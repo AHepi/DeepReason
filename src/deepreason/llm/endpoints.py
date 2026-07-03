@@ -57,6 +57,7 @@ class OpenAICompatEndpoint:
         self.timeout_s = timeout_s
         self.max_tokens = max_tokens
         self.last_usage: dict | None = None
+        self.last_finish_reason: str | None = None
 
     def complete(self, prompt: str) -> str:
         body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
@@ -75,4 +76,5 @@ class OpenAICompatEndpoint:
         with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
             data = json.load(response)
         self.last_usage = data.get("usage") or None
+        self.last_finish_reason = data["choices"][0].get("finish_reason")
         return data["choices"][0]["message"]["content"]

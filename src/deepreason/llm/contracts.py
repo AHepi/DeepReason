@@ -5,9 +5,10 @@ The conjecturer contract is Verbalized Sampling (§11.6): a candidate
 distribution with stated typicality estimates, never a single point.
 """
 
+import json
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class CandidateRef(BaseModel):
@@ -21,6 +22,15 @@ class ConjectureCandidate(BaseModel):
     typicality: float = Field(ge=0.0, le=1.0)
     # Born-connected (§7 L1): refs to neighbourhood artifacts where natural.
     refs: list[CandidateRef] = Field(default_factory=list)
+
+    @field_validator("content", mode="before")
+    @classmethod
+    def _coerce_object_content(cls, value):
+        # Models asked for skeleton content often emit the skeleton as a JSON
+        # object instead of an embedded string — accept it canonically.
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, sort_keys=True)
+        return value
 
 
 class ConjecturerOutput(BaseModel):

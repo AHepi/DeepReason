@@ -99,6 +99,14 @@ class LLMAdapter:
                 data = output_model.model_validate_json(_extract_json(raw))
             except (ValidationError, ValueError) as e:
                 error = str(e)[:500]
+                # A length-truncated response will truncate identically on a
+                # blind retry — tell the model to compress instead.
+                if getattr(endpoint, "last_finish_reason", None) == "length":
+                    error = (
+                        "your output hit the length limit and was CUT OFF mid-JSON. "
+                        "Respond MORE COMPACTLY: fewer/shorter items, terse strings, "
+                        "same schema. Original error: " + error
+                    )[:500]
                 continue
             call = LLMCall(
                 role=role,

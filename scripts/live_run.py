@@ -42,14 +42,16 @@ from deepreason.report import eval_report  # noqa: E402
 from deepreason.scheduler.scheduler import Scheduler  # noqa: E402
 from deepreason.views.theory import theory  # noqa: E402
 
-# Per-role completion caps: the cheapest optimization the first live run
-# exposed (~40s conjecturer calls with unbounded output).
+# Per-role completion caps. Calibrated from live-run data: 1600 truncated
+# VS_K skeleton candidates mid-JSON (every completion hit the cap exactly),
+# so skeleton-bearing roles get real headroom; the adapter also detects
+# finish_reason=length and asks for compression instead of blind retries.
 MAX_TOKENS = {
-    "conjecturer": 1600,
+    "conjecturer": 4000,
     "argumentative_critic": 700,
     "defender": 500,
-    "variator": 1200,
-    "synthesizer": 700,
+    "variator": 2000,
+    "synthesizer": 900,
     "judge": 400,
 }
 
@@ -220,6 +222,11 @@ def main() -> int:
     for aid in result["frontier"]:
         print(f"\n--- {aid[:12]} ---")
         print(theory(aid, harness.state, harness.blobs, log=harness.log))
+    dropped = [d for d in result["diagnostics"] if "dropped" in d]
+    if dropped:
+        print(f"\nDROPPED CYCLES ({len(dropped)}):")
+        for d in dropped:
+            print(f"  cycle={d.get('cycle')}: {d['dropped'][:160]}")
     stopped = [d for d in result["diagnostics"] if "stopped" in d]
     if stopped:
         print(f"\nNOTE: run stopped early: {stopped[-1]['stopped']}")

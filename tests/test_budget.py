@@ -109,3 +109,31 @@ def test_arg_crit_per_cycle_cap(tmp_path):
     config = Config(VS_K=3, N_SCHOOLS=0, FLOOR=0, ARG_CRIT_PER_CYCLE=1)
     Scheduler(harness, adapter, config).run(2)
     assert critic_calls["n"] == 2  # one per cycle despite 3 admitted per cycle
+
+
+def test_truncation_hint_on_length_finish(tmp_path):
+    """A length-truncated response gets a compression hint, not a blind retry."""
+    prompts_seen = []
+
+    class TruncatingEndpoint(MockEndpoint):
+        def complete(self, prompt):
+            prompts_seen.append(prompt)
+            response = super().complete(prompt)
+            self.last_finish_reason = "length" if len(prompts_seen) == 1 else "stop"
+            return response
+
+    endpoint = TruncatingEndpoint(['{"candidates": [{"content": "cut off mid', GOOD])
+    adapter = LLMAdapter({"conjecturer": endpoint}, BlobStore(tmp_path / "b"), retry_max=2)
+    output, call = adapter.call("conjecturer", "PACK", ConjecturerOutput)
+    assert call.attempts == 2
+    assert "CUT OFF" in prompts_seen[1]  # the repair prompt says compress
+
+
+def test_contract_coerces_object_content():
+    """Skeleton emitted as a JSON object (not embedded string) still parses."""
+    raw = json.dumps(
+        {"candidates": [{"content": {"claim": "x", "mechanism": "y"}, "typicality": 0.5}]}
+    )
+    output = ConjecturerOutput.model_validate_json(raw)
+    parsed = json.loads(output.candidates[0].content)
+    assert parsed == {"claim": "x", "mechanism": "y"}

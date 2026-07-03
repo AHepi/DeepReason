@@ -23,7 +23,7 @@ STANCE_DECAY: 20
 XEXAM_SHARE: 0.15
 RESEED_DIST_MIN: 0.15
 NEAR_DUP_EPS: 0.35
-VS_K: 4
+VS_K: 3                       # 4 skeleton candidates truncated at sane caps; 3 fits
 PARETO_AXES: [hv, reach, coverage]
 LAMBDA_FLOOR: 0.3
 CAPTURE_W: 10
