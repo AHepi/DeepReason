@@ -48,11 +48,11 @@ from deepreason.views.theory import theory  # noqa: E402
 # finish_reason=length and asks for compression instead of blind retries.
 MAX_TOKENS = {
     "conjecturer": 4000,
-    "argumentative_critic": 700,
-    "defender": 500,
+    "argumentative_critic": 900,
+    "defender": 700,
     "variator": 2000,
     "synthesizer": 900,
-    "judge": 400,
+    "judge": 1200,  # v4-pro rulings run long even in JSON mode
 }
 
 
@@ -189,7 +189,7 @@ def main() -> int:
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
         return OpenAICompatEndpoint(
             args.base_url, model, api_key=api_key, temperature=temperature,
-            max_tokens=MAX_TOKENS.get(role),
+            max_tokens=MAX_TOKENS.get(role), json_mode=True,
         )
 
     adapter = LLMAdapter(

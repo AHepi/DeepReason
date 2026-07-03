@@ -77,6 +77,7 @@ class OpenAICompatEndpoint:
         temperature: float | None = None,
         timeout_s: int = 120,
         max_tokens: int | None = None,
+        json_mode: bool = False,
     ) -> None:
         self.name = base_url
         self.model = model
@@ -84,6 +85,9 @@ class OpenAICompatEndpoint:
         self.temperature = temperature
         self.timeout_s = timeout_s
         self.max_tokens = max_tokens
+        # response_format json_object: stops models prefacing the JSON with
+        # analysis prose (observed live: judge rulings truncating at the cap).
+        self.json_mode = json_mode
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
 
@@ -93,6 +97,8 @@ class OpenAICompatEndpoint:
             body["temperature"] = self.temperature
         if self.max_tokens is not None:
             body["max_tokens"] = self.max_tokens
+        if self.json_mode:
+            body["response_format"] = {"type": "json_object"}
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
