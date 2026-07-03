@@ -4,7 +4,35 @@ replay experiments without network.
 """
 
 import json
+import time
+import urllib.error
 import urllib.request
+
+_RETRYABLE_HTTP = {429, 500, 502, 503, 504}
+_BACKOFFS = (2, 4, 8)
+
+
+class EndpointError(RuntimeError):
+    """A completion failed after transport retries (or non-retryably)."""
+
+
+def request_with_retries(fn):
+    """Run fn(); retry transient network failures with 2s/4s/8s backoff.
+    Non-retryable HTTP errors (auth, bad request) raise immediately."""
+    last: Exception | None = None
+    for delay in (*_BACKOFFS, None):
+        try:
+            return fn()
+        except urllib.error.HTTPError as e:
+            if e.code not in _RETRYABLE_HTTP:
+                raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
+            last = e
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+            last = e
+        if delay is None:
+            break
+        time.sleep(delay)
+    raise EndpointError(f"transport failed after retries: {last}") from last
 
 
 class MockEndpoint:
@@ -73,8 +101,12 @@ class OpenAICompatEndpoint:
             data=json.dumps(body).encode(),
             headers=headers,
         )
-        with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
-            data = json.load(response)
+
+        def _once() -> dict:
+            with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
+                return json.load(response)
+
+        data = request_with_retries(_once)
         self.last_usage = data.get("usage") or None
         self.last_finish_reason = data["choices"][0].get("finish_reason")
         return data["choices"][0]["message"]["content"]

@@ -137,3 +137,27 @@ def test_contract_coerces_object_content():
     output = ConjecturerOutput.model_validate_json(raw)
     parsed = json.loads(output.candidates[0].content)
     assert parsed == {"claim": "x", "mechanism": "y"}
+
+
+def test_transport_retries_transient_then_succeeds(monkeypatch):
+    import urllib.error
+
+    from deepreason.llm import endpoints as ep
+
+    monkeypatch.setattr(ep.time, "sleep", lambda s: None)  # no real backoff in tests
+    attempts = {"n": 0}
+
+    def flaky():
+        attempts["n"] += 1
+        if attempts["n"] < 3:
+            raise urllib.error.URLError(ConnectionResetError(104, "reset by peer"))
+        return {"ok": True}
+
+    assert ep.request_with_retries(flaky) == {"ok": True}
+    assert attempts["n"] == 3
+
+    def auth_fail():
+        raise urllib.error.HTTPError("u", 401, "unauthorized", {}, None)
+
+    with pytest.raises(ep.EndpointError):  # non-retryable: raises immediately
+        ep.request_with_retries(auth_fail)

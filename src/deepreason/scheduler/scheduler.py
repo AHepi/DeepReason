@@ -12,6 +12,7 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
+from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
@@ -106,7 +107,7 @@ class Scheduler:
                         harness, artifact.id, kappa, self.adapter, self.config,
                         self.diagnostics, embedder=self.embedder,
                     )
-                except SchemaRepairError as e:
+                except (SchemaRepairError, EndpointError) as e:
                     self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
         if (
             harness.state.status.get(artifact.id) == Status.ACCEPTED
@@ -119,7 +120,7 @@ class Scheduler:
             self._arg_crit_this_cycle += 1
             try:
                 crit_argumentative(harness, artifact.id, self.adapter, self.config)
-            except SchemaRepairError as e:
+            except (SchemaRepairError, EndpointError) as e:
                 self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
     def step(self) -> None:
@@ -151,7 +152,7 @@ class Scheduler:
                         harness, problem, rivals[0], rivals[1],
                         self.adapter, config, self.diagnostics,
                     )
-                except SchemaRepairError as e:
+                except (SchemaRepairError, EndpointError) as e:
                     self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
             reach_sweep(harness)
             self._capture_step()
@@ -182,7 +183,7 @@ class Scheduler:
                         school=school, tail_weighted=self.tail_weighted,
                         complement=self.complement, embedder=self.embedder,
                     )
-            except SchemaRepairError as e:
+            except (SchemaRepairError, EndpointError) as e:
                 self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
                 continue
             for artifact in admitted:
@@ -208,7 +209,7 @@ class Scheduler:
 
         try:
             paraphrase_invariance_audit(self.harness, self.adapter, self.config)
-        except SchemaRepairError as e:
+        except (SchemaRepairError, EndpointError) as e:
             self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
     def _research_step(self) -> None:
@@ -245,7 +246,7 @@ class Scheduler:
                     hv_spot_check(
                         self.harness, self.adapter, aid, self.config.HV_K, self.embedder
                     )
-                except SchemaRepairError as e:
+                except (SchemaRepairError, EndpointError) as e:
                     self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
                 return
 
