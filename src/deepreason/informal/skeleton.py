@@ -1,16 +1,29 @@
 """Skeleton + forbidden cases (spec §10.1).
 
 skeleton-wf (eval:program) passes iff the content parses as the skeleton
-schema AND forbidden != []. At registration (before id computation) each
-forbidden case compiles into a commitment in I(a): "if this case obtains, I
-fail." Forbid nothing => fail skeleton-wf => refuted by a program.
+schema AND forbidden != []. At registration — before id computation, so
+deterministically — each forbidden case compiles into a commitment in
+I(a): "if this case obtains, I fail." Forbid nothing => fail skeleton-wf
+=> refuted by a program: demarcation made real (§6). Prose is a §8 view.
+D2 intact: this constrains what survives, not what gamma may emit.
+
+Not a type: skeleton-ness is a content convention keyed on whether the
+bytes parse; the discipline enters through problem criteria.
 """
 
-from pydantic import BaseModel, Field
+import json
+
+from pydantic import BaseModel, Field, ValidationError
+
+from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.ontology import Commitment
+from deepreason.ontology.commitment import Budget
+
+SKELETON_WF_ID = "skeleton-wf"
 
 
 class ForbiddenCase(BaseModel):
-    case: str
+    case: str = Field(min_length=1)
     eval: str  # "rubric:<spec-id>" | "program:<ref>"
     observation_valued: bool = False
 
@@ -23,16 +36,52 @@ class Scope(BaseModel):
 class Skeleton(BaseModel):
     claim: str
     mechanism: str
-    scope: Scope
-    forbidden: list[ForbiddenCase]
+    scope: Scope = Field(default_factory=Scope)
+    forbidden: list[ForbiddenCase] = Field(default_factory=list)
     prose_notes: str | None = None  # rendered, never adjudicated
 
 
-def skeleton_wf(content: bytes) -> str:
-    """Commitment program: pass | fail. TODO(P5)."""
-    raise NotImplementedError
+def parse_skeleton(text: str) -> Skeleton | None:
+    try:
+        data = json.loads(text)
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(data, dict) or "claim" not in data or "mechanism" not in data:
+        return None
+    try:
+        return Skeleton.model_validate(data)
+    except ValidationError:
+        return None
 
 
-def compile_forbidden(skeleton: Skeleton) -> list:
-    """Compile forbidden cases into commitments (deterministic). TODO(P5)."""
-    raise NotImplementedError
+def skeleton_wf_program(text: str, budget) -> tuple[str, dict]:
+    """The skeleton-wf commitment program: parse AND forbidden != []."""
+    skeleton = parse_skeleton(text)
+    if skeleton is None:
+        return "fail", {"error": "content does not parse as a skeleton"}
+    if not skeleton.forbidden:
+        return "fail", {"error": "forbids nothing: empty attack surface (§6)"}
+    return "pass", {"forbidden_cases": len(skeleton.forbidden)}
+
+
+def skeleton_wf_commitment() -> Commitment:
+    return Commitment(id=SKELETON_WF_ID, eval="program:skeleton_wf")
+
+
+def compile_forbidden_commitments(harness, skeleton: Skeleton) -> list[str]:
+    """Compile each forbidden case into a registered commitment; the case
+    text rides in budget.extra for trial packs. Deterministic ids, so the
+    same skeleton always compiles to the same interface."""
+    ids: list[str] = []
+    for case in skeleton.forbidden:
+        cid = "fc:" + sha256_hex(canonical_json({"case": case.case, "eval": case.eval}))[:12]
+        harness.register_commitment(
+            Commitment(
+                id=cid,
+                eval=case.eval,
+                observation_valued=case.observation_valued,
+                budget=Budget(extra={"case": case.case}),
+            )
+        )
+        ids.append(cid)
+    return ids

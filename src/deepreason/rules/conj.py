@@ -51,8 +51,20 @@ def conj(
     batch: list[tuple[Artifact, list[Warrant]]] = []
     seen: set[str] = set()
     for candidate in candidates[: config.VS_K]:
+        commitments = [c for c in problem.criteria if c in harness.commitments]
+        # Skeleton discipline (§10.1): content that parses as a skeleton has
+        # its forbidden cases compiled into commitments — at registration,
+        # BEFORE id computation, deterministically.
+        from deepreason.informal.skeleton import compile_forbidden_commitments, parse_skeleton
+
+        skeleton = parse_skeleton(candidate.content)
+        if skeleton is not None:
+            commitments += [
+                c for c in compile_forbidden_commitments(harness, skeleton)
+                if c not in commitments
+            ]
         interface = Interface(
-            commitments=[c for c in problem.criteria if c in harness.commitments],
+            commitments=commitments,
             refs=[
                 Ref(target=r.target, role=r.role)
                 for r in candidate.refs

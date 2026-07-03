@@ -125,7 +125,8 @@ def scan_spawns(harness, config) -> list[Problem]:
         )
 
     # Research (§12): observation-valued commitment, no covering evidence.
-    from deepreason.research.backends import covered
+    # Sealed holdout evidence is scheduled-pending — no premature Spawn (§10.5).
+    from deepreason.research.backends import pending
 
     for aid, artifact in state.artifacts.items():
         if status.get(aid) == Status.REFUTED:
@@ -135,7 +136,7 @@ def scan_spawns(harness, config) -> list[Problem]:
             if kappa is None or not kappa.observation_valued:
                 continue
             rid = f"research:{cid}:{aid[:12]}"
-            if rid in state.problems or covered(harness, rid):
+            if rid in state.problems or pending(harness, rid):
                 continue
             _spawn(
                 SpawnTrigger.RESEARCH,

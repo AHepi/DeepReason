@@ -1,18 +1,78 @@
 """User as appellate court (spec §10.6).
 
-Disagreement-ranked docket (ensemble splits, guard-block streaks, audit hits,
-maximum-entropy rivalries), never round-robin, capped at
-USER_RULINGS_BUDGET per session. Each ruling registers as a precedent
-artifact (provenance.role: user): ranked first in precedent slices, yet an
-ordinary artifact — attackable, reinstateable (N1). Appellate, not oracle.
+A disagreement-ranked docket (ensemble splits, guard-block streaks, audit
+hits, maximum-entropy rivalries) — never round-robin, capped at
+USER_RULINGS_BUDGET: the user is the scarce calibration resource and is
+spent where the machine is most confused. Each ruling registers as a
+precedent artifact (provenance.role: user) with a mention ref to the
+standard it calibrates: ranked first in precedent slices, yet an ordinary
+artifact — attackable, reinstateable (N1). Appellate, not oracle. A
+starved docket degrades calibration silently; the docket makes starvation
+visible, which is the most the design can do (§17).
 """
 
+import json
 
-def docket(state) -> list:
-    """Disagreement-ranked queue of cases for the user. TODO(P5)."""
-    raise NotImplementedError
+from deepreason.informal.standards import resolve_standard
+from deepreason.ontology import Interface, Provenance, Ref, SpawnTrigger, Status
 
 
-def rule(case_id: str, holding: str, standard_id: str, state):
-    """Register a user ruling as a precedent artifact. TODO(P5)."""
-    raise NotImplementedError
+def docket(harness, config) -> list[dict]:
+    """Disagreement-ranked queue, capped at USER_RULINGS_BUDGET."""
+    scores: dict[str, dict] = {}
+
+    def bump(case: str, kind: str, weight: int = 1) -> None:
+        entry = scores.setdefault(case, {"case": case, "kinds": set(), "score": 0})
+        entry["score"] += weight
+        entry["kinds"].add(kind)
+
+    for event in harness.log.read():
+        for tag in event.inputs:
+            if tag.startswith("trial-blocked:ensemble-split"):
+                bump(event.inputs[-1], "ensemble-split", 3)
+            elif tag.startswith("trial-blocked:"):
+                bump(event.inputs[-1], "guard-block", 1)
+            elif tag.startswith("audit-hit:"):
+                bump(tag.split(":", 1)[1], "audit-hit", 2)
+    # Maximum-entropy rivalries: open discrimination problems.
+    for problem in harness.state.problems.values():
+        if problem.provenance.trigger != SpawnTrigger.DISCRIMINATION:
+            continue
+        rivals = [
+            i for i in problem.provenance.from_
+            if harness.state.status.get(i) == Status.ACCEPTED
+        ]
+        if len(rivals) >= 2:
+            bump(problem.id, "unresolved-rivalry", 2)
+
+    ranked = sorted(scores.values(), key=lambda e: (-e["score"], e["case"]))
+    for entry in ranked:
+        entry["kinds"] = sorted(entry["kinds"])
+    return ranked[: config.USER_RULINGS_BUDGET]
+
+
+def rule(harness, case_id: str, holding: str, spec_id: str):
+    """Enter an appellate ruling: a precedent artifact calibrating spec_id."""
+    standard = resolve_standard(harness, spec_id)
+    if standard is None:
+        raise KeyError(f"no standard registered for spec {spec_id!r}")
+    return harness.create_artifact(
+        json.dumps(
+            {"precedent": {"case": case_id, "holding": holding}}, sort_keys=True
+        ),
+        codec="json",
+        interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
+        provenance=Provenance(role="user"),
+    )
+
+
+def spawn_audit_problem(harness, reason: str) -> None:
+    from deepreason.rules.spawn import spawn
+
+    spawn(
+        harness,
+        SpawnTrigger.AUDIT_CRITIC,
+        [],
+        f"audit the critic: {reason}",
+        problem_id=f"audit:{reason}",
+    )

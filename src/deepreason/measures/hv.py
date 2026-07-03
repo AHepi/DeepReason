@@ -61,20 +61,35 @@ def _evaluable_battery(artifact: Artifact, commitments: dict) -> list[str]:
     )
 
 
-def _variator_pack(text: str, battery_desc: list[str], k: int) -> str:
+def _variator_pack(text: str, battery_desc: list[str], k: int, struct: bool) -> str:
     lines = [f"TARGET CONTENT:\n{text}", ""]
     if battery_desc:
         lines += ["BATTERY THE EDITS WILL FACE:"] + [f"- {b}" for b in battery_desc] + [""]
+    if struct:
+        lines += [
+            "KERNEL mu_struct (§10.7): the target is a skeleton — substitute at "
+            "role level. Swap the mechanism, the causal link, the scope. Each "
+            "edit must be a complete valid skeleton JSON. Do NOT merely reword.",
+            "",
+        ]
     lines.append(f"DIRECTIVE: produce exactly {k} bounded edits.")
     return "\n".join(lines)
 
 
 def _sample_edits(harness, adapter, artifact: Artifact, k: int):
+    """Returns (text, battery, edits, kernel, llm_call). Kernel selection
+    (§6/§10.7): mu_struct whenever the content parses as a skeleton —
+    rewording-only variation is banned as the sole kernel for skeletons."""
+    from deepreason.informal.skeleton import parse_skeleton
+
     text = programs.content_text(artifact, harness.blobs)
+    kernel = "mu_struct" if parse_skeleton(text) is not None else "mu"
     battery = _evaluable_battery(artifact, harness.commitments)
-    pack = _variator_pack(text, [harness.commitments[c].eval for c in battery], k)
+    pack = _variator_pack(
+        text, [harness.commitments[c].eval for c in battery], k, kernel == "mu_struct"
+    )
     output, llm_call = adapter.call("variator", pack, VariatorOutput)
-    return text, battery, [e.content for e in output.edits[:k]], llm_call
+    return text, battery, [e.content for e in output.edits[:k]], kernel, llm_call
 
 
 def _survival(harness, artifact, text, battery, edits, embedder) -> tuple[float, list[dict]]:
@@ -109,7 +124,7 @@ def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> 
     if not adapter.has_role("variator"):
         return None
     artifact = harness.state.artifacts[artifact_id]
-    text, battery, edits, llm_call = _sample_edits(harness, adapter, artifact, k)
+    text, battery, edits, _kernel, llm_call = _sample_edits(harness, adapter, artifact, k)
     if not edits:
         return None
     s_hat, _ = _survival(harness, artifact, text, battery, edits, embedder)
@@ -146,7 +161,7 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
         return programs.FAIL  # verdict already on the record
     k = int(commitment.budget.extra.get("k", 5))
     hv_min = float(commitment.budget.extra.get("hv_min", "0.5"))
-    text, battery, edits, llm_call = _sample_edits(harness, adapter, target, k)
+    text, battery, edits, kernel, llm_call = _sample_edits(harness, adapter, target, k)
     s_hat, per_edit = _survival(harness, target, text, battery, edits, embedder)
     hv = 1.0 - s_hat
     if hv >= hv_min:
@@ -154,7 +169,8 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
         return programs.PASS
     trace_ref = harness.blobs.put(
         json.dumps(
-            {"k": k, "hv_min": hv_min, "s_hat": s_hat, "per_edit": per_edit},
+            {"k": k, "hv_min": hv_min, "s_hat": s_hat, "kernel": kernel,
+             "per_edit": per_edit},
             sort_keys=True,
         ).encode()
     )

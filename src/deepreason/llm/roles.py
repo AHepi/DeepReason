@@ -52,4 +52,20 @@ TEMPLATES = {
         "relation whose specifics could not be swapped out freely.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "defender": (
+        "You are the defender: answer the critic's case on behalf of the target "
+        "artifact, addressing its specific clauses. Concede nothing that is not "
+        "actually established; never invent facts.\n\n" + _JSON_ONLY + "{pack}"
+    ),
+    "judge": (
+        "You are the judge, ruling under the trial protocol. Answer ONLY the "
+        "narrow question the pack poses — never a holistic quality verdict. Your "
+        "decisive_point MUST quote a specific span of the exchange; a ruling "
+        "whose grounds cannot be located is invalid.\n\n" + _JSON_ONLY + "{pack}"
+    ),
+    "summarizer": (
+        "You are the summarizer: render the skeleton in the pack as readable "
+        "prose. The prose is a view, never the content — add nothing the "
+        "skeleton does not assert.\n\n" + _JSON_ONLY + "{pack}"
+    ),
 }

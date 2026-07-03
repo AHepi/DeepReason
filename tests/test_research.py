@@ -114,10 +114,20 @@ def test_grounding_brake_fires_on_staged_decay(tmp_path):
         )
     )
     # Staged decay: a run of rubric-derived verdicts and nothing exogenous.
+    # Rubric warrants require conforming trial transcripts (§2, P5).
+    from deepreason.informal.trial import transcript_blob
+
     harness.register_commitment(Commitment(id="kappa-r", eval="rubric:std-1"))
     for i in range(4):
         target = art(harness, f"informal claim {i}")
         nu = art(harness, f"nu: rubric ruling {i} is sound")
+        trace_ref = transcript_blob(
+            harness,
+            case=f"the claim violates clause {i} of std-1",
+            answer="the defence concedes the clause applies",
+            decisive_point=f"violates clause {i}",
+            checks={"order_swap": "skipped", "paraphrase": "skipped"},
+        )
         harness.create_artifact(
             f"critic: rubric fail {i}",
             provenance=Provenance(role="critic"),
@@ -128,7 +138,7 @@ def test_grounding_brake_fires_on_staged_decay(tmp_path):
                     type=WarrantType.DEMONSTRATIVE,
                     commitment="kappa-r",
                     verdict="fail",
-                    trace_ref="inline:transcript",
+                    trace_ref=trace_ref,
                     validity_node=nu.id,
                 )
             ],

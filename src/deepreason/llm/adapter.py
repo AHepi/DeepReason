@@ -38,12 +38,30 @@ class LLMAdapter:
     def has_role(self, role: str) -> bool:
         return role in self.endpoints
 
+    def ensemble_size(self, role: str) -> int:
+        entry = self.endpoints.get(role)
+        return len(entry) if isinstance(entry, (list, tuple)) else (1 if entry else 0)
+
+    def _resolve(self, role: str, index: int):
+        entry = self.endpoints[role]
+        if isinstance(entry, (list, tuple)):
+            return entry[index]
+        if index:
+            raise KeyError(f"role {role!r} has no ensemble endpoint {index}")
+        return entry
+
     def call(
-        self, role: str, pack: str, output_model: type[BaseModel]
+        self,
+        role: str,
+        pack: str,
+        output_model: type[BaseModel],
+        endpoint_index: int = 0,
     ) -> tuple[BaseModel, LLMCall]:
+        """endpoint_index selects within a role's ensemble (§9: the judge
+        MUST run on >=2 endpoints from different families)."""
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
-        endpoint = self.endpoints[role]
+        endpoint = self._resolve(role, endpoint_index)
         import json as _json
 
         schema = _json.dumps(output_model.model_json_schema(), sort_keys=True)
@@ -76,20 +94,29 @@ class LLMAdapter:
         raise SchemaRepairError(f"role {role}: no schema-valid output after retries: {error}")
 
 
+def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
+    if not isinstance(spec, dict) or not spec.get("endpoint"):
+        return None
+    api_key_env = spec.get("api_key_env") or ""
+    return OpenAICompatEndpoint(
+        base_url=spec["endpoint"],
+        model=spec.get("model") or "",
+        api_key=os.environ.get(api_key_env) if api_key_env else None,
+        temperature=spec.get("temperature"),
+    )
+
+
 def build_adapter(config, blob_store) -> LLMAdapter:
     """Build from the §15 role table. Roles with a null endpoint are absent
-    (has_role False); judge ensembles (lists) land with P5."""
+    (has_role False); a list spec becomes an ensemble (judge, §9)."""
     endpoints: dict[str, object] = {}
     for role, spec in (config.roles or {}).items():
         if isinstance(spec, list):
-            continue  # judge ensemble: P5
-        if not isinstance(spec, dict) or not spec.get("endpoint"):
+            built = [e for e in (_endpoint_from_spec(s) for s in spec) if e is not None]
+            if built:
+                endpoints[role] = built
             continue
-        api_key_env = spec.get("api_key_env") or ""
-        endpoints[role] = OpenAICompatEndpoint(
-            base_url=spec["endpoint"],
-            model=spec.get("model") or "",
-            api_key=os.environ.get(api_key_env) if api_key_env else None,
-            temperature=spec.get("temperature"),
-        )
+        endpoint = _endpoint_from_spec(spec)
+        if endpoint is not None:
+            endpoints[role] = endpoint
     return LLMAdapter(endpoints, blob_store, retry_max=config.RETRY_MAX)

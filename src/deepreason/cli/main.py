@@ -41,7 +41,10 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
     sub.add_parser("docket", help="disagreement-ranked user queue (spec 10.6)")
-    sub.add_parser("rule", help="enter an appellate ruling").add_argument("case_id")
+    rule_cmd = sub.add_parser("rule", help="enter an appellate ruling")
+    rule_cmd.add_argument("case_id")
+    rule_cmd.add_argument("--holding", required=True, help="the one-line holding")
+    rule_cmd.add_argument("--standard", required=True, help="spec id the ruling calibrates")
     sub.add_parser("schools", help="rosters, centroid distances, stance weights")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
@@ -133,6 +136,34 @@ def main(argv: list[str] | None = None) -> int:
             "raw_flags": detection.raw_flags(harness, embedder, config),
         }
         print(json.dumps(dashboard, indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "docket":
+        from deepreason.config import load as load_config
+        from deepreason.informal.appellate import docket
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        entries = docket(harness, config)
+        if not entries:
+            print("(docket is empty)")
+        for entry in entries:
+            print(f"{entry['case']}  score={entry['score']}  {', '.join(entry['kinds'])}")
+        return 0
+
+    if args.command == "rule":
+        from deepreason.informal.appellate import rule as appellate_rule
+
+        harness = Harness(Path(args.root))
+        precedent = appellate_rule(harness, args.case_id, args.holding, args.standard)
+        print(f"precedent registered: {precedent.id[:12]}")
+        return 0
+
+    if args.command == "prose":
+        from deepreason.views.prose import prose as prose_view
+
+        harness = Harness(Path(args.root))
+        print(prose_view(_resolve(harness, args.id), harness.state, harness.blobs))
         return 0
 
     if args.command == "merge":

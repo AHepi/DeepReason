@@ -37,6 +37,8 @@ def build_scenario(root) -> tuple[Harness, dict[str, str]]:
         "nu: judged under std-1",
         interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
     )
+    from deepreason.informal.trial import transcript_blob
+
     critic = h.create_artifact(
         "critic: fails std-1",
         warrants=[
@@ -46,7 +48,12 @@ def build_scenario(root) -> tuple[Harness, dict[str, str]]:
                 type=WarrantType.DEMONSTRATIVE,
                 commitment="kappa-taste",
                 verdict="fail",
-                trace_ref="inline:transcript",
+                trace_ref=transcript_blob(
+                    h,
+                    case="the work violates clause 1 of std-1",
+                    answer="the defence disputes the clause's scope",
+                    decisive_point="violates clause 1",
+                ),
                 validity_node=nu.id,
             )
         ],

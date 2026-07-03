@@ -240,6 +240,20 @@ class Harness:
             raise WellFormednessError(
                 f"warrant {warrant.id}: commitment {warrant.commitment} not registered"
             )
+        # §2: every rubric-derived demonstrative warrant's trace_ref must
+        # contain a conforming trial transcript (§3 guard, unbypassable).
+        if warrant.commitment and self.commitments[warrant.commitment].eval.startswith(
+            "rubric:"
+        ):
+            from deepreason.informal.trial import conforming_transcript
+
+            if warrant.trace_ref is None or not conforming_transcript(
+                self.blobs, warrant.trace_ref
+            ):
+                raise WellFormednessError(
+                    f"warrant {warrant.id}: rubric-derived but trace_ref lacks a "
+                    "conforming trial transcript (§2/§3)"
+                )
 
     # ------------------------------------------------------------------ #
     # Event application (shared by live path and replay)                 #
@@ -273,6 +287,16 @@ class Harness:
         pre_status = dict(self.state.status)
         a_add: list[str] = []
         pi_add: list[str] = []
+        if event.rule == Rule.REVEAL:
+            # Reveal (§10.5): move sealed bytes from the holdout namespace
+            # into the blob store — idempotent, so replay reproduces it.
+            for aid in event.inputs:
+                artifact = self.state.artifacts.get(aid)
+                if artifact is None:
+                    continue
+                sealed = self.root / "holdout" / artifact.content_ref
+                if sealed.exists():
+                    self.blobs.put(sealed.read_bytes())
         for oid in event.outputs:
             schema, obj = self.objects.get(oid)
             if schema == "commitment":

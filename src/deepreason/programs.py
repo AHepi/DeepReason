@@ -48,9 +48,18 @@ def _json_wf(text: str, budget) -> tuple[str, dict]:
         return FAIL, {"error": str(e)}
 
 
-# Named program registry; hv_estimator joins with P2 (spec §7).
+def _skeleton_wf(text: str, budget) -> tuple[str, dict]:
+    from deepreason.informal.skeleton import skeleton_wf_program
+
+    return skeleton_wf_program(text, budget)
+
+
+# Named program registry. hv_floor is deliberately NOT here: it needs the
+# variator (measures/hv.py), and keeping it out makes B0 stratification
+# structural (spec §7).
 PROGRAMS = {
     "json-wf": _json_wf,
+    "skeleton_wf": _skeleton_wf,
 }
 
 

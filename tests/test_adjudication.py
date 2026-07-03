@@ -125,13 +125,20 @@ def test_standard_refutation_collapses_verdicts_and_reinstates(harness):
         "nu: judged under std-1",
         interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
     )
+    from deepreason.informal.trial import transcript_blob
+
     verdict_warrant = Warrant(
         id="w-verdict",
         target=target.id,
         type=WarrantType.DEMONSTRATIVE,
         commitment="kappa-taste",
         verdict="fail",
-        trace_ref="inline:trial transcript",
+        trace_ref=transcript_blob(
+            harness,
+            case="the work violates clause 1 of std-1",
+            answer="the defence disputes the clause's scope",
+            decisive_point="violates clause 1",
+        ),
         validity_node=nu.id,
     )
     critic = harness.create_artifact(

@@ -50,3 +50,27 @@ class SynthesizerOutput(BaseModel):
 
     relation: str
     connects: list[str] = Field(min_length=1)
+
+
+class DefenderOutput(BaseModel):
+    answer: str = Field(min_length=1)
+
+
+class JudgeRuling(BaseModel):
+    """Trial ruling (§3 guard): decisive_point MUST resolve to an actual
+    element of the exchange — program-checked (referential integrity)."""
+
+    verdict: Literal["fail", "pass"]
+    decisive_point: str = Field(min_length=1)
+
+
+class PairwiseRuling(BaseModel):
+    """Pairwise discrimination (§10.2): A-beats-B-for-pi, never a global
+    ranking. 'neither' registers nothing — the rivalry stands."""
+
+    winner: Literal["A", "B", "neither"]
+    decisive_point: str = ""
+
+
+class ProseOutput(BaseModel):
+    prose: str = Field(min_length=1)

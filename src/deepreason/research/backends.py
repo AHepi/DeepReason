@@ -36,16 +36,41 @@ class AskUserBackend:
         return None
 
 
-def covered(harness, research_problem_id: str) -> bool:
-    """A research problem is covered by an ACCEPTED import artifact
-    addressing it — refuted or orphaned evidence (source reliability under
-    successful attack) does not cover, so research re-arms. Sealed holdout
-    evidence will not count pre-Reveal (P5)."""
-    return any(
-        pid == research_problem_id
-        and harness.state.artifacts[aid].provenance.role.value == "import"
-        and harness.state.status.get(aid) == Status.ACCEPTED
+def _readable(harness, artifact) -> bool:
+    if artifact.content_ref.startswith("inline:"):
+        return True
+    try:
+        harness.blobs.get(artifact.content_ref)
+        return True
+    except KeyError:
+        return False
+
+
+def _evidence_for(harness, research_problem_id: str):
+    return [
+        harness.state.artifacts[aid]
         for aid, pid in harness.state.addr
+        if pid == research_problem_id
+        and harness.state.artifacts[aid].provenance.role.value == "import"
+    ]
+
+
+def covered(harness, research_problem_id: str) -> bool:
+    """Covered = an ACCEPTED, READABLE import artifact addressing the
+    problem. Refuted/orphaned evidence doesn't cover (research re-arms);
+    sealed holdout evidence doesn't cover pre-Reveal (§10.5)."""
+    return any(
+        harness.state.status.get(e.id) == Status.ACCEPTED and _readable(harness, e)
+        for e in _evidence_for(harness, research_problem_id)
+    )
+
+
+def pending(harness, research_problem_id: str) -> bool:
+    """Covered OR sealed-awaiting-Reveal: either way, no research Spawn and
+    no fetch — the commitment is scheduled-pending, not failed (§1)."""
+    return any(
+        harness.state.status.get(e.id) != Status.REFUTED
+        for e in _evidence_for(harness, research_problem_id)
     )
 
 

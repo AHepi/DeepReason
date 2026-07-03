@@ -84,8 +84,22 @@ class Scheduler:
         crit_program(harness, artifact.id)
         for cid in artifact.interface.commitments:
             kappa = harness.commitments.get(cid)
-            if kappa is not None and is_hv_floor(kappa):
+            if kappa is None:
+                continue
+            if is_hv_floor(kappa):
                 run_hv_floor(harness, self.adapter, artifact.id, kappa, self.embedder)
+            elif kappa.eval.startswith("rubric:") and self.adapter.has_role("judge"):
+                from deepreason.informal.trial import run_trial
+
+                if harness.state.status.get(artifact.id) != Status.ACCEPTED:
+                    continue  # budget triage: already felled
+                try:
+                    run_trial(
+                        harness, artifact.id, kappa, self.adapter, self.config,
+                        self.diagnostics, embedder=self.embedder,
+                    )
+                except SchemaRepairError as e:
+                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
         if (
             harness.state.status.get(artifact.id) == Status.ACCEPTED
             and self.adapter.has_role("argumentative_critic")
@@ -104,6 +118,31 @@ class Scheduler:
             return
         if problem.provenance.trigger in _INTEGRATION_TRIGGERS:
             self._integration_cycles += 1
+
+        # Discrimination in informal mode resolves comparatively (§10.2):
+        # a pairwise ruling, not more conjectures.
+        if (
+            problem.provenance.trigger == SpawnTrigger.DISCRIMINATION
+            and self.adapter.has_role("judge")
+        ):
+            from deepreason.informal.trial import pairwise_discriminate
+
+            rivals = [
+                i for i in problem.provenance.from_
+                if harness.state.status.get(i) == Status.ACCEPTED
+            ][:2]
+            if len(rivals) == 2:
+                try:
+                    pairwise_discriminate(
+                        harness, problem, rivals[0], rivals[1],
+                        self.adapter, config, self.diagnostics,
+                    )
+                except SchemaRepairError as e:
+                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+            reach_sweep(harness)
+            self._capture_step()
+            self._cycles += 1
+            return
 
         assigned = schools.allocate(harness, problem, self.schools, config)
         if self.recruit_all and self.schools:
@@ -138,8 +177,25 @@ class Scheduler:
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()
         self._research_step()
+        self._audit_step()
         self._capture_step()
         self._cycles += 1
+
+    def _audit_step(self) -> None:
+        """Judge-audit sweep every AUDIT_PERIOD cycles (§10.4), budgeted."""
+        if (
+            self._cycles == 0
+            or self._cycles % self.config.AUDIT_PERIOD != 0
+            or not self.adapter.has_role("judge")
+            or not self.adapter.has_role("variator")
+        ):
+            return
+        from deepreason.informal.audits import paraphrase_invariance_audit
+
+        try:
+            paraphrase_invariance_audit(self.harness, self.adapter, self.config)
+        except SchemaRepairError as e:
+            self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
     def _research_step(self) -> None:
         """Standing exogenous schedule (§12): work one uncovered research
@@ -150,12 +206,12 @@ class Scheduler:
         due = self.research_priority or self._cycles % self.config.RESEARCH_PERIOD == 0
         if not due:
             return
-        from deepreason.research.backends import covered, run_research
+        from deepreason.research.backends import pending, run_research
 
         for problem in self.harness.state.problems.values():
             if problem.provenance.trigger != SpawnTrigger.RESEARCH:
                 continue
-            if covered(self.harness, problem.id):
+            if pending(self.harness, problem.id):
                 continue
             if run_research(self.harness, problem, self.research_backend) is not None:
                 return  # one fetch per due cycle (budgeted)

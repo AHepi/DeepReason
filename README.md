@@ -51,8 +51,8 @@ tests/                           acceptance tests per phase (grounded extension,
 | P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | ✅ implemented |
 | P3 | merge, session namespaces | ✅ implemented |
 | P4 | research commitments + backends | ✅ implemented |
-| P5 | informal-domain protocol (§10) | next |
-| P6 | frontier-model hardening | — |
+| P5 | informal-domain protocol (§10) | ✅ implemented |
+| P6 | frontier-model hardening | next |
 
 ## Development
 
