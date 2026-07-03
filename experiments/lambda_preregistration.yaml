@@ -1,0 +1,38 @@
+# λ dose-response experiment — PRE-REGISTERED thresholds (spec §11.8).
+# Committed BEFORE first look at any run data. Do not edit after runs begin;
+# a revision is a new pre-registration file, not a mutation (D8 in spirit).
+#
+# Question: does the harness's exogenous anchoring earn exemption from
+# closed-loop semantic collapse, or is the exemption an architecture-diagram
+# fiction?
+
+arms:
+  lambda0:            # the closed loop: verifier withheld from the loop
+    program_criteria_in_loop: false
+  lambda_full:        # exogenous anchoring on: verifier's criteria in the loop
+    program_criteria_in_loop: true
+
+design:
+  replicates_min: 5          # >= N replicates per arm; report distributions, not means
+  cycles_per_run: 30
+  oracle: withheld           # oracle-blind, oracle-scored: verifier exists, is
+                             # never registered in the lambda0 loop, scores post-hoc
+
+predictions:
+  - lambda0 contracts on both surfaces and plateaus below lambda>0 arms
+  - dose-response monotone in lambda
+  - some runs dissociate the surfaces (generator diversity holds while
+    attack entropy collapses) — vindicating the two-surface framing
+
+thresholds:
+  # Falsifier, stated in advance: if lambda_full tracks lambda0, the
+  # anchoring as built does not earn the theorem's exemption.
+  oracle_gap_min: 0.10        # mean oracle pass-rate advantage lambda_full must show
+  contraction_margin: 0.00    # lambda0 mean_pairwise_dist slope expected below this
+  entropy_gap_min: 0.05       # attack-entropy advantage expected for lambda_full
+
+dependent_variables:
+  generator_surface: [mean_pairwise_dist, dist_slope]
+  adjudicator_surface: [attack_target_entropy, criticism_debt, g_churn,
+                        reinstatement_rate, validity_attack_rate]
+  goodhart_signature: hv_of_accepted_rising_while_oracle_flat

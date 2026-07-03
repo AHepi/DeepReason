@@ -40,6 +40,10 @@ class StateDiff(BaseModel):
     a_add: list[str] = Field(default_factory=list, alias="A+")
     pi_add: list[str] = Field(default_factory=list, alias="Π+")
     status_changed: list[str] = Field(default_factory=list)
+    # Measure-rule payloads (§6): estimates recorded in the event so replay
+    # applies them without re-running the variator (raws are logged too).
+    hv_set: dict[str, float] = Field(default_factory=dict)
+    reach_set: dict[str, float] = Field(default_factory=dict)
 
     model_config = {"populate_by_name": True}
 

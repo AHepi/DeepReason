@@ -36,4 +36,20 @@ TEMPLATES = {
         "genuine fault. Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "variator": (
+        "You are the variator (mu): produce bounded edits of the target content. "
+        "If the content is a JSON skeleton, substitute at role level — swap the "
+        "mechanism, the causal link, the scope (mu_struct) — never merely reword. "
+        "For prose, make substantive local edits that change what the claim "
+        "forbids. Each edit must remain a complete, coherent candidate.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
+    "synthesizer": (
+        "You are the synthesizer: propose ONE relation artifact that genuinely "
+        "connects the listed artifacts — a shared mechanism, a derivation, a "
+        "constraint one places on the other. Shallow thematic links ('both involve "
+        "energy') will be refuted by the hard-to-vary floor; only propose a "
+        "relation whose specifics could not be swapped out freely.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
 }

@@ -1,20 +1,55 @@
 """Response ladder (spec §11.4) — logged scheduler rules with hysteresis;
-attention only.
-
-- lineage stagnation  => recruit fan-out; VS tail-weighted selection;
-                         complement directives in packs.
-- school convergence  => Reseed the laggard (logged Reseed event).
-- adjudication ritual => criticism-debt sweep; audit-the-critic Spawn;
-                         appellate docket priority raised.
-- grounding decay     => exogenous brake: research to max priority, retrieval
-                         forced, docket surfaced, cross-family critic quota up.
-
-Every intervention logged with before/after diagnostics — escape efficacy is
-measured. Policy is FIXED in v1; a learned controller is out of scope
-(meta-attractor risk).
+attention only, never status. Policy is FIXED in v1 (a learned controller
+is a meta-attractor risk, §17). Every intervention is logged as a Measure
+event with its trigger, so escape efficacy is measured, not vibes.
 """
 
+from deepreason.capture import detection, schools
+from deepreason.ontology import SpawnTrigger, Status
+from deepreason.rules.crit import crit_program
+from deepreason.rules.spawn import spawn
 
-def respond(flags: dict, scheduler, state, config):
-    """Apply the ladder for the raised flags. TODO(P2)."""
-    raise NotImplementedError
+
+def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
+    harness, config = scheduler.harness, scheduler.config
+    applied: list[str] = []
+
+    if active_flags.get("lineage_stagnation"):
+        scheduler.recruit_all = True       # fan-out recruitment (§11.2.4)
+        scheduler.tail_weighted = True     # VS tail-weighted selection (§11.6)
+        scheduler.complement = True        # complement directives in packs
+        harness.record_measure(inputs=["intervention:stagnation-recruit"])
+        applied.append("stagnation-recruit")
+
+    if active_flags.get("school_convergence"):
+        current = schools.roster(harness)
+        novelty = detection.school_novelty(harness, scheduler.embedder, config.CAPTURE_W)
+        laggard = min(
+            sorted(current),
+            key=lambda s: (novelty.get(s, -1.0), s),  # deterministic tiebreak
+        )
+        schools.reseed(harness, laggard, current[laggard], reason="school-convergence")
+        applied.append(f"reseed:{laggard}")
+
+    if active_flags.get("adjudication_ritual"):
+        # Criticism-debt sweep: evaluate never-evaluated commitments.
+        for aid, status in list(harness.state.status.items()):
+            if status == Status.ACCEPTED and harness.state.artifacts[aid].interface.commitments:
+                crit_program(harness, aid)
+        spawn(
+            harness,
+            SpawnTrigger.AUDIT_CRITIC,
+            [],
+            "audit the critic: adjudication-ritual flags sustained (§11.3)",
+            problem_id="audit:ritual",
+        )
+        harness.record_measure(inputs=["intervention:debt-sweep"])
+        applied.append("debt-sweep")
+
+    if active_flags.get("grounding_decay"):
+        # Exogenous brake: research machinery is P4; the intervention and the
+        # priority raise are logged now so the ladder is complete and audited.
+        scheduler.research_priority = True
+        harness.record_measure(inputs=["intervention:exogenous-brake"])
+        applied.append("exogenous-brake")
+    return applied

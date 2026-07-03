@@ -36,8 +36,10 @@ src/deepreason/
   capture/                  §11  schools, capture detection, response ladder, negative atlas, Pareto retention
   research/                 §12  observation-valued commitments → research backends
   scheduler/                §14  rule registry + budgets; school allocation
-  cli/                      §13  frontier / focus / step / why / theory / docket / schools / capture …
-tests/                           P0 acceptance tests (grounded extension, reinstatement, replay)
+  experiments/              §11.8 λ dose-response runner (thresholds in /experiments)
+  cli/                      §13  frontier / run / why / theory / schools / capture / reseed / trace …
+experiments/                §11.8 pre-registered λ-experiment thresholds (committed before first look)
+tests/                           acceptance tests per phase (grounded extension, replay, hv-floor, schools, λ)
 ```
 
 ## Phases (§16)
@@ -46,8 +48,8 @@ tests/                           P0 acceptance tests (grounded extension, reinst
 |-------|-------|--------|
 | P0 | deterministic core: schema, event log, two-pass adjudicator, replay | ✅ implemented |
 | P1 | single-problem loop: Conj → Crit → Adj, anti-relapse, VS conjecturer | ✅ implemented |
-| P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | next |
-| P3 | merge, session namespaces | — |
+| P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | ✅ implemented |
+| P3 | merge, session namespaces | next |
 | P4 | research commitments + backends | — |
 | P5 | informal-domain protocol (§10) | — |
 | P6 | frontier-model hardening | — |

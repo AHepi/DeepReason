@@ -33,7 +33,13 @@ def render_conj_pack(
     blobs,
     vs_k: int,
     token_budget: int,
+    school: dict | None = None,
+    complement: bool = False,
 ) -> str:
+    """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
+    the neighbourhood prefers the school's own accepted descendants; the
+    stance directive fades as lineage grows. complement is the §11.4
+    stagnation directive."""
     lines = [
         f"PROBLEM {problem.id}",
         problem.description,
@@ -43,13 +49,28 @@ def render_conj_pack(
     for cid in problem.criteria:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
-    accepted = [
-        aid for aid, status in state.status.items() if status == Status.ACCEPTED
-    ][-NEIGHBOURHOOD_N:]
+    accepted = [aid for aid, status in state.status.items() if status == Status.ACCEPTED]
+    if school is not None:
+        lineage = [
+            aid for aid in accepted
+            if state.artifacts[aid].provenance.school == school["id"]
+        ]
+        others = [aid for aid in accepted if aid not in set(lineage)]
+        accepted = (lineage + others)[:NEIGHBOURHOOD_N]
+    else:
+        accepted = accepted[-NEIGHBOURHOOD_N:]
     if accepted:
         lines += ["", "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"]
         for aid in accepted:
             lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+    if school is not None and school.get("weight", 0) > 0:
+        lines += ["", f"SCHOOL STANCE (weight {school['weight']:.2f}): {school['stance_text']}"]
+    if complement:
+        lines += [
+            "",
+            "COMPLEMENT DIRECTIVE: produce the attempt these summaries make "
+            "least likely — avoid the modal continuation of the neighbourhood.",
+        ]
     lines += [
         "",
         f"DIRECTIVE: return exactly {vs_k} diverse candidates with typicality "

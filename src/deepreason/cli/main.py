@@ -98,6 +98,57 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "run":
         return _cmd_run(args)
 
+    if args.command == "schools":
+        from deepreason.capture import schools as schools_mod
+        from deepreason.config import load as load_config
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        roster = schools_mod.roster(harness)
+        if not roster:
+            print("(no schools registered)")
+        for school_id in sorted(roster):
+            policy = roster[school_id]
+            weight = schools_mod.stance_weight(harness, school_id, config)
+            lineage = schools_mod.lineage_size(harness, school_id)
+            print(
+                f"{school_id}  stance={policy['stance']}  weight={weight:.2f}  "
+                f"lineage={lineage}  policy={policy['artifact_id'][:12]}"
+            )
+        return 0
+
+    if args.command == "capture":
+        from deepreason.capture import detection
+        from deepreason.config import load as load_config
+        from deepreason.llm.embedder import HashingEmbedder
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        embedder = HashingEmbedder()
+        window = config.CAPTURE_W
+        dashboard = {
+            "generator": detection.generator_metrics(harness, embedder, window),
+            "adjudicator": detection.adjudicator_metrics(harness, window),
+            "lambda": detection.grounding_lambda(harness, window),
+            "raw_flags": detection.raw_flags(harness, embedder, config),
+        }
+        print(json.dumps(dashboard, indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "reseed":
+        from deepreason.capture import schools as schools_mod
+
+        harness = Harness(Path(args.root))
+        roster = schools_mod.roster(harness)
+        if args.school_id not in roster:
+            print(f"unknown school: {args.school_id}", file=sys.stderr)
+            return 1
+        policy = schools_mod.reseed(
+            harness, args.school_id, roster[args.school_id], reason="manual"
+        )
+        print(f"{args.school_id} reseeded: stance={policy['stance']}")
+        return 0
+
     print(
         f"deepreason {args.command}: not implemented yet "
         "(see docs/harness-spec-v1.3.md, spec 16 phases)"

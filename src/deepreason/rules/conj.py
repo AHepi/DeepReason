@@ -3,9 +3,12 @@
 Enabled iff the problem frontier is nonempty (D1 made structural). Each
 gamma-call returns a VS_K candidate distribution with typicality estimates
 (§11.6); every candidate passes the anti-relapse gate before commit, and
-problem criteria are instantiated into each candidate's interface. Born-
-connected (§7 L1): candidate refs to registered neighbourhood artifacts are
-kept as dependence/mention refs. School render policies land with P2.
+problem criteria are instantiated into each candidate's interface.
+Born-connected (§7 L1): candidate refs to registered neighbourhood
+artifacts are kept. School conditioning (§11.1) enters ONLY through the
+pack render and provenance — never adjudication. Under a stagnation flag
+the harness spends budget tail-first on the candidates the model itself
+marks atypical (§11.6).
 """
 
 from deepreason.llm.contracts import ConjecturerOutput
@@ -20,6 +23,11 @@ def conj(
     adapter,
     config,
     diagnostics: list | None = None,
+    *,
+    school: dict | None = None,
+    tail_weighted: bool = False,
+    complement: bool = False,
+    embedder=None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -31,12 +39,18 @@ def conj(
         harness.blobs,
         vs_k=config.VS_K,
         token_budget=config.PACK_TOKEN_BUDGET,
+        school=school,
+        complement=complement,
     )
     output, llm_call = adapter.call("conjecturer", pack, ConjecturerOutput)
 
+    candidates = list(output.candidates)
+    if tail_weighted:  # stagnation response (§11.4): fund the atypical tail
+        candidates.sort(key=lambda c: c.typicality)
+
     batch: list[tuple[Artifact, list[Warrant]]] = []
     seen: set[str] = set()
-    for candidate in output.candidates[: config.VS_K]:
+    for candidate in candidates[: config.VS_K]:
         interface = Interface(
             commitments=[c for c in problem.criteria if c in harness.commitments],
             refs=[
@@ -51,10 +65,16 @@ def conj(
             content_ref=content_ref,
             codec="utf8",
             interface=interface,
-            provenance=Provenance(role="conjecturer", event_seq=harness._next_seq),
+            provenance=Provenance(
+                role="conjecturer",
+                school=school["id"] if school else None,
+                event_seq=harness._next_seq,
+            ),
         )
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
-        admitted, reason = anti_relapse.check(artifact, [], harness)
+        admitted, reason = anti_relapse.check(
+            artifact, [], harness, embedder=embedder, near_dup_eps=config.NEAR_DUP_EPS
+        )
         if diagnostics is not None:
             diagnostics.append({"candidate": artifact.id[:12], "gate": reason})
         if not admitted:

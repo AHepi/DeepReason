@@ -28,7 +28,7 @@ class Config(BaseModel):
     HOLDOUT_SHARE: float = 0.2
     # Capture control (§11)
     N_SCHOOLS: int = 4
-    STANCE_DECAY: str | None = None
+    STANCE_DECAY: float | None = None  # lineage size at which stance weight hits 0 (None => 20)
     XEXAM_SHARE: float = 0.15
     RESEED_DIST_MIN: float | None = None
     NEAR_DUP_EPS: float | None = None
@@ -36,6 +36,10 @@ class Config(BaseModel):
     PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage"])
     LAMBDA_FLOOR: float | None = None
     CAPTURE_W: int = 20
+    # Adjudication-ritual thresholds (§11.3; empirical per family/domain, §17)
+    ATTACK_ENTROPY_FLOOR: float = 0.2
+    CRIT_DEBT_CEILING: float = 0.5
+    MIN_ATTACKS_FOR_RITUAL: int = 5
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

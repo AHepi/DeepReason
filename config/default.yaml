@@ -26,6 +26,9 @@ VS_K: 6                       # candidates per gamma-call, Verbalized Sampling (
 PARETO_AXES: [hv, reach, coverage]  # frontier axes for focus/reporting
 LAMBDA_FLOOR: null            # min exogenous grounding ratio before brake; tune
 CAPTURE_W: 20                 # detection window / hysteresis width in cycles (10-30)
+ATTACK_ENTROPY_FLOOR: 0.2     # ritual condition: attack-target entropy floor (11.3)
+CRIT_DEBT_CEILING: 0.5        # ritual condition: criticism-debt ceiling
+MIN_ATTACKS_FOR_RITUAL: 5     # min window attacks before ritual conditions count
 
 # --- LLM adapter (§9) ---
 PACK_TOKEN_BUDGET: 2500       # max pack size (2000-3000)

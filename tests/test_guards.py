@@ -76,6 +76,28 @@ def test_counter_warrant_exempts(harness):
     assert admitted
 
 
+def test_semantic_gate_blocks_paraphrase_admits_differing_neighbor(harness):
+    """P2 acceptance: with the embedder, a near-duplicate of a refuted
+    artifact within NEAR_DUP_EPS faces the battery check and blocks; a
+    near-neighbor whose verdict-vector differs is admitted (§11.5)."""
+    from deepreason.llm.embedder import HashingEmbedder
+
+    _refute_by_program(harness)  # refutes "the tides are magic"
+    embedder = HashingEmbedder()
+    eps = 0.6
+    paraphrase = _unregistered("the tides are magic surely", ["k-moon"])
+    admitted, reason = check(paraphrase, [], harness, embedder=embedder, near_dup_eps=eps)
+    assert not admitted and "battery-equivalent" in reason
+    # Near in embedding space but satisfies the criterion => verdicts differ.
+    neighbor = _unregistered("the tides are moon magic", ["k-moon"])
+    admitted, _ = check(neighbor, [], harness, embedder=embedder, near_dup_eps=eps)
+    assert admitted
+    # Far outside eps: the battery check never even runs => admitted cheaply.
+    far = _unregistered("continental drift reshapes basins", ["k-moon"])
+    admitted, _ = check(far, [], harness, embedder=embedder, near_dup_eps=0.1)
+    assert admitted
+
+
 def test_near_duplicates_of_accepted_never_blocked(harness):
     harness.register_commitment(Commitment(id="k-moon", eval="predicate:'moon' in content"))
     art(harness, "the moon pulls the sea", interface=Interface(commitments=["k-moon"]))

@@ -42,6 +42,8 @@ def check(
     candidate: Artifact,
     warrants: Iterable[Warrant],
     harness,
+    embedder=None,
+    near_dup_eps: float | None = None,
 ) -> tuple[bool, str]:
     """(admit, reason). Blocks ONLY relapse onto refuted-equivalents (§0)."""
     status = harness.state.status
@@ -50,8 +52,21 @@ def check(
         return False, f"hash: {candidate.id[:12]} is a refuted artifact"
     counter_targets = {w.target for w in warrants}
     att = set(harness.state.att)
-    for prior_id, prior_status in status.items():
-        if prior_status != Status.REFUTED or prior_id == candidate.id:
+    # Stage 2 — semantic trigger (§11.5): with an embedder, only refuted
+    # priors within NEAR_DUP_EPS face the battery check; without one, every
+    # refuted prior does (correct, just less cheap).
+    if embedder is not None and near_dup_eps is not None:
+        from deepreason.capture.atlas import RefutedIndex
+        from deepreason.programs import content_text
+
+        index = RefutedIndex(embedder)
+        index.rebuild(harness)
+        candidate_vec = embedder.embed(content_text(candidate, harness.blobs))
+        prior_ids = index.nearest(candidate_vec, near_dup_eps)
+    else:
+        prior_ids = [aid for aid, s in status.items() if s == Status.REFUTED]
+    for prior_id in prior_ids:
+        if prior_id == candidate.id:
             continue
         prior = harness.state.artifacts[prior_id]
         battery = _battery(candidate, prior, harness.commitments)

@@ -192,6 +192,45 @@ class Harness:
         self._commit(rule, inputs=[problem_id] if problem_id else [], outputs=outputs, llm=llm)
         return [self.state.artifacts[a.id] for a, _ in accepted_entries]
 
+    def record_measure(
+        self,
+        *,
+        hv: dict[str, float] | None = None,
+        reach: dict[str, float] | None = None,
+        inputs: Iterable[str] = (),
+        llm: LLMCall | None = None,
+    ) -> Event:
+        """Measure event (spec §3/§6): estimates steer attention, never
+        status — they land in state.hv/state.reach only."""
+        return self._commit(
+            Rule.MEASURE,
+            inputs=list(inputs),
+            outputs=[],
+            llm=llm,
+            hv_set=hv or {},
+            reach_set=reach or {},
+        )
+
+    def transitions(self) -> list[tuple[int, str, str | None, str]]:
+        """(seq, artifact, old_status, new_status) per logged event — a
+        replay program over the log (§11.3 instrument)."""
+        shadow = Harness.__new__(Harness)
+        shadow.root = self.root
+        shadow.blobs = self.blobs
+        shadow.objects = self.objects
+        shadow.log = self.log
+        shadow._reset()
+        out: list[tuple[int, str, str | None, str]] = []
+        for event in self.log.read():
+            pre = {aid: status for aid, status in shadow.state.status.items()}
+            shadow._apply_event(event)
+            for aid in event.state_diff.status_changed:
+                old = pre.get(aid)
+                new = shadow.state.status.get(aid)
+                if new is not None:
+                    out.append((event.seq, aid, old.value if old else None, new.value))
+        return out
+
     def _validate_warrant(self, warrant: Warrant) -> None:
         if warrant.validity_node not in self.state.artifacts:
             raise WellFormednessError(
@@ -212,6 +251,8 @@ class Harness:
         inputs: list[str],
         outputs: list[str],
         llm: LLMCall | None = None,
+        hv_set: dict[str, float] | None = None,
+        reach_set: dict[str, float] | None = None,
     ) -> Event:
         event = Event(
             seq=self._next_seq,
@@ -220,6 +261,7 @@ class Harness:
             inputs=inputs,
             outputs=outputs,
             llm=llm,
+            state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {}),
         )
         event.state_diff = self._apply_event(event)
         self.log.append(event)
@@ -247,6 +289,10 @@ class Harness:
                     if pid in self.state.problems and (obj.id, pid) not in self.state.addr:
                         self.state.addr.append((obj.id, pid))
         self._adjudicate()
+        for aid, value in event.state_diff.hv_set.items():
+            self.state.hv[aid] = value
+        for aid, value in event.state_diff.reach_set.items():
+            self.state.reach[aid] = value
         self._next_seq = event.seq + 1
         return StateDiff(
             att_add=sorted(set(self.state.att) - pre_att),
@@ -256,6 +302,8 @@ class Harness:
             status_changed=sorted(
                 i for i in self.state.artifacts if pre_status.get(i) != self.state.status.get(i)
             ),
+            hv_set=event.state_diff.hv_set,
+            reach_set=event.state_diff.reach_set,
         )
 
     # ------------------------------------------------------------------ #

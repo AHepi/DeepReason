@@ -5,18 +5,25 @@ replay experiments without network.
 
 import json
 import urllib.request
-from collections.abc import Iterable
 
 
 class MockEndpoint:
-    """Returns scripted responses in order; raises when exhausted."""
+    """Returns scripted responses in order (raises when exhausted), or — when
+    given a callable — computes each response from the prompt."""
 
-    def __init__(self, responses: Iterable[str], name: str = "mock", model: str = "mock") -> None:
-        self._responses = list(responses)
+    def __init__(self, responses, name: str = "mock", model: str = "mock") -> None:
+        if callable(responses):
+            self._fn = responses
+            self._responses: list[str] | None = None
+        else:
+            self._fn = None
+            self._responses = list(responses)
         self.name = name
         self.model = model
 
     def complete(self, prompt: str) -> str:
+        if self._fn is not None:
+            return self._fn(prompt)
         if not self._responses:
             raise RuntimeError("MockEndpoint exhausted")
         return self._responses.pop(0)
