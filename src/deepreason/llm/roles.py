@@ -1,8 +1,8 @@
-"""Role definitions (spec §9): prompt template + JSON schema + temperature +
-endpoint, per role.
+"""Role prompt templates (spec §9).
 
-conjecturer returns a VS_K-candidate distribution with typicality estimates
-(schema-enforced, §11.6) — never a single point.
+Each role = prompt template + output contract (contracts.py) + endpoint
+(endpoints.py, routed by config). The LLM is a bounded pure function
+``pack -> schema-validated JSON`` (§0): templates demand raw JSON only.
 """
 
 ROLES = (
@@ -16,4 +16,24 @@ ROLES = (
     "embedder",
 )
 
-# TODO(P1): prompt templates + per-role JSON schemas (see llm/schemas/).
+_JSON_ONLY = (
+    "Respond with ONLY a JSON object conforming to this JSON Schema — "
+    "no prose, no code fences:\n{schema}\n\n"
+)
+
+TEMPLATES = {
+    "conjecturer": (
+        "You are the conjecture operator (gamma): you propose bold, criticizable "
+        "explanations for the problem in the pack. You hold no state and decide "
+        "nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION "
+        "of diverse candidates, each with your typicality estimate in [0,1] (typical "
+        "candidates near 1, atypical near 0). Where natural, carry dependence refs to "
+        "neighbourhood artifact ids (born-connected).\n\n" + _JSON_ONLY + "{pack}"
+    ),
+    "argumentative_critic": (
+        "You are an argumentative critic. Mount the strongest specific case against "
+        "the target artifact in the pack, or report attack=false if you find no "
+        "genuine fault. Never invent facts about summarized content.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
+}

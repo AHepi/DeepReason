@@ -10,10 +10,12 @@ directory; loop/scheduler commands land with P1/P2.
 """
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
 from deepreason.harness import Harness
+from deepreason.views.theory import theory
 from deepreason.views.why import why
 
 
@@ -25,14 +27,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--root", default=".deepreason", help="harness state directory (blobs, objects, log)"
     )
+    parser.add_argument("--config", default=None, help="knob file (default: config/default.yaml)")
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
     sub.add_parser("attack", help="solicit criticism of an artifact").add_argument("id")
     sub.add_parser("step", help="apply one enabled rule under budget")
-    run = sub.add_parser("run", help="run until budget exhaustion")
-    run.add_argument("--budget", required=True)
+    run = sub.add_parser("run", help="run the Conj->Crit->Adj loop on a problem")
+    run.add_argument("--budget", required=True, help="cycles=<N> or plain <N>")
+    run.add_argument("--problem", default=None, help="problem file (json/yaml) to register first")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
@@ -86,11 +90,70 @@ def main(argv: list[str] | None = None) -> int:
             print(f"(no events touching {args.id!r})")
         return 0
 
+    if args.command == "theory":
+        harness = Harness(Path(args.root))
+        print(theory(_resolve(harness, args.id), harness.state, harness.blobs, log=harness.log))
+        return 0
+
+    if args.command == "run":
+        return _cmd_run(args)
+
     print(
         f"deepreason {args.command}: not implemented yet "
         "(see docs/harness-spec-v1.3.md, spec 16 phases)"
     )
     return 1
+
+
+def _load_problem_file(harness: Harness, path: Path) -> str:
+    from deepreason.ontology import Commitment, Problem
+
+    if path.suffix in (".yaml", ".yml"):
+        import yaml
+
+        data = yaml.safe_load(path.read_text())
+    else:
+        data = json.loads(path.read_text())
+    for c in data.get("commitments", []):
+        harness.register_commitment(Commitment.model_validate(c))
+    problem = Problem.model_validate(data["problem"])
+    harness.register_problem(problem)
+    return problem.id
+
+
+def _cmd_run(args) -> int:
+    from deepreason.config import load as load_config
+    from deepreason.llm.adapter import build_adapter
+    from deepreason.loop import run_problem
+
+    cycles = int(args.budget.split("=", 1)[1]) if "=" in args.budget else int(args.budget)
+    config = load_config(Path(args.config) if args.config else None)
+    harness = Harness(Path(args.root))
+    if args.problem:
+        problem_id = _load_problem_file(harness, Path(args.problem))
+    elif harness.state.problems:
+        problem_id = next(iter(harness.state.problems))
+    else:
+        print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
+        return 1
+    adapter = build_adapter(config, harness.blobs)
+    if not adapter.has_role("conjecturer"):
+        print(
+            "no conjecturer endpoint configured — set roles.conjecturer in the "
+            "config knob file (spec 15)",
+            file=sys.stderr,
+        )
+        return 1
+    result = run_problem(harness, problem_id, adapter, config, cycles=cycles)
+    print(f"survivors ({len(result['survivors'])}):")
+    for aid in result["frontier"]:
+        print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")
+    for note in result["diagnostics"]:
+        print(f"  [gate] {note}")
+    if result["frontier"]:
+        print()
+        print(theory(result["frontier"][0], harness.state, harness.blobs, log=harness.log))
+    return 0
 
 
 if __name__ == "__main__":

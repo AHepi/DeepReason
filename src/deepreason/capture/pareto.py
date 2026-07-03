@@ -6,6 +6,16 @@ status: an artifact off the frontier is merely unfunded, not demoted.
 """
 
 
-def frontier(candidates: list, axes: list[str]) -> list:
-    """Non-dominated set over the configured axes. TODO(P2)."""
-    raise NotImplementedError
+def frontier(scored: list[tuple[object, dict[str, float]]], axes: list[str]) -> list[object]:
+    """Non-dominated set (maximizing every axis; missing scores are 0)."""
+
+    def dominates(a: dict[str, float], b: dict[str, float]) -> bool:
+        return all(a.get(x, 0.0) >= b.get(x, 0.0) for x in axes) and any(
+            a.get(x, 0.0) > b.get(x, 0.0) for x in axes
+        )
+
+    return [
+        item
+        for item, scores in scored
+        if not any(dominates(other, scores) for _, other in scored)
+    ]

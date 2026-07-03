@@ -26,6 +26,7 @@ from deepreason.ontology import (
     EpistemicState,
     Event,
     Interface,
+    LLMCall,
     Problem,
     Provenance,
     Rule,
@@ -106,6 +107,7 @@ class Harness:
         warrants: Iterable[Warrant] = (),
         problem_id: str | None = None,
         rule: Rule = Rule.REGISTER,
+        llm: LLMCall | None = None,
     ) -> Artifact:
         """Store content, compute the canonical id, and register."""
         interface = interface or Interface()
@@ -123,7 +125,7 @@ class Harness:
             provenance=provenance or Provenance(role="user"),
         )
         return self.register_artifact(
-            artifact, warrants=warrants, problem_id=problem_id, rule=rule
+            artifact, warrants=warrants, problem_id=problem_id, rule=rule, llm=llm
         )
 
     def register_artifact(
@@ -133,38 +135,62 @@ class Harness:
         warrants: Iterable[Warrant] = (),
         problem_id: str | None = None,
         rule: Rule = Rule.REGISTER,
+        llm: LLMCall | None = None,
     ) -> Artifact:
         if artifact.id in self.state.artifacts:
             return self.state.artifacts[artifact.id]  # content-addressed dedupe
+        self.register_batch(
+            [(artifact, list(warrants))], problem_id=problem_id, rule=rule, llm=llm
+        )
+        return self.state.artifacts[artifact.id]
 
-        provided = {w.id: w for w in warrants}
-        # Every attack edge carries a registered warrant (§2).
-        for wid in artifact.warrants:
-            w = provided.get(wid) or self.warrants.get(wid)
-            if w is None:
-                raise WellFormednessError(f"carried warrant not provided/registered: {wid}")
-            self._validate_warrant(w)
-        # Interface commitments must be registered (§2).
-        for cid in artifact.interface.commitments:
-            if cid not in self.commitments:
-                raise WellFormednessError(f"interface commitment not registered: {cid}")
-        # dep must remain a DAG (§1): check the materialized edge set.
+    def register_batch(
+        self,
+        entries: list[tuple[Artifact, list[Warrant]]],
+        *,
+        problem_id: str | None = None,
+        rule: Rule = Rule.REGISTER,
+        llm: LLMCall | None = None,
+    ) -> list[Artifact]:
+        """Register several artifacts (+ their warrants) in one event — e.g.
+        one Conj event per gamma-call carrying all admitted VS candidates."""
         candidate = dict(self.state.artifacts)
-        candidate[artifact.id] = artifact
+        accepted_entries: list[tuple[Artifact, list[Warrant]]] = []
+        for artifact, warrants in entries:
+            if artifact.id in candidate:
+                continue  # content-addressed dedupe (incl. within the batch)
+            provided = {w.id: w for w in warrants}
+            # Every attack edge carries a registered warrant (§2).
+            for wid in artifact.warrants:
+                w = provided.get(wid) or self.warrants.get(wid)
+                if w is None:
+                    raise WellFormednessError(f"carried warrant not provided/registered: {wid}")
+                self._validate_warrant(w)
+            # Interface commitments must be registered (§2).
+            for cid in artifact.interface.commitments:
+                if cid not in self.commitments:
+                    raise WellFormednessError(f"interface commitment not registered: {cid}")
+            candidate[artifact.id] = artifact
+            accepted_entries.append((artifact, warrants))
+        if not accepted_entries:
+            return []
+        # dep must remain a DAG (§1): check the materialized edge set.
         try:
             toposort(set(candidate), build_dep(candidate))
         except DependenceCycleError as e:
             raise WellFormednessError(str(e)) from e
 
         outputs: list[str] = []
-        for wid in artifact.warrants:
-            if wid in provided and wid not in self.warrants:
-                self.objects.put("warrant", provided[wid])
-                outputs.append(wid)
-        self.objects.put("artifact", artifact)
-        outputs.append(artifact.id)
-        self._commit(rule, inputs=[problem_id] if problem_id else [], outputs=outputs)
-        return self.state.artifacts[artifact.id]
+        for artifact, warrants in accepted_entries:
+            provided = {w.id: w for w in warrants}
+            for wid in artifact.warrants:
+                if wid in provided and wid not in self.warrants and wid not in outputs:
+                    self.objects.put("warrant", provided[wid])
+                    outputs.append(wid)
+            self.objects.put("artifact", artifact)
+            outputs.append(artifact.id)
+        self._commit(rule, inputs=[problem_id] if problem_id else [], outputs=outputs, llm=llm)
+        return [self.state.artifacts[a.id] for a, _ in accepted_entries]
 
     def _validate_warrant(self, warrant: Warrant) -> None:
         if warrant.validity_node not in self.state.artifacts:
@@ -180,13 +206,20 @@ class Harness:
     # Event application (shared by live path and replay)                 #
     # ------------------------------------------------------------------ #
 
-    def _commit(self, rule: Rule, inputs: list[str], outputs: list[str]) -> Event:
+    def _commit(
+        self,
+        rule: Rule,
+        inputs: list[str],
+        outputs: list[str],
+        llm: LLMCall | None = None,
+    ) -> Event:
         event = Event(
             seq=self._next_seq,
             ts=datetime.now(timezone.utc).isoformat(),
             rule=rule,
             inputs=inputs,
             outputs=outputs,
+            llm=llm,
         )
         event.state_diff = self._apply_event(event)
         self.log.append(event)

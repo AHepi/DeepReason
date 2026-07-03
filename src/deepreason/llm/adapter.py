@@ -1,18 +1,95 @@
 """Role -> endpoint routing (spec §9).
 
-Config maps role to endpoint (frontier APIs | ollama | llama.cpp |
-OpenAI-compatible); mix freely. Schema-invalid output => feed error back,
-RETRY_MAX bounded retries, then drop the cycle (logged). Every call is
-logged with prompt_ref + raw_ref so replay consumes logged raws (§0).
+Every call stores the rendered prompt and the raw output as blobs and
+returns an LLMCall record for the consuming event — replay consumes logged
+raws (§0), so nothing downstream depends on live model behavior.
+Schema-invalid output => feed the error back, RETRY_MAX bounded retries,
+then SchemaRepairError (caller drops the cycle, logged).
 """
+
+import os
+import time
+
+from pydantic import BaseModel, ValidationError
+
+from deepreason.llm.endpoints import OpenAICompatEndpoint
+from deepreason.llm.roles import TEMPLATES
+from deepreason.ontology.event import LLMCall
+
+
+class SchemaRepairError(RuntimeError):
+    """Bounded retries exhausted without schema-valid output."""
+
+
+def _extract_json(raw: str) -> str:
+    s = raw.strip()
+    start, end = s.find("{"), s.rfind("}")
+    if start >= 0 and end > start:
+        return s[start : end + 1]
+    return s
 
 
 class LLMAdapter:
-    def __init__(self, role_config: dict, blob_store, event_log) -> None:
-        self.role_config = role_config
-        self.blob_store = blob_store
-        self.event_log = event_log
+    def __init__(self, endpoints: dict[str, object], blob_store, retry_max: int = 2) -> None:
+        self.endpoints = endpoints
+        self.blobs = blob_store
+        self.retry_max = retry_max
 
-    def call(self, role: str, pack: str, schema: dict) -> dict:
-        """One logged, schema-validated, bounded-retry role call. TODO(P1)."""
-        raise NotImplementedError
+    def has_role(self, role: str) -> bool:
+        return role in self.endpoints
+
+    def call(
+        self, role: str, pack: str, output_model: type[BaseModel]
+    ) -> tuple[BaseModel, LLMCall]:
+        if role not in self.endpoints:
+            raise KeyError(f"no endpoint configured for role {role!r}")
+        endpoint = self.endpoints[role]
+        import json as _json
+
+        schema = _json.dumps(output_model.model_json_schema(), sort_keys=True)
+        prompt = TEMPLATES[role].format(schema=schema, pack=pack)
+        prompt_ref = self.blobs.put(prompt.encode())
+        started = time.monotonic()
+        error = ""
+        for _attempt in range(self.retry_max + 1):
+            request = prompt if not error else (
+                prompt + f"\n\nYour previous output was invalid: {error}\n"
+                "Return ONLY a valid JSON object for the schema."
+            )
+            raw = endpoint.complete(request)
+            raw_ref = self.blobs.put(raw.encode())
+            try:
+                data = output_model.model_validate_json(_extract_json(raw))
+            except (ValidationError, ValueError) as e:
+                error = str(e)[:500]
+                continue
+            call = LLMCall(
+                role=role,
+                model=getattr(endpoint, "model", ""),
+                endpoint=getattr(endpoint, "name", ""),
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                tokens=0,
+                ms=int((time.monotonic() - started) * 1000),
+            )
+            return data, call
+        raise SchemaRepairError(f"role {role}: no schema-valid output after retries: {error}")
+
+
+def build_adapter(config, blob_store) -> LLMAdapter:
+    """Build from the §15 role table. Roles with a null endpoint are absent
+    (has_role False); judge ensembles (lists) land with P5."""
+    endpoints: dict[str, object] = {}
+    for role, spec in (config.roles or {}).items():
+        if isinstance(spec, list):
+            continue  # judge ensemble: P5
+        if not isinstance(spec, dict) or not spec.get("endpoint"):
+            continue
+        api_key_env = spec.get("api_key_env") or ""
+        endpoints[role] = OpenAICompatEndpoint(
+            base_url=spec["endpoint"],
+            model=spec.get("model") or "",
+            api_key=os.environ.get(api_key_env) if api_key_env else None,
+            temperature=spec.get("temperature"),
+        )
+    return LLMAdapter(endpoints, blob_store, retry_max=config.RETRY_MAX)

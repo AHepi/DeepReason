@@ -20,6 +20,8 @@ docs/                            normative spec
 src/deepreason/
   harness.py                §1–§4 registration, well-formedness, materialized view, replay/time-travel
   canonical.py              §1   canonical JSON + sha256 content addressing
+  programs.py               §1   budgeted test programs tau_kappa (predicate/program verdicts)
+  loop.py                   P1   single-problem Conj -> Crit -> Adj loop
   ontology/                 §1   one schema: Artifact, Commitment, Warrant, Problem, Event, State
   log/                      §1   append-only JSONL event log; replay / time-travel
   storage/                  §14  content-addressed blobs; merge (P3); holdout namespace
@@ -43,8 +45,8 @@ tests/                           P0 acceptance tests (grounded extension, reinst
 | Phase | Scope | Status |
 |-------|-------|--------|
 | P0 | deterministic core: schema, event log, two-pass adjudicator, replay | ✅ implemented |
-| P1 | single-problem loop: Conj → Crit → Adj, anti-relapse, VS conjecturer | next |
-| P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | — |
+| P1 | single-problem loop: Conj → Crit → Adj, anti-relapse, VS conjecturer | ✅ implemented |
+| P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | next |
 | P3 | merge, session namespaces | — |
 | P4 | research commitments + backends | — |
 | P5 | informal-domain protocol (§10) | — |
