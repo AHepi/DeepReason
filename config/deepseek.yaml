@@ -1,0 +1,45 @@
+# DeepSeek live-run knob file (spec §15). DeepSeek's API is OpenAI-compatible.
+# Set DEEPSEEK_API_KEY in the environment. Model ids marked "auto" are
+# resolved against the provider's /models list by scripts/live_run.py
+# (preferring the id passed via --model, e.g. a V4 pro variant).
+#
+# Honest note (§9/§17): the judge SHOULD run on >=2 endpoints from different
+# model FAMILIES; with a single provider we approximate with two different
+# DeepSeek models, which catches intra-provider disagreement only.
+
+FLOOR: 1
+K: 4
+INTEGRATION_BUDGET_SHARE: 0.30
+HV_MIN: 0.5
+HV_K: 5
+PRECEDENT_K: 4
+TRIAL_PARAPHRASE_N: 2
+JUDGE_ERR_MAX: 0.25
+AUDIT_PERIOD: 10
+USER_RULINGS_BUDGET: 2
+HOLDOUT_SHARE: 0.2
+N_SCHOOLS: 2
+STANCE_DECAY: 20
+XEXAM_SHARE: 0.15
+RESEED_DIST_MIN: 0.15
+NEAR_DUP_EPS: 0.35
+VS_K: 4
+PARETO_AXES: [hv, reach, coverage]
+LAMBDA_FLOOR: 0.3
+CAPTURE_W: 10
+ATTACK_ENTROPY_FLOOR: 0.2
+CRIT_DEBT_CEILING: 0.5
+MIN_ATTACKS_FOR_RITUAL: 5
+RESEARCH_PERIOD: 5
+PACK_TOKEN_BUDGET: 2500
+RETRY_MAX: 2
+
+roles:
+  conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY }
+  argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY }
+  defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY }
+  variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY }
+  judge:
+    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY }
+    - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY }
+  synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY }

@@ -69,7 +69,7 @@ class LLMAdapter:
         prompt_ref = self.blobs.put(prompt.encode())
         started = time.monotonic()
         error = ""
-        for _attempt in range(self.retry_max + 1):
+        for attempt in range(self.retry_max + 1):
             request = prompt if not error else (
                 prompt + f"\n\nYour previous output was invalid: {error}\n"
                 "Return ONLY a valid JSON object for the schema."
@@ -89,6 +89,7 @@ class LLMAdapter:
                 raw_ref=raw_ref,
                 tokens=0,
                 ms=int((time.monotonic() - started) * 1000),
+                attempts=attempt + 1,
             )
             return data, call
         raise SchemaRepairError(f"role {role}: no schema-valid output after retries: {error}")

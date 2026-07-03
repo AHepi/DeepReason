@@ -47,6 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     rule_cmd.add_argument("--standard", required=True, help="spec id the ruling calibrates")
     sub.add_parser("schools", help="rosters, centroid distances, stance weights")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
+    sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
     sub.add_parser("merge", help="merge another saved graph (G-Set union)").add_argument("path")
     sub.add_parser("trace", help="print the events touching an id").add_argument("id")
@@ -136,6 +137,15 @@ def main(argv: list[str] | None = None) -> int:
             "raw_flags": detection.raw_flags(harness, embedder, config),
         }
         print(json.dumps(dashboard, indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "report":
+        from deepreason.config import load as load_config
+        from deepreason.report import eval_report
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        print(json.dumps(eval_report(harness, config), indent=2, sort_keys=True))
         return 0
 
     if args.command == "docket":

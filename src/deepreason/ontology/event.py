@@ -32,6 +32,7 @@ class LLMCall(BaseModel):
     raw_ref: str  # blob — replay consumes logged raws (§0)
     tokens: int = 0
     ms: int = 0
+    attempts: int = 1  # completions consumed incl. schema repairs (P6 valid-JSON rate)
 
 
 class StateDiff(BaseModel):
