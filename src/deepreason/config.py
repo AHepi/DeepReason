@@ -40,6 +40,8 @@ class Config(BaseModel):
     ATTACK_ENTROPY_FLOOR: float = 0.2
     CRIT_DEBT_CEILING: float = 0.5
     MIN_ATTACKS_FOR_RITUAL: int = 5
+    # Research (§12)
+    RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

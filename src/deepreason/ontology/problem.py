@@ -24,6 +24,7 @@ class SpawnTrigger(str, Enum):
     AUDIT_CRITIC = "audit-critic"              # critic-gaming signal
     CONNECTION = "connection"                  # iso(a) > 0 (§7)
     INTEGRATION = "integration"                # overlapping accepted, no declared relation
+    RESEARCH = "research"                      # observation-valued, no covering evidence (§12)
 
 
 class ProblemProvenance(BaseModel):

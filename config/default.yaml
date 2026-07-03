@@ -30,6 +30,9 @@ ATTACK_ENTROPY_FLOOR: 0.2     # ritual condition: attack-target entropy floor (1
 CRIT_DEBT_CEILING: 0.5        # ritual condition: criticism-debt ceiling
 MIN_ATTACKS_FOR_RITUAL: 5     # min window attacks before ritual conditions count
 
+# --- Research (§12) ---
+RESEARCH_PERIOD: 5            # cycles between research fetches (standing exogenous schedule)
+
 # --- LLM adapter (§9) ---
 PACK_TOKEN_BUDGET: 2500       # max pack size (2000-3000)
 RETRY_MAX: 2                  # schema-repair retries

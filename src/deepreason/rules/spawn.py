@@ -124,6 +124,26 @@ def scan_spawns(harness, config) -> list[Problem]:
             problem_id=f"conn:{aid[:12]}",
         )
 
+    # Research (§12): observation-valued commitment, no covering evidence.
+    from deepreason.research.backends import covered
+
+    for aid, artifact in state.artifacts.items():
+        if status.get(aid) == Status.REFUTED:
+            continue
+        for cid in artifact.interface.commitments:
+            kappa = harness.commitments.get(cid)
+            if kappa is None or not kappa.observation_valued:
+                continue
+            rid = f"research:{cid}:{aid[:12]}"
+            if rid in state.problems or covered(harness, rid):
+                continue
+            _spawn(
+                SpawnTrigger.RESEARCH,
+                [aid, cid],
+                f"obtain evidence for observation-valued {cid} on {aid[:12]}",
+                problem_id=rid,
+            )
+
     # Integration: accepted artifacts on overlapping problems, no relation.
     accepted = [a for a in addressed if status.get(a) == Status.ACCEPTED]
     dep = set(state.dep)

@@ -49,9 +49,9 @@ tests/                           acceptance tests per phase (grounded extension,
 | P0 | deterministic core: schema, event log, two-pass adjudicator, replay | ✅ implemented |
 | P1 | single-problem loop: Conj → Crit → Adj, anti-relapse, VS conjecturer | ✅ implemented |
 | P2 | scheduler, all Spawn triggers, HV/reach, capture control (§11), λ experiment | ✅ implemented |
-| P3 | merge, session namespaces | next |
-| P4 | research commitments + backends | — |
-| P5 | informal-domain protocol (§10) | — |
+| P3 | merge, session namespaces | ✅ implemented |
+| P4 | research commitments + backends | ✅ implemented |
+| P5 | informal-domain protocol (§10) | next |
 | P6 | frontier-model hardening | — |
 
 ## Development

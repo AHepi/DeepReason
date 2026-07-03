@@ -25,11 +25,12 @@ _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 
 
 class Scheduler:
-    def __init__(self, harness, adapter, config, embedder=None) -> None:
+    def __init__(self, harness, adapter, config, embedder=None, research_backend=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
         self.embedder = embedder or HashingEmbedder()
+        self.research_backend = research_backend
         self.schools = (
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
         )
@@ -59,7 +60,9 @@ class Scheduler:
         candidates = [
             p
             for p in state.problems.values()
-            if integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS
+            # Research problems are worked by backends, not gamma (§12).
+            if p.provenance.trigger != SpawnTrigger.RESEARCH
+            and (integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS)
         ]
         if not candidates:
             return None
@@ -134,8 +137,28 @@ class Scheduler:
 
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()
+        self._research_step()
         self._capture_step()
         self._cycles += 1
+
+    def _research_step(self) -> None:
+        """Standing exogenous schedule (§12): work one uncovered research
+        problem every RESEARCH_PERIOD cycles — every cycle under the
+        grounding brake (§11.4)."""
+        if self.research_backend is None:
+            return
+        due = self.research_priority or self._cycles % self.config.RESEARCH_PERIOD == 0
+        if not due:
+            return
+        from deepreason.research.backends import covered, run_research
+
+        for problem in self.harness.state.problems.values():
+            if problem.provenance.trigger != SpawnTrigger.RESEARCH:
+                continue
+            if covered(self.harness, problem.id):
+                continue
+            if run_research(self.harness, problem, self.research_backend) is not None:
+                return  # one fetch per due cycle (budgeted)
 
     def _lazy_hv(self) -> None:
         """One spot-check per cycle on an accepted, unmeasured artifact."""

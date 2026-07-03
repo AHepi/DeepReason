@@ -135,6 +135,14 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(dashboard, indent=2, sort_keys=True))
         return 0
 
+    if args.command == "merge":
+        from deepreason.storage.merge import merge
+
+        harness = Harness(Path(args.root))
+        stats = merge(harness, Path(args.path))
+        print(json.dumps(stats, sort_keys=True))
+        return 0
+
     if args.command == "reseed":
         from deepreason.capture import schools as schools_mod
 
