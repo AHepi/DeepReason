@@ -33,6 +33,10 @@ MIN_ATTACKS_FOR_RITUAL: 5
 RESEARCH_PERIOD: 5
 PACK_TOKEN_BUDGET: 2500
 RETRY_MAX: 2
+# Budget triage (attention only, never status): cap the two most expensive
+# call sites the first live run exposed.
+ARG_CRIT_PER_CYCLE: 3
+RUBRIC_TRIALS_PER_ARTIFACT: 1
 
 roles:
   conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY }

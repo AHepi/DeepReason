@@ -60,15 +60,18 @@ def eval_report(harness, config, embedder=None) -> dict:
 
     # --- LLM reliability: valid-JSON rate per role (P6) ---------------- #
     per_role: dict[str, dict] = {}
+    total_tokens = 0
     for event in events:
         if event.llm is None:
             continue
         row = per_role.setdefault(
-            event.llm.role, {"calls": 0, "attempts": 0, "total_ms": 0}
+            event.llm.role, {"calls": 0, "attempts": 0, "total_ms": 0, "tokens": 0}
         )
         row["calls"] += 1
         row["attempts"] += event.llm.attempts
         row["total_ms"] += event.llm.ms
+        row["tokens"] += event.llm.tokens
+        total_tokens += event.llm.tokens
     for row in per_role.values():
         row["valid_json_rate"] = row["calls"] / row["attempts"] if row["attempts"] else None
 
@@ -173,6 +176,7 @@ def eval_report(harness, config, embedder=None) -> dict:
             "problems": len(state.problems),
             "warrants": len(harness.warrants),
             "survivors": len(survivors),
+            "llm_tokens": total_tokens,
         },
         "llm": per_role,
         "attack_validity_rate": attack_validity,

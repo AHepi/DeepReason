@@ -30,10 +30,17 @@ def _extract_json(raw: str) -> str:
 
 
 class LLMAdapter:
-    def __init__(self, endpoints: dict[str, object], blob_store, retry_max: int = 2) -> None:
+    def __init__(
+        self,
+        endpoints: dict[str, object],
+        blob_store,
+        retry_max: int = 2,
+        meter=None,
+    ) -> None:
         self.endpoints = endpoints
         self.blobs = blob_store
         self.retry_max = retry_max
+        self.meter = meter  # TokenMeter: hard provider-wide budget (llm/budget.py)
 
     def has_role(self, role: str) -> bool:
         return role in self.endpoints
@@ -69,12 +76,24 @@ class LLMAdapter:
         prompt_ref = self.blobs.put(prompt.encode())
         started = time.monotonic()
         error = ""
+        tokens_used = 0
         for attempt in range(self.retry_max + 1):
+            if self.meter is not None:
+                self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
             request = prompt if not error else (
                 prompt + f"\n\nYour previous output was invalid: {error}\n"
                 "Return ONLY a valid JSON object for the schema."
             )
             raw = endpoint.complete(request)
+            usage = getattr(endpoint, "last_usage", None) or {
+                "prompt_tokens": len(request) // 4,
+                "completion_tokens": len(raw) // 4,
+            }
+            tokens_used += int(usage.get("prompt_tokens", 0)) + int(
+                usage.get("completion_tokens", 0)
+            )
+            if self.meter is not None:
+                self.meter.add(usage)
             raw_ref = self.blobs.put(raw.encode())
             try:
                 data = output_model.model_validate_json(_extract_json(raw))
@@ -87,7 +106,7 @@ class LLMAdapter:
                 endpoint=getattr(endpoint, "name", ""),
                 prompt_ref=prompt_ref,
                 raw_ref=raw_ref,
-                tokens=0,
+                tokens=tokens_used,
                 ms=int((time.monotonic() - started) * 1000),
                 attempts=attempt + 1,
             )

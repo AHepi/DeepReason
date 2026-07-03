@@ -42,6 +42,9 @@ class Config(BaseModel):
     MIN_ATTACKS_FOR_RITUAL: int = 5
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
+    # Budget triage (§14; attention only, never status)
+    ARG_CRIT_PER_CYCLE: int | None = None      # cap argumentative-critic calls per cycle
+    RUBRIC_TRIALS_PER_ARTIFACT: int | None = None  # cap rubric trials per artifact per cycle
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

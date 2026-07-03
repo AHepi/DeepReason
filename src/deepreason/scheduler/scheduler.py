@@ -42,6 +42,7 @@ class Scheduler:
         self.research_priority = False
         self._cycles = 0
         self._integration_cycles = 0
+        self._arg_crit_this_cycle = 0
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
 
@@ -80,8 +81,9 @@ class Scheduler:
         }
 
     def _criticize(self, artifact) -> None:
-        harness = self.harness
+        harness, config = self.harness, self.config
         crit_program(harness, artifact.id)
+        trials = 0
         for cid in artifact.interface.commitments:
             kappa = harness.commitments.get(cid)
             if kappa is None:
@@ -93,6 +95,12 @@ class Scheduler:
 
                 if harness.state.status.get(artifact.id) != Status.ACCEPTED:
                     continue  # budget triage: already felled
+                if (
+                    config.RUBRIC_TRIALS_PER_ARTIFACT is not None
+                    and trials >= config.RUBRIC_TRIALS_PER_ARTIFACT
+                ):
+                    continue  # budget triage (§14): remaining trials next cycle
+                trials += 1
                 try:
                     run_trial(
                         harness, artifact.id, kappa, self.adapter, self.config,
@@ -103,7 +111,12 @@ class Scheduler:
         if (
             harness.state.status.get(artifact.id) == Status.ACCEPTED
             and self.adapter.has_role("argumentative_critic")
+            and (
+                config.ARG_CRIT_PER_CYCLE is None
+                or self._arg_crit_this_cycle < config.ARG_CRIT_PER_CYCLE
+            )
         ):
+            self._arg_crit_this_cycle += 1
             try:
                 crit_argumentative(harness, artifact.id, self.adapter, self.config)
             except SchemaRepairError as e:
@@ -111,6 +124,7 @@ class Scheduler:
 
     def step(self) -> None:
         harness, config = self.harness, self.config
+        self._arg_crit_this_cycle = 0
         scan_spawns(harness, config)
         problem = self._select_problem()
         if problem is None:
@@ -259,8 +273,16 @@ class Scheduler:
     # -------------------------------------------------------------- #
 
     def run(self, cycles: int) -> dict:
+        from deepreason.llm.budget import TokenBudgetExceeded
+
         for _ in range(cycles):
-            self.step()
+            try:
+                self.step()
+            except TokenBudgetExceeded as e:
+                # Budget exhaustion is a logged stop, never a crash: state is
+                # consistent (Adj runs inside every registration).
+                self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
+                break
         return self.report()
 
     def report(self) -> dict:

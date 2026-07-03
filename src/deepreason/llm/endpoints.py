@@ -9,7 +9,8 @@ import urllib.request
 
 class MockEndpoint:
     """Returns scripted responses in order (raises when exhausted), or — when
-    given a callable — computes each response from the prompt."""
+    given a callable — computes each response from the prompt. Reports an
+    estimated usage (chars/4) so token accounting is testable."""
 
     def __init__(self, responses, name: str = "mock", model: str = "mock") -> None:
         if callable(responses):
@@ -20,13 +21,20 @@ class MockEndpoint:
             self._responses = list(responses)
         self.name = name
         self.model = model
+        self.last_usage: dict | None = None
 
     def complete(self, prompt: str) -> str:
         if self._fn is not None:
-            return self._fn(prompt)
-        if not self._responses:
+            response = self._fn(prompt)
+        elif self._responses:
+            response = self._responses.pop(0)
+        else:
             raise RuntimeError("MockEndpoint exhausted")
-        return self._responses.pop(0)
+        self.last_usage = {
+            "prompt_tokens": max(1, len(prompt) // 4),
+            "completion_tokens": max(1, len(response) // 4),
+        }
+        return response
 
 
 class OpenAICompatEndpoint:
@@ -40,17 +48,22 @@ class OpenAICompatEndpoint:
         api_key: str | None = None,
         temperature: float | None = None,
         timeout_s: int = 120,
+        max_tokens: int | None = None,
     ) -> None:
         self.name = base_url
         self.model = model
         self.api_key = api_key
         self.temperature = temperature
         self.timeout_s = timeout_s
+        self.max_tokens = max_tokens
+        self.last_usage: dict | None = None
 
     def complete(self, prompt: str) -> str:
         body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
         if self.temperature is not None:
             body["temperature"] = self.temperature
+        if self.max_tokens is not None:
+            body["max_tokens"] = self.max_tokens
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -61,4 +74,5 @@ class OpenAICompatEndpoint:
         )
         with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
             data = json.load(response)
+        self.last_usage = data.get("usage") or None
         return data["choices"][0]["message"]["content"]
