@@ -1,0 +1,47 @@
+# Config knobs (spec §15) — single file, exposed.
+# "tune" values start at null and must be set before the relevant phase's runs.
+
+# --- Unification (§7) ---
+FLOOR: 1                      # min accepted dependence edges before isolation fires
+K: 4                          # neighbours considered per connection problem (3-5)
+INTEGRATION_BUDGET_SHARE: 0.30 # cap on cycles spent on connection/integration
+HV_MIN: null                  # pass threshold of the hv-floor criterion (1 - s_hat >= HV_MIN); tune
+HV_K: 8                       # edits sampled per HV estimate (5-10)
+
+# --- Informal domains (§10) ---
+PRECEDENT_K: 4                # precedents in a judge pack's precedent slice (3-5)
+TRIAL_PARAPHRASE_N: 2         # paraphrase spot-checks per rubric ruling (2-3)
+JUDGE_ERR_MAX: null           # tolerated planted-flaw error rate before audit Spawn; tune
+AUDIT_PERIOD: 30              # cycles between judge-audit sweeps (20-50)
+USER_RULINGS_BUDGET: 2        # appellate rulings requested per session (1-3)
+HOLDOUT_SHARE: 0.2            # fraction of evidence corpus sealed (0.1-0.3)
+
+# --- Capture control (§11) ---
+N_SCHOOLS: 4                  # conjecture schools (3-5)
+STANCE_DECAY: null            # stance-weight decay schedule vs. lineage-corpus size; tune
+XEXAM_SHARE: 0.15             # cross-examination slice per lineage (0.1-0.2)
+RESEED_DIST_MIN: null         # min inter-school centroid distance before reseed; tune
+NEAR_DUP_EPS: null            # embedding radius triggering anti-relapse stage 3; tune
+VS_K: 6                       # candidates per gamma-call, Verbalized Sampling (4-8)
+PARETO_AXES: [hv, reach, coverage]  # frontier axes for focus/reporting
+LAMBDA_FLOOR: null            # min exogenous grounding ratio before brake; tune
+CAPTURE_W: 20                 # detection window / hysteresis width in cycles (10-30)
+
+# --- LLM adapter (§9) ---
+PACK_TOKEN_BUDGET: 2500       # max pack size (2000-3000)
+RETRY_MAX: 2                  # schema-repair retries
+
+# role -> endpoint/model/temperature routing (cross-family rules, §9).
+# judge MUST have >= 2 endpoints from different model families;
+# embedder MUST be a non-generator model.
+roles:
+  conjecturer:          { endpoint: null, model: null, temperature: 1.0 }
+  argumentative_critic: { endpoint: null, model: null, temperature: 0.7 }
+  defender:             { endpoint: null, model: null, temperature: 0.7 }
+  variator:             { endpoint: null, model: null, temperature: 1.0 }
+  judge:
+    - { endpoint: null, model: null, temperature: 0.0 }
+    - { endpoint: null, model: null, temperature: 0.0 }
+  summarizer:           { endpoint: null, model: null, temperature: 0.3 }
+  synthesizer:          { endpoint: null, model: null, temperature: 0.9 }
+  embedder:             { endpoint: null, model: null }

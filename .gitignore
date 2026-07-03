@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+
+# Runtime state (event logs / blob stores are per-run, git-native saves are explicit)
+runs/
+*.local.yaml
+
+# Editors
+.idea/
+.vscode/
+*.swp
+.DS_Store
