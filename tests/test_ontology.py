@@ -27,6 +27,15 @@ def test_artifact_round_trip():
     assert Artifact.model_validate_json(a.model_dump_json()) == a
 
 
+def test_compute_id_deterministic_and_content_sensitive():
+    interface = Interface(commitments=["c1"])
+    id1 = Artifact.compute_id("inline:x", "utf8", interface)
+    assert id1 == Artifact.compute_id("inline:x", "utf8", Interface(commitments=["c1"]))
+    assert id1 != Artifact.compute_id("inline:y", "utf8", interface)
+    assert id1 != Artifact.compute_id("inline:x", "json", interface)
+    assert len(id1) == 64  # sha256 hex
+
+
 def test_artifact_has_no_kind_field():
     # Untypedness (Def 3.2, §0): dispatch is on interface structure only.
     assert "kind" not in Artifact.model_fields

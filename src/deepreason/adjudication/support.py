@@ -6,12 +6,30 @@ premise makes dependents ``suspended_unsupported``, NOT refuted — orphaned
 endpoints may stay accepted.
 """
 
+from collections.abc import Iterable
+
+from deepreason.adjudication.edges import toposort
 from deepreason.ontology.state import Status
 
 
 def final_labels(
     label0: dict[str, str],
-    dep: list[tuple[str, str]],
+    dep_edges: Iterable[tuple[str, str]],
 ) -> dict[str, Status]:
-    """Two-pass final labels; recompute after every registration. TODO(P0)."""
-    raise NotImplementedError
+    nodes = set(label0)
+    dep_edges = set(dep_edges)
+    deps: dict[str, list[str]] = {n: [] for n in nodes}
+    for a, b in dep_edges:
+        deps[a].append(b)
+    final: dict[str, Status] = {}
+    for a in toposort(nodes, dep_edges):
+        supported = all(final[b] == Status.ACCEPTED for b in deps[a])
+        if label0[a] == "accepted" and supported:
+            final[a] = Status.ACCEPTED
+        elif label0[a] == "accepted":
+            final[a] = Status.SUSPENDED_UNSUPPORTED
+        elif label0[a] == "refuted":
+            final[a] = Status.REFUTED
+        else:
+            final[a] = Status.SUSPENDED
+    return final

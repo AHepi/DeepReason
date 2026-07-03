@@ -65,5 +65,12 @@ class Artifact(BaseModel):
 
     @staticmethod
     def compute_id(content_ref: str, codec: str, interface: Interface) -> str:
-        """Canonical content-addressed id. TODO(P0): canonical JSON + sha256."""
-        raise NotImplementedError
+        """sha256 over canonical JSON of (content_ref, codec, interface)."""
+        from deepreason.canonical import canonical_json, sha256_hex
+
+        payload = {
+            "content_ref": content_ref,
+            "codec": codec,
+            "interface": interface.model_dump(mode="json"),
+        }
+        return sha256_hex(canonical_json(payload))

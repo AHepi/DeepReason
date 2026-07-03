@@ -2,22 +2,113 @@
 
 - Each carried warrant => attack edge (carrier -> warrant.target).
 - Each ``dependence`` ref => support edge (this -> target); dep must stay a
-  DAG — reject any dependence ref that would create a cycle.
+  DAG — a registration whose materialized edges would create a cycle is
+  rejected (see harness).
 - Validity-node closure: any attacker of a warrant's validity_node attacks
-  the warrant (hence its carrier's attack edge).
+  the warrant — encoded as an attack on the warrant's carrier, which
+  disables the carrier's attack edge in grounded semantics.
 - Closure extension (case law, §1/§10.3): the nu of a rubric-derived warrant
   mentions the standard it applied; every registered attacker of that
   standard attacks the nu. Refute a standard => every nu citing it is
   attacked => every warrant under it falls => targets reinstate, all in
   pass 1.
+
+Edges materialize only when both endpoints are registered: refs/targets may
+dangle (import/merge order, §14) and take effect when the target appears.
 """
 
+import heapq
+from collections.abc import Iterable
 
-def build_att(state) -> list[tuple[str, str]]:
-    """Attack edges incl. both closure rules. TODO(P0)."""
-    raise NotImplementedError
+from deepreason.ontology.artifact import Artifact, RefRole
+from deepreason.ontology.commitment import Commitment
+from deepreason.ontology.warrant import Warrant
 
 
-def build_dep(state) -> list[tuple[str, str]]:
-    """Support edges; cycle rejection. TODO(P0)."""
-    raise NotImplementedError
+class DependenceCycleError(ValueError):
+    """A dependence ref would make dep cyclic (forbidden, §1)."""
+
+
+def build_dep(artifacts: dict[str, Artifact]) -> set[tuple[str, str]]:
+    """Support edges (dependent -> dependency) from dependence refs."""
+    edges: set[tuple[str, str]] = set()
+    for a in artifacts.values():
+        for ref in a.interface.refs:
+            if ref.role == RefRole.DEPENDENCE and ref.target in artifacts:
+                edges.add((a.id, ref.target))
+    return edges
+
+
+def toposort(nodes: set[str], dep_edges: Iterable[tuple[str, str]]) -> list[str]:
+    """Dependencies-before-dependents order; deterministic (lexicographic
+    tie-break); raises DependenceCycleError if dep is not a DAG."""
+    deps: dict[str, set[str]] = {n: set() for n in nodes}
+    rdeps: dict[str, set[str]] = {n: set() for n in nodes}
+    for a, b in dep_edges:
+        deps[a].add(b)
+        rdeps[b].add(a)
+    remaining = {n: len(deps[n]) for n in nodes}
+    heap = sorted(n for n in nodes if remaining[n] == 0)
+    heapq.heapify(heap)
+    order: list[str] = []
+    while heap:
+        n = heapq.heappop(heap)
+        order.append(n)
+        for m in sorted(rdeps[n]):
+            remaining[m] -= 1
+            if remaining[m] == 0:
+                heapq.heappush(heap, m)
+    if len(order) != len(nodes):
+        cyclic = sorted(n for n in nodes if remaining[n] > 0)
+        raise DependenceCycleError(f"dep contains a cycle through: {cyclic}")
+    return order
+
+
+def build_att(
+    artifacts: dict[str, Artifact],
+    warrants: dict[str, Warrant],
+    commitments: dict[str, Commitment],
+) -> set[tuple[str, str]]:
+    """Attack edges (attacker -> target) including both closure rules.
+
+    Computed as a fixpoint: the case-law extension adds attackers of a
+    standard as attackers of every nu citing it, which the validity-node
+    closure then lifts onto the warrants' carriers.
+    """
+    att: set[tuple[str, str]] = set()
+    carriers: dict[str, str] = {}  # warrant id -> carrier artifact id
+    for a in artifacts.values():
+        for wid in a.warrants:
+            w = warrants.get(wid)
+            if w is None:
+                continue
+            carriers[wid] = a.id
+            if w.target in artifacts:
+                att.add((a.id, w.target))
+
+    changed = True
+    while changed:
+        changed = False
+        for wid, carrier in carriers.items():
+            w = warrants[wid]
+            nu = w.validity_node
+            # Case-law extension: attackers of the mentioned standard attack nu.
+            kappa = commitments.get(w.commitment) if w.commitment else None
+            if kappa is not None and kappa.eval.startswith("rubric:"):
+                nu_artifact = artifacts.get(nu)
+                if nu_artifact is not None:
+                    standards = {
+                        r.target
+                        for r in nu_artifact.interface.refs
+                        if r.role == RefRole.MENTION and r.target in artifacts
+                    }
+                    for x, target in list(att):
+                        if target in standards and (x, nu) not in att:
+                            att.add((x, nu))
+                            changed = True
+            # Validity-node closure: attackers of nu attack the carrier.
+            for x, target in list(att):
+                if target == nu and (x, carrier) not in att:
+                    att.add((x, carrier))
+                    changed = True
+    return att

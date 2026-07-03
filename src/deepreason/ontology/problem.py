@@ -9,6 +9,12 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
+# Popper battery (spec §1): commitment-schema ids auto-pinned into every
+# problem's criteria at registration. The pinning mechanism is structural
+# from P0; the battery's contents (demarcation checks etc.) land with P1/P2.
+POPPER_BATTERY: tuple[str, ...] = ()
+
+
 class SpawnTrigger(str, Enum):
     SEED = "seed"
     SUCCESSOR = "successor"                    # failed verdict (P2)

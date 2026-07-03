@@ -6,15 +6,27 @@ sha256 and never mutated or deleted (D8).
 
 from pathlib import Path
 
+from deepreason.canonical import sha256_hex
+
 
 class BlobStore:
     def __init__(self, root: Path) -> None:
-        self.root = root
+        self.root = Path(root)
+        self.root.mkdir(parents=True, exist_ok=True)
+
+    def _path(self, ref: str) -> Path:
+        return self.root / ref[:2] / ref
 
     def put(self, data: bytes) -> str:
-        """Store bytes, return sha256 hash. TODO(P0)."""
-        raise NotImplementedError
+        ref = sha256_hex(data)
+        path = self._path(ref)
+        if not path.exists():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+        return ref
 
     def get(self, ref: str) -> bytes:
-        """Fetch bytes by hash. TODO(P0)."""
-        raise NotImplementedError
+        path = self._path(ref)
+        if not path.exists():
+            raise KeyError(f"blob not found: {ref}")
+        return path.read_bytes()
