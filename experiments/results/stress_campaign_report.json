@@ -1,0 +1,68 @@
+{
+  "campaign": "stress tests T0-T8",
+  "campaign_total_tokens": 1296032,
+  "date": "2026-07-04",
+  "plan": "experiments/stress_plan.md",
+  "spend_per_run": {
+    "T0_strict_redo": 132029,
+    "T1": 217873,
+    "T2_budget": 30718,
+    "T2_default": 40326,
+    "T2_none": 18112,
+    "T3a": 93082,
+    "T3b": 71155,
+    "T4": 147714,
+    "T5": 223557,
+    "T6_post": 43912,
+    "T6a": 132021,
+    "T6b": 92687,
+    "T7_relapse": 52846
+  },
+  "verdicts": {
+    "T0_staged_criteria": {
+      "detail": "unfocused: 0 candidates (dilution); focus-locked: 16 candidates, 11 accepted incl. 2 negative results; universal impossibility claim refuted",
+      "expectation": "strict phase works when focus-locked",
+      "verdict": "HELD after redo"
+    },
+    "T1_flash_downgrade": {
+      "detail": "flash critic/judge fine (attack validity 1.0, 6 convictions, 12 guard blocks); 0 survivors in 10 cycles -> flash conjecturer inadequate; route flash to aux roles only",
+      "expectation": "falsified if flash criticism stops felling candidates",
+      "verdict": "NOT falsified; asymmetry found"
+    },
+    "T2_reasoning_dose_response": {
+      "detail": "off 4 vs default 7 survivors (-43%) on tides; per-survivor cost still favors off; domain-dependent (republic demo held); policy: per-suite calibration",
+      "expectation": "falsified if reasoning-off loses >30% survivors",
+      "verdict": "FALSIFIER FIRED"
+    },
+    "T3_endurance_diversity": {
+      "detail": "30 cycles, 8 schools: attack validity 1.0, 0 interventions, 0 reseeds, 164k tokens total (~5k/cycle)",
+      "expectation": "no hysteresis lock, debt<ceiling, frontier sublinear",
+      "verdict": "HELD"
+    },
+    "T4_adversarial_occult": {
+      "detail": "3 refuted; 3 survivors all falsifiable (self-fulfilling stereotypes, seasonal birth effects, sunspot-hormone with real killing experiments self-stated); truth needs grounding, shape enforced by argument",
+      "expectation": "unfalsifiable claims must not survive kappa-causal",
+      "verdict": "HELD"
+    },
+    "T5_judge_pressure": {
+      "detail": "first live audit hits (2); survival_rate 0.43 vs 0.21 baseline; first invalid attack observed (attack_validity 0.909)",
+      "expectation": "blocks rise, valid convictions not wiped out",
+      "verdict": "HELD"
+    },
+    "T6_merge": {
+      "detail": "76 events merged, replay byte-for-byte True, post-merge cycles healthy",
+      "expectation": "lossless union, replay identical, gate works post-merge",
+      "verdict": "HELD"
+    },
+    "T7_relapse": {
+      "detail": "mature root still admits 2-3/3 candidates; INSTRUMENTATION GAP: gate diagnostics not persisted to event log",
+      "expectation": "gate blocks without starving admission",
+      "verdict": "HELD"
+    },
+    "T8_cachebench_refresh": {
+      "detail": "exact 2.0%->11.1%, prefix 29%->40.6% with campaign volume; refuted designs stay refuted; overlap grows with resume-heavy usage",
+      "expectation": "exact hit rate stays <20%",
+      "verdict": "HELD (trend noted)"
+    }
+  }
+}
