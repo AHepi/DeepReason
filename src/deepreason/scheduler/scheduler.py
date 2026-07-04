@@ -18,7 +18,7 @@ from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
 from deepreason.ontology import SpawnTrigger, Status
 from deepreason.rules.conj import conj
-from deepreason.rules.crit import crit_argumentative, crit_program
+from deepreason.rules.crit import crit_argumentative_batch, crit_program
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
 
@@ -112,17 +112,31 @@ class Scheduler:
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
-        if (
-            harness.state.status.get(artifact.id) == Status.ACCEPTED
-            and self.adapter.has_role("argumentative_critic")
-            and (
-                config.ARG_CRIT_PER_CYCLE is None
-                or self._arg_crit_this_cycle < config.ARG_CRIT_PER_CYCLE
-            )
-        ):
+    def _arg_crit(self, admitted_ids: list[str]) -> None:
+        """Argumentative pass over the admitted-and-still-accepted targets.
+        With CRIT_BATCH_K set, up to K targets share one call (angle 3 of
+        docs/TOKEN_ECONOMY.md); warrants stay per-target inside the rule.
+        ARG_CRIT_PER_CYCLE caps targets, batched or not."""
+        harness, config = self.harness, self.config
+        if not self.adapter.has_role("argumentative_critic"):
+            return
+        eligible: list[str] = []
+        for aid in admitted_ids:
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue  # budget triage: already felled by cheaper criticism
+            if (
+                config.ARG_CRIT_PER_CYCLE is not None
+                and self._arg_crit_this_cycle >= config.ARG_CRIT_PER_CYCLE
+            ):
+                break
             self._arg_crit_this_cycle += 1
+            eligible.append(aid)
+        size = config.CRIT_BATCH_K or 1
+        for i in range(0, len(eligible), size):
             try:
-                crit_argumentative(harness, artifact.id, self.adapter, self.config)
+                crit_argumentative_batch(
+                    harness, eligible[i : i + size], self.adapter, config
+                )
             except (SchemaRepairError, EndpointError) as e:
                 self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
@@ -205,6 +219,10 @@ class Scheduler:
                 continue
             for artifact in admitted:
                 self._criticize(artifact)
+            # Argumentative criticism runs after the cheap per-target passes
+            # so program-felled targets never spend a call — and survivors
+            # can share one (CRIT_BATCH_K).
+            self._arg_crit([a.id for a in admitted])
 
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()

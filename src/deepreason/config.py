@@ -43,8 +43,12 @@ class Config(BaseModel):
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # Budget triage (§14; attention only, never status)
-    ARG_CRIT_PER_CYCLE: int | None = None      # cap argumentative-critic calls per cycle
+    ARG_CRIT_PER_CYCLE: int | None = None      # cap argumentative-critic TARGETS per cycle
     RUBRIC_TRIALS_PER_ARTIFACT: int | None = None  # cap rubric trials per artifact per cycle
+    # Batch criticism (docs/TOKEN_ECONOMY.md angle 3): up to this many
+    # admitted targets share ONE argumentative-critic call; warrants remain
+    # per-target. None = one call per target (legacy behavior).
+    CRIT_BATCH_K: int | None = None
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

@@ -42,6 +42,20 @@ class ArgumentativeCriticOutput(BaseModel):
     case: str = ""  # the argument; becomes the critic artifact's content
 
 
+class BatchCase(BaseModel):
+    """One target's entry in a batched criticism pass (§14 batching): the
+    CALL is shared across targets, the case never is — each attacking entry
+    becomes an ordinary per-target argumentative warrant with its own nu."""
+
+    target: str  # must be an id listed in the pack; others are dropped
+    attack: bool
+    case: str = ""
+
+
+class BatchCriticOutput(BaseModel):
+    cases: list[BatchCase] = Field(default_factory=list)
+
+
 class VariatorEdit(BaseModel):
     content: str
 

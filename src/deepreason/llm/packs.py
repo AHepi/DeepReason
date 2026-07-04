@@ -84,6 +84,54 @@ def render_conj_pack(
     return _clip("\n".join(lines), token_budget)
 
 
+def render_batch_crit_pack(
+    target_ids: list[str],
+    state: EpistemicState,
+    commitments: dict[str, Commitment],
+    blobs,
+    token_budget: int,
+) -> str:
+    """One critic pass over several targets (§14 batching): the commitment
+    schemas — usually shared, since batch-mates come from one problem —
+    render once; each target carries its content and standing attacks.
+    Only the call is shared; every warrant stays per-target."""
+    lines = [
+        f"TARGETS ({len(target_ids)}) — judge each independently.",
+        "",
+        "COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):",
+    ]
+    seen: set[str] = set()
+    for tid in target_ids:
+        for cid in state.artifacts[tid].interface.commitments:
+            if cid in seen:
+                continue
+            seen.add(cid)
+            kappa = commitments.get(cid)
+            lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
+    content_chars = max(320, (token_budget * 2) // max(1, len(target_ids)))
+    for tid in target_ids:
+        target = state.artifacts[tid]
+        lines += [
+            "",
+            f"TARGET {tid}",
+            content_text(target, blobs)[:content_chars],
+            f"commitments: {', '.join(target.interface.commitments) or '(none)'}",
+        ]
+        attackers = [x for x, t in sorted(state.att) if t == tid][:ATTACKERS_N]
+        if attackers:
+            lines.append("standing attacks (do not repeat these):")
+            for x in attackers:
+                status = state.status.get(x)
+                lines.append(f"- {x} [{status.value if status else '?'}]: {_head(state, x, blobs)}")
+    lines += [
+        "",
+        "DIRECTIVE: return exactly one entry per target id above — the "
+        "strongest NEW specific case (attack=true) or attack=false. Never "
+        "attack an id that is not listed.",
+    ]
+    return _clip("\n".join(lines), token_budget)
+
+
 def render_crit_pack(
     target_id: str,
     state: EpistemicState,

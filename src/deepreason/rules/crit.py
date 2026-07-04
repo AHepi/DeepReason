@@ -12,8 +12,8 @@ import json
 
 from deepreason import programs
 from deepreason.canonical import sha256_hex
-from deepreason.llm.contracts import ArgumentativeCriticOutput
-from deepreason.llm.packs import render_crit_pack
+from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
+from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
 
 
@@ -91,3 +91,61 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         rule=Rule.CRIT,
         llm=llm_call,
     )
+
+
+def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artifact]:
+    """One argumentative-critic call over K targets (§14 batching — the call
+    structure is not the epistemology; the warrant structure is). Every
+    attacking case registers exactly as in the single path: per-target
+    argumentative warrant with its own attackable nu. A case naming an id
+    outside the batch is dropped — no verdict without exposure. A single
+    target delegates to the single-target contract unchanged."""
+    target_ids = list(dict.fromkeys(target_ids))
+    if not target_ids:
+        return []
+    if len(target_ids) == 1:
+        critic = crit_argumentative(harness, target_ids[0], adapter, config)
+        return [critic] if critic else []
+    pack = render_batch_crit_pack(
+        target_ids,
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        token_budget=config.PACK_TOKEN_BUDGET,
+    )
+    output, llm_call = adapter.call(
+        "argumentative_critic", pack, BatchCriticOutput, template_role="batch_critic"
+    )
+    critics: list[Artifact] = []
+    ruled: set[str] = set()
+    for case in output.cases:
+        if case.target not in target_ids or case.target in ruled:
+            continue
+        ruled.add(case.target)
+        if not case.attack or not case.case.strip():
+            continue  # no fault found for this target: registers nothing
+        case_hash = sha256_hex(case.case.encode())[:16]
+        nu = _register_nu(
+            harness, f"nu: argumentative case {case_hash} against {case.target} is sound"
+        )
+        warrant = Warrant(
+            id=f"w:arg:{case_hash}:{case.target}",
+            target=case.target,
+            type=WarrantType.ARGUMENTATIVE,
+            validity_node=nu.id,
+        )
+        critics.append(
+            harness.create_artifact(
+                case.case,
+                provenance=Provenance(role="critic"),
+                warrants=[warrant],
+                rule=Rule.CRIT,
+                # The shared call is logged once — on the first registration,
+                # or on a Measure below when nothing registers — so replay and
+                # token accounting see each call exactly once.
+                llm=llm_call if not critics else None,
+            )
+        )
+    if not critics:
+        harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_call)
+    return critics

@@ -36,6 +36,16 @@ TEMPLATES = {
         "genuine fault. Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "batch_critic": (
+        "You are an argumentative critic reviewing SEVERAL target artifacts in one "
+        "pass. Judge each target INDEPENDENTLY: for every listed target id, return "
+        "one entry — either the strongest specific case against it (attack=true) "
+        "or attack=false if you find no genuine fault in that target. Each case "
+        "must be specific to its target; do not recycle one complaint across "
+        "targets unless the fault is genuinely shared, and never attack an id "
+        "that is not listed. Never invent facts about summarized content.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
     "variator": (
         "You are the variator (mu): produce bounded edits of the target content. "
         "If the content is a JSON skeleton, substitute at role level — swap the "

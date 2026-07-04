@@ -37,6 +37,9 @@ RETRY_MAX: 2
 # call sites the first live run exposed.
 ARG_CRIT_PER_CYCLE: 3
 RUBRIC_TRIALS_PER_ARTIFACT: 1
+# Batch criticism (TOKEN_ECONOMY angle 3): one critic call covers up to 3
+# admitted targets; warrants stay per-target with their own nu.
+CRIT_BATCH_K: 3
 
 # The role table is the model-change plug (llm/providers.py): endpoint,
 # model, provider, reasoning, caps are all config. reasoning knob:
@@ -46,7 +49,7 @@ RUBRIC_TRIALS_PER_ARTIFACT: 1
 # battery (planted-flaw, paraphrase-flip, valid-JSON), not assumed.
 roles:
   conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true, logprobs: true }
-  argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }
+  argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2800, json_mode: true }  # sized for CRIT_BATCH_K cases per call
   defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 900, json_mode: true }
   variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 3000, json_mode: true }
   judge:
