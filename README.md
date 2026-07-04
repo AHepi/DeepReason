@@ -12,6 +12,21 @@ A deterministic epistemology harness implementing the **creativity-calculus** bu
   is a materialized view.
 - **Measures never adjudicate.** Search control steers attention, never status.
 
+## Use it from any agent, with any LLM
+
+Any OpenAI-compatible model can be the engine (per-role config, no code
+changes), and any MCP-capable agent — or anything that can run a CLI —
+can be the operator:
+
+```bash
+pip install .
+claude mcp add deepreason -- deepreason-mcp     # or any MCP client, stdio transport
+deepreason run --budget cycles=6 --token-budget 100000 --problem problem.yaml
+```
+
+See [`docs/AGENT.md`](docs/AGENT.md) for the tool surface, engine
+configuration, and the operating agent's rules of engagement.
+
 ## Layout
 
 ```

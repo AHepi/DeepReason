@@ -1,0 +1,333 @@
+"""MCP server: install DeepReason as an agent tool in any MCP harness.
+
+Any MCP-capable operator — Claude Code/Desktop, Cursor, a custom agent
+loop, any LLM behind an MCP client — can drive the harness through these
+tools; any OpenAI-compatible LLM can serve as the engine via the §15 role
+table (llm/providers.py). Zero dependencies beyond the package: the
+transport is newline-delimited JSON-RPC 2.0 over stdio, per the MCP spec.
+
+The tool surface is the spec §13 verb set, not a bypass: an operator can
+seed problems, fund cycles, read views, and enter appellate rulings
+(§10.6). It CANNOT set a status, delete anything, or adjudicate — those
+paths simply do not exist here (§0 stays load-bearing).
+"""
+
+import json
+import sys
+from pathlib import Path
+
+_PROTOCOL = "2024-11-05"
+_ROOT = {"root": {"type": "string", "description": "harness state directory", "default": ".deepreason"}}
+_CONFIG = {"config": {"type": "string", "description": "knob file path (default: config/default.yaml)"}}
+
+
+def _tools() -> list[dict]:
+    return [
+        {
+            "name": "seed_problem",
+            "description": (
+                "Register a problem on the frontier, with its commitments and "
+                "(optionally) a rubric standard. Criteria including "
+                "'skeleton-wf' auto-register the skeleton well-formedness "
+                "program. Nothing is ever deleted; re-seeding an id is an error."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "problem": {
+                        "type": "object",
+                        "properties": {
+                            "id": {"type": "string"},
+                            "description": {"type": "string"},
+                            "criteria": {"type": "array", "items": {"type": "string"}},
+                        },
+                        "required": ["id", "description"],
+                    },
+                    "commitments": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {"id": {"type": "string"}, "eval": {"type": "string"}},
+                            "required": ["id", "eval"],
+                        },
+                    },
+                    "standard": {
+                        "type": "object",
+                        "properties": {
+                            "id": {"type": "string"},
+                            "rubric": {"type": "string"},
+                            "mode": {"type": "string", "enum": ["absolute", "comparative"]},
+                        },
+                        "required": ["id", "rubric"],
+                    },
+                },
+                "required": ["problem"],
+            },
+        },
+        {
+            "name": "run_cycles",
+            "description": (
+                "Fund N scheduler cycles (Conj -> Crit -> Adj with schools, "
+                "capture control, budget triage). Requires LLM roles in the "
+                "config knob file's role table — any OpenAI-compatible "
+                "provider works; api keys come from the named env vars. "
+                "token_budget is a hard ceiling; the run stops gracefully."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    **_CONFIG,
+                    "cycles": {"type": "integer", "minimum": 1},
+                    "token_budget": {"type": "integer", "description": "hard prompt+completion cap"},
+                },
+                "required": ["cycles"],
+            },
+        },
+        {
+            "name": "frontier",
+            "description": "List problems on the frontier and the surviving (accepted) artifacts per problem.",
+            "inputSchema": {"type": "object", "properties": {**_ROOT}},
+        },
+        {
+            "name": "theory",
+            "description": "Render the theory view for an artifact id (or unique prefix): content, attack surface, refs, status history.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {**_ROOT, "id": {"type": "string"}},
+                "required": ["id"],
+            },
+        },
+        {
+            "name": "why",
+            "description": "Print the attack/defence chain justifying an artifact's current status.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {**_ROOT, "id": {"type": "string"}},
+                "required": ["id"],
+            },
+        },
+        {
+            "name": "eval_report",
+            "description": "P6 eval report: per-role LLM metrics, attack validity, trial-guard blocks, capture dashboard, survivor HV/reach.",
+            "inputSchema": {"type": "object", "properties": {**_ROOT, **_CONFIG}},
+        },
+        {
+            "name": "docket",
+            "description": (
+                "Disagreement-ranked queue of cases awaiting an appellate "
+                "ruling (§10.6) — the ONLY channel by which an operator's "
+                "judgement enters the graph, and it is budgeted."
+            ),
+            "inputSchema": {"type": "object", "properties": {**_ROOT, **_CONFIG}},
+        },
+        {
+            "name": "appellate_rule",
+            "description": "Enter an appellate ruling on a docket case: a one-line holding calibrating a named standard. Registers a precedent artifact.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "case_id": {"type": "string"},
+                    "holding": {"type": "string"},
+                    "standard": {"type": "string"},
+                },
+                "required": ["case_id", "holding", "standard"],
+            },
+        },
+    ]
+
+
+def _harness(arguments: dict):
+    from deepreason.harness import Harness
+
+    return Harness(Path(arguments.get("root") or ".deepreason"))
+
+
+def _config(arguments: dict):
+    from deepreason.config import load
+
+    path = arguments.get("config")
+    return load(Path(path) if path else None)
+
+
+def _resolve(harness, prefix: str) -> str:
+    matches = [i for i in harness.state.artifacts if i.startswith(prefix)]
+    if len(matches) == 1:
+        return matches[0]
+    if not matches:
+        return prefix
+    raise ValueError(f"ambiguous id prefix {prefix!r}: {[m[:12] for m in matches]}")
+
+
+def call_tool(name: str, arguments: dict) -> str:
+    """Execute one tool; returns the text payload (raises on error)."""
+    from deepreason.ontology import Commitment, Problem, ProblemProvenance, Status
+
+    if name == "seed_problem":
+        harness = _harness(arguments)
+        if arguments.get("standard"):
+            from deepreason.informal.standards import register_standard
+
+            std = arguments["standard"]
+            register_standard(
+                harness, std["id"], rubric=std["rubric"], mode=std.get("mode", "absolute")
+            )
+        for c in arguments.get("commitments") or []:
+            harness.register_commitment(Commitment.model_validate(c))
+        spec = arguments["problem"]
+        criteria = list(spec.get("criteria") or [])
+        if "skeleton-wf" in criteria and "skeleton-wf" not in harness.commitments:
+            from deepreason.informal.skeleton import skeleton_wf_commitment
+
+            harness.register_commitment(skeleton_wf_commitment())
+        problem = Problem(
+            id=spec["id"],
+            description=spec["description"],
+            criteria=criteria,
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+        harness.register_problem(problem)
+        return f"registered problem {problem.id} with criteria {criteria}"
+
+    if name == "run_cycles":
+        from deepreason.llm.adapter import build_adapter
+        from deepreason.llm.budget import TokenMeter
+        from deepreason.scheduler.scheduler import Scheduler
+
+        harness = _harness(arguments)
+        config = _config(arguments)
+        meter = TokenMeter(budget=arguments["token_budget"]) if arguments.get("token_budget") else None
+        adapter = build_adapter(config, harness.blobs, meter=meter)
+        if not adapter.has_role("conjecturer"):
+            raise ValueError(
+                "no conjecturer endpoint configured — set roles.conjecturer "
+                "(endpoint, model, api_key_env) in the config knob file (§15)"
+            )
+        result = Scheduler(harness, adapter, config).run(int(arguments["cycles"]))
+        payload = {
+            "survivors": result["survivors"],
+            "frontier": result["frontier"],
+            "problems": result["problems"],
+            "diagnostics": result["diagnostics"][-20:],
+        }
+        if meter is not None:
+            payload["token_spend"] = meter.snapshot()
+        return json.dumps(payload, indent=2, sort_keys=True)
+
+    if name == "frontier":
+        harness = _harness(arguments)
+        out = []
+        for pid, problem in harness.state.problems.items():
+            survivors = [
+                a for a, p in harness.state.addr
+                if p == pid and harness.state.status.get(a) == Status.ACCEPTED
+            ]
+            out.append(
+                {
+                    "problem": pid,
+                    "trigger": problem.provenance.trigger.value,
+                    "description": problem.description[:200],
+                    "survivors": survivors,
+                }
+            )
+        return json.dumps(out, indent=2, sort_keys=True)
+
+    if name == "theory":
+        from deepreason.views.theory import theory
+
+        harness = _harness(arguments)
+        return theory(_resolve(harness, arguments["id"]), harness.state, harness.blobs, log=harness.log)
+
+    if name == "why":
+        from deepreason.views.why import why
+
+        harness = _harness(arguments)
+        return why(_resolve(harness, arguments["id"]), harness.state)
+
+    if name == "eval_report":
+        from deepreason.report import eval_report
+
+        return json.dumps(
+            eval_report(_harness(arguments), _config(arguments)), indent=2, sort_keys=True
+        )
+
+    if name == "docket":
+        from deepreason.informal.appellate import docket
+
+        entries = docket(_harness(arguments), _config(arguments))
+        return json.dumps(entries, indent=2, sort_keys=True) if entries else "(docket is empty)"
+
+    if name == "appellate_rule":
+        from deepreason.informal.appellate import rule as appellate_rule
+
+        harness = _harness(arguments)
+        precedent = appellate_rule(
+            harness, arguments["case_id"], arguments["holding"], arguments["standard"]
+        )
+        return f"precedent registered: {precedent.id}"
+
+    raise ValueError(f"unknown tool: {name}")
+
+
+def handle(message: dict) -> dict | None:
+    """One JSON-RPC message in, one response out (None for notifications)."""
+    method = message.get("method")
+    msg_id = message.get("id")
+    if method == "initialize":
+        return {
+            "jsonrpc": "2.0",
+            "id": msg_id,
+            "result": {
+                "protocolVersion": _PROTOCOL,
+                "capabilities": {"tools": {}},
+                "serverInfo": {"name": "deepreason", "version": "0.1.0"},
+            },
+        }
+    if method in ("notifications/initialized", "notifications/cancelled"):
+        return None
+    if method == "ping":
+        return {"jsonrpc": "2.0", "id": msg_id, "result": {}}
+    if method == "tools/list":
+        return {"jsonrpc": "2.0", "id": msg_id, "result": {"tools": _tools()}}
+    if method == "tools/call":
+        params = message.get("params") or {}
+        try:
+            text = call_tool(params.get("name", ""), params.get("arguments") or {})
+            result = {"content": [{"type": "text", "text": text}], "isError": False}
+        except Exception as e:  # tool errors are results, not protocol errors
+            result = {"content": [{"type": "text", "text": f"{type(e).__name__}: {e}"}], "isError": True}
+        return {"jsonrpc": "2.0", "id": msg_id, "result": result}
+    if msg_id is None:
+        return None  # unknown notification: ignore per JSON-RPC
+    return {
+        "jsonrpc": "2.0",
+        "id": msg_id,
+        "error": {"code": -32601, "message": f"method not found: {method}"},
+    }
+
+
+def main() -> int:
+    """Newline-delimited JSON-RPC over stdio (MCP stdio transport)."""
+    for line in sys.stdin:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            message = json.loads(line)
+        except json.JSONDecodeError as e:
+            print(
+                json.dumps({"jsonrpc": "2.0", "id": None,
+                            "error": {"code": -32700, "message": f"parse error: {e}"}}),
+                flush=True,
+            )
+            continue
+        response = handle(message)
+        if response is not None:
+            print(json.dumps(response), flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

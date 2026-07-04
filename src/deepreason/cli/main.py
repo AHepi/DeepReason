@@ -34,9 +34,12 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("expand", help="expand the focused node")
     sub.add_parser("attack", help="solicit criticism of an artifact").add_argument("id")
     sub.add_parser("step", help="apply one enabled rule under budget")
-    run = sub.add_parser("run", help="run the Conj->Crit->Adj loop on a problem")
+    run = sub.add_parser("run", help="run the full scheduler (Conj->Crit->Adj, schools, capture)")
     run.add_argument("--budget", required=True, help="cycles=<N> or plain <N>")
     run.add_argument("--problem", default=None, help="problem file (json/yaml) to register first")
+    run.add_argument("--token-budget", type=int, default=None,
+                     help="hard prompt+completion token ceiling (graceful stop)")
+    sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
@@ -101,6 +104,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "run":
         return _cmd_run(args)
+
+    if args.command == "mcp":
+        from deepreason.mcp_server import main as mcp_main
+
+        return mcp_main()
 
     if args.command == "schools":
         from deepreason.capture import schools as schools_mod
@@ -214,8 +222,19 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
         data = yaml.safe_load(path.read_text())
     else:
         data = json.loads(path.read_text())
+    if data.get("standard"):
+        from deepreason.informal.standards import register_standard
+
+        std = data["standard"]
+        register_standard(harness, std["id"], rubric=std["rubric"], mode=std.get("mode", "absolute"))
     for c in data.get("commitments", []):
         harness.register_commitment(Commitment.model_validate(c))
+    if "skeleton-wf" in data.get("problem", {}).get("criteria", []) and (
+        "skeleton-wf" not in harness.commitments
+    ):
+        from deepreason.informal.skeleton import skeleton_wf_commitment
+
+        harness.register_commitment(skeleton_wf_commitment())
     problem = Problem.model_validate(data["problem"])
     harness.register_problem(problem)
     return problem.id
@@ -224,19 +243,19 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
 def _cmd_run(args) -> int:
     from deepreason.config import load as load_config
     from deepreason.llm.adapter import build_adapter
-    from deepreason.loop import run_problem
+    from deepreason.llm.budget import TokenMeter
+    from deepreason.scheduler.scheduler import Scheduler
 
     cycles = int(args.budget.split("=", 1)[1]) if "=" in args.budget else int(args.budget)
     config = load_config(Path(args.config) if args.config else None)
     harness = Harness(Path(args.root))
     if args.problem:
-        problem_id = _load_problem_file(harness, Path(args.problem))
-    elif harness.state.problems:
-        problem_id = next(iter(harness.state.problems))
-    else:
+        _load_problem_file(harness, Path(args.problem))
+    if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
-    adapter = build_adapter(config, harness.blobs)
+    meter = TokenMeter(budget=args.token_budget) if args.token_budget else None
+    adapter = build_adapter(config, harness.blobs, meter=meter)
     if not adapter.has_role("conjecturer"):
         print(
             "no conjecturer endpoint configured — set roles.conjecturer in the "
@@ -244,12 +263,14 @@ def _cmd_run(args) -> int:
             file=sys.stderr,
         )
         return 1
-    result = run_problem(harness, problem_id, adapter, config, cycles=cycles)
+    result = Scheduler(harness, adapter, config).run(cycles)
     print(f"survivors ({len(result['survivors'])}):")
     for aid in result["frontier"]:
         print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")
     for note in result["diagnostics"]:
-        print(f"  [gate] {note}")
+        print(f"  [note] {note}")
+    if meter is not None:
+        print(json.dumps(meter.snapshot(), sort_keys=True))
     if result["frontier"]:
         print()
         print(theory(result["frontier"][0], harness.state, harness.blobs, log=harness.log))

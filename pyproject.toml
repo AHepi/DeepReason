@@ -21,6 +21,7 @@ dev = [
 
 [project.scripts]
 deepreason = "deepreason.cli.main:main"
+deepreason-mcp = "deepreason.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/deepreason"]

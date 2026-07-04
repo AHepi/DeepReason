@@ -145,7 +145,7 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     )
 
 
-def build_adapter(config, blob_store) -> LLMAdapter:
+def build_adapter(config, blob_store, meter=None) -> LLMAdapter:
     """Build from the §15 role table. Roles with a null endpoint are absent
     (has_role False); a list spec becomes an ensemble (judge, §9)."""
     endpoints: dict[str, object] = {}
@@ -158,4 +158,4 @@ def build_adapter(config, blob_store) -> LLMAdapter:
         endpoint = _endpoint_from_spec(spec)
         if endpoint is not None:
             endpoints[role] = endpoint
-    return LLMAdapter(endpoints, blob_store, retry_max=config.RETRY_MAX)
+    return LLMAdapter(endpoints, blob_store, retry_max=config.RETRY_MAX, meter=meter)
