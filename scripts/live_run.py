@@ -458,7 +458,10 @@ def main() -> int:
     harness = Harness(Path(args.root))
     adapter.blobs = harness.blobs
     problem_id, seed = SUITES[args.suite]
-    seed(harness)
+    if problem_id in harness.state.problems:
+        print(f"resuming existing root (problem {problem_id} already seeded)")
+    else:
+        seed(harness)
 
     scheduler = Scheduler(harness, adapter, config)
     result = scheduler.run(args.cycles)
