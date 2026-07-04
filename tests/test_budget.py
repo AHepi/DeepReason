@@ -161,3 +161,28 @@ def test_transport_retries_transient_then_succeeds(monkeypatch):
 
     with pytest.raises(ep.EndpointError):  # non-retryable: raises immediately
         ep.request_with_retries(auth_fail)
+
+
+def test_predicate_comprehensions_work():
+    """Comprehension bodies must see the safe namespace (globals, not locals)."""
+    from deepreason import programs
+    from deepreason.ontology import Artifact, Commitment, Interface, Provenance
+
+    oracle = Commitment(
+        id="oracle",
+        eval=(
+            'predicate:[len(w) for w in re.findall(r"[A-Za-z]+", content)][:8] '
+            "== [3, 1, 4, 1, 5, 9, 2, 6]"
+        ),
+    )
+
+    def artifact(text):
+        return Artifact(
+            id="x", content_ref=f"inline:{text}", codec="utf8",
+            interface=Interface(), provenance=Provenance(role="seed"),
+        )
+
+    good = artifact("How I need a drink, alcoholic of course")
+    bad = artifact("The tides are magic")
+    assert programs.evaluate(oracle, good, None)[0] == "pass"
+    assert programs.evaluate(oracle, bad, None)[0] == "fail"

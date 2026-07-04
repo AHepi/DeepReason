@@ -74,9 +74,17 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
     text = content_text(artifact, blobs)
     started = time.monotonic()
     if kind == "predicate":
-        namespace = {**_SAFE_NAMES, "content": text, "codec": artifact.codec}
+        # Safe names go in GLOBALS: comprehension bodies inside eval resolve
+        # free names via globals, so locals-only namespaces break e.g.
+        # [len(w) for w in ...].
+        namespace = {
+            "__builtins__": {},
+            **_SAFE_NAMES,
+            "content": text,
+            "codec": artifact.codec,
+        }
         try:
-            verdict = PASS if bool(eval(arg, {"__builtins__": {}}, namespace)) else FAIL
+            verdict = PASS if bool(eval(arg, namespace)) else FAIL
             detail: dict = {}
         except Exception as e:  # noqa: BLE001 - a predicate error is a failed verdict
             verdict, detail = FAIL, {"error": str(e)}

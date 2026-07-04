@@ -50,7 +50,7 @@ MAX_TOKENS = {
     "conjecturer": 4000,
     "argumentative_critic": 900,
     "defender": 700,
-    "variator": 2000,
+    "variator": 3000,  # 2000 truncated paraphrases of large skeleton exchanges
     "synthesizer": 900,
     "judge": 1200,  # v4-pro rulings run long even in JSON mode
 }
