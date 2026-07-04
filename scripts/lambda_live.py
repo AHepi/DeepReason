@@ -76,17 +76,25 @@ def run_one_arm(args) -> int:
         root = Path(args.root) / args.arm / str(replicate)
         meter = TokenMeter(budget=args.per_run_budget)
 
-        def endpoint(temperature: float, cap: int) -> OpenAICompatEndpoint:
+        def endpoint(temperature: float, cap: int, reasoning=None) -> OpenAICompatEndpoint:
             return OpenAICompatEndpoint(
                 args.base_url, args.model, api_key=api_key,
                 temperature=temperature, max_tokens=cap, json_mode=True,
-                    request_logprobs=True,
+                request_logprobs=True, reasoning=reasoning,
             )
 
+        # The letter-count task is one v4-pro demonstrably solves BY
+        # reasoning, so the conjecturer keeps thinking — but budgeted
+        # (docs/TOKEN_ECONOMY.md angle 1); the critic runs without.
+        conj_reasoning = (
+            int(args.conjecturer_reasoning)
+            if args.conjecturer_reasoning.isdigit()
+            else (None if args.conjecturer_reasoning == "default" else args.conjecturer_reasoning)
+        )
         adapter = LLMAdapter(
             {
-                "conjecturer": endpoint(1.0, 4000),
-                "argumentative_critic": endpoint(0.7, 1400),
+                "conjecturer": endpoint(1.0, 4000, reasoning=conj_reasoning),
+                "argumentative_critic": endpoint(0.7, 1400, reasoning="none"),
             },
             BlobStore(root / "blobs"),
             retry_max=config.RETRY_MAX,
@@ -153,6 +161,8 @@ def main() -> int:
     parser.add_argument("--model", default="deepseek-v4-pro")
     parser.add_argument("--base-url", default="https://api.deepseek.com")
     parser.add_argument("--api-key-env", default="DEEPSEEK_API_KEY")
+    parser.add_argument("--conjecturer-reasoning", default="2000",
+                        help="default|none|high|max|<int budget tokens>")
     args = parser.parse_args()
 
     if args.aggregate:

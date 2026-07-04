@@ -127,6 +127,8 @@ class LLMAdapter:
 
 
 def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
+    """The §15 role table is the model-change plug: endpoint, model,
+    provider, reasoning, caps — all config, no call-site edits."""
     if not isinstance(spec, dict) or not spec.get("endpoint"):
         return None
     api_key_env = spec.get("api_key_env") or ""
@@ -135,6 +137,11 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
         model=spec.get("model") or "",
         api_key=os.environ.get(api_key_env) if api_key_env else None,
         temperature=spec.get("temperature"),
+        max_tokens=spec.get("max_tokens"),
+        json_mode=bool(spec.get("json_mode", False)),
+        request_logprobs=bool(spec.get("logprobs", False)),
+        reasoning=spec.get("reasoning"),
+        provider=spec.get("provider"),
     )
 
 

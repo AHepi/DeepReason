@@ -55,6 +55,19 @@ MAX_TOKENS = {
     "judge": 1200,  # v4-pro rulings run long even in JSON mode
 }
 
+# Per-role reasoning policy (docs/TOKEN_ECONOMY.md angle 1): reasoning off
+# for prose/skeleton generation and aux roles — quality is carried by
+# criticism (D2), and the eval report certifies the change. The judge keeps
+# the provider default pending audit data. Overridable via --reasoning.
+REASONING = {
+    "conjecturer": "none",
+    "argumentative_critic": "none",
+    "defender": "none",
+    "variator": "none",
+    "synthesizer": "none",
+    "judge": None,
+}
+
 
 def list_models(base_url: str, api_key: str) -> list[str]:
     request = urllib.request.Request(
@@ -167,6 +180,8 @@ def main() -> int:
     parser.add_argument("--api-key-env", default="DEEPSEEK_API_KEY")
     parser.add_argument("--config", default=str(Path(__file__).resolve().parents[1] / "config" / "deepseek.yaml"))
     parser.add_argument("--dry-run", action="store_true", help="resolve models and exit")
+    parser.add_argument("--reasoning", default="policy",
+                        help="conjecturer reasoning override: policy|default|none|high|max|<int>")
     args = parser.parse_args()
 
     api_key = os.environ.get(args.api_key_env)
@@ -187,9 +202,13 @@ def main() -> int:
     meter = TokenMeter(budget=args.token_budget)
 
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
+        reasoning = REASONING.get(role)
+        if role == "conjecturer" and args.reasoning != "policy":
+            reasoning = None if args.reasoning == "default" else args.reasoning
         return OpenAICompatEndpoint(
             args.base_url, model, api_key=api_key, temperature=temperature,
             max_tokens=MAX_TOKENS.get(role), json_mode=True, request_logprobs=True,
+            reasoning=reasoning,
         )
 
     adapter = LLMAdapter(

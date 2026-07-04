@@ -38,12 +38,18 @@ RETRY_MAX: 2
 ARG_CRIT_PER_CYCLE: 3
 RUBRIC_TRIALS_PER_ARTIFACT: 1
 
+# The role table is the model-change plug (llm/providers.py): endpoint,
+# model, provider, reasoning, caps are all config. reasoning knob:
+# "none" disables the thinking trace (docs/TOKEN_ECONOMY.md: ~93% of a
+# v4-pro call was reasoning we never asked for); an int is a token budget;
+# null keeps the provider default. Downgrades are certified by the audit
+# battery (planted-flaw, paraphrase-flip, valid-JSON), not assumed.
 roles:
-  conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY }
-  argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY }
-  defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY }
-  variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY }
+  conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true, logprobs: true }
+  argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }
+  defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 900, json_mode: true }
+  variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 3000, json_mode: true }
   judge:
-    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY }
-    - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY }
-  synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY }
+    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 1200, json_mode: true }
+    - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 1200, json_mode: true }
+  synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }

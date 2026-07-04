@@ -92,7 +92,11 @@ class OpenAICompatEndpoint:
         max_tokens: int | None = None,
         json_mode: bool = False,
         request_logprobs: bool = False,
+        reasoning: str | int | None = None,
+        provider: str | None = None,
     ) -> None:
+        from deepreason.llm.providers import infer_provider
+
         self.name = base_url
         self.model = model
         self.api_key = api_key
@@ -103,11 +107,17 @@ class OpenAICompatEndpoint:
         # analysis prose (observed live: judge rulings truncating at the cap).
         self.json_mode = json_mode
         self.request_logprobs = request_logprobs
+        # Neutral reasoning knob, realized per provider (llm/providers.py) —
+        # the dominant cost lever (docs/TOKEN_ECONOMY.md angle 1).
+        self.reasoning = reasoning
+        self.provider = provider or infer_provider(base_url)
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
         self.last_mean_surprisal: float | None = None
 
-    def complete(self, prompt: str) -> str:
+    def build_body(self, prompt: str) -> dict:
+        from deepreason.llm.providers import reasoning_body
+
         body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
         if self.temperature is not None:
             body["temperature"] = self.temperature
@@ -117,6 +127,11 @@ class OpenAICompatEndpoint:
             body["response_format"] = {"type": "json_object"}
         if self.request_logprobs:
             body["logprobs"] = True
+        body.update(reasoning_body(self.provider, self.reasoning))
+        return body
+
+    def complete(self, prompt: str) -> str:
+        body = self.build_body(prompt)
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"

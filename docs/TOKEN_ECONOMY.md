@@ -187,6 +187,13 @@ metrics gate acceptance) are also the ones §0 already forbids.
 | 5 | Brownout ladder + seed-focus share | prevents waste, hard to est. | small scheduler addition | none (attention only) |
 | 6 | Compact hand-written schemas | ~2–3% | tedious | none |
 
+**Deferred (research-gated):** a deployable harness-side caching layer —
+e.g. semantic caching of variator edits or judge-pack fragments across
+runs, or a local proxy cache portable across providers. Its effectiveness
+depends on measured cross-run prompt overlap and on how much the provider
+prefix cache already captures; research that first (the seam is
+`llm/providers.py` + the adapter — nothing else would change).
+
 Compounded, a realistic **5–10x cost reduction per unit of epistemic
 output** (surviving, verified artifacts per dollar) — with item 1 alone
 delivering most of it, and every item verifiable by the harness's own
