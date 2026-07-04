@@ -1,0 +1,122 @@
+{
+  "critic": {
+    "argumentative_warrants": 10,
+    "baseline_tokens_per_target": 1443,
+    "calls": 4,
+    "per_target_reduction": "52%",
+    "tokens": 6970,
+    "tokens_per_criticized_target": 697,
+    "valid_json_rate": 1.0
+  },
+  "date": "2026-07-04",
+  "eval_report": {
+    "attack_validity_rate": 1.0,
+    "audits": {
+      "hits": 0,
+      "planted_flaw_error_rate": null,
+      "self_preference": null,
+      "verbosity_bias": null
+    },
+    "capture": {
+      "adjudicator": {
+        "attack_target_entropy": 0.9999999999999998,
+        "criticism_debt": 1.0,
+        "g_churn": 3,
+        "n_attacks": 3,
+        "refutations": 3,
+        "reinstatement_rate": 0.0,
+        "validity_attack_rate": 0.0
+      },
+      "generator": {
+        "dist_slope": 0.06434884613055214,
+        "inter_school_min_dist": 0.6802955931794552,
+        "mean_pairwise_dist": 0.6433523325373457,
+        "mean_token_surprisal": 0.25394217589552404,
+        "stream_len": 10,
+        "surprisal_slope": null
+      },
+      "lambda": 1.0
+    },
+    "interventions": [],
+    "llm": {
+      "argumentative_critic": {
+        "attempts": 4,
+        "calls": 4,
+        "mean_surprisal": 0.28203900099369655,
+        "tokens": 6970,
+        "total_ms": 37265,
+        "valid_json_rate": 1.0
+      },
+      "conjecturer": {
+        "attempts": 5,
+        "calls": 5,
+        "mean_surprisal": 0.3748935809888395,
+        "tokens": 12020,
+        "total_ms": 117497,
+        "valid_json_rate": 1.0
+      },
+      "variator": {
+        "attempts": 4,
+        "calls": 4,
+        "mean_surprisal": 0.5476609352228824,
+        "tokens": 9243,
+        "total_ms": 153449,
+        "valid_json_rate": 1.0
+      }
+    },
+    "schools": {
+      "reseeds": 0,
+      "roster": {
+        "school-0": {
+          "lineage": 9,
+          "novelty_contribution": 0.5478580171414956,
+          "stance": "mechanist",
+          "stance_weight": 0.55
+        },
+        "school-1": {
+          "lineage": 6,
+          "novelty_contribution": 0.625755722496784,
+          "stance": "skeptic",
+          "stance_weight": 0.7
+        }
+      }
+    },
+    "spec_transmission": {
+      "n": 0
+    },
+    "survivor_hv": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "n": 4
+    },
+    "survivor_reach": {
+      "n": 0
+    },
+    "totals": {
+      "artifacts": 38,
+      "events": 74,
+      "llm_tokens": 28233,
+      "problems": 19,
+      "survivors": 5,
+      "warrants": 10
+    },
+    "trial_guard": {
+      "blocked": {
+        "ensemble-split": 2,
+        "paraphrase-flip": 1
+      },
+      "rubric_warrants": 0,
+      "survival_rate": 0.0
+    }
+  },
+  "meter": {
+    "budget": 120000,
+    "calls": 70,
+    "completion_tokens": 49499,
+    "prompt_tokens": 66477,
+    "total": 115976
+  },
+  "purpose": "live verification of batch criticism (TOKEN_ECONOMY angle 3, CRIT_BATCH_K=3)",
+  "run": "demo_batch_crit"
+}
