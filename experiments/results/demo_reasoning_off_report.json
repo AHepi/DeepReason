@@ -1,0 +1,131 @@
+{
+  "baseline_conjecturer_avg_tokens_per_call": 6151,
+  "date": "2026-07-04",
+  "eval_report": {
+    "attack_validity_rate": 1.0,
+    "audits": {
+      "hits": 0,
+      "planted_flaw_error_rate": null,
+      "self_preference": null,
+      "verbosity_bias": null
+    },
+    "capture": {
+      "adjudicator": {
+        "attack_target_entropy": 1.0,
+        "criticism_debt": 1.0,
+        "g_churn": 2,
+        "n_attacks": 2,
+        "refutations": 2,
+        "reinstatement_rate": 0.0,
+        "validity_attack_rate": 0.0
+      },
+      "generator": {
+        "dist_slope": 0.20299563609986448,
+        "inter_school_min_dist": 0.6170347094649753,
+        "mean_pairwise_dist": 0.621436288627693,
+        "mean_token_surprisal": 0.4228730162851535,
+        "stream_len": 10,
+        "surprisal_slope": null
+      },
+      "lambda": 1.0
+    },
+    "interventions": [],
+    "llm": {
+      "argumentative_critic": {
+        "attempts": 11,
+        "calls": 11,
+        "mean_surprisal": 0.4247285990068521,
+        "tokens": 7469,
+        "total_ms": 56843,
+        "valid_json_rate": 1.0
+      },
+      "conjecturer": {
+        "attempts": 6,
+        "calls": 6,
+        "mean_surprisal": 0.48752731056157544,
+        "tokens": 13956,
+        "total_ms": 153355,
+        "valid_json_rate": 1.0
+      },
+      "judge": {
+        "attempts": 2,
+        "calls": 1,
+        "mean_surprisal": 0.00032130267093428565,
+        "tokens": 4160,
+        "total_ms": 29804,
+        "valid_json_rate": 0.5
+      },
+      "variator": {
+        "attempts": 2,
+        "calls": 2,
+        "mean_surprisal": 0.4518996024412375,
+        "tokens": 2508,
+        "total_ms": 33631,
+        "valid_json_rate": 1.0
+      }
+    },
+    "schools": {
+      "reseeds": 0,
+      "roster": {
+        "school-0": {
+          "lineage": 10,
+          "novelty_contribution": 0.5634175445665631,
+          "stance": "mechanist",
+          "stance_weight": 0.5
+        },
+        "school-1": {
+          "lineage": 4,
+          "novelty_contribution": 0.5496679285610983,
+          "stance": "skeptic",
+          "stance_weight": 0.8
+        }
+      }
+    },
+    "spec_transmission": {
+      "n": 0
+    },
+    "survivor_hv": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "n": 2
+    },
+    "survivor_reach": {
+      "n": 0
+    },
+    "totals": {
+      "artifacts": 41,
+      "events": 89,
+      "llm_tokens": 28093,
+      "problems": 12,
+      "survivors": 2,
+      "warrants": 12
+    },
+    "trial_guard": {
+      "blocked": {
+        "ensemble-split": 2,
+        "referential-integrity": 2
+      },
+      "rubric_warrants": 1,
+      "survival_rate": 0.2
+    }
+  },
+  "meter": {
+    "budget": 200000,
+    "calls": 74,
+    "completion_tokens": 40907,
+    "prompt_tokens": 62303,
+    "total": 103210
+  },
+  "observed_conjecturer_avg_tokens_per_call": 2326,
+  "policy": {
+    "argumentative_critic": "none",
+    "conjecturer": "none",
+    "defender": "none",
+    "judge": "provider default",
+    "synthesizer": "none",
+    "variator": "none"
+  },
+  "purpose": "live verification of per-role reasoning control (TOKEN_ECONOMY angle 1)",
+  "run": "demo_reasoning_off"
+}
