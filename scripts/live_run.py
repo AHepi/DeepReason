@@ -69,6 +69,13 @@ REASONING = {
 }
 
 
+def yaml_value(raw: str):
+    """Parse a --set value with YAML scalar rules (ints, floats, bools, null)."""
+    import yaml
+
+    return yaml.safe_load(raw)
+
+
 def list_models(base_url: str, api_key: str) -> list[str]:
     request = urllib.request.Request(
         base_url.rstrip("/") + "/models",
@@ -317,12 +324,56 @@ def seed_cache_strict(harness: Harness) -> None:
     )
 
 
+def seed_occult(harness: Harness) -> None:
+    """Adversarial suite (stress plan T4): epistemically hostile terrain.
+    The question invites unfalsifiable, mood-based answers; the criteria
+    demand mechanism + falsifiability anyway. The system PASSES this test
+    by refusing to accept what cannot be criticized — a small or empty
+    frontier here is success, capture flags firing is instrumentation."""
+    register_standard(
+        harness,
+        "std-causal",
+        rubric=(
+            "An explanatory account must: (1) name a specific causal "
+            "mechanism whose operation could be observed or traced — not a "
+            "resonance, energy, destiny, or tendency with no carrier; "
+            "(2) state forbidden cases: concrete observations that would "
+            "refute the account and could realistically be checked; "
+            "(3) accounts compatible with every possible observation "
+            "violate this standard."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-causal", eval="rubric:std-causal"))
+    harness.register_problem(
+        Problem(
+            id="pi-occult",
+            description=(
+                "Why do people born under different zodiac signs have "
+                "different personalities and life outcomes? Take the "
+                "premise seriously enough to state what mechanisms COULD "
+                "produce sign-correlated outcomes and what would refute "
+                "each. Each candidate's content MUST be a JSON skeleton "
+                'object, exactly this shape: {"claim": str, "mechanism": '
+                'str, "scope": {"covers": [str], "excludes": [str]}, '
+                '"forbidden": [{"case": str, "eval": "rubric:std-causal"}], '
+                '"prose_notes": str}. Forbidden cases must be concrete '
+                "checkable observations."
+            ),
+            criteria=["skeleton-wf", "kappa-causal"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
     "cache": ("pi-cache", seed_cache),
     "cache-sandbox": ("pi-cache-sandbox", seed_cache_sandbox),
     "cache-strict": ("pi-cache-strict", seed_cache_strict),
+    "occult": ("pi-occult", seed_occult),
 }
 
 
@@ -345,6 +396,8 @@ def main() -> int:
                         help="override N_SCHOOLS (stances sampled from STANCE_LIBRARY)")
     parser.add_argument("--stance-decay", type=float, default=None,
                         help="override STANCE_DECAY (lineage size at which stance weight hits 0)")
+    parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                        help="override any config knob (repeatable), e.g. --set AUDIT_PERIOD=3")
     args = parser.parse_args()
 
     api_key = os.environ.get(args.api_key_env)
@@ -368,6 +421,14 @@ def main() -> int:
         config.N_SCHOOLS = args.schools
     if args.stance_decay is not None:
         config.STANCE_DECAY = args.stance_decay
+    for override in args.set:
+        key, _, raw = override.partition("=")
+        if not hasattr(config, key):
+            print(f"unknown config knob: {key}", file=sys.stderr)
+            return 1
+        current = getattr(config, key)
+        value = yaml_value(raw)
+        setattr(config, key, type(current)(value) if current is not None and value is not None else value)
     meter = TokenMeter(budget=args.token_budget)
 
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
