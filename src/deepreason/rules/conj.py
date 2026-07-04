@@ -100,6 +100,11 @@ def conj(
         if diagnostics is not None:
             diagnostics.append({"candidate": artifact.id[:12], "gate": reason})
         if not admitted:
+            # Persist the block (stress campaign T7 finding): gate decisions
+            # were in-memory only, so a finished run could not be audited for
+            # block counts — violating log-as-source-of-truth. A Measure is
+            # the right vehicle: attention/diagnostic, never a status.
+            harness.record_measure(inputs=[f"gate:{reason}", artifact.id, problem_id])
             continue
         if artifact.id in seen or artifact.id in harness.state.artifacts:
             continue  # attention-level dedupe of a registered twin — never a block (§0)

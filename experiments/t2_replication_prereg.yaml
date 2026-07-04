@@ -1,0 +1,21 @@
+# T2 replication pre-registration — committed before any run.
+# Motivation: the stress campaign's T2 falsifier fired on n=1 per arm
+# (reasoning-off lost 43% of survivors vs provider default on tides).
+# This replication tests whether that effect survives repetition.
+experiment: t2-replication
+date_registered: 2026-07-04
+suite: tides
+cycles_per_run: 5
+arms:
+  none:    { reasoning: "none",    repeats: 4 }
+  default: { reasoning: "default", repeats: 4 }
+token_cap_per_run: 60000
+primary_metric: mean surviving artifacts per run (accepted, addressed to any problem)
+secondary_metrics: [total tokens per run, tokens per survivor, mean_pairwise_dist]
+falsifier: >
+  The reasoning-off economy claim is falsified for free-prose domains if
+  mean(none survivors) < 0.7 * mean(default survivors) across repeats.
+  If instead means are within 30%, the campaign T2 result is attributed
+  to single-run variance and the per-suite-calibration policy stands with
+  reasoning-off as the tides default too.
+deviations_policy: any deviation is recorded in the results file, never edited here.

@@ -131,6 +131,27 @@ def test_anti_relapse_blocks_resubmitted_refuted_idea(harness):
     assert any(d.get("gate", "").startswith("hash") for d in result["diagnostics"])
 
 
+def test_gate_block_is_persisted_to_the_log(harness):
+    """Stress-campaign T7 fix: a finished run must be auditable for gate
+    blocks — every block leaves a Measure event, not just an in-memory
+    diagnostic."""
+    _setup(harness)
+    config = Config(VS_K=1)
+    adapter = _adapter(harness, [_vs("the tides are magic"), _vs("the tides are magic")])
+    run_problem(harness, "pi-tides", adapter, config, cycles=2)
+    gate_measures = [
+        e for e in harness.log.read()
+        if e.rule.value == "Measure" and e.inputs and e.inputs[0].startswith("gate:")
+    ]
+    assert len(gate_measures) == 1
+    assert gate_measures[0].inputs[2] == "pi-tides"
+    # Replay reproduces the same log, blocks included.
+    assert any(
+        e.inputs and e.inputs[0].startswith("gate:")
+        for e in type(harness)(harness.root).log.read()
+    )
+
+
 def test_argumentative_critic_attack_registers(harness):
     _setup(harness)
     config = Config(VS_K=1)
