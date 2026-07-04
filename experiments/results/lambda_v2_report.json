@@ -1,0 +1,233 @@
+{
+  "summary": {
+    "lambda0": {
+      "attack_target_entropy": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "n": 3,
+        "values": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "criticism_debt": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "dist_slope": {
+        "max": 0.14098738591939863,
+        "mean": 0.10206431587794625,
+        "min": 0.06744255153559742,
+        "n": 3,
+        "values": [
+          0.14098738591939863,
+          0.0977630101788427,
+          0.06744255153559742
+        ]
+      },
+      "gate_blocks": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "lambda": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "n": 4,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "mean_pairwise_dist": {
+        "max": 0.8998747651356482,
+        "mean": 0.7685936800045711,
+        "min": 0.7225699779809732,
+        "n": 4,
+        "values": [
+          0.7253536920407656,
+          0.7225699779809732,
+          0.8998747651356482,
+          0.7265762848608971
+        ]
+      },
+      "oracle_pass_rate": {
+        "max": 1.0,
+        "mean": 0.33187500000000003,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          0.14,
+          0.0,
+          1.0,
+          0.1875
+        ]
+      },
+      "oracle_pass_rate_seed": {
+        "max": 1.0,
+        "mean": 0.33187500000000003,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          0.14,
+          0.0,
+          1.0,
+          0.1875
+        ]
+      },
+      "oracle_passes": {
+        "max": 9.0,
+        "mean": 4.5,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          7.0,
+          0.0,
+          2.0,
+          9.0
+        ]
+      }
+    },
+    "lambda_full": {
+      "attack_target_entropy": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 0.9999999999999998,
+        "n": 4,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          0.9999999999999998
+        ]
+      },
+      "criticism_debt": {
+        "max": 0.0,
+        "mean": 0.0,
+        "min": 0.0,
+        "n": 4,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "dist_slope": {
+        "max": 0.31255745397161194,
+        "mean": 0.020310543530538808,
+        "min": -0.3586578990575881,
+        "n": 4,
+        "values": [
+          -0.05609021107275913,
+          -0.3586578990575881,
+          0.18343283028089052,
+          0.31255745397161194
+        ]
+      },
+      "gate_blocks": {
+        "max": 36.0,
+        "mean": 24.25,
+        "min": 6.0,
+        "n": 4,
+        "values": [
+          33.0,
+          36.0,
+          6.0,
+          22.0
+        ]
+      },
+      "lambda": {
+        "max": 1.0,
+        "mean": 1.0,
+        "min": 1.0,
+        "n": 4,
+        "values": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "mean_pairwise_dist": {
+        "max": 0.8613423388180168,
+        "mean": 0.6896159692283641,
+        "min": 0.580683721589338,
+        "n": 4,
+        "values": [
+          0.8613423388180168,
+          0.5955082581296641,
+          0.580683721589338,
+          0.7209295583764374
+        ]
+      },
+      "oracle_pass_rate": {
+        "max": 0.875,
+        "mean": 0.7872023809523809,
+        "min": 0.6666666666666666,
+        "n": 4,
+        "values": [
+          0.8571428571428571,
+          0.875,
+          0.75,
+          0.6666666666666666
+        ]
+      },
+      "oracle_pass_rate_seed": {
+        "max": 0.875,
+        "mean": 0.7872023809523809,
+        "min": 0.6666666666666666,
+        "n": 4,
+        "values": [
+          0.8571428571428571,
+          0.875,
+          0.75,
+          0.6666666666666666
+        ]
+      },
+      "oracle_passes": {
+        "max": 7.0,
+        "mean": 5.0,
+        "min": 3.0,
+        "n": 4,
+        "values": [
+          6.0,
+          7.0,
+          3.0,
+          4.0
+        ]
+      }
+    }
+  },
+  "verdict": {
+    "deviation_from_preregistration": "run stopped early at user request: 4 of 5 pre-registered replicates completed per arm (30 cycles each, focus lock on); metrics reconstructed offline from the replayable run directories; gate_blocks taken from run logs",
+    "falsifier_triggered": true,
+    "gap": 0.5,
+    "gap_min": 1.0,
+    "metric": "oracle_passes",
+    "oracle_gap": 0.5,
+    "oracle_gap_min": 1.0,
+    "preregistration": "lambda_preregistration_v2.yaml",
+    "reading": "anchoring as built does NOT earn the exemption (lambda_full tracks lambda0)"
+  }
+}
