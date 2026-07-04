@@ -255,7 +255,45 @@ was rendered, the verdict's *validity* was then attacked with evidence,
 and the attack stands. A definitive run needs (a) a harder oracle with no
 ceiling, (b) the metric conditioned on oracle-facing candidates or a
 scheduler focus lock, (c) the pre-registered 5×30 scale — all cheap to do,
-none done yet, no goalposts moved.
+no goalposts moved.
+
+### 6b. The v2 run — the definitive (near-complete) result
+
+All three fixes were pre-registered as an amendment
+(`experiments/lambda_preregistration_v2.yaml`, committed before any v2
+run): an arbitrary word-length oracle `[4,2,9,3,7,5,8,2,6,10]` with no
+famous mnemonic to recall, a scheduler focus lock eliminating side-problem
+dilution, and a count metric — distinct verified passers per run — immune
+to denominator games. Scale: 5 replicates × 30 cycles per arm; the run was
+stopped at user request after **4 complete replicates per arm** (the
+deviation is recorded in the verdict).
+
+**Pre-registered verdict: the falsifier triggered again.** λ_full averaged
+5.0 verified sentences per run vs λ0's 4.5 — a gap of 0.5, under the
+pre-registered 1.0. In-loop grounding did not increase the *volume* of
+verified output. Recorded in `experiments/results/lambda_v2_report.json`.
+
+**What the distributions show** (the phenomenon the count metric wasn't
+built to catch):
+
+| | λ0 (closed loop) | λ_full (grounded) |
+|---|---|---|
+| verified per run | 7, 0, 2, 9 — erratic | 6, 7, 3, 4 — consistent |
+| share of registered record correct | 33% | **79%** |
+| worst replicate | 36 candidates, zero correct | 3 correct |
+| anti-relapse gate blocks | 0 | 6–36 per run |
+
+The closed loop is a gambler — one replicate produced nothing true across
+30 cycles while its unanchored critic found nothing wrong. The grounded
+loop never excelled and never failed: high floor, mostly-true record,
+gate visibly working. Caveats both ways: v4-pro can count letters
+internally (partially its own oracle here, compressing the gap), and the
+count metric charges λ_full for candidates its own gate correctly
+suppressed. Current best statement: **grounding as built does not make the
+generator more productive — it makes the archive trustworthy and bounds
+the failure modes.** A v3, if run, should use a precision-weighted primary
+metric; that intention is on record before any v3 data exists. The full
+narrative is in `docs/STATE_OF_THE_THEORY.md`.
 
 ## 7. Token spend vs. the 4M budget
 
@@ -268,17 +306,19 @@ none done yet, no goalposts moved.
 | Republic extension | 70,108 | success |
 | λ pilot 1 (reasoning-empty, killed) | ~65–95k | failed, diagnosed |
 | λ pilot 2 (complete) | 465,347 | complete data |
-| **Total** | **≈ 720–790k** | |
+| λ v2 definitive (8 full runs + 2 partial, stopped) | ~1,700k | verdict recorded |
+| **Total** | **≈ 2.4–2.5M** | |
 
-**Roughly 3.2M of the 4M remains.** Every run after the first is
+**Roughly 1.5M of the 4M remains.** Every run after the first is
 hard-capped by the token meter, which stops before spending when a ceiling
 is reached.
 
 ## 8. What remains
 
-1. **The definitive λ run** — harder oracle, conditional metric
-   (pre-register the amendment first), 5×30 scale. Est. 1.5–2.5M tokens:
-   fits the remaining budget.
+1. ~~**The definitive λ run**~~ — **done** (see §6b): pre-registered v2,
+   4/5 replicates per arm, falsifier verdict recorded. Open follow-up: a
+   v3 with a precision-weighted primary metric and a task the model cannot
+   self-verify.
 2. **Longer informal runs** — enough cycles for the judge-audit sweeps
    (paraphrase invariance, planted-flaw calibration, bias probes) to fire
    against live rulings, and for a critic to find the Sulla counterexample.
