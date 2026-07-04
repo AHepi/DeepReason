@@ -166,7 +166,66 @@ def seed_republic(harness: Harness) -> None:
     )
 
 
-SUITES = {"tides": ("pi-tides", seed_tides), "republic": ("pi-republic", seed_republic)}
+def seed_cache(harness: Harness) -> None:
+    """Self-referential suite: the harness works the research question that
+    gates its own deferred feature (docs/TOKEN_ECONOMY.md §8) — a deployable
+    caching layer for providers without prefix caching. A surviving design's
+    forbidden cases convert directly into tests for the implementation."""
+    register_standard(
+        harness,
+        "std-design",
+        rubric=(
+            "A harness-design proposal must: (1) name a specific mechanism — "
+            "a data structure, keying scheme, invalidation rule, or protocol "
+            "step — not an aspiration ('cache smartly'); (2) state forbidden "
+            "cases that are concrete, observable system behaviors or workload "
+            "measurements that would refute the design (a measured miss rate, "
+            "a replay divergence, a stale response served); (3) respect the "
+            "harness invariants: nothing served from cache may alter "
+            "adjudication outcomes relative to a cache-free run, verdicts are "
+            "never reused across non-equivalent targets, and the event log "
+            "remains the source of truth. Designs trading correctness for hit "
+            "rate violate this standard."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-design", eval="rubric:std-design"))
+    harness.register_problem(
+        Problem(
+            id="pi-cache",
+            description=(
+                "Design a deployable, provider-agnostic caching layer for a "
+                "deterministic LLM harness whose providers may lack prefix "
+                "caching. Facts: every LLM call is a pure pack->JSON function; "
+                "an append-only event log is the source of truth and replay "
+                "must stay byte-for-byte; packs within a run share long stable "
+                "prefixes (problem, criteria, stance) and moderate overlap "
+                "across runs; roles differ in temperature (conjecturer 1.0, "
+                "judge 0.0). Decide WHAT is cached (rendered packs, "
+                "completions, embedding vectors — cached VERDICTS across "
+                "non-equivalent targets are forbidden), HOW it is keyed, WHEN "
+                "it is invalidated, and under which MEASURED workload "
+                "conditions the design pays for itself. Each candidate's "
+                "content MUST be a JSON skeleton object, exactly this shape: "
+                '{"claim": str, "mechanism": str, '
+                '"scope": {"covers": [str], "excludes": [str]}, '
+                '"forbidden": [{"case": str, "eval": "rubric:std-design"}], '
+                '"prose_notes": str}. '
+                "Forbidden cases must be concrete observable behaviors that "
+                "would refute the design had they obtained."
+            ),
+            criteria=["skeleton-wf", "kappa-design"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
+SUITES = {
+    "tides": ("pi-tides", seed_tides),
+    "republic": ("pi-republic", seed_republic),
+    "cache": ("pi-cache", seed_cache),
+}
 
 
 def main() -> int:
@@ -182,6 +241,8 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="resolve models and exit")
     parser.add_argument("--reasoning", default="policy",
                         help="conjecturer reasoning override: policy|default|none|high|max|<int>")
+    parser.add_argument("--spec-injection", action="store_true",
+                        help="enable Level-2 diversity spec injection (llm/specs.py)")
     args = parser.parse_args()
 
     api_key = os.environ.get(args.api_key_env)
@@ -199,6 +260,8 @@ def main() -> int:
         return 0
 
     config = load_config(Path(args.config))
+    if args.spec_injection:
+        config.SPEC_INJECTION = True
     meter = TokenMeter(budget=args.token_budget)
 
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
