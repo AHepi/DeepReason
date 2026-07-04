@@ -59,16 +59,22 @@ def scan_spawns(harness, config) -> list[Problem]:
         if problem is not None:
             new.append(problem)
 
-    # Successor: a refuted candidate leaves its problem-shift behind.
+    # Successor: a refuted candidate leaves its problem-shift behind. The
+    # parent's description carries forward — criteria alone starve the
+    # generator of the problem's format/content contract (observed live:
+    # successor packs without the skeleton instruction bred prose that
+    # skeleton-wf refuted, cascading successors).
     for aid, pids in addressed.items():
         if status.get(aid) != Status.REFUTED:
             continue
         for pid in pids:
+            parent = state.problems[pid]
             _spawn(
                 SpawnTrigger.SUCCESSOR,
                 [aid, pid],
-                f"supersede refuted candidate {aid[:12]} on {pid}",
-                criteria=state.problems[pid].criteria,
+                f"supersede refuted candidate {aid[:12]} on {pid}. "
+                f"Original problem: {parent.description}",
+                criteria=parent.criteria,
                 problem_id=f"succ:{aid[:12]}",
             )
 

@@ -48,10 +48,10 @@ from deepreason.views.theory import theory  # noqa: E402
 # finish_reason=length and asks for compression instead of blind retries.
 MAX_TOKENS = {
     "conjecturer": 4000,
-    "argumentative_critic": 900,
-    "defender": 700,
+    "argumentative_critic": 1400,  # 900 starved long cases (33% valid-JSON observed)
+    "defender": 900,
     "variator": 3000,  # 2000 truncated paraphrases of large skeleton exchanges
-    "synthesizer": 900,
+    "synthesizer": 1400,  # 900 truncated a relation proposal
     "judge": 1200,  # v4-pro rulings run long even in JSON mode
 }
 
