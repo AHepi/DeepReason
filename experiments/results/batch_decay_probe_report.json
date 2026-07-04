@@ -1,0 +1,146 @@
+{
+  "date": "2026-07-04",
+  "decay_verdict": {
+    "attack_target_entropy": 1.0,
+    "attack_validity_rate": 1.0,
+    "case_diversity_early_vs_late": [
+      0.567,
+      0.602
+    ],
+    "case_len_early_vs_late_chars": [
+      816,
+      625
+    ],
+    "cases": 20,
+    "critic_valid_json_rate": 1.0,
+    "decayed": false,
+    "note": "cases shortened ~23% late but stayed diverse and lethal; no correlated-case collapse",
+    "refutation_seqs_spread": "seq 14 through 156, no late fade",
+    "registering_calls": 10
+  },
+  "emergent_bonus_replication": {
+    "accepted_critic_artifacts": 20,
+    "dependence_edges_onto_criticism": 0,
+    "note": "the 4-cycle run's build-on-criticism refs did not recur; treat as occasional, not a reliable property",
+    "replicated": false
+  },
+  "eval_report": {
+    "attack_validity_rate": 1.0,
+    "audits": {
+      "hits": 0,
+      "planted_flaw_error_rate": null,
+      "self_preference": null,
+      "verbosity_bias": null
+    },
+    "capture": {
+      "adjudicator": {
+        "attack_target_entropy": 0.9999999999999998,
+        "criticism_debt": 1.0,
+        "g_churn": 3,
+        "n_attacks": 3,
+        "refutations": 3,
+        "reinstatement_rate": 0.0,
+        "validity_attack_rate": 0.0
+      },
+      "generator": {
+        "dist_slope": 0.1087658645945957,
+        "inter_school_min_dist": 0.6176865085079826,
+        "mean_pairwise_dist": 0.6291112439661867,
+        "mean_token_surprisal": 0.358985150637267,
+        "stream_len": 10,
+        "surprisal_slope": null
+      },
+      "lambda": 1.0
+    },
+    "interventions": [],
+    "llm": {
+      "argumentative_critic": {
+        "attempts": 10,
+        "calls": 10,
+        "mean_surprisal": 0.3082163570393079,
+        "tokens": 15255,
+        "total_ms": 91645,
+        "valid_json_rate": 1.0
+      },
+      "conjecturer": {
+        "attempts": 11,
+        "calls": 11,
+        "mean_surprisal": 0.46621447700397806,
+        "tokens": 25771,
+        "total_ms": 245652,
+        "valid_json_rate": 1.0
+      },
+      "judge": {
+        "attempts": 4,
+        "calls": 3,
+        "mean_surprisal": 0.007468474252449197,
+        "tokens": 8264,
+        "total_ms": 64616,
+        "valid_json_rate": 0.75
+      },
+      "variator": {
+        "attempts": 3,
+        "calls": 3,
+        "mean_surprisal": 0.6819788980453825,
+        "tokens": 8054,
+        "total_ms": 137669,
+        "valid_json_rate": 1.0
+      }
+    },
+    "schools": {
+      "reseeds": 0,
+      "roster": {
+        "school-0": {
+          "lineage": 20,
+          "novelty_contribution": 0.5754332515174362,
+          "stance": "mechanist",
+          "stance_weight": 0.0
+        },
+        "school-1": {
+          "lineage": 9,
+          "novelty_contribution": 0.5446561450245418,
+          "stance": "skeptic",
+          "stance_weight": 0.55
+        }
+      }
+    },
+    "spec_transmission": {
+      "n": 0
+    },
+    "survivor_hv": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "n": 3
+    },
+    "survivor_reach": {
+      "n": 0
+    },
+    "totals": {
+      "artifacts": 84,
+      "events": 157,
+      "llm_tokens": 57344,
+      "problems": 30,
+      "survivors": 3,
+      "warrants": 26
+    },
+    "trial_guard": {
+      "blocked": {
+        "ensemble-split": 4,
+        "paraphrase-flip": 1,
+        "referential-integrity": 5
+      },
+      "rubric_warrants": 3,
+      "survival_rate": 0.23076923076923078
+    }
+  },
+  "meter": {
+    "budget": 300000,
+    "calls": 141,
+    "completion_tokens": 88364,
+    "prompt_tokens": 128744,
+    "total": 217108
+  },
+  "purpose": "10-cycle probe: does batched criticism decay late in a run; does the build-on-criticism bonus replicate",
+  "run": "batch_decay_probe"
+}
