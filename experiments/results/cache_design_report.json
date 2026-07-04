@@ -1,0 +1,251 @@
+{
+  "date": "2026-07-04",
+  "eval_report": {
+    "attack_validity_rate": 0.9772727272727273,
+    "audits": {
+      "hits": 1,
+      "planted_flaw_error_rate": null,
+      "self_preference": null,
+      "verbosity_bias": null
+    },
+    "capture": {
+      "adjudicator": {
+        "attack_target_entropy": null,
+        "criticism_debt": 1.0,
+        "g_churn": 1,
+        "n_attacks": 1,
+        "refutations": 1,
+        "reinstatement_rate": 0.0,
+        "validity_attack_rate": 0.022727272727272728
+      },
+      "generator": {
+        "dist_slope": -0.026171697939005756,
+        "inter_school_min_dist": 0.7053200308294926,
+        "mean_pairwise_dist": 0.669136362567996,
+        "mean_token_surprisal": 0.6385598705615501,
+        "stream_len": 10,
+        "surprisal_slope": null
+      },
+      "lambda": 0.0
+    },
+    "interventions": [],
+    "llm": {
+      "argumentative_critic": {
+        "attempts": 15,
+        "calls": 15,
+        "mean_surprisal": 0.2362314657844988,
+        "tokens": 27833,
+        "total_ms": 119312,
+        "valid_json_rate": 1.0
+      },
+      "conjecturer": {
+        "attempts": 33,
+        "calls": 33,
+        "mean_surprisal": 0.7774297110726621,
+        "tokens": 64605,
+        "total_ms": 639464,
+        "valid_json_rate": 1.0
+      },
+      "judge": {
+        "attempts": 6,
+        "calls": 4,
+        "mean_surprisal": 0.040075651625619886,
+        "tokens": 14525,
+        "total_ms": 98272,
+        "valid_json_rate": 0.6666666666666666
+      },
+      "variator": {
+        "attempts": 4,
+        "calls": 4,
+        "mean_surprisal": 0.5940562105792044,
+        "tokens": 11031,
+        "total_ms": 159591,
+        "valid_json_rate": 1.0
+      }
+    },
+    "schools": {
+      "reseeds": 0,
+      "roster": {
+        "school-0": {
+          "lineage": 22,
+          "novelty_contribution": 0.5994921373890306,
+          "stance": "mechanist",
+          "stance_weight": 0.0
+        },
+        "school-1": {
+          "lineage": 26,
+          "novelty_contribution": 0.6033929787064103,
+          "stance": "skeptic",
+          "stance_weight": 0.0
+        }
+      }
+    },
+    "spec_transmission": {
+      "max": 1.0,
+      "mean": 0.8627588235294118,
+      "min": 0.6667,
+      "n": 17
+    },
+    "survivor_hv": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "n": 4
+    },
+    "survivor_reach": {
+      "n": 0
+    },
+    "totals": {
+      "artifacts": 139,
+      "events": 309,
+      "llm_tokens": 117994,
+      "problems": 50,
+      "survivors": 6,
+      "warrants": 44
+    },
+    "trial_guard": {
+      "blocked": {
+        "ensemble-split": 6,
+        "paraphrase-flip": 2,
+        "referential-integrity": 7
+      },
+      "rubric_warrants": 4,
+      "survival_rate": 0.21052631578947367
+    }
+  },
+  "meter": {
+    "budget": 450000,
+    "calls": 248,
+    "completion_tokens": 165409,
+    "prompt_tokens": 286002,
+    "total": 451411
+  },
+  "notes": {
+    "lambda_zero_expected": "design domain has no exogenous oracle",
+    "spec_injection_first_live_data": {
+      "max": 1.0,
+      "mean": 0.8627588235294118,
+      "min": 0.6667,
+      "n": 17
+    },
+    "stopped_at_cap": true
+  },
+  "purpose": "18-cycle self-referential run: the harness designs its own deployable caching layer (gates TOKEN_ECONOMY deferred item)",
+  "run": "cache_design",
+  "surviving_designs": [
+    {
+      "claim": "A causal event-sourced materialized view caches resolved completions keyed by (run_id, seq_no, input_hash), with pointer swizzling for shared prefixes, replaying logs via hash-linked chains.",
+      "forbidden": [
+        "During replay, a completion from run A is used for run B at same seq_no but different input, deviating from byte-for-byte log.",
+        "Cache hit returns stale data after a code change that alters LLM behavior, because epoch wasn't updated.",
+        "Pointer swizzling corrupts a cached entry, causing replay to diverge from original log bytes."
+      ],
+      "id": "18aa7c47be2664ed7740202ceaab59b0e789c421a33ab23db7934de1b02d33ed",
+      "mechanism": "Upon each LLM call, the input fingerprint (input_hash) is computed. The cache is an append-only log where each entry stores the completion bytes plus a back-pointer to the previous cache entry for the same prefix. Shared prefixes are detected by maintaining a hash table of recent input hashes to entry offsets. A global epoch (version tag) is appended to the log on any code or model change. Replay uses the event log: for each call, we check if (run_id, seq_no) exists in cache; if so, use the stored completion byte-for-byte. Otherwise, execute and append. Invalidated only by epoch change.",
+      "scope": {
+        "covers": [
+          "Exact LLM completions for identical (run_id, seq_no, input_hash, model)",
+          "Log-shipping replay where the event log is the source of truth"
+        ],
+        "excludes": [
+          "Pack rendering beyond completions (no token-level caching)",
+          "Cross-target prefix caching unless input_hash matches exactly",
+          "Embedding vector caching"
+        ]
+      }
+    },
+    {
+      "claim": "Decorrelated embedding-zone veto: use locality-sensitive hashing on LLM last-layer states to group semantically equivalent prompts, force-route them to identical cached completions, ensuring replay-deterministic verdicts without cross-target leakage.",
+      "forbidden": [
+        "Two semantically similar prompts from different targets (e.g., different schools) map to the same LSH bucket and share a cached completion, causing verdict leakage.",
+        "The safe-delay timer causes a stale completion to be served after the underlying model or pack context has changed, breaking byte-for-byte replay consistency.",
+        "The embedding computation overhead plus LSH insert/lookup exceeds the cost of a raw LLM call for typical prompt sizes, making the cache a net negative."
+      ],
+      "id": "346567fd2a7d016be9a60c2a50511d03eb6213ca3b6d88b0c9bd1ca1e3bcb62b",
+      "mechanism": "For each provider, maintain a ring-buffer of ring-consistent hash rings (consistent hashing with virtual nodes). When a new prompt arrives, compute its embedding vector using a fast, deterministic encoder (e.g., the same LLM's last hidden state). Apply LSH to map it to a bucket. If the bucket has a cached completion and a 'safe-delay' timer hasn't expired, serve that completion; otherwise, query the LLM and cache the result with a new safe-delay. Invalidation: ring-buffer rotates old entries out after a configurable delay; also, on log rewind, rings are replayed consistently. Verdict agreement improvement is measured by comparing completion consistency under this cache vs. raw LLM calls over a range of semantically similar prompts.",
+      "scope": {
+        "covers": [
+          "Only replay-deterministic cached verdicts: same semantic input yields the same output within delay window.",
+          "Semantically equivalent system+user tuples (by embedding distance) share cached completions.",
+          "Ring-consistent hashing ensures load distribution across cache shards."
+        ],
+        "excludes": [
+          "Cross-target verdict leakage: embeddings include target-specific metadata to keep different-target cache entries separate.",
+          "Non-deterministic fuzzy matches: LSH parameters are tuned so that only very close embeddings collide, preserving byte-for-byte replay when needed.",
+          "Unbounded memory: ring-buffer limits cache size."
+        ]
+      }
+    },
+    {
+      "claim": "Caching via incremental state-machine reconciliation stores a base state and deltas between successive packs, with completions indexed by state fingerprint, avoiding redundant full re-renders on small changes.",
+      "forbidden": [
+        "Applying deltas yields a state fingerprint that does not match the full pack rendered from the event log (delta logic error)",
+        "Cache hit ratio for a run with 10% event additions (versus full recompute) falls below 80% when deltas are stored efficiently",
+        "State fingerprint collisions cause wrong completion retrieval (hash collision probability > 2^-128)",
+        "Invalidation fails to evict when an event earlier in the log is retroactively modified (cache serves stale data)"
+      ],
+      "id": "890a7af46d48ef94e8f925472c4e6a0fa39a339cc9f2f09dc3b6a2e31205216d",
+      "mechanism": "Base state is a fully rendered pack; deltas are the minimal edits (add/delete/replace) to transform one pack to the next. A state fingerprint (hash of rendered pack) indexes completions. On a new request, we compute the edit distance from the nearest cached state, apply deltas to get the new rendered pack, and check cache. Invalidation occurs when the event log advances beyond the cached state range (e.g., a prior event is modified), requiring a new base state recomputation.",
+      "scope": {
+        "covers": [
+          "Rendered packs within a run",
+          "Completions for exact state fingerprints",
+          "Reuse of base states with small diffs"
+        ],
+        "excludes": [
+          "Caching completions across different targets",
+          "Cross-run state sharing without explicit base transfer",
+          "Embracing non-determinism in delta computation"
+        ]
+      }
+    },
+    {
+      "claim": "A prompt-component DAG caches both raw text and rendered prefixes for each stable component (system, problem, criteria, stance), with completions keyed by the DAG node hash, enabling maximal reuse across runs and invalidation only on component changes.",
+      "forbidden": [
+        "A completion is returned for a DAG hash that does not include a component newly added to the event log (stale cache)",
+        "Hit rate for runs with identical system+problem but different stance (rare in school) falls below 90% when stances are small vs. problem size",
+        "Node hash collision across two distinct component contents causes incorrect prefix reuse (should be cryptographically negligible)",
+        "Cache entry depends on component ordering that is not deterministic from event log parsing (e.g., unordered criteria list)"
+      ],
+      "id": "c9931dd15d647e3e648ea494291e3949ba9c9dfca85950150dcf065bf09afb8d",
+      "mechanism": "The prompt is decomposed into a DAG of distinct components (e.g., system message, problem statement, criteria, stance). Each node stores its raw text and a prefix-hash (hash of all text from root to this node). Cached completions are keyed by the full DAG root hash (which represents the entire rendered pack). For a new request, we traverse the DAG to find the longest prefix with a cached completion; if not found, we render from the novel component onward and cache the completion. Invalidation: nodes are immutable; if a component changes in the event log, its hash changes, creating new nodes, and old nodes become unreachable if no other references exist.",
+      "scope": {
+        "covers": [
+          "System message",
+          "Problem description",
+          "Criteria",
+          "Stance",
+          "Rendered prefixes",
+          "Completions for exact DAG state"
+        ],
+        "excludes": [
+          "Caching completions across different targets",
+          "Dynamic components not modeled in the DAG",
+          "Provider-specific routing logic"
+        ]
+      }
+    },
+    {
+      "claim": "A content-addressable dedup of rendered system+user packs via deterministic hash eliminates redundant rendering work across runs and providers.",
+      "forbidden": [
+        "A cache hit serves a completion from a different target (e.g., school-1 vs school-0) because their packs happen to collide in fingerprint.",
+        "Cache entries persist across log-truncation or replay forks, leading to non-deterministic behavior when replaying an earlier event sequence.",
+        "The cache hit ratio under typical workloads is <20% because pack variability (e.g., timestamps, random seeds) makes fingerprints near-unique per call."
+      ],
+      "id": "ce1b3cfc233df4b7effc5cb7f5e9404dd59eb84a6627382ab086974cf439898a",
+      "mechanism": "Pack-level fingerprint (SHA-256) of the concatenated rendered system and user prompt. Per-provider sharded LRU caches keyed by this fingerprint. A content-addressed store ensures identical packs share cache entries. Conflict-free merge: the fingerprint is deterministic, so no merge conflicts arise. Cache eviction per provider shard is budgeted by observed cache miss cost (latency).",
+      "scope": {
+        "covers": [
+          "Idempotent pack rendering: identical system+user prompts reuse cached completions.",
+          "Replay determinism: same pack fingerprint always yields the same cached completion if present and valid.",
+          "Provider-agnostic: sharding per provider allows independent LRU management with provider-specific cost weights."
+        ],
+        "excludes": [
+          "Cross-target completion sharing: completions for different targets (e.g., different school stances) are never mixed.",
+          "Completion reuse across non-equivalent packs: only exact fingerprint matches are served from cache.",
+          "Any inference-time semantic similarity: no embedding-based fuzzy matching."
+        ]
+      }
+    }
+  ]
+}
