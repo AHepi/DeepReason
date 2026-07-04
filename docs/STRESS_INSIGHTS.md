@@ -20,6 +20,16 @@ flat, but the defensible policy is now **per-suite calibration, not
 blanket reasoning-off**. Small n (one run per arm) — a replication with
 multiple seeds would firm this up.
 
+**Replication outcome (same day, pre-registered in
+`experiments/t2_replication_prereg.yaml`, 4 repeats per arm):** the
+falsifier did NOT fire on replication — reasoning-off averaged **6.0
+survivors vs 4.25 for provider default** (survivors off: 6,4,7,7;
+default: 3,5,4,5) at 26% fewer tokens (20.7k vs 27.9k mean). The
+original firing is attributed to single-run variance; reasoning-off is
+certified as the tides default as well. Lesson kept: single-run
+experiment verdicts on count metrics are noise-dominated — replicate
+before repolicying.
+
 ## The commercial insight: the downgrade is asymmetric (T1)
 
 Flash-everything (pro kept as second judge seat): the *criticism*
