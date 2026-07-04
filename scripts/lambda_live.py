@@ -81,10 +81,13 @@ def main() -> int:
                     temperature=temperature, max_tokens=cap, json_mode=True,
                 )
 
+            # v4-pro reasons before answering; letter-counting tasks consume
+            # the completion budget as reasoning, so caps need real headroom
+            # (1200 returned EMPTY content on every call — all reasoning).
             adapter = LLMAdapter(
                 {
-                    "conjecturer": endpoint(1.0, 1200),
-                    "argumentative_critic": endpoint(0.7, 700),
+                    "conjecturer": endpoint(1.0, 4000),
+                    "argumentative_critic": endpoint(0.7, 1400),
                 },
                 BlobStore(root / "blobs"),
                 retry_max=config.RETRY_MAX,
