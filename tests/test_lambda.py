@@ -83,3 +83,67 @@ def test_arms_run_and_verdict_recorded(tmp_path):
     # In the full arm the oracle is in the loop, so bad candidates get refuted
     # and lambda is exogenous; in the closed arm nothing is.
     assert summary["lambda_full"]["lambda"]["mean"] == 1.0
+
+
+def test_focus_lock_works_only_the_focused_problem(tmp_path):
+    """FOCUS_PROBLEM (prereg v2): spawned side-problems are recorded but
+    never worked — attention only."""
+    from deepreason.harness import Harness
+    from deepreason.ontology import Commitment, Problem, ProblemProvenance
+    from deepreason.scheduler.scheduler import Scheduler
+
+    harness = Harness(tmp_path / "run")
+    harness.register_commitment(Commitment(id="oracle", eval="predicate:'moon' in content"))
+    harness.register_problem(
+        Problem(
+            id="pi-arm", description="the seed problem", criteria=["oracle"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    calls = {"n": 0}
+
+    def conjecture(prompt):
+        calls["n"] += 1
+        return _vs(f"the tides are magic {calls['n']}", f"the moon pulls {calls['n']}")
+
+    adapter = LLMAdapter({"conjecturer": MockEndpoint(conjecture)}, harness.blobs, retry_max=2)
+    config = Config(VS_K=2, N_SCHOOLS=0, FLOOR=0, FOCUS_PROBLEM="pi-arm")
+    Scheduler(harness, adapter, config).run(4)
+    worked = {pid for _, pid in harness.state.addr}
+    assert worked == {"pi-arm"}  # successors spawn but are never worked
+    assert any(p.startswith("succ:") for p in harness.state.problems)
+
+
+def test_run_arm_reports_v2_metrics(tmp_path):
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint(lambda p: _vs("the moon pulls the sea", "magic"))},
+        BlobStore(tmp_path / "b"),
+        retry_max=2,
+    )
+    result = lambda_run.run_arm(
+        tmp_path / "run",
+        program_criteria_in_loop=True,
+        oracle_eval="predicate:'moon' in content",
+        problem_description="mention the moon",
+        adapter=adapter,
+        config=Config(VS_K=2, N_SCHOOLS=0, FLOOR=0, FOCUS_PROBLEM="pi-arm"),
+        cycles=1,
+    )
+    assert result["oracle_passes"] == 1        # one seed candidate passes
+    assert result["oracle_pass_rate_seed"] == 0.5
+    assert "gate_blocks" in result
+
+
+def test_verdict_uses_preregistered_primary_metric(tmp_path):
+    prereg = tmp_path / "prereg_v2.yaml"
+    prereg.write_text(
+        "primary_metric: oracle_passes\nthresholds:\n  gap_min: 1.0\n"
+    )
+    summary = {
+        "lambda_full": {"oracle_passes": {"mean": 3.0}},
+        "lambda0": {"oracle_passes": {"mean": 1.0}},
+    }
+    v = lambda_run.verdict(summary, prereg)
+    assert v["metric"] == "oracle_passes"
+    assert v["gap"] == 2.0
+    assert v["falsifier_triggered"] is False

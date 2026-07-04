@@ -51,6 +51,8 @@ class Scheduler:
 
     def _select_problem(self):
         state = self.harness.state
+        if self.config.FOCUS_PROBLEM is not None:
+            return state.problems.get(self.config.FOCUS_PROBLEM)
         survivors_by_problem: dict[str, int] = {}
         for aid, pid in state.addr:
             if state.status.get(aid) == Status.ACCEPTED:

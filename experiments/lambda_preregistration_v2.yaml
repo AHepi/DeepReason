@@ -1,0 +1,53 @@
+# λ dose-response experiment — PRE-REGISTERED AMENDMENT v2 (spec §11.8).
+# Committed BEFORE any v2 run. v1 (lambda_preregistration.yaml) is unedited;
+# a revision is a new registration, not a mutation.
+#
+# Why v2 exists (pilot post-mortem, docs/REPORT.md §6):
+#   1. Ceiling effect: the 8-digit pi mnemonic was solved immediately in
+#      every replicate of BOTH arms (2/2 on the seed problem) — a task the
+#      generator never fails cannot show a dose-response to criticism.
+#   2. Denominator dilution: 18/20 conjectures per run landed on derivative
+#      side-problems with empty criteria; the v1 metric averaged over them.
+
+amends: lambda_preregistration.yaml
+
+task:
+  # Word lengths of the first 10 words must encode an ARBITRARY sequence —
+  # no famous mnemonic exists (blocks memorization), and the 9/8/10-letter
+  # placements resist one-shot construction.
+  sequence: [4, 2, 9, 3, 7, 5, 8, 2, 6, 10]
+  oracle: word_lengths_of_first_10_words == sequence, letters only
+
+design:
+  replicates: 5
+  cycles_per_run: 30
+  focus_lock: pi-arm        # scheduler works ONLY the seed problem (Config.FOCUS_PROBLEM)
+  vs_k: 2
+  arg_crit_per_cycle: 1
+  per_run_token_budget: 200000
+
+primary_metric: oracle_passes
+# oracle_passes = distinct REGISTERED candidates addressing the seed problem
+# that pass the withheld verifier post-hoc, per run. A count, not a rate:
+# under an equal cycle budget it measures verified output directly and is
+# not distorted by the anti-relapse gate suppressing registered failures in
+# the lambda_full arm (the gate IS part of the treatment).
+
+thresholds:
+  gap_min: 1.0
+# Falsifier, stated in advance: if mean(oracle_passes | lambda_full) minus
+# mean(oracle_passes | lambda0) is below 1.0, in-loop grounding did not
+# increase verified output on this task and the anchoring does not earn
+# the exemption here.
+
+secondary_metrics:
+  - oracle_pass_rate_seed   # conditioned rate over registered seed candidates
+  - oracle_pass_rate        # v1 metric, for continuity with the pilot
+  - gate_blocks             # anti-relapse blocks (mechanism diagnostic)
+  - mean_pairwise_dist      # generator surface
+
+predictions:
+  - lambda_full produces at least one more distinct verified passer per run
+  - mechanism - in-loop refutation plus anti-relapse enrichment plus
+    accepted-passer exemplars re-entering packs as neighbourhood
+  - lambda0 registers more candidates but fewer verified ones

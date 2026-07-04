@@ -45,6 +45,10 @@ class Config(BaseModel):
     # Budget triage (§14; attention only, never status)
     ARG_CRIT_PER_CYCLE: int | None = None      # cap argumentative-critic calls per cycle
     RUBRIC_TRIALS_PER_ARTIFACT: int | None = None  # cap rubric trials per artifact per cycle
+    # Focus lock (attention only): when set, the scheduler works ONLY this
+    # problem — used by controlled experiments to eliminate side-problem
+    # dilution (spawn triggers still record problems; they are just unworked).
+    FOCUS_PROBLEM: str | None = None
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2
