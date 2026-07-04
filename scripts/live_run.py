@@ -221,10 +221,108 @@ def seed_cache(harness: Harness) -> None:
     )
 
 
+_CACHE_SKELETON_SHAPE = (
+    'Each candidate\'s content MUST be a JSON skeleton object, exactly this '
+    'shape: {"claim": str, "mechanism": str, '
+    '"scope": {"covers": [str], "excludes": [str]}, '
+    '"forbidden": [{"case": str, "eval": "rubric:%s"}], '
+    '"prose_notes": str}. Forbidden cases must be concrete observable '
+    "behaviors that would refute the design had they obtained."
+)
+
+
+def seed_cache_sandbox(harness: Harness) -> None:
+    """Sandbox phase (staged criteria, never verdict forgiveness): the
+    standard keeps mechanism-and-falsifiability but DROPS the harness
+    invariant clause, so wilder designs can survive argument. Survivors
+    face the strict standard later via seed_cache_strict in the SAME root —
+    the anti-relapse gate exempts near-dups of accepted artifacts, so
+    refined resubmissions under strict criteria are admissible."""
+    register_standard(
+        harness,
+        "std-design-sandbox",
+        rubric=(
+            "A harness-design proposal must: (1) name a specific mechanism — "
+            "a data structure, keying scheme, invalidation rule, or protocol "
+            "step — not an aspiration; (2) state forbidden cases that are "
+            "concrete, observable system behaviors or workload measurements "
+            "that would refute the design. Correctness constraints of the "
+            "host system are NOT part of this standard: bold designs that "
+            "would need re-architecting to deploy are admissible here."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(
+        Commitment(id="kappa-design-sandbox", eval="rubric:std-design-sandbox")
+    )
+    harness.register_problem(
+        Problem(
+            id="pi-cache-sandbox",
+            description=(
+                "SANDBOX: propose bold, unconventional caching/reuse "
+                "strategies for a deterministic LLM harness (pure pack->JSON "
+                "calls, append-only event log, packs with stable heads and "
+                "volatile tails, measured exact-match hit rate only ~2%, "
+                "prefix reuse ~29%). Ignore deployment safety for now — "
+                "semantic reuse, cross-run transfer, speculative generation, "
+                "learned render compression are all in scope. "
+                + _CACHE_SKELETON_SHAPE % "std-design-sandbox"
+            ),
+            criteria=["skeleton-wf", "kappa-design-sandbox"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
+def seed_cache_strict(harness: Harness) -> None:
+    """Strict phase: registered into the SAME root after the sandbox run.
+    The full std-design standard (harness invariants included) arrives as a
+    NEW standard + problem — never an edit of the sandbox one (§11.8)."""
+    register_standard(
+        harness,
+        "std-design",
+        rubric=(
+            "A harness-design proposal must: (1) name a specific mechanism — "
+            "a data structure, keying scheme, invalidation rule, or protocol "
+            "step — not an aspiration; (2) state forbidden cases that are "
+            "concrete, observable system behaviors or workload measurements "
+            "that would refute the design; (3) respect the harness "
+            "invariants: nothing served from cache may alter adjudication "
+            "outcomes relative to a cache-free run, verdicts are never "
+            "reused across non-equivalent targets, and the event log remains "
+            "the source of truth. Designs trading correctness for hit rate "
+            "violate this standard."
+        ),
+        mode="absolute",
+    )
+    if "skeleton-wf" not in harness.commitments:
+        harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-design", eval="rubric:std-design"))
+    harness.register_problem(
+        Problem(
+            id="pi-cache-strict",
+            description=(
+                "STRICT PHASE: harden the boldest surviving sandbox designs "
+                "(visible in the neighbourhood) into deployable form — keep "
+                "the bold mechanism, add the machinery that satisfies the "
+                "harness invariants (replay unchanged, no verdict reuse "
+                "across non-equivalent targets, event log as source of "
+                "truth), or show why it cannot be done. "
+                + _CACHE_SKELETON_SHAPE % "std-design"
+            ),
+            criteria=["skeleton-wf", "kappa-design"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
     "cache": ("pi-cache", seed_cache),
+    "cache-sandbox": ("pi-cache-sandbox", seed_cache_sandbox),
+    "cache-strict": ("pi-cache-strict", seed_cache_strict),
 }
 
 
@@ -243,6 +341,10 @@ def main() -> int:
                         help="conjecturer reasoning override: policy|default|none|high|max|<int>")
     parser.add_argument("--spec-injection", action="store_true",
                         help="enable Level-2 diversity spec injection (llm/specs.py)")
+    parser.add_argument("--schools", type=int, default=None,
+                        help="override N_SCHOOLS (stances sampled from STANCE_LIBRARY)")
+    parser.add_argument("--stance-decay", type=float, default=None,
+                        help="override STANCE_DECAY (lineage size at which stance weight hits 0)")
     args = parser.parse_args()
 
     api_key = os.environ.get(args.api_key_env)
@@ -262,6 +364,10 @@ def main() -> int:
     config = load_config(Path(args.config))
     if args.spec_injection:
         config.SPEC_INJECTION = True
+    if args.schools is not None:
+        config.N_SCHOOLS = args.schools
+    if args.stance_decay is not None:
+        config.STANCE_DECAY = args.stance_decay
     meter = TokenMeter(budget=args.token_budget)
 
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:

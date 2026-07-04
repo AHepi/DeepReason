@@ -66,3 +66,29 @@ the exact-fingerprint cache with the component-DAG keying from `c9931dd1`
 inside `llm/providers.py`/adapter seam, (c) ship with the three
 convergent forbidden cases as tests. The LSH branch stays unbuilt unless
 overlap measurement shows exact matching leaves large money on the table.
+
+## Addendum (same day): the measurement happened, and it flipped the plan
+
+`scripts/cachebench.py` replayed all 151 logged prompts from six run
+directories — the real workload, byte-for-byte. Results
+(`experiments/results/cachebench_report.json`):
+
+- **cross-run exact hit rate: 1.99%** — far below `ce1b3cfc`'s own 20%
+  floor. Its forbidden case obtained; it is now **refuted by a
+  demonstrative warrant** carrying the benchmark trace.
+- **same-run prefix reuse: 29%** (34% cross-run; conjecturer 30%, judge
+  18%) — far below `c9931dd1`'s 90% claim. Also **refuted by
+  measurement**. Stable-prefix ordering keeps the head cacheable, but the
+  volatile tail (neighbourhood, target content) dominates prompt length.
+- λ for the design domain rose 0.0 → 0.67: verdicts here are now
+  grounded, not argued.
+
+Standing after measurement: the **event-sourced completion log**
+(`18aa7c47` — fits replay exactly, pays on re-runs/resumes rather than
+fresh cycles), **delta reconciliation** (`890a7af4`), and the **LSH
+semantic cache** (`346567fd`) — the "wild" branch survived its rivals
+precisely because exact matching provably leaves the money on the table.
+Its own forbidden cases (verdict leakage, overhead > raw call) are now
+the next things to measure before building. Provider-side prefix caching
+(free, automatic) remains worth keeping via pack ordering; a
+harness-side exact/prefix cache is not worth building for this workload.
