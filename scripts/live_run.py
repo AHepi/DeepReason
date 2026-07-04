@@ -367,6 +367,79 @@ def seed_occult(harness: Harness) -> None:
     )
 
 
+def seed_autonomics(harness: Harness) -> None:
+    """The 3M-token hard problem: design the mechanism by which the harness
+    calibrates its own generation-side knobs — ending the human operator's
+    tinkering loop — without the feedback loop becoming a capture vector.
+    The problem statement carries the REAL tinkering record so designs
+    target reality, and the standard's clause (3) encodes the §0 line."""
+    register_standard(
+        harness,
+        "std-autonomics",
+        rubric=(
+            "A self-calibration design must: (1) name the full control loop "
+            "concretely — which LOGGED signal (e.g. valid-JSON rate, "
+            "finish_reason=length frequency, survivors-per-token, admission "
+            "rate, attack validity, spec transmission) drives which KNOB "
+            "(reasoning depth, completion cap, batch size, VS_K, model "
+            "routing, focus share), with what update rule and what damping; "
+            "(2) state forbidden cases: concrete observable behaviors that "
+            "would refute the design, INCLUDING at least one Goodhart case "
+            "(the controller optimizes the signal while degrading the thing "
+            "the signal proxies) and how the design makes it detectable; "
+            "(3) respect the constitution: knobs may steer GENERATION and "
+            "ATTENTION only — no measured signal may ever set or influence "
+            "an artifact status, a verdict, or an adjudication input; a "
+            "design where the controller can suppress criticism of itself "
+            "violates this clause. Vague designs ('adapt dynamically') "
+            "violate clause (1)."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(
+        Commitment(id="kappa-autonomics", eval="rubric:std-autonomics")
+    )
+    harness.register_problem(
+        Problem(
+            id="pi-autonomics",
+            description=(
+                "Design the self-calibration mechanism for a deterministic "
+                "conjecture-criticism harness, so that a human operator no "
+                "longer hand-tunes it. The operator's actual tinkering "
+                "record, from logged history: (a) completion caps set after "
+                "three truncation failures (per-role, per-domain); "
+                "(b) reasoning depth policies found DOMAIN-DEPENDENT "
+                "(skeleton tasks fine without reasoning, free-prose lost "
+                "survivors without it); (c) model routing found ASYMMETRIC "
+                "(cheap model criticizes soundly but its conjectures cannot "
+                "survive criticism); (d) two experiments failed by "
+                "ATTENTION STARVATION until a manual focus lock was added; "
+                "(e) batch sizes, VS_K, audit periods all hand-set. "
+                "Constraints: every signal the controller may read already "
+                "exists in the append-only event log (token counts, "
+                "finish_reason, valid-JSON rates, admission/refutation "
+                "rates, surprisal, survivors-per-token); the controller's "
+                "policy and every update it makes must be REGISTERED, "
+                "REPLAYABLE artifacts that critics can attack; statuses and "
+                "verdicts are forever out of its reach. The central tension "
+                "to solve: a controller tuning knobs by measured outcomes "
+                "is one mistake away from measures adjudicating (Goodhart, "
+                "self-capture) — your design must say precisely why its "
+                "loop cannot cross that line and what observation would "
+                "prove it had. Each candidate's content MUST be a JSON "
+                'skeleton object, exactly this shape: {"claim": str, '
+                '"mechanism": str, "scope": {"covers": [str], "excludes": '
+                '[str]}, "forbidden": [{"case": str, "eval": '
+                '"rubric:std-autonomics"}], "prose_notes": str}. Forbidden '
+                "cases must be concrete observable behaviors."
+            ),
+            criteria=["skeleton-wf", "kappa-autonomics"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
@@ -374,6 +447,7 @@ SUITES = {
     "cache-sandbox": ("pi-cache-sandbox", seed_cache_sandbox),
     "cache-strict": ("pi-cache-strict", seed_cache_strict),
     "occult": ("pi-occult", seed_occult),
+    "autonomics": ("pi-autonomics", seed_autonomics),
 }
 
 
