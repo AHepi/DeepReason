@@ -33,6 +33,11 @@ class LLMCall(BaseModel):
     tokens: int = 0
     ms: int = 0
     attempts: int = 1  # completions consumed incl. schema repairs (P6 valid-JSON rate)
+    # Mean token surprisal (-mean logprob) of the final completion, when the
+    # endpoint returns logprobs. A token-level uncertainty signal that stays
+    # informative even when response-level diversity collapses — the
+    # decoupling reported in docs/research (alignment tax): detection §11.3.
+    mean_surprisal: float | None = None
 
 
 class StateDiff(BaseModel):

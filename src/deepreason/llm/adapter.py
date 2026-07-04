@@ -63,16 +63,19 @@ class LLMAdapter:
         pack: str,
         output_model: type[BaseModel],
         endpoint_index: int = 0,
+        template_role: str | None = None,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
-        MUST run on >=2 endpoints from different families)."""
+        MUST run on >=2 endpoints from different families). template_role
+        lets an auxiliary contract (e.g. spec generation) reuse a configured
+        endpoint with a different prompt template."""
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
         endpoint = self._resolve(role, endpoint_index)
         import json as _json
 
         schema = _json.dumps(output_model.model_json_schema(), sort_keys=True)
-        prompt = TEMPLATES[role].format(schema=schema, pack=pack)
+        prompt = TEMPLATES[template_role or role].format(schema=schema, pack=pack)
         prompt_ref = self.blobs.put(prompt.encode())
         started = time.monotonic()
         error = ""
@@ -117,6 +120,7 @@ class LLMAdapter:
                 tokens=tokens_used,
                 ms=int((time.monotonic() - started) * 1000),
                 attempts=attempt + 1,
+                mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
             )
             return data, call
         raise SchemaRepairError(f"role {role}: no schema-valid output after retries: {error}")

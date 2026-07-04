@@ -60,6 +60,7 @@ def eval_report(harness, config, embedder=None) -> dict:
 
     # --- LLM reliability: valid-JSON rate per role (P6) ---------------- #
     per_role: dict[str, dict] = {}
+    surprisal_sums: dict[str, list[float]] = {}
     total_tokens = 0
     for event in events:
         if event.llm is None:
@@ -72,8 +73,12 @@ def eval_report(harness, config, embedder=None) -> dict:
         row["total_ms"] += event.llm.ms
         row["tokens"] += event.llm.tokens
         total_tokens += event.llm.tokens
-    for row in per_role.values():
+        if event.llm.mean_surprisal is not None:
+            surprisal_sums.setdefault(event.llm.role, []).append(event.llm.mean_surprisal)
+    for role, row in per_role.items():
         row["valid_json_rate"] = row["calls"] / row["attempts"] if row["attempts"] else None
+        values = surprisal_sums.get(role)
+        row["mean_surprisal"] = sum(values) / len(values) if values else None
 
     # --- Attack validity: do registered attacks stand? ----------------- #
     attackers = [a for a in state.artifacts.values() if a.warrants]
@@ -117,6 +122,17 @@ def eval_report(harness, config, embedder=None) -> dict:
     audit_hits = sum(
         1 for e in events for t in e.inputs if t.startswith("audit-hit:")
     )
+    # Level-2 spec transmission (llm/specs.py): did injected specifications
+    # bind? 1.0 = every candidate realized its own spec.
+    spec_scores = []
+    for event in events:
+        for tag in event.inputs:
+            if tag.startswith("spec-transmission:"):
+                try:
+                    spec_scores.append(float(tag[len("spec-transmission:"):]))
+                except ValueError:
+                    pass
+    spec_transmission = _distribution(spec_scores)
     judge_error_rate = _latest_tagged(events, "judge-error-rate:")
     self_preference = _latest_tagged(events, "judge-self-preference:")
     verbosity_bias = _latest_tagged(events, "judge-verbosity-bias:")
@@ -193,6 +209,7 @@ def eval_report(harness, config, embedder=None) -> dict:
             "self_preference": self_preference,
             "verbosity_bias": verbosity_bias,
         },
+        "spec_transmission": spec_transmission,
         "schools": {"roster": school_rows, "reseeds": reseeds},
         "interventions": interventions,
         "capture": {

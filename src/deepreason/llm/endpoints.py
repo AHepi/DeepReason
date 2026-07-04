@@ -35,6 +35,19 @@ def request_with_retries(fn):
     raise EndpointError(f"transport failed after retries: {last}") from last
 
 
+def mean_surprisal(logprobs_block: dict | None) -> float | None:
+    """-mean(logprob) over the completion's sampled tokens (OpenAI-shaped
+    ``logprobs.content``). A surprisal proxy for token-level uncertainty —
+    true entropy would need the full per-position distribution."""
+    if not logprobs_block:
+        return None
+    content = logprobs_block.get("content") or []
+    values = [t["logprob"] for t in content if isinstance(t.get("logprob"), (int, float))]
+    if not values:
+        return None
+    return -sum(values) / len(values)
+
+
 class MockEndpoint:
     """Returns scripted responses in order (raises when exhausted), or — when
     given a callable — computes each response from the prompt. Reports an
@@ -78,6 +91,7 @@ class OpenAICompatEndpoint:
         timeout_s: int = 120,
         max_tokens: int | None = None,
         json_mode: bool = False,
+        request_logprobs: bool = False,
     ) -> None:
         self.name = base_url
         self.model = model
@@ -88,8 +102,10 @@ class OpenAICompatEndpoint:
         # response_format json_object: stops models prefacing the JSON with
         # analysis prose (observed live: judge rulings truncating at the cap).
         self.json_mode = json_mode
+        self.request_logprobs = request_logprobs
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
+        self.last_mean_surprisal: float | None = None
 
     def complete(self, prompt: str) -> str:
         body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
@@ -99,6 +115,8 @@ class OpenAICompatEndpoint:
             body["max_tokens"] = self.max_tokens
         if self.json_mode:
             body["response_format"] = {"type": "json_object"}
+        if self.request_logprobs:
+            body["logprobs"] = True
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -113,6 +131,8 @@ class OpenAICompatEndpoint:
                 return json.load(response)
 
         data = request_with_retries(_once)
+        choice = data["choices"][0]
         self.last_usage = data.get("usage") or None
-        self.last_finish_reason = data["choices"][0].get("finish_reason")
-        return data["choices"][0]["message"]["content"]
+        self.last_finish_reason = choice.get("finish_reason")
+        self.last_mean_surprisal = mean_surprisal(choice.get("logprobs"))
+        return choice["message"]["content"]

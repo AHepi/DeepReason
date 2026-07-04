@@ -35,11 +35,13 @@ def render_conj_pack(
     token_budget: int,
     school: dict | None = None,
     complement: bool = False,
+    specs: list[str] | None = None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
     stance directive fades as lineage grows. complement is the §11.4
-    stagnation directive."""
+    stagnation directive. specs are Level-2 diversity specifications:
+    candidate k must realize spec k (llm/specs.py)."""
     lines = [
         f"PROBLEM {problem.id}",
         problem.description,
@@ -71,6 +73,9 @@ def render_conj_pack(
             "COMPLEMENT DIRECTIVE: produce the attempt these summaries make "
             "least likely — avoid the modal continuation of the neighbourhood.",
         ]
+    if specs:
+        lines += ["", "DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):"]
+        lines += [f"  spec {i + 1}: {s}" for i, s in enumerate(specs)]
     lines += [
         "",
         f"DIRECTIVE: return exactly {vs_k} diverse candidates with typicality "

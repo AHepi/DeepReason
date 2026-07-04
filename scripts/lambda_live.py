@@ -80,6 +80,7 @@ def run_one_arm(args) -> int:
             return OpenAICompatEndpoint(
                 args.base_url, args.model, api_key=api_key,
                 temperature=temperature, max_tokens=cap, json_mode=True,
+                    request_logprobs=True,
             )
 
         adapter = LLMAdapter(

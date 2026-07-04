@@ -63,6 +63,13 @@ TEMPLATES = {
         "decisive_point MUST quote a specific span of the exchange; a ruling "
         "whose grounds cannot be located is invalid.\n\n" + _JSON_ONLY + "{pack}"
     ),
+    "spec_generator": (
+        "You are the diversity-specification generator: you design ORTHOGONAL "
+        "outlines that later candidates must each realize. You produce "
+        "specifications only — never the candidates themselves. Orthogonal "
+        "means: different causal angle, different mechanism family, different "
+        "structure. Avoid the modal framing entirely.\n\n" + _JSON_ONLY + "{pack}"
+    ),
     "summarizer": (
         "You are the summarizer: render the skeleton in the pack as readable "
         "prose. The prose is a view, never the content — add nothing the "

@@ -189,7 +189,7 @@ def main() -> int:
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
         return OpenAICompatEndpoint(
             args.base_url, model, api_key=api_key, temperature=temperature,
-            max_tokens=MAX_TOKENS.get(role), json_mode=True,
+            max_tokens=MAX_TOKENS.get(role), json_mode=True, request_logprobs=True,
         )
 
     adapter = LLMAdapter(

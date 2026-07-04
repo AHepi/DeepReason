@@ -18,6 +18,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
         scheduler.recruit_all = True       # fan-out recruitment (§11.2.4)
         scheduler.tail_weighted = True     # VS tail-weighted selection (§11.6)
         scheduler.complement = True        # complement directives in packs
+        scheduler.spec_injection = True    # Level-2 spec injection (llm/specs.py)
         harness.record_measure(inputs=["intervention:stagnation-recruit"])
         applied.append("stagnation-recruit")
 

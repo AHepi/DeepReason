@@ -27,6 +27,7 @@ def conj(
     school: dict | None = None,
     tail_weighted: bool = False,
     complement: bool = False,
+    specs: list[str] | None = None,
     embedder=None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
@@ -41,8 +42,17 @@ def conj(
         token_budget=config.PACK_TOKEN_BUDGET,
         school=school,
         complement=complement,
+        specs=specs,
     )
     output, llm_call = adapter.call("conjecturer", pack, ConjecturerOutput)
+    # Level-2 transmission diagnostic (attention/reporting only, §0): did
+    # candidate k actually realize spec k? Logged as a replayable Measure.
+    if specs and embedder is not None:
+        from deepreason.llm.specs import transmission_score
+
+        score = transmission_score(specs, [c.content for c in output.candidates], embedder)
+        if score is not None:
+            harness.record_measure(inputs=[f"spec-transmission:{score:.4f}", problem_id])
 
     candidates = list(output.candidates)
     if tail_weighted:  # stagnation response (§11.4): fund the atypical tail

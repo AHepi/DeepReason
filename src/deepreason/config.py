@@ -49,6 +49,9 @@ class Config(BaseModel):
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).
     FOCUS_PROBLEM: str | None = None
+    # Level-2 diversity injection always-on (llm/specs.py); the stagnation
+    # ladder can also switch it on reactively (§11.4).
+    SPEC_INJECTION: bool = False
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

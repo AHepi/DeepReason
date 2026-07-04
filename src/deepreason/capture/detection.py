@@ -61,11 +61,33 @@ def generator_metrics(harness, embedder, window: int) -> dict:
         for i, a in enumerate(ids)
         for b in ids[i + 1 :]
     ]
+    # Token-level uncertainty (docs/research: alignment tax) — response
+    # diversity can collapse while token surprisal stays informative, so
+    # this catches contraction the embedding metrics can miss.
+    surprisals = [
+        e.llm.mean_surprisal
+        for e in list(harness.log.read())[-window:]
+        if e.llm is not None
+        and e.llm.role in ("conjecturer", "synthesizer")
+        and e.llm.mean_surprisal is not None
+    ]
+    half_s = len(surprisals) // 2
+
+    def _avg(xs):
+        return sum(xs) / len(xs) if xs else None
+
+    surprisal_mean = _avg(surprisals)
+    first_s, second_s = _avg(surprisals[:half_s]), _avg(surprisals[half_s:])
+    surprisal_slope = (
+        (second_s - first_s) if (first_s is not None and second_s is not None) else None
+    )
     return {
         "stream_len": len(stream),
         "mean_pairwise_dist": mean_dist,
         "dist_slope": slope,
         "inter_school_min_dist": min(inter) if inter else None,
+        "mean_token_surprisal": surprisal_mean,
+        "surprisal_slope": surprisal_slope,
     }
 
 

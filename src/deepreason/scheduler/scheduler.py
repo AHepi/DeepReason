@@ -40,6 +40,7 @@ class Scheduler:
         self.recruit_all = False
         self.tail_weighted = False
         self.complement = False
+        self.spec_injection = config.SPEC_INJECTION
         self.research_priority = False
         self._cycles = 0
         self._integration_cycles = 0
@@ -167,6 +168,19 @@ class Scheduler:
         if not assigned:
             assigned = [None]
 
+        # Level-2 diversity injection: one spec call per step, shared across
+        # schools (inter-school diversity comes from stances; specs fight
+        # intra-call stem collapse). Logged so tokens and replay both see it.
+        specs = None
+        if self.spec_injection and problem.provenance.trigger not in _INTEGRATION_TRIGGERS:
+            from deepreason.llm.specs import generate_specs
+
+            try:
+                specs, spec_call = generate_specs(harness, self.adapter, problem, config)
+                harness.record_measure(inputs=["spec-generation", problem.id], llm=spec_call)
+            except (SchemaRepairError, EndpointError) as e:
+                self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+
         for school_id in assigned:
             school = self._school_dict(school_id) if school_id else None
             try:
@@ -183,7 +197,8 @@ class Scheduler:
                     admitted = conj(
                         harness, problem.id, self.adapter, config, self.diagnostics,
                         school=school, tail_weighted=self.tail_weighted,
-                        complement=self.complement, embedder=self.embedder,
+                        complement=self.complement, specs=specs,
+                        embedder=self.embedder,
                     )
             except (SchemaRepairError, EndpointError) as e:
                 self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
