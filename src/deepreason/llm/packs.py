@@ -1,10 +1,16 @@
 """Pack renderer (spec §9) — deterministic, budgeted.
 
 P1 renders: problem + compressed criteria + neighbourhood (born-connected,
-§7 L1) + VS directive for Conj packs; target + commitments + standing
+§7 L1) + VS directive for Conj packs; commitments + target + standing
 attackers for Crit packs. School render weights, precedent slices, and
 summarizer re-voicing land with P2/P5. Negative case law is NEVER rendered
 (§11.5); sealed holdout bytes are excluded until Reveal (§10.5).
+
+Section ORDER is stable-prefix-first (docs/TOKEN_ECONOMY.md angle 4):
+slow-changing sections (problem, criteria, school stance, shared
+commitment schemas) render before volatile ones (neighbourhood, target
+content, directives), so provider prefix caches bill the repeated head at
+the cached rate. Ordering is presentation only — zero epistemic content.
 """
 
 from deepreason.ontology.commitment import Commitment
@@ -61,12 +67,14 @@ def render_conj_pack(
         accepted = (lineage + others)[:NEIGHBOURHOOD_N]
     else:
         accepted = accepted[-NEIGHBOURHOOD_N:]
+    # Stance before neighbourhood: the stance text is stable per school while
+    # the neighbourhood changes every cycle — cache-prefix ordering (angle 4).
+    if school is not None and school.get("weight", 0) > 0:
+        lines += ["", f"SCHOOL STANCE (weight {school['weight']:.2f}): {school['stance_text']}"]
     if accepted:
         lines += ["", "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"]
         for aid in accepted:
             lines.append(f"- {aid}: {_head(state, aid, blobs)}")
-    if school is not None and school.get("weight", 0) > 0:
-        lines += ["", f"SCHOOL STANCE (weight {school['weight']:.2f}): {school['stance_text']}"]
     if complement:
         lines += [
             "",
@@ -140,15 +148,18 @@ def render_crit_pack(
     token_budget: int,
 ) -> str:
     target = state.artifacts[target_id]
-    lines = [
-        f"TARGET {target_id}",
-        content_text(target, blobs)[: token_budget * 2],
-        "",
-        "TARGET COMMITMENTS (its declared attack surface):",
-    ]
+    # Commitments render BEFORE the target (angle 4): problem criteria lead
+    # each interface list, so sibling targets share this section verbatim
+    # and the cacheable prefix runs through it.
+    lines = ["TARGET COMMITMENTS (the target's declared attack surface):"]
     for cid in target.interface.commitments:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
+    lines += [
+        "",
+        f"TARGET {target_id}",
+        content_text(target, blobs)[: token_budget * 2],
+    ]
     attackers = [x for x, t in sorted(state.att) if t == target_id][:ATTACKERS_N]
     if attackers:
         lines += ["", "STANDING ATTACKS (do not repeat these):"]
