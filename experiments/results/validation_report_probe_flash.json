@@ -1,0 +1,135 @@
+{
+  "accuracy": {
+    "harness": 1.0,
+    "self_consistency": 1.0,
+    "single": 1.0
+  },
+  "confidence_arm": {
+    "calibration": {
+      "accuracy": 1.0,
+      "n": 4
+    },
+    "surprisal_means": {
+      "correct": 0.1339,
+      "wrong": null
+    },
+    "test": {
+      "accuracy": {
+        "confidence_filtered": 1.0,
+        "llm_critic": 1.0,
+        "self_consistency": 1.0,
+        "single": 1.0
+      },
+      "broke": 0,
+      "candidate_base_error": 0.0,
+      "fixed": 0,
+      "n": 4,
+      "net": 0
+    },
+    "threshold": 1.23644
+  },
+  "crit_model": "deepseek-v4-flash",
+  "criticism_error_detection": {
+    "base_rate_wrong": 0.0,
+    "candidates": 40,
+    "confusion": {
+      "fn": 0,
+      "fp": 0,
+      "tn": 40,
+      "tp": 0
+    },
+    "precision": null,
+    "recall": null
+  },
+  "experiment": "validation-does-criticism-help",
+  "gen_model": "deepseek-v4-flash",
+  "harness_vs_self_consistency": {
+    "broke": 0,
+    "fixed": 0,
+    "net": 0
+  },
+  "k": 5,
+  "n_questions": 8,
+  "per_question": {
+    "h2-01": {
+      "accept": [
+        "1.25"
+      ],
+      "harness": "1.25",
+      "n_correct": 5,
+      "sc": "1.25",
+      "single": "1.25"
+    },
+    "h2-02": {
+      "accept": [
+        "3"
+      ],
+      "harness": "3",
+      "n_correct": 5,
+      "sc": "3",
+      "single": "3"
+    },
+    "h2-03": {
+      "accept": [
+        "21"
+      ],
+      "harness": "21",
+      "n_correct": 5,
+      "sc": "21",
+      "single": "21"
+    },
+    "h2-04": {
+      "accept": [
+        "8"
+      ],
+      "harness": "8",
+      "n_correct": 5,
+      "sc": "8",
+      "single": "8"
+    },
+    "h2-05": {
+      "accept": [
+        "2"
+      ],
+      "harness": "2",
+      "n_correct": 5,
+      "sc": "2",
+      "single": "2"
+    },
+    "h2-06": {
+      "accept": [
+        "11"
+      ],
+      "harness": "11",
+      "n_correct": 5,
+      "sc": "11",
+      "single": "11"
+    },
+    "h2-07": {
+      "accept": [
+        "40"
+      ],
+      "harness": "40",
+      "n_correct": 5,
+      "sc": "40",
+      "single": "40"
+    },
+    "h2-08": {
+      "accept": [
+        "2",
+        "second"
+      ],
+      "harness": "second",
+      "n_correct": 5,
+      "sc": "second",
+      "single": "second"
+    }
+  },
+  "tokens": {
+    "budget": 60000,
+    "calls": 40,
+    "completion_tokens": 2615,
+    "prompt_tokens": 4160,
+    "total": 6775
+  }
+}

@@ -53,6 +53,19 @@ stages:
       experiment's outcome: this provider's weakest model does not err enough
       on verifiable questions for filtering to matter (itself evidence
       relevant to d239's scope clause).
+    result: RAN 2026-07-05 — base error 0.0 (40/40 correct). OUTCOME:
+      regime NOT reached; the pre-registered experiment terminates here.
+      Neither theory is refuted — d239's forbidden case requires an
+      in-regime run; 57e0 remains untested. Standing meta-finding: on this
+      provider, even the weakest model with reasoning off does not err
+      measurably on closed-form verifiable questions (two independently
+      constructed 8-question probes, 80/80 candidates correct), so the
+      contested-majority regime cannot be constructed from questions whose
+      answers can be programmatically checked. Criticism's measurable value
+      on this provider must be sought where verification is NOT mechanical —
+      the informal-domain trial protocol (where the criticism suite itself
+      showed a 31.8% ruling survival rate and real refutations) — or on a
+      provider/model with genuinely higher base error.
   full:
     what: full collection (gen + critic) over all 44 questions with
       confidence capture; then score per the arms above

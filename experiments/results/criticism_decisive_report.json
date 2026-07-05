@@ -1,0 +1,19 @@
+{
+  "experiment": "criticism-decisive (experiments/criticism_decisive_prereg.yaml)",
+  "outcome": "regime_not_reached",
+  "verdicts": {
+    "d239d34e54e6": "untested \u2014 forbidden case requires an in-regime run",
+    "57e09ea4045b": "untested"
+  },
+  "meta_finding": "Two pre-registered 8-question probes (classic traps; novel randomized arithmetic), deepseek-v4-flash, reasoning off, k=5: 80/80 candidates correct. The contested-majority regime cannot be constructed on this provider from questions whose answers are mechanically checkable; criticism's measurable value must be sought in informal domains or on higher-base-error models.",
+  "probes": {
+    "probe_hard2_classics": {
+      "base_error": 0.0,
+      "tokens": 6775
+    },
+    "probe2_hard_novel": {
+      "base_error": 0.0,
+      "tokens": 7170
+    }
+  }
+}
