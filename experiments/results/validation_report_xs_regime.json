@@ -1,0 +1,57 @@
+{
+  "accuracy": {
+    "harness": 1.0,
+    "self_consistency": 1.0,
+    "single": 1.0
+  },
+  "confidence_arm": null,
+  "crit_model": "deepseek-v4-flash",
+  "criticism_error_detection": {
+    "base_rate_wrong": 0.0,
+    "candidates": 10,
+    "confusion": {
+      "fn": 0,
+      "fp": 0,
+      "tn": 10,
+      "tp": 0
+    },
+    "precision": null,
+    "recall": null
+  },
+  "experiment": "validation-does-criticism-help",
+  "gen_model": "poolside/laguna-xs.2",
+  "harness_vs_self_consistency": {
+    "broke": 0,
+    "fixed": 0,
+    "net": 0
+  },
+  "k": 5,
+  "n_questions": 2,
+  "per_question": {
+    "h01": {
+      "accept": [
+        "909"
+      ],
+      "harness": "909",
+      "n_correct": 5,
+      "sc": "909",
+      "single": "909"
+    },
+    "h02": {
+      "accept": [
+        "162"
+      ],
+      "harness": "162",
+      "n_correct": 5,
+      "sc": "162",
+      "single": "162"
+    }
+  },
+  "tokens": {
+    "budget": 300000,
+    "calls": 20,
+    "completion_tokens": 3163,
+    "prompt_tokens": 3383,
+    "total": 6546
+  }
+}

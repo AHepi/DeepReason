@@ -62,11 +62,23 @@ class Harness:
             self._apply_event(event, adjudicate=False)
         self._adjudicate()
 
+    _TAIL_CAP = 512  # bounded in-memory event tail (windows are ~CAPTURE_W)
+
     def _reset(self) -> None:
         self.state = EpistemicState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
+        # Derived caches — pure functions of the immutable, append-only
+        # history, so they never need invalidation, only extension. They
+        # exist because capture detection runs EVERY cycle and used to
+        # re-read/re-replay/re-embed the whole log each time (measured
+        # quadratic: ~7.6s/cycle at 2k events).
+        self._tail: list[Event] = []
+        self._trans_shadow: "Harness | None" = None
+        self._trans_out: list[tuple[int, str, str | None, str]] = []
+        self._embed_cache: dict[tuple[str, str], list[float]] = {}
+        self._verdict_cache: dict[tuple[str, str], str] = {}
 
     @classmethod
     def at(cls, root: Path | str, seq: int) -> "Harness":

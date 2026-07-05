@@ -16,6 +16,11 @@ class EndpointError(RuntimeError):
     """A completion failed after transport retries (or non-retryably)."""
 
 
+class _TransientBody(OSError):
+    """A 200 response with a malformed/empty body — retryable like any
+    transport fault (subclasses OSError so request_with_retries takes it)."""
+
+
 def request_with_retries(fn):
     """Run fn(); retry transient network failures with 2s/4s/8s backoff.
     Non-retryable HTTP errors (auth, bad request) raise immediately."""
@@ -197,11 +202,24 @@ class OpenAICompatEndpoint:
         def _once() -> dict:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
                 try:
-                    return json.load(response)
+                    data = json.load(response)
                 except ValueError as e:
-                    # 200 with a non-JSON body (gateway/proxy error page):
-                    # not transport-retryable, but still an endpoint failure.
-                    raise EndpointError(f"non-JSON response body: {e}") from e
+                    # 200 with a non-JSON body (gateway/proxy hiccup):
+                    # transient in practice — let the retry loop take it.
+                    raise _TransientBody(f"non-JSON response body: {e}") from e
+            # Malformed 200 shapes (empty body, missing choices, null content)
+            # are usually transient server faults: surface them as retryable;
+            # the post-retry guards below still catch the persistent case.
+            try:
+                if data["choices"][0]["message"]["content"] is None:
+                    raise _TransientBody(
+                        f"null content (finish_reason="
+                        f"{data['choices'][0].get('finish_reason')!r})"
+                    )
+            except (KeyError, IndexError, TypeError) as e:
+                detail = data.get("error") if isinstance(data, dict) else data
+                raise _TransientBody(f"malformed completion response: {detail!r}") from e
+            return data
 
         data = request_with_retries(_once)
         try:

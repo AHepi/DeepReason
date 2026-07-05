@@ -271,37 +271,44 @@ def main() -> int:
     meter = TokenMeter(budget=args.budget)
 
     checkpoint = json.loads(CKPT.read_text()) if CKPT.exists() else {}
+    skipped = 0
     try:
         for q in QUESTIONS:
             if q["id"] in checkpoint:
                 continue
-            cands = []
-            for _ in range(args.k):
-                a = structured(gen, GEN_PROMPT.format(q=q["q"]), AnswerOut, meter)
-                surprisal = getattr(gen, "last_mean_surprisal", None) if args.confidence else None
-                if args.gen_only:
-                    sound = None  # probe mode: no critic verdict collected
-                else:
-                    verdict = structured(
-                        crit, CRIT_PROMPT.format(q=q["q"], reasoning=a.reasoning[:1500],
-                                                 answer=a.final_answer), CritiqueOut, meter)
-                    sound = verdict.sound
-                cands.append({"answer": a.final_answer,
-                              "correct": correct(a.final_answer, q["accept"]),
-                              "critic_sound": sound,
-                              "surprisal": surprisal})
+            try:
+                cands = []
+                for _ in range(args.k):
+                    a = structured(gen, GEN_PROMPT.format(q=q["q"]), AnswerOut, meter)
+                    surprisal = getattr(gen, "last_mean_surprisal", None) if args.confidence else None
+                    if args.gen_only:
+                        sound = None  # probe mode: no critic verdict collected
+                    else:
+                        verdict = structured(
+                            crit, CRIT_PROMPT.format(q=q["q"], reasoning=a.reasoning[:1500],
+                                                     answer=a.final_answer), CritiqueOut, meter)
+                        sound = verdict.sound
+                    cands.append({"answer": a.final_answer,
+                                  "correct": correct(a.final_answer, q["accept"]),
+                                  "critic_sound": sound,
+                                  "surprisal": surprisal})
+            except (EndpointError, RuntimeError) as e:
+                # A question that persistently fails is SKIPPED (never
+                # scored, never fabricated); it stays absent from the
+                # checkpoint so a later rerun can resume it. Bounded so a
+                # dead provider cannot burn the whole budget on retries.
+                skipped += 1
+                print(f"{q['id']}: skipped ({str(e)[:100]})")
+                if skipped >= 5:
+                    print("too many skips — provider unhealthy, stopping")
+                    break
+                continue
             checkpoint[q["id"]] = {"accept": q["accept"], "candidates": cands}
             CKPT.write_text(json.dumps(checkpoint, indent=2))
             print(f"{q['id']}: {sum(c['correct'] for c in cands)}/{args.k} correct "
                   f"| spent {meter.snapshot()['total']}")
     except TokenBudgetExceeded:
         print("budget exhausted — scoring what completed")
-    except EndpointError as e:
-        print(f"endpoint error: {e} — scoring what completed")
-    except RuntimeError as e:
-        # A persistent unparseable response: stop and score the checkpointed
-        # questions rather than crash or fabricate a 'sound' critic verdict.
-        print(f"{e} — scoring what completed")
 
     # -- score the three arms + criticism error-detection --------------- #
     arms = {"single": [0, 0], "self_consistency": [0, 0], "harness": [0, 0]}
