@@ -26,12 +26,18 @@ _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 
 
 class Scheduler:
-    def __init__(self, harness, adapter, config, embedder=None, research_backend=None) -> None:
+    def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
+                 controller=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
         self.embedder = embedder or HashingEmbedder()
         self.research_backend = research_backend
+        # Self-calibration controller (controller.py) — optional; None means
+        # fixed knobs (legacy). It reads process signals and tunes generator
+        # caps; it cannot touch a status (§0 preserved structurally).
+        self.controller = controller
+        self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
         )
@@ -71,6 +77,21 @@ class Scheduler:
         ]
         if not candidates:
             return None
+        if self.config.LIVENESS_QUEUE:
+            # Aging priority (docs/CONTROLLER_SPEC.md liveness): age = cycles
+            # since a problem was last WORKED (never-worked => -1, so it has
+            # waited longest). age grows without bound until the problem wins,
+            # so nothing starves; unsolved outweighs solved; lower id breaks
+            # ties. Selecting a problem resets its age — that is what makes
+            # this a fair rotation rather than a fixed winner.
+            def rank(p):
+                age = self._cycles - self._problem_worked.get(p.id, -1)
+                weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
+                return (-(age * weight), p.id)
+
+            best = min(candidates, key=rank)
+            self._problem_worked[best.id] = self._cycles
+            return best
         # Unsolved problems first, then round-robin rotation by cycle count.
         unsolved = [p for p in candidates if not survivors_by_problem.get(p.id)]
         pool = unsolved or candidates
@@ -143,6 +164,8 @@ class Scheduler:
     def step(self) -> None:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
+        if self.controller is not None:
+            self.controller.step()  # calibrate generator knobs from process signals
         scan_spawns(harness, config)
         problem = self._select_problem()
         if problem is None:

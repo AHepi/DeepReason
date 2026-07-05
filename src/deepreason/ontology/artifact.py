@@ -36,6 +36,10 @@ class ProvenanceRole(str, Enum):
     SEED = "seed"
     IMPORT = "import"
     USER = "user"
+    # Self-calibration controller (controller.py): emits calibration_policy
+    # artifacts. Provenance-only like every role — epistemically inert (D2);
+    # a policy steers generation, never adjudication.
+    CONTROLLER = "controller"
 
 
 class Provenance(BaseModel):

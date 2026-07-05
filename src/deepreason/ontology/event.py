@@ -33,6 +33,10 @@ class LLMCall(BaseModel):
     tokens: int = 0
     ms: int = 0
     attempts: int = 1  # completions consumed incl. schema repairs (P6 valid-JSON rate)
+    # A pure PROCESS signal (not outcome): did any attempt in this call hit the
+    # completion length limit? Read by the self-calibration controller
+    # (controller.py) to widen caps; default False keeps old events replayable.
+    truncated: bool = False
     # Mean token surprisal (-mean logprob) of the final completion, when the
     # endpoint returns logprobs. A token-level uncertainty signal that stays
     # informative even when response-level diversity collapses — the

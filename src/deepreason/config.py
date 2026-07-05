@@ -56,6 +56,10 @@ class Config(BaseModel):
     # Level-2 diversity injection always-on (llm/specs.py); the stagnation
     # ladder can also switch it on reactively (§11.4).
     SPEC_INJECTION: bool = False
+    # Self-calibration liveness queue (docs/CONTROLLER_SPEC.md): replaces
+    # unsolved-first rotation with aging priority (age x unsolvedness) so no
+    # registered problem starves. Attention only, never status.
+    LIVENESS_QUEUE: bool = False
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

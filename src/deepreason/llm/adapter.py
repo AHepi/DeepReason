@@ -80,6 +80,7 @@ class LLMAdapter:
         started = time.monotonic()
         error = ""
         tokens_used = 0
+        truncated_any = False
         for attempt in range(self.retry_max + 1):
             if self.meter is not None:
                 self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
@@ -88,6 +89,8 @@ class LLMAdapter:
                 "Return ONLY a valid JSON object for the schema."
             )
             raw = endpoint.complete(request)
+            if getattr(endpoint, "last_finish_reason", None) == "length":
+                truncated_any = True  # process signal for the controller
             usage = getattr(endpoint, "last_usage", None) or {
                 "prompt_tokens": len(request) // 4,
                 "completion_tokens": len(raw) // 4,
@@ -120,6 +123,7 @@ class LLMAdapter:
                 tokens=tokens_used,
                 ms=int((time.monotonic() - started) * 1000),
                 attempts=attempt + 1,
+                truncated=truncated_any,
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
             )
             return data, call

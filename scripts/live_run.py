@@ -527,6 +527,12 @@ def main() -> int:
                         help="override STANCE_DECAY (lineage size at which stance weight hits 0)")
     parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
                         help="override any config knob (repeatable), e.g. --set AUDIT_PERIOD=3")
+    parser.add_argument("--controller", action="store_true",
+                        help="enable the self-calibration controller (controller.py)")
+    parser.add_argument("--liveness", action="store_true",
+                        help="enable the aging liveness queue for problem selection")
+    parser.add_argument("--starve-cap", type=int, default=None,
+                        help="start the conjecturer completion cap here (controller demo)")
     args = parser.parse_args()
 
     api_key = os.environ.get(args.api_key_env)
@@ -560,13 +566,19 @@ def main() -> int:
         setattr(config, key, type(current)(value) if current is not None and value is not None else value)
     meter = TokenMeter(budget=args.token_budget)
 
+    if args.liveness:
+        config.LIVENESS_QUEUE = True
+
     def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
         reasoning = REASONING.get(role)
         if role == "conjecturer" and args.reasoning != "policy":
             reasoning = None if args.reasoning == "default" else args.reasoning
+        cap = MAX_TOKENS.get(role)
+        if role == "conjecturer" and args.starve_cap is not None:
+            cap = args.starve_cap  # controller demo: start starved, watch it recover
         return OpenAICompatEndpoint(
             args.base_url, model, api_key=api_key, temperature=temperature,
-            max_tokens=MAX_TOKENS.get(role), json_mode=True, request_logprobs=True,
+            max_tokens=cap, json_mode=True, request_logprobs=True,
             reasoning=reasoning,
         )
 
@@ -592,8 +604,30 @@ def main() -> int:
     else:
         seed(harness)
 
-    scheduler = Scheduler(harness, adapter, config)
+    controller = None
+    if args.controller:
+        from deepreason.controller import Controller
+
+        controller = Controller(harness, adapter)
+        caps0 = {r: getattr(e[0] if isinstance(e, list) else e, "max_tokens", None)
+                 for r, e in adapter.endpoints.items()}
+        print(f"controller ON; initial caps: {caps0}")
+
+    scheduler = Scheduler(harness, adapter, config, controller=controller)
     result = scheduler.run(args.cycles)
+
+    if controller is not None:
+        caps1 = {r: getattr(e[0] if isinstance(e, list) else e, "max_tokens", None)
+                 for r, e in adapter.endpoints.items()}
+        policies = [a for a in harness.state.artifacts.values()
+                    if a.provenance.role.value == "controller"
+                    and a.content_ref.startswith("inline:{")]
+        holds = [e for e in harness.log.read()
+                 if e.inputs and str(e.inputs[0]).startswith("controller-hold")]
+        print(f"\n=== CONTROLLER ===\nfinal caps: {caps1}")
+        print(f"policies emitted: {len(policies)} | fail-static holds: {len(holds)}")
+        for a in policies:
+            print(f"  policy: {a.content_ref[len('inline:'):][:160]}")
 
     print("\n=== TOKEN SPEND ===")
     print(json.dumps(meter.snapshot(), indent=2, sort_keys=True))
