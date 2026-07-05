@@ -110,4 +110,9 @@ def conj(
             continue  # attention-level dedupe of a registered twin — never a block (§0)
         seen.add(artifact.id)
         batch.append((artifact, []))
-    return harness.register_batch(batch, problem_id=problem_id, rule=Rule.CONJ, llm=llm_call)
+    registered = harness.register_batch(batch, problem_id=problem_id, rule=Rule.CONJ, llm=llm_call)
+    if not registered:
+        # All candidates gate-blocked or deduped => no Conj event committed;
+        # the gamma call still spent tokens and must reach the log once (§0).
+        harness.record_llm_calls([llm_call], "conj-noregister")
+    return registered

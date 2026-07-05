@@ -66,12 +66,9 @@ def _judge_exchange(adapter, transcript: dict, exchange: str):
 
 
 def _log_calls(harness, calls) -> None:
-    """Persist LLM calls that did not land on a critic event (variator
-    paraphrases, non-decisive re-rulings) as Measure events, so no audit
-    call is missing from the event log's per-event llm records."""
-    for call in calls:
-        if call is not None:
-            harness.record_measure(inputs=["audit-llm"], llm=call)
+    """Persist audit LLM calls that did not land on a critic event (variator
+    paraphrases, non-decisive re-rulings) — see Harness.record_llm_calls."""
+    harness.record_llm_calls(calls, "audit-llm")
 
 
 def paraphrase_invariance_audit(harness, adapter, config) -> list:

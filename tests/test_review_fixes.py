@@ -271,6 +271,47 @@ def test_hv_floor_no_vacuous_pass_on_empty_edits(tmp_path):
     assert target.id not in h.state.hv  # nothing recorded — not a vacuous 1.0
 
 
+def test_every_llm_call_reaches_the_log(tmp_path):
+    """Live-run finding: 85% of trial spend (38 of 44 calls) never reached an
+    event — critic/defender/ensemble/paraphrase calls were discarded. Every
+    adapter call must now land on exactly one logged event, so replay and
+    token accounting see the full spend: meter totals == sum over event.llm."""
+    from deepreason.informal.standards import register_standard
+    from deepreason.scheduler.scheduler import Scheduler
+
+    h = Harness(tmp_path / "run")
+    register_standard(h, "std-t", rubric="must name a specific mechanism")
+    h.register_commitment(Commitment(id="kappa-t", eval="rubric:std-t"))
+    h.register_problem(
+        Problem(
+            id="pi-t", description="explain the tides", criteria=["kappa-t"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    endpoints = {
+        "conjecturer": MockEndpoint(lambda p: json.dumps(
+            {"candidates": [{"content": "the moon pulls the sea via gravity",
+                             "typicality": 0.5}]})),
+        "argumentative_critic": MockEndpoint(lambda p: json.dumps(
+            {"attack": True, "case": "violates clause 1: no mechanism named"})),
+        "defender": MockEndpoint(lambda p: json.dumps({"answer": "the defence answers"})),
+        "judge": MockEndpoint(lambda p: json.dumps(
+            {"verdict": "fail", "decisive_point": "violates clause 1"})),
+        "variator": MockEndpoint(lambda p: json.dumps(
+            {"edits": [{"content": "paraphrase one"}, {"content": "paraphrase two"}]})),
+    }
+    from deepreason.llm.budget import TokenMeter
+
+    meter = TokenMeter()
+    adapter = LLMAdapter(endpoints, h.blobs, retry_max=2, meter=meter)
+    Scheduler(h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0)).run(2)
+
+    events_with_llm = [e for e in h.log.read() if e.llm]
+    assert meter.calls >= 5  # conjecturer + trial roles actually fired
+    assert len(events_with_llm) == meter.calls  # one event per call, exactly
+    assert sum(e.llm.tokens for e in events_with_llm) == meter.total
+
+
 def test_ladder_interventions_clear_after_window(tmp_path):
     """A response-ladder intervention is active for CAPTURE_W cycles, then
     clears — it must not latch on for the rest of the run."""

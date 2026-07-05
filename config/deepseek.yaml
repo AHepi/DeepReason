@@ -1,7 +1,8 @@
 # DeepSeek live-run knob file (spec §15). DeepSeek's API is OpenAI-compatible.
-# Set DEEPSEEK_API_KEY in the environment. Model ids marked "auto" are
-# resolved against the provider's /models list by scripts/live_run.py
-# (preferring the id passed via --model, e.g. a V4 pro variant).
+# Set DEEPSEEK_API_KEY in the environment. Model ids marked "auto"/"auto-alt"
+# are resolved against the provider's /models list at adapter build time
+# (llm/endpoints.py:resolve_model) — works from `deepreason run`, the MCP
+# server, and the scripts alike.
 #
 # Honest note (§9/§17): the judge SHOULD run on >=2 endpoints from different
 # model FAMILIES; with a single provider we approximate with two different

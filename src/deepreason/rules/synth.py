@@ -31,6 +31,9 @@ def synthesize(
 
     connects = [i for i in output.connects if i in harness.state.artifacts]
     if not connects:
+        # No registrable relation => no Conj event; the synthesizer call
+        # still spent tokens and must reach the log once (§0).
+        harness.record_llm_calls([llm_call], "synth-noregister")
         return None
     interface = Interface(
         commitments=[c for c in problem.criteria if c in harness.commitments],
@@ -50,6 +53,7 @@ def synthesize(
         artifact, [], harness, embedder=embedder, near_dup_eps=config.NEAR_DUP_EPS
     )
     if not admitted or artifact.id in harness.state.artifacts:
+        harness.record_llm_calls([llm_call], "synth-noregister")
         return None
     harness.register_batch(
         [(artifact, [])], problem_id=problem.id, rule=Rule.CONJ, llm=llm_call

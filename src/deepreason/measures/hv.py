@@ -124,6 +124,7 @@ def hv_spot_check(harness, adapter, artifact_id: str, k: int, embedder=None) -> 
     artifact = harness.state.artifacts[artifact_id]
     text, battery, edits, _kernel, llm_call = _sample_edits(harness, adapter, artifact, k)
     if not edits:
+        harness.record_llm_calls([llm_call], "hv-nomeasure")
         return None
     s_hat, _ = _survival(harness, artifact, text, battery, edits, embedder)
     hv = 1.0 - s_hat

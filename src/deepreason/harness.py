@@ -214,6 +214,16 @@ class Harness:
             reach_set=reach or {},
         )
 
+    def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str) -> None:
+        """Persist LLM calls that landed on no registration event — blocked
+        trials, extra ensemble seats, defender/variator exchanges, all-deduped
+        batches — as Measure events. Every call reaches the log exactly once
+        (§0: replay consumes logged raws; token accounting reads event.llm),
+        or replay and eval_report silently under-count real spend."""
+        for call in calls:
+            if call is not None:
+                self.record_measure(inputs=[tag], llm=call)
+
     def transitions(self) -> list[tuple[int, str, str | None, str]]:
         """(seq, artifact, old_status, new_status) per logged event — a
         replay program over the log (§11.3 instrument). The shadow shares
