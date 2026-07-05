@@ -1,0 +1,25 @@
+{
+  "results": {
+    "500": {
+      "open_s": 0.03,
+      "transitions_s": 0.41,
+      "raw_flags_s": 0.45
+    },
+    "1000": {
+      "open_s": 0.05,
+      "transitions_s": 1.76,
+      "raw_flags_s": 1.82
+    },
+    "2000": {
+      "open_s": 0.12,
+      "transitions_s": 7.39,
+      "raw_flags_s": 7.64
+    }
+  },
+  "scaling_exponent_1k_to_2k": {
+    "open_s": 1.26,
+    "transitions_s": 2.07,
+    "raw_flags_s": 2.07
+  },
+  "note": "transitions() runs inside capture detection EVERY cycle via adjudicator_metrics"
+}
