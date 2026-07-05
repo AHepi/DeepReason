@@ -53,6 +53,7 @@ MAX_TOKENS = {
     "variator": 3000,  # 2000 truncated paraphrases of large skeleton exchanges
     "synthesizer": 1400,  # 900 truncated a relation proposal
     "judge": 2400,  # 1200 length-truncated 5/40 cycles on late-run packs (criticism suite)
+    "judge_alt": 2400,
 }
 
 # Per-role reasoning policy (docs/TOKEN_ECONOMY.md angle 1): reasoning off
@@ -65,7 +66,12 @@ REASONING = {
     "defender": "none",
     "variator": "none",
     "synthesizer": "none",
-    "judge": None,
+    # Certified by the planted-flaw battery (judge_battery_report.json):
+    # the PRIMARY (pro) judge seat matches its reasoning-on accuracy with
+    # reasoning off at half the tokens; the ALT (flash) seat needs
+    # reasoning (0.125 error / 0.375 verbosity bias without it).
+    "judge": "none",
+    "judge_alt": None,
 }
 
 
@@ -646,7 +652,7 @@ def main() -> int:
             "defender": endpoint("defender", primary, 0.7),
             "variator": endpoint("variator", primary, 1.0),
             "synthesizer": endpoint("synthesizer", primary, 0.9),
-            "judge": [endpoint("judge", primary, 0.0), endpoint("judge", alt, 0.0)],
+            "judge": [endpoint("judge", primary, 0.0), endpoint("judge_alt", alt, 0.0)],
         },
         None,
         retry_max=config.RETRY_MAX,

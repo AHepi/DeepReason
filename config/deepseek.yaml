@@ -53,7 +53,11 @@ roles:
   argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2800, json_mode: true }  # sized for CRIT_BATCH_K cases per call
   defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 900, json_mode: true }
   variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 3000, json_mode: true }
+  # Judge reasoning certified by the planted-flaw battery (experiments/
+  # results/judge_battery_report.json): pro scores 0.0 error / 0.0 bias with
+  # reasoning OFF at half the tokens; flash NEEDS reasoning (0.125 error,
+  # 0.375 verbosity bias without it). Hence: primary seat off, alt default.
   judge:
-    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 2400, json_mode: true }
+    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2400, json_mode: true }
     - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 2400, json_mode: true }
   synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }
