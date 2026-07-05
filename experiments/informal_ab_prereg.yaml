@@ -42,3 +42,21 @@ outcome_mapping:
     the marginal value of the criticism/adjudication apparatus, not model
     quality.
 budget: harness 70k + solo 65k + scoring <= 20k  (~155k total)
+
+# ---------------------------------------------------------------------
+# AMENDMENT (committed before rescoring): cross-family judge stage.
+# First scoring pass was inconclusive by POSITION-BIAS SATURATION: every
+# same-family (DeepSeek) seat preferred position A in both orders, so the
+# order-swap screen discarded all votes. A second model family is now
+# available (poolside/laguna-m.1). Calibration first, per the gate:
+# planted-flaw error 0.0 (passes); verbosity bias 0.25 (caveat — noted,
+# mitigated by skeleton pairs being length-matched).
+rescore:
+  seats: pro/reasoning-off, flash/default, laguna-m.1/default (3 seats)
+  pairs: the SAME committed top-3 vs top-3 (no regeneration)
+  rules: identical (order-swap-consistent votes only; net per pair)
+  outcome_mapping: harness_wins / solo_wins at >= 2 of 3 pairs, else
+    inconclusive. The cross-family seat's votes are also reported
+    separately: if DeepSeek seats abstain again while laguna votes
+    consistently, that isolates same-family saturation as the mechanism.
+

@@ -110,7 +110,7 @@ def _harness_top3(root: Path) -> list[str]:
     return [t for _, _, t in scored[:3]]
 
 
-def run_score(api_key: str, base_url: str) -> int:
+def run_score(api_key: str, base_url: str, crossfamily: bool = False) -> int:
     _, rubric = _problem_and_rubric()
     solo = json.loads(SOLO_OUT.read_text())
     harness_top = _harness_top3(Path("runs/ab_harness"))
@@ -132,7 +132,14 @@ def run_score(api_key: str, base_url: str) -> int:
                                               api_key=api_key, temperature=0.0,
                                               max_tokens=2400, json_mode=True),
     }
-    meter = TokenMeter(budget=25_000)
+    if crossfamily:
+        # §9 cross-family seat (calibrated: planted-flaw 0.0, verbosity 0.25).
+        poolside_key = os.environ["POOLSIDE_API_KEY"]
+        seats["laguna-m.1/default"] = OpenAICompatEndpoint(
+            "https://inference.poolside.ai/v1", "poolside/laguna-m.1",
+            api_key=poolside_key, temperature=0.0, max_tokens=2400, json_mode=True,
+        )
+    meter = TokenMeter(budget=40_000 if crossfamily else 25_000)
     pairs = []
     try:
         for rank in range(n_pairs):
@@ -174,7 +181,9 @@ def run_score(api_key: str, base_url: str) -> int:
             "tie": sum(p["outcome"] == "tie" for p in pairs)}
     outcome = ("harness_wins" if wins["harness"] >= 2
                else "solo_wins" if wins["solo"] >= 2 else "inconclusive")
-    REPORT.write_text(json.dumps(
+    out_path = (REPORT.with_name("informal_ab_crossfamily_report.json")
+                if crossfamily else REPORT)
+    out_path.write_text(json.dumps(
         {"experiment": "informal-ab (experiments/informal_ab_prereg.yaml)",
          "outcome": outcome, "pair_wins": wins, "pairs": pairs,
          "harness_top3": harness_top, "solo_top3": solo_top,
@@ -188,6 +197,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--solo", action="store_true")
     parser.add_argument("--score", action="store_true")
+    parser.add_argument("--crossfamily", action="store_true",
+                        help="add the calibrated poolside seat (POOLSIDE_API_KEY)")
     parser.add_argument("--budget", type=int, default=65_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
     args = parser.parse_args()
@@ -198,7 +209,7 @@ def main() -> int:
     if args.solo:
         return run_solo(api_key, args.base_url, args.budget)
     if args.score:
-        return run_score(api_key, args.base_url)
+        return run_score(api_key, args.base_url, crossfamily=args.crossfamily)
     print("pass --solo or --score", file=sys.stderr)
     return 1
 

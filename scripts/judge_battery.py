@@ -143,6 +143,10 @@ def main() -> int:
     parser.add_argument("--budget", type=int, default=160_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
     parser.add_argument("--root", default="runs/judge_battery")
+    parser.add_argument("--only", default="",
+                        help="substring filter on config names (e.g. 'laguna')")
+    parser.add_argument("--tag", default="",
+                        help="suffix for the report filename")
     args = parser.parse_args()
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     if not api_key:
@@ -156,15 +160,22 @@ def main() -> int:
                     "n_calibration": len(CALIBRATION), "configs": {}}
 
     configs = [
-        ("v4-pro/reasoning-default", "deepseek-v4-pro", None),
-        ("v4-pro/reasoning-off", "deepseek-v4-pro", "none"),
-        ("v4-flash/reasoning-default", "deepseek-v4-flash", None),
-        ("v4-flash/reasoning-off", "deepseek-v4-flash", "none"),
+        ("v4-pro/reasoning-default", args.base_url, api_key, "deepseek-v4-pro", None),
+        ("v4-pro/reasoning-off", args.base_url, api_key, "deepseek-v4-pro", "none"),
+        ("v4-flash/reasoning-default", args.base_url, api_key, "deepseek-v4-flash", None),
+        ("v4-flash/reasoning-off", args.base_url, api_key, "deepseek-v4-flash", "none"),
     ]
+    poolside_key = os.environ.get("POOLSIDE_API_KEY")
+    if poolside_key:
+        # Cross-family seat (§9): calibrate before it judges anything.
+        configs.append(("laguna-m.1/default", "https://inference.poolside.ai/v1",
+                        poolside_key, "poolside/laguna-m.1", None))
+    if args.only:
+        configs = [c for c in configs if args.only in c[0]]
     try:
-        for name, model, reasoning in configs:
+        for name, base_url, key, model, reasoning in configs:
             endpoint = OpenAICompatEndpoint(
-                args.base_url, model, api_key=api_key, temperature=0.0,
+                base_url, model, api_key=key, temperature=0.0,
                 max_tokens=2400, json_mode=True, reasoning=reasoning,
             )
             adapter = LLMAdapter({"judge": endpoint}, harness.blobs,
@@ -191,7 +202,8 @@ def main() -> int:
         print(f"endpoint error: {e} — reporting completed configs")
 
     report["tokens"] = meter.snapshot()
-    out = Path("experiments/results/judge_battery_report.json")
+    suffix = f"_{args.tag}" if args.tag else ""
+    out = Path(f"experiments/results/judge_battery_report{suffix}.json")
     out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(json.dumps(report["configs"], indent=2, sort_keys=True))
     return 0
