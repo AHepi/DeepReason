@@ -9,6 +9,8 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 (§11.4). The frontier persists across sessions because the log does.
 """
 
+from collections.abc import Iterable
+
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
@@ -42,17 +44,49 @@ class Scheduler:
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
         )
         self.diagnostics: list[dict] = []
-        # Ladder state (§11.4) — attention only.
-        self.recruit_all = False
-        self.tail_weighted = False
-        self.complement = False
-        self.spec_injection = config.SPEC_INJECTION
-        self.research_priority = False
+        # Ladder state (§11.4) — attention only. An intervention is active for a
+        # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
+        # it must NOT latch on for the rest of the run. Held as name -> expiry
+        # cycle so the flags are derived, never stuck (spec §11.4 hysteresis).
+        self._intervention_until: dict[str, int] = {}
         self._cycles = 0
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
+
+    # -------------------------------------------------------------- #
+    # Response-ladder interventions (§11.4): derived, time-bounded flags.     #
+
+    def activate_interventions(self, names: Iterable[str]) -> None:
+        """Turn on the named interventions for the next CAPTURE_W cycles."""
+        until = self._cycles + self.config.CAPTURE_W
+        for name in names:
+            self._intervention_until[name] = until
+
+    def _intervention_active(self, name: str) -> bool:
+        return self._cycles < self._intervention_until.get(name, 0)
+
+    @property
+    def recruit_all(self) -> bool:
+        return self._intervention_active("recruit_all")
+
+    @property
+    def tail_weighted(self) -> bool:
+        return self._intervention_active("tail_weighted")
+
+    @property
+    def complement(self) -> bool:
+        return self._intervention_active("complement")
+
+    @property
+    def research_priority(self) -> bool:
+        return self._intervention_active("research_priority")
+
+    @property
+    def spec_injection(self) -> bool:
+        # Config default is always on; the ladder can also inject transiently.
+        return self.config.SPEC_INJECTION or self._intervention_active("spec_injection")
 
     # -------------------------------------------------------------- #
 

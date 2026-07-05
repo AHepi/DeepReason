@@ -15,10 +15,12 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
     applied: list[str] = []
 
     if active_flags.get("lineage_stagnation"):
-        scheduler.recruit_all = True       # fan-out recruitment (§11.2.4)
-        scheduler.tail_weighted = True     # VS tail-weighted selection (§11.6)
-        scheduler.complement = True        # complement directives in packs
-        scheduler.spec_injection = True    # Level-2 spec injection (llm/specs.py)
+        scheduler.activate_interventions([
+            "recruit_all",     # fan-out recruitment (§11.2.4)
+            "tail_weighted",   # VS tail-weighted selection (§11.6)
+            "complement",      # complement directives in packs
+            "spec_injection",  # Level-2 spec injection (llm/specs.py)
+        ])
         harness.record_measure(inputs=["intervention:stagnation-recruit"])
         applied.append("stagnation-recruit")
 
@@ -56,7 +58,7 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
     if active_flags.get("grounding_decay"):
         # Exogenous brake: research machinery is P4; the intervention and the
         # priority raise are logged now so the ladder is complete and audited.
-        scheduler.research_priority = True
+        scheduler.activate_interventions(["research_priority"])
         harness.record_measure(inputs=["intervention:exogenous-brake"])
         applied.append("exogenous-brake")
     return applied

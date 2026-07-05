@@ -271,6 +271,28 @@ def test_hv_floor_no_vacuous_pass_on_empty_edits(tmp_path):
     assert target.id not in h.state.hv  # nothing recorded — not a vacuous 1.0
 
 
+def test_ladder_interventions_clear_after_window(tmp_path):
+    """A response-ladder intervention is active for CAPTURE_W cycles, then
+    clears — it must not latch on for the rest of the run."""
+    from deepreason.capture import ladder
+    from deepreason.scheduler.scheduler import Scheduler
+
+    h = Harness(tmp_path / "run")
+    adapter = LLMAdapter({}, h.blobs, retry_max=2)
+    sched = Scheduler(h, adapter, Config(CAPTURE_W=3, N_SCHOOLS=0, FLOOR=0))
+    assert not sched.recruit_all and not sched.spec_injection
+
+    ladder.respond(sched, {"lineage_stagnation": True})  # fires at cycle 0
+    assert sched.recruit_all and sched.tail_weighted
+    assert sched.complement and sched.spec_injection
+
+    sched._cycles = 2  # still inside the CAPTURE_W=3 window
+    assert sched.recruit_all
+    sched._cycles = 3  # window (0 + 3) has elapsed
+    assert not sched.recruit_all and not sched.tail_weighted
+    assert not sched.complement and not sched.spec_injection
+
+
 def test_pairwise_blocks_empty_decisive_point(tmp_path):
     """A pairwise winner with an empty decisive_point is unscreened LLM
     adjudication and must be blocked, registering nothing."""
