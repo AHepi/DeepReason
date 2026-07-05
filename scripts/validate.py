@@ -119,7 +119,16 @@ def main() -> int:
     parser.add_argument("--k", type=int, default=5)
     parser.add_argument("--budget", type=int, default=300_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
+    parser.add_argument("--model", default=None,
+                        help="force a model id (e.g. deepseek-v4-flash to escape ceiling)")
+    parser.add_argument("--crit-model", default=None,
+                        help="separate critic model (default: same as --model)")
+    parser.add_argument("--tag", default="", help="suffix for report/checkpoint filenames")
     args = parser.parse_args()
+    global OUT, CKPT
+    if args.tag:
+        OUT = OUT.with_name(f"validation_report_{args.tag}.json")
+        CKPT = CKPT.with_name(f"validation_checkpoint_{args.tag}.json")
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     if not api_key:
         print("DEEPSEEK_API_KEY not set", file=sys.stderr)
@@ -130,14 +139,15 @@ def main() -> int:
                                  headers={"Authorization": f"Bearer {api_key}"})
     with urllib.request.urlopen(req, timeout=30) as r:
         models = [m["id"] for m in json.load(r).get("data", [])]
-    model = next((m for m in models if "v4" in m and "pro" in m), sorted(models)[0])
-    print(f"model: {model}  K={args.k}  budget={args.budget}")
+    gen_model = args.model or next((m for m in models if "v4" in m and "pro" in m), sorted(models)[0])
+    crit_model = args.crit_model or gen_model
+    print(f"gen: {gen_model}  crit: {crit_model}  K={args.k}  budget={args.budget}")
 
-    def ep(temp):
+    def ep(model, temp):
         return OpenAICompatEndpoint(args.base_url, model, api_key=api_key,
                                     temperature=temp, max_tokens=1200, json_mode=True,
                                     reasoning="none")  # reasoning OFF (prereg)
-    gen, crit = ep(1.0), ep(0.3)
+    gen, crit = ep(gen_model, 1.0), ep(crit_model, 0.3)
     meter = TokenMeter(budget=args.budget)
 
     checkpoint = json.loads(CKPT.read_text()) if CKPT.exists() else {}
@@ -198,7 +208,8 @@ def main() -> int:
     n_cand = tp + fp + fn + tn
     base_wrong = (tp + fn) / n_cand if n_cand else 0
     report = {
-        "experiment": "validation-does-criticism-help", "model": model, "k": args.k,
+        "experiment": "validation-does-criticism-help",
+        "gen_model": gen_model, "crit_model": crit_model, "k": args.k,
         "n_questions": len(checkpoint),
         "accuracy": {k: round(v[0] / v[1], 3) if v[1] else None for k, v in arms.items()},
         "harness_vs_self_consistency": {"fixed": fixed, "broke": broke, "net": fixed - broke},
