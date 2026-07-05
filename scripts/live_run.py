@@ -173,29 +173,32 @@ def seed_republic(harness: Harness) -> None:
     )
 
 
+# ONE canonical std-design rubric for both cache suites. resolve_standard
+# returns the LATEST artifact declaring the spec, so two drifted copies made
+# the effective standard depend on which suite seeded last; a shared constant
+# (registered idempotently — identical text content-address-dedupes) removes
+# the order dependence.
+STD_DESIGN_RUBRIC = (
+    "A harness-design proposal must: (1) name a specific mechanism — "
+    "a data structure, keying scheme, invalidation rule, or protocol "
+    "step — not an aspiration ('cache smartly'); (2) state forbidden "
+    "cases that are concrete, observable system behaviors or workload "
+    "measurements that would refute the design (a measured miss rate, "
+    "a replay divergence, a stale response served); (3) respect the "
+    "harness invariants: nothing served from cache may alter "
+    "adjudication outcomes relative to a cache-free run, verdicts are "
+    "never reused across non-equivalent targets, and the event log "
+    "remains the source of truth. Designs trading correctness for hit "
+    "rate violate this standard."
+)
+
+
 def seed_cache(harness: Harness) -> None:
     """Self-referential suite: the harness works the research question that
     gates its own deferred feature (docs/TOKEN_ECONOMY.md §8) — a deployable
     caching layer for providers without prefix caching. A surviving design's
     forbidden cases convert directly into tests for the implementation."""
-    register_standard(
-        harness,
-        "std-design",
-        rubric=(
-            "A harness-design proposal must: (1) name a specific mechanism — "
-            "a data structure, keying scheme, invalidation rule, or protocol "
-            "step — not an aspiration ('cache smartly'); (2) state forbidden "
-            "cases that are concrete, observable system behaviors or workload "
-            "measurements that would refute the design (a measured miss rate, "
-            "a replay divergence, a stale response served); (3) respect the "
-            "harness invariants: nothing served from cache may alter "
-            "adjudication outcomes relative to a cache-free run, verdicts are "
-            "never reused across non-equivalent targets, and the event log "
-            "remains the source of truth. Designs trading correctness for hit "
-            "rate violate this standard."
-        ),
-        mode="absolute",
-    )
+    register_standard(harness, "std-design", rubric=STD_DESIGN_RUBRIC, mode="absolute")
     harness.register_commitment(skeleton_wf_commitment())
     harness.register_commitment(Commitment(id="kappa-design", eval="rubric:std-design"))
     harness.register_problem(
@@ -283,26 +286,11 @@ def seed_cache_sandbox(harness: Harness) -> None:
 
 
 def seed_cache_strict(harness: Harness) -> None:
-    """Strict phase: registered into the SAME root after the sandbox run.
-    The full std-design standard (harness invariants included) arrives as a
-    NEW standard + problem — never an edit of the sandbox one (§11.8)."""
-    register_standard(
-        harness,
-        "std-design",
-        rubric=(
-            "A harness-design proposal must: (1) name a specific mechanism — "
-            "a data structure, keying scheme, invalidation rule, or protocol "
-            "step — not an aspiration; (2) state forbidden cases that are "
-            "concrete, observable system behaviors or workload measurements "
-            "that would refute the design; (3) respect the harness "
-            "invariants: nothing served from cache may alter adjudication "
-            "outcomes relative to a cache-free run, verdicts are never "
-            "reused across non-equivalent targets, and the event log remains "
-            "the source of truth. Designs trading correctness for hit rate "
-            "violate this standard."
-        ),
-        mode="absolute",
-    )
+    """Strict phase: registered into the SAME root after the sandbox run,
+    as a NEW problem (never an edit of the sandbox one, §11.8). It declares
+    the SAME std-design standard — idempotent by content addressing — so the
+    effective rubric is identical regardless of which suite seeded last."""
+    register_standard(harness, "std-design", rubric=STD_DESIGN_RUBRIC, mode="absolute")
     if "skeleton-wf" not in harness.commitments:
         harness.register_commitment(skeleton_wf_commitment())
     harness.register_commitment(Commitment(id="kappa-design", eval="rubric:std-design"))
