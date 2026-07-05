@@ -1,0 +1,218 @@
+{
+  "accuracy": {
+    "harness": 1.0,
+    "self_consistency": 1.0,
+    "single": 0.95
+  },
+  "crit_model": "deepseek-v4-pro",
+  "criticism_error_detection": {
+    "base_rate_wrong": 0.01,
+    "candidates": 100,
+    "confusion": {
+      "fn": 0,
+      "fp": 7,
+      "tn": 92,
+      "tp": 1
+    },
+    "precision": 0.125,
+    "recall": 1.0
+  },
+  "experiment": "validation-does-criticism-help",
+  "gen_model": "deepseek-v4-pro",
+  "harness_vs_self_consistency": {
+    "broke": 0,
+    "fixed": 0,
+    "net": 0
+  },
+  "k": 5,
+  "n_questions": 20,
+  "per_question": {
+    "h01": {
+      "accept": [
+        "909"
+      ],
+      "harness": "909",
+      "n_correct": 5,
+      "sc": "909",
+      "single": "909"
+    },
+    "h02": {
+      "accept": [
+        "162"
+      ],
+      "harness": "162",
+      "n_correct": 5,
+      "sc": "162",
+      "single": "162"
+    },
+    "h03": {
+      "accept": [
+        "53"
+      ],
+      "harness": "53",
+      "n_correct": 5,
+      "sc": "53",
+      "single": "53"
+    },
+    "h04": {
+      "accept": [
+        "12800"
+      ],
+      "harness": "12800",
+      "n_correct": 5,
+      "sc": "12800",
+      "single": "12800"
+    },
+    "h05": {
+      "accept": [
+        "48"
+      ],
+      "harness": "48",
+      "n_correct": 5,
+      "sc": "48",
+      "single": "48"
+    },
+    "h06": {
+      "accept": [
+        "23"
+      ],
+      "harness": "23",
+      "n_correct": 5,
+      "sc": "23",
+      "single": "23"
+    },
+    "h07": {
+      "accept": [
+        "225"
+      ],
+      "harness": "225",
+      "n_correct": 5,
+      "sc": "225",
+      "single": "225"
+    },
+    "h08": {
+      "accept": [
+        "16.7"
+      ],
+      "harness": "16.7",
+      "n_correct": 5,
+      "sc": "16.7",
+      "single": "16.7"
+    },
+    "h09": {
+      "accept": [
+        "70"
+      ],
+      "harness": "70",
+      "n_correct": 5,
+      "sc": "70",
+      "single": "70"
+    },
+    "h10": {
+      "accept": [
+        "648"
+      ],
+      "harness": "648",
+      "n_correct": 5,
+      "sc": "648",
+      "single": "648"
+    },
+    "h11": {
+      "accept": [
+        "210"
+      ],
+      "harness": "210",
+      "n_correct": 5,
+      "sc": "210",
+      "single": "210"
+    },
+    "h12": {
+      "accept": [
+        "2420"
+      ],
+      "harness": "2420",
+      "n_correct": 5,
+      "sc": "2420",
+      "single": "2420"
+    },
+    "h13": {
+      "accept": [
+        "24"
+      ],
+      "harness": "24",
+      "n_correct": 5,
+      "sc": "24",
+      "single": "24"
+    },
+    "h14": {
+      "accept": [
+        "3"
+      ],
+      "harness": "3",
+      "n_correct": 5,
+      "sc": "3",
+      "single": "3"
+    },
+    "h15": {
+      "accept": [
+        "8"
+      ],
+      "harness": "8",
+      "n_correct": 4,
+      "sc": "8",
+      "single": "16"
+    },
+    "h16": {
+      "accept": [
+        "7.5"
+      ],
+      "harness": "7.5",
+      "n_correct": 5,
+      "sc": "7.5",
+      "single": "7.5"
+    },
+    "h17": {
+      "accept": [
+        "34.7"
+      ],
+      "harness": "34.7",
+      "n_correct": 5,
+      "sc": "34.7",
+      "single": "34.7"
+    },
+    "h18": {
+      "accept": [
+        "80"
+      ],
+      "harness": "80",
+      "n_correct": 5,
+      "sc": "80",
+      "single": "80"
+    },
+    "h19": {
+      "accept": [
+        "35"
+      ],
+      "harness": "35",
+      "n_correct": 5,
+      "sc": "35",
+      "single": "35"
+    },
+    "h20": {
+      "accept": [
+        "64.8"
+      ],
+      "harness": "64.8",
+      "n_correct": 5,
+      "sc": "64.8",
+      "single": "64.8"
+    }
+  },
+  "tokens": {
+    "budget": 300000,
+    "calls": 201,
+    "completion_tokens": 12517,
+    "prompt_tokens": 30815,
+    "total": 43332
+  }
+}
