@@ -23,3 +23,6 @@ runs/
 .vscode/
 *.swp
 .DS_Store
+
+# Transient validation-study checkpoint (durable output is validation_report.json)
+experiments/results/validation_checkpoint.json
