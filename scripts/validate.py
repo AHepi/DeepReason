@@ -28,7 +28,11 @@ from pydantic import BaseModel  # noqa: E402
 
 from deepreason.llm.adapter import _extract_json  # noqa: E402
 from deepreason.llm.budget import TokenBudgetExceeded, TokenMeter  # noqa: E402
-from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint  # noqa: E402
+from deepreason.llm.endpoints import (  # noqa: E402
+    EndpointError,
+    OpenAICompatEndpoint,
+    resolve_model,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 QUESTIONS = json.loads((ROOT / "experiments" / "validation_questions.json").read_text())
@@ -59,16 +63,27 @@ class CritiqueOut(BaseModel):
     error: str = ""
 
 
-def structured(endpoint, prompt, model_cls, meter):
-    meter.check()
-    raw = endpoint.complete(prompt)
-    usage = getattr(endpoint, "last_usage", None) or {
-        "prompt_tokens": len(prompt) // 4, "completion_tokens": len(raw) // 4}
-    meter.add(usage)
-    try:
-        return model_cls.model_validate_json(_extract_json(raw))
-    except Exception:
-        return model_cls()
+def structured(endpoint, prompt, model_cls, meter, retries=2):
+    """Bounded schema-repair loop. On exhaustion RAISE — never fabricate a
+    default. CritiqueOut.sound defaults True, so silently returning the
+    default on a parse failure would score a truncated critic as 'no error
+    found', biasing the harness arm and corrupting the study's numbers."""
+    error = ""
+    for attempt in range(retries + 1):
+        meter.check()
+        request = prompt if not error else (
+            prompt + f"\n\nYour previous output was invalid JSON: {error}\n"
+            "Return ONLY a valid JSON object.")
+        raw = endpoint.complete(request)
+        usage = getattr(endpoint, "last_usage", None) or {
+            "prompt_tokens": len(request) // 4, "completion_tokens": len(raw) // 4}
+        meter.add(usage)
+        try:
+            return model_cls.model_validate_json(_extract_json(raw))
+        except Exception as e:  # noqa: BLE001 - retry, then surface loudly
+            error = str(e)[:300]
+    raise RuntimeError(
+        f"{model_cls.__name__}: no valid JSON after {retries + 1} attempts: {error}")
 
 
 _WORDS = {"zero": "0", "one": "1", "two": "2", "three": "3", "four": "4",
@@ -137,13 +152,13 @@ def main() -> int:
         print("DEEPSEEK_API_KEY not set", file=sys.stderr)
         return 1
 
-    import urllib.request
-    req = urllib.request.Request(args.base_url.rstrip("/") + "/models",
-                                 headers={"Authorization": f"Bearer {api_key}"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        models = [m["id"] for m in json.load(r).get("data", [])]
-    gen_model = args.model or next((m for m in models if "v4" in m and "pro" in m), sorted(models)[0])
-    crit_model = args.crit_model or gen_model
+    # Resolve models via the shared package helper (auto => v4-pro cascade),
+    # so this study and live_run.py pick the same model by the same rule.
+    gen_model = resolve_model(args.model or "auto", args.base_url, api_key)
+    crit_model = (
+        resolve_model(args.crit_model, args.base_url, api_key)
+        if args.crit_model else gen_model
+    )
     print(f"gen: {gen_model}  crit: {crit_model}  K={args.k}  budget={args.budget}")
 
     def ep(model, temp):
@@ -175,6 +190,10 @@ def main() -> int:
         print("budget exhausted — scoring what completed")
     except EndpointError as e:
         print(f"endpoint error: {e} — scoring what completed")
+    except RuntimeError as e:
+        # A persistent unparseable response: stop and score the checkpointed
+        # questions rather than crash or fabricate a 'sound' critic verdict.
+        print(f"{e} — scoring what completed")
 
     # -- score the three arms + criticism error-detection --------------- #
     arms = {"single": [0, 0], "self_consistency": [0, 0], "harness": [0, 0]}
