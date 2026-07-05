@@ -482,6 +482,74 @@ def seed_autonomics_synthesis(harness: Harness) -> None:
     )
 
 
+def seed_criticism(harness: Harness) -> None:
+    """Self-referential suite: the harness works its own foundational open
+    question. Three validation runs (validate.py) left "does harness-style
+    criticism beat self-consistency?" undecidable — every arm ceilinged.
+    The problem carries the measured data; candidates must predict the
+    regime where criticism wins and design the decisive experiment."""
+    register_standard(
+        harness,
+        "std-crit-design",
+        rubric=(
+            "A study-design proposal must: (1) name the specific mechanism "
+            "or regime condition under which criticism-filtered voting "
+            "diverges from unfiltered majority voting, stated in measurable "
+            "quantities (candidate base error rate, critic precision and "
+            "recall, ensemble size k) — not an aspiration ('make criticism "
+            "better'); (2) state forbidden cases that are concrete, "
+            "measurable outcomes of running the proposed experiment (an arm "
+            "accuracy, a precision/recall bound, a net fixed-minus-broke "
+            "count) that would refute the proposal had they obtained; "
+            "(3) respect study-design honesty: the answer key stays held "
+            "out from every model call, thresholds are pre-registered "
+            "before the first look, and all arms score one shared candidate "
+            "pool per question. Proposals whose forbidden cases cannot be "
+            "measured by rerunning this repository's validation harness "
+            "violate this standard."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-crit", eval="rubric:std-crit-design"))
+    harness.register_problem(
+        Problem(
+            id="pi-criticism",
+            description=(
+                "Under what conditions does harness-style criticism (an "
+                "adversarial critic filters the candidate pool before a "
+                "majority vote) extract more reliable answers than "
+                "self-consistency (unfiltered majority vote over the SAME "
+                "pool)? Measured facts from this repository's validation "
+                "studies (k=5 candidates per question, one shared pool per "
+                "question, answer key held out from every model call): "
+                "[easy set, 24 q] v4-pro: single=sc=harness=1.00 (ceiling); "
+                "v4-flash: all three arms 0.958, critic precision 0.333, "
+                "recall 0.25 at candidate base error 0.033. [hard set, "
+                "20 q] v4-pro: single 0.95, sc 1.00, harness 1.00; "
+                "candidate base error 0.01; critic recall 1.0, precision "
+                "0.125; net fixed-minus-broke 0 — with 4/5 majorities "
+                "already right, filtering changed nothing. Task: predict "
+                "the regime (base error rate, critic precision/recall, k) "
+                "in which the criticism-filtered arm STRICTLY beats "
+                "self-consistency — including how filtering can LOSE when "
+                "false flags erode correct majorities — and design the "
+                "decisive experiment that would confirm or refute the "
+                "prediction within a 300k-token budget on this provider. "
+                "Each candidate's content MUST be a JSON skeleton object, "
+                'exactly this shape: {"claim": str, "mechanism": str, '
+                '"scope": {"covers": [str], "excludes": [str]}, '
+                '"forbidden": [{"case": str, "eval": '
+                '"rubric:std-crit-design"}], "prose_notes": str}. '
+                "Forbidden cases must be measurable outcomes of the "
+                "proposed experiment."
+            ),
+            criteria=["skeleton-wf", "kappa-crit"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
@@ -491,6 +559,7 @@ SUITES = {
     "occult": ("pi-occult", seed_occult),
     "autonomics": ("pi-autonomics", seed_autonomics),
     "autonomics-synthesis": ("pi-autonomics-synthesis", seed_autonomics_synthesis),
+    "criticism": ("pi-criticism", seed_criticism),
 }
 
 
