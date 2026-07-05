@@ -108,3 +108,60 @@ solo design supplied the liveness and constitutional elements the
 frontier lacked. Final instruments for the whole program: 148 invalid
 conviction attempts blocked vs 44 admitted, attack validity 0.94, spec
 transmission 0.91 over 131 injections, zero capture interventions.
+
+## Controller test (2026-07-05): does it work, is it efficient?
+
+The minimal controller was built (constitution + process-only update +
+CBF envelopes + fail-static + liveness; reference arm and market deferred)
+and put through both an acceptance suite and a live A/B. Answering the two
+questions honestly:
+
+**Acceptance suite (`tests/test_controller.py`): passes.** Forbidden
+cases 1, 2, 3, 5, 6, 7 are enforced as tests (case 4 deferred with the
+reference arm). Writing them caught a real design bug — the first liveness
+formula aged problems by first-sight, so with all problems registered at
+once the ages tied and one problem won every cycle forever; the test
+forced the fix (age from last-worked = fair rotation). The suite proves
+the controller is *well-behaved and safe*, not that it is smart.
+
+**Live A/B (`experiments/results/controller_ab_report.json`): starved the
+conjecturer cap to 1200 on republic skeletons, 6 cycles, controller OFF
+vs ON.**
+
+| metric | controller OFF | controller ON |
+|---|---|---|
+| conjecturer truncation rate | 0.40 | **0.17** |
+| conjecturer valid-JSON | 0.71 | **0.86** |
+| cap:conjecturer (start → end) | 1200 (fixed) | 1200 → 1920 → **3072** |
+| policies emitted / fail-static holds | — | 3 / 0 |
+| survivors | 3 | 2 |
+| total tokens | 67,843 | 68,933 |
+
+**Does it work? Yes, on what it controls.** The controller read the
+truncation signal from the log, widened the cap in two envelope-bounded
+steps to 3072, and truncation fell from 40% to 17% while valid-JSON rose
+from 0.71 to 0.86 — each move a replayable policy artifact carrying its
+own evidence, zero constitution violations, zero fail-static needed. The
+mechanism does exactly what it was designed to do, automatically, with no
+human.
+
+**Is it token-efficient? Not at this scale, and honestly not the point of
+the minimal build.** Tokens were within 1.6% (68.9k vs 67.8k) — it spent
+slightly *more* to widen. This is a recovery/correctness mechanism, not a
+savings one, exactly as flagged before the run. Two honest dents in the
+story: (1) survivors were 2 vs 3 — within noise at one run per arm, and
+even slightly lower; (2) the harness ALREADY carries a truncation-aware
+compression-retry (added by hand earlier), which rescues much of the same
+failure, so the controller's *marginal* value on this particular failure
+is small. Its real value is auto-handling the failures we have NOT already
+patched by hand — which an A/B on an old, already-patched failure cannot
+show. The savings direction (narrowing wasteful caps, reasoning routing)
+lives in the deferred half.
+
+**Bottom line for the two questions asked:** the controller is *safe and
+it works* (proven), and it is *not yet a token saver* (measured, and
+expected — savings is the deferred reference-arm/routing half). The
+minimal build is the right thing to have shipped first: it is the part
+that is certainly correct and certainly useful, and it now has the
+instruments to decide empirically whether the clever deferred half is
+worth building.

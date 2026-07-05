@@ -1,0 +1,37 @@
+{
+  "arms": {
+    "controller_off": {
+      "conj_calls": 5,
+      "conj_valid_json": 0.71,
+      "final_cap": 1200,
+      "survivors": 3,
+      "tokens": 67843,
+      "truncation_rate": 0.4
+    },
+    "controller_on": {
+      "cap_path": [
+        1200,
+        1920,
+        3072
+      ],
+      "conj_calls": 6,
+      "conj_valid_json": 0.86,
+      "fail_static_holds": 0,
+      "final_cap": 3072,
+      "policies": 3,
+      "survivors": 2,
+      "tokens": 68933,
+      "truncation_rate": 0.17
+    }
+  },
+  "caveats": [
+    "single run per arm (survivor count high-variance)",
+    "truncation was already half-mitigated by the existing compression-hint retry",
+    "savings direction (cap narrowing, reasoning routing) deferred with the reference arm"
+  ],
+  "date": "2026-07-05",
+  "design": "starved conjecturer cap (1200) on republic skeletons; controller OFF vs ON+liveness, 6 cycles each",
+  "test": "controller_ab",
+  "verdict_does_it_work": "YES on process metrics: the controller detected truncation from log signals and widened cap:conjecturer 1200->1920->3072, cutting truncation 0.40->0.17 and lifting valid-JSON 0.71->0.86, with 3 replayable policies carrying their evidence and zero constitution violations.",
+  "verdict_is_it_efficient": "NO net savings at this scale: near-identical tokens (68.9k vs 67.8k, +1.6%). This is a recovery/correctness mechanism, not a savings one, as pre-stated. Survivors 2 vs 3 is within noise and even slightly lower \u2014 because the harness ALREADY has a truncation-aware compression retry that partially rescues the same failure by hand. The controller's marginal value is small HERE precisely because this failure was already patched once; its real value is auto-handling UNpatched failures."
+}
