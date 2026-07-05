@@ -13,6 +13,7 @@ from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
 from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
+from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
 
 
 def _register_nu(harness, content: str) -> Artifact:
@@ -27,32 +28,19 @@ def crit_program(harness, target_id: str) -> list[Artifact]:
         kappa = harness.commitments.get(cid)
         if kappa is None or not programs.evaluable(kappa):
             continue
-        if any(
-            w.commitment == cid and w.target == target_id for w in harness.warrants.values()
-        ):
-            continue  # this verdict is already on the record
+        if verdict_on_record(harness, cid, target_id):
+            continue  # guard checked pre-evaluation: skips the τκ run too
         verdict, trace = programs.evaluate(kappa, target, harness.blobs)
         if verdict != programs.FAIL:
             continue
-        trace_ref = harness.blobs.put(canonical_json(trace))
-        nu = _register_nu(
-            harness, f"nu: verdict of {cid} on {target_id} is sound and relevant"
-        )
-        warrant = Warrant(
-            id=f"w:{cid}:{target_id}",
-            target=target_id,
-            type=WarrantType.DEMONSTRATIVE,
-            commitment=cid,
-            verdict="fail",
-            trace_ref=trace_ref,
-            validity_node=nu.id,
-        )
         critics.append(
-            harness.create_artifact(
-                f"critic: {cid} failed on {target_id[:12]}",
-                provenance=Provenance(role="critic"),
-                warrants=[warrant],
-                rule=Rule.CRIT,
+            register_fail_warrant(
+                harness,
+                commitment_id=cid,
+                target_id=target_id,
+                nu_content=f"nu: verdict of {cid} on {target_id} is sound and relevant",
+                critic_content=f"critic: {cid} failed on {target_id[:12]}",
+                trace_ref=harness.blobs.put(canonical_json(trace)),
             )
         )
     return critics

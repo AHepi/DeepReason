@@ -25,6 +25,7 @@ from deepreason.llm.contracts import (
 from deepreason.canonical import canonical_json
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
+from deepreason.rules.warrants import register_fail_warrant
 
 
 def conforming_transcript(blobs, trace_ref: str) -> bool:
@@ -193,26 +194,17 @@ def run_trial(harness, target_id: str, commitment, adapter, config,
         target=target_id, commitment=commitment.id, standard=standard.id,
         mode=body["mode"],
     )
-    nu = harness.create_artifact(
-        f"nu: the trial ruling under {body['spec']} on {target_id} is sound",
-        interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
-        provenance=Provenance(role="critic"),
-    )
-    warrant = Warrant(
-        id=f"w:{commitment.id}:{target_id}",
-        target=target_id,
-        type=WarrantType.DEMONSTRATIVE,
-        commitment=commitment.id,
-        verdict="fail",
+    return register_fail_warrant(
+        harness,
+        commitment_id=commitment.id,
+        target_id=target_id,
+        nu_content=f"nu: the trial ruling under {body['spec']} on {target_id} is sound",
+        nu_interface=Interface(refs=[Ref(target=standard.id, role="mention")]),
+        critic_content=(
+            f"critic: trial fail under {body['spec']} on {target_id[:12]} — "
+            f"{ruling.decisive_point[:100]}"
+        ),
         trace_ref=trace_ref,
-        validity_node=nu.id,
-    )
-    return harness.create_artifact(
-        f"critic: trial fail under {body['spec']} on {target_id[:12]} — "
-        f"{ruling.decisive_point[:100]}",
-        provenance=Provenance(role="critic"),
-        warrants=[warrant],
-        rule=Rule.CRIT,
         llm=judge_llm,
     )
 

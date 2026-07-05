@@ -14,7 +14,8 @@ import json
 from deepreason.canonical import canonical_json
 from deepreason.informal.appellate import spawn_audit_problem
 from deepreason.llm.contracts import JudgeRuling, PairwiseRuling, VariatorOutput
-from deepreason.ontology import Commitment, Provenance, Rule, Warrant, WarrantType
+from deepreason.ontology import Commitment
+from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
 
 PARAPHRASE_AUDIT = Commitment(id="audit:paraphrase-invariance", eval="program:paraphrase_audit")
 PREMISE_AUDIT = Commitment(id="audit:premise-deletion", eval="program:premise_deletion_audit")
@@ -39,30 +40,15 @@ def _audit_warrant(harness, audit_commitment, nu_target: str, finding: dict, llm
     logged on the critic event so replay, eval_report, and the controller's
     process signals see each audit LLM call (§0), not just the live meter."""
     harness.register_commitment(audit_commitment)
-    if any(
-        w.commitment == audit_commitment.id and w.target == nu_target
-        for w in harness.warrants.values()
-    ):
+    if verdict_on_record(harness, audit_commitment.id, nu_target):
         return None
-    trace_ref = harness.blobs.put(canonical_json(finding))
-    audit_nu = harness.create_artifact(
-        f"nu: the {audit_commitment.id} finding against {nu_target} is sound",
-        provenance=Provenance(role="critic"),
-    )
-    warrant = Warrant(
-        id=f"w:{audit_commitment.id}:{nu_target}",
-        target=nu_target,
-        type=WarrantType.DEMONSTRATIVE,
-        commitment=audit_commitment.id,
-        verdict="fail",
-        trace_ref=trace_ref,
-        validity_node=audit_nu.id,
-    )
-    critic = harness.create_artifact(
-        f"audit-critic: {audit_commitment.id} hit on {nu_target[:12]}",
-        provenance=Provenance(role="critic"),
-        warrants=[warrant],
-        rule=Rule.CRIT,
+    critic = register_fail_warrant(
+        harness,
+        commitment_id=audit_commitment.id,
+        target_id=nu_target,
+        nu_content=f"nu: the {audit_commitment.id} finding against {nu_target} is sound",
+        critic_content=f"audit-critic: {audit_commitment.id} hit on {nu_target[:12]}",
+        trace_ref=harness.blobs.put(canonical_json(finding)),
         llm=llm,
     )
     harness.record_measure(inputs=[f"audit-hit:{nu_target}", audit_commitment.id])

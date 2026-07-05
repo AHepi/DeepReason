@@ -22,9 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from deepreason.harness import Harness  # noqa: E402
-from deepreason.ontology import (  # noqa: E402
-    Commitment, Provenance, Rule, Status, Warrant, WarrantType,
-)
+from deepreason.ontology import Commitment, Provenance, Status  # noqa: E402
+from deepreason.rules.warrants import register_fail_warrant  # noqa: E402
 from deepreason.research.backends import StaticBackend, covered, run_research  # noqa: E402
 from deepreason.rules.spawn import scan_spawns  # noqa: E402
 from deepreason.config import load as load_config  # noqa: E402
@@ -98,29 +97,22 @@ def main() -> int:
 
     # 4. The forbidden case obtained: demonstrative warrant against the claim.
     target = _full(harness, SUNSPOT)
-    nu = harness.create_artifact(
-        f"nu: the time-twins verdict of {kappa_id} on {target[:12]} is sound — "
-        "to attack it, attack the evidence's reliability node "
-        "(unpublished full dataset; disputed resemblance criteria)",
-        provenance=Provenance(role="critic"),
-    )
-    warrant = Warrant(
-        id=f"w:{kappa_id}:{target}",
-        target=target,
-        type=WarrantType.DEMONSTRATIVE,
-        commitment=kappa_id,
-        verdict="fail",
+    register_fail_warrant(
+        harness,
+        commitment_id=kappa_id,
+        target_id=target,
+        nu_content=(
+            f"nu: the time-twins verdict of {kappa_id} on {target[:12]} is sound — "
+            "to attack it, attack the evidence's reliability node "
+            "(unpublished full dataset; disputed resemblance criteria)"
+        ),
+        critic_content=(
+            "critic: the claim's self-stated forbidden case obtained in the "
+            "published record — time twins with maximal shared prenatal "
+            f"solar/geomagnetic exposure show no personality clustering "
+            f"(evidence {evidence.id[:12]})"
+        ),
         trace_ref=harness.blobs.put(EVIDENCE.encode()),
-        validity_node=nu.id,
-    )
-    harness.create_artifact(
-        "critic: the claim's self-stated forbidden case obtained in the "
-        "published record — time twins with maximal shared prenatal "
-        f"solar/geomagnetic exposure show no personality clustering "
-        f"(evidence {evidence.id[:12]})",
-        provenance=Provenance(role="critic"),
-        warrants=[warrant],
-        rule=Rule.CRIT,
     )
     print(f"sunspot claim status: {harness.state.status.get(target).value}")
     return 0

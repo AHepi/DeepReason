@@ -58,12 +58,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _resolve(harness: Harness, prefix: str) -> str:
-    matches = [i for i in harness.state.artifacts if i.startswith(prefix)]
-    if len(matches) == 1:
-        return matches[0]
-    if not matches:
-        return prefix
-    raise SystemExit(f"ambiguous id prefix {prefix!r}: {[m[:12] for m in matches]}")
+    from deepreason.ops import resolve_prefix
+
+    try:
+        return resolve_prefix(harness, prefix)
+    except ValueError as e:
+        raise SystemExit(str(e)) from e
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -214,7 +214,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _load_problem_file(harness: Harness, path: Path) -> str:
-    from deepreason.ontology import Commitment, Problem
+    from deepreason.ops import seed_problem_payload
 
     if path.suffix in (".yaml", ".yml"):
         import yaml
@@ -222,29 +222,12 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
         data = yaml.safe_load(path.read_text())
     else:
         data = json.loads(path.read_text())
-    if data.get("standard"):
-        from deepreason.informal.standards import register_standard
-
-        std = data["standard"]
-        register_standard(harness, std["id"], rubric=std["rubric"], mode=std.get("mode", "absolute"))
-    for c in data.get("commitments", []):
-        harness.register_commitment(Commitment.model_validate(c))
-    if "skeleton-wf" in data.get("problem", {}).get("criteria", []) and (
-        "skeleton-wf" not in harness.commitments
-    ):
-        from deepreason.informal.skeleton import skeleton_wf_commitment
-
-        harness.register_commitment(skeleton_wf_commitment())
-    problem = Problem.model_validate(data["problem"])
-    harness.register_problem(problem)
-    return problem.id
+    return seed_problem_payload(harness, data).id
 
 
 def _cmd_run(args) -> int:
     from deepreason.config import load as load_config
-    from deepreason.llm.adapter import build_adapter
-    from deepreason.llm.budget import TokenMeter
-    from deepreason.scheduler.scheduler import Scheduler
+    from deepreason.ops import run_scheduler
 
     cycles = int(args.budget.split("=", 1)[1]) if "=" in args.budget else int(args.budget)
     config = load_config(Path(args.config) if args.config else None)
@@ -254,16 +237,11 @@ def _cmd_run(args) -> int:
     if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
-    meter = TokenMeter(budget=args.token_budget) if args.token_budget is not None else None
-    adapter = build_adapter(config, harness.blobs, meter=meter)
-    if not adapter.has_role("conjecturer"):
-        print(
-            "no conjecturer endpoint configured — set roles.conjecturer in the "
-            "config knob file (spec 15)",
-            file=sys.stderr,
-        )
+    try:
+        result, meter = run_scheduler(harness, config, cycles, args.token_budget)
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
         return 1
-    result = Scheduler(harness, adapter, config).run(cycles)
     print(f"survivors ({len(result['survivors'])}):")
     for aid in result["frontier"]:
         print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")

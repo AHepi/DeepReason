@@ -152,61 +152,23 @@ def _config(arguments: dict):
     return load(Path(path) if path else None)
 
 
-def _resolve(harness, prefix: str) -> str:
-    matches = [i for i in harness.state.artifacts if i.startswith(prefix)]
-    if len(matches) == 1:
-        return matches[0]
-    if not matches:
-        return prefix
-    raise ValueError(f"ambiguous id prefix {prefix!r}: {[m[:12] for m in matches]}")
-
-
 def call_tool(name: str, arguments: dict) -> str:
     """Execute one tool; returns the text payload (raises on error)."""
-    from deepreason.ontology import Commitment, Problem, ProblemProvenance, Status
+    from deepreason.ontology import Status
+    from deepreason.ops import resolve_prefix as _resolve
+    from deepreason.ops import run_scheduler, seed_problem_payload
 
     if name == "seed_problem":
         harness = _harness(arguments)
-        if arguments.get("standard"):
-            from deepreason.informal.standards import register_standard
-
-            std = arguments["standard"]
-            register_standard(
-                harness, std["id"], rubric=std["rubric"], mode=std.get("mode", "absolute")
-            )
-        for c in arguments.get("commitments") or []:
-            harness.register_commitment(Commitment.model_validate(c))
-        spec = arguments["problem"]
-        criteria = list(spec.get("criteria") or [])
-        if "skeleton-wf" in criteria and "skeleton-wf" not in harness.commitments:
-            from deepreason.informal.skeleton import skeleton_wf_commitment
-
-            harness.register_commitment(skeleton_wf_commitment())
-        problem = Problem(
-            id=spec["id"],
-            description=spec["description"],
-            criteria=criteria,
-            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
-        )
-        harness.register_problem(problem)
-        return f"registered problem {problem.id} with criteria {criteria}"
+        problem = seed_problem_payload(harness, arguments)
+        return f"registered problem {problem.id} with criteria {list(problem.criteria)}"
 
     if name == "run_cycles":
-        from deepreason.llm.adapter import build_adapter
-        from deepreason.llm.budget import TokenMeter
-        from deepreason.scheduler.scheduler import Scheduler
-
         harness = _harness(arguments)
         config = _config(arguments)
-        _tb = arguments.get("token_budget")
-        meter = TokenMeter(budget=_tb) if _tb is not None else None
-        adapter = build_adapter(config, harness.blobs, meter=meter)
-        if not adapter.has_role("conjecturer"):
-            raise ValueError(
-                "no conjecturer endpoint configured — set roles.conjecturer "
-                "(endpoint, model, api_key_env) in the config knob file (§15)"
-            )
-        result = Scheduler(harness, adapter, config).run(int(arguments["cycles"]))
+        result, meter = run_scheduler(
+            harness, config, arguments["cycles"], arguments.get("token_budget")
+        )
         payload = {
             "survivors": result["survivors"],
             "frontier": result["frontier"],

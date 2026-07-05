@@ -24,14 +24,12 @@ from deepreason import programs
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import VariatorOutput
 from deepreason.llm.embedder import distance
+from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
 from deepreason.ontology import (
     Artifact,
     Commitment,
     Interface,
     Provenance,
-    Rule,
-    Warrant,
-    WarrantType,
 )
 from deepreason.ontology.commitment import Budget
 
@@ -156,8 +154,7 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
     if not adapter.has_role("variator"):
         return programs.OVERRUN  # no kernel available within budget
     target = harness.state.artifacts[target_id]
-    if any(w.commitment == commitment.id and w.target == target_id
-           for w in harness.warrants.values()):
+    if verdict_on_record(harness, commitment.id, target_id):
         return programs.FAIL  # verdict already on the record
     k = int(commitment.budget.extra.get("k", 5))
     hv_min = float(commitment.budget.extra.get("hv_min", "0.5"))
@@ -174,34 +171,24 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
     if hv >= hv_min:
         harness.record_measure(hv={target_id: hv}, inputs=[target_id], llm=llm_call)
         return programs.PASS
-    trace_ref = harness.blobs.put(
-        json.dumps(
-            {"k": k, "hv_min": hv_min, "s_hat": s_hat, "kernel": kernel,
-             "per_edit": per_edit},
-            sort_keys=True,
-        ).encode()
-    )
-    nu = harness.create_artifact(
-        f"nu: hv-floor verdict on {target_id} is sound — (i) mu emitted genuine "
-        "bounded edits; (ii) k suffices at the decision margin; (iii) the "
-        "equivalence surrogate is adequate (misclassifying rephrasings as "
-        "inequivalent inflates s_hat); (iv) B0 is an adequate surrogate for B.",
-        provenance=Provenance(role="critic"),
-    )
-    warrant = Warrant(
-        id=f"w:{commitment.id}:{target_id}",
-        target=target_id,
-        type=WarrantType.DEMONSTRATIVE,
-        commitment=commitment.id,
-        verdict="fail",
-        trace_ref=trace_ref,
-        validity_node=nu.id,
-    )
-    harness.create_artifact(
-        f"critic: hv-floor fail on {target_id[:12]} (hv={hv:.2f} < {hv_min})",
-        provenance=Provenance(role="critic"),
-        warrants=[warrant],
-        rule=Rule.CRIT,
+    register_fail_warrant(
+        harness,
+        commitment_id=commitment.id,
+        target_id=target_id,
+        nu_content=(
+            f"nu: hv-floor verdict on {target_id} is sound — (i) mu emitted genuine "
+            "bounded edits; (ii) k suffices at the decision margin; (iii) the "
+            "equivalence surrogate is adequate (misclassifying rephrasings as "
+            "inequivalent inflates s_hat); (iv) B0 is an adequate surrogate for B."
+        ),
+        critic_content=f"critic: hv-floor fail on {target_id[:12]} (hv={hv:.2f} < {hv_min})",
+        trace_ref=harness.blobs.put(
+            json.dumps(
+                {"k": k, "hv_min": hv_min, "s_hat": s_hat, "kernel": kernel,
+                 "per_edit": per_edit},
+                sort_keys=True,
+            ).encode()
+        ),
         llm=llm_call,
     )
     return programs.FAIL

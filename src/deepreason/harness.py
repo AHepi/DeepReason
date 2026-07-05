@@ -44,18 +44,21 @@ class WellFormednessError(ValueError):
 
 
 class Harness:
-    def __init__(self, root: Path | str) -> None:
+    def __init__(self, root: Path | str, *, upto_seq: int | None = None) -> None:
+        """Open (or create) a harness at ``root``; ``upto_seq`` truncates the
+        replay for time-travel views (prefer the ``Harness.at`` spelling).
+
+        Replay applies every event but adjudicates ONCE at the end: the
+        grounded-extension fixpoint is a pure function of the final graph,
+        so per-event adjudication during replay is discarded work (it made
+        reopening an N-event log superlinear)."""
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self.blobs = BlobStore(self.root / "blobs")
         self.objects = ObjectStore(self.root / "objects")
         self.log = EventLog(self.root / "log.jsonl")
         self._reset()
-        # Replay applies every event but adjudicates ONCE at the end: the
-        # grounded-extension fixpoint is a pure function of the final graph,
-        # so per-event adjudication during replay is discarded work (it made
-        # reopening an N-event log superlinear).
-        for event in self.log.read():
+        for event in self.log.read(upto_seq=upto_seq):
             self._apply_event(event, adjudicate=False)
         self._adjudicate()
 
@@ -69,16 +72,7 @@ class Harness:
     def at(cls, root: Path | str, seq: int) -> "Harness":
         """Time-travel: the harness as of event ``seq`` (spec §1). Read-only —
         do not register into a truncated view."""
-        h = cls.__new__(cls)
-        h.root = Path(root)
-        h.blobs = BlobStore(h.root / "blobs")
-        h.objects = ObjectStore(h.root / "objects")
-        h.log = EventLog(h.root / "log.jsonl")
-        h._reset()
-        for event in h.log.read(upto_seq=seq):
-            h._apply_event(event, adjudicate=False)
-        h._adjudicate()
-        return h
+        return cls(root, upto_seq=seq)
 
     # ------------------------------------------------------------------ #
     # Registration (live path: validate -> persist -> commit event)      #
@@ -222,12 +216,12 @@ class Harness:
 
     def transitions(self) -> list[tuple[int, str, str | None, str]]:
         """(seq, artifact, old_status, new_status) per logged event — a
-        replay program over the log (§11.3 instrument)."""
+        replay program over the log (§11.3 instrument). The shadow shares
+        this instance's stores (read-only) and rewalks the log with a fresh
+        state; copying __dict__ then _reset() keeps it in sync with any
+        future field added to __init__ (no hand-mirrored constructor)."""
         shadow = Harness.__new__(Harness)
-        shadow.root = self.root
-        shadow.blobs = self.blobs
-        shadow.objects = self.objects
-        shadow.log = self.log
+        shadow.__dict__.update(self.__dict__)
         shadow._reset()
         out: list[tuple[int, str, str | None, str]] = []
         for event in self.log.read():

@@ -130,11 +130,10 @@ def ground(target_root: Path, report: dict) -> None:
     attackable source-reliability node; verdicts are warrants with traces,
     never scores."""
     from deepreason.canonical import sha256_hex
-    from deepreason.ontology import (
-        Interface, Provenance, Ref, Rule, Status, Warrant, WarrantType,
-    )
+    from deepreason.ontology import Interface, Provenance, Ref, Status
     from deepreason.ontology.commitment import Commitment
     from deepreason.programs import content_text
+    from deepreason.rules.warrants import register_fail_warrant
 
     harness = Harness(target_root)
     payload = json.dumps(report, indent=2, sort_keys=True)
@@ -184,27 +183,20 @@ def ground(target_root: Path, report: dict) -> None:
                 harness.record_measure(inputs=[f"cachebench-supports:{aid}", evidence.id])
                 print(f"measurement SUPPORTS {aid[:12]} (no warrant registered)")
                 continue
-            nu = harness.create_artifact(
-                f"nu: the cachebench verdict of {kappa_id} on {aid} is sound — "
-                "attack the measurement's representativeness, not this line",
-                provenance=Provenance(role="critic"),
-            )
-            warrant = Warrant(
-                id=f"w:{kappa_id}:{aid}",
-                target=aid,
-                type=WarrantType.DEMONSTRATIVE,
-                commitment=kappa_id,
-                verdict="fail",
+            critic = register_fail_warrant(
+                harness,
+                commitment_id=kappa_id,
+                target_id=aid,
+                nu_content=(
+                    f"nu: the cachebench verdict of {kappa_id} on {aid} is sound — "
+                    "attack the measurement's representativeness, not this line"
+                ),
+                critic_content=(
+                    f"critic: measured {key} {measured} is below the design's own "
+                    f"floor {floor} — its forbidden case obtained "
+                    f"(evidence {evidence.id[:12]})"
+                ),
                 trace_ref=harness.blobs.put(payload.encode()),
-                validity_node=nu.id,
-            )
-            critic = harness.create_artifact(
-                f"critic: measured {key} {measured} is below the design's own "
-                f"floor {floor} — its forbidden case obtained "
-                f"(evidence {evidence.id[:12]})",
-                provenance=Provenance(role="critic"),
-                warrants=[warrant],
-                rule=Rule.CRIT,
             )
             print(f"REFUTED by measurement: {aid[:12]} (critic {critic.id[:12]}, "
                   f"status now {harness.state.status.get(aid).value})")

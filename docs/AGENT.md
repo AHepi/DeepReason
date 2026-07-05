@@ -54,9 +54,12 @@ roles:
 ```
 
 API keys are read from the named environment variables — never from
-files. Name a real model id in the table (`auto` resolution is a
-convenience of `scripts/live_run.py` only). Two judge seats from
-different model families satisfy the §9 cross-family rule properly.
+files. `model: auto` / `auto-alt` are resolved against the provider's
+live `/models` list at adapter build time (`llm/endpoints.py:resolve_model`,
+used by `deepreason run`, the MCP server, and the scripts alike); name a
+real model id when you need the run pinned for reproducibility. Two judge
+seats from different model families satisfy the §9 cross-family rule
+properly.
 
 ## MCP tool surface (spec §13 verbs)
 
