@@ -66,6 +66,27 @@ stages:
       the informal-domain trial protocol (where the criticism suite itself
       showed a 31.8% ruling survival rate and real refutations) — or on a
       provider/model with genuinely higher base error.
+  stage_xs:  # registered before first model call on this configuration
+    what: a SECOND model family became available (poolside). Generator =
+      poolside/laguna-xs.2 (smallest available model; plausibly real base
+      error); critic = deepseek-v4-flash (cross-family, calibrated: planted
+      flaw error 0.0 with its default reasoning). ONE full collection over
+      all 44 committed questions, k=5, gen and crit in the same pass — no
+      gen-only probes (they waste a round trip when the regime IS reached).
+    limitation: poolside returns no logprobs, so the confidence-filtered
+      arm is UNAVAILABLE; d239's specific confidence mechanism cannot be
+      tested on this generator. The core rivalry still can be: llm-critic-
+      filtered vote vs self-consistency in a contested regime.
+    outcome_mapping:
+      regime_reached: test-split candidate base error in [0.15, 0.60]
+      criticism_wins: regime_reached AND llm_critic beats self_consistency
+        on the test split with net fixed-minus-broke >= +2 (supports d239's
+        direction, refutes 57e0's universal reading)
+      criticism_fails: regime_reached AND llm_critic <= self_consistency
+        net (supports 57e0; d239's confidence variant stays untested)
+      regime_not_reached: with TWO families ceilinged, d239's regime is
+        declared unreachable on available providers; the rivalry stands
+        adjudicated only by the informal-domain evidence.
   full:
     what: full collection (gen + critic) over all 44 questions with
       confidence capture; then score per the arms above

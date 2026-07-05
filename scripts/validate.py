@@ -213,6 +213,11 @@ def main() -> int:
     parser.add_argument("--k", type=int, default=5)
     parser.add_argument("--budget", type=int, default=300_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
+    parser.add_argument("--api-key-env", default="DEEPSEEK_API_KEY")
+    parser.add_argument("--crit-base-url", default=None,
+                        help="critic endpoint (default: --base-url); enables a "
+                             "cross-provider critic")
+    parser.add_argument("--crit-api-key-env", default=None)
     parser.add_argument("--model", default=None,
                         help="force a model id (e.g. deepseek-v4-flash to escape ceiling)")
     parser.add_argument("--crit-model", default=None,
@@ -236,28 +241,33 @@ def main() -> int:
     if args.tag:
         OUT = OUT.with_name(f"validation_report_{args.tag}.json")
         CKPT = CKPT.with_name(f"validation_checkpoint_{args.tag}.json")
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
+    api_key = os.environ.get(args.api_key_env)
     if not api_key:
-        print("DEEPSEEK_API_KEY not set", file=sys.stderr)
+        print(f"{args.api_key_env} not set", file=sys.stderr)
+        return 1
+    crit_base = args.crit_base_url or args.base_url
+    crit_key = os.environ.get(args.crit_api_key_env) if args.crit_api_key_env else api_key
+    if not crit_key:
+        print(f"{args.crit_api_key_env} not set", file=sys.stderr)
         return 1
 
     # Resolve models via the shared package helper (auto => v4-pro cascade),
     # so this study and live_run.py pick the same model by the same rule.
     gen_model = resolve_model(args.model or "auto", args.base_url, api_key)
     crit_model = (
-        resolve_model(args.crit_model, args.base_url, api_key)
+        resolve_model(args.crit_model, crit_base, crit_key)
         if args.crit_model else gen_model
     )
     print(f"gen: {gen_model}  crit: {crit_model}  K={args.k}  budget={args.budget}")
 
-    def ep(model, temp, logprobs=False, max_tokens=1200):
-        return OpenAICompatEndpoint(args.base_url, model, api_key=api_key,
+    def ep(base, key, model, temp, logprobs=False, max_tokens=1200):
+        return OpenAICompatEndpoint(base, model, api_key=key,
                                     temperature=temp, max_tokens=max_tokens, json_mode=True,
                                     request_logprobs=logprobs,
                                     reasoning="none")  # reasoning OFF (prereg)
-    gen = ep(gen_model, args.temperature, logprobs=args.confidence,
-             max_tokens=args.max_tokens)
-    crit = ep(crit_model, 0.3)
+    gen = ep(args.base_url, api_key, gen_model, args.temperature,
+             logprobs=args.confidence, max_tokens=args.max_tokens)
+    crit = ep(crit_base, crit_key, crit_model, 0.3)
     meter = TokenMeter(budget=args.budget)
 
     checkpoint = json.loads(CKPT.read_text()) if CKPT.exists() else {}
