@@ -1,0 +1,50 @@
+# Validation study pre-registration — committed BEFORE running.
+# The project's core thesis, tested head-on: does harness-mediated
+# criticism extract more reliable knowledge than the raw model?
+experiment: validation-does-criticism-help
+date_registered: 2026-07-05
+domain: >
+  24 self-authored reasoning puzzles with CERTAIN short answers (numeric
+  or single-token), spanning multi-step arithmetic, counting, logic, and
+  several "trap" items where the intuitive answer is wrong. Ground truth
+  is certain because the questions are authored, not looked up. The answer
+  key is held out from every arm; scoring is external and exact-match
+  after normalization.
+generator_setting: reasoning DISABLED (thinking off) for both generation
+  and criticism — deliberately, so the generator has a real error rate for
+  criticism to catch (a strong reasoning generator would ceiling out and
+  leave nothing to test). Reasoning-on is a documented follow-up lever.
+K: 5   # candidates per question, drawn once and shared by all arms
+arms:
+  single:            first of the K candidates (raw single-shot baseline)
+  self_consistency:  majority vote over all K (ensembling, NO criticism)
+  harness:           majority vote over the K candidates the critic did
+                     NOT refute; if all refuted, fall back to full vote
+primary_hypothesis: >
+  harness accuracy > self_consistency accuracy. This is the load-bearing
+  claim: criticism must add value BEYOND mere resampling. Beating only
+  single-shot is not enough — self-consistency is the honest control.
+deepest_metric: >
+  criticism's error-detection skill at the CANDIDATE level. For every
+  candidate we know (from the held-out key) whether it was actually
+  correct, and (from the critic) whether it was marked unsound. Compute:
+    - precision = P(actually wrong | critic flagged unsound)
+    - recall    = P(critic flagged unsound | actually wrong)
+    - base rate = overall fraction of candidates that are wrong
+  Criticism carries real signal iff precision > base rate AND recall > 0
+  meaningfully — i.e. flags concentrate on wrong answers, not random ones.
+falsifier: >
+  The epistemology adds no reliable knowledge on this domain if EITHER
+  (a) harness accuracy <= self_consistency accuracy, OR (b) criticism's
+  candidate-level precision <= base rate (flags no better than chance).
+  A negative result here is the most important finding in the project and
+  will be reported as-is.
+caveats_stated_upfront:
+  - single provider (DeepSeek) — critic shares the generator's family, so
+    this measures SAME-family criticism; cross-family is the follow-up.
+  - self-authored questions — absolute difficulty is uncalibrated, but the
+    RELATIVE arm comparison is valid on an identical question set as long
+    as accuracy is not saturated at 0 or 100%.
+  - reasoning-off — tests the weak-generator regime on purpose.
+budget: 300000 tokens hard cap; per-question checkpointing so a container
+  restart resumes instead of restarting.
