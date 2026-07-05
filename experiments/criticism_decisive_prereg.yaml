@@ -87,6 +87,18 @@ stages:
       regime_not_reached: with TWO families ceilinged, d239's regime is
         declared unreachable on available providers; the rivalry stands
         adjudicated only by the informal-domain evidence.
+    result: RAN 2026-07-05 — 43/44 questions (1 transient skip), 215
+      candidates, 167k tokens. Base error 0.023: laguna-xs.2 DOES err
+      (polygon angles, rope ladder, calendar, discount chains) but an
+      order of magnitude below the 0.15 regime floor, and every error was
+      a 4/5 or 3/5 minority — no majority was ever contested; all arms
+      1.00, net fixed-minus-broke 0. Cross-family critic at this base
+      rate: precision 0.333, recall 0.6. OUTCOME: regime_not_reached,
+      final. Two model families, five configurations, three question
+      sets: the contested-majority regime does not exist on available
+      providers for mechanically checkable questions. d239's regime claim
+      is unreachable (not refuted); 57e0's direction holds empirically in
+      every regime we could measure.
   full:
     what: full collection (gen + critic) over all 44 questions with
       confidence capture; then score per the arms above

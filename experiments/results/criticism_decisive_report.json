@@ -1,6 +1,6 @@
 {
   "experiment": "criticism-decisive (experiments/criticism_decisive_prereg.yaml)",
-  "outcome": "regime_not_reached",
+  "outcome": "regime_not_reached_final",
   "verdicts": {
     "d239d34e54e6": "untested \u2014 forbidden case requires an in-regime run",
     "57e09ea4045b": "untested"
@@ -15,5 +15,23 @@
       "base_error": 0.0,
       "tokens": 7170
     }
+  },
+  "stage_xs": {
+    "generator": "poolside/laguna-xs.2",
+    "critic": "deepseek-v4-flash",
+    "n_questions": 43,
+    "tokens": 167203,
+    "base_error": 0.023,
+    "accuracy": {
+      "harness": 1.0,
+      "self_consistency": 1.0,
+      "single": 1.0
+    },
+    "critic_precision_recall": [
+      0.333,
+      0.6
+    ],
+    "net_fixed_minus_broke": 0,
+    "outcome": "regime_not_reached (final: two families ceilinged)"
   }
 }
