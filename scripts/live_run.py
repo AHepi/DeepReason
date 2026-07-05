@@ -440,6 +440,60 @@ def seed_autonomics(harness: Harness) -> None:
     )
 
 
+def seed_autonomics_synthesis(harness: Harness) -> None:
+    """Phase 3: compound designs over the phase-1/2 frontier's families.
+    Registered into the SAME root as pi-autonomics; std-autonomics and
+    kappa-autonomics already exist there (idempotent guards for fresh
+    roots). The description carries the families and the trial lesson."""
+    if "skeleton-wf" not in harness.commitments:
+        harness.register_commitment(skeleton_wf_commitment())
+    if "kappa-autonomics" not in harness.commitments:
+        # Fresh-root fallback only; in runs/autonomics these already exist.
+        seed_autonomics(harness)
+    harness.register_problem(
+        Problem(
+            id="pi-autonomics-synthesis",
+            description=(
+                "SYNTHESIS: the exploration phase left five surviving "
+                "design FAMILIES for harness self-calibration, plus a "
+                "sealed external design. Compose the strongest COMPOUND "
+                "design — or show two families are incompatible. The "
+                "families: (1) adversarial calibration markets "
+                "(controller vs anti-controller zero-sum bets over knob "
+                "changes); (2) causal graph surgery (a FIXED causal model "
+                "of knob->process effects, never re-fitted from outcomes); "
+                "(3) process-only signal diets (outcome metrics banned as "
+                "controller inputs; only process degradations like "
+                "truncation and JSON invalidity drive knobs); (4) control "
+                "barrier functions (formal per-knob safe envelopes); "
+                "(5) frozen baselines / reference arms (immutable policy "
+                "on a fixed share of cycles; Goodhart = divergence between "
+                "controlled and reference arms). The external design adds: "
+                "a generator/tribunal knob-ledger constitution (the "
+                "controller tunes the defendant, never the court), "
+                "policy-as-attackable-artifact with fail-static revert, "
+                "and an aging liveness queue (priority = age x "
+                "unsolvedness) that no family currently covers. Lesson "
+                "from live criticism of that design: distinguish DEPENDING "
+                "on adjudication outcomes (which are log-determined and "
+                "fine) from INFLUENCING adjudication parameters (which is "
+                "forbidden) — state your dependency structure precisely. "
+                "A compound design must say which component is the "
+                "constitution, which is the update rule, which is the "
+                "detector, and which is the liveness guarantee, and why "
+                "the composition introduces no NEW Goodhart path between "
+                "components. Each candidate's content MUST be a JSON "
+                'skeleton object, exactly this shape: {"claim": str, '
+                '"mechanism": str, "scope": {"covers": [str], "excludes": '
+                '[str]}, "forbidden": [{"case": str, "eval": '
+                '"rubric:std-autonomics"}], "prose_notes": str}.'
+            ),
+            criteria=["skeleton-wf", "kappa-autonomics"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
@@ -448,6 +502,7 @@ SUITES = {
     "cache-strict": ("pi-cache-strict", seed_cache_strict),
     "occult": ("pi-occult", seed_occult),
     "autonomics": ("pi-autonomics", seed_autonomics),
+    "autonomics-synthesis": ("pi-autonomics-synthesis", seed_autonomics_synthesis),
 }
 
 
