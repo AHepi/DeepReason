@@ -148,7 +148,107 @@
       "survival_rate": 0.23529411764705882
     }
   },
-  "phase3": "HELD pending user review",
+  "phase3": {
+    "deliverable": "docs/CONTROLLER_SPEC.md",
+    "frontier_correction_to_solo": "8/10 compounds ban outcome metrics as controller inputs entirely (process-only diet) \u2014 stricter than the solo design's outcome-reading probe arms",
+    "solo_contribution_adopted": "aging liveness queue in 9/10 compounds; ledger constitution in most",
+    "solo_trial": {
+      "artifact": "9ec6cc1f66d8",
+      "final_status": "accepted",
+      "gauntlet": "program crit pass; trial guard blocked a paraphrase-flip conviction; argumentative case refuted it; rebuttal refuted the case's validity node; design REINSTATED (derived); held accepted through released cycles"
+    },
+    "spend": {
+      "p3a2": 451870,
+      "p3a_partial_interrupted": "~150k est",
+      "p3b": 112894,
+      "solo_trial": 22944
+    },
+    "synthesis": {
+      "accepted_compounds": 10,
+      "candidates": 31,
+      "compounds": [
+        {
+          "claim": "A compound design where the constitution is a generator/tribunal ledger with fail-static revert, the update rule is a control barrier function constrained by the tribunal's rulings, the detector is an adversarial market using process-only signals, and the liveness guarantee is the aging queue integrated into the tribunal's docket, but this introduces a subtle Goodhart path because the controller can influence adjudication parameters indirectly through market betting strategies.",
+          "forbidden": [
+            "Controller indirectly shapes tribunal parameters via market behavior, violating the principle of non-influence on adjudication parameters"
+          ],
+          "id": "0ccb951ff3a0998b1d12748d16da63b6d42fc0f470d2dc75f014da57b912a859"
+        },
+        {
+          "claim": "A minimal adversarial calibration market with liveness queue: controller and anti-controller place bets on knob changes using only process-signal diet and CBF envelopes; market resolution uses frozen baseline arms as reference for payout determination, and an aging priority queue ensures unresolved bets are escalated \u2014 no causal graph, no ledger constitution beyond market rules.",
+          "forbidden": [
+            "Market rules are altered based on outcomes",
+            "Anti-controller colludes with controller to ignore process degradations"
+          ],
+          "id": "50e017285e296eb1c8731fd080b65f43c353d27e47f11e6a3dddccbd814fa822"
+        },
+        {
+          "claim": "A constitutional, tri-loop design where a fixed causal graph provides immutable dependency rules, an adversarial market pit controller vs anti-controller with process-only signals prevents Goodhart, control barrier envelopes ensure safety, frozen baselines detect drift, and an aging liveness queue guarantees progress \u2014 all governed by a typed-dependency ledger forbidding influence on adjudication parameters.",
+          "forbidden": [
+            "Controller attempts to modify adjudication thresholds",
+            "Anti-controller bribes generator tribunal"
+          ],
+          "id": "51608c7284426e0d42be69c5b6a00e62b52e6e073f40ee9e1fe8fa23d36d0b16"
+        },
+        {
+          "claim": "The design uses formal control barrier functions as the constitution, with immutable fallback to frozen baselines, and combines with an aging liveness queue that triggers upon stagnation in safe envelope expansion, while completely avoiding outcome metrics.",
+          "forbidden": [
+            "Controller adjusts CBF parameters based on outcome metrics"
+          ],
+          "id": "5d97b89fe46b64183fcdfa01444ac622a4c3b64493dbc13dc64655aaa02886fc"
+        },
+        {
+          "claim": "A causal-invariance compound design uses a fixed causal graph with frozen reference arms for Goodhart detection, do-operator interventions respecting control barrier functions, and an aging liveness queue that escalates reference-arm tasks without feeding back into the causal model.",
+          "forbidden": [
+            "updating causal graph from outcomes",
+            "liveness queue influencing causal estimates or barrier definitions"
+          ],
+          "id": "6ee2101f21e47b6ce7f7694d388a53e224a5a917ecb2c1b82e91507aaa81bd28"
+        },
+        {
+          "claim": "A purely degenerative, homeostatic design without outcome telemetry: detector uses only process-internal degradation signals (truncation, schema invalidity, resource exhaustion); update rule adjusts knobs via direct degradation gradients bounded by CBFs; liveness is embedded in the aging of degradation signals themselves, with zero dependence on adjudication or outcomes.",
+          "forbidden": [
+            "outcome data leaking into controller",
+            "liveness queue affecting barrier definitions"
+          ],
+          "id": "7ffea3119ee877f0f2873bcb1f019fcbf914447f4c31ce37dbe626b3b052309f"
+        },
+        {
+          "claim": "A compound design legally separates constitutional oversight (knob-ledger tribunal), adversarial knob-delta betting within safe envelopes, process-only signal diet, and an aging liveness queue, with dependencies strictly from update rule to detector signals and constitutional bounds, never influencing tribunal parameters.",
+          "forbidden": [
+            "controller influencing tribunal adjudication parameters",
+            "outcome metrics leaking into controller via detector"
+          ],
+          "id": "9195e139cb3f8662f0810f248caec23e85a92098eb5036b67882ede47c9d4352"
+        },
+        {
+          "claim": "Compound design with process-only signal diet driver for a generator-tribunal knob-ledger constitution, using control barrier functions as detector, aging queue as primary liveness guarantee, and process degradation as update rule signal, all operating without outcome metrics.",
+          "forbidden": [
+            "Controller adjusts tribunal safety parameters",
+            "Aging queue priority influenced by outcome proxies"
+          ],
+          "id": "abab46643839ff5f701a333cb1f0d134f0b16e910ebb72460c42ba6252899567"
+        },
+        {
+          "claim": "A pure cybernetic homeostat: knobs are adjusted solely to maintain process-signal health within predefined control barrier envelopes, using a single feedback loop with no outcome visibility, and validated by divergence from frozen baseline arms \u2014 no markets, no causal models, no adversarial components.",
+          "forbidden": [
+            "Controller uses outcome metric to adjust knobs",
+            "CBF envelope is updated based on controlled outcomes"
+          ],
+          "id": "b8ada07d150658545c12d0723c0e8d559e02a69ce2ce35d8ba13d0dec7326ba5"
+        },
+        {
+          "claim": "A compound design where a fixed causal graph serves as the constitution, control barrier functions enforce safe knob envelopes as the update rule, process-only signals detect structural degradation, and an aging priority queue ensures liveness, eliminating Goodhart paths by disallowing any influence over adjudication parameters.",
+          "forbidden": [
+            "Any component modifies barrier function parameters based on runtime data.",
+            "Detector uses outcome metrics to trigger updates.",
+            "Liveness queue reprioritization depends on adjudication outcomes rather than logged events."
+          ],
+          "id": "fc119cd8fd9ef2f8d53e714153a3aebb33e973e7e049dd7bfc57250eb96c8237"
+        }
+      ]
+    }
+  },
   "phases": {
     "p1_focus_locked": "~1.17M tokens across container restart",
     "p2_released": 1101329

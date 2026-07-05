@@ -108,3 +108,28 @@ exists because both ran.
 
 Run spend ~2.27M (phase 1: ~1.17M across restart; phase 2: 1.10M).
 Cumulative ~7.4M of the 8M budget; **~600k remains** (phase 3 fits).
+
+## Phase 3 outcome (2026-07-05)
+
+- **The solo design's trial was the system's finest hour**: program
+  criticism passed; the trial guard blocked a paraphrase-flip conviction
+  attempt; an argumentative case then refuted the design — resting on a
+  factual error (adjudication here IS log-deterministic) while exposing
+  a real phrasing ambiguity (dependency on court outcomes vs influence
+  over court parameters). A rebuttal attacking the case's validity node
+  refuted the case, and the design REINSTATED by derivation, then held
+  accepted through the released criticism cycles. Refute → rebut →
+  reinstate, all live, all on the record.
+- **Synthesis: 31 compound candidates, 10 accepted.** They converge on
+  one architecture: two-ledger constitution (+ fixed causal graph),
+  process-only signals inside control-barrier envelopes as the update
+  rule, frozen reference arm as detector (market variant optional),
+  aging liveness queue — with acyclic component dependencies.
+- **The frontier corrected the solo design**: 8/10 compounds ban outcome
+  metrics as controller inputs entirely — stricter than the solo
+  design's probe arms. The solo design's liveness queue was adopted by
+  9/10. The synthesis is better than either source.
+- Deliverable: `docs/CONTROLLER_SPEC.md` — the implementation blueprint,
+  with the seven forbidden cases as its test suite.
+- Phase 3 spend ~740k of the authorized 1.2M (incl. the interrupted
+  partial); program total ~3.0M across all phases and restarts.
