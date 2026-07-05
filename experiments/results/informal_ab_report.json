@@ -1,0 +1,102 @@
+{
+  "experiment": "informal-ab (experiments/informal_ab_prereg.yaml)",
+  "outcome": "inconclusive",
+  "pair_wins": {
+    "harness": 0,
+    "solo": 0,
+    "tie": 3
+  },
+  "pairs": [
+    {
+      "rank": 0,
+      "votes": {
+        "pro/off": {
+          "orders": [
+            "A",
+            "A"
+          ],
+          "vote": null
+        },
+        "flash/default": {
+          "orders": [
+            "neither",
+            "B"
+          ],
+          "vote": null
+        }
+      },
+      "net": 0,
+      "outcome": "tie"
+    },
+    {
+      "rank": 1,
+      "votes": {
+        "pro/off": {
+          "orders": [
+            "A",
+            "A"
+          ],
+          "vote": null
+        },
+        "flash/default": {
+          "orders": [
+            "A",
+            "A"
+          ],
+          "vote": null
+        }
+      },
+      "net": 0,
+      "outcome": "tie"
+    },
+    {
+      "rank": 2,
+      "votes": {
+        "pro/off": {
+          "orders": [
+            "A",
+            "A"
+          ],
+          "vote": null
+        },
+        "flash/default": {
+          "orders": [
+            "neither",
+            "A"
+          ],
+          "vote": null
+        }
+      },
+      "net": 0,
+      "outcome": "tie"
+    }
+  ],
+  "harness_top3": [
+    "{\"claim\": \"The Republic collapsed because the institutions designed for a city-state could not govern a Mediterranean empire, generating relentless crises that justified and normalized the delegation of emergency powers to individuals, who then refused to surrender them.\", \"mechanism\": \"Institutional scale-failure and emergency-power lock-in. The Republican constitution\u2014annual magistracies, collegiality, Senate guidance\u2014was optimized for a compact polity where face-to-face politics and a small citizen militia sufficed. Territorial expansion created continuous, far-flung military threats (Cimbri, Mithridates, pirates) that demanded long-term, large-scale commands (e.g., Marius's consulships, Pompey's lex Gabinia). These extended proconsular commands concentrated military resources, foreign policy, and patronage in single hands for years, breaking the principle of annual accountability. Each crisis set a precedent for extraordinary powers; each returning commander threatened to dominate domestic politics with veteran settlements and wealth. The Senate's attempts to reclaim control (e.g., by denying land distribution or assigning successor governors) backfired, provoking commanders to march on Rome. Over decades, the accepted 'solution' to empire was permanent autocracy, culminating in Augustus's principate\u2014a rationalized emergency regime that never ended. This was not mere ambition but structural necessity: the polycentric governance of the early Republic could not coordinate defense and administration across the Mediterranean without a central executive.\", \"scope\": {\"covers\": [\"institutional inadequacy\", \"rise of extraordinary commands\", \"transition from city-state to empire\"], \"excludes\": [\"moral decline\", \"popular revolutionary movements\", \"sharp class conflict as primary driver\"]}, \"forbidden\": [{\"case\": \"If the Republic had successfully developed a federal or provincial administrative structure with rotating commands and civilian oversight that kept military power fragmented and subordinate to Senate-decreed policy, and no commander had felt compelled to march on Rome to secure his veterans' interests\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This explanation treats the collapse as a constitutional adaptation problem. It directly contradicts the 'great man' narrative by making individual ambition epiphenomenal to structural deficits. It suggests that any ancient city-state republic would fail when tasked with imperial scale, barring institutional revolution.\"}",
+    "{\"claim\": \"The Republic collapsed because ambitious military commanders subverted the constitutional order by creating armies loyal to themselves rather than the state, a process enabled by the Senate's short-sighted refusal to accommodate the Italians and professionalize the legions earlier.\", \"mechanism\": \"The Senate's resistance to extending citizenship to Italian allies (until after the Social War) and its reliance on temporary levies left soldiers dependent on their generals for pay and land upon discharge. This turned legions into private clients. Commanders like Marius, Sulla, and Caesar leveraged their armies to intimidate the Senate and seize power, with each civil war further legitimizing military intervention in politics.\", \"scope\": {\"covers\": [\"133-27 BC\", \"Marian reforms\", \"civil wars\"], \"excludes\": [\"purely ideological conflicts without military backing\", \"economic crises unrelated to army loyalties\"]}, \"forbidden\": [{\"case\": \"If the Senate had successfully implemented a system of universal citizenship and state-funded veteran settlements before the Social War, and if generals consistently disbanded their armies upon returning to Rome, the mechanism would not function.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"If the post-Marian legions consistently refused to follow their commanders into civil conflict, showing primary loyalty to the Senate, the account would be refuted.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This emphasizes the institutional vulnerability: a citizen militia was not designed for prolonged foreign occupation. The delay in reforming the military and integrating the Italians created a power vacuum that ambitious generals filled. The Republic's own military success outsourced violence to individuals who then turned it inward.\"}",
+    "{\"claim\": \"The Republic collapsed not due to any single structural flaw, but because a series of contingent, impactful events (e.g., the Gracchan assassinations, the Social War, Sulla's march on Rome) triggered a positive feedback loop of norm-breaking and escalating violence that made autocracy the only stable equilibrium.\", \"mechanism\": \"Each act of political violence\u2014starting with the killing of Tiberius Gracchus\u2014established a new, lower norm for acceptable political behavior. This 'norm erosion' escalated in a ratchet-like manner: each transgression made the next more thinkable and less risky. By the time of Caesar and Pompey, the constitutional order was a hollow shell; civil war became the default dispute-resolution mechanism. The eventual victor, Octavian, simply consolidated what had already become a military monarchy in all but name.\", \"scope\": {\"covers\": [\"133-27 BC\", \"norm erosion\", \"political violence\"], \"excludes\": [\"predetermined decline based solely on size\", \"economic determinism\"]}, \"forbidden\": [{\"case\": \"If the assassination of Tiberius Gracchus had been universally condemned and led to a restoration of strict adherence to traditional norms with no further political killings for generations, the norm-erosion cascade would not have started.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"If after Sulla's proscriptions and 'reforms' the Republic had returned to stable, non-violent senatorial rule without any further military interventions for several decades, the mechanism would be invalidated.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account is path-dependent and highlights the role of agency and contingency. It explains why the Republic could survive for centuries and then collapse rapidly: a critical threshold of norm violation was crossed. It aligns with modern research on democratic backsliding and political norm erosion.\"}"
+  ],
+  "solo_top3": [
+    "{\"claim\": \"The concentration of wealth from imperial conquests empowered a few senatorial families who used their riches to build private armies loyal to them, undercutting the collective aristocratic power-sharing.\", \"mechanism\": \"Military loyalties shifted from the state to individual commanders because soldiers, increasingly drawn from the landless poor, depended on their generals for land and bonuses, enabling ambitious nobles to wield personal armies against the Senate.\", \"scope\": {\"covers\": [\"Roman Republic 133-27 BC\", \"Late Republic civil wars\"], \"excludes\": [\"Earlier periods of conquest without private armies\", \"Non-Roman republics\"]}, \"forbidden\": [{\"case\": \"If after the Punic Wars, returning soldiers were systematically settled on public land without relying on individual patrons, preventing the formation of client armies.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"If laws were effectively enforced to limit landholdings and prevent the rise of latifundia, maintaining a class of small citizen-farmers who formed the traditional army.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate highlights the shift in military dependency from the state to generals. Marius's reforms are a key turning point, but the underlying cause is elite competition fueled by unequal wealth. The mechanism is the client-army dynamic.\"}",
+    "{\"claim\": \"The concentration of military power in the hands of individual commanders, due to the Marian reforms and prolonged foreign wars, allowed ambitious generals to build personal armies loyal to them rather than the state, enabling them to seize power.\", \"mechanism\": \"Institutional: The shift from a citizen militia bound by property qualifications to a professional standing army recruited from the landless poor, who looked to their commanders for pay and land grants upon discharge, created a direct patron-client link between soldiers and generals. This undermined the Senate's control over military force and incentivized generals to use their armies for political ends, culminating in civil wars and the rise of a sole ruler.\", \"scope\": {\"covers\": [\"Late Roman Republic (107-27 BC)\", \"Civil wars of Sulla, Caesar, Pompey, Octavian\", \"Rise of warlord politics\"], \"excludes\": [\"Early and Middle Republic's successful military expansion without military coups\", \"Stable polities with professional armies that remained under civilian control (e.g., modern democracies)\"]}, \"forbidden\": [{\"case\": \"If after the Marian reforms, soldiers continued to show primary loyalty to the Senate and refused to march on Rome when commanded by their generals.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"If land distribution for veterans was consistently managed by the Senate without sparking political conflict that forced soldiers to depend on their commanders.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"If a general with a personally loyal army had attempted to march on Rome and was swiftly abandoned by his troops due to overriding Republican sentiment.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This mechanism emphasizes the institutional innovation of the Marian reforms creating a structural incentive for military insubordination. The counterfactual checks probe whether the personal loyalty to commanders was indeed the critical factor.\"}",
+    "{\"claim\": \"The Roman Republic collapsed because military reforms tied soldiers' loyalty to generals rather than the state.\", \"mechanism\": \"Marius's reforms abolished the property qualification for military service, creating a professional army of landless volunteers who depended on their generals for pay, bonuses, and retirement land grants. This shifted allegiance from the Senate and People of Rome to individual commanders, enabling generals to use legions as personal tools for political domination.\", \"scope\": {\"covers\": [\"Period 107-27 BC\", \"Civil wars led by Sulla, Caesar, and Octavian\", \"Senate's inability to control generals\"], \"excludes\": [\"Earlier centuries where citizen-soldier model maintained republican loyalty\", \"Economic causes not directly related to army structure\"]}, \"forbidden\": [{\"case\": \"After Marius's reforms, legions consistently refused to follow their generals against Rome.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Military clientelism is a classic explanation. The mechanism is concrete: soldiers' economic dependence on commanders created a structural incentive for civil war. The forbidden case would directly contradict the loyalty shift.\"}"
+  ],
+  "solo_meta": {
+    "n_candidates": 111,
+    "n_skeletons": 107,
+    "tokens": {
+      "prompt_tokens": 47885,
+      "completion_tokens": 42914,
+      "total": 90799,
+      "budget": 65000,
+      "calls": 27
+    }
+  },
+  "scoring_tokens": {
+    "prompt_tokens": 12528,
+    "completion_tokens": 5775,
+    "total": 18303,
+    "budget": 25000,
+    "calls": 12
+  }
+}
