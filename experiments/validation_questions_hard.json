@@ -1,0 +1,22 @@
+[
+  {"id": "h01", "q": "A worker earns $18/hour for the first 40 hours in a week and 1.5 times that rate for overtime. If she worked 47 hours, what is her total pay in dollars?", "accept": ["909"]},
+  {"id": "h02", "q": "A rectangle has a perimeter of 54 cm and its length is exactly twice its width. What is its area in square centimeters?", "accept": ["162"]},
+  {"id": "h03", "q": "How many integers from 1 to 200 inclusive are divisible by 3 but not by 5?", "accept": ["53"]},
+  {"id": "h04", "q": "A car loses 20% of its current value every year. Starting at $25000, what is its value after exactly 3 years, in dollars?", "accept": ["12800"]},
+  {"id": "h05", "q": "The sum of three consecutive even integers is 138. What is the largest of the three?", "accept": ["48"]},
+  {"id": "h06", "q": "A recipe for 4 servings needs 3 eggs. Using the same ratio, how many whole eggs are needed for 30 servings (you cannot use a fraction of an egg)?", "accept": ["23"]},
+  {"id": "h07", "q": "A train departs at 9:40 and arrives at 13:25 the same day. How many minutes long is the journey?", "accept": ["225"]},
+  {"id": "h08", "q": "A fair six-sided die is rolled twice. What is the probability that the two rolls sum to exactly 7, expressed as a percentage rounded to one decimal place?", "accept": ["16.7"]},
+  {"id": "h09", "q": "A number, when increased by 30%, equals 91. What was the original number?", "accept": ["70"]},
+  {"id": "h10", "q": "How many three-digit numbers (100 to 999) have all three digits different from each other?", "accept": ["648"]},
+  {"id": "h11", "q": "A tank fills at 35 liters per minute and simultaneously drains at 15 liters per minute. Starting empty, how many minutes does it take to reach 4200 liters?", "accept": ["210"]},
+  {"id": "h12", "q": "$2000 is invested at 10% annual interest compounded yearly. What is the total amount after exactly 2 years, in dollars?", "accept": ["2420"]},
+  {"id": "h13", "q": "A clock loses 4 minutes every hour. It is set correctly at noon. When the true time is 6:00 PM the same day, how many minutes behind the true time is the clock showing?", "accept": ["24"]},
+  {"id": "h14", "q": "What is the units digit of 7 raised to the power 2023?", "accept": ["3"]},
+  {"id": "h15", "q": "A pizza is cut with 4 straight cuts, each passing through the exact center. What is the number of pieces produced?", "accept": ["8"]},
+  {"id": "h16", "q": "If 5 workers build a wall in 12 days, how many days would 8 workers take to build the same wall at the same rate?", "accept": ["7.5"]},
+  {"id": "h17", "q": "A jar contains 12 red and 8 blue marbles. Two are drawn at random without replacement. What is the probability that both are red, as a percentage rounded to one decimal place?", "accept": ["34.7"]},
+  {"id": "h18", "q": "The three angles of a triangle are in the ratio 2:3:4. What is the largest angle, in degrees?", "accept": ["80"]},
+  {"id": "h19", "q": "How many diagonals does a decagon (10-sided polygon) have?", "accept": ["35"]},
+  {"id": "h20", "q": "A store discounts an $80 item by 25%, then adds 8% sales tax on the discounted price. What is the final price in dollars?", "accept": ["64.8"]}
+]

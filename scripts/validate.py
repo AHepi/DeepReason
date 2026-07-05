@@ -124,8 +124,11 @@ def main() -> int:
     parser.add_argument("--crit-model", default=None,
                         help="separate critic model (default: same as --model)")
     parser.add_argument("--tag", default="", help="suffix for report/checkpoint filenames")
+    parser.add_argument("--questions", default=None, help="path to a questions json")
     args = parser.parse_args()
-    global OUT, CKPT
+    global OUT, CKPT, QUESTIONS
+    if args.questions:
+        QUESTIONS = json.loads(Path(args.questions).read_text())
     if args.tag:
         OUT = OUT.with_name(f"validation_report_{args.tag}.json")
         CKPT = CKPT.with_name(f"validation_checkpoint_{args.tag}.json")
