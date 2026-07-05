@@ -1,0 +1,44 @@
+# Pre-registration: informal-domain A/B (T2 of the test battery)
+# Committed BEFORE either arm runs.
+#
+# Question: does the full conjecture-criticism harness produce better
+# informal-domain output than raw generation at a matched token budget?
+# This is the harness's actual value proposition, and the regime where
+# criticism demonstrably acts (criticism-suite trial survival rate 31.8%);
+# the mechanically-checkable regime was closed by T1c (no error mass).
+#
+# Gate (passed): judge battery measured 0.0 planted-flaw error / 0.0
+# verbosity bias for both deployed ensemble seats (pro/reasoning-off,
+# flash/reasoning-default) — the scorer is calibrated.
+
+arms:
+  harness: scripts/live_run.py --suite republic --root runs/ab_harness
+    --token-budget 70000 (v4-pro generation, certified judge ensemble,
+    full Conj->Crit->Adj with trials). Top 3 = ACCEPTED artifacts addressed
+    to pi-republic that parse as skeletons, ranked by state.hv descending,
+    then earliest registration seq.
+  solo: same generator (v4-pro, temperature 1.0, reasoning off, max_tokens
+    4000, json_mode), same information (pi-republic description + the
+    std-hist rubric verbatim), ConjecturerOutput contract, candidates
+    accumulated to ~60k tokens; then ONE self-selection call picks its own
+    top 3 (the raw-model analogue of internal quality control).
+
+scoring:  # blind: content only, no provenance
+  pairs: rank-matched top-3 vs top-3 (3 pairs)
+  per pair, per judge seat (pro/reasoning-off, flash/reasoning-default):
+    pairwise ruling with mandatory decisive_point, BOTH presentation
+    orders; a seat votes only if its two orders agree on the real winner
+    (order-swap consistency), else it abstains
+  pair outcome: net seat votes (harness wins > 0, solo wins < 0, tie 0)
+  secondary: absolute rubric verdict (pass/fail vs std-hist) per artifact
+    from each seat
+
+outcome_mapping:
+  harness_wins: harness takes at least 2 of 3 pairs (net votes)
+  solo_wins: solo takes at least 2 of 3 pairs
+  inconclusive: anything else (including mass abstention)
+  caveats: n=3 pairs, one problem, one provider — a directional reading,
+    not a general verdict; both arms share one generator so this measures
+    the marginal value of the criticism/adjudication apparatus, not model
+    quality.
+budget: harness 70k + solo 65k + scoring <= 20k  (~155k total)
