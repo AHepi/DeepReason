@@ -1,0 +1,58 @@
+# Pre-registration: the decisive criticism experiment
+# Committed BEFORE any model call on the hard2 question set (first-look rule).
+#
+# Provenance: the criticism suite (runs/criticism, report
+# experiments/results/criticism_design_report.json) left two rival surviving
+# theories. This experiment executes the decisive test both point at, testing
+# the POSITIVE, measurable claim first (falsificationist ordering):
+#
+#   d239d34e54e6 (regime theory): criticism-filtering beats self-consistency
+#     when majorities are contested — base error high, k moderate — and a
+#     CONFIDENCE-based critic (flagging low-confidence candidates) breaks
+#     near-ties correctly. Registered forbidden case: "Experiment with
+#     confidence-based critic on high base error and optimized threshold
+#     yields harness accuracy <= self-consistency."
+#   57e09ea4045b (impossibility claim): without precision=1.0 on flagged
+#     items, filtering adds noise and cannot beat SC; any observed win is
+#     sampling error.
+
+design:
+  generator_and_critic_model: deepseek-v4-flash   # weaker model to raise base error
+  k: 5                                            # candidates per question
+  questions: hard (20 q) + hard2 (24 q) = 44      # committed before first look
+  confidence_signal: mean token surprisal of the generation (-mean logprob),
+    captured via logprobs at generation time; NO extra calls
+  arms:
+    single: candidate[0]
+    self_consistency: majority vote over all k
+    llm_critic (harness): majority over candidates the critic did not refute
+    confidence_filtered: majority over candidates with surprisal <= threshold;
+      threshold tuned on the CALIBRATION split only; empty pool falls back to
+      the full pool (same fallback rule as the harness arm)
+  split: questions sorted by id; even index -> calibration (threshold tuning),
+    odd index -> test (all reported comparisons)
+  budget: probe <= 60_000 tokens; full collection <= 300_000 tokens
+
+stages:
+  probe:
+    what: generation only (no critic calls), k=5, questions h2-01..h2-08
+    decision_rule: proceed to full collection iff probe candidate base error
+      >= 0.10; otherwise the regime is unreachable with this model/set —
+      report "regime not reached", do not run the full collection
+  full:
+    what: full collection (gen + critic) over all 44 questions with
+      confidence capture; then score per the arms above
+
+outcome_mapping:  # decided BEFORE looking at results
+  regime_reached: test-split candidate base error in [0.15, 0.60]
+  refutes_d239_forbidden_case: regime_reached AND confidence_filtered test
+    accuracy <= self_consistency test accuracy (net fixed-minus-broke <= 0)
+  supports_d239_and_refutes_57e0_universal_reading: regime_reached AND
+    confidence_filtered strictly beats self_consistency on the test split
+    with net fixed-minus-broke >= +2 questions
+  regime_not_reached: no verdict on either theory; report the escalation
+    options (weaker model, adversarial question generation) instead
+  caveats: n_test ~= 22 questions is small; any positive result is a
+    single-provider, single-model-family observation and says nothing about
+    generalization. Both verdicts will be GROUNDED back into runs/criticism
+    as evidence artifacts against the registered forbidden cases.
