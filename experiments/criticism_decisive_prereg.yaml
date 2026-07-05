@@ -39,6 +39,20 @@ stages:
     decision_rule: proceed to full collection iff probe candidate base error
       >= 0.10; otherwise the regime is unreachable with this model/set —
       report "regime not reached", do not run the full collection
+    result: RAN 2026-07-05 — base error 0.0 (40/40 correct). The hard2 trap
+      questions are classic puzzles (memorized); regime NOT reached on this
+      set. Per the escalation clause, probe2 registered below BEFORE running.
+  probe2:
+    what: generation only, k=5, questions h01..h08 of the ORIGINAL hard set
+      (novel randomized arithmetic, never measured on flash)
+    decision_rule: proceed iff probe2 base error >= 0.10; the full collection
+      then runs on the hard set ONLY (20 q; calibration = even index, test =
+      odd index of sorted qids, as above). hard2 is dropped from the full
+      collection — measured base error 0 means it can only dilute the regime.
+      If probe2 also fails the gate, report regime-not-reached as the
+      experiment's outcome: this provider's weakest model does not err enough
+      on verifiable questions for filtering to matter (itself evidence
+      relevant to d239's scope clause).
   full:
     what: full collection (gen + critic) over all 44 questions with
       confidence capture; then score per the arms above
