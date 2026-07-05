@@ -22,6 +22,7 @@ def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> d
         try:
             admitted = conj(harness, problem_id, adapter, config, diagnostics)
         except (SchemaRepairError, EndpointError) as e:
+            harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
             diagnostics.append({"cycle": cycle, "dropped": str(e)})
             continue  # drop the cycle, logged (spec §9)
         for artifact in admitted:
@@ -34,6 +35,7 @@ def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> d
                 try:
                     crit_argumentative(harness, artifact.id, adapter, config)
                 except (SchemaRepairError, EndpointError) as e:
+                    harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
                     diagnostics.append({"cycle": cycle, "dropped": str(e)})
     survivors = [
         aid

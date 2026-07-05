@@ -97,6 +97,33 @@ def stance_weight(harness, school_id: str, config) -> float:
     return max(0.0, 1.0 - lineage_size(harness, school_id) / decay)
 
 
+def _with_cross_examiner(harness, assigned: list[str], schools: dict, config) -> list[str]:
+    """Cross-examination floor (§11.2, the XEXAM_SHARE knob): ownership
+    allocation is rich-get-richer — a refuted candidate spawns a successor
+    OWNED by its school, so an early lead compounds (observed live: 64:1
+    lineage; the rival stance effectively never generated). When the
+    smallest lineage falls below XEXAM_SHARE of the owner's, it joins the
+    assignment as cross-examiner until it catches back up. Deterministic
+    (a function of log + config) and attention-only — never status."""
+    share = float(config.XEXAM_SHARE or 0)
+    if not share or len(schools) < 2:
+        return assigned
+    owner = assigned[0]
+    starved = min(
+        (s for s in schools if s not in assigned),
+        key=lambda s: (lineage_size(harness, s), s),
+        default=None,
+    )
+    if starved is None:
+        return assigned
+    # Integer floor: fires only once the owner has a real lead (at share
+    # 0.15, from owner lineage 7 up), so tiny early lineages keep pure
+    # ownership and the first mover isn't instantly cross-examined.
+    if lineage_size(harness, starved) < int(share * lineage_size(harness, owner)):
+        return assigned + [starved]
+    return assigned
+
+
 def allocate(harness, problem, schools: dict[str, dict], config) -> list[str]:
     """Deterministic function of (log, config) — no per-problem curation."""
     if not schools:
@@ -106,16 +133,21 @@ def allocate(harness, problem, schools: dict[str, dict], config) -> list[str]:
     # Fan-out classes: exactly where rival programmes should compete.
     if trigger in (SpawnTrigger.SEED, SpawnTrigger.DISCRIMINATION, SpawnTrigger.INTEGRATION):
         return everyone
-    # Ownership by provenance: lineages follow through on their problem-shifts.
+    # Ownership by provenance: lineages follow through on their problem-shifts —
+    # with a cross-examination floor so ownership cannot starve a rival school.
     if trigger in (SpawnTrigger.SUCCESSOR, SpawnTrigger.REMOVE_ARBITRARINESS):
         for fid in problem.provenance.from_:
             artifact = harness.state.artifacts.get(fid)
             if artifact is not None and artifact.provenance.school in schools:
-                return [artifact.provenance.school]
+                return _with_cross_examiner(
+                    harness, [artifact.provenance.school], schools, config
+                )
         return everyone
     # Other triggers: owner if known, else fan out.
     for fid in problem.provenance.from_:
         artifact = harness.state.artifacts.get(fid)
         if artifact is not None and artifact.provenance.school in schools:
-            return [artifact.provenance.school]
+            return _with_cross_examiner(
+                harness, [artifact.provenance.school], schools, config
+            )
     return everyone

@@ -12,13 +12,23 @@ import time
 
 from pydantic import BaseModel, ValidationError
 
-from deepreason.llm.endpoints import OpenAICompatEndpoint, resolve_model
+from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint, resolve_model
 from deepreason.llm.roles import TEMPLATES
 from deepreason.ontology.event import LLMCall
 
 
 class SchemaRepairError(RuntimeError):
-    """Bounded retries exhausted without schema-valid output."""
+    """Bounded retries exhausted without schema-valid output.
+
+    Carries ``spend`` — an LLMCall covering every attempt — so drop sites
+    can persist it via Harness.record_llm_calls: retry-exhausted calls burn
+    real tokens (8.4% of a live run) and must not vanish from the log (§0
+    accounting). EndpointError raised mid-retries gets the same attribute
+    stamped dynamically when prior attempts already spent tokens."""
+
+    def __init__(self, message: str, spend=None) -> None:
+        super().__init__(message)
+        self.spend = spend
 
 
 def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
@@ -104,7 +114,24 @@ class LLMAdapter:
         error = ""
         tokens_used = 0
         truncated_any = False
+        raw_ref = ""
         prompt_ref = self.blobs.put(prompt.encode())
+
+        def _spend(attempts: int) -> LLMCall | None:
+            if not tokens_used:
+                return None
+            return LLMCall(
+                role=role,
+                model=getattr(endpoint, "model", ""),
+                endpoint=getattr(endpoint, "name", ""),
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                tokens=tokens_used,
+                ms=int((time.monotonic() - started) * 1000),
+                attempts=attempts,
+                truncated=truncated_any,
+            )
+
         for attempt in range(self.retry_max + 1):
             if self.meter is not None:
                 self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
@@ -116,7 +143,13 @@ class LLMAdapter:
             # the error suffix, so the logged prompt must match the raw it
             # produced (replay/audit reconstructs the wire exchange, §0).
             prompt_ref = prompt_ref if not error else self.blobs.put(request.encode())
-            raw = endpoint.complete(request)
+            try:
+                raw = endpoint.complete(request)
+            except EndpointError as e:
+                # Prior attempts may have spent tokens — hand the caller the
+                # spend record so the drop site can log it.
+                e.spend = _spend(attempt)
+                raise
             if getattr(endpoint, "last_finish_reason", None) == "length":
                 truncated_any = True  # process signal for the controller
             usage = _usage_tokens(getattr(endpoint, "last_usage", None), request, raw)
@@ -150,7 +183,10 @@ class LLMAdapter:
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
             )
             return data, call
-        raise SchemaRepairError(f"role {role}: no schema-valid output after retries: {error}")
+        raise SchemaRepairError(
+            f"role {role}: no schema-valid output after retries: {error}",
+            spend=_spend(self.retry_max + 1),
+        )
 
 
 def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:

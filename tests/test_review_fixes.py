@@ -312,6 +312,78 @@ def test_every_llm_call_reaches_the_log(tmp_path):
     assert sum(e.llm.tokens for e in events_with_llm) == meter.total
 
 
+def test_retry_exhausted_spend_reaches_the_log(tmp_path):
+    """Live-run finding #2: retry-exhausted calls (SchemaRepairError) burned
+    8.4% of a 700k run's budget invisibly — metered but never logged. The
+    adapter now attaches a spend record to the exception and drop sites
+    persist it, so meter totals still reconcile with the log exactly."""
+    from deepreason.llm.budget import TokenMeter
+    from deepreason.scheduler.scheduler import Scheduler
+
+    h = Harness(tmp_path / "run")
+    h.register_commitment(Commitment(id="k-t", eval="predicate:True"))
+    h.register_problem(
+        Problem(
+            id="pi-t", description="t", criteria=["k-t"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    meter = TokenMeter()
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint(lambda p: "NOT JSON AT ALL")},
+        h.blobs, retry_max=2, meter=meter,
+    )
+    Scheduler(h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0)).run(2)
+
+    dropped = [e for e in h.log.read() if "dropped-call" in e.inputs]
+    assert len(dropped) == 2 and all(e.llm for e in dropped)  # one per cycle
+    assert dropped[0].llm.attempts == 3  # all retries recorded on the spend
+    logged = sum(e.llm.tokens for e in h.log.read() if e.llm)
+    assert logged == meter.total > 0  # nothing invisible
+
+
+def test_cross_examination_floor_unstarves_minority_school(tmp_path):
+    """Live-run finding: successor-ownership allocation is rich-get-richer
+    (observed 64:1 lineage — the rival stance never generated). The
+    XEXAM_SHARE floor adds the smallest lineage as cross-examiner whenever
+    it falls below the share of the owner's lineage."""
+    from deepreason.capture import schools as sch
+    from deepreason.ontology import Provenance
+
+    h = Harness(tmp_path / "run")
+    roster = sch.init_schools(h, Config(N_SCHOOLS=2))
+    # Grow school-0's lineage; school-1 stays at zero.
+    for i in range(10):
+        h.create_artifact(
+            f"school-0 conjecture {i}",
+            provenance=Provenance(role="conjecturer", school="school-0"),
+        )
+    owner_artifact = next(
+        a for a in h.state.artifacts.values() if a.provenance.school == "school-0"
+    )
+    h.register_problem(
+        Problem(
+            id="succ:x", description="successor", criteria=[],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "successor", "from": [owner_artifact.id]}
+            ),
+        )
+    )
+    problem = h.state.problems["succ:x"]
+    config = Config(N_SCHOOLS=2, XEXAM_SHARE=0.15)
+    # Starved: 0 < 0.15 * 10 => school-1 joins as cross-examiner.
+    assert sch.allocate(h, problem, roster, config) == ["school-0", "school-1"]
+    # Balanced lineages => ownership alone (floor inactive).
+    for i in range(3):
+        h.create_artifact(
+            f"school-1 conjecture {i}",
+            provenance=Provenance(role="conjecturer", school="school-1"),
+        )
+    assert sch.allocate(h, problem, roster, config) == ["school-0"]
+    # Floor disabled => ownership alone regardless of starvation.
+    assert sch.allocate(h, problem, roster, Config(N_SCHOOLS=2, XEXAM_SHARE=0)) == ["school-0"]
+
+
 def test_ladder_interventions_clear_after_window(tmp_path):
     """A response-ladder intervention is active for CAPTURE_W cycles, then
     clears — it must not latch on for the rest of the run."""

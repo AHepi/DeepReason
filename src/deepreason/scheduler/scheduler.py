@@ -90,6 +90,13 @@ class Scheduler:
 
     # -------------------------------------------------------------- #
 
+    def _drop(self, e: Exception) -> None:
+        """A dropped call still spent tokens: persist its spend record (the
+        adapter attaches one to SchemaRepairError/EndpointError), then log
+        the drop reason in diagnostics."""
+        self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
+        self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+
     def _select_problem(self):
         state = self.harness.state
         if self.config.FOCUS_PROBLEM is not None:
@@ -166,7 +173,7 @@ class Scheduler:
                         self.diagnostics, embedder=self.embedder,
                     )
                 except (SchemaRepairError, EndpointError) as e:
-                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                    self._drop(e)
     def _arg_crit(self, admitted_ids: list[str]) -> None:
         """Argumentative pass over the admitted-and-still-accepted targets.
         With CRIT_BATCH_K set, up to K targets share one call (angle 3 of
@@ -193,7 +200,7 @@ class Scheduler:
                     harness, eligible[i : i + size], self.adapter, config
                 )
             except (SchemaRepairError, EndpointError) as e:
-                self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                self._drop(e)
 
     def step(self) -> None:
         harness, config = self.harness, self.config
@@ -227,7 +234,7 @@ class Scheduler:
                         self.adapter, config, self.diagnostics,
                     )
                 except (SchemaRepairError, EndpointError) as e:
-                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                    self._drop(e)
             reach_sweep(harness)
             self._capture_step()
             self._cycles += 1
@@ -250,7 +257,7 @@ class Scheduler:
                 specs, spec_call = generate_specs(harness, self.adapter, problem, config)
                 harness.record_measure(inputs=["spec-generation", problem.id], llm=spec_call)
             except (SchemaRepairError, EndpointError) as e:
-                self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                self._drop(e)
 
         for school_id in assigned:
             school = self._school_dict(school_id) if school_id else None
@@ -272,7 +279,7 @@ class Scheduler:
                         embedder=self.embedder,
                     )
             except (SchemaRepairError, EndpointError) as e:
-                self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                self._drop(e)
                 continue
             for artifact in admitted:
                 self._criticize(artifact)
@@ -302,7 +309,7 @@ class Scheduler:
         try:
             paraphrase_invariance_audit(self.harness, self.adapter, self.config)
         except (SchemaRepairError, EndpointError) as e:
-            self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+            self._drop(e)
 
     def _research_step(self) -> None:
         """Standing exogenous schedule (§12): work one uncovered research
@@ -339,7 +346,7 @@ class Scheduler:
                         self.harness, self.adapter, aid, self.config.HV_K, self.embedder
                     )
                 except (SchemaRepairError, EndpointError) as e:
-                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                    self._drop(e)
                 return
 
     def _capture_step(self) -> None:

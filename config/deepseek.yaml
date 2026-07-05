@@ -54,6 +54,6 @@ roles:
   defender:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 900, json_mode: true }
   variator:             { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 3000, json_mode: true }
   judge:
-    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 1200, json_mode: true }
-    - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 1200, json_mode: true }
+    - { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 2400, json_mode: true }
+    - { endpoint: "https://api.deepseek.com", model: auto-alt, temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, reasoning: null, max_tokens: 2400, json_mode: true }
   synthesizer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.9, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true }
