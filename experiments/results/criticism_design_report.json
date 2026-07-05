@@ -1,0 +1,168 @@
+{
+  "experiment": "criticism-suite: when does harness-style criticism beat self-consistency",
+  "preregistration_commit": "e2c9948",
+  "config": {
+    "suite": "criticism",
+    "cycles": 40,
+    "token_budget": 700000,
+    "gen_model": "deepseek-v4-pro",
+    "judge_alt": "deepseek-v4-flash"
+  },
+  "meter": {
+    "budget": 700000,
+    "attempts": 356,
+    "prompt_tokens": 386948,
+    "completion_tokens": 272380,
+    "total": 659328
+  },
+  "log_accounting": {
+    "events": 696,
+    "llm_bearing_events": 293,
+    "logged_tokens": 604018,
+    "unlogged_retry_exhausted_tokens": 55310,
+    "note": "retry-exhausted calls (SchemaRepairError) are metered but produce no LLMCall, so their spend never reaches the log \u2014 identified follow-up"
+  },
+  "totals": {
+    "artifacts": 202,
+    "problems": 70,
+    "warrants": 67,
+    "survivors": 4
+  },
+  "problems_by_trigger": {
+    "seed": 1,
+    "successor": 63,
+    "integration": 2,
+    "remove-arbitrariness": 4
+  },
+  "trial_guard": {
+    "blocked": {
+      "referential-integrity": 8,
+      "ensemble-split": 4,
+      "paraphrase-flip": 3
+    },
+    "rubric_warrants": 7,
+    "survival_rate": 0.318
+  },
+  "audit_hits": 3,
+  "dropped_cycles": 6,
+  "survivors": [
+    {
+      "id": "044862fea6884dad68aea0166f3bad6a5246095a6a00f3d23ec095c4057e4b4b",
+      "school": "school-0",
+      "addressed_to": [
+        "succ:c6220a0699b5"
+      ],
+      "attacked_by": [
+        {
+          "id": "59675a6cc65a",
+          "status": "refuted"
+        }
+      ],
+      "content": {
+        "claim": "Criticism-filtering improves accuracy by breaking symmetry in near-ties, but only when the critic is a superforecaster that identifies low-confidence correct answers, acting asymmetrically on the margins.",
+        "mechanism": "SC fails when correct answers have low confidence, leading to near-ties or incorrect majorities. A critic that predicts when the model is likely to be wrong on a specific candidate can remove low-quality candidates, breaking ties in favor of the correct answer. This requires the critic to have high precision on low-confidence candidates (i.e., it identifies truly wrong answers) and the base model to produce a non-trivial proportion of such cases. The effect is largest when k is moderate (5-10) and base error creates many ties.",
+        "scope": {
+          "covers": [
+            "Questions with high dispersion of confidence",
+            "Critic trained on confidence/calibration signals",
+            "k small to moderate"
+          ],
+          "excludes": [
+            "High-confidence correct answers",
+            "Critic with random precision",
+            "Very large k where majority is robust"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Experiment shows no improvement over SC when ties are explicitly induced",
+            "eval": "rubric:std-crit-design"
+          }
+        ],
+        "prose_notes": "Inspired by artifact d239d... but extends it: the critic must be a superforecaster of model errors, not just a confidence filter. In current data, no ties exist (easy set SC=0.958, single=0.958, so no SC failures), so no room for improvement. Need to design questions that induce near-ties."
+      }
+    },
+    {
+      "id": "1b52aec0ecba413410fe6aad6729aab7c11bb2f0925a93fab87f3850cddd110a",
+      "school": "school-0",
+      "addressed_to": [
+        "succ:e54929a45d69"
+      ],
+      "attacked_by": [],
+      "content": "Criticism-filtering only succeeds when the answering model and critic share a similar error landscape, meaning the critic's failures are correlated with the model's near-ties. If the critic is a superforecaster but its errors are independent of the model's confusion zones, it may not help. Thus, integration requires that the critic is not just good overall, but specifically good at resolving the model's typical failure modes. This implies a dependency on the same training data or architectural biases."
+    },
+    {
+      "id": "57e09ea4045b178fa598543959d46394a040f7a27ea82fe8151a4a51e082459b",
+      "school": "school-0",
+      "addressed_to": [
+        "succ:5f5e8149844e"
+      ],
+      "attacked_by": [
+        {
+          "id": "cf3dc1a4854d",
+          "status": "refuted"
+        }
+      ],
+      "content": {
+        "claim": "Harness beats SC only when the critic acts as an oracle on a subset of questions where SC would otherwise fail, i.e., when the critic has perfect precision on flagged instances (precision=1.0), but that requires an ensemble or a verifier step that sacrifices recall; in all realistic scenarios with imperfect precision, harness introduces noise and cannot surpass SC.",
+        "mechanism": "SC is already an optimal error-reduction strategy for independent errors; any filtering that is not perfect on the flagged set risks removing correct votes. The only way filtering improves SC is if the flagged pool is enriched for errors absolutely\u2014meaning no false positives. This is practically unattainable without additional verification (e.g., checking against a trusted source). Without perfect precision, the expected error after filtering is higher than SC\u2019s, because the reduction in error from removing true positives is outweighed by the increase from removing correct answers, unless the critic has extraordinarily high recall. Since high precision and high recall are anti-correlated, the product (precision*recall) must exceed a threshold that is unreachable for boundedly rational critics.",
+        "scope": {
+          "covers": [
+            "any non-oracle critic (precision < 1)"
+          ],
+          "excludes": [
+            "systems with an infallible verification step",
+            "oracles"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "If the critic has any false positives (precision < 1), then there exists a distribution of errors and correct answers where harness underperforms SC.",
+            "eval": "rubric:std-crit-design"
+          },
+          {
+            "case": "If an experiment shows harness > SC with an imperfect critic, it must be due to sampling error or overfitting to the specific question set.",
+            "eval": "rubric:std-crit-design"
+          }
+        ],
+        "prose_notes": "This skeptical counterclaim posits that the provided data already shows the truth: harness never beats SC (they are equal). A decisive experiment would construct a critic with precision as close to 1 as possible (e.g., using self-verification with chain-of-thought) and test across varied error rates; if harness still fails to beat SC, it supports this claim. Within 300k tokens, one can generate candidates and critic judgments for 100 questions with varied difficulty."
+      }
+    },
+    {
+      "id": "d239d34e54e6c2ef22b91828e9a50752f4cfd5352bc71cd231cf797a75129247",
+      "school": "school-0",
+      "addressed_to": [
+        "succ:57e09ea4045b"
+      ],
+      "attacked_by": [
+        {
+          "id": "45f70fea8226",
+          "status": "refuted"
+        }
+      ],
+      "content": {
+        "claim": "Criticism-filtering improves accuracy by breaking symmetry in near-ties, but only when the critic is a superforecaster that identifies low-confidence candidates; the regime is high base error (>30%) and critic precision must be above a threshold that scales with base error.",
+        "forbidden": [
+          {
+            "case": "Experiment with confidence-based critic on base error=0.4 and optimized threshold yields harness accuracy <= self-consistency",
+            "eval": "rubric:std-crit-design"
+          }
+        ],
+        "mechanism": "Self-consistency treats all candidates equally, weighting them by 1/k. Harnessing with a confidence-based critic (which flags candidates with low model confidence) implicitly weights votes by an estimate of their reliability. In questions where the correct answer is in the minority among candidates (high base error), but the correct-answer candidates have higher confidence on average, filtering out low-confidence wrong answers can flip the majority. The mechanism is a confidence-weighted vote, with the critic acting as a threshold. This requires that confidence is correlated with correctness (assumption: model's internal confidence scores are available and informative). The critic's precision/recall on the flagged set improves when tuned on a calibration set.",
+        "prose_notes": "This connects to the literature on weighted voting and confidence-based answer selection. The experiment must collect model confidence scores for each candidate (e.g., average log-prob of generated tokens). The critic's threshold is tuned to maximize precision on a calibration set, balancing false flags. The mechanism is causal: confidence acts as a confounder affecting both flagging and correctness; conditioning on it improves the majority vote's composition. This is an atypical candidate because it relies on a specific implementation detail (confidence availability), which is often overlooked in standard harnessing proposals.",
+        "scope": {
+          "covers": [
+            "cases where model provides token probabilities as confidence",
+            "base error > 0.3",
+            "k=5",
+            "critic uses confidence threshold optimized on a held-out set"
+          ],
+          "excludes": [
+            "critics based solely on correctness labels (no confidence signal)",
+            "low base error where majorities are already correct"
+          ]
+        }
+      }
+    }
+  ]
+}
