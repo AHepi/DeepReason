@@ -161,8 +161,14 @@ def run_score(api_key: str, base_url: str, crossfamily: bool = False) -> int:
                     ruling, _ = adapter.call("judge", pack, PairwiseRuling)
                     return ruling.winner
 
-                r1 = rule(h_text, s_text)   # harness is A
-                r2 = rule(s_text, h_text)   # swapped: harness is B
+                try:
+                    r1 = rule(h_text, s_text)   # harness is A
+                    r2 = rule(s_text, h_text)   # swapped: harness is B
+                except (SchemaRepairError, EndpointError) as e:
+                    # A seat that errors abstains; it must not kill the panel.
+                    votes[seat_name] = {"orders": None, "vote": None,
+                                        "error": str(e)[:120]}
+                    continue
                 consistent = (r1, r2) in (("A", "B"), ("B", "A"))
                 vote = None
                 if consistent:
