@@ -11,6 +11,7 @@ construction (§17).
 
 import json
 
+from deepreason.canonical import canonical_json
 from deepreason.informal.appellate import spawn_audit_problem
 from deepreason.llm.contracts import JudgeRuling, PairwiseRuling, VariatorOutput
 from deepreason.ontology import Commitment, Provenance, Rule, Warrant, WarrantType
@@ -31,15 +32,19 @@ def _rubric_warrants(harness):
         yield warrant, transcript
 
 
-def _audit_warrant(harness, audit_commitment, nu_target: str, finding: dict):
-    """Register an audit critic carrying a program warrant against a nu."""
+def _audit_warrant(harness, audit_commitment, nu_target: str, finding: dict, llm=None):
+    """Register an audit critic carrying a program warrant against a nu.
+
+    ``llm`` is the decisive judge re-ruling that produced the finding — it is
+    logged on the critic event so replay, eval_report, and the controller's
+    process signals see each audit LLM call (§0), not just the live meter."""
     harness.register_commitment(audit_commitment)
     if any(
         w.commitment == audit_commitment.id and w.target == nu_target
         for w in harness.warrants.values()
     ):
         return None
-    trace_ref = harness.blobs.put(json.dumps(finding, sort_keys=True).encode())
+    trace_ref = harness.blobs.put(canonical_json(finding))
     audit_nu = harness.create_artifact(
         f"nu: the {audit_commitment.id} finding against {nu_target} is sound",
         provenance=Provenance(role="critic"),
@@ -58,19 +63,29 @@ def _audit_warrant(harness, audit_commitment, nu_target: str, finding: dict):
         provenance=Provenance(role="critic"),
         warrants=[warrant],
         rule=Rule.CRIT,
+        llm=llm,
     )
     harness.record_measure(inputs=[f"audit-hit:{nu_target}", audit_commitment.id])
     return critic
 
 
-def _judge_exchange(adapter, transcript: dict, exchange: str) -> str:
+def _judge_exchange(adapter, transcript: dict, exchange: str):
     pack = "\n".join([
         "Re-rule on this exchange (audit replay).",
         "THE CASE FOR FAIL:", exchange, "",
         "verdict=fail iff the case establishes the violation.",
     ])
-    ruling, _ = adapter.call("judge", pack, JudgeRuling)
-    return ruling.verdict
+    ruling, llm_call = adapter.call("judge", pack, JudgeRuling)
+    return ruling.verdict, llm_call
+
+
+def _log_calls(harness, calls) -> None:
+    """Persist LLM calls that did not land on a critic event (variator
+    paraphrases, non-decisive re-rulings) as Measure events, so no audit
+    call is missing from the event log's per-event llm records."""
+    for call in calls:
+        if call is not None:
+            harness.record_measure(inputs=["audit-llm"], llm=call)
 
 
 def paraphrase_invariance_audit(harness, adapter, config) -> list:
@@ -78,24 +93,31 @@ def paraphrase_invariance_audit(harness, adapter, config) -> list:
     hits = []
     for warrant, transcript in list(_rubric_warrants(harness)):
         exchange = f"{transcript['case']}\n{transcript['answer']}"
-        para, _ = adapter.call(
+        para, para_call = adapter.call(
             "variator",
             f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly "
             f"{config.TRIAL_PARAPHRASE_N} meaning-preserving paraphrases.",
             VariatorOutput,
         )
-        flips = [
-            p.content[:80]
-            for p in para.edits[: config.TRIAL_PARAPHRASE_N]
-            if _judge_exchange(adapter, transcript, p.content) != "fail"
-        ]
+        calls = [para_call]
+        flips = []
+        decisive = None
+        for p in para.edits[: config.TRIAL_PARAPHRASE_N]:
+            verdict, call = _judge_exchange(adapter, transcript, p.content)
+            calls.append(call)
+            if verdict != "fail":
+                flips.append(p.content[:80])
+                decisive = call
         if flips:
             critic = _audit_warrant(
                 harness, PARAPHRASE_AUDIT, warrant.validity_node,
-                {"warrant": warrant.id, "flips": flips},
+                {"warrant": warrant.id, "flips": flips}, llm=decisive,
             )
+            if decisive is not None:
+                calls.remove(decisive)
             if critic is not None:
                 hits.append(critic)
+        _log_calls(harness, calls)
     return hits
 
 
@@ -106,13 +128,16 @@ def premise_deletion_audit(harness, adapter, config) -> list:
     for warrant, transcript in list(_rubric_warrants(harness)):
         decisive = transcript["ruling"]["decisive_point"]
         exchange = f"{transcript['case']}\n{transcript['answer']}".replace(decisive, "")
-        if _judge_exchange(adapter, transcript, exchange) == "fail":
+        verdict, call = _judge_exchange(adapter, transcript, exchange)
+        if verdict == "fail":
             critic = _audit_warrant(
                 harness, PREMISE_AUDIT, warrant.validity_node,
-                {"warrant": warrant.id, "deleted": decisive[:120]},
+                {"warrant": warrant.id, "deleted": decisive[:120]}, llm=call,
             )
             if critic is not None:
                 hits.append(critic)
+        else:
+            _log_calls(harness, [call])
     return hits
 
 

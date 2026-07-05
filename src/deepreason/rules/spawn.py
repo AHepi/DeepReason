@@ -67,7 +67,7 @@ def scan_spawns(harness, config) -> list[Problem]:
     for aid, pids in addressed.items():
         if status.get(aid) != Status.REFUTED:
             continue
-        for pid in pids:
+        for pid in sorted(pids):
             parent = state.problems[pid]
             _spawn(
                 SpawnTrigger.SUCCESSOR,

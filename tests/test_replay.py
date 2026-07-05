@@ -15,8 +15,12 @@ from deepreason.ontology import (
 from tests.conftest import art, attack
 
 
-def build_scenario(root) -> tuple[Harness, dict[str, str]]:
-    """Standard-refutation scenario: refute, then reinstate via case law."""
+def build_scenario(root) -> tuple[Harness, dict[str, str], str]:
+    """Standard-refutation scenario: refute, then reinstate via case law.
+
+    Also returns the LIVE state snapshot captured at the moment the critic
+    refuted the target (before the reinstating attack) — so time-travel can
+    be checked against genuine live state, not against a second replay."""
     h = Harness(root)
     h.register_problem(
         Problem(
@@ -58,13 +62,16 @@ def build_scenario(root) -> tuple[Harness, dict[str, str]]:
             )
         ],
     )
+    # Live state at the refutation point, captured from the LIVE harness
+    # before the reinstating attack — the ground truth for time-travel.
+    live_at_critic = h.state.model_dump_json()
     attack(h, standard.id, "std-1-is-wrong")
-    return h, {"target": target.id, "standard": standard.id, "critic": critic.id}
+    return h, {"target": target.id, "standard": standard.id, "critic": critic.id}, live_at_critic
 
 
 def test_replay_reproduces_state_byte_for_byte(tmp_path):
     root = tmp_path / "run"
-    live, _ = build_scenario(root)
+    live, _, _ = build_scenario(root)
     snapshot = live.state.model_dump_json()
 
     reopened = Harness(root)  # materializes purely from the log
@@ -75,7 +82,7 @@ def test_replay_reproduces_state_byte_for_byte(tmp_path):
 
 def test_time_travel_truncated_replay(tmp_path):
     root = tmp_path / "run"
-    live, ids = build_scenario(root)
+    live, ids, live_at_critic = build_scenario(root)
     assert live.state.status[ids["target"]] == Status.ACCEPTED  # reinstated at head
 
     # Find the seq of the critic's registration: target refuted at that point.
@@ -87,5 +94,7 @@ def test_time_travel_truncated_replay(tmp_path):
     assert ids["standard"] in past.state.artifacts
     assert past.state.addr == [(ids["target"], "pi-1")]
 
-    # Truncated replay of a prefix matches the live state at that prefix.
-    assert Harness.at(root, critic_seq).state.model_dump_json() == past.state.model_dump_json()
+    # Truncated replay of a prefix must reproduce the LIVE state as it was at
+    # that prefix (captured from the live harness), not merely a second replay
+    # of the same log — this is what proves live and replay do not diverge.
+    assert past.state.model_dump_json() == live_at_critic

@@ -8,11 +8,12 @@ and never mutated (D8).
 """
 
 import json
+import os
 from pathlib import Path
 
 from pydantic import BaseModel
 
-from deepreason.canonical import sha256_hex
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
@@ -38,10 +39,22 @@ class ObjectStore:
     def put(self, schema: str, obj: BaseModel) -> None:
         assert schema in SCHEMAS
         path = self._path(obj.id)
-        if path.exists():
+        if path.exists() and self._readable(path):
             return  # immutable; same id => same record
+        # A torn write (crash/ENOSPC mid-write) may have left a corrupt file:
+        # write a temp file and atomically replace so the record heals.
         record = {"schema": schema, "id": obj.id, "data": obj.model_dump(mode="json", by_alias=True)}
-        path.write_text(json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
+        tmp = path.with_suffix(f".tmp.{os.getpid()}")
+        tmp.write_bytes(canonical_json(record))
+        os.replace(tmp, path)
+
+    @staticmethod
+    def _readable(path: Path) -> bool:
+        try:
+            json.loads(path.read_text())
+            return True
+        except (ValueError, OSError):
+            return False
 
     def get(self, oid: str) -> tuple[str, BaseModel]:
         path = self._path(oid)

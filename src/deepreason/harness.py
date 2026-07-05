@@ -51,8 +51,13 @@ class Harness:
         self.objects = ObjectStore(self.root / "objects")
         self.log = EventLog(self.root / "log.jsonl")
         self._reset()
+        # Replay applies every event but adjudicates ONCE at the end: the
+        # grounded-extension fixpoint is a pure function of the final graph,
+        # so per-event adjudication during replay is discarded work (it made
+        # reopening an N-event log superlinear).
         for event in self.log.read():
-            self._apply_event(event)
+            self._apply_event(event, adjudicate=False)
+        self._adjudicate()
 
     def _reset(self) -> None:
         self.state = EpistemicState()
@@ -71,7 +76,8 @@ class Harness:
         h.log = EventLog(h.root / "log.jsonl")
         h._reset()
         for event in h.log.read(upto_seq=seq):
-            h._apply_event(event)
+            h._apply_event(event, adjudicate=False)
+        h._adjudicate()
         return h
 
     # ------------------------------------------------------------------ #
@@ -165,7 +171,10 @@ class Harness:
                 w = provided.get(wid) or self.warrants.get(wid)
                 if w is None:
                     raise WellFormednessError(f"carried warrant not provided/registered: {wid}")
-                self._validate_warrant(w)
+                # A warrant's validity node may be an earlier artifact in this
+                # same batch, not only one already in state (one Conj event can
+                # carry both the nu and the critic that cites it).
+                self._validate_warrant(w, known_artifacts=candidate)
             # Interface commitments must be registered (§2).
             for cid in artifact.interface.commitments:
                 if cid not in self.commitments:
@@ -231,8 +240,9 @@ class Harness:
                     out.append((event.seq, aid, old.value if old else None, new.value))
         return out
 
-    def _validate_warrant(self, warrant: Warrant) -> None:
-        if warrant.validity_node not in self.state.artifacts:
+    def _validate_warrant(self, warrant: Warrant, known_artifacts=None) -> None:
+        known = self.state.artifacts if known_artifacts is None else known_artifacts
+        if warrant.validity_node not in known:
             raise WellFormednessError(
                 f"warrant {warrant.id}: validity_node {warrant.validity_node} not registered"
             )
@@ -281,7 +291,10 @@ class Harness:
         self.log.append(event)
         return event
 
-    def _apply_event(self, event: Event) -> StateDiff:
+    def _apply_event(self, event: Event, adjudicate: bool = True) -> StateDiff | None:
+        """Apply one event to the materialized view. ``adjudicate=False`` skips
+        the grounded-extension recompute and the per-event diff — used by
+        replay, which adjudicates once at the end and discards the diffs."""
         pre_att = set(self.state.att)
         pre_dep = set(self.state.dep)
         pre_status = dict(self.state.status)
@@ -312,12 +325,14 @@ class Harness:
                 for pid in event.inputs:
                     if pid in self.state.problems and (obj.id, pid) not in self.state.addr:
                         self.state.addr.append((obj.id, pid))
-        self._adjudicate()
         for aid, value in event.state_diff.hv_set.items():
             self.state.hv[aid] = value
         for aid, value in event.state_diff.reach_set.items():
             self.state.reach[aid] = value
         self._next_seq = event.seq + 1
+        if not adjudicate:
+            return None  # replay recomputes status once after the full walk
+        self._adjudicate()
         return StateDiff(
             att_add=sorted(set(self.state.att) - pre_att),
             dep_add=sorted(set(self.state.dep) - pre_dep),

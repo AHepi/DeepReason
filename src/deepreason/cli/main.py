@@ -254,7 +254,7 @@ def _cmd_run(args) -> int:
     if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
-    meter = TokenMeter(budget=args.token_budget) if args.token_budget else None
+    meter = TokenMeter(budget=args.token_budget) if args.token_budget is not None else None
     adapter = build_adapter(config, harness.blobs, meter=meter)
     if not adapter.has_role("conjecturer"):
         print(

@@ -162,6 +162,13 @@ def run_hv_floor(harness, adapter, target_id: str, commitment: Commitment, embed
     k = int(commitment.budget.extra.get("k", 5))
     hv_min = float(commitment.budget.extra.get("hv_min", "0.5"))
     text, battery, edits, kernel, llm_call = _sample_edits(harness, adapter, target, k)
+    if not edits:
+        # No bounded edits sampled => hv is UNMEASURED. Falling through would
+        # record s_hat=0 -> hv=1.0, vacuously PASSing the floor from zero
+        # samples (hv_spot_check guards this the same way).
+        if llm_call is not None:
+            harness.record_measure(inputs=[f"hv-floor-nomeasure:{target_id}"], llm=llm_call)
+        return programs.OVERRUN
     s_hat, per_edit = _survival(harness, target, text, battery, edits, embedder)
     hv = 1.0 - s_hat
     if hv >= hv_min:

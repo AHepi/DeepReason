@@ -4,6 +4,7 @@ Content is Sigma* (Def 3.1): opaque bytes + codec. Blobs are addressed by
 sha256 and never mutated or deleted (D8).
 """
 
+import os
 from pathlib import Path
 
 from deepreason.canonical import sha256_hex
@@ -22,7 +23,9 @@ class BlobStore:
         path = self._path(ref)
         if not path.exists():
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
+            tmp = path.parent / f"{ref}.tmp.{os.getpid()}"
+            tmp.write_bytes(data)
+            os.replace(tmp, path)
         return ref
 
     def get(self, ref: str) -> bytes:

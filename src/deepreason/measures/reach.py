@@ -43,7 +43,11 @@ def reach_sweep(harness) -> list[tuple[str, str]]:
             ):
                 hits.append((aid, pid))
                 count += 1
-        if count and harness.state.reach.get(aid) != float(count):
+        # Record whenever reach changed — including a drop back to zero, so a
+        # once-reaching artifact that no longer reaches is cleared rather than
+        # ranked forever on a stale count (frontier scoring, explanation-debt).
+        # Default stored to 0.0 so never-reached artifacts don't log noise.
+        if float(count) != harness.state.reach.get(aid, 0.0):
             reach_counts[aid] = float(count)
     if reach_counts:
         harness.record_measure(reach=reach_counts, inputs=sorted(reach_counts))

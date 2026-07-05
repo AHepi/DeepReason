@@ -8,10 +8,8 @@
   exist only downstream of the trial guard (P5).
 """
 
-import json
-
 from deepreason import programs
-from deepreason.canonical import sha256_hex
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
 from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
@@ -36,9 +34,7 @@ def crit_program(harness, target_id: str) -> list[Artifact]:
         verdict, trace = programs.evaluate(kappa, target, harness.blobs)
         if verdict != programs.FAIL:
             continue
-        trace_ref = harness.blobs.put(
-            json.dumps(trace, sort_keys=True, separators=(",", ":")).encode()
-        )
+        trace_ref = harness.blobs.put(canonical_json(trace))
         nu = _register_nu(
             harness, f"nu: verdict of {cid} on {target_id} is sound and relevant"
         )
@@ -73,7 +69,9 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
     )
     output, llm_call = adapter.call("argumentative_critic", pack, ArgumentativeCriticOutput)
     if not output.attack or not output.case.strip():
-        return None  # no fault found: registers nothing, correctly
+        # No fault found: the call still spent tokens and must be logged once.
+        harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+        return None
     case_hash = sha256_hex(output.case.encode())[:16]
     nu = _register_nu(
         harness, f"nu: argumentative case {case_hash} against {target_id} is sound"
@@ -84,13 +82,19 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         type=WarrantType.ARGUMENTATIVE,
         validity_node=nu.id,
     )
-    return harness.create_artifact(
+    before = set(harness.state.artifacts)
+    critic = harness.create_artifact(
         output.case,
         provenance=Provenance(role="critic"),
         warrants=[warrant],
         rule=Rule.CRIT,
         llm=llm_call,
     )
+    if critic.id in before:
+        # The critic content deduped to an existing artifact, so no event
+        # carried llm_call — log it so token accounting sees the call once.
+        harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+    return critic
 
 
 def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artifact]:
@@ -118,6 +122,10 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
     )
     critics: list[Artifact] = []
     ruled: set[str] = set()
+    # The shared call must be logged on exactly one committed event. Attach it
+    # to the first registration that actually COMMITS (a deduped critic
+    # commits no event), and fall back to a Measure if none do.
+    llm_pending: object | None = llm_call
     for case in output.cases:
         if case.target not in target_ids or case.target in ruled:
             continue
@@ -134,18 +142,18 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             type=WarrantType.ARGUMENTATIVE,
             validity_node=nu.id,
         )
-        critics.append(
-            harness.create_artifact(
-                case.case,
-                provenance=Provenance(role="critic"),
-                warrants=[warrant],
-                rule=Rule.CRIT,
-                # The shared call is logged once — on the first registration,
-                # or on a Measure below when nothing registers — so replay and
-                # token accounting see each call exactly once.
-                llm=llm_call if not critics else None,
-            )
+        before = set(harness.state.artifacts)
+        critic = harness.create_artifact(
+            case.case,
+            provenance=Provenance(role="critic"),
+            warrants=[warrant],
+            rule=Rule.CRIT,
+            llm=llm_pending,
         )
-    if not critics:
-        harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_call)
+        critics.append(critic)
+        if critic.id not in before:
+            llm_pending = None  # a real event carried the call
+    if llm_pending is not None:
+        # Nothing committed the call (no attacks, or every critic deduped).
+        harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_pending)
     return critics

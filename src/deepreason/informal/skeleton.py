@@ -74,7 +74,15 @@ def compile_forbidden_commitments(harness, skeleton: Skeleton) -> list[str]:
     same skeleton always compiles to the same interface."""
     ids: list[str] = []
     for case in skeleton.forbidden:
-        cid = "fc:" + sha256_hex(canonical_json({"case": case.case, "eval": case.eval}))[:12]
+        # observation_valued is part of the commitment's identity: register_
+        # commitment dedupes by id, so omitting it would let an earlier
+        # observation_valued=False case mask a later True one, silently
+        # suppressing the research-evidence Spawn trigger (§12).
+        cid = "fc:" + sha256_hex(canonical_json({
+            "case": case.case,
+            "eval": case.eval,
+            "observation_valued": case.observation_valued,
+        }))[:12]
         harness.register_commitment(
             Commitment(
                 id=cid,

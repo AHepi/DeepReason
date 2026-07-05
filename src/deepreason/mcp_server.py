@@ -57,7 +57,7 @@ def _tools() -> list[dict]:
                         "properties": {
                             "id": {"type": "string"},
                             "rubric": {"type": "string"},
-                            "mode": {"type": "string", "enum": ["absolute", "comparative"]},
+                            "mode": {"type": "string", "enum": ["absolute", "anchored", "pairwise"]},
                         },
                         "required": ["id", "rubric"],
                     },
@@ -198,7 +198,8 @@ def call_tool(name: str, arguments: dict) -> str:
 
         harness = _harness(arguments)
         config = _config(arguments)
-        meter = TokenMeter(budget=arguments["token_budget"]) if arguments.get("token_budget") else None
+        _tb = arguments.get("token_budget")
+        meter = TokenMeter(budget=_tb) if _tb is not None else None
         adapter = build_adapter(config, harness.blobs, meter=meter)
         if not adapter.has_role("conjecturer"):
             raise ValueError(

@@ -5,14 +5,14 @@ budgeted, decidable. ``eval:program|predicate`` verdicts are computed here
 (reliable). ``eval:rubric`` verdicts exist only downstream of the trial
 guard (§3, §10 — P5) and raise NotEvaluable here.
 
-P1 budget honesty: predicates run to completion and the elapsed time is
-checked afterwards (overrun is reported, not preempted); registry programs
-receive the budget and may enforce it internally.
+Budget honesty (§0 determinism): a verdict is a pure function of content,
+so wall-clock time never drives it. Registry programs receive the budget
+and may enforce a DETERMINISTIC bound (e.g. step count) internally; the
+``overrun`` verdict is reserved for those (see measures/hv.py).
 """
 
 import json
 import re
-import time
 
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
@@ -72,7 +72,6 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
     """Run tau_kappa on the artifact's real bytes; return (verdict, trace)."""
     kind, _, arg = commitment.eval.partition(":")
     text = content_text(artifact, blobs)
-    started = time.monotonic()
     if kind == "predicate":
         # Safe names go in GLOBALS: comprehension bodies inside eval resolve
         # free names via globals, so locals-only namespaces break e.g.
@@ -97,14 +96,13 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
         raise NotEvaluable("rubric verdicts require the trial protocol (spec §3/§10, P5)")
     else:
         raise NotEvaluable(f"unknown eval kind: {commitment.eval}")
-    elapsed_ms = int((time.monotonic() - started) * 1000)
-    if commitment.budget.time_ms is not None and elapsed_ms > commitment.budget.time_ms:
-        verdict = OVERRUN
+    # Verdicts are a deterministic function of content (§0): wall-clock must
+    # never drive them, and no wall-clock value may enter the content-
+    # addressed trace, or two runs from identical inputs would fork the log.
     trace = {
         "commitment": commitment.id,
         "eval": commitment.eval,
         "verdict": verdict,
-        "elapsed_ms": elapsed_ms,
         **detail,
     }
     return verdict, trace

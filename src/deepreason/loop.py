@@ -8,6 +8,7 @@ P2 — this is the minimal usable loop.
 
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
+from deepreason.llm.endpoints import EndpointError
 from deepreason.ontology.state import Status
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative, crit_program
@@ -20,7 +21,7 @@ def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> d
     for cycle in range(cycles):
         try:
             admitted = conj(harness, problem_id, adapter, config, diagnostics)
-        except SchemaRepairError as e:
+        except (SchemaRepairError, EndpointError) as e:
             diagnostics.append({"cycle": cycle, "dropped": str(e)})
             continue  # drop the cycle, logged (spec §9)
         for artifact in admitted:
@@ -32,7 +33,7 @@ def run_problem(harness, problem_id: str, adapter, config, cycles: int = 1) -> d
             if adapter.has_role("argumentative_critic"):
                 try:
                     crit_argumentative(harness, artifact.id, adapter, config)
-                except SchemaRepairError as e:
+                except (SchemaRepairError, EndpointError) as e:
                     diagnostics.append({"cycle": cycle, "dropped": str(e)})
     survivors = [
         aid

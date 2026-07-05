@@ -22,6 +22,7 @@ from deepreason.llm.contracts import (
     PairwiseRuling,
     VariatorOutput,
 )
+from deepreason.canonical import canonical_json
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
 
@@ -53,7 +54,7 @@ def transcript_blob(harness, *, case: str, answer: str, decisive_point: str,
     data = {"case": case, "answer": answer,
             "ruling": {"verdict": "fail", "decisive_point": decisive_point},
             "checks": checks or {}, **meta}
-    return harness.blobs.put(json.dumps(data, sort_keys=True).encode())
+    return harness.blobs.put(canonical_json(data))
 
 
 def _block(harness, reason: str, target_id: str, diagnostics) -> None:
@@ -100,6 +101,11 @@ def run_trial(harness, target_id: str, commitment, adapter, config,
               diagnostics: list | None = None, embedder=None):
     """Full §3 guard. Returns the registered critic artifact, or None (the
     ruling was pass / blocked — nothing registers, correctly)."""
+    # The trial needs critic + defender + judge (variator is optional, §3);
+    # a config missing any is a logged no-op, not a mid-run KeyError crash.
+    for role in ("argumentative_critic", "defender", "judge"):
+        if not adapter.has_role(role):
+            return _block(harness, f"no-{role}-role", target_id, diagnostics)
     spec_id = commitment.eval.split(":", 1)[1]
     standard = resolve_standard(harness, spec_id)
     if standard is None:
@@ -242,11 +248,21 @@ def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, confi
     )
     if not consistent:
         return _block(harness, "order-swap", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
-    if ruling1.decisive_point and ruling1.decisive_point not in f"{a_text}\n{b_text}":
+    # Referential integrity (§3): a named winner MUST quote a span of a
+    # candidate. An empty decisive_point is unscreened LLM adjudication —
+    # block it rather than skipping the check (the empty string is a substring
+    # of everything, so it would otherwise pass vacuously). PairwiseRuling
+    # allows "" only for 'neither', handled above.
+    if not ruling1.decisive_point or ruling1.decisive_point not in f"{a_text}\n{b_text}":
         return _block(harness, "referential-integrity", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
 
     loser = b_id if ruling1.winner == "A" else a_id
     winner = a_id if ruling1.winner == "A" else b_id
+    trace_ref = harness.blobs.put(canonical_json({
+        "pairwise": {"problem": problem.id, "winner": winner, "loser": loser,
+                     "decisive_point": ruling1.decisive_point},
+        "order_swap": "pass",
+    }))
     nu = harness.create_artifact(
         f"nu: the pairwise ruling {winner[:12]} > {loser[:12]} for {problem.id} is sound",
         provenance=Provenance(role="critic"),
@@ -255,6 +271,7 @@ def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, confi
         id=f"w:pairwise:{problem.id}:{loser}",
         target=loser,
         type=WarrantType.ARGUMENTATIVE,
+        trace_ref=trace_ref,
         validity_node=nu.id,
     )
     return harness.create_artifact(

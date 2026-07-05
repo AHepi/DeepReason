@@ -104,18 +104,21 @@ def measure(run_roots: list[Path]) -> dict:
         sum(r["prefix_reuse_fraction"] * r["prompts"] for r in runs)
         / sum(r["prompts"] for r in runs)
     ) if runs else None
+    exact_measured = report["cross_run"]["exact_hit_rate"]
+    prefix_measured = round(same_run_prefix, 4) if same_run_prefix is not None else None
     report["verdicts"] = {
         "exact_floor": {
             "design": "ce1b3cfc (content-addressable pack dedup)",
             "forbidden_case": f"cross-run exact hit ratio < {EXACT_FLOOR}",
-            "measured": report["cross_run"]["exact_hit_rate"],
-            "obtained": (report["cross_run"]["exact_hit_rate"] or 0) < EXACT_FLOOR,
+            "measured": exact_measured,
+            # None => no data; the forbidden case is UNMEASURED, not obtained.
+            "obtained": None if exact_measured is None else exact_measured < EXACT_FLOOR,
         },
         "prefix_floor": {
             "design": "c9931dd1 (prompt-component DAG)",
             "forbidden_case": f"same-run prefix reuse < {PREFIX_FLOOR}",
-            "measured": round(same_run_prefix, 4) if same_run_prefix is not None else None,
-            "obtained": (same_run_prefix or 0) < PREFIX_FLOOR,
+            "measured": prefix_measured,
+            "obtained": None if prefix_measured is None else prefix_measured < PREFIX_FLOOR,
         },
     }
     return report
@@ -158,6 +161,12 @@ def ground(target_root: Path, report: dict) -> None:
          report["verdicts"]["prefix_floor"]["measured"], PREFIX_FLOOR),
     ]
     for key, kappa_id, markers, measured, floor in checks:
+        if measured is None:
+            # No prompts collected — the forbidden case is unmeasured. Grounding
+            # a `predicate:None >= floor` verdict would refute designs from zero
+            # data; skip instead.
+            print(f"SKIP {key}: no measurement (no prompts collected)")
+            continue
         harness.register_commitment(
             Commitment(id=kappa_id, eval=f"predicate:{measured} >= {floor}")
         )

@@ -12,13 +12,37 @@ import time
 
 from pydantic import BaseModel, ValidationError
 
-from deepreason.llm.endpoints import OpenAICompatEndpoint
+from deepreason.llm.endpoints import OpenAICompatEndpoint, resolve_model
 from deepreason.llm.roles import TEMPLATES
 from deepreason.ontology.event import LLMCall
 
 
 class SchemaRepairError(RuntimeError):
     """Bounded retries exhausted without schema-valid output."""
+
+
+def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
+    """Normalize a provider usage block to prompt/completion token counts.
+
+    Some servers report only ``total_tokens`` (or other partial shapes); a
+    truthy-but-partial dict must not count as zero spend against the hard
+    budget — fall back to the chars/4 estimate instead.
+    """
+    if usage:
+        prompt = usage.get("prompt_tokens")
+        completion = usage.get("completion_tokens")
+        if prompt is not None or completion is not None:
+            return {
+                "prompt_tokens": int(prompt or 0),
+                "completion_tokens": int(completion or 0),
+            }
+        total = usage.get("total_tokens")
+        if total is not None:
+            return {"prompt_tokens": int(total), "completion_tokens": 0}
+    return {
+        "prompt_tokens": len(request) // 4,
+        "completion_tokens": len(raw) // 4,
+    }
 
 
 def _extract_json(raw: str) -> str:
@@ -76,11 +100,11 @@ class LLMAdapter:
 
         schema = _json.dumps(output_model.model_json_schema(), sort_keys=True)
         prompt = TEMPLATES[template_role or role].format(schema=schema, pack=pack)
-        prompt_ref = self.blobs.put(prompt.encode())
         started = time.monotonic()
         error = ""
         tokens_used = 0
         truncated_any = False
+        prompt_ref = self.blobs.put(prompt.encode())
         for attempt in range(self.retry_max + 1):
             if self.meter is not None:
                 self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
@@ -88,16 +112,15 @@ class LLMAdapter:
                 prompt + f"\n\nYour previous output was invalid: {error}\n"
                 "Return ONLY a valid JSON object for the schema."
             )
+            # Log the ACTUAL request sent this attempt; repair retries append
+            # the error suffix, so the logged prompt must match the raw it
+            # produced (replay/audit reconstructs the wire exchange, §0).
+            prompt_ref = prompt_ref if not error else self.blobs.put(request.encode())
             raw = endpoint.complete(request)
             if getattr(endpoint, "last_finish_reason", None) == "length":
                 truncated_any = True  # process signal for the controller
-            usage = getattr(endpoint, "last_usage", None) or {
-                "prompt_tokens": len(request) // 4,
-                "completion_tokens": len(raw) // 4,
-            }
-            tokens_used += int(usage.get("prompt_tokens", 0)) + int(
-                usage.get("completion_tokens", 0)
-            )
+            usage = _usage_tokens(getattr(endpoint, "last_usage", None), request, raw)
+            tokens_used += usage["prompt_tokens"] + usage["completion_tokens"]
             if self.meter is not None:
                 self.meter.add(usage)
             raw_ref = self.blobs.put(raw.encode())
@@ -136,10 +159,12 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     if not isinstance(spec, dict) or not spec.get("endpoint"):
         return None
     api_key_env = spec.get("api_key_env") or ""
+    api_key = os.environ.get(api_key_env) if api_key_env else None
+    model = resolve_model(spec.get("model") or "", spec["endpoint"], api_key)
     return OpenAICompatEndpoint(
         base_url=spec["endpoint"],
-        model=spec.get("model") or "",
-        api_key=os.environ.get(api_key_env) if api_key_env else None,
+        model=model,
+        api_key=api_key,
         temperature=spec.get("temperature"),
         max_tokens=spec.get("max_tokens"),
         json_mode=bool(spec.get("json_mode", False)),

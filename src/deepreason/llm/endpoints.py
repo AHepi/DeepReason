@@ -35,6 +35,59 @@ def request_with_retries(fn):
     raise EndpointError(f"transport failed after retries: {last}") from last
 
 
+def list_models(base_url: str, api_key: str | None) -> list[str]:
+    """GET /models on an OpenAI-compatible endpoint; returns the id list."""
+    headers = {}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    request = urllib.request.Request(base_url.rstrip("/") + "/models", headers=headers)
+
+    def _once() -> dict:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.load(response)
+
+    data = request_with_retries(_once)
+    return [m["id"] for m in data.get("data", []) if isinstance(m, dict) and m.get("id")]
+
+
+def _pick_primary(available: list[str]) -> str:
+    for want in (("v4", "pro"), ("v4",), ("pro",), ("chat",)):
+        hits = [m for m in available if all(w in m.lower() for w in want)]
+        if hits:
+            return sorted(hits)[0]
+    if not available:
+        raise EndpointError("provider returned no models to resolve 'auto'")
+    return sorted(available)[0]
+
+
+def _pick_alt(available: list[str], primary: str) -> str:
+    others = [m for m in available if m != primary]
+    for want in ("reason", "r1"):
+        hits = [m for m in others if want in m.lower()]
+        if hits:
+            return sorted(hits)[0]
+    return sorted(others)[0] if others else primary
+
+
+_MODEL_CACHE: dict[tuple[str, str | None], list[str]] = {}
+
+
+def resolve_model(model: str, base_url: str, api_key: str | None) -> str:
+    """Resolve the ``auto``/``auto-alt`` model sentinels against the
+    provider's live /models list (cached per endpoint). Concrete ids pass
+    through unchanged. This is what makes the shipped ``model: auto`` role
+    table usable from ``deepreason run`` and MCP, not just live_run."""
+    if model not in ("auto", "auto-alt"):
+        return model
+    key = (base_url, api_key)
+    available = _MODEL_CACHE.get(key)
+    if available is None:
+        available = list_models(base_url, api_key)
+        _MODEL_CACHE[key] = available
+    primary = _pick_primary(available)
+    return _pick_alt(available, primary) if model == "auto-alt" else primary
+
+
 def mean_surprisal(logprobs_block: dict | None) -> float | None:
     """-mean(logprob) over the completion's sampled tokens (OpenAI-shaped
     ``logprobs.content``). A surprisal proxy for token-level uncertainty —
@@ -143,11 +196,28 @@ class OpenAICompatEndpoint:
 
         def _once() -> dict:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
-                return json.load(response)
+                try:
+                    return json.load(response)
+                except ValueError as e:
+                    # 200 with a non-JSON body (gateway/proxy error page):
+                    # not transport-retryable, but still an endpoint failure.
+                    raise EndpointError(f"non-JSON response body: {e}") from e
 
         data = request_with_retries(_once)
-        choice = data["choices"][0]
+        try:
+            choice = data["choices"][0]
+            content = choice["message"]["content"]
+        except (KeyError, IndexError, TypeError) as e:
+            detail = data.get("error") if isinstance(data, dict) else data
+            raise EndpointError(f"malformed completion response: {detail!r}") from e
+        if content is None:
+            # Legal per the API (content filter; reasoning-only replies) —
+            # surface as an endpoint failure so the caller's drop/retry
+            # handling applies instead of crashing on None.
+            raise EndpointError(
+                f"null content (finish_reason={choice.get('finish_reason')!r})"
+            )
         self.last_usage = data.get("usage") or None
         self.last_finish_reason = choice.get("finish_reason")
         self.last_mean_surprisal = mean_surprisal(choice.get("logprobs"))
-        return choice["message"]["content"]
+        return content

@@ -29,7 +29,13 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
             sorted(current),
             key=lambda s: (novelty.get(s, -1.0), s),  # deterministic tiebreak
         )
-        schools.reseed(harness, laggard, current[laggard], reason="school-convergence")
+        new_policy = schools.reseed(
+            harness, laggard, current[laggard], reason="school-convergence"
+        )
+        # Refresh the live roster the scheduler renders packs from — otherwise
+        # the reseed is a logged no-op: _school_dict keeps serving the old
+        # stance and the flag just re-fires each cooldown.
+        scheduler.schools[laggard] = new_policy
         applied.append(f"reseed:{laggard}")
 
     if active_flags.get("adjudication_ritual"):

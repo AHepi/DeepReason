@@ -29,7 +29,10 @@ def _deepseek_reasoning(value) -> dict:
         return {"thinking": {"type": "disabled"}}
     if isinstance(value, int):
         return {"thinking": {"type": "enabled", "budget_tokens": value}}
-    effort = {"low": "high", "medium": "high", "high": "high", "max": "xhigh"}.get(
+    # Preserve the ordinal cost lever: low stays cheap, max is the top tier.
+    # (An earlier table collapsed low/medium up to "high", silently sending
+    # maximum-cost reasoning for the cheapest configured settings.)
+    effort = {"low": "low", "medium": "medium", "high": "high", "max": "xhigh"}.get(
         str(value), str(value)
     )
     return {"thinking": {"type": "enabled", "effort": effort}}
