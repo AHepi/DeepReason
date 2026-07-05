@@ -225,6 +225,10 @@ def main() -> int:
                              "(criticism_decisive_prereg.yaml)")
     parser.add_argument("--gen-only", action="store_true",
                         help="probe mode: generation only, no critic calls")
+    parser.add_argument("--temperature", type=float, default=1.0,
+                        help="generator temperature (gauntlet: raise to induce errors)")
+    parser.add_argument("--max-tokens", type=int, default=1200,
+                        help="generator completion cap")
     args = parser.parse_args()
     global OUT, CKPT, QUESTIONS
     if args.questions:
@@ -246,12 +250,14 @@ def main() -> int:
     )
     print(f"gen: {gen_model}  crit: {crit_model}  K={args.k}  budget={args.budget}")
 
-    def ep(model, temp, logprobs=False):
+    def ep(model, temp, logprobs=False, max_tokens=1200):
         return OpenAICompatEndpoint(args.base_url, model, api_key=api_key,
-                                    temperature=temp, max_tokens=1200, json_mode=True,
+                                    temperature=temp, max_tokens=max_tokens, json_mode=True,
                                     request_logprobs=logprobs,
                                     reasoning="none")  # reasoning OFF (prereg)
-    gen, crit = ep(gen_model, 1.0, logprobs=args.confidence), ep(crit_model, 0.3)
+    gen = ep(gen_model, args.temperature, logprobs=args.confidence,
+             max_tokens=args.max_tokens)
+    crit = ep(crit_model, 0.3)
     meter = TokenMeter(budget=args.budget)
 
     checkpoint = json.loads(CKPT.read_text()) if CKPT.exists() else {}
