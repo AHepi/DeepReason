@@ -129,6 +129,85 @@ def majority(answers: list[str]) -> str:
     return Counter(norm).most_common(1)[0][0]
 
 
+def _conf_vote(cands, threshold) -> str:
+    """Majority over candidates with surprisal <= threshold; empty pool
+    falls back to the full pool (same fallback rule as the harness arm).
+    Candidates with no surprisal (missing logprobs) are never filtered."""
+    kept = [c["answer"] for c in cands
+            if c.get("surprisal") is None or c["surprisal"] <= threshold]
+    return majority(kept if kept else [c["answer"] for c in cands])
+
+
+def confidence_analysis(checkpoint: dict) -> dict | None:
+    """The pre-registered confidence-filtered arm (d239's design,
+    experiments/criticism_decisive_prereg.yaml): tune the surprisal
+    threshold on the calibration split (even index of sorted qids), report
+    every comparison on the test split (odd index) only."""
+    qids = sorted(checkpoint)
+    calib = [q for i, q in enumerate(qids) if i % 2 == 0]
+    test = [q for i, q in enumerate(qids) if i % 2 == 1]
+    if not calib or not test:
+        return None
+
+    def is_ok(ans, accept) -> bool:
+        return any(normalize(ans) == normalize(a) for a in accept)
+
+    def arm_accuracy(qs, vote_fn) -> float:
+        hits = sum(is_ok(vote_fn(checkpoint[q]["candidates"]),
+                         checkpoint[q]["accept"]) for q in qs)
+        return hits / len(qs)
+
+    grid = sorted({c["surprisal"] for q in calib
+                   for c in checkpoint[q]["candidates"]
+                   if c.get("surprisal") is not None})
+    if not grid:
+        return None  # no logprobs captured
+    grid.append(grid[-1] + 1.0)  # keep-everything sentinel
+    # Max calibration accuracy; ties break to the LARGEST threshold (least
+    # aggressive filtering — the conservative optimum).
+    threshold, calib_acc = max(
+        ((t, arm_accuracy(calib, lambda cs, t=t: _conf_vote(cs, t))) for t in grid),
+        key=lambda pair: (pair[1], pair[0]),
+    )
+
+    test_cands = [c for q in test for c in checkpoint[q]["candidates"]]
+    base_error = sum(not c["correct"] for c in test_cands) / len(test_cands)
+    arms = {
+        "confidence_filtered": arm_accuracy(
+            test, lambda cs: _conf_vote(cs, threshold)),
+        "self_consistency": arm_accuracy(
+            test, lambda cs: majority([c["answer"] for c in cs])),
+        "single": arm_accuracy(test, lambda cs: cs[0]["answer"]),
+        "llm_critic": arm_accuracy(
+            test, lambda cs: majority(
+                [c["answer"] for c in cs if c["critic_sound"] is not False]
+                or [c["answer"] for c in cs])),
+    }
+    fixed = broke = 0
+    for q in test:
+        cs, accept = checkpoint[q]["candidates"], checkpoint[q]["accept"]
+        sc_ok = is_ok(majority([c["answer"] for c in cs]), accept)
+        cf_ok = is_ok(_conf_vote(cs, threshold), accept)
+        fixed += int(cf_ok and not sc_ok)
+        broke += int(sc_ok and not cf_ok)
+    right = [c["surprisal"] for q in qids for c in checkpoint[q]["candidates"]
+             if c["correct"] and c.get("surprisal") is not None]
+    wrong = [c["surprisal"] for q in qids for c in checkpoint[q]["candidates"]
+             if not c["correct"] and c.get("surprisal") is not None]
+    return {
+        "threshold": round(threshold, 6),
+        "calibration": {"n": len(calib), "accuracy": round(calib_acc, 3)},
+        "test": {"n": len(test),
+                 "candidate_base_error": round(base_error, 3),
+                 "accuracy": {k: round(v, 3) for k, v in arms.items()},
+                 "fixed": fixed, "broke": broke, "net": fixed - broke},
+        "surprisal_means": {
+            "correct": round(sum(right) / len(right), 4) if right else None,
+            "wrong": round(sum(wrong) / len(wrong), 4) if wrong else None,
+        },
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--k", type=int, default=5)
@@ -140,6 +219,12 @@ def main() -> int:
                         help="separate critic model (default: same as --model)")
     parser.add_argument("--tag", default="", help="suffix for report/checkpoint filenames")
     parser.add_argument("--questions", default=None, help="path to a questions json")
+    parser.add_argument("--confidence", action="store_true",
+                        help="capture per-candidate mean token surprisal (logprobs) "
+                             "and score the confidence-filtered arm "
+                             "(criticism_decisive_prereg.yaml)")
+    parser.add_argument("--gen-only", action="store_true",
+                        help="probe mode: generation only, no critic calls")
     args = parser.parse_args()
     global OUT, CKPT, QUESTIONS
     if args.questions:
@@ -161,11 +246,12 @@ def main() -> int:
     )
     print(f"gen: {gen_model}  crit: {crit_model}  K={args.k}  budget={args.budget}")
 
-    def ep(model, temp):
+    def ep(model, temp, logprobs=False):
         return OpenAICompatEndpoint(args.base_url, model, api_key=api_key,
                                     temperature=temp, max_tokens=1200, json_mode=True,
+                                    request_logprobs=logprobs,
                                     reasoning="none")  # reasoning OFF (prereg)
-    gen, crit = ep(gen_model, 1.0), ep(crit_model, 0.3)
+    gen, crit = ep(gen_model, 1.0, logprobs=args.confidence), ep(crit_model, 0.3)
     meter = TokenMeter(budget=args.budget)
 
     checkpoint = json.loads(CKPT.read_text()) if CKPT.exists() else {}
@@ -176,12 +262,18 @@ def main() -> int:
             cands = []
             for _ in range(args.k):
                 a = structured(gen, GEN_PROMPT.format(q=q["q"]), AnswerOut, meter)
-                verdict = structured(
-                    crit, CRIT_PROMPT.format(q=q["q"], reasoning=a.reasoning[:1500],
-                                             answer=a.final_answer), CritiqueOut, meter)
+                surprisal = getattr(gen, "last_mean_surprisal", None) if args.confidence else None
+                if args.gen_only:
+                    sound = None  # probe mode: no critic verdict collected
+                else:
+                    verdict = structured(
+                        crit, CRIT_PROMPT.format(q=q["q"], reasoning=a.reasoning[:1500],
+                                                 answer=a.final_answer), CritiqueOut, meter)
+                    sound = verdict.sound
                 cands.append({"answer": a.final_answer,
                               "correct": correct(a.final_answer, q["accept"]),
-                              "critic_sound": verdict.sound})
+                              "critic_sound": sound,
+                              "surprisal": surprisal})
             checkpoint[q["id"]] = {"accept": q["accept"], "candidates": cands}
             CKPT.write_text(json.dumps(checkpoint, indent=2))
             print(f"{q['id']}: {sum(c['correct'] for c in cands)}/{args.k} correct "
@@ -203,7 +295,8 @@ def main() -> int:
     for qid, rec in checkpoint.items():
         cands, accept = rec["candidates"], rec["accept"]
         answers = [c["answer"] for c in cands]
-        survivors = [c["answer"] for c in cands if c["critic_sound"]]
+        # critic_sound None (gen-only probe) counts as unflagged.
+        survivors = [c["answer"] for c in cands if c["critic_sound"] is not False]
         single = normalize(answers[0])
         sc = majority(answers)
         hv = majority(survivors) if survivors else sc
@@ -219,13 +312,15 @@ def main() -> int:
             broke += 1
         for c in cands:
             wrong = not c["correct"]
-            flagged = not c["critic_sound"]
+            flagged = c["critic_sound"] is False
             tp += int(flagged and wrong)
             fp += int(flagged and not wrong)
             fn += int(not flagged and wrong)
             tn += int(not flagged and not wrong)
         per_q[qid] = {"single": single, "sc": sc, "harness": hv, "accept": accept,
                       "n_correct": sum(c["correct"] for c in cands)}
+
+    confidence = confidence_analysis(checkpoint) if args.confidence else None
 
     n_cand = tp + fp + fn + tn
     base_wrong = (tp + fn) / n_cand if n_cand else 0
@@ -240,6 +335,7 @@ def main() -> int:
             "precision": round(tp / (tp + fp), 3) if (tp + fp) else None,
             "recall": round(tp / (tp + fn), 3) if (tp + fn) else None,
             "confusion": {"tp": tp, "fp": fp, "fn": fn, "tn": tn}},
+        "confidence_arm": confidence,
         "tokens": meter.snapshot(), "per_question": per_q}
     OUT.write_text(json.dumps(report, indent=2, sort_keys=True))
     print("\n=== RESULT ===")
