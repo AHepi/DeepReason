@@ -342,6 +342,50 @@ def test_retry_exhausted_spend_reaches_the_log(tmp_path):
     assert logged == meter.total > 0  # nothing invisible
 
 
+def test_incremental_transitions_and_event_tail(tmp_path):
+    """Perf caches are derived views of the append-only history: incremental
+    transitions() must equal a from-scratch rewalk at every point, and
+    recent_events must serve the same window the log would."""
+    from tests.conftest import attack
+
+    h = Harness(tmp_path / "run")
+    a = art(h, "target claim")
+    first = h.transitions()  # prime the incremental shadow early
+    attack(h, a.id, "t1")  # refutes a
+    critic = next(x for x, t in h.state.att if t == a.id)
+    attack(h, critic, "t2")  # refutes the critic, reinstates a
+    incremental = h.transitions()
+    assert len(incremental) > len(first)
+    # From-scratch reference: a freshly opened harness rewalks everything.
+    reference = Harness(tmp_path / "run").transitions()
+    assert incremental == reference
+    assert (a.id in {t[1] for t in incremental})
+    # Tail serves the same events as the log.
+    tail = [e.seq for e in h.recent_events(5)]
+    log = [e.seq for e in list(h.log.read())[-5:]]
+    assert tail == log
+
+
+def test_reach_verdict_cache_consistent(tmp_path):
+    """Cached reach verdicts must not change reach results."""
+    from deepreason.measures.reach import reach_sweep
+
+    h = Harness(tmp_path / "run")
+    h.register_commitment(Commitment(id="k-a", eval="predicate:'moon' in content"))
+    h.register_problem(Problem(
+        id="home", description="home", criteria=["k-a"],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []})))
+    h.register_commitment(Commitment(id="k-b", eval="predicate:'sea' in content"))
+    h.register_problem(Problem(
+        id="foreign", description="foreign", criteria=["k-b"],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []})))
+    x = h.create_artifact("the moon pulls the sea", problem_id="home")
+    first = reach_sweep(h)
+    second = reach_sweep(h)  # served from the verdict cache
+    assert first == second == [(x.id, "foreign")]
+    assert h.state.reach[x.id] == 1.0
+
+
 def test_cross_examination_floor_unstarves_minority_school(tmp_path):
     """Live-run finding: successor-ownership allocation is rich-get-richer
     (observed 64:1 lineage — the rival stance never generated). The

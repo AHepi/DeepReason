@@ -10,7 +10,6 @@ model-version-specific: revalidate on embedder upgrade.
 
 from deepreason.llm.embedder import distance
 from deepreason.ontology.state import Status
-from deepreason.programs import content_text
 
 
 class RefutedIndex:
@@ -19,17 +18,17 @@ class RefutedIndex:
         self._entries: list[tuple[str, list[float]]] = []
 
     def rebuild(self, harness) -> None:
+        # Embeddings come from the harness cache: refuted artifacts are
+        # immutable, and this index is rebuilt for every gated candidate —
+        # re-embedding the whole refuted set each time was the anti-relapse
+        # gate's dominant cost (and per-call spend with an API embedder).
         self._entries = [
-            (aid, self.embedder.embed(content_text(harness.state.artifacts[aid], harness.blobs)))
+            (aid, harness.embed_artifact(self.embedder, aid))
             for aid, status in harness.state.status.items()
             if status == Status.REFUTED
         ]
 
     def nearest(self, vector: list[float], eps: float) -> list[str]:
         """Refuted ids within eps, closest first; deterministic tiebreak."""
-        hits = [
-            (distance(vector, emb), aid)
-            for aid, emb in self._entries
-            if distance(vector, emb) <= eps
-        ]
-        return [aid for _, aid in sorted(hits)]
+        scored = ((distance(vector, emb), aid) for aid, emb in self._entries)
+        return [aid for d, aid in sorted(scored) if d <= eps]

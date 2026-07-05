@@ -12,6 +12,19 @@ from deepreason import programs
 from deepreason.ontology.state import Status
 
 
+def _verdict(harness, cid: str, aid: str, artifact) -> str:
+    """Cached verdict for the (commitment, artifact) pair. Both are
+    immutable and content-addressed, and verdicts are deterministic pure
+    functions (§0), so the sweep re-evaluating every pair every cycle was
+    pure waste (measured O(artifacts x problems x criteria) per cycle)."""
+    key = (cid, aid)
+    v = harness._verdict_cache.get(key)
+    if v is None:
+        v = programs.evaluate(harness.commitments[cid], artifact, harness.blobs)[0]
+        harness._verdict_cache[key] = v
+    return v
+
+
 def reach_sweep(harness) -> list[tuple[str, str]]:
     """Returns (artifact, foreign_problem) hits; records reach counts."""
     addressed: dict[str, set[str]] = {}
@@ -36,11 +49,7 @@ def reach_sweep(harness) -> list[tuple[str, str]]:
             # foreign criterion must be novel to the artifact's own battery.
             if not criteria or not (set(criteria) - carried):
                 continue
-            if all(
-                programs.evaluate(harness.commitments[c], artifact, harness.blobs)[0]
-                == programs.PASS
-                for c in criteria
-            ):
+            if all(_verdict(harness, c, aid, artifact) == programs.PASS for c in criteria):
                 hits.append((aid, pid))
                 count += 1
         # Record whenever reach changed — including a drop back to zero, so a

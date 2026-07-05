@@ -226,6 +226,37 @@ class Harness:
             reach_set=reach or {},
         )
 
+    def recent_events(self, window: int) -> list[Event]:
+        """The last ``window`` events. Served from the bounded in-memory tail
+        (populated by every _apply_event, live and replay) — capture detection
+        calls this every cycle, and re-reading the JSONL log three times per
+        cycle was measured quadratic. Falls back to a log read only when the
+        window exceeds the tail."""
+        if window <= len(self._tail) or self._next_seq <= len(self._tail):
+            return self._tail[-window:]
+        return list(self.log.read())[-window:]
+
+    def embed_artifact(self, embedder, aid: str) -> list[float]:
+        """Embed an artifact's content, cached: artifacts are immutable and
+        content-addressed, so re-embedding the same id every cycle (capture
+        metrics, the refuted index) is pure waste — and real money with an
+        API embedder. Keyed by embedder type: embedders are deterministic
+        functions, distinct types give distinct vectors."""
+        from deepreason.programs import content_text
+
+        key = (type(embedder).__name__, aid)
+        vec = self._embed_cache.get(key)
+        if vec is None:
+            vec = embedder.embed(content_text(self.state.artifacts[aid], self.blobs))
+            self._embed_cache[key] = vec
+        return vec
+
+    def _events_since(self, seq: int):
+        """Events with .seq >= seq, from the tail when it covers them."""
+        if self._tail and self._tail[0].seq <= seq:
+            return [e for e in self._tail if e.seq >= seq]
+        return (e for e in self.log.read() if e.seq >= seq)
+
     def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str) -> None:
         """Persist LLM calls that landed on no registration event — blocked
         trials, extra ensemble seats, defender/variator exchanges, all-deduped
@@ -241,20 +272,29 @@ class Harness:
         replay program over the log (§11.3 instrument). The shadow shares
         this instance's stores (read-only) and rewalks the log with a fresh
         state; copying __dict__ then _reset() keeps it in sync with any
-        future field added to __init__ (no hand-mirrored constructor)."""
-        shadow = Harness.__new__(Harness)
-        shadow.__dict__.update(self.__dict__)
-        shadow._reset()
-        out: list[tuple[int, str, str | None, str]] = []
-        for event in self.log.read():
-            pre = {aid: status for aid, status in shadow.state.status.items()}
-            shadow._apply_event(event)
-            for aid in event.state_diff.status_changed:
-                old = pre.get(aid)
-                new = shadow.state.status.get(aid)
-                if new is not None:
-                    out.append((event.seq, aid, old.value if old else None, new.value))
-        return out
+        future field added to __init__ (no hand-mirrored constructor).
+
+        INCREMENTAL: the shadow and its output persist on this instance and
+        only the events committed since the previous call are applied.
+        Capture detection calls this every cycle; the from-scratch rewalk
+        (full per-event adjudication) was measured quadratic. The history is
+        append-only, so extension is always sound."""
+        if self._trans_shadow is None:
+            shadow = Harness.__new__(Harness)
+            shadow.__dict__.update(self.__dict__)
+            shadow._reset()
+            self._trans_shadow, self._trans_out = shadow, []
+        shadow, out = self._trans_shadow, self._trans_out
+        if shadow._next_seq < self._next_seq:
+            for event in self._events_since(shadow._next_seq):
+                pre = {aid: status for aid, status in shadow.state.status.items()}
+                shadow._apply_event(event)
+                for aid in event.state_diff.status_changed:
+                    old = pre.get(aid)
+                    new = shadow.state.status.get(aid)
+                    if new is not None:
+                        out.append((event.seq, aid, old.value if old else None, new.value))
+        return list(out)
 
     def _validate_warrant(self, warrant: Warrant, known_artifacts=None) -> None:
         known = self.state.artifacts if known_artifacts is None else known_artifacts
@@ -346,6 +386,9 @@ class Harness:
         for aid, value in event.state_diff.reach_set.items():
             self.state.reach[aid] = value
         self._next_seq = event.seq + 1
+        self._tail.append(event)
+        if len(self._tail) > self._TAIL_CAP:
+            del self._tail[: -self._TAIL_CAP]
         if not adjudicate:
             return None  # replay recomputes status once after the full walk
         self._adjudicate()

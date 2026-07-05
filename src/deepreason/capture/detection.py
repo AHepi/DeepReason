@@ -14,7 +14,6 @@ import math
 
 from deepreason.llm.embedder import distance
 from deepreason.ontology import Status
-from deepreason.programs import content_text
 
 
 def _conjecture_stream(harness) -> list[str]:
@@ -38,10 +37,7 @@ def _mean_pairwise(vectors: list[list[float]]) -> float | None:
 
 def generator_metrics(harness, embedder, window: int) -> dict:
     stream = _conjecture_stream(harness)[-window:]
-    vectors = [
-        embedder.embed(content_text(harness.state.artifacts[aid], harness.blobs))
-        for aid in stream
-    ]
+    vectors = [harness.embed_artifact(embedder, aid) for aid in stream]
     mean_dist = _mean_pairwise(vectors)
     half = len(vectors) // 2
     first, second = _mean_pairwise(vectors[:half]), _mean_pairwise(vectors[half:])
@@ -66,7 +62,7 @@ def generator_metrics(harness, embedder, window: int) -> dict:
     # this catches contraction the embedding metrics can miss.
     surprisals = [
         e.llm.mean_surprisal
-        for e in list(harness.log.read())[-window:]
+        for e in harness.recent_events(window)
         if e.llm is not None
         and e.llm.role in ("conjecturer", "synthesizer")
         and e.llm.mean_surprisal is not None
@@ -95,10 +91,7 @@ def school_novelty(harness, embedder, window: int) -> dict[str, float]:
     """Per-school novelty contribution: mean distance of the school's recent
     output to the global recent centroid (laggard selection, §11.4)."""
     stream = _conjecture_stream(harness)[-window:]
-    vectors = {
-        aid: embedder.embed(content_text(harness.state.artifacts[aid], harness.blobs))
-        for aid in stream
-    }
+    vectors = {aid: harness.embed_artifact(embedder, aid) for aid in stream}
     if not vectors:
         return {}
     all_vecs = list(vectors.values())
@@ -112,7 +105,7 @@ def school_novelty(harness, embedder, window: int) -> dict[str, float]:
 
 
 def adjudicator_metrics(harness, window: int) -> dict:
-    events = list(harness.log.read())[-window:]
+    events = harness.recent_events(window)
     # Attack-target entropy: probing new commitments or re-litigating?
     targets = [t for e in events for _, t in e.state_diff.att_add]
     entropy = None
@@ -168,7 +161,7 @@ def adjudicator_metrics(harness, window: int) -> dict:
 def grounding_lambda(harness, window: int) -> float:
     """Windowed fraction of verdicts from program/observation evals vs
     rubric. No verdicts in window => 1.0 (nothing rode on a rubric)."""
-    events = list(harness.log.read())[-window:]
+    events = harness.recent_events(window)
     recent_warrants = [
         harness.warrants[oid]
         for e in events
