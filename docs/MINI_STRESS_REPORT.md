@@ -25,6 +25,10 @@ and the regression tests that pin each finding.*
 4. **Live hot gauntlet** (`mini/scripts/gauntlet.py`): real provider,
    temperature 1.0, completion cap 900 (deliberately forcing length
    truncations and compression-hint repairs), 4 problems, 25k hard budget.
+   Result: 7/7 calls truncated, 6 repaired, 6 dropped in repair
+   exhaustion, zero candidates survived the starvation cap — and
+   meter == log to the token (25,987), parent ingest clean. The
+   accounting layer's exact target regime, held.
 
 ## Findings (each fixed + pinned by a regression test)
 
