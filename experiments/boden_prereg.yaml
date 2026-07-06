@@ -1,0 +1,104 @@
+# Pre-registration: the Boden experiments
+# Committed BEFORE any arm runs.
+#
+# Question: is an LLM question-evolution loop exploratory (touring a
+# fixed repertoire, however vast) or transformational (extending it)?
+# Boden's distinction, made operational. Follow-up to the basin study's
+# proved half (a frozen model at a fixed question is a sampler whose
+# novelty declines; docs/BASIN_REPORT.md) and its open half (problem
+# turnover restored novelty — but is turnover *generative* or just a
+# bigger tour?).
+#
+# Model: poolside/laguna-m.1 ONLY (throughput and budget permit runs
+# long enough to see plateaus — the thing prior experiments could not
+# afford). Findings are claims about THIS model; family generalization
+# is future work, stated up front.
+
+theories:  # committed rival predictions, Popper-style
+  C-closed: the composed system (answer sampler + question sampler) is
+    still a fixed distribution. Question evolution delays saturation
+    but cannot prevent it; the questions themselves saturate; adaptive
+    question evolution is no better than random conditioning noise.
+  G-generative: chaining outputs into inputs extends the effective
+    repertoire. Marginal novelty under the loop is sustained while the
+    fixed arm decays; the loop's question corpus keeps producing new
+    conceptual material; adaptivity beats noise.
+
+instruments:  # embedder-free — the hashing embedder is certified blind (F4)
+  compression_novelty: marginal LZMA gain — for draw k, how many
+    compressed bytes does it add to the arm's cumulative corpus,
+    normalized by its own standalone compressed size? 1.0 = fully
+    novel, ~0 = already implied by the corpus. Deterministic
+    (Cilibrasi-Vitanyi normalized-compression family).
+  type_growth: cumulative distinct word types and word-bigram types vs
+    cumulative tokens (Heaps curves), computed on normalized text.
+  agreement_rule: a verdict requires BOTH instruments to point the
+    same way; disagreement = UNDECIDED, reported as such.
+
+design:  # 4 arms x 300 answers, matched: the ONLY difference is where
+  # the question stream comes from. No answer call ever sees history —
+  # the question is the sole channel, so arm differences isolate it.
+  common: laguna-m.1, temperature 0.9, json_mode, contract
+    {"claim": str, "mechanism": str}, max_tokens 600, retry<=3 per
+    draw (failures logged and counted, never silently redrawn).
+  arms:
+    F-fixed: 300 draws of the SAME seed question (pi-bronze's Late
+      Bronze Age collapse question, giving continuity with committed
+      baselines). The repertoire-depth floor (E1).
+    L-loop: 2 independent chains x 15 generations x 10 draws. Each
+      generation: the model sees the current question + its last 3
+      answers and poses the successor question "these answers make
+      most urgent". Answers to q_t+1 are fresh draws (no history).
+      THE loop arm (E2), and its 30 generated questions are
+      themselves the E3 corpus.
+    X-exogenous: 30 fixed, human-written history-mechanism questions
+      (committed in the script; spanning eras/regions/systems),
+      10 draws each. The fresh-conditioning ceiling: what ANY new
+      question buys, with no loop.
+    R-noise: the seed question + a deterministic 2-word random "lens"
+      (seeded shuffle of a fixed wordlist), 30 lenses x 10 draws.
+      Pure conditioning perturbation with zero semantic adaptivity.
+  total: 1200 answer draws + 30 question-generation calls (+retries).
+
+predictions:  # thresholds committed now; quartiles are over draw order
+  P1-depth (E1): F-fixed's final-quartile mean compression novelty is
+    < 60% of its first-quartile mean (the sampler decays), replicating
+    the basin study on 5x the draws with a real instrument. If F does
+    NOT decay, the repertoire at temp 0.9 exceeds 300 draws and all
+    other comparisons weaken — say so.
+  P2-loop-vs-fixed (E2): C-closed predicts L-loop's final-quartile
+    novelty rate ends within 25% of F-fixed's (delayed, same fate);
+    G-generative predicts L's final-quartile rate >= 1.5x F's AND
+    L's own final/first quartile ratio >= 60% (sustained, not just
+    slower decay).
+  P3-loop-vs-noise (E2): G-generative requires L-loop's final-quartile
+    novelty > R-noise's by >= 20% (adaptive evolution beats arbitrary
+    perturbation). C-closed predicts L ~= R (within 20%) — "the loop
+    is just noise with extra steps".
+  P4-question-saturation (E3): C-closed predicts the 30 loop-generated
+    questions' own cumulative bigram-type curve flattens: final-third
+    new-type rate < 50% of first-third. G-generative predicts
+    sustained (>= 50%). Also reported: the two chains' question
+    corpora overlap (shared bigram fraction) — high overlap = the
+    question sampler has its own basin.
+  P5-reach (E4): distinct answer-bigram types produced by L-loop that
+    appear in NEITHER F-fixed nor X-exogenous, as a fraction of L's
+    types, compared quartile-by-quartile: G-generative predicts the
+    exclusive-reach fraction GROWS across quartiles (the loop walks
+    away from reachable territory); C-closed predicts flat/shrinking.
+
+verdict_rule:
+  score G-generative one point per prediction resolved its way
+  (P2, P3, P4, P5; P1 is instrument validation, not scored).
+  4/4 -> transformational-for-this-model; 0/4 -> closed-repertoire
+  CONFIRMED for this model; mixed -> report the split honestly —
+  partial generativity is itself a finding (e.g. adaptive loops beat
+  noise but still saturate = "bigger tour, same museum").
+  scope: one weak model, one domain family, 300 draws/arm. This
+  bounds the claim; it does not license "LLMs cannot create" or
+  "LLMs can create" as universals. Committed before running.
+
+budget: laguna only; ~1230 calls + retries, unmetered per operator
+  ("tokens for the small LLM are infinite"). Flat JSONL logs per arm
+  (prompt, raw, tokens, failures) -> runs/boden/<arm>.jsonl so every
+  number is recomputable.
