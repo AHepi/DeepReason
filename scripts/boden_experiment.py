@@ -17,6 +17,7 @@ import lzma
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -34,7 +35,17 @@ PER_CONDITION = 10          # draws per question/lens
 N_CONDITIONS = 30           # questions (X, R) or chain-generations total (L)
 CHAINS = 2                  # independent L chains (15 generations each)
 TEMP = 0.9
-MAX_TOKENS = 600
+# laguna-m.1 is a REASONING model and poolside is the "generic" provider,
+# which has NO API knob to disable reasoning (llm/providers.py). The first
+# run set 600 and reasoning burned ~470-560 of it, truncating the JSON on
+# ~55% of draws — and, worse, the truncation rate rose with question length
+# (the long seed question failed far more than short exogenous ones), which
+# would bias the very loop-vs-fixed comparison this experiment makes. The
+# fix is headroom above the reasoning budget; the 2-field contract needs
+# only ~200 output tokens, so 2500 never truncates. (docs/AGENT.md
+# reasoning-burn trap.) Contaminated first run archived under
+# runs/boden_contaminated_600tok/.
+MAX_TOKENS = 2500
 
 SEED_QUESTION = (
     "Why did the interconnected palace civilizations of the Eastern "
@@ -127,7 +138,13 @@ def _extract(raw: str) -> str:
 
 def _call(ep, prompt: str, model: type[BaseModel], log, kind: str, meta: dict):
     err = ""
-    for attempt in range(3):
+    # A transport error (rate limit / 5xx) is NOT a draw outcome: back off
+    # and retry the SAME draw so a 429 storm can never consume draw slots as
+    # failures. Only schema-invalid output counts against the 3 real
+    # attempts. transport_wait caps total patience per draw (~10 min).
+    transport_wait = 0.0
+    attempt = 0
+    while attempt < 3:
         req = prompt if not err else (
             prompt + f"\nYour previous output was invalid: {err[:300]}\n"
             "Return ONLY a valid JSON object.")
@@ -137,7 +154,13 @@ def _call(ep, prompt: str, model: type[BaseModel], log, kind: str, meta: dict):
             err = str(e)[:200]
             log.write(json.dumps({"kind": kind, "meta": meta, "attempt": attempt,
                                   "endpoint_error": err}) + "\n")
-            continue
+            log.flush()
+            if transport_wait < 600:
+                back = min(60.0, 5.0 * (2 ** min(6, int(transport_wait // 30))))
+                time.sleep(back)
+                transport_wait += back
+                continue  # SAME draw, no attempt consumed
+            return None  # give up this draw after ~10 min of rate limiting
         usage = getattr(ep, "last_usage", None) or {}
         try:
             obj = model.model_validate_json(_extract(raw))
@@ -146,6 +169,7 @@ def _call(ep, prompt: str, model: type[BaseModel], log, kind: str, meta: dict):
             log.write(json.dumps({"kind": kind, "meta": meta, "attempt": attempt,
                                   "invalid": err, "raw": raw[:400],
                                   "usage": usage}) + "\n")
+            attempt += 1  # a schema failure IS a real attempt
             continue
         log.write(json.dumps({"kind": kind, "meta": meta, "attempt": attempt,
                               "prompt": prompt, "raw": raw,
@@ -187,13 +211,24 @@ def _question_prompt(question: str, answers: list[Answer]) -> str:
 def run_arm(arm: str) -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     path = OUT_DIR / f"{arm}.jsonl"
+    # Resume = number of COMPLETED draw() calls already logged: a draw
+    # terminates as a success (carries "prompt") or a hard-fail (carries
+    # "failed"). Invalid mid-call retry attempts also carry "raw", so the
+    # naive `"raw" in line` count over-counted them as done (fixed here).
+    # NOTE (L-loop): resume restores the draw COUNT but not the chain/gen/
+    # question walk — a mid-run death resets L-loop to the seed question.
+    # Acceptable now that the truncation fix makes single-shot completion
+    # the norm; reconstruct-from-log if that stops holding.
     done = 0
     if path.exists():
-        with path.open() as f:
-            done = sum(1 for line in f
-                       if '"kind": "answer"' in line and '"raw"' in line)
+        for line in path.read_text().splitlines():
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            if r.get("kind") == "answer" and ("prompt" in r or r.get("failed")):
+                done += 1
     if done >= N_DRAWS:
-        print(f"[{arm}] already complete ({done} answers)")
+        print(f"[{arm}] already complete ({done} draws)")
         return 0
     ep = _endpoint()
     log = path.open("a")

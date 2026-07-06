@@ -102,3 +102,22 @@ budget: laguna only; ~1230 calls + retries, unmetered per operator
   ("tokens for the small LLM are infinite"). Flat JSONL logs per arm
   (prompt, raw, tokens, failures) -> runs/boden/<arm>.jsonl so every
   number is recomputable.
+
+# ---------------------------------------------------------------------
+# AMENDMENT 1 (measurement-artifact fix, committed before the rerun;
+# NO change to hypotheses, arms, instruments, predictions, or verdict
+# rule — only the token cap that realizes them).
+# The first run (archived: runs/boden_contaminated_600tok/) was
+# contaminated and is DISCARDED without analysis. Cause: laguna-m.1 is
+# a reasoning model and poolside is the "generic" provider, which has
+# no API knob to disable reasoning (llm/providers.py). At max_tokens
+# 600, hidden reasoning consumed ~470-560 tokens per call, truncating
+# the JSON on ~55% of draws. Critically the truncation rate ROSE with
+# question length (seed-question arms F/L hard-failed ~60%, short-
+# question arm X ~17%), so the failure bias was CORRELATED with the
+# loop-vs-fixed contrast the experiment measures — fatal, not merely
+# slow. This is the docs/AGENT.md reasoning-burn trap, reencountered.
+# Fix: max_tokens 600 -> 2500 (the 2-field contract needs ~200 output
+# tokens; 2500 clears the reasoning budget with margin). Also fixed a
+# resume bug that counted invalid retry attempts as completed draws.
+# Discovered before ANY verdict was computed; prereg integrity intact.
