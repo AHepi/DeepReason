@@ -342,6 +342,29 @@ def test_retry_exhausted_spend_reaches_the_log(tmp_path):
     assert logged == meter.total > 0  # nothing invisible
 
 
+def test_docket_entries_name_their_standards(tmp_path):
+    """Operator-drive finding: without the spec id on the entry, operators
+    GUESS the standard for appellate_rule. Trial-block cases carry the
+    target's rubric spec; cases with no rubric carry an empty list."""
+    from deepreason.informal.appellate import docket
+    from deepreason.informal.standards import register_standard
+    from deepreason.ontology import Interface
+
+    h = Harness(tmp_path / "run")
+    register_standard(h, "std-z", rubric="must name a mechanism")
+    h.register_commitment(Commitment(id="kappa-z", eval="rubric:std-z"))
+    target = h.create_artifact(
+        "work under trial", interface=Interface(commitments=["kappa-z"]))
+    h.record_measure(inputs=["trial-blocked:ensemble-split", target.id])
+    h.record_measure(inputs=["trial-blocked:ensemble-split", target.id])
+    plain = h.create_artifact("no rubric here")
+    h.record_measure(inputs=["trial-blocked:referential-integrity", plain.id])
+
+    entries = {e["case"]: e for e in docket(h, Config(USER_RULINGS_BUDGET=5))}
+    assert entries[target.id]["standards"] == ["std-z"]
+    assert entries[plain.id]["standards"] == []
+
+
 def test_incremental_transitions_and_event_tail(tmp_path):
     """Perf caches are derived views of the append-only history: incremental
     transitions() must equal a from-scratch rewalk at every point, and

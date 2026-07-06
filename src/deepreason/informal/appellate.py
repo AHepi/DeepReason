@@ -48,7 +48,49 @@ def docket(harness, config) -> list[dict]:
     ranked = sorted(scores.values(), key=lambda e: (-e["score"], e["case"]))
     for entry in ranked:
         entry["kinds"] = sorted(entry["kinds"])
+        # Which standard(s) a ruling on this case would calibrate — without
+        # this, an operator must GUESS the spec id for appellate_rule
+        # (observed live: an operator invented 'std-explain' and was
+        # rejected). Empty list = no rubric standard applies: appellate_rule
+        # is not the instrument for this case.
+        entry["standards"] = _standards_for(harness, entry["case"])
     return ranked[: config.USER_RULINGS_BUDGET]
+
+
+def _standards_for(harness, case: str) -> list[str]:
+    """Rubric spec ids reachable from a docket case: the trial target's
+    rubric commitments, a nu's mentioned standard artifact, or a problem's
+    rubric criteria."""
+    specs: set[str] = set()
+
+    def from_commitments(cids) -> None:
+        for cid in cids:
+            kappa = harness.commitments.get(cid)
+            if kappa is not None and kappa.eval.startswith("rubric:"):
+                specs.add(kappa.eval.split(":", 1)[1])
+
+    artifact = harness.state.artifacts.get(case)
+    if artifact is not None:
+        from_commitments(artifact.interface.commitments)
+        for ref in artifact.interface.refs:  # a nu MENTIONS its standard
+            target = harness.state.artifacts.get(ref.target)
+            if target is None or not target.content_ref.startswith("inline:"):
+                continue
+            try:
+                body = json.loads(target.content_ref[len("inline:"):])
+            except ValueError:
+                continue
+            spec = (body.get("standard") or {}).get("spec")
+            if spec:
+                specs.add(spec)
+    problem = harness.state.problems.get(case)
+    if problem is not None:
+        from_commitments(problem.criteria)
+        for aid in problem.provenance.from_:
+            rival = harness.state.artifacts.get(aid)
+            if rival is not None:
+                from_commitments(rival.interface.commitments)
+    return sorted(specs)
 
 
 def rule(harness, case_id: str, holding: str, spec_id: str):

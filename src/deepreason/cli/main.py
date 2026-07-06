@@ -180,7 +180,9 @@ def main(argv: list[str] | None = None) -> int:
         if not entries:
             print("(docket is empty)")
         for entry in entries:
-            print(f"{entry['case']}  score={entry['score']}  {', '.join(entry['kinds'])}")
+            standards = ", ".join(entry["standards"]) or "none (appellate_rule not applicable)"
+            print(f"{entry['case']}  score={entry['score']}  {', '.join(entry['kinds'])}  "
+                  f"standards: {standards}")
         return 0
 
     if args.command == "rule":

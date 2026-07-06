@@ -37,7 +37,16 @@ OPERATORS = {
     "poolside/laguna-m.1": (POOLSIDE, "POOLSIDE_API_KEY", None),
 }
 
-TASK = """You are the OPERATING AGENT for the DeepReason harness.
+_TASK_SHARED = """CONSTRAINTS: at most {steps} tool calls total; total engine spend across
+all run_cycles calls at most {engine_budget} tokens (pass token_budget!).
+
+Respond with ONLY one JSON object per turn, no prose:
+  {{"tool": "<name>", "arguments": {{...}}, "why": "<one sentence>"}}
+Finish with: {{"tool": "done", "arguments": {{"summary": "<what you found,
+quoting the surviving theory if any>"}}}}"""
+
+SCENARIOS = {
+    "tides": """You are the OPERATING AGENT for the DeepReason harness.
 
 {agent_md}
 
@@ -54,13 +63,29 @@ conclude the problem resists and say why. Seed exactly this problem first:
   'lunar' in content.lower()) and ('sun' in content.lower() or 'solar' in
   content.lower())"}}]
 
-CONSTRAINTS: at most {steps} tool calls total; total engine spend across
-all run_cycles calls at most {engine_budget} tokens (pass token_budget!).
+""" + _TASK_SHARED,
+    "rubric": """You are the OPERATING AGENT for the DeepReason harness.
 
-Respond with ONLY one JSON object per turn, no prose:
-  {{"tool": "<name>", "arguments": {{...}}, "why": "<one sentence>"}}
-Finish with: {{"tool": "done", "arguments": {{"summary": "<what you found,
-quoting the surviving theory if any>"}}}}"""
+{agent_md}
+
+GOAL: drive the harness on an informal history problem (judged by a rubric
+STANDARD via trials) until at least one account SURVIVES and you have READ
+it; if the docket shows a case, clear it with an appellate ruling. Seed
+exactly this first:
+
+  problem: {{"id": "pi-fall", "description": "Explain why the Western Roman
+  Empire fell in the fifth century while the Eastern half survived; name a
+  specific causal mechanism and one observation that would have refuted
+  your account.", "criteria": ["kappa-fall"]}}
+  commitments: [{{"id": "kappa-fall", "eval": "rubric:std-fall"}}]
+  standard: {{"id": "std-fall", "rubric": "An acceptable account must name a
+  specific causal mechanism (not a restatement), state at least one
+  observation that would have refuted it, and explain the East-West
+  asymmetry rather than ignoring it. Circular or unfalsifiable accounts
+  violate this standard."}}
+
+""" + _TASK_SHARED,
+}
 
 
 def agent_md_slice() -> str:
@@ -75,13 +100,13 @@ def run_operator(model: str, steps: int, engine_budget: int, args) -> dict:
         base, model, api_key=os.environ[key_env], temperature=0.0,
         max_tokens=1200, json_mode=True, reasoning=reasoning,
     )
-    slug = model.replace("/", "_").replace(".", "_")
+    slug = f"{model}_{args.scenario}".replace("/", "_").replace(".", "_")
     root = Path("runs/operator_drive") / slug
     if root.exists():
         shutil.rmtree(root)  # fresh seat each attempt (test scaffold, not harness data)
 
-    history = TASK.format(agent_md=agent_md_slice(), steps=steps,
-                          engine_budget=engine_budget)
+    history = SCENARIOS[args.scenario].format(
+        agent_md=agent_md_slice(), steps=steps, engine_budget=engine_budget)
     transcript: list[dict] = []
     engine_spent = 0
     violations: list[str] = []
@@ -179,18 +204,20 @@ def main() -> int:
                         choices=sorted(OPERATORS), help="repeatable; default: all")
     parser.add_argument("--steps", type=int, default=12)
     parser.add_argument("--engine-budget", type=int, default=60_000)
+    parser.add_argument("--scenario", default="tides", choices=sorted(SCENARIOS))
     args = parser.parse_args()
     for env in ("DEEPSEEK_API_KEY", "POOLSIDE_API_KEY"):
         if not os.environ.get(env):
             print(f"{env} not set", file=sys.stderr)
             return 1
-    report = {"experiment": "operator-drive (post-playbook)", "drives": []}
+    report = {"experiment": f"operator-drive (post-playbook, {args.scenario})",
+              "drives": []}
     for model in (args.operator or sorted(OPERATORS)):
         print(f"=== operator: {model} ===", flush=True)
         drive = run_operator(model, args.steps, args.engine_budget, args)
         report["drives"].append(drive)
         print(json.dumps(drive["outcome"], indent=1), flush=True)
-    out = ROOT / "experiments" / "results" / "operator_drive_report.json"
+    out = ROOT / "experiments" / "results" / f"operator_drive_report_{args.scenario}.json"
     out.write_text(json.dumps(report, indent=2) + "\n")
     print(f"report: {out}")
     return 0
