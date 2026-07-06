@@ -124,10 +124,21 @@ class NextQuestion(BaseModel):
 
 
 def _endpoint() -> OpenAICompatEndpoint:
+    # AMENDMENT 2 (prereg): poolside/laguna-m.1 was hard-429 for 2.5+ hours
+    # (unusable). Switched to deepseek-v4-flash with reasoning="none" — a
+    # provider whose reasoning knob is controllable, so the reasoning-burn
+    # truncation that contaminated run 1 cannot recur. The verdict now
+    # scopes to deepseek-v4-flash. The laguna config is preserved below for
+    # the record / a future poolside-recovered rerun.
+    if os.environ.get("BODEN_PROVIDER") == "poolside":
+        return OpenAICompatEndpoint(
+            "https://inference.poolside.ai/v1", "poolside/laguna-m.1",
+            api_key=os.environ["POOLSIDE_API_KEY"], temperature=TEMP,
+            max_tokens=MAX_TOKENS, json_mode=True)
     return OpenAICompatEndpoint(
-        "https://inference.poolside.ai/v1", "poolside/laguna-m.1",
-        api_key=os.environ["POOLSIDE_API_KEY"], temperature=TEMP,
-        max_tokens=MAX_TOKENS, json_mode=True)
+        "https://api.deepseek.com", "deepseek-v4-flash",
+        api_key=os.environ["DEEPSEEK_API_KEY"], temperature=TEMP,
+        max_tokens=MAX_TOKENS, json_mode=True, reasoning="none")
 
 
 def _extract(raw: str) -> str:

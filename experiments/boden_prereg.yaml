@@ -121,3 +121,21 @@ budget: laguna only; ~1230 calls + retries, unmetered per operator
 # tokens; 2500 clears the reasoning budget with margin). Also fixed a
 # resume bug that counted invalid retry attempts as completed draws.
 # Discovered before ANY verdict was computed; prereg integrity intact.
+
+# ---------------------------------------------------------------------
+# AMENDMENT 2 (model switch, committed before the rerun; NO change to
+# hypotheses, arms, instruments, predictions, or verdict rule).
+# poolside/laguna-m.1 was hard rate-limited (HTTP 429) continuously for
+# 2.5+ hours after the first (contaminated) run — a long-term quota block,
+# unusable. Even a single probe call fails. The experiment MODEL is
+# therefore switched to deepseek-v4-flash with reasoning="none" (deepseek
+# is a provider whose reasoning knob IS controllable, so the reasoning-
+# burn artifact that killed run 1 cannot recur — Amendment 1's max_tokens
+# headroom stays as belt-and-suspenders). SCOPE CHANGE: the verdict now
+# describes deepseek-v4-flash, not laguna-m.1. This is still "a single
+# model, one domain family, 300 draws/arm" — the Boden question (is an
+# LLM question-evolution loop exploratory or transformational?) is
+# model-agnostic; only the scoping noun changes. Decided after the
+# AskUserQuestion tool failed and the operator said "continue"; flagged
+# transparently here so a reader knows exactly which model produced the
+# numbers. The user may revert to laguna if/when poolside recovers.
