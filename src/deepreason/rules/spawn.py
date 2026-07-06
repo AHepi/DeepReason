@@ -69,11 +69,17 @@ def scan_spawns(harness, config) -> list[Problem]:
             continue
         for pid in sorted(pids):
             parent = state.problems[pid]
+            # Carry the ROOT description, not the parent's: a successor of a
+            # successor would otherwise nest the whole ancestor chain
+            # (observed live: 7 levels deep, 52/70 problems multi-nested,
+            # compounding pack size per refutation generation). The text
+            # after the last marker is the seed description at any depth.
+            root_desc = parent.description.rsplit("Original problem: ", 1)[-1]
             _spawn(
                 SpawnTrigger.SUCCESSOR,
                 [aid, pid],
                 f"supersede refuted candidate {aid[:12]} on {pid}. "
-                f"Original problem: {parent.description}",
+                f"Original problem: {root_desc}",
                 criteria=parent.criteria,
                 problem_id=f"succ:{aid[:12]}",
             )

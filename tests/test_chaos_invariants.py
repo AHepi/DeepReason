@@ -99,6 +99,28 @@ def test_disagreeing_ensemble_and_weak_defender(tmp_path):
         v["check"] != "warrant-validity" for v in result["violations"])
 
 
+def test_successor_descriptions_do_not_nest(tmp_path):
+    """Chaos finding: successor problems embedded the whole ancestor chain
+    (7 levels deep live). A successor-of-a-successor must carry the ROOT
+    description exactly once, at any depth."""
+    from deepreason.rules.spawn import scan_spawns
+    from tests.conftest import attack
+
+    h = Harness(tmp_path / "run")
+    _seed(h)
+    seed_desc = h.state.problems["pi-t"].description
+    config = Config(HV_MIN=None, FLOOR=0)
+    pid = "pi-t"
+    for depth in range(3):
+        a = h.create_artifact(f"candidate at depth {depth}", problem_id=pid)
+        attack(h, a.id, f"kill-{depth}")
+        spawned = scan_spawns(h, config)
+        succ = next(p for p in spawned if p.id == f"succ:{a.id[:12]}")
+        assert succ.description.count("Original problem:") == 1
+        assert seed_desc in succ.description
+        pid = succ.id
+
+
 def test_duplicate_flood_hits_gate_and_dedupe(tmp_path):
     root = tmp_path / "run"
     h = Harness(root)
