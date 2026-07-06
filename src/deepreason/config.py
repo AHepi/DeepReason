@@ -31,6 +31,12 @@ class Config(BaseModel):
     STANCE_DECAY: float | None = None  # lineage size at which stance weight hits 0 (None => 20)
     XEXAM_SHARE: float = 0.15
     RESEED_DIST_MIN: float | None = None
+    # Refuted-attractor orbiting floor (basin study, docs/BASIN_REPORT.md):
+    # gate blocks per CAPTURE_W event window before the ladder rotates the
+    # orbiting school's stance. Healthy runs measured exactly 0; orbiting
+    # runs ~7 per 20 events. Default ON — zero false fires across every
+    # committed root. None disables.
+    GATE_ORBIT_MIN: int | None = 5
     NEAR_DUP_EPS: float | None = None
     VS_K: int = 6
     # Conjecture-pack shaping (attention only, never status). Defaults

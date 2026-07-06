@@ -180,6 +180,43 @@ def grounding_lambda(harness, window: int) -> float:
     return exogenous / len(verdicts)
 
 
+def gate_block_count(harness, window: int) -> int:
+    """Anti-relapse refusals in the recent event window. The basin study
+    (docs/BASIN_REPORT.md) measured this as the clean circling signal:
+    0 in every healthy arm, 54/36 in the two refuted-attractor-orbiting
+    arms — scale-free, free, and already on the log."""
+    return sum(
+        1
+        for e in harness.recent_events(window)
+        for i in e.inputs
+        if isinstance(i, str) and i.startswith("gate:")
+    )
+
+
+def orbit_attractor_school(harness, window: int) -> str | None:
+    """The school whose refuted attractor the generator is orbiting:
+    majority school across the refuted targets named by recent gate
+    blocks (deterministic tiebreak by school id)."""
+    import re
+
+    counts: dict[str, int] = {}
+    for e in harness.recent_events(window):
+        for i in e.inputs:
+            if not (isinstance(i, str) and i.startswith("gate:")):
+                continue
+            m = re.search(r"to refuted ([0-9a-f]{8,})", i)
+            if not m:
+                continue
+            prefix = m.group(1)
+            for aid, a in harness.state.artifacts.items():
+                if aid.startswith(prefix) and a.provenance.school:
+                    counts[a.provenance.school] = counts.get(a.provenance.school, 0) + 1
+                    break
+    if not counts:
+        return None
+    return max(sorted(counts), key=lambda s: counts[s])
+
+
 def raw_flags(harness, embedder, config) -> dict[str, bool]:
     """Un-hysteresized conjunction flags for one window (§11.3)."""
     window = config.CAPTURE_W
@@ -209,9 +246,19 @@ def raw_flags(harness, embedder, config) -> dict[str, bool]:
     ritual = sum(ritual_conditions) >= 2
 
     grounding_decay = config.LAMBDA_FLOOR is not None and lam < config.LAMBDA_FLOOR
+
+    # Refuted-attractor orbiting (basin study): the generator keeps
+    # re-proposing battery-equivalents of a refuted artifact and the gate
+    # keeps refusing them. Unlike the embedding flags this needs no
+    # calibrated scale — a healthy run's rate is exactly zero.
+    orbiting = (
+        config.GATE_ORBIT_MIN is not None
+        and gate_block_count(harness, window) >= config.GATE_ORBIT_MIN
+    )
     return {
         "lineage_stagnation": stagnation,
         "school_convergence": convergence,
         "adjudication_ritual": ritual,
         "grounding_decay": grounding_decay,
+        "attractor_orbiting": orbiting,
     }
