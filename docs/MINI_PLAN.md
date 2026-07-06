@@ -1,6 +1,7 @@
 # MiniReason — construction plan
 
-*Branch: `claude/mini-harness`. Status: plan, not yet built.*
+*Branch: `claude/mini-harness`. Status: BUILT — see `mini/` (M0–M4 done;
+M2's live smoke ships as `mini/scripts/smoke.py`, pending an API key).*
 *Every inclusion/exclusion below cites a measurement from the parent
 system's experiment record (see `experiments/results/INDEX_2026-07-05.md`,
 `docs/BASIN_REPORT.md`). Nothing is kept on faith.*
