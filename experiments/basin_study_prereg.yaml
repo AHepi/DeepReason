@@ -1,0 +1,93 @@
+# Pre-registration: basin study, live manipulation battery
+# Committed BEFORE any live arm runs.
+#
+# Question: WHEN does conjecture start circling a basin (low variation,
+# little novelty) and WHY — which mechanism pulls it there?
+#
+# Offline phase (basin_offline_report.json, zero tokens, 8 committed
+# roots) already established, correlationally:
+#   F1: novelty declines with PROBLEM AGE for strong models on fixed
+#       problems (needham r=-0.68) and RECOVERS under problem turnover
+#       (criticism run, +0.31 with age, late/early=1.12 — successor
+#       spawning is the one observed antidote).
+#   F2: strong models are BELOW-chance at echoing their pack (nearest
+#       prior artifact was a displayed exemplar at 0.22-0.46x chance):
+#       conditioning is anti-basin for them (the VS diversity directive
+#       is honored). The weak model at temp 0.2 is ABOVE chance (1.12x,
+#       raw rate 0.78): pack parroting.
+#   F3: survivorship narrowing ruled out: accepted-subset diversity is
+#       0.82-0.99x the full pool's — adjudication is not the funnel.
+#   F4: the embedder scale is nearly blind: within-problem vs
+#       cross-problem distance distributions overlap almost entirely
+#       (e.g. medians 0.645 vs 0.671 on runs/criticism) — which is WHY
+#       school_convergence (threshold 0.15 on this scale) never fires.
+#   F5: stance decay untestable offline — only the criticism run crossed
+#       lineage 20, confounded by problem turnover.
+#
+# The live battery tests what correlations cannot: causation, by
+# manipulating one variable per arm.
+
+hypotheses:
+  H-exhaustion (primary): for a strong model on a FIXED problem the
+    basin is the model's own answer repertoire depleting — not pack
+    conditioning. Novelty declines because the k-th distinct answer to
+    the same question does not exist, not because the pack anchors it.
+  H-echo-weak: for a weak model, the basin is pack echo, and sampling
+    temperature is its dial.
+  H-decay: vanishing stance weight (lineage > STANCE_DECAY) removes the
+    only inter-school differentiator in the pack, so schools converge
+    on each other after crossing it.
+  H-complement: the built-in §11.4 complement directive ("produce the
+    attempt these summaries make least likely") buys real novelty —
+    the ladder's remedy actually works when applied every cycle.
+
+design:  # conjecture-only runs: no critics/judges — generation dynamics
+  # isolated from adjudication (licensed by F3: adjudication is not the
+  # funnel). All arms: suite bronze (pi-bronze, fixed single problem),
+  # N_SCHOOLS=2, VS_K=2, ~26 cycles -> ~50 conjectures/arm, fresh roots
+  # runs/basin/<arm>, token cap 60k/arm (scheduler stops at budget).
+  arms:
+    A-control:    v4-pro, temp 1.0, NEIGHBOURHOOD_N=8, decay default(20)
+    B-blind:      v4-pro, NEIGHBOURHOOD_N=0 (generator never sees prior
+                  output; the gate still dedupes downstream)
+    C-decay-off:  v4-pro, STANCE_DECAY=1e9 (stance never fades)
+    D-decay-fast: v4-pro, STANCE_DECAY=5 (stance gone after 5/school)
+    E-complement: v4-pro, COMPLEMENT_ALWAYS=true
+    F-weak-cold:  laguna-m.1, temp 0.2, NEIGHBOURHOOD_N=8
+    G-weak-hot:   laguna-m.1, temp 1.0, NEIGHBOURHOOD_N=8
+
+metrics:  # all from views/basin.py, the same instrument as offline
+  primary: late_over_early novelty ratio; rolling novelty curve;
+    echo_vs_chance; inter-school centroid distance trajectory;
+    duplicate/gate-block counts (from the log)
+  per arm also: within-school diversity, surprisal slope
+
+predictions:  # committed before the first token
+  P1 (H-exhaustion): B-blind's late_over_early is within 0.15 of
+    A-control's, AND B produces >= 2x A's duplicate/near-dup gate
+    events (it cannot see what it already said). If instead B stays
+    HIGH-novelty while A declines, conditioning (not exhaustion) drives
+    the basin and H-exhaustion is REFUTED.
+  P2 (H-echo-weak): F-weak-cold echo_vs_chance > 1.0 > G-weak-hot
+    echo_vs_chance, and G's late_over_early > F's by >= 0.1.
+  P3 (H-decay): C-decay-off's mean inter-school centroid distance over
+    the final 20 conjectures exceeds D-decay-fast's by >= the offline
+    within-problem IQR/2; A-control sits between them. If C ~= D, the
+    stance section does no differentiating work and H-decay is REFUTED
+    (consistent with F2's below-chance echo: the model barely reads
+    the stance line either).
+  P4 (H-complement): E-complement's late_over_early >= A-control's
+    + 0.1, or REFUTED (the documented remedy is placebo at pro level).
+  ordering: P1 is the primary claim; P2-P4 are secondary and reported
+    regardless of P1's outcome.
+
+decision_rules:
+  each prediction evaluates independently CONFIRMED/REFUTED/UNDECIDED
+  (undecided = an arm died early or metrics returned None; say so).
+  No verdict may cite a metric not listed above. The embedder is
+  HashingEmbedder(128) — same scale caveat F4 applies to everything;
+  effects are likely UNDERSTATED, so confirmations are conservative
+  and refutations of small predicted effects are weak evidence.
+
+budget: 7 arms x <= 60k = <= 420k tokens hard ceiling; expected ~300k
+  (pro skeleton candidates ~1.2k completion tokens; laguna cheaper).

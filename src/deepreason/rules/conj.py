@@ -41,8 +41,9 @@ def conj(
         vs_k=config.VS_K,
         token_budget=config.PACK_TOKEN_BUDGET,
         school=school,
-        complement=complement,
+        complement=complement or bool(config.COMPLEMENT_ALWAYS),
         specs=specs,
+        neighbourhood_n=config.NEIGHBOURHOOD_N,
     )
     output, llm_call = adapter.call("conjecturer", pack, ConjecturerOutput)
     # Level-2 transmission diagnostic (attention/reporting only, §0): did

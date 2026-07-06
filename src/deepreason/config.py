@@ -33,6 +33,10 @@ class Config(BaseModel):
     RESEED_DIST_MIN: float | None = None
     NEAR_DUP_EPS: float | None = None
     VS_K: int = 6
+    # Conjecture-pack shaping (attention only, never status). Defaults
+    # reproduce prior behavior exactly; the basin study manipulates them.
+    NEIGHBOURHOOD_N: int = 8  # exemplars shown per conj pack (0 = blind)
+    COMPLEMENT_ALWAYS: bool = False  # force the §11.4 complement directive every cycle
     PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage"])
     LAMBDA_FLOOR: float | None = None
     CAPTURE_W: int = 20

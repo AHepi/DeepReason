@@ -42,12 +42,15 @@ def render_conj_pack(
     school: dict | None = None,
     complement: bool = False,
     specs: list[str] | None = None,
+    neighbourhood_n: int = NEIGHBOURHOOD_N,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
     stance directive fades as lineage grows. complement is the §11.4
     stagnation directive. specs are Level-2 diversity specifications:
-    candidate k must realize spec k (llm/specs.py)."""
+    candidate k must realize spec k (llm/specs.py). neighbourhood_n caps
+    the exemplar section (0 = blind generation — the basin study's
+    conditioning-vs-repertoire manipulation); presentation only."""
     lines = [
         f"PROBLEM {problem.id}",
         problem.description,
@@ -64,9 +67,9 @@ def render_conj_pack(
             if state.artifacts[aid].provenance.school == school["id"]
         ]
         others = [aid for aid in accepted if aid not in set(lineage)]
-        accepted = (lineage + others)[:NEIGHBOURHOOD_N]
+        accepted = (lineage + others)[:neighbourhood_n]
     else:
-        accepted = accepted[-NEIGHBOURHOOD_N:]
+        accepted = accepted[-neighbourhood_n:] if neighbourhood_n else []
     # Stance before neighbourhood: the stance text is stable per school while
     # the neighbourhood changes every cycle — cache-prefix ordering (angle 4).
     if school is not None and school.get("weight", 0) > 0:
