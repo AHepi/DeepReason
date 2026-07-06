@@ -95,15 +95,20 @@ def main() -> int:
     for aid, _, sk in short:
         print(f"  {labels[aid]}: {sk.claim[:80]}", flush=True)
 
+    # flash/default (not pro): the mini's HttpEndpoint has no reasoning-off
+    # knob, and pro reasons by default — ~13k tokens/pair and truncated
+    # criterion JSON. flash/default certified at 0.0 planted-flaw error, so
+    # it is the right cheap seat; laguna adds the cross-family check.
     seats = {
-        "pro/off": HttpEndpoint(args.base_url, "deepseek-v4-pro", api_key=api_key,
-                                temperature=0.0, max_tokens=1200),
+        "flash/default": HttpEndpoint(args.base_url, "deepseek-v4-flash",
+                                      api_key=api_key, temperature=0.0,
+                                      max_tokens=1500),
     }
     poolside_key = os.environ.get("POOLSIDE_API_KEY")
     if poolside_key:
         seats["laguna-m.1"] = HttpEndpoint(
             "https://inference.poolside.ai/v1", "poolside/laguna-m.1",
-            api_key=poolside_key, temperature=0.0, max_tokens=1200)
+            api_key=poolside_key, temperature=0.0, max_tokens=1500)
 
     meter = TokenMeter(budget=args.budget)
     blobs = BlobStore(Path("runs/mini_rank_blobs"))
