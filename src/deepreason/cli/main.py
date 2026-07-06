@@ -54,6 +54,13 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
     sub.add_parser("merge", help="merge another saved graph (G-Set union)").add_argument("path")
     sub.add_parser("trace", help="print the events touching an id").add_argument("id")
+    narrate_cmd = sub.add_parser(
+        "narrate", help="render the event log as chain-of-thought prose (view, spec 8)"
+    )
+    narrate_cmd.add_argument("--window", type=int, default=None,
+                             help="only the last N events")
+    narrate_cmd.add_argument("--upto", type=int, default=None,
+                             help="only events up to seq N (time-travel narration)")
     return parser
 
 
@@ -100,6 +107,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "theory":
         harness = Harness(Path(args.root))
         print(theory(_resolve(harness, args.id), harness.state, harness.blobs, log=harness.log))
+        return 0
+
+    if args.command == "narrate":
+        from deepreason.views.narrate import narrate
+
+        harness = Harness(Path(args.root))
+        print(narrate(harness, window=args.window, upto_seq=args.upto))
         return 0
 
     if args.command == "run":

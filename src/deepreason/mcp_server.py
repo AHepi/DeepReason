@@ -100,6 +100,14 @@ def _tools() -> list[dict]:
             },
         },
         {
+            "name": "narrate",
+            "description": "Render the event log as chain-of-thought prose: proposals, attacks, refutations, reinstatements and blocked rulings joined by logical connectors. Deterministic view of the log.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {**_ROOT, "window": {"type": "integer"}},
+            },
+        },
+        {
             "name": "why",
             "description": "Print the attack/defence chain justifying an artifact's current status.",
             "inputSchema": {
@@ -208,6 +216,12 @@ def call_tool(name: str, arguments: dict) -> str:
 
         harness = _harness(arguments)
         return why(_resolve(harness, arguments["id"]), harness.state)
+
+    if name == "narrate":
+        from deepreason.views.narrate import narrate
+
+        harness = _harness(arguments)
+        return narrate(harness, window=arguments.get("window"))
 
     if name == "eval_report":
         from deepreason.report import eval_report
