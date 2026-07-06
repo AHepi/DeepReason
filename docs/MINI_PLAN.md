@@ -1,7 +1,11 @@
 # MiniReason — construction plan
 
-*Branch: `claude/mini-harness`. Status: BUILT — see `mini/` (M0–M4 done;
-M2's live smoke ships as `mini/scripts/smoke.py`, pending an API key).*
+*Branch: `claude/mini-harness`. Status: BUILT AND LIVE-VERIFIED — see
+`mini/`. M0–M4 done; M2 smoke PASS (meter==log, zero orbit windows,
+novelty late/early 1.01 vs 0.846 baseline, parent ingest clean:
+`experiments/results/mini_smoke_report.json`); all three judge seats
+certified at 0.0 planted-flaw error
+(`experiments/results/mini_seat_certification.json`).*
 *Every inclusion/exclusion below cites a measurement from the parent
 system's experiment record (see `experiments/results/INDEX_2026-07-05.md`,
 `docs/BASIN_REPORT.md`). Nothing is kept on faith.*
