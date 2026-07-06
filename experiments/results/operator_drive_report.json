@@ -4,15 +4,12 @@
     {
       "operator": "deepseek-v4-flash",
       "outcome": {
-        "engine_spent": 19964,
+        "engine_spent": 11960,
         "violations": [
-          "step 3: invented/unknown tool 'theory'",
-          "step 4: invented/unknown tool 'theory'",
-          "step 5: invented/unknown tool 'theory'",
-          "step 8: invented/unknown tool 'theory'"
+          "step 3: bad arguments for theory"
         ],
         "survivors": 4,
-        "events": 65,
+        "events": 36,
         "read_theory": true,
         "read_report_or_frontier": true,
         "finished": true
@@ -41,7 +38,7 @@
               }
             ]
           },
-          "why": "Seed the tides problem with two criteria commitments to start the harness.",
+          "why": "Register the tides problem with two criteria commitments.",
           "result_head": "registered problem pi-tides with criteria ['k-mechanism', 'k-tidal-facts']"
         },
         {
@@ -53,8 +50,8 @@
             "token_budget": 20000,
             "config": "/home/user/DeepReason/config/deepseek.yaml"
           },
-          "why": "Fund 3 cycles with a 20k token budget to generate initial artifacts and criticism.",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 13476,\n    \"metered_tokens\": 13476,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"47fc065e6dc9\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"4e0ff87db2bf\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"2827fb1d"
+          "why": "Fund initial cycles to generate artifacts and criticism under tight budget.",
+          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 11960,\n    \"metered_tokens\": 11960,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"fc636092710d\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"cc967efd1b92\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"0bb01ea1"
         },
         {
           "step": 2,
@@ -62,188 +59,53 @@
           "arguments": {
             "problem_id": "pi-tides"
           },
-          "why": "Check which artifacts survived the first 3 cycles to decide where to focus next.",
-          "result_head": "[\n  {\n    \"description\": \"Explain why most coasts see two high tides a day and why their height varies across the month; name the mechanism explicitly and state one falsifiable consequence.\",\n    \"problem\": \"pi-tides\",\n    \"survivors\": [\n      \"1e2086321fa6aaa5390b7c5ae5c79cfc5aeff626ec8348310293b18ed49171ed\",\n      \"91874dc867cba5e5a33b0099623ee2eb67d40867092ba88d28036681c94c43e9\",\n      \"54ee4bd"
+          "why": "Check which artifacts survived criticism after initial cycles.",
+          "result_head": "[\n  {\n    \"description\": \"Explain why most coasts see two high tides a day and why their height varies across the month; name the mechanism explicitly and state one falsifiable consequence.\",\n    \"problem\": \"pi-tides\",\n    \"survivors\": [\n      \"f75510b9a349d29919f129a932f9d608d5b20632597aa388f44db634bc93681f\",\n      \"0eb9f598697852b21239ba867b86577ca17fb703ef3fb1f615e8d34b50c0ab86\"\n    ],\n    \"tri"
         },
         {
           "step": 3,
           "tool": "theory",
           "arguments": {
-            "artifact_id": "1e2086321fa6aaa5390b7c5ae5c79cfc5aeff626ec8348310293b18ed49171ed"
+            "artifact_id": "f75510b9a349d29919f129a932f9d608d5b20632597aa388f44db634bc93681f"
           },
-          "why": "Read the theory of a surviving artifact to assess its quality and mechanism naming.",
-          "result_head": "ERROR: KeyError('id')"
+          "why": "Read the surviving theory on the main problem to assess its content and mechanism.",
+          "result_head": "ERROR: theory: missing required argument(s) ['id']; received ['artifact_id']. Required: ['id']."
         },
         {
           "step": 4,
           "tool": "theory",
           "arguments": {
-            "artifact_id": "1e2086321fa6aaa5390b7c5ae5c79cfc5aeff626ec8348310293b18ed49171ed"
+            "id": "f75510b9a349d29919f129a932f9d608d5b20632597aa388f44db634bc93681f"
           },
-          "why": "Read the theory of a surviving artifact to assess its quality and mechanism naming.",
-          "result_head": "ERROR: KeyError('id')"
+          "why": "Read the surviving theory on the main problem to assess its content and mechanism.",
+          "result_head": "# Theory: f75510b9a349\n\n## f75510b9a349 [accepted]\n\nMost coasts experience two high tides daily due to the combined gravitational pull of the moon and sun, creating two tidal bulges on opposite sides of Earth. As Earth rotates through these bulges, a given coast passes through a high tide approximately every 12 hours and 25 minutes, leading to a semidiurnal pattern. The height variation across the"
         },
         {
           "step": 5,
           "tool": "theory",
           "arguments": {
-            "artifact_id": "91874dc867cba5e5a33b0099623ee2eb67d40867092ba88d28036681c94c43e9"
+            "id": "0eb9f598697852b21239ba867b86577ca17fb703ef3fb1f615e8d34b50c0ab86"
           },
-          "why": "Try another survivor artifact ID from the frontier list.",
-          "result_head": "ERROR: KeyError('id')"
+          "why": "Read the other surviving theory on the main problem to compare.",
+          "result_head": "# Theory: 0eb9f5986978\n\n## 0eb9f5986978 [accepted]\n\nThe two daily tides are not from celestial bulges but from ocean basin resonance: the gravitational forcing by the moon and sun excites edge waves and basin oscillations (seiches) in coastal embayments, and the resonance period often matches the 12-hour forcing, giving a semidiurnal tide. Monthly variability comes from the modulation of the forci"
         },
         {
           "step": 6,
-          "tool": "eval_report",
-          "arguments": {
-            "problem_id": "pi-tides"
-          },
-          "why": "Get metrics to understand why theory tool fails and assess run health.",
-          "result_head": "{\n  \"attack_validity_rate\": 1.0,\n  \"audits\": {\n    \"hits\": 0,\n    \"planted_flaw_error_rate\": null,\n    \"self_preference\": null,\n    \"verbosity_bias\": null\n  },\n  \"capture\": {\n    \"adjudicator\": {\n      \"attack_target_entropy\": 1.0000000000000002,\n      \"criticism_debt\": 0.0,\n      \"g_churn\": 5,\n      \"n_attacks\": 5,\n      \"refutations\": 5,\n      \"reinstatement_rate\": 0.0,\n      \"validity_attack_ra"
-        },
-        {
-          "step": 7,
-          "tool": "run_cycles",
-          "arguments": {
-            "problem_id": "pi-tides",
-            "cycles": 3,
-            "token_budget": 20000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
-          },
-          "why": "Fund 3 more cycles with remaining budget to generate criticism and potentially reinstate or advance survivors.",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 6488,\n    \"metered_tokens\": 6488,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"6d5812397828\",\n      \"gate\": \"battery-equivalent (~=_B) to refuted 47fc065e6dc9\"\n    },\n    {\n      \"candidate\": \"95fed74399c6\",\n      \"gate\": \"battery-equi"
-        },
-        {
-          "step": 8,
-          "tool": "theory",
-          "arguments": {
-            "artifact_id": "46b9a618d2cc899e19c91df29c3740b56931af282a6987f8384c5786ef644c7b"
-          },
-          "why": "Read the theory of the sole surviving artifact to assess its quality and mechanism naming.",
-          "result_head": "ERROR: KeyError('id')"
-        },
-        {
-          "step": 9,
-          "done": "After 6 cycles and ~20k tokens, the pi-tides problem has one surviving artifact (46b9a618d2cc) but the theory tool fails with KeyError on all artifact IDs, preventing reading of the theory. The eval_report shows 4 survivors earlier but now only 1, with high attack validity (1.0) and zero reinstatements. The harness is functioning but the theory tool appears to require a different ID format or path. I cannot confirm the mechanism is named or a falsifiable consequence stated. The problem resists due to tool limitations."
-        }
-      ]
-    },
-    {
-      "operator": "deepseek-v4-pro",
-      "outcome": {
-        "engine_spent": 31783,
-        "violations": [],
-        "survivors": 9,
-        "events": 83,
-        "read_theory": true,
-        "read_report_or_frontier": false,
-        "finished": true
-      },
-      "transcript": [
-        {
-          "step": 0,
-          "tool": "seed_problem",
-          "arguments": {
-            "problem": {
-              "id": "pi-tides",
-              "description": "Explain why most coasts see two high tides a day and why their height varies across the month; name the mechanism explicitly and state one falsifiable consequence.",
-              "criteria": [
-                "k-mechanism",
-                "k-tidal-facts"
-              ]
-            },
-            "commitments": [
-              {
-                "id": "k-mechanism",
-                "eval": "predicate:len(content) > 120"
-              },
-              {
-                "id": "k-tidal-facts",
-                "eval": "predicate:('moon' in content.lower() or 'lunar' in content.lower()) and ('sun' in content.lower() or 'solar' in content.lower())"
-              }
-            ]
-          },
-          "why": "Seed the tides problem with two commitments as specified.",
-          "result_head": "registered problem pi-tides with criteria ['k-mechanism', 'k-tidal-facts']"
-        },
-        {
-          "step": 1,
-          "tool": "run_cycles",
-          "arguments": {
-            "cycles": 3,
-            "token_budget": 20000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
-          },
-          "why": "Run initial cycles to generate candidate theories under a modest budget.",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 9897,\n    \"metered_tokens\": 9897,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"db0e8c4b9a7e\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"f4379b796f0e\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"817bbdf2da"
-        },
-        {
-          "step": 2,
-          "tool": "run_cycles",
-          "arguments": {
-            "cycles": 3,
-            "token_budget": 20000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
-          },
-          "why": "Run more cycles to generate criticism and sharpen the surviving theory.",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 11646,\n    \"metered_tokens\": 11646,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"92b4a49a03ca\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"1b81bacb56bd\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"953c7196"
-        },
-        {
-          "step": 3,
-          "tool": "theory",
-          "arguments": {
-            "id": "7217c6bb0ae8e7f3487a1f7146151dada4e3ab8f1101399ae7d8cb9b4d45f453"
-          },
-          "why": "Read the theory of the first surviving artifact to check its content.",
-          "result_head": "# Theory: 7217c6bb0ae8\n\n## 7217c6bb0ae8 [accepted]\n\nTides result from resonant basin oscillations in ocean basins excited by the gravitational differential of the Moon and Sun. The equilibrium tide theory with its two bulges is a simplification; actual tides are shaped by coastal geography and basin resonance, leading to two high tides daily due to the semi-diurnal nature of the forcing.\n\n- refs: "
-        },
-        {
-          "step": 4,
-          "tool": "theory",
-          "arguments": {
-            "id": "cf10cc3c71a2df0ff917038736fbf809161e067b8c8e8cd19a16408e16f8a228"
-          },
-          "why": "Read the theory of the second surviving artifact to check its content.",
-          "result_head": "# Theory: cf10cc3c71a2\n\n## cf10cc3c71a2 [accepted]\n\nA controversial mechanism: tidal forces modulate Earth's internal pressure affecting seafloor compliance, causing bulges not just in water but crust, altering water depth. The Sun's heating also expands water slightly, contributing to daily and monthly thermal tides. Spring tides occur when Sun and Moon combine thermally and gravitationally. Fals"
-        },
-        {
-          "step": 5,
-          "tool": "run_cycles",
-          "arguments": {
-            "cycles": 3,
-            "token_budget": 20000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
-          },
-          "why": "Run more cycles to see if cf10cc3c71a2 gets criticized or if 7217c6bb0ae8 survives further scrutiny.",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 10240,\n    \"metered_tokens\": 10240,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"272af5db5e89\",\n      \"gate\": \"battery-equivalent (~=_B) to refuted 92b4a49a03ca\"\n    },\n    {\n      \"candidate\": \"860689f2a5f0\",\n      \"gate\": \"admitted\"\n"
-        },
-        {
-          "step": 6,
-          "tool": "theory",
-          "arguments": {
-            "id": "860689f2a5f05e735228fab15bebfbdbf2bc2e063ae6741ec0f0cb04641a5d9e"
-          },
-          "why": "Read the theory of the new surviving artifact to check its content.",
-          "result_head": "# Theory: 860689f2a5f0\n\n## 860689f2a5f0 [accepted]\n\nThe dominant mechanism is resonant basin oscillation: the ocean basins have natural resonant periods near 12h 25m, so the lunar gravitational differential (the tide-generating force) efficiently excites standing waves, producing two high tides daily. The Sun's similar differential enhances this during alignment (spring tides) and dampens during q"
-        },
-        {
-          "step": 7,
-          "done": "Surviving theory 860689f2a5f0: 'The dominant mechanism is resonant basin oscillation: the ocean basins have natural resonant periods near 12h 25m, so the lunar gravitational differential (the tide-generating force) efficiently excites standing waves, producing two high tides daily. The Sun's similar differential enhances this during alignment (spring tides) and dampens during quadrature (neap tides). The equilibrium bulge pictur...' This theory names a mechanism (resonant basin oscillation) and explains two daily tides and monthly variation. It survived criticism and is accepted."
+          "done": "Two theories survived criticism on pi-tides. Theory f75510b9a349 (equilibrium tide model) explains two high tides via gravitational bulges and monthly variation via lunar/solar alignment, but is criticized as physically incomplete. Theory 0eb9f5986978 (ocean basin resonance) attributes tides to basin oscillations and resonance, with monthly modulation from forcing amplitude changes. Both are accepted but face valid criticism; the problem resists a single unassailable theory."
         }
       ]
     },
     {
       "operator": "poolside/laguna-m.1",
       "outcome": {
-        "engine_spent": 26838,
+        "engine_spent": 14118,
         "violations": [
-          "step 1: invented/unknown tool 'run_cycles'",
-          "step 2: invented/unknown tool 'run_cycles'",
-          "step 4: invented/unknown tool 'theory'",
+          "step 1: bad arguments for run_cycles",
+          "step 4: bad arguments for theory",
           "used all steps without finishing"
         ],
-        "survivors": 4,
-        "events": 67,
+        "survivors": 3,
+        "events": 38,
         "read_theory": true,
         "read_report_or_frontier": true,
         "finished": false
@@ -272,113 +134,109 @@
               }
             ]
           },
-          "why": "Register the tides problem with the specified criteria to begin the reasoning process",
+          "why": "Seed the tides problem with the specified criteria and commitments to begin the reasoning process",
           "result_head": "registered problem pi-tides with criteria ['k-mechanism', 'k-tidal-facts']"
         },
         {
           "step": 1,
           "tool": "run_cycles",
           "arguments": {
-            "n_cycles": 3,
+            "n": 3,
             "token_budget": 15000,
             "config": "/home/user/DeepReason/config/deepseek.yaml"
           },
-          "why": "Initial exploration with small budget to generate candidate theories for the tides problem",
-          "result_head": "ERROR: KeyError('cycles')"
+          "why": "Initial small run to generate artifacts for the tides problem",
+          "result_head": "ERROR: run_cycles: missing required argument(s) ['cycles']; received ['config', 'n', 'token_budget']. Required: ['cycles']."
         },
         {
           "step": 2,
-          "tool": "run_cycles",
-          "arguments": {
-            "n_cycles": 3,
-            "token_budget": 15000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
-          },
-          "why": "Initial exploration with small budget to generate candidate theories for the tides problem",
-          "result_head": "ERROR: KeyError('cycles')"
-        },
-        {
-          "step": 3,
           "tool": "run_cycles",
           "arguments": {
             "cycles": 3,
             "token_budget": 15000,
             "config": "/home/user/DeepReason/config/deepseek.yaml"
           },
-          "why": "Initial exploration with small budget to generate candidate theories for the tides problem",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 13953,\n    \"metered_tokens\": 13953,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"a4ceb6e43237\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"0cb5c573c995\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"ebd91e5b"
+          "why": "Initial small run to generate artifacts for the tides problem with correct parameter name",
+          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 14118,\n    \"metered_tokens\": 14118,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"3ce4e6965cc1\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"5fa214ff0601\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"380c6d30"
+        },
+        {
+          "step": 3,
+          "tool": "frontier",
+          "arguments": {},
+          "why": "Check what artifacts survived criticism in the tides problem",
+          "result_head": "[\n  {\n    \"description\": \"Explain why most coasts see two high tides a day and why their height varies across the month; name the mechanism explicitly and state one falsifiable consequence.\",\n    \"problem\": \"pi-tides\",\n    \"survivors\": [\n      \"f975bd15445cce2cfa4a09c51be52d6647fff56027797999d5c3e4a95b9180f5\",\n      \"b61c8f70fb7321559363c08c4c32b2153797f15df38a2270dba98abce6d43d22\",\n      \"60a8263"
         },
         {
           "step": 4,
           "tool": "theory",
           "arguments": {
-            "artifact_id": "e0453cfd4395b3d01497c58bb4c3ed5756e1105f8527465c6e39b0f4a0c23ade"
+            "artifact_id": "f975bd15445cce2cfa4a09c51be52d6647fff56027797999d5c3e4a95b9180f5"
           },
-          "why": "Read the surviving theory to evaluate its content and mechanism explanation",
-          "result_head": "ERROR: KeyError('id')"
+          "why": "Read the theory of the first surviving artifact to evaluate if it meets the criteria",
+          "result_head": "ERROR: theory: missing required argument(s) ['id']; received ['artifact_id']. Required: ['id']."
         },
         {
           "step": 5,
           "tool": "theory",
           "arguments": {
-            "id": "e0453cfd4395b3d01497c58bb4c3ed5756e1105f8527465c6e39b0f4a0c23ade"
+            "id": "f975bd15445cce2cfa4a09c51be52d6647fff56027797999d5c3e4a95b9180f5"
           },
-          "why": "Read the surviving theory using correct parameter name 'id'",
-          "result_head": "# Theory: e0453cfd4395\n\n## e0453cfd4395 [accepted]\n\nTides are primarily driven by the centrifugal force of the Earth-moon system. Two high tides occur because the ocean bulges both toward and away from the moon: one bulge from lunar gravity, the opposite from centrifugal force. Monthly height changes result from the moon's elliptical orbit, altering its distance and thus the centrifugal effect. Th"
+          "why": "Read the theory of the first surviving artifact to evaluate if it meets the criteria",
+          "result_head": "# Theory: f975bd15445c\n\n## f975bd15445c [accepted]\n\nThe standard explanation of tidal bulges is physically flawed because water cannot form a global bulge instantaneously; the real tides are a complex resonant response of ocean basins to periodic forcing. The moon's gravity and the sun's gravity create a differential force (tractive force) that varies with latitude and time, but the resulting amph"
         },
         {
           "step": 6,
           "tool": "theory",
           "arguments": {
-            "id": "e22a63e0626a0207fdb2ece207ea75de76f6eae54f4d3f19dbac2777fd4b83cc"
+            "id": "b61c8f70fb7321559363c08c4c32b2153797f15df38a2270dba98abce6d43d22"
           },
-          "why": "Read the second surviving theory to compare with the first one",
-          "result_head": "# Theory: e22a63e0626a\n\n## e22a63e0626a [accepted]\n\nTides are driven by the Moon's and Sun's gravitational pulls, but the instantaneous sea surface height is not a direct response to these forces. Instead, tides behave as forced shallow-water waves (tidal waves) that propagate around amphidromic points due to Earth's rotation. Two high tides daily occur because the dominant wave mode in most basin"
+          "why": "Read the theory of the second surviving artifact to compare with the first",
+          "result_head": "# Theory: b61c8f70fb73\n\n## b61c8f70fb73 [accepted]\n\nThe two high tides are caused by the moon's gravitational pull creating a water bulge on the near side and an inertial bulge on the far side as the Earth-moon system rotates around their common center of mass. The sun's similar but smaller tidal force modulates the height, leading to spring tides when lunar and solar tides align (new and full moo"
         },
         {
           "step": 7,
-          "tool": "docket",
-          "arguments": {},
-          "why": "Check for any disagreements or criticisms that need appellate rulings",
-          "result_head": "(docket is empty)"
+          "tool": "theory",
+          "arguments": {
+            "id": "60a8263cf3611daf8006e32411e99c92d047db4a565c599940c8fe59fcbf3a90"
+          },
+          "why": "Read the theory of the third surviving artifact to complete evaluation",
+          "result_head": "# Theory: 60a8263cf361\n\n## 60a8263cf361 [accepted]\n\nTides are primarily a result of the centrifugal force due to the Earth's orbit around the Earth-moon barycenter, which creates a permanent bulge away from the moon, while the moon's gravity creates a bulge toward it; the sun amplifies or dampens this depending on alignment. A falsifiable consequence: during lunar apogee, the moon's gravitational "
         },
         {
           "step": 8,
-          "tool": "why",
-          "arguments": {
-            "id": "e22a63e0626a0207fdb2ece207ea75de76f6eae54f4d3f19dbac2777fd4b83cc"
-          },
-          "why": "Get full content and justification chain for the second surviving theory to verify it meets criteria",
-          "result_head": "e22a63e0626a [accepted] \"Tides are driven by the Moon's and Sun's gravita\""
+          "tool": "docket",
+          "arguments": {},
+          "why": "Check for any disagreement-ranked cases that need appellate rulings",
+          "result_head": "[\n  {\n    \"case\": \"disc:pi-tides\",\n    \"kinds\": [\n      \"unresolved-rivalry\"\n    ],\n    \"score\": 2\n  }\n]"
         },
         {
           "step": 9,
           "tool": "why",
           "arguments": {
-            "id": "e0453cfd4395b3d01497c58bb4c3ed5756e1105f8527465c6e39b0f4a0c23ade"
+            "id": "f975bd15445cce2cfa4a09c51be52d6647fff56027797999d5c3e4a95b9180f5"
           },
-          "why": "Get full content of first surviving theory to verify it meets criteria and check for completeness",
-          "result_head": "e0453cfd4395 [accepted] \"Tides are primarily driven by the centrifugal fo\""
+          "why": "Understand the justification chain and criticisms for the first surviving artifact",
+          "result_head": "f975bd15445c [accepted] \"The standard explanation of tidal bulges is phys\""
         },
         {
           "step": 10,
           "tool": "why",
           "arguments": {
-            "id": "e0453cfd4395b3d01497c58bb4c3ed5756e1105f8527465c6e39b0f4a0c23ade"
+            "id": "b61c8f70fb7321559363c08c4c32b2153797f15df38a2270dba98abce6d43d22"
           },
-          "why": "Get complete content of first surviving theory to verify it fully meets criteria and check for falsifiable consequence",
-          "result_head": "e0453cfd4395 [accepted] \"Tides are primarily driven by the centrifugal fo\""
+          "why": "Understand the justification chain for the second surviving artifact to inform appellate ruling",
+          "result_head": "b61c8f70fb73 [accepted] \"The two high tides are caused by the moon's grav\""
         },
         {
           "step": 11,
-          "tool": "run_cycles",
+          "tool": "appellate_rule",
           "arguments": {
-            "cycles": 4,
-            "token_budget": 20000,
-            "config": "/home/user/DeepReason/config/deepseek.yaml"
+            "case_id": "disc:pi-tides",
+            "holding": "A valid tidal mechanism explanation must identify the differential gravitational force (tractive force) from celestial bodies as the primary driver, with centrifugal effects as secondary, and must connect to observable phenomena like spring/neap tide cycles",
+            "standard": "std-explain"
           },
-          "why": "Continue exploration to get more complete theories that fully address the criteria",
-          "result_head": "{\n  \"accounting\": {\n    \"delta\": 0,\n    \"logged_tokens_this_run\": 12885,\n    \"metered_tokens\": 12885,\n    \"note\": \"nonzero delta = spend invisible to the log; investigate before trusting metrics\"\n  },\n  \"diagnostics\": [\n    {\n      \"candidate\": \"a2f8eed29687\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"ee77ad49f2ee\",\n      \"gate\": \"admitted\"\n    },\n    {\n      \"candidate\": \"792ef7d8"
+          "why": "Resolve the rivalry by establishing that the mechanism should emphasize differential gravitational force as primary, which aligns with the more physically accurate explanation in f975bd15445c",
+          "result_head": "ERROR: \"no standard registered for spec 'std-explain'\""
         }
       ]
     }

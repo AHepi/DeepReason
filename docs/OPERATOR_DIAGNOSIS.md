@@ -75,7 +75,41 @@ Compliance is a documentation problem more than a capability problem —
 except for the unwritten mechanics (cause 3) and the instinct to
 relitigate verdicts (cause 4).
 
-## Recommendations (not yet applied)
+## Post-intervention measurements (2026-07-05, same day)
+
+The recommendations below were applied (AGENT.md playbook; in-band
+accounting + narration in run_cycles; actionable argument errors) and
+re-measured at two levels:
+
+**Static probes (knowledge):** probe A re-run with the playbook in
+context — 4/4 models now produce the criticize-the-critic ->
+computed-reinstatement plan (0/4 before); zero verdict-flip attempts
+(laguna-m.1 had attempted `holding="refuted"` before). Transcripts:
+operator_probes_after.json.
+
+**Live drives (driving):** each model given the real operator seat — 12
+tool calls max against the actual MCP dispatch, live engine, fresh root
+(scripts/operator_drive.py; operator_drive_report.json):
+- v4-pro: CLEAN end-to-end drive, zero violations — seeded, budgeted
+  every run, read three theories, finished quoting the survivor.
+- v4-flash before the arg-error fix: burned 4/12 steps on
+  `theory(artifact_id=...)` -> bare KeyError, never adapted, and reported
+  THE TOOL as broken. After the fix (errors name what is missing vs
+  received): one error, immediate self-correction, clean finish with a
+  comparative summary of two surviving theories, engine spend halved.
+- laguna-m.1: arg fumbles now self-correct in one step; it ran the FULL
+  playbook loop unprompted (docket -> why -> appellate_rule on the
+  docketed discrimination case) — and exposed the next paper cut: docket
+  entries don't say which STANDARD applies, so it guessed a spec id and
+  got "no standard registered".
+- Rule compliance across all drives: every run_cycles carried a
+  token_budget; no verdict-flip, deletion, or re-seed attempts anywhere.
+
+Conclusion confirmed: the gap was documentation + instrumentation, not
+capability. Remaining known paper cut: docket entries should carry the
+applicable standard's spec id.
+
+## Recommendations (applied 2026-07-05 — kept for the record)
 1. AGENT.md: add the positive playbook — "if you think a critic is wrong:
    read `why`, then fund cycles / register criticism against the critic's
    validity node; reinstatement is computed, never granted" — plus one
