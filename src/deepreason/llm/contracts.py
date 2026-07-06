@@ -98,3 +98,32 @@ class PairwiseRuling(BaseModel):
 
 class ProseOutput(BaseModel):
     prose: str = Field(min_length=1)
+
+
+class ThesisSection(BaseModel):
+    """One section of a thesis argument; ``citations`` are pack artifact
+    id prefixes (bracketed in the pack) — program-checked afterwards."""
+
+    heading: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+    citations: list[str] = Field(default_factory=list)
+
+
+class ThesisRival(BaseModel):
+    """A surviving rival position, stated fairly, with the concrete
+    evidence or test that would discriminate it from the thesis."""
+
+    artifact: str = ""  # pack id prefix ("" when positional)
+    position: str = Field(min_length=1)
+    discriminator: str = Field(min_length=1)
+
+
+class ThesisOutput(BaseModel):
+    """Committed thesis over a finished run's adjudicated record (§8 view):
+    one defended position, argued from the pack ONLY."""
+
+    thesis: str = Field(min_length=1)
+    argument: list[ThesisSection] = Field(min_length=1)
+    rebuttals: list[ThesisSection] = Field(default_factory=list)
+    rivals: list[ThesisRival] = Field(default_factory=list)
+    overturn: list[str] = Field(min_length=1)
