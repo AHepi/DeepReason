@@ -96,7 +96,7 @@ is a coffee break, not a blink; the mini's own replay stays linear.
   symbol-only prior blocks all others. Harmless in v0 (skeleton-wf refutes
   such content anyway); pinned by test.
 - Budget overshoot: the attempt that crosses the ceiling completes (the
-  gauntlet's hard 25k ended at ~25.6k). Documented meter semantics, not a
+  gauntlet's hard 25k ended at 25,987). Documented meter semantics, not a
   leak — the overshoot is on the log.
 - A flipped byte INSIDE a valid JSON string (log or object file) is not
   detectable without per-record checksums — same posture as the parent;

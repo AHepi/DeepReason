@@ -1,0 +1,30 @@
+{
+  "experiment": "mini chaos battery (adversarial endpoint, seeded)",
+  "runs": 400,
+  "failed_runs": 0,
+  "failures": [],
+  "stop_distribution": {
+    "queue-exhausted": 61,
+    "budget": 215,
+    "endpoint-error": 82,
+    "max-cycles": 42
+  },
+  "totals": {
+    "events": 7565,
+    "refuted": 1498,
+    "gate_blocks": 376,
+    "rotations": 494,
+    "tokens_simulated": 5638814
+  },
+  "campaign_s": 29.0,
+  "scale_probe": {
+    "cycles": 2500,
+    "events": 5509,
+    "artifacts": 2508,
+    "log_mb": 1.49,
+    "run_s": 10.57,
+    "mini_replay_s": 0.36,
+    "parent_verify_s": 69.46,
+    "failures": []
+  }
+}
