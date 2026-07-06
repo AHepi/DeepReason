@@ -1,0 +1,31 @@
+{
+  "experiment": "full-harness 1M arrow-of-time run (deepseek-v4-flash primary)",
+  "root": "runs/arrow_full",
+  "budget": 1000000,
+  "meter_stop": 1000214,
+  "logged_tokens": 990192,
+  "accounting_delta": 10022,
+  "accounting_note": "caught by verify_root; drop-site diagnosis in leak hunt (F4)",
+  "events": 1464,
+  "artifacts": 289,
+  "problems": 224,
+  "status": {
+    "accepted": 184,
+    "refuted": 99,
+    "suspended_unsupported": 6
+  },
+  "warrants": 99,
+  "accepted_skeletons": 20,
+  "trial_guard": {
+    "rubric_warrants": 36,
+    "survival_rate": 0.6429,
+    "blocked": {
+      "ensemble-split": 13,
+      "paraphrase-flip": 3,
+      "referential-integrity": 4
+    }
+  },
+  "gate_blocks": 84,
+  "dropped_calls": 13,
+  "dropped_note": "all 13 = flash variator nested-payload cliff (known parent finding)"
+}
