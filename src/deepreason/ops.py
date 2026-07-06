@@ -48,12 +48,18 @@ def seed_problem_payload(harness, data: dict) -> Problem:
 
 def run_scheduler(harness, config, cycles: int, token_budget: int | None = None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
-    (result, meter). An explicit token_budget of 0 is a real ceiling.
-    Raises ValueError when no conjecturer role is configured."""
+    (result, meter, accounting). An explicit token_budget of 0 is a real
+    ceiling. Raises ValueError when no conjecturer role is configured.
+
+    ``accounting`` reconciles the meter against the event log for THIS
+    invocation (the log may carry prior runs on a resumed root): silent
+    spend was the pipeline's most-recurrent bug class, so the check ships
+    in-band with every run rather than living in an operator's habits."""
     from deepreason.llm.adapter import build_adapter
     from deepreason.llm.budget import TokenMeter
     from deepreason.scheduler.scheduler import Scheduler
 
+    logged_before = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     meter = TokenMeter(budget=token_budget) if token_budget is not None else None
     adapter = build_adapter(config, harness.blobs, meter=meter)
     if not adapter.has_role("conjecturer"):
@@ -62,4 +68,13 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None)
             "(endpoint, model, api_key_env) in the config knob file (§15)"
         )
     result = Scheduler(harness, adapter, config).run(int(cycles))
-    return result, meter
+    logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
+    accounting = {
+        "metered_tokens": meter.total if meter is not None else None,
+        "logged_tokens_this_run": logged_now - logged_before,
+        "delta": (meter.total - (logged_now - logged_before))
+                 if meter is not None else None,
+        "note": "nonzero delta = spend invisible to the log; investigate "
+                "before trusting metrics",
+    }
+    return result, meter, accounting

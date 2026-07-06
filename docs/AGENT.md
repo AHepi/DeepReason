@@ -96,3 +96,49 @@ so it doesn't fight the harness:
 A typical operating loop: `seed_problem` → `run_cycles` (small budget) →
 `eval_report` + `frontier` → read `theory`/`why` on survivors → clear the
 `docket` with rulings where standards disagree → fund more cycles.
+
+## The positive playbook (what TO do)
+
+The rules above are prohibitions; these are the moves. (Live operator
+probes showed models follow the written rules but miss every mechanic
+that was unwritten — see docs/OPERATOR_DIAGNOSIS.md.)
+
+**If a verdict looks wrong to you — a critic you believe is mistaken has
+refuted good work — you criticize the critic.** Every warrant carries an
+attackable validity node ν ("this verdict is sound"); when criticism
+lands on ν or on the critic artifact and survives adjudication, the
+original target is REINSTATED automatically. Reinstatement is computed,
+never granted. Concretely: read `why(<refuted-id>)` to find the attacker,
+then fund more cycles — the argumentative critic attacks accepted
+artifacts including critics — or, in hostile cases, seed a problem whose
+criteria target the critic's weakness. You never need (and never have) a
+tool that flips the verdict directly.
+
+**What `appellate_rule` actually does — and does not.** A ruling enters
+case law for a STANDARD: it is rendered into FUTURE trial packs for that
+standard (a precedent slice), shifting how the judge reads borderline
+cases from now on. It does NOT re-adjudicate any existing verdict, does
+not touch the artifact you were looking at, and takes the standard's
+spec id (e.g. `std-hist`) — not a severity label — as its `standard`
+argument. Worked example: the docket shows case `c-42` where two judges
+split over whether "the model is memorizing" names a mechanism. Ruling:
+`appellate_rule(case_id="c-42", holding="Naming a training-data pathway
+(memorization of benchmark X) IS a mechanism for this standard",
+standard="std-explain")`. Effect: future trials under `std-explain` see
+that holding; the artifact in `c-42` is unchanged until criticism or a
+new trial moves it.
+
+**Reading results without fooling yourself.** An empty frontier on a
+hostile problem is success (nothing uncriticizable was admitted); a
+budget stop is graceful (fund more cycles on the SAME root); refutations
+are progress, not damage. The truth of a run is in its log, not its exit:
+`narrate` renders the log as readable reasoning, and `run_cycles` returns
+an accounting reconciliation (metered vs logged tokens) — if those
+diverge, stop and investigate before trusting any metric.
+
+**Engine calls need pinned reasoning and generous caps.** Reasoning-mode
+models silently burn the whole completion budget on thinking and return
+EMPTY output with no error (observed live on the strongest models). Every
+role in your config should set `reasoning` explicitly and a `max_tokens`
+with headroom; when an engine returns empty or truncated output, suspect
+the cap before the model.

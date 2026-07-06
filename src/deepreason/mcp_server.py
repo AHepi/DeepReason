@@ -172,9 +172,11 @@ def call_tool(name: str, arguments: dict) -> str:
         return f"registered problem {problem.id} with criteria {list(problem.criteria)}"
 
     if name == "run_cycles":
+        from deepreason.views.narrate import narrate
+
         harness = _harness(arguments)
         config = _config(arguments)
-        result, meter = run_scheduler(
+        result, meter, accounting = run_scheduler(
             harness, config, arguments["cycles"], arguments.get("token_budget")
         )
         payload = {
@@ -182,6 +184,10 @@ def call_tool(name: str, arguments: dict) -> str:
             "frontier": result["frontier"],
             "problems": result["problems"],
             "diagnostics": result["diagnostics"][-20:],
+            # In-band truth (docs/OPERATOR_DIAGNOSIS.md): silent failure
+            # modes must be visible in the tool result itself.
+            "accounting": accounting,
+            "narration": narrate(harness, window=25),
         }
         if meter is not None:
             payload["token_spend"] = meter.snapshot()

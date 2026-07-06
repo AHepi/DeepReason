@@ -252,10 +252,13 @@ def _cmd_run(args) -> int:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
     try:
-        result, meter = run_scheduler(harness, config, cycles, args.token_budget)
+        result, meter, accounting = run_scheduler(harness, config, cycles, args.token_budget)
     except ValueError as e:
         print(str(e), file=sys.stderr)
         return 1
+    if accounting["delta"]:
+        print(f"[accounting] WARNING: {accounting['delta']} metered tokens are "
+              "not on the log — investigate before trusting metrics", file=sys.stderr)
     print(f"survivors ({len(result['survivors'])}):")
     for aid in result["frontier"]:
         print(f"  {aid[:12]}  {harness.state.artifacts[aid].content_ref[:80]}")
