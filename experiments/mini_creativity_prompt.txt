@@ -1,0 +1,50 @@
+==============================================================================
+MiniReason conjecture-generation prompt  (faithful reconstruction)
+==============================================================================
+
+WHAT THIS IS
+------------
+This is the EXACT prompt MiniReason sent to its conjecturer LLM
+(deepseek-v4-flash, temperature 1.0) to generate candidate explanations for
+an open problem. Two related problems were run. Below is the wire prompt for
+each on cycle 1 (before any survivors accumulate in the neighbourhood slot).
+
+The generator returns a JSON distribution of ~6 candidate "skeletons", each a
+claim + mechanism + falsifiable forbidden cases. In the real run these were
+then mechanically checked (candidates that forbid nothing, or whose own
+forbidden predicate does not evaluate over their text, are refuted for free),
+and the survivors were ranked offline by a calibrated pairwise judge.
+
+TO REPLICATE: paste ONE problem's block below into any model, temperature ~1.0,
+and compare the candidate explanations it returns. The stance line rotates
+every 5 cycles in a full run (mechanist -> skeptic -> unifier -> empiric ->
+formalist -> historicist -> adversary -> minimalist); cycle 1 uses 'mechanist'.
+
+
+##############################################################################
+# PROBLEM: pi-novelty-decay
+##############################################################################
+
+Respond with ONLY a JSON object conforming to this JSON Schema - no prose, no code fences:
+{"$defs": {"Candidate": {"properties": {"content": {"title": "Content", "type": "string"}, "typicality": {"default": 0.5, "maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content"], "title": "Candidate", "type": "object"}}, "properties": {"candidates": {"items": {"$ref": "#/$defs/Candidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjOut", "type": "object"}
+
+You are the conjecture operator: propose bold, criticizable explanations for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of 6 diverse candidates, each with a typicality estimate in [0,1].
+STANCE (condition your generation on it): demand a causal mechanism.
+Each candidate's content MUST be a JSON skeleton embedded as a string: {"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, "forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. Each forbidden case states evidence that would REFUTE the candidate; eval is "predicate:<python expression over the variable content>" for mechanically checkable cases or "rubric:std" otherwise. A candidate that forbids nothing is refuted on arrival.
+
+PROBLEM: A strong LLM asked to generate many candidate explanations for one problem produces a diverse first batch, but its novelty decays over a sustained run: later candidates cluster, paraphrase earlier ones, and re-propose ideas already set aside. Why does the novelty of an LLM conjecture generator collapse under sustained self-conditioning on its own recent output, even at high sampling temperature?
+
+
+##############################################################################
+# PROBLEM: pi-restoration
+##############################################################################
+
+Respond with ONLY a JSON object conforming to this JSON Schema - no prose, no code fences:
+{"$defs": {"Candidate": {"properties": {"content": {"title": "Content", "type": "string"}, "typicality": {"default": 0.5, "maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content"], "title": "Candidate", "type": "object"}}, "properties": {"candidates": {"items": {"$ref": "#/$defs/Candidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjOut", "type": "object"}
+
+You are the conjecture operator: propose bold, criticizable explanations for the PROBLEM below. Verbalized Sampling: return a DISTRIBUTION of 6 diverse candidates, each with a typicality estimate in [0,1].
+STANCE (condition your generation on it): demand a causal mechanism.
+Each candidate's content MUST be a JSON skeleton embedded as a string: {"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, "forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. Each forbidden case states evidence that would REFUTE the candidate; eval is "predicate:<python expression over the variable content>" for mechanically checkable cases or "rubric:std" otherwise. A candidate that forbids nothing is refuted on arrival.
+
+PROBLEM: Empirically, cheap structural interventions restore novelty in a stalling LLM generator - rotating the generation stance, switching to a different problem, and blocking re-proposals of already-refuted ideas - while expensive per-candidate adversarial criticism does not improve the creative output at low base error. Why do structural interventions on the generator's conditioning outperform adversarial filtering of its products?
+
