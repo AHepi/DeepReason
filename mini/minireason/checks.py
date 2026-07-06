@@ -12,14 +12,39 @@ Commitment ids and eval semantics are the parent's exactly, so a mini log
 replays under the parent with identical verdicts (G6).
 """
 
+import contextlib
 import json
 import re
+import signal
 
 from pydantic import BaseModel, Field, ValidationError
 
 from minireason.log import canonical_json, sha256_hex
 
 SKELETON_WF_ID = "skeleton-wf"
+PREDICATE_TIMEOUT_S = 2  # wall bound on hostile predicates (e.g. 10**10**8)
+
+
+@contextlib.contextmanager
+def _deadline(seconds: int):
+    """Bound a predicate's wall time (POSIX main thread; elsewhere it runs
+    unbounded, as the parent does). Safe for determinism: verdicts are
+    logged as warrants and replay never re-evaluates, so a timeout can
+    only shape the live run, never fork the log."""
+    if hasattr(signal, "SIGALRM") and signal.getsignal(signal.SIGALRM) in (
+            signal.SIG_DFL, signal.default_int_handler, None):
+        def _raise(signum, frame):
+            raise TimeoutError(f"predicate exceeded {seconds}s")
+
+        old = signal.signal(signal.SIGALRM, _raise)
+        signal.alarm(seconds)
+        try:
+            yield
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old)
+    else:
+        yield
 
 
 class ForbiddenCase(BaseModel):
@@ -99,9 +124,12 @@ def evaluate(eval_spec: str, text: str, codec: str = "utf8") -> tuple[str, dict]
         # names via globals (parent bug, kept fixed).
         namespace = {"__builtins__": {}, **_SAFE_NAMES, "content": text, "codec": codec}
         try:
-            return ("pass" if bool(eval(arg, namespace)) else "fail"), {}
-        except Exception as e:  # noqa: BLE001 - a predicate error is a failed verdict
-            return "fail", {"error": str(e)}
+            with _deadline(PREDICATE_TIMEOUT_S):
+                return ("pass" if bool(eval(arg, namespace)) else "fail"), {}
+        except BaseException as e:  # noqa: BLE001 - incl. TimeoutError: a bomb is a failed verdict
+            if isinstance(e, (KeyboardInterrupt, SystemExit)):
+                raise
+            return "fail", {"error": str(e)[:200]}
     if kind == "program" and arg in PROGRAMS:
         return PROGRAMS[arg](text)
     raise ValueError(f"not evaluable in the loop: {eval_spec}")

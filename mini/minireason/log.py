@@ -120,18 +120,74 @@ class SeqError(ValueError):
 class EventLog:
     def __init__(self, path: Path) -> None:
         self.path = Path(path)
+        self._repair_torn_tail()
         self.next_seq = sum(1 for _ in self.read())
+        self._size = self.path.stat().st_size if self.path.exists() else 0
+
+    def _repair_torn_tail(self) -> None:
+        """Truncate a torn FINAL line at open (crash mid-append). Without
+        this, the next append writes onto the unterminated fragment and the
+        merged line swallows a real, fsynced event — found by the chaos
+        battery: acknowledged data lost AFTER a clean recovery. Only bytes
+        that were never acknowledged durable are removed (append returns
+        only after the full line + newline hit the disk); a bad line with
+        valid lines after it is real corruption and is left to raise."""
+        if not self.path.exists():
+            return
+        data = self.path.read_bytes()
+        if not data:
+            return
+        offset, valid_end = 0, 0
+        torn_at: int | None = None
+        while offset < len(data):
+            nl = data.find(b"\n", offset)
+            end = (nl + 1) if nl != -1 else len(data)
+            line = data[offset:end].strip()
+            ok = not line
+            if line:
+                try:
+                    Event.model_validate_json(line)
+                    ok = nl != -1  # even a parseable line is torn without its newline
+                except ValidationError:
+                    ok = False
+            if ok:
+                valid_end = end
+                torn_at = None
+            elif torn_at is None:
+                torn_at = offset
+            else:
+                return  # bad line followed by more lines: corruption, read() raises
+            offset = end
+        if torn_at is not None:
+            warnings.warn(
+                f"{self.path}: truncating torn final line (crash mid-append), "
+                f"{len(data) - valid_end} bytes discarded",
+                stacklevel=3,
+            )
+            with open(self.path, "r+b") as f:
+                f.truncate(valid_end)
+                f.flush()
+                os.fsync(f.fileno())
 
     def append(self, event: Event) -> None:
         if event.seq != self.next_seq:
             raise SeqError(f"seq {event.seq} != expected {self.next_seq}")
         if event.rule not in RULES:
             raise SeqError(f"rule {event.rule!r} outside the parent enum")
+        # Single-writer fence: if the file grew under us, another writer is
+        # live and appending would duplicate a seq — silent corruption the
+        # chaos battery caught. Fail HERE, not at the next replay.
+        actual = self.path.stat().st_size if self.path.exists() else 0
+        if actual != self._size:
+            raise SeqError(
+                f"log advanced under us ({actual} != {self._size} bytes): "
+                "concurrent writer on this root")
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(event.model_dump_json() + "\n")
             f.flush()
             os.fsync(f.fileno())
+            self._size = f.tell()
         self.next_seq += 1
 
     def read(self):
