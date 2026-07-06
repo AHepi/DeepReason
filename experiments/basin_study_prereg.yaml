@@ -91,3 +91,66 @@ decision_rules:
 
 budget: 7 arms x <= 60k = <= 420k tokens hard ceiling; expected ~300k
   (pro skeleton candidates ~1.2k completion tokens; laguna cheaper).
+
+# ---------------------------------------------------------------------
+result: RAN — all 7 arms complete, zero invariant violations. Spend
+  425.7k vs 420k ceiling (+1.4%, per-arm check-before-spend overshoot).
+  P1-exhaustion: formally REFUTED as committed (conjunction), but
+    decomposed: the CAUSAL CORE held — blind late/early 0.888 vs
+    control 0.846 (within 0.15, on 96 blind draws vs 60): novelty
+    declines the same whether or not the generator sees prior output,
+    so the decline is model-internal, not pack conditioning. The dup
+    clause failed (blind dups 0, not >= 2x): 96 blind draws produced
+    no near-collisions — the repertoire is big enough that exhaustion
+    shows as semantic clustering, never literal repetition. The dup
+    sub-prediction was wrong about the mechanism's surface signature.
+  P2-echo-weak: UNDECIDED — G-weak-hot registered only 8 conjectures
+    (36 gate blocks; see circling finding below), too few for the
+    novelty metric. F-weak-cold alone: echo 0.87x chance, late/early
+    1.037 — the cold weak model did NOT parrot on this problem,
+    unreplicating offline S3 (different problem, roles). H-echo-weak
+    is weaker than offline data suggested.
+  P3-decay: REFUTED AND INVERTED. Predicted permanent stance keeps
+    schools apart; measured the opposite: inter-school distance
+    D-fast 0.690 > C-never 0.545, and D-fast had the flattest novelty
+    of any pro arm (late/early 0.973 vs control 0.846). Fast stance
+    rotation is ANTI-basin on both metrics.
+  P4-complement: REFUTED — placebo at pro level (E 0.865 vs A 0.846,
+    needed +0.1). Dissociation: E had the LOWEST echo of any arm
+    (0.49x chance — the directive does push output away from the
+    displayed exemplars) yet no novelty gain: it moves the model
+    relative to the pack, not out of its own basin.
+  unpredicted_finding (the circling mechanism, caught live): hard
+    circling is REFUTED-ATTRACTOR ORBITING. C-decay-off: one artifact
+    failed skeleton-wf mechanically -> refuted -> 15 successor/spawn
+    problems -> the stance-pinned generator re-emitted battery-
+    equivalent candidates 54 times (gate blocks) + 27 no-register
+    cycles, burning 4.3x tokens per registered conjecture; echo 0.70
+    raw (2.4x control). G-weak-hot: same signature (2 refutations,
+    36 gate blocks, 8 registered). Arms with zero refutations had
+    ZERO gate activity. Circling = (a refuted attractor exists) AND
+    (the generator's identity is pinned to it — permanent stance, or
+    weak+hot model). Default-decay strong arms never entered orbit.
+  answer_on_record:
+    when: soft basin — gradual, shallow novelty decline with problem
+      age (late/early 0.85-0.89 by ~60 draws), no hard onset. Hard
+      basin — immediately after a refutation, iff stance is pinned or
+      the model is weak at high temperature.
+    why: model-internal repertoire exhaustion (proved by the blind
+      arm), plus refuted-attractor orbiting under pinned identity.
+      NOT pack echo (below chance in every completed arm, live and
+      offline), NOT adjudication narrowing, NOT curable by the
+      complement directive.
+    antidotes_measured: problem turnover (offline: criticism run
+      recovered to 1.12) and fast stance rotation (D: 0.973 novelty,
+      best school separation). Both already exist in the system;
+      STANCE_DECAY should default LOWER, not higher.
+    detector_recommendation: school_convergence (embedding threshold)
+      is the wrong instrument — the embedder is scale-blind (F4) and
+      echo is below chance anyway. The cheap, scale-free circling
+      signal already in the log is GATE-BLOCK RATE (battery-equivalent
+      refusals per cycle): 0 in every healthy arm, 54 and 36 in the
+      two orbiting arms. Wire the ladder to that instead of
+      RESEED_DIST_MIN.
+  report: experiments/results/basin_live_report.json (arm metrics,
+    prediction evaluations; full curves in runs/basin/*)
