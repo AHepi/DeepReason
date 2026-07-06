@@ -615,8 +615,64 @@ def seed_criticism(harness: Harness) -> None:
     )
 
 
+def seed_arrow(harness: Harness) -> None:
+    """Hard-physics suite: the arrow of time. Same question the MiniReason
+    comparison ran (runs/mini_arrow), now under the FULL machinery — the
+    rubric criterion is judged live by the trial protocol. The standard
+    encodes the reversibility discipline: an account that merely restates
+    the second law, or never confronts Loschmidt, violates it."""
+    register_standard(
+        harness,
+        "std-arrow",
+        rubric=(
+            "An account of the thermodynamic arrow must: (1) locate the "
+            "time-asymmetry precisely — in the dynamical laws, in a boundary "
+            "or initial condition, or in the statistics of coarse-graining — "
+            "and name a concrete mechanism, not a restatement of the second "
+            "law; (2) confront the reversibility (Loschmidt) objection: "
+            "time-symmetric dynamics plus time-symmetric statistics cannot "
+            "prefer a direction, so the account must say what asymmetric "
+            "ingredient it adds and why that ingredient is not itself the "
+            "thing to be explained; (3) state forbidden cases that are "
+            "concrete observations or consistency arguments that would "
+            "refute it (a measured CMB signature, a demonstrated "
+            "counterexample system, a proof of symmetry); accounts "
+            "compatible with every possible observation violate this "
+            "standard."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-arrow", eval="rubric:std-arrow"))
+    harness.register_problem(
+        Problem(
+            id="pi-arrow",
+            description=(
+                "The microphysical laws are essentially time-symmetric "
+                "(CPT-invariant), yet time has a robust thermodynamic "
+                "direction: entropy rises toward the future, we remember the "
+                "past not the future, causes precede effects. Why does a "
+                "temporal arrow exist at all, given time-symmetric dynamics, "
+                "and what fixes its direction? A good answer must confront "
+                "the reversibility objection: symmetric dynamics plus "
+                "symmetric statistics cannot by themselves prefer a "
+                "direction. Each candidate's content MUST be a JSON skeleton "
+                'object, exactly this shape: {"claim": str, "mechanism": '
+                'str, "scope": {"covers": [str], "excludes": [str]}, '
+                '"forbidden": [{"case": str, "eval": "rubric:std-arrow"}], '
+                '"prose_notes": str}. Forbidden cases must be concrete '
+                "observations or consistency arguments that would refute "
+                "the account."
+            ),
+            criteria=["skeleton-wf", "kappa-arrow"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
+    "arrow": ("pi-arrow", seed_arrow),
     "republic": ("pi-republic", seed_republic),
     "bronze": ("pi-bronze", seed_bronze),
     "needham": ("pi-needham", seed_needham),
