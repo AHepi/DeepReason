@@ -1,0 +1,73 @@
+# Pre-registration: rank-concentration experiment
+# Committed BEFORE any arm runs.
+#
+# Motivating observation (informal_ab_instrument_report.json, republic):
+# with a validated instrument, the harness's BEST artifact beat solo's
+# best (+0.213, against a verbosity penalty), while ranks 1-2 leaned solo
+# (-0.125, -0.192). If criticism works by KILLING weak candidates rather
+# than improving generation, this is exactly the predicted signature:
+# the harness improves the maximum of the output distribution, not the
+# mean. One problem, n=3 pairs cannot distinguish that from noise.
+
+hypothesis:
+  H_rank: harness advantage concentrates at rank 0 (best-vs-best).
+    Mechanism: adjudication selects survivors of criticism, so the top of
+    the harness distribution is filtered; solo self-selection has no
+    adversarial filter, so its ranking is noisy and its best is weaker.
+  prediction_if_true: margin(rank0) > margin(rank1) and margin(rank0) >
+    margin(rank2) per problem, with rank0 a harness point (> +0.15).
+  prediction_if_false: rank0 margins indistinguishable from other ranks
+    or <= 0 — the republic rank0 result was noise or problem-specific.
+
+problems:  # two FRESH informal problems, never run in any prior root
+  bronze: pi-bronze (Late Bronze Age collapse) — scripts/live_run.py
+    suite `bronze`, root runs/ab_bronze
+  needham: pi-needham (the Needham question) — suite `needham`,
+    root runs/ab_needham
+  both use the SAME std-hist standard and skeleton discipline as
+  pi-republic (STD_HIST_RUBRIC constant, content-address deduped), so
+  the instrument's criteria decomposition carries over unchanged.
+
+arms:  # identical to informal_ab_prereg.yaml, per problem
+  harness: live_run.py --suite {bronze|needham} --token-budget 70000,
+    v4-pro generation, certified judge ensemble. Top 3 = ACCEPTED
+    skeleton artifacts addressed to the problem, ranked hv desc, then
+    earliest seq (_harness_top3 — deterministic, committed here).
+  solo: informal_ab.py --solo --problem {bronze|needham}, budget 65000:
+    same generator (v4-pro, temp 1.0, reasoning off), same information
+    (problem description + std-hist rubric verbatim), candidates to
+    ~57k then ONE self-selection call picks its own top 3.
+
+scoring:  # the VALIDATED instrument, unchanged (design aac313a1af55)
+  instrument: informal_ab.py --score-instrument --problem {bronze|needham}
+    — criterion-level forced choice (5 fixed criteria), 3 calibrated
+    seats (pro/off, flash/default, laguna-m.1) x both orders, verbosity
+    penalty min(0.3, 0.1*(len_ratio-1)), degraded control pair per
+    problem. No instrument changes are permitted after this commit; it
+    scores exactly as validated on republic.
+  validity_gate: per problem, control-pair margin >= +0.2 toward the
+    undegraded artifact. A problem whose gate fails contributes NO
+    evidence in either direction.
+
+decision_rules:  # committed before the first arm token is spent
+  per_problem_rank_concentration: margin(rank0) > max(margin(rank1),
+    margin(rank2)) AND margin(rank0) > +0.15.
+  outcomes (over the two new problems, gates permitting):
+    confirmed: rank concentration holds in BOTH problems
+    partial: holds in exactly ONE (report which; no strong claim)
+    refuted: holds in NEITHER — the republic rank0 point was noise or
+      problem-specific; record that verdict with equal prominence.
+  secondary (reported, not decisive): pooled mean rank0 margin across
+    all three problems including republic's committed +0.213; per-rank
+    margin profile (rank0 vs rank1 vs rank2 pooled); classic outcome
+    mapping (>= 2 of 3 pairs) per problem for continuity with the
+    original A/B.
+  note: if an arm produces < 3 skeleton survivors, pairs are formed to
+    min(len) as before; rank concentration then requires rank0 >
+    all remaining ranks. If min(len) == 1, the problem reports
+    rank0-only and cannot test concentration (counts as neither
+    confirm nor refute; say so plainly).
+
+budget:
+  per problem: harness 70k + solo 65k + instrument scoring 45k = 180k
+  total: <= 420k including retries/slack (2 problems + margin)

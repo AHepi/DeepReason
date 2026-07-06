@@ -140,22 +140,34 @@ def seed_tides(harness: Harness) -> None:
     )
 
 
+# ONE canonical std-hist rubric for every historical-mechanism suite
+# (republic, bronze, needham) — identical text content-address-dedupes, so
+# the effective standard cannot drift between suites (same rationale as
+# STD_DESIGN_RUBRIC below).
+STD_HIST_RUBRIC = (
+    "A historical-mechanism account must: (1) name a specific causal "
+    "mechanism — an institution, incentive, or process — not a mood, "
+    "essence, or inevitability; (2) state forbidden cases that are "
+    "concrete observations which could realistically have obtained "
+    "(a record, an event, a datable pattern); (3) claims of the form "
+    "'decline was inevitable' or 'moral decay' with no mechanism "
+    "violate this standard."
+)
+
+_HIST_SKELETON_SHAPE = (
+    "Each candidate's content MUST be a JSON skeleton object, exactly this "
+    'shape: {"claim": str, "mechanism": str, '
+    '"scope": {"covers": [str], "excludes": [str]}, '
+    '"forbidden": [{"case": str, "eval": "rubric:std-hist"}], '
+    '"prose_notes": str}. '
+    "The forbidden cases must be historical observations that would "
+    "have refuted the account had they obtained."
+)
+
+
 def seed_republic(harness: Harness) -> None:
     """Informal-domain suite (§10): skeletons + a standard + a rubric trial."""
-    register_standard(
-        harness,
-        "std-hist",
-        rubric=(
-            "A historical-mechanism account must: (1) name a specific causal "
-            "mechanism — an institution, incentive, or process — not a mood, "
-            "essence, or inevitability; (2) state forbidden cases that are "
-            "concrete observations which could realistically have obtained "
-            "(a record, an event, a datable pattern); (3) claims of the form "
-            "'decline was inevitable' or 'moral decay' with no mechanism "
-            "violate this standard."
-        ),
-        mode="absolute",
-    )
+    register_standard(harness, "std-hist", rubric=STD_HIST_RUBRIC, mode="absolute")
     harness.register_commitment(skeleton_wf_commitment())
     harness.register_commitment(Commitment(id="kappa-hist", eval="rubric:std-hist"))
     harness.register_problem(
@@ -172,6 +184,53 @@ def seed_republic(harness: Harness) -> None:
                 '"prose_notes": str}. '
                 "The forbidden cases must be historical observations that would "
                 "have refuted the account had they obtained."
+            ),
+            criteria=["skeleton-wf", "kappa-hist"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
+def seed_bronze(harness: Harness) -> None:
+    """Fresh informal problem #1 for the rank-concentration experiment
+    (experiments/rank_concentration_prereg.yaml): same standard, same
+    skeleton discipline as republic, never run before."""
+    register_standard(harness, "std-hist", rubric=STD_HIST_RUBRIC, mode="absolute")
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-hist", eval="rubric:std-hist"))
+    harness.register_problem(
+        Problem(
+            id="pi-bronze",
+            description=(
+                "Why did the interconnected palace civilizations of the "
+                "Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, "
+                "Ugarit and the Levantine city-states — collapse nearly "
+                "simultaneously around 1200-1150 BC after centuries of "
+                "stability, while Egypt survived diminished? "
+                + _HIST_SKELETON_SHAPE
+            ),
+            criteria=["skeleton-wf", "kappa-hist"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
+def seed_needham(harness: Harness) -> None:
+    """Fresh informal problem #2 for the rank-concentration experiment:
+    the Needham question — same standard, same skeleton discipline."""
+    register_standard(harness, "std-hist", rubric=STD_HIST_RUBRIC, mode="absolute")
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-hist", eval="rubric:std-hist"))
+    harness.register_problem(
+        Problem(
+            id="pi-needham",
+            description=(
+                "Why did sustained, cumulative, mathematized experimental "
+                "science emerge in early modern Europe (roughly 1550-1700) "
+                "rather than in Song-through-Ming China, which for centuries "
+                "had been richer, more populous, and technologically ahead "
+                "(printing, gunpowder, the compass, canal locks, "
+                "astronomical clockwork)? " + _HIST_SKELETON_SHAPE
             ),
             criteria=["skeleton-wf", "kappa-hist"],
             provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
@@ -559,6 +618,8 @@ def seed_criticism(harness: Harness) -> None:
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "republic": ("pi-republic", seed_republic),
+    "bronze": ("pi-bronze", seed_bronze),
+    "needham": ("pi-needham", seed_needham),
     "cache": ("pi-cache", seed_cache),
     "cache-sandbox": ("pi-cache-sandbox", seed_cache_sandbox),
     "cache-strict": ("pi-cache-strict", seed_cache_strict),

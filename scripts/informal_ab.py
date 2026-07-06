@@ -33,32 +33,51 @@ from deepreason.ontology import Status  # noqa: E402
 from deepreason.storage.blobs import BlobStore  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-SOLO_OUT = ROOT / "experiments" / "results" / "informal_ab_solo.json"
-REPORT = ROOT / "experiments" / "results" / "informal_ab_report.json"
+RESULTS = ROOT / "experiments" / "results"
 
-def _problem_and_rubric():
-    """Seed the republic suite into a throwaway root and read back the
-    problem description and std-hist rubric — bytes-identical to what the
+# Problem registry for the A/B family. republic keeps its legacy file
+# names (they are committed and referenced by two prereg stages); the
+# rank-concentration problems (experiments/rank_concentration_prereg.yaml)
+# get suffixed ones.
+PROBLEMS = {
+    "republic": {"pid": "pi-republic", "harness_root": Path("runs/ab_harness"),
+                 "solo": RESULTS / "informal_ab_solo.json",
+                 "instrument": RESULTS / "informal_ab_instrument_report.json"},
+    "bronze": {"pid": "pi-bronze", "harness_root": Path("runs/ab_bronze"),
+               "solo": RESULTS / "informal_ab_solo_bronze.json",
+               "instrument": RESULTS / "informal_ab_instrument_report_bronze.json"},
+    "needham": {"pid": "pi-needham", "harness_root": Path("runs/ab_needham"),
+                "solo": RESULTS / "informal_ab_solo_needham.json",
+                "instrument": RESULTS / "informal_ab_instrument_report_needham.json"},
+}
+SOLO_OUT = PROBLEMS["republic"]["solo"]
+REPORT = RESULTS / "informal_ab_report.json"
+
+def _problem_and_rubric(problem: str = "republic"):
+    """Seed the suite into a throwaway root and read back the problem
+    description and std-hist rubric — bytes-identical to what the
     harness arm sees."""
     import tempfile
 
-    from live_run import seed_republic
+    import live_run
     from deepreason.informal.standards import resolve_standard, standard_body
 
     with tempfile.TemporaryDirectory() as td:
         h = Harness(Path(td) / "seed")
-        seed_republic(h)
-        problem = h.state.problems["pi-republic"]
+        pid, seed = live_run.SUITES[problem]
+        seed(h)
         body = standard_body(h, resolve_standard(h, "std-hist"))
-        return problem.description, body["rubric"]
+        return h.state.problems[pid].description, body["rubric"]
 
 
 class SelectOut(BaseModel):
     picks: list[int] = Field(min_length=1, max_length=3)
 
 
-def run_solo(api_key: str, base_url: str, budget: int) -> int:
-    description, rubric = _problem_and_rubric()
+def run_solo(api_key: str, base_url: str, budget: int,
+             problem: str = "republic") -> int:
+    solo_out = PROBLEMS[problem]["solo"]
+    description, rubric = _problem_and_rubric(problem)
     gen = OpenAICompatEndpoint(base_url, "deepseek-v4-pro", api_key=api_key,
                                temperature=1.0, max_tokens=4000, json_mode=True,
                                reasoning="none")
@@ -90,7 +109,7 @@ def run_solo(api_key: str, base_url: str, budget: int) -> int:
         print(f"self-selection failed ({e}); falling back to first 3")
         picks = list(range(min(3, len(pool))))
     top = [pool[i] for i in picks] or pool[:3]
-    SOLO_OUT.write_text(json.dumps(
+    solo_out.write_text(json.dumps(
         {"n_candidates": len(candidates), "n_skeletons": len(skeletons),
          "picks": picks, "top3": top, "tokens": meter.snapshot()}, indent=2))
     print(f"solo arm done: {len(candidates)} candidates, top3 saved, "
@@ -98,11 +117,11 @@ def run_solo(api_key: str, base_url: str, budget: int) -> int:
     return 0
 
 
-def _harness_top3(root: Path) -> list[str]:
+def _harness_top3(root: Path, pid: str = "pi-republic") -> list[str]:
     from deepreason.programs import content_text
 
     h = Harness(root)
-    addressed = {a for a, p in h.state.addr if p == "pi-republic"}
+    addressed = {a for a, p in h.state.addr if p == pid}
     survivors = [a for a in addressed if h.state.status.get(a) == Status.ACCEPTED]
     scored = []
     for aid in survivors:
@@ -211,8 +230,6 @@ def run_score(api_key: str, base_url: str, crossfamily: bool = False) -> int:
 # picking (the measured saturation mode); a deterministically degraded
 # control pair gates instrument validity.
 
-INSTRUMENT_REPORT = ROOT / "experiments" / "results" / "informal_ab_instrument_report.json"
-
 CRITERIA = [
     ("mechanism_specificity",
      "names a concrete causal mechanism rather than gesturing at one"),
@@ -257,11 +274,21 @@ def _verbosity_penalty(len_a: int, len_b: int) -> float:
     return min(0.3, 0.1 * (hi / lo - 1))
 
 
-def run_score_instrument(api_key: str, base_url: str) -> int:
-    _, rubric = _problem_and_rubric()
-    committed = json.loads(REPORT.read_text())
-    harness_top = committed["harness_top3"]
-    solo_top = committed["solo_top3"]
+def run_score_instrument(api_key: str, base_url: str,
+                         problem: str = "republic") -> int:
+    spec = PROBLEMS[problem]
+    _, rubric = _problem_and_rubric(problem)
+    if problem == "republic":
+        # The republic pairs were committed by the first scoring stage —
+        # reuse them verbatim (amendment 2: "the SAME committed top-3").
+        committed = json.loads(REPORT.read_text())
+        harness_top = committed["harness_top3"]
+        solo_top = committed["solo_top3"]
+    else:
+        # Fresh problems: pairs are the pre-registered deterministic
+        # selection rules applied to the finished arms.
+        harness_top = _harness_top3(spec["harness_root"], spec["pid"])
+        solo_top = json.loads(spec["solo"].read_text())["top3"]
 
     # pairs: (label, X, Y) where X is the harness-slot side; positive
     # margins favor X. Control: X = undegraded, Y = degraded.
@@ -364,9 +391,10 @@ def run_score_instrument(api_key: str, base_url: str) -> int:
     disagreements = [s["order_disagreement"] for r in results
                      for s in r["seats"].values()
                      if s.get("order_disagreement") is not None]
-    INSTRUMENT_REPORT.write_text(json.dumps(
-        {"experiment": "informal-ab instrument stage "
-                       "(prereg amendment 2, design aac313a1af55)",
+    spec["instrument"].write_text(json.dumps(
+        {"experiment": f"informal-ab instrument stage, problem={problem} "
+                       "(design aac313a1af55)",
+         "harness_top3": harness_top, "solo_top3": solo_top,
          "instrument_valid": gate_pass,
          "control_pair": control,
          "verdict": outcome if gate_pass else "instrument_failed_control_gate",
@@ -389,6 +417,8 @@ def main() -> int:
     parser.add_argument("--score", action="store_true")
     parser.add_argument("--score-instrument", action="store_true",
                         help="prereg amendment 2: criterion-level instrument")
+    parser.add_argument("--problem", choices=sorted(PROBLEMS), default="republic",
+                        help="which A/B problem (rank_concentration_prereg.yaml)")
     parser.add_argument("--crossfamily", action="store_true",
                         help="add the calibrated poolside seat (POOLSIDE_API_KEY)")
     parser.add_argument("--budget", type=int, default=65_000)
@@ -399,11 +429,11 @@ def main() -> int:
         print("DEEPSEEK_API_KEY not set", file=sys.stderr)
         return 1
     if args.solo:
-        return run_solo(api_key, args.base_url, args.budget)
+        return run_solo(api_key, args.base_url, args.budget, problem=args.problem)
     if args.score:
         return run_score(api_key, args.base_url, crossfamily=args.crossfamily)
     if args.score_instrument:
-        return run_score_instrument(api_key, args.base_url)
+        return run_score_instrument(api_key, args.base_url, problem=args.problem)
     print("pass --solo, --score, or --score-instrument", file=sys.stderr)
     return 1
 
