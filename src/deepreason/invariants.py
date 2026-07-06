@@ -80,8 +80,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         toposort(set(h.state.artifacts), build_dep(h.state.artifacts))
     except DependenceCycleError as e:
         fail("dep-dag", str(e))
+    # Any Status enum member is legal — SUSPENDED/SUSPENDED_UNSUPPORTED
+    # are the spec §4 support-cascade labels (dependent of a refuted
+    # premise; orphaned != false), first produced live on runs/ab_needham.
+    # The check guards against values outside the enum domain entirely.
     for aid, status in h.state.status.items():
-        if status not in (Status.ACCEPTED, Status.REFUTED):
+        if not isinstance(status, Status):
             fail("status-domain", f"{aid[:12]}: {status}")
     for aid, pid in h.state.addr:
         if aid not in h.state.artifacts or pid not in h.state.problems:

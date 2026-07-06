@@ -142,6 +142,27 @@ def test_successor_descriptions_do_not_nest(tmp_path):
         pid = succ.id
 
 
+def test_support_cascade_suspension_verifies_clean(tmp_path):
+    """Live finding (runs/ab_needham, rank-concentration experiment): the
+    first run to produce a spec §4 support-cascade suspension tripped the
+    checker's status-domain check, which only allowed accepted/refuted.
+    SUSPENDED_UNSUPPORTED is a legal label (orphaned != false) — a root
+    containing one must verify clean."""
+    from deepreason.ontology import Interface, Ref, Status
+    from tests.conftest import attack
+
+    h = Harness(tmp_path / "run")
+    _seed(h)
+    premise = h.create_artifact("premise claim", problem_id="pi-t")
+    dependent = h.create_artifact(
+        "dependent claim", problem_id="pi-t",
+        interface=Interface(refs=[Ref(target=premise.id, role="dependence")]))
+    attack(h, premise.id, "kills-premise")
+    assert h.state.status[dependent.id] == Status.SUSPENDED_UNSUPPORTED
+    result = verify_root(tmp_path / "run")
+    assert result["violations"] == [], result["violations"]
+
+
 def test_duplicate_flood_hits_gate_and_dedupe(tmp_path):
     root = tmp_path / "run"
     h = Harness(root)
