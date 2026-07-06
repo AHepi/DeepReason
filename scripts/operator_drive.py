@@ -127,12 +127,16 @@ def run_operator(model: str, steps: int, engine_budget: int, args) -> dict:
             arguments["token_budget"] = budget
             arguments.setdefault("config", str(ROOT / "config" / "deepseek.yaml"))
 
+        known = {"seed_problem", "run_cycles", "frontier", "theory", "why",
+                 "eval_report", "docket", "appellate_rule", "narrate"}
+        if tool not in known:
+            violations.append(f"step {step}: invented/unknown tool {tool!r}")
         try:
             result_text = mcp_server.call_tool(tool, arguments)
         except Exception as e:  # noqa: BLE001 - operator mistakes are data
-            result_text = f"ERROR: {e!r}"
-            if "unknown tool" in repr(e).lower() or isinstance(e, KeyError):
-                violations.append(f"step {step}: invented/unknown tool {tool!r}")
+            result_text = f"ERROR: {e}"
+            if "missing required argument" in str(e):
+                violations.append(f"step {step}: bad arguments for {tool}")
         if tool == "run_cycles" and "token_spend" in result_text:
             try:
                 engine_spent += json.loads(result_text)["token_spend"]["total"]

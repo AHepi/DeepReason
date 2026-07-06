@@ -160,11 +160,32 @@ def _config(arguments: dict):
     return load(Path(path) if path else None)
 
 
+_REQUIRED_ARGS = {
+    "seed_problem": ("problem",),
+    "run_cycles": ("cycles",),
+    "theory": ("id",),
+    "why": ("id",),
+    "appellate_rule": ("case_id", "holding", "standard"),
+}
+
+
 def call_tool(name: str, arguments: dict) -> str:
     """Execute one tool; returns the text payload (raises on error)."""
     from deepreason.ontology import Status
     from deepreason.ops import resolve_prefix as _resolve
     from deepreason.ops import run_scheduler, seed_problem_payload
+
+    # Actionable argument errors: operator models burn steps on a bare
+    # KeyError and conclude the TOOL is broken (observed live: an operator
+    # called theory(artifact_id=...) four times and reported the tool as
+    # failing). Name what is missing and what was received.
+    missing = [k for k in _REQUIRED_ARGS.get(name, ()) if k not in arguments]
+    if missing:
+        raise ValueError(
+            f"{name}: missing required argument(s) {missing}; received "
+            f"{sorted(k for k in arguments if k != 'root')}. "
+            f"Required: {list(_REQUIRED_ARGS[name])}."
+        )
 
     if name == "seed_problem":
         harness = _harness(arguments)
