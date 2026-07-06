@@ -89,4 +89,16 @@ instrument_stage:
     before (>= 2 of 3 real pairs). Instrument validity gate: control-pair
     margin >= +0.2 toward the undegraded artifact.
   budget: 24 scoring calls, <= 45k tokens
+  result: RAN — control gate PASS (margin +0.478, all 3 seats positive,
+    order disagreement 0.0-0.2 on the control): the instrument detects a
+    constructed quality gap, so its verdict counts. Zero abstentions,
+    24/24 calls usable — the saturation that discarded 8/9 pairwise votes
+    is broken by criterion-level forced choice. A/B verdict: INCONCLUSIVE
+    (harness 1 / solo 1 / tie 1): harness's best beats solo's best
+    (+0.213 despite a verbosity penalty against it), solo takes rank2
+    (-0.192), rank1 a solo-leaning tie (-0.125). Residual position bias
+    shows as per-order disagreement 0.37 mean on near-tie real pairs vs
+    ~0.1 on the control — absorbed by order-averaging rather than
+    discarding votes. Report:
+    experiments/results/informal_ab_instrument_report.json
 
