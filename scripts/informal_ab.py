@@ -5,6 +5,10 @@ ensemble (pairwise + order swap + mandatory decisive_point).
 
   --solo   generate the solo arm (candidates to ~60k tokens + self-pick 3)
   --score  score harness top-3 vs solo top-3 (run after both arms exist)
+  --score-instrument  rescore the SAME committed pairs with the harness-
+           designed instrument (prereg amendment 2: criterion-level forced
+           choice, calibrated seats, verbosity penalty, degraded control
+           pair gating instrument validity)
 """
 
 import argparse
@@ -12,6 +16,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Literal
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # for live_run import
@@ -199,10 +204,191 @@ def run_score(api_key: str, base_url: str, crossfamily: bool = False) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------
+# Instrument stage (prereg AMENDMENT 2): design aac313a1af55 from
+# instrument_designs.json — produced by the unrefereed pro drive on
+# pi-instrument. Criterion-level forced choice replaces holistic winner-
+# picking (the measured saturation mode); a deterministically degraded
+# control pair gates instrument validity.
+
+INSTRUMENT_REPORT = ROOT / "experiments" / "results" / "informal_ab_instrument_report.json"
+
+CRITERIA = [
+    ("mechanism_specificity",
+     "names a concrete causal mechanism rather than gesturing at one"),
+    ("falsifiability",
+     "makes claims that identifiable evidence could in principle refute"),
+    ("scope_discipline",
+     "claims no more than its mechanism actually supports"),
+    ("internal_coherence",
+     "parts support each other; no internal contradiction"),
+    ("evidential_grounding",
+     "points to specific, checkable evidence for its claims"),
+]
+
+DEGRADE_SENTENCE = (
+    " In conclusion, the true mechanism here is ultimately unknowable and "
+    "no conceivable evidence could ever bear on this account."
+)
+
+
+class CriterionChoices(BaseModel):
+    """One forced choice per fixed criterion — completeness is schema-
+    enforced, so a seat cannot skip the criteria it finds hard."""
+
+    mechanism_specificity: Literal["A", "B", "tie"]
+    falsifiability: Literal["A", "B", "tie"]
+    scope_discipline: Literal["A", "B", "tie"]
+    internal_coherence: Literal["A", "B", "tie"]
+    evidential_grounding: Literal["A", "B", "tie"]
+
+
+def _degrade(text: str) -> str:
+    """The control pair's constructed-worse artifact: truncated to 55% of
+    characters + an appended unfalsifiability sentence violating the
+    rubric. Deterministic, so the control is replayable."""
+    return text[: int(len(text) * 0.55)] + DEGRADE_SENTENCE
+
+
+def _verbosity_penalty(len_a: int, len_b: int) -> float:
+    lo, hi = min(len_a, len_b), max(len_a, len_b)
+    if lo == 0 or lo == hi:
+        return 0.0
+    return min(0.3, 0.1 * (hi / lo - 1))
+
+
+def run_score_instrument(api_key: str, base_url: str) -> int:
+    _, rubric = _problem_and_rubric()
+    committed = json.loads(REPORT.read_text())
+    harness_top = committed["harness_top3"]
+    solo_top = committed["solo_top3"]
+
+    # pairs: (label, X, Y) where X is the harness-slot side; positive
+    # margins favor X. Control: X = undegraded, Y = degraded.
+    pairs = [(f"rank{r}", harness_top[r], solo_top[r])
+             for r in range(min(len(harness_top), len(solo_top)))]
+    pairs.append(("control", solo_top[0], _degrade(solo_top[0])))
+
+    seats = {
+        "pro/off": OpenAICompatEndpoint(base_url, "deepseek-v4-pro", api_key=api_key,
+                                        temperature=0.0, max_tokens=2400,
+                                        json_mode=True, reasoning="none"),
+        "flash/default": OpenAICompatEndpoint(base_url, "deepseek-v4-flash",
+                                              api_key=api_key, temperature=0.0,
+                                              max_tokens=2400, json_mode=True),
+        "laguna-m.1/default": OpenAICompatEndpoint(
+            "https://inference.poolside.ai/v1", "poolside/laguna-m.1",
+            api_key=os.environ["POOLSIDE_API_KEY"], temperature=0.0,
+            max_tokens=2400, json_mode=True),
+    }
+    criteria_block = "\n".join(
+        f"- {name}: {desc}" for name, desc in CRITERIA)
+    meter = TokenMeter(budget=45_000)
+    blobs = BlobStore(Path("runs/ab_solo_blobs"))
+
+    def judge_once(adapter, first: str, second: str) -> dict[str, str]:
+        pack = (
+            f"STANDARD std-hist (both candidates answer the same problem "
+            f"and will be judged against it):\n{rubric}\n\n"
+            f"CRITERIA (each decomposes the standard):\n{criteria_block}\n\n"
+            f"CANDIDATE A:\n{first}\n\nCANDIDATE B:\n{second}\n\n"
+            "QUESTION: for EACH criterion separately, which candidate "
+            "better satisfies THAT criterion alone, judged on content "
+            "only? Answer A, B, or tie per criterion. Do NOT pick an "
+            "overall winner; judge each criterion on its own."
+        )
+        out, _ = adapter.call("judge", pack, CriterionChoices)
+        return {name: getattr(out, name) for name, _ in CRITERIA}
+
+    def rel(choice: str, x_is: str) -> int:
+        # +1 when the harness-slot side X wins the criterion.
+        if choice == "tie":
+            return 0
+        return 1 if choice == x_is else -1
+
+    results = []
+    try:
+        for label, x_text, y_text in pairs:
+            penalty = _verbosity_penalty(len(x_text), len(y_text))
+            x_longer = len(x_text) > len(y_text)
+            seat_rows = {}
+            for seat_name, endpoint in seats.items():
+                adapter = LLMAdapter({"judge": endpoint}, blobs,
+                                     retry_max=2, meter=meter)
+                try:
+                    c1 = judge_once(adapter, x_text, y_text)  # X is A
+                    c2 = judge_once(adapter, y_text, x_text)  # X is B
+                except (SchemaRepairError, EndpointError) as e:
+                    seat_rows[seat_name] = {"score": None,
+                                            "error": str(e)[:120]}
+                    continue
+                rel1 = {k: rel(v, "A") for k, v in c1.items()}
+                rel2 = {k: rel(v, "B") for k, v in c2.items()}
+                disagree = sum(rel1[k] != rel2[k] for k in rel1) / len(rel1)
+                raw = (sum(rel1.values()) + sum(rel2.values())) / (2 * len(rel1))
+                # Verbosity handicap: shift the longer artifact's margin
+                # toward the shorter one (amendment 2 formula), clamped.
+                adj = raw - penalty if x_longer else raw + penalty
+                adj = max(-1.0, min(1.0, adj))
+                seat_rows[seat_name] = {
+                    "orders": [c1, c2], "raw": round(raw, 4),
+                    "adjusted": round(adj, 4),
+                    "order_disagreement": round(disagree, 4)}
+            scores = [r["adjusted"] for r in seat_rows.values()
+                      if r.get("adjusted") is not None]
+            margin = sum(scores) / len(scores) if scores else None
+            point = ("abstain" if margin is None
+                     else "harness" if margin > 0.15
+                     else "solo" if margin < -0.15 else "tie")
+            results.append({"pair": label, "len_x": len(x_text),
+                            "len_y": len(y_text),
+                            "verbosity_penalty": round(penalty, 4),
+                            "penalized_side": "X" if x_longer else "Y",
+                            "seats": seat_rows,
+                            "margin": None if margin is None else round(margin, 4),
+                            "point": point})
+            print(f"pair {label}: margin={margin} -> {point} "
+                  f"(spent {meter.total})", flush=True)
+    except TokenBudgetExceeded as e:
+        print(f"instrument scoring stopped early: {e}")
+
+    real = [r for r in results if r["pair"] != "control"]
+    control = next((r for r in results if r["pair"] == "control"), None)
+    points = {"harness": sum(r["point"] == "harness" for r in real),
+              "solo": sum(r["point"] == "solo" for r in real),
+              "tie": sum(r["point"] == "tie" for r in real)}
+    outcome = ("harness_wins" if points["harness"] >= 2
+               else "solo_wins" if points["solo"] >= 2 else "inconclusive")
+    gate_pass = bool(control and control["margin"] is not None
+                     and control["margin"] >= 0.2)
+    disagreements = [s["order_disagreement"] for r in results
+                     for s in r["seats"].values()
+                     if s.get("order_disagreement") is not None]
+    INSTRUMENT_REPORT.write_text(json.dumps(
+        {"experiment": "informal-ab instrument stage "
+                       "(prereg amendment 2, design aac313a1af55)",
+         "instrument_valid": gate_pass,
+         "control_pair": control,
+         "verdict": outcome if gate_pass else "instrument_failed_control_gate",
+         "ab_outcome_if_valid": outcome,
+         "pair_points": points,
+         "mean_order_disagreement": (round(sum(disagreements) / len(disagreements), 4)
+                                     if disagreements else None),
+         "pairs": results,
+         "scoring_tokens": meter.snapshot()}, indent=2))
+    print(f"\nCONTROL GATE: {'PASS' if gate_pass else 'FAIL'} "
+          f"(margin={control['margin'] if control else None}, need >= +0.2)")
+    print(f"VERDICT: {outcome if gate_pass else 'instrument_failed_control_gate'}"
+          f"  points={points}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--solo", action="store_true")
     parser.add_argument("--score", action="store_true")
+    parser.add_argument("--score-instrument", action="store_true",
+                        help="prereg amendment 2: criterion-level instrument")
     parser.add_argument("--crossfamily", action="store_true",
                         help="add the calibrated poolside seat (POOLSIDE_API_KEY)")
     parser.add_argument("--budget", type=int, default=65_000)
@@ -216,7 +402,9 @@ def main() -> int:
         return run_solo(api_key, args.base_url, args.budget)
     if args.score:
         return run_score(api_key, args.base_url, crossfamily=args.crossfamily)
-    print("pass --solo or --score", file=sys.stderr)
+    if args.score_instrument:
+        return run_score_instrument(api_key, args.base_url)
+    print("pass --solo, --score, or --score-instrument", file=sys.stderr)
     return 1
 
 

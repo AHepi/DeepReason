@@ -59,4 +59,34 @@ rescore:
     inconclusive. The cross-family seat's votes are also reported
     separately: if DeepSeek seats abstain again while laguna votes
     consistently, that isolates same-family saturation as the mechanism.
+  result: RAN — inconclusive by judge-general position bias (8/9 votes
+    discarded; the sole surviving vote favored solo). Saturation is a
+    property of pairwise winner-picking, not family overlap.
+
+# ---------------------------------------------------------------------
+# AMENDMENT 2 (committed before running): score with the HARNESS-DESIGNED
+# instrument — design aac313a1af55 from instrument_designs.json (criterion-
+# level forced choice, planted-flaw-calibrated judges, verbosity penalty),
+# produced by the unrefereed pro drive on pi-instrument.
+instrument_stage:
+  pairs: the SAME committed top-3 vs top-3, PLUS one control pair of known
+    quality difference — solo_top3[0] vs a deterministic degradation of
+    itself (truncated to 55% of characters + an appended unfalsifiability
+    sentence violating the rubric). The control gates the instrument:
+    if it cannot detect a constructed gap, its A/B verdict counts nothing.
+  criteria (fixed, decomposing std-hist): mechanism-specificity,
+    falsifiability, scope-discipline, internal-coherence,
+    evidential-grounding
+  protocol: per pair x BOTH orders x 3 calibrated seats (pro/off,
+    flash/default, laguna-m.1): one call returns a forced choice
+    (A/B/tie) PER criterion; seat score = mean over criteria of +1/-1/0,
+    averaged over the two orders (position bias cancels in the mean and
+    is REPORTED as the per-order disagreement rate)
+  verbosity_penalty: the longer artifact's margin is reduced by
+    min(0.3, 0.1 * (len_longer/len_shorter - 1))
+  decision_rule: pair margin = mean adjusted seat score; harness point if
+    margin > +0.15, solo point if < -0.15, else tie. Outcome mapping as
+    before (>= 2 of 3 real pairs). Instrument validity gate: control-pair
+    margin >= +0.2 toward the undegraded artifact.
+  budget: 24 scoring calls, <= 45k tokens
 
