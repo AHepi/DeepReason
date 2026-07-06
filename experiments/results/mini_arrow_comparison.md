@@ -93,3 +93,43 @@ generator is strong; the free mechanical criticism keys on falsifier
 well-formedness (not substance); and the offline judge measures
 articulation-against-rubric. Reading its "#1" as "the correct theory"
 would over-read it — it is "the best-argued artifact in the bracket."
+
+
+## Addendum: the full harness at 1M tokens (runs/arrow_full)
+
+Same question, full machinery (live adversarial critic, defenders, 2-seat
+trial protocol flash+pro, pairwise discrimination, schools, grounded
+adjudication with reinstatement), hard 1M budget. Reports:
+`arrow_full_report.json`, `arrow_full_frontier.md`.
+
+What 12.5x the mini's budget bought:
+
+- **A problem GRAPH, not a problem.** 224 problems (55+ spawned successors/
+  discriminations); the mini grinds one prompt.
+- **Substantive refutation.** 42 conjectures refuted, many by ARGUED cases
+  (e.g. one Past-Hypothesis phrasing killed for asserting monotonic entropy
+  increase, while a better-stated boundary-condition variant survived) —
+  the exact capability the mini's free criticism lacks (it can only kill
+  malformed falsifiers).
+- **Filtered rubric verdicts.** 36 trial warrants at a 64% guard survival
+  rate (13 ensemble splits, 3 paraphrase flips, 4 referential-integrity
+  blocks): the trial protocol demonstrably discarded unreliable rulings.
+- **A frontier that covers the field.** 20 accepted skeletons: Past
+  Hypothesis (boundary-condition form), Weyl curvature, several
+  decoherence/branching variants, CP violation, GRW/objective collapse,
+  retrocausal two-boundary, anthropic selection, Boltzmann fluctuation —
+  a superset of both the mini's survivors and my answer's pillars, with
+  dependence links between related theories.
+- **And the session's only invariant failure.** verify_root caught a
+  10,022-token accounting delta — dedupe-swallowed decisive rulings (F4 in
+  docs/MINI_STRESS_REPORT.md), fixed with regression tests the same day.
+  The mini's three live runs all balanced to the token; the parent's
+  richer registration paths hid one more leak class, found precisely
+  BECAUSE the instrument exists.
+
+Verdict across the three: my answer commits to a ranking the physics
+community would recognize (Past Hypothesis + Weyl as the deep story); the
+mini reconstructs the solution space cheaply but ranks articulation; the
+full harness reconstructs the space MORE completely, criticizes it
+substantively, and holds rivalries open where the evidence genuinely
+doesn't discriminate - at 12.5x the cost and one uncovered accounting bug.
