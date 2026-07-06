@@ -380,7 +380,9 @@ class Scheduler:
                 self.step()
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
-                # consistent (Adj runs inside every registration).
+                # consistent (Adj runs inside every registration). Mid-retry
+                # exhaustion carries the spent-but-uncarried attempts.
+                self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
                 break
         return self.report()

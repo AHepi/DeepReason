@@ -99,6 +99,27 @@ def test_disagreeing_ensemble_and_weak_defender(tmp_path):
         v["check"] != "warrant-validity" for v in result["violations"])
 
 
+def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
+    """Live finding (in-band accounting, first outing): TokenBudgetExceeded
+    raised mid-retry left prior attempts' spend off the log (833-token
+    delta). The exception now carries the spend; the meter and the log must
+    reconcile exactly even when the budget dies inside a repair loop."""
+    root = tmp_path / "run"
+    h = Harness(root)
+    _seed(h)
+    meter = TokenMeter(budget=250)  # dies after roughly one garbage attempt
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint(lambda p: "never valid json {{{")},
+        h.blobs, retry_max=2, meter=meter)
+    Scheduler(h, adapter, Config(VS_K=1, N_SCHOOLS=0, FLOOR=0)).run(3)
+
+    logged = sum(e.llm.tokens for e in h.log.read() if e.llm)
+    assert meter.total > 0
+    assert logged == meter.total  # nothing invisible, even at the death
+    result = verify_root(root, meter.total)
+    assert result["violations"] == [], result["violations"]
+
+
 def test_successor_descriptions_do_not_nest(tmp_path):
     """Chaos finding: successor problems embedded the whole ancestor chain
     (7 levels deep live). A successor-of-a-successor must carry the ROOT

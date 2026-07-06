@@ -12,6 +12,7 @@ import time
 
 from pydantic import BaseModel, ValidationError
 
+from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint, resolve_model
 from deepreason.llm.roles import TEMPLATES
 from deepreason.ontology.event import LLMCall
@@ -134,7 +135,15 @@ class LLMAdapter:
 
         for attempt in range(self.retry_max + 1):
             if self.meter is not None:
-                self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
+                try:
+                    self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
+                except TokenBudgetExceeded as e:
+                    # Exhaustion mid-retry: prior attempts already spent
+                    # tokens that no LLMCall will carry — hand the caller
+                    # the spend record (found live by the in-band
+                    # accounting check: 833-token delta on first outing).
+                    e.spend = _spend(attempt)
+                    raise
             request = prompt if not error else (
                 prompt + f"\n\nYour previous output was invalid: {error}\n"
                 "Return ONLY a valid JSON object for the schema."
