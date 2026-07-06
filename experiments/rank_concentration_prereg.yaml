@@ -71,3 +71,34 @@ decision_rules:  # committed before the first arm token is spent
 budget:
   per problem: harness 70k + solo 65k + instrument scoring 45k = 180k
   total: <= 420k including retries/slack (2 problems + margin)
+
+# ---------------------------------------------------------------------
+result: RAN — H_rank REFUTED (holds in neither problem).
+  gates: both control pairs PASS decisively (bronze +0.909, needham
+    +0.841; republic was +0.478) — every verdict below counts.
+  bronze: rank0 -0.372, rank1 -0.337, rank2 -0.086 -> solo_wins
+    (rank0 fails both clauses: not the max, not > +0.15; inverted —
+    harness's best lost WORST).
+  needham: rank0 +0.055, rank1 -0.141, rank2 -0.053 -> inconclusive
+    (rank0 IS the max rank, but +0.055 << +0.15: fails).
+  secondary (pooled over 3 problems incl. republic's committed +0.213):
+    rank0 -0.035, rank1 -0.201, rank2 -0.110 — a weak rank0 > others
+    ordering survives pooling, but every pooled rank is <= 0: solo is
+    never behind. Classic mapping: republic inconclusive, bronze
+    solo_wins, needham inconclusive — the harness won no problem.
+  verdict_on_record: the republic rank0 point (+0.213) was noise or
+    problem-specific, per the pre-committed refutation clause. At a
+    ~70k budget with a shared v4-pro generator, the criticism/
+    adjudication apparatus showed NO measurable quality advantage over
+    raw generation + self-selection on these informal problems — and
+    lost outright on bronze.
+  caveats (committed with equal prominence): (1) solo arms overshot to
+    ~92.5k tokens vs harness's 70k (the known check-before-spend
+    semantics on the oversized self-selection call, identical to the
+    republic arm) — arms were NOT budget-matched and the asymmetry
+    favors solo by ~32% more generation; a budget-matched rerun is the
+    obvious follow-up before treating solo_wins as generalizable.
+    (2) one generator family; (3) n=3 pairs per problem.
+  spend: 417.8k total (71.3k + 70.2k harness; 92.6k + 92.7k solo;
+    45.4k + 45.6k scoring) vs <= 420k committed.
+  reports: informal_ab_instrument_report_{bronze,needham}.json

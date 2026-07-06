@@ -1,0 +1,401 @@
+{
+  "experiment": "informal-ab instrument stage, problem=needham (design aac313a1af55)",
+  "harness_top3": [
+    "{\"claim\": \"The European marriage of craft knowledge and theoretical mathematics, absent in China, enabled mathematized science.\", \"mechanism\": \"Europe had a distinct social structure where university-trained scholars (often clergy) interacted with practical artisans (guilds). This was fostered by the printing press, which disseminated both practical manuals and theoretical treatises. The collaboration between, say, Galileo and lens-grinders or Newton and clockmakers, allowed mathematics to be applied to physical phenomena. In China, the scholar-official elite (literati) disdained manual labor, maintaining a rigid separation between theoretical knowledge (Confucian classics) and practical skills (artisans' tacit knowledge). Thus, cumulative experimental science did not crystallize.\", \"scope\": {\"covers\": [\"Europe 1400-1700\", \"Ming China\"], \"excludes\": [\"Song China\", \"Islamic world\"]}, \"forbidden\": [{\"case\": \"Song China had flourishing institutions where scholars and craftsmen collaborated systematically to produce experimental science.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Inspired by Needham's own question and Zilsel's thesis on the role of superior artisans. Atypical because it focuses on social epistemology rather than economic or political factors. Emphasizes cultural-sociological mechanism.\"}",
+    "{\"claim\": \"European legal and institutional innovation\u2014the corporation and patent system\u2014created incentives for sustained experimental science.\", \"mechanism\": \"Europe developed a unique legal framework: autonomous universities with corporate rights, intellectual property (patents), and scientific societies as self-governing bodies. These institutions provided autonomy from state and church, allowing long-term inquiry. Patents, introduced in Venice in 1474, gave inventors a temporary monopoly, encouraging public disclosure of methods and stimulating cumulative improvement. China lacked such legal personhood for institutions and had no patent concept; the state could appropriate inventions but didn't foster a market for systematic innovation. Thus, Europe's institutional environment turned scattered ingenuity into cumulative, mathematized science.\", \"scope\": {\"covers\": [\"Europe 1400-1700\", \"Ming-Qing China\"], \"excludes\": [\"Islamic world\", \"Classical Greece\"]}, \"forbidden\": [{\"case\": \"Early Ming China had a patent system and autonomous corporations that incentivized experimental research.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is an institutional economics perspective, branching from new institutionalism (North, Acemoglu). Atypical because it emphasizes legal infrastructure rather than cultural ethos or state competition. Carries risk of overstating the impact of early patents.\"}",
+    "{\"claim\": \"The European marriage of craft knowledge and theoretical mathematics, absent in China, enabled mathematized science.\", \"mechanism\": \"In Europe, the Renaissance recovery of ancient mathematics (Euclid, Archimedes) combined with the practical needs of artisans and engineers, leading to a feedback loop where theoretical problems were tested empirically and practical inventions were analyzed mathematically. This alliance was institutionalized in scientific societies (e.g., Royal Society) that deliberately brought together scholars and craftsmen. In China, the literati class disdained manual labor, and mathematical knowledge (astronomy, algebra) remained insulated from craft practices, precluding the emergence of experimental science.\", \"scope\": {\"covers\": [\"mathematization of nature\"], \"excludes\": [\"technological innovation\"]}, \"forbidden\": [{\"case\": \"If Chinese polymaths like Shen Kuo had systematically applied quantitative methods to craft problems in ways similar to Galileo.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic Needham thesis, emphasizing the lack of a craft-theory fusion in China. It explains mathematization but may overstate the separation in China, as some interactions did occur in alchemy, astronomy, and hydraulic engineering. However, the institutional and social chasm between literati and artisans was indeed stark.\"}"
+  ],
+  "solo_top3": [
+    "{\"claim\": \"The Black Death's massive demographic shock in Europe (14th century) disrupted labor-supply and feudal ties, eventually leading to a more fluid social structure, urban growth, and a premium on labor-saving devices, which stimulated mechanical arts and empirical tinkering; by 1550 this had laid the groundwork for science. China's demographic continuity and agrarian intensity did not produce the same rupture or incentive.\", \"mechanism\": \"Population collapse in Europe raised wages, incentivizing mechanical innovation, printing, and mining technologies that later fed into scientific instrumentation and experimental culture. Labor scarcity also eroded guild restrictions, fostering a class of artisan-engineers who collaborated with scholars (e.g., Leonardo, Gilbert). Ming China recovered from plague and Mongol collapse more quickly, returning to a land-abundant, labor-intensive agrarian equilibrium that prioritized agricultural intensification rather than mechanical experimentation.\", \"scope\": {\"covers\": [\"post-Black Death Europe\", \"early Ming China\"], \"excludes\": [\"Middle East after the Black Death\"]}, \"forbidden\": [{\"case\": \"If Europe had experienced a similar demographic shock but without subsequent wage increases and mechanical innovation, or if Song China had experienced a labor-shedding shock and responded with scientific mechanization that then stalled.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A materialist candidate based on the Brenner thesis and economic history. It connects demography to the emergence of experimentation via labor markets and technical arts.\"}",
+    "{\"claim\": \"The competitive and relatively fragmented political landscape of early modern Europe, absent a single hegemonic empire, created a market-like environment for intellectual and technical talent. This incentivized natural philosophers and mathematical practitioners to develop public, reproducible experimental methods to attract patronage from multiple competing courts, cities, and universities.\", \"mechanism\": \"Fragmented multistate system with exit options for scholars and artisans, leading to a competitive market for patronage. Patrons sought useful and novel knowledge, fostering public demonstration and systematic experimentation. The printing press, operating in a decentralized and less censored environment, amplified this by allowing rapid dissemination and verification across the continent.\", \"scope\": {\"covers\": [\"Rapid development of experimental science in Europe 1550-1700\", \"Contrast with Ming China's centralized imperial system\", \"Role of patronage and printing\", \"Absence of a single orthodoxy enforcing authority in Europe\"], \"excludes\": [\"Cases where a single empire with a unified elite also developed modern science in a similar timeframe\", \"Situations where a highly fragmented but non-competitive patronage system (e.g., feudal anarchy without cities) would produce the same outcome\"]}, \"forbidden\": [{\"case\": \"A centralized empire with a unified, cosmopolitan elite and a single imperial academy successfully developed mathematized experimental science as a public, cumulative enterprise before 1700.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Ming China had a large class of independent, mobile natural philosophers selling their services to rival provincial lords, with a corresponding rapid spread of experimental methods from 1500 onward.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Emphasizes exit, voice, and loyalty dynamics. The mechanism is not about European superiority but about a specific incentive structure. The forbidden cases test whether the fragmentation was necessary: if a centralized system could have done it, the account is falsified. Also, if the crucial factor was just fragmentation without the competitive patronage market (e.g., warlord era with no stability), the account fails.\"}",
+    "{\"claim\": \"The competitive, fragmented European state system, combined with the Protestant Reformation's challenge to intellectual authority, created a market for novel knowledge claims, incentivizing the development of experimental science.\", \"mechanism\": \"Rival courts and wealthy merchants competed for prestige and practical advantage by patronizing natural philosophers and inventors. The printing press disseminated findings, allowing knowledge to accumulate and be tested. In contrast, China's imperial bureaucracy was centralized and prioritized social stability and orthodoxy over disruptive novelty.\", \"scope\": {\"covers\": [\"Early modern Europe\", \"1550-1700\"], \"excludes\": [\"Ancient China\", \"Islamic Golden Age\"]}, \"forbidden\": [{\"case\": \"If Chinese records showed widespread private patronage of experimental science by competing warlords or merchant princes in the late Ming, with a flourishing book market in natural philosophy independent of the imperial examination system.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This emphasizes institutional competition as the driver, contrasting Europe's multistate system with China's unipolar order.\"}"
+  ],
+  "instrument_valid": true,
+  "control_pair": {
+    "pair": "control",
+    "len_x": 1607,
+    "len_y": 1008,
+    "verbosity_penalty": 0.0594,
+    "penalized_side": "X",
+    "seats": {
+      "pro/off": {
+        "orders": [
+          {
+            "mechanism_specificity": "A",
+            "falsifiability": "A",
+            "scope_discipline": "A",
+            "internal_coherence": "A",
+            "evidential_grounding": "A"
+          },
+          {
+            "mechanism_specificity": "B",
+            "falsifiability": "B",
+            "scope_discipline": "B",
+            "internal_coherence": "A",
+            "evidential_grounding": "B"
+          }
+        ],
+        "raw": 0.8,
+        "adjusted": 0.7406,
+        "order_disagreement": 0.2
+      },
+      "flash/default": {
+        "orders": [
+          {
+            "mechanism_specificity": "A",
+            "falsifiability": "A",
+            "scope_discipline": "A",
+            "internal_coherence": "A",
+            "evidential_grounding": "A"
+          },
+          {
+            "mechanism_specificity": "B",
+            "falsifiability": "B",
+            "scope_discipline": "B",
+            "internal_coherence": "B",
+            "evidential_grounding": "B"
+          }
+        ],
+        "raw": 1.0,
+        "adjusted": 0.9406,
+        "order_disagreement": 0.0
+      },
+      "laguna-m.1/default": {
+        "orders": [
+          {
+            "mechanism_specificity": "A",
+            "falsifiability": "A",
+            "scope_discipline": "tie",
+            "internal_coherence": "A",
+            "evidential_grounding": "A"
+          },
+          {
+            "mechanism_specificity": "B",
+            "falsifiability": "B",
+            "scope_discipline": "B",
+            "internal_coherence": "B",
+            "evidential_grounding": "B"
+          }
+        ],
+        "raw": 0.9,
+        "adjusted": 0.8406,
+        "order_disagreement": 0.2
+      }
+    },
+    "margin": 0.8406,
+    "point": "harness"
+  },
+  "verdict": "inconclusive",
+  "ab_outcome_if_valid": "inconclusive",
+  "pair_points": {
+    "harness": 0,
+    "solo": 0,
+    "tie": 3
+  },
+  "mean_order_disagreement": 0.5,
+  "pairs": [
+    {
+      "pair": "rank0",
+      "len_x": 1325,
+      "len_y": 1607,
+      "verbosity_penalty": 0.0213,
+      "penalized_side": "Y",
+      "seats": {
+        "pro/off": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            }
+          ],
+          "raw": 0.0,
+          "adjusted": 0.0213,
+          "order_disagreement": 1.0
+        },
+        "flash/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "tie",
+              "falsifiability": "tie",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            },
+            {
+              "mechanism_specificity": "tie",
+              "falsifiability": "tie",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            }
+          ],
+          "raw": 0.0,
+          "adjusted": 0.0213,
+          "order_disagreement": 0.0
+        },
+        "laguna-m.1/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            }
+          ],
+          "raw": 0.1,
+          "adjusted": 0.1213,
+          "order_disagreement": 0.6
+        }
+      },
+      "margin": 0.0546,
+      "point": "tie"
+    },
+    {
+      "pair": "rank1",
+      "len_x": 1412,
+      "len_y": 2249,
+      "verbosity_penalty": 0.0593,
+      "penalized_side": "Y",
+      "seats": {
+        "pro/off": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "B",
+              "scope_discipline": "B",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            }
+          ],
+          "raw": -0.4,
+          "adjusted": -0.3407,
+          "order_disagreement": 0.6
+        },
+        "flash/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "B",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "tie",
+              "falsifiability": "tie",
+              "scope_discipline": "A",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            }
+          ],
+          "raw": 0.0,
+          "adjusted": 0.0593,
+          "order_disagreement": 0.8
+        },
+        "laguna-m.1/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "B",
+              "scope_discipline": "B",
+              "internal_coherence": "tie",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "tie",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "B"
+            }
+          ],
+          "raw": -0.2,
+          "adjusted": -0.1407,
+          "order_disagreement": 0.4
+        }
+      },
+      "margin": -0.1407,
+      "point": "tie"
+    },
+    {
+      "pair": "rank2",
+      "len_x": 1384,
+      "len_y": 1161,
+      "verbosity_penalty": 0.0192,
+      "penalized_side": "X",
+      "seats": {
+        "pro/off": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "tie",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            }
+          ],
+          "raw": -0.1,
+          "adjusted": -0.1192,
+          "order_disagreement": 1.0
+        },
+        "flash/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "tie",
+              "scope_discipline": "tie",
+              "internal_coherence": "tie",
+              "evidential_grounding": "tie"
+            }
+          ],
+          "raw": 0.1,
+          "adjusted": 0.0808,
+          "order_disagreement": 0.4
+        },
+        "laguna-m.1/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "tie",
+              "scope_discipline": "A",
+              "internal_coherence": "tie",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "tie",
+              "evidential_grounding": "A"
+            }
+          ],
+          "raw": -0.1,
+          "adjusted": -0.1192,
+          "order_disagreement": 0.8
+        }
+      },
+      "margin": -0.0525,
+      "point": "tie"
+    },
+    {
+      "pair": "control",
+      "len_x": 1607,
+      "len_y": 1008,
+      "verbosity_penalty": 0.0594,
+      "penalized_side": "X",
+      "seats": {
+        "pro/off": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "B",
+              "falsifiability": "B",
+              "scope_discipline": "B",
+              "internal_coherence": "A",
+              "evidential_grounding": "B"
+            }
+          ],
+          "raw": 0.8,
+          "adjusted": 0.7406,
+          "order_disagreement": 0.2
+        },
+        "flash/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "A",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "B",
+              "falsifiability": "B",
+              "scope_discipline": "B",
+              "internal_coherence": "B",
+              "evidential_grounding": "B"
+            }
+          ],
+          "raw": 1.0,
+          "adjusted": 0.9406,
+          "order_disagreement": 0.0
+        },
+        "laguna-m.1/default": {
+          "orders": [
+            {
+              "mechanism_specificity": "A",
+              "falsifiability": "A",
+              "scope_discipline": "tie",
+              "internal_coherence": "A",
+              "evidential_grounding": "A"
+            },
+            {
+              "mechanism_specificity": "B",
+              "falsifiability": "B",
+              "scope_discipline": "B",
+              "internal_coherence": "B",
+              "evidential_grounding": "B"
+            }
+          ],
+          "raw": 0.9,
+          "adjusted": 0.8406,
+          "order_disagreement": 0.2
+        }
+      },
+      "margin": 0.8406,
+      "point": "harness"
+    }
+  ],
+  "scoring_tokens": {
+    "prompt_tokens": 27834,
+    "completion_tokens": 17769,
+    "total": 45603,
+    "budget": 45000,
+    "calls": 24
+  }
+}
