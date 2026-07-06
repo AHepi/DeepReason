@@ -85,6 +85,49 @@ exactly this first:
   violate this standard."}}
 
 """ + _TASK_SHARED,
+    # A REAL open problem (docs/OPERATOR_DIAGNOSIS.md, informal_ab reports):
+    # pairwise judging saturates on near-tie informal outputs, which blocks
+    # measuring the harness's own value. Whatever survives here is a usable
+    # design, not a test fixture.
+    "instrument": """You are the OPERATING AGENT for the DeepReason harness.
+
+{agent_md}
+
+GOAL: have the harness design a DISCRIMINATION INSTRUMENT for comparing
+near-tie informal artifacts, drive it until at least two designs SURVIVE
+criticism and you have READ them, clear any docket cases (the entry names
+the standard), then finish with a comparative summary. Seed exactly this:
+
+  problem: {{"id": "pi-instrument", "description": "Design a discrimination
+  instrument that can reliably rank two near-tie informal artifacts, so
+  that harness-vs-raw-generation comparisons stop saturating. Measured
+  facts from this repository: three calibrated judge seats across two
+  model families (planted-flaw error 0.0-0.125, verbosity bias 0.0-0.375)
+  each preferred position A in BOTH presentation orders on rank-matched
+  pairs; the order-swap screen discarded 8 of 9 votes; the sole surviving
+  vote favored the weaker arm. Plain pairwise winner-picking saturates.
+  Your instrument must name what is elicited and how it is scored, the
+  regime where it discriminates, and forbidden cases measurable by running
+  the instrument on this repository's committed A/B pairs within 150k
+  tokens. Each candidate's content MUST be a JSON skeleton object, exactly
+  this shape: {{\\"claim\\": str, \\"mechanism\\": str, \\"scope\\":
+  {{\\"covers\\": [str], \\"excludes\\": [str]}}, \\"forbidden\\":
+  [{{\\"case\\": str, \\"eval\\": \\"rubric:std-instrument\\"}}],
+  \\"prose_notes\\": str}}.", "criteria": ["skeleton-wf", "kappa-instrument"]}}
+  commitments: [{{"id": "kappa-instrument", "eval": "rubric:std-instrument"}}]
+  standard: {{"id": "std-instrument", "rubric": "A discrimination-instrument
+  proposal must: (1) name a specific elicitation and scoring mechanism
+  (e.g. criterion-wise decomposed grading, tournament against planted
+  anchors of known quality, calibrated absolute scoring) — not an
+  aspiration ('judge better'); (2) state forbidden cases that are concrete
+  measurable outcomes of running the instrument (an agreement rate, a
+  position-bias delta, a discrimination rate on pairs of KNOWN quality
+  difference); (3) directly address the measured failure modes: position
+  bias that survives order-swap screening, verbosity bias, and same-family
+  saturation. Instruments that assume an oracle judge or unmeasurable
+  quantities violate this standard."}}
+
+""" + _TASK_SHARED,
 }
 
 
@@ -136,21 +179,29 @@ def run_operator(model: str, steps: int, engine_budget: int, args) -> dict:
             transcript.append({"step": step, "done": arguments.get("summary", "")[:800]})
             break
 
-        # Referee: force the scenario root; police the engine budget.
+        # Root injection is environment setup, not refereeing: always applied.
         arguments["root"] = str(root)
         if tool == "run_cycles":
+            arguments.setdefault("config", str(ROOT / "config" / "deepseek.yaml"))
             budget = arguments.get("token_budget")
             if budget is None:
                 violations.append(f"step {step}: run_cycles WITHOUT token_budget (rule 5)")
-                budget = 20_000
-            budget = min(int(budget), engine_budget - engine_spent, 30_000)
-            if budget <= 0:
-                result_text = "ERROR: engine budget for this drive is exhausted"
-                transcript.append({"step": step, "tool": tool, "blocked": result_text})
-                history += f"\n\nTOOL CALL: {json.dumps(move)}\nRESULT: {result_text}"
-                continue
-            arguments["token_budget"] = budget
-            arguments.setdefault("config", str(ROOT / "config" / "deepseek.yaml"))
+            if args.unrefereed:
+                # No per-call rewriting: the operator manages its own budget.
+                # A hard killswitch (1.5x the stated budget) is the only guard.
+                if engine_spent >= int(engine_budget * 1.5):
+                    result_text = "ERROR: drive killswitch — engine spend exceeded 1.5x budget"
+                    transcript.append({"step": step, "tool": tool, "blocked": result_text})
+                    history += f"\n\nTOOL CALL: {json.dumps(move)}\nRESULT: {result_text}"
+                    continue
+            else:
+                budget = min(int(budget or 20_000), engine_budget - engine_spent, 30_000)
+                if budget <= 0:
+                    result_text = "ERROR: engine budget for this drive is exhausted"
+                    transcript.append({"step": step, "tool": tool, "blocked": result_text})
+                    history += f"\n\nTOOL CALL: {json.dumps(move)}\nRESULT: {result_text}"
+                    continue
+                arguments["token_budget"] = budget
 
         known = {"seed_problem", "run_cycles", "frontier", "theory", "why",
                  "eval_report", "docket", "appellate_rule", "narrate"}
@@ -205,6 +256,8 @@ def main() -> int:
     parser.add_argument("--steps", type=int, default=12)
     parser.add_argument("--engine-budget", type=int, default=60_000)
     parser.add_argument("--scenario", default="tides", choices=sorted(SCENARIOS))
+    parser.add_argument("--unrefereed", action="store_true",
+                        help="no per-call budget rewriting; killswitch only")
     args = parser.parse_args()
     for env in ("DEEPSEEK_API_KEY", "POOLSIDE_API_KEY"):
         if not os.environ.get(env):
