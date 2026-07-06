@@ -1,0 +1,23 @@
+{
+  "stop": "budget",
+  "cycles": 11,
+  "problems": {
+    "pi-bronze": 36
+  },
+  "refuted": 23,
+  "gate_blocks": 0,
+  "rotations": 2,
+  "tokens": {
+    "prompt_tokens": 8931,
+    "completion_tokens": 23062,
+    "total": 31993,
+    "budget": 30000,
+    "calls": 10
+  },
+  "meter_equals_log": true,
+  "logged_tokens": 31993,
+  "novelty_late_early": 1.0099834404363126,
+  "novelty_baseline": 0.846,
+  "parent_ingest_violations": [],
+  "smoke_failures": []
+}
