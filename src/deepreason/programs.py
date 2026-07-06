@@ -11,6 +11,7 @@ and may enforce a DETERMINISTIC bound (e.g. step count) internally; the
 ``overrun`` verdict is reserved for those (see measures/hv.py).
 """
 
+import ast
 import json
 import re
 
@@ -18,6 +19,35 @@ from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 
 PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+
+
+class UnsafePredicate(ValueError):
+    """A predicate expression reaches for dunder internals (the object-
+    subclasses sandbox-escape surface) or names outside the safe set."""
+
+
+def _validate_predicate(expr: str) -> None:
+    """Defense-in-depth for the predicate eval() (stress-campaign RCE).
+    eval() with __builtins__={} is escapable via `().__class__.__base__.
+    __subclasses__()` — every such escape needs a dunder attribute or
+    name. Reject any Attribute or Name touching an underscore-prefixed
+    identifier, which blocks the entire escape family while leaving every
+    legitimate predicate (len(content) > 120, 'x' in content.lower(),
+    comprehensions over content.split()) untouched. Parse errors are
+    unsafe by default."""
+    try:
+        tree = ast.parse(expr, mode="eval")
+    except SyntaxError as e:
+        raise UnsafePredicate(f"unparseable predicate: {e}") from e
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
+            raise UnsafePredicate(f"dunder attribute access: .{node.attr}")
+        if isinstance(node, ast.Name) and node.id.startswith("_"):
+            raise UnsafePredicate(f"underscore name: {node.id}")
+        # No legitimate boolean predicate exponentiates; ** is only useful
+        # here as an integer bomb (9**9**9). Cheap to forbid.
+        if isinstance(node, ast.Pow):
+            raise UnsafePredicate("exponentiation not allowed in a predicate")
 
 
 class NotEvaluable(ValueError):
@@ -83,6 +113,7 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
             "codec": artifact.codec,
         }
         try:
+            _validate_predicate(arg)  # reject sandbox-escape shapes first
             verdict = PASS if bool(eval(arg, namespace)) else FAIL
             detail: dict = {}
         except Exception as e:  # noqa: BLE001 - a predicate error is a failed verdict

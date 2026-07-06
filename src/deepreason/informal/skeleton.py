@@ -13,7 +13,7 @@ bytes parse; the discipline enters through problem criteria.
 
 import json
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Commitment
@@ -26,6 +26,26 @@ class ForbiddenCase(BaseModel):
     case: str = Field(min_length=1)
     eval: str  # "rubric:<spec-id>" | "program:<ref>"
     observation_valued: bool = False
+
+    @field_validator("eval")
+    @classmethod
+    def _eval_kind_is_safe(cls, v: str) -> str:
+        """SECURITY (stress-campaign RCE): forbidden cases come from
+        UNTRUSTED skeleton content (LLM output). Their eval string is
+        copied verbatim into a registered Commitment and can reach
+        programs.evaluate. A `predicate:` here would put attacker-
+        controlled text into an eval() — arbitrary code execution via the
+        object-subclasses walk. Untrusted forbidden cases may ONLY name a
+        rubric standard (judged via the trial protocol) or a known safe
+        program; never an inline predicate. A skeleton with any other eval
+        kind fails to parse (so skeleton-wf fails) rather than registering
+        a dangerous commitment."""
+        if not (v.startswith("rubric:") or v.startswith("program:")):
+            raise ValueError(
+                "forbidden-case eval must be 'rubric:<spec-id>' or "
+                "'program:<ref>' (untrusted content may not carry an "
+                f"inline predicate): {v[:40]!r}")
+        return v
 
 
 class Scope(BaseModel):
