@@ -27,8 +27,8 @@ deepreason-mcp = "deepreason.mcp_server:main"
 packages = ["src/deepreason"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "mini/tests"]
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests"]
+src = ["src", "tests", "mini"]
