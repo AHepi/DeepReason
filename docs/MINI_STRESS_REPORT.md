@@ -62,6 +62,24 @@ fork state — so the parent is deliberately left alone (its own budget
 machinery is the right fix there).
 Test: `test_chaos.py::test_predicate_bomb_is_bounded`.
 
+### F4 — the 1M run: dedupe-swallowed trial rulings (parent, found LIVE)
+The full-harness 1M arrow-of-time run was the first run of the session to
+FAIL an invariant: `verify_root` reported meter 1,000,214 vs log 990,192
+(delta 10,022). Diagnosis: skeletons carry several rubric commitments
+resolving to the same standard (kappa + fc: forbidden cases); two trials
+on the same target with the same decisive quote produce a byte-identical
+critic artifact, the second registration content-address-dedupes
+(committing NO event), and `_trial_steps` had already removed the decisive
+judge ruling from the trial-llm list — one swallowed judge call per
+collision (~13 x ~770 tokens; 13 orphaned judge trial prompts in the blob
+census corroborate). A mock accounting sweep found a sibling class:
+`_judge_all`'s local list lost seat 1's completed spend whenever a later
+seat raised. Fix: commit-checked removal (a call leaves the trial-llm list
+only if a real event carried it) in trial, pairwise, and both audits;
+ensemble calls append to the caller's list as they land; the battery-only
+audit helpers now log their spends too.
+Tests: `tests/test_trial_accounting.py` (both classes).
+
 ## What held without any fix
 
 - **Accounting (G1)**: meter == log in all 400 chaos runs + both live runs,

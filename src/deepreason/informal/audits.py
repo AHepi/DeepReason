@@ -92,11 +92,15 @@ def paraphrase_invariance_audit(harness, adapter, config) -> list:
                 flips.append(p.content[:80])
                 decisive = call
         if flips:
+            before = set(harness.state.artifacts)
             critic = _audit_warrant(
                 harness, PARAPHRASE_AUDIT, warrant.validity_node,
                 {"warrant": warrant.id, "flips": flips}, llm=decisive,
             )
-            if decisive is not None:
+            # The decisive re-ruling rides the critic event only if one
+            # committed; an on-record/deduped audit commits nothing and the
+            # call must land as audit-llm instead (accounting totality, §0).
+            if critic is not None and critic.id not in before and decisive is not None:
                 calls.remove(decisive)
             if critic is not None:
                 hits.append(critic)
@@ -113,10 +117,13 @@ def premise_deletion_audit(harness, adapter, config) -> list:
         exchange = f"{transcript['case']}\n{transcript['answer']}".replace(decisive, "")
         verdict, call = _judge_exchange(adapter, transcript, exchange)
         if verdict == "fail":
+            before = set(harness.state.artifacts)
             critic = _audit_warrant(
                 harness, PREMISE_AUDIT, warrant.validity_node,
                 {"warrant": warrant.id, "deleted": decisive[:120]}, llm=call,
             )
+            if critic is None or critic.id in before:
+                _log_calls(harness, [call])  # nothing committed the ruling
             if critic is not None:
                 hits.append(critic)
         else:
@@ -138,7 +145,8 @@ def planted_flaw_calibration(
             f"TARGET:\n{content}", "",
             "QUESTION: does the target violate the standard? verdict=fail iff yes.",
         ])
-        ruling, _ = adapter.call("judge", pack, JudgeRuling)
+        ruling, llm_call = adapter.call("judge", pack, JudgeRuling)
+        _log_calls(harness, [llm_call])
         if (ruling.verdict == "fail") != has_flaw:
             errors += 1
     rate = errors / len(calibration) if calibration else 0.0
@@ -172,7 +180,8 @@ def bias_probes(
                     f"A:\n{a_text}", "", f"B:\n{b_text}", "",
                     "winner=neither if equal.",
                 ])
-                ruling, _ = adapter.call("judge", pack, PairwiseRuling)
+                ruling, llm_call = adapter.call("judge", pack, PairwiseRuling)
+                _log_calls(harness, [llm_call])
                 total += 1
                 if ruling.winner == probe_label:
                     preferred += 1

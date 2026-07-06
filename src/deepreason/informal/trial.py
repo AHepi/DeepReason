@@ -88,17 +88,21 @@ def _judge_pack(harness, config, body, target_text, case, answer,
     return "\n".join(lines)
 
 
-def _judge_all(harness, adapter, pack: str, diagnostics, target_id):
+def _judge_all(harness, adapter, pack: str, diagnostics, target_id, calls: list):
     """Rule with the full ensemble; disagreement blocks (never averaged).
-    Returns (ruling | None, calls) — every seat's LLMCall, for the log."""
+    Appends every seat's LLMCall to the CALLER's list as it lands — a local
+    list dropped seat 1's completed spend whenever a later seat raised
+    (found by the mock accounting sweep: judge2-storm leaked seat 1)."""
     ruling, first = adapter.call("judge", pack, JudgeRuling)
-    calls = [first]
+    calls.append(first)
+    seat_calls = [first]
     for index in range(1, adapter.ensemble_size("judge")):
         other, call = adapter.call("judge", pack, JudgeRuling, endpoint_index=index)
         calls.append(call)
+        seat_calls.append(call)
         if other.verdict != ruling.verdict:
-            return None, calls  # ensemble split: critic-gaming signal
-    return ruling, calls
+            return None, seat_calls  # ensemble split: critic-gaming signal
+    return ruling, seat_calls
 
 
 def run_trial(harness, target_id: str, commitment, adapter, config,
@@ -161,8 +165,7 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
             anchor_text = content_text(harness.state.artifacts[anchors[0]], harness.blobs)
     pack = _judge_pack(harness, config, body, target_text, case_out.case,
                        defence.answer, standard.id, anchor_text)
-    ruling, judge_calls = _judge_all(harness, adapter, pack, diagnostics, target_id)
-    calls.extend(judge_calls)
+    ruling, judge_calls = _judge_all(harness, adapter, pack, diagnostics, target_id, calls)
     if ruling is None:
         return _block(harness, "ensemble-split", target_id, diagnostics)
     if ruling.verdict != "fail":
@@ -180,8 +183,7 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
     if body["mode"] in ("anchored", "pairwise") and anchor_text is not None:
         swapped_pack = _judge_pack(harness, config, body, target_text, case_out.case,
                                    defence.answer, standard.id, anchor_text, swapped=True)
-        swapped, swap_calls = _judge_all(harness, adapter, swapped_pack, diagnostics, target_id)
-        calls.extend(swap_calls)
+        swapped, _ = _judge_all(harness, adapter, swapped_pack, diagnostics, target_id, calls)
         if swapped is None or swapped.verdict != ruling.verdict:
             return _block(harness, "order-swap", target_id, diagnostics)
         checks["order_swap"] = "pass"
@@ -221,8 +223,8 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         mode=body["mode"],
     )
     judge_llm = judge_calls[0]
-    calls.remove(judge_llm)  # this one rides the critic event below
-    return register_fail_warrant(
+    before = set(harness.state.artifacts)
+    critic = register_fail_warrant(
         harness,
         commitment_id=commitment.id,
         target_id=target_id,
@@ -235,6 +237,15 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         trace_ref=trace_ref,
         llm=judge_llm,
     )
+    # The decisive ruling rides the critic event ONLY if one actually
+    # committed: a byte-identical critic (same target, same spec, same
+    # decisive quote from a second rubric kappa) content-address-dedupes,
+    # committing nothing — the 1M arrow run leaked 13 judge rulings this
+    # way (verify_root delta 10,022). Uncommitted => the call stays in
+    # ``calls`` and lands as trial-llm.
+    if critic is not None and critic.id not in before:
+        calls.remove(judge_llm)
+    return critic
 
 
 def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, config,
@@ -290,7 +301,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
 
     loser = b_id if ruling1.winner == "A" else a_id
     winner = a_id if ruling1.winner == "A" else b_id
-    calls.remove(llm_call)  # the decisive ruling rides the critic event below
+    before = set(harness.state.artifacts)
     trace_ref = harness.blobs.put(canonical_json({
         "pairwise": {"problem": problem.id, "winner": winner, "loser": loser,
                      "decisive_point": ruling1.decisive_point},
@@ -307,7 +318,7 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
         trace_ref=trace_ref,
         validity_node=nu.id,
     )
-    return harness.create_artifact(
+    critic = harness.create_artifact(
         json.dumps({"pairwise": {"problem": problem.id, "winner": winner,
                                  "loser": loser,
                                  "decisive_point": ruling1.decisive_point}},
@@ -319,3 +330,6 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
         llm=llm_call,
         problem_id=problem.id,
     )
+    if critic.id not in before:
+        calls.remove(llm_call)  # a real event carried the decisive ruling
+    return critic
