@@ -228,3 +228,39 @@ def test_score_orders_properties_hold_for_all_inputs():
         assert mirrored["raw"] == -row["raw"]
         assert mirrored["adjusted"] == -row["adjusted"]
         assert mirrored["order_disagreement"] == row["order_disagreement"]
+
+
+# --- SECURITY: predicate-eval RCE (object-subclasses sandbox escape) ---------
+
+def test_predicate_sandbox_escape_is_blocked():
+    """The __builtins__={} eval sandbox is escapable via the object-
+    subclasses walk; the AST guard rejects the whole dunder-access family as
+    a failed verdict rather than executing it."""
+    from minireason.checks import UnsafePredicate, _validate_predicate, evaluate
+
+    escapes = [
+        "predicate:().__class__.__bases__[0].__subclasses__()",
+        "predicate:[c for c in ().__class__.__base__.__subclasses__() "
+        "if c.__name__=='catch_warnings'][0]()._module.__builtins__"
+        "['open']('x','w').write('pwned') or len(content) >= 0",
+        "predicate:__import__('os').system('true')",
+        "predicate:content.__class__.__mro__",
+    ]
+    for expr in escapes:
+        verdict, detail = evaluate(expr, "anything")
+        assert verdict == "fail", expr
+        assert "error" in detail
+        with pytest.raises(UnsafePredicate):
+            _validate_predicate(expr.split(":", 1)[1])
+
+
+def test_legitimate_predicates_still_refute_after_guard():
+    """The guard must leave real falsifiers working end-to-end."""
+    from minireason.checks import evaluate
+
+    # A true predicate over the content passes (survives); a false one fails.
+    assert evaluate("predicate:'zebra' in content", "a zebra appears")[0] == "pass"
+    assert evaluate("predicate:'zebra' in content", "no animal here")[0] == "fail"
+    assert evaluate("predicate:len(content) > 3", "abcd")[0] == "pass"
+    assert evaluate(
+        "predicate:all(len(w) > 0 for w in content.split())", "a b c")[0] == "pass"

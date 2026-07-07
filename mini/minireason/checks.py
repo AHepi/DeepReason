@@ -12,6 +12,7 @@ Commitment ids and eval semantics are the parent's exactly, so a mini log
 replays under the parent with identical verdicts (G6).
 """
 
+import ast
 import contextlib
 import json
 import re
@@ -23,6 +24,35 @@ from minireason.log import canonical_json, sha256_hex
 
 SKELETON_WF_ID = "skeleton-wf"
 PREDICATE_TIMEOUT_S = 2  # wall bound on hostile predicates (e.g. 10**10**8)
+
+
+class UnsafePredicate(ValueError):
+    """A predicate reaches dunder internals (the object-subclasses sandbox-
+    escape surface) or exponentiates (integer bomb)."""
+
+
+def _validate_predicate(expr: str) -> None:
+    """SECURITY: the mini evals ``predicate:`` forbidden cases from UNTRUSTED
+    skeleton content — its free-criticism mechanism — so it cannot ban
+    predicates like the parent; it must make them safe. eval() with
+    __builtins__={} is escapable via ``().__class__.__base__.__subclasses__()``
+    (verified live), and every such escape needs a dunder/underscore
+    attribute or name. Reject any Attribute/Name touching an underscore-
+    prefixed identifier — this blocks the whole escape family while leaving
+    every legitimate predicate (len(content) > 10, 'x' in content.lower(),
+    comprehensions over content.split()) untouched. ** is only useful here
+    as an integer bomb. Parse errors are unsafe by default."""
+    try:
+        tree = ast.parse(expr, mode="eval")
+    except SyntaxError as e:
+        raise UnsafePredicate(f"unparseable predicate: {e}") from e
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
+            raise UnsafePredicate(f"dunder attribute access: .{node.attr}")
+        if isinstance(node, ast.Name) and node.id.startswith("_"):
+            raise UnsafePredicate(f"underscore name: {node.id}")
+        if isinstance(node, ast.Pow):
+            raise UnsafePredicate("exponentiation not allowed in a predicate")
 
 
 @contextlib.contextmanager
@@ -120,8 +150,14 @@ def evaluate(eval_spec: str, text: str, codec: str = "utf8") -> tuple[str, dict]
     verdict is a pure function of content — no wall-clock ever enters."""
     kind, _, arg = eval_spec.partition(":")
     if kind == "predicate":
-        # Safe names go in GLOBALS: comprehensions inside eval resolve free
-        # names via globals (parent bug, kept fixed).
+        # SECURITY: AST-gate before eval — untrusted content cannot reach the
+        # object-subclasses sandbox escape (a rejected predicate is a failed
+        # verdict, not an execution). Safe names go in GLOBALS: comprehensions
+        # inside eval resolve free names via globals (parent bug, kept fixed).
+        try:
+            _validate_predicate(arg)
+        except UnsafePredicate as e:
+            return "fail", {"error": str(e)[:200]}
         namespace = {"__builtins__": {}, **_SAFE_NAMES, "content": text, "codec": codec}
         try:
             with _deadline(PREDICATE_TIMEOUT_S):

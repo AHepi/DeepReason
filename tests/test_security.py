@@ -9,20 +9,16 @@ untrusted forbidden cases may not carry a predicate at all, and the
 predicate evaluator rejects dunder access even for trusted predicates."""
 
 import json
-import tempfile
-from pathlib import Path
 
 import pytest
 
 from deepreason.harness import Harness
 from deepreason.informal.skeleton import (
-    compile_forbidden_commitments,
     parse_skeleton,
     skeleton_wf_commitment,
 )
-from deepreason.ontology import Commitment, Interface
+from deepreason.ontology import Commitment
 from deepreason.programs import UnsafePredicate, _validate_predicate, evaluate
-from deepreason.rules.crit import crit_program
 
 ESCAPE = (
     "predicate:[c for c in ().__class__.__base__.__subclasses__() "
