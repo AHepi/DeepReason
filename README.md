@@ -91,6 +91,11 @@ argued survivors spanning every major position in the literature, and then
 wrote a committed thesis citing its own record. MiniReason reconstructed the
 same solution space for roughly **8% of the cost**.
 
+**Research using the harness:**
+[Can an LLM explore past its own repertoire?](docs/CAN_LLMS_EXPLORE.md) — a
+write-up (with a call for replication and critique) on measuring when an
+LLM's idea-generation stalls and what pushes it back out.
+
 ## When *not* to use it
 
 Reach for a plain LLM call (or a search tool) instead when:
