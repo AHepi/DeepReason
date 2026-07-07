@@ -97,6 +97,12 @@ A typical operating loop: `seed_problem` → `run_cycles` (small budget) →
 `eval_report` + `frontier` → read `theory`/`why` on survivors → clear the
 `docket` with rulings where standards disagree → fund more cycles.
 
+These rules govern driving the harness *on a problem*. When the task is
+improving the harness *itself* from its experiment record, follow
+[`docs/SELF_IMPROVEMENT.md`](SELF_IMPROVEMENT.md) instead — start from the
+latest `experiments/results/INDEX_*.md`, pre-register before running, and
+never change code without a report to cite.
+
 ## The positive playbook (what TO do)
 
 The rules above are prohibitions; these are the moves. (Live operator
