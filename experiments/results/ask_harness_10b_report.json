@@ -1,0 +1,92 @@
+{
+  "problem": "pi-10b-solo-harness",
+  "engine": "deepseek-v4-pro (thinking OFF only)",
+  "description": "A reasoning harness requires each model turn to emit a strict nested-JSON 'skeleton': a claim, a mechanism, a scope, and one or more self-falsifying 'forbidden' cases whose checks are Python predicate expressions over the raw content string (e.g. len(content) > 10). Measured on a real ~10B/12B model, it fails to run this harness unaided: (1) malformed nested JSON \u2014 premature object close before the last field, missing delimiters, unescaped inner quotes, smart quotes; (2) predicates in the WRONG language \u2014 JavaScript (content.mechanism.includes(...)) or calls to undefined functions, which error under Python eval and self-refute the candidate; (3) token degradation at high temperature \u2014 garbled/hallucinated tokens. A larger model repairing the output is DISALLOWED: the ~10B model must run the harness entirely on its own. Why does a small model fail to satisfy a self-criticizing structured-output contract unaided, and what changes to the harness's OWN design \u2014 its output contract, its prompting, its decoding constraints, or its criticism protocol \u2014 would let a ~10B model run it end to end with no stronger model in the loop? A good answer names a concrete mechanism, locates the fix in the harness rather than the model, and states what evidence would refute it.",
+  "run": {
+    "stop": "budget",
+    "cycles": 19,
+    "problems": {
+      "pi-10b-solo-harness": 45
+    },
+    "refuted": 63,
+    "gate_blocks": 0,
+    "rotations": 3,
+    "tokens": {
+      "prompt_tokens": 20715,
+      "completion_tokens": 40846,
+      "total": 61561,
+      "budget": 60000,
+      "calls": 18
+    },
+    "meter_equals_log": true,
+    "logged_tokens": 61561,
+    "replayable": true,
+    "parent_ingest_violations": []
+  },
+  "ranking": {
+    "instrument_valid": true,
+    "stopped": null,
+    "control_margin": 0.7414,
+    "ranking": [
+      {
+        "rank": 1,
+        "label": "E",
+        "copeland": 3,
+        "mean_margin": 0.5291,
+        "claim": "The harness's single-pass generation paradigm is incompatible with the model's token-level sequential processing, which cannot plan ahead for nested closures; a chunked or iterative generation harness would allow the model to maintain local coherence.",
+        "mechanism": "The model generates JSON left-to-right without a built-in stack for tracking nesting depth. When the harness requires a complex, deeply nested object, the model loses track of open braces/brackets due to attention dilution over long sequences, leading to premature closes. By decomposing the generation into smaller, dependent steps (e.g., first generate the claim, then mechanism, etc., with each step conditioned on previous ones), the harness reduces the cognitive load per step.",
+        "artifact": "f9128447a110"
+      },
+      {
+        "rank": 2,
+        "label": "A",
+        "copeland": 2,
+        "mean_margin": 0.3944,
+        "claim": "The harness's requirement for self-falsifying 'forbidden' cases with Python predicates forces the model to simulate an adversarial evaluator in a zero-shot manner, which is a form of self-reflection that the ~10B model cannot reliably perform; replacing it with a simple declarative constraint language would offload the adversarial thinking.",
+        "mechanism": "Generating a meaningful self-refutation requires the model to: (1) understand its own claim, (2) imagine a scenario where the claim would be false, and (3) encode that scenario as a precise predicate. This meta-cognitive task is hard for a model trained to mimic text. The model often fails by producing trivial predicates (always true/false) or syntactically incorrect ones. By changing the harness's contract so that forbidden cases are specified as natural language conditions that are automatically translated into checkable predicates by a rule-based system (e.g., checking for presence of certain keywords or structure), the model only needs to articulate what would refute its claim, not how to check it programmatically.",
+        "artifact": "ae259c921203"
+      },
+      {
+        "rank": 3,
+        "label": "D",
+        "copeland": 1,
+        "mean_margin": 0.2214,
+        "claim": "The harness's prompt lacks explicit syntactic anchoring for the inner predicate strings, leaving the model to guess the evaluation language from ambiguous context.",
+        "mechanism": "Without strong prior that predicates are Python, the model defaults to its most common code context\u2014JavaScript\u2014due to prevalence in training data. This is reinforced by token co-occurrences in web text.",
+        "artifact": "e0c8e560f2b7"
+      },
+      {
+        "rank": 4,
+        "label": "B",
+        "copeland": -2,
+        "mean_margin": -0.5127,
+        "claim": "High-temperature sampling disrupts the model's ability to maintain a coherent structural stack because token probabilities become diffuse, causing the model to 'forget' its syntactic state.",
+        "mechanism": "At high temperatures, the entropy over next-token predictions increases. For a small model, the probability of generating a correct structural token (like '}') can drop below a noise threshold, leading to hallucinations like random strings or missing closures.",
+        "artifact": "0d2ebd3ab7f9"
+      },
+      {
+        "rank": 5,
+        "label": "C",
+        "copeland": -4,
+        "mean_margin": -0.6323,
+        "claim": "The failure to run the harness end-to-end is due to the absence of iterative refinement: the model must produce a perfect output in one shot, but small models lack the self-monitoring capacity to detect and correct errors mid-generation.",
+        "mechanism": "Autoregressive decoding does not allow the model to revisit past tokens. When a syntax error occurs early, the rest of the output is often corrupted. Larger models implicitly plan ahead, but small models cannot.",
+        "artifact": "8f3576a76c8b"
+      }
+    ],
+    "tokens": {
+      "prompt_tokens": 25508,
+      "completion_tokens": 1146,
+      "total": 26654,
+      "budget": 40000,
+      "calls": 22
+    }
+  },
+  "note": "surviving conjectures are hypotheses proposed by the harness, not validated findings (SELF_IMPROVEMENT \u00a71.5)",
+  "reading": {
+    "status": "GENERATIVE run \u2014 45 surviving conjectures are HYPOTHESES the harness proposed, not validated findings (SELF_IMPROVEMENT \u00a71.5). Control gate PASSED (margin 0.7414) so the RANKING is a valid instrument; the claims themselves still need fresh-problem tests.",
+    "engine": "deepseek-v4-pro, thinking OFF, sole conjecturer and sole ranking seat (single-seat: intra-model check only, no cross-family).",
+    "top_proposals_converge_with_the_empirical_record": "#1 chunked/step-wise generation (claim, then mechanism, ...) to stop brace-tracking loss -> explains the measured 64% malformed-nested-JSON in nemotron12b_report.json. #2 replace executable-Python forbidden cases with NL conditions auto-compiled to checks -> addresses both the wrong-language predicates AND the repair run's residual gap (recovered skeletons that still self-refute). #3 predicate language underspecified, model defaults to JavaScript -> the exact JS-predicate failure measured. The harness independently reconstructed its own failure mechanisms and ranked harness-side redesigns above the 'blame the temperature' conjecture (ranked last, -2).",
+    "caveat": "single provider, single seat, one run; the two lowest-ranked conjectures (temperature disruption, missing iterative refinement) are not refuted, only out-argued on this rubric."
+  }
+}
