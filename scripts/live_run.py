@@ -670,9 +670,82 @@ def seed_arrow(harness: Harness) -> None:
     )
 
 
+def seed_impl(harness: Harness) -> None:
+    """Self-referential suite: the harness works how a ~10B model could run
+    IT unaided, under the FULL machinery. Round 1 (ask_harness_10b) proposed
+    why a small model fails the contract and what to change; round 2 (the
+    mini run) collapsed because mini judges forbidden cases as Python
+    PREDICATES and pro wrote statements/undefined names — the R3 failure
+    biting the generator. Here forbidden cases are RUBRIC-judged by the trial
+    protocol (judge ensemble, order-swap), so the proposal's falsifiability
+    is adjudicated, not eval'd — the correct home for this question."""
+    register_standard(
+        harness,
+        "std-10b-impl",
+        rubric=(
+            "A harness-design proposal for small-model self-sufficiency must: "
+            "(1) name a specific harness-side mechanism — an output-contract "
+            "shape, a gamma-call decoding constraint, a prompt/render change, "
+            "or a criticism-protocol step — not an aspiration ('prompt it "
+            "better'); (2) state forbidden cases that are concrete, observable "
+            "behaviors or measurements which would refute the design had they "
+            "obtained (a measured valid-JSON rate, a survivors-per-token "
+            "count, a self-refutation rate, a replay divergence); (3) respect "
+            "the harness invariants: the LLM stays a bounded pure function "
+            "pack -> schema-validated JSON with NO graph state, adjudication, "
+            "or control flow; determinism and byte-exact event-log replay are "
+            "preserved; every refutation stays a logged warrant inside "
+            "Conj->Crit->Adj; measures never adjudicate; program checks stay "
+            "pure functions of content. A design that needs a STRONGER model "
+            "or an external repair pass in the loop violates this standard — "
+            "the ~10B model must run the harness entirely on its own."
+        ),
+        mode="absolute",
+    )
+    harness.register_commitment(skeleton_wf_commitment())
+    harness.register_commitment(Commitment(id="kappa-10b-impl", eval="rubric:std-10b-impl"))
+    harness.register_problem(
+        Problem(
+            id="pi-10b-impl",
+            description=(
+                "A prior conjecture round found WHY a ~10B model cannot run "
+                "this conjecture-criticism harness unaided and ranked three "
+                "recommendations: (R1) single-pass generation of a deeply "
+                "nested JSON skeleton exceeds the small model's token-level "
+                "decoding — it has no stack to track nesting depth, so it "
+                "loses brace/quote bookkeeping; (R2) the self-falsifying "
+                "'forbidden' cases force the model to simulate an adversary "
+                "against its own claim in one pass, which it cannot reliably "
+                "do; (R3) the inner predicate strings lack syntactic "
+                "anchoring, so the model defaults to JavaScript or undefined "
+                "functions instead of a Python expression over the content "
+                "string. Design a CONCRETE implementation of R1, R2, and/or "
+                "R3 — a change to the output contract, the gamma-call "
+                "prompting or decoding, or the criticism protocol — that a "
+                "~10B model executes end to end UNAIDED (no stronger model, "
+                "no external repair), WITHOUT violating any harness invariant "
+                "(LLM as bounded pure pack->JSON function; determinism and "
+                "byte-exact replay; refutation as logged warrant; measures "
+                "never adjudicate; program checks pure functions of content). "
+                "Name the exact mechanism, say where in the loop it sits, and "
+                "which invariant it preserves. Each candidate's content MUST "
+                'be a JSON skeleton object, exactly this shape: {"claim": '
+                'str, "mechanism": str, "scope": {"covers": [str], "excludes": '
+                '[str]}, "forbidden": [{"case": str, "eval": '
+                '"rubric:std-10b-impl"}], "prose_notes": str}. Forbidden '
+                "cases must be concrete observable behaviors or measurements "
+                "that would refute the design."
+            ),
+            criteria=["skeleton-wf", "kappa-10b-impl"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "arrow": ("pi-arrow", seed_arrow),
+    "impl": ("pi-10b-impl", seed_impl),
     "republic": ("pi-republic", seed_republic),
     "bronze": ("pi-bronze", seed_bronze),
     "needham": ("pi-needham", seed_needham),
