@@ -1,0 +1,212 @@
+{
+  "prereg": "experiments/small_model_burden_prereg.yaml",
+  "mode": "live",
+  "budget_per_arm": 30000,
+  "problems": [
+    "pi-bronze",
+    "pi-needham"
+  ],
+  "arms": {
+    "A-flash-stock": {
+      "arm": "A-flash-stock",
+      "model": "deepseek-v4-flash",
+      "vs_k": 6,
+      "neighbourhood": 8,
+      "prompt_variant": "stock",
+      "resumed_from_tokens": null,
+      "run_summary": {
+        "note": "battery process crashed on arm C (IncompleteRead) before per-arm persistence existed; metrics recomputed from this arm's committed log, meter splits from captured stdout",
+        "stop": "budget"
+      },
+      "metrics": {
+        "conjecture_calls": 10,
+        "clean_first_attempt": 10,
+        "repaired": 0,
+        "dropped": 0,
+        "failure_rate": 0.0,
+        "truncation_rate": 0.0,
+        "admitted_candidates": 60,
+        "refuted": 16,
+        "refuted_on_arrival_skeleton_wf": 1,
+        "refuted_on_arrival_rate": 0.0167,
+        "survivors": 44,
+        "logged_tokens": 30795,
+        "yield_per_10k": 14.288,
+        "avg_prompt_tokens_per_call": 908,
+        "avg_completion_tokens_per_call": 2171
+      },
+      "meter_equals_log": null,
+      "replay_ok": true
+    },
+    "B-flash-terse": {
+      "arm": "B-flash-terse",
+      "model": "deepseek-v4-flash",
+      "vs_k": 6,
+      "neighbourhood": 8,
+      "prompt_variant": "terse",
+      "resumed_from_tokens": null,
+      "run_summary": {
+        "note": "battery process crashed on arm C (IncompleteRead) before per-arm persistence existed; metrics recomputed from this arm's committed log, meter splits from captured stdout",
+        "stop": "budget"
+      },
+      "metrics": {
+        "conjecture_calls": 9,
+        "clean_first_attempt": 8,
+        "repaired": 1,
+        "dropped": 0,
+        "failure_rate": 0.1111,
+        "truncation_rate": 0.1111,
+        "admitted_candidates": 54,
+        "refuted": 27,
+        "refuted_on_arrival_skeleton_wf": 2,
+        "refuted_on_arrival_rate": 0.037,
+        "survivors": 27,
+        "logged_tokens": 30239,
+        "yield_per_10k": 8.929,
+        "avg_prompt_tokens_per_call": 737,
+        "avg_completion_tokens_per_call": 2287
+      },
+      "meter_equals_log": null,
+      "replay_ok": true
+    },
+    "C-flash-compact": {
+      "arm": "C-flash-compact",
+      "model": "deepseek-v4-flash",
+      "vs_k": 3,
+      "neighbourhood": 2,
+      "prompt_variant": "terse",
+      "resumed_from_tokens": 16203,
+      "run_summary": {
+        "stop": "budget",
+        "cycles": 7,
+        "problems": {
+          "pi-bronze": 27
+        },
+        "refuted": 18,
+        "gate_blocks": 0,
+        "rotations": 1,
+        "tokens": {
+          "prompt_tokens": 2559,
+          "completion_tokens": 11271,
+          "total": 13830,
+          "budget": 13797,
+          "calls": 6
+        },
+        "meter_equals_log": false,
+        "logged_tokens": 30033
+      },
+      "metrics": {
+        "conjecture_calls": 15,
+        "clean_first_attempt": 15,
+        "repaired": 0,
+        "dropped": 0,
+        "failure_rate": 0.0,
+        "truncation_rate": 0.0,
+        "admitted_candidates": 45,
+        "refuted": 18,
+        "refuted_on_arrival_skeleton_wf": 1,
+        "refuted_on_arrival_rate": 0.0222,
+        "survivors": 27,
+        "logged_tokens": 30033,
+        "yield_per_10k": 8.99,
+        "avg_prompt_tokens_per_call": 426,
+        "avg_completion_tokens_per_call": 1878
+      },
+      "meter_equals_log": false,
+      "replay_ok": true
+    },
+    "D-pro-stock": {
+      "arm": "D-pro-stock",
+      "model": "deepseek-v4-pro",
+      "vs_k": 6,
+      "neighbourhood": 8,
+      "prompt_variant": "stock",
+      "resumed_from_tokens": null,
+      "run_summary": {
+        "stop": "budget",
+        "cycles": 5,
+        "problems": {
+          "pi-bronze": 12
+        },
+        "refuted": 12,
+        "gate_blocks": 0,
+        "rotations": 0,
+        "tokens": {
+          "prompt_tokens": 5338,
+          "completion_tokens": 28277,
+          "total": 33615,
+          "budget": 30000,
+          "calls": 8
+        },
+        "meter_equals_log": true,
+        "logged_tokens": 33615
+      },
+      "metrics": {
+        "conjecture_calls": 5,
+        "clean_first_attempt": 2,
+        "repaired": 2,
+        "dropped": 0,
+        "failure_rate": 0.6,
+        "truncation_rate": 0.6,
+        "admitted_candidates": 24,
+        "refuted": 12,
+        "refuted_on_arrival_skeleton_wf": 0,
+        "refuted_on_arrival_rate": 0.0,
+        "survivors": 12,
+        "logged_tokens": 33615,
+        "yield_per_10k": 3.57,
+        "avg_prompt_tokens_per_call": 667,
+        "avg_completion_tokens_per_call": 3535
+      },
+      "meter_equals_log": true,
+      "replay_ok": true
+    }
+  },
+  "predictions": {
+    "P1": {
+      "verdict": "REFUTED",
+      "reason": "degenerate guard: failure_rate(A)=0.0 < 0.10 \u2014 nothing to halve; stock already fits"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "failure_B": 0.1111,
+      "midpoint_A_C": 0.0
+    },
+    "P3": {
+      "verdict": "UNDECIDED",
+      "reason": "arm D died with < 8 calls"
+    }
+  },
+  "accounting": {
+    "A-flash-stock": {
+      "meter_equals_log": null,
+      "replay_ok": true
+    },
+    "B-flash-terse": {
+      "meter_equals_log": null,
+      "replay_ok": true
+    },
+    "C-flash-compact": {
+      "meter_equals_log": false,
+      "replay_ok": true
+    },
+    "D-pro-stock": {
+      "meter_equals_log": true,
+      "replay_ok": true
+    }
+  },
+  "unpredicted_findings": {
+    "yield_inversion": "Compacting the prompt REDUCED survivor yield ~37% on flash: stock 14.29 survivors/10k vs terse 8.93 and compact 8.99. The verbose stock instruction block is not burden for the small model, it is scaffolding: terse arms produced proportionally more refuted candidates (B 27/54, C 18/45 vs A 16/60) and more refuted-on-arrival skeleton failures (B 0.037 vs A 0.0167).",
+    "truncation_hits_the_large_model": "The only instruction-following failures at stock burden were on v4-pro (control): 3/5 calls truncated at max_tokens=4000 (avg completion 3535 tokens vs flash 2171). At this budget the compliance bottleneck is completion-length truncation on verbose models, not prompt comprehension on small ones. The small-model-optimisation premise inverted: flash is the tier that fits the harness as committed.",
+    "transport_fault": "http.client.IncompleteRead escaped HttpEndpoint.complete's retry net (HTTPException is outside its except tuple) and crashed the battery on arm C. Contained at the experiment layer (RobustEndpoint); the one-line call.py retry-tuple fix is a CANDIDATE citing this report, not applied. The crashed attempt's provider-side spend is unknowable and unlogged."
+  },
+  "caveats": [
+    "n=1 per arm, single seed, two problems (the committed smoke pair).",
+    "deepseek-v4-flash is a PROXY for the ~10B class (smallest model on the provided key; parameter count unpublished). Generalisation to true 10B checkpoints is unverified.",
+    "Arm C ran across two processes after the transport crash (16,203 + 13,830 tokens, matched 30k total); its meter_equals_log=false is the resume split, not a leak \u2014 replay_ok=true and the halves reconcile.",
+    "Arms A/B metrics were reconstructed from their committed logs after the process crash; meter splits from captured stdout (meter_equals_log unrecoverable, replay verified instead).",
+    "Arm D overshot to 33,615 tokens (documented check-before-spend overshoot; pro completions ~3.5k tokens).",
+    "Yield is count-based; survivor QUALITY was not judged (no judge in the loop, per prereg).",
+    "P3 is UNDECIDED as pre-registered (D made 5 < 8 calls); its failure_rate=0.6 is reported observationally only."
+  ]
+}

@@ -110,5 +110,31 @@ budget: 4 arms x 30k = 120k tokens hard ceiling (+ documented per-arm
   check-before-spend overshoot). Flash arms cheap; pro arm moderate.
 
 # ---------------------------------------------------------------------
-# result: (to be filled by the report; this block appended after the run
-# per the record's convention — prereg text above this line is frozen)
+result: RAN — all 4 arms complete (arm C across two processes after a
+  transport crash; matched 30k total). Spend ~124.7k vs 120k ceiling
+  (+3.9%, arm D check-before-spend overshoot). All roots replay
+  byte-equal.
+  P1: REFUTED via the degenerate guard — failure_rate(A) = 0.0 < 0.10.
+    The small model follows the stock harness prompt PERFECTLY (10/10
+    calls schema-valid first attempt, zero truncation): the premise
+    ("stock burden breaks the small model"), not the mechanism, failed.
+  P2: REFUTED — terse instructions were WORSE, not better:
+    failure_rate(B) = 0.111 > midpoint 0.0 (one truncation-repair).
+  P3: UNDECIDED as committed (D made 5 < 8 calls). Observationally
+    INVERTED: v4-pro failed 60% of stock-burden calls — all
+    truncation at max_tokens=4000 (avg completion 3535 tokens).
+  unpredicted_finding (yield inversion): compaction cost ~37% survivor
+    yield on flash (stock 14.29/10k vs terse 8.93, compact 8.99) with
+    more refuted-on-arrival skeletons in the terse arms. The verbose
+    stock instruction block is scaffolding for the small model, not
+    burden. Optimising the harness for small models by shrinking
+    prompts is the WRONG dial on this proxy; the measured
+    instruction-following bottleneck at this budget is
+    completion-length truncation on the LARGE model.
+  unpredicted_finding (transport): http.client.IncompleteRead escapes
+    HttpEndpoint.complete's retry tuple (HTTPException not covered) —
+    crashed the battery live; candidate one-line call.py fix cites the
+    report, not applied here.
+  report: experiments/results/small_model_burden_report.json (arm
+    metrics, prediction evaluations, caveats; roots in
+    runs/small_burden/*)
