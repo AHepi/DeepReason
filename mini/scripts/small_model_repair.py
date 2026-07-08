@@ -17,6 +17,9 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 MINI = Path(__file__).resolve().parents[1]
@@ -28,6 +31,57 @@ from minireason.gate import normalize  # noqa: E402
 from minireason.log import BlobStore  # noqa: E402
 from minireason.loop import Session  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
+
+
+class ReasoningOffEndpoint(llm.HttpEndpoint):
+    """HttpEndpoint with DeepSeek V4 thinking DISABLED
+    ({"thinking":{"type":"disabled"}}, per src/deepreason/llm/providers.py
+    _deepseek_reasoning). TOKEN_ECONOMY: ~93% of an unconfigured v4-pro
+    call is reasoning we never asked for — leaving it on made the first
+    repair run burn 125k tokens on 63 short fixes. Reimplemented here (not
+    an edit to call.py — the prereg forbids touching minireason/) but kept
+    byte-identical to the parent path otherwise, including retries."""
+
+    def complete(self, prompt: str) -> str:
+        body: dict = {"model": self.model,
+                      "messages": [{"role": "user", "content": prompt}],
+                      "thinking": {"type": "disabled"}}
+        if self.temperature is not None:
+            body["temperature"] = self.temperature
+        if self.max_tokens is not None:
+            body["max_tokens"] = self.max_tokens
+        if self.json_mode:
+            body["response_format"] = {"type": "json_object"}
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+        request = urllib.request.Request(
+            self.name.rstrip("/") + "/chat/completions",
+            data=json.dumps(body).encode(), headers=headers)
+        last: Exception | None = None
+        for delay in (2, 4, 8, None):
+            try:
+                with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
+                    data = json.load(response)
+                choice = data["choices"][0]
+                content = choice["message"]["content"]
+                if content is None:
+                    raise llm.EndpointError(
+                        f"null content (finish_reason={choice.get('finish_reason')!r})")
+                self.last_usage = data.get("usage") or None
+                self.last_finish_reason = choice.get("finish_reason")
+                return content
+            except urllib.error.HTTPError as e:
+                if e.code not in llm._RETRYABLE_HTTP:
+                    raise llm.EndpointError(f"HTTP {e.code}: {e.reason}") from e
+                last = e
+            except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                    ValueError, KeyError, IndexError, TypeError) as e:
+                last = e
+            if delay is None:
+                break
+            time.sleep(delay)
+        raise llm.EndpointError(f"transport failed after retries: {last}")
 
 CORPUS_ROOTS = ["runs/nemotron12b/A-12b-stock", "runs/nemotron12b/C-12b-compact"]
 
@@ -241,8 +295,8 @@ def main() -> int:
         budget = args.budget
 
         def factory(model):
-            return llm.HttpEndpoint(args.base_url, model, api_key=api_key,
-                                    temperature=0.0, max_tokens=1200)
+            return ReasoningOffEndpoint(args.base_url, model, api_key=api_key,
+                                        temperature=0.0, max_tokens=1200)
 
     meter = llm.TokenMeter(budget=budget)
     print("--- R-flash ---", flush=True)
