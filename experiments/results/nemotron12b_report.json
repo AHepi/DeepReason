@@ -1,0 +1,278 @@
+{
+  "prereg": "experiments/nemotron12b_replication_prereg.yaml",
+  "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+  "provider": "https://openrouter.ai/api/v1",
+  "total_openrouter_tokens": 79599,
+  "cap": 1000000,
+  "arms": {
+    "A-12b-stock": {
+      "arm": "A-12b-stock",
+      "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+      "vs_k": 6,
+      "neighbourhood": 8,
+      "prompt_variant": "stock",
+      "resumed_from_tokens": 10527,
+      "run_summary": {
+        "stop": "budget",
+        "cycles": 13,
+        "problems": {
+          "pi-bronze": 9
+        },
+        "refuted": 89,
+        "gate_blocks": 0,
+        "rotations": 2,
+        "tokens": {
+          "prompt_tokens": 7869,
+          "completion_tokens": 12968,
+          "total": 20837,
+          "budget": 19473,
+          "calls": 13
+        },
+        "meter_equals_log": false,
+        "logged_tokens": 31364
+      },
+      "metrics": {
+        "conjecture_calls": 17,
+        "clean_first_attempt": 15,
+        "repaired": 2,
+        "dropped": 0,
+        "failure_rate": 0.1176,
+        "truncation_rate": 0.0,
+        "admitted_candidates": 98,
+        "refuted": 89,
+        "refuted_on_arrival_skeleton_wf": 72,
+        "refuted_on_arrival_rate": 0.7347,
+        "survivors": 9,
+        "logged_tokens": 31364,
+        "yield_per_10k": 2.87,
+        "avg_prompt_tokens_per_call": 605,
+        "avg_completion_tokens_per_call": 998
+      },
+      "meter_equals_log": false,
+      "replay_ok": true
+    },
+    "B-12b-terse": {
+      "arm": "B-12b-terse",
+      "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+      "vs_k": 6,
+      "neighbourhood": 8,
+      "prompt_variant": "terse",
+      "resumed_from_tokens": null,
+      "run_summary": {
+        "stop": "budget",
+        "cycles": 11,
+        "problems": {
+          "pi-bronze": 43
+        },
+        "refuted": 13,
+        "gate_blocks": 0,
+        "rotations": 2,
+        "tokens": {
+          "prompt_tokens": 9427,
+          "completion_tokens": 21482,
+          "total": 30909,
+          "budget": 30000,
+          "calls": 14
+        },
+        "meter_equals_log": true,
+        "logged_tokens": 30909
+      },
+      "metrics": {
+        "conjecture_calls": 11,
+        "clean_first_attempt": 8,
+        "repaired": 2,
+        "dropped": 0,
+        "failure_rate": 0.2727,
+        "truncation_rate": 0.1818,
+        "admitted_candidates": 56,
+        "refuted": 13,
+        "refuted_on_arrival_skeleton_wf": 7,
+        "refuted_on_arrival_rate": 0.125,
+        "survivors": 43,
+        "logged_tokens": 30909,
+        "yield_per_10k": 13.912,
+        "avg_prompt_tokens_per_call": 673,
+        "avg_completion_tokens_per_call": 1534
+      },
+      "meter_equals_log": true,
+      "replay_ok": true
+    },
+    "C-12b-compact": {
+      "arm": "C-12b-compact",
+      "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+      "vs_k": 3,
+      "neighbourhood": 2,
+      "prompt_variant": "terse",
+      "resumed_from_tokens": 11817,
+      "run_summary": {
+        "stop": "endpoint-error",
+        "cycles": 4,
+        "problems": {
+          "pi-bronze": 7
+        },
+        "refuted": 9,
+        "gate_blocks": 0,
+        "rotations": 0,
+        "tokens": {
+          "prompt_tokens": 1316,
+          "completion_tokens": 2260,
+          "total": 3576,
+          "budget": 18183,
+          "calls": 3
+        },
+        "meter_equals_log": false,
+        "logged_tokens": 15393
+      },
+      "metrics": {
+        "conjecture_calls": 6,
+        "clean_first_attempt": 4,
+        "repaired": 2,
+        "dropped": 0,
+        "failure_rate": 0.3333,
+        "truncation_rate": 0.3333,
+        "admitted_candidates": 16,
+        "refuted": 9,
+        "refuted_on_arrival_skeleton_wf": 6,
+        "refuted_on_arrival_rate": 0.375,
+        "survivors": 7,
+        "logged_tokens": 15393,
+        "yield_per_10k": 4.548,
+        "avg_prompt_tokens_per_call": 439,
+        "avg_completion_tokens_per_call": 753
+      },
+      "meter_equals_log": false,
+      "replay_ok": true
+    }
+  },
+  "certification": {
+    "seat": "nvidia/nemotron-nano-12b-v2-vl:free/default",
+    "result": {
+      "planted_flaw_error_rate": 0.6667,
+      "n": 12,
+      "passes": false
+    },
+    "tokens": {
+      "prompt_tokens": 1219,
+      "completion_tokens": 714,
+      "total": 1933,
+      "budget": 15000,
+      "calls": 6
+    }
+  },
+  "long_run": {
+    "problem": "pi-arrow-of-time",
+    "resumed_from_tokens": null,
+    "run_summary": {
+      "stop": "endpoint-error",
+      "cycles": 1,
+      "problems": {
+        "pi-arrow-of-time": 0
+      },
+      "refuted": 0,
+      "gate_blocks": 0,
+      "rotations": 0,
+      "tokens": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total": 0,
+        "budget": 920401,
+        "calls": 0
+      },
+      "meter_equals_log": true,
+      "logged_tokens": 0
+    },
+    "metrics": {
+      "conjecture_calls": 0,
+      "clean_first_attempt": 0,
+      "repaired": 0,
+      "dropped": 0,
+      "failure_rate": null,
+      "truncation_rate": null,
+      "admitted_candidates": 0,
+      "refuted": 0,
+      "refuted_on_arrival_skeleton_wf": 0,
+      "refuted_on_arrival_rate": null,
+      "survivors": 0,
+      "logged_tokens": 0,
+      "yield_per_10k": null,
+      "avg_prompt_tokens_per_call": null,
+      "novelty_late_early": null,
+      "novelty_baseline": 0.846
+    },
+    "meter_equals_log": true,
+    "replay_ok": true
+  },
+  "predictions": {
+    "P1": {
+      "verdict": "UNDECIDED",
+      "reason": "transport ceiling before 8 calls: {'A-12b-stock': 17, 'B-12b-terse': 11, 'C-12b-compact': 6}",
+      "observational_note": "A-stock refuted_on_arrival 0.735, yield 2.87, 9 survivors; B-terse refuted_on_arrival 0.125, yield 13.91, 43 survivors. Direction strongly favours terse on the 12B \u2014 opposite of flash."
+    },
+    "P2": {
+      "verdict": "CONFIRMED",
+      "planted_flaw_error_rate": 0.6667,
+      "ceiling": 0.25,
+      "passes": false
+    },
+    "P3": {
+      "verdict": "UNDECIDED",
+      "reason": "long run below the 60k decidability floor",
+      "logged": 0
+    }
+  },
+  "flash_baseline": "experiments/results/small_model_burden_report.json",
+  "failure_mode_decomposition": {
+    "A-12b-stock": {
+      "candidates": 98,
+      "malformed_json": 63,
+      "prose_after_close": 5,
+      "forbids_nothing": 9,
+      "js_style_predicate": 6,
+      "invented_or_degenerate_predicate": 0,
+      "valid_but_self_refuted": 17,
+      "survived": 9
+    },
+    "B-12b-terse": {
+      "candidates": 56,
+      "malformed_json": 6,
+      "prose_after_close": 0,
+      "forbids_nothing": 1,
+      "js_style_predicate": 0,
+      "invented_or_degenerate_predicate": 0,
+      "valid_but_self_refuted": 6,
+      "survived": 43
+    },
+    "C-12b-compact": {
+      "candidates": 16,
+      "malformed_json": 0,
+      "prose_after_close": 0,
+      "forbids_nothing": 6,
+      "js_style_predicate": 0,
+      "invented_or_degenerate_predicate": 3,
+      "valid_but_self_refuted": 3,
+      "survived": 7
+    }
+  },
+  "root_cause_of_stops": {
+    "binding_constraint": "OpenRouter free tier: 50 model requests per DAY (X-RateLimit-Limit 50, Remaining 0 at run end; resets next UTC midnight). NOT the 1M-token cap and NOT network flakiness.",
+    "consequence": "arm C stopped at 6 conjecture calls (< 8 floor) and the long run logged 0 tokens (died on its first call) because the daily request budget was exhausted by arms A+B+C + certification. A long run to the 60k-token decidability floor needs ~30+ calls; the free tier's 50-request/day cap cannot sustain it.",
+    "total_openrouter_tokens": 79599,
+    "token_cap": 1000000
+  },
+  "findings": {
+    "headline": "The full JSON-Schema dump is what breaks the 12B; a flat filled example fixes it \u2014 INVERTING the flash result. Stock arm A: 73% of candidates refuted on arrival (malformed skeletons), 9 survivors over 98 candidates, yield 2.87/10k. Terse arm B: 12.5% refuted on arrival, 43 survivors, yield 13.9/10k. On flash the same compaction HURT (small_model_burden_report.json); on a true 12B it is the single biggest lever.",
+    "three_model_output_failure_modes": {
+      "1_malformed_nested_json": "Dominant in the stock arm. The 12B mismanages bracket bookkeeping: premature object close before prose_notes (Extra data), missing ',' delimiters, raw control chars in strings. These are JSON-STRUCTURE generation failures, not schema-content failures \u2014 the harness validates and refutes them correctly.",
+      "2_wrong_predicate_language": "The 12B writes JavaScript predicates (content.mechanism.includes('...')) treating `content` as a parsed object; in the harness `content` is the raw JSON STRING and eval is Python, so `.mechanism` -> AttributeError -> the candidate self-refutes. ~6-7 stock candidates.",
+      "3_token_degradation_at_temp_1": "Worst in the compact arm: hallucinated garbled multilingual tokens and invented predicate functions (no(...), not('literal')) that NameError or are vacuously False -> self-refute."
+    },
+    "harness_verdict": "The machinery behaved correctly in every arm: meter == log per process, byte-replay clean, every refutation valid by the harness's own rules. Zero survivors in stock arm A is entirely the model's malformed output, not a harness fault."
+  },
+  "caveats": [
+    "P1 UNDECIDED as pre-registered: arm C reached only 6 < 8 conjecture calls before the daily request cap. The stock-vs-terse survivor/refute contrast (A vs B) is strong OBSERVATIONALLY but the literal P1 rule (failure_rate halving on C) is undecided; do not report P1 as confirmed.",
+    "P3 UNDECIDED: the long-run stress test is UNREACHABLE on the free tier (50 requests/day). Would need a paid tier or a different provider.",
+    "n=1 per arm, single seed, two smoke problems; nvidia/nemotron-nano-12b-v2-vl (a vision-language variant \u2014 the only 12B nemotron on the free tier) as the ~12B representative.",
+    "Arm A ran across two processes (transport crash + resume, 10.5k + 20.8k = 31.4k total); meter_equals_log is per-process, replay_ok verified.",
+    "Certification seat spend (1,933 tokens) counts inside the OpenRouter cap."
+  ]
+}

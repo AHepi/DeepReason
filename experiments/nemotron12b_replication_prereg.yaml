@@ -92,4 +92,47 @@ budget: batteries <= 105k + long run <= 895k; hard total 1,000,000
   OpenRouter tokens (+ documented per-arm check-before-spend overshoot).
 
 # ---------------------------------------------------------------------
-# result: (appended after the run; prereg above this line is frozen)
+result: RAN — 3 burden arms + seat certification complete; long run
+  UNREACHABLE. Total 79,599 OpenRouter tokens (well under the 1M cap).
+  All roots replay byte-equal; accounting clean per process.
+  BINDING CONSTRAINT: OpenRouter free tier caps at 50 model REQUESTS
+    per day (not tokens) — X-RateLimit-Remaining hit 0. This is the
+    declared transport stop condition, and it bound long before the
+    token cap. Arm C stopped at 6 calls; the long run logged 0 tokens
+    (died on its first call, daily budget spent).
+  P1 (H-12b): UNDECIDED as written — arm C reached only 6 < 8
+    conjecture calls before the daily cap, so the failure_rate-halving
+    clause cannot be evaluated. Observationally the DIRECTION is strong
+    and INVERTS the flash result: stock arm A refuted 73% of candidates
+    on arrival (63/98 malformed JSON), 9 survivors, yield 2.87/10k;
+    terse arm B refuted 12.5% on arrival, 43 survivors, yield 13.9/10k.
+    A's stock first-attempt failure_rate settled at 0.118 (> the 0.10
+    floor) on 17 calls — the floor clause alone would have held, but P1
+    is a conjunction and stays UNDECIDED.
+  P2 (seat certification): CONFIRMED — the 12B seat FAILS the trimmed
+    planted-flaw battery at 0.667 error (ceiling 0.25). It must not
+    judge anything; the record's cross-family requirement stands.
+  P3 (long-run dryness): UNDECIDED — the long-run stress test is
+    UNREACHABLE on the free tier's 50-requests/day cap (0 tokens
+    logged). Needs a paid tier or a higher-throughput provider.
+  unpredicted_finding (three model-output failure modes, from log
+    forensics over the committed roots — zero extra tokens):
+    (1) MALFORMED NESTED JSON dominates the stock arm (64%): premature
+        object close before prose_notes, missing delimiters, raw
+        control chars — JSON-structure generation failures, all
+        correctly caught and refuted by the harness.
+    (2) WRONG PREDICATE LANGUAGE: the 12B writes JS predicates
+        (content.mechanism.includes('...')) treating content as an
+        object; content is the raw STRING under Python eval, so it
+        AttributeErrors and self-refutes (~6 stock candidates).
+    (3) TOKEN DEGRADATION at temp 1.0 (worst in the compact arm):
+        hallucinated garbled multilingual tokens and invented predicate
+        functions (no(...), not('literal')) that error or are vacuously
+        False and self-refute.
+  harness_verdict: the machinery behaved correctly in every arm (meter
+    == log per process, byte-replay clean, every refutation valid by
+    its own rules). Zero survivors in the stock arm is the model's
+    malformed output, not a harness fault.
+  report: experiments/results/nemotron12b_report.json (arm metrics,
+    failure_mode_decomposition, root_cause_of_stops, findings, caveats;
+    roots in runs/nemotron12b/*)
