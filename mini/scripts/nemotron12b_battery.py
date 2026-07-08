@@ -23,6 +23,7 @@ MINI = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(MINI))
 sys.path.insert(0, str(MINI / "scripts"))
 
+from minireason import call as llm  # noqa: E402
 from minireason import judge  # noqa: E402
 from minireason.call import TokenMeter  # noqa: E402
 from minireason.log import BlobStore  # noqa: E402
@@ -32,7 +33,6 @@ from hard_problem import DESCRIPTION as ARROW_DESCRIPTION  # noqa: E402
 from hard_problem import PID as ARROW_PID  # noqa: E402
 from small_model_burden import (PROBLEMS, RobustEndpoint, TerseConjOut,  # noqa: E402
                                 arm_metrics, replay_ok, terse_prompt)
-from small_model_burden import run_arm as _run_arm_impl  # noqa: E402
 from smoke import NOVELTY_BASELINE, novelty_late_early  # noqa: E402
 
 BASE_URL = "https://openrouter.ai/api/v1"
@@ -41,6 +41,8 @@ TOTAL_CAP = 1_000_000
 ARM_BUDGET = 30_000
 CERTIFY_BUDGET = 15_000
 MIN_INTERVAL_S = 3.0  # free tier ~20 req/min
+RUNS_ROOT = Path("runs/nemotron12b")  # --mock re-roots this to a scratch dir
+_MOCK = False  # set by --mock; endpoint() then serves offline responses
 
 ARMS = [
     # (name, prompt_fn, schema_cls, vs_k, neighbourhood)
@@ -67,9 +69,37 @@ class PacedEndpoint(RobustEndpoint):
             self._last_request[0] = time.monotonic()
 
 
-def endpoint(api_key: str, temperature: float, max_tokens: int) -> PacedEndpoint:
+def endpoint(api_key: str, temperature: float, max_tokens: int):
+    if _MOCK:
+        return mock_endpoint(MODEL)
     return PacedEndpoint(BASE_URL, MODEL, api_key=api_key,
                          temperature=temperature, max_tokens=max_tokens)
+
+
+def mock_endpoint(model: str) -> llm.MockEndpoint:
+    """Deterministic offline pipeline sanity (mirrors small_model_burden's
+    mock): a conjecture prompt gets one valid schema-clean skeleton; the
+    certification judge prompt gets a FlawRuling. No network, no key — this
+    proves the three-phase wiring, metric recompute, and report assembly
+    before a single OpenRouter token is spent, not the 12B's behaviour."""
+    counter = {"n": 0}
+
+    def respond(prompt: str) -> str:
+        if "does the argument violate the standard" in prompt:
+            return json.dumps({"violates": True})
+        counter["n"] += 1
+        n = counter["n"]
+        skeleton = json.dumps({
+            "claim": f"mock claim {n} for 12b pipeline sanity",
+            "mechanism": f"mock mechanism {n}",
+            "scope": {"covers": [f"case-{n}"], "excludes": []},
+            "forbidden": [{"case": f"refuter {n}",
+                           "eval": "predicate:len(content) > 10"}],
+            "prose_notes": ""})
+        return json.dumps({"candidates": [{"content": skeleton,
+                                           "typicality": 0.5}]})
+
+    return llm.MockEndpoint(respond, name="mock", model=model)
 
 
 def phase1_burden(api_key: str, resume: bool) -> dict:
@@ -86,7 +116,7 @@ def run_arm_12b(name, prompt_fn, schema_cls, vs_k, nb, api_key, resume) -> dict:
     """small_model_burden.run_arm, re-rooted for this battery (that function
     hardcodes runs/small_burden; same logic, same persistence contract)."""
     from minireason import loop as loop_mod
-    root = Path("runs/nemotron12b") / name
+    root = RUNS_ROOT / name
     result_path = root / "arm_result.json"
     if resume and result_path.exists():
         print(f"(resume: loading committed result for {name})", flush=True)
@@ -122,12 +152,12 @@ def run_arm_12b(name, prompt_fn, schema_cls, vs_k, nb, api_key, resume) -> dict:
 
 
 def phase2_certify(api_key: str, resume: bool) -> dict:
-    out_path = Path("runs/nemotron12b/certification.json")
+    out_path = RUNS_ROOT / "certification.json"
     if resume and out_path.exists():
         print("(resume: loading committed certification)", flush=True)
         return json.loads(out_path.read_text())
     meter = TokenMeter(budget=CERTIFY_BUDGET)
-    blobs = BlobStore(Path("runs/nemotron12b/certify_blobs"))
+    blobs = BlobStore(RUNS_ROOT / "certify_blobs")
     seat = endpoint(api_key, 0.0, 600)
     result = judge.certify_seat(seat, meter, blobs)
     report = {"seat": f"{MODEL}/default", "result": result,
@@ -139,7 +169,7 @@ def phase2_certify(api_key: str, resume: bool) -> dict:
 
 
 def phase3_long_run(api_key: str, budget: int, resume: bool) -> dict:
-    root = Path("runs/nemotron12b/long-arrow")
+    root = RUNS_ROOT / "long-arrow"
     resumed_from = 0
     if resume and (root / "log.jsonl").exists():
         resumed_from = Session(root).state.logged_tokens()
@@ -213,13 +243,26 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--skip-long-run", action="store_true")
+    parser.add_argument("--mock", action="store_true",
+                        help="offline pipeline sanity: no network, no key, "
+                             "scratch runs root; never the recorded result")
     parser.add_argument("--out", default=str(
         MINI.parent / "experiments" / "results" / "nemotron12b_report.json"))
     args = parser.parse_args()
-    api_key = os.environ.get("OPENROUTER_API_KEY")
-    if not api_key:
-        print("OPENROUTER_API_KEY not set", file=sys.stderr)
-        return 1
+    if args.mock:
+        global _MOCK, RUNS_ROOT, ARM_BUDGET, CERTIFY_BUDGET, TOTAL_CAP
+        _MOCK = True
+        ARM_BUDGET, CERTIFY_BUDGET, TOTAL_CAP = 3_000, 15_000, 40_000
+        RUNS_ROOT = MINI / "runs" / "nemotron12b_mock"
+        if args.out.endswith("nemotron12b_report.json"):
+            args.out = str(RUNS_ROOT / "report.mock.json")
+        RUNS_ROOT.mkdir(parents=True, exist_ok=True)
+        api_key = "mock"
+    else:
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            print("OPENROUTER_API_KEY not set", file=sys.stderr)
+            return 1
 
     arms = phase1_burden(api_key, args.resume)
     certification = phase2_certify(api_key, args.resume)
@@ -235,6 +278,7 @@ def main() -> int:
 
     report = {
         "prereg": "experiments/nemotron12b_replication_prereg.yaml",
+        "mode": "mock" if _MOCK else "live",
         "model": MODEL, "provider": BASE_URL,
         "total_openrouter_tokens": spent, "cap": TOTAL_CAP,
         "arms": arms, "certification": certification, "long_run": long_run,
