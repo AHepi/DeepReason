@@ -3,6 +3,7 @@ OpenAI-compatible — mix freely per role. MockEndpoint serves tests and
 replay experiments without network.
 """
 
+import http.client
 import json
 import time
 import urllib.error
@@ -32,7 +33,16 @@ def request_with_retries(fn):
             if e.code not in _RETRYABLE_HTTP:
                 raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
             last = e
-        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                http.client.HTTPException, ValueError) as e:
+            # A dropped/short chunked body raises http.client.IncompleteRead
+            # (an HTTPException, NOT an OSError) or a base-16 ValueError from
+            # the chunk-size parse — both are transient 200-stream faults, not
+            # logic errors. Retrying re-issues the request; the LOGGED response
+            # is whatever finally succeeds, so byte-replay is unaffected. This
+            # gap crashed a 286k-token full-harness run mid-stream; mini's
+            # call.py already caught these (experiments/results/
+            # small_model_burden_report.json transport finding).
             last = e
         if delay is None:
             break
