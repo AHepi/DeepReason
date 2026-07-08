@@ -1,0 +1,95 @@
+# Pre-registration: true-12B replication + long-run stress
+# (nvidia/nemotron-nano-12b-v2-vl via OpenRouter). Committed BEFORE any
+# live arm runs.
+#
+# Question: small_model_burden_report.json refuted H-burden on
+# deepseek-v4-flash (0/10 stock-prompt failures; compaction cost ~37%
+# yield) but flash was only a PROXY for the small-model class — the
+# report's own caveat gates generalisation on a true small checkpoint.
+# This experiment runs the same battery on an actual 12B-parameter
+# model, adds the record-required judge-seat certification for the new
+# provider, then stresses the harness with a long run on the repo's
+# canonical hard problem (pi-arrow-of-time).
+#
+# Pilot observation (motivates P1, one probe call, logged here for
+# honesty): a single JSON-mode probe of the 12B on a trivial one-field
+# schema returned structurally degenerate output (four duplicate
+# "candidates" keys, stray tab whitespace) — the exact failure class
+# flash never showed. The probe is a pilot, not evidence; the battery
+# decides.
+#
+# Provider notes: OpenRouter, model nvidia/nemotron-nano-12b-v2-vl:free
+# (128k ctx, free tier). Free-tier transport limits (requests/min and
+# requests/day) may bind BEFORE the token budget; every arm is
+# resume-capable and the report records which stop actually fired.
+# Total OpenRouter spend hard-capped at 1,000,000 tokens (user
+# directive). Judge-seat spend for offline ranking, if any, runs on the
+# already-certified DeepSeek flash seat and is outside this cap.
+
+hypothesis:
+  H-12b: >
+    The burden mechanism refuted on flash IS real at true-12B scale:
+    on the stock harness prompt the 12B's instruction-following failure
+    rate clears the 0.10 floor that flash never reached, and the
+    compact arm halves it while keeping >= 0.8x survivor yield — the
+    original P1 decision rule, re-run unchanged on the model class it
+    was written for.
+
+definitions: identical to small_model_burden_prereg.yaml (conjecture
+  calls, failure_rate, truncation_rate, refuted_on_arrival_rate, yield
+  per 10k) — same metric code, same log-recomputation.
+
+design:
+  battery_1_burden_replication:
+    arms (30k tokens each, same two smoke problems, temperature 1.0,
+    max_tokens 4000, retry_max 2, roots runs/nemotron12b/<arm>):
+      A-12b-stock:   stock prompt path, vs_k=6, neighbourhood=8
+      B-12b-terse:   terse instructions only, vs_k=6, neighbourhood=8
+      C-12b-compact: terse + vs_k=3, neighbourhood=2
+    (no pro-control arm: D ran in the parent experiment; the flash
+    numbers there are the comparison baseline.)
+  battery_2_seat_certification:
+    judge.certify_seat on the 12B (trimmed planted-flaw battery,
+    temperature 0.0, max_tokens 600, ~15k tokens) — the record requires
+    certification on every new provider before any score is trusted.
+  long_run:
+    pi-arrow-of-time (the committed hard problem from
+    mini/scripts/hard_problem.py), one problem, vs_k=6, stance_decay=5
+    (measured best), turnover_k=12, max_cycles=300, budget = remainder
+    of the 1M cap after the batteries (~850k nominal). Stop conditions
+    are the harness's own (budget / dry / endpoint-error) plus the
+    free-tier transport ceiling; whichever fires is the recorded result,
+    not a failure of the experiment.
+  pacing: >= 3s between requests (free-tier ~20 req/min); 429 responses
+    ride the committed retry/backoff; a hard daily cap surfaces as
+    endpoint-error and the arm resumes in a later process if possible.
+
+predictions:  # committed before the first battery token
+  P1 (primary, H-12b): failure_rate(A-12b-stock) >= 0.10 AND
+    failure_rate(C-12b-compact) <= 0.5 * failure_rate(A-12b-stock) AND
+    yield(C) >= 0.8 * yield(A). All three clauses or H-12b is REFUTED
+    as written. If failure_rate(A) < 0.10 the flash result REPLICATES
+    downward and the small-model-burden premise is dead at 12B too.
+  P2 (secondary): the 12B seat FAILS certification (planted-flaw error
+    > 0.25 ceiling). Record precedent: flash needed reasoning to pass;
+    a 12B is predicted not to clear it.
+  P3 (secondary, long-run): before 200k long-run tokens the problem
+    goes DRY (turnover: 12 consecutive draws with no new distinct
+    survivor) — 12B repertoire exhaustion on a hard problem. REFUTED if
+    the run is still producing new survivors past 200k. Health metrics
+    reported regardless: novelty late/early vs the 0.846 baseline,
+    gate-block/orbit counts, per-process meter==log, byte-equal replay.
+
+decision_rules:
+  - Each prediction evaluates independently CONFIRMED/REFUTED/UNDECIDED.
+  - UNDECIDED if the transport ceiling stopped an arm before 8
+    conjecture calls (batteries) or before 60k tokens (long run); the
+    report says exactly how far each arm got and why it stopped.
+  - No verdict may cite a metric not defined above.
+  - No code change to minireason/ or src/ from this experiment alone.
+
+budget: batteries <= 105k + long run <= 895k; hard total 1,000,000
+  OpenRouter tokens (+ documented per-arm check-before-spend overshoot).
+
+# ---------------------------------------------------------------------
+# result: (appended after the run; prereg above this line is frozen)
