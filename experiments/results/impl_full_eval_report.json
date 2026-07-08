@@ -1,0 +1,138 @@
+{
+  "attack_validity_rate": 0.98,
+  "audits": {
+    "hits": 4,
+    "planted_flaw_error_rate": null,
+    "self_preference": null,
+    "verbosity_bias": null
+  },
+  "capture": {
+    "adjudicator": {
+      "attack_target_entropy": null,
+      "criticism_debt": 1.0,
+      "g_churn": 0,
+      "n_attacks": 0,
+      "refutations": 0,
+      "reinstatement_rate": null,
+      "validity_attack_rate": 0.02
+    },
+    "generator": {
+      "dist_slope": -0.09017567276127214,
+      "inter_school_min_dist": 0.7779029003291411,
+      "mean_pairwise_dist": 0.7413478139063346,
+      "mean_token_surprisal": 0.43052925521055435,
+      "stream_len": 10,
+      "surprisal_slope": -0.1967091761426839
+    },
+    "lambda": 1.0
+  },
+  "interventions": [
+    {
+      "diversity_delta": -0.019241475598050117,
+      "rule": "stagnation-recruit",
+      "seq": 764,
+      "stream_dist_after": 0.6658398554563456,
+      "stream_dist_before": 0.6850813310543957
+    }
+  ],
+  "llm": {
+    "argumentative_critic": {
+      "attempts": 122,
+      "calls": 122,
+      "mean_surprisal": 0.3073909570697816,
+      "tokens": 130761,
+      "total_ms": 855467,
+      "valid_json_rate": 1.0
+    },
+    "conjecturer": {
+      "attempts": 106,
+      "calls": 104,
+      "mean_surprisal": 0.45851591139519776,
+      "tokens": 221471,
+      "total_ms": 2011411,
+      "valid_json_rate": 0.9811320754716981
+    },
+    "defender": {
+      "attempts": 46,
+      "calls": 45,
+      "mean_surprisal": 0.3737546718901075,
+      "tokens": 45685,
+      "total_ms": 388731,
+      "valid_json_rate": 0.9782608695652174
+    },
+    "judge": {
+      "attempts": 158,
+      "calls": 158,
+      "mean_surprisal": 0.006031973559438687,
+      "tokens": 214255,
+      "total_ms": 596868,
+      "valid_json_rate": 1.0
+    },
+    "synthesizer": {
+      "attempts": 3,
+      "calls": 3,
+      "mean_surprisal": 0.23231705137970607,
+      "tokens": 1786,
+      "total_ms": 12702,
+      "valid_json_rate": 1.0
+    },
+    "variator": {
+      "attempts": 65,
+      "calls": 64,
+      "mean_surprisal": 0.32376253197224225,
+      "tokens": 87426,
+      "total_ms": 848546,
+      "valid_json_rate": 0.9846153846153847
+    }
+  },
+  "schools": {
+    "reseeds": 0,
+    "roster": {
+      "school-0": {
+        "lineage": 57,
+        "novelty_contribution": 0.6297729019448691,
+        "stance": "mechanist",
+        "stance_weight": 0.0
+      },
+      "school-1": {
+        "lineage": 167,
+        "novelty_contribution": 0.6832588027603432,
+        "stance": "skeptic",
+        "stance_weight": 0.0
+      }
+    }
+  },
+  "spec_transmission": {
+    "max": 1.0,
+    "mean": 0.6481555555555556,
+    "min": 0.3333,
+    "n": 18
+  },
+  "survivor_hv": {
+    "max": 0.19999999999999996,
+    "mean": 0.013793103448275858,
+    "min": 0.0,
+    "n": 29
+  },
+  "survivor_reach": {
+    "n": 0
+  },
+  "totals": {
+    "artifacts": 627,
+    "events": 1439,
+    "llm_tokens": 701384,
+    "problems": 262,
+    "survivors": 32,
+    "warrants": 200
+  },
+  "trial_guard": {
+    "blocked": {
+      "ensemble-split": 19,
+      "paraphrase-flip": 5,
+      "referential-integrity": 1
+    },
+    "rubric_warrants": 5,
+    "survival_rate": 0.16666666666666666
+  }
+}
+

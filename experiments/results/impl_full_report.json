@@ -1,0 +1,59 @@
+{
+  "problem": "pi-10b-impl",
+  "engine": "deepseek-v4-pro thinking-off (full harness)",
+  "judge_ensemble": [
+    "deepseek-v4-pro (thinking-off)",
+    "deepseek-v4-flash"
+  ],
+  "total_tokens": 701384,
+  "invariant_violations": [],
+  "event_rules": {
+    "REFL": 3,
+    "REGISTER": 451,
+    "SPAWN": 262,
+    "CONJ": 87,
+    "MEASURE": 436,
+    "CRIT": 200
+  },
+  "conjecturer_statuses": {
+    "REFUTED": 191,
+    "ACCEPTED": 30
+  },
+  "accepted_frontier": [
+    {
+      "id": "752c638b0410",
+      "claim": "Split the single-pass generation into a nested two-step protocol: gamma1 drafts a flat skeleton with claim and forgiving placeholders; gamma2 expands placeholders into structured parts, with a schema-aware validator ensuring correctness at each step.",
+      "mechanism": "In the harness loop, the conjecture call is replaced by a controlled sequence: (1) prompt gamma to output a flat JSON with only top-level fields and placeholder tokens for nested objects/arrays; (2) a deterministic expander replaces placeholders with further calls to gamma (constrained by a limited-depth prompt) or with static defaults. A JSON schema validator rejects any output that doesn't conform. This avoids deep nesting in a single pass and prevents runaway brace errors. The invariant of LLM as bounded pure function holds because each gamma call is independent and deterministic given its prompt; the expander is a program over gamma outputs."
+    },
+    {
+      "id": "f4160a135a55",
+      "claim": "A two-stage generate-and-fill pipeline eliminates nesting complexity: the 10B model first generates a flat template with placeholders, then a second pass fills values.",
+      "mechanism": "The harness conducts two consecutive LLM calls (the same 10B model). In Stage 1 (skeleton generation), the prompt instructs the model to output a simplified JSON skeleton with only keys and placeholder tokens (e.g., '<<CLAIM>>', '<<MECHANISM>>'), ensuring the structure is flat and braces are balanced because the model only emits keys and static punctuation. The harness validates and parses this skeleton. In Stage 2 (value filling), the harness prompts the model with the skeleton and requests values for each placeholder, using constrained sampling (e.g., by stopping tokens) to prevent structural corruption. The final JSON is assembled deterministically. This preserves determinism by using the same seeds in both stages and ensures byte-exact replay."
+    },
+    {
+      "id": "850b23f4716f",
+      "claim": "Anchor inner predicate strings by requiring them to be valid Python lambda expressions that operate on a content string, enforced by a harness-side Python syntax checker (ast.parse) before accepting the skeleton.",
+      "mechanism": "In the output contract, replace the free-text 'eval' field in forbidden cases with 'eval_lambda', a string that must be a valid Python lambda expression with exactly one argument (e.g., 'lambda x: len(x) > 10'). After gamma outputs the skeleton, the harness runs ast.parse on the string; if it raises SyntaxError, the skeleton is rejected and gamma is re-prompted with the error. This provides immediate syntactic feedback, anchoring the model to a specific domain (Python) and preventing undefined functions."
+    },
+    {
+      "id": "6c88ddab3c82",
+      "claim": "Adversarial self-play training for forbidden case generation: fine-tune the 10B model on a synthetic dataset of conjecture-criticism exchanges where it must generate, then refute, its own claims, using a two-turn prompt. At inference, the model simulates both sides in one call by conditioning on a separator token.",
+      "mechanism": "A two-turn fine-tuning: The model is trained on (prompt, conjecture) and then (conjecture, criticism) pairs, learning to anticipate its own mistakes. During inference, the harness appends a special token that triggers the model to generate the forbidden cases as part of its output, effectively making it a self-critic. This is a model-side change, not a harness change, so deterministic replay is preserved by standard sampling with fixed seed."
+    },
+    {
+      "id": "aac1bdd9ff36",
+      "claim": "Enforce structural correctness during decoding via a deterministic pushdown automaton that constrains the LLM token sampling to only those tokens that maintain bracket balance and valid JSON nesting",
+      "mechanism": "At each decoding step, the harness maintains a stack representing the JSON nesting context. The LLM's logits are masked: any token that would break bracket pairing (e.g., an unescaped quote, missing brace, or improper comma) is assigned -inf log-probability. The automaton transitions through a small set of states (object, array, key, value) using top-of-stack and next-token. This ensures the output is always syntactically valid JSON without external repair, preserving byte-exact determinism if sampling uses a fixed seed and the mask is applied deterministically."
+    },
+    {
+      "id": "28c4ee09cb42",
+      "claim": "Use multi-turn self-play within a single inference call, where the model sequentially generates a claim and then attacks it, refining it until a self-consistent candidate emerges.",
+      "mechanism": "The harness orchestrates a loop: prompt the model to generate an initial candidate, then immediately prompt it (in the same context window) to critique that candidate by generating a forbidden case. The final output is the last refined claim and its defense. This iterative critique is performed without external models."
+    },
+    {
+      "id": "2935a79911e8",
+      "claim": "Integrate a bracket-balancing constrained decoder that terminates generation only when braces/brackets are balanced, preventing nesting errors.",
+      "mechanism": "During generation, the model output is constrained by a pushdown automaton that tracks nesting depth. The harness uses a logit mask that sets probabilities of tokens causing imbalance to zero, ensuring a well-formed JSON skeleton is produced in a single pass."
+    }
+  ]
+}

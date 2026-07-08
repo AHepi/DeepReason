@@ -1,0 +1,242 @@
+[
+  {
+    "id": "752c638b0410",
+    "problem": "pi-10b-impl",
+    "school": "school-1",
+    "claim": "Split the single-pass generation into a nested two-step protocol: gamma1 drafts a flat skeleton with claim and forgiving placeholders; gamma2 expands placeholders into structured parts, with a schema-aware validator ensuring correctness at each step.",
+    "mechanism": "In the harness loop, the conjecture call is replaced by a controlled sequence: (1) prompt gamma to output a flat JSON with only top-level fields and placeholder tokens for nested objects/arrays; (2) a deterministic expander replaces placeholders with further calls to gamma (constrained by a limited-depth prompt) or with static defaults. A JSON schema validator rejects any output that doesn't conform. This avoids deep nesting in a single pass and prevents runaway brace errors. The invariant of LLM as bounded pure function holds because each gamma call is independent and deterministic given its prompt; the expander is a program over gamma outputs.",
+    "family": "R1_nested_json"
+  },
+  {
+    "id": "f4160a135a55",
+    "problem": "succ:27f513b2c7b8",
+    "school": "school-0",
+    "claim": "A two-stage generate-and-fill pipeline eliminates nesting complexity: the 10B model first generates a flat template with placeholders, then a second pass fills values.",
+    "mechanism": "The harness conducts two consecutive LLM calls (the same 10B model). In Stage 1 (skeleton generation), the prompt instructs the model to output a simplified JSON skeleton with only keys and placeholder tokens (e.g., '<<CLAIM>>', '<<MECHANISM>>'), ensuring the structure is flat and braces are balanced because the model only emits keys and static punctuation. The harness validates and parses this skeleton. In Stage 2 (value filling), the harness prompts the model with the skeleton and requests values for each placeholder, using constrained sampling (e.g., by stopping tokens) to prevent structural corruption. The final JSON is assembled deterministically. This preserves determinism by using the same seeds in both stages and ensures byte-exact replay.",
+    "family": "R1_nested_json"
+  },
+  {
+    "id": "850b23f4716f",
+    "problem": "succ:7d2ff3395e80",
+    "school": "school-0",
+    "claim": "Anchor inner predicate strings by requiring them to be valid Python lambda expressions that operate on a content string, enforced by a harness-side Python syntax checker (ast.parse) before accepting the skeleton.",
+    "mechanism": "In the output contract, replace the free-text 'eval' field in forbidden cases with 'eval_lambda', a string that must be a valid Python lambda expression with exactly one argument (e.g., 'lambda x: len(x) > 10'). After gamma outputs the skeleton, the harness runs ast.parse on the string; if it raises SyntaxError, the skeleton is rejected and gamma is re-prompted with the error. This provides immediate syntactic feedback, anchoring the model to a specific domain (Python) and preventing undefined functions.",
+    "family": "R3_predicate_lang"
+  },
+  {
+    "id": "a7d86125896b",
+    "problem": "succ:ce2e3f5e8657",
+    "school": "school-1",
+    "claim": "Replace the fixed hv threshold with a dynamic one that adjusts based on the distribution of heuristi",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "448f372d9a5c",
+    "problem": "succ:7021f05bf47b",
+    "school": "school-1",
+    "claim": "Use an external verifier that re-reads the generated output and checks for internal logical consiste",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "6c88ddab3c82",
+    "problem": "succ:7d2ff3395e80",
+    "school": "school-0",
+    "claim": "Adversarial self-play training for forbidden case generation: fine-tune the 10B model on a synthetic dataset of conjecture-criticism exchanges where it must generate, then refute, its own claims, using a two-turn prompt. At inference, the model simulates both sides in one call by conditioning on a separator token.",
+    "mechanism": "A two-turn fine-tuning: The model is trained on (prompt, conjecture) and then (conjecture, criticism) pairs, learning to anticipate its own mistakes. During inference, the harness appends a special token that triggers the model to generate the forbidden cases as part of its output, effectively making it a self-critic. This is a model-side change, not a harness change, so deterministic replay is preserved by standard sampling with fixed seed.",
+    "family": "R2_self_falsification"
+  },
+  {
+    "id": "3a635a9caba2",
+    "problem": "succ:cbe59cb141e3",
+    "school": "school-1",
+    "claim": "Treat the generation process as a dynamical system where heuristic value acts as a bifurcation param",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "f434721c239a",
+    "problem": "succ:cbe59cb141e3",
+    "school": "school-1",
+    "claim": "Frame the selection of a heuristic value threshold as a game between the harness (minimizing worst-c",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "a9f2979cfc00",
+    "problem": "succ:cbe59cb141e3",
+    "school": "school-1",
+    "claim": "Instead of a fixed hv threshold, compute a bootstrap confidence interval for the proportion of candi",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "b6314a083f92",
+    "problem": "succ:20b4155eb5fe",
+    "school": "school-1",
+    "claim": "Model the acceptance problem as a cooperative bargaining game among three stakeholders: the 'Quality",
+    "mechanism": "",
+    "family": "R2_self_falsification"
+  },
+  {
+    "id": "526f7d1665b1",
+    "problem": "succ:20b4155eb5fe",
+    "school": "school-1",
+    "claim": "Design an evolutionary algorithm where the heuristic value landscape is augmented with diversity and",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "57d42e719441",
+    "problem": "succ:20b4155eb5fe",
+    "school": "school-1",
+    "claim": "Adopt an axiomatic framework where the acceptance of a candidate is governed by three non-negotiable",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "aac1bdd9ff36",
+    "problem": "succ:21c33d69d52d",
+    "school": "school-1",
+    "claim": "Enforce structural correctness during decoding via a deterministic pushdown automaton that constrains the LLM token sampling to only those tokens that maintain bracket balance and valid JSON nesting",
+    "mechanism": "At each decoding step, the harness maintains a stack representing the JSON nesting context. The LLM's logits are masked: any token that would break bracket pairing (e.g., an unescaped quote, missing brace, or improper comma) is assigned -inf log-probability. The automaton transitions through a small set of states (object, array, key, value) using top-of-stack and next-token. This ensures the output is always syntactically valid JSON without external repair, preserving byte-exact determinism if sampling uses a fixed seed and the mask is applied deterministically.",
+    "family": "R1_nested_json"
+  },
+  {
+    "id": "5701fbd101a5",
+    "problem": "succ:bd532f293850",
+    "school": "school-1",
+    "claim": "Model the harness's acceptance decision as a causal graph: candidate quality Q (latent) causes both ",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "4ce606c076f9",
+    "problem": "succ:bd532f293850",
+    "school": "school-1",
+    "claim": "We replace the fixed hv threshold with a sense-disambiguated coherence score: each generated candida",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "b6521f635257",
+    "problem": "succ:bd532f293850",
+    "school": "school-1",
+    "claim": "We recast candidate generation as WaveFunctionCollapse on a grid of narrative slots. The tileset com",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "1ec6d131ac3a",
+    "problem": "succ:498f91dbb584",
+    "school": "school-1",
+    "claim": "Construct a Bayesian Truth Serum (BTS) market where participants trade prediction tokens on the prob",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "590619f9e282",
+    "problem": "succ:498f91dbb584",
+    "school": "school-1",
+    "claim": "Implement a Decentralized Arbitrariness Auction (DAA) where each candidate is minted as an NFT and s",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "ec933a3b7b7f",
+    "problem": "succ:498f91dbb584",
+    "school": "school-1",
+    "claim": "Establish a Tiered Review Committee (TRC) within the harness: an algorithmic body with three escalat",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "600862726dc1",
+    "problem": "succ:46c193508a49",
+    "school": "school-1",
+    "claim": "Construct a causal graph over candidate features, generation parameters, and heuristic value, then l",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "605d11f93876",
+    "problem": "succ:46c193508a49",
+    "school": "school-1",
+    "claim": "Model the generation process as a hierarchical Bayesian model where each candidate's latent quality ",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "691a0801e5a2",
+    "problem": "succ:46c193508a49",
+    "school": "school-1",
+    "claim": "Apply L1-regularized logistic regression to select features from candidate-level metrics (e.g., cohe",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "ca18181f615b",
+    "problem": "succ:a4cb0378047d",
+    "school": "school-1",
+    "claim": "Model the problem as a causal DAG where the heuristic value is a noisy mediator between the true qua",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "3557c45ffd57",
+    "problem": "succ:a4cb0378047d",
+    "school": "school-1",
+    "claim": "Define a Lie group of symmetries (e.g., permutations of equivalent problem elements) and require tha",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "8b3898b217b4",
+    "problem": "succ:a4cb0378047d",
+    "school": "school-1",
+    "claim": "Impose a hard cap on the total number of measurements (e.g., token generation steps, API calls, or c",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "28c4ee09cb42",
+    "problem": "succ:53956f4d4275",
+    "school": "school-1",
+    "claim": "Use multi-turn self-play within a single inference call, where the model sequentially generates a claim and then attacks it, refining it until a self-consistent candidate emerges.",
+    "mechanism": "The harness orchestrates a loop: prompt the model to generate an initial candidate, then immediately prompt it (in the same context window) to critique that candidate by generating a forbidden case. The final output is the last refined claim and its defense. This iterative critique is performed without external models.",
+    "family": "R2_self_falsification"
+  },
+  {
+    "id": "2935a79911e8",
+    "problem": "succ:53956f4d4275",
+    "school": "school-1",
+    "claim": "Integrate a bracket-balancing constrained decoder that terminates generation only when braces/brackets are balanced, preventing nesting errors.",
+    "mechanism": "During generation, the model output is constrained by a pushdown automaton that tracks nesting depth. The harness uses a logit mask that sets probabilities of tokens causing imbalance to zero, ensuring a well-formed JSON skeleton is produced in a single pass.",
+    "family": "R1_nested_json"
+  },
+  {
+    "id": "600ad9dc2ffb",
+    "problem": "succ:d1f286b65755",
+    "school": "school-1",
+    "claim": "Introduce a stochastic acceptance rule where candidates are accepted with probability proportional t",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "9e28d156f0bb",
+    "problem": "succ:d1f286b65755",
+    "school": "school-1",
+    "claim": "Replace the point estimate of candidate quality with a full Bayesian posterior over hv, using a nonp",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  },
+  {
+    "id": "7129da3f71dc",
+    "problem": "succ:d1f286b65755",
+    "school": "school-1",
+    "claim": "Frame candidate selection as a multi-armed bandit where each possible hv threshold is an arm. Use an",
+    "mechanism": "",
+    "family": "adjacent_hv_acceptance"
+  }
+]
