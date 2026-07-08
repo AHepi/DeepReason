@@ -1,0 +1,114 @@
+# Pre-registration: small-model prompt burden (harness optimisation for
+# the ~10B class). Committed BEFORE any live arm runs.
+#
+# Question: the harness's per-call instruction surface (a full JSON-Schema
+# dump + the skeleton contract + stance directive + up to 8 neighbourhood
+# survivors + a demand for 6 candidates) was tuned on strong models. Small
+# models are known to struggle with instruction-following as prompt burden
+# grows. Where does the mini harness actually lose a small model — and
+# which burden knob (instruction verbosity vs context size vs demanded
+# output width) is the dial?
+#
+# Motivating index lines (INDEX_2026-07-05.md):
+#   - operator_drive_report_instrument.json: "flash fell at the
+#     nested-payload cliff" — the weak tier fails on payload complexity,
+#     mechanism unmeasured.
+#   - judge_battery_report.json: flash needs reasoning where pro does not
+#     — capability gap on this exact provider pair is established.
+#   - basin prereg F-weak/G-weak arms: weak model at high temp registered
+#     8/44 attempts — weak-model attrition observed but never decomposed
+#     into instruction-following vs generation failures.
+#
+# Model honesty note: the provided key exposes exactly two models
+# (deepseek-v4-flash, deepseek-v4-pro). Flash is the smallest available
+# and the record's established weak/cheap tier; its parameter count is
+# unpublished. It stands PROXY for the small-model (~10B) class here;
+# every claim below is literally about flash, and generalisation to true
+# 10B checkpoints is flagged as unverified in the report.
+
+hypothesis:
+  H-burden: >
+    On the small model, MiniReason's per-call instruction-following
+    failure rate is driven by PROMPT BURDEN, not by the model's ceiling:
+    at matched budget on the same problems, a compact-burden arm
+    (terse format example instead of the raw JSON-Schema dump, vs_k=3,
+    neighbourhood=2) will show a failure rate no more than HALF the
+    stock arm's, while keeping survivor yield per 10k tokens at >= 0.8x
+    stock. One hypothesis; the pro control and the instructions-only arm
+    serve its interpretation, not separate claims.
+
+definitions:
+  conjecture_call: any llm.call with role=conjecturer whose spend landed
+    on the log (Conj, all-blocked, dropped-call, or budget-exhausted
+    events). Every token exactly once (G1).
+  failure_rate: fraction of conjecture calls that were NOT clean, where
+    clean = schema-valid on the FIRST attempt (Call.attempts == 1) and
+    not dropped. Repairs (attempts > 1) and dropped calls (SchemaError
+    after retries) both count as failures; the repair loop's extra spend
+    is the cost being measured.
+  truncation_rate: fraction of conjecture calls with truncated=true
+    (finish_reason=length on any attempt).
+  refuted_on_arrival_rate: fraction of admitted candidates refuted by
+    skeleton-wf (content not a parseable skeleton, or forbids nothing) —
+    the instruction-following failure that survives JSON validation.
+  yield: distinct survivors per 10k logged tokens (count-based; no judge
+    in the loop, so QUALITY of survivors is out of scope — caveat).
+
+design:
+  harness: MiniReason (cheapest valid arm; a mini root is a parent root).
+  problems: the two committed smoke problems (pi-bronze, pi-needham),
+    same order, every arm.
+  common: temperature 1.0, max_tokens 4000, retry_max 2, budget 30k
+    tokens per arm (hard meter; documented overshoot allowed), fresh
+    roots runs/small_burden/<arm>, max_cycles 60.
+  arms:
+    A-flash-stock:   deepseek-v4-flash, stock prompt path exactly as
+                     committed (full model_json_schema dump, vs_k=6,
+                     neighbourhood=8).
+    B-flash-terse:   deepseek-v4-flash, INSTRUCTIONS ONLY compacted: the
+                     schema dump replaced by a one-line format example
+                     and the skeleton contract stated tersely; vs_k=6,
+                     neighbourhood=8 unchanged. Isolates instruction
+                     verbosity from context size.
+    C-flash-compact: deepseek-v4-flash, terse instructions AND reduced
+                     demand/context: vs_k=3, neighbourhood=2. The full
+                     candidate optimisation.
+    D-pro-stock:     deepseek-v4-pro, stock prompt path, same budget.
+                     Control: if pro also fails at stock burden, the
+                     effect is not small-model-specific and H-burden's
+                     framing is wrong regardless of A vs C.
+  validation is IDENTICAL in all arms (same pydantic schema, same
+  checks/gate/rotation); only the instruction text and the vs_k /
+  neighbourhood knobs vary. Arm order A, B, C, D, run once each (n=1
+  per arm — caveat, same as prior live batteries).
+
+predictions:  # committed before the first token
+  P1 (primary): failure_rate(C) <= 0.5 * failure_rate(A), AND
+    yield(C) >= 0.8 * yield(A). Both clauses or H-burden is REFUTED as
+    written. Degenerate guard: if failure_rate(A) < 0.10 there is
+    nothing to halve — H-burden is REFUTED (the stock harness already
+    fits the small model; the premise, not the mechanism, fails).
+  P2 (secondary, attribution): failure_rate(B) <= midpoint of A and C —
+    i.e. instruction compaction alone captures at least half the A->C
+    reduction. Reported CONFIRMED/REFUTED but does not decide H-burden.
+  P3 (secondary, control): failure_rate(D) < 0.5 * failure_rate(A) at
+    stock burden. If REFUTED (pro fails like flash), the effect is
+    prompt-general, not small-model-specific, and the report must say
+    so.
+
+decision_rules:
+  - Each prediction evaluates independently CONFIRMED/REFUTED/UNDECIDED
+    (undecided = an arm died early with < 8 conjecture calls; say so).
+  - No verdict may cite a metric not defined above.
+  - truncation_rate and refuted_on_arrival_rate are reported per arm as
+    observational decomposition, not verdict inputs.
+  - No code change to minireason/ or src/ from this experiment alone;
+    a change proposal must cite the report per SELF_IMPROVEMENT.md §2
+    step 5.
+
+budget: 4 arms x 30k = 120k tokens hard ceiling (+ documented per-arm
+  check-before-spend overshoot). Flash arms cheap; pro arm moderate.
+
+# ---------------------------------------------------------------------
+# result: (to be filled by the report; this block appended after the run
+# per the record's convention — prereg text above this line is frozen)
