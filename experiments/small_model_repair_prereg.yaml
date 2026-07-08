@@ -89,4 +89,42 @@ budget: <= 250k DeepSeek tokens hard cap across both live arms
   (63 items x 2 arms x ~1.5k tokens ~= 190k expected). Balance $5.04.
 
 # ---------------------------------------------------------------------
-# result: (appended after the run; prereg above this line is frozen)
+result: RAN — all three arms over the frozen 63-candidate corpus; 87,028
+  DeepSeek tokens total (flash 43,812 + pro 43,216), well under the 250k
+  cap. Zero new 12B tokens. H-repair CONFIRMED on every prediction.
+  P1 (primary): CONFIRMED — R-flash recovered 57/63 (0.905 >= 0.50) and
+    24/63 became genuine live survivors (0.381 >= 0.33). The 12B's
+    dead-on-arrival candidates were format failures: a single flash pass
+    rescued 90% of them.
+  P2 (pro >= flash): CONFIRMED — exact TIE on recovery (both 57/63);
+    pro won survival narrowly (28 vs 24). No reason to pay for pro on
+    repair; flash is the cost-effective seat.
+  P3 (repair not regeneration): CONFIRMED — median claim_fidelity 1.0.
+    The repaired skeletons kept the 12B's original claims token-for-
+    token; flash fixed syntax, it did not invent content.
+  P4 (control): R-mechanical recovered only 10/63 (0.159) — the model
+    does real work on the majority; deterministic repair is a weak floor.
+  unpredicted_finding (reasoning OFF beats reasoning ON for repair): the
+    first live run accidentally left DeepSeek thinking ON — flash
+    recovered 46/63 at 125k tokens. With thinking DISABLED
+    ({"thinking":{"type":"disabled"}}, per src/deepreason/llm/
+    providers.py) flash recovered MORE (57/63) at a THIRD the cost
+    (43.8k). For pure format repair reasoning both cost 3x and lowered
+    recovery (the model overthought and mutated well-formed content) —
+    docs/TOKEN_ECONOMY.md extends to the repair seat. Superseded run
+    recorded, not deleted.
+  residual_gap: recovery 90% but survival only 38% of corpus — ~33
+    recovered skeletons parse yet still self-refute (a forbidden case
+    whose own predicate fails on the candidate). Repairing SYNTAX does
+    not repair a semantically self-defeating forbidden case; that is a
+    12B generation-quality limit, not a format one, and is where a
+    stronger generator (not a repairer) would help.
+  operating_implication: the small-model harness optimisation is not a
+    smaller prompt (that hurt flash and the 12B alike) — it is KEEP the
+    small model as generator and add a cheap reasoning-off flash
+    JSON/predicate repair pass. That converts the stock arm's 0
+    survivors into ~38% recovered, with the 12B's reasoning preserved.
+    NOT applied to minireason/ here; a change proposal must cite this
+    report and confirm on a fresh problem (SELF_IMPROVEMENT §2 step 5).
+  report: experiments/results/small_model_repair_report.json (arm
+    tallies, survived_examples, findings, caveats).

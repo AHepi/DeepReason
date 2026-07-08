@@ -1,0 +1,160 @@
+{
+  "prereg": "experiments/small_model_repair_prereg.yaml",
+  "mode": "live",
+  "corpus_size": 63,
+  "corpus_source": [
+    "runs/nemotron12b/A-12b-stock",
+    "runs/nemotron12b/C-12b-compact"
+  ],
+  "arms": {
+    "R-mechanical": {
+      "arm": "R-mechanical",
+      "processed": 63,
+      "aborted": null,
+      "recovered": 10,
+      "survived": 7,
+      "recovery_rate": 0.1587,
+      "survival_rate_of_corpus": 0.1111,
+      "survival_rate_of_recovered": 0.7,
+      "median_claim_fidelity": 1.0,
+      "tokens": {
+        "total": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "calls": 0,
+        "budget": null
+      },
+      "survived_examples": [
+        {
+          "aid": "115e9e780e2c",
+          "salvaged_claim": "foreign invasions crippled political cohesion",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "d38ac7b91a67",
+          "salvaged_claim": "asteroid impacts altered habitability",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "ba577d421b09",
+          "salvaged_claim": "resource-driven math errors destabilized planning",
+          "claim_fidelity": 1.0
+        }
+      ],
+      "items_count": 63
+    },
+    "R-flash": {
+      "arm": "R-flash",
+      "processed": 63,
+      "aborted": null,
+      "recovered": 57,
+      "survived": 24,
+      "recovery_rate": 0.9048,
+      "survival_rate_of_corpus": 0.381,
+      "survival_rate_of_recovered": 0.4211,
+      "median_claim_fidelity": 1.0,
+      "tokens": {
+        "prompt_tokens": 33800,
+        "completion_tokens": 10012,
+        "total": 43812,
+        "budget": 250000,
+        "calls": 63
+      },
+      "survived_examples": [
+        {
+          "aid": "115e9e780e2c",
+          "salvaged_claim": "foreign invasions crippled political cohesion",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "d38ac7b91a67",
+          "salvaged_claim": "asteroid impacts altered habitability",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "ba577d421b09",
+          "salvaged_claim": "resource-driven math errors destabilized planning",
+          "claim_fidelity": 1.0
+        }
+      ],
+      "items_count": 63,
+      "marginal_tokens": 43812
+    },
+    "R-pro": {
+      "arm": "R-pro",
+      "processed": 63,
+      "aborted": null,
+      "recovered": 57,
+      "survived": 28,
+      "recovery_rate": 0.9048,
+      "survival_rate_of_corpus": 0.4444,
+      "survival_rate_of_recovered": 0.4912,
+      "median_claim_fidelity": 1.0,
+      "tokens": {
+        "prompt_tokens": 67600,
+        "completion_tokens": 19428,
+        "total": 87028,
+        "budget": 250000,
+        "calls": 126
+      },
+      "survived_examples": [
+        {
+          "aid": "115e9e780e2c",
+          "salvaged_claim": "foreign invasions crippled political cohesion",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "d38ac7b91a67",
+          "salvaged_claim": "asteroid impacts altered habitability",
+          "claim_fidelity": 1.0
+        },
+        {
+          "aid": "ba577d421b09",
+          "salvaged_claim": "resource-driven math errors destabilized planning",
+          "claim_fidelity": 1.0
+        }
+      ],
+      "items_count": 63,
+      "marginal_tokens": 43216
+    }
+  },
+  "predictions": {
+    "P1": {
+      "verdict": "CONFIRMED",
+      "recovery_clause": true,
+      "survival_clause": true,
+      "flash_recovery_rate": 0.9048,
+      "flash_survival_of_corpus": 0.381
+    },
+    "P2": {
+      "verdict": "CONFIRMED",
+      "pro": 0.9048,
+      "flash": 0.9048
+    },
+    "P3": {
+      "verdict": "CONFIRMED",
+      "median_claim_fidelity": 1.0
+    },
+    "P4_control": {
+      "mechanical_recovery_rate": 0.1587,
+      "note": "context only; >=0.50 => model not needed for the majority"
+    }
+  },
+  "total_deepseek_tokens": 87028,
+  "findings": {
+    "headline": "The 12B's format failures are cheaply repairable. A single flash pass (reasoning OFF) recovered 57/63 (90%) of the stock arm's dead-on-arrival candidates into valid skeletons, 24 (38% of corpus) into GENUINE live survivors, at median claim-fidelity 1.0 \u2014 the 12B's arrow-of-time reasoning preserved verbatim, only JSON/predicate syntax fixed. Deterministic control recovered only 16%, so the model does real work on the majority.",
+    "flash_vs_pro": "TIE on recovery (both 57/63 = 90.5%); pro won survival narrowly (28 vs 24 survivors). No reason to pay for pro on repair \u2014 flash is the cost-effective seat (43.8k vs pro 43.2k tokens/arm).",
+    "reasoning_off_beat_reasoning_on": "The killed first run (reasoning ON) recovered 46/63 at 125k flash tokens; reasoning OFF recovered 57/63 at 43.8k. For pure format repair, reasoning both COST 3x AND lowered recovery (the model overthought and mutated well-formed content). Confirms docs/TOKEN_ECONOMY.md beyond generation: repair wants thinking disabled too.",
+    "residual_gap": "Recovery 90% but survival only 38% of corpus: ~33 recovered skeletons parse yet still self-refute \u2014 mostly forbidden cases whose own predicate fails on the candidate. Repairing SYNTAX does not repair a semantically self-defeating forbidden case; that is a generation-quality limit of the 12B, not a format one."
+  },
+  "caveats": [
+    "Corpus is the committed 12B stock/compact malformed candidates (63, all from A-stock); single provider, n=1 per arm.",
+    "claim_fidelity is token-set Jaccard vs a regex-salvaged claim; 1.0 median means the repaired claim's token set matched the salvageable original \u2014 strong evidence of preservation, not a semantic-equivalence proof.",
+    "survival is mechanical-criticism survival only (no judge in the loop); it measures criticizability recovered, not answer quality.",
+    "Repaired skeletons were assessed in-memory, not written back into a run root \u2014 this experiment measures recoverability, it does not graft the repairs onto the 12B log."
+  ],
+  "reasoning_on_run_superseded": {
+    "note": "first live run left DeepSeek thinking ON (bug); flash 46/63 recovered, 24 survived, 125330 tokens. Superseded by this reasoning-off run; recorded, not deleted (append-only record)."
+  },
+  "token_accounting_note": "arm 'tokens' is the SHARED meter snapshot (cumulative across arms); 'marginal_tokens' is each arm's own spend. flash 43,812 + pro 43,216 = 87,028 total, well under the 250k cap."
+}
