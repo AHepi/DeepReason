@@ -1,0 +1,92 @@
+# Pre-registration: repairing the 12B's failures with a stronger DeepSeek
+# model (flash + pro). Committed BEFORE any repair token is spent.
+#
+# Question: nemotron12b_report.json isolated the 12B's failures as FORMAT,
+# not content — 63 of the stock arm's candidates were refuted on arrival
+# for malformed JSON (missing delimiters, premature object close,
+# unescaped quotes, smart quotes) or JS-style predicates, while the
+# arrow-of-time reasoning inside them was intelligible. If the gap is
+# serialization rather than reasoning, a cheap repair PASS by a stronger
+# model should recover a majority of those lost candidates into valid,
+# criticizable skeletons WITHOUT regenerating their content — a harness
+# optimisation for small models that keeps the small model as the
+# generator and adds a capable model only as a JSON/predicate fixer.
+#
+# This spends ZERO new 12B tokens: the corpus is the committed malformed
+# candidates already on the log (runs/nemotron12b/A-12b-stock,
+# C-12b-compact). Repair runs on deepseek-v4-flash (cheap) and
+# deepseek-v4-pro (capable) via the paid key.
+
+hypothesis:
+  H-repair: >
+    The 12B's refuted-on-arrival candidates fail on FORMAT (JSON syntax
+    + predicate language), not content. A single-shot repair by a
+    stronger DeepSeek model recovers a MAJORITY of them into valid
+    skeletons that then survive mechanical criticism, while preserving
+    the original claim wording (repair, not regeneration). Flash
+    recovers nearly as well as pro at a fraction of the cost.
+
+corpus:
+  the malformed candidates from the committed 12B stock/compact roots
+  (parse_skeleton == None). Frozen at experiment start; count and the
+  per-reason breakdown recorded in the report. No 12B calls.
+
+definitions:
+  recovered: repaired output parses as a Skeleton (checks.parse_skeleton
+    != None) AND forbids >= 1 case.
+  survived: a recovered skeleton whose mechanical checks (checks.run_checks)
+    return NO failure — i.e. it is a genuine live survivor, not merely
+    parseable. This is the real target: parseable-but-self-refuting
+    repairs do not count.
+  claim_fidelity: token-set Jaccard (gate.normalize) between the repaired
+    skeleton's claim and the claim string salvaged from the malformed
+    original by regex. Guards against the "repair" silently regenerating
+    new content. Reported as median over recovered items.
+  cost: repair tokens (meter, every call logged) and USD from the
+    provider usage, per arm.
+
+design:
+  arms (each processes the SAME frozen corpus, one repair call per item,
+  repair prompt identical across arms — only the model differs):
+    R-mechanical (control, ZERO tokens): a deterministic fixer
+      (straight-quote normalisation, strip non-JSON control chars,
+      truncate trailing data after the first balanced object). Floors how
+      much recovery needs a model at all.
+    R-flash: deepseek-v4-flash, temperature 0.0, max_tokens 1200.
+    R-pro:   deepseek-v4-pro,   temperature 0.0, max_tokens 1200.
+  repair prompt states the target skeleton schema, instructs FIX-ONLY
+  (correct JSON syntax; predicates must be PYTHON expressions over the
+  string variable `content`, e.g. len(content) > 10; preserve claim /
+  mechanism / scope wording verbatim where legible), and RETURN ONLY the
+  corrected JSON. Repaired outputs are validated by the committed
+  checks.py / parse_skeleton — the same code that judged them malformed.
+
+predictions:  # committed before the first repair token
+  P1 (primary, H-repair): R-flash recovered/corpus >= 0.50 AND
+    R-flash survived/corpus >= 0.33 (a third of the lost candidates
+    become genuine live survivors). Both clauses or H-repair REFUTED.
+  P2 (pro >= flash): R-pro recovered/corpus >= R-flash recovered/corpus.
+    REFUTED if pro recovers fewer (would mean flash is already at the
+    ceiling and pro adds nothing / hurts).
+  P3 (repair not regeneration): median claim_fidelity over R-flash
+    recovered items >= 0.50. If < 0.50 the pass is effectively
+    regenerating content and H-repair's "repair" claim is REFUTED even
+    if recovery is high (reported separately from P1).
+  P4 (control context): R-mechanical recovered/corpus is reported; if it
+    alone is >= 0.50, the model is not needed for the majority and the
+    finding shifts to "the harness should self-repair" — reported as an
+    unpredicted result, not a refutation of P1.
+
+decision_rules:
+  - Each prediction independent CONFIRMED/REFUTED/UNDECIDED (undecided =
+    an arm aborted on transport/budget before the whole corpus ran).
+  - No verdict cites a metric not defined above.
+  - Cost is observational, never a verdict input.
+  - No code change to minireason/ or src/ from this experiment alone; a
+    change proposal must cite the report (SELF_IMPROVEMENT §2 step 5).
+
+budget: <= 250k DeepSeek tokens hard cap across both live arms
+  (63 items x 2 arms x ~1.5k tokens ~= 190k expected). Balance $5.04.
+
+# ---------------------------------------------------------------------
+# result: (appended after the run; prereg above this line is frozen)
