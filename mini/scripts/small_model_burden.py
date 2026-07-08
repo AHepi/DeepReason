@@ -13,9 +13,11 @@ Usage: DEEPSEEK_API_KEY=... python mini/scripts/small_model_burden.py [--budget 
 """
 
 import argparse
+import http.client
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 MINI = Path(__file__).resolve().parents[1]
@@ -24,7 +26,29 @@ sys.path.insert(0, str(MINI))
 from minireason import call as llm  # noqa: E402
 from minireason import loop as loop_mod  # noqa: E402
 from minireason.checks import parse_skeleton  # noqa: E402
+from minireason.log import replay  # noqa: E402
 from minireason.loop import ConjOut, Session, run  # noqa: E402
+
+
+class RobustEndpoint(llm.HttpEndpoint):
+    """OBSERVED FAILURE MODE (arm C, live): http.client.IncompleteRead is an
+    HTTPException, which the committed retry net in HttpEndpoint.complete
+    does not cover — the fault crashed the whole battery instead of
+    retrying. Contained here at the experiment layer; the call.py fix is a
+    CANDIDATE recorded in the report, not applied (SELF_IMPROVEMENT §2
+    step 5: code changes only with a citing report). The failed attempt's
+    provider-side spend is unknowable and not logged — accounting caveat."""
+
+    def complete(self, prompt: str) -> str:
+        last: Exception | None = None
+        for delay in (2, 4, None):
+            try:
+                return super().complete(prompt)
+            except http.client.HTTPException as e:
+                last = e
+                if delay is not None:
+                    time.sleep(delay)
+        raise llm.EndpointError(f"http-layer fault after retries: {last}")
 
 PROBLEMS = [  # the committed smoke problems, same order, every arm
     ("pi-bronze", "Why did the Late Bronze Age interstate system collapse "
@@ -128,30 +152,51 @@ def arm_metrics(root: Path) -> dict:
     }
 
 
+def replay_ok(root: Path) -> bool:
+    """Byte-replay invariant (G2), post-hoc: two replays, equal digests."""
+    return replay(root).digest() == replay(root).digest()
+
+
 def run_arm(name: str, model: str, prompt_fn, schema_cls, vs_k: int,
-            neighbourhood: int, budget: int, endpoint_factory) -> dict:
+            neighbourhood: int, budget: int, endpoint_factory,
+            resume: bool = False) -> dict:
     root = Path("runs/small_burden") / name
+    result_path = root / "arm_result.json"
+    if resume and result_path.exists():
+        print(f"(resume: loading committed result for {name})", flush=True)
+        return json.loads(result_path.read_text())
+    arm_budget, resumed_from = budget, 0
+    if resume and (root / "log.jsonl").exists():
+        resumed_from = Session(root).state.logged_tokens()
+        arm_budget = max(0, budget - resumed_from)
+        print(f"(resume: {name} continues, {resumed_from} tokens already "
+              f"logged, {arm_budget} remaining)", flush=True)
     original_prompt, original_schema = loop_mod._prompt, loop_mod.ConjOut
     loop_mod._prompt = prompt_fn or original_prompt
     loop_mod.ConjOut = schema_cls
     try:
-        summary = run(PROBLEMS, endpoint_factory(model), budget=budget,
+        summary = run(PROBLEMS, endpoint_factory(model), budget=arm_budget,
                       root=root, vs_k=vs_k, neighbourhood=neighbourhood,
                       max_cycles=60)
     finally:
         loop_mod._prompt, loop_mod.ConjOut = original_prompt, original_schema
     metrics = arm_metrics(root)
-    # prompt-side spend from the meter snapshot (burden documentation)
+    # prompt-side spend from the meter snapshot (burden documentation);
+    # covers this process's calls only — resumed arms note the partiality
     tk = summary["tokens"]
     metrics["avg_prompt_tokens_per_call"] = (
         round(tk["prompt_tokens"] / tk["calls"]) if tk["calls"] else None)
     metrics["avg_completion_tokens_per_call"] = (
         round(tk["completion_tokens"] / tk["calls"]) if tk["calls"] else None)
-    return {"arm": name, "model": model, "vs_k": vs_k,
-            "neighbourhood": neighbourhood,
-            "prompt_variant": "terse" if prompt_fn else "stock",
-            "run_summary": summary, "metrics": metrics,
-            "meter_equals_log": summary["meter_equals_log"]}
+    result = {"arm": name, "model": model, "vs_k": vs_k,
+              "neighbourhood": neighbourhood,
+              "prompt_variant": "terse" if prompt_fn else "stock",
+              "resumed_from_tokens": resumed_from or None,
+              "run_summary": summary, "metrics": metrics,
+              "meter_equals_log": summary["meter_equals_log"],
+              "replay_ok": replay_ok(root)}
+    result_path.write_text(json.dumps(result, indent=2) + "\n")
+    return result
 
 
 def evaluate(arms: dict) -> dict:
@@ -217,6 +262,9 @@ def main() -> int:
     parser.add_argument("--budget", type=int, default=30_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
     parser.add_argument("--mock", action="store_true")
+    parser.add_argument("--resume", action="store_true",
+                        help="load finished arms from arm_result.json; "
+                             "continue partial arms with remaining budget")
     parser.add_argument("--out", default=str(
         MINI.parent / "experiments" / "results" / "small_model_burden_report.json"))
     args = parser.parse_args()
@@ -232,14 +280,14 @@ def main() -> int:
         budget = args.budget
 
         def factory(model):
-            return llm.HttpEndpoint(args.base_url, model, api_key=api_key,
-                                    temperature=1.0, max_tokens=4000)
+            return RobustEndpoint(args.base_url, model, api_key=api_key,
+                                  temperature=1.0, max_tokens=4000)
 
     arms = {}
     for name, model, prompt_fn, schema_cls, vs_k, nb in ARMS:
         print(f"--- arm {name} ({model}, vs_k={vs_k}, nb={nb}) ---", flush=True)
         arms[name] = run_arm(name, model, prompt_fn, schema_cls, vs_k, nb,
-                             budget, factory)
+                             budget, factory, resume=args.resume)
         print(json.dumps(arms[name]["metrics"], indent=2), flush=True)
 
     report = {
@@ -249,7 +297,9 @@ def main() -> int:
         "problems": [p for p, _ in PROBLEMS],
         "arms": arms,
         "predictions": evaluate(arms),
-        "accounting": {n: a["meter_equals_log"] for n, a in arms.items()},
+        "accounting": {n: {"meter_equals_log": a.get("meter_equals_log"),
+                           "replay_ok": a.get("replay_ok")}
+                       for n, a in arms.items()},
     }
     Path(args.out).write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report["predictions"], indent=2))
