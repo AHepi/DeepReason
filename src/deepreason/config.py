@@ -101,6 +101,15 @@ class Config(BaseModel):
     # (generator_wf: compile/yield/novelty) — no judge. 0 disables.
     GEN_PROPOSE_PERIOD: int = 5
     GEN_MAX: int = 3
+    # Proposed properties (rules/experiment.py): every this-many cycles, ask
+    # the property_designer role to conjecture correctness properties the
+    # problem statement demands but the current checker does not enforce.
+    # Adjudication: checker_wf (mechanical non-vacuity) + cross-family
+    # relevance trial (unanimity) + population wipeout guard at use time +
+    # the source-artifact att closure (refute the property => its verdicts
+    # collapse). Requires the property_designer AND judge roles. 0 disables.
+    PROP_PROPOSE_PERIOD: int = 7
+    PROP_MAX: int = 3
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

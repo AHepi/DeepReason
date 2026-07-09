@@ -357,7 +357,8 @@ class Scheduler:
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()
         self._experiment_step()
-        self._fuzz_sweep()  # after experiment step: new designs re-probe NOW
+        self._property_step()
+        self._fuzz_sweep()  # after design steps: new probes/oracles apply NOW
         self._research_step()
         self._audit_step()
         self._capture_step()
@@ -410,8 +411,14 @@ class Scheduler:
                 for cid in artifact.interface.commitments
             ):
                 continue
+            from deepreason.rules.crit import QUARANTINE_TICK
+
+            tick = QUARANTINE_TICK[0]
             crit_fuzz(harness, aid, config)
-            if harness.state.status.get(aid) == Status.ACCEPTED:
+            if (
+                harness.state.status.get(aid) == Status.ACCEPTED
+                and QUARANTINE_TICK[0] == tick  # no verdict pending population
+            ):
                 self._fuzz_clean.add(aid)
 
     def _experiment_step(self) -> None:
@@ -448,6 +455,43 @@ class Scheduler:
                     return
                 if survivors:
                     self._fuzz_clean.clear()  # new experiments: re-probe everyone
+                return  # one design call per due cycle (budgeted)
+
+    def _property_step(self) -> None:
+        """Property conjecture (rules/experiment.py): every PROP_PROPOSE_PERIOD
+        cycles, ONE property-designer call for the first property oracle whose
+        active-property count is below PROP_MAX. Requires the judge ensemble
+        (the relevance trial is part of admission — no judges, no proposals:
+        fail closed). Activation clears the fuzz-clean cache: a stronger
+        oracle re-probes everything."""
+        config = self.config
+        if (
+            config.PROP_PROPOSE_PERIOD <= 0
+            or config.FUZZ_N <= 0
+            or self._cycles % config.PROP_PROPOSE_PERIOD != 0
+            or not self.adapter.has_role("property_designer")
+            or not self.adapter.has_role("judge")
+        ):
+            return
+        from deepreason.oracle import PROPERTY_PROGRAM
+        from deepreason.rules.experiment import active_properties, propose_properties
+
+        for problem in self.harness.state.problems.values():
+            for cid in problem.criteria:
+                base = self.harness.commitments.get(cid)
+                if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+                    continue
+                if len(active_properties(self.harness, cid)) >= config.PROP_MAX:
+                    continue
+                try:
+                    activated = propose_properties(
+                        self.harness, base, problem, self.adapter, config
+                    )
+                except (SchemaRepairError, EndpointError) as e:
+                    self._drop(e)
+                    return
+                if activated:
+                    self._fuzz_clean.clear()  # stronger oracle: re-probe everyone
                 return  # one design call per due cycle (budgeted)
 
     def _research_step(self) -> None:

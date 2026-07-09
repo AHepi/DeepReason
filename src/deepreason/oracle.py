@@ -353,7 +353,11 @@ def counterexample_commitment(base: Commitment, args) -> Commitment | None:
 
 
 def fuzz_property(
-    source: str, base: Commitment, fuzz_n: int, generator: str | None = None
+    source: str,
+    base: Commitment,
+    fuzz_n: int,
+    generator: str | None = None,
+    checker: str | None = None,
 ) -> tuple[list | None, dict]:
     """The harness's OWN experimenter — deterministic property-based fuzzing
     (QuickCheck inside the criticism loop). Enumerate ``gen(0..fuzz_n-1)`` from
@@ -370,11 +374,20 @@ def fuzz_property(
     ``generator`` overrides the spec's own — this is how EXPERIMENTER-proposed
     generators (rules/experiment.py) plug in. Soundness is generator-
     independent by construction: whoever wrote gen, the frozen gate admits
-    each input and the frozen checker decides each violation."""
+    each input and the checker decides each violation.
+
+    ``checker`` overrides the spec's checker — this is how PROPOSED PROPERTIES
+    plug in. Unlike generators, a checker DOES decide verdicts, so an override
+    is only as trustworthy as its own adjudication: callers must gate it
+    (checker_wf + relevance trial + wipeout guard, rules/experiment.py) and
+    mint the violation against a commitment that DECLARES its source artifact,
+    so refuting the property collapses its refutations (edges.py closure)."""
     spec = _load_spec(base.budget)
     generator = generator or spec.get("generator")
     if base.eval != f"program:{PROPERTY_PROGRAM}" or not generator:
         return None, {"fuzzed": 0, "note": "no generator in spec"}
+    if checker is None:
+        checker = spec["checker"]
     gen, gerr = _compile(generator, "gen")
     if gerr:
         return None, {"fuzzed": 0, "note": f"generator unusable: {gerr}"}
@@ -412,7 +425,7 @@ def fuzz_property(
             sys.settrace(previous)
         tried += 1
         verdict, detail = run_property(
-            source, spec["entry"], [candidate_input], spec["checker"], limit
+            source, spec["entry"], [candidate_input], checker, limit
         )
         if verdict == FAIL:
             return candidate_input, {"fuzzed": tried, "k": k, **detail}
@@ -511,6 +524,145 @@ def check_generator_from_spec(source: str, budget) -> tuple:
         int(spec.get("probe_n", _GEN_PROBE_N)),
         int(spec.get("min_valid", _GEN_MIN_VALID)),
         int(spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Proposed PROPERTIES (rules/experiment.py): conjectured ground truth.
+#
+# A checker is NOT a generator: it decides verdicts, so a bogus one can refute
+# correct code. The defense is layered, and none of it is a judge deciding a
+# status by fiat:
+#   1. checker_wf (here): mechanical — compiles under the guard, runs bounded,
+#      and is NON-VACUOUS (rejects at least one degenerate output on a probe
+#      input; a checker that accepts everything can never refute anything but
+#      could be used to feign rigor).
+#   2. Relevance trial (rules/experiment.py): cross-family judge ensemble on
+#      the narrow question "does this follow from the problem statement?" —
+#      the §3 sanctioned path for informal claims.
+#   3. Wipeout guard at use time: a property every accepted sibling also
+#      violates refutes the population, not a candidate — quarantined.
+#   4. The structural safety net (edges.py): every violation is minted against
+#      a commitment that DECLARES source_artifact = the property; the att
+#      closure gives the property's attackers an edge onto each verdict's nu,
+#      so refuting the property REINSTATES everything it felled. Nothing an
+#      LLM proposes ever becomes unaccountable ground truth.
+# ---------------------------------------------------------------------------
+
+CHECKER_PROGRAM = "checker_wf"
+# Degenerate outputs no legitimate correctness property should bless for
+# every input: the empty list, zero, the empty string, None, and the echoed
+# input. Fixed battery => deterministic verdicts.
+_VACUITY_BATTERY = ([], 0, "", None, "echo-input")
+
+
+def check_checker(
+    source: str,
+    probe_inputs: list,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+) -> tuple[str, dict]:
+    """Well-formedness of a proposed property checker: compiles under the
+    guard, exposes check(inp, out), stays within the step bound on the probe
+    battery, and REJECTS (falsy or raise) at least one degenerate output on
+    at least one probe input — non-vacuity. Deterministic pure function of
+    the source."""
+    check, err = _compile(source, "check")
+    if err:
+        return FAIL, {"error": f"checker: {err}"}
+
+    steps = [0]
+
+    def _tracer(frame, event, arg):
+        if event == "line":
+            steps[0] += 1
+            if steps[0] > step_limit:
+                raise _StepExceeded()
+        return _tracer
+
+    rejected_any = False
+    for args in probe_inputs[:4]:
+        for degenerate in _VACUITY_BATTERY:
+            out = args if degenerate == "echo-input" else degenerate
+            steps[0] = 0
+            previous = sys.gettrace()
+            sys.settrace(_tracer)
+            try:
+                if not check(args, out):
+                    rejected_any = True
+            except Exception:  # noqa: BLE001 - rejection by exception counts
+                rejected_any = True
+            finally:
+                sys.settrace(previous)
+            if rejected_any:
+                break
+        if rejected_any:
+            break
+    if not rejected_any:
+        return FAIL, {"error": "vacuous checker: accepts every degenerate output "
+                               "on every probe input — it can never refute anything"}
+    return PASS, {"non_vacuous": True, "probes": len(probe_inputs[:4])}
+
+
+def check_checker_from_spec(source: str, budget) -> tuple:
+    """programs.py entry point for checker_wf commitments."""
+    spec = _load_spec(budget)
+    if "inputs" not in spec:
+        return OVERRUN, {"error": "checker-wf spec missing inputs"}
+    return check_checker(
+        source, spec["inputs"], int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
+    )
+
+
+def checker_wf_commitment(base: Commitment) -> Commitment | None:
+    """Content-addressed checker-wf commitment derived from a property oracle:
+    freezes the base's probe inputs. A proposed-property artifact carrying
+    this commitment is adjudicated mechanically on arrival by crit_program."""
+    if base.eval != f"program:{PROPERTY_PROGRAM}":
+        return None
+    base_spec = _load_spec(base.budget)
+    if not base_spec.get("entry"):
+        return None
+    spec = {
+        "for": base.id,
+        "inputs": base_spec.get("inputs", [])[:4],
+        "step_limit": int(base_spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
+    }
+    digest = sha256_hex(canonical_json(spec))[:12]
+    return Commitment(
+        id=f"chk-wf@{digest}",
+        eval=f"program:{CHECKER_PROGRAM}",
+        budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
+    )
+
+
+def property_violation_commitment(
+    base: Commitment, property_artifact_id: str, property_source: str, args: list
+) -> Commitment:
+    """Mint the commitment for a proposed-property violation: a property
+    oracle whose single input is the violating args and whose CHECKER is the
+    property's own source, frozen at mint time (later edits to the property
+    artifact cannot rewrite past verdicts — D8-friendly). The property
+    artifact id is DECLARED as source_artifact both inside the content-
+    addressed spec and as a top-level budget key, which the att closure
+    (edges.py) reads: attackers of the property attack every nu hanging on
+    this commitment, so refuting the property reinstates its victims."""
+    base_spec = _load_spec(base.budget)
+    spec = {
+        "entry": base_spec.get("entry"),
+        "inputs": [args],
+        "checker": property_source,
+        "input_check": base_spec.get("input_check"),
+        "step_limit": int(base_spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
+        "source_artifact": property_artifact_id,
+    }
+    digest = sha256_hex(canonical_json(spec))[:12]
+    return Commitment(
+        id=f"prop-oracle@{digest}",
+        eval=f"program:{PROPERTY_PROGRAM}",
+        budget=Budget(extra={
+            "spec": json.dumps(spec, sort_keys=True),
+            "source_artifact": property_artifact_id,
+        }),
     )
 
 

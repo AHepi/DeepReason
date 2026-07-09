@@ -73,6 +73,20 @@ class ExperimenterOutput(BaseModel):
     generators: list[str] = Field(min_length=1)
 
 
+class PropertyProposal(BaseModel):
+    """One conjectured correctness property: ``claim`` states in one sentence
+    what requirement of the PROBLEM STATEMENT the checker encodes (the
+    relevance trial arbitrates exactly this claim); ``checker`` is the full
+    source of ``def check(inp, out)``."""
+
+    claim: str = Field(min_length=1)
+    checker: str = Field(min_length=1)
+
+
+class PropertyDesignerOutput(BaseModel):
+    properties: list[PropertyProposal] = Field(min_length=1)
+
+
 class VariatorEdit(BaseModel):
     content: str
 

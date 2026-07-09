@@ -274,6 +274,51 @@ def render_experiment_pack(
     return _clip("\n".join(lines), token_budget)
 
 
+def render_property_pack(
+    base: Commitment,
+    problem_description: str,
+    existing_claims: list[str],
+    token_budget: int,
+    n_properties: int = 2,
+) -> str:
+    """Property-design pack (rules/experiment.py): the PROBLEM STATEMENT (the
+    sole source of legitimacy) plus the oracle's current spec. Deliberately
+    shows NO candidate code — a property derived from code enshrines the
+    code's bugs; a property derived from the problem statement tests them."""
+    try:
+        spec = json.loads(base.budget.extra.get("spec", "{}"))
+    except (ValueError, AttributeError):
+        spec = {}
+    lines = [
+        "PROBLEM STATEMENT (the sole source of legitimacy for any property):",
+        problem_description,
+        "",
+        f"PROPERTY ORACLE {base.id}",
+        f"entry point: {spec.get('entry')}",
+        f"frozen example inputs (positional-args lists): "
+        f"{json.dumps(spec.get('inputs', [])[:4])}",
+    ]
+    contract = spec.get("input_contract")
+    if contract:
+        lines.append(f"INPUT CONTRACT: {contract}")
+    checker = spec.get("checker")
+    if checker:
+        lines += ["", "CURRENT checker — find requirements the problem states "
+                      "that this does NOT enforce:", checker]
+    if existing_claims:
+        lines += ["", "ALREADY-ACTIVE PROPERTY CLAIMS (do not duplicate):"]
+        lines += [f"- {c[:160]}" for c in existing_claims]
+    lines += [
+        "",
+        f"DIRECTIVE: return at most {n_properties} properties, each targeting "
+        "a DIFFERENT unenforced requirement. If the current checker already "
+        "enforces everything the problem states, return one property that "
+        "restates the weakest-enforced requirement more strictly ONLY if the "
+        "problem statement actually demands it.",
+    ]
+    return _clip("\n".join(lines), token_budget)
+
+
 def render_cx_retry_pack(
     rejected: list[dict],
     state: EpistemicState,

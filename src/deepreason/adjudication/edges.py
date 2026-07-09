@@ -12,6 +12,15 @@
   standard attacks the nu. Refute a standard => every nu citing it is
   attacked => every warrant under it falls => targets reinstate, all in
   pass 1.
+- Source-artifact closure (proposed properties): a commitment minted from a
+  PROPOSED artifact (e.g. an LLM-conjectured property checker) declares it
+  as budget.extra["source_artifact"]; every attacker of that artifact
+  attacks the nu of every warrant under the commitment. Refute the property
+  => every verdict it produced falls => its victims reinstate. This is what
+  makes LLM-proposed ground truth accountable: the verdicts stand exactly as
+  long as their source does. (Generator credit is deliberately NOT load-
+  bearing — a generator only chose where to look, so it is a MENTION on the
+  nu with no closure.)
 
 Edges materialize only when both endpoints are registered: refs/targets may
 dangle (import/merge order, §14) and take effect when the target appears.
@@ -104,6 +113,16 @@ def build_att(
                     }
                     for x, target in list(att):
                         if target in standards and (x, nu) not in att:
+                            att.add((x, nu))
+                            changed = True
+            # Source-artifact closure: attackers of the declared source
+            # (a proposed property checker) attack the nu — refuting the
+            # property collapses every verdict minted from it.
+            if kappa is not None and kappa.budget.extra.get("source_artifact"):
+                source = kappa.budget.extra["source_artifact"]
+                if source in artifacts:
+                    for x, target in list(att):
+                        if target == source and (x, nu) not in att:
                             att.add((x, nu))
                             changed = True
             # Validity-node closure: attackers of nu attack the carrier.

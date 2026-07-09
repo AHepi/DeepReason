@@ -115,6 +115,17 @@ def _generator_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     return check_generator_from_spec(text, budget)
 
 
+def _checker_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Mechanical admission for a PROPOSED property checker (oracle.py):
+    compiles under the guard, bounded, and non-vacuous (rejects at least one
+    degenerate output). Deliberately narrow: whether the property FOLLOWS
+    FROM THE PROBLEM is an informal claim and goes to the relevance trial
+    (rules/experiment.py), never to a program."""
+    from deepreason.oracle import check_checker_from_spec
+
+    return check_checker_from_spec(text, budget)
+
+
 def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
     """Structural born-connected check (§7 L1): a candidate on a connection
     problem must carry a `dependence` ref into the problem's declared lineage
@@ -149,6 +160,7 @@ PROGRAMS = {
     "exec_oracle": _exec_oracle,
     "property_oracle": _property_oracle,
     "generator_wf": _generator_wf,
+    "checker_wf": _checker_wf,
 }
 
 

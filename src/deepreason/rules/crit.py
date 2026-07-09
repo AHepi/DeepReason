@@ -133,6 +133,13 @@ def crit_program(harness, target_id: str) -> list[Artifact]:
     return critics
 
 
+# Deterministic tick incremented whenever a property violation is quarantined
+# (population not yet supporting): the scheduler's fuzz sweep snapshots it to
+# avoid marking such a target clean — the verdict is pending population
+# growth, not settled. Derived from deterministic control flow (replay-safe).
+QUARANTINE_TICK = [0]
+
+
 def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
     """Deterministic fuzz criticism (§3): the HARNESS experiments, no LLM. For
     each property-oracle commitment on the target that carries a generator,
@@ -206,6 +213,97 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
                 nu_interface=nu_interface,
                 trace_ref=harness.blobs.put(canonical_json(trace)),
             )
+        # The trusted spec checker found nothing: probe with ACTIVE proposed
+        # properties (conjectured ground truth — checker_wf'd, trial-passed,
+        # wipeout-guarded, and collapsible via the source-artifact closure).
+        prop_critic = _crit_proposed_properties(
+            harness, target_id, base, source, probes, config
+        )
+        if prop_critic is not None:
+            return prop_critic
+    return None
+
+
+def _crit_proposed_properties(
+    harness, target_id: str, base, source: str, probes: list, config
+) -> Artifact | None:
+    """Fuzz the target against each ACTIVE proposed property: frozen inputs
+    first (cheapest), then every generator probe. A violation grounds a
+    DEMONSTRATIVE warrant only if the population supports the property (at
+    least one accepted sibling passes it — otherwise the property is indicting
+    everyone and is quarantined). The minted commitment DECLARES the property
+    as source_artifact, so the att closure (edges.py) makes the property's
+    attackers attack this verdict's nu: refute the property and the target
+    reinstates. Deterministic given the graph; no LLM calls."""
+    from deepreason.oracle import (
+        _load_spec,
+        admit_counterexample,
+        fuzz_property,
+        property_violation_commitment,
+        run_property,
+    )
+    from deepreason.rules.experiment import active_properties, population_supports
+
+    spec = _load_spec(base.budget)
+    entry, frozen = spec.get("entry"), spec.get("inputs", [])
+    for prop_id, claim, prop_source in active_properties(harness, base.id):
+        violation = None
+        if entry and frozen:
+            verdict, d = run_property(source, entry, frozen, prop_source)
+            if verdict == programs.FAIL and "case" in d:
+                violation = frozen[d["case"]]
+        if violation is None:
+            for _, gen_source in probes:
+                found, _detail = fuzz_property(
+                    source, base, config.FUZZ_N, generator=gen_source,
+                    checker=prop_source,
+                )
+                if found is not None:
+                    candidate, _ = admit_counterexample(base, found)
+                    if candidate is None:
+                        continue  # out-of-gate input: never grounds
+                    violation = found
+                    break
+        if violation is None:
+            continue
+        if not population_supports(harness, base, prop_source, target_id):
+            QUARANTINE_TICK[0] += 1  # sweep must NOT mark this target clean
+            harness.record_measure(
+                inputs=["property-wipeout-quarantine", prop_id, target_id]
+            )
+            continue
+        cx = property_violation_commitment(base, prop_id, prop_source, violation)
+        verdict, trace = programs.evaluate(
+            cx, harness.state.artifacts[target_id], harness.blobs
+        )
+        if verdict != programs.FAIL:
+            continue
+        harness.register_commitment(cx)
+        if verdict_on_record(harness, cx.id, target_id):
+            continue
+        from deepreason.ontology import Interface, Ref
+        from deepreason.ontology.artifact import RefRole
+
+        return register_fail_warrant(
+            harness,
+            commitment_id=cx.id,
+            target_id=target_id,
+            nu_content=(
+                f"nu: proposed-property verdict of {cx.id} on {target_id} is "
+                f"sound — property {prop_id} ({claim[:80]}) was checker-wf'd, "
+                f"trial-validated, and population-supported; refute the "
+                f"property and this verdict falls with it"
+            ),
+            critic_content=(
+                f"critic: input {canonical_json(violation).decode()} violates "
+                f"proposed property {prop_id[:12]} ({claim[:80]}) on "
+                f"{target_id[:12]}"
+            ),
+            # Load-bearing source is DECLARED on the commitment (closure);
+            # the MENTION here is for readers and reach.
+            nu_interface=Interface(refs=[Ref(target=prop_id, role=RefRole.MENTION)]),
+            trace_ref=harness.blobs.put(canonical_json(trace)),
+        )
     return None
 
 

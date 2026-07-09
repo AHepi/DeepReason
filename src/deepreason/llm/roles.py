@@ -95,6 +95,26 @@ TEMPLATES = {
         "a plain string with real newlines — no markdown fences.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "property_designer": (
+        "You are the property designer: you conjecture CORRECTNESS PROPERTIES "
+        "the problem statement demands but the current checker does not "
+        "enforce. Read the PROBLEM STATEMENT (the sole source of legitimacy — "
+        "you are shown no candidate code, so you cannot enshrine anyone's "
+        "bugs) and the CURRENT checker, and find requirements stated in the "
+        "problem that the checker fails to test. For each, return: claim — "
+        "ONE sentence naming the requirement, quoting the problem statement's "
+        "own words where possible (independent judges will rule on whether "
+        "the claim follows from the statement); checker — the complete source "
+        "of `def check(inp, out)` returning True iff the candidate output "
+        "`out` satisfies the property for input `inp` (inp is the positional-"
+        "args list). A checker that accepts every degenerate output is "
+        "refuted as vacuous; a checker stricter than the problem statement "
+        "will be refuted at trial and its verdicts voided. HARD SANDBOX "
+        "CONSTRAINTS: builtins only — no import statements, no underscore/"
+        "dunder names, no `**`, no integer literals above 1000000; check must "
+        "be a PURE function. Return sources as plain strings with real "
+        "newlines — no markdown fences.\n\n" + _JSON_ONLY + "{pack}"
+    ),
     "spec_generator": (
         "You are the diversity-specification generator: you design ORTHOGONAL "
         "outlines that later candidates must each realize. You produce "
