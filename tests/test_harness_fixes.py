@@ -11,6 +11,7 @@
 from deepreason.capture import detection
 from deepreason.config import Config
 from deepreason.llm.embedder import HashingEmbedder
+from deepreason.llm.packs import render_conj_pack
 from deepreason.ontology import (
     Commitment,
     Interface,
@@ -57,6 +58,55 @@ def test_remove_arbitrariness_carries_root_description_and_criteria(harness):
     n = len(harness.state.problems)
     scan_spawns(harness, Config())
     assert len(harness.state.problems) == n
+
+
+def test_ra_conjecture_pack_is_anchored_not_drifting(harness):
+    """The drift problem, end-to-end: the remove-arbitrariness re-attempt used
+    to be conditioned on a contextless "remove arbitrariness of <id>" pack, so
+    the generator had nothing holding it to the topic and long runs wandered
+    off-problem. This checks the fix at the point that actually matters — the
+    rendered conjecture pack the generator sees — and contrasts it with the
+    pre-fix contextless pack to guard against regressing the description."""
+    harness.register_commitment(Commitment(id="c-fmt", eval="predicate:True"))
+    harness.register_problem(
+        Problem(
+            id="pi-root",
+            description="explain the SPECIFIC_ROOT_TOPIC in concrete terms",
+            criteria=["c-fmt"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    a = harness.create_artifact(
+        "a candidate answer",
+        interface=Interface(commitments=["c-fmt"]),
+        provenance=Provenance(role="conjecturer"),
+        problem_id="pi-root",
+    )
+    harness.record_measure(hv={a.id: 0.1})
+    scan_spawns(harness, Config())
+    ra = harness.state.problems[f"ra:{a.id[:12]}"]
+
+    budget = Config().PACK_TOKEN_BUDGET
+    anchored = render_conj_pack(
+        ra, harness.state, harness.commitments, harness.blobs, vs_k=3, token_budget=budget
+    )
+    # The generator is now conditioned on the ORIGINAL problem => it cannot
+    # drift off-topic the way the contextless loop did.
+    assert "SPECIFIC_ROOT_TOPIC" in anchored
+
+    # Regression guard: the pre-fix contextless ra description carries no topic.
+    bare = Problem(
+        id="ra-bare",
+        description=f"remove arbitrariness of accepted {a.id[:12]} (hv=0.10)",
+        criteria=[],
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": "remove-arbitrariness", "from": [a.id]}
+        ),
+    )
+    bare_pack = render_conj_pack(
+        bare, harness.state, harness.commitments, harness.blobs, vs_k=3, token_budget=budget
+    )
+    assert "SPECIFIC_ROOT_TOPIC" not in bare_pack
 
 
 def test_remove_arbitrariness_skips_artifacts_addressing_no_problem(harness):
