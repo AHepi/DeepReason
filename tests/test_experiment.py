@@ -232,3 +232,47 @@ def test_scheduler_designs_its_own_experiment_and_kills_the_trap(tmp_path):
     assert harness.state.status[trap.id] == Status.REFUTED
     w = next(w for w in harness.warrants.values() if w.target == trap.id)
     assert w.type == WarrantType.DEMONSTRATIVE  # killed by its own experiment
+
+
+def test_fuzz_sweep_is_not_rationed_behind_llm_slots(tmp_path):
+    """Deterministic criticism runs even when every ARG_CRIT_PER_CYCLE slot
+    is taken by fresh admits — fuzz costs sandbox steps, not tokens, so the
+    trap must die via _fuzz_sweep with ZERO leftover critic capacity."""
+    harness = Harness(tmp_path / "run")
+    base = _base()
+    harness.register_commitment(base)
+    harness.register_problem(
+        Problem(
+            id="pi-sort",
+            description="return the input list sorted ascending",
+            criteria=[base.id],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    trap = harness.create_artifact(
+        SNEAKY, codec="code:python",
+        interface=Interface(commitments=[base.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    good = json.dumps({"candidates": [
+        {"content": "def solve(xs):\n    return sorted(xs)", "typicality": 0.9},
+    ]})
+    gens = json.dumps({"generators": [GOOD_GEN]})
+    adapter = LLMAdapter(
+        {
+            "conjecturer": MockEndpoint([good, gens, good]),
+            "argumentative_critic": MockEndpoint(
+                lambda prompt: json.dumps({"attack": False, "case": ""})
+            ),
+        },
+        harness.blobs,
+        retry_max=2,
+    )
+    # ARG_CRIT_PER_CYCLE=1 and one fresh accepted admit per cycle: the
+    # standing arg-crit sweep NEVER gets a slot.
+    config = Config(VS_K=1, N_SCHOOLS=0, ARG_CRIT_PER_CYCLE=1,
+                    GEN_PROPOSE_PERIOD=1, GEN_MAX=1)
+    scheduler = Scheduler(harness, adapter, config)
+    scheduler.step()
+    scheduler.step()
+    assert harness.state.status[trap.id] == Status.REFUTED

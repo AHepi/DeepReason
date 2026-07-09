@@ -357,6 +357,7 @@ class Scheduler:
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()
         self._experiment_step()
+        self._fuzz_sweep()  # after experiment step: new designs re-probe NOW
         self._research_step()
         self._audit_step()
         self._capture_step()
@@ -377,6 +378,41 @@ class Scheduler:
             paraphrase_invariance_audit(self.harness, self.adapter, self.config)
         except (SchemaRepairError, EndpointError) as e:
             self._drop(e)
+
+    def _fuzz_sweep(self) -> None:
+        """Deterministic criticism is never rationed (§14): LLM criticism
+        queues behind ARG_CRIT_PER_CYCLE because calls cost tokens, but fuzz
+        costs sandbox steps only — so every cycle, re-probe EVERY standing
+        accepted candidate whose fuzz-clean bit is unset. The bit clears when
+        the generator pool grows (surviving yesterday's experiments is not
+        surviving today's). Without this, a target was only re-fuzzed when
+        the arg-crit sweep had leftover slots — a token-economy constraint
+        wrongly imposed on free criticism."""
+        config = self.config
+        if config.FUZZ_N <= 0:
+            return
+        from deepreason.oracle import PROPERTY_PROGRAM
+
+        harness = self.harness
+        property_eval = f"program:{PROPERTY_PROGRAM}"
+        for aid, artifact in list(harness.state.artifacts.items()):
+            if aid in self._fuzz_clean:
+                continue
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if (artifact.provenance.role if artifact.provenance else "") not in (
+                "conjecturer", "synthesizer", "seed"
+            ):
+                continue
+            if not any(
+                (kappa := harness.commitments.get(cid)) is not None
+                and kappa.eval == property_eval
+                for cid in artifact.interface.commitments
+            ):
+                continue
+            crit_fuzz(harness, aid, config)
+            if harness.state.status.get(aid) == Status.ACCEPTED:
+                self._fuzz_clean.add(aid)
 
     def _experiment_step(self) -> None:
         """Experiment design (rules/experiment.py): every GEN_PROPOSE_PERIOD
