@@ -458,6 +458,12 @@ def test_crit_pack_advertises_the_counterexample_recourse(harness):
     pack = render_crit_pack(art.id, harness.state, harness.commitments,
                             harness.blobs, token_budget=2500)
     assert "counterexample" in pack
+    # The critic can AIM: the frozen spec's entry, an example input, and the
+    # admission gate source are all visible (else it proposes out-of-spec
+    # inputs that ground nothing).
+    assert "entry point: solve" in pack
+    assert "example input" in pack
+    assert "def valid(inp):" in pack
     plain = harness.create_artifact("prose with no oracle")
     pack2 = render_crit_pack(plain.id, harness.state, harness.commitments,
                              harness.blobs, token_budget=2500)

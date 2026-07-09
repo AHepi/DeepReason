@@ -13,6 +13,8 @@ content, directives), so provider prefix caches bill the repeated head at
 the cached rate. Ordering is presentation only — zero epistemic content.
 """
 
+import json
+
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
 from deepreason.ontology.state import EpistemicState, Status
@@ -41,6 +43,35 @@ def _carries_execution_oracle(artifact, commitments: dict[str, Commitment]) -> b
         (kappa := commitments.get(cid)) is not None and kappa.eval in _EXECUTION_EVALS
         for cid in artifact.interface.commitments
     )
+
+
+def _execution_spec_lines(kappa: Commitment) -> list[str]:
+    """Render an execution commitment's frozen spec so critics can aim: the
+    entry point, one example input, and the counterexample admission gate. A
+    critic that cannot see the gate proposes out-of-spec inputs (integer node
+    ids, cyclic graphs) that ground nothing — the commitment is the declared
+    attack surface, so its spec belongs in the pack. Presentation only."""
+    if kappa.eval not in _EXECUTION_EVALS:
+        return []
+    try:
+        spec = json.loads(kappa.budget.extra.get("spec", "{}"))
+    except (ValueError, AttributeError):
+        return []
+    if not spec:
+        return []
+    example = None
+    if spec.get("inputs"):
+        example = spec["inputs"][0]
+    elif spec.get("tests"):
+        example = spec["tests"][0].get("in")
+    lines = [f"    entry point: {spec.get('entry')}"]
+    if example is not None:
+        lines.append(f"    example input (positional args): {json.dumps(example)}")
+    gate = spec.get("input_check")
+    if gate:
+        lines.append("    counterexample admission gate — def valid(inp) must return True:")
+        lines += [f"      {line}" for line in gate.splitlines()]
+    return lines
 
 
 def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> str:
@@ -150,6 +181,8 @@ def render_batch_crit_pack(
             seen.add(cid)
             kappa = commitments.get(cid)
             lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
+            if kappa is not None:
+                lines += _execution_spec_lines(kappa)
     content_chars = max(320, (token_budget * 2) // max(1, len(target_ids)))
     for tid in target_ids:
         target = state.artifacts[tid]
@@ -191,6 +224,8 @@ def render_crit_pack(
     for cid in target.interface.commitments:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
+        if kappa is not None:
+            lines += _execution_spec_lines(kappa)
     lines += [
         "",
         f"TARGET {target_id}",
