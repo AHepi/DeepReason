@@ -7,9 +7,21 @@ from deepreason import programs
 from deepreason.config import Config
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.oracle import exec_oracle_commitment, run, run_from_spec
-from deepreason.ontology import Interface, Provenance, Status
-from deepreason.rules.crit import crit_argumentative, crit_program, execution_backed
+from deepreason.ontology import Interface, Provenance, Status, WarrantType
+from deepreason.oracle import (
+    counterexample_commitment,
+    exec_oracle_commitment,
+    property_oracle_commitment,
+    run,
+    run_from_spec,
+    run_property,
+)
+from deepreason.rules.crit import (
+    crit_argumentative,
+    crit_argumentative_batch,
+    crit_program,
+    execution_backed,
+)
 
 DOUBLE = [{"in": [1], "out": 2}, {"in": [5], "out": 10}, {"in": [0], "out": 0}]
 
@@ -283,3 +295,170 @@ def test_pairwise_preference_still_refutes_a_non_execution_loser(harness):
     critic = pairwise_discriminate(harness, p, a.id, b.id, adapter, Config())
     assert critic is not None
     assert harness.state.status[b.id] == Status.REFUTED
+
+
+# ---- property oracle: reference-free execution verdicts ----
+
+# "return the input list sorted ascending" — correctness decided by a CHECKER
+# over (input, output); no expected outputs anywhere in the spec.
+CHECKER = (
+    "def check(inp, out):\n"
+    "    xs = inp[0]\n"
+    "    return isinstance(out, list) and sorted(xs) == out\n"
+)
+GATE = (
+    "def valid(inp):\n"
+    "    if not isinstance(inp, list) or len(inp) != 1:\n"
+    "        return False\n"
+    "    xs = inp[0]\n"
+    "    if not isinstance(xs, list) or len(xs) > 20:\n"
+    "        return False\n"
+    "    for x in xs:\n"
+    "        if not isinstance(x, int):\n"
+    "            return False\n"
+    "    return True\n"
+)
+SORT_INPUTS = [[[3, 1, 2]]]  # one frozen case: solve([3, 1, 2])
+GOOD_SORT = "def solve(xs):\n    return sorted(xs)"
+# Passes the frozen input (len 3) but mishandles short lists — the classic
+# incomplete-test-suite survivor that only a NEW input can expose.
+SNEAKY_SORT = (
+    "def solve(xs):\n"
+    "    if len(xs) > 2:\n"
+    "        return sorted(xs)\n"
+    "    return xs\n"
+)
+
+
+def test_property_pass_and_fail_without_reference_outputs():
+    assert run_property(GOOD_SORT, "solve", SORT_INPUTS, CHECKER)[0] == "pass"
+    verdict, detail = run_property(
+        "def solve(xs):\n    return xs", "solve", SORT_INPUTS, CHECKER
+    )
+    assert verdict == "fail" and detail["error"] == "property violated"
+
+
+def test_unusable_checker_is_overrun_not_candidate_fault():
+    verdict, detail = run_property(GOOD_SORT, "solve", SORT_INPUTS, "import os")
+    assert verdict == "overrun" and "checker" in detail["error"]
+
+
+def test_property_oracle_commitment_evaluates(harness):
+    c = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    art = harness.create_artifact(GOOD_SORT, codec="code:python")
+    assert programs.evaluable(c)
+    assert programs.evaluate(c, art, harness.blobs)[0] == "pass"
+
+
+def test_property_backed_candidate_counts_as_execution_backed(harness):
+    c = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    harness.register_commitment(c)
+    art = harness.create_artifact(
+        SNEAKY_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert execution_backed(harness, art.id) is True  # passes the frozen input
+
+
+def test_counterexample_commitment_admission():
+    base = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    ok = counterexample_commitment(base, [[2, 1]])
+    assert ok is not None and ok.id.startswith("prop-oracle@") and ok.id != base.id
+    assert counterexample_commitment(base, [[2, 1]]).id == ok.id  # content-addressed
+    assert counterexample_commitment(base, [["a", "b"]]) is None  # gate: not ints
+    assert counterexample_commitment(base, [list(range(30))]) is None  # gate: too long
+    assert counterexample_commitment(base, "not a list") is None
+    exec_base = exec_oracle_commitment("solve", DOUBLE)
+    assert counterexample_commitment(exec_base, [[2, 1]]) is None  # no checker
+
+
+# ---- the counterexample loop: critics refute by proposing NEW inputs ----
+
+def _property_candidate(harness, source):
+    c = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    harness.register_commitment(c)
+    art = harness.create_artifact(
+        source, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    return c, art
+
+
+def _cx_critic(harness, counterexample, case="fails on short lists"):
+    return LLMAdapter(
+        {"argumentative_critic": MockEndpoint([json.dumps(
+            {"attack": True, "case": case, "counterexample": counterexample}
+        )])},
+        harness.blobs,
+        retry_max=2,
+    )
+
+
+def test_counterexample_refutes_an_execution_backed_candidate(harness):
+    _, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    assert execution_backed(harness, sneaky.id) is True  # frozen tests missed the bug
+
+    critic = crit_argumentative(harness, sneaky.id, _cx_critic(harness, [[2, 1]]), Config())
+
+    assert critic is not None
+    assert harness.state.status[sneaky.id] == Status.REFUTED  # refuted by EXECUTION
+    w = next(w for w in harness.warrants.values() if w.target == sneaky.id)
+    assert w.type == WarrantType.DEMONSTRATIVE  # not an argument: a run verdict
+    assert w.commitment.startswith("prop-oracle@")
+    assert w.commitment in harness.commitments  # minted commitment is registered
+
+
+def test_passing_counterexample_grounds_nothing_and_supremacy_holds(harness):
+    _, good = _property_candidate(harness, GOOD_SORT)
+
+    critic = crit_argumentative(harness, good.id, _cx_critic(harness, [[2, 1]]), Config())
+
+    assert critic is None  # solve([2,1]) == [1,2]: property held, argument overridden
+    assert harness.state.status[good.id] == Status.ACCEPTED
+    last = list(harness.log.read())[-1]
+    assert last.inputs == ["arg-crit-overridden-by-execution", good.id]
+
+
+def test_gate_rejected_counterexample_grounds_nothing(harness):
+    _, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    # ["a", "b"] would break sneaky's sort, but the problem never posed string
+    # inputs: the gate rejects it, so it refutes nothing and supremacy holds.
+    critic = crit_argumentative(harness, sneaky.id, _cx_critic(harness, [["a", "b"]]), Config())
+    assert critic is None
+    assert harness.state.status[sneaky.id] == Status.ACCEPTED
+
+
+def test_batch_counterexample_also_grounds(harness):
+    c, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    good = harness.create_artifact(
+        GOOD_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    batch = json.dumps({"cases": [
+        {"target": sneaky.id, "attack": True, "case": "short lists unsorted",
+         "counterexample": [[2, 1]]},
+        {"target": good.id, "attack": True, "case": "handwavy complaint"},
+    ]})
+    adapter = LLMAdapter(
+        {"argumentative_critic": MockEndpoint([batch])}, harness.blobs, retry_max=2
+    )
+    critics = crit_argumentative_batch(harness, [sneaky.id, good.id], adapter, Config())
+    assert len(critics) == 1  # counterexample grounded; bare argument overridden
+    assert harness.state.status[sneaky.id] == Status.REFUTED
+    assert harness.state.status[good.id] == Status.ACCEPTED
+
+
+def test_crit_pack_advertises_the_counterexample_recourse(harness):
+    from deepreason.llm.packs import render_crit_pack
+
+    _, art = _property_candidate(harness, GOOD_SORT)
+    pack = render_crit_pack(art.id, harness.state, harness.commitments,
+                            harness.blobs, token_budget=2500)
+    assert "counterexample" in pack
+    plain = harness.create_artifact("prose with no oracle")
+    pack2 = render_crit_pack(plain.id, harness.state, harness.commitments,
+                             harness.blobs, token_budget=2500)
+    assert "counterexample" not in pack2

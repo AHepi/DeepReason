@@ -24,6 +24,54 @@ def _register_nu(harness, content: str) -> Artifact:
     return harness.create_artifact(content, provenance=Provenance(role="critic"))
 
 
+def try_counterexample(harness, target_id: str, args, *, case: str, llm=None) -> Artifact | None:
+    """The critic's grounded recourse (§3 execution supremacy): the critic
+    proposed a concrete INPUT; run the target on it and check the declared
+    property. Admissible iff the target carries a property-oracle commitment
+    (correctness is checker-decided, reference-free) and the spec's input gate
+    admits the args. A violated property mints a content-addressed
+    counterexample commitment and registers an ordinary DEMONSTRATIVE fail
+    warrant — the critic refuted by EXECUTION, so execution supremacy does not
+    apply. Anything else (no property oracle, inadmissible input, property
+    holds) grounds nothing and returns None; the caller decides whether the
+    remaining argument may register. Deterministic (§0): minting, evaluation,
+    and the warrant are pure functions of frozen spec + proposed args."""
+    from deepreason.oracle import PROPERTY_PROGRAM, counterexample_commitment
+
+    target = harness.state.artifacts.get(target_id)
+    if target is None or args is None:
+        return None
+    for cid in target.interface.commitments:
+        base = harness.commitments.get(cid)
+        if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+            continue
+        cx = counterexample_commitment(base, args)
+        if cx is None:
+            continue  # inadmissible against this commitment's input gate
+        verdict, trace = programs.evaluate(cx, target, harness.blobs)
+        if verdict != programs.FAIL:
+            continue  # the property held: this counterexample grounds nothing
+        harness.register_commitment(cx)
+        if verdict_on_record(harness, cx.id, target_id):
+            return None  # same counterexample already refutes this target
+        return register_fail_warrant(
+            harness,
+            commitment_id=cx.id,
+            target_id=target_id,
+            nu_content=(
+                f"nu: counterexample verdict of {cx.id} on {target_id} is sound "
+                f"(input admitted by {base.id}'s gate, property checker inherited)"
+            ),
+            critic_content=(
+                f"critic: counterexample {canonical_json(args).decode()} violates "
+                f"the property of {base.id} on {target_id[:12]} — {case}"
+            ),
+            trace_ref=harness.blobs.put(canonical_json(trace)),
+            llm=llm,
+        )
+    return None
+
+
 def crit_program(harness, target_id: str) -> list[Artifact]:
     """Evaluate the target's commitments; register a critic per failure."""
     target = harness.state.artifacts[target_id]
@@ -64,11 +112,21 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         # No fault found: the call still spent tokens and must be logged once.
         harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
         return None
+    before = set(harness.state.artifacts)
+    grounded = try_counterexample(
+        harness, target_id, output.counterexample, case=output.case, llm=llm_call
+    )
+    if grounded is not None:
+        # The critic refuted by EXECUTION (counterexample violated the
+        # property) — strictly stronger than the argument it came with.
+        if grounded.id in before:
+            harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+        return grounded
     if execution_backed(harness, target_id):
         # Execution supremacy (§3): the target passes its exec-oracle, so a
         # verdict from reality already stands. A purely argumentative case
-        # cannot override it — register nothing and log the override so the
-        # call is on the record. The critic's grounded recourse is unaffected.
+        # cannot override it — and the counterexample (if any) just failed to
+        # ground. Register nothing; log the override so the call is on record.
         harness.record_measure(
             inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
         )
@@ -133,6 +191,15 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         ruled.add(case.target)
         if not case.attack or not case.case.strip():
             continue  # no fault found for this target: registers nothing
+        before = set(harness.state.artifacts)
+        grounded = try_counterexample(
+            harness, case.target, case.counterexample, case=case.case, llm=llm_pending
+        )
+        if grounded is not None:
+            critics.append(grounded)
+            if grounded.id not in before:
+                llm_pending = None  # a real event carried the shared call
+            continue
         if execution_backed(harness, case.target):
             continue  # execution supremacy (§3): reality overrides the argument
         case_hash = sha256_hex(case.case.encode())[:16]

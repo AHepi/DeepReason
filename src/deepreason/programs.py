@@ -93,6 +93,17 @@ def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
     return run_from_spec(text, budget)
 
 
+def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Reference-free acting evaluator (oracle.py): RUN the candidate on fixed
+    inputs and check each output with the spec's `def check(inp, out)` — no
+    expected outputs anywhere, so the harness can pose problems nobody has
+    solved, and critics can ground refutations in NEW inputs (counterexamples).
+    Deterministic + sandboxed, same as exec_oracle."""
+    from deepreason.oracle import run_property_from_spec
+
+    return run_property_from_spec(text, budget)
+
+
 def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
     """Structural born-connected check (§7 L1): a candidate on a connection
     problem must carry a `dependence` ref into the problem's declared lineage
@@ -125,6 +136,7 @@ PROGRAMS = {
     "skeleton_wf": _skeleton_wf,
     "lineage_ref": _lineage_ref,
     "exec_oracle": _exec_oracle,
+    "property_oracle": _property_oracle,
 }
 
 

@@ -40,6 +40,12 @@ class ConjecturerOutput(BaseModel):
 class ArgumentativeCriticOutput(BaseModel):
     attack: bool
     case: str = ""  # the argument; becomes the critic artifact's content
+    # Grounded recourse against an execution-backed target: a JSON list of
+    # positional args for the target's entry point. The harness RUNS the
+    # target on it and checks the declared property (oracle.py) — a violated
+    # property becomes a DEMONSTRATIVE refutation; an invalid or passing
+    # counterexample grounds nothing.
+    counterexample: list | None = None
 
 
 class BatchCase(BaseModel):
@@ -50,6 +56,7 @@ class BatchCase(BaseModel):
     target: str  # must be an id listed in the pack; others are dropped
     attack: bool
     case: str = ""
+    counterexample: list | None = None  # same semantics as the single contract
 
 
 class BatchCriticOutput(BaseModel):

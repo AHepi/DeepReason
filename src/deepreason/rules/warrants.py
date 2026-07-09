@@ -40,15 +40,16 @@ def execution_backed(harness, target_id: str) -> bool:
     on the graph, so att/dep stay the only inputs to labels, nothing is deleted
     (D8), and nothing is made final (N1: execution can still refute)."""
     from deepreason import programs
-    from deepreason.oracle import EXEC_PROGRAM
+    from deepreason.oracle import EXEC_PROGRAMS
 
+    execution_evals = {f"program:{p}" for p in EXEC_PROGRAMS}
     target = harness.state.artifacts.get(target_id)
     if target is None:
         return False
     saw = False
     for cid in target.interface.commitments:
         kappa = harness.commitments.get(cid)
-        if kappa is None or kappa.eval != f"program:{EXEC_PROGRAM}":
+        if kappa is None or kappa.eval not in execution_evals:
             continue
         saw = True
         verdict, _ = programs.evaluate(kappa, target, harness.blobs)

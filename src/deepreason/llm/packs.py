@@ -16,11 +16,31 @@ the cached rate. Ordering is presentation only — zero epistemic content.
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
 from deepreason.ontology.state import EpistemicState, Status
+from deepreason.oracle import EXEC_PROGRAMS
 from deepreason.programs import content_text
 
 _CHARS_PER_TOKEN = 4
 NEIGHBOURHOOD_N = 8
 ATTACKERS_N = 5
+
+_EXECUTION_EVALS = {f"program:{p}" for p in EXEC_PROGRAMS}
+
+_COUNTEREXAMPLE_NOTE = (
+    "EXECUTION-BACKED TARGETS: a target whose commitments include an "
+    "execution oracle is judged by RUNNING it — if it currently passes, a "
+    "purely argumentative case CANNOT refute it. To refute such a target, "
+    "also return \"counterexample\": a JSON list of positional args for its "
+    "entry point; the harness will run the target on it and check the "
+    "declared property. An input the problem's gate rejects, or one the "
+    "target handles correctly, grounds nothing."
+)
+
+
+def _carries_execution_oracle(artifact, commitments: dict[str, Commitment]) -> bool:
+    return any(
+        (kappa := commitments.get(cid)) is not None and kappa.eval in _EXECUTION_EVALS
+        for cid in artifact.interface.commitments
+    )
 
 
 def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> str:
@@ -145,6 +165,8 @@ def render_batch_crit_pack(
             for x in attackers:
                 status = state.status.get(x)
                 lines.append(f"- {x} [{status.value if status else '?'}]: {_head(state, x, blobs)}")
+    if any(_carries_execution_oracle(state.artifacts[tid], commitments) for tid in target_ids):
+        lines += ["", _COUNTEREXAMPLE_NOTE]
     lines += [
         "",
         "DIRECTIVE: return exactly one entry per target id above — the "
@@ -180,6 +202,8 @@ def render_crit_pack(
         for x in attackers:
             status = state.status.get(x)
             lines.append(f"- {x} [{status.value if status else '?'}]: {_head(state, x, blobs)}")
+    if _carries_execution_oracle(target, commitments):
+        lines += ["", _COUNTEREXAMPLE_NOTE]
     lines += [
         "",
         "DIRECTIVE: mount the strongest NEW specific case against the target, "
