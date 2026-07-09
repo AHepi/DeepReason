@@ -123,6 +123,17 @@ def test_check_checker_accepts_real_and_rejects_vacuous_and_broken():
     assert check_checker("import os", FROZEN)[0] == "fail"
 
 
+def test_check_checker_rejects_truncated_always_raising_code():
+    # The live failure: the designer's token window cut the checker mid-code.
+    # `return o` parses but raises NameError unconditionally — under
+    # raise=reject alone it would count as non-vacuous and then 'violate'
+    # every candidate ever written (the wipeout guard quarantined all 10 kill
+    # attempts). A checker must DECIDE at least once, not just crash.
+    truncated = "def check(inp, out):\n    return o\n"
+    v, d = check_checker(truncated, FROZEN)
+    assert v == "fail" and "broken checker" in d["error"]
+
+
 def test_checker_wf_commitment_derived_and_stable():
     base = _base()
     wf = checker_wf_commitment(base)

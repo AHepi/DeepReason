@@ -580,6 +580,7 @@ def check_checker(
         return _tracer
 
     rejected_any = False
+    returned_any = False  # returned a bool at least once (didn't just raise)
     for args in probe_inputs[:4]:
         for degenerate in _VACUITY_BATTERY:
             out = args if degenerate == "echo-input" else degenerate
@@ -587,19 +588,24 @@ def check_checker(
             previous = sys.gettrace()
             sys.settrace(_tracer)
             try:
-                if not check(args, out):
+                if check(args, out):
+                    returned_any = True
+                else:
                     rejected_any = True
+                    returned_any = True
             except Exception:  # noqa: BLE001 - rejection by exception counts
                 rejected_any = True
             finally:
                 sys.settrace(previous)
-            if rejected_any:
-                break
-        if rejected_any:
-            break
     if not rejected_any:
         return FAIL, {"error": "vacuous checker: accepts every degenerate output "
                                "on every probe input — it can never refute anything"}
+    if not returned_any:
+        # An always-raising checker (e.g. truncated code -> unconditional
+        # NameError) is broken, not strict: it would 'violate' every candidate
+        # ever written. Rejection must be a decision at least once.
+        return FAIL, {"error": "broken checker: raised on every battery pair — "
+                               "it never actually decides anything"}
     return PASS, {"non_vacuous": True, "probes": len(probe_inputs[:4])}
 
 
