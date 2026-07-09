@@ -742,10 +742,90 @@ def seed_impl(harness: Harness) -> None:
     )
 
 
+def seed_impl_synthesis(harness: Harness) -> None:
+    """Phase 2, seeded into the SAME root as pi-10b-impl so the exploration
+    frontier is visible in the neighbourhood (born-connected conjecture,
+    §L1 — 'previous runs info'). Operator ruling from phase 1: R2 is OUT.
+    Restructuring how the forbidden cases (commitments) are GENERATED —
+    self-play, deferring/outsourcing the model's own falsification claims —
+    is antithetical to the harness: a conjecture stating its own refutation
+    conditions IS the epistemic core (§10.1). Phase 2 keeps commitment
+    generation exactly as is and asks only for compound R1+R3 FORMAT fixes.
+    std-10b-impl is idempotent (identical text content-address-dedupes)."""
+    register_standard(
+        harness,
+        "std-10b-impl",
+        rubric=(
+            "A harness-design proposal for small-model self-sufficiency must: "
+            "(1) name a specific harness-side mechanism — an output-contract "
+            "shape, a gamma-call decoding constraint, a prompt/render change, "
+            "or a criticism-protocol step — not an aspiration ('prompt it "
+            "better'); (2) state forbidden cases that are concrete, observable "
+            "behaviors or measurements which would refute the design had they "
+            "obtained (a measured valid-JSON rate, a survivors-per-token "
+            "count, a self-refutation rate, a replay divergence); (3) respect "
+            "the harness invariants: the LLM stays a bounded pure function "
+            "pack -> schema-validated JSON with NO graph state, adjudication, "
+            "or control flow; determinism and byte-exact event-log replay are "
+            "preserved; every refutation stays a logged warrant inside "
+            "Conj->Crit->Adj; measures never adjudicate; program checks stay "
+            "pure functions of content. A design that needs a STRONGER model "
+            "or an external repair pass in the loop violates this standard — "
+            "the ~10B model must run the harness entirely on its own."
+        ),
+        mode="absolute",
+    )
+    if "skeleton-wf" not in harness.commitments:
+        harness.register_commitment(skeleton_wf_commitment())
+    if "kappa-10b-impl" not in harness.commitments:
+        harness.register_commitment(Commitment(id="kappa-10b-impl", eval="rubric:std-10b-impl"))
+    harness.register_problem(
+        Problem(
+            id="pi-10b-impl-synth",
+            description=(
+                "SYNTHESIS PHASE (previous run's surviving families are in the "
+                "neighbourhood). The exploration phase left viable FORMAT "
+                "fixes for a ~10B model to run this harness unaided: "
+                "(R1a) two-stage generate-and-fill — gamma1 emits a FLAT "
+                "skeleton with placeholder tokens for the nested parts, then a "
+                "deterministic harness-side expander/validator builds the "
+                "nesting; (R1b) constrained decoding — a harness-side pushdown "
+                "automaton / logit mask that only samples bracket- and "
+                "quote-balancing tokens, so malformed JSON is unrepresentable; "
+                "(R3) anchor the forbidden-case eval as an ast.parse-checked "
+                "Python lambda over the content string, rejected pre-admission "
+                "if not valid Python. OPERATOR RULING — R2 IS OUT OF SCOPE: "
+                "restructuring HOW the forbidden cases are generated (self-play "
+                "loops, a separate adversary pass, deferring or outsourcing the "
+                "model's own falsification claims) is REJECTED. A conjecture "
+                "stating its own forbidden cases is the epistemic core of the "
+                "harness (§10.1); the model must still author its own forbidden "
+                "cases in the same call. Any design that replaces, defers, or "
+                "outsources commitment generation is refuted on arrival. TASK: "
+                "compose the STRONGEST COMPOUND design over R1a/R1b/R3 that a "
+                "~10B model runs end to end unaided while LEAVING commitment "
+                "generation intact — say which component owns structural "
+                "well-formedness (R1a vs R1b), how R3 composes with it, where "
+                "each sits in the Conj->Crit->Adj loop, and which invariant "
+                "each preserves; or show two components are incompatible. "
+                "Each candidate's content MUST be a JSON skeleton object, "
+                'exactly this shape: {"claim": str, "mechanism": str, "scope": '
+                '{"covers": [str], "excludes": [str]}, "forbidden": [{"case": '
+                'str, "eval": "rubric:std-10b-impl"}], "prose_notes": str}. '
+                "Forbidden cases must be concrete observable behaviors or "
+                "measurements that would refute the design."
+            ),
+            criteria=["skeleton-wf", "kappa-10b-impl"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+
+
 SUITES = {
     "tides": ("pi-tides", seed_tides),
     "arrow": ("pi-arrow", seed_arrow),
     "impl": ("pi-10b-impl", seed_impl),
+    "impl-synth": ("pi-10b-impl-synth", seed_impl_synthesis),
     "republic": ("pi-republic", seed_republic),
     "bronze": ("pi-bronze", seed_bronze),
     "needham": ("pi-needham", seed_needham),
