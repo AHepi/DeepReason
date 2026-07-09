@@ -168,3 +168,45 @@ def test_arg_crit_cap_counts_targets_not_calls(tmp_path):
     # Only 2 of the 3 admitted targets were shown to the critic.
     last_prompt = [e for e in harness.log.read() if e.rule == Rule.MEASURE and e.llm][-1]
     assert len(last_prompt.inputs) - 1 == 2  # ["batch-crit", t1, t2]
+
+
+def test_standing_survivor_swept_into_leftover_slots(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic), CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4
+    )
+    # Accepted BEFORE any cycle: under legacy behavior it would never be
+    # criticized (only freshly admitted artifacts reached the critic).
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    # 3 fresh admits + 1 leftover slot -> the standing survivor was shown.
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert shown
+
+
+def test_recrit_standing_off_preserves_legacy(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic),
+        CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4, RECRIT_STANDING=False,
+    )
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert not shown  # legacy: only freshly admitted artifacts are criticized

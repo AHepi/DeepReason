@@ -83,6 +83,12 @@ class Config(BaseModel):
     # WITH the deterministic rejection reason echoed back — the gate's verdict
     # is information the one-shot caller otherwise never sees. 0 disables.
     CX_RETRY_MAX: int = 1
+    # Standing re-criticism (§14 attention only): unused ARG_CRIT_PER_CYCLE
+    # slots sweep ACCEPTED artifacts with no warrant on record (round-robin,
+    # execution-oracle carriers first). Off = legacy behavior, where an
+    # artifact is only criticized in the cycle it was admitted and anything
+    # accepted early is never attacked again (accepted-by-neglect).
+    RECRIT_STANDING: bool = True
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

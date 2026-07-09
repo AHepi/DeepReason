@@ -52,6 +52,7 @@ class Scheduler:
         self._cycles = 0
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
+        self._recrit_cursor = 0  # round-robin over standing survivors (§14)
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
 
@@ -177,11 +178,44 @@ class Scheduler:
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
+    def _standing_recrit_pool(self) -> list[str]:
+        """Standing survivors eligible for re-criticism (§14 attention only):
+        ACCEPTED candidate-role artifacts with NO warrant on record against
+        them — accepted-by-neglect is untested acceptance, not corroboration.
+        Execution-oracle carriers order first: a passing oracle is the
+        strongest standing claim on the graph, and a Goodhart survivor (right
+        on the frozen inputs, wrong in general) can hide nowhere else.
+        Deterministic: state insertion order within each group."""
+        from deepreason.oracle import EXEC_PROGRAMS
+
+        harness = self.harness
+        execution_evals = {f"program:{p}" for p in EXEC_PROGRAMS}
+        attacked = {w.target for w in harness.warrants.values()}
+        backed: list[str] = []
+        rest: list[str] = []
+        for aid, artifact in harness.state.artifacts.items():
+            if harness.state.status.get(aid) != Status.ACCEPTED or aid in attacked:
+                continue
+            if (artifact.provenance.role if artifact.provenance else "") not in (
+                "conjecturer", "synthesizer", "seed"
+            ):
+                continue
+            carries = any(
+                (kappa := harness.commitments.get(cid)) is not None
+                and kappa.eval in execution_evals
+                for cid in artifact.interface.commitments
+            )
+            (backed if carries else rest).append(aid)
+        return backed + rest
+
     def _arg_crit(self, admitted_ids: list[str]) -> None:
         """Argumentative pass over the admitted-and-still-accepted targets.
         With CRIT_BATCH_K set, up to K targets share one call (angle 3 of
         docs/TOKEN_ECONOMY.md); warrants stay per-target inside the rule.
-        ARG_CRIT_PER_CYCLE caps targets, batched or not."""
+        ARG_CRIT_PER_CYCLE caps targets, batched or not. Unused slots go to
+        STANDING survivors (round-robin): without this, an artifact was only
+        ever criticized in the cycle it was admitted, so anything accepted
+        early — or seeded — was never attacked again (accepted-by-neglect)."""
         harness, config = self.harness, self.config
         if not self.adapter.has_role("argumentative_critic"):
             return
@@ -196,6 +230,22 @@ class Scheduler:
                 break
             self._arg_crit_this_cycle += 1
             eligible.append(aid)
+        if config.RECRIT_STANDING:
+            # Leftover capacity sweeps the standing pool; a bounded default
+            # (2) when ARG_CRIT_PER_CYCLE is None keeps the sweep from
+            # scaling with population size.
+            remaining = (
+                config.ARG_CRIT_PER_CYCLE - self._arg_crit_this_cycle
+                if config.ARG_CRIT_PER_CYCLE is not None
+                else 2
+            )
+            pool = [x for x in self._standing_recrit_pool() if x not in set(eligible)]
+            if pool and remaining > 0:
+                start = self._recrit_cursor % len(pool)
+                for aid in (pool[start:] + pool[:start])[:remaining]:
+                    eligible.append(aid)
+                    self._arg_crit_this_cycle += 1
+                    self._recrit_cursor += 1
         size = config.CRIT_BATCH_K or 1
         for i in range(0, len(eligible), size):
             try:
