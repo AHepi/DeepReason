@@ -1,10 +1,15 @@
 """Execution oracle (oracle.py): criticism grounded in running the candidate,
 plus the sandbox-escape and determinism guards."""
 
+import json
+
 from deepreason import programs
+from deepreason.config import Config
+from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.endpoints import MockEndpoint
 from deepreason.oracle import exec_oracle_commitment, run, run_from_spec
 from deepreason.ontology import Interface, Provenance, Status
-from deepreason.rules.crit import crit_program
+from deepreason.rules.crit import crit_argumentative, crit_program, execution_backed
 
 DOUBLE = [{"in": [1], "out": 2}, {"in": [5], "out": 10}, {"in": [0], "out": 0}]
 
@@ -125,3 +130,78 @@ def test_run_from_spec_overruns_on_malformed_spec():
 
     verdict, _ = run_from_spec("def solve(x):\n    return x", Budget(extra={}))
     assert verdict == "overrun"  # not a wall-clock condition (§1): the spec is unusable
+
+
+# ---- execution supremacy: a passing oracle verdict beats a mere argument ----
+
+def _oracle_candidate(harness, source):
+    """Register the exec-oracle commitment and a candidate carrying it."""
+    c = exec_oracle_commitment("solve", DOUBLE)
+    harness.register_commitment(c)
+    art = harness.create_artifact(
+        source,
+        codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    return c, art
+
+
+def _attacking_critic(harness, case="the algorithm is obviously unsound"):
+    return LLMAdapter(
+        {"argumentative_critic": MockEndpoint(
+            [json.dumps({"attack": True, "case": case})]
+        )},
+        harness.blobs,
+        retry_max=2,
+    )
+
+
+def test_execution_backed_true_only_when_passing(harness):
+    _, good = _oracle_candidate(harness, "def solve(x):\n    return x * 2")
+    assert execution_backed(harness, good.id) is True
+
+
+def test_execution_backed_false_when_failing(harness):
+    _, bad = _oracle_candidate(harness, "def solve(x):\n    return x + 999")
+    # A failing exec verdict earns no protection — execution itself refutes it.
+    assert execution_backed(harness, bad.id) is False
+
+
+def test_execution_backed_false_without_oracle(harness):
+    plain = harness.create_artifact("just some prose, no commitment")
+    assert execution_backed(harness, plain.id) is False
+
+
+def test_argument_cannot_refute_passing_candidate(harness):
+    _, good = _oracle_candidate(harness, "def solve(x):\n    return x * 2")
+    assert harness.state.status[good.id] == Status.ACCEPTED
+
+    critic = crit_argumentative(harness, good.id, _attacking_critic(harness), Config())
+
+    assert critic is None                                    # no warrant registered
+    assert harness.state.status[good.id] == Status.ACCEPTED  # reality overrides argument
+    # No argumentative warrant against a passing candidate exists on the graph.
+    assert not any(w.target == good.id for w in harness.warrants.values())
+    # The override is on the record for token accounting (the call still spent).
+    last = list(harness.log.read())[-1]
+    assert last.inputs == ["arg-crit-overridden-by-execution", good.id]
+    assert last.llm is not None
+
+
+def test_argument_still_refutes_failing_candidate(harness):
+    _, bad = _oracle_candidate(harness, "def solve(x):\n    return x + 999")
+
+    critic = crit_argumentative(harness, bad.id, _attacking_critic(harness), Config())
+
+    assert critic is not None                             # not execution-backed: argument stands
+    assert harness.state.status[bad.id] == Status.REFUTED
+
+
+def test_execution_still_refutes_a_passing_looking_but_wrong_candidate(harness):
+    # Execution supremacy protects only against ARGUMENT, never against a
+    # failing test: crit_program runs the code and refutes by reality.
+    _, bad = _oracle_candidate(harness, "def solve(x):\n    return x + 999")
+    assert execution_backed(harness, bad.id) is False
+    crit_program(harness, bad.id)
+    assert harness.state.status[bad.id] == Status.REFUTED
