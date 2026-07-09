@@ -190,7 +190,11 @@ def main(argv: list[str] | None = None) -> int:
         from deepreason.informal.appellate import rule as appellate_rule
 
         harness = Harness(Path(args.root))
-        precedent = appellate_rule(harness, args.case_id, args.holding, args.standard)
+        try:
+            precedent = appellate_rule(harness, args.case_id, args.holding, args.standard)
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            return 1
         print(f"precedent registered: {precedent.id[:12]}")
         return 0
 

@@ -376,3 +376,52 @@ def test_eval_report_surfaces_uncovered_research(harness):
     assert rep["research"]["uncovered"] >= 1
     assert rep["research"]["note"]
     assert rep["capture"]["evidence_lambda"] == 0.0
+
+
+# ---- Paper-cut: appellate_rule gives an ACTIONABLE error, not a bare KeyError
+
+def test_registered_specs_enumerates_standards(harness):
+    from deepreason.informal.standards import register_standard, registered_specs
+
+    register_standard(harness, "std-b", rubric="r2")
+    register_standard(harness, "std-a", rubric="r1")
+    assert registered_specs(harness) == ["std-a", "std-b"]
+
+
+def test_appellate_rule_unresolved_spec_is_actionable(harness):
+    import pytest
+
+    from deepreason.informal.appellate import rule
+    from deepreason.informal.standards import register_standard
+
+    register_standard(harness, "std-usability", rubric="r")
+    with pytest.raises(ValueError) as exc:
+        rule(harness, "c-1", "some holding", "std-explain")  # wrong/invented spec id
+    msg = str(exc.value)
+    assert "std-explain" in msg  # names what was wrong
+    assert "std-usability" in msg  # lists what is valid
+    assert "severity label" in msg  # the documented misuse hint
+
+
+def test_appellate_rule_succeeds_with_registered_standard(harness):
+    from deepreason.informal.appellate import rule
+    from deepreason.informal.standards import register_standard
+
+    register_standard(harness, "std-usability", rubric="r")
+    precedent = rule(harness, "c-1", "naming a mechanism counts", "std-usability")
+    assert precedent.provenance.role.value == "user"
+    assert harness.state.status[precedent.id] == Status.ACCEPTED
+
+
+def test_appellate_rule_actionable_through_mcp_surface(harness):
+    import pytest
+
+    from deepreason.informal.standards import register_standard
+    from deepreason.mcp_server import call_tool
+
+    register_standard(harness, "std-usability", rubric="r")
+    with pytest.raises(ValueError, match="std-usability"):
+        call_tool(
+            "appellate_rule",
+            {"root": str(harness.root), "case_id": "c", "holding": "h", "standard": "nope"},
+        )
