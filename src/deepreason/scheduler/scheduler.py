@@ -144,6 +144,9 @@ class Scheduler:
             "id": school_id,
             "stance_text": schools.STANCE_LIBRARY.get(policy["stance"], policy["stance"]),
             "weight": schools.stance_weight(self.harness, school_id, self.config),
+            # Forced cross-school crossover after a convergence reseed (§11.4);
+            # empty unless the school's policy names a crossover_from.
+            "crossover": schools.crossover_exemplars(self.harness, school_id),
         }
 
     def _criticize(self, artifact) -> None:

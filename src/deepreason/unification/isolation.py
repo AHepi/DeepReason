@@ -11,7 +11,24 @@ isolated, so the same signal drives interpretation of numeric/opaque content.
 
 from collections.abc import Iterable
 
+from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.ontology.commitment import Budget, Commitment
 from deepreason.ontology.state import Status
+
+
+def lineage_ref_commitment(endpoints: Iterable[str]) -> Commitment:
+    """Program criterion pinned on connection problems (§7 L2): a candidate
+    must carry a `dependence` ref into one of these lineage endpoints (the
+    isolated node + its ranked neighbours). Content-addressed like hv-floor —
+    the endpoint set is frozen into the id, so verdicts are replay-stable and
+    retuning the neighbourhood only affects future instantiations."""
+    ids = sorted({e for e in endpoints if e})
+    digest = sha256_hex(canonical_json(ids))[:12]
+    return Commitment(
+        id=f"lineage-ref@{digest}",
+        eval="program:lineage_ref",
+        budget=Budget(extra={"endpoints": ",".join(ids)}),
+    )
 
 
 def conn_map(

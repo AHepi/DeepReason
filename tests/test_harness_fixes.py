@@ -8,7 +8,8 @@
    (criticize the critic), the load-bearing operator mechanic that was unwritten.
 """
 
-from deepreason.capture import detection
+from deepreason import programs
+from deepreason.capture import detection, schools
 from deepreason.config import Config
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.llm.packs import render_conj_pack
@@ -18,11 +19,19 @@ from deepreason.ontology import (
     Problem,
     ProblemProvenance,
     Provenance,
+    Ref,
     Status,
 )
+from deepreason.ontology.artifact import RefRole
+from deepreason.rules.crit import crit_program
 from deepreason.rules.spawn import scan_spawns
+from deepreason.unification.isolation import lineage_ref_commitment
 from deepreason.views.why import why
 from tests.conftest import art, attack
+
+
+def _conj(harness, text, **kw):
+    return harness.create_artifact(text, provenance=Provenance(role="conjecturer", **kw))
 
 
 # ---- Fix 1: remove-arbitrariness stays anchored to the root problem ---------
@@ -162,3 +171,117 @@ def test_why_accepted_has_no_hint(harness):
     assert harness.state.status[a.id] == Status.ACCEPTED
     out = why(a.id, harness.state)
     assert "Criticize the CRITIC" not in out
+
+
+# ---- Fix #2: structural lineage-ref catches abstraction escape at the program level
+
+def test_lineage_ref_passes_with_dependence_into_lineage(harness):
+    ep = art(harness, "an endpoint in the lineage")
+    lineage = lineage_ref_commitment([ep.id])
+    harness.register_commitment(lineage)
+    good = harness.create_artifact(
+        "a genuine bridge",
+        interface=Interface(commitments=[lineage.id], refs=[Ref(target=ep.id, role=RefRole.DEPENDENCE)]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    verdict, _ = programs.evaluate(lineage, harness.state.artifacts[good.id], harness.blobs)
+    assert verdict == "pass"
+
+
+def test_lineage_ref_refutes_import_from_nowhere(harness):
+    ep = art(harness, "an endpoint in the lineage")
+    lineage = lineage_ref_commitment([ep.id])
+    harness.register_commitment(lineage)
+    orphan = harness.create_artifact(
+        "imported from nowhere (no dependence ref)",
+        interface=Interface(commitments=[lineage.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[orphan.id] == Status.ACCEPTED
+    crit_program(harness, orphan.id)  # program criticism, not a rubric judge
+    assert harness.state.status[orphan.id] == Status.REFUTED
+
+
+def test_connection_problem_pins_lineage_ref_commitment(harness):
+    harness.register_commitment(Commitment(id="c-fmt", eval="predicate:True"))
+    harness.register_problem(
+        Problem(
+            id="pi",
+            description="root",
+            criteria=["c-fmt"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    a = harness.create_artifact(
+        "an isolated accepted artifact",
+        interface=Interface(commitments=["c-fmt"]),
+        provenance=Provenance(role="conjecturer"),
+        problem_id="pi",
+    )
+    assert harness.state.status[a.id] == Status.ACCEPTED  # no dependence edges => isolated
+    scan_spawns(harness, Config(FLOOR=1))
+    conn = harness.state.problems.get(f"conn:{a.id[:12]}")
+    assert conn is not None
+    assert any(c.startswith("lineage-ref@") for c in conn.criteria)
+    assert any(c.startswith("hv-floor@") for c in conn.criteria)
+
+
+# ---- Calibration: the embedder-agnostic ratio firing path for school_convergence
+
+def _two_schools(harness):
+    for school, texts in {
+        "school-0": ["gear pressure torque linkage", "lever fulcrum load moment"],
+        "school-1": ["anomaly refutation boundary case", "counterexample falsifier exception"],
+    }.items():
+        for t in texts:
+            _conj(harness, t, school=school)
+
+
+def test_school_convergence_ratio_path(harness):
+    _two_schools(harness)
+    ratio = detection.generator_metrics(harness, HashingEmbedder(), 20)["inter_school_dist_ratio"]
+    assert ratio is not None and ratio > 0.02
+    emb = HashingEmbedder()
+    # Absolute path pinned off (0.01 << hot hashing distances) to isolate the ratio path.
+    off = Config(RESEED_DIST_MIN=0.01)  # RESEED_RATIO_MAX defaults to None
+    assert detection.raw_flags(harness, emb, off)["school_convergence"] is False
+    fires = Config(RESEED_DIST_MIN=0.01, RESEED_RATIO_MAX=ratio + 0.01)
+    assert detection.raw_flags(harness, emb, fires)["school_convergence"] is True
+    quiet = Config(RESEED_DIST_MIN=0.01, RESEED_RATIO_MAX=ratio - 0.01)
+    assert detection.raw_flags(harness, emb, quiet)["school_convergence"] is False
+
+
+# ---- Fix #3: forced cross-school crossover on a convergence reseed
+
+def test_reseed_records_crossover_and_exemplars_pulls_foreign(harness):
+    schools.init_schools(harness, Config(N_SCHOOLS=2))
+    b = _conj(harness, "a foreign lineage idea", school="school-1")
+    assert harness.state.status[b.id] == Status.ACCEPTED
+    roster = schools.roster(harness)
+    schools.reseed(harness, "school-0", roster["school-0"], reason="t", crossover_from="school-1")
+    assert schools.roster(harness)["school-0"]["crossover_from"] == "school-1"
+    assert b.id in schools.crossover_exemplars(harness, "school-0")
+
+
+def test_crossover_exemplars_empty_without_pending_crossover(harness):
+    schools.init_schools(harness, Config(N_SCHOOLS=2))
+    _conj(harness, "a foreign lineage idea", school="school-1")
+    assert schools.crossover_exemplars(harness, "school-0") == []
+
+
+def test_conj_pack_renders_forced_crossover_section(harness):
+    b = _conj(harness, "foreign idea X to reconcile", school="school-1")
+    harness.register_problem(
+        Problem(
+            id="pi",
+            description="root",
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    pack = render_conj_pack(
+        harness.state.problems["pi"], harness.state, harness.commitments, harness.blobs,
+        vs_k=3, token_budget=Config().PACK_TOKEN_BUDGET,
+        school={"id": "school-0", "stance_text": "x", "weight": 0.5, "crossover": [b.id]},
+    )
+    assert "CROSSOVER" in pack
+    assert b.id in pack

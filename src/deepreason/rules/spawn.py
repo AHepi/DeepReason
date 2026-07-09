@@ -17,7 +17,7 @@ are idempotent.
 
 from deepreason.measures.hv import hv_floor_commitment
 from deepreason.ontology import Problem, ProblemProvenance, SpawnTrigger, Status
-from deepreason.unification.isolation import iso, rank_neighbours
+from deepreason.unification.isolation import iso, lineage_ref_commitment, rank_neighbours
 
 
 def spawn(
@@ -132,20 +132,28 @@ def scan_spawns(harness, config) -> list[Problem]:
                 problem_id=f"debt:{aid[:12]}",
             )
 
-    # Connection: isolation floor (§7 L2); hv-floor pinned as a criterion.
+    # Connection: isolation floor (§7 L2); hv-floor + lineage-ref pinned as
+    # criteria. lineage-ref is the structural anti-abstraction-escape catch:
+    # a candidate must carry a dependence ref into this problem's declared
+    # neighbourhood, program-checked, so a skeleton imported from nowhere is
+    # refuted before it ever reaches a rubric judge (which criticism-debt was
+    # starving on the long runs).
     floor_commitment = hv_floor_commitment(config)
     for aid in addressed:
         if status.get(aid) != Status.ACCEPTED:
             continue
         if iso(aid, state.conn, config.FLOOR) <= 0:
             continue
-        harness.register_commitment(floor_commitment)
         neighbours = rank_neighbours(aid, harness, config.K)
+        endpoints = [aid, *neighbours]
+        lineage = lineage_ref_commitment(endpoints)
+        harness.register_commitment(floor_commitment)
+        harness.register_commitment(lineage)
         _spawn(
             SpawnTrigger.CONNECTION,
-            [aid, *neighbours],
+            endpoints,
             f"connect isolated {aid[:12]} to its neighbourhood",
-            criteria=[floor_commitment.id],
+            criteria=[floor_commitment.id, lineage.id],
             problem_id=f"conn:{aid[:12]}",
         )
 

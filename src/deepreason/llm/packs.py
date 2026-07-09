@@ -78,6 +78,17 @@ def render_conj_pack(
         lines += ["", "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"]
         for aid in accepted:
             lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+    crossover = (school or {}).get("crossover") if school else None
+    if crossover:
+        lines += [
+            "",
+            "CROSSOVER (a divergent lineage from the most distant school — "
+            "your school just reseeded on convergence; reconcile or bridge "
+            "these, do NOT echo your own lineage):",
+        ]
+        for aid in crossover:
+            if aid in state.artifacts:
+                lines.append(f"- {aid}: {_head(state, aid, blobs)}")
     if complement:
         lines += [
             "",

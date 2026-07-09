@@ -31,8 +31,14 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
             sorted(current),
             key=lambda s: (novelty.get(s, -1.0), s),  # deterministic tiebreak
         )
+        # Force crossover with the MOST DISTANT school (§11.4): rotating the
+        # stance alone leaves the reseeded school echoing its own lineage.
+        foreign = detection.most_distant_school(
+            harness, scheduler.embedder, config.CAPTURE_W, of=laggard
+        )
         new_policy = schools.reseed(
-            harness, laggard, current[laggard], reason="school-convergence"
+            harness, laggard, current[laggard],
+            reason="school-convergence", crossover_from=foreign,
         )
         # Refresh the live roster the scheduler renders packs from — otherwise
         # the reseed is a logged no-op: _school_dict keeps serving the old

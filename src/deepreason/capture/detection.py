@@ -119,6 +119,31 @@ def school_novelty(harness, embedder, window: int) -> dict[str, float]:
     return {s: sum(d) / len(d) for s, d in out.items()}
 
 
+def school_centroids(harness, embedder, window: int) -> dict[str, list[float]]:
+    """Embedding centroid of each school's recent conjecture stream."""
+    stream = _conjecture_stream(harness)[-window:]
+    by_school: dict[str, list[list[float]]] = {}
+    for aid in stream:
+        school = harness.state.artifacts[aid].provenance.school
+        if school:
+            by_school.setdefault(school, []).append(harness.embed_artifact(embedder, aid))
+    return {s: [sum(c) / len(c) for c in zip(*v)] for s, v in by_school.items() if v}
+
+
+def most_distant_school(harness, embedder, window: int, of: str) -> str | None:
+    """The school whose recent centroid is farthest from ``of`` (deterministic
+    tiebreak by school id). Drives forced cross-school crossover on a
+    convergence reseed (§11.4): reconcile the most divergent lineage, not a
+    near neighbour."""
+    cents = school_centroids(harness, embedder, window)
+    if of not in cents:
+        return None
+    others = sorted(s for s in cents if s != of)  # id order first (tiebreak)
+    if not others:
+        return None
+    return max(others, key=lambda s: distance(cents[of], cents[s]))
+
+
 def adjudicator_metrics(harness, window: int) -> dict:
     events = harness.recent_events(window)
     # Attack-target entropy: probing new commitments or re-litigating?
@@ -243,10 +268,15 @@ def raw_flags(harness, embedder, config) -> dict[str, bool]:
     flat = adj["g_churn"] == 0
     stagnation = contraction and flat
 
+    # Absolute path (embedder-scale-dependent) OR the scale-free ratio path.
     convergence = (
         config.RESEED_DIST_MIN is not None
         and gen["inter_school_min_dist"] is not None
         and gen["inter_school_min_dist"] < config.RESEED_DIST_MIN
+    ) or (
+        getattr(config, "RESEED_RATIO_MAX", None) is not None
+        and gen["inter_school_dist_ratio"] is not None
+        and gen["inter_school_dist_ratio"] < config.RESEED_RATIO_MAX
     )
 
     ritual_conditions = [

@@ -70,7 +70,7 @@ _SAFE_NAMES = {
 }
 
 
-def _json_wf(text: str, budget) -> tuple[str, dict]:
+def _json_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     try:
         json.loads(text)
         return PASS, {"parsed": True}
@@ -78,10 +78,34 @@ def _json_wf(text: str, budget) -> tuple[str, dict]:
         return FAIL, {"error": str(e)}
 
 
-def _skeleton_wf(text: str, budget) -> tuple[str, dict]:
+def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
     return skeleton_wf_program(text, budget)
+
+
+def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Structural born-connected check (§7 L1): a candidate on a connection
+    problem must carry a `dependence` ref into the problem's declared lineage
+    (its isolated node or a ranked neighbour), frozen into budget.extra by
+    unification.isolation.lineage_ref_commitment. This catches 'abstraction
+    escape' — a skeleton imported from nowhere, unconnected to the graph — at
+    the PROGRAM level, before it reaches a rubric judge and while criticism
+    debt is high. It does NOT adjudicate on semantics (§0): the verdict is a
+    pure function of interface STRUCTURE, which is part of the artifact's
+    content-addressed identity, so it is replay-deterministic."""
+    from deepreason.ontology.artifact import RefRole
+
+    allowed = {e for e in str(budget.extra.get("endpoints", "")).split(",") if e}
+    if not allowed or artifact is None:
+        return PASS, {"endpoints": len(allowed)}  # nothing to enforce
+    for ref in artifact.interface.refs:
+        if ref.role == RefRole.DEPENDENCE and any(
+            ref.target == e or ref.target.startswith(e) or e.startswith(ref.target)
+            for e in allowed
+        ):
+            return PASS, {"connected_to": ref.target[:12]}
+    return FAIL, {"reason": "no dependence ref into the connection lineage"}
 
 
 # Named program registry. hv_floor is deliberately NOT here: it needs the
@@ -90,6 +114,7 @@ def _skeleton_wf(text: str, budget) -> tuple[str, dict]:
 PROGRAMS = {
     "json-wf": _json_wf,
     "skeleton_wf": _skeleton_wf,
+    "lineage_ref": _lineage_ref,
 }
 
 
@@ -122,7 +147,10 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
         fn = PROGRAMS.get(arg)
         if fn is None:
             raise NotEvaluable(f"unknown program: {arg}")
-        verdict, detail = fn(text, commitment.budget)
+        # Programs receive the artifact too: structural checks (lineage_ref)
+        # read interface.refs, which is part of the content-addressed id, so
+        # the verdict stays a pure function of the artifact (§0).
+        verdict, detail = fn(text, commitment.budget, artifact)
     elif kind == "rubric":
         raise NotEvaluable("rubric verdicts require the trial protocol (spec §3/§10, P5)")
     else:

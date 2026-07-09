@@ -31,6 +31,15 @@ class Config(BaseModel):
     STANCE_DECAY: float | None = None  # lineage size at which stance weight hits 0 (None => 20)
     XEXAM_SHARE: float = 0.15
     RESEED_DIST_MIN: float | None = None
+    # Embedder-AGNOSTIC school-convergence firing path (detection.raw_flags):
+    # school_convergence also fires when inter_school_dist_ratio (min inter-
+    # school centroid distance / mean within-stream pairwise distance) drops
+    # below this. RESEED_DIST_MIN is an ABSOLUTE distance and must be calibrated
+    # to the embedder (the HashingEmbedder runs hot, ~0.6-0.9, so the shipped
+    # 0.15 can never fire); this ratio is scale-free (~1.0 = as separated as the
+    # stream, ->0 = converged). None (default) = disabled: opt in and calibrate
+    # against views/basin.embedder_calibration before trusting it in a config.
+    RESEED_RATIO_MAX: float | None = None
     # Refuted-attractor orbiting floor (basin study, docs/BASIN_REPORT.md):
     # gate blocks per CAPTURE_W event window before the ladder rotates the
     # orbiting school's stance. Healthy runs measured exactly 0; orbiting
