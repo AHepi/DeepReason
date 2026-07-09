@@ -205,3 +205,81 @@ def test_execution_still_refutes_a_passing_looking_but_wrong_candidate(harness):
     assert execution_backed(harness, bad.id) is False
     crit_program(harness, bad.id)
     assert harness.state.status[bad.id] == Status.REFUTED
+
+
+# ---- execution supremacy also covers the pairwise preference path (§10.2) ----
+
+def _problem(harness, *criteria):
+    from deepreason.ontology import Problem, ProblemProvenance
+
+    p = Problem(
+        id="pi-x2",
+        description="double the input",
+        criteria=list(criteria),
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    )
+    harness.register_problem(p)
+    return p
+
+
+def _pairwise_judge(harness, r1, r2):
+    return LLMAdapter(
+        {"judge": MockEndpoint([json.dumps(r1), json.dumps(r2)])},
+        harness.blobs,
+        retry_max=2,
+    )
+
+
+def test_pairwise_preference_cannot_refute_execution_backed_loser(harness):
+    from deepreason.informal.trial import pairwise_discriminate
+
+    c = exec_oracle_commitment("solve", DOUBLE)
+    harness.register_commitment(c)
+    p = _problem(harness, c.id)
+    a = harness.create_artifact(
+        "def solve(x):\n    return x * 2",
+        codec="code:python", interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=p.id,
+    )
+    b = harness.create_artifact(
+        "def solve(x):\n    return x + x",  # distinct source, also passes
+        codec="code:python", interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=p.id,
+    )
+    assert execution_backed(harness, b.id) is True
+    # Judge consistently prefers A; b would be the loser — but b passes its oracle.
+    adapter = _pairwise_judge(
+        harness,
+        {"winner": "A", "decisive_point": "return x + x"},
+        {"winner": "B", "decisive_point": "return x + x"},
+    )
+    critic = pairwise_discriminate(harness, p, a.id, b.id, adapter, Config())
+    assert critic is None                                 # rivalry stands unresolved
+    assert harness.state.status[b.id] == Status.ACCEPTED  # preference can't beat execution
+    assert not any(w.target == b.id for w in harness.warrants.values())
+
+
+def test_pairwise_preference_still_refutes_a_non_execution_loser(harness):
+    from deepreason.informal.trial import pairwise_discriminate
+
+    c = exec_oracle_commitment("solve", DOUBLE)
+    harness.register_commitment(c)
+    p = _problem(harness, c.id)
+    a = harness.create_artifact(
+        "def solve(x):\n    return x * 2",
+        codec="code:python", interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"), problem_id=p.id,
+    )
+    b = harness.create_artifact(  # plain prose, carries no oracle: no protection
+        "just an assertion that doubling is easy",
+        provenance=Provenance(role="conjecturer"), problem_id=p.id,
+    )
+    assert execution_backed(harness, b.id) is False
+    adapter = _pairwise_judge(
+        harness,
+        {"winner": "A", "decisive_point": "just an assertion"},
+        {"winner": "B", "decisive_point": "just an assertion"},
+    )
+    critic = pairwise_discriminate(harness, p, a.id, b.id, adapter, Config())
+    assert critic is not None
+    assert harness.state.status[b.id] == Status.REFUTED

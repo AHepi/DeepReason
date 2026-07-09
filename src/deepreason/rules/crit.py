@@ -13,43 +13,15 @@ from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
 from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
-from deepreason.oracle import EXEC_PROGRAM
-from deepreason.rules.warrants import register_fail_warrant, verdict_on_record
+from deepreason.rules.warrants import (
+    execution_backed,
+    register_fail_warrant,
+    verdict_on_record,
+)
 
 
 def _register_nu(harness, content: str) -> Artifact:
     return harness.create_artifact(content, provenance=Provenance(role="critic"))
-
-
-def execution_backed(harness, target_id: str) -> bool:
-    """Execution-supremacy guard (§3): True iff the target carries at least one
-    exec-oracle commitment and EVERY exec-oracle commitment it carries currently
-    passes. A passing execution verdict is a warrant from reality (the candidate
-    was RUN against fixed tests and produced the right answers); a purely
-    *argumentative* critic — an LLM arguing an LLM's output is wrong — must not
-    override it. When this holds, crit_argumentative registers no warrant: the
-    critic keeps its grounded recourse (supply a failing input via a stronger
-    exec-oracle, whose demonstrative fail warrant refutes by execution; or attack
-    the oracle's validity node / the commitment itself), but it cannot win by
-    assertion. Deterministic (§0): the oracle re-runs the candidate against its
-    frozen tests, so the guard is a pure function of content and replays
-    byte-for-byte; it decides only whether an edge is CREATED — it never
-    adjudicates an edge already on the graph, so att/dep stay the only inputs to
-    labels, and nothing is deleted (D8) or made final (N1: execution can still
-    refute)."""
-    target = harness.state.artifacts.get(target_id)
-    if target is None:
-        return False
-    saw = False
-    for cid in target.interface.commitments:
-        kappa = harness.commitments.get(cid)
-        if kappa is None or kappa.eval != f"program:{EXEC_PROGRAM}":
-            continue
-        saw = True
-        verdict, _ = programs.evaluate(kappa, target, harness.blobs)
-        if verdict != programs.PASS:
-            return False  # execution already refutes it: no protection to give
-    return saw
 
 
 def crit_program(harness, target_id: str) -> list[Artifact]:
