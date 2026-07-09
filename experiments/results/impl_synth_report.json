@@ -1,0 +1,41 @@
+{
+  "problem": "pi-10b-impl-synth",
+  "phase": "synthesis (R2 excluded)",
+  "engine": "deepseek-v4-pro thinking-off (full harness)",
+  "judge_ensemble": [
+    "deepseek-v4-pro thinking-off",
+    "deepseek-v4-flash"
+  ],
+  "total_tokens": 200800,
+  "accepted": 5,
+  "refuted": 22,
+  "invariant_violations": [],
+  "accepted_frontier": [
+    {
+      "id": "f12d62f069f0",
+      "claim": "R1a and R1b are incompatible if both try to own structural well-formedness simultaneously: R1a's placeholder expansion presumes the skeleton may contain placeholder tokens that do not interfere with JSON syntax, but R1b's constrained decoding would reject placeholders that are not valid JSON characters (e.g., special tokens outside quotes). Attempting to compose them forces the model to produce only valid JSON tokens, negating the benefit of R1a's flat generation. However, a hybrid is possible where R1b ensures outer JSON structure, but placeholders inside string values are allowed by a modified mask that treats placeholder tokens as legal within quoted strings. This hybrid would own well-formedness via constrained decoding for brackets, while expander handles nested content substitution. The mechanism is complex: the automaton must distinguish between placeholders inside strings (allowed) and outside (blocked), requiring token-level placeholder detection. R3 would still validate Python eval. Invariant: output is always valid JSON, with nested structures filled deterministically. Scope: 10B model unaided but harness complexity increases.",
+      "mechanism": "A pushdown automaton masks logits except tokens that keep brackets/quotes balanced. Additionally, when inside a string (based on automaton state), a set of placeholder tokens (e.g., <|nest_start|>, <|nest_end|>) are unmasked, allowing the model to insert them. The harness then replaces these placeholders with pre-determined JSON fragments (e.g., extra quotes, brackets). This ensures overall JSON validity while letting the model reference nested parts linearly. The automaton state machine must handle the placeholder tokens as transparent to bracket counting when inside a string."
+    },
+    {
+      "id": "8a111ca1aa46",
+      "claim": "R1a and R1b are composable if they own separate aspects of structural well-formedness: R1a handles nesting via placeholder expansion, while R1b ensures local bracket/quote balance during token sampling, and R3 validates eval syntax. Together they guarantee skeleton-wf and kappa-10b-impl, but complexity may challenge a 10B model.",
+      "mechanism": "Conjecture step: model generates a flat skeleton with placeholders for nested structures, but during token sampling, a PDA (R1b) ensures local bracket/quote balance even within placeholders and non-placeholder text, preventing errors that the expander might propagate. Harness expander (R1a) then resolves placeholders into correctly nested structures. R3: post-hoc validation of eval strings with ast.parse. Conj->Crit->Adj: Conj outputs skeleton under PDA constraints; Crit checks R3 eval validity and correct expansion; Adj allows retries. Invariants: R1b prevents low-level imbalance, R1a ensures high-level nesting, together guaranteeing skeleton-wf; kappa-10b-impl preserved. This design combines both, but may be over-constrained, risking reduced model expressiveness."
+    },
+    {
+      "id": "3ef08d943336",
+      "claim": "The harness expander uses a learned pushdown automaton (PDA) with a differentiable stack, ",
+      "mechanism": ""
+    },
+    {
+      "id": "06bd67a1939d",
+      "claim": "The harness expander is purely syntactic with no learned components; it employs a determin",
+      "mechanism": ""
+    },
+    {
+      "id": "8f43ce8badb2",
+      "claim": "The harness expander is a small transformer model fine-tuned to predict the next JSON toke",
+      "mechanism": ""
+    }
+  ],
+  "note": "R2 (restructuring forbidden-case/commitment generation) was ruled out of scope in the problem framing per the operator; the 5 survivors are all R1/R3 FORMAT compound designs that leave commitment generation intact. Surviving conjectures are proposals, not validated fixes."
+}

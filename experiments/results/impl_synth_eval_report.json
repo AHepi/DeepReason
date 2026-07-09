@@ -1,0 +1,120 @@
+{
+  "attack_validity_rate": 1.0,
+  "audits": {
+    "hits": 0,
+    "planted_flaw_error_rate": null,
+    "self_preference": null,
+    "verbosity_bias": null
+  },
+  "capture": {
+    "adjudicator": {
+      "attack_target_entropy": 1.0,
+      "criticism_debt": 1.0,
+      "g_churn": 2,
+      "n_attacks": 2,
+      "refutations": 2,
+      "reinstatement_rate": 0.0,
+      "validity_attack_rate": 0.0
+    },
+    "generator": {
+      "dist_slope": 0.25925666365324235,
+      "inter_school_min_dist": 0.7468062932617192,
+      "mean_pairwise_dist": 0.6108721620629519,
+      "mean_token_surprisal": 0.21700068291870916,
+      "stream_len": 10,
+      "surprisal_slope": null
+    },
+    "lambda": 1.0
+  },
+  "interventions": [],
+  "llm": {
+    "argumentative_critic": {
+      "attempts": 28,
+      "calls": 27,
+      "mean_surprisal": 0.33963301020299846,
+      "tokens": 38315,
+      "total_ms": 154571,
+      "valid_json_rate": 0.9642857142857143
+    },
+    "conjecturer": {
+      "attempts": 11,
+      "calls": 11,
+      "mean_surprisal": 0.4841069262457365,
+      "tokens": 34354,
+      "total_ms": 306244,
+      "valid_json_rate": 1.0
+    },
+    "defender": {
+      "attempts": 18,
+      "calls": 18,
+      "mean_surprisal": 0.4090876203277637,
+      "tokens": 20528,
+      "total_ms": 125827,
+      "valid_json_rate": 1.0
+    },
+    "judge": {
+      "attempts": 46,
+      "calls": 46,
+      "mean_surprisal": 0.010376242750269434,
+      "tokens": 86002,
+      "total_ms": 184664,
+      "valid_json_rate": 1.0
+    },
+    "variator": {
+      "attempts": 8,
+      "calls": 6,
+      "mean_surprisal": 0.26395768698200345,
+      "tokens": 21601,
+      "total_ms": 201995,
+      "valid_json_rate": 0.75
+    }
+  },
+  "schools": {
+    "reseeds": 0,
+    "roster": {
+      "school-0": {
+        "lineage": 12,
+        "novelty_contribution": 0.6735891982088605,
+        "stance": "mechanist",
+        "stance_weight": 0.4
+      },
+      "school-1": {
+        "lineage": 15,
+        "novelty_contribution": 0.49672598056285505,
+        "stance": "skeptic",
+        "stance_weight": 0.25
+      }
+    }
+  },
+  "spec_transmission": {
+    "n": 0
+  },
+  "survivor_hv": {
+    "max": 0.19999999999999996,
+    "mean": 0.09999999999999998,
+    "min": 0.0,
+    "n": 2
+  },
+  "survivor_reach": {
+    "n": 0
+  },
+  "totals": {
+    "artifacts": 74,
+    "events": 271,
+    "llm_tokens": 200800,
+    "problems": 26,
+    "survivors": 5,
+    "warrants": 22
+  },
+  "trial_guard": {
+    "blocked": {
+      "ensemble-split": 9,
+      "order-swap": 1,
+      "paraphrase-flip": 2,
+      "referential-integrity": 2
+    },
+    "rubric_warrants": 2,
+    "survival_rate": 0.125
+  }
+}
+
