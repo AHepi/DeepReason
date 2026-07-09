@@ -57,6 +57,20 @@ def generator_metrics(harness, embedder, window: int) -> dict:
         for i, a in enumerate(ids)
         for b in ids[i + 1 :]
     ]
+    inter_min = min(inter) if inter else None
+    # Scale-normalized school separation: inter_school_min_dist relative to the
+    # within-stream spread. Embedder-AGNOSTIC (~1.0 = schools as separated as
+    # the stream at large, ->0 = converged), unlike inter_school_min_dist whose
+    # absolute scale depends on the embedder. The school_convergence flag
+    # compares the ABSOLUTE distance to RESEED_DIST_MIN, so that knob must be
+    # calibrated to the embedder in use: with the default HashingEmbedder,
+    # pairwise distances run "hot" (~0.6-0.9), so a small absolute
+    # RESEED_DIST_MIN (e.g. the shipped 0.15) can never fire on real content.
+    # Read this ratio (or views/basin.embedder_calibration) to set
+    # RESEED_DIST_MIN on-scale.
+    inter_ratio = (
+        (inter_min / mean_dist) if (inter_min is not None and mean_dist) else None
+    )
     # Token-level uncertainty (docs/research: alignment tax) — response
     # diversity can collapse while token surprisal stays informative, so
     # this catches contraction the embedding metrics can miss.
@@ -81,7 +95,8 @@ def generator_metrics(harness, embedder, window: int) -> dict:
         "stream_len": len(stream),
         "mean_pairwise_dist": mean_dist,
         "dist_slope": slope,
-        "inter_school_min_dist": min(inter) if inter else None,
+        "inter_school_min_dist": inter_min,
+        "inter_school_dist_ratio": inter_ratio,
         "mean_token_surprisal": surprisal_mean,
         "surprisal_slope": surprisal_slope,
     }

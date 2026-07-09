@@ -98,14 +98,27 @@ def scan_spawns(harness, config) -> list[Problem]:
                 problem_id=f"disc:{pid}",
             )
 
-    # Remove-arbitrariness: accepted with logged low HV.
+    # Remove-arbitrariness: accepted with logged low HV. Carry the ROOT
+    # problem's description + criteria (exactly as Successor does) so the
+    # sharper re-attempt stays anchored to the original problem. Without the
+    # anchor the ra-pack is just "remove arbitrariness of <id>" with no topical
+    # or format contract, and long runs drift off-problem into unrelated
+    # formalisms that survive only as criticism-debt (observed live: a 200k
+    # resume where the ra-loop wandered into abstract mathematics).
     ra_floor = float(config.HV_MIN if config.HV_MIN is not None else 0.5)
     for aid, hv in state.hv.items():
-        if status.get(aid) == Status.ACCEPTED and hv < ra_floor:
+        if status.get(aid) != Status.ACCEPTED or hv >= ra_floor:
+            continue
+        for pid in sorted(addressed.get(aid, ())):
+            parent = state.problems[pid]
+            root_desc = parent.description.rsplit("Original problem: ", 1)[-1]
             _spawn(
                 SpawnTrigger.REMOVE_ARBITRARINESS,
                 [aid],
-                f"remove arbitrariness of accepted {aid[:12]} (hv={hv:.2f})",
+                f"sharpen accepted {aid[:12]} (hv={hv:.2f}): it is easy-to-vary; "
+                f"produce a harder-to-vary version that still addresses the "
+                f"problem. Original problem: {root_desc}",
+                criteria=parent.criteria,
                 problem_id=f"ra:{aid[:12]}",
             )
 
