@@ -49,6 +49,27 @@ def accepted_generators(harness, base_commitment_id: str) -> list[tuple[str, str
     return out
 
 
+def _survivor_heads(harness, base_commitment_id: str, cap: int = 3) -> list[str]:
+    """The code of ACCEPTED candidates carrying the base oracle — what the
+    experiment is for. The two live impotent designs (chains that never
+    create a tie; alphabetical node lists that make the buggy choice coincide
+    with the correct one) were designed BLIND; a directed experiment reads
+    the implementation it is probing. Presentation only (§9): the gate and
+    checker still decide everything."""
+    from deepreason.programs import content_text
+
+    heads: list[str] = []
+    for aid, artifact in harness.state.artifacts.items():
+        if len(heads) >= cap:
+            break
+        if harness.state.status.get(aid) != Status.ACCEPTED:
+            continue
+        if base_commitment_id not in artifact.interface.commitments:
+            continue
+        heads.append(f"CANDIDATE {aid[:12]}:\n{content_text(artifact, harness.blobs)[:500]}")
+    return heads
+
+
 def propose_generators(harness, base, adapter, config) -> list:
     """One experimenter call for a property oracle: register each returned
     generator as an artifact carrying the derived generator_wf commitment and
@@ -64,7 +85,10 @@ def propose_generators(harness, base, adapter, config) -> list:
     harness.register_commitment(wf)
     existing = [src for _, src in accepted_generators(harness, base.id)]
     pack = render_experiment_pack(
-        base, existing, token_budget=config.PACK_TOKEN_BUDGET
+        base,
+        existing,
+        token_budget=config.PACK_TOKEN_BUDGET,
+        targets=_survivor_heads(harness, base.id),
     )
     output, llm_call = adapter.call(
         "conjecturer", pack, ExperimenterOutput, template_role="experimenter"

@@ -217,11 +217,17 @@ def render_experiment_pack(
     existing: list[str],
     token_budget: int,
     n_generators: int = 2,
+    targets: list[str] | None = None,
 ) -> str:
     """Experiment-design pack (rules/experiment.py): the property oracle's
     full frozen spec — entry, example inputs, CHECKER source (what a violation
     means), input contract, and admission gate — plus the heads of already-
-    accepted generators so new designs cover DIFFERENT ground."""
+    accepted generators so new designs cover DIFFERENT ground, plus the CODE
+    of standing execution-backed survivors. The survivors are what the
+    experiment is FOR: a blind generator explores coverage; a generator
+    designed against real code hunts the specific dimension its shortcuts
+    ignore. Showing the code cannot bias adjudication — the frozen gate and
+    checker decide every verdict (presentation only, §9)."""
     try:
         spec = json.loads(base.budget.extra.get("spec", "{}"))
     except (ValueError, AttributeError):
@@ -243,6 +249,16 @@ def render_experiment_pack(
     if gate:
         lines += ["", "admission gate — def valid(inp) must return True for every "
                       "generated input:", gate]
+    if targets:
+        lines += [
+            "",
+            "STANDING SURVIVORS (they pass every existing input; your "
+            "experiments exist to probe THEM — read each implementation and "
+            "design inputs that reach whatever the frozen examples and "
+            "existing generators never vary: sizes, orderings, ties, "
+            "degenerate shapes):",
+        ]
+        lines += targets
     if existing:
         lines += ["", "ALREADY-ACCEPTED GENERATORS (cover DIFFERENT ground — do "
                       "not duplicate these):"]

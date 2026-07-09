@@ -160,6 +160,25 @@ def test_fuzz_kills_trap_with_a_proposed_generator(harness):
     assert any(r.target == gen_id for r in nu.interface.refs)
 
 
+def test_experiment_pack_shows_the_survivors_code(harness):
+    from deepreason.llm.packs import render_experiment_pack
+    from deepreason.rules.experiment import _survivor_heads
+
+    base = _base()
+    harness.register_commitment(base)
+    trap = harness.create_artifact(
+        SNEAKY, codec="code:python",
+        interface=Interface(commitments=[base.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    heads = _survivor_heads(harness, base.id)
+    assert len(heads) == 1 and "if len(xs) > 2:" in heads[0]
+    pack = render_experiment_pack(base, [], token_budget=4000, targets=heads)
+    assert "STANDING SURVIVORS" in pack
+    assert "if len(xs) > 2:" in pack  # the experimenter reads the code it probes
+    assert trap.id[:12] in pack
+
+
 def test_refuted_generators_are_never_used(harness):
     base = _base()
     harness.register_commitment(base)
