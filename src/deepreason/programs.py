@@ -84,6 +84,15 @@ def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     return skeleton_wf_program(text, budget)
 
 
+def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """The acting evaluator (oracle.py): RUN the candidate against fixed tests
+    and take the verdict from the result — criticism grounded in execution, not
+    in a rubric judge or a well-formedness check. Deterministic + sandboxed."""
+    from deepreason.oracle import run_from_spec
+
+    return run_from_spec(text, budget)
+
+
 def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
     """Structural born-connected check (§7 L1): a candidate on a connection
     problem must carry a `dependence` ref into the problem's declared lineage
@@ -115,6 +124,7 @@ PROGRAMS = {
     "json-wf": _json_wf,
     "skeleton_wf": _skeleton_wf,
     "lineage_ref": _lineage_ref,
+    "exec_oracle": _exec_oracle,
 }
 
 
