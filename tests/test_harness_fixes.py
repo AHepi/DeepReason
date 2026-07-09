@@ -285,3 +285,94 @@ def test_conj_pack_renders_forced_crossover_section(harness):
     )
     assert "CROSSOVER" in pack
     assert b.id in pack
+
+
+# ---- evidence_lambda: truly-exogenous grounding, distinct from spec lambda ----
+
+def test_evidence_lambda_none_without_empirical_claims(harness):
+    # A design/explanatory run (no observation_valued commitments) => grounding
+    # is NOT applicable => None, not 0.0 (so the opt-in brake never fires on it).
+    harness.register_commitment(Commitment(id="c-fmt", eval="predicate:True"))
+    harness.create_artifact(
+        "a pure design idea",
+        interface=Interface(commitments=["c-fmt"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert detection.evidence_lambda(harness) is None
+
+
+def test_evidence_lambda_zero_when_empirical_claim_uncovered(harness):
+    harness.register_commitment(
+        Commitment(id="k-obs", eval="predicate:True", observation_valued=True)
+    )
+    harness.create_artifact(
+        "an ungrounded empirical claim",
+        interface=Interface(commitments=["k-obs"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert detection.evidence_lambda(harness) == 0.0
+
+
+def test_evidence_lambda_one_when_covered_by_evidence(harness):
+    harness.register_commitment(
+        Commitment(id="k-obs", eval="predicate:True", observation_valued=True)
+    )
+    a = harness.create_artifact(
+        "an empirical claim",
+        interface=Interface(commitments=["k-obs"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    scan_spawns(harness, Config())  # spawns research:k-obs:<aid>
+    rid = f"research:k-obs:{a.id[:12]}"
+    assert rid in harness.state.problems
+    harness.create_artifact(  # accepted import evidence covering it
+        "NOAA measurements 2026",
+        provenance=Provenance(role="import"),
+        problem_id=rid,
+    )
+    assert detection.evidence_lambda(harness) == 1.0
+
+
+def test_grounding_brake_uses_evidence_lambda_only_when_opted_in(harness):
+    harness.register_commitment(
+        Commitment(id="k-obs", eval="predicate:True", observation_valued=True)
+    )
+    harness.create_artifact(
+        "an ungrounded empirical claim",
+        interface=Interface(commitments=["k-obs"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    emb = HashingEmbedder()
+    # Default: spec lambda (no rubric verdicts in window => 1.0) => no brake.
+    off = Config(LAMBDA_FLOOR=0.3)
+    assert detection.raw_flags(harness, emb, off)["grounding_decay"] is False
+    # Opt-in: evidence_lambda = 0.0 (uncovered) < floor => brake fires.
+    on = Config(LAMBDA_FLOOR=0.3, GROUNDING_USE_EVIDENCE_LAMBDA=True)
+    assert detection.raw_flags(harness, emb, on)["grounding_decay"] is True
+
+
+def test_grounding_brake_not_spurious_on_design_problem(harness):
+    # Opt-in ON but no empirical claims => evidence_lambda None => fall back to
+    # spec lambda => no spurious brake on a pure design problem.
+    harness.create_artifact("pure design idea", provenance=Provenance(role="conjecturer"))
+    on = Config(LAMBDA_FLOOR=0.3, GROUNDING_USE_EVIDENCE_LAMBDA=True)
+    assert detection.raw_flags(harness, HashingEmbedder(), on)["grounding_decay"] is False
+
+
+def test_eval_report_surfaces_uncovered_research(harness):
+    from deepreason.report import eval_report
+
+    harness.register_commitment(
+        Commitment(id="k-obs", eval="predicate:True", observation_valued=True)
+    )
+    harness.create_artifact(
+        "an empirical claim",
+        interface=Interface(commitments=["k-obs"]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    scan_spawns(harness, Config())
+    rep = eval_report(harness, Config())
+    assert rep["research"]["problems"] >= 1
+    assert rep["research"]["uncovered"] >= 1
+    assert rep["research"]["note"]
+    assert rep["capture"]["evidence_lambda"] == 0.0

@@ -220,6 +220,42 @@ def grounding_lambda(harness, window: int) -> float:
     return exogenous / len(verdicts)
 
 
+def evidence_lambda(harness, window: int | None = None) -> float | None:
+    """Stricter, truly-exogenous grounding ratio: of the empirical claims the
+    run has committed to (non-refuted artifacts carrying observation_valued
+    commitments), the fraction actually COVERED by accepted external evidence
+    (import-role artifacts / revealed holdout, via research.backends.covered).
+
+    Distinct from grounding_lambda, which per spec §11.3 counts every
+    program/predicate verdict as exogenous — INCLUDING pure well-formedness
+    checks (skeleton-wf, lineage_ref) that inject no external information. On a
+    program-heavy run grounding_lambda pegs at 1.0 while nothing external was
+    consulted, so the grounding-decay brake it feeds can never fire. This
+    metric credits only real external contact.
+
+    Returns None when the run makes NO empirical claims (no observation_valued
+    commitments): exogenous grounding is then not applicable, and a pure
+    design/explanatory problem SHOULD read None, not 0.0, so the opt-in brake
+    never fires spuriously on it. Graph property, not windowed (coverage is
+    cumulative); the window arg is accepted for call-site parity. Diagnostic /
+    attention only — never a status input (§0)."""
+    from deepreason.research.backends import covered
+
+    state = harness.state
+    pairs: list[tuple[str, str]] = []
+    for aid, artifact in state.artifacts.items():
+        if state.status.get(aid) == Status.REFUTED:
+            continue
+        for cid in artifact.interface.commitments:
+            kappa = harness.commitments.get(cid)
+            if kappa is not None and kappa.observation_valued:
+                pairs.append((cid, aid))
+    if not pairs:
+        return None
+    grounded = sum(1 for cid, aid in pairs if covered(harness, f"research:{cid}:{aid[:12]}"))
+    return grounded / len(pairs)
+
+
 def gate_block_count(harness, window: int) -> int:
     """Anti-relapse refusals in the recent event window. The basin study
     (docs/BASIN_REPORT.md) measured this as the clean circling signal:
@@ -290,7 +326,16 @@ def raw_flags(harness, embedder, config) -> dict[str, bool]:
     ]
     ritual = sum(ritual_conditions) >= 2
 
-    grounding_decay = config.LAMBDA_FLOOR is not None and lam < config.LAMBDA_FLOOR
+    # Grounding-decay brake keys off the spec lambda by default. Opt in to the
+    # stricter evidence_lambda (truly-exogenous only) — but only when the run
+    # actually makes empirical claims (evidence_lambda not None), so a pure
+    # design problem never trips the brake spuriously.
+    lam_for_brake = lam
+    if getattr(config, "GROUNDING_USE_EVIDENCE_LAMBDA", False):
+        ev = evidence_lambda(harness)
+        if ev is not None:
+            lam_for_brake = ev
+    grounding_decay = config.LAMBDA_FLOOR is not None and lam_for_brake < config.LAMBDA_FLOOR
 
     # Refuted-attractor orbiting (basin study): the generator keeps
     # re-proposing battery-equivalents of a refuted artifact and the gate

@@ -156,6 +156,7 @@ def main(argv: list[str] | None = None) -> int:
             "generator": detection.generator_metrics(harness, embedder, window),
             "adjudicator": detection.adjudicator_metrics(harness, window),
             "lambda": detection.grounding_lambda(harness, window),
+            "evidence_lambda": detection.evidence_lambda(harness),
             "raw_flags": detection.raw_flags(harness, embedder, config),
         }
         print(json.dumps(dashboard, indent=2, sort_keys=True))

@@ -54,6 +54,15 @@ class Config(BaseModel):
     COMPLEMENT_ALWAYS: bool = False  # force the §11.4 complement directive every cycle
     PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage"])
     LAMBDA_FLOOR: float | None = None
+    # Opt-in: drive the grounding-decay brake off the stricter evidence_lambda
+    # (fraction of observation_valued claims actually covered by external
+    # evidence) instead of the spec lambda (which counts internal well-
+    # formedness program checks as grounding, so it pegs at 1.0 on
+    # program-heavy runs and the brake never fires). Default False preserves
+    # spec §11.3 semantics and the §11.8 experiment; evidence_lambda is always
+    # reported as a diagnostic regardless. Only bites when the run makes
+    # empirical claims — a pure design problem reads N/A and never trips it.
+    GROUNDING_USE_EVIDENCE_LAMBDA: bool = False
     CAPTURE_W: int = 20
     # Adjudication-ritual thresholds (§11.3; empirical per family/domain, §17)
     ATTACK_ENTROPY_FLOOR: float = 0.2
