@@ -89,6 +89,11 @@ class Config(BaseModel):
     # artifact is only criticized in the cycle it was admitted and anything
     # accepted early is never attacked again (accepted-by-neglect).
     RECRIT_STANDING: bool = True
+    # Deterministic fuzz criticism (§3): inputs enumerated per property-oracle
+    # commitment carrying a generator (def gen(k), pure in k). The harness
+    # experiments mechanically — sandboxed executions, zero LLM calls, replay-
+    # stable. 0 disables.
+    FUZZ_N: int = 64
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

@@ -261,14 +261,27 @@ def property_oracle_commitment(
     checker: str,
     input_check: str | None = None,
     step_limit: int = _STEP_LIMIT_DEFAULT,
+    generator: str | None = None,
+    input_contract: str | None = None,
 ) -> Commitment:
     """Content-addressed property-oracle commitment. ``checker`` is the source
     of ``def check(inp, out)`` (inp = the args list); ``input_check`` is the
     optional source of ``def valid(inp)`` gating which NEW inputs count as
     admissible counterexamples (without it, a critic could 'refute' any
-    candidate with garbage the problem never posed)."""
+    candidate with garbage the problem never posed). ``generator`` is the
+    optional source of ``def gen(k)`` — a PURE function from an index to an
+    input — enabling the deterministic fuzz pass (fuzz_property): the harness
+    probing the input space itself, no LLM in the loop. ``input_contract`` is
+    a human-readable statement of what inputs are admissible; it is rendered
+    in packs and echoed in gate rejections so an LLM critic fixated on an
+    out-of-scope attack (e.g. cycles when the gate demands DAGs) gets told in
+    words, not just a False."""
     spec = {"entry": entry, "inputs": inputs, "checker": checker,
             "input_check": input_check, "step_limit": step_limit}
+    if generator:
+        spec["generator"] = generator
+    if input_contract:
+        spec["input_contract"] = input_contract
     digest = sha256_hex(canonical_json(spec))[:12]
     return Commitment(
         id=f"prop-oracle@{digest}",
@@ -310,16 +323,22 @@ def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str
                     raise _StepExceeded()
             return _tracer
 
+        contract = spec.get("input_contract")
+        contract_note = f" INPUT CONTRACT: {contract}" if contract else ""
         previous = sys.gettrace()
         sys.settrace(_tracer)
         try:
             if not valid(args):
                 return None, (
                     "input rejected by the admission gate (def valid(inp) returned "
-                    "False) — re-read the gate source and satisfy every constraint"
+                    "False) — re-read the gate source and satisfy every constraint."
+                    + contract_note
                 )
         except Exception as e:  # noqa: BLE001 - a gate error/overrun is a rejected input
-            return None, f"admission gate raised on this input ({type(e).__name__}) — rejected"
+            return None, (
+                f"admission gate raised on this input ({type(e).__name__}) — rejected."
+                + contract_note
+            )
         finally:
             sys.settrace(previous)
     return property_oracle_commitment(
@@ -331,3 +350,63 @@ def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str
 def counterexample_commitment(base: Commitment, args) -> Commitment | None:
     """Admission without the reason (see admit_counterexample)."""
     return admit_counterexample(base, args)[0]
+
+
+def fuzz_property(source: str, base: Commitment, fuzz_n: int) -> tuple[list | None, dict]:
+    """The harness's OWN experimenter — deterministic property-based fuzzing
+    (QuickCheck inside the criticism loop). Enumerate ``gen(0..fuzz_n-1)`` from
+    the spec's generator, keep the gate-valid inputs, RUN the candidate on
+    each, and return the first input whose output violates the checker —
+    (input, detail), or (None, detail) when everything holds or no generator
+    exists. No LLM anywhere: an input an LLM critic cannot construct (probe
+    result: two frontier models fixated on out-of-contract cycle attacks for
+    15 straight proposals) is often trivially reachable by enumeration.
+    Deterministic (§0): gen is a PURE function of the index k — no PRNG, no
+    wall-clock — so the search replays byte-for-byte; gen/gate/candidate all
+    run untrusted under the same AST guard + sandbox + step bound."""
+    spec = _load_spec(base.budget)
+    generator = spec.get("generator")
+    if base.eval != f"program:{PROPERTY_PROGRAM}" or not generator:
+        return None, {"fuzzed": 0, "note": "no generator in spec"}
+    gen, gerr = _compile(generator, "gen")
+    if gerr:
+        return None, {"fuzzed": 0, "note": f"generator unusable: {gerr}"}
+    gate = spec.get("input_check")
+    valid = None
+    if gate:
+        valid, verr = _compile(gate, "valid")
+        if verr:
+            return None, {"fuzzed": 0, "note": "gate unusable — fuzzing nothing (fail closed)"}
+
+    limit = int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
+    steps = [0]
+
+    def _tracer(frame, event, arg):
+        if event == "line":
+            steps[0] += 1
+            if steps[0] > limit:
+                raise _StepExceeded()
+        return _tracer
+
+    tried = 0
+    for k in range(max(0, fuzz_n)):
+        steps[0] = 0
+        previous = sys.gettrace()
+        sys.settrace(_tracer)
+        try:
+            candidate_input = gen(k)
+            if not isinstance(candidate_input, list):
+                continue
+            if valid is not None and not valid(candidate_input):
+                continue
+        except Exception:  # noqa: BLE001 - a bad generated input is skipped, not fatal
+            continue
+        finally:
+            sys.settrace(previous)
+        tried += 1
+        verdict, detail = run_property(
+            source, spec["entry"], [candidate_input], spec["checker"], limit
+        )
+        if verdict == FAIL:
+            return candidate_input, {"fuzzed": tried, "k": k, **detail}
+    return None, {"fuzzed": tried, "note": "no violation found"}

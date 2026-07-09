@@ -133,6 +133,59 @@ def crit_program(harness, target_id: str) -> list[Artifact]:
     return critics
 
 
+def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
+    """Deterministic fuzz criticism (§3): the HARNESS experiments, no LLM. For
+    each property-oracle commitment on the target that carries a generator,
+    enumerate gate-valid inputs (oracle.fuzz_property) and RUN the target; the
+    first property violation goes through the same admission/minting path as a
+    critic-proposed counterexample and registers an ordinary DEMONSTRATIVE
+    fail warrant. Cheap (sandboxed executions only), replay-deterministic,
+    and immune to the attractor problem the probe exposed — an enumerator
+    cannot fixate on cycle attacks."""
+    from deepreason.oracle import PROPERTY_PROGRAM, admit_counterexample, fuzz_property
+
+    if config.FUZZ_N <= 0:
+        return None
+    target = harness.state.artifacts.get(target_id)
+    if target is None:
+        return None
+    source = programs.content_text(target, harness.blobs)
+    for cid in target.interface.commitments:
+        base = harness.commitments.get(cid)
+        if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+            continue
+        violation, detail = fuzz_property(source, base, config.FUZZ_N)
+        if violation is None:
+            continue
+        cx, _ = admit_counterexample(base, violation)
+        if cx is None:
+            continue  # generator emitted an inadmissible input: never grounds
+        verdict, trace = programs.evaluate(cx, target, harness.blobs)
+        if verdict != programs.FAIL:
+            continue
+        harness.register_commitment(cx)
+        if verdict_on_record(harness, cx.id, target_id):
+            continue
+        return register_fail_warrant(
+            harness,
+            commitment_id=cx.id,
+            target_id=target_id,
+            nu_content=(
+                f"nu: fuzz counterexample verdict of {cx.id} on {target_id} is "
+                f"sound (deterministic enumeration k={detail.get('k')}, gate-"
+                f"admitted, property checker inherited from {base.id})"
+            ),
+            critic_content=(
+                f"critic: fuzz found counterexample "
+                f"{canonical_json(violation).decode()} violating the property "
+                f"of {base.id} on {target_id[:12]} (k={detail.get('k')}, "
+                f"{detail.get('fuzzed')} inputs tried)"
+            ),
+            trace_ref=harness.blobs.put(canonical_json(trace)),
+        )
+    return None
+
+
 def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | None:
     """One argumentative-critic call; registers a critic iff it attacks."""
     pack = render_crit_pack(

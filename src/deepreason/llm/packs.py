@@ -67,6 +67,9 @@ def _execution_spec_lines(kappa: Commitment) -> list[str]:
     lines = [f"    entry point: {spec.get('entry')}"]
     if example is not None:
         lines.append(f"    example input (positional args): {json.dumps(example)}")
+    contract = spec.get("input_contract")
+    if contract:
+        lines.append(f"    INPUT CONTRACT (binding): {contract}")
     gate = spec.get("input_check")
     if gate:
         lines.append("    counterexample admission gate — def valid(inp) must return True:")

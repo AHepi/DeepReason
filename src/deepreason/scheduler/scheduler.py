@@ -20,7 +20,7 @@ from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
 from deepreason.ontology import SpawnTrigger, Status
 from deepreason.rules.conj import conj
-from deepreason.rules.crit import crit_argumentative_batch, crit_program
+from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
 
@@ -53,6 +53,7 @@ class Scheduler:
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
         self._recrit_cursor = 0  # round-robin over standing survivors (§14)
+        self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
 
@@ -153,6 +154,11 @@ class Scheduler:
     def _criticize(self, artifact) -> None:
         harness, config = self.harness, self.config
         crit_program(harness, artifact.id)
+        if harness.state.status.get(artifact.id) == Status.ACCEPTED:
+            # Passed its declared oracles on the frozen inputs: the fuzz pass
+            # (deterministic enumeration, no LLM) probes BEYOND them before
+            # anything more expensive runs.
+            crit_fuzz(harness, artifact.id, config)
         trials = 0
         for cid in artifact.interface.commitments:
             kappa = harness.commitments.get(cid)
@@ -243,9 +249,16 @@ class Scheduler:
             if pool and remaining > 0:
                 start = self._recrit_cursor % len(pool)
                 for aid in (pool[start:] + pool[:start])[:remaining]:
+                    self._recrit_cursor += 1
+                    # Machine experimentation first: if the deterministic fuzz
+                    # pass fells the standing survivor, the LLM call is saved.
+                    if aid not in self._fuzz_clean:
+                        crit_fuzz(harness, aid, config)
+                        if harness.state.status.get(aid) != Status.ACCEPTED:
+                            continue
+                        self._fuzz_clean.add(aid)  # cache: fuzz is deterministic
                     eligible.append(aid)
                     self._arg_crit_this_cycle += 1
-                    self._recrit_cursor += 1
         size = config.CRIT_BATCH_K or 1
         for i in range(0, len(eligible), size):
             try:

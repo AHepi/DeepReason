@@ -486,6 +486,129 @@ def test_cx_retry_disabled_by_config(harness):
     assert harness.state.status[sneaky.id] == Status.ACCEPTED
 
 
+# ---- deterministic fuzz: the harness experiments, no LLM ----
+
+# gen(k): k-th input for the sorted problem — pure in k; includes the short
+# lists (len 1-2) the frozen suite missed.
+GEN = (
+    "def gen(k):\n"
+    "    n = 1 + k % 4\n"
+    "    xs = []\n"
+    "    j = k\n"
+    "    for i in range(n):\n"
+    "        xs.append((j * 7 + i * 3) % 10)\n"
+    "        j = j // 2 + 1\n"
+    "    return [xs]\n"
+)
+
+
+def _fuzzable_commitment():
+    from deepreason.oracle import property_oracle_commitment
+
+    return property_oracle_commitment(
+        "solve", SORT_INPUTS, CHECKER, GATE,
+        generator=GEN,
+        input_contract="a single list of at most 20 ints (any length >= 0)",
+    )
+
+
+def test_fuzz_finds_the_goodhart_bug():
+    from deepreason.oracle import fuzz_property
+
+    c = _fuzzable_commitment()
+    violation, detail = fuzz_property(SNEAKY_SORT, c, 64)
+    assert violation is not None            # an unsorted short list was found
+    assert len(violation[0]) <= 2           # exactly the case the suite missed
+    again, _ = fuzz_property(SNEAKY_SORT, c, 64)
+    assert again == violation               # deterministic, replay-stable
+
+
+def test_fuzz_passes_a_correct_candidate():
+    from deepreason.oracle import fuzz_property
+
+    violation, detail = fuzz_property(GOOD_SORT, _fuzzable_commitment(), 64)
+    assert violation is None
+    assert detail["fuzzed"] > 0             # inputs really ran
+
+
+def test_fuzz_without_generator_is_a_noop():
+    from deepreason.oracle import fuzz_property
+
+    c = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    assert fuzz_property(SNEAKY_SORT, c, 64) == (None, {"fuzzed": 0, "note": "no generator in spec"})
+
+
+def test_crit_fuzz_refutes_by_demonstrative_warrant(harness):
+    c = _fuzzable_commitment()
+    harness.register_commitment(c)
+    sneaky = harness.create_artifact(
+        SNEAKY_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[sneaky.id] == Status.ACCEPTED  # frozen inputs pass
+    from deepreason.rules.crit import crit_fuzz
+
+    critic = crit_fuzz(harness, sneaky.id, Config())
+    assert critic is not None
+    assert harness.state.status[sneaky.id] == Status.REFUTED  # machine experiment
+    w = next(w for w in harness.warrants.values() if w.target == sneaky.id)
+    assert w.type == WarrantType.DEMONSTRATIVE
+    assert w.commitment.startswith("prop-oracle@") and w.commitment != c.id
+
+
+def test_crit_fuzz_leaves_correct_candidates_alone(harness):
+    c = _fuzzable_commitment()
+    harness.register_commitment(c)
+    good = harness.create_artifact(
+        GOOD_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    from deepreason.rules.crit import crit_fuzz
+
+    assert crit_fuzz(harness, good.id, Config()) is None
+    assert harness.state.status[good.id] == Status.ACCEPTED
+
+
+def test_crit_fuzz_disabled_by_config(harness):
+    c = _fuzzable_commitment()
+    harness.register_commitment(c)
+    sneaky = harness.create_artifact(
+        SNEAKY_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    from deepreason.rules.crit import crit_fuzz
+
+    assert crit_fuzz(harness, sneaky.id, Config(FUZZ_N=0)) is None
+    assert harness.state.status[sneaky.id] == Status.ACCEPTED
+
+
+def test_gate_rejection_reason_echoes_the_input_contract():
+    from deepreason.oracle import admit_counterexample
+
+    c = _fuzzable_commitment()
+    _, reason = admit_counterexample(c, [list(range(30))])  # gate: too long
+    assert "INPUT CONTRACT" in reason
+    assert "at most 20 ints" in reason
+
+
+def test_pack_renders_the_input_contract(harness):
+    from deepreason.llm.packs import render_crit_pack
+
+    c = _fuzzable_commitment()
+    harness.register_commitment(c)
+    art = harness.create_artifact(
+        GOOD_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    pack = render_crit_pack(art.id, harness.state, harness.commitments,
+                            harness.blobs, token_budget=4000)
+    assert "INPUT CONTRACT (binding): a single list of at most 20 ints" in pack
+
+
 def test_batch_retry_grounds_counterexample(harness):
     c, sneaky = _property_candidate(harness, SNEAKY_SORT)
     good = harness.create_artifact(
