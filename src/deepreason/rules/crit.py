@@ -154,35 +154,58 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
         base = harness.commitments.get(cid)
         if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
             continue
-        violation, detail = fuzz_property(source, base, config.FUZZ_N)
-        if violation is None:
-            continue
-        cx, _ = admit_counterexample(base, violation)
-        if cx is None:
-            continue  # generator emitted an inadmissible input: never grounds
-        verdict, trace = programs.evaluate(cx, target, harness.blobs)
-        if verdict != programs.FAIL:
-            continue
-        harness.register_commitment(cx)
-        if verdict_on_record(harness, cx.id, target_id):
-            continue
-        return register_fail_warrant(
-            harness,
-            commitment_id=cx.id,
-            target_id=target_id,
-            nu_content=(
-                f"nu: fuzz counterexample verdict of {cx.id} on {target_id} is "
-                f"sound (deterministic enumeration k={detail.get('k')}, gate-"
-                f"admitted, property checker inherited from {base.id})"
-            ),
-            critic_content=(
-                f"critic: fuzz found counterexample "
-                f"{canonical_json(violation).decode()} violating the property "
-                f"of {base.id} on {target_id[:12]} (k={detail.get('k')}, "
-                f"{detail.get('fuzzed')} inputs tried)"
-            ),
-            trace_ref=harness.blobs.put(canonical_json(trace)),
-        )
+        # The spec's own generator first, then every ACCEPTED experimenter-
+        # designed generator (rules/experiment.py) — the system probing with
+        # experiments it designed for itself. Lazy import: experiment.py
+        # imports crit_program from this module.
+        from deepreason.rules.experiment import accepted_generators
+
+        probes: list[tuple[str | None, str | None]] = [(None, None)]
+        probes += [(gid, src) for gid, src in accepted_generators(harness, cid)]
+        for gen_id, gen_source in probes:
+            violation, detail = fuzz_property(
+                source, base, config.FUZZ_N, generator=gen_source
+            )
+            if violation is None:
+                continue
+            cx, _ = admit_counterexample(base, violation)
+            if cx is None:
+                continue  # generator emitted an inadmissible input: never grounds
+            verdict, trace = programs.evaluate(cx, target, harness.blobs)
+            if verdict != programs.FAIL:
+                continue
+            harness.register_commitment(cx)
+            if verdict_on_record(harness, cx.id, target_id):
+                continue
+            credit = f"designed by {gen_id[:12]}" if gen_id else "spec generator"
+            nu_interface = None
+            if gen_id:
+                from deepreason.ontology import Interface, Ref
+                from deepreason.ontology.artifact import RefRole
+
+                # Credit flows in the graph: the nu mentions the generator
+                # that designed the killing experiment (provenance, not a
+                # warrant — D2).
+                nu_interface = Interface(refs=[Ref(target=gen_id, role=RefRole.MENTION)])
+            return register_fail_warrant(
+                harness,
+                commitment_id=cx.id,
+                target_id=target_id,
+                nu_content=(
+                    f"nu: fuzz counterexample verdict of {cx.id} on {target_id} "
+                    f"is sound (deterministic enumeration k={detail.get('k')}, "
+                    f"{credit}, gate-admitted, property checker inherited from "
+                    f"{base.id})"
+                ),
+                critic_content=(
+                    f"critic: fuzz found counterexample "
+                    f"{canonical_json(violation).decode()} violating the property "
+                    f"of {base.id} on {target_id[:12]} (k={detail.get('k')}, "
+                    f"{detail.get('fuzzed')} inputs tried, {credit})"
+                ),
+                nu_interface=nu_interface,
+                trace_ref=harness.blobs.put(canonical_json(trace)),
+            )
     return None
 
 

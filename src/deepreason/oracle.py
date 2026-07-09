@@ -352,7 +352,9 @@ def counterexample_commitment(base: Commitment, args) -> Commitment | None:
     return admit_counterexample(base, args)[0]
 
 
-def fuzz_property(source: str, base: Commitment, fuzz_n: int) -> tuple[list | None, dict]:
+def fuzz_property(
+    source: str, base: Commitment, fuzz_n: int, generator: str | None = None
+) -> tuple[list | None, dict]:
     """The harness's OWN experimenter — deterministic property-based fuzzing
     (QuickCheck inside the criticism loop). Enumerate ``gen(0..fuzz_n-1)`` from
     the spec's generator, keep the gate-valid inputs, RUN the candidate on
@@ -363,9 +365,14 @@ def fuzz_property(source: str, base: Commitment, fuzz_n: int) -> tuple[list | No
     15 straight proposals) is often trivially reachable by enumeration.
     Deterministic (§0): gen is a PURE function of the index k — no PRNG, no
     wall-clock — so the search replays byte-for-byte; gen/gate/candidate all
-    run untrusted under the same AST guard + sandbox + step bound."""
+    run untrusted under the same AST guard + sandbox + step bound.
+
+    ``generator`` overrides the spec's own — this is how EXPERIMENTER-proposed
+    generators (rules/experiment.py) plug in. Soundness is generator-
+    independent by construction: whoever wrote gen, the frozen gate admits
+    each input and the frozen checker decides each violation."""
     spec = _load_spec(base.budget)
-    generator = spec.get("generator")
+    generator = generator or spec.get("generator")
     if base.eval != f"program:{PROPERTY_PROGRAM}" or not generator:
         return None, {"fuzzed": 0, "note": "no generator in spec"}
     gen, gerr = _compile(generator, "gen")
@@ -410,3 +417,130 @@ def fuzz_property(source: str, base: Commitment, fuzz_n: int) -> tuple[list | No
         if verdict == FAIL:
             return candidate_input, {"fuzzed": tried, "k": k, **detail}
     return None, {"fuzzed": tried, "note": "no violation found"}
+
+
+# ---------------------------------------------------------------------------
+# Experimenter-designed generators (rules/experiment.py).
+#
+# An LLM proposes `def gen(k)` sources; the harness adjudicates them BY THEIR
+# FRUITS, mechanically: generator_wf is an ordinary program commitment whose
+# verdict is a pure function of the generator source — does it compile under
+# the guard, does it YIELD gate-valid inputs, does it reach anything NOVEL
+# (an input outside the frozen suite)? No judge, no trial: a generator can
+# never create a false refutation (gate + checker stay frozen), so the only
+# question a generator ever poses is "is this a productive place to look?" —
+# and that is decidable by running it.
+# ---------------------------------------------------------------------------
+
+GENERATOR_PROGRAM = "generator_wf"
+_GEN_PROBE_N = 64
+_GEN_MIN_VALID = 8
+
+
+def check_generator(
+    source: str,
+    gate: str | None,
+    frozen_inputs: list,
+    probe_n: int = _GEN_PROBE_N,
+    min_valid: int = _GEN_MIN_VALID,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+) -> tuple[str, dict]:
+    """Well-formedness of a proposed generator: enumerate gen(0..probe_n-1)
+    under the sandbox and PASS iff at least ``min_valid`` outputs are gate-
+    valid AND at least one gate-valid output is NOVEL (not among the frozen
+    inputs — a generator that only replays the known suite designs no
+    experiment). Deterministic pure function of the source."""
+    gen, gerr = _compile(source, "gen")
+    if gerr:
+        return FAIL, {"error": f"generator: {gerr}"}
+    valid = None
+    if gate:
+        valid, verr = _compile(gate, "valid")
+        if verr:
+            return OVERRUN, {"error": f"admission gate unusable: {verr}"}
+
+    frozen = {canonical_json(i) for i in frozen_inputs}
+    steps = [0]
+
+    def _tracer(frame, event, arg):
+        if event == "line":
+            steps[0] += 1
+            if steps[0] > step_limit:
+                raise _StepExceeded()
+        return _tracer
+
+    valid_count = 0
+    novel = False
+    for k in range(max(0, probe_n)):
+        steps[0] = 0
+        previous = sys.gettrace()
+        sys.settrace(_tracer)
+        try:
+            candidate_input = gen(k)
+            if not isinstance(candidate_input, list):
+                continue
+            if valid is not None and not valid(candidate_input):
+                continue
+        except Exception:  # noqa: BLE001 - a bad generated input just doesn't count
+            continue
+        finally:
+            sys.settrace(previous)
+        valid_count += 1
+        if canonical_json(candidate_input) not in frozen:
+            novel = True
+    if valid_count < min_valid:
+        return FAIL, {"valid": valid_count, "probe_n": probe_n,
+                      "error": f"yield too low: {valid_count}/{probe_n} gate-valid "
+                               f"(need {min_valid})"}
+    if not novel:
+        return FAIL, {"valid": valid_count, "probe_n": probe_n,
+                      "error": "no novel input: every gate-valid output replays "
+                               "the frozen suite"}
+    return PASS, {"valid": valid_count, "probe_n": probe_n, "novel": True}
+
+
+def check_generator_from_spec(source: str, budget) -> tuple:
+    """programs.py entry point for generator_wf commitments."""
+    spec = _load_spec(budget)
+    if "inputs" not in spec:
+        return OVERRUN, {"error": "generator-wf spec missing inputs"}
+    return check_generator(
+        source,
+        spec.get("input_check"),
+        spec["inputs"],
+        int(spec.get("probe_n", _GEN_PROBE_N)),
+        int(spec.get("min_valid", _GEN_MIN_VALID)),
+        int(spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
+    )
+
+
+def generator_wf_commitment(
+    base: Commitment,
+    probe_n: int = _GEN_PROBE_N,
+    min_valid: int = _GEN_MIN_VALID,
+) -> Commitment | None:
+    """Content-addressed generator-wf commitment derived from a property
+    oracle: freezes the base's gate + frozen inputs (novelty reference) with
+    the probe parameters. A generator artifact carrying this commitment is
+    adjudicated by crit_program exactly like any candidate — a generator that
+    doesn't compile, doesn't yield, or designs no new experiment is REFUTED
+    by a demonstrative warrant, mechanically."""
+    if base.eval != f"program:{PROPERTY_PROGRAM}":
+        return None
+    base_spec = _load_spec(base.budget)
+    if not base_spec.get("entry"):
+        return None
+    spec = {
+        "for": base.id,
+        "inputs": base_spec.get("inputs", []),
+        "input_check": base_spec.get("input_check"),
+        "probe_n": probe_n,
+        "min_valid": min_valid,
+        "step_limit": int(base_spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
+    }
+    digest = sha256_hex(canonical_json(spec))[:12]
+    return Commitment(
+        id=f"gen-wf@{digest}",
+        eval=f"program:{GENERATOR_PROGRAM}",
+        budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
+    )

@@ -94,6 +94,13 @@ class Config(BaseModel):
     # experiments mechanically — sandboxed executions, zero LLM calls, replay-
     # stable. 0 disables.
     FUZZ_N: int = 64
+    # Experiment design (rules/experiment.py): every this-many cycles, ask the
+    # EXPERIMENTER (conjecturer endpoint, experimenter template) to propose
+    # def gen(k) input generators for a property oracle that has fewer than
+    # GEN_MAX accepted ones. Proposals are adjudicated mechanically
+    # (generator_wf: compile/yield/novelty) — no judge. 0 disables.
+    GEN_PROPOSE_PERIOD: int = 5
+    GEN_MAX: int = 3
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

@@ -104,6 +104,17 @@ def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
     return run_property_from_spec(text, budget)
 
 
+def _generator_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Adjudicate an experimenter-proposed input generator BY ITS FRUITS
+    (oracle.py): compile under the guard, enumerate, and PASS iff it yields
+    enough gate-valid inputs including at least one novel one. Deterministic;
+    a generator never decides refutations, so this well-formedness verdict is
+    the ONLY adjudication a generator needs."""
+    from deepreason.oracle import check_generator_from_spec
+
+    return check_generator_from_spec(text, budget)
+
+
 def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
     """Structural born-connected check (§7 L1): a candidate on a connection
     problem must carry a `dependence` ref into the problem's declared lineage
@@ -137,6 +148,7 @@ PROGRAMS = {
     "lineage_ref": _lineage_ref,
     "exec_oracle": _exec_oracle,
     "property_oracle": _property_oracle,
+    "generator_wf": _generator_wf,
 }
 
 

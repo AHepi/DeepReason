@@ -40,6 +40,12 @@ class ProvenanceRole(str, Enum):
     # artifacts. Provenance-only like every role — epistemically inert (D2);
     # a policy steers generation, never adjudication.
     CONTROLLER = "controller"
+    # Experiment design (rules/experiment.py): emits input GENERATORS for
+    # property oracles — def gen(k) sources the fuzz pass enumerates. Inert
+    # like every role: a generator never decides anything (the frozen gate
+    # admits every input, the frozen checker decides every violation); it
+    # only chooses where the harness looks.
+    EXPERIMENTER = "experimenter"
 
 
 class Provenance(BaseModel):

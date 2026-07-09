@@ -212,6 +212,52 @@ def render_batch_crit_pack(
     return _clip("\n".join(lines), token_budget)
 
 
+def render_experiment_pack(
+    base: Commitment,
+    existing: list[str],
+    token_budget: int,
+    n_generators: int = 2,
+) -> str:
+    """Experiment-design pack (rules/experiment.py): the property oracle's
+    full frozen spec — entry, example inputs, CHECKER source (what a violation
+    means), input contract, and admission gate — plus the heads of already-
+    accepted generators so new designs cover DIFFERENT ground."""
+    try:
+        spec = json.loads(base.budget.extra.get("spec", "{}"))
+    except (ValueError, AttributeError):
+        spec = {}
+    lines = [
+        f"PROPERTY ORACLE {base.id}",
+        f"entry point: {spec.get('entry')}",
+        f"frozen example inputs (positional-args lists): "
+        f"{json.dumps(spec.get('inputs', [])[:4])}",
+    ]
+    contract = spec.get("input_contract")
+    if contract:
+        lines.append(f"INPUT CONTRACT (binding): {contract}")
+    checker = spec.get("checker")
+    if checker:
+        lines += ["", "correctness checker — a candidate output violating this "
+                      "refutes the candidate:", checker]
+    gate = spec.get("input_check")
+    if gate:
+        lines += ["", "admission gate — def valid(inp) must return True for every "
+                      "generated input:", gate]
+    if existing:
+        lines += ["", "ALREADY-ACCEPTED GENERATORS (cover DIFFERENT ground — do "
+                      "not duplicate these):"]
+        for src in existing:
+            head = " / ".join(src.splitlines()[:3])
+            lines.append(f"- {head[:160]}")
+    lines += [
+        "",
+        f"DIRECTIVE: return exactly {n_generators} substantively different "
+        "generators (different structural families of inputs, not parameter "
+        "tweaks of one idea).",
+    ]
+    return _clip("\n".join(lines), token_budget)
+
+
 def render_cx_retry_pack(
     rejected: list[dict],
     state: EpistemicState,

@@ -73,6 +73,25 @@ TEMPLATES = {
         "decisive_point MUST quote a specific span of the exchange; a ruling "
         "whose grounds cannot be located is invalid.\n\n" + _JSON_ONLY + "{pack}"
     ),
+    "experimenter": (
+        "You are the experimenter: you DESIGN EXPERIMENTS, you do not judge. "
+        "The pack describes a property oracle — an entry point, frozen example "
+        "inputs, a correctness checker, and an input-admission gate. Write "
+        "input GENERATORS: each is the complete source of `def gen(k)` that "
+        "maps an integer index k to ONE input (the positional-args list). The "
+        "harness will enumerate k = 0, 1, 2, ... and RUN candidates on every "
+        "gate-valid input, so your generator's job is COVERAGE: reach corners "
+        "the frozen examples miss — sizes, orderings, degenerate shapes, "
+        "adversarial structure. Vary the output substantively with k (a "
+        "constant generator is refuted for novelty). Every input must satisfy "
+        "the admission gate; outputs that violate it are silently skipped, and "
+        "a generator that mostly emits invalid inputs is refuted for yield. "
+        "HARD SANDBOX CONSTRAINTS: builtins only — no import statements, no "
+        "underscore/dunder names, no `**`, no integer literals above 1000000; "
+        "gen must be PURE in k (no randomness, no state). Return the source as "
+        "a plain string with real newlines — no markdown fences.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
     "spec_generator": (
         "You are the diversity-specification generator: you design ORTHOGONAL "
         "outlines that later candidates must each realize. You produce "

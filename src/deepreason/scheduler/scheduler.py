@@ -356,6 +356,7 @@ class Scheduler:
 
         reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
         self._lazy_hv()
+        self._experiment_step()
         self._research_step()
         self._audit_step()
         self._capture_step()
@@ -376,6 +377,42 @@ class Scheduler:
             paraphrase_invariance_audit(self.harness, self.adapter, self.config)
         except (SchemaRepairError, EndpointError) as e:
             self._drop(e)
+
+    def _experiment_step(self) -> None:
+        """Experiment design (rules/experiment.py): every GEN_PROPOSE_PERIOD
+        cycles, ONE experimenter call for the first property oracle among the
+        registered problems' criteria that still has fewer than GEN_MAX
+        accepted generators. New accepted generators invalidate the fuzz-clean
+        cache — a target that survived yesterday's experiments has not
+        survived today's."""
+        config = self.config
+        if (
+            config.GEN_PROPOSE_PERIOD <= 0
+            or config.FUZZ_N <= 0
+            or self._cycles % config.GEN_PROPOSE_PERIOD != 0
+            or not self.adapter.has_role("conjecturer")
+        ):
+            return
+        from deepreason.oracle import PROPERTY_PROGRAM
+        from deepreason.rules.experiment import accepted_generators, propose_generators
+
+        for problem in self.harness.state.problems.values():
+            for cid in problem.criteria:
+                base = self.harness.commitments.get(cid)
+                if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+                    continue
+                if len(accepted_generators(self.harness, cid)) >= config.GEN_MAX:
+                    continue
+                try:
+                    survivors = propose_generators(
+                        self.harness, base, self.adapter, config
+                    )
+                except (SchemaRepairError, EndpointError) as e:
+                    self._drop(e)
+                    return
+                if survivors:
+                    self._fuzz_clean.clear()  # new experiments: re-probe everyone
+                return  # one design call per due cycle (budgeted)
 
     def _research_step(self) -> None:
         """Standing exogenous schedule (§12): work one uncovered research

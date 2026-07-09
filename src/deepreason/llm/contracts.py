@@ -63,6 +63,16 @@ class BatchCriticOutput(BaseModel):
     cases: list[BatchCase] = Field(default_factory=list)
 
 
+class ExperimenterOutput(BaseModel):
+    """Experiment designs (rules/experiment.py): each entry is the SOURCE of
+    ``def gen(k)`` — a pure function from an index to one input for the
+    property oracle in the pack. Adjudicated mechanically by generator_wf
+    (compile, yield, novelty); a generator that designs no new experiment is
+    refuted on arrival."""
+
+    generators: list[str] = Field(min_length=1)
+
+
 class VariatorEdit(BaseModel):
     content: str
 
