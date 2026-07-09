@@ -209,6 +209,46 @@ def render_batch_crit_pack(
     return _clip("\n".join(lines), token_budget)
 
 
+def render_cx_retry_pack(
+    rejected: list[dict],
+    state: EpistemicState,
+    commitments: dict[str, Commitment],
+    blobs,
+    token_budget: int,
+) -> str:
+    """Counterexample-retry pack (§3): each entry is {target, counterexample,
+    reason} for an attack on an execution-backed target whose counterexample
+    failed to ground. The rejection reason is the gate/oracle's own
+    deterministic verdict — echoing it back is what turns a one-shot guesser
+    into an experimenter. Renders the target's code and its frozen spec
+    (entry, example input, gate) so the critic can aim."""
+    lines = [
+        f"COUNTEREXAMPLE RETRY ({len(rejected)} target(s)) — your previous "
+        "attack(s) on execution-backed targets did not ground. For each "
+        "target below: the harness's verdict on your proposed input, the "
+        "target's code, and its oracle spec. Return one entry per target id "
+        "with a NEW \"counterexample\" (a JSON list of positional args) that "
+        "satisfies the admission gate AND makes the target's output violate "
+        "the checker; attack=false if you cannot construct one.",
+    ]
+    for item in rejected:
+        tid = item["target"]
+        target = state.artifacts[tid]
+        lines += [
+            "",
+            f"TARGET {tid}",
+            content_text(target, blobs)[: max(320, token_budget // max(1, len(rejected)))],
+            f"your previous counterexample: {json.dumps(item.get('counterexample'))}",
+            f"harness verdict: {item.get('reason') or 'did not ground'}",
+        ]
+        for cid in target.interface.commitments:
+            kappa = commitments.get(cid)
+            if kappa is not None and kappa.eval in _EXECUTION_EVALS:
+                lines.append(f"- {cid}: {kappa.eval}")
+                lines += _execution_spec_lines(kappa)
+    return _clip("\n".join(lines), token_budget)
+
+
 def render_crit_pack(
     target_id: str,
     state: EpistemicState,

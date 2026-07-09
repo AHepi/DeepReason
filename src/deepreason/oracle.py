@@ -277,25 +277,27 @@ def property_oracle_commitment(
     )
 
 
-def counterexample_commitment(base: Commitment, args: list) -> Commitment | None:
-    """Mint the critic's grounded recourse: a property-oracle commitment whose
-    single input is the critic's proposed counterexample, inheriting the BASE
-    commitment's entry/checker/input_check verbatim. Returns None when the
-    counterexample is inadmissible: base is not a property oracle, args is not
-    a list, or the spec's input gate rejects it (an invalid input refutes
-    nothing). Deterministic: the minted id is content-addressed on the base
-    spec + the counterexample, so the same proposal replays to the same
-    commitment."""
-    if base.eval != f"program:{PROPERTY_PROGRAM}" or not isinstance(args, list):
-        return None
+def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str]:
+    """Admission for the critic's grounded recourse: returns (commitment, "")
+    when the proposed counterexample is admissible, else (None, reason). The
+    reason is DETERMINISTIC information the gate produced — callers may echo
+    it back to the critic (a one-shot caller otherwise never learns why its
+    input refuted nothing). The minted commitment is a property oracle whose
+    single input is the counterexample, inheriting the BASE spec's
+    entry/checker/input_check verbatim; content-addressed, so the same
+    proposal replays to the same commitment."""
+    if base.eval != f"program:{PROPERTY_PROGRAM}":
+        return None, "target commitment is not a property oracle: counterexamples do not apply"
+    if not isinstance(args, list):
+        return None, "counterexample must be a JSON LIST of positional args for the entry point"
     spec = _load_spec(base.budget)
     if not spec.get("entry") or not spec.get("checker"):
-        return None
+        return None, "base spec is missing entry/checker"
     gate = spec.get("input_check")
     if gate:
         valid, err = _compile(gate, "valid")
         if err:
-            return None  # unusable gate: fail closed — admit nothing
+            return None, "admission gate unusable — admitting nothing (fail closed)"
         # The gate source is spec-frozen but ARGS are critic-supplied: bound
         # the gate run with the same step tracer as candidate execution.
         limit = int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
@@ -312,12 +314,20 @@ def counterexample_commitment(base: Commitment, args: list) -> Commitment | None
         sys.settrace(_tracer)
         try:
             if not valid(args):
-                return None
-        except Exception:  # noqa: BLE001 - a gate error/overrun is a rejected input
-            return None
+                return None, (
+                    "input rejected by the admission gate (def valid(inp) returned "
+                    "False) — re-read the gate source and satisfy every constraint"
+                )
+        except Exception as e:  # noqa: BLE001 - a gate error/overrun is a rejected input
+            return None, f"admission gate raised on this input ({type(e).__name__}) — rejected"
         finally:
             sys.settrace(previous)
     return property_oracle_commitment(
         spec["entry"], [args], spec["checker"], gate,
         int(spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
-    )
+    ), ""
+
+
+def counterexample_commitment(base: Commitment, args) -> Commitment | None:
+    """Admission without the reason (see admit_counterexample)."""
+    return admit_counterexample(base, args)[0]

@@ -11,7 +11,11 @@
 from deepreason import programs
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
-from deepreason.llm.packs import render_batch_crit_pack, render_crit_pack
+from deepreason.llm.packs import (
+    render_batch_crit_pack,
+    render_crit_pack,
+    render_cx_retry_pack,
+)
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
 from deepreason.rules.warrants import (
     execution_backed,
@@ -24,7 +28,25 @@ def _register_nu(harness, content: str) -> Artifact:
     return harness.create_artifact(content, provenance=Provenance(role="critic"))
 
 
-def try_counterexample(harness, target_id: str, args, *, case: str, llm=None) -> Artifact | None:
+def _has_property_oracle(harness, target_id: str) -> bool:
+    """Counterexamples can ground only against a property-oracle commitment
+    (checker-decided correctness); retrying against anything else is spend
+    with no possible payoff."""
+    from deepreason.oracle import PROPERTY_PROGRAM
+
+    target = harness.state.artifacts.get(target_id)
+    if target is None:
+        return False
+    return any(
+        (kappa := harness.commitments.get(cid)) is not None
+        and kappa.eval == f"program:{PROPERTY_PROGRAM}"
+        for cid in target.interface.commitments
+    )
+
+
+def try_counterexample(
+    harness, target_id: str, args, *, case: str, llm=None
+) -> tuple[Artifact | None, str]:
     """The critic's grounded recourse (§3 execution supremacy): the critic
     proposed a concrete INPUT; run the target on it and check the declared
     property. Admissible iff the target carries a property-oracle commitment
@@ -32,28 +54,39 @@ def try_counterexample(harness, target_id: str, args, *, case: str, llm=None) ->
     admits the args. A violated property mints a content-addressed
     counterexample commitment and registers an ordinary DEMONSTRATIVE fail
     warrant — the critic refuted by EXECUTION, so execution supremacy does not
-    apply. Anything else (no property oracle, inadmissible input, property
-    holds) grounds nothing and returns None; the caller decides whether the
-    remaining argument may register. Deterministic (§0): minting, evaluation,
-    and the warrant are pure functions of frozen spec + proposed args."""
-    from deepreason.oracle import PROPERTY_PROGRAM, counterexample_commitment
+    apply. Anything else grounds nothing: returns (None, reason), where reason
+    is the DETERMINISTIC gate/oracle verdict on why — callers may echo it back
+    to the critic (§3 counterexample retry). Deterministic (§0): minting,
+    evaluation, and the warrant are pure functions of frozen spec + args."""
+    from deepreason.oracle import PROPERTY_PROGRAM, admit_counterexample
 
     target = harness.state.artifacts.get(target_id)
-    if target is None or args is None:
-        return None
+    if target is None:
+        return None, "unknown target"
+    if args is None:
+        return None, "no counterexample proposed"
+    reasons: list[str] = []
+    saw_property_oracle = False
     for cid in target.interface.commitments:
         base = harness.commitments.get(cid)
         if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
             continue
-        cx = counterexample_commitment(base, args)
+        saw_property_oracle = True
+        cx, reason = admit_counterexample(base, args)
         if cx is None:
+            reasons.append(reason)
             continue  # inadmissible against this commitment's input gate
         verdict, trace = programs.evaluate(cx, target, harness.blobs)
         if verdict != programs.FAIL:
-            continue  # the property held: this counterexample grounds nothing
+            reasons.append(
+                "the target RAN your input and the property HELD — this "
+                "counterexample does not discriminate; construct an input where "
+                "the target's OUTPUT violates the checker"
+            )
+            continue
         harness.register_commitment(cx)
         if verdict_on_record(harness, cx.id, target_id):
-            return None  # same counterexample already refutes this target
+            return None, "this exact counterexample already refutes the target"
         return register_fail_warrant(
             harness,
             commitment_id=cx.id,
@@ -68,8 +101,10 @@ def try_counterexample(harness, target_id: str, args, *, case: str, llm=None) ->
             ),
             trace_ref=harness.blobs.put(canonical_json(trace)),
             llm=llm,
-        )
-    return None
+        ), ""
+    if not saw_property_oracle:
+        return None, "target carries no property oracle: counterexamples do not apply"
+    return None, "; ".join(reasons)
 
 
 def crit_program(harness, target_id: str) -> list[Artifact]:
@@ -113,7 +148,7 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
         return None
     before = set(harness.state.artifacts)
-    grounded = try_counterexample(
+    grounded, reason = try_counterexample(
         harness, target_id, output.counterexample, case=output.case, llm=llm_call
     )
     if grounded is not None:
@@ -123,10 +158,40 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
             harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
         return grounded
     if execution_backed(harness, target_id):
-        # Execution supremacy (§3): the target passes its exec-oracle, so a
-        # verdict from reality already stands. A purely argumentative case
-        # cannot override it — and the counterexample (if any) just failed to
-        # ground. Register nothing; log the override so the call is on record.
+        # Execution supremacy (§3): a verdict from reality stands and a purely
+        # argumentative case cannot override it. Before giving up, echo the
+        # gate/oracle's DETERMINISTIC rejection reason back to the critic (§3
+        # counterexample retry): the one-shot caller otherwise never learns
+        # why its input refuted nothing.
+        cx = output.counterexample
+        retries = config.CX_RETRY_MAX if _has_property_oracle(harness, target_id) else 0
+        for _ in range(max(0, retries)):
+            harness.record_measure(inputs=["arg-crit-cx-rejected", target_id], llm=llm_call)
+            retry_pack = render_cx_retry_pack(
+                [{"target": target_id, "counterexample": cx, "reason": reason}],
+                harness.state,
+                harness.commitments,
+                harness.blobs,
+                token_budget=config.PACK_TOKEN_BUDGET,
+            )
+            retry, llm_call = adapter.call(
+                "argumentative_critic", retry_pack, ArgumentativeCriticOutput
+            )
+            if not retry.attack:
+                break  # the critic withdrew: nothing further to ground
+            before = set(harness.state.artifacts)
+            grounded, reason = try_counterexample(
+                harness,
+                target_id,
+                retry.counterexample,
+                case=retry.case.strip() or output.case,
+                llm=llm_call,
+            )
+            if grounded is not None:
+                if grounded.id in before:
+                    harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+                return grounded
+            cx = retry.counterexample
         harness.record_measure(
             inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
         )
@@ -181,6 +246,7 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
     )
     critics: list[Artifact] = []
     ruled: set[str] = set()
+    rejected: list[dict] = []  # execution-backed targets queued for cx retry
     # The shared call must be logged on exactly one committed event. Attach it
     # to the first registration that actually COMMITS (a deduped critic
     # commits no event), and fall back to a Measure if none do.
@@ -192,7 +258,7 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         if not case.attack or not case.case.strip():
             continue  # no fault found for this target: registers nothing
         before = set(harness.state.artifacts)
-        grounded = try_counterexample(
+        grounded, reason = try_counterexample(
             harness, case.target, case.counterexample, case=case.case, llm=llm_pending
         )
         if grounded is not None:
@@ -201,7 +267,18 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
                 llm_pending = None  # a real event carried the shared call
             continue
         if execution_backed(harness, case.target):
-            continue  # execution supremacy (§3): reality overrides the argument
+            # Execution supremacy (§3): reality overrides the argument. Log the
+            # override (llm=None — the shared call is accounted exactly once
+            # elsewhere) and queue the target for the counterexample retry.
+            harness.record_measure(
+                inputs=["arg-crit-overridden-by-execution", case.target]
+            )
+            if _has_property_oracle(harness, case.target):
+                rejected.append(
+                    {"target": case.target, "counterexample": case.counterexample,
+                     "reason": reason, "case": case.case}
+                )
+            continue
         case_hash = sha256_hex(case.case.encode())[:16]
         nu = _register_nu(
             harness, f"nu: argumentative case {case_hash} against {case.target} is sound"
@@ -223,6 +300,54 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         critics.append(critic)
         if critic.id not in before:
             llm_pending = None  # a real event carried the call
+    # Counterexample retry (§3): ONE shared follow-up call per round for every
+    # overridden attack, echoing each gate/oracle rejection reason. Same
+    # batching philosophy as above — the call is shared, warrants per-target.
+    for _ in range(max(0, config.CX_RETRY_MAX)):
+        if not rejected:
+            break
+        retry_pack = render_cx_retry_pack(
+            rejected,
+            harness.state,
+            harness.commitments,
+            harness.blobs,
+            token_budget=config.PACK_TOKEN_BUDGET,
+        )
+        retry_out, retry_llm = adapter.call(
+            "argumentative_critic", retry_pack, BatchCriticOutput, template_role="batch_critic"
+        )
+        allowed = {item["target"]: item for item in rejected}
+        retry_pending: object | None = retry_llm
+        seen_retry: set[str] = set()
+        next_rejected: list[dict] = []
+        for case in retry_out.cases:
+            if case.target not in allowed or case.target in seen_retry:
+                continue
+            seen_retry.add(case.target)
+            if not case.attack:
+                continue  # the critic withdrew this attack
+            before = set(harness.state.artifacts)
+            grounded, reason = try_counterexample(
+                harness,
+                case.target,
+                case.counterexample,
+                case=case.case.strip() or allowed[case.target].get("case", ""),
+                llm=retry_pending,
+            )
+            if grounded is not None:
+                critics.append(grounded)
+                if grounded.id not in before:
+                    retry_pending = None
+                continue
+            next_rejected.append(
+                {"target": case.target, "counterexample": case.counterexample,
+                 "reason": reason, "case": case.case}
+            )
+        if retry_pending is not None:
+            harness.record_measure(
+                inputs=["batch-crit-cx-retry", *sorted(allowed)], llm=retry_pending
+            )
+        rejected = next_rejected
     if llm_pending is not None:
         # Nothing committed the call (no attacks, or every critic deduped).
         harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_pending)

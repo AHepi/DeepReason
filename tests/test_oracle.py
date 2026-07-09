@@ -386,11 +386,15 @@ def _property_candidate(harness, source):
     return c, art
 
 
-def _cx_critic(harness, counterexample, case="fails on short lists"):
+WITHDRAW = json.dumps({"attack": False, "case": ""})
+
+
+def _cx_critic(harness, counterexample, case="fails on short lists", retry_responses=()):
+    responses = [json.dumps(
+        {"attack": True, "case": case, "counterexample": counterexample}
+    ), *retry_responses]
     return LLMAdapter(
-        {"argumentative_critic": MockEndpoint([json.dumps(
-            {"attack": True, "case": case, "counterexample": counterexample}
-        )])},
+        {"argumentative_critic": MockEndpoint(responses)},
         harness.blobs,
         retry_max=2,
     )
@@ -413,7 +417,10 @@ def test_counterexample_refutes_an_execution_backed_candidate(harness):
 def test_passing_counterexample_grounds_nothing_and_supremacy_holds(harness):
     _, good = _property_candidate(harness, GOOD_SORT)
 
-    critic = crit_argumentative(harness, good.id, _cx_critic(harness, [[2, 1]]), Config())
+    critic = crit_argumentative(
+        harness, good.id,
+        _cx_critic(harness, [[2, 1]], retry_responses=[WITHDRAW]), Config(),
+    )
 
     assert critic is None  # solve([2,1]) == [1,2]: property held, argument overridden
     assert harness.state.status[good.id] == Status.ACCEPTED
@@ -425,9 +432,84 @@ def test_gate_rejected_counterexample_grounds_nothing(harness):
     _, sneaky = _property_candidate(harness, SNEAKY_SORT)
     # ["a", "b"] would break sneaky's sort, but the problem never posed string
     # inputs: the gate rejects it, so it refutes nothing and supremacy holds.
-    critic = crit_argumentative(harness, sneaky.id, _cx_critic(harness, [["a", "b"]]), Config())
+    critic = crit_argumentative(
+        harness, sneaky.id,
+        _cx_critic(harness, [["a", "b"]], retry_responses=[WITHDRAW]), Config(),
+    )
     assert critic is None
     assert harness.state.status[sneaky.id] == Status.ACCEPTED
+
+
+# ---- the counterexample RETRY: the gate's rejection reason feeds back ----
+
+def test_retry_with_echoed_reason_grounds_the_second_counterexample(harness):
+    _, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    good_retry = json.dumps(
+        {"attack": True, "case": "short lists unsorted", "counterexample": [[2, 1]]}
+    )
+    # First proposal is gate-rejected (strings); the retry — with the reason
+    # echoed — proposes a valid discriminating input and refutes by execution.
+    critic = crit_argumentative(
+        harness, sneaky.id,
+        _cx_critic(harness, [["a", "b"]], retry_responses=[good_retry]), Config(),
+    )
+    assert critic is not None
+    assert harness.state.status[sneaky.id] == Status.REFUTED
+    kinds = [e.inputs[0] for e in harness.log.read() if e.inputs]
+    assert "arg-crit-cx-rejected" in kinds  # the feedback round is on the record
+
+
+def test_retry_pack_contains_reason_gate_and_previous_proposal(harness):
+    from deepreason.llm.packs import render_cx_retry_pack
+
+    _, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    pack = render_cx_retry_pack(
+        [{"target": sneaky.id, "counterexample": [["a", "b"]],
+          "reason": "input rejected by the admission gate"}],
+        harness.state, harness.commitments, harness.blobs, token_budget=4000,
+    )
+    assert "input rejected by the admission gate" in pack  # the echoed verdict
+    assert '[["a", "b"]]' in pack                          # what was proposed
+    assert "def valid(inp):" in pack                       # the gate to satisfy
+    assert "def solve" in pack                             # the code to attack
+
+
+def test_cx_retry_disabled_by_config(harness):
+    _, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    # Only ONE scripted response: with CX_RETRY_MAX=0 no retry call is made
+    # (MockEndpoint would raise if one were attempted).
+    critic = crit_argumentative(
+        harness, sneaky.id, _cx_critic(harness, [["a", "b"]]),
+        Config(CX_RETRY_MAX=0),
+    )
+    assert critic is None
+    assert harness.state.status[sneaky.id] == Status.ACCEPTED
+
+
+def test_batch_retry_grounds_counterexample(harness):
+    c, sneaky = _property_candidate(harness, SNEAKY_SORT)
+    good = harness.create_artifact(
+        GOOD_SORT, codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    first = json.dumps({"cases": [
+        {"target": sneaky.id, "attack": True, "case": "special-cased",
+         "counterexample": [["a", "b"]]},  # gate-rejected: strings
+        {"target": good.id, "attack": False, "case": ""},
+    ]})
+    second = json.dumps({"cases": [
+        {"target": sneaky.id, "attack": True, "case": "special-cased",
+         "counterexample": [[2, 1]]},      # valid + discriminating
+    ]})
+    adapter = LLMAdapter(
+        {"argumentative_critic": MockEndpoint([first, second])},
+        harness.blobs, retry_max=2,
+    )
+    critics = crit_argumentative_batch(harness, [sneaky.id, good.id], adapter, Config())
+    assert harness.state.status[sneaky.id] == Status.REFUTED  # retry grounded it
+    assert harness.state.status[good.id] == Status.ACCEPTED
+    assert len(critics) == 1
 
 
 def test_batch_counterexample_also_grounds(harness):
@@ -442,8 +524,12 @@ def test_batch_counterexample_also_grounds(harness):
          "counterexample": [[2, 1]]},
         {"target": good.id, "attack": True, "case": "handwavy complaint"},
     ]})
+    withdraw_batch = json.dumps({"cases": [
+        {"target": good.id, "attack": False, "case": ""},
+    ]})
     adapter = LLMAdapter(
-        {"argumentative_critic": MockEndpoint([batch])}, harness.blobs, retry_max=2
+        {"argumentative_critic": MockEndpoint([batch, withdraw_batch])},
+        harness.blobs, retry_max=2,
     )
     critics = crit_argumentative_batch(harness, [sneaky.id, good.id], adapter, Config())
     assert len(critics) == 1  # counterexample grounded; bare argument overridden

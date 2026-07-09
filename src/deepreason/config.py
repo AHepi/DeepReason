@@ -77,6 +77,12 @@ class Config(BaseModel):
     # admitted targets share ONE argumentative-critic call; warrants remain
     # per-target. None = one call per target (legacy behavior).
     CRIT_BATCH_K: int | None = None
+    # Counterexample feedback retries (§3 execution supremacy): when an attack
+    # on an execution-backed target fails to ground (missing / gate-rejected /
+    # property-held counterexample), re-ask the critic up to this many times
+    # WITH the deterministic rejection reason echoed back — the gate's verdict
+    # is information the one-shot caller otherwise never sees. 0 disables.
+    CX_RETRY_MAX: int = 1
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).
