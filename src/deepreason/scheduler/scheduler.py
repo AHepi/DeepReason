@@ -54,6 +54,13 @@ class Scheduler:
         self._arg_crit_this_cycle = 0
         self._recrit_cursor = 0  # round-robin over standing survivors (§14)
         self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
+        # Discrimination futility tracking (§14 attention only): pid -> attempt
+        # count / last-attempt cycle. A pairwise trial that blocks (order-swap
+        # deadlock) or rules 'neither' leaves the problem unsolved, and
+        # unsolved-first selection would re-feed it judge calls forever — the
+        # run-3 starvation (18 blocked trials, one conjecturer call).
+        self._disc_attempts: dict[str, int] = {}
+        self._disc_last: dict[str, int] = {}
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
 
@@ -99,6 +106,25 @@ class Scheduler:
         self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
         self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
+    def _disc_paused(self, problem) -> bool:
+        """Futility backoff for discrimination problems (§14 attention only):
+        each attempt — resolved, 'neither', or blocked — starts a cooldown of
+        DISC_COOLDOWN cycles, and after DISC_ATTEMPTS_MAX attempts the problem
+        is paused permanently (a rivalry the judges cannot presently resolve
+        is recorded as unresolved, not retried into starvation; new evidence
+        arrives through new artifacts, not identical re-rulings). Pausing
+        never touches a status — selection only."""
+        if problem.provenance.trigger != SpawnTrigger.DISCRIMINATION:
+            return False
+        attempts = self._disc_attempts.get(problem.id, 0)
+        if (
+            self.config.DISC_ATTEMPTS_MAX is not None
+            and attempts >= self.config.DISC_ATTEMPTS_MAX
+        ):
+            return True
+        last = self._disc_last.get(problem.id)
+        return last is not None and self._cycles - last < self.config.DISC_COOLDOWN
+
     def _select_problem(self):
         state = self.harness.state
         if self.config.FOCUS_PROBLEM is not None:
@@ -117,6 +143,7 @@ class Scheduler:
             # Research problems are worked by backends, not gamma (§12).
             if p.provenance.trigger != SpawnTrigger.RESEARCH
             and (integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS)
+            and not self._disc_paused(p)
         ]
         if not candidates:
             return None
@@ -289,6 +316,15 @@ class Scheduler:
         ):
             from deepreason.informal.trial import pairwise_discriminate
 
+            # Futility tracking: every selection is an attempt — resolved,
+            # 'neither', blocked, or rivals-missing alike (each burned the
+            # cycle). Cooldown + attempt cap keep an unresolvable rivalry
+            # from starving the rest of the run (_disc_paused).
+            self._disc_attempts[problem.id] = self._disc_attempts.get(problem.id, 0) + 1
+            self._disc_last[problem.id] = self._cycles
+            if self._disc_attempts[problem.id] == self.config.DISC_ATTEMPTS_MAX:
+                # Observability: from here on, selection skips this problem.
+                harness.record_measure(inputs=["disc-attempts-exhausted", problem.id])
             rivals = [
                 i for i in problem.provenance.from_
                 if harness.state.status.get(i) == Status.ACCEPTED

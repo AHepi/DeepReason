@@ -110,6 +110,14 @@ class Config(BaseModel):
     # collapse). Requires the property_designer AND judge roles. 0 disables.
     PROP_PROPOSE_PERIOD: int = 7
     PROP_MAX: int = 3
+    # Discrimination futility backoff (§14 attention only; the run-3
+    # starvation: an order-swap-deadlocked pairwise trial stayed 'unsolved'
+    # and won unsolved-first selection 18 times while the root problem got
+    # one conjecturer call). Each attempt starts a cooldown; after the cap
+    # the problem is paused permanently — recorded as unresolved, never
+    # retried into starvation. None = unlimited attempts (legacy).
+    DISC_ATTEMPTS_MAX: int | None = 3
+    DISC_COOLDOWN: int = 4
     # The ratchet: an active property older than this many EVENTS is promoted
     # — it may then refute without population support (the standard holds the
     # line even when every current candidate fails it). Promotion is trust,
@@ -125,8 +133,12 @@ class Config(BaseModel):
     SPEC_INJECTION: bool = False
     # Self-calibration liveness queue (docs/CONTROLLER_SPEC.md): replaces
     # unsolved-first rotation with aging priority (age x unsolvedness) so no
-    # registered problem starves. Attention only, never status.
-    LIVENESS_QUEUE: bool = False
+    # registered problem starves. Attention only, never status. Default ON
+    # since the ground-truth run-3 starvation: under unsolved-first, a SOLVED
+    # root problem is never selected while ANY unsolved spawn exists, so the
+    # very process that could overturn its survivor is starved by that
+    # survivor's own acceptance. False = legacy unsolved-first.
+    LIVENESS_QUEUE: bool = True
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2
