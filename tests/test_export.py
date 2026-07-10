@@ -45,6 +45,22 @@ def test_export_writes_app_screenshots_and_readme(harness, tmp_path):
     assert app.id[:8] in readme                      # the why-chain names the app
 
 
+def test_export_finds_default_codec_apps_by_commitment(harness, tmp_path):
+    # Conjecturer-admitted candidates carry the default text codec; the
+    # browser commitment (not the codec) marks them as app deliverables,
+    # and content sniffing picks the .html extension.
+    c = browser_commitment(SCRIPT)
+    harness.register_commitment(c)
+    app = harness.create_artifact(
+        "<!doctype html><div id=t>25:00</div>",  # default codec (utf8)
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    paths = export_run(harness, tmp_path / "out")
+    html = [p for p in paths if p.suffix == ".html"]
+    assert len(html) == 1 and app.id[:12] in html[0].name
+
+
 def test_export_specific_artifact(harness, tmp_path):
     app = _run_shape(harness)
     other = harness.create_artifact("unrelated prose")

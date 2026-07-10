@@ -25,8 +25,24 @@ def _raw(harness, artifact) -> bytes:
     return harness.blobs.get(artifact.content_ref)
 
 
-def _extension(codec: str) -> str:
-    return _EXTENSIONS.get(codec, "txt")
+def _extension(codec: str, content: bytes = b"") -> str:
+    ext = _EXTENSIONS.get(codec)
+    if ext:
+        return ext
+    head = content[:200].lstrip().lower()
+    if head.startswith((b"<!doctype", b"<html")):
+        return "html"  # conjecturer-admitted apps carry the default codec
+    return "txt"
+
+
+def _carries_browser_oracle(harness, artifact) -> bool:
+    from deepreason.browser import BROWSER_PROGRAM
+
+    return any(
+        (kappa := harness.commitments.get(cid)) is not None
+        and kappa.eval == f"program:{BROWSER_PROGRAM}"
+        for cid in artifact.interface.commitments
+    )
 
 
 def _deliverables(harness, artifact_id: str | None) -> list:
@@ -37,7 +53,13 @@ def _deliverables(harness, artifact_id: str | None) -> list:
         if harness.state.status.get(a.id) == Status.ACCEPTED
         and (a.provenance.role if a.provenance else "") in ("conjecturer", "synthesizer", "seed")
     ]
-    apps = [a for a in accepted if a.codec == "code:html"]
+    # An app candidate is one built to run in the browser oracle — the
+    # commitment, not the codec, is the load-bearing marker (conj-admitted
+    # candidates carry the default text codec).
+    apps = [
+        a for a in accepted
+        if a.codec == "code:html" or _carries_browser_oracle(harness, a)
+    ]
     return apps or [a for a in accepted if str(a.codec).startswith("code:")]
 
 
@@ -50,8 +72,9 @@ def export_run(harness, out_dir: str | Path, artifact_id: str | None = None) -> 
     readme = ["# DeepReason export", ""]
     for artifact in _deliverables(harness, artifact_id):
         aid = artifact.id
-        path = out / f"app-{aid[:12]}.{_extension(str(artifact.codec))}"
-        path.write_bytes(_raw(harness, artifact))
+        content = _raw(harness, artifact)
+        path = out / f"app-{aid[:12]}.{_extension(str(artifact.codec), content)}"
+        path.write_bytes(content)
         written.append(path)
 
         status = harness.state.status.get(aid)
