@@ -2,11 +2,11 @@
 
 The on-disk layout is a strict subset of the parent's (G6): root/log.jsonl
 holds parent-schema events, root/blobs is the sha256 blob store, and
-root/objects holds the parent's four record schemas so parent replay can
-rehydrate outputs by id. State is a pure function of the log: two replays
-are byte-equal (G2). Kept because the accounting layer caught three real
-spend bugs in the parent (invisible trial spend, retry-exhausted spend,
-mid-retry budget death).
+root/objects holds the parent's four record schemas (legacy flat on Mini
+writes, schema-namespaced or flat on reads) so parent replay can rehydrate
+outputs by id. State is a pure function of the log: two replays are byte-equal
+(G2). Kept because the accounting layer caught three real spend bugs in the
+parent (invisible trial spend, retry-exhausted spend, mid-retry budget death).
 """
 
 import hashlib
@@ -85,7 +85,7 @@ class BlobStore:
 
 
 class ObjectStore:
-    """Parent record files: objects/<sha256(id)>.json = {schema, id, data}."""
+    """Read parent namespaced records and legacy flat records; write legacy."""
 
     SCHEMAS = ("artifact", "commitment", "warrant", "problem")
 
@@ -106,10 +106,17 @@ class ObjectStore:
         os.replace(tmp, path)
 
     def get(self, oid: str) -> tuple[str, dict]:
-        path = self._path(oid)
+        digest = f"{sha256_hex(oid.encode())}.json"
+        matches = [self.root / schema / digest for schema in self.SCHEMAS
+                   if (self.root / schema / digest).exists()]
+        if len(matches) > 1:
+            raise ValueError(f"object id {oid!r} exists in multiple schemas")
+        path = matches[0] if matches else self._path(oid)
         if not path.exists():
             raise KeyError(f"object not found: {oid}")
         record = json.loads(path.read_text())
+        if record.get("id") != oid:
+            raise ValueError(f"object id mismatch: {oid}")
         return record["schema"], record["data"]
 
 

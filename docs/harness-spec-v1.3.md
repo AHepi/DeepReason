@@ -134,7 +134,9 @@ participates in attack closure. Both keep status computation inside `att`/`dep`.
 S = (A, Π, carry, att, dep, addr, status, hv, reach, conn)
 ```
 
-Recompute from the event log at any `seq` for time-travel.
+Recompute from the event log at any `seq` for time-travel. A historical view
+is physically read-only: opening it MUST NOT create directories, repair a
+torn log tail, materialize a reveal, or write objects, blobs, or events.
 
 **Event** (source of truth; append-only JSONL)
 
@@ -500,7 +502,21 @@ Thin custom scheduler over a rule registry — control flow is "apply enabled ru
 
 Frontier of problems + global budgets (κ budgets generalized). School allocation per §11.2; focus selection per Pareto retention (§11.7). Short horizon: one problem, N cycles, return the Pareto frontier of G-members. Long horizon: persistent frontier across sessions. Integration work capped by `INTEGRATION_BUDGET_SHARE`; audits by `AUDIT_PERIOD`; user queue by `USER_RULINGS_BUDGET`; `Reveal` events per holdout policy; capture-response rules per §11.4 with hysteresis.
 
-**Storage:** flat content-addressed JSON files + append-only JSONL log, git-native; sealed holdout blobs in a `holdout/` namespace excluded from pack rendering until their `Reveal` event; refuted-index (embedding NN over refuted artifacts) rebuilt deterministically from the log. Save = git commit. Merge = componentwise set-union + re-adjudicate (G-Set CRDT; no conflicts possible); school-policy artifacts union like any artifact, and the scheduler reconciles active rosters from config. SQLite/FAISS-style index only if scale demands.
+**Storage:** schema-namespaced content-addressed JSON files
+(`objects/<schema>/<sha256(id)>.json`) + an append-only JSONL log, git-native.
+Legacy flat object records remain readable. Validated ontology records and
+their nested collections are immutable. Because event references contain an
+untyped object id, an id is globally unambiguous within a root: every stored
+copy of an id MUST have the same schema and canonical bytes. A conflicting
+registration or merge is rejected rather than silently choosing a record.
+Event sequence numbers MUST be exactly `0..N-1`; duplicates, gaps, and
+out-of-order appends are corruption. Sealed holdout blobs live in a `holdout/`
+namespace excluded from pack rendering until their `Reveal` event;
+refuted-index (embedding NN over refuted artifacts) is rebuilt
+deterministically from the log. Save = git commit. Merge = componentwise
+set-union + re-adjudicate when common ids are identical; school-policy
+artifacts union like any artifact, and the scheduler reconciles active rosters
+from config. SQLite/FAISS-style index only if scale demands.
 
 Pydantic models throughout.
 

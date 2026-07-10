@@ -43,8 +43,18 @@ class WellFormednessError(ValueError):
     """A registration would violate the formation rules (spec §2)."""
 
 
+class ReadOnlyHarnessError(RuntimeError):
+    """A mutation was attempted through a time-travel materialization."""
+
+
 class Harness:
-    def __init__(self, root: Path | str, *, upto_seq: int | None = None) -> None:
+    def __init__(
+        self,
+        root: Path | str,
+        *,
+        upto_seq: int | None = None,
+        read_only: bool | None = None,
+    ) -> None:
         """Open (or create) a harness at ``root``; ``upto_seq`` truncates the
         replay for time-travel views (prefer the ``Harness.at`` spelling).
 
@@ -53,10 +63,15 @@ class Harness:
         so per-event adjudication during replay is discarded work (it made
         reopening an N-event log superlinear)."""
         self.root = Path(root)
-        self.root.mkdir(parents=True, exist_ok=True)
-        self.blobs = BlobStore(self.root / "blobs")
-        self.objects = ObjectStore(self.root / "objects")
-        self.log = EventLog(self.root / "log.jsonl")
+        self._read_only = (upto_seq is not None) if read_only is None else read_only
+        if self._read_only:
+            if not self.root.exists():
+                raise FileNotFoundError(f"read-only harness root does not exist: {self.root}")
+        else:
+            self.root.mkdir(parents=True, exist_ok=True)
+        self.blobs = BlobStore(self.root / "blobs", read_only=self._read_only)
+        self.objects = ObjectStore(self.root / "objects", read_only=self._read_only)
+        self.log = EventLog(self.root / "log.jsonl", read_only=self._read_only)
         self._reset()
         for event in self.log.read(upto_seq=upto_seq):
             self._apply_event(event, adjudicate=False)
@@ -88,27 +103,45 @@ class Harness:
     def at(cls, root: Path | str, seq: int) -> "Harness":
         """Time-travel: the harness as of event ``seq`` (spec §1). Read-only —
         do not register into a truncated view."""
-        return cls(root, upto_seq=seq)
+        return cls(root, upto_seq=seq, read_only=True)
+
+    def _ensure_writable(self) -> None:
+        if self._read_only:
+            raise ReadOnlyHarnessError("time-travel harness is read-only")
 
     # ------------------------------------------------------------------ #
     # Registration (live path: validate -> persist -> commit event)      #
     # ------------------------------------------------------------------ #
 
     def register_commitment(self, commitment: Commitment) -> Commitment:
+        self._ensure_writable()
         if commitment.id in self.commitments:
-            return self.commitments[commitment.id]
+            existing = self.commitments[commitment.id]
+            if existing != commitment:
+                raise WellFormednessError(
+                    f"commitment id {commitment.id!r} conflicts with its registered record"
+                )
+            return existing
         self.objects.put("commitment", commitment)
         self._commit(Rule.REGISTER, inputs=[], outputs=[commitment.id])
-        return commitment
+        return self.commitments[commitment.id]
 
     def register_problem(self, problem: Problem) -> Problem:
-        if problem.id in self.state.problems:
-            return self.state.problems[problem.id]
+        self._ensure_writable()
         # Popper battery auto-pinned (spec §1).
         criteria = list(problem.criteria) + [
             b for b in POPPER_BATTERY if b not in problem.criteria
         ]
-        problem = problem.model_copy(update={"criteria": criteria})
+        payload = problem.model_dump(mode="json", by_alias=True)
+        payload["criteria"] = criteria
+        problem = Problem.model_validate(payload)
+        if problem.id in self.state.problems:
+            existing = self.state.problems[problem.id]
+            if existing != problem:
+                raise WellFormednessError(
+                    f"problem id {problem.id!r} conflicts with its registered record"
+                )
+            return existing
         self.objects.put("problem", problem)
         self._commit(Rule.SPAWN, inputs=list(problem.provenance.from_), outputs=[problem.id])
         return self.state.problems[problem.id]
@@ -126,6 +159,7 @@ class Harness:
         llm: LLMCall | None = None,
     ) -> Artifact:
         """Store content, compute the canonical id, and register."""
+        self._ensure_writable()
         interface = interface or Interface()
         if isinstance(content, bytes):
             content_ref = self.blobs.put(content)
@@ -153,6 +187,7 @@ class Harness:
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
     ) -> Artifact:
+        self._ensure_writable()
         # register_batch handles both content dedupe and any NEW carriage
         # declared for an existing content artifact.
         self.register_batch(
@@ -174,6 +209,7 @@ class Harness:
         pair still commits. This is what lets identical criticism prose attack
         more than one target without changing the prose artifact's id.
         """
+        self._ensure_writable()
         candidate = dict(self.state.artifacts)
         accepted_entries: list[tuple[Artifact, list[Warrant]]] = []
         carry_add: list[tuple[str, str]] = []
@@ -409,6 +445,7 @@ class Harness:
         addr_add: list[tuple[str, str]] | None = None,
         carry_add: list[tuple[str, str]] | None = None,
     ) -> Event:
+        self._ensure_writable()
         event = Event(
             seq=self._next_seq,
             ts=datetime.now(timezone.utc).isoformat(),
@@ -419,8 +456,19 @@ class Harness:
             state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {},
                                  addr_add=addr_add or [], carry_add=carry_add or []),
         )
-        event.state_diff = self._apply_event(event)
-        self.log.append(event)
+        state_diff = self._apply_event(event)
+        event = event.model_copy(update={"state_diff": state_diff})
+        self._tail[-1] = event  # _apply_event saw the provisional immutable event
+        try:
+            self.log.append(event)
+        except Exception:
+            # Object/blob writes are content-addressed and may remain orphaned,
+            # but the live materialization must never outrun the durable log.
+            self._reset()
+            for durable in self.log.read():
+                self._apply_event(durable, adjudicate=False)
+            self._adjudicate()
+            raise
         return event
 
     def _apply_event(self, event: Event, adjudicate: bool = True) -> StateDiff | None:
@@ -440,7 +488,7 @@ class Harness:
                 if artifact is None:
                     continue
                 sealed = self.root / "holdout" / artifact.content_ref
-                if sealed.exists():
+                if sealed.exists() and not self._read_only:
                     self.blobs.put(sealed.read_bytes())
         for oid in event.outputs:
             schema, obj = self.objects.get(oid)

@@ -154,9 +154,13 @@ harness can open it and keep going.
 ## What you can trust, and what you can't
 
 **Trust:** every run is deterministic and byte-for-byte replayable from its
-log; token accounting is checked (`deepreason.invariants.verify_root` — it
-caught a real 1% leak in a million-token run this project ran). Nothing is
-deleted; state is a pure function of the append-only log.
+log; ontology records are immutable, event sequence numbers are continuous,
+and historical views cannot write to the run they inspect. Object ids resolve
+to one schema and one canonical record, so a conflicting registration or
+merge fails loudly instead of changing history. Token accounting is checked
+(`deepreason.invariants.verify_root` — it caught a real 1% leak in a
+million-token run this project ran). Nothing is deleted; state is a pure
+function of the append-only log.
 
 **Read with care** (documented honestly in
 [`docs/MINI_STRESS_REPORT.md`](docs/MINI_STRESS_REPORT.md) and the arrow
