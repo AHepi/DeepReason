@@ -79,6 +79,10 @@ class Harness:
         self._trans_out: list[tuple[int, str, str | None, str]] = []
         self._embed_cache: dict[tuple[str, str], list[float]] = {}
         self._verdict_cache: dict[tuple[str, str], str] = {}
+        # Live-only availability state: a sandbox resource abort is not an
+        # epistemic event and is never replayed/cached, but generator/property
+        # activation must fail closed until a later deterministic retry.
+        self._oracle_pending: set[tuple[str, str]] = set()
 
     @classmethod
     def at(cls, root: Path | str, seq: int) -> "Harness":

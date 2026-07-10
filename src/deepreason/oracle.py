@@ -12,26 +12,34 @@ a real measurement that refuted a design and lifted λ 0.0 -> 0.67).
 
 Determinism (§0): the candidate runs against FIXED inputs under a DETERMINISTIC
 step bound (Python line-event count, never wall-clock), and an AST int-literal
-cap forbids C-level range/collection bombs — so the verdict is a pure function
-of content and replays byte-for-byte. `overrun` (not a wall-clock condition, §1)
-is reserved for a malformed spec.
+cap forbids C-level range/collection bombs — so every epistemic verdict is a
+pure function of content and replays byte-for-byte. The whole operation,
+including module loading, runs in a fresh subprocess. OS memory/CPU limits and
+a parent watchdog are emergency containment only: if one fires, the API returns
+``overrun`` with ``sandbox_abort`` and no fail warrant may be minted.
 
-Security: the candidate is UNTRUSTED model output, so it is AST-guarded (no
-imports, no underscore/dunder names or attributes, no `**`, no huge int
+Security: every candidate/checker/generator/gate is UNTRUSTED model output, so
+it is AST-guarded (no imports, no underscore/dunder names or attributes, no
+`**`, no huge int
 literals, no global/nonlocal) and executed with a locked, whitelist
 `__builtins__` — the same escape-family guard programs.py uses for predicates,
-extended to a callable. This is a PROTOTYPE sandbox: a production evaluator must
-run in a subprocess/container with real resource limits. See tests/test_oracle.py
-for the blocked-escape cases.
+extended to a callable. The AST guard is defense in depth; process isolation is
+the availability and blast-radius boundary. See tests/test_oracle.py for the
+blocked-escape and hostile-top-level cases.
 """
 
 import ast
 import builtins as _builtins
 import json
 import sys
+from contextlib import contextmanager
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.commitment import Budget, Commitment
+from deepreason.oracle_sandbox import (
+    SandboxAborted as OracleSandboxAborted,
+)
+from deepreason.oracle_sandbox import run_isolated as _run_isolated
 
 PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
 
@@ -56,46 +64,24 @@ class _StepExceeded(Exception):
     """The candidate ran past its deterministic line-event budget."""
 
 
-# The step bound counts LINE events; a single line can still allocate
-# unboundedly (`chr(97) * (999999 * 999999)` — runtime products dodge the
-# int-literal cap). Observed live: a buggy run-length decoder misparsed a
-# count, multiplied a string by ~10^12, and the OS OOM-killed the whole
-# harness process (dmesg: 16GB RSS, SIGKILL) — an AVAILABILITY hole, not a
-# soundness one. Mitigation: lower the process's SOFT address-space limit
-# around candidate execution so the allocation raises MemoryError inside
-# the candidate (caught => FAIL verdict) instead of summoning the OOM
-# killer. The hard limit stays untouched, so the soft cap is fully
-# restorable. Full fix remains subprocess isolation (module docstring).
-_MEMORY_CAP_BYTES = 2_000_000_000
+@contextmanager
+def _step_budget(step_limit: int):
+    """Count Python line events, including untrusted module top-level code."""
+    steps = [0]
 
+    def _tracer(frame, event, arg):
+        if event == "line":
+            steps[0] += 1
+            if steps[0] > step_limit:
+                raise _StepExceeded()
+        return _tracer
 
-class _MemoryGuard:
-    """Context manager: soft RLIMIT_AS cap during untrusted execution.
-    No-op where the resource module is unavailable (non-POSIX)."""
-
-    def __enter__(self):
-        self._saved = None
-        try:
-            import resource
-
-            self._resource = resource
-            soft, hard = resource.getrlimit(resource.RLIMIT_AS)
-            cap = _MEMORY_CAP_BYTES if hard == resource.RLIM_INFINITY \
-                else min(_MEMORY_CAP_BYTES, hard)
-            if soft == resource.RLIM_INFINITY or soft > cap:
-                resource.setrlimit(resource.RLIMIT_AS, (cap, hard))
-                self._saved = (soft, hard)
-        except (ImportError, ValueError, OSError):
-            pass  # platform without rlimits: keep the prototype behavior
-        return self
-
-    def __exit__(self, *exc):
-        if self._saved is not None:
-            try:
-                self._resource.setrlimit(self._resource.RLIMIT_AS, self._saved)
-            except (ValueError, OSError):
-                pass
-        return False
+    previous = sys.gettrace()
+    sys.settrace(_tracer)
+    try:
+        yield steps
+    finally:
+        sys.settrace(previous)
 
 
 def _guard(tree: ast.AST) -> None:
@@ -137,6 +123,10 @@ def _compile(source: str, entry: str):
     namespace: dict = {"__builtins__": dict(_SAFE_BUILTINS)}
     try:
         exec(compile(tree, "<candidate>", "exec"), namespace)  # noqa: S102 - guarded+sandboxed
+    except _StepExceeded:
+        return None, "step limit exceeded while loading module"
+    except MemoryError:
+        raise
     except Exception as e:  # noqa: BLE001 - a bad candidate is a failed verdict, not a crash
         return None, f"did not load: {e}"
     fn = namespace.get(entry)
@@ -145,43 +135,58 @@ def _compile(source: str, entry: str):
     return fn, None
 
 
-def run(source: str, entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT):
-    """Execute candidate ``source``, call ``entry`` on each test's positional
-    args, and PASS iff every result equals the expected output. Deterministic
-    (fixed tests + line-event bound); returns (verdict, trace)."""
-    fn, err = _compile(source, entry)
-    if err:
-        return FAIL, {"error": f"candidate: {err}"}
+def _sandbox_abort_verdict(error: OracleSandboxAborted) -> tuple[str, dict]:
+    return OVERRUN, {
+        "error": "oracle sandbox aborted before a deterministic verdict",
+        "sandbox_abort": str(error),
+    }
 
-    steps = [0]
 
-    def _tracer(frame, event, arg):
-        if event == "line":
-            steps[0] += 1
-            if steps[0] > step_limit:
-                raise _StepExceeded()
-        return _tracer
-
-    previous = sys.gettrace()
-    sys.settrace(_tracer)
-    try:
-        with _MemoryGuard():
-            for i, case in enumerate(tests):
-                args = case.get("in", [])
-                try:
-                    got = fn(*args)
-                except _StepExceeded:
-                    return FAIL, {"case": i, "error": "step limit exceeded",
-                                  "step_limit": step_limit}
-                except Exception as e:  # noqa: BLE001 - candidate raised => failed test
-                    return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
-                if got != case.get("out"):
-                    return FAIL, {
-                        "case": i, "input": args, "expected": case.get("out"), "got": _short(got)
-                    }
-    finally:
-        sys.settrace(previous)
+def _run_local(
+    source: str,
+    entry: str,
+    tests: list,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+):
+    """Worker-side exec oracle; all untrusted loading and calls are traced."""
+    with _step_budget(step_limit) as steps:
+        fn, err = _compile(source, entry)
+        if err:
+            return FAIL, {"error": f"candidate: {err}"}
+        for i, case in enumerate(tests):
+            args = case.get("in", [])
+            try:
+                got = fn(*args)
+            except _StepExceeded:
+                return FAIL, {
+                    "case": i,
+                    "error": "step limit exceeded",
+                    "step_limit": step_limit,
+                }
+            except MemoryError:
+                raise
+            except Exception as e:  # noqa: BLE001 - candidate raised => failed test
+                return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
+            if got != case.get("out"):
+                return FAIL, {
+                    "case": i,
+                    "input": args,
+                    "expected": case.get("out"),
+                    "got": _short(got),
+                }
     return PASS, {"cases_passed": len(tests), "steps": steps[0]}
+
+
+def run(source: str, entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+    """Execute a candidate in a fresh subprocess against fixed expected outputs."""
+    try:
+        return _run_isolated(
+            "run",
+            {"source": source, "entry": entry, "tests": tests, "step_limit": step_limit},
+            step_limit=step_limit,
+        )
+    except OracleSandboxAborted as e:
+        return _sandbox_abort_verdict(e)
 
 
 def run_from_spec(source: str, budget) -> tuple:
@@ -227,7 +232,7 @@ def exec_oracle_commitment(entry: str, tests: list, step_limit: int = _STEP_LIMI
 # ---------------------------------------------------------------------------
 
 
-def run_property(
+def _run_property_local(
     source: str,
     entry: str,
     inputs: list,
@@ -239,48 +244,74 @@ def run_property(
     step overrun fails; a checker exception fails the candidate too (the
     output was un-checkable, e.g. wrong shape). An unusable CHECKER is an
     ``overrun`` — a spec defect, not the candidate's fault (§1)."""
-    fn, err = _compile(source, entry)
-    if err:
-        return FAIL, {"error": f"candidate: {err}"}
-    check, cerr = _compile(checker, "check")
-    if cerr:
-        return OVERRUN, {"error": f"property checker unusable: {cerr}"}
-
-    steps = [0]
-
-    def _tracer(frame, event, arg):
-        if event == "line":
-            steps[0] += 1
-            if steps[0] > step_limit:
-                raise _StepExceeded()
-        return _tracer
-
-    previous = sys.gettrace()
-    sys.settrace(_tracer)
-    try:
-        with _MemoryGuard():
-            for i, args in enumerate(inputs):
-                try:
-                    got = fn(*args)
-                except _StepExceeded:
-                    return FAIL, {"case": i, "error": "step limit exceeded",
-                                  "step_limit": step_limit}
-                except Exception as e:  # noqa: BLE001 - candidate raised => failed case
-                    return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
-                try:
-                    ok = check(args, got)
-                except _StepExceeded:
-                    return FAIL, {"case": i, "error": "step limit exceeded in checker",
-                                  "step_limit": step_limit}
-                except Exception as e:  # noqa: BLE001 - un-checkable output => failed case
-                    return FAIL, {"case": i, "error": f"checker raised {type(e).__name__}: {e}",
-                                  "got": _short(got)}
-                if not ok:
-                    return FAIL, {"case": i, "input": args, "got": _short(got),
-                                  "error": "property violated"}
-    finally:
-        sys.settrace(previous)
+    with _step_budget(step_limit) as steps:
+        fn, err = _compile(source, entry)
+        if err:
+            return FAIL, {"error": f"candidate: {err}"}
+        check, cerr = _compile(checker, "check")
+        if cerr:
+            return OVERRUN, {"error": f"property checker unusable: {cerr}"}
+        for i, args in enumerate(inputs):
+            try:
+                got = fn(*args)
+            except _StepExceeded:
+                return FAIL, {
+                    "case": i,
+                    "error": "step limit exceeded",
+                    "step_limit": step_limit,
+                }
+            except MemoryError:
+                raise
+            except Exception as e:  # noqa: BLE001 - candidate raised => failed case
+                return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
+            try:
+                ok = check(args, got)
+            except _StepExceeded:
+                return FAIL, {
+                    "case": i,
+                    "error": "step limit exceeded in checker",
+                    "step_limit": step_limit,
+                }
+            except MemoryError:
+                raise
+            except Exception as e:  # noqa: BLE001 - un-checkable output => failed case
+                return FAIL, {
+                    "case": i,
+                    "error": f"checker raised {type(e).__name__}: {e}",
+                    "got": _short(got),
+                }
+            if not ok:
+                return FAIL, {
+                    "case": i,
+                    "input": args,
+                    "got": _short(got),
+                    "error": "property violated",
+                }
     return PASS, {"cases_passed": len(inputs), "steps": steps[0]}
+
+
+def run_property(
+    source: str,
+    entry: str,
+    inputs: list,
+    checker: str,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+):
+    """Execute candidate and checker together in one isolated worker."""
+    try:
+        return _run_isolated(
+            "property",
+            {
+                "source": source,
+                "entry": entry,
+                "inputs": inputs,
+                "checker": checker,
+                "step_limit": step_limit,
+            },
+            step_limit=step_limit,
+        )
+    except OracleSandboxAborted as e:
+        return _sandbox_abort_verdict(e)
 
 
 def run_property_from_spec(source: str, budget) -> tuple:
@@ -336,6 +367,22 @@ def property_oracle_commitment(
     )
 
 
+def _gate_local(source: str, args: list, step_limit: int) -> tuple[str, str]:
+    """Worker-side admission gate load and call."""
+    with _step_budget(step_limit):
+        valid, err = _compile(source, "valid")
+        if err:
+            return "unusable", err
+        try:
+            return ("accept", "") if valid(args) else ("reject", "")
+        except _StepExceeded:
+            return "raised", "StepExceeded"
+        except MemoryError:
+            raise
+        except Exception as e:  # noqa: BLE001 - deterministic gate rejection detail
+            return "raised", type(e).__name__
+
+
 def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str]:
     """Admission for the critic's grounded recourse: returns (commitment, "")
     when the proposed counterexample is admissible, else (None, reason). The
@@ -354,39 +401,33 @@ def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str
         return None, "base spec is missing entry/checker"
     gate = spec.get("input_check")
     if gate:
-        valid, err = _compile(gate, "valid")
-        if err:
-            return None, "admission gate unusable — admitting nothing (fail closed)"
-        # The gate source is spec-frozen but ARGS are critic-supplied: bound
-        # the gate run with the same step tracer as candidate execution.
         limit = int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
-        steps = [0]
-
-        def _tracer(frame, event, arg):
-            if event == "line":
-                steps[0] += 1
-                if steps[0] > limit:
-                    raise _StepExceeded()
-            return _tracer
-
         contract = spec.get("input_contract")
         contract_note = f" INPUT CONTRACT: {contract}" if contract else ""
-        previous = sys.gettrace()
-        sys.settrace(_tracer)
         try:
-            if not valid(args):
-                return None, (
-                    "input rejected by the admission gate (def valid(inp) returned "
-                    "False) — re-read the gate source and satisfy every constraint."
-                    + contract_note
-                )
-        except Exception as e:  # noqa: BLE001 - a gate error/overrun is a rejected input
+            outcome, detail = _run_isolated(
+                "gate",
+                {"source": gate, "args": args, "step_limit": limit},
+                step_limit=limit,
+            )
+        except OracleSandboxAborted:
             return None, (
-                f"admission gate raised on this input ({type(e).__name__}) — rejected."
+                "admission gate sandbox aborted — admitting nothing (fail closed)."
                 + contract_note
             )
-        finally:
-            sys.settrace(previous)
+        if outcome == "unusable":
+            return None, "admission gate unusable — admitting nothing (fail closed)"
+        if outcome == "raised":
+            return None, (
+                f"admission gate raised on this input ({detail}) — rejected."
+                + contract_note
+            )
+        if outcome == "reject":
+            return None, (
+                "input rejected by the admission gate (def valid(inp) returned "
+                "False) — re-read the gate source and satisfy every constraint."
+                + contract_note
+            )
     return property_oracle_commitment(
         spec["entry"], [args], spec["checker"], gate,
         int(spec.get("step_limit", _STEP_LIMIT_DEFAULT)),
@@ -396,6 +437,62 @@ def admit_counterexample(base: Commitment, args) -> tuple[Commitment | None, str
 def counterexample_commitment(base: Commitment, args) -> Commitment | None:
     """Admission without the reason (see admit_counterexample)."""
     return admit_counterexample(base, args)[0]
+
+
+def _fuzz_property_local(
+    source: str,
+    spec: dict,
+    fuzz_n: int,
+    generator: str,
+    checker: str,
+) -> tuple[list | None, dict]:
+    """Worker-side deterministic fuzz pass."""
+    limit = int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
+    with _step_budget(limit):
+        gen, gerr = _compile(generator, "gen")
+    if gerr:
+        return None, {"fuzzed": 0, "note": f"generator unusable: {gerr}"}
+    gate = spec.get("input_check")
+    valid = None
+    if gate:
+        with _step_budget(limit):
+            valid, verr = _compile(gate, "valid")
+        if verr:
+            return None, {
+                "fuzzed": 0,
+                "note": "gate unusable — fuzzing nothing (fail closed)",
+            }
+
+    tried = 0
+    for k in range(max(0, fuzz_n)):
+        with _step_budget(limit):
+            try:
+                candidate_input = gen(k)
+                if not isinstance(candidate_input, list):
+                    continue
+                canonical_json(candidate_input)  # IPC/log-safe, JSON-domain inputs only
+                if valid is not None and not valid(candidate_input):
+                    continue
+            except (_StepExceeded, TypeError, ValueError):
+                continue
+            except MemoryError:
+                raise
+            except Exception:  # noqa: BLE001 - a bad generated input is skipped
+                continue
+        tried += 1
+        verdict, detail = _run_property_local(
+            source, spec["entry"], [candidate_input], checker, limit
+        )
+        if verdict == FAIL:
+            return candidate_input, {"fuzzed": tried, "k": k, **detail}
+        if verdict == OVERRUN:
+            return None, {
+                "fuzzed": tried,
+                "note": "property oracle produced no verdict during fuzzing",
+                "oracle_overrun": True,
+                **detail,
+            }
+    return None, {"fuzzed": tried, "note": "no violation found"}
 
 
 def fuzz_property(
@@ -434,48 +531,26 @@ def fuzz_property(
         return None, {"fuzzed": 0, "note": "no generator in spec"}
     if checker is None:
         checker = spec["checker"]
-    gen, gerr = _compile(generator, "gen")
-    if gerr:
-        return None, {"fuzzed": 0, "note": f"generator unusable: {gerr}"}
-    gate = spec.get("input_check")
-    valid = None
-    if gate:
-        valid, verr = _compile(gate, "valid")
-        if verr:
-            return None, {"fuzzed": 0, "note": "gate unusable — fuzzing nothing (fail closed)"}
-
     limit = int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
-    steps = [0]
-
-    def _tracer(frame, event, arg):
-        if event == "line":
-            steps[0] += 1
-            if steps[0] > limit:
-                raise _StepExceeded()
-        return _tracer
-
-    tried = 0
-    for k in range(max(0, fuzz_n)):
-        steps[0] = 0
-        previous = sys.gettrace()
-        sys.settrace(_tracer)
-        try:
-            candidate_input = gen(k)
-            if not isinstance(candidate_input, list):
-                continue
-            if valid is not None and not valid(candidate_input):
-                continue
-        except Exception:  # noqa: BLE001 - a bad generated input is skipped, not fatal
-            continue
-        finally:
-            sys.settrace(previous)
-        tried += 1
-        verdict, detail = run_property(
-            source, spec["entry"], [candidate_input], checker, limit
+    try:
+        return _run_isolated(
+            "fuzz",
+            {
+                "source": source,
+                "spec": spec,
+                "fuzz_n": fuzz_n,
+                "generator": generator,
+                "checker": checker,
+            },
+            step_limit=limit,
+            units=max(1, fuzz_n),
         )
-        if verdict == FAIL:
-            return candidate_input, {"fuzzed": tried, "k": k, **detail}
-    return None, {"fuzzed": tried, "note": "no violation found"}
+    except OracleSandboxAborted as e:
+        return None, {
+            "fuzzed": 0,
+            "note": "fuzz sandbox aborted before a deterministic result",
+            "sandbox_abort": str(e),
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -496,7 +571,7 @@ _GEN_PROBE_N = 64
 _GEN_MIN_VALID = 8
 
 
-def check_generator(
+def _check_generator_local(
     source: str,
     gate: str | None,
     frozen_inputs: list,
@@ -509,43 +584,37 @@ def check_generator(
     valid AND at least one gate-valid output is NOVEL (not among the frozen
     inputs — a generator that only replays the known suite designs no
     experiment). Deterministic pure function of the source."""
-    gen, gerr = _compile(source, "gen")
+    with _step_budget(step_limit):
+        gen, gerr = _compile(source, "gen")
     if gerr:
         return FAIL, {"error": f"generator: {gerr}"}
     valid = None
     if gate:
-        valid, verr = _compile(gate, "valid")
+        with _step_budget(step_limit):
+            valid, verr = _compile(gate, "valid")
         if verr:
             return OVERRUN, {"error": f"admission gate unusable: {verr}"}
 
     frozen = {canonical_json(i) for i in frozen_inputs}
-    steps = [0]
-
-    def _tracer(frame, event, arg):
-        if event == "line":
-            steps[0] += 1
-            if steps[0] > step_limit:
-                raise _StepExceeded()
-        return _tracer
-
     valid_count = 0
     novel = False
     for k in range(max(0, probe_n)):
-        steps[0] = 0
-        previous = sys.gettrace()
-        sys.settrace(_tracer)
-        try:
-            candidate_input = gen(k)
-            if not isinstance(candidate_input, list):
+        with _step_budget(step_limit):
+            try:
+                candidate_input = gen(k)
+                if not isinstance(candidate_input, list):
+                    continue
+                encoded = canonical_json(candidate_input)
+                if valid is not None and not valid(candidate_input):
+                    continue
+            except (_StepExceeded, TypeError, ValueError):
                 continue
-            if valid is not None and not valid(candidate_input):
+            except MemoryError:
+                raise
+            except Exception:  # noqa: BLE001 - a bad generated input just doesn't count
                 continue
-        except Exception:  # noqa: BLE001 - a bad generated input just doesn't count
-            continue
-        finally:
-            sys.settrace(previous)
         valid_count += 1
-        if canonical_json(candidate_input) not in frozen:
+        if encoded not in frozen:
             novel = True
     if valid_count < min_valid:
         return FAIL, {"valid": valid_count, "probe_n": probe_n,
@@ -556,6 +625,33 @@ def check_generator(
                       "error": "no novel input: every gate-valid output replays "
                                "the frozen suite"}
     return PASS, {"valid": valid_count, "probe_n": probe_n, "novel": True}
+
+
+def check_generator(
+    source: str,
+    gate: str | None,
+    frozen_inputs: list,
+    probe_n: int = _GEN_PROBE_N,
+    min_valid: int = _GEN_MIN_VALID,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+) -> tuple[str, dict]:
+    """Evaluate a proposed generator wholly inside one isolated worker."""
+    try:
+        return _run_isolated(
+            "generator",
+            {
+                "source": source,
+                "gate": gate,
+                "frozen_inputs": frozen_inputs,
+                "probe_n": probe_n,
+                "min_valid": min_valid,
+                "step_limit": step_limit,
+            },
+            step_limit=step_limit,
+            units=max(1, probe_n),
+        )
+    except OracleSandboxAborted as e:
+        return _sandbox_abort_verdict(e)
 
 
 def check_generator_from_spec(source: str, budget) -> tuple:
@@ -602,7 +698,7 @@ CHECKER_PROGRAM = "checker_wf"
 _VACUITY_BATTERY = ([], 0, "", None, "echo-input")
 
 
-def check_checker(
+def _check_checker_local(
     source: str,
     probe_inputs: list,
     step_limit: int = _STEP_LIMIT_DEFAULT,
@@ -612,37 +708,27 @@ def check_checker(
     battery, and REJECTS (falsy or raise) at least one degenerate output on
     at least one probe input — non-vacuity. Deterministic pure function of
     the source."""
-    check, err = _compile(source, "check")
+    with _step_budget(step_limit):
+        check, err = _compile(source, "check")
     if err:
         return FAIL, {"error": f"checker: {err}"}
-
-    steps = [0]
-
-    def _tracer(frame, event, arg):
-        if event == "line":
-            steps[0] += 1
-            if steps[0] > step_limit:
-                raise _StepExceeded()
-        return _tracer
 
     rejected_any = False
     returned_any = False  # returned a bool at least once (didn't just raise)
     for args in probe_inputs[:4]:
         for degenerate in _VACUITY_BATTERY:
             out = args if degenerate == "echo-input" else degenerate
-            steps[0] = 0
-            previous = sys.gettrace()
-            sys.settrace(_tracer)
-            try:
-                if check(args, out):
-                    returned_any = True
-                else:
+            with _step_budget(step_limit):
+                try:
+                    if check(args, out):
+                        returned_any = True
+                    else:
+                        rejected_any = True
+                        returned_any = True
+                except MemoryError:
+                    raise
+                except Exception:  # noqa: BLE001 - rejection by exception counts
                     rejected_any = True
-                    returned_any = True
-            except Exception:  # noqa: BLE001 - rejection by exception counts
-                rejected_any = True
-            finally:
-                sys.settrace(previous)
     if not rejected_any:
         return FAIL, {"error": "vacuous checker: accepts every degenerate output "
                                "on every probe input — it can never refute anything"}
@@ -653,6 +739,28 @@ def check_checker(
         return FAIL, {"error": "broken checker: raised on every battery pair — "
                                "it never actually decides anything"}
     return PASS, {"non_vacuous": True, "probes": len(probe_inputs[:4])}
+
+
+def check_checker(
+    source: str,
+    probe_inputs: list,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+) -> tuple[str, dict]:
+    """Evaluate a proposed checker wholly inside one isolated worker."""
+    units = max(1, len(probe_inputs[:4]) * len(_VACUITY_BATTERY))
+    try:
+        return _run_isolated(
+            "checker",
+            {
+                "source": source,
+                "probe_inputs": probe_inputs,
+                "step_limit": step_limit,
+            },
+            step_limit=step_limit,
+            units=units,
+        )
+    except OracleSandboxAborted as e:
+        return _sandbox_abort_verdict(e)
 
 
 def check_checker_from_spec(source: str, budget) -> tuple:
@@ -748,3 +856,15 @@ def generator_wf_commitment(
         eval=f"program:{GENERATOR_PROGRAM}",
         budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
     )
+
+
+# Worker dispatch deliberately names only internal implementations: public
+# wrappers spawn; worker-local functions never do.
+_LOCAL_OPERATIONS = {
+    "run": _run_local,
+    "property": _run_property_local,
+    "gate": _gate_local,
+    "fuzz": _fuzz_property_local,
+    "generator": _check_generator_local,
+    "checker": _check_checker_local,
+}

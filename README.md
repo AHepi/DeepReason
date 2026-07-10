@@ -171,9 +171,12 @@ comparison):
 - A thesis argues from **the run's own record**, not outside knowledge — it
   commits to what *this run* adjudicated, and will say so.
 
-Security: forbidden-case predicates come from untrusted model output and are
-sandboxed (an AST guard blocks the `eval` escape family). See
-[`tests/test_security.py`](tests/test_security.py).
+Security: forbidden-case predicates use an AST guard against the `eval` escape
+family. Execution-oracle candidates, checkers, generators, and admission gates
+additionally run in fresh subprocesses with deterministic line budgets and
+emergency OS resource containment; module top-level code never runs in the
+harness process. See [`tests/test_security.py`](tests/test_security.py) and
+[`tests/test_oracle.py`](tests/test_oracle.py).
 
 ## Development
 

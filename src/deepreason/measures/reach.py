@@ -54,8 +54,12 @@ def _verdict(harness, cid: str, aid: str, artifact) -> str:
     key = (cid, aid)
     v = harness._verdict_cache.get(key)
     if v is None:
-        v = programs.evaluate(harness.commitments[cid], artifact, harness.blobs)[0]
-        harness._verdict_cache[key] = v
+        v, trace = programs.evaluate(harness.commitments[cid], artifact, harness.blobs)
+        # A subprocess resource kill is explicitly not an epistemic verdict.
+        # Retrying later is legal; caching the API's overrun envelope would
+        # silently turn machine availability into graph semantics.
+        if "sandbox_abort" not in trace:
+            harness._verdict_cache[key] = v
     return v
 
 

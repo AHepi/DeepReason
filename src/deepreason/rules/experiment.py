@@ -42,6 +42,40 @@ GEN_CODEC = "code:python-gen"
 PROP_CODEC = "code:python-prop"
 
 
+def _oracle_ready(harness, artifact) -> bool:
+    """Require a verdict before activating executable policy.
+
+    A fail already represented by a warrant remains graph-governed (attacking
+    its validity node can reinstate the policy, N1). With no on-record fail,
+    activation requires a deterministic PASS; sandbox abort and deterministic
+    overrun both fail closed without manufacturing a refutation.
+    """
+    from deepreason import programs
+    from deepreason.rules.warrants import verdict_on_record
+
+    for cid in artifact.interface.commitments:
+        kappa = harness.commitments.get(cid)
+        if kappa is None or not programs.evaluable(kappa):
+            return False
+        if verdict_on_record(harness, cid, artifact.id):
+            continue  # status/grounded semantics decide an attacked fail warrant
+        key = (cid, artifact.id)
+        verdict = harness._verdict_cache.get(key)
+        if verdict is None:
+            verdict, trace = programs.evaluate(kappa, artifact, harness.blobs)
+            if trace.get("sandbox_abort"):
+                harness._oracle_pending.add(key)
+                return False
+            harness._oracle_pending.discard(key)
+            harness._verdict_cache[key] = verdict
+        if verdict == programs.FAIL:
+            crit_program(harness, artifact.id)  # put the deterministic fail on graph
+            return False
+        if verdict != programs.PASS:
+            return False
+    return True
+
+
 def accepted_generators(harness, base_commitment_id: str) -> list[tuple[str, str]]:
     """ACCEPTED experimenter generators targeting the given property oracle,
     as (artifact_id, source) in state insertion order (deterministic)."""
@@ -53,6 +87,10 @@ def accepted_generators(harness, base_commitment_id: str) -> list[tuple[str, str
             continue
         if harness.state.status.get(aid) != Status.ACCEPTED:
             continue
+        if not _oracle_ready(harness, artifact):
+            continue
+        if harness.state.status.get(aid) != Status.ACCEPTED:
+            continue  # a retry may have produced a deterministic fail warrant
         if not any(
             r.role == RefRole.MENTION and r.target == base_commitment_id
             for r in artifact.interface.refs
@@ -126,7 +164,11 @@ def propose_generators(harness, base, adapter, config) -> list:
         if artifact.id not in before:
             llm_pending = None  # a real event carried the shared call
         crit_program(harness, artifact.id)  # generator_wf adjudicates now
-        if harness.state.status.get(artifact.id) == Status.ACCEPTED:
+        if (
+            harness.state.status.get(artifact.id) == Status.ACCEPTED
+            and _oracle_ready(harness, artifact)
+            and harness.state.status.get(artifact.id) == Status.ACCEPTED
+        ):
             survivors.append(artifact)
     if llm_pending is not None:
         # Nothing committed the call (empty/duplicate outputs): log it once.
@@ -152,6 +194,10 @@ def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, 
     out: list[tuple[str, str, str]] = []
     for aid, artifact in harness.state.artifacts.items():
         if artifact.codec != PROP_CODEC:
+            continue
+        if harness.state.status.get(aid) != Status.ACCEPTED:
+            continue
+        if not _oracle_ready(harness, artifact):
             continue
         if harness.state.status.get(aid) != Status.ACCEPTED:
             continue
@@ -414,7 +460,11 @@ def propose_properties(harness, base, problem, adapter, config) -> list:
         if artifact.id not in before:
             llm_pending = None  # a real event carried the shared call
         crit_program(harness, artifact.id)  # checker_wf adjudicates now
-        if harness.state.status.get(artifact.id) != Status.ACCEPTED:
+        if (
+            harness.state.status.get(artifact.id) != Status.ACCEPTED
+            or not _oracle_ready(harness, artifact)
+            or harness.state.status.get(artifact.id) != Status.ACCEPTED
+        ):
             continue
         # Arrival crash probe (intervals/boot postmortem): run the proposed
         # checker against existing carriers' real outputs BEFORE any judge

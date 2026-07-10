@@ -77,6 +77,18 @@ def try_counterexample(
             reasons.append(reason)
             continue  # inadmissible against this commitment's input gate
         verdict, trace = programs.evaluate(cx, target, harness.blobs)
+        if trace.get("sandbox_abort"):
+            reasons.append(
+                "the execution sandbox aborted before producing a verdict — "
+                "the proposed input grounds nothing and may be retried"
+            )
+            continue
+        if verdict == programs.OVERRUN:
+            reasons.append(
+                "the property oracle was unusable on this input and produced "
+                "no verdict — the proposed input grounds nothing"
+            )
+            continue
         if verdict != programs.FAIL:
             reasons.append(
                 "the target RAN your input and the property HELD — this "
@@ -118,6 +130,11 @@ def crit_program(harness, target_id: str) -> list[Artifact]:
         if verdict_on_record(harness, cid, target_id):
             continue  # guard checked pre-evaluation: skips the τκ run too
         verdict, trace = programs.evaluate(kappa, target, harness.blobs)
+        pending_key = (cid, target_id)
+        if trace.get("sandbox_abort"):
+            harness._oracle_pending.add(pending_key)
+            continue  # availability failure: no verdict and no warrant
+        harness._oracle_pending.discard(pending_key)
         if verdict != programs.FAIL:
             continue
         critics.append(
@@ -174,6 +191,8 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
                 source, base, config.FUZZ_N, generator=gen_source
             )
             if violation is None:
+                if detail.get("sandbox_abort") or detail.get("oracle_overrun"):
+                    QUARANTINE_TICK[0] += 1  # unavailable is pending, never clean
                 continue
             cx, _ = admit_counterexample(base, violation)
             if cx is None:
@@ -296,6 +315,9 @@ def _crit_proposed_properties(
         violation = None
         if entry and frozen:
             verdict, d = run_property(source, entry, frozen, prop_source)
+            if verdict == programs.OVERRUN:
+                QUARANTINE_TICK[0] += 1
+                continue
             if verdict == programs.FAIL and "case" in d:
                 if checker_crashed(d):
                     # The CHECKER threw, not the candidate (intervals/boot
@@ -313,6 +335,9 @@ def _crit_proposed_properties(
                     source, base, config.FUZZ_N, generator=gen_source,
                     checker=prop_source,
                 )
+                if _detail.get("sandbox_abort") or _detail.get("oracle_overrun"):
+                    QUARANTINE_TICK[0] += 1
+                    continue
                 if found is not None:
                     candidate, _ = admit_counterexample(base, found)
                     if candidate is None:

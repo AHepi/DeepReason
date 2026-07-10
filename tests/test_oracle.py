@@ -61,6 +61,55 @@ def test_infinite_loop_hits_step_bound_not_a_hang():
     assert "step limit" in detail["error"]
 
 
+def test_top_level_infinite_loop_is_bounded_before_entry_loads():
+    """The old in-process loader executed module bodies before installing the
+    tracer, so this source hung the whole harness before ``solve`` existed."""
+    src = "while True:\n    marker = 1\ndef solve(x):\n    return x"
+    verdict, detail = run(src, "solve", [{"in": [0], "out": 0}], step_limit=1000)
+    assert verdict == "fail"
+    assert "while loading module" in detail["error"]
+
+
+def test_top_level_checker_loop_is_spec_overrun_not_candidate_failure():
+    checker = "while True:\n    marker = 1\ndef check(inp, out):\n    return True"
+    verdict, detail = run_property(
+        "def solve(x):\n    return x", "solve", [[1]], checker, step_limit=1000
+    )
+    assert verdict == "overrun"
+    assert "checker unusable" in detail["error"]
+
+
+def test_top_level_generator_and_gate_loops_are_contained():
+    from deepreason.oracle import admit_counterexample, check_generator, fuzz_property
+
+    loop_gen = "while True:\n    marker = 1\ndef gen(k):\n    return [[k]]"
+    verdict, detail = check_generator(loop_gen, None, [], step_limit=1000)
+    assert verdict == "fail" and "while loading module" in detail["error"]
+
+    base = property_oracle_commitment(
+        "solve",
+        [[[1]]],
+        "def check(inp, out):\n    return True",
+        "while True:\n    marker = 1\ndef valid(inp):\n    return True",
+        generator=loop_gen,
+        step_limit=1000,
+    )
+    admitted, reason = admit_counterexample(base, [[1]])
+    assert admitted is None and "gate unusable" in reason
+    violation, fuzz_detail = fuzz_property("def solve(x):\n    return x", base, 4)
+    assert violation is None
+    assert "generator unusable" in fuzz_detail["note"]
+
+
+def test_top_level_proposed_checker_loop_is_contained():
+    from deepreason.oracle import check_checker
+
+    source = "while True:\n    marker = 1\ndef check(inp, out):\n    return False"
+    verdict, detail = check_checker(source, [[[1]]], step_limit=1000)
+    assert verdict == "fail"
+    assert "while loading module" in detail["error"]
+
+
 def test_verdict_is_deterministic():
     a = run("def solve(x):\n    return x * 2", "solve", DOUBLE)
     b = run("def solve(x):\n    return x * 2", "solve", DOUBLE)
@@ -538,6 +587,17 @@ def test_fuzz_without_generator_is_a_noop():
     assert fuzz_property(SNEAKY_SORT, c, 64) == (None, {"fuzzed": 0, "note": "no generator in spec"})
 
 
+def test_fuzz_unusable_checker_is_no_verdict_not_a_clean_pass():
+    from deepreason.oracle import fuzz_property
+
+    base = _fuzzable_commitment()
+    violation, detail = fuzz_property(
+        SNEAKY_SORT, base, 4, checker="import os\ndef check(inp, out):\n    return True"
+    )
+    assert violation is None
+    assert detail["oracle_overrun"] is True
+
+
 def test_crit_fuzz_refutes_by_demonstrative_warrant(harness):
     c = _fuzzable_commitment()
     harness.register_commitment(c)
@@ -679,13 +739,14 @@ def test_crit_pack_advertises_the_counterexample_recourse(harness):
     assert "counterexample" not in pack2
 
 
-def test_memory_bomb_fails_the_candidate_not_the_process():
+def test_memory_bomb_aborts_the_sandbox_not_the_process_or_candidate():
     """A single line can allocate unboundedly (runtime products dodge the
     int-literal cap; the step bound counts lines, not bytes). Observed live:
     a buggy decoder multiplied a string by ~10^12 and the OS OOM-killed the
-    whole harness (dmesg, 16GB RSS). The soft-RLIMIT guard must turn that
-    into a MemoryError INSIDE the candidate => FAIL verdict, process alive."""
-    from deepreason.oracle import FAIL, run_property
+    whole harness (dmesg, 16GB RSS). The child RLIMIT must turn that
+    into a child-only resource abort. An OS ceiling is containment, not an
+    epistemic test, so it must produce no FAIL warrant."""
+    from deepreason.oracle import OVERRUN, run_property
 
     bomb = (
         "def solve(s):\n"
@@ -695,11 +756,88 @@ def test_memory_bomb_fails_the_candidate_not_the_process():
     checker = "def check(inp, out):\n    return isinstance(out, str)\n"
     verdict, trace = run_property(bomb, "solve", [["x"]], checker,
                                   step_limit=100_000)
-    assert verdict == FAIL
-    assert "MemoryError" in trace["error"]
+    assert verdict == OVERRUN
+    assert trace["sandbox_abort"]
 
-    # and the limit is fully restored: a normal candidate still passes after
+    # The parent was never limited: a normal candidate still passes afterward.
     ok = "def solve(s):\n    return s + s\n"
     verdict, trace = run_property(ok, "solve", [["x"]], checker,
                                   step_limit=100_000)
     assert verdict == "pass"
+
+
+def test_sandbox_abort_mints_no_fail_warrant(harness):
+    """Containment is operational state, never evidence against an artifact."""
+    checker = "def check(inp, out):\n    return isinstance(out, str)\n"
+    commitment = property_oracle_commitment("solve", [["x"]], checker)
+    harness.register_commitment(commitment)
+    bomb = harness.create_artifact(
+        "def solve(s):\n    return chr(97) * (999999 * 999999)",
+        codec="code:python",
+        interface=Interface(commitments=[commitment.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+
+    critics = crit_program(harness, bomb.id)
+
+    assert critics == []
+    assert harness.state.status[bomb.id] == Status.ACCEPTED
+    assert not any(w.target == bomb.id for w in harness.warrants.values())
+    assert (commitment.id, bomb.id) in harness._oracle_pending
+
+
+def test_fuzz_abort_remains_pending_instead_of_marking_target_clean(harness):
+    from deepreason.oracle import fuzz_property
+    from deepreason.rules.crit import QUARANTINE_TICK, crit_fuzz
+
+    bomb_gen = (
+        "payload = chr(97) * (999999 * 999999)\n"
+        "def gen(k):\n    return [[k]]\n"
+    )
+    commitment = property_oracle_commitment(
+        "solve", SORT_INPUTS, CHECKER, GATE, generator=bomb_gen
+    )
+    harness.register_commitment(commitment)
+    target = harness.create_artifact(
+        GOOD_SORT,
+        codec="code:python",
+        interface=Interface(commitments=[commitment.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    violation, detail = fuzz_property(GOOD_SORT, commitment, 4)
+    assert violation is None and detail["sandbox_abort"]
+
+    before = QUARANTINE_TICK[0]
+    assert crit_fuzz(harness, target.id, Config(FUZZ_N=4)) is None
+    assert QUARANTINE_TICK[0] == before + 1
+    assert harness.state.status[target.id] == Status.ACCEPTED
+
+
+def test_aborted_generator_never_activates_even_after_replay(harness):
+    from deepreason.harness import Harness
+    from deepreason.ontology import Ref
+    from deepreason.ontology.artifact import RefRole
+    from deepreason.oracle import generator_wf_commitment
+    from deepreason.rules.experiment import GEN_CODEC, accepted_generators
+
+    base = property_oracle_commitment("solve", SORT_INPUTS, CHECKER, GATE)
+    wf = generator_wf_commitment(base)
+    assert wf is not None
+    harness.register_commitment(base)
+    harness.register_commitment(wf)
+    generator = harness.create_artifact(
+        "payload = chr(97) * (999999 * 999999)\n"
+        "def gen(k):\n    return [[k]]\n",
+        codec=GEN_CODEC,
+        interface=Interface(
+            commitments=[wf.id],
+            refs=[Ref(target=base.id, role=RefRole.MENTION)],
+        ),
+        provenance=Provenance(role="experimenter"),
+    )
+    assert crit_program(harness, generator.id) == []
+    assert accepted_generators(harness, base.id) == []
+
+    reopened = Harness(harness.root)
+    assert reopened.state.status[generator.id] == Status.ACCEPTED
+    assert accepted_generators(reopened, base.id) == []

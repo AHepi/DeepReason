@@ -77,6 +77,15 @@ participates in attack closure. Both keep status computation inside `att`/`dep`.
 - `budget` is a structured object interpreted by the test program τκ. Canonical keys: `steps`, `time_ms`; program evals may declare extended structured budgets (e.g. `k`, `per_edit_steps` for `hv-floor`, §7). Total resource is always finite and declared.
 - Verdict `V(κ, c) = U^{≤β}(τκ, c) ∈ {pass, fail, overrun}`. Extensional, budgeted, decidable (budgeting keeps Rice at bay).
 - **Budget honesty is deterministic (§0).** A verdict is a pure function of content: wall-clock time never drives it, and no wall-clock value enters the content-addressed trace — otherwise two harnesses replaying identical inputs under different machine load would fork their logs. Budget enforcement, where a program enforces one, must be a deterministic bound (step count, item count); `time_ms` is a declared intent, not a verdict input. `overrun` therefore means "the verdict is unobtainable within the declared deterministic budget" (e.g. no variator kernel available, §7) — never "the machine was slow".
+- **Oracle isolation is not adjudication.** Untrusted candidate, checker,
+  generator, and gate modules execute in a fresh subprocess, with the
+  deterministic step tracer installed before module top-level code runs. OS
+  memory/CPU ceilings and a parent watchdog are emergency containment only. A
+  containment kill produces no epistemic verdict and MUST NOT mint a warrant,
+  confer execution supremacy, enter a verdict cache, or mark a fuzz target
+  clean. The implementation exposes this no-result condition through the
+  existing `overrun` API envelope plus `sandbox_abort`; it is outside `V` and
+  must not be written as evidence.
 - `eval:program|predicate` ⇒ computed by execution (reliable).
 - `eval:rubric` ⇒ computed by the judge LLM role under the trial protocol (§3 guard, §10). `<spec-id>` MUST resolve to a registered **standard artifact** (§10); the standard's content specifies the evaluation mode: `absolute | anchored | pairwise`. Noisy; every structural mitigation in §10 applies.
 - `observation_valued == true` and no covering evidence artifact ⇒ Spawn a research problem (§12). Evidence registered **sealed** (holdout, §10) does not count as covering before its reveal; the commitment is scheduled-pending, not failed.
