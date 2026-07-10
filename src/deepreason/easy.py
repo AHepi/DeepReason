@@ -238,9 +238,13 @@ def _fresh(path: Path) -> Path:
     return Path(f"{path}-{n}")
 
 
+def _echo(message: str) -> None:
+    print(message, flush=True)  # progress must reach pipes/logs live, not buffered
+
+
 def make(description: str, out: str | None = None, cycles: int = 6,
          token_budget: int | None = 150_000, config: str | None = None,
-         root: str | None = None, echo=print) -> list[Path]:
+         root: str | None = None, echo=_echo) -> list[Path]:
     """Build a website from a plain-language description: seed, run the
     conjecture-criticism loop with a friendly ticker, export what survives.
     Returns the exported file paths (empty = nothing survived)."""
