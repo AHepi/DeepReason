@@ -41,6 +41,15 @@ def build_parser() -> argparse.ArgumentParser:
                      help="hard prompt+completion token ceiling (graceful stop)")
     sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
+    sub.add_parser(
+        "evidence", help="full dossier for an artifact: warrants, verdicts, "
+                         "browser/vision evidence, LLM calls, dependencies"
+    ).add_argument("id")
+    blob_cmd = sub.add_parser("blob", help="dump a blob by ref (or unique prefix)")
+    blob_cmd.add_argument("ref")
+    blob_cmd.add_argument("--out", default=None,
+                          help="write bytes to this file (required for binary blobs)")
+    sub.add_parser("signals", help="list every log signal kind with meaning and count")
     export_cmd = sub.add_parser(
         "export", help="write surviving deliverables (app files, screenshots, README) to a directory"
     )
@@ -59,7 +68,10 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
     sub.add_parser("merge", help="merge another saved graph (G-Set union)").add_argument("path")
-    sub.add_parser("trace", help="print the events touching an id").add_argument("id")
+    trace_cmd = sub.add_parser("trace", help="print the events touching an id")
+    trace_cmd.add_argument("id")
+    trace_cmd.add_argument("--json", action="store_true",
+                           help="raw event JSON lines (legacy format)")
     narrate_cmd = sub.add_parser(
         "narrate", help="render the event log as chain-of-thought prose (view, spec 8)"
     )
@@ -95,7 +107,56 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "why":
         harness = Harness(Path(args.root))
-        print(why(_resolve(harness, args.id), harness.state))
+        print(why(_resolve(harness, args.id), harness.state, harness.warrants))
+        return 0
+
+    if args.command == "evidence":
+        from deepreason.views.evidence import evidence
+
+        harness = Harness(Path(args.root))
+        print(evidence(harness, _resolve(harness, args.id)))
+        return 0
+
+    if args.command == "blob":
+        harness = Harness(Path(args.root))
+        try:
+            ref = harness.blobs.resolve_prefix(args.ref)
+        except (KeyError, ValueError) as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        data = harness.blobs.get(ref)
+        if args.out:
+            Path(args.out).write_bytes(data)
+            print(f"wrote {len(data)} bytes to {args.out}")
+            return 0
+        kind = "image/png" if data.startswith(b"\x89PNG\r\n\x1a\n") else None
+        if kind is None:
+            try:
+                print(data.decode("utf-8"))
+                return 0
+            except UnicodeDecodeError:
+                kind = "binary"
+        print(f"({kind}, {len(data)} bytes — pass --out FILE to write it)",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "signals":
+        from collections import Counter
+
+        from deepreason.signals import PREFIXES, SIGNALS, event_signal, family
+
+        harness = Harness(Path(args.root))
+        counts: Counter[str] = Counter()
+        for event in harness.log.read():
+            signal = event_signal(event)
+            if signal is not None:
+                counts[family(signal)] += 1
+        for name, meaning in {**SIGNALS, **{k + "*": v for k, v in PREFIXES.items()}}.items():
+            print(f"{counts.get(name, 0):6}  {name}: {meaning}")
+        unregistered = {k: n for k, n in counts.items()
+                        if k not in SIGNALS and not k.endswith("*")}
+        for name, n in sorted(unregistered.items()):
+            print(f"{n:6}  {name}: (unregistered signal)")
         return 0
 
     if args.command == "export":
@@ -108,13 +169,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "trace":
+        from deepreason.signals import describe, event_signal
+
         harness = Harness(Path(args.root))
         found = False
         for event in harness.log.read():
             ids = list(event.inputs) + list(event.outputs)
-            if any(i.startswith(args.id) for i in ids):
+            if not any(i.startswith(args.id) for i in ids):
+                continue
+            found = True
+            if args.json:
                 print(event.model_dump_json(by_alias=True))
-                found = True
+                continue
+            signal = event_signal(event)
+            what = (f"{signal} — {describe(signal)[:60]}" if signal
+                    else f"{', '.join(i[:12] for i in event.inputs) or '-'} -> "
+                         f"{', '.join(o[:12] for o in event.outputs) or '-'}")
+            llm = (f"  [llm {event.llm.role}/{event.llm.model} "
+                   f"tok={event.llm.tokens}]" if event.llm else "")
+            print(f"#{event.seq:<5} {event.ts[:19]} {event.rule.value:<8} {what}{llm}")
         if not found:
             print(f"(no events touching {args.id!r})")
         return 0

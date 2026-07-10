@@ -17,10 +17,37 @@ def _head(state: EpistemicState, artifact_id: str) -> str:
     return ""
 
 
-def why(artifact_id: str, state: EpistemicState) -> str:
+def why(artifact_id: str, state: EpistemicState, warrants: dict | None = None) -> str:
+    """``warrants`` (harness.warrants) is optional: when provided, each attack
+    edge shows the WARRANT behind it — type, commitment, verdict, trace_ref,
+    and the validity node with its CURRENT status — the evidence pointers a
+    reader needs to follow the chain into blobs. Omitted, output is byte-
+    identical to the legacy view."""
     if artifact_id not in state.artifacts:
         return f"{artifact_id}: not registered"
     lines: list[str] = []
+
+    def edge_evidence(attacker: str, target: str, depth: int) -> None:
+        if warrants is None:
+            return
+        carried = getattr(state.artifacts.get(attacker), "warrants", []) or []
+        direct = [warrants[wid] for wid in carried
+                  if wid in warrants and warrants[wid].target == target]
+        pad = "  " * (depth + 1)
+        if not direct:
+            lines.append(f"{pad}(closure edge — attacks via validity-node/"
+                         f"standard/source closure)")
+            return
+        for w in direct:
+            nu_status = state.status.get(w.validity_node)
+            lines.append(
+                f"{pad}via {w.type.value} warrant"
+                + (f" · commitment {w.commitment}" if w.commitment else "")
+                + (f" · verdict {w.verdict}" if w.verdict else "")
+                + f" · nu {w.validity_node[:12]}"
+                  f" [{nu_status.value if nu_status else '?'}]"
+                + (f" · trace {w.trace_ref[:12]}" if w.trace_ref else "")
+            )
 
     def visit(aid: str, depth: int, seen: frozenset[str]) -> None:
         status = state.status.get(aid)
@@ -33,6 +60,7 @@ def why(artifact_id: str, state: EpistemicState) -> str:
         for x, target in sorted(state.att):
             if target == aid:
                 visit(x, depth + 1, seen | {aid})
+                edge_evidence(x, aid, depth + 1)
 
     visit(artifact_id, 0, frozenset())
 

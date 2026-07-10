@@ -59,6 +59,9 @@ SIGNALS: dict[str, str] = {
                                "and is paused permanently — recorded as "
                                "unresolved, not retried into starvation",
     "spec-generation": "diversity-specification call for the cycle's problem",
+    # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
+    "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
+    "reach": "reach sweep recorded (reach_set payload; inputs = reached ids)",
     # record_llm_calls tags (spent calls that registered nothing themselves)
     "synth-noregister": "synthesizer call that registered no relation",
     "property-relevance-trial": "judge-ensemble call ruling whether a proposed "
@@ -119,3 +122,16 @@ def family(signal: str) -> str:
         if signal.startswith(prefix):
             return prefix + "*"
     return signal
+
+
+def event_signal(event) -> str | None:
+    """The signal of a Measure event; None for non-measures. The two bare-id
+    measure families are recognized by PAYLOAD: 'hv' (hv_set) and 'reach'
+    (reach_set) — their inputs are artifact ids, not tags."""
+    if event.rule.value != "Measure":
+        return None
+    if event.state_diff.hv_set:
+        return "hv"
+    if event.state_diff.reach_set:
+        return "reach"
+    return str(event.inputs[0]) if event.inputs else ""

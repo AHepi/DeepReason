@@ -242,7 +242,7 @@ def call_tool(name: str, arguments: dict) -> str:
         from deepreason.views.why import why
 
         harness = _harness(arguments)
-        return why(_resolve(harness, arguments["id"]), harness.state)
+        return why(_resolve(harness, arguments["id"]), harness.state, harness.warrants)
 
     if name == "narrate":
         from deepreason.views.narrate import narrate

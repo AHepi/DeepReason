@@ -684,8 +684,13 @@ class Scheduler:
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry
-                # exhaustion carries the spent-but-uncarried attempts.
-                self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
+                # exhaustion carries the spent-but-uncarried attempts — and the
+                # stop REASON goes into the log for the post-hoc reader.
+                spend = getattr(e, "spend", None)
+                if spend is not None:
+                    self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])
+                else:
+                    self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
                 break
         return self.report()

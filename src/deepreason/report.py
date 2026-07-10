@@ -196,6 +196,15 @@ def eval_report(harness, config, embedder=None) -> dict:
                 }
             )
 
+    from deepreason.signals import event_signal, family
+
+    signal_counts: dict[str, int] = {}
+    for e in events:
+        signal = event_signal(e)
+        if signal is not None:
+            key = family(signal)
+            signal_counts[key] = signal_counts.get(key, 0) + 1
+
     return {
         "totals": {
             "events": len(events),
@@ -205,6 +214,9 @@ def eval_report(harness, config, embedder=None) -> dict:
             "survivors": len(survivors),
             "llm_tokens": total_tokens,
         },
+        # Every measure signal, normalized to its registry family — the log's
+        # own table of contents (see src/deepreason/signals.py for meanings).
+        "signals": dict(sorted(signal_counts.items())),
         "llm": per_role,
         "attack_validity_rate": attack_validity,
         "survivor_hv": survivor_hv,

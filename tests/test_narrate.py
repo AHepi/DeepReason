@@ -60,3 +60,29 @@ def test_upto_seq_prefix_narration(tmp_path):
     partial = narrate(live, upto_seq=critic_seq)
     assert "reinstated" not in partial.lower()  # the reinstatement hasn't happened yet
     assert "refuted" in partial.lower()
+
+
+def test_new_signal_prose_and_cycle_paragraphs(tmp_path):
+    h = Harness(tmp_path / "run")
+    art(h, "an app candidate under browser test")
+    h.record_measure(inputs=["cycle", "0", "pi-app"])
+    h.record_measure(inputs=["browser-pass", "browser@abc", "target"])
+    h.record_measure(inputs=["vision-crit", "target"])
+    h.record_measure(inputs=["arg-crit-overridden-by-execution", "target"])
+    h.record_measure(inputs=["disc-attempts-exhausted", "disc:x"])
+    out = narrate(h).lower()
+    assert "cycle 0 turned to pi-app" in out
+    assert "passed every scripted step" in out
+    assert "found no visible fault" in out
+    assert "overridden" in out                      # not swallowed by 'arg-crit' noise
+    assert "attempt cap" in out
+
+
+def test_plain_arg_crit_stays_an_aside(tmp_path):
+    h = Harness(tmp_path / "run")
+    art(h, "some work")
+    for _ in range(3):
+        h.record_measure(inputs=["arg-crit", "target"])
+    out = narrate(h)
+    assert "overridden" not in out.lower()
+    assert out.lower().count("deliberation") == 1   # asides still collapse
