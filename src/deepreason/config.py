@@ -110,6 +110,12 @@ class Config(BaseModel):
     # collapse). Requires the property_designer AND judge roles. 0 disables.
     PROP_PROPOSE_PERIOD: int = 7
     PROP_MAX: int = 3
+    # The ratchet: an active property older than this many EVENTS is promoted
+    # — it may then refute without population support (the standard holds the
+    # line even when every current candidate fails it). Promotion is trust,
+    # never finality: the source-artifact closure still collapses a promoted
+    # property's verdicts if it is ever refuted. 0 disables promotion.
+    PROP_PROBATION_EVENTS: int = 80
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).

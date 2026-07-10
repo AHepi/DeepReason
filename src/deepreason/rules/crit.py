@@ -242,10 +242,15 @@ def _crit_proposed_properties(
         property_violation_commitment,
         run_property,
     )
-    from deepreason.rules.experiment import active_properties, population_supports
+    from deepreason.rules.experiment import (
+        active_properties,
+        population_supports,
+        promoted_properties,
+    )
 
     spec = _load_spec(base.budget)
     entry, frozen = spec.get("entry"), spec.get("inputs", [])
+    promoted = promoted_properties(harness, base.id, config)
     for prop_id, claim, prop_source in active_properties(harness, base.id):
         violation = None
         if entry and frozen:
@@ -266,7 +271,13 @@ def _crit_proposed_properties(
                     break
         if violation is None:
             continue
-        if not population_supports(harness, base, prop_source, target_id):
+        # Promotion (the ratchet): a property past probation holds the line
+        # without population support — the standard does not sink with a bad
+        # generation of candidates. Probationary properties still need a
+        # sibling that satisfies them.
+        if prop_id not in promoted and not population_supports(
+            harness, base, prop_source, target_id
+        ):
             QUARANTINE_TICK[0] += 1  # sweep must NOT mark this target clean
             harness.record_measure(
                 inputs=["property-wipeout-quarantine", prop_id, target_id]

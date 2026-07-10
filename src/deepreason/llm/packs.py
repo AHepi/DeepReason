@@ -38,6 +38,35 @@ _COUNTEREXAMPLE_NOTE = (
 )
 
 
+def _active_property_claims(state: EpistemicState, blobs, criteria: list[str]) -> list[str]:
+    """Docstring claims of ACCEPTED proposed properties (code:python-prop
+    artifacts with a MENTION ref into the problem's criteria). Shown to the
+    conjecturer so candidates comply with the run's validated standards up
+    front — presentation only (§9); the checkers still decide everything.
+    (Reimplemented from rules/experiment.py against raw state: packs must not
+    import rules.)"""
+    from deepreason.ontology.artifact import RefRole
+
+    criteria_set = set(criteria)
+    claims: list[str] = []
+    for aid, artifact in state.artifacts.items():
+        if artifact.codec != "code:python-prop":
+            continue
+        if state.status.get(aid) != Status.ACCEPTED:
+            continue
+        if not any(
+            r.role == RefRole.MENTION and r.target in criteria_set
+            for r in artifact.interface.refs
+        ):
+            continue
+        text = content_text(artifact, blobs)
+        if text.startswith('"""'):
+            end = text.find('"""', 3)
+            if end > 0:
+                claims.append(text[3:end].strip())
+    return claims
+
+
 def _carries_execution_oracle(artifact, commitments: dict[str, Commitment]) -> bool:
     return any(
         (kappa := commitments.get(cid)) is not None and kappa.eval in _EXECUTION_EVALS
@@ -114,6 +143,12 @@ def render_conj_pack(
     for cid in problem.criteria:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
+    claims = _active_property_claims(state, blobs, problem.criteria)
+    if claims:
+        lines += ["", "ACTIVE PROPERTIES (conjectured standards the run has "
+                      "validated — candidates violating them are refuted by "
+                      "execution):"]
+        lines += [f"- {c[:200]}" for c in claims]
     accepted = [aid for aid, status in state.status.items() if status == Status.ACCEPTED]
     if school is not None:
         lineage = [

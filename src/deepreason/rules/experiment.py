@@ -119,7 +119,7 @@ def propose_generators(harness, base, adapter, config) -> list:
                 commitments=[wf.id],
                 refs=[Ref(target=base.id, role=RefRole.MENTION)],
             ),
-            provenance=Provenance(role="experimenter"),
+            provenance=Provenance(role="experimenter", event_seq=harness._next_seq),
             rule=Rule.CONJ,
             llm=llm_pending,
         )
@@ -168,6 +168,28 @@ def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, 
                 claim = text[3:end].strip()
         out.append((aid, claim, text))
     return out
+
+
+def promoted_properties(harness, base_commitment_id: str, config) -> set[str]:
+    """The ratchet (probation -> promotion): artifact ids of ACTIVE properties
+    that have survived at least PROP_PROBATION_EVENTS events since their
+    registration. A promoted property holds the line even when the whole
+    current population fails it (the wipeout guard is waived in crit_fuzz) —
+    the standard does not sink with a bad generation of candidates. Promotion
+    is TRUST, never finality (N1): the property remains an ordinary artifact,
+    ordinary criticism can refute it, and the source-artifact closure
+    (edges.py) still collapses every verdict it ever minted the moment it
+    falls. Deterministic: age is event-seq distance, a pure function of the
+    log; 0 disables promotion."""
+    if config.PROP_PROBATION_EVENTS <= 0:
+        return set()
+    now = harness._next_seq
+    return {
+        aid
+        for aid, _, _ in active_properties(harness, base_commitment_id)
+        if now - harness.state.artifacts[aid].provenance.event_seq
+        >= config.PROP_PROBATION_EVENTS
+    }
 
 
 def population_supports(harness, base, property_source: str, target_id: str) -> bool:
@@ -319,7 +341,9 @@ def propose_properties(harness, base, problem, adapter, config) -> list:
                 commitments=[wf.id],
                 refs=[Ref(target=base.id, role=RefRole.MENTION)],
             ),
-            provenance=Provenance(role="experimenter"),
+            # event_seq stamps the probation clock (promotion age is derived
+            # from it deterministically — no new event kind needed).
+            provenance=Provenance(role="experimenter", event_seq=harness._next_seq),
             rule=Rule.CONJ,
             llm=llm_pending,
         )

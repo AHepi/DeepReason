@@ -278,6 +278,74 @@ def test_refuted_sibling_still_proves_satisfiability(harness):
     assert harness.state.status[trap.id] == Status.REFUTED
 
 
+# ---- promotion (the ratchet): probation -> trust, never finality ----
+
+def test_probationary_property_is_not_promoted(harness):
+    from deepreason.rules.experiment import promoted_properties
+
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    _activated_property(harness, base, problem)
+    assert promoted_properties(harness, base.id, Config()) == set()  # too young
+    assert promoted_properties(
+        harness, base.id, Config(PROP_PROBATION_EVENTS=0)
+    ) == set()  # 0 disables promotion entirely
+
+
+def test_promoted_property_kills_without_population_support(harness):
+    # The ratchet with teeth: the trap is the ONLY candidate (in
+    # test_wipeout_guard... this exact situation quarantines), but a property
+    # past probation holds the line — the standard does not sink with the
+    # population.
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    trap = _candidate(harness, base, TRAP)
+    prop = _activated_property(harness, base, problem)
+
+    aged = Config(PROP_PROBATION_EVENTS=1)  # everything past probation
+    from deepreason.rules.experiment import promoted_properties
+
+    assert prop.id in promoted_properties(harness, base.id, aged)
+    critic = crit_fuzz(harness, trap.id, aged)
+    assert critic is not None
+    assert harness.state.status[trap.id] == Status.REFUTED
+
+
+def test_promotion_is_trust_not_finality(harness):
+    # N1 survives the ratchet: refuting a PROMOTED property still collapses
+    # its verdicts via the source-artifact closure.
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    trap = _candidate(harness, base, TRAP)
+    prop = _activated_property(harness, base, problem)
+    aged = Config(PROP_PROBATION_EVENTS=1)
+    crit_fuzz(harness, trap.id, aged)
+    assert harness.state.status[trap.id] == Status.REFUTED
+
+    attack(harness, prop.id, "the-promoted-property-is-wrong")
+
+    assert harness.state.status[prop.id] == Status.REFUTED
+    assert harness.state.status[trap.id] == Status.ACCEPTED  # victims reinstate
+
+
+def test_conj_pack_shows_active_property_claims(harness):
+    from deepreason.llm.packs import render_conj_pack
+
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    _activated_property(harness, base, problem)
+    pack = render_conj_pack(
+        problem, harness.state, harness.commitments, harness.blobs,
+        vs_k=3, token_budget=4000,
+    )
+    assert "ACTIVE PROPERTIES" in pack
+    assert ASCENDING_CLAIM in pack  # candidates see the validated standard
+
+
 # ---- scheduler: conjecture ground truth and kill the trap, end to end ----
 
 def test_scheduler_conjectures_ground_truth_and_kills_the_trap(tmp_path):
