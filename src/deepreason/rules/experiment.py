@@ -171,13 +171,18 @@ def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, 
 
 
 def population_supports(harness, base, property_source: str, target_id: str) -> bool:
-    """Wipeout guard: a property that every OTHER accepted sibling candidate
-    also violates is indicting the population, not the target — that is what
-    a bogus over-strict checker looks like, so it grounds nothing (defense in
-    depth behind the trial; the property itself stays registered and
-    criticizable). Requires at least one accepted sibling that PASSES the
-    property on the frozen inputs. Deterministic function of the current
-    graph + frozen content."""
+    """Wipeout guard: a property that EVERY sibling candidate also violates is
+    indicting the population, not the target — that is what a bogus
+    over-strict checker looks like, so it grounds nothing (defense in depth
+    behind the trial; the property stays registered and criticizable).
+
+    Support = at least one OTHER registered candidate carrying the base
+    oracle whose output SATISFIES the property on the frozen inputs. Any
+    status counts (accepted checked first): a candidate refuted for other
+    reasons still proves the property is satisfiable by real code — the
+    question here is satisfiability, not the supporter's correctness. A
+    reject-everything checker still finds no supporter and stays quarantined.
+    Deterministic function of the current graph + frozen content."""
     from deepreason.oracle import _load_spec, run_property
     from deepreason.programs import content_text
 
@@ -185,19 +190,17 @@ def population_supports(harness, base, property_source: str, target_id: str) -> 
     entry, inputs = spec.get("entry"), spec.get("inputs", [])
     if not entry or not inputs:
         return False
-    checked = 0
-    for aid, artifact in harness.state.artifacts.items():
-        if checked >= 5:
-            break
-        if aid == target_id:
-            continue
-        if harness.state.status.get(aid) != Status.ACCEPTED:
-            continue
-        # Membership = carries the base oracle (codec is presentation and
-        # varies by admission path; the commitment is the load-bearing link).
-        if base.id not in artifact.interface.commitments:
-            continue
-        checked += 1
+    # Membership = carries the base oracle (codec is presentation and varies
+    # by admission path; the commitment is the load-bearing link).
+    carriers = [
+        (aid, artifact) for aid, artifact in harness.state.artifacts.items()
+        if aid != target_id and base.id in artifact.interface.commitments
+    ]
+    accepted_first = sorted(
+        carriers,
+        key=lambda pair: harness.state.status.get(pair[0]) != Status.ACCEPTED,
+    )
+    for aid, artifact in accepted_first[:8]:
         verdict, _ = run_property(
             content_text(artifact, harness.blobs), entry, inputs, property_source
         )

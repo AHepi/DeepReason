@@ -258,6 +258,26 @@ def test_wipeout_guard_quarantines_population_indicting_property(harness):
     assert last.inputs[0] == "property-wipeout-quarantine"
 
 
+def test_refuted_sibling_still_proves_satisfiability(harness):
+    # Cold start (live run 3): the only ACCEPTED carrier was the trap itself,
+    # so a valid kill deadlocked in quarantine. Satisfiability evidence does
+    # not require the supporter to be accepted — a candidate refuted for
+    # other reasons that PASSES the property proves real code can meet it.
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    trap = _candidate(harness, base, TRAP)
+    good = _candidate(harness, base, CORRECT)
+    attack(harness, good.id, "refuted-for-unrelated-reasons")
+    assert harness.state.status[good.id] == Status.REFUTED
+    _activated_property(harness, base, problem)
+
+    critic = crit_fuzz(harness, trap.id, Config())
+
+    assert critic is not None  # the refuted-but-passing sibling supports it
+    assert harness.state.status[trap.id] == Status.REFUTED
+
+
 # ---- scheduler: conjecture ground truth and kill the trap, end to end ----
 
 def test_scheduler_conjectures_ground_truth_and_kills_the_trap(tmp_path):
