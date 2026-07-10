@@ -51,3 +51,22 @@ def test_missing_role_raises(tmp_path):
     assert not adapter.has_role("judge")
     with pytest.raises(KeyError):
         adapter.call("judge", "PACK", ConjecturerOutput)
+
+
+def test_retry_covers_mid_stream_disconnects():
+    """http.client.IncompleteRead escapes the OSError net (killed two live
+    runs at cycle 1) — the retry wrapper must treat it as transient."""
+    import http.client
+
+    from deepreason.llm.endpoints import request_with_retries
+
+    calls = [0]
+
+    def flaky():
+        calls[0] += 1
+        if calls[0] < 3:
+            raise http.client.IncompleteRead(b"")
+        return "ok"
+
+    assert request_with_retries(flaky) == "ok"
+    assert calls[0] == 3

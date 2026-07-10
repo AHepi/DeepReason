@@ -4,6 +4,7 @@ replay experiments without network.
 """
 
 import base64
+import http.client
 import json
 import time
 import urllib.error
@@ -33,7 +34,10 @@ def request_with_retries(fn):
             if e.code not in _RETRYABLE_HTTP:
                 raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
             last = e
-        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                http.client.HTTPException) as e:
+            # HTTPException covers IncompleteRead — a mid-stream drop the
+            # OSError net misses (observed live: killed two runs at cycle 1).
             last = e
         if delay is None:
             break
