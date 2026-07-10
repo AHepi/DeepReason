@@ -282,17 +282,22 @@ def make(description: str, out: str | None = None, cycles: int = 6,
 
     run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
     harness = Harness(run_root)
-    problem = seed_website(harness, description)
+    seed_website(harness, description)
     echo(f"Building: {description.strip()}")
     echo(f"(work happens in {run_root}; every step is on the record there)\n")
 
     def ticker(scheduler):
+        # Count ALL design candidates in the run, not just those addressed
+        # to the seed problem: refuted designs spawn successor problems and
+        # later candidates address THOSE (observed live: the eventual
+        # survivor sat three successor generations deep). The root is
+        # dedicated to this one build, so the global count is the build.
         state = scheduler.harness.state
-        mine = [aid for aid, pid in state.addr if pid == problem.id]
-        alive = sum(1 for a in set(mine)
-                    if state.status.get(a) == Status.ACCEPTED)
-        dead = sum(1 for a in set(mine)
-                   if state.status.get(a) == Status.REFUTED)
+        designs = [aid for aid, a in state.artifacts.items()
+                   if a.provenance and a.provenance.role.value
+                   in ("conjecturer", "synthesizer")]
+        alive = sum(1 for a in designs if state.status.get(a) == Status.ACCEPTED)
+        dead = sum(1 for a in designs if state.status.get(a) == Status.REFUTED)
         n = scheduler._cycles
         echo(f"  round {n}/{cycles}: {alive} design(s) standing, "
              f"{dead} criticized away")
