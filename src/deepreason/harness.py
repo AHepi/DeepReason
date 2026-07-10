@@ -257,15 +257,18 @@ class Harness:
             return [e for e in self._tail if e.seq >= seq]
         return (e for e in self.log.read() if e.seq >= seq)
 
-    def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str) -> None:
+    def record_llm_calls(self, calls: Iterable[LLMCall | None], tag: str, *extra: str) -> None:
         """Persist LLM calls that landed on no registration event — blocked
         trials, extra ensemble seats, defender/variator exchanges, all-deduped
         batches — as Measure events. Every call reaches the log exactly once
         (§0: replay consumes logged raws; token accounting reads event.llm),
-        or replay and eval_report silently under-count real spend."""
+        or replay and eval_report silently under-count real spend. ``extra``
+        strings are appended to inputs — e.g. the drop REASON on a
+        dropped-call, so the log answers 'why' without the in-memory
+        diagnostics."""
         for call in calls:
             if call is not None:
-                self.record_measure(inputs=[tag], llm=call)
+                self.record_measure(inputs=[tag, *extra], llm=call)
 
     def transitions(self) -> list[tuple[int, str, str | None, str]]:
         """(seq, artifact, old_status, new_status) per logged event — a

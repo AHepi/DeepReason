@@ -105,9 +105,16 @@ class Scheduler:
 
     def _drop(self, e: Exception) -> None:
         """A dropped call still spent tokens: persist its spend record (the
-        adapter attaches one to SchemaRepairError/EndpointError), then log
-        the drop reason in diagnostics."""
-        self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
+        adapter attaches one to SchemaRepairError/EndpointError) WITH the
+        drop reason — the log must answer 'why was this dropped' without the
+        in-memory diagnostics (which die with the process)."""
+        spend = getattr(e, "spend", None)
+        if spend is not None:
+            self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])
+        else:
+            # No tokens were spent, but the drop itself must still be on the
+            # record for a log-follower.
+            self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
         self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
 
     def _disc_paused(self, problem) -> bool:
@@ -306,6 +313,12 @@ class Scheduler:
             self.controller.step()  # calibrate generator knobs from process signals
         scan_spawns(harness, config)
         problem = self._select_problem()
+        # Heartbeat: every event that follows (by seq) until the next
+        # heartbeat belongs to this cycle — the log segments itself, live
+        # progress is tail-able, and stalls become diagnosable post hoc.
+        harness.record_measure(
+            inputs=["cycle", str(self._cycles), problem.id if problem else "-"]
+        )
         if problem is None:
             self._cycles += 1
             return
