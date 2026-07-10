@@ -20,6 +20,26 @@ section below.
 
 ## Quickstart
 
+### The two-command path (no configuration knowledge needed)
+
+```bash
+pip install ".[browser]"
+
+deepreason setup      # one time: pick your AI provider, paste your API key
+deepreason make "a pomodoro timer website"
+```
+
+`setup` asks two questions and stores your key privately in
+`~/.deepreason/credentials` (owner-only file; the key never appears in any
+config, prompt, or log). `make` proposes several complete single-file
+websites, criticizes them (each candidate is really loaded in headless
+Chromium; with a vision-capable provider a vision critic judges the rendered
+screenshots), and exports the survivors as `.html` files you can double-click
+— with a README explaining why each survived. If nothing survives, it says so
+and suggests more rounds: refutation is the tool working, not failing. The
+two commands run the very same machinery as everything below and leave the
+same replayable record in `runs/`.
+
 ### Full harness
 
 ```bash

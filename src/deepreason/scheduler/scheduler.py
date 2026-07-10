@@ -715,12 +715,16 @@ class Scheduler:
 
     # -------------------------------------------------------------- #
 
-    def run(self, cycles: int) -> dict:
+    def run(self, cycles: int, on_cycle=None) -> dict:
+        """on_cycle(self) fires after every completed cycle — a read-only
+        progress hook (easy.make's friendly ticker); it must not register."""
         from deepreason.llm.budget import TokenBudgetExceeded
 
         for _ in range(cycles):
             try:
                 self.step()
+                if on_cycle is not None:
+                    on_cycle(self)
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry

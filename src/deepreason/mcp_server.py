@@ -314,6 +314,9 @@ def handle(message: dict) -> dict | None:
 
 def main() -> int:
     """Newline-delimited JSON-RPC over stdio (MCP stdio transport)."""
+    from deepreason.easy import load_credentials
+
+    load_credentials()  # keys stored by `deepreason setup` reach MCP runs too
     for line in sys.stdin:
         line = line.strip()
         if not line:

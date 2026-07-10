@@ -29,6 +29,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--config", default=None, help="knob file (default: config/default.yaml)")
     sub = parser.add_subparsers(dest="command")
+    sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
+                                 "your API key privately")
+    make_cmd = sub.add_parser(
+        "make", help='build a website from a description, e.g. '
+                     'deepreason make "a recipe website"')
+    make_cmd.add_argument("description", help="what to build, in plain language")
+    make_cmd.add_argument("--out", default=None, help="output folder (default: <slug>-site)")
+    make_cmd.add_argument("--cycles", type=int, default=6,
+                          help="conjecture-criticism rounds (default 6)")
+    make_cmd.add_argument("--token-budget", type=int, default=150_000,
+                          help="hard token ceiling (default 150000; 0 = unlimited)")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -116,6 +127,23 @@ def _main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command is None:
         build_parser().print_help()
+        return 0
+
+    from deepreason import easy
+
+    easy.load_credentials()  # stored keys reach every command; env vars win
+
+    if args.command == "setup":
+        easy.setup_wizard()
+        return 0
+
+    if args.command == "make":
+        easy.make(
+            args.description, out=args.out, cycles=args.cycles,
+            token_budget=args.token_budget or None,
+            config=args.config,
+            root=None if args.root == ".deepreason" else args.root,
+        )
         return 0
 
     if args.command == "frontier":

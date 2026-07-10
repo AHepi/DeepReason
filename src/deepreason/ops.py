@@ -68,7 +68,8 @@ def make_embedder(harness, config):
         return None
 
 
-def run_scheduler(harness, config, cycles: int, token_budget: int | None = None):
+def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
+                  on_cycle=None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
     (result, meter, accounting). An explicit token_budget of 0 is a real
     ceiling. Raises ValueError when no conjecturer role is configured.
@@ -100,7 +101,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None)
     result = Scheduler(
         harness, adapter, config, embedder=make_embedder(harness, config),
         browser_backend=browser_backend,
-    ).run(int(cycles))
+    ).run(int(cycles), on_cycle=on_cycle)
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {
         "metered_tokens": meter.total if meter is not None else None,
