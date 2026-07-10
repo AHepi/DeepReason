@@ -118,6 +118,15 @@ class Config(BaseModel):
     # retried into starvation. None = unlimited attempts (legacy).
     DISC_ATTEMPTS_MAX: int | None = 3
     DISC_COOLDOWN: int = 4
+    # Browser oracle (rules/act.py): app candidates carrying browser
+    # commitments are rendered + driven in headless Chromium, at most this
+    # many NEW runs per cycle (each is one exogenous evidence registration;
+    # re-runs never happen — pending() guards). 0 disables.
+    BROWSER_PER_CYCLE: int = 1
+    # Vision criticism (rules/vision.py): targets with recorded screenshots
+    # get one vision-critic look each, at most this many calls per cycle.
+    # Requires the vision_critic role. 0 disables.
+    VISION_CRIT_PER_CYCLE: int = 1
     # The ratchet: an active property older than this many EVENTS is promoted
     # — it may then refute without population support (the standard holds the
     # line even when every current candidate fails it). Promotion is trust,

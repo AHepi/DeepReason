@@ -29,12 +29,16 @@ _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 
 class Scheduler:
     def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
-                 controller=None) -> None:
+                 controller=None, browser_backend=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
         self.embedder = embedder or HashingEmbedder()
         self.research_backend = research_backend
+        # Browser oracle backend (rules/act.py, duck-typed like research
+        # backends). None = feature off; set to None on BrowserUnavailable.
+        self.browser_backend = browser_backend
+        self._vision_done: set[str] = set()  # attention-only: one look per target
         # Self-calibration controller (controller.py) — optional; None means
         # fixed knobs (legacy). It reads process signals and tunes generator
         # caps; it cannot touch a status (§0 preserved structurally).
@@ -395,6 +399,8 @@ class Scheduler:
         self._experiment_step()
         self._property_step()
         self._fuzz_sweep()  # after design steps: new probes/oracles apply NOW
+        self._browser_step()
+        self._vision_step()  # after browser: judges freshly recorded renders
         self._research_step()
         self._audit_step()
         self._capture_step()
@@ -529,6 +535,71 @@ class Scheduler:
                 if activated:
                     self._fuzz_clean.clear()  # stronger oracle: re-probe everyone
                 return  # one design call per due cycle (budgeted)
+
+    def _browser_step(self) -> None:
+        """Browser evidence (rules/act.py): render + drive app candidates
+        that carry browser commitments and lack recorded evidence — at most
+        BROWSER_PER_CYCLE new runs per cycle. Exogenous like research: each
+        run happens once and its outcome is materialized; a missing
+        playwright disables the feature for the run (fail closed)."""
+        config = self.config
+        if self.browser_backend is None or config.BROWSER_PER_CYCLE <= 0:
+            return
+        from deepreason.browser import BrowserUnavailable
+        from deepreason.rules.act import needs_browser_run, run_browser_evidence
+
+        harness = self.harness
+        runs = 0
+        for aid, artifact in list(harness.state.artifacts.items()):
+            if runs >= config.BROWSER_PER_CYCLE:
+                break
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if (artifact.provenance.role if artifact.provenance else "") not in (
+                "conjecturer", "synthesizer", "seed"
+            ):
+                continue
+            if not needs_browser_run(harness, aid):
+                continue
+            try:
+                run_browser_evidence(harness, aid, self.browser_backend, config)
+            except BrowserUnavailable as e:
+                self.browser_backend = None  # optional dep missing: feature off
+                self.diagnostics.append({"cycle": self._cycles, "browser": str(e)})
+                return
+            runs += 1
+
+    def _vision_step(self) -> None:
+        """Vision criticism (rules/vision.py): one look per target with
+        recorded screenshots, at most VISION_CRIT_PER_CYCLE calls per cycle.
+        Attention-only cache — screenshots are recorded once per candidate,
+        so one look is complete coverage."""
+        config = self.config
+        if (
+            config.VISION_CRIT_PER_CYCLE <= 0
+            or not self.adapter.has_role("vision_critic")
+        ):
+            return
+        from deepreason.rules.act import browser_evidence
+        from deepreason.rules.vision import crit_vision
+
+        harness = self.harness
+        calls = 0
+        for aid in list(harness.state.artifacts):
+            if calls >= config.VISION_CRIT_PER_CYCLE:
+                break
+            if aid in self._vision_done:
+                continue
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if not browser_evidence(harness, aid):
+                continue
+            try:
+                crit_vision(harness, aid, self.adapter, config)
+            except (SchemaRepairError, EndpointError) as e:
+                self._drop(e)
+            self._vision_done.add(aid)
+            calls += 1
 
     def _research_step(self) -> None:
         """Standing exogenous schedule (§12): work one uncovered research

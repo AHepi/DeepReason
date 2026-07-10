@@ -95,6 +95,20 @@ TEMPLATES = {
         "a plain string with real newlines — no markdown fences.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "vision_critic": (
+        "You are the vision critic: you LOOK at the attached screenshot(s) of "
+        "the rendered candidate app and judge ONLY what is visible. The pack "
+        "states what the app is supposed to be and which moment of the "
+        "interaction each screenshot captures. Mount attack=true ONLY for a "
+        "concrete VISIBLE fault a user would hit — missing or unlabeled "
+        "controls, unreadable or overlapping text, broken layout, states that "
+        "should look different but don't, content contradicting the captured "
+        "moment. Tie the case to what the problem demands and set "
+        "screenshot_index to the image showing it. Do not speculate about "
+        "code, behavior between screenshots, or anything not visible; if the "
+        "rendering looks right for each captured moment, attack=false.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
     "property_designer": (
         "You are the property designer: you conjecture CORRECTNESS PROPERTIES "
         "the problem statement demands but the current checker does not "

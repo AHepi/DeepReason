@@ -73,6 +73,17 @@ class ExperimenterOutput(BaseModel):
     generators: list[str] = Field(min_length=1)
 
 
+class VisionCriticOutput(BaseModel):
+    """Visual judgment of RENDERED screenshots (rules/vision.py): attack=true
+    with a concrete, visible fault tied to what the problem demands, or
+    attack=false. screenshot_index names which provided image shows the
+    fault (0-based; null when the fault spans all of them)."""
+
+    attack: bool
+    case: str = ""
+    screenshot_index: int | None = None
+
+
 class PropertyProposal(BaseModel):
     """One conjectured correctness property: ``claim`` states in one sentence
     what requirement of the PROBLEM STATEMENT the checker encodes (the
