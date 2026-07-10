@@ -18,6 +18,11 @@ dev = [
     "pytest>=8.0",
     "ruff>=0.4",
 ]
+# Browser oracle (src/deepreason/browser.py): headless-Chromium evaluation of
+# single-file web-app candidates. Optional — the harness runs without it.
+browser = [
+    "playwright>=1.45",
+]
 
 [project.scripts]
 deepreason = "deepreason.cli.main:main"
