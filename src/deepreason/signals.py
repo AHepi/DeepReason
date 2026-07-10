@@ -83,6 +83,10 @@ SIGNALS: dict[str, str] = {
     "spec-generation": "diversity-specification call for the cycle's problem",
     # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
     "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
+    "reach-provisional": "cross-problem survival on a battery below "
+                         "REACH_COVERAGE_MIN coverage - logged for attention, "
+                         "grounds no reach, no addressing, no debt (inputs: "
+                         "[signal, artifact id, foreign problem id])",
     "reach": "reach sweep recorded (reach_set payload; inputs = reached ids)",
     # record_llm_calls tags (spent calls that registered nothing themselves)
     "synth-noregister": "synthesizer call that registered no relation",
@@ -154,6 +158,6 @@ def event_signal(event) -> str | None:
         return None
     if event.state_diff.hv_set:
         return "hv"
-    if event.state_diff.reach_set:
+    if event.state_diff.reach_set or getattr(event.state_diff, "addr_add", None):
         return "reach"
     return str(event.inputs[0]) if event.inputs else ""

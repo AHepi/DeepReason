@@ -404,9 +404,15 @@ def test_reach_verdict_cache_consistent(tmp_path):
         provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []})))
     x = h.create_artifact("the moon pulls the sea", problem_id="home")
     first = reach_sweep(h)
-    second = reach_sweep(h)  # served from the verdict cache
-    assert first == second == [(x.id, "foreign")]
+    assert first == [(x.id, "foreign")]
     assert h.state.reach[x.id] == 1.0
+    # Def 3.7 as amended: the full hit REGISTERS the artifact as addressing
+    # the foreign problem (structure, replay-applied), so the next sweep no
+    # longer counts it as foreign — reach was consummated into addressing.
+    assert (x.id, "foreign") in h.state.addr
+    second = reach_sweep(h)  # served from the verdict cache
+    assert second == []
+    assert h.state.reach[x.id] == 0.0
 
 
 def test_cross_examination_floor_unstarves_minority_school(tmp_path):

@@ -212,11 +212,14 @@ class Harness:
         *,
         hv: dict[str, float] | None = None,
         reach: dict[str, float] | None = None,
+        addr: list[tuple[str, str]] | None = None,
         inputs: Iterable[str] = (),
         llm: LLMCall | None = None,
     ) -> Event:
         """Measure event (spec §3/§6): estimates steer attention, never
-        status — they land in state.hv/state.reach only."""
+        status — they land in state.hv/state.reach only. ``addr`` carries the
+        reach amendment (Def 3.7): full cross-problem survival registers the
+        artifact as addressing the foreign problem (structure, not status)."""
         return self._commit(
             Rule.MEASURE,
             inputs=list(inputs),
@@ -224,6 +227,7 @@ class Harness:
             llm=llm,
             hv_set=hv or {},
             reach_set=reach or {},
+            addr_add=addr or [],
         )
 
     def recent_events(self, window: int) -> list[Event]:
@@ -338,6 +342,7 @@ class Harness:
         llm: LLMCall | None = None,
         hv_set: dict[str, float] | None = None,
         reach_set: dict[str, float] | None = None,
+        addr_add: list[tuple[str, str]] | None = None,
     ) -> Event:
         event = Event(
             seq=self._next_seq,
@@ -346,7 +351,8 @@ class Harness:
             inputs=inputs,
             outputs=outputs,
             llm=llm,
-            state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {}),
+            state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {},
+                                 addr_add=addr_add or []),
         )
         event.state_diff = self._apply_event(event)
         self.log.append(event)
@@ -390,6 +396,9 @@ class Harness:
             self.state.hv[aid] = value
         for aid, value in event.state_diff.reach_set.items():
             self.state.reach[aid] = value
+        for aid, pid in event.state_diff.addr_add:
+            if pid in self.state.problems and (aid, pid) not in self.state.addr:
+                self.state.addr.append((aid, pid))
         self._next_seq = event.seq + 1
         self._tail.append(event)
         if len(self._tail) > self._TAIL_CAP:
@@ -407,6 +416,7 @@ class Harness:
             ),
             hv_set=event.state_diff.hv_set,
             reach_set=event.state_diff.reach_set,
+            addr_add=event.state_diff.addr_add,
         )
 
     # ------------------------------------------------------------------ #

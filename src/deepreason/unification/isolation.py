@@ -31,6 +31,29 @@ def lineage_ref_commitment(endpoints: Iterable[str]) -> Commitment:
     )
 
 
+_RELATION_KINDS = ("depends on", "reduces to", "shares mechanism",
+                   "shared mechanism", "compatible with", "inherits",
+                   "integrates", "contradicts", "abstracts")
+_RELATION_EXPR = (
+    "'refuted if' in content.lower() and any(k in content.lower() for k in ("
+    + ", ".join(repr(k) for k in _RELATION_KINDS) + "))"
+)
+
+
+def relation_form_commitment() -> Commitment:
+    """Form gate for RELATION candidates (connection/integration problems):
+    a relation must NAME its kind (dependence, reduction, shared mechanism,
+    compatibility, inheritance, integration, contradiction, abstraction) and
+    state a 'REFUTED IF' condition — the minimum that makes the asserted
+    relation criticisable. A prose summary that merely restates its endpoints
+    fails on form, mechanically, before any judge spends tokens (approved
+    correction: the synthesizer is defective only when it staples artifacts
+    together without proposing a testable relation)."""
+    digest = sha256_hex(canonical_json(_RELATION_EXPR))[:12]
+    return Commitment(id=f"relation-form@{digest}",
+                      eval=f"predicate:{_RELATION_EXPR}")
+
+
 def conn_map(
     dep_edges: Iterable[tuple[str, str]],
     status: dict[str, Status],

@@ -68,6 +68,14 @@ class Config(BaseModel):
     ATTACK_ENTROPY_FLOOR: float = 0.2
     CRIT_DEBT_CEILING: float = 0.5
     MIN_ATTACKS_FOR_RITUAL: int = 5
+    # Reach (Def 3.7 as amended): a foreign problem's qualifying
+    # (substantive, evaluable) criteria must cover at least this fraction of
+    # its TOTAL criteria for a full reach hit (which registers addressing and
+    # can raise explanation debt); below it the hit is provisional - logged,
+    # grounding nothing. Guards against reach minted from thin or unguarded
+    # batteries (rubric-heavy problems stay provisional until their guarded
+    # procedures put survivals on the record).
+    REACH_COVERAGE_MIN: float = 0.5
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # Budget triage (§14; attention only, never status)

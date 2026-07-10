@@ -17,7 +17,7 @@ are idempotent.
 
 from deepreason.measures.hv import hv_floor_commitment
 from deepreason.ontology import Problem, ProblemProvenance, SpawnTrigger, Status
-from deepreason.unification.isolation import iso, lineage_ref_commitment, rank_neighbours
+from deepreason.unification.isolation import relation_form_commitment, iso, lineage_ref_commitment, rank_neighbours
 
 
 def spawn(
@@ -125,10 +125,37 @@ def scan_spawns(harness, config) -> list[Problem]:
     # Explanation-debt: reach hits raise standing AND a debt.
     for aid, reach in state.reach.items():
         if reach > 0 and status.get(aid) == Status.ACCEPTED:
+            # Reach = cross-problem survival (Def 3.7 as amended): the sweep
+            # has already registered the artifact as ADDRESSING the foreign
+            # problems, so its addr set names both sides. The debt problem
+            # asks the GENUINE explanatory question — what single deeper
+            # account covers all of these domains? — and makes commentary
+            # about artifacts structurally off-topic: candidates explain the
+            # subject matter, carrying the union of the addressed problems'
+            # criteria as their attack surface.
+            pids = sorted(addressed.get(aid, ()))
+            if len(pids) < 2:
+                continue  # reach>0 but addressing not yet on record: wait
+            union_criteria = sorted({
+                c for pid in pids for c in state.problems[pid].criteria
+                if c in harness.commitments
+            })
+            domains = "; ".join(
+                f"({pid}) {state.problems[pid].description[:160]}"
+                for pid in pids[:4]
+            )
             _spawn(
                 SpawnTrigger.EXPLANATION_DEBT,
-                [aid],
-                f"explain why {aid[:12]} reaches beyond its problem",
+                [aid, *pids],
+                "One explanation has survived the criteria of several "
+                f"distinct problems: {domains}. Conjecture the deeper "
+                "account: what SINGLE explanation of the underlying subject "
+                "matter covers all of these domains, and what does it "
+                "predict that the narrower explanations do not? Each "
+                "candidate MUST be an explanation of the subject matter "
+                "itself - never commentary on, or a review of, any existing "
+                "artifact or explanation.",
+                criteria=union_criteria,
                 problem_id=f"debt:{aid[:12]}",
             )
 
@@ -147,13 +174,19 @@ def scan_spawns(harness, config) -> list[Problem]:
         neighbours = rank_neighbours(aid, harness, config.K)
         endpoints = [aid, *neighbours]
         lineage = lineage_ref_commitment(endpoints)
+        relation_form = relation_form_commitment()
         harness.register_commitment(floor_commitment)
         harness.register_commitment(lineage)
+        harness.register_commitment(relation_form)
         _spawn(
             SpawnTrigger.CONNECTION,
             endpoints,
-            f"connect isolated {aid[:12]} to its neighbourhood",
-            criteria=[floor_commitment.id, lineage.id],
+            f"connect isolated {aid[:12]} to its neighbourhood: propose a "
+            "SUBSTANTIVE relation (dependence, reduction, shared mechanism, "
+            "compatibility, inheritance, integration, contradiction, or "
+            "abstraction), naming its kind and stating what it is REFUTED "
+            "IF - a summary of the endpoints is not a relation",
+            criteria=[floor_commitment.id, lineage.id, relation_form.id],
             problem_id=f"conn:{aid[:12]}",
         )
 
@@ -191,10 +224,19 @@ def scan_spawns(harness, config) -> list[Problem]:
             if not shared or (a, b) in dep or (b, a) in dep:
                 continue
             x, y = sorted([a, b])
+            relation_form = relation_form_commitment()
+            harness.register_commitment(relation_form)
             _spawn(
                 SpawnTrigger.INTEGRATION,
                 [x, y],
-                f"integrate {x[:12]} and {y[:12]} (overlapping, unrelated)",
+                f"relate {x[:12]} and {y[:12]} (shared commitments, no "
+                "relation on record): propose ONE substantive relation - "
+                "dependence, reduction, shared mechanism, compatibility, "
+                "inheritance, partial integration, contradiction, or a "
+                "deeper ABSTRACTION from which both follow. Name the "
+                "relation kind and state what it is REFUTED IF. A prose "
+                "summary of the two artifacts is not a relation.",
+                criteria=[relation_form.id],
                 problem_id=f"integ:{x[:12]}+{y[:12]}",
             )
     return new

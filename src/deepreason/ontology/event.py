@@ -54,6 +54,11 @@ class StateDiff(BaseModel):
     # applies them without re-running the variator (raws are logged too).
     hv_set: dict[str, float] = Field(default_factory=dict)
     reach_set: dict[str, float] = Field(default_factory=dict)
+    # Normative amendment (reach, Def 3.7): a FULL reach hit - genuine
+    # cross-problem survival of another problem's non-trivial battery -
+    # registers the artifact as ADDRESSING that problem. Carried in the
+    # event so replay applies it without re-running the sweep.
+    addr_add: list[tuple[str, str]] = Field(default_factory=list, alias="addr+")
 
     model_config = {"populate_by_name": True}
 

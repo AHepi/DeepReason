@@ -25,6 +25,51 @@ from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
 
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
+# Reflexive theory-building work: problems ABOUT the run's own artifacts
+# (unification layer). All of it draws from ONE shared budget so it can
+# steer attention but never consume the inquiry (Bronze Age postmortem: the
+# meta-economy ate ~40/48 artifacts because debt problems were budgeted as
+# ordinary work and their successors escaped entirely).
+_REFLEXIVE_TRIGGERS = (
+    SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION,
+    SpawnTrigger.EXPLANATION_DEBT, SpawnTrigger.REMOVE_ARBITRARINESS,
+)
+
+
+def reflexive_problems(state) -> set[str]:
+    """The reflexive set FOLLOWS LINEAGE: a problem is reflexive if its
+    trigger is, or if every provenance root it descends from is reflexive —
+    so a successor of a debt problem keeps drawing from the reflexive
+    budget instead of laundering itself into ordinary work. Lineage returns
+    to independence only through an independently originating problem."""
+    out = {p.id for p in state.problems.values()
+           if p.provenance.trigger in _REFLEXIVE_TRIGGERS}
+    addressed: dict[str, set[str]] = {}
+    for aid, pid in state.addr:
+        addressed.setdefault(aid, set()).add(pid)
+    changed = True
+    while changed:
+        changed = False
+        for pid, problem in state.problems.items():
+            if pid in out or not problem.provenance.from_:
+                continue
+            reflexive_parent = False
+            independent_parent = False
+            for fid in problem.provenance.from_:
+                if fid in state.problems:
+                    if fid in out:
+                        reflexive_parent = True
+                    else:
+                        independent_parent = True
+                elif fid in addressed:
+                    if addressed[fid] & out:
+                        reflexive_parent = True
+                    if addressed[fid] - out:
+                        independent_parent = True
+            if reflexive_parent and not independent_parent:
+                out.add(pid)
+                changed = True
+    return out
 
 
 def problem_family(state, root_pid: str) -> set[str]:
@@ -182,16 +227,17 @@ class Scheduler:
         for aid, pid in state.addr:
             if state.status.get(aid) == Status.ACCEPTED:
                 survivors_by_problem[pid] = survivors_by_problem.get(pid, 0) + 1
-        integration_allowed = (
+        integration_allowed = self.config.INTEGRATION_BUDGET_SHARE > 0 and (
             self._cycles == 0
             or self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE
         )
+        reflexive = reflexive_problems(state)
         candidates = [
             p
             for p in state.problems.values()
             # Research problems are worked by backends, not gamma (§12).
             if p.provenance.trigger != SpawnTrigger.RESEARCH
-            and (integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS)
+            and (integration_allowed or p.id not in reflexive)
             and not self._disc_paused(p)
         ]
         if self.config.FOCUS_FAMILY is not None:
@@ -383,7 +429,7 @@ class Scheduler:
         if problem is None:
             self._cycles += 1
             return
-        if problem.provenance.trigger in _INTEGRATION_TRIGGERS:
+        if problem.id in reflexive_problems(harness.state):
             self._integration_cycles += 1
 
         # Discrimination in informal mode resolves comparatively (§10.2):
@@ -415,7 +461,7 @@ class Scheduler:
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
-            reach_sweep(harness)
+            reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)
             self._capture_step()
             self._cycles += 1
             return
@@ -468,7 +514,7 @@ class Scheduler:
             # can share one (CRIT_BATCH_K).
             self._arg_crit([a.id for a in admitted])
 
-        reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
+        reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)  # hits recorded; debt spawns next scan
         self._lazy_hv()
         self._experiment_step()
         self._property_step()
