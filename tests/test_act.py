@@ -7,6 +7,7 @@ import json
 from deepreason.browser import BrowserResult, browser_commitment
 from deepreason.config import Config
 from deepreason.ontology import Interface, Provenance, Status, WarrantType
+from deepreason.ontology.artifact import RefRole
 from deepreason.programs import content_text
 from deepreason.rules.act import browser_evidence, browser_rid, run_browser_evidence
 
@@ -71,10 +72,34 @@ def test_fail_registers_demonstrative_warrant(harness):
     assert harness.state.status[app.id] == Status.REFUTED
     w = next(w for w in harness.warrants.values() if w.target == app.id)
     assert w.type == WarrantType.DEMONSTRATIVE and w.commitment == c.id
-    # The nu MENTIONs the recorded evidence artifact.
+    # The nu declares the recorded artifact as load-bearing evidence.
     nu = harness.state.artifacts[w.validity_node]
     ev = browser_evidence(harness, app.id)
-    assert any(r.target == ev[0]["evidence_id"] for r in nu.interface.refs)
+    assert any(
+        r.target == ev[0]["evidence_id"] and r.role == RefRole.EVIDENCE
+        for r in nu.interface.refs
+    )
+
+
+def test_refuting_reliability_reinstates_browser_failed_app(harness):
+    c = browser_commitment(SCRIPT)
+    harness.register_commitment(c)
+    app = _app(harness, c, "<div id=t>00:00</div>")
+    browser_critic = run_browser_evidence(
+        harness, app.id, FakeBrowser("fail"), Config()
+    )
+    assert browser_critic is not None
+    payload = browser_evidence(harness, app.id)[0]
+    evidence = harness.state.artifacts[payload["evidence_id"]]
+    reliability = next(
+        ref.target for ref in evidence.interface.refs if ref.role == RefRole.DEPENDENCE
+    )
+
+    attack(harness, reliability, "browser-failure-source-is-unreliable")
+
+    assert harness.state.status[browser_critic.id] == Status.REFUTED
+    assert harness.state.status[app.id] == Status.ACCEPTED
+    assert browser_evidence(harness, app.id) == []
 
 
 def test_run_once_idempotence(harness):

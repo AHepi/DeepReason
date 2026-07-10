@@ -67,6 +67,40 @@ def test_batch_registers_per_target_warrants(harness):
     assert len(llm_events) == 1
 
 
+def test_shared_case_text_still_attacks_each_target(harness):
+    """Critic content is an artifact; carriage is a separate relation.
+
+    A genuinely shared fault may be stated byte-for-byte identically for two
+    targets. Content-addressing should dedupe the prose without deduping either
+    warrant carried by that prose artifact.
+    """
+    a, b = _two_targets(harness)
+    shared = "both claims omit the same boundary condition"
+    adapter = _adapter(
+        harness,
+        [
+            _batch(
+                {"target": a.id, "attack": True, "case": shared},
+                {"target": b.id, "attack": True, "case": shared},
+            )
+        ],
+    )
+
+    critics = crit_argumentative_batch(harness, [a.id, b.id], adapter, Config())
+
+    assert len({critic.id for critic in critics}) == 1  # prose dedupes
+    carrier_id = critics[0].id
+    carried = set(harness.carried_warrant_ids(carrier_id))
+    assert carried == {
+        w.id for w in harness.warrants.values() if w.target in {a.id, b.id}
+    }
+    assert len(carried) == 2
+    assert harness.state.status[a.id] == Status.REFUTED
+    assert harness.state.status[b.id] == Status.REFUTED
+    # The shared model call is still accounted exactly once.
+    assert sum(e.llm is not None for e in harness.log.read()) == 1
+
+
 def test_case_against_unlisted_target_is_dropped(harness):
     a, b = _two_targets(harness)
     outsider = harness.create_artifact("an artifact the critic was never shown")

@@ -60,8 +60,10 @@ def test_adapter_without_images_keeps_legacy_single_arg_call(harness):
 from deepreason.browser import browser_commitment  # noqa: E402
 from deepreason.config import Config  # noqa: E402
 from deepreason.ontology import Interface, Problem, ProblemProvenance, Provenance, Status, WarrantType  # noqa: E402
+from deepreason.ontology.artifact import RefRole  # noqa: E402
 from deepreason.oracle import property_oracle_commitment  # noqa: E402
 from deepreason.rules.vision import crit_vision  # noqa: E402
+from tests.conftest import attack  # noqa: E402
 from tests.test_act import PNG as ACT_PNG, SCRIPT, FakeBrowser  # noqa: E402
 
 
@@ -102,12 +104,36 @@ def test_vision_attack_registers_argumentative_warrant(harness):
     assert harness.state.status[app.id] == Status.REFUTED
     w = next(w for w in harness.warrants.values() if w.target == app.id)
     assert w.type == WarrantType.ARGUMENTATIVE
-    # The nu MENTIONs the screenshot(s) it judged.
+    # The nu declares the screenshot(s) as load-bearing EVIDENCE.
     nu = harness.state.artifacts[w.validity_node]
     from deepreason.rules.act import browser_evidence
 
     shot = browser_evidence(harness, app.id)[0]["screenshots"][0]
-    assert any(r.target == shot for r in nu.interface.refs)
+    assert any(r.target == shot and r.role == RefRole.EVIDENCE for r in nu.interface.refs)
+
+
+def test_refuting_browser_reliability_reinstates_visually_refuted_app(harness):
+    """Evidence invalidation is graph closure, not a hidden view-level check."""
+    _, app = _rendered_app(harness)
+    _, adapter = _vision_adapter(harness, attack=True)
+    vision_critic = crit_vision(harness, app.id, adapter, Config())
+    assert vision_critic is not None
+    assert harness.state.status[app.id] == Status.REFUTED
+
+    from deepreason.rules.act import browser_evidence
+
+    payload = browser_evidence(harness, app.id)[0]
+    evidence = harness.state.artifacts[payload["evidence_id"]]
+    reliability_id = next(
+        ref.target for ref in evidence.interface.refs if ref.role == RefRole.DEPENDENCE
+    )
+
+    attack(harness, reliability_id, "browser-source-is-unreliable")
+
+    assert harness.state.status[reliability_id] == Status.REFUTED
+    assert harness.state.status[evidence.id] == Status.SUSPENDED_UNSUPPORTED
+    assert harness.state.status[vision_critic.id] == Status.REFUTED
+    assert harness.state.status[app.id] == Status.ACCEPTED
 
 
 def test_vision_no_attack_logs_measure(harness):

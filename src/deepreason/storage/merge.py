@@ -5,7 +5,8 @@ content-addressed. Identical artifacts dedupe by id; school-policy
 artifacts union like any artifact (the scheduler reconciles rosters from
 the roster() replay). The merge walks the SOURCE log in order and emits
 one Merge event per source event that contributed anything new, preserving
-inputs — so addr pairs and Measure payloads reconstruct, and the merged
+the complete contribution and LLM provenance — so addr/carry pairs and
+Measure payloads reconstruct, and the merged
 log remains a faithful replayable history. Adjudication recomputes after
 every Merge event (Adj: after any registration).
 
@@ -31,17 +32,20 @@ def _known(harness, oid: str) -> bool:
     )
 
 
-def _signature(inputs, outputs, hv_set, reach_set) -> tuple:
+def _signature(event) -> tuple:
     """Content signature of an event's contribution, independent of rule/seq
     (a source Conj becomes a target Merge). Union semantics (G-Set CRDT):
     identical contributions collapse, so a re-merge or shared prefix is a
     no-op — but a re-measurement (same key, new value) is a distinct
     signature and is preserved, so the latest value wins in source order."""
     return (
-        tuple(inputs),
-        tuple(outputs),
-        tuple(sorted(hv_set.items())),
-        tuple(sorted(reach_set.items())),
+        tuple(event.inputs),
+        tuple(event.outputs),
+        tuple(sorted(event.state_diff.hv_set.items())),
+        tuple(sorted(event.state_diff.reach_set.items())),
+        tuple(event.state_diff.addr_add),
+        tuple(event.state_diff.carry_add),
+        event.llm.model_dump_json() if event.llm is not None else None,
     )
 
 
@@ -49,10 +53,10 @@ def merge(harness, source_root: Path) -> dict:
     """Union the session at source_root into harness. Returns stats.
 
     Every source event that carries a contribution not already present is
-    re-emitted as a Merge event preserving its full inputs and outputs — so
-    addr (artifact-addresses-problem) pairs reconstruct even when the
-    artifact itself is already known, diagnostic Measure events survive, and
-    hv/reach re-estimates apply in order (latest wins)."""
+    re-emitted as a Merge event preserving its inputs, outputs, state payload,
+    and LLM record — so addr/carry relations reconstruct even when an artifact
+    is already known, diagnostic Measure events survive, and hv/reach
+    re-estimates apply in order (latest wins)."""
     from deepreason.harness import Harness
 
     source = Harness(source_root)
@@ -69,16 +73,14 @@ def merge(harness, source_root: Path) -> dict:
 
     # Existing contributions (this session's own history) are already merged.
     seen = {
-        _signature(e.inputs, e.outputs, e.state_diff.hv_set, e.state_diff.reach_set)
+        _signature(e)
         for e in harness.log.read()
     }
 
     merged_events = 0
     merged_objects = 0
     for event in source.log.read():
-        sig = _signature(
-            event.inputs, event.outputs, event.state_diff.hv_set, event.state_diff.reach_set
-        )
+        sig = _signature(event)
         if sig in seen:
             continue  # already present (re-merge / shared prefix)
         seen.add(sig)
@@ -93,8 +95,11 @@ def merge(harness, source_root: Path) -> dict:
             Rule.MERGE,
             inputs=list(event.inputs),
             outputs=list(event.outputs),
+            llm=event.llm,
             hv_set=dict(event.state_diff.hv_set),
             reach_set=dict(event.state_diff.reach_set),
+            addr_add=list(event.state_diff.addr_add),
+            carry_add=list(event.state_diff.carry_add),
         )
         merged_events += 1
         merged_objects += len(new_outputs)

@@ -59,6 +59,10 @@ class StateDiff(BaseModel):
     # registers the artifact as ADDRESSING that problem. Carried in the
     # event so replay applies it without re-running the sweep.
     addr_add: list[tuple[str, str]] = Field(default_factory=list, alias="addr+")
+    # Append-only warrant carriage. Kept out of Artifact.compute_id so an
+    # artifact remains the same content object when it packages more than one
+    # attack; old events remain compatible through the default empty list.
+    carry_add: list[tuple[str, str]] = Field(default_factory=list, alias="carry+")
 
     model_config = {"populate_by_name": True}
 

@@ -7,7 +7,15 @@ import shutil
 from deepreason.capture import schools
 from deepreason.config import Config
 from deepreason.harness import Harness
-from deepreason.ontology import Commitment, Problem, ProblemProvenance, Status
+from deepreason.ontology import (
+    Commitment,
+    Problem,
+    ProblemProvenance,
+    Provenance,
+    Status,
+    Warrant,
+    WarrantType,
+)
 from deepreason.storage.merge import merge
 from tests.conftest import art, attack
 
@@ -93,3 +101,47 @@ def test_merge_is_idempotent(tmp_path):
     stats = merge(harness_a, root_b)  # merging again adds nothing
     assert stats["merged_objects"] == 0 and stats["merged_events"] == 0
     assert harness_a.state.model_dump_json() == snapshot
+
+
+def test_merge_preserves_carriage_added_to_existing_artifact(tmp_path):
+    """A source may attach a second warrant to already-deduped critic prose."""
+    source_root, dest_root = tmp_path / "source", tmp_path / "dest"
+    source = Harness(source_root)
+    target_a = art(source, "target A")
+    target_b = art(source, "target B")
+    nu_a = art(source, "nu A")
+    first = Warrant(
+        id="w-a",
+        target=target_a.id,
+        type=WarrantType.ARGUMENTATIVE,
+        validity_node=nu_a.id,
+    )
+    carrier = source.create_artifact(
+        "one shared criticism",
+        provenance=Provenance(role="critic"),
+        warrants=[first],
+    )
+    shutil.copytree(source_root, dest_root)
+
+    nu_b = art(source, "nu B")
+    second = Warrant(
+        id="w-b",
+        target=target_b.id,
+        type=WarrantType.ARGUMENTATIVE,
+        validity_node=nu_b.id,
+    )
+    same_carrier = source.create_artifact(
+        "one shared criticism",
+        provenance=Provenance(role="critic"),
+        warrants=[second],
+    )
+    assert same_carrier.id == carrier.id
+    assert source.state.status[target_b.id] == Status.REFUTED
+
+    dest = Harness(dest_root)
+    assert dest.state.status[target_b.id] == Status.ACCEPTED
+    merge(dest, source_root)
+
+    assert set(dest.carried_warrant_ids(carrier.id)) == {"w-a", "w-b"}
+    assert dest.state.status[target_b.id] == Status.REFUTED
+    assert Harness(dest_root).state == dest.state

@@ -82,7 +82,8 @@ def eval_report(harness, config, embedder=None) -> dict:
         row["mean_surprisal"] = sum(values) / len(values) if values else None
 
     # --- Attack validity: do registered attacks stand? ----------------- #
-    attackers = [a for a in state.artifacts.values() if a.warrants]
+    carrier_ids = {carrier for carrier, _ in state.carries}
+    attackers = [a for a in state.artifacts.values() if a.id in carrier_ids]
     standing = sum(
         1 for a in attackers if state.status.get(a.id) == Status.ACCEPTED
     )

@@ -60,6 +60,35 @@ def test_validity_node_closure(harness):
     assert status[target.id] == Status.ACCEPTED  # reinstated
 
 
+def test_validity_attack_disables_every_carrier_of_a_warrant(harness):
+    """Carriage is many-to-many: one warrant may be packaged more than once."""
+    target = art(harness, "target claim")
+    nu = art(harness, "nu: the shared warrant is valid")
+    warrant = Warrant(
+        id="w-shared",
+        target=target.id,
+        type=WarrantType.ARGUMENTATIVE,
+        validity_node=nu.id,
+    )
+    first = harness.create_artifact(
+        "first packaging of the attack",
+        provenance=Provenance(role="critic"),
+        warrants=[warrant],
+    )
+    second = harness.create_artifact(
+        "second packaging of the attack",
+        provenance=Provenance(role="critic"),
+        warrants=[warrant],
+    )
+    assert harness.state.status[target.id] == Status.REFUTED
+
+    attack(harness, nu.id, "shared-warrant-is-unsound")
+
+    assert harness.state.status[first.id] == Status.REFUTED
+    assert harness.state.status[second.id] == Status.REFUTED
+    assert harness.state.status[target.id] == Status.ACCEPTED
+
+
 def test_support_cascade_orphaned_not_false(harness):
     premise = art(harness, "premise")
     dependent = art(

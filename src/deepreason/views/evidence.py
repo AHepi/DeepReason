@@ -80,7 +80,12 @@ def evidence(harness, artifact_id: str) -> str:
         lines.append("WARRANTS AGAINST IT")
         for w in against:
             carrier = next(
-                (a for a in state.artifacts.values() if w.id in a.warrants), None
+                (
+                    state.artifacts[aid]
+                    for aid in harness.carrier_ids(w.id)
+                    if aid in state.artifacts
+                ),
+                None,
             )
             lines.append(
                 f"  {w.type.value} · commitment {w.commitment or '(none: argued case)'}"
@@ -102,8 +107,11 @@ def evidence(harness, artifact_id: str) -> str:
                     f"as its source does"
                 )
 
-    carried = [harness.warrants[wid] for wid in artifact.warrants
-               if wid in harness.warrants]
+    carried = [
+        harness.warrants[wid]
+        for wid in harness.carried_warrant_ids(artifact.id)
+        if wid in harness.warrants
+    ]
     if carried:
         lines.append("WARRANTS IT CARRIES (it is a critic)")
         for w in carried:

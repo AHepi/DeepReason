@@ -21,6 +21,11 @@
   long as their source does. (Generator credit is deliberately NOT load-
   bearing — a generator only chose where to look, so it is a MENTION on the
   nu with no closure.)
+- Evidence closure: a warrant validity node may declare ``evidence`` refs.
+  Attackers of that evidence, or of any registered dependency beneath it,
+  attack the validity node. The ordinary validity-node closure then disables
+  every carrier of the warrant. Evidence invalidation therefore remains an
+  explicit attack-graph derivation, never a hidden status check.
 
 Edges materialize only when both endpoints are registered: refs/targets may
 dangle (import/merge order, §14) and take effect when the target appears.
@@ -77,6 +82,7 @@ def build_att(
     artifacts: dict[str, Artifact],
     warrants: dict[str, Warrant],
     commitments: dict[str, Commitment],
+    carries: Iterable[tuple[str, str]] | None = None,
 ) -> set[tuple[str, str]]:
     """Attack edges (attacker -> target) including both closure rules.
 
@@ -85,20 +91,53 @@ def build_att(
     closure then lifts onto the warrants' carriers.
     """
     att: set[tuple[str, str]] = set()
-    carriers: dict[str, str] = {}  # warrant id -> carrier artifact id
-    for a in artifacts.values():
-        for wid in a.warrants:
-            w = warrants.get(wid)
-            if w is None:
+    # Artifact.warrants is the legacy on-record encoding. New logs also carry
+    # the relation explicitly in StateDiff.carry_add. Unioning both makes old
+    # roots replay unchanged while allowing one content artifact to acquire a
+    # second warrant without changing its content-addressed id.
+    carry_pairs = {
+        (artifact.id, wid)
+        for artifact in artifacts.values()
+        for wid in artifact.warrants
+    }
+    if carries is not None:
+        carry_pairs.update(carries)
+    carriers: dict[str, set[str]] = {}  # warrant id -> every carrier artifact
+    for carrier, wid in carry_pairs:
+        if carrier not in artifacts:
+            continue
+        w = warrants.get(wid)
+        if w is None:
+            continue
+        carriers.setdefault(wid, set()).add(carrier)
+        if w.target in artifacts:
+            att.add((carrier, w.target))
+
+    evidence_cache: dict[str, set[str]] = {}
+
+    def evidence_lineage(evidence_id: str) -> set[str]:
+        """Evidence plus its transitive registered dependence sources."""
+        if evidence_id in evidence_cache:
+            return evidence_cache[evidence_id]
+        seen: set[str] = set()
+        stack = [evidence_id]
+        while stack:
+            aid = stack.pop()
+            if aid in seen or aid not in artifacts:
                 continue
-            carriers[wid] = a.id
-            if w.target in artifacts:
-                att.add((a.id, w.target))
+            seen.add(aid)
+            stack.extend(
+                ref.target
+                for ref in artifacts[aid].interface.refs
+                if ref.role == RefRole.DEPENDENCE
+            )
+        evidence_cache[evidence_id] = seen
+        return seen
 
     changed = True
     while changed:
         changed = False
-        for wid, carrier in carriers.items():
+        for wid, warrant_carriers in carriers.items():
             w = warrants[wid]
             nu = w.validity_node
             # Case-law extension: attackers of the mentioned standard attack nu.
@@ -115,6 +154,20 @@ def build_att(
                         if target in standards and (x, nu) not in att:
                             att.add((x, nu))
                             changed = True
+            # Evidence closure: the nu explicitly declares which recorded
+            # evidence is load-bearing. An attack anywhere in that evidence's
+            # dependency lineage is an attack on the nu's validity.
+            nu_artifact = artifacts.get(nu)
+            if nu_artifact is not None:
+                evidence = set()
+                for ref in nu_artifact.interface.refs:
+                    if ref.role == RefRole.EVIDENCE:
+                        evidence.update(evidence_lineage(ref.target))
+                if evidence:
+                    for x, target in list(att):
+                        if target in evidence and (x, nu) not in att:
+                            att.add((x, nu))
+                            changed = True
             # Source-artifact closure: attackers of the declared source
             # (a proposed property checker) attack the nu — refuting the
             # property collapses every verdict minted from it.
@@ -125,9 +178,12 @@ def build_att(
                         if target == source and (x, nu) not in att:
                             att.add((x, nu))
                             changed = True
-            # Validity-node closure: attackers of nu attack the carrier.
+            # Validity-node closure: attackers of nu attack every carrier.
             for x, target in list(att):
-                if target == nu and (x, carrier) not in att:
-                    att.add((x, carrier))
-                    changed = True
+                if target != nu:
+                    continue
+                for carrier in warrant_carriers:
+                    if (x, carrier) not in att:
+                        att.add((x, carrier))
+                        changed = True
     return att

@@ -3,6 +3,11 @@
 **Status:** build spec, **v1.3**. Source: *The Necessity of Creativity* (creativity-calculus).
 **Audience:** implementing LLM / engineer. Rationale lives in the companion human-readable plan; this file is normative and terse.
 
+**Implementation clarifications:** warrant carriage is an explicit append-only
+`carry ⊆ A × W` relation and is not part of artifact identity; validity nodes
+grounded in recorded evidence use an `evidence` ref whose dependency lineage
+participates in attack closure. Both keep status computation inside `att`/`dep`.
+
 **Changes from v1.2** (capture control; all via attention/provenance/gates — no new acceptance semantics, no types):
 
 1. **New §11 (Capture control).** Two capture surfaces named: generator (variation collapse) and adjudicator (criticism ritualizing). Schools — islands in conjecture, panmixia in criticism — with lineage-based constitution and provenance-ownership allocation (no per-problem curation). Graph-native ritual detection + generator-side embedding detection, all as replay programs over the event log. Exogenous grounding ratio λ with floor + reactive brake. Response ladder as logged scheduler rules with hysteresis. Old §§11–16 renumbered §§12–17.
@@ -38,7 +43,7 @@
   "codec": "utf8 | json | csv | f64le | i64le | code:<lang> | raw",
   "interface": {
     "commitments": ["<commitment-id>", "..."],
-    "refs": [{ "target": "<artifact-id>", "role": "dependence | mention" }]
+    "refs": [{ "target": "<artifact-id>", "role": "dependence | mention | evidence" }]
   },
   "warrants": ["<warrant-id>", "..."],
   "provenance": { "role": "conjecturer|critic|variator|synthesizer|seed|import|user", "school": "<school-id>|null", "event_seq": 0 }
@@ -46,7 +51,15 @@
 ```
 
 - `refs[].role == "dependence"` ⇒ contributes a support edge (this → target) to `dep`.
-- Each carried warrant ⇒ contributes an attack edge (this → warrant.target) to `att`.
+- Warrant carriage is logically an explicit append-only relation
+  `carry ⊆ A × W`. `artifact.warrants` is its legacy/on-record shorthand, not
+  part of artifact identity. A later event MAY add `(artifact, warrant)` to
+  `carry` without changing the artifact id. Each pair contributes an attack
+  edge `(artifact → warrant.target)` to `att`.
+- `refs[].role == "evidence"` is permitted on a warrant validity node and
+  declares load-bearing evidence. Attackers of that evidence, or of anything
+  in its transitive `dependence` lineage, attack the validity node during
+  `att` construction. Plain `mention` refs remain non-load-bearing.
 - `dep` MUST remain a DAG. Reject any dependence ref that would create a cycle.
 - `provenance.school` records which conditioning regime (§11.1) generated the artifact. Provenance is never a warrant (D2), so school membership is epistemically inert **by construction**: it can shape packs and scheduling, never adjudication.
 
@@ -84,6 +97,12 @@
 
 - **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction.
 - **Closure extension (case law):** the ν of any rubric-derived warrant MUST carry a `mention` ref to the standard artifact it applied. `att` construction adds an edge (x → ν) for every registered attacker x of that standard. Consequence, all in pass 1: refute a standard ⇒ every ν citing it is attacked ⇒ every warrant under it falls ⇒ targets reinstated (Lemma 3.1 mechanics). This is the parallel-fifths reinstatement, computed, not curated.
+- **Closure extension (evidence):** a ν grounded in recorded evidence MUST
+  carry an `evidence` ref to it. `att` construction adds `(x → ν)` for every
+  attacker `x` of the evidence or any artifact in its transitive dependence
+  lineage. The ordinary closure rule then attacks every carrier of the
+  warrant, so invalidating a source can reinstate the target without any
+  status rule outside `att`/`dep`.
 - Both warrant types are contentful (packaged in artifacts); **a bare verdict is never an edge**.
 
 **Problem** (Def 3.2)
@@ -103,7 +122,7 @@
 **Epistemic state** (materialized view; Def 3.3)
 
 ```
-S = (A, Π, att, dep, addr, status, hv, reach, conn)
+S = (A, Π, carry, att, dep, addr, status, hv, reach, conn)
 ```
 
 Recompute from the event log at any `seq` for time-travel.
@@ -116,7 +135,7 @@ Recompute from the event log at any `seq` for time-travel.
   "rule": "Conj|Crit|Adj|Spawn|Refl|Register|Merge|Measure|Reveal|Reseed",
   "inputs": ["<id>"], "outputs": ["<id>"],
   "llm": { "role": "...", "model": "...", "endpoint": "...", "prompt_ref": "<blob>", "raw_ref": "<blob>", "tokens": 0, "ms": 0 },
-  "state_diff": { "att+": [], "dep+": [], "A+": [], "Π+": [], "status_changed": [] }
+  "state_diff": { "carry+": [], "att+": [], "dep+": [], "A+": [], "Π+": [], "status_changed": [] }
 }
 ```
 
@@ -124,14 +143,20 @@ Embedder calls (§9, §11) are logged exactly like any other role — prompt/inp
 
 ## 2. Formation rules (well-formedness; §3.2)
 
-A state is well-formed iff: every attack edge carries a registered warrant; every problem criterion is a commitment schema; every `addr` pair is declared; the validity-node closure (including the case-law extension) holds; `dep` is acyclic; **and every rubric-derived demonstrative warrant's `trace_ref` contains a conforming trial transcript (§3 rubric-verdict guard)**. All transition rules preserve well-formedness.
+A state is well-formed iff: every `(carrier,warrant)` pair names a registered
+artifact and warrant; every attack edge derives from such a pair; every problem
+criterion is a commitment schema; every `addr` pair is declared; the
+validity-node closure (including case-law and evidence extensions) holds; `dep`
+is acyclic; **and every rubric-derived demonstrative warrant's `trace_ref`
+contains a conforming trial transcript (§3 rubric-verdict guard)**. All
+transition rules preserve well-formedness.
 
 ## 3. Transition rules (§3.3)
 
 | Rule  | Enabling condition                          | Effect |
 |-------|---------------------------------------------|--------|
 | Conj  | `Π ≠ ∅`; a problem π selected               | `a = γ(π, S)` via conjecturer role under the assigned school's render policy (§11.2), born-connected (§7); `A += a`, `addr += (a,π)`, interface attached |
-| Crit  | target `a ∈ A`; a valid warrant `w` for `(k,a)` | `A += k`, `att += (k,a)`, `W(k,a)=w` |
+| Crit  | target `a ∈ A`; a valid warrant `w` for `(k,a)` | register `k` if new; `carry += (k,w)`; derive `att += (k,a)` |
 | Adj   | after any registration                      | recompute two-pass labels (§4) |
 | Spawn | any trigger below                           | register new problem with provenance |
 | Refl  | always available                            | rule-artifacts, demarcation criterion, adjudication semantics, standards, guard procedures, and school-policy artifacts are registered artifacts in `A`, attackable |
@@ -451,7 +476,10 @@ Question: does the harness's exogenous anchoring earn exemption from closed-loop
 
 Backend pluggable: web-search | local-RAG | ask-user (doubles as the appellate channel, §10.6). Research cadence is part of the standing exogenous schedule that keeps λ above floor (§11.3).
 
-Evidence enters as an artifact carrying a source-reliability `validity_node`; attackable like anything else.
+Evidence enters as an artifact depending on a source-reliability assertion;
+any warrant grounded in it declares an `evidence` ref from its validity node.
+Attacking the evidence or its source therefore propagates through the explicit
+evidence closure and can reinstate the warrant's target.
 
 ## 13. Interface (CLI first)
 

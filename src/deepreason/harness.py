@@ -149,8 +149,8 @@ class Harness:
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
     ) -> Artifact:
-        if artifact.id in self.state.artifacts:
-            return self.state.artifacts[artifact.id]  # content-addressed dedupe
+        # register_batch handles both content dedupe and any NEW carriage
+        # declared for an existing content artifact.
         self.register_batch(
             [(artifact, list(warrants))], problem_id=problem_id, rule=rule, llm=llm
         )
@@ -164,30 +164,69 @@ class Harness:
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
     ) -> list[Artifact]:
-        """Register several artifacts (+ their warrants) in one event — e.g.
-        one Conj event per gamma-call carrying all admitted VS candidates."""
+        """Register artifacts and explicit warrant-carriage relations.
+
+        Content-addressed artifacts dedupe, but a new ``(artifact, warrant)``
+        pair still commits. This is what lets identical criticism prose attack
+        more than one target without changing the prose artifact's id.
+        """
         candidate = dict(self.state.artifacts)
         accepted_entries: list[tuple[Artifact, list[Warrant]]] = []
+        carry_add: list[tuple[str, str]] = []
+        known_carries = set(self.state.carries)
+        new_warrants: dict[str, Warrant] = {}
         for artifact, warrants in entries:
-            if artifact.id in candidate:
-                continue  # content-addressed dedupe (incl. within the batch)
+            is_new = artifact.id not in candidate
+            if not is_new:
+                existing_artifact = candidate[artifact.id]
+                if (
+                    existing_artifact.content_ref != artifact.content_ref
+                    or existing_artifact.codec != artifact.codec
+                    or existing_artifact.interface != artifact.interface
+                ):
+                    raise WellFormednessError(
+                        f"artifact id {artifact.id} conflicts with its content identity"
+                    )
             provided = {w.id: w for w in warrants}
             # Every attack edge carries a registered warrant (§2).
             for wid in artifact.warrants:
-                w = provided.get(wid) or self.warrants.get(wid)
+                w = provided.get(wid) or new_warrants.get(wid) or self.warrants.get(wid)
                 if w is None:
                     raise WellFormednessError(f"carried warrant not provided/registered: {wid}")
+                if (
+                    wid in provided
+                    and wid in self.warrants
+                    and provided[wid] != self.warrants[wid]
+                ):
+                    raise WellFormednessError(
+                        f"warrant id {wid} conflicts with the registered record"
+                    )
                 # A warrant's validity node may be an earlier artifact in this
                 # same batch, not only one already in state (one Conj event can
                 # carry both the nu and the critic that cites it).
                 self._validate_warrant(w, known_artifacts=candidate)
+                pair = (artifact.id, wid)
+                if pair not in known_carries:
+                    carry_add.append(pair)
+                    known_carries.add(pair)
+                if wid in provided and wid not in self.warrants:
+                    existing = new_warrants.get(wid)
+                    if existing is not None and existing != provided[wid]:
+                        raise WellFormednessError(
+                            f"warrant id {wid} has conflicting records in one batch"
+                        )
+                    new_warrants[wid] = provided[wid]
+            if not is_new:
+                # The content object already exists, but newly declared
+                # carriage above is still a real append-only graph relation.
+                continue
             # Interface commitments must be registered (§2).
             for cid in artifact.interface.commitments:
                 if cid not in self.commitments:
                     raise WellFormednessError(f"interface commitment not registered: {cid}")
             candidate[artifact.id] = artifact
             accepted_entries.append((artifact, warrants))
-        if not accepted_entries:
+        if not accepted_entries and not carry_add:
             return []
         # dep must remain a DAG (§1): check the materialized edge set.
         try:
@@ -196,16 +235,37 @@ class Harness:
             raise WellFormednessError(str(e)) from e
 
         outputs: list[str] = []
-        for artifact, warrants in accepted_entries:
-            provided = {w.id: w for w in warrants}
-            for wid in artifact.warrants:
-                if wid in provided and wid not in self.warrants and wid not in outputs:
-                    self.objects.put("warrant", provided[wid])
-                    outputs.append(wid)
+        for wid, warrant in new_warrants.items():
+            self.objects.put("warrant", warrant)
+            outputs.append(wid)
+        for artifact, _ in accepted_entries:
             self.objects.put("artifact", artifact)
             outputs.append(artifact.id)
-        self._commit(rule, inputs=[problem_id] if problem_id else [], outputs=outputs, llm=llm)
+        # Existing callers detect content dedupe and record a shared LLM call
+        # as a Measure. A carriage-only event therefore leaves llm unset so the
+        # same call is not counted twice; a newly registered artifact keeps the
+        # original attachment behavior.
+        event_llm = llm if accepted_entries else None
+        self._commit(
+            rule,
+            inputs=[problem_id] if problem_id else [],
+            outputs=outputs,
+            llm=event_llm,
+            carry_add=carry_add,
+        )
         return [self.state.artifacts[a.id] for a, _ in accepted_entries]
+
+    def carried_warrant_ids(self, artifact_id: str) -> list[str]:
+        """Warrants explicitly carried by an artifact, in registration order.
+
+        The materialized relation includes legacy Artifact.warrants entries,
+        so callers do not need to distinguish old and new logs.
+        """
+        return [wid for carrier, wid in self.state.carries if carrier == artifact_id]
+
+    def carrier_ids(self, warrant_id: str) -> list[str]:
+        """Every artifact carrying ``warrant_id``, in registration order."""
+        return [carrier for carrier, wid in self.state.carries if wid == warrant_id]
 
     def record_measure(
         self,
@@ -343,6 +403,7 @@ class Harness:
         hv_set: dict[str, float] | None = None,
         reach_set: dict[str, float] | None = None,
         addr_add: list[tuple[str, str]] | None = None,
+        carry_add: list[tuple[str, str]] | None = None,
     ) -> Event:
         event = Event(
             seq=self._next_seq,
@@ -352,7 +413,7 @@ class Harness:
             outputs=outputs,
             llm=llm,
             state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {},
-                                 addr_add=addr_add or []),
+                                 addr_add=addr_add or [], carry_add=carry_add or []),
         )
         event.state_diff = self._apply_event(event)
         self.log.append(event)
@@ -389,6 +450,13 @@ class Harness:
             elif schema == "artifact":
                 self.state.artifacts[obj.id] = obj
                 a_add.append(obj.id)
+                # Backward compatibility: historical records embedded carriage
+                # on the artifact. Materialize those entries into the explicit
+                # relation during replay.
+                for wid in obj.warrants:
+                    pair = (obj.id, wid)
+                    if pair not in self.state.carries:
+                        self.state.carries.append(pair)
                 for pid in event.inputs:
                     if pid in self.state.problems and (obj.id, pid) not in self.state.addr:
                         self.state.addr.append((obj.id, pid))
@@ -399,6 +467,13 @@ class Harness:
         for aid, pid in event.state_diff.addr_add:
             if pid in self.state.problems and (aid, pid) not in self.state.addr:
                 self.state.addr.append((aid, pid))
+        for carrier, wid in event.state_diff.carry_add:
+            if (
+                carrier in self.state.artifacts
+                and wid in self.warrants
+                and (carrier, wid) not in self.state.carries
+            ):
+                self.state.carries.append((carrier, wid))
         self._next_seq = event.seq + 1
         self._tail.append(event)
         if len(self._tail) > self._TAIL_CAP:
@@ -417,6 +492,7 @@ class Harness:
             hv_set=event.state_diff.hv_set,
             reach_set=event.state_diff.reach_set,
             addr_add=event.state_diff.addr_add,
+            carry_add=event.state_diff.carry_add,
         )
 
     # ------------------------------------------------------------------ #
@@ -425,7 +501,12 @@ class Harness:
 
     def _adjudicate(self) -> None:
         nodes = set(self.state.artifacts)
-        att = build_att(self.state.artifacts, self.warrants, self.commitments)
+        att = build_att(
+            self.state.artifacts,
+            self.warrants,
+            self.commitments,
+            self.state.carries,
+        )
         dep = build_dep(self.state.artifacts)
         final = final_labels(compute_label0(nodes, att), dep)
         self.state.att = sorted(att)

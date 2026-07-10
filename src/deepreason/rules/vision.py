@@ -6,7 +6,7 @@ like — the dimension no DOM assertion covers, which is exactly why
 program:browser_oracle grants no execution supremacy. The critic receives the
 recorded screenshot bytes (content-addressed evidence artifacts) through the
 multimodal adapter and registers an ordinary ARGUMENTATIVE warrant whose ν
-MENTIONs the screenshots it judged: attack the ν (or refute the screenshots'
+declares the screenshots as load-bearing EVIDENCE: attack the ν (or refute the screenshots'
 reliability upstream) and the target reinstates — a visual judgment is a
 case, never a verdict from reality (D2/N1).
 
@@ -98,7 +98,7 @@ def crit_vision(harness, target_id: str, adapter, config) -> Artifact | None:
     nu = harness.create_artifact(
         f"nu: vision case {case_hash} against {target_id} is sound (judged from "
         f"recorded screenshots {', '.join(s[:12] for s in shot_ids)})",
-        interface=Interface(refs=[Ref(target=s, role=RefRole.MENTION) for s in shot_ids]),
+        interface=Interface(refs=[Ref(target=s, role=RefRole.EVIDENCE) for s in shot_ids]),
         provenance=Provenance(role="critic"),
     )
     warrant = Warrant(

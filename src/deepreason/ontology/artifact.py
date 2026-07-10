@@ -14,6 +14,11 @@ from pydantic import BaseModel, Field
 class RefRole(str, Enum):
     DEPENDENCE = "dependence"  # contributes a support edge (this -> target) to dep
     MENTION = "mention"
+    # Load-bearing evidence for a warrant validity node. Unlike a plain
+    # mention, attackers of the evidence (or of anything it depends on) are
+    # lifted onto the validity node by build_att. This keeps evidence
+    # invalidation inside the att/dep calculus instead of a view-level check.
+    EVIDENCE = "evidence"
 
 
 class Ref(BaseModel):
@@ -70,7 +75,10 @@ class Artifact(BaseModel):
     content_ref: str  # blob hash or inline string
     codec: str = "utf8"
     interface: Interface = Field(default_factory=Interface)
-    warrants: list[str] = Field(default_factory=list)  # warrant ids carried
+    # Legacy/on-record shorthand for initial carriage. The materialized
+    # EpistemicState.carries relation is authoritative and may gain additional
+    # (artifact, warrant) pairs without changing this content identity.
+    warrants: list[str] = Field(default_factory=list)
     provenance: Provenance
 
     @staticmethod

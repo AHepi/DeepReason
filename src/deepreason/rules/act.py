@@ -30,6 +30,7 @@ from deepreason.ontology import (
     ProblemProvenance,
     Provenance,
     Ref,
+    Status,
 )
 from deepreason.ontology.artifact import RefRole
 from deepreason.programs import content_text
@@ -55,6 +56,8 @@ def browser_evidence(harness, target_id: str) -> list[dict]:
                 continue
             artifact = harness.state.artifacts[aid]
             if artifact.codec != "json" or artifact.provenance.role.value != "import":
+                continue
+            if harness.state.status.get(aid) != Status.ACCEPTED:
                 continue
             try:
                 payload = json.loads(content_text(artifact, harness.blobs))
@@ -172,7 +175,7 @@ def run_browser_evidence(harness, target_id: str, browser, config) -> Artifact |
                 f"{result.trace.get('failed_step')} "
                 f"({json.dumps(result.trace.get('steps', [])[-1:])[:200]})"
             ),
-            nu_interface=Interface(refs=[Ref(target=evidence.id, role=RefRole.MENTION)]),
+            nu_interface=Interface(refs=[Ref(target=evidence.id, role=RefRole.EVIDENCE)]),
             trace_ref=harness.blobs.put(canonical_json(payload)),
         )
     return None
