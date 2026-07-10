@@ -49,6 +49,19 @@ both desktop and mobile widths. Interactive behavior must actually work.
 Differ substantively across candidates (different layout/structure and
 visual direction), not cosmetic rewordings."""
 
+# Binding for candidates AND critics: the critic pack renders the problem
+# statement, so this text is what stops unbounded scope-expansion criticism
+# ("lacks accessibility provisions", "no data-minimisation policy") from
+# refuting every finite document — observed live against plan candidates.
+_SCOPE_NOTE = """
+SCOPE (binding for candidates and critics alike): this is a small,
+self-contained, client-only website delivered as ONE local HTML file — no
+server, no accounts, no analytics, and no data leaving the browser. A FAULT
+is a missing or wrong element that would make the finished website fail its
+stated purpose for its user. Proposals to ADD scope (compliance programs,
+integrations, infrastructure, enterprise concerns) are design choices, not
+faults."""
+
 _PLAN_TEMPLATE = """Write a PRODUCT PLAN for this website: {description}
 
 Each candidate's `content` MUST be one plan document in plain prose or
@@ -57,7 +70,8 @@ the key interactions, a content inventory (what text/data actually appears),
 and concrete acceptance criteria a reviewer could check one by one. Be
 specific enough that a designer could work from the plan alone. Differ
 substantively across candidates (different scopes and priorities), not
-rewordings."""
+rewordings.
+""" + _SCOPE_NOTE
 
 _DESIGN_TEMPLATE = """Produce a DESIGN SPECIFICATION for this website:
 {description}
@@ -68,12 +82,13 @@ document in plain prose or markdown — NOT code, NOT HTML: layout per page,
 visual direction (palette, typography, spacing), component inventory,
 interaction and state behavior, and the responsive strategy. Differ
 substantively across candidates (different layouts and visual directions),
-not rewordings."""
+not rewordings.
+""" + _SCOPE_NOTE
 
 _BUILD_TEMPLATE = (
     "Implement the design specification shown in FOUNDATION faithfully — "
     "its layout, palette, components, and interactions are the adjudicated "
-    "groundwork, not suggestions.\n\n" + _DESCRIPTION_TEMPLATE
+    "groundwork, not suggestions.\n\n" + _DESCRIPTION_TEMPLATE + "\n" + _SCOPE_NOTE
 )
 
 _KNOBS = {
@@ -375,7 +390,7 @@ def _echo(message: str) -> None:
 
 def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
                token_budget: int | None, echo, stop_on_survivor: bool,
-               min_cycles: int = 2) -> dict:
+               min_cycles: int = 1) -> dict:
     """One staged run_scheduler invocation, selection locked to the stage's
     problem family. The ticker counts candidates addressed into the family
     (successor generations included) and — for plan/design stages — stops
@@ -385,6 +400,13 @@ def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
     from deepreason.ops import run_scheduler
     from deepreason.scheduler.scheduler import problem_family
 
+    # min_cycles=1: candidates are criticized WITHIN their own cycle
+    # (crit_program + the argumentative pass run before on_cycle fires), so a
+    # round-1 survivor has already faced a full criticism pass. Observed
+    # live: forcing a second round just gave the critic a second free shot
+    # and the plan stage ended empty. Later stages keep re-criticizing
+    # standing survivors anyway (RECRIT_STANDING is global); a foundation
+    # refuted later orphans its dependents rather than falsely refuting them.
     stage_cfg = cfg.model_copy(update={"FOCUS_FAMILY": root_pid})
     rounds = [0]
 

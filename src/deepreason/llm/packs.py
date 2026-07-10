@@ -249,7 +249,8 @@ def render_batch_crit_pack(
     schemas — usually shared, since batch-mates come from one problem —
     render once; each target carries its content and standing attacks.
     Only the call is shared; every warrant stays per-target."""
-    lines = [
+    lines = _problem_context(state, target_ids)
+    lines += [
         f"TARGETS ({len(target_ids)}) — judge each independently.",
         "",
         "COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):",
@@ -437,6 +438,31 @@ def render_cx_retry_pack(
     return _clip("\n".join(lines), token_budget)
 
 
+def _problem_context(state: EpistemicState, target_ids: list[str]) -> list[str]:
+    """The problem statements the targets address — the STANDARD criticism is
+    measured against. A critic shown a plan but not its problem reliably
+    manufactures out-of-scope faults (observed live: 'lacks accessibility
+    provisions' and 'raises privacy concerns' against a problem that scoped a
+    small local timer page — unbounded scope-expansion always wins against a
+    finite document). Problem descriptions are the run's most stable text, so
+    the section leads the pack (cache-prefix, angle 4)."""
+    targets = set(target_ids)
+    pids: list[str] = []
+    for aid, pid in state.addr:
+        if aid in targets and pid in state.problems and pid not in pids:
+            pids.append(pid)
+    lines: list[str] = []
+    for pid in pids[:3]:
+        lines += [
+            f"PROBLEM CONTEXT ({pid}) — the standard the target answers to. "
+            "A FAULT must show the target fails THIS problem as stated; "
+            "omitting scope the problem never asked for is not a fault:",
+            state.problems[pid].description[:1500],
+            "",
+        ]
+    return lines
+
+
 def render_crit_pack(
     target_id: str,
     state: EpistemicState,
@@ -448,7 +474,8 @@ def render_crit_pack(
     # Commitments render BEFORE the target (angle 4): problem criteria lead
     # each interface list, so sibling targets share this section verbatim
     # and the cacheable prefix runs through it.
-    lines = ["TARGET COMMITMENTS (the target's declared attack surface):"]
+    lines = _problem_context(state, [target_id])
+    lines += ["TARGET COMMITMENTS (the target's declared attack surface):"]
     for cid in target.interface.commitments:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
