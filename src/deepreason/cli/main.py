@@ -41,6 +41,12 @@ def build_parser() -> argparse.ArgumentParser:
                      help="hard prompt+completion token ceiling (graceful stop)")
     sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
+    export_cmd = sub.add_parser(
+        "export", help="write surviving deliverables (app files, screenshots, README) to a directory"
+    )
+    export_cmd.add_argument("--out", required=True, help="output directory")
+    export_cmd.add_argument("--id", default=None,
+                            help="artifact id prefix (default: all surviving deliverables)")
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
     sub.add_parser("docket", help="disagreement-ranked user queue (spec 10.6)")
@@ -90,6 +96,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "why":
         harness = Harness(Path(args.root))
         print(why(_resolve(harness, args.id), harness.state))
+        return 0
+
+    if args.command == "export":
+        from deepreason.views.export import export_run, render_export_summary
+
+        harness = Harness(Path(args.root))
+        artifact_id = _resolve(harness, args.id) if args.id else None
+        paths = export_run(harness, args.out, artifact_id)
+        print(render_export_summary(paths))
         return 0
 
     if args.command == "trace":
