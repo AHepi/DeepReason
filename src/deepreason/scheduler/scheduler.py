@@ -284,9 +284,14 @@ class Scheduler:
         for aid, artifact in harness.state.artifacts.items():
             if harness.state.status.get(aid) != Status.ACCEPTED or aid in attacked:
                 continue
-            if (artifact.provenance.role if artifact.provenance else "") not in (
-                "conjecturer", "synthesizer", "seed"
-            ):
+            # ACTIVE conjectured properties are CRITERIA with kill authority
+            # and must face the same rotation (intervals/boot postmortem: a
+            # buggy checker "survived criticism" for 80+ events because no
+            # criticism ever visited it — accepted-by-neglect on the criteria
+            # side). Candidates by role; properties by codec.
+            role = artifact.provenance.role if artifact.provenance else ""
+            if role not in ("conjecturer", "synthesizer", "seed") \
+                    and artifact.codec != "code:python-prop":
                 continue
             carries = any(
                 (kappa := harness.commitments.get(cid)) is not None

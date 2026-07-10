@@ -293,11 +293,21 @@ def test_probationary_property_is_not_promoted(harness):
     ) == set()  # 0 disables promotion entirely
 
 
+def _corroborate_by_surviving_attack(harness, prop_id: str) -> None:
+    """Give the property a REAL corroboration record: attack it, then refute
+    the critic (criticize-the-critic) so the property reinstates. Under the
+    corroborated ratchet (intervals/boot postmortem), age alone no longer
+    promotes — neglect earns no authority."""
+    critic, _ = attack(harness, prop_id, "the-property-is-too-strict")
+    attack(harness, critic.id, "the-critic-misread-the-problem-statement")
+    assert harness.state.status[prop_id] == Status.ACCEPTED  # survived
+
+
 def test_promoted_property_kills_without_population_support(harness):
     # The ratchet with teeth: the trap is the ONLY candidate (in
     # test_wipeout_guard... this exact situation quarantines), but a property
-    # past probation holds the line — the standard does not sink with the
-    # population.
+    # past probation that SURVIVED REAL CRITICISM holds the line — the
+    # standard does not sink with the population.
     base = _base()
     harness.register_commitment(base)
     problem = _problem(harness, base)
@@ -306,6 +316,13 @@ def test_promoted_property_kills_without_population_support(harness):
 
     aged = Config(PROP_PROBATION_EVENTS=1)  # everything past probation
     from deepreason.rules.experiment import promoted_properties
+
+    # Age alone no longer promotes: zero witnesses, zero scrutiny — the
+    # intervals/boot massacre pattern stays under the wipeout guard.
+    assert prop.id not in promoted_properties(harness, base.id, aged)
+    assert crit_fuzz(harness, trap.id, aged) is None  # still quarantined
+
+    _corroborate_by_surviving_attack(harness, prop.id)
 
     assert prop.id in promoted_properties(harness, base.id, aged)
     critic = crit_fuzz(harness, trap.id, aged)
@@ -321,10 +338,12 @@ def test_promotion_is_trust_not_finality(harness):
     problem = _problem(harness, base)
     trap = _candidate(harness, base, TRAP)
     prop = _activated_property(harness, base, problem)
+    _corroborate_by_surviving_attack(harness, prop.id)
     aged = Config(PROP_PROBATION_EVENTS=1)
     crit_fuzz(harness, trap.id, aged)
     assert harness.state.status[trap.id] == Status.REFUTED
 
+    # A SECOND, better critic now refutes the promoted property outright.
     attack(harness, prop.id, "the-promoted-property-is-wrong")
 
     assert harness.state.status[prop.id] == Status.REFUTED
@@ -377,3 +396,91 @@ def test_scheduler_conjectures_ground_truth_and_kills_the_trap(tmp_path):
     prop_id = kappa.budget.extra["source_artifact"]
     assert harness.state.artifacts[prop_id].codec == "code:python-prop"
     assert problem.id  # the property's legitimacy came from the problem statement
+
+
+# ---- crash attribution (intervals/boot postmortem): a conjectured checker
+# that THROWS refutes ITSELF, never the candidate ----
+
+# Passes checker_wf's probe battery (decides on None/str/echo probes, and a
+# crash counts as rejection for non-vacuity) but CRASHES on any empty-list
+# output — the live bug class (`for a, b in inp` was the observed variant).
+CRASHY_CHECKER = (
+    "def check(inp, out):\n"
+    "    if out is None or isinstance(out, (str, int, dict)):\n"
+    "        return False\n"
+    "    first = out[0]\n"
+    "    return isinstance(first, int)\n"
+)
+EMPTY_RETURNER = "def solve(xs):\n    return []\n"
+
+
+def _direct_property(harness, base, checker_source):
+    """Register a property artifact as if it slipped in (bypassing the
+    arrival probe) — isolates the fuzz-time attribution path."""
+    from deepreason.ontology import Ref
+    from deepreason.ontology.artifact import RefRole
+
+    wf = checker_wf_commitment(base)
+    harness.register_commitment(wf)
+    return harness.create_artifact(
+        f'"""crashes on empty outputs"""\n{checker_source}',
+        codec="code:python-prop",
+        interface=Interface(commitments=[wf.id],
+                            refs=[Ref(target=base.id, role=RefRole.MENTION)]),
+        provenance=Provenance(role="experimenter", event_seq=harness._next_seq),
+    )
+
+
+def test_fuzz_time_checker_crash_refutes_property_not_candidate(harness):
+    from deepreason.ontology import Rule
+
+    base = _base()
+    harness.register_commitment(base)
+    _problem(harness, base)
+    victim = _candidate(harness, base, EMPTY_RETURNER)  # output [] crashes it
+    prop = _direct_property(harness, base, CRASHY_CHECKER)
+    assert harness.state.status[prop.id] == Status.ACCEPTED
+
+    critic = crit_fuzz(harness, victim.id, Config())
+
+    assert critic is None                                    # candidate spared
+    assert harness.state.status[victim.id] == Status.ACCEPTED
+    assert harness.state.status[prop.id] == Status.REFUTED   # checker indicted
+    crash = [e for e in harness.log.read()
+             if e.rule == Rule.MEASURE and e.inputs
+             and e.inputs[0] == "property-checker-crash"]
+    assert len(crash) == 1 and crash[0].inputs[1] == prop.id
+    w = next(w for w in harness.warrants.values() if w.target == prop.id)
+    assert w.type == WarrantType.DEMONSTRATIVE  # the crash is the evidence
+
+
+def test_arrival_probe_refutes_crashing_checker_before_any_judge(harness):
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    _candidate(harness, base, EMPTY_RETURNER)  # a real carrier to probe against
+    judge_never_called = []  # both seats would record a consumed response
+    adapter = _designer_adapter(
+        harness,
+        [{"claim": "outputs start with an int", "checker": CRASHY_CHECKER}],
+        judge_never_called, judge_never_called,
+    )
+    activated = propose_properties(harness, base, problem, adapter, Config())
+
+    assert activated == []
+    prop = next(aid for aid, a in harness.state.artifacts.items()
+                if a.codec == "code:python-prop")
+    assert harness.state.status[prop] == Status.REFUTED  # dead on arrival
+
+
+def test_standing_recrit_pool_includes_active_properties(harness):
+    from deepreason.llm.adapter import LLMAdapter
+
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    prop = _activated_property(harness, base, problem)
+    adapter = LLMAdapter({"conjecturer": MockEndpoint([])}, harness.blobs)
+    scheduler = Scheduler(harness, adapter, Config(N_SCHOOLS=0, FUZZ_N=0))
+    pool = scheduler._standing_recrit_pool()
+    assert prop.id in pool  # criteria face the same rotation as candidates

@@ -173,23 +173,49 @@ def active_properties(harness, base_commitment_id: str) -> list[tuple[str, str, 
 def promoted_properties(harness, base_commitment_id: str, config) -> set[str]:
     """The ratchet (probation -> promotion): artifact ids of ACTIVE properties
     that have survived at least PROP_PROBATION_EVENTS events since their
-    registration. A promoted property holds the line even when the whole
-    current population fails it (the wipeout guard is waived in crit_fuzz) —
-    the standard does not sink with a bad generation of candidates. Promotion
-    is TRUST, never finality (N1): the property remains an ordinary artifact,
-    ordinary criticism can refute it, and the source-artifact closure
-    (edges.py) still collapses every verdict it ever minted the moment it
-    falls. Deterministic: age is event-seq distance, a pure function of the
-    log; 0 disables promotion."""
+    registration AND have a WITNESS — at least one registered candidate whose
+    output actually satisfies them. A promoted property holds the line even
+    when the whole current population fails it (the wipeout guard is waived
+    in crit_fuzz) — the standard does not sink with a bad generation of
+    candidates.
+
+    The corroboration clause is the intervals/boot postmortem: a buggy
+    conjectured checker survived 14 quarantines UNTOUCHED — no critic ever
+    read it, no candidate ever satisfied it — aged past probation, and then
+    executed seven correct candidates. Age alone is seniority masquerading
+    as corroboration (accepted-by-neglect, the exact failure standing
+    re-criticism exists to prevent). Promotion now requires age AND either:
+
+      - SURVIVED ATTACK: some critic attacked the property and it is still
+        accepted (grounded semantics: an accepted-yet-attacked node has
+        defeated its attacker — a real reinstatement record, reachable now
+        that active properties sit in the standing re-criticism rotation); or
+      - WITNESS: at least one registered carrier's output satisfies it
+        (satisfiability evidence — a checker whose entire record is failing
+        people has never been tested as a standard, only used as a weapon).
+
+    Promotion remains TRUST, never finality (N1): ordinary criticism can
+    refute a promoted property and the source-artifact closure (edges.py)
+    still collapses every verdict it ever minted. Deterministic: age is
+    event-seq distance, attack survival is graph structure, the witness
+    check runs frozen content in the sandbox; 0 disables promotion."""
     if config.PROP_PROBATION_EVENTS <= 0:
         return set()
     now = harness._next_seq
-    return {
-        aid
-        for aid, _, _ in active_properties(harness, base_commitment_id)
-        if now - harness.state.artifacts[aid].provenance.event_seq
-        >= config.PROP_PROBATION_EVENTS
-    }
+    base = harness.commitments.get(base_commitment_id)
+    attacked = {target for _, target in harness.state.att}
+    out: set[str] = set()
+    for aid, _claim, source in active_properties(harness, base_commitment_id):
+        age = now - harness.state.artifacts[aid].provenance.event_seq
+        if age < config.PROP_PROBATION_EVENTS:
+            continue
+        survived_attack = aid in attacked  # active => any attacker was defeated
+        if not survived_attack and (
+            base is None or not population_supports(harness, base, source, "")
+        ):
+            continue  # neither scrutiny nor witness: neglect earns no authority
+        out.add(aid)
+    return out
 
 
 def population_supports(harness, base, property_source: str, target_id: str) -> bool:
@@ -304,6 +330,44 @@ def _prop_text(harness, artifact) -> str:
     return content_text(artifact, harness.blobs)
 
 
+def checker_crashed(detail: dict) -> bool:
+    """True when a run_property FAIL was the CHECKER's doing (it raised or
+    overran), not the candidate's. For the seed checker that distinction
+    doesn't matter — an accountable operator froze it, so an uncheckable
+    output is the candidate's problem. For a CONJECTURED checker it is the
+    whole ballgame: a crash is at least as likely the checker's bug as the
+    candidate's (observed live: `for a, b in inp` on the args wrapper), so a
+    crash must never ground a warrant against the candidate."""
+    err = str(detail.get("error", ""))
+    return err.startswith("checker raised") or err == "step limit exceeded in checker"
+
+
+def crash_probe(harness, base, checker_source: str, limit: int = 8) -> dict | None:
+    """Run a proposed checker against up to ``limit`` existing base-oracle
+    carriers on the frozen inputs; return the first CRASH detail, else None.
+    A well-formed checker REJECTS outputs it dislikes — it does not throw on
+    the problem's own domain. Mechanical, no LLM; any-status carriers count
+    (the question is whether the checker runs, not who it judges)."""
+    from deepreason.oracle import _load_spec, run_property
+    from deepreason.programs import content_text
+
+    spec = _load_spec(base.budget)
+    entry, inputs = spec.get("entry"), spec.get("inputs", [])
+    if not entry or not inputs:
+        return None
+    carriers = [
+        artifact for aid, artifact in harness.state.artifacts.items()
+        if base.id in artifact.interface.commitments
+    ]
+    for artifact in carriers[:limit]:
+        verdict, detail = run_property(
+            content_text(artifact, harness.blobs), entry, inputs, checker_source
+        )
+        if verdict == "fail" and checker_crashed(detail):
+            return detail
+    return None
+
+
 def propose_properties(harness, base, problem, adapter, config) -> list:
     """One property-designer call for a property oracle: each proposal is
     registered as an artifact (claim as module docstring + checker source)
@@ -351,6 +415,32 @@ def propose_properties(harness, base, problem, adapter, config) -> list:
             llm_pending = None  # a real event carried the shared call
         crit_program(harness, artifact.id)  # checker_wf adjudicates now
         if harness.state.status.get(artifact.id) != Status.ACCEPTED:
+            continue
+        # Arrival crash probe (intervals/boot postmortem): run the proposed
+        # checker against existing carriers' real outputs BEFORE any judge
+        # spends tokens on it — a checker that throws on the problem's own
+        # domain is refuted mechanically on arrival, with the crash as trace.
+        crash = crash_probe(harness, base, content)
+        if crash is not None:
+            from deepreason.canonical import canonical_json
+            from deepreason.rules.warrants import register_fail_warrant
+
+            register_fail_warrant(
+                harness,
+                commitment_id=wf.id,
+                target_id=artifact.id,
+                nu_content=(
+                    f"nu: proposed checker {artifact.id[:12]} CRASHES on a "
+                    "real candidate's output on the frozen inputs — a "
+                    "well-formed checker rejects, it does not throw"
+                ),
+                critic_content=(
+                    f"critic: checker of {artifact.id[:12]} raised on the "
+                    f"problem's own domain: {str(crash.get('error', ''))[:120]}"
+                ),
+                trace_ref=harness.blobs.put(canonical_json(crash)),
+                skip_if_on_record=True,
+            )
             continue
         if relevance_trial(harness, artifact, proposal.claim, problem, adapter, config):
             activated.append(artifact)

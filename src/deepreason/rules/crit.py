@@ -224,6 +224,45 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
     return None
 
 
+def _refute_crashing_property(harness, prop_id: str, detail: dict) -> None:
+    """A conjectured checker that THROWS on a real domain input is refuted
+    demonstratively — the crash is the counterexample to its own checker_wf
+    claim (compiles/bounded/runs on the domain). Mechanical, deduplicated;
+    the source-artifact closure then collapses any verdicts it minted."""
+    from deepreason.oracle import CHECKER_PROGRAM
+
+    prop = harness.state.artifacts.get(prop_id)
+    if prop is None:
+        return
+    wf_id = next(
+        (cid for cid in prop.interface.commitments
+         if (kappa := harness.commitments.get(cid)) is not None
+         and kappa.eval == f"program:{CHECKER_PROGRAM}"),
+        None,
+    )
+    if wf_id is None:
+        return
+    harness.record_measure(
+        inputs=["property-checker-crash", prop_id, str(detail.get("error", ""))[:120]]
+    )
+    register_fail_warrant(
+        harness,
+        commitment_id=wf_id,
+        target_id=prop_id,
+        nu_content=(
+            f"nu: proposed checker {prop_id[:12]} crashed on a real domain "
+            "input during fuzz — a well-formed checker rejects, it does not "
+            "throw; this crash refutes the checker, not the candidate"
+        ),
+        critic_content=(
+            f"critic: checker of {prop_id[:12]} raised during property fuzz: "
+            f"{str(detail.get('error', ''))[:120]}"
+        ),
+        trace_ref=harness.blobs.put(canonical_json(detail)),
+        skip_if_on_record=True,
+    )
+
+
 def _crit_proposed_properties(
     harness, target_id: str, base, source: str, probes: list, config
 ) -> Artifact | None:
@@ -248,6 +287,8 @@ def _crit_proposed_properties(
         promoted_properties,
     )
 
+    from deepreason.rules.experiment import checker_crashed
+
     spec = _load_spec(base.budget)
     entry, frozen = spec.get("entry"), spec.get("inputs", [])
     promoted = promoted_properties(harness, base.id, config)
@@ -256,6 +297,15 @@ def _crit_proposed_properties(
         if entry and frozen:
             verdict, d = run_property(source, entry, frozen, prop_source)
             if verdict == programs.FAIL and "case" in d:
+                if checker_crashed(d):
+                    # The CHECKER threw, not the candidate (intervals/boot
+                    # postmortem: a conjectured checker's own bug executed
+                    # seven correct candidates). A crash is not a verdict —
+                    # it grounds nothing against the target and is instead a
+                    # demonstrative counterexample to the CHECKER's
+                    # well-formedness, with the crash as trace.
+                    _refute_crashing_property(harness, prop_id, d)
+                    continue
                 violation = frozen[d["case"]]
         if violation is None:
             for _, gen_source in probes:
@@ -267,6 +317,14 @@ def _crit_proposed_properties(
                     candidate, _ = admit_counterexample(base, found)
                     if candidate is None:
                         continue  # out-of-gate input: never grounds
+                    # Classify before blaming: re-run the single input and
+                    # route checker crashes to the property, not the target.
+                    if entry:
+                        _, d2 = run_property(source, entry, [found], prop_source)
+                        if checker_crashed(d2):
+                            _refute_crashing_property(harness, prop_id, d2)
+                            found = None
+                            break
                     violation = found
                     break
         if violation is None:

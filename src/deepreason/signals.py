@@ -51,6 +51,10 @@ SIGNALS: dict[str, str] = {
                                    "quarantined: no sibling candidate "
                                    "satisfies the property, so it indicts the "
                                    "population, not the target",
+    "property-checker-crash": "a conjectured checker THREW on a real domain "
+                              "input — the crash refutes the CHECKER (its "
+                              "well-formedness claim), never the candidate "
+                              "(inputs: [signal, property id, error])",
     # Vision criticism (rules/vision.py)
     "vision-crit": "vision critic looked at the target's recorded screenshots "
                    "and registered nothing (no visible fault, or dedupe)",
