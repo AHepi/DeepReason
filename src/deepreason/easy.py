@@ -49,13 +49,43 @@ both desktop and mobile widths. Interactive behavior must actually work.
 Differ substantively across candidates (different layout/structure and
 visual direction), not cosmetic rewordings."""
 
+_PLAN_TEMPLATE = """Write a PRODUCT PLAN for this website: {description}
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. Differ
+substantively across candidates (different scopes and priorities), not
+rewordings."""
+
+_DESIGN_TEMPLATE = """Produce a DESIGN SPECIFICATION for this website:
+{description}
+
+It must implement the plan shown in FOUNDATION faithfully — deviations from
+the plan are criticism bait. Each candidate's `content` MUST be one design
+document in plain prose or markdown — NOT code, NOT HTML: layout per page,
+visual direction (palette, typography, spacing), component inventory,
+interaction and state behavior, and the responsive strategy. Differ
+substantively across candidates (different layouts and visual directions),
+not rewordings."""
+
+_BUILD_TEMPLATE = (
+    "Implement the design specification shown in FOUNDATION faithfully — "
+    "its layout, palette, components, and interactions are the adjudicated "
+    "groundwork, not suggestions.\n\n" + _DESCRIPTION_TEMPLATE
+)
+
 _KNOBS = {
     # The validated app-run shape (runs/acting_loop_app2): no schools/fuzz/
     # property machinery for a website build; browser evidence + criticism.
     "FLOOR": 1, "K": 4, "VS_K": 2, "N_SCHOOLS": 0, "FUZZ_N": 0,
     "GEN_PROPOSE_PERIOD": 0, "PROP_PROPOSE_PERIOD": 0,
     "BROWSER_PER_CYCLE": 2, "ARG_CRIT_PER_CYCLE": 2, "CRIT_BATCH_K": 2,
-    "PACK_TOKEN_BUDGET": 4000, "RETRY_MAX": 2,
+    # 6000: a stage pack must fit the FOUNDATION section (a full plan or
+    # design document, capped at FOUNDATION_CHARS) without clipping the
+    # trailing directive (_clip truncates the tail).
+    "PACK_TOKEN_BUDGET": 6000, "RETRY_MAX": 2,
 }
 
 # Provider presets. Every seat combination below has been driven live in a
@@ -224,6 +254,107 @@ def seed_website(harness, description: str):
     ))
 
 
+def _stage_gate(name: str, expr: str):
+    """Light mechanical stage gate, content-addressed like lineage-ref: the
+    predicate is frozen into the id, so verdicts are replay-stable."""
+    from deepreason.canonical import canonical_json, sha256_hex
+    from deepreason.ontology import Commitment
+
+    return Commitment(id=f"{name}@{sha256_hex(canonical_json(expr))[:12]}",
+                      eval=f"predicate:{expr}")
+
+
+# A real document, not an HTML file emitted a stage early.
+_PLAN_GATE_EXPR = "len(content) > 400 and 'doctype' not in content.lower()[:200]"
+_DESIGN_GATE_EXPR = "len(content) > 600 and 'doctype' not in content.lower()[:200]"
+
+
+def seed_plan(harness, description: str):
+    """Stage 1: product-plan problem. Prose criteria only — no browser
+    commitment, so browser/vision/research machinery no-ops for it."""
+    from deepreason.ontology import Problem, ProblemProvenance
+
+    gate = _stage_gate("plan-doc", _PLAN_GATE_EXPR)
+    if gate.id not in harness.commitments:
+        harness.register_commitment(gate)
+    return harness.register_problem(Problem(
+        id="pi-plan",
+        description=_PLAN_TEMPLATE.format(description=description.strip()),
+        criteria=[gate.id],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    ))
+
+
+def seed_design(harness, description: str, plan_id: str):
+    """Stage 2: design problem, lineage-bound to the surviving plan — every
+    design MUST declare dependence on it (program:lineage_ref refutes the
+    rest mechanically) and the plan's full text renders as the pack's
+    FOUNDATION section."""
+    from deepreason.ontology import Problem, ProblemProvenance
+    from deepreason.unification.isolation import lineage_ref_commitment
+
+    gate = _stage_gate("design-doc", _DESIGN_GATE_EXPR)
+    lineage = lineage_ref_commitment([plan_id])
+    for kappa in (gate, lineage):
+        if kappa.id not in harness.commitments:
+            harness.register_commitment(kappa)
+    return harness.register_problem(Problem(
+        id="pi-design",
+        description=_DESIGN_TEMPLATE.format(description=description.strip()),
+        criteria=[gate.id, lineage.id],
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": "seed", "from": [plan_id]}),
+    ))
+
+
+def seed_build(harness, description: str, design_id: str):
+    """Stage 3: the build problem — browser smoke commitment plus lineage
+    binding to the surviving design. Keeps the id `pi-website` so export
+    semantics are unchanged."""
+    from deepreason.browser import browser_commitment
+    from deepreason.ontology import Problem, ProblemProvenance
+    from deepreason.unification.isolation import lineage_ref_commitment
+
+    browser = browser_commitment(WEBSITE_SCRIPT)
+    lineage = lineage_ref_commitment([design_id])
+    for kappa in (browser, lineage):
+        if kappa.id not in harness.commitments:
+            harness.register_commitment(kappa)
+    return harness.register_problem(Problem(
+        id="pi-website",
+        description=_BUILD_TEMPLATE.format(description=description.strip()),
+        criteria=[browser.id, lineage.id],
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": "seed", "from": [design_id]}),
+    ))
+
+
+def pick_survivor(harness, root_pid: str) -> str | None:
+    """Deterministic stage survivor: ACCEPTED candidate artifacts addressed
+    into the stage's problem family; EARLIEST event_seq wins (the longest-
+    standing survivor has faced the most re-criticism sweeps — the most
+    corroborated conjecture). Ties break on id."""
+    from deepreason.ontology import Status
+    from deepreason.scheduler.scheduler import problem_family
+
+    family = problem_family(harness.state, root_pid)
+    best: tuple[int, str] | None = None
+    for aid, pid in harness.state.addr:
+        if pid not in family:
+            continue
+        artifact = harness.state.artifacts.get(aid)
+        if artifact is None or harness.state.status.get(aid) != Status.ACCEPTED:
+            continue
+        role = artifact.provenance.role.value if artifact.provenance else ""
+        if role not in ("conjecturer", "synthesizer"):
+            continue
+        seq = artifact.provenance.event_seq
+        key = (seq if seq is not None else 1 << 62, aid)
+        if best is None or key < best:
+            best = key
+    return best[1] if best else None
+
+
 def _slug(text: str) -> str:
     words = re.findall(r"[a-z0-9]+", text.lower())[:4]
     return "-".join(words) or "site"
@@ -242,16 +373,64 @@ def _echo(message: str) -> None:
     print(message, flush=True)  # progress must reach pipes/logs live, not buffered
 
 
-def make(description: str, out: str | None = None, cycles: int = 6,
+def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
+               token_budget: int | None, echo, stop_on_survivor: bool,
+               min_cycles: int = 2) -> dict:
+    """One staged run_scheduler invocation, selection locked to the stage's
+    problem family. The ticker counts candidates addressed into the family
+    (successor generations included) and — for plan/design stages — stops
+    the stage early once a survivor exists, so leftover cycles flow to the
+    build. Returns the invocation's accounting for budget threading."""
+    from deepreason.ontology import Status
+    from deepreason.ops import run_scheduler
+    from deepreason.scheduler.scheduler import problem_family
+
+    stage_cfg = cfg.model_copy(update={"FOCUS_FAMILY": root_pid})
+    rounds = [0]
+
+    def ticker(scheduler):
+        rounds[0] += 1
+        state = scheduler.harness.state
+        family = problem_family(state, root_pid)
+        mine = {aid for aid, pid in state.addr if pid in family}
+        cands = [aid for aid in mine
+                 if (a := state.artifacts.get(aid)) is not None
+                 and a.provenance
+                 and a.provenance.role.value in ("conjecturer", "synthesizer")]
+        alive = sum(1 for a in cands if state.status.get(a) == Status.ACCEPTED)
+        dead = sum(1 for a in cands if state.status.get(a) == Status.REFUTED)
+        echo(f"  {label} round {rounds[0]}/{cycles}: {alive} standing, "
+             f"{dead} criticized away")
+        if stop_on_survivor and rounds[0] >= min_cycles:
+            return pick_survivor(harness, root_pid) is not None
+        return False
+
+    _, _, accounting = run_scheduler(
+        harness, stage_cfg, cycles, token_budget=token_budget, on_cycle=ticker)
+    return accounting
+
+
+def _first_line(harness, aid: str, limit: int = 100) -> str:
+    from deepreason.programs import content_text
+
+    text = content_text(harness.state.artifacts[aid], harness.blobs).strip()
+    head = text.splitlines()[0] if text else ""
+    return head[:limit].lstrip("# ").strip()
+
+
+def make(description: str, out: str | None = None, cycles: int = 10,
          token_budget: int | None = 150_000, config: str | None = None,
-         root: str | None = None, echo=_echo) -> list[Path]:
-    """Build a website from a plain-language description: seed, run the
-    conjecture-criticism loop with a friendly ticker, export what survives.
-    Returns the exported file paths (empty = nothing survived)."""
+         root: str | None = None, echo=_echo, staged: bool = True) -> list[Path]:
+    """Build a website from a plain-language description the way a person
+    would: PLAN it (what pages/features), DESIGN it (layout, look, behavior),
+    then BUILD it — each stage's survivor is enforced groundwork for the
+    next (lineage commitments + dependence edges, criticizable and on the
+    record like everything else). Exports what survives; returns the
+    exported file paths. staged=False runs the legacy single-stage loop
+    (programmatic/tests only)."""
     from deepreason.config import load
     from deepreason.harness import Harness
     from deepreason.ontology import Status
-    from deepreason.ops import run_scheduler
     from deepreason.views.export import export_run
 
     load_credentials()
@@ -282,9 +461,102 @@ def make(description: str, out: str | None = None, cycles: int = 6,
 
     run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
     harness = Harness(run_root)
-    seed_website(harness, description)
+    out_dir = Path(out) if out else Path(_slug(description) + "-site")
     echo(f"Building: {description.strip()}")
     echo(f"(work happens in {run_root}; every step is on the record there)\n")
+
+    if not staged:
+        return _make_single(harness, cfg, description, out_dir, cycles,
+                            token_budget, echo)
+
+    plan_cycles = max(2, cycles // 4)
+    design_cycles = max(2, cycles // 4)
+    build_cycles = max(2, cycles - plan_cycles - design_cycles)
+    echo(f"Stages: planning (up to {plan_cycles} rounds) -> designing "
+         f"(up to {design_cycles}) -> building ({build_cycles})\n")
+    spent = 0
+
+    def remaining() -> int | None:
+        return None if token_budget is None else max(0, token_budget - spent)
+
+    def spend(accounting: dict) -> None:
+        nonlocal spent
+        spent += (accounting.get("metered_tokens")
+                  or accounting.get("logged_tokens_this_run") or 0)
+
+    # ---- stage 1: plan ----
+    seed_plan(harness, description)
+    spend(_run_stage(harness, cfg, label="planning", root_pid="pi-plan",
+                     cycles=plan_cycles, token_budget=remaining(), echo=echo,
+                     stop_on_survivor=True))
+    plan_id = pick_survivor(harness, "pi-plan")
+    if plan_id is None:
+        echo("\nNo plan survived criticism — that's the tool being honest. "
+             f'Try more rounds:\n  deepreason make "{description.strip()}" '
+             f"--cycles {cycles + 4}")
+        return []
+    harness.record_measure(inputs=["stage-pick", "plan", plan_id])
+    echo(f"  plan chosen: {_first_line(harness, plan_id)}\n")
+    if remaining() == 0:
+        echo("Ran out of token budget after planning — raise --token-budget.")
+        return []
+
+    # ---- stage 2: design ----
+    seed_design(harness, description, plan_id)
+    spend(_run_stage(harness, cfg, label="designing", root_pid="pi-design",
+                     cycles=design_cycles, token_budget=remaining(), echo=echo,
+                     stop_on_survivor=True))
+    design_id = pick_survivor(harness, "pi-design")
+    if design_id is None:
+        echo("\nA plan survived but no design did — try more rounds:\n"
+             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
+        return []
+    harness.record_measure(inputs=["stage-pick", "design", design_id])
+    echo(f"  design chosen: {_first_line(harness, design_id)}\n")
+    if remaining() == 0:
+        echo("Ran out of token budget after designing — raise --token-budget.")
+        return []
+
+    # ---- stage 3: build ----
+    seed_build(harness, description, design_id)
+    spend(_run_stage(harness, cfg, label="building", root_pid="pi-website",
+                     cycles=build_cycles, token_budget=remaining(), echo=echo,
+                     stop_on_survivor=False))
+    echo(f"\nDone thinking ({spent:,} tokens).")
+
+    paths = export_run(harness, out_dir)
+    from deepreason.programs import content_text
+    for stage, aid in (("plan", plan_id), ("design", design_id)):
+        doc = out_dir / f"{stage}-{aid[:12]}.md"
+        doc.write_text(content_text(harness.state.artifacts[aid], harness.blobs))
+        paths.append(doc)
+    pages = [p for p in paths if p.suffix == ".html"]
+    if pages:
+        echo(f"\nYour website is ready — {len(pages)} version(s) survived criticism:")
+        for p in pages:
+            echo(f"  {p.resolve()}")
+        echo("\nDouble-click one to open it in your browser. The folder also "
+             "holds the plan and design it implements, and the README "
+             "explains why each version survived.")
+    else:
+        echo("\nThe plan and design survived, but no build did — that's the "
+             "tool being honest, not broken. Try again with more rounds:\n"
+             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
+        if harness.state.status.get(design_id) != Status.ACCEPTED:
+            echo("(Note: the chosen design was itself refuted under later "
+                 "criticism, so builds depending on it were suspended — "
+                 "orphaned, not proven wrong.)")
+    return paths
+
+
+def _make_single(harness, cfg, description: str, out_dir: Path, cycles: int,
+                 token_budget: int | None, echo) -> list[Path]:
+    """The legacy single-stage loop: conjecture finished pages directly."""
+    from deepreason.ontology import Status
+    from deepreason.ops import run_scheduler
+    from deepreason.views.export import export_run
+
+    seed_website(harness, description)
 
     def ticker(scheduler):
         # Count ALL design candidates in the run, not just those addressed
@@ -302,12 +574,11 @@ def make(description: str, out: str | None = None, cycles: int = 6,
         echo(f"  round {n}/{cycles}: {alive} design(s) standing, "
              f"{dead} criticized away")
 
-    result, meter, accounting = run_scheduler(
+    _, _, accounting = run_scheduler(
         harness, cfg, cycles, token_budget=token_budget, on_cycle=ticker)
     spent = accounting.get("logged_tokens_this_run") or 0
     echo(f"\nDone thinking ({spent:,} tokens).")
 
-    out_dir = Path(out) if out else Path(_slug(description) + "-site")
     paths = export_run(harness, out_dir)
     pages = [p for p in paths if p.suffix == ".html"]
     if pages:

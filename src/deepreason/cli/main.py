@@ -33,11 +33,13 @@ def build_parser() -> argparse.ArgumentParser:
                                  "your API key privately")
     make_cmd = sub.add_parser(
         "make", help='build a website from a description, e.g. '
-                     'deepreason make "a recipe website"')
+                     'deepreason make "a recipe website" — plans it, designs '
+                     'it, then builds it, criticizing each stage')
     make_cmd.add_argument("description", help="what to build, in plain language")
     make_cmd.add_argument("--out", default=None, help="output folder (default: <slug>-site)")
-    make_cmd.add_argument("--cycles", type=int, default=6,
-                          help="conjecture-criticism rounds (default 6)")
+    make_cmd.add_argument("--cycles", type=int, default=10,
+                          help="total rounds across the plan/design/build "
+                               "stages (default 10 -> 2/2/6)")
     make_cmd.add_argument("--token-budget", type=int, default=150_000,
                           help="hard token ceiling (default 150000; 0 = unlimited)")
     sub.add_parser("frontier", help="show the problem frontier")

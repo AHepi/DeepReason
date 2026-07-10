@@ -17,6 +17,21 @@ from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Warr
 from deepreason.rules.guards import anti_relapse
 
 
+def _resolve_ref(target: str, artifacts: dict) -> str | None:
+    """Resolve a candidate ref to a registered artifact id. Models reliably
+    emit truncated ids (packs show 12-char heads), and silently dropping the
+    ref would mechanically refute a lineage-bound candidate — so a UNIQUE
+    prefix resolves to the full id (deterministic; the resolved ref enters
+    the content-addressed identity exactly as a correctly-typed one would).
+    Ambiguous or unknown targets drop, as before."""
+    if not target:
+        return None
+    if target in artifacts:
+        return target
+    matches = [aid for aid in artifacts if aid.startswith(target)]
+    return matches[0] if len(matches) == 1 else None
+
+
 def conj(
     harness,
     problem_id: str,
@@ -77,9 +92,9 @@ def conj(
         interface = Interface(
             commitments=commitments,
             refs=[
-                Ref(target=r.target, role=r.role)
+                Ref(target=resolved, role=r.role)
                 for r in candidate.refs
-                if r.target in harness.state.artifacts
+                if (resolved := _resolve_ref(r.target, harness.state.artifacts))
             ],
         )
         content_ref = f"inline:{candidate.content}"

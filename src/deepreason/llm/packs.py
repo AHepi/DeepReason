@@ -24,6 +24,7 @@ from deepreason.programs import content_text
 _CHARS_PER_TOKEN = 4
 NEIGHBOURHOOD_N = 8
 ATTACKERS_N = 5
+FOUNDATION_CHARS = 8000  # total across all lineage endpoints in one pack
 
 _EXECUTION_EVALS = {f"program:{p}" for p in EXEC_PROGRAMS}
 
@@ -65,6 +66,45 @@ def _active_property_claims(state: EpistemicState, blobs, criteria: list[str]) -
             if end > 0:
                 claims.append(text[3:end].strip())
     return claims
+
+
+def _lineage_foundation(
+    problem: Problem,
+    state: EpistemicState,
+    commitments: dict[str, Commitment],
+    blobs,
+) -> list[str]:
+    """FOUNDATION section: full content of the lineage-ref endpoints the
+    problem's criteria freeze (staged pipelines: the surviving plan/design
+    the next stage must build on). Presentation only (§9) — the AUTHORITY
+    is the program:lineage_ref commitment itself, which mechanically
+    refutes any candidate that fails to declare the dependence. The
+    endpoint set is frozen into the commitment id, so this section is
+    static for the life of the problem and all its successors — it belongs
+    in the cacheable prefix."""
+    endpoints: list[str] = []
+    for cid in problem.criteria:
+        kappa = commitments.get(cid)
+        if kappa is None or kappa.eval != "program:lineage_ref":
+            continue
+        for eid in (kappa.budget.extra.get("endpoints") or "").split(","):
+            if eid and eid in state.artifacts and eid not in endpoints:
+                endpoints.append(eid)
+    if not endpoints:
+        return []
+    per_endpoint = FOUNDATION_CHARS // len(endpoints)
+    lines = ["", "FOUNDATION (adjudicated groundwork this problem builds on — "
+                 "your candidate MUST implement it faithfully):"]
+    for eid in endpoints:
+        lines += [f"--- foundation artifact {eid} ---",
+                  content_text(state.artifacts[eid], blobs)[:per_endpoint]]
+    lines.append(
+        "REQUIRED: every candidate's \"refs\" MUST include "
+        + " or ".join(f'{{"target": "{eid}", "role": "dependence"}}' for eid in endpoints)
+        + " for the foundation it builds on — candidates without this ref "
+          "are refuted mechanically."
+    )
+    return lines
 
 
 def _carries_execution_oracle(artifact, commitments: dict[str, Commitment]) -> bool:
@@ -143,6 +183,9 @@ def render_conj_pack(
     for cid in problem.criteria:
         kappa = commitments.get(cid)
         lines.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
+    # FOUNDATION before the volatile sections: frozen into the lineage
+    # commitment's id, hence static per problem (cache-prefix, angle 4).
+    lines += _lineage_foundation(problem, state, commitments, blobs)
     claims = _active_property_claims(state, blobs, problem.criteria)
     if claims:
         lines += ["", "ACTIVE PROPERTIES (conjectured standards the run has "

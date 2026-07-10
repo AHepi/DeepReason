@@ -27,6 +27,33 @@ from deepreason.rules.synth import synthesize
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 
 
+def problem_family(state, root_pid: str) -> set[str]:
+    """The problem plus everything spawned (transitively) from it or from
+    artifacts addressing a family problem — successors, discriminations,
+    lineage/debt problems, research. Deterministic fixpoint over provenance
+    (`from_` entries are problem ids OR artifact ids; artifacts join via
+    their addr edges). Used by FOCUS_FAMILY (attention only) and by
+    easy.py's staged pipeline for tickers and survivor picks."""
+    if root_pid not in state.problems:
+        return set()
+    addressed: dict[str, set[str]] = {}
+    for aid, pid in state.addr:
+        addressed.setdefault(aid, set()).add(pid)
+    family = {root_pid}
+    changed = True
+    while changed:
+        changed = False
+        for pid, problem in state.problems.items():
+            if pid in family:
+                continue
+            for fid in problem.provenance.from_:
+                if fid in family or addressed.get(fid, set()) & family:
+                    family.add(pid)
+                    changed = True
+                    break
+    return family
+
+
 class Scheduler:
     def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
                  controller=None, browser_backend=None) -> None:
@@ -167,6 +194,12 @@ class Scheduler:
             and (integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS)
             and not self._disc_paused(p)
         ]
+        if self.config.FOCUS_FAMILY is not None:
+            # Stage isolation (attention only): without it, an earlier
+            # stage's unsolved successor leftovers out-age this stage's
+            # seed under the liveness queue and the stage bleeds backward.
+            family = problem_family(state, self.config.FOCUS_FAMILY)
+            candidates = [p for p in candidates if p.id in family]
         if not candidates:
             return None
         if self.config.LIVENESS_QUEUE:
@@ -717,14 +750,17 @@ class Scheduler:
 
     def run(self, cycles: int, on_cycle=None) -> dict:
         """on_cycle(self) fires after every completed cycle — a read-only
-        progress hook (easy.make's friendly ticker); it must not register."""
+        progress hook (easy.make's friendly ticker); it must not register.
+        A truthy return stops the run early (staged pipelines stop a stage
+        on its first survivor without rebuilding the Scheduler, which would
+        wipe the attention caches)."""
         from deepreason.llm.budget import TokenBudgetExceeded
 
         for _ in range(cycles):
             try:
                 self.step()
-                if on_cycle is not None:
-                    on_cycle(self)
+                if on_cycle is not None and on_cycle(self):
+                    break
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry

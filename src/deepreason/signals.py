@@ -28,6 +28,11 @@ SIGNALS: dict[str, str] = {
     "embedder-fallback": "EMBEDDER_MODEL was set but the backend is "
                          "unavailable; the run degraded to the hashing "
                          "embedder (inputs: [signal, model, reason])",
+    # Staged pipeline (easy.py make: plan -> design -> build)
+    "stage-pick": "staged pipeline chose a stage's surviving artifact as the "
+                  "next stage's frozen foundation (inputs: [signal, stage, "
+                  "artifact id]) — attention only; the lineage commitment "
+                  "carries the authority",
     # Argumentative criticism accounting (rules/crit.py)
     "arg-crit": "argumentative critic ran and registered nothing new "
                 "(no fault found, or the critic artifact deduplicated)",

@@ -145,6 +145,14 @@ class Config(BaseModel):
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).
     FOCUS_PROBLEM: str | None = None
+    # Family lock (attention only): when set, selection is restricted to the
+    # named problem's transitive FAMILY — the problem plus everything spawned
+    # from it or from artifacts addressing it (successors, discriminations,
+    # lineage problems). Unlike FOCUS_PROBLEM, in-family successor iteration
+    # keeps working. Used by staged pipelines (easy.make: plan -> design ->
+    # build) so one stage's leftovers cannot out-age the next stage's seed
+    # under the liveness queue. FOCUS_PROBLEM takes precedence when both set.
+    FOCUS_FAMILY: str | None = None
     # Level-2 diversity injection always-on (llm/specs.py); the stagnation
     # ladder can also switch it on reactively (§11.4).
     SPEC_INJECTION: bool = False
