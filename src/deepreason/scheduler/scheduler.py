@@ -68,6 +68,16 @@ class Scheduler:
         self._disc_last: dict[str, int] = {}
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
+        self._embedder_stamped = False  # geometry identity, logged once per run
+
+    def _embedder_fingerprint(self) -> dict:
+        """fingerprint() when the embedder provides it; a minimal identity
+        otherwise (duck-typed test embedders keep working)."""
+        fp = getattr(self.embedder, "fingerprint", None)
+        if callable(fp):
+            return fp()
+        return {"model": getattr(self.embedder, "model", type(self.embedder).__name__),
+                "version": getattr(self.embedder, "version", "?"), "sentinel": "-"}
 
     # -------------------------------------------------------------- #
     # Response-ladder interventions (§11.4): derived, time-bounded flags.     #
@@ -310,6 +320,18 @@ class Scheduler:
     def step(self) -> None:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
+        if not self._embedder_stamped:
+            # Geometry identity on the record (§11.5/§17, adjudicated in
+            # runs/embedder_design): model + library versions + sentinel-
+            # embedding hash. Two runs' school geometry / atlas distances are
+            # comparable iff their stamps match — cross-environment drift is
+            # DETECTED here, never assumed away. Once per scheduler, before
+            # the first heartbeat: a pre-run provenance record, like Register.
+            self._embedder_stamped = True
+            fp = self._embedder_fingerprint()
+            harness.record_measure(
+                inputs=["embedder", fp["model"], fp["version"], fp["sentinel"]]
+            )
         if self.controller is not None:
             self.controller.step()  # calibrate generator knobs from process signals
         scan_spawns(harness, config)

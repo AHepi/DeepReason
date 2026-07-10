@@ -19,6 +19,15 @@ SIGNALS: dict[str, str] = {
     "cycle": "cycle heartbeat: [cycle, number, selected problem id or '-'] — "
              "every event that follows (by seq) until the next heartbeat "
              "belongs to this cycle",
+    # Embedder geometry identity (llm/embedder.py; adjudicated in
+    # runs/embedder_design — cross-environment drift is detected, never denied)
+    "embedder": "geometry identity stamp, once per run before the first "
+                "heartbeat: [signal, model, library versions, sentinel-"
+                "embedding hash] — school geometry and atlas distances are "
+                "comparable across runs iff these match",
+    "embedder-fallback": "EMBEDDER_MODEL was set but the backend is "
+                         "unavailable; the run degraded to the hashing "
+                         "embedder (inputs: [signal, model, reason])",
     # Argumentative criticism accounting (rules/crit.py)
     "arg-crit": "argumentative critic ran and registered nothing new "
                 "(no fault found, or the critic artifact deduplicated)",

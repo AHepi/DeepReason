@@ -23,6 +23,14 @@ dev = [
 browser = [
     "playwright>=1.45",
 ]
+# Neural embedder (src/deepreason/llm/embedder.py): ONNX/CPU semantic
+# embeddings via fastembed, enabled by the EMBEDDER_MODEL knob. Optional —
+# without it the harness keeps the zero-dependency hashing embedder, and a
+# configured-but-missing backend degrades visibly (embedder-fallback on the
+# log). Recalibrate distance thresholds when switching (deepreason calibrate).
+embed = [
+    "fastembed>=0.3",
+]
 
 [project.scripts]
 deepreason = "deepreason.cli.main:main"

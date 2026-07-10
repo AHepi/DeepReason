@@ -112,10 +112,20 @@ def test_scheduler_heartbeat_segments_the_log(tmp_path):
     assert beats[0].inputs[2] == "pi-root"  # first cycle worked the seed
     assert all(len(b.inputs) == 3 for b in beats)  # every beat names its focus
     # Every event attributes to a cycle: nothing precedes the first heartbeat
-    # except the pre-run seeds (commitment Register, problem Spawn).
+    # except the pre-run seeds (commitment Register, problem Spawn) and the
+    # run's one embedder geometry stamp.
     first = beats[0].seq
     pre = [e for e in harness.log.read() if e.seq < first]
-    assert all(e.rule in (Rule.REGISTER, Rule.SPAWN) for e in pre)
+    assert all(
+        e.rule in (Rule.REGISTER, Rule.SPAWN)
+        or (e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "embedder")
+        for e in pre
+    )
+    stamps = [e for e in harness.log.read()
+              if e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "embedder"]
+    assert len(stamps) == 1                      # once per run, not per cycle
+    assert stamps[0].inputs[1] == "hashing-128"  # the default embedder's model
+    assert stamps[0].seq < first                 # pre-run provenance, like Register
 
 
 def test_oversize_artifact_skips_lazy_hv_once(tmp_path):

@@ -48,6 +48,26 @@ def seed_problem_payload(harness, data: dict) -> Problem:
     return harness.register_problem(Problem.model_validate(spec))
 
 
+def make_embedder(harness, config):
+    """The embedder a run actually gets. EMBEDDER_MODEL unset => the
+    zero-dependency hashing default (None: the Scheduler constructs it).
+    Set but unavailable => hashing fallback with `embedder-fallback` on the
+    log — degraded geometry must be visible to the post-hoc reader, never
+    silent (the browser-oracle precedent records nothing because absence
+    disables a feature; here the run still embeds, just worse)."""
+    if not config.EMBEDDER_MODEL:
+        return None
+    from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
+
+    try:
+        return build_embedder(config.EMBEDDER_MODEL)
+    except EmbedderUnavailable as e:
+        harness.record_measure(
+            inputs=["embedder-fallback", config.EMBEDDER_MODEL, str(e)[:160]]
+        )
+        return None
+
+
 def run_scheduler(harness, config, cycles: int, token_budget: int | None = None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
     (result, meter, accounting). An explicit token_budget of 0 is a real
@@ -78,7 +98,8 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None)
 
         browser_backend = PlaywrightBrowser()
     result = Scheduler(
-        harness, adapter, config, browser_backend=browser_backend
+        harness, adapter, config, embedder=make_embedder(harness, config),
+        browser_backend=browser_backend,
     ).run(int(cycles))
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {

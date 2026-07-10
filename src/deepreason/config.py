@@ -156,6 +156,18 @@ class Config(BaseModel):
     # very process that could overturn its survivor is starved by that
     # survivor's own acceptance. False = legacy unsolved-first.
     LIVENESS_QUEUE: bool = True
+    # Embedder (§9, §11.5): None = HashingEmbedder (zero-dependency default,
+    # lexical geometry). Set a fastembed model id to enable NeuralEmbedder —
+    # verified on this repo: "BAAI/bge-small-en-v1.5" (prose margins) and
+    # "jinaai/jina-embeddings-v2-base-code" (code margins); requires the
+    # optional dependency group (pip install 'deepreason[embed]'). If the
+    # backend is unavailable at run start the scheduler falls back to hashing
+    # and records `embedder-fallback` on the log. EVERY distance threshold
+    # (NEAR_DUP_EPS, RESEED_DIST_MIN, atlas radii) is scale-specific:
+    # recalibrate via `deepreason calibrate` (views/basin.threshold_calibration)
+    # before trusting a config on a new embedder — the adjudicated record in
+    # runs/embedder_design refuted every blind distribution-mapping shortcut.
+    EMBEDDER_MODEL: str | None = None
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

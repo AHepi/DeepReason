@@ -240,11 +240,13 @@ class Harness:
         """Embed an artifact's content, cached: artifacts are immutable and
         content-addressed, so re-embedding the same id every cycle (capture
         metrics, the refuted index) is pure waste — and real money with an
-        API embedder. Keyed by embedder type: embedders are deterministic
-        functions, distinct types give distinct vectors."""
+        API embedder. Keyed by embedder MODEL (falling back to type):
+        embedders are deterministic functions within a process, and distinct
+        models give distinct vectors — two NeuralEmbedders with different
+        model ids must not share entries."""
         from deepreason.programs import content_text
 
-        key = (type(embedder).__name__, aid)
+        key = (getattr(embedder, "model", type(embedder).__name__), aid)
         vec = self._embed_cache.get(key)
         if vec is None:
             vec = embedder.embed(content_text(self.state.artifacts[aid], self.blobs))

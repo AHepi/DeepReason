@@ -64,6 +64,14 @@ def build_parser() -> argparse.ArgumentParser:
     rule_cmd.add_argument("--holding", required=True, help="the one-line holding")
     rule_cmd.add_argument("--standard", required=True, help="spec id the ruling calibrates")
     sub.add_parser("schools", help="rosters, centroid distances, stance weights")
+    calibrate_cmd = sub.add_parser(
+        "calibrate", help="distance-threshold calibration for an embedder on this "
+                          "corpus (planted duplicates vs siblings vs unrelated)"
+    )
+    calibrate_cmd.add_argument(
+        "--model", default=None,
+        help="fastembed model id (default: the config's EMBEDDER_MODEL, "
+             "else the hashing embedder)")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
@@ -242,6 +250,22 @@ def _main(argv: list[str] | None = None) -> int:
                 f"{school_id}  stance={policy['stance']}  weight={weight:.2f}  "
                 f"lineage={lineage}  policy={policy['artifact_id'][:12]}"
             )
+        return 0
+
+    if args.command == "calibrate":
+        from deepreason.config import load as load_config
+        from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
+        from deepreason.views.basin import threshold_calibration
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        try:
+            embedder = build_embedder(args.model or config.EMBEDDER_MODEL)
+        except EmbedderUnavailable as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        print(json.dumps(threshold_calibration(harness, embedder),
+                         indent=2, sort_keys=True))
         return 0
 
     if args.command == "capture":

@@ -75,6 +75,13 @@ _SIGNAL_LINES = {
     "disc-attempts-exhausted": ("consequence",
                                 "an unresolvable rivalry hit its attempt cap "
                                 "and was set aside as unresolved"),
+    "embedder": ("progress",
+                 "the run stamped its embedding geometry — model, library "
+                 "versions, sentinel hash — so drift is detectable on the "
+                 "record"),
+    "embedder-fallback": ("setback",
+                          "the configured embedding backend was unavailable, "
+                          "so the run degraded to the hashing embedder"),
 }
 
 _BLOCK_LINES = {
