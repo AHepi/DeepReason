@@ -109,12 +109,13 @@ def test_scheduler_heartbeat_segments_the_log(tmp_path):
     beats = [e for e in harness.log.read()
              if e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "cycle"]
     assert [b.inputs[1] for b in beats] == ["0", "1"]
-    assert all(b.inputs[2] == "pi-root" for b in beats)
+    assert beats[0].inputs[2] == "pi-root"  # first cycle worked the seed
+    assert all(len(b.inputs) == 3 for b in beats)  # every beat names its focus
     # Every event attributes to a cycle: nothing precedes the first heartbeat
-    # except the pre-run registrations (commitment/problem seeds).
+    # except the pre-run seeds (commitment Register, problem Spawn).
     first = beats[0].seq
     pre = [e for e in harness.log.read() if e.seq < first]
-    assert all(e.rule == Rule.REGISTER for e in pre)
+    assert all(e.rule in (Rule.REGISTER, Rule.SPAWN) for e in pre)
 
 
 def test_dropped_call_carries_the_reason(tmp_path):
