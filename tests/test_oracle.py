@@ -677,3 +677,29 @@ def test_crit_pack_advertises_the_counterexample_recourse(harness):
     pack2 = render_crit_pack(plain.id, harness.state, harness.commitments,
                              harness.blobs, token_budget=2500)
     assert "counterexample" not in pack2
+
+
+def test_memory_bomb_fails_the_candidate_not_the_process():
+    """A single line can allocate unboundedly (runtime products dodge the
+    int-literal cap; the step bound counts lines, not bytes). Observed live:
+    a buggy decoder multiplied a string by ~10^12 and the OS OOM-killed the
+    whole harness (dmesg, 16GB RSS). The soft-RLIMIT guard must turn that
+    into a MemoryError INSIDE the candidate => FAIL verdict, process alive."""
+    from deepreason.oracle import FAIL, run_property
+
+    bomb = (
+        "def solve(s):\n"
+        "    big = 999999 * 999999\n"
+        "    return chr(97) * big\n"
+    )
+    checker = "def check(inp, out):\n    return isinstance(out, str)\n"
+    verdict, trace = run_property(bomb, "solve", [["x"]], checker,
+                                  step_limit=100_000)
+    assert verdict == FAIL
+    assert "MemoryError" in trace["error"]
+
+    # and the limit is fully restored: a normal candidate still passes after
+    ok = "def solve(s):\n    return s + s\n"
+    verdict, trace = run_property(ok, "solve", [["x"]], checker,
+                                  step_limit=100_000)
+    assert verdict == "pass"

@@ -56,6 +56,48 @@ class _StepExceeded(Exception):
     """The candidate ran past its deterministic line-event budget."""
 
 
+# The step bound counts LINE events; a single line can still allocate
+# unboundedly (`chr(97) * (999999 * 999999)` — runtime products dodge the
+# int-literal cap). Observed live: a buggy run-length decoder misparsed a
+# count, multiplied a string by ~10^12, and the OS OOM-killed the whole
+# harness process (dmesg: 16GB RSS, SIGKILL) — an AVAILABILITY hole, not a
+# soundness one. Mitigation: lower the process's SOFT address-space limit
+# around candidate execution so the allocation raises MemoryError inside
+# the candidate (caught => FAIL verdict) instead of summoning the OOM
+# killer. The hard limit stays untouched, so the soft cap is fully
+# restorable. Full fix remains subprocess isolation (module docstring).
+_MEMORY_CAP_BYTES = 2_000_000_000
+
+
+class _MemoryGuard:
+    """Context manager: soft RLIMIT_AS cap during untrusted execution.
+    No-op where the resource module is unavailable (non-POSIX)."""
+
+    def __enter__(self):
+        self._saved = None
+        try:
+            import resource
+
+            self._resource = resource
+            soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+            cap = _MEMORY_CAP_BYTES if hard == resource.RLIM_INFINITY \
+                else min(_MEMORY_CAP_BYTES, hard)
+            if soft == resource.RLIM_INFINITY or soft > cap:
+                resource.setrlimit(resource.RLIMIT_AS, (cap, hard))
+                self._saved = (soft, hard)
+        except (ImportError, ValueError, OSError):
+            pass  # platform without rlimits: keep the prototype behavior
+        return self
+
+    def __exit__(self, *exc):
+        if self._saved is not None:
+            try:
+                self._resource.setrlimit(self._resource.RLIMIT_AS, self._saved)
+            except (ValueError, OSError):
+                pass
+        return False
+
+
 def _guard(tree: ast.AST) -> None:
     """Reject the untrusted-code escape family (same shape as programs._validate_
     predicate, extended for a def+body): no imports, no underscore names/attrs
@@ -123,18 +165,20 @@ def run(source: str, entry: str, tests: list, step_limit: int = _STEP_LIMIT_DEFA
     previous = sys.gettrace()
     sys.settrace(_tracer)
     try:
-        for i, case in enumerate(tests):
-            args = case.get("in", [])
-            try:
-                got = fn(*args)
-            except _StepExceeded:
-                return FAIL, {"case": i, "error": "step limit exceeded", "step_limit": step_limit}
-            except Exception as e:  # noqa: BLE001 - candidate raised => failed test
-                return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
-            if got != case.get("out"):
-                return FAIL, {
-                    "case": i, "input": args, "expected": case.get("out"), "got": _short(got)
-                }
+        with _MemoryGuard():
+            for i, case in enumerate(tests):
+                args = case.get("in", [])
+                try:
+                    got = fn(*args)
+                except _StepExceeded:
+                    return FAIL, {"case": i, "error": "step limit exceeded",
+                                  "step_limit": step_limit}
+                except Exception as e:  # noqa: BLE001 - candidate raised => failed test
+                    return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
+                if got != case.get("out"):
+                    return FAIL, {
+                        "case": i, "input": args, "expected": case.get("out"), "got": _short(got)
+                    }
     finally:
         sys.settrace(previous)
     return PASS, {"cases_passed": len(tests), "steps": steps[0]}
@@ -214,24 +258,26 @@ def run_property(
     previous = sys.gettrace()
     sys.settrace(_tracer)
     try:
-        for i, args in enumerate(inputs):
-            try:
-                got = fn(*args)
-            except _StepExceeded:
-                return FAIL, {"case": i, "error": "step limit exceeded", "step_limit": step_limit}
-            except Exception as e:  # noqa: BLE001 - candidate raised => failed case
-                return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
-            try:
-                ok = check(args, got)
-            except _StepExceeded:
-                return FAIL, {"case": i, "error": "step limit exceeded in checker",
-                              "step_limit": step_limit}
-            except Exception as e:  # noqa: BLE001 - un-checkable output => failed case
-                return FAIL, {"case": i, "error": f"checker raised {type(e).__name__}: {e}",
-                              "got": _short(got)}
-            if not ok:
-                return FAIL, {"case": i, "input": args, "got": _short(got),
-                              "error": "property violated"}
+        with _MemoryGuard():
+            for i, args in enumerate(inputs):
+                try:
+                    got = fn(*args)
+                except _StepExceeded:
+                    return FAIL, {"case": i, "error": "step limit exceeded",
+                                  "step_limit": step_limit}
+                except Exception as e:  # noqa: BLE001 - candidate raised => failed case
+                    return FAIL, {"case": i, "error": f"raised {type(e).__name__}: {e}"}
+                try:
+                    ok = check(args, got)
+                except _StepExceeded:
+                    return FAIL, {"case": i, "error": "step limit exceeded in checker",
+                                  "step_limit": step_limit}
+                except Exception as e:  # noqa: BLE001 - un-checkable output => failed case
+                    return FAIL, {"case": i, "error": f"checker raised {type(e).__name__}: {e}",
+                                  "got": _short(got)}
+                if not ok:
+                    return FAIL, {"case": i, "input": args, "got": _short(got),
+                                  "error": "property violated"}
     finally:
         sys.settrace(previous)
     return PASS, {"cases_passed": len(inputs), "steps": steps[0]}
