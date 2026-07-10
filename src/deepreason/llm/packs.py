@@ -38,6 +38,16 @@ _COUNTEREXAMPLE_NOTE = (
     "target handles correctly, grounds nothing."
 )
 
+_MACHINE_EVAL_NOTE = (
+    "MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with "
+    "'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY "
+    "— every target shown here currently PASSES them (failures were refuted "
+    "mechanically before this call). Do NOT base a case on claiming such a "
+    "commitment is violated (e.g. re-counting a length bound): that claim is "
+    "machine-decided and your case would assert a falsehood. Argue about the "
+    "SUBSTANCE of the content instead."
+)
+
 
 def _active_property_claims(state: EpistemicState, blobs, criteria: list[str]) -> list[str]:
     """Docstring claims of ACCEPTED proposed properties (code:python-prop
@@ -265,6 +275,7 @@ def render_batch_crit_pack(
             lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
             if kappa is not None:
                 lines += _execution_spec_lines(kappa)
+    lines += ["", _MACHINE_EVAL_NOTE]
     content_chars = max(320, (token_budget * 2) // max(1, len(target_ids)))
     for tid in target_ids:
         target = state.artifacts[tid]
@@ -481,6 +492,7 @@ def render_crit_pack(
         lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
         if kappa is not None:
             lines += _execution_spec_lines(kappa)
+    lines += ["", _MACHINE_EVAL_NOTE]
     lines += [
         "",
         f"TARGET {target_id}",
