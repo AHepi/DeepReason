@@ -118,6 +118,14 @@ class Config(BaseModel):
     # retried into starvation. None = unlimited attempts (legacy).
     DISC_ATTEMPTS_MAX: int | None = 3
     DISC_COOLDOWN: int = 4
+    # Lazy HV spot-checks ask the variator for K whole-content edits in one
+    # JSON reply; on app-sized artifacts (multi-KB HTML) that reliably blows
+    # the completion window (observed live: 9 dropped variator calls in one
+    # run, all length-limit). Artifacts whose content exceeds this many chars
+    # are skipped by _lazy_hv (attention-only machinery — skipping estimates
+    # is legal; skipping criticism would not be), logged once as
+    # hv-skip-oversize. None disables the gate.
+    HV_CONTENT_MAX_CHARS: int | None = 8000
     # Browser oracle (rules/act.py): app candidates carrying browser
     # commitments are rendered + driven in headless Chromium, at most this
     # many NEW runs per cycle (each is one exogenous evidence registration;

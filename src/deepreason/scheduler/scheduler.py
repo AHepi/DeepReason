@@ -58,6 +58,7 @@ class Scheduler:
         self._arg_crit_this_cycle = 0
         self._recrit_cursor = 0  # round-robin over standing survivors (§14)
         self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
+        self._hv_skipped: set[str] = set()  # oversize hv skips, logged once each
         # Discrimination futility tracking (§14 attention only): pid -> attempt
         # count / last-attempt cycle. A pairwise trial that blocks (order-swap
         # deadlock) or rules 'neither' leaves the problem unsolved, and
@@ -634,23 +635,40 @@ class Scheduler:
                 return  # one fetch per due cycle (budgeted)
 
     def _lazy_hv(self) -> None:
-        """One spot-check per cycle on an accepted, unmeasured artifact."""
+        """One spot-check per cycle on an accepted, unmeasured artifact.
+        Oversized content is skipped (HV_CONTENT_MAX_CHARS): the variator
+        cannot emit K whole-document edits of a multi-KB app inside its
+        completion window — every attempt was a guaranteed length-limit drop
+        (observed live). Attention-only machinery, so skipping is legal."""
         if not self.adapter.has_role("variator"):
             return
+        from deepreason.programs import content_text
+
         addressed = {aid for aid, _ in self.harness.state.addr}
+        limit = self.config.HV_CONTENT_MAX_CHARS
         for aid, status in self.harness.state.status.items():
             if (
-                status == Status.ACCEPTED
-                and aid in addressed
-                and aid not in self.harness.state.hv
+                status != Status.ACCEPTED
+                or aid not in addressed
+                or aid in self.harness.state.hv
+                or aid in self._hv_skipped
             ):
-                try:
-                    hv_spot_check(
-                        self.harness, self.adapter, aid, self.config.HV_K, self.embedder
+                continue
+            if limit is not None:
+                text = content_text(self.harness.state.artifacts[aid], self.harness.blobs)
+                if len(text) > limit:
+                    self._hv_skipped.add(aid)
+                    self.harness.record_measure(
+                        inputs=["hv-skip-oversize", aid, str(len(text))]
                     )
-                except (SchemaRepairError, EndpointError) as e:
-                    self._drop(e)
-                return
+                    continue  # keep scanning: the cycle's slot is not spent
+            try:
+                hv_spot_check(
+                    self.harness, self.adapter, aid, self.config.HV_K, self.embedder
+                )
+            except (SchemaRepairError, EndpointError) as e:
+                self._drop(e)
+            return
 
     def _capture_step(self) -> None:
         """Detection + hysteresis (raw flag sustained 2 checks) + ladder,

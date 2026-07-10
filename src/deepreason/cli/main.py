@@ -92,6 +92,19 @@ def _resolve(harness: Harness, prefix: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Entry point: _main wrapped so piping into `head`/`less` (which closes
+    stdout early) exits quietly instead of tracebacking on BrokenPipeError."""
+    try:
+        return _main(argv)
+    except BrokenPipeError:
+        try:
+            sys.stdout.close()
+        except Exception:  # noqa: BLE001 - already broken; nothing to save
+            pass
+        return 0
+
+
+def _main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command is None:
         build_parser().print_help()

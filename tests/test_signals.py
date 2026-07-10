@@ -118,6 +118,76 @@ def test_scheduler_heartbeat_segments_the_log(tmp_path):
     assert all(e.rule in (Rule.REGISTER, Rule.SPAWN) for e in pre)
 
 
+def test_oversize_artifact_skips_lazy_hv_once(tmp_path):
+    """The variator cannot emit K whole-document edits of a multi-KB app in
+    one completion window (9 guaranteed drops observed live) — oversize
+    artifacts skip the lazy HV estimate, logged once, and the variator is
+    never called for them."""
+    import json
+
+    from deepreason.config import Config
+    from deepreason.harness import Harness
+    from deepreason.llm.adapter import LLMAdapter
+    from deepreason.llm.endpoints import MockEndpoint
+    from deepreason.ontology import Commitment, Problem, ProblemProvenance, Provenance, Rule
+    from deepreason.scheduler.scheduler import Scheduler
+
+    harness = Harness(tmp_path / "run")
+    harness.register_commitment(Commitment(id="k-any", eval="predicate:len(content) > 0"))
+    harness.register_problem(Problem(
+        id="pi-app", description="an app problem", criteria=["k-any"],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    ))
+    big = harness.create_artifact(
+        "<html>" + "x" * 9000 + "</html>",
+        provenance=Provenance(role="conjecturer"), problem_id="pi-app",
+    )
+
+    def _variator_must_not_run(prompt):
+        if "xxxxxxxxxx" in prompt:  # the oversize artifact's content
+            raise AssertionError("variator was called for an oversize artifact")
+        return json.dumps({"edits": [{"content": "small candidate edited"}]})
+
+    conj = json.dumps({"candidates": [{"content": "small candidate", "typicality": 0.9}]})
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint([conj, conj]),
+         "variator": MockEndpoint(_variator_must_not_run)},
+        harness.blobs, retry_max=2,
+    )
+    scheduler = Scheduler(harness, adapter, Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0))
+    scheduler.step()  # would raise if the variator saw the big artifact
+    scheduler.step()
+    skips = [e for e in harness.log.read()
+             if e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "hv-skip-oversize"]
+    assert len(skips) == 1                      # logged exactly once, not per cycle
+    assert skips[0].inputs[1] == big.id
+    assert int(skips[0].inputs[2]) > 8000       # the char count is on the record
+
+
+def test_cli_broken_pipe_exits_quietly(monkeypatch, tmp_path):
+    """Piping `deepreason ... | head` closes stdout early; the CLI must exit
+    cleanly instead of tracebacking (observed live)."""
+    import sys as _sys
+
+    from deepreason.cli.main import main
+    from deepreason.harness import Harness
+
+    Harness(tmp_path / "run")  # a valid, empty root
+
+    class _ClosedPipe:
+        def write(self, *_):
+            raise BrokenPipeError
+
+        def flush(self):
+            raise BrokenPipeError
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(_sys, "stdout", _ClosedPipe())
+    assert main(["--root", str(tmp_path / "run"), "frontier"]) == 0
+
+
 def test_dropped_call_carries_the_reason(tmp_path):
     from deepreason.config import Config
     from deepreason.harness import Harness

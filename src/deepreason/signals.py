@@ -58,6 +58,10 @@ SIGNALS: dict[str, str] = {
     "disc-attempts-exhausted": "a discrimination problem hit its attempt cap "
                                "and is paused permanently — recorded as "
                                "unresolved, not retried into starvation",
+    "hv-skip-oversize": "lazy HV spot-check skipped: the artifact's content "
+                        "exceeds HV_CONTENT_MAX_CHARS, so K whole-content "
+                        "variator edits cannot fit a completion window "
+                        "(inputs: [signal, artifact id, char count])",
     "spec-generation": "diversity-specification call for the cycle's problem",
     # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
     "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
