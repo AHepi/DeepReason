@@ -317,7 +317,8 @@ def test_run_scheduler_wires_controller_by_default(tmp_path, monkeypatch):
 
     class _FakeScheduler:
         def __init__(self, harness, adapter, config, embedder=None,
-                     browser_backend=None, controller=None):
+                     browser_backend=None, controller=None,
+                     research_backend=None):
             seen["controller"] = controller
 
         def run(self, cycles, on_cycle=None):
