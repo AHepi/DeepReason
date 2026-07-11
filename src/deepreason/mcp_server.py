@@ -149,6 +149,67 @@ def _tools() -> list[dict]:
                 "required": ["case_id", "holding", "standard"],
             },
         },
+        {
+            "name": "research_docket",
+            "description": (
+                "Open evidence requests (§12): research problems whose "
+                "observation-valued commitment has no covering evidence. "
+                "Read-only and deterministic. The operating agent reads "
+                "this, retrieves with its OWN tools, then answers via "
+                "submit_evidence or report_research_failure."
+            ),
+            "inputSchema": {"type": "object", "properties": {**_ROOT, **_CONFIG}},
+        },
+        {
+            "name": "submit_evidence",
+            "description": (
+                "Register CANDIDATE evidence for a research problem. "
+                "Registration is not coverage: the material enters as an "
+                "attackable import artifact depending on an attackable "
+                "source-reliability claim, is checked against the problem's "
+                "relevance/scope commitments, and covers only while it "
+                "remains accepted and supported. You never adjudicate, mark "
+                "problems solved, or touch statuses — you only return "
+                "candidate evidence."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    **_CONFIG,
+                    "problem_id": {"type": "string"},
+                    "source": {"type": "string", "description": "source identifier or URL"},
+                    "content": {"type": "string", "description": "the retrieved source text"},
+                    "retrieved_at": {
+                        "type": "string",
+                        "description": "agent-claimed retrieval time (stored as claim metadata only; event time is harness-controlled)",
+                    },
+                    "title": {"type": "string"},
+                    "query": {"type": "string", "description": "the search query / retrieval trace"},
+                },
+                "required": ["problem_id", "source", "content"],
+            },
+        },
+        {
+            "name": "report_research_failure",
+            "description": (
+                "Record a FAILED retrieval attempt for a research problem "
+                "(operational event, never evidence, never a verdict): the "
+                "problem stays open and scheduled-pending."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "problem_id": {"type": "string"},
+                    "source": {"type": "string", "description": "attempted source or query"},
+                    "reason": {"type": "string"},
+                    "category": {"type": "string", "description": "e.g. fetch-error | blocked | not-found | timeout"},
+                    "detail": {"type": "string", "description": "optional HTTP status / exception class"},
+                },
+                "required": ["problem_id", "source", "reason"],
+            },
+        },
     ]
 
 
@@ -171,6 +232,8 @@ _REQUIRED_ARGS = {
     "theory": ("id",),
     "why": ("id",),
     "appellate_rule": ("case_id", "holding", "standard"),
+    "submit_evidence": ("problem_id", "source", "content"),
+    "report_research_failure": ("problem_id", "source", "reason"),
 }
 
 
@@ -276,6 +339,46 @@ def call_tool(name: str, arguments: dict) -> str:
             harness, arguments["case_id"], arguments["holding"], arguments["standard"]
         )
         return f"precedent registered: {precedent.id}"
+
+    if name == "research_docket":
+        from deepreason.ops import research_docket
+
+        entries = research_docket(_harness(arguments), _config(arguments))
+        return (json.dumps(entries, indent=2, sort_keys=True)
+                if entries else "(no open research problems)")
+
+    if name == "submit_evidence":
+        from deepreason.ops import submit_evidence
+        from deepreason.research.backends import covered
+
+        harness = _harness(arguments)
+        metadata = {
+            k: arguments[k]
+            for k in ("retrieved_at", "title", "query")
+            if arguments.get(k)
+        }
+        evidence = submit_evidence(
+            harness, arguments["problem_id"], arguments["source"],
+            arguments["content"], metadata=metadata or None,
+        )
+        now_covered = covered(harness, arguments["problem_id"])
+        return (
+            f"candidate evidence registered: {evidence.id} "
+            f"(status {harness.state.status.get(evidence.id).value}; "
+            f"problem {'covered' if now_covered else 'still open'} — coverage "
+            "is derived from the graph and may change under criticism)"
+        )
+
+    if name == "report_research_failure":
+        from deepreason.ops import report_research_failure
+
+        report_research_failure(
+            _harness(arguments), arguments["problem_id"], arguments["source"],
+            arguments["reason"], category=arguments.get("category", "fetch-error"),
+            detail=arguments.get("detail"),
+        )
+        return (f"failure recorded for {arguments['problem_id']} — the request "
+                "stays open (a failed fetch is never a verdict)")
 
     raise ValueError(f"unknown tool: {name}")
 

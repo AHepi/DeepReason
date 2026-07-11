@@ -76,6 +76,27 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
     sub.add_parser("docket", help="disagreement-ranked user queue (spec 10.6)")
+    sub.add_parser("research", help="open evidence requests awaiting retrieval (spec 12)")
+    submit_cmd = sub.add_parser(
+        "submit-evidence",
+        help="register CANDIDATE evidence for a research problem (coverage "
+             "is derived under criticism, never granted by submission)")
+    submit_cmd.add_argument("problem_id")
+    submit_cmd.add_argument("--source", required=True, help="source identifier or URL")
+    submit_cmd.add_argument("--file", required=True, help="file holding the retrieved text")
+    submit_cmd.add_argument("--retrieved-at", default=None,
+                            help="claimed retrieval time (stored as claim metadata only)")
+    submit_cmd.add_argument("--title", default=None)
+    submit_cmd.add_argument("--user", action="store_true",
+                            help="the evidence was genuinely supplied by the human user "
+                                 "(default provenance is 'import' for agent material)")
+    fail_cmd = sub.add_parser(
+        "report-research-failure",
+        help="record a failed retrieval attempt (operational event, never evidence)")
+    fail_cmd.add_argument("problem_id")
+    fail_cmd.add_argument("--source", required=True, help="attempted source or query")
+    fail_cmd.add_argument("--reason", required=True)
+    fail_cmd.add_argument("--category", default="fetch-error")
     rule_cmd = sub.add_parser("rule", help="enter an appellate ruling")
     rule_cmd.add_argument("case_id")
     rule_cmd.add_argument("--holding", required=True, help="the one-line holding")
@@ -352,6 +373,51 @@ def _main(argv: list[str] | None = None) -> int:
             standards = ", ".join(entry["standards"]) or "none (appellate_rule not applicable)"
             print(f"{entry['case']}  score={entry['score']}  {', '.join(entry['kinds'])}  "
                   f"standards: {standards}")
+        return 0
+
+    if args.command == "research":
+        from deepreason.config import load as load_config
+        from deepreason.ops import research_docket
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        entries = research_docket(harness, config)
+        if not entries:
+            print("(no open research problems)")
+        for entry in entries:
+            state = ("internal-exhausted" if entry["internal_exhausted"]
+                     else f"attempts={entry['failed_internal_attempts']}")
+            print(f"{entry['problem']}  [{entry['backend_mode']}]  {state}  "
+                  f"{entry['claim'][:100]}")
+        return 0
+
+    if args.command == "submit-evidence":
+        from deepreason.ops import submit_evidence
+        from deepreason.research.backends import covered
+
+        harness = Harness(Path(args.root))
+        metadata = {k: v for k, v in (
+            ("retrieved_at", args.retrieved_at), ("title", args.title)) if v}
+        evidence = submit_evidence(
+            harness, args.problem_id, args.source,
+            Path(args.file).read_text(),
+            role="user" if args.user else "import",
+            metadata=metadata or None,
+        )
+        status = harness.state.status.get(evidence.id).value
+        state = "covered" if covered(harness, args.problem_id) else "still open"
+        print(f"candidate evidence {evidence.id[:12]} registered ({status}); "
+              f"problem {state} — coverage is derived under criticism")
+        return 0
+
+    if args.command == "report-research-failure":
+        from deepreason.ops import report_research_failure
+
+        report_research_failure(
+            Harness(Path(args.root)), args.problem_id, args.source,
+            args.reason, category=args.category,
+        )
+        print(f"failure recorded for {args.problem_id} — the request stays open")
         return 0
 
     if args.command == "rule":

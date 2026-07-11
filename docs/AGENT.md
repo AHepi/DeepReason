@@ -76,6 +76,38 @@ properly.
 | `eval_report` | P6 metrics: per-role LLM stats, trial-guard blocks, capture dashboard |
 | `docket` | Disagreement-ranked cases awaiting an appellate ruling (§10.6) |
 | `appellate_rule` | Enter a ruling (a one-line holding calibrating a standard) |
+| `research_docket` | Open evidence requests awaiting retrieval (§12) |
+| `submit_evidence` | Register CANDIDATE evidence you retrieved for a request |
+| `report_research_failure` | Record a failed retrieval attempt (operational, not evidence) |
+
+## The research loop (§12): you are the retrieval backend
+
+With `RESEARCH_BACKEND: "agent"` (the default), the harness does no web
+fetching of its own — YOU are the retrieval arm, through an explicit,
+logged channel:
+
+1. Read `research_docket` — each entry is an observation-valued commitment
+   with no covering evidence. Under a `research-agent-requested` signal
+   (the grounding-decay brake), treat the named entries as the
+   highest-priority grounding task.
+2. Search and fetch with your OWN tools (web search, browsing — your
+   credentials, never the harness's).
+3. On success, `submit_evidence` with the source and the retrieved text.
+4. On failure (blocked site, nothing found, timeout),
+   `report_research_failure` with the reason — a failed fetch is an
+   operational event on the record, never evidence and never a verdict.
+5. Let the harness do the rest: your submission enters as an ordinary
+   attackable import artifact depending on an attackable
+   source-reliability claim, gets checked against the problem's
+   relevance/scope commitments, and covers the request only while it
+   remains accepted and supported.
+
+What submission does NOT do: it does not certify the source (the
+reliability claim stays attackable), does not adjudicate the underlying
+claim, does not mark the research problem solved, does not edit λ, and
+does not touch any status. You return candidate evidence; the court does
+the rest. Your claimed retrieval time is stored as claim metadata — event
+time and ordering are harness-controlled.
 
 ## Rules of engagement for the operating agent
 
