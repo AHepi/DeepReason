@@ -1,17 +1,43 @@
-"""Config loading (spec §15) — single exposed knob file (config/default.yaml).
+"""The single configuration boundary for DeepReason (spec §15).
 
-Knobs whose spec start value is "tune" load as None and must be set before
-the phases that consume them.
+``Config`` owns every default and validates every knob. YAML files are partial
+profiles: they contain only deliberate differences from the built-in schema.
+Profile-driven entry points load here and build role endpoints through
+``deepreason.llm.adapter.build_adapter``; general-purpose scripts must not
+carry private copies of role caps, reasoning policy, or model-selection logic.
+Pre-registered experiment arms may still instantiate ``Config`` directly so
+their manipulated conditions remain explicit in the experiment source.
+
+Knobs whose spec start value is "tune" default to ``None`` and must be set
+before the phases that consume them.
 """
 
+from collections.abc import Iterable, Mapping
 from pathlib import Path
+from typing import Any
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class EndpointSpec(BaseModel):
+    """Validated shape of one role endpoint while preserving dict consumers."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    endpoint: str | None = None
+    model: str | None = None
+    temperature: float | None = None
+    api_key_env: str | None = None
+    provider: str | None = None
+    reasoning: str | int | None = None
+    max_tokens: int | None = Field(default=None, gt=0)
+    json_mode: bool = False
+    logprobs: bool = False
 
 
 class Config(BaseModel):
-    model_config = {"extra": "allow"}
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     # Unification (§7)
     FLOOR: int = 1
@@ -187,11 +213,119 @@ class Config(BaseModel):
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2
-    roles: dict = Field(default_factory=dict)
+    roles: dict[
+        str,
+        dict[str, Any] | list[dict[str, Any]] | None,
+    ] = Field(default_factory=dict)
+
+    @field_validator("roles")
+    @classmethod
+    def _validate_roles(cls, value):
+        for role, configured in value.items():
+            if configured is None:
+                continue
+            seats = configured if isinstance(configured, list) else [configured]
+            if not seats:
+                raise ValueError(f"role {role!r} has an empty endpoint ensemble")
+            for index, seat in enumerate(seats):
+                try:
+                    EndpointSpec.model_validate(seat)
+                except ValueError as error:
+                    raise ValueError(
+                        f"invalid endpoint for role {role!r} seat {index}: {error}"
+                    ) from error
+        return value
 
 
 def load(path: Path | None = None) -> Config:
+    """Load a partial YAML profile over the canonical typed defaults.
+
+    With no path, no file-system lookup occurs: installed packages, the CLI,
+    MCP, tests, and scripts all receive exactly ``Config()``.
+    """
     if path is None:
-        path = Path(__file__).resolve().parents[2] / "config" / "default.yaml"
-    with open(path) as f:
-        return Config.model_validate(yaml.safe_load(f) or {})
+        return Config()
+    data = yaml.safe_load(Path(path).read_text()) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"config profile must be a mapping: {path}")
+    return Config.model_validate(data)
+
+
+def parse_overrides(items: Iterable[str]) -> dict[str, Any]:
+    """Parse repeatable ``KEY=YAML_VALUE`` command-line overrides."""
+    parsed: dict[str, Any] = {}
+    for item in items:
+        key, separator, raw = item.partition("=")
+        if not separator or not key.strip():
+            raise ValueError(f"invalid config override {item!r}; expected KEY=VALUE")
+        parsed[key.strip()] = parse_value(raw)
+    return parsed
+
+
+def parse_value(raw: str) -> Any:
+    """Parse one command-line value with the profile's YAML scalar rules."""
+    return yaml.safe_load(raw)
+
+
+def apply_overrides(config: Config, values: Mapping[str, Any]) -> Config:
+    """Return a revalidated config with top-level or dotted-path overrides.
+
+    Dotted role paths such as ``roles.conjecturer.reasoning`` and indexed
+    ensemble paths such as ``roles.judge.1.model`` use the same validation as
+    a YAML profile. Unknown paths fail loudly instead of becoming inert knobs.
+    """
+    data = config.model_dump(mode="python")
+    for path, value in values.items():
+        parts = path.split(".")
+        cursor: Any = data
+        for part in parts[:-1]:
+            if isinstance(cursor, list):
+                try:
+                    index = int(part)
+                except ValueError as error:
+                    raise ValueError(f"config path {path!r}: {part!r} is not a list index") from error
+                if index < 0 or index >= len(cursor):
+                    raise ValueError(f"unknown config path: {path}")
+                cursor = cursor[index]
+            elif isinstance(cursor, dict) and part in cursor:
+                cursor = cursor[part]
+            elif parts[0] == "roles" and cursor is data["roles"]:
+                cursor[part] = {}
+                cursor = cursor[part]
+            else:
+                raise ValueError(f"unknown config path: {path}")
+        leaf = parts[-1]
+        if isinstance(cursor, list):
+            try:
+                index = int(leaf)
+            except ValueError as error:
+                raise ValueError(f"config path {path!r}: {leaf!r} is not a list index") from error
+            if index < 0 or index >= len(cursor):
+                raise ValueError(f"unknown config path: {path}")
+            cursor[index] = value
+        elif isinstance(cursor, dict) and (
+            leaf in cursor
+            or (parts[0] == "roles" and leaf in EndpointSpec.model_fields)
+            or (parts[0] == "roles" and cursor is data["roles"])
+        ):
+            cursor[leaf] = value
+        else:
+            raise ValueError(f"unknown config path: {path}")
+    return Config.model_validate(data)
+
+
+def role_api_key_envs(
+    config: Config,
+    roles: Iterable[str] | None = None,
+) -> set[str]:
+    """Environment-variable names referenced by selected enabled roles."""
+    names: set[str] = set()
+    selected = config.roles.values() if roles is None else (
+        config.roles.get(role) for role in roles
+    )
+    for configured in selected:
+        seats = configured if isinstance(configured, list) else [configured]
+        for seat in seats:
+            if isinstance(seat, dict) and seat.get("endpoint") and seat.get("api_key_env"):
+                names.add(str(seat["api_key_env"]))
+    return names

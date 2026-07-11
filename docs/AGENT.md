@@ -40,9 +40,13 @@ deepreason --root .deepreason theory <id-prefix>
 
 ## Configure the engine LLM(s)
 
-Copy `config/deepseek.yaml` and edit the role table — endpoint, model,
-provider, reasoning, caps are all config (`llm/providers.py` maps the
-neutral `reasoning` knob to each provider's wire format):
+Copy `config/deepseek.yaml` and edit the role table. It is a partial profile:
+omitted knobs inherit the one typed default schema, and unknown knobs fail
+validation instead of being silently ignored. Run `deepreason config` to see
+all built-in values, or `deepreason --config your.yaml config` to see the
+fully resolved profile. Endpoint, model, provider, reasoning, and caps are all
+config (`llm/providers.py` maps the neutral `reasoning` knob to each provider's
+wire format):
 
 ```yaml
 roles:
@@ -56,7 +60,7 @@ roles:
 API keys are read from the named environment variables — never from
 files. `model: auto` / `auto-alt` are resolved against the provider's
 live `/models` list at adapter build time (`llm/endpoints.py:resolve_model`,
-used by `deepreason run`, the MCP server, and the scripts alike); name a
+used by `deepreason run`, the MCP server, and live scripts alike); name a
 real model id when you need the run pinned for reproducibility. Two judge
 seats from different model families satisfy the §9 cross-family rule
 properly.

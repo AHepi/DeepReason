@@ -18,7 +18,12 @@ from pathlib import Path
 
 _PROTOCOL = "2024-11-05"
 _ROOT = {"root": {"type": "string", "description": "harness state directory", "default": ".deepreason"}}
-_CONFIG = {"config": {"type": "string", "description": "knob file path (default: config/default.yaml)"}}
+_CONFIG = {
+    "config": {
+        "type": "string",
+        "description": "partial YAML profile path (default: built-in typed defaults)",
+    }
+}
 
 
 def _tools() -> list[dict]:

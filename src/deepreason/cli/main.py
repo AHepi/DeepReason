@@ -27,10 +27,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--root", default=".deepreason", help="harness state directory (blobs, objects, log)"
     )
-    parser.add_argument("--config", default=None, help="knob file (default: config/default.yaml)")
+    parser.add_argument(
+        "--config", default=None,
+        help="partial YAML profile (default: built-in typed defaults)",
+    )
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
                                  "your API key privately")
+    sub.add_parser("config", help="print the complete effective configuration")
     make_cmd = sub.add_parser(
         "make", help='build a website from a description, e.g. '
                      'deepreason make "a recipe website" — plans it, designs '
@@ -137,6 +141,15 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "setup":
         easy.setup_wizard()
+        return 0
+
+    if args.command == "config":
+        import yaml
+
+        from deepreason.config import load as load_config
+
+        configured = load_config(Path(args.config) if args.config else None)
+        print(yaml.safe_dump(configured.model_dump(mode="json"), sort_keys=False), end="")
         return 0
 
     if args.command == "make":

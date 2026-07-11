@@ -13,17 +13,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-
-from live_run import MAX_TOKENS, REASONING, list_models, pick_alt, pick_model  # noqa: E402
 
 from deepreason.config import load as load_config  # noqa: E402
 from deepreason.harness import Harness  # noqa: E402
 from deepreason.informal.skeleton import compile_forbidden_commitments, parse_skeleton  # noqa: E402
 from deepreason.informal.trial import run_trial  # noqa: E402
-from deepreason.llm.adapter import LLMAdapter  # noqa: E402
+from deepreason.llm.adapter import build_adapter  # noqa: E402
 from deepreason.llm.budget import TokenMeter  # noqa: E402
-from deepreason.llm.endpoints import OpenAICompatEndpoint  # noqa: E402
 from deepreason.ontology import Interface, Provenance, Status  # noqa: E402
 from deepreason.rules.crit import crit_argumentative_batch, crit_program  # noqa: E402
 
@@ -125,26 +121,7 @@ def main() -> int:
     print(f"registered solo design: {artifact.id[:12]} "
           f"[{harness.state.status.get(artifact.id).value}]")
 
-    base = "https://api.deepseek.com"
-    available = list_models(base, api_key)
-    primary, alt = pick_model(available, None), pick_alt(available, pick_model(available, None))
-
-    def endpoint(role, model, temperature):
-        return OpenAICompatEndpoint(
-            base, model, api_key=api_key, temperature=temperature,
-            max_tokens=MAX_TOKENS.get(role), json_mode=True,
-            request_logprobs=True, reasoning=REASONING.get(role),
-        )
-
-    adapter = LLMAdapter(
-        {
-            "argumentative_critic": endpoint("argumentative_critic", primary, 0.7),
-            "defender": endpoint("defender", primary, 0.7),
-            "variator": endpoint("variator", primary, 1.0),
-            "judge": [endpoint("judge", primary, 0.0), endpoint("judge", alt, 0.0)],
-        },
-        harness.blobs, retry_max=config.RETRY_MAX, meter=meter,
-    )
+    adapter = build_adapter(config, harness.blobs, meter=meter)
 
     diagnostics: list = []
     crit_program(harness, artifact.id)

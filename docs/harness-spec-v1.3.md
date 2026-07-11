@@ -520,7 +520,18 @@ from config. SQLite/FAISS-style index only if scale demands.
 
 Pydantic models throughout.
 
-## 15. Config knobs (single file, exposed)
+## 15. Config knobs (single typed schema, optional profile)
+
+`deepreason.config.Config` is the sole source of defaults and accepted field
+names. A YAML config is a partial profile containing only intentional
+overrides; omitted values inherit the typed defaults, while unknown top-level
+knobs or role-seat fields are errors. Profile-driven CLI, MCP,
+setup-generated configs, and general-purpose live scripts MUST load through
+`deepreason.config.load` and construct endpoints through
+`deepreason.llm.adapter.build_adapter`. Pre-registered experiment arms MAY
+instantiate the same schema directly to keep their manipulations explicit.
+`deepreason config` renders the complete effective configuration for
+inspection.
 
 | Knob | Meaning | Start |
 |------|---------|-------|

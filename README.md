@@ -62,6 +62,8 @@ claude mcp add deepreason -- deepreason-mcp
 
 Engine models are per-role config, no code changes — see
 [`docs/AGENT.md`](docs/AGENT.md).
+Configuration has one typed source of defaults; YAML files are partial
+profiles, and `deepreason config` prints the complete effective result.
 
 ### MiniReason
 

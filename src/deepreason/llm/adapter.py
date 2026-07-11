@@ -228,11 +228,15 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     )
 
 
-def build_adapter(config, blob_store, meter=None) -> LLMAdapter:
+def build_adapter(config, blob_store, meter=None, only_roles: set[str] | None = None) -> LLMAdapter:
     """Build from the §15 role table. Roles with a null endpoint are absent
-    (has_role False); a list spec becomes an ensemble (judge, §9)."""
+    (has_role False); a list spec becomes an ensemble (judge, §9).
+    ``only_roles`` lets a single-purpose view use its configured seat without
+    resolving or requiring credentials for unrelated engine roles."""
     endpoints: dict[str, object] = {}
     for role, spec in (config.roles or {}).items():
+        if only_roles is not None and role not in only_roles:
+            continue
         if isinstance(spec, list):
             built = [e for e in (_endpoint_from_spec(s) for s in spec) if e is not None]
             if built:

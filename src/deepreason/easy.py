@@ -23,6 +23,8 @@ from pathlib import Path
 
 import yaml
 
+from deepreason.config import Config, role_api_key_envs
+
 # Generic website smoke script: loads, renders something, survives two
 # seconds of virtual time. Deliberately minimal — DOM assertions gate only
 # "it is a working page"; QUALITY criticism is the argumentative and vision
@@ -91,7 +93,7 @@ _BUILD_TEMPLATE = (
     "groundwork, not suggestions.\n\n" + _DESCRIPTION_TEMPLATE + "\n" + _SCOPE_NOTE
 )
 
-_KNOBS = {
+MAKE_OVERRIDES = {
     # The validated app-run shape (runs/acting_loop_app2): no schools/fuzz/
     # property machinery for a website build; browser evidence + criticism.
     "FLOOR": 1, "K": 4, "VS_K": 2, "N_SCHOOLS": 0, "FUZZ_N": 0,
@@ -237,15 +239,21 @@ def setup_wizard(input_fn=input, getpass_fn=None) -> Path:
         key = getpass_fn("Paste your API key (input stays hidden): ").strip()
     save_credential(preset["env"], key)
 
-    config = {**_KNOBS, "roles": preset["roles"](base, model, preset["env"])}
+    profile = {
+        **MAKE_OVERRIDES,
+        "roles": preset["roles"](base, model, preset["env"]),
+    }
     if preset["vision"]:
-        config["VISION_CRIT_PER_CYCLE"] = 2
+        profile["VISION_CRIT_PER_CYCLE"] = 2
+    # The wizard and hand-written profiles pass through the exact same strict
+    # schema. Keep the file partial; omitted values inherit Config defaults.
+    Config.model_validate(profile)
     path = config_path()
     path.write_text(
         "# DeepReason engine config — written by `deepreason setup`.\n"
         "# Edit models/limits freely. Your API key is NOT here: it lives in\n"
         f"# {credentials_path()} (private to your user), referenced by name.\n"
-        + yaml.safe_dump(config, sort_keys=False)
+        + yaml.safe_dump(profile, sort_keys=False)
     )
     print(f"\nDone. Config: {path}")
     print(f"Key stored:  {credentials_path()} (only your user can read it)")
@@ -468,13 +476,9 @@ def make(description: str, out: str | None = None, cycles: int = 10,
                 f"(looked for {cfg_path})."
             )
     cfg = load(cfg_path)
-    missing = sorted({
-        seat["api_key_env"]
-        for role in cfg.roles.values()
-        for seat in (role if isinstance(role, list) else [role])
-        if isinstance(seat, dict) and seat.get("api_key_env")
-        and not os.environ.get(seat["api_key_env"])
-    })
+    missing = sorted(
+        name for name in role_api_key_envs(cfg) if not os.environ.get(name)
+    )
     if missing:
         raise SystemExit(
             f"Missing API key ({', '.join(missing)}). Run `deepreason setup` "
