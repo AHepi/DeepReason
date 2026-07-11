@@ -72,6 +72,59 @@ def test_partial_usage_dict_counts_tokens():
     # A usage dict missing every count falls back to the chars/4 estimate.
     est = _usage_tokens({"foo": 1}, "a" * 40, "b" * 40)
     assert est["prompt_tokens"] == 10 and est["completion_tokens"] == 10
+    # A provider-reported side remains exact; only its missing peer is
+    # estimated from the corresponding request/response text.
+    assert _usage_tokens({"prompt_tokens": 7}, "x" * 40, "y" * 20) == {
+        "prompt_tokens": 7,
+        "completion_tokens": 5,
+    }
+    assert _usage_tokens({"completion_tokens": 3}, "x" * 40, "y" * 20) == {
+        "prompt_tokens": 10,
+        "completion_tokens": 3,
+    }
+
+
+@pytest.mark.parametrize(
+    ("partial_usage", "reported_side", "reported_value"),
+    [
+        ({"prompt_tokens": 7}, "prompt_tokens", 7),
+        ({"completion_tokens": 3}, "completion_tokens", 3),
+    ],
+)
+def test_one_sided_usage_estimates_peer_and_reconciles_log(
+    tmp_path, partial_usage, reported_side, reported_value
+):
+    """One-sided live usage advances both meter sides and the exact total is
+    carried into the replay log; no missing side is silently written as 0."""
+
+    class OneSidedUsageEndpoint(MockEndpoint):
+        def complete(self, prompt):
+            out = super().complete(prompt)
+            self.last_usage = dict(partial_usage)
+            return out
+
+    harness = Harness(tmp_path / reported_side)
+    meter = TokenMeter()
+    adapter = LLMAdapter(
+        {"conjecturer": OneSidedUsageEndpoint([GOOD])},
+        harness.blobs,
+        retry_max=2,
+        meter=meter,
+    )
+    _, llm_call = adapter.call("conjecturer", "PACK", ConjecturerOutput)
+    harness.record_llm_calls([llm_call], "usage-accounting-test")
+
+    assert getattr(meter, reported_side) == reported_value
+    missing_side = (
+        meter.completion_tokens
+        if reported_side == "prompt_tokens"
+        else meter.prompt_tokens
+    )
+    assert missing_side > 0
+    assert llm_call.tokens == meter.total
+    assert sum(
+        event.llm.tokens for event in harness.log.read() if event.llm
+    ) == meter.total
 
 
 def test_partial_usage_dict_trips_budget(tmp_path):
@@ -295,8 +348,22 @@ def test_every_llm_call_reaches_the_log(tmp_path):
         "argumentative_critic": MockEndpoint(lambda p: json.dumps(
             {"attack": True, "case": "violates clause 1: no mechanism named"})),
         "defender": MockEndpoint(lambda p: json.dumps({"answer": "the defence answers"})),
-        "judge": MockEndpoint(lambda p: json.dumps(
-            {"verdict": "fail", "decisive_point": "violates clause 1"})),
+        "judge": [
+            MockEndpoint(
+                lambda p: json.dumps(
+                    {"verdict": "fail", "decisive_point": "violates clause 1"}
+                ),
+                name="mock://judge-gemma",
+                model="gemma-test",
+            ),
+            MockEndpoint(
+                lambda p: json.dumps(
+                    {"verdict": "fail", "decisive_point": "violates clause 1"}
+                ),
+                name="mock://judge-qwen",
+                model="qwen-test",
+            ),
+        ],
         "variator": MockEndpoint(lambda p: json.dumps(
             {"edits": [{"content": "paraphrase one"}, {"content": "paraphrase two"}]})),
     }

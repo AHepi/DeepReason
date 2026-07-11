@@ -126,6 +126,34 @@ def test_forbidden3_widen_is_clamped_to_envelope_max(tmp_path):
     assert ep.max_tokens > 800, "controller never widened despite persistent truncation"
 
 
+def test_controller_does_not_normalize_an_explicit_cap_outside_its_envelope(tmp_path):
+    h = _harness_with_problem(tmp_path)
+    ep = _CapEndpoint(needs=99999)
+    ep.max_tokens = 7000  # an explicit compiled website-route cap
+    adapter = LLMAdapter({"conjecturer": ep}, h.blobs)
+    c = Controller(h, adapter)
+    from deepreason.ontology import Rule
+    from deepreason.ontology.event import LLMCall
+
+    for _ in range(2):
+        h._commit(
+            Rule.CONJ,
+            inputs=["pi-tides"],
+            outputs=[],
+            llm=LLMCall(
+                role="conjecturer", model="m", endpoint="e",
+                prompt_ref="inline:p", raw_ref="inline:r", truncated=True,
+            ),
+        )
+
+    assert c.step() is None
+    assert ep.max_tokens == 7000
+    assert not any(
+        event.inputs and event.inputs[0] == "controller-update"
+        for event in h.log.read()
+    )
+
+
 # --- #5: liveness — no registered problem starves ---------------------- #
 def test_forbidden5_liveness_queue_starves_no_problem(tmp_path):
     h = Harness(tmp_path / "run")
@@ -187,6 +215,54 @@ def test_forbidden6_fail_static_holds_under_standing_attack(tmp_path):
                            if a.provenance.role.value == "controller"
                            and a.content_ref.startswith("inline:{"))
     assert n_policies_after == n_policies_before, "emitted a policy while under attack"
+
+
+def test_resume_rehydrates_only_latest_accepted_controller_policy(tmp_path):
+    from deepreason.ontology import Provenance, Rule, Warrant, WarrantType
+
+    h = _harness_with_problem(tmp_path)
+    original_endpoint = _CapEndpoint(needs=99999)
+    original = Controller(
+        h, LLMAdapter({"conjecturer": original_endpoint}, h.blobs)
+    )
+    original._cycle = 1
+    original._emit_policy({"cap:conjecturer": 1280}, {"test": "accepted"})
+    accepted_policy = original._last_policy()
+    original._cycle = 2
+    original._emit_policy({"cap:conjecturer": 2048}, {"test": "refuted"})
+    refuted_policy = original._last_policy()
+    assert accepted_policy is not None and refuted_policy is not None
+
+    attack_nu = h.create_artifact(
+        "nu: the newer process policy is unsound",
+        provenance=Provenance(role="critic"),
+    )
+    h.create_artifact(
+        "critic: reject the newer policy",
+        provenance=Provenance(role="critic"),
+        warrants=[Warrant(
+            id="w:attack:resume-policy",
+            target=refuted_policy,
+            type=WarrantType.ARGUMENTATIVE,
+            validity_node=attack_nu.id,
+        )],
+        rule=Rule.CRIT,
+    )
+
+    resumed_endpoint = _CapEndpoint(needs=99999)
+    resumed = Controller(
+        Harness(h.root),
+        LLMAdapter({"conjecturer": resumed_endpoint}, h.blobs),
+    )
+
+    assert resumed_endpoint.max_tokens == 1280
+    assert resumed._last_policy() == refuted_policy
+    rehydrations = [
+        event for event in Harness(h.root).log.read()
+        if event.inputs and event.inputs[0] == "controller-rehydration"
+    ]
+    assert len(rehydrations) == 1
+    assert rehydrations[0].inputs[1] == accepted_policy
 
 
 # --- #7: controller decisions are deterministic from the log ------------ #

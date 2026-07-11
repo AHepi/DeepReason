@@ -15,30 +15,50 @@ before the phases that consume them.
 import re
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
+_ENV_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
 class EndpointSpec(BaseModel):
     """Validated shape of one role endpoint while preserving dict consumers."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", hide_input_in_errors=True)
 
+    # ``endpoint_id`` and ``family`` are setup-time identities used by the
+    # compiled RunManifest.  They are never model-visible and contain no
+    # credential.  Omitting them keeps legacy profiles valid: compilation
+    # derives stable values from endpoint/provider/model.
+    endpoint_id: str | None = None
     endpoint: str | None = None
     model: str | None = None
+    model_revision: str | None = None
+    family: str | None = None
     temperature: float | None = None
     api_key_env: str | None = None
     provider: str | None = None
     reasoning: str | int | None = None
     max_tokens: int | None = Field(default=None, gt=0)
     json_mode: bool = False
+    output_mode: Literal["json_object", "text"] | None = None
+    # Compile-time transport choice. Runtime calls never probe/fall back.
+    output_mechanism: Literal["native_json_schema", "grammar", "json_text"] | None = None
     logprobs: bool = False
     # Transport read timeout (seconds) for one completion attempt. None keeps
     # the endpoint default. Slow hosted open-model endpoints need headroom:
     # a run was killed by ~110s+ generations against a fixed 120s wait.
     timeout_s: int | None = Field(default=None, gt=0)
+
+    @field_validator("api_key_env")
+    @classmethod
+    def _credential_reference_is_an_env_name(cls, value: str | None) -> str | None:
+        if value is not None and not _ENV_IDENTIFIER.fullmatch(value):
+            raise ValueError("api_key_env must be a POSIX environment-variable name")
+        return value
 
 
 class ImportPolicy(BaseModel):
@@ -100,7 +120,15 @@ class ImportPolicy(BaseModel):
 
 
 class Config(BaseModel):
-    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+    model_config = ConfigDict(
+        extra="forbid", validate_assignment=True, hide_input_in_errors=True
+    )
+
+    # Orthogonal process profiles. engine_profile selects the available
+    # deterministic harness surface; model_profile changes only packs, wire
+    # contracts, batching and repair presentation. Neither is ontology data.
+    engine_profile: Literal["mini", "full"] = "full"
+    model_profile: Literal["compact", "standard", "frontier"] = "standard"
 
     # Unification (§7)
     FLOOR: int = 1

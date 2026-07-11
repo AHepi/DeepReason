@@ -118,6 +118,105 @@ class Controller:
         self._policies: list[str] = []  # policy artifact ids, in emission order
         self._cycle = 0
         self._drops_seen = 0  # transport-drop events already consumed
+        self._rehydrate_process_state()
+
+    def _policy_payload(self, artifact_id: str) -> dict | None:
+        artifact = self.harness.state.artifacts.get(artifact_id)
+        if (
+            artifact is None
+            or artifact.provenance.role.value != "controller"
+            or not artifact.content_ref.startswith("inline:")
+        ):
+            return None
+        try:
+            body = json.loads(artifact.content_ref[len("inline:"):])
+        except (TypeError, ValueError):
+            return None
+        if not isinstance(body, dict) or not isinstance(body.get("knobs"), dict):
+            return None
+        return body
+
+    def _validated_policy_knobs(self, body: dict) -> dict[str, int]:
+        knobs: dict[str, int] = {}
+        for knob, value in body.get("knobs", {}).items():
+            if knob not in GENERATOR_LEDGER or knob not in self.envelopes:
+                continue
+            if type(value) is not int:  # bool is not a transport limit
+                continue
+            envelope = self.envelopes[knob]
+            if envelope["min"] <= value <= envelope["max"]:
+                knobs[knob] = value
+        return knobs
+
+    def _knob_needs_apply(self, knob: str, value: int) -> bool:
+        if knob == "timeout:transport":
+            endpoints = [
+                endpoint
+                for entry in self.adapter.endpoints.values()
+                for endpoint in (
+                    entry if isinstance(entry, (list, tuple)) else [entry]
+                )
+            ]
+            return any(
+                hasattr(endpoint, "timeout_s")
+                and endpoint.timeout_s != value
+                for endpoint in endpoints
+            )
+        role = knob.split(":", 1)[1]
+        entry = self.adapter.endpoints.get(role)
+        if entry is None:
+            return False
+        endpoints = entry if isinstance(entry, (list, tuple)) else [entry]
+        return any(getattr(endpoint, "max_tokens", None) != value for endpoint in endpoints)
+
+    def _rehydrate_process_state(self) -> None:
+        """Restore only logged, accepted controller process state on resume."""
+        events = list(self.harness.log.read())
+        self._drops_seen = sum(
+            int(bool(event.inputs) and event.inputs[0] == TRANSPORT_DROP_TAG)
+            for event in events
+        )
+        for event in events:
+            if event.rule != Rule.REFL:
+                continue
+            for artifact_id in event.outputs:
+                body = self._policy_payload(artifact_id)
+                if body is None:
+                    continue
+                self._policies.append(artifact_id)
+                cycle = body.get("cycle")
+                if type(cycle) is not int or cycle < 0:
+                    continue
+                self._cycle = max(self._cycle, cycle)
+                for knob in self._validated_policy_knobs(body):
+                    self._last_move[knob] = max(
+                        self._last_move.get(knob, -999), cycle
+                    )
+
+        accepted = next(
+            (
+                artifact_id
+                for artifact_id in reversed(self._policies)
+                if self.harness.state.status.get(artifact_id) == Status.ACCEPTED
+            ),
+            None,
+        )
+        if accepted is None:
+            return
+        body = self._policy_payload(accepted)
+        if body is None:
+            return
+        changed: dict[str, int] = {}
+        for knob, value in self._validated_policy_knobs(body).items():
+            if self._knob_needs_apply(knob, value):
+                self._apply_cap(knob, value)
+                changed[knob] = value
+        if changed:
+            self.harness.record_measure(inputs=[
+                "controller-rehydration",
+                accepted,
+                json.dumps(changed, sort_keys=True, separators=(",", ":")),
+            ])
 
     # -- process signals: touches ONLY event.llm process fields ----------- #
     def _process_signals(self) -> dict[str, dict]:
@@ -162,6 +261,14 @@ class Controller:
             if self._cycle - self._last_move.get(knob, -999) < self.envelopes[knob]["dwell"]:
                 continue  # damping: respect min-dwell
             cur = caps[role]
+            envelope = self.envelopes[knob]
+            # A compiled route may intentionally start outside this legacy
+            # controller's safe envelope (for example a 7k compact website
+            # cap).  The controller has no authority to normalize such a
+            # setting; treating a truncation signal as a clamped 5k update
+            # would perversely *shrink* it. Hold the explicit setting.
+            if not envelope["min"] <= cur <= envelope["max"]:
+                continue
             if sig["truncation_rate"] > TRUNC_HI:
                 new = clamp(knob, round(cur * self.envelopes[knob]["step"]))
                 if new != cur:
@@ -287,11 +394,10 @@ class Controller:
         for aid in reversed(self._policies):
             if self.harness.state.status.get(aid) != Status.ACCEPTED:
                 continue
-            try:
-                body = json.loads(self.harness.state.artifacts[aid].content_ref[len("inline:"):])
-            except (ValueError, IndexError):
+            body = self._policy_payload(aid)
+            if body is None:
                 continue
-            for knob, value in body.get("knobs", {}).items():
+            for knob, value in self._validated_policy_knobs(body).items():
                 self._apply_cap(knob, value)
             return
 

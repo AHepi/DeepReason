@@ -22,6 +22,8 @@ from deepreason.llm.contracts import (
     PairwiseRuling,
     VariatorOutput,
 )
+from deepreason.llm.packs import aliases_for_values
+from deepreason.llm.wire import wire_contract_for
 from deepreason.canonical import canonical_json
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
@@ -88,21 +90,34 @@ def _judge_pack(harness, config, body, target_text, case, answer,
     return "\n".join(lines)
 
 
-def _judge_all(harness, adapter, pack: str, diagnostics, target_id, calls: list):
+def _judge_all(
+    harness,
+    adapter,
+    pack: str,
+    diagnostics,
+    target_id,
+    calls: list,
+    aliases,
+):
     """Rule with the full ensemble; disagreement blocks (never averaged).
     Appends every seat's LLMCall to the CALLER's list as it lands — a local
     list dropped seat 1's completed spend whenever a later seat raised
     (found by the mock accounting sweep: judge2-storm leaked seat 1)."""
-    ruling, first = adapter.call("judge", pack, JudgeRuling)
+    judge_seats = adapter.require_cross_family_judges()
+    ruling, first = adapter.call("judge", pack, JudgeRuling, aliases=aliases)
     calls.append(first)
     seat_calls = [first]
-    for index in range(1, adapter.ensemble_size("judge")):
-        other, call = adapter.call("judge", pack, JudgeRuling, endpoint_index=index)
+    seat_rulings = [ruling]
+    for index in range(1, len(judge_seats)):
+        other, call = adapter.call(
+            "judge", pack, JudgeRuling, endpoint_index=index, aliases=aliases
+        )
         calls.append(call)
         seat_calls.append(call)
+        seat_rulings.append(other)
         if other.verdict != ruling.verdict:
-            return None, seat_calls  # ensemble split: critic-gaming signal
-    return ruling, seat_calls
+            return None, seat_calls, seat_rulings  # critic-gaming signal
+    return ruling, seat_calls, seat_rulings
 
 
 def run_trial(harness, target_id: str, commitment, adapter, config,
@@ -114,6 +129,10 @@ def run_trial(harness, target_id: str, commitment, adapter, config,
     for role in ("argumentative_critic", "defender", "judge"):
         if not adapter.has_role(role):
             return _block(harness, f"no-{role}-role", target_id, diagnostics)
+    # Normative rubric policy is a process preflight, not a model decision.
+    # Check the immutable leases before even the critic or defender endpoint
+    # can be called, so a malformed convenience adapter cannot partially run.
+    adapter.require_cross_family_judges()
     # Every call the trial makes reaches the log exactly once (§0): the
     # decisive ruling rides the critic event; everything else — critic case,
     # defence, extra ensemble seats, order-swap and paraphrase re-rulings,
@@ -147,14 +166,33 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         "Draft the strongest case that the target violates the standard, citing "
         "specific clauses/cases — or attack=false if none exists.",
     ])
-    case_out, call = adapter.call("argumentative_critic", critic_pack, ArgumentativeCriticOutput)
+    critic_aliases = aliases_for_values([target_text], prefix="A")
+    critic_contract = wire_contract_for(
+        "argumentative_critic",
+        ArgumentativeCriticOutput,
+        adapter.profile_for("argumentative_critic"),
+        critic_aliases,
+        expected_target=target_text,
+    )
+    case_out, call = adapter.call(
+        "argumentative_critic",
+        critic_pack,
+        ArgumentativeCriticOutput,
+        aliases=critic_aliases,
+        wire_contract=critic_contract,
+    )
     calls.append(call)
     if not case_out.attack or not case_out.case.strip():
         return None  # no case, no trial
 
     # 2. The defender answers.
     defence_pack = f"THE CASE AGAINST THE TARGET:\n{case_out.case}\n\nTARGET:\n{target_text}"
-    defence, call = adapter.call("defender", defence_pack, DefenderOutput)
+    defence, call = adapter.call(
+        "defender",
+        defence_pack,
+        DefenderOutput,
+        aliases=aliases_for_values([case_out.case], prefix="K"),
+    )
     calls.append(call)
 
     # 3. The judge rules on the exchange (precedent slice in the pack).
@@ -165,17 +203,22 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
             anchor_text = content_text(harness.state.artifacts[anchors[0]], harness.blobs)
     pack = _judge_pack(harness, config, body, target_text, case_out.case,
                        defence.answer, standard.id, anchor_text)
-    ruling, judge_calls = _judge_all(harness, adapter, pack, diagnostics, target_id, calls)
+    judge_aliases = aliases_for_values(
+        [case_out.case, defence.answer], prefix="K"
+    )
+    ruling, judge_calls, judge_rulings = _judge_all(
+        harness, adapter, pack, diagnostics, target_id, calls, judge_aliases
+    )
     if ruling is None:
         return _block(harness, "ensemble-split", target_id, diagnostics)
     if ruling.verdict != "fail":
         return None  # the work survives; nothing registers
 
     exchange = f"{case_out.case}\n{defence.answer}"
-    checks: dict = {"ensemble": adapter.ensemble_size("judge")}
+    checks: dict = {"ensemble": len(adapter.require_cross_family_judges())}
 
     # 4. Referential integrity (program check).
-    if ruling.decisive_point not in exchange:
+    if any(item.decisive_point not in exchange for item in judge_rulings):
         return _block(harness, "referential-integrity", target_id, diagnostics)
     checks["referential_integrity"] = True
 
@@ -183,14 +226,27 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
     if body["mode"] in ("anchored", "pairwise") and anchor_text is not None:
         swapped_pack = _judge_pack(harness, config, body, target_text, case_out.case,
                                    defence.answer, standard.id, anchor_text, swapped=True)
-        swapped, _ = _judge_all(harness, adapter, swapped_pack, diagnostics, target_id, calls)
+        swapped, _, swapped_rulings = _judge_all(
+            harness,
+            adapter,
+            swapped_pack,
+            diagnostics,
+            target_id,
+            calls,
+            judge_aliases,
+        )
         if swapped is None or swapped.verdict != ruling.verdict:
             return _block(harness, "order-swap", target_id, diagnostics)
+        if any(item.decisive_point not in exchange for item in swapped_rulings):
+            return _block(harness, "referential-integrity", target_id, diagnostics)
         checks["order_swap"] = "pass"
     else:
         checks["order_swap"] = "skipped"
 
-    # 6. Paraphrase spot-check: any flip => no warrant.
+    # 6. Paraphrase spot-check: every re-ruling uses the same preflighted
+    # cross-family ensemble as the decisive ruling.  A lone seat can never
+    # issue (or preserve) a rubric warrant: either a split or a unanimous
+    # non-fail blocks the trial.
     if adapter.has_role("variator"):
         n = config.TRIAL_PARAPHRASE_N
         para_out, call = adapter.call(
@@ -204,8 +260,20 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         for paraphrase in [e.content for e in para_out.edits[:n]]:
             repack = pack.replace(exchange, paraphrase) if exchange in pack else (
                 pack + "\n\nPARAPHRASED EXCHANGE:\n" + paraphrase)
-            reruling, call = adapter.call("judge", repack, JudgeRuling)
-            calls.append(call)
+            paraphrase_aliases = aliases_for_values([paraphrase], prefix="K")
+            reruling, _, _ = _judge_all(
+                harness,
+                adapter,
+                repack,
+                diagnostics,
+                target_id,
+                calls,
+                paraphrase_aliases,
+            )
+            if reruling is None:
+                return _block(
+                    harness, "ensemble-split", target_id, diagnostics
+                )
             if reruling.verdict != "fail":
                 flips += 1
         if flips:
@@ -277,11 +345,22 @@ def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, confi
 
 def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
                     adapter, diagnostics, calls: list):
-    ruling1, llm_call = adapter.call("judge", pack(a_text, b_text, "A", "B"), PairwiseRuling)
+    aliases = aliases_for_values([a_text, b_text], prefix="K")
+    ruling1, llm_call = adapter.call(
+        "judge",
+        pack(a_text, b_text, "A", "B"),
+        PairwiseRuling,
+        aliases=aliases,
+    )
     calls.append(llm_call)
     if ruling1.winner == "neither":
         return None
-    ruling2, call = adapter.call("judge", pack(b_text, a_text, "A", "B"), PairwiseRuling)
+    ruling2, call = adapter.call(
+        "judge",
+        pack(b_text, a_text, "A", "B"),
+        PairwiseRuling,
+        aliases=aliases,
+    )
     calls.append(call)
     # Under the swap, candidate a is labelled B: the same real winner is
     # required (order-swap consistency, §3).

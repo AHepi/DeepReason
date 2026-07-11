@@ -1,14 +1,15 @@
-# Installing DeepReason as an Agent Tool
+# Installing DeepReason as a Deterministic Tool
 
-DeepReason is usable by any LLM on **both sides** of the loop:
+DeepReason separates the model-facing role from the process-facing driver:
 
-- **As the engine** (the γ operator): any OpenAI-compatible provider —
+- **Engine role** (the γ operator): any OpenAI-compatible provider —
   OpenAI, DeepSeek, ollama, llama.cpp server, most gateways — configured
   per role in the §15 role table. No code changes to switch models.
-- **As the operator** (the agent driving the harness): any MCP-capable
-  harness — Claude Code, Claude Desktop, Cursor, or a custom agent loop —
-  installs the harness as a set of MCP tools. Non-MCP agents can shell
-  out to the `deepreason` CLI, which exposes the same verbs.
+- **Driver role:** the deterministic CLI or narrow MCP operations compile an
+  immutable `RunManifest`, bind exact endpoint leases, and invoke the harness.
+  A general LLM is not a supported repository-level operator. Do not ask one
+  to browse YAML, assign roles, choose/fallback models, spawn peers, repair
+  policy, or decide workflow transitions.
 
 ## Install
 
@@ -32,13 +33,13 @@ transport) with zero dependencies beyond the package.
 ### As a CLI (any agent that can run commands)
 
 ```bash
-deepreason --root .deepreason run --budget cycles=6 --token-budget 100000 \
-    --problem problem.yaml --config config/my-provider.yaml
+deepreason --root .deepreason --config config/my-provider.yaml \
+    run --budget cycles=6 --token-budget 100000 --problem problem.yaml
 deepreason --root .deepreason report
 deepreason --root .deepreason theory <id-prefix>
 ```
 
-## Configure the engine LLM(s)
+## Compile the engine LLM route(s)
 
 Copy `config/deepseek.yaml` and edit the role table. It is a partial profile:
 omitted knobs inherit the one typed default schema, and unknown knobs fail
@@ -57,17 +58,45 @@ roles:
     - { endpoint: "https://api.deepseek.com",   model: deepseek-v4-pro,  temperature: 0.0, api_key_env: DEEPSEEK_API_KEY, max_tokens: 1200, json_mode: true }
 ```
 
-API keys are read from the named environment variables — never from
-files. `model: auto` / `auto-alt` are resolved against the provider's
-live `/models` list at adapter build time (`llm/endpoints.py:resolve_model`,
-used by `deepreason run`, the MCP server, and live scripts alike); name a
-real model id when you need the run pinned for reproducibility. Two judge
-seats from different model families satisfy the §9 cross-family rule
-properly.
+API keys are read from named environment variables and never written into a
+manifest, prompt, or log. YAML and `model: auto` / `auto-alt` are source
+configuration only: `deepreason config compile` resolves them before the
+first role-model call and production manifests reject unresolved sentinels.
+Runtime adapters consume only the frozen route matrix. Two judge seats from
+different model families satisfy the §9 cross-family rule properly.
 
-## MCP tool surface (spec §13 verbs)
+```bash
+deepreason doctor --endpoint conjecturer --model gemma4:31b
+deepreason --config config/my-provider.yaml config compile \
+  --single-model gemma4:31b --profile compact --rubric-policy forbid \
+  --out run-manifest.json
+deepreason config inspect --run-manifest run-manifest.json
+deepreason --root runs/example run --budget cycles=6 \
+  --problem problem.yaml --run-manifest run-manifest.json
+```
+
+`--single-model` copies one explicitly configured concrete route to every
+active legal role. It never searches a second provider. Rubric input requires
+a frozen second judge family; otherwise compilation fails with
+`SECOND_JUDGE_FAMILY_REQUIRED`. `--rubric-policy forbid` is valid only for
+program/predicate workloads and rejects rubric-bearing input at preflight.
+
+## MCP tool surface
+
+The default production surface is deliberately limited to three
+harness-owned website operations:
 
 | Tool | What it does |
+|---|---|
+| `start_make` | Start one website workflow from a typed problem and precompiled manifest reference |
+| `make_status` | Read operational progress without changing harness state |
+| `make_result` | Read terminal result metadata and output paths |
+
+The historical spec §13 research/operator surface is quarantined. It is
+available only when a human explicitly starts the server with
+`DEEPREASON_ENABLE_LEGACY_MCP=1`; endpoint models must never receive it:
+
+| Legacy tool | What it does |
 |---|---|
 | `seed_problem` | Register a problem + commitments (+ optional rubric standard) |
 | `run_cycles` | Fund N scheduler cycles under an optional hard token budget |
@@ -80,7 +109,7 @@ properly.
 | `submit_evidence` | Register CANDIDATE evidence you retrieved for a request |
 | `report_research_failure` | Record a failed retrieval attempt (operational, not evidence) |
 
-## The research loop (§12): you are the retrieval backend
+## Legacy research loop (§12)
 
 With `RESEARCH_BACKEND: "agent"` (the default), the harness does no web
 fetching of its own — YOU are the retrieval arm, through an explicit,
@@ -109,7 +138,12 @@ does not touch any status. You return candidate evidence; the court does
 the rest. Your claimed retrieval time is stored as claim metadata — event
 time and ordering are harness-controlled.
 
-## Rules of engagement for the operating agent
+`start_make`, `make_status`, and `make_result` are the supported production
+path. The server intentionally exposes no generic model invoke,
+shell, arbitrary-file, route-edit, guard-bypass, event-write, or status-set
+operation. Endpoint models receive rendered packs only and have no tools.
+
+## Rules for the explicitly enabled legacy client
 
 The tool surface enforces these, but state them in your agent's prompt
 so it doesn't fight the harness:

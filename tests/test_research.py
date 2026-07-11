@@ -580,6 +580,10 @@ def test_mcp_and_cli_expose_the_research_channel(tmp_path, monkeypatch):
     from deepreason import mcp_server
     from deepreason.cli.main import main as cli_main
 
+    # The research verbs are a deliberate migration-only surface; the
+    # production MCP surface remains start/status/result only.
+    monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
+
     harness, rid, _ = _open_research_harness(tmp_path)
     root = str(tmp_path / "run")
 

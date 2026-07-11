@@ -12,10 +12,13 @@ from deepreason import programs
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
 from deepreason.llm.packs import (
+    aliases_for_pack,
     render_batch_crit_pack,
     render_crit_pack,
     render_cx_retry_pack,
 )
+from deepreason.llm.profiles import ModelProfile, get_profile
+from deepreason.llm.wire import wire_contract_for
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
 from deepreason.rules.warrants import (
     execution_backed,
@@ -410,7 +413,21 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         harness.blobs,
         token_budget=config.PACK_TOKEN_BUDGET,
     )
-    output, llm_call = adapter.call("argumentative_critic", pack, ArgumentativeCriticOutput)
+    aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
+    wire_contract = wire_contract_for(
+        "argumentative_critic",
+        ArgumentativeCriticOutput,
+        adapter.profile_for("argumentative_critic"),
+        aliases,
+        expected_target=target_id,
+    )
+    output, llm_call = adapter.call(
+        "argumentative_critic",
+        pack,
+        ArgumentativeCriticOutput,
+        aliases=aliases,
+        wire_contract=wire_contract,
+    )
     if not output.attack or not output.case.strip():
         # No fault found: the call still spent tokens and must be logged once.
         harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
@@ -442,8 +459,22 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
                 harness.blobs,
                 token_budget=config.PACK_TOKEN_BUDGET,
             )
+            retry_aliases = aliases_for_pack(
+                retry_pack, harness.state.artifacts, prefix="A"
+            )
+            retry_contract = wire_contract_for(
+                "argumentative_critic",
+                ArgumentativeCriticOutput,
+                adapter.profile_for("argumentative_critic"),
+                retry_aliases,
+                expected_target=target_id,
+            )
             retry, llm_call = adapter.call(
-                "argumentative_critic", retry_pack, ArgumentativeCriticOutput
+                "argumentative_critic",
+                retry_pack,
+                ArgumentativeCriticOutput,
+                aliases=retry_aliases,
+                wire_contract=retry_contract,
             )
             if not retry.attack:
                 break  # the critic withdrew: nothing further to ground
@@ -502,6 +533,19 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
     if len(target_ids) == 1:
         critic = crit_argumentative(harness, target_ids[0], adapter, config)
         return [critic] if critic else []
+    if (
+        get_profile(adapter.profile_for("argumentative_critic")).name
+        == ModelProfile.COMPACT
+    ):
+        # Compact is one semantic target per call. Preserve per-target warrant
+        # construction and deterministic target order by using the ordinary
+        # single-target path rather than exposing BatchCriticOutput.
+        critics = []
+        for target_id in target_ids:
+            critic = crit_argumentative(harness, target_id, adapter, config)
+            if critic is not None:
+                critics.append(critic)
+        return critics
     pack = render_batch_crit_pack(
         target_ids,
         harness.state,

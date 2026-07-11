@@ -107,7 +107,14 @@ def _designer_adapter(harness, proposals, judge1, judge2):
             "property_designer": MockEndpoint(
                 [json.dumps({"properties": proposals})]
             ),
-            "judge": [MockEndpoint(judge1), MockEndpoint(judge2)],
+            "judge": [
+                MockEndpoint(
+                    judge1, name="mock://judge-gemma", model="gemma-test"
+                ),
+                MockEndpoint(
+                    judge2, name="mock://judge-qwen", model="qwen-test"
+                ),
+            ],
         },
         harness.blobs,
         retry_max=2,
@@ -381,7 +388,18 @@ def test_scheduler_conjectures_ground_truth_and_kills_the_trap(tmp_path):
         {
             "conjecturer": MockEndpoint([conj, conj]),
             "property_designer": MockEndpoint([designs]),
-            "judge": [MockEndpoint([PASS_RULING]), MockEndpoint([PASS_RULING])],
+            "judge": [
+                MockEndpoint(
+                    [PASS_RULING],
+                    name="mock://judge-gemma",
+                    model="gemma-test",
+                ),
+                MockEndpoint(
+                    [PASS_RULING],
+                    name="mock://judge-qwen",
+                    model="qwen-test",
+                ),
+            ],
         },
         harness.blobs,
         retry_max=2,

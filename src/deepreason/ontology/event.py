@@ -27,6 +27,57 @@ class Rule(str, Enum):
     RESEED = "Reseed"
 
 
+class LLMAttempt(FrozenRecord):
+    """Process-only trace for one provider completion attempt.
+
+    Every rejected wire value and repair diagnostic remains reachable from
+    the append-only event record.  These fields are accounting/replay data;
+    they never participate in graph state, warrants, guards, or status.
+    """
+
+    prompt_ref: str
+    raw_ref: str = ""
+    diagnostic_ref: str = ""
+    # Zero-based provider completion index: 0 is the initial generation,
+    # 1 the whole-object correction, and 2 the smallest-subtree correction.
+    # Defaults keep historical events replayable.
+    attempt: int = 0
+    # JSON Pointer reported by validation for this failed attempt, or the
+    # pointer being repaired by a successful retry. Process-only metadata.
+    validation_path: str = ""
+    contract_id: str = ""
+    endpoint_id: str = ""
+    route_sha256: str = ""
+    seat: int = 0
+    model_profile: str = ""
+    # Effective model-facing transport for this call. It may become compact
+    # on a later scheduler cycle after direct-contract exhaustion, while
+    # model_profile remains the frozen RunManifest identity.
+    transport_profile: str = ""
+    repair_scope: str = ""
+    # Exact effective process-health limits immediately before this provider
+    # request. They may differ from the compiled route after a logged,
+    # bounded controller update. Optional defaults keep historical logs
+    # replayable without pretending their unrecorded values are known.
+    max_tokens: int | None = Field(default=None, gt=0)
+    timeout_s: int | None = Field(default=None, gt=0)
+    tokens: int = 0
+    # A request can reach a provider and then fail before a usage block is
+    # returned.  Recording that distinction prevents a zero-token estimate
+    # from being mistaken for proof that no provider work occurred.
+    usage_unknown: bool = False
+    ms: int = 0
+    valid: bool = False
+    output_mechanism: str = "json_text"
+    transport_attempts: int = 1
+    transport_diagnostics: list[str] = Field(default_factory=FrozenList)
+
+    @field_validator("transport_diagnostics", mode="after")
+    @classmethod
+    def _freeze_diagnostics(cls, value):
+        return FrozenList(value)
+
+
 class LLMCall(FrozenRecord):
     role: str
     model: str
@@ -45,6 +96,14 @@ class LLMCall(FrozenRecord):
     # informative even when response-level diversity collapses — the
     # decoupling reported in docs/research (alignment tax): detection §11.3.
     mean_surprisal: float | None = None
+    # Defaults empty for byte-compatible replay of historical roots. New
+    # calls contain exactly one entry per completed/failed schema attempt.
+    attempt_trace: list[LLMAttempt] = Field(default_factory=FrozenList)
+
+    @field_validator("attempt_trace", mode="after")
+    @classmethod
+    def _freeze_attempt_trace(cls, value):
+        return FrozenList(value)
 
 
 class StateDiff(FrozenRecord):

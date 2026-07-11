@@ -45,6 +45,35 @@ SIGNALS: dict[str, str] = {
                   "next stage's frozen foundation (inputs: [signal, stage, "
                   "artifact id]) — attention only; the lineage commitment "
                   "carries the authority",
+    "website-stage": "deterministic website workflow transition result "
+                     "(inputs: [signal, stage, outcome, next action, attempt]); "
+                     "process-only and never an acceptance or status signal",
+    "website-terminal": "website workflow stopped with a typed terminal "
+                        "summary (inputs: [signal, stage, outcome, resume "
+                        "command]); no invalid page is exported",
+    "website-design-mode": "website design transport changed only by the "
+                           "deterministic profile policy (inputs: [signal, "
+                           "source profile, selected recovery mode]); never "
+                           "a model-authored route or status change",
+    "website-compact-call": "one bounded compact website micro-call completed "
+                            "(outline, art direction, or one component "
+                            "contract); its prompt/raw refs and spend are on "
+                            "this process-only event",
+    "website-compact-dropped": "a compact website micro-call exhausted "
+                               "schema or transport repair; its spend remains "
+                               "logged and no partial value is compiled",
+    "website-compact-critic-dropped": "ordinary argumentative criticism of "
+                                      "a compiled compact design hit an "
+                                      "operational/schema failure; no verdict "
+                                      "was inferred from the dropped call",
+    "controller-update": "bounded self-calibration update derived only from "
+                         "process-health signals (inputs: [signal, canonical "
+                         "JSON with knob deltas and evidence]); a Measure "
+                         "only, never an artifact, warrant, or status",
+    "controller-rehydration": "resume restored the latest accepted bounded "
+                              "controller limits onto freshly constructed "
+                              "endpoints (inputs: [signal, policy artifact "
+                              "id, canonical knob JSON]); process-only",
     # Argumentative criticism accounting (rules/crit.py)
     "arg-crit": "argumentative critic ran and registered nothing new "
                 "(no fault found, or the critic artifact deduplicated)",
@@ -154,6 +183,8 @@ PREFIXES: dict[str, str] = {
     "trial-blocked:": "a trial ruling was screened out by a guard (suffix = "
                       "ensemble-split | referential-integrity | "
                       "paraphrase-flip | order-swap | unresolved-standard)",
+    "audit-blocked:": "a judge audit was screened out before graph mutation "
+                      "(suffix = ensemble-split)",
     "audit-hit:": "a planted-flaw audit caught the judge (suffix = nu target)",
     "judge-error-rate:": "measured judge error rate on planted flaws "
                          "(suffix = rate)",

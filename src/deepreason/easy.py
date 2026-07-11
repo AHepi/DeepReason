@@ -70,7 +70,13 @@ Each candidate's `content` MUST be one plan document in plain prose or
 markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
 the key interactions, a content inventory (what text/data actually appears),
 and concrete acceptance criteria a reviewer could check one by one. Be
-specific enough that a designer could work from the plan alone. Differ
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational text" or "a philosophical question." When motion is requested,
+the plan must apply the user's system-level `prefers-reduced-motion` setting
+before any animation starts; a manual toggle may supplement but cannot replace
+that automatic behavior. Differ
 substantively across candidates (different scopes and priorities), not
 rewordings.
 """ + _SCOPE_NOTE
@@ -80,8 +86,10 @@ _DESIGN_TEMPLATE = """Produce a DESIGN SPECIFICATION for this website:
 
 It must implement the plan shown in FOUNDATION faithfully — deviations from
 the plan are criticism bait. Each candidate's `content` MUST be one design
-document in plain prose or markdown — NOT code, NOT HTML: layout per page,
-visual direction (palette, typography, spacing), component inventory,
+document in plain prose or markdown—not implementation HTML, JavaScript, or
+CSS—with one exception: the chunked workflow's explicitly required fenced
+COMPONENT MANIFEST is allowed as structured design metadata. Cover layout per
+page, visual direction (palette, typography, spacing), component inventory,
 interaction and state behavior, and the responsive strategy. Differ
 substantively across candidates (different layouts and visual directions),
 not rewordings.
@@ -170,7 +178,10 @@ The component's contract (machine-checked):
 - Import lineage refs required in the candidate interface: {import_refs}.
 - Animated code must implement the declared initializer/cleanup lifecycle,
   release listeners/observers/timelines/canvases/RAF callbacks, respect
-  prefers-reduced-motion, and preserve the static fallback.
+  prefers-reduced-motion, and preserve the static fallback. JavaScript must
+  explicitly query window.matchMedia('(prefers-reduced-motion: reduce)') and
+  choose the static path when it matches; a manual motion toggle alone does
+  not implement the operating-system preference.
   Lifecycle contract: {lifecycle}.
 - HARD SIZE BOUND: at most {max_chars} characters total.
 
@@ -244,6 +255,41 @@ PROVIDERS = {
         },
         "base": None,  # asked interactively
         "model": None,
+    },
+    # A deliberately single-model profile for controlled operator studies.
+    # It is separate from the general Ollama preset above, which intentionally
+    # mixes models by role.  Here every enabled role, including judges and the
+    # visual critic, is pinned to the same concrete cloud model id.
+    "gemma4_31b": {
+        "label": "Ollama Cloud — Gemma 4 31B everywhere",
+        "env": "OLLAMA_API_KEY",
+        "vision": True,
+        "roles": lambda base, model, env: {
+            "conjecturer": _seat(base, model, env, 0.9, 7000,
+                                 provider="ollama", reasoning="none", logprobs=False),
+            "variator": _seat(base, model, env, 0.9, 6000,
+                               provider="ollama", reasoning="none"),
+            "argumentative_critic": _seat(base, model, env, 0.7, 3200,
+                                           provider="ollama", reasoning="none"),
+            "defender": _seat(base, model, env, 0.5, 2000,
+                              provider="ollama", reasoning="none"),
+            "judge": [
+                _seat(base, model, env, 0.0, 2600, provider="ollama", reasoning="none"),
+                _seat(base, model, env, 0.0, 2600, provider="ollama", reasoning="none"),
+            ],
+            "synthesizer": _seat(base, model, env, 0.8, 2500,
+                                  provider="ollama", reasoning="none"),
+            "summarizer": _seat(base, model, env, 0.3, 1600,
+                                 provider="ollama", reasoning="none"),
+            "vision_critic": _seat(base, model, env, 0.2, 2500,
+                                   provider="ollama", reasoning="none"),
+            "property_designer": _seat(base, model, env, 0.7, 4000,
+                                        provider="ollama", reasoning="none"),
+            "thesis": _seat(base, model, env, 0.3, 6000,
+                            provider="ollama", reasoning="none"),
+        },
+        "base": "https://ollama.com/v1",
+        "model": "gemma4:31b",
     },
 }
 
@@ -728,7 +774,7 @@ def _echo(message: str) -> None:
 
 def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
                token_budget: int | None, echo, stop_on_survivor: bool,
-               min_cycles: int = 1) -> dict:
+               min_cycles: int = 1, run_manifest=None) -> dict:
     """One staged run_scheduler invocation, selection locked to the stage's
     problem family. The ticker counts candidates addressed into the family
     (successor generations included) and — for plan/design stages — stops
@@ -766,7 +812,8 @@ def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
         return False
 
     _, _, accounting = run_scheduler(
-        harness, stage_cfg, cycles, token_budget=token_budget, on_cycle=ticker)
+        harness, stage_cfg, cycles, token_budget=token_budget, on_cycle=ticker,
+        run_manifest=run_manifest)
     return accounting
 
 
@@ -794,22 +841,48 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     machinery. Exports what survives; returns the exported file paths."""
     from deepreason.config import load
     from deepreason.harness import Harness
+    from deepreason.llm.capabilities import CapabilityCache
     from deepreason.ontology import Status
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        bind_run_manifest,
+        compile_run_manifest,
+        config_from_run_manifest,
+        load_run_manifest,
+        materialize_run_config,
+        preflight_payload,
+    )
     from deepreason.views.export import export_run
 
     load_credentials()
-    cfg_path = Path(config) if config else config_path()
-    if not cfg_path.exists():
-        if config is None and sys.stdin.isatty():
-            echo("First run — let's set up your AI provider.\n")
-            cfg_path = setup_wizard()
-            echo("")
-        else:
-            raise SystemExit(
-                "No engine config found. Run `deepreason setup` once first "
-                f"(looked for {cfg_path})."
-            )
-    cfg = load(cfg_path)
+    run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
+    bound_path = run_root / MANIFEST_NAME
+    if bound_path.exists():
+        # A resumed root is governed solely by its first manifest. Source
+        # YAML (including an explicitly supplied path) cannot reroute it.
+        manifest = load_run_manifest(bound_path)
+        cfg = config_from_run_manifest(manifest)
+    else:
+        source_path = Path(config) if config else config_path()
+        if not source_path.exists():
+            if config is None and sys.stdin.isatty():
+                echo("First run — let's set up your AI provider.\n")
+                source_path = setup_wizard()
+                echo("")
+            else:
+                raise SystemExit(
+                    "No engine config found. Run `deepreason setup` once first "
+                    f"(looked for {source_path})."
+                )
+        source_config = load(source_path)
+        # Website commitments are executable program/predicate checks, so a
+        # cross-family rubric ensemble is not silently fabricated here.
+        manifest = compile_run_manifest(
+            source_config,
+            rubric_policy="forbid",
+            capability_cache=CapabilityCache(run_root / "capabilities.json"),
+        )
+        cfg = config_from_run_manifest(manifest)
     missing = sorted(
         name for name in role_api_key_envs(cfg) if not os.environ.get(name)
     )
@@ -819,7 +892,11 @@ def make(description: str, out: str | None = None, cycles: int = 10,
             "to store it, or export it in your shell."
         )
 
-    run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
+    preflight_payload(
+        manifest, {"problem": {"description": description}, "commitments": []}
+    )
+    bind_run_manifest(manifest, run_root)
+    cfg_path = materialize_run_config(manifest, run_root)
     harness = Harness(run_root)
     out_dir = Path(out) if out else Path(_slug(description) + "-site")
     echo(f"Building: {description.strip()}")
@@ -827,10 +904,11 @@ def make(description: str, out: str | None = None, cycles: int = 10,
 
     if not staged:
         return _make_single(harness, cfg, description, out_dir, cycles,
-                            token_budget, echo)
+                            token_budget, echo, run_manifest=manifest)
     if chunked if chunked is not None else cfg.WEBSITE_CHUNKED:
         return _make_chunked(harness, cfg, description, out_dir, cycles,
-                             token_budget, echo)
+                             token_budget, echo, config_path=cfg_path,
+                             run_manifest=manifest)
 
     plan_cycles = max(2, cycles // 4)
     design_cycles = max(2, cycles // 4)
@@ -851,7 +929,7 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     seed_plan(harness, description)
     spend(_run_stage(harness, cfg, label="planning", root_pid="pi-plan",
                      cycles=plan_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True))
+                     stop_on_survivor=True, run_manifest=manifest))
     plan_id = pick_survivor(harness, "pi-plan")
     if plan_id is None:
         echo("\nNo plan survived criticism — that's the tool being honest. "
@@ -868,7 +946,7 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     seed_design(harness, description, plan_id)
     spend(_run_stage(harness, cfg, label="designing", root_pid="pi-design",
                      cycles=design_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True))
+                     stop_on_survivor=True, run_manifest=manifest))
     design_id = pick_survivor(harness, "pi-design")
     if design_id is None:
         echo("\nA plan survived but no design did — try more rounds:\n"
@@ -884,7 +962,7 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     seed_build(harness, description, design_id)
     spend(_run_stage(harness, cfg, label="building", root_pid="pi-website",
                      cycles=build_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=False))
+                     stop_on_survivor=False, run_manifest=manifest))
     echo(f"\nDone thinking ({spent:,} tokens).")
 
     paths = export_run(harness, out_dir)
@@ -913,202 +991,25 @@ def make(description: str, out: str | None = None, cycles: int = 10,
 
 
 def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
-                  token_budget: int | None, echo) -> list[Path]:
-    """plan -> design manifest -> component problems -> deterministic
-    assembly -> integration criticism (-> one targeted repair round).
-    Every stage seeds ordinary problems into the normal scheduler — schools,
-    VS, anti-relapse, criticism and lineage all apply; only the final
-    composition is repository code."""
-    import importlib.util
+                  token_budget: int | None, echo,
+                  config_path: Path | None = None, run_manifest=None) -> list[Path]:
+    """Compatibility facade for the deterministic website state machine."""
+    from deepreason.workflows.website import run_website_workflow
 
-    from deepreason import assets
-    from deepreason.manifest import parse_manifest
-    from deepreason.ontology import Status
-    from deepreason.programs import content_text
-    from deepreason.views.export import export_run
-
-    spent = 0
-
-    def remaining() -> int | None:
-        return None if token_budget is None else max(0, token_budget - spent)
-
-    def spend(accounting: dict) -> None:
-        nonlocal spent
-        spent += (accounting.get("metered_tokens")
-                  or accounting.get("logged_tokens_this_run") or 0)
-
-    plan_cycles = max(2, cycles // 5)
-    design_cycles = max(2, cycles // 5)
-    echo(f"Stages: planning (up to {plan_cycles} rounds) -> designing a "
-         f"component manifest (up to {design_cycles}) -> building each "
-         "component -> assembling deterministically -> integration checks\n")
-
-    # ---- stage 1: plan ----
-    seed_plan(harness, description)
-    spend(_run_stage(harness, cfg, label="planning", root_pid="pi-plan",
-                     cycles=plan_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True))
-    plan_id = pick_survivor(harness, "pi-plan")
-    if plan_id is None:
-        echo("\nNo plan survived criticism — that's the tool being honest. "
-             f'Try more rounds:\n  deepreason make "{description.strip()}" '
-             f"--cycles {cycles + 4}")
-        return []
-    harness.record_measure(inputs=["stage-pick", "plan", plan_id])
-    echo(f"  plan chosen: {_first_line(harness, plan_id)}\n")
-
-    # ---- stage 2: design + manifest ----
-    seed_design_chunked(harness, description, plan_id)
-    spend(_run_stage(harness, cfg, label="designing", root_pid="pi-design",
-                     cycles=design_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True))
-    design_id = pick_survivor(harness, "pi-design")
-    if design_id is None:
-        echo("\nA plan survived but no design (with a valid component "
-             "manifest) did — try more rounds:\n"
-             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
-        return []
-    harness.record_measure(inputs=["stage-pick", "design", design_id])
-    echo(f"  design chosen: {_first_line(harness, design_id)}")
-    manifest, error = parse_manifest(
-        content_text(harness.state.artifacts[design_id], harness.blobs),
-        known_libs=assets.catalog_names(),
+    return run_website_workflow(
+        harness,
+        cfg,
+        description,
+        out_dir,
+        cycles,
+        token_budget,
+        echo,
+        config_path=config_path,
+        run_manifest=run_manifest,
     )
-    if manifest is None:  # unreachable past manifest_wf, but stay honest
-        echo(f"\nThe chosen design's manifest failed to parse ({error}).")
-        return []
-    names = [c.name for c in manifest.ordered()]
-    echo(f"  components: {', '.join(names)}\n")
-
-    # The import plan is accepted and resolved before component problems
-    # exist. A component therefore cannot mutate package selection later.
-    from deepreason.imports import (
-        ImportPlanError,
-        OperationalImportError,
-        register_epistemic_import_failure,
-        resolve_for_design,
-    )
-
-    has_runtime = any(d.preferred_provider != "native" for d in manifest.dependencies)
-    resolved_imports = resolve_for_design(harness, design_id, manifest, cfg)
-    if has_runtime and resolved_imports is None:
-        if harness.state.status.get(design_id) == Status.REFUTED:
-            echo("  dependency plan failed an accepted import commitment; "
-                 "the evidence-backed criticism is on the record")
-        else:
-            echo("  dependency resolution was deferred after an operational "
-                 "failure; the design remains schedulable")
-        return []
-    if resolved_imports is not None:
-        echo("  runtime imports resolved exactly and verified offline\n")
-
-    # ---- stage 3: one bounded problem per component ----
-    comp_cycles = max(1, (cycles - plan_cycles - design_cycles)
-                      // max(1, len(names)))
-    chosen: dict[str, str] = {}
-    for spec in manifest.ordered():
-        seed_component(harness, description, design_id, manifest, spec,
-                       cfg.CHUNK_MAX_CHARS, resolved_imports=resolved_imports)
-        spend(_run_stage(
-            harness, cfg, label=f"component {spec.name}",
-            root_pid=f"pi-comp-{spec.name}", cycles=comp_cycles,
-            token_budget=remaining(), echo=echo, stop_on_survivor=True))
-        survivor = pick_survivor(harness, f"pi-comp-{spec.name}")
-        if survivor is None:
-            echo(f"\nComponent {spec.name!r} produced no surviving fragment "
-                 "— that's the tool being honest. Try more rounds:\n"
-                 f'  deepreason make "{description.strip()}" '
-                 f"--cycles {cycles + 4}")
-            return []
-        chosen[spec.name] = survivor
-        harness.record_measure(
-            inputs=["stage-pick", f"component:{spec.name}", survivor])
-        echo(f"  component {spec.name}: fragment chosen\n")
-
-    # ---- stage 4: deterministic assembly + integration criticism ----
-    browser_backend = None
-    if importlib.util.find_spec("playwright") is not None:
-        from deepreason.browser import PlaywrightBrowser
-
-        browser_backend = PlaywrightBrowser()
-    try:
-        assembled = register_assembly(
-            harness, design_id, manifest, chosen, resolved_imports, cfg.IMPORT_POLICY
-        )
-    except OperationalImportError as exc:
-        harness.record_measure(inputs=["import-deferred", design_id, exc.code])
-        echo("  bundling was deferred after an operational toolchain failure")
-        return []
-    except ImportPlanError as exc:
-        register_epistemic_import_failure(harness, design_id, exc)
-        echo("  bundled imports failed an accepted size or export commitment")
-        return []
-    echo("  assembled deterministically from the accepted fragments")
-    implicated = integration_criticism(
-        harness, assembled.id, manifest, cfg, browser_backend)
-
-    # ---- one TARGETED repair round: successor problems for the implicated
-    # components only, never a full rebuild ----
-    if implicated:
-        echo(f"  integration flagged: {', '.join(sorted(implicated))} — "
-             "spawning targeted repair problems\n")
-        for spec in manifest.ordered():
-            if spec.name not in implicated:
-                continue
-            seed_component(harness, description, design_id, manifest, spec,
-                           cfg.CHUNK_MAX_CHARS, suffix="-r2",
-                           repair_of=chosen[spec.name],
-                           resolved_imports=resolved_imports)
-            spend(_run_stage(
-                harness, cfg, label=f"repairing {spec.name}",
-                root_pid=f"pi-comp-{spec.name}-r2", cycles=comp_cycles,
-                token_budget=remaining(), echo=echo, stop_on_survivor=True))
-            fixed = pick_survivor(harness, f"pi-comp-{spec.name}-r2")
-            if fixed is not None:
-                chosen[spec.name] = fixed
-        try:
-            assembled = register_assembly(
-                harness, design_id, manifest, chosen,
-                resolved_imports, cfg.IMPORT_POLICY,
-            )
-        except OperationalImportError as exc:
-            harness.record_measure(inputs=["import-deferred", design_id, exc.code])
-            return []
-        except ImportPlanError as exc:
-            register_epistemic_import_failure(harness, design_id, exc)
-            return []
-        integration_criticism(
-            harness, assembled.id, manifest, cfg, browser_backend)
-
-    echo(f"\nDone thinking ({spent:,} tokens).")
-    paths = export_run(harness, out_dir)
-    for stage, aid in (("plan", plan_id), ("design", design_id)):
-        doc = out_dir / f"{stage}-{aid[:12]}.md"
-        doc.write_text(content_text(harness.state.artifacts[aid], harness.blobs))
-        paths.append(doc)
-    pages = [p for p in paths if p.suffix == ".html"]
-    if pages:
-        echo(f"\nYour website is ready — assembled from {len(names)} "
-             "component(s) that each survived criticism:")
-        for p in pages:
-            echo(f"  {p.resolve()}")
-        echo("\nDouble-click one to open it in your browser. The folder also "
-             "holds the plan and the design (with its component manifest); "
-             "the README explains why each piece survived.")
-    else:
-        echo("\nComponents survived but the assembled page did not pass "
-             "integration criticism — that's the tool being honest, not "
-             "broken. Try again with more rounds:\n"
-             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
-        if harness.state.status.get(assembled.id) == Status.SUSPENDED_UNSUPPORTED:
-            echo("(Note: a foundation the assembly depends on was refuted "
-                 "under later criticism, so the page was suspended — "
-                 "orphaned, not proven wrong.)")
-    return paths
-
 
 def _make_single(harness, cfg, description: str, out_dir: Path, cycles: int,
-                 token_budget: int | None, echo) -> list[Path]:
+                 token_budget: int | None, echo, *, run_manifest=None) -> list[Path]:
     """The legacy single-stage loop: conjecture finished pages directly."""
     from deepreason.ontology import Status
     from deepreason.ops import run_scheduler
@@ -1133,7 +1034,8 @@ def _make_single(harness, cfg, description: str, out_dir: Path, cycles: int,
              f"{dead} criticized away")
 
     _, _, accounting = run_scheduler(
-        harness, cfg, cycles, token_budget=token_budget, on_cycle=ticker)
+        harness, cfg, cycles, token_budget=token_budget, on_cycle=ticker,
+        run_manifest=run_manifest)
     spent = accounting.get("logged_tokens_this_run") or 0
     echo(f"\nDone thinking ({spent:,} tokens).")
 

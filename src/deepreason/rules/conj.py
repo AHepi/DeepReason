@@ -12,7 +12,7 @@ marks atypical (§11.6).
 """
 
 from deepreason.llm.contracts import ConjecturerOutput
-from deepreason.llm.packs import render_conj_pack
+from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
 
@@ -60,7 +60,10 @@ def conj(
         specs=specs,
         neighbourhood_n=config.NEIGHBOURHOOD_N,
     )
-    output, llm_call = adapter.call("conjecturer", pack, ConjecturerOutput)
+    aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
+    output, llm_call = adapter.call(
+        "conjecturer", pack, ConjecturerOutput, aliases=aliases
+    )
     # Level-2 transmission diagnostic (attention/reporting only, §0): did
     # candidate k actually realize spec k? Logged as a replayable Measure.
     if specs and embedder is not None:

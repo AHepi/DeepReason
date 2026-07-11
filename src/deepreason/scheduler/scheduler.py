@@ -15,6 +15,7 @@ from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
 from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import RouteFirewallError
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
@@ -906,6 +907,14 @@ class Scheduler:
                 self.step()
                 if on_cycle is not None and on_cycle(self):
                     break
+            except RouteFirewallError as e:
+                # A leased route changing during a run is a fail-closed
+                # security/configuration error, not an ordinary model or
+                # transport failure. Preserve any already-spent attempts on
+                # the append-only process record, then stop the run loudly so
+                # the scheduler cannot continue against the mutated endpoint.
+                self._drop(e)
+                raise
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry

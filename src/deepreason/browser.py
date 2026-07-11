@@ -28,6 +28,7 @@ raises BrowserUnavailable with install instructions when missing.
 
 import json
 import os
+import shlex
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -78,6 +79,18 @@ def chromium_executable() -> str | None:
         if candidate and Path(candidate).is_file() and os.access(candidate, os.X_OK):
             return str(Path(candidate))
     return None
+
+
+def chromium_launch_args() -> list[str]:
+    """Optional launch flags for a supplied non-Playwright Chromium binary.
+
+    Serverless Chromium distributions frequently need a small, vendor-specific
+    flag set (for example, single-process mode).  Keeping it in an explicit
+    environment variable makes that runtime input visible without changing a
+    candidate app or silently weakening the normal Playwright path.
+    """
+    raw = os.environ.get("DEEPREASON_CHROMIUM_ARGS", "")
+    return shlex.split(raw) if raw.strip() else []
 
 
 @dataclass
@@ -146,7 +159,10 @@ class PlaywrightBrowser:
                         "Playwright is installed but no Chromium executable is available; "
                         "install its browser payload or set DEEPREASON_CHROMIUM_PATH"
                     ) from primary
-                browser = p.chromium.launch(executable_path=executable)
+                browser = p.chromium.launch(
+                    executable_path=executable,
+                    args=chromium_launch_args(),
+                )
             try:
                 page = browser.new_page(
                     viewport=viewport, device_scale_factor=1, reduced_motion="reduce"

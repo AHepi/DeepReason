@@ -1,155 +1,299 @@
 """M2 — the driver: propose -> gate -> check -> log -> rotate (MINI_PLAN §3.7).
 
-Session is the registration layer: every mutation is an event whose outputs
-are parent-schema object records, so the root graduates to DeepReason by
-pointing ``Harness(root)`` at it — no data conversion (G6). Refutation is
-expressed the parent's way (nu artifact + demonstrative warrant + carrier),
-which is exactly what makes v0 status a special case of parent adjudication.
+Session is a narrow facade over the parent's Harness: every registration,
+object, event, fail-warrant package, attack edge, and status is canonical.
+The reduced engine retains only the small outer scheduling loop, so graduation
+is still just ``Harness(root)`` with no data conversion (G6).
 
 Stop conditions: budget death, queue exhausted, all problems dry. Never
 loop a dry problem — that is the measured 4.3x token burn.
 """
 
 import json
-from datetime import datetime, timezone
 from pathlib import Path
+from types import MappingProxyType
 
-from pydantic import BaseModel, Field, field_validator
-
+from deepreason.harness import Harness
+from deepreason.log.event_log import (
+    ConcurrentWriterError,
+    CorruptLogError,
+    EventSequenceError,
+)
+from deepreason.llm.contracts import ConjecturerOutput as ConjOut
+from deepreason.ontology import (
+    Artifact,
+    Commitment,
+    Interface,
+    Problem,
+    ProblemProvenance,
+    Provenance,
+    Rule,
+    SpawnTrigger,
+    Warrant,
+)
+from deepreason.rules.guards import anti_relapse
+from deepreason.rules.warrants import register_fail_warrant
+from deepreason.run_manifest import (
+    MANIFEST_NAME,
+    RunManifestError,
+    load_run_manifest,
+    payload_has_rubric,
+    preflight_payload,
+)
 from minireason import call as llm
 from minireason import checks, gate, rotate
-from minireason.log import (BlobStore, Call, Event, EventLog, ObjectStore, State,
-                            apply_event, artifact_id, canonical_json)
+from minireason.compat import (
+    DEFAULT_MODEL_PROFILE,
+    ENGINE_PROFILE,
+    MINI_NEAR_DUP_EPS,
+    initialize,
+)
+from minireason.log import Call, Event, SeqError, State, canonical_json
 
 
-class Candidate(BaseModel):
-    content: str
-    typicality: float = Field(default=0.5, ge=0.0, le=1.0)
-
-    @field_validator("content", mode="before")
-    @classmethod
-    def _coerce(cls, value):
-        # Models asked for skeleton content often emit the skeleton as a JSON
-        # object instead of an embedded string — accept it canonically.
-        return json.dumps(value, sort_keys=True) if isinstance(value, (dict, list)) else value
+RUBRIC_POLICY_ERROR = "RUBRIC_INPUT_FORBIDDEN"
 
 
-class ConjOut(BaseModel):
-    candidates: list[Candidate] = Field(min_length=1)
+class _CommitmentOverlayHarness:
+    """Read-only candidate commitment view for pre-registration guards.
+
+    The normative guard expects the Harness facade, including its commitment
+    mapping. Candidate-derived commitments must be visible while computing
+    the active battery, but must not enter canonical state unless that exact
+    candidate is admitted.
+    """
+
+    def __init__(self, harness: Harness, additions: list[Commitment]) -> None:
+        commitments = dict(harness.commitments)
+        commitments.update((commitment.id, commitment) for commitment in additions)
+        self._harness = harness
+        self.commitments = MappingProxyType(commitments)
+
+    def __getattr__(self, name: str):
+        return getattr(self._harness, name)
 
 
 class Session:
-    """Open (or create) a mini root; state is replayed from the log."""
+    """Small-engine facade over DeepReason's canonical Harness.
+
+    Mini owns the outer loop only. Registration, replay, object identity,
+    attack construction, and status are all parent operations.
+    """
 
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root)
-        self.root.mkdir(parents=True, exist_ok=True)
-        self.blobs = BlobStore(self.root / "blobs")
-        self.objects = ObjectStore(self.root / "objects")
-        self.log = EventLog(self.root / "log.jsonl")
-        self.state = State()
-        for event in self.log.read():
-            apply_event(self.state, event, self.objects)
+        self.harness = Harness(self.root)
+        self.blobs = self.harness.blobs
+        self.objects = self.harness.objects
+        self.log = self.harness.log
+        self.state = State(self.harness)
+        manifest_path = self.root / MANIFEST_NAME
+        self.manifest = load_run_manifest(manifest_path) if manifest_path.exists() else None
+
+    def _rubric_commitments(self, commitments: list[dict]) -> list[str]:
+        resolved: list[dict] = []
+        for record in commitments:
+            item = dict(record)
+            cid = str(item.get("id", ""))
+            if not item.get("eval") and cid in self.harness.commitments:
+                item["eval"] = self.harness.commitments[cid].eval
+            resolved.append(item)
+        payload = {"commitments": resolved}
+        if not payload_has_rubric(payload):
+            return []
+        if self.manifest is not None:
+            try:
+                preflight_payload(self.manifest, payload)
+            except RunManifestError:
+                # Convert the canonical preflight failure into Mini's logged
+                # process drop below. No policy error can become an escape.
+                pass
+        blocked: list[str] = []
+        for record in resolved:
+            cid = str(record.get("id", ""))
+            eval_spec = str(record.get("eval", ""))
+            if eval_spec.startswith("rubric:"):
+                blocked.append(cid or "<missing-id>")
+        return blocked
+
+    def _policy_drop(self, blocked: list[str], candidate_id: str = "") -> Event:
+        inputs = ["dropped-candidate", RUBRIC_POLICY_ERROR]
+        if candidate_id:
+            inputs.append(f"candidate:{candidate_id}")
+        inputs.extend(f"commitment:{cid}" for cid in blocked)
+        return self.measure(inputs)
+
+    @staticmethod
+    def _translate_log_error(error: Exception) -> SeqError:
+        return SeqError(str(error))
 
     def commit(self, rule: str, inputs: list[str], outputs: list[str],
                spend: Call | None = None) -> Event:
-        event = Event(seq=self.log.next_seq,
-                      ts=datetime.now(timezone.utc).isoformat(),
-                      rule=rule, inputs=inputs, outputs=outputs, llm=spend)
-        self.log.append(event)
-        apply_event(self.state, event, self.objects)
-        return event
+        try:
+            return self.harness._commit(
+                Rule(rule), inputs=list(inputs), outputs=list(outputs), llm=spend
+            )
+        except (ConcurrentWriterError, CorruptLogError, EventSequenceError) as error:
+            raise self._translate_log_error(error) from error
 
     def measure(self, inputs: list[str], spend: Call | None = None) -> Event:
-        return self.commit("Measure", inputs, [], spend)
+        try:
+            return self.harness.record_measure(inputs=inputs, llm=spend)
+        except (ConcurrentWriterError, CorruptLogError, EventSequenceError) as error:
+            raise self._translate_log_error(error) from error
 
     def spawn_problem(self, pid: str, description: str) -> None:
-        if pid in self.state.problems:
-            return
-        self.objects.put("problem", pid, {
-            "id": pid, "description": description, "criteria": [],
-            "provenance": {"trigger": "seed", "from": []}})
-        self.commit("Spawn", [], [pid])
+        self.harness.register_problem(
+            Problem(
+                id=pid,
+                description=description,
+                provenance=ProblemProvenance(trigger=SpawnTrigger.SEED),
+            )
+        )
 
-    def register_commitments(self, commitments: list[dict]) -> None:
-        new = [c for c in commitments if c["id"] not in self.state.commitments]
-        for c in new:
-            self.objects.put("commitment", c["id"], c)
-        if new:
-            self.commit("Register", [], [c["id"] for c in new])
+    def register_commitments(self, commitments: list[dict]) -> list[str]:
+        """Register through Harness, atomically rejecting rubric input.
 
-    def register_candidates(self, entries: list[tuple[str, str, list[dict]]],
-                            problem_id: str, stance: str,
-                            spend: Call | None) -> list[str]:
-        """entries: (artifact_id, content, checks). One Conj event carries
-        every admitted candidate of the gamma-call (parent batching), and
-        the call's spend — every token on the log exactly once (G1)."""
-        ids = []
-        for aid, content, cks in entries:
-            self.objects.put("artifact", aid, {
-                "id": aid, "content_ref": f"inline:{content}", "codec": "utf8",
-                "interface": {"commitments": [c["id"] for c in cks], "refs": []},
-                "warrants": [],
-                "provenance": {"role": "conjecturer", "school": stance,
-                               "event_seq": self.log.next_seq}})
-            ids.append(aid)
-        self.commit("Conj", [problem_id], ids, spend)
+        Mini's immutable run policy is ``forbid``. A rubric-bearing batch is
+        process-logged and none of its commitments enter canonical state.
+        """
+        blocked = self._rubric_commitments(commitments)
+        if blocked:
+            self._policy_drop(blocked)
+            return []
+        registered: list[str] = []
+        for record in commitments:
+            commitment = Commitment.model_validate(record)
+            self.harness.register_commitment(commitment)
+            registered.append(commitment.id)
+        return registered
+
+    def build_candidate(
+        self,
+        content: str,
+        commitment_ids: list[str],
+        stance: str,
+        warrants: list[Warrant] | None = None,
+    ) -> Artifact:
+        """Construct the one canonical value used for admission and commit."""
+        carried = list(warrants or [])
+        interface = Interface(commitments=commitment_ids, refs=[])
+        content_ref = f"inline:{content}"
+        return Artifact(
+            id=Artifact.compute_id(content_ref, "utf8", interface),
+            content_ref=content_ref,
+            codec="utf8",
+            interface=interface,
+            warrants=[warrant.id for warrant in carried],
+            provenance=Provenance(
+                role="conjecturer",
+                school=stance,
+                event_seq=self.harness._next_seq,
+            ),
+        )
+
+    def admit_candidate(
+        self,
+        artifact: Artifact,
+        warrants: list[Warrant] | None = None,
+        *,
+        candidate_commitments: list[Commitment] | None = None,
+        embedder=None,
+        near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
+    ) -> tuple[bool, str]:
+        """Delegate admission with a non-persistent commitment overlay."""
+        guard_harness = (
+            _CommitmentOverlayHarness(self.harness, candidate_commitments)
+            if candidate_commitments
+            else self.harness
+        )
+        return anti_relapse.check(
+            artifact,
+            list(warrants or []),
+            guard_harness,
+            embedder=embedder,
+            near_dup_eps=near_dup_eps,
+        )
+
+    def register_candidates(
+        self,
+        entries: list[tuple[Artifact, list[Warrant]]],
+        problem_id: str,
+        spend: Call | None,
+    ) -> list[str]:
+        """Register the exact canonical Artifacts that passed admission."""
+        canonical_entries: list[tuple[Artifact, list[Warrant]]] = []
+        ids: list[str] = []
+        for artifact, warrants in entries:
+            records = [
+                self.harness.commitments[cid].model_dump(mode="json", by_alias=True)
+                for cid in artifact.interface.commitments
+                if cid in self.harness.commitments
+            ]
+            blocked = self._rubric_commitments(records)
+            if blocked:
+                self._policy_drop(blocked, artifact.id)
+                continue
+            canonical_entries.append((artifact, warrants))
+            ids.append(artifact.id)
+        if not canonical_entries:
+            if spend is not None:
+                self.measure(["dropped-call", RUBRIC_POLICY_ERROR], spend)
+            return []
+        self.harness.register_batch(
+            canonical_entries,
+            problem_id=problem_id,
+            rule=Rule.CONJ,
+            llm=spend,
+        )
         return ids
 
     def refute(self, target: str, failures: list[dict]) -> None:
-        """Register the parent-shaped refutation: nu (the check is sound &
-        relevant) + demonstrative warrant + carrier. Grounded semantics then
-        labels the target refuted in BOTH systems."""
+        """Delegate the canonical demonstrative fail-warrant package."""
         cid = failures[0]["commitment"]
         nu_content = f"nu: check {cid} is sound and relevant for {target[:12]}"
-        nu_id = artifact_id(f"inline:{nu_content}", "utf8", {"commitments": [], "refs": []})
-        self.objects.put("artifact", nu_id, {
-            "id": nu_id, "content_ref": f"inline:{nu_content}", "codec": "utf8",
-            "interface": {"commitments": [], "refs": []}, "warrants": [],
-            "provenance": {"role": "critic", "school": None,
-                           "event_seq": self.log.next_seq}})
-        wid = f"w-{cid}-{target[:12]}"
-        self.objects.put("warrant", wid, {
-            "id": wid, "target": target, "type": "demonstrative",
-            "commitment": cid, "verdict": "fail",
-            "trace_ref": self.blobs.put(canonical_json(failures)),
-            "validity_node": nu_id})
-        carrier_content = f"check-refuter: {cid} fails on {target[:12]}"
-        carrier_id = artifact_id(f"inline:{carrier_content}", "utf8",
-                                 {"commitments": [], "refs": []})
-        self.objects.put("artifact", carrier_id, {
-            "id": carrier_id, "content_ref": f"inline:{carrier_content}",
-            "codec": "utf8", "interface": {"commitments": [], "refs": []},
-            "warrants": [wid],
-            "provenance": {"role": "critic", "school": None,
-                           "event_seq": self.log.next_seq}})
-        self.commit("Crit", [], [nu_id, wid, carrier_id])
+        register_fail_warrant(
+            self.harness,
+            commitment_id=cid,
+            target_id=target,
+            nu_content=nu_content,
+            critic_content=f"check-refuter: {cid} fails on {target[:12]}",
+            trace_ref=self.blobs.put(canonical_json(failures)),
+            skip_if_on_record=True,
+        )
 
     def rotate_stance(self, rotation: rotate.Rotation, reason: str) -> None:
         old = rotation.stance
         stance = rotation.rotate()
         content = json.dumps({"school_policy": {
             "school": stance, "stance": rotate.STANCE_LIBRARY[stance]}}, sort_keys=True)
-        pid = artifact_id(f"inline:{content}", "json", {"commitments": [], "refs": []})
+        interface = Interface()
+        pid = Artifact.compute_id(f"inline:{content}", "json", interface)
         if pid not in self.state.artifacts:  # succession, not duplication
-            self.objects.put("artifact", pid, {
-                "id": pid, "content_ref": f"inline:{content}", "codec": "json",
-                "interface": {"commitments": [], "refs": []}, "warrants": [],
-                "provenance": {"role": "seed", "school": stance,
-                               "event_seq": self.log.next_seq}})
-            self.commit("Reseed", [], [pid])
+            self.harness.create_artifact(
+                content,
+                codec="json",
+                interface=interface,
+                provenance=Provenance(
+                    role="seed", school=stance, event_seq=self.harness._next_seq
+                ),
+                rule=Rule.RESEED,
+            )
         self.measure(["intervention:reseed", f"school:{old}", reason])
 
     def survivors(self, problem_id: str) -> list[str]:
-        refuted = self.state.refuted
-        return [a for a, p in self.state.addr if p == problem_id and a not in refuted]
+        accepted = self.state.accepted
+        return [a for a, p in self.state.addr if p == problem_id and a in accepted]
 
 
 def _neighbourhood(session: Session, problem_id: str, k: int) -> str:
     texts = []
     for aid in session.survivors(problem_id)[-k:]:
         content = session.state.artifacts[aid]["content_ref"][len("inline:"):]
-        texts.append(f"- [{aid[:12]}] {content[:300]}")
+        # Mini's canonical candidate builder does not retain conjecturer refs.
+        # Show survivor content for diversity conditioning, but expose neither
+        # raw hashes nor alias labels that the output contract cannot preserve.
+        texts.append(f"- {content[:300]}")
     return "\n".join(texts)
 
 
@@ -163,8 +307,10 @@ def _prompt(description: str, stance_directive: str, neighbourhood: str, vs_k: i
         '{"claim": ..., "mechanism": ..., "scope": {"covers": [], "excludes": []}, '
         '"forbidden": [{"case": ..., "eval": ...}], "prose_notes": ...}. '
         'Each forbidden case states evidence that would REFUTE the candidate; eval is '
-        '"predicate:<python expression over the variable content>" for mechanically '
-        'checkable cases or "rubric:std" otherwise. A candidate that forbids nothing '
+        'a known "program:<name>" for mechanically checkable cases. Inline predicates '
+        'from model output are forbidden. Rubric commitments are '
+        'outside this reduced engine and are dropped before registration. A candidate '
+        'that forbids nothing '
         "is refuted on arrival.\n\n"
         f"PROBLEM: {description}\n"
         + (f"\nRECENT SURVIVORS (do not repeat; differ substantively):\n{neighbourhood}\n"
@@ -173,14 +319,22 @@ def _prompt(description: str, stance_directive: str, neighbourhood: str, vs_k: i
 
 
 def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str,
-        vs_k: int = 6, neighbourhood: int = 8,
+        vs_k: int | None = None, neighbourhood: int = 8,
         stance_decay: int = rotate.STANCE_DECAY, turnover_k: int = rotate.TURNOVER_K,
         window: int = 20, orbit_floor: int = 5, retry_max: int = 2,
-        max_cycles: int = 1000) -> dict:
+        max_cycles: int = 1000,
+        model_profile: str = DEFAULT_MODEL_PROFILE.value,
+        near_dup_eps: float | None = MINI_NEAR_DUP_EPS) -> dict:
     """Drive (pid, description) problems until budget death, queue
     exhaustion, or global dryness. Returns the run summary; the log at
     ``root`` is the real output."""
+    # Resolve presentation, wire schema, and the exact endpoint route before
+    # the first call.  The reduced engine stays MiniReason; compact is its
+    # explicit default model-facing representation.
+    kernel = initialize(root, endpoint, model_profile)
+    vs_k = kernel.profile.vs_k if vs_k is None else vs_k
     session = Session(root)
+    logged_before = session.state.logged_tokens()
     meter = llm.TokenMeter(budget=budget)
     rotation = rotate.Rotation(decay=stance_decay)
     queue = list(problems)
@@ -196,7 +350,10 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                              _neighbourhood(session, pid, neighbourhood), vs_k)
             try:
                 out, spend = llm.call(endpoint, prompt, ConjOut, meter,
-                                      session.blobs, retry_max, role="conjecturer")
+                                      session.blobs, retry_max, role="conjecturer",
+                                      model_profile=kernel.profile,
+                                      wire_contract=kernel.wire_contract,
+                                      endpoint_lease=kernel.lease)
             except llm.BudgetExceeded as e:
                 if e.spend:  # exhaustion mid-retry still carries spend (G1)
                     session.measure(["budget-exhausted"], e.spend)
@@ -214,31 +371,56 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                 stop = "endpoint-error"
                 queue = []
                 break
-            admitted: list[tuple[str, str, list[dict]]] = []
+            admitted: list[tuple[Artifact, list[dict]]] = []
+            seen: set[str] = set()
             for candidate in out.candidates[:vs_k]:
                 content = candidate.content
                 cks = checks.compile_checks(content)
-                aid = artifact_id(f"inline:{content}", "utf8",
-                                  {"commitments": [c["id"] for c in cks], "refs": []})
-                ok, reason = gate.check(aid, content, session.state)
+                blocked = session._rubric_commitments(cks)
+                if blocked:
+                    session._policy_drop(blocked)
+                    continue
+                candidate_commitments = [
+                    Commitment.model_validate(record) for record in cks
+                ]
+                commitment_ids = [
+                    commitment.id for commitment in candidate_commitments
+                ]
+                artifact = session.build_candidate(
+                    content, commitment_ids, rotation.stance
+                )
+                ok, reason = session.admit_candidate(
+                    artifact,
+                    [],
+                    candidate_commitments=candidate_commitments,
+                    near_dup_eps=near_dup_eps,
+                )
                 if not ok:
                     session.measure([f"gate:{reason}"])
                     continue
-                if aid in session.state.artifacts or any(a == aid for a, _, _ in admitted):
+                if artifact.id in session.state.artifacts or artifact.id in seen:
                     continue  # dedupe of live content: skipped, never gated
-                admitted.append((aid, content, cks))
+                # Only the exact candidate that survived the mandatory guard
+                # may make its model-derived commitments canonical.
+                registered = session.register_commitments(cks)
+                if registered != commitment_ids:
+                    continue
+                seen.add(artifact.id)
+                admitted.append((artifact, cks))
             if admitted:
-                for _, _, cks in admitted:
-                    session.register_commitments(cks)
-                session.register_candidates(admitted, pid, rotation.stance, spend)
-                for aid, content, cks in admitted:
+                session.register_candidates(
+                    [(artifact, []) for artifact, _ in admitted], pid, spend
+                )
+                for artifact, cks in admitted:
+                    content = artifact.content_ref[len("inline:"):]
                     failures = checks.run_checks(content, cks)
                     if failures:
-                        session.refute(aid, failures)
+                        session.refute(artifact.id, failures)
             else:
                 session.measure(["all-blocked"], spend)  # spend lands exactly once
             new_survivors = sum(
-                1 for aid, _, _ in admitted if aid not in session.state.refuted)
+                1 for artifact, _ in admitted if artifact.id not in session.state.refuted
+            )
             rotation.tick()
             turnover.draw(new_survivors)
             orbit_school = gate.orbit(session.state.events, session.state.artifacts,
@@ -251,7 +433,11 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                 session.measure(["intervention:turnover", f"problem:{pid}"])
             queue.pop(0)
     logged = session.state.logged_tokens()
+    logged_this_run = logged - logged_before
     return {
+        "engine_profile": ENGINE_PROFILE,
+        "model_profile": kernel.profile.name.value,
+        "run_manifest_sha256": kernel.manifest.sha256,
         "stop": stop if stop != "queue-exhausted" or not queue else "max-cycles",
         "cycles": cycles,
         "problems": {p: len(session.survivors(p)) for p in session.state.problems},
@@ -259,6 +445,7 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
         "gate_blocks": len(gate.gate_blocks(session.state.events, len(session.state.events))),
         "rotations": rotation.rotations,
         "tokens": meter.snapshot(),
-        "meter_equals_log": meter.total == logged,
+        "meter_equals_log": meter.total == logged_this_run,
+        "logged_tokens_this_run": logged_this_run,
         "logged_tokens": logged,
     }

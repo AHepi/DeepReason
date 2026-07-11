@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "baseline_id": "deepreason-frontier-before-compat-v1",
+  "matrix_path": "experiments/website_compat_matrix_v1.json",
+  "phase": "baseline",
+  "status": "not_collected",
+  "evidence_required": "live",
+  "complete_frontier_coverage_required": true,
+  "same_matrix_digest_required": true,
+  "metrics": [
+    "browser_oracle_pass_rate",
+    "integration_success_rate",
+    "attack_validity_rate",
+    "survivor_hv_mean"
+  ],
+  "aggregation": {
+    "browser_oracle_pass_rate": "sum(browser passes) / sum(browser pass and fail outcomes)",
+    "integration_success_rate": "trials reaching successful INTEGRATION_VALIDATE / terminal trials",
+    "attack_validity_rate": "standing argumentative attack carriers / all argumentative attack carriers",
+    "survivor_hv_mean": "pooled hard-to-vary values across accepted addressed artifacts"
+  },
+  "maximum_regression_percentage_points": 2.0,
+  "missing_value_rule": "Any missing locked metric makes A9 insufficient_evidence.",
+  "honesty_note": "This file preregisters the baseline protocol; it contains no measurements. Generate a complete live phase=baseline report before using --frontier-baseline."
+}

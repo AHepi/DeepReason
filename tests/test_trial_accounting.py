@@ -57,7 +57,14 @@ def test_deduped_critic_does_not_swallow_the_ruling(tmp_path):
         "argumentative_critic": MockEndpoint(
             [json.dumps({"attack": True, "case": "the mechanism is vacuous"})] * 4),
         "defender": MockEndpoint([json.dumps({"answer": "it is fine"})] * 4),
-        "judge": MockEndpoint([FAIL] * 8),
+        "judge": [
+            MockEndpoint(
+                [FAIL] * 8, name="mock://judge-gemma", model="gemma-test"
+            ),
+            MockEndpoint(
+                [FAIL] * 8, name="mock://judge-qwen", model="qwen-test"
+            ),
+        ],
     }, h.blobs, retry_max=2, meter=meter)
     config = Config()
     run_trial(h, target.id, h.commitments["kappa-x"], adapter, config, [])
@@ -72,7 +79,16 @@ def test_seat_one_spend_survives_seat_two_storm(tmp_path):
         "argumentative_critic": MockEndpoint(
             [json.dumps({"attack": True, "case": "the mechanism is vacuous"})]),
         "defender": MockEndpoint([json.dumps({"answer": "it is fine"})]),
-        "judge": [MockEndpoint([FAIL] * 4), MockEndpoint(["never json"] * 4)],
+        "judge": [
+            MockEndpoint(
+                [FAIL] * 4, name="mock://judge-gemma", model="gemma-test"
+            ),
+            MockEndpoint(
+                ["never json"] * 4,
+                name="mock://judge-qwen",
+                model="qwen-test",
+            ),
+        ],
     }, h.blobs, retry_max=2, meter=meter)
     with pytest.raises(SchemaRepairError) as err:
         run_trial(h, target.id, h.commitments["kappa-x"], adapter, Config(), [])

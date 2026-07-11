@@ -88,6 +88,26 @@ def test_setup_wizard_rejects_nonsense_then_recovers():
     assert path.exists()
 
 
+def test_gemma4_31b_preset_pins_every_model_bearing_role_to_ollama_cloud():
+    preset = easy.PROVIDERS["gemma4_31b"]
+    profile = Config.model_validate({
+        **easy.MAKE_OVERRIDES,
+        "roles": preset["roles"](preset["base"], preset["model"], preset["env"]),
+    })
+    expected = {
+        "conjecturer", "variator", "argumentative_critic", "defender", "judge",
+        "synthesizer", "summarizer", "vision_critic", "property_designer", "thesis",
+    }
+    assert expected <= set(profile.roles)
+    for configured in profile.roles.values():
+        seats = configured if isinstance(configured, list) else [configured]
+        for seat in seats:
+            assert seat["endpoint"] == "https://ollama.com/v1"
+            assert seat["model"] == "gemma4:31b"
+            assert seat["api_key_env"] == "OLLAMA_API_KEY"
+            assert seat["provider"] == "ollama"
+
+
 # ---- seeding: the same record-grade objects the expert surface makes ----
 
 def test_seed_website_registers_browser_commitment(tmp_path):
@@ -146,7 +166,8 @@ def _stage_faker(calls):
     required dependence ref."""
     from deepreason.ontology import Interface, Provenance, Ref
 
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None):
+    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
+                 run_manifest=None):
         pid = list(harness.state.problems)[-1]
         problem = harness.state.problems[pid]
         refs = []
@@ -220,7 +241,8 @@ def test_staged_make_stops_when_no_plan_survives(tmp_path, monkeypatch):
     cfg = _fake_cfg(tmp_path, monkeypatch)
     calls = []
 
-    def barren(harness, config, cycles, token_budget=None, on_cycle=None):
+    def barren(harness, config, cycles, token_budget=None, on_cycle=None,
+               run_manifest=None):
         calls.append(config.FOCUS_FAMILY)
         return ({"survivors": 0}, None, {"logged_tokens_this_run": 7})
 
@@ -242,7 +264,8 @@ def test_make_single_stage_legacy_path(tmp_path, monkeypatch):
 
     cfg = _fake_cfg(tmp_path, monkeypatch)
 
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None):
+    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
+                 run_manifest=None):
         assert config.FOCUS_FAMILY is None
         cid = next(iter(harness.commitments))
         harness.create_artifact(
@@ -260,6 +283,69 @@ def test_make_single_stage_legacy_path(tmp_path, monkeypatch):
     pages = [p for p in paths if p.suffix == ".html"]
     assert len(pages) == 1 and pages[0].exists()
     assert "1,234 tokens" in "\n".join(lines)
+
+
+def test_direct_easy_make_binds_manifest_before_scheduler(tmp_path, monkeypatch):
+    from deepreason import ops
+    from deepreason.run_manifest import load_run_manifest
+
+    cfg = _fake_cfg(tmp_path, monkeypatch)
+    run_root = tmp_path / "bound-run"
+
+    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
+                 run_manifest=None):
+        manifest_path = run_root / "run-manifest.json"
+        assert manifest_path.exists()
+        manifest = load_run_manifest(manifest_path)
+        assert run_manifest == manifest
+        assert config.roles["conjecturer"]["model"] == "m"
+        assert manifest.roles["conjecturer"][0].model_id == "m"
+        return ({"survivors": 0}, None, {"logged_tokens_this_run": 0})
+
+    monkeypatch.setattr(ops, "run_scheduler", fake_run)
+    easy.make(
+        "bound site", config=str(cfg), root=str(run_root),
+        out=str(tmp_path / "out"), staged=False, echo=lambda *_: None,
+    )
+    assert (run_root / "run-manifest.sha256").exists()
+    assert (run_root / ".run-manifest-config.json").exists()
+
+
+def test_direct_easy_make_resume_uses_bound_manifest_not_new_source(
+    tmp_path, monkeypatch
+):
+    from deepreason import ops
+    from deepreason.run_manifest import (
+        bind_run_manifest,
+        compile_run_manifest,
+        load_run_manifest,
+    )
+
+    cfg_path = _fake_cfg(tmp_path, monkeypatch)
+    source = Config.model_validate(yaml.safe_load(cfg_path.read_text()))
+    manifest = compile_run_manifest(
+        source, rubric_policy="forbid", compiled_at="2026-07-11T00:00:00Z"
+    )
+    run_root = tmp_path / "resume-run"
+    bind_run_manifest(manifest, run_root)
+    monkeypatch.setattr(
+        "deepreason.run_manifest.compile_run_manifest",
+        lambda *_a, **_k: pytest.fail("resume attempted to compile a new manifest"),
+    )
+
+    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
+                 run_manifest=None):
+        assert load_run_manifest(run_root / "run-manifest.json") == manifest
+        assert run_manifest == manifest
+        assert config.roles["conjecturer"]["model"] == "m"
+        return ({"survivors": 0}, None, {"logged_tokens_this_run": 0})
+
+    monkeypatch.setattr(ops, "run_scheduler", fake_run)
+    easy.make(
+        "resume site", config=str(tmp_path / "does-not-exist.yaml"),
+        root=str(run_root), out=str(tmp_path / "resume-out"),
+        staged=False, echo=lambda *_: None,
+    )
 
 
 # ---- staged seeding, enforcement, and the FOUNDATION pack section ----

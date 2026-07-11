@@ -7,6 +7,7 @@ the adjudication).
 """
 
 from deepreason.llm.contracts import SynthesizerOutput
+from deepreason.llm.packs import aliases_for_values
 from deepreason.ontology import Artifact, Interface, Problem, Provenance, Ref, Rule
 from deepreason.programs import content_text
 from deepreason.rules.guards import anti_relapse
@@ -32,7 +33,12 @@ def synthesize(
               "integrates / contradicts / abstracts) and state what the "
               "relation is REFUTED IF. A summary of the endpoints is not a "
               "relation and fails on form."]
-    output, llm_call = adapter.call("synthesizer", "\n".join(lines), SynthesizerOutput)
+    output, llm_call = adapter.call(
+        "synthesizer",
+        "\n".join(lines),
+        SynthesizerOutput,
+        aliases=aliases_for_values(endpoints, prefix="A"),
+    )
 
     connects = [i for i in output.connects if i in harness.state.artifacts]
     if not connects:

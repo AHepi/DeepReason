@@ -12,6 +12,7 @@ from deepreason.browser import (  # noqa: E402
     PlaywrightBrowser,
     browser_commitment,
     chromium_executable,
+    chromium_launch_args,
     load_spec,
 )
 
@@ -49,6 +50,11 @@ def test_configured_chromium_path_is_discovered(tmp_path, monkeypatch):
     executable.chmod(0o755)
     monkeypatch.setenv("DEEPREASON_CHROMIUM_PATH", str(executable))
     assert chromium_executable() == str(executable)
+
+
+def test_configured_chromium_launch_args_are_shell_split(monkeypatch):
+    monkeypatch.setenv("DEEPREASON_CHROMIUM_ARGS", "--single-process --headless='shell'")
+    assert chromium_launch_args() == ["--single-process", "--headless=shell"]
 
 
 def test_commitment_is_content_addressed_and_observation_valued():

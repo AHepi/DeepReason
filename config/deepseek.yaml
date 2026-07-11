@@ -2,13 +2,14 @@
 # defaults from deepreason.config.Config; only deliberate differences belong
 # here. DeepSeek's API is OpenAI-compatible.
 # Set DEEPSEEK_API_KEY in the environment. Model ids marked "auto"/"auto-alt"
-# are resolved against the provider's /models list at adapter build time
-# (llm/endpoints.py:resolve_model) — works from `deepreason run`, the MCP
-# server, and the scripts alike.
+# are source-only sentinels resolved by `deepreason config compile` before the
+# first role-model call. Runtime adapters consume only the persisted concrete
+# RunManifest; they never inspect this file or discover models.
 #
-# Honest note (§9/§17): the judge SHOULD run on >=2 endpoints from different
-# model FAMILIES; with a single provider we approximate with two different
-# DeepSeek models, which catches intra-provider disagreement only.
+# This profile's two DeepSeek judge seats are useful for non-normative probes
+# but do NOT satisfy the rubric trial requirement. Compile program/predicate
+# workloads with `--rubric-policy forbid`; rubric workloads must supply and
+# freeze a second judge family or preflight fails.
 
 HV_MIN: 0.5
 HV_K: 5

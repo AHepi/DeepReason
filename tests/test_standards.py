@@ -30,7 +30,18 @@ def _trial_adapter(harness, judge_responses):
         {
             "argumentative_critic": MockEndpoint([json.dumps({"attack": True, "case": CASE})]),
             "defender": MockEndpoint([json.dumps({"answer": "it is an echo effect"})]),
-            "judge": MockEndpoint(judge_responses),
+            "judge": [
+                MockEndpoint(
+                    judge_responses,
+                    name="mock://judge-gemma",
+                    model="gemma-test",
+                ),
+                MockEndpoint(
+                    judge_responses,
+                    name="mock://judge-qwen",
+                    model="qwen-test",
+                ),
+            ],
             "variator": MockEndpoint([PARAPHRASES]),
         },
         harness.blobs, retry_max=2,

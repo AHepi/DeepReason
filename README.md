@@ -12,9 +12,8 @@ confident paragraph — it's a *map* of which explanations survived scrutiny,
 which died and exactly why, and where the evidence genuinely can't decide.
 
 There are two ways to run it: the **full harness** (all the machinery) and
-**MiniReason** (the measured ~20% that carries most of the value, in ~900
-lines). Which to use is the most important decision, so it has its own
-section below.
+**MiniReason** (the measured reduced engine profile). Which to use is the
+most important decision, so it has its own section below.
 
 ---
 
@@ -40,27 +39,53 @@ and suggests more rounds: refutation is the tool working, not failing. The
 two commands run the very same machinery as everything below and leave the
 same replayable record in `runs/`.
 
+For reproducible or small-model runs, compile routing before the first model
+call and pass only the resulting immutable manifest to the workflow:
+
+```bash
+deepreason doctor --endpoint conjecturer --model gemma4:31b
+deepreason --config config/my-provider.yaml config compile \
+  --single-model gemma4:31b --profile compact --rubric-policy forbid \
+  --out run-manifest.json
+deepreason --root runs/dna make "the wonders of DNA" \
+  --run-manifest run-manifest.json
+```
+
+Source YAML is read only while compiling. The run binds exact routes,
+families, output mechanisms, profile, and concurrency in
+`run-manifest.json`; endpoint models receive only one rendered role pack and
+one output schema. They never receive configuration, model catalogs,
+credentials, repository access, peer-model access, or workflow authority.
+Implementation and evidence status are recorded in
+[`docs/SMALL_MODEL_COMPATIBILITY.md`](docs/SMALL_MODEL_COMPATIBILITY.md).
+
 ### Full harness
 
 ```bash
 pip install .
 export DEEPSEEK_API_KEY=...            # any OpenAI-compatible provider works
 
-# Run a built-in problem suite to a token budget; the log lands in runs/<name>
-python scripts/live_run.py --suite arrow --root runs/arrow --token-budget 200000
+# Run a typed problem payload to a token budget; the log lands in runs/<name>
+deepreason --config config/my-provider.yaml config compile \
+  --rubric-policy forbid --out run-manifest.json
+deepreason --root runs/my-run run --budget cycles=12 \
+  --problem problem.yaml --token-budget 200000 \
+  --run-manifest run-manifest.json
 
 # Turn a finished run into a committed, cited thesis (read-only over the run)
-python scripts/thesis.py --root runs/arrow --problem pi-arrow
+python scripts/thesis.py --root runs/my-run --problem pi-1
 ```
 
-Or drive it from any MCP-capable agent (it exposes a tool surface over
-stdio):
+An MCP-capable client can invoke the same deterministic driver over stdio:
 
 ```bash
 claude mcp add deepreason -- deepreason-mcp
 ```
 
-Engine models are per-role config, no code changes — see
+Use the narrow `start_make` operation with a precompiled manifest, then read
+progress through `make_status` and `make_result`. Do not appoint a general LLM
+to inspect this repository, interpret provider YAML, select models, or operate
+the workflow. Engine models are per-role source config, no code changes — see
 [`docs/AGENT.md`](docs/AGENT.md).
 Configuration has one typed source of defaults; YAML files are partial
 profiles, and `deepreason config` prints the complete effective result.
@@ -79,7 +104,11 @@ run([("pi-1", "why did X happen?")],
     budget=30_000, root="runs/my-run")
 ```
 
-Self-contained in [`mini/`](mini/) (pydantic only). See
+The reduced control loop lives in [`mini/`](mini/); it reuses the full
+package's canonical Harness, ontology, grounded/support adjudication,
+anti-relapse guard, warrant plumbing, storage, route firewall, model profiles,
+wire contracts, and bounded repair kernel so it cannot drift into a second
+protocol. See
 [`mini/README.md`](mini/README.md).
 
 ---
@@ -144,9 +173,9 @@ is hard enough that criticism has something real to argue about.**
 
 | | MiniReason (`mini/`) | Full harness (`src/`) |
 |---|---|---|
-| Size / cost | ~900 lines; cheap | full system; ~10x+ the tokens |
-| Criticism | mechanical only (a candidate's own falsifier checks) | + LLM critic, defender, 2-seat judge trial |
-| Scope | one problem, generate-and-filter | spawns a *graph* of follow-up problems |
+| Scope / cost | reduced scheduler; measured cheap path | full system; ~10x+ the tokens in the referenced comparison |
+| Criticism | mechanical only (a candidate's own falsifier checks) | + LLM critic, defender, cross-family judge trial |
+| Problem graph | one problem, generate-and-filter | spawns a *graph* of follow-up problems |
 | Ranking | offline calibrated judge (control-gated) | live pairwise discrimination + adjudication |
 | Concludes | survivor list | committed, cited **thesis** view |
 
@@ -180,12 +209,15 @@ comparison):
 - A thesis argues from **the run's own record**, not outside knowledge — it
   commits to what *this run* adjudicated, and will say so.
 
-Security: forbidden-case predicates use an AST guard against the `eval` escape
-family. Execution-oracle candidates, checkers, generators, and admission gates
-additionally run in fresh subprocesses with deterministic line budgets and
-emergency OS resource containment; module top-level code never runs in the
-harness process. See [`tests/test_security.py`](tests/test_security.py) and
-[`tests/test_oracle.py`](tests/test_oracle.py).
+Security: model-authored forbidden cases cannot carry inline `predicate:`
+expressions; the shared skeleton contract accepts known `program:` checks (and,
+in full-engine rubric workflows, guarded rubric references). Predicate
+commitments supplied by a trusted workload use the parent's AST guard against
+the `eval` escape family. Execution-oracle candidates, checkers, generators,
+and admission gates additionally run in fresh subprocesses with deterministic
+line budgets and emergency OS resource containment; module top-level code
+never runs in the harness process. See [`tests/test_security.py`](tests/test_security.py)
+and [`tests/test_oracle.py`](tests/test_oracle.py).
 
 ## Development
 

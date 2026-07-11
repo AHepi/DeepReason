@@ -65,6 +65,29 @@ def test_crit_pack_prefix_diverges_only_at_per_target_extras(harness):
     assert "fc-x" in pack_a and "fc-y" in pack_b  # nothing dropped
 
 
+def test_long_critic_target_preserves_labeled_tail_instead_of_fake_truncation(
+    harness,
+):
+    _problem(harness)
+    target = _sibling(
+        harness,
+        "BEGIN-DESIGN\n" + ("component detail\n" * 600) + "END-MANIFEST",
+    )
+    pack = render_crit_pack(
+        target.id,
+        harness.state,
+        harness.commitments,
+        harness.blobs,
+        1200,
+    )
+    assert "HARNESS PACK EXCERPT" in pack
+    assert "do not claim that unshown sections are missing" in pack
+    assert "BEGIN-DESIGN" in pack and "END-MANIFEST" in pack
+    assert pack.rstrip().endswith(
+        "or attack=false if you find no genuine fault."
+    )
+
+
 def test_conj_pack_stance_precedes_neighbourhood(harness):
     problem = _problem(harness)
     school = {"id": "school-0", "stance_text": "prefer mechanisms", "weight": 0.8}

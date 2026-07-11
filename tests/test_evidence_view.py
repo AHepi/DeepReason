@@ -142,8 +142,16 @@ def test_property_sourced_verdicts_name_their_source(harness):
                 {"properties": [{"claim": "output must be ascending", "checker": checker}]}
             )]),
             "judge": [
-                MockEndpoint([json.dumps({"verdict": "pass", "decisive_point": "ascending"})]),
-                MockEndpoint([json.dumps({"verdict": "pass", "decisive_point": "ascending"})]),
+                MockEndpoint(
+                    [json.dumps({"verdict": "pass", "decisive_point": "ascending"})],
+                    name="mock://judge-gemma",
+                    model="gemma-test",
+                ),
+                MockEndpoint(
+                    [json.dumps({"verdict": "pass", "decisive_point": "ascending"})],
+                    name="mock://judge-qwen",
+                    model="qwen-test",
+                ),
             ],
         },
         harness.blobs, retry_max=2,

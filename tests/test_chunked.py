@@ -145,6 +145,37 @@ def _candidate(harness, problem, design, content):
         provenance=Provenance(role="conjecturer"), problem_id=problem.id)
 
 
+def test_plan_pack_requires_actual_copy_instead_of_content_placeholders(tmp_path):
+    harness = Harness(tmp_path / "plan-run")
+    problem = easy.seed_plan(harness, "an educational site")
+    assert "actual headings, labels, explanatory copy, facts" in problem.description
+    assert '"educational text"' in problem.description
+    assert "system-level `prefers-reduced-motion`" in problem.description
+    assert "before any animation starts" in problem.description
+
+
+def test_chunked_design_pack_allows_only_its_required_manifest_metadata(tmp_path):
+    harness = Harness(tmp_path / "design-run")
+    easy.seed_plan(harness, "an educational site")
+    plan = harness.create_artifact(
+        "complete product plan " * 40,
+        provenance=Provenance(role="conjecturer"),
+        problem_id="pi-plan",
+    )
+    problem = easy.seed_design_chunked(harness, "an educational site", plan.id)
+    assert "not implementation HTML, JavaScript, or" in problem.description
+    assert "COMPONENT MANIFEST is allowed as structured design metadata" in (
+        problem.description
+    )
+
+
+def test_animated_component_pack_requires_the_os_reduced_motion_query(tmp_path):
+    _, _, _, problems = _component_harness(tmp_path)
+    description = problems["header"].description
+    assert "window.matchMedia('(prefers-reduced-motion: reduce)')" in description
+    assert "manual motion toggle alone" in description
+
+
 @pytest.mark.parametrize("mutate, expected_violation", [
     (lambda f: f + "x" * 5000, "oversized"),
     (lambda f: "<!doctype html><html><body>" + f + "</body></html>",
@@ -403,7 +434,8 @@ def _chunked_faker(calls):
     fragments — each addressed to the newest seeded problem with the
     required lineage ref, exactly as conj would register them."""
 
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None):
+    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
+                 run_manifest=None):
         pid = config.FOCUS_FAMILY
         problem = harness.state.problems[pid]
         refs = []
@@ -523,7 +555,8 @@ def test_make_chunked_repairs_the_implicated_component(tmp_path, monkeypatch):
     calls = []
     base = _chunked_faker(calls)
 
-    def flaky(harness, config, cycles, token_budget=None, on_cycle=None):
+    def flaky(harness, config, cycles, token_budget=None, on_cycle=None,
+              run_manifest=None):
         pid = config.FOCUS_FAMILY
         if pid == "pi-comp-list":
             # First attempt: mount is right but the declared export is
@@ -545,7 +578,7 @@ def test_make_chunked_repairs_the_implicated_component(tmp_path, monkeypatch):
             return ({"survivors": 1}, None,
                     {"logged_tokens_this_run": 1000, "metered_tokens": 1000})
         return base(harness, config, cycles, token_budget=token_budget,
-                    on_cycle=on_cycle)
+                    on_cycle=on_cycle, run_manifest=run_manifest)
 
     monkeypatch.setattr(ops, "run_scheduler", flaky)
     lines = []

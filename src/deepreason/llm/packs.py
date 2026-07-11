@@ -20,6 +20,8 @@ from deepreason.ontology.problem import Problem
 from deepreason.ontology.state import EpistemicState, Status
 from deepreason.oracle import EXEC_PROGRAMS
 from deepreason.programs import content_text
+from deepreason.llm.profiles import ModelProfile, ProfileSpec, clip_pack
+from deepreason.llm.wire import AliasTable
 
 _CHARS_PER_TOKEN = 4
 NEIGHBOURHOOD_N = 8
@@ -163,6 +165,70 @@ def _head(state: EpistemicState, artifact_id: str, blobs, limit: int = 160) -> s
 
 def _clip(text: str, token_budget: int) -> str:
     return text[: token_budget * _CHARS_PER_TOKEN]
+
+
+def _document_excerpt(text: str, char_budget: int) -> str:
+    """Budget a long target without making its tail look deleted.
+
+    Prefix-only clipping caused compact critics to refute valid compiled
+    designs for "ending abruptly" even though the omitted manifest and later
+    components existed and had passed deterministic checks.  A labeled
+    head/tail excerpt preserves document closure and makes the transport
+    omission explicit; it does not manufacture or summarize target content.
+    """
+    if len(text) <= char_budget:
+        return text
+    marker = (
+        "\n\n[HARNESS PACK EXCERPT: middle bytes omitted only for the model-facing "
+        "budget. They remain in the logged target. This omission is not a "
+        "fault; do not claim that unshown sections are missing.]\n\n"
+    )
+    available = max(2, char_budget - len(marker))
+    head = (available * 3) // 4
+    tail = available - head
+    return text[:head].rstrip() + marker + text[-tail:].lstrip()
+
+
+def apply_model_profile(
+    pack: str,
+    profile: str | ModelProfile | ProfileSpec,
+    requested_tokens: int | None = None,
+) -> str:
+    """Apply only the profile's presentation budget to an existing pack."""
+    return clip_pack(pack, profile, requested_tokens)
+
+
+def alias_references(
+    values: list[str],
+    *,
+    prefix: str = "A",
+) -> tuple[AliasTable, str]:
+    """Return an external alias table and deterministic model-facing list."""
+    table = AliasTable.from_values(values, prefix=prefix)
+    return table, "\n".join(f"{a}" for a in table.aliases)
+
+
+def aliases_for_values(values, *, prefix: str = "A") -> AliasTable:
+    """Build a deterministic table from nonempty unique call-local values."""
+    unique = list(dict.fromkeys(str(value) for value in values if value))
+    return AliasTable.from_values(unique, prefix=prefix)
+
+
+def aliases_for_pack(
+    pack: str,
+    values,
+    *,
+    prefix: str = "A",
+) -> AliasTable:
+    """Alias only canonical values actually exposed by this rendered pack.
+
+    Ordering follows first appearance, then input order. The mapping remains
+    outside the model response and compiles back deterministically.
+    """
+    unique = list(dict.fromkeys(str(value) for value in values if value and str(value) in pack))
+    positions = {value: pack.find(value) for value in unique}
+    unique.sort(key=lambda value: positions[value])
+    return AliasTable.from_values(unique, prefix=prefix)
 
 
 def render_conj_pack(
@@ -449,7 +515,12 @@ def render_cx_retry_pack(
     return _clip("\n".join(lines), token_budget)
 
 
-def _problem_context(state: EpistemicState, target_ids: list[str]) -> list[str]:
+def _problem_context(
+    state: EpistemicState,
+    target_ids: list[str],
+    *,
+    description_limit: int = 1500,
+) -> list[str]:
     """The problem statements the targets address — the STANDARD criticism is
     measured against. A critic shown a plan but not its problem reliably
     manufactures out-of-scope faults (observed live: 'lacks accessibility
@@ -468,7 +539,7 @@ def _problem_context(state: EpistemicState, target_ids: list[str]) -> list[str]:
             f"PROBLEM CONTEXT ({pid}) — the standard the target answers to. "
             "A FAULT must show the target fails THIS problem as stated; "
             "omitting scope the problem never asked for is not a fault:",
-            state.problems[pid].description[:1500],
+            state.problems[pid].description[:description_limit],
             "",
         ]
     return lines
@@ -485,7 +556,10 @@ def render_crit_pack(
     # Commitments render BEFORE the target (angle 4): problem criteria lead
     # each interface list, so sibling targets share this section verbatim
     # and the cacheable prefix runs through it.
-    lines = _problem_context(state, [target_id])
+    context_limit = 900 if token_budget <= 1200 else 1500
+    lines = _problem_context(
+        state, [target_id], description_limit=context_limit
+    )
     lines += ["TARGET COMMITMENTS (the target's declared attack surface):"]
     for cid in target.interface.commitments:
         kappa = commitments.get(cid)
@@ -493,22 +567,26 @@ def render_crit_pack(
         if kappa is not None:
             lines += _execution_spec_lines(kappa)
     lines += ["", _MACHINE_EVAL_NOTE]
-    lines += [
-        "",
-        f"TARGET {target_id}",
-        content_text(target, blobs)[: token_budget * 2],
-    ]
+    suffix: list[str] = []
     attackers = [x for x, t in sorted(state.att) if t == target_id][:ATTACKERS_N]
     if attackers:
-        lines += ["", "STANDING ATTACKS (do not repeat these):"]
+        suffix += ["", "STANDING ATTACKS (do not repeat these):"]
         for x in attackers:
             status = state.status.get(x)
-            lines.append(f"- {x} [{status.value if status else '?'}]: {_head(state, x, blobs)}")
+            suffix.append(
+                f"- {x} [{status.value if status else '?'}]: "
+                f"{_head(state, x, blobs)}"
+            )
     if _carries_execution_oracle(target, commitments):
-        lines += ["", _COUNTEREXAMPLE_NOTE]
-    lines += [
+        suffix += ["", _COUNTEREXAMPLE_NOTE]
+    suffix += [
         "",
         "DIRECTIVE: mount the strongest NEW specific case against the target, "
         "or attack=false if you find no genuine fault.",
     ]
-    return _clip("\n".join(lines), token_budget)
+    target_header = ["", f"TARGET {target_id}"]
+    total_chars = token_budget * _CHARS_PER_TOKEN
+    overhead = len("\n".join(lines + target_header + suffix)) + 2
+    target_budget = max(256, total_chars - overhead)
+    target_text = _document_excerpt(content_text(target, blobs), target_budget)
+    return _clip("\n".join(lines + target_header + [target_text] + suffix), token_budget)

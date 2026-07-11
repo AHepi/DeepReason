@@ -25,7 +25,11 @@ from deepreason.llm.contracts import (
     JudgeRuling,
     PropertyDesignerOutput,
 )
-from deepreason.llm.packs import render_experiment_pack, render_property_pack
+from deepreason.llm.packs import (
+    aliases_for_values,
+    render_experiment_pack,
+    render_property_pack,
+)
 from deepreason.ontology import (
     Interface,
     Provenance,
@@ -314,6 +318,7 @@ def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config
     rule on the property artifact alone."""
     from deepreason.canonical import sha256_hex
 
+    judge_seats = adapter.require_cross_family_judges()
     pack = "\n".join([
         "NARROW QUESTION: does the proposed property follow from the problem "
         "statement — is it a requirement the statement actually makes (rule "
@@ -330,8 +335,16 @@ def relevance_trial(harness, prop_artifact, claim: str, problem, adapter, config
     calls: list = []
     rulings: list[JudgeRuling] = []
     try:
-        for seat in (0, 1):
-            ruling, llm_call = adapter.call("judge", pack, JudgeRuling, endpoint_index=seat)
+        for seat in range(len(judge_seats)):
+            ruling, llm_call = adapter.call(
+                "judge",
+                pack,
+                JudgeRuling,
+                endpoint_index=seat,
+                aliases=aliases_for_values(
+                    [problem.description, claim], prefix="K"
+                ),
+            )
             calls.append(llm_call)
             if ruling.decisive_point and ruling.decisive_point not in pack:
                 # Unlocatable grounds: treat as an invalid ruling (fail-closed

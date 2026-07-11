@@ -10,7 +10,6 @@ from pathlib import Path
 
 import pytest
 
-from minireason import gate
 from minireason.call import MockEndpoint
 from minireason.checks import compile_checks, evaluate, run_checks
 from minireason.log import ObjectStore, SeqError, replay
@@ -40,8 +39,9 @@ def test_hostile_content_survives_the_full_trip(tmp_path):
     ]
     summary = run([("pi-0", "d")], MockEndpoint([_conj(*hostile)]),
                   budget=10**7, root=tmp_path / "run", vs_k=10, max_cycles=1)
-    # Every candidate registered or refuted -- nothing crashed, and the
-    # measure-format mimic stayed CONTENT (no phantom gate blocks).
+    # Every supported candidate registered or refuted, rubric candidates were
+    # policy-dropped, and the measure-format mimic stayed CONTENT (no phantom
+    # gate blocks).
     assert summary["gate_blocks"] == 0
     assert summary["meter_equals_log"]
     root = tmp_path / "run"
@@ -51,23 +51,17 @@ def test_hostile_content_survives_the_full_trip(tmp_path):
 
 
 def test_punctuation_only_contents_share_an_equivalence_class(tmp_path):
-    """Documented edge: normalize() maps symbol-only bytes to the empty
-    token set, so a refuted symbol-only prior blocks every other
-    symbol-only candidate. Acceptable in v0: such content is always
-    refuted by skeleton-wf anyway; recorded here so the behavior is a
-    choice, not a surprise."""
+    """The canonical battery equates two skeleton-wf failures."""
     s = Session(tmp_path / "run")
     s.spawn_problem("pi-0", "d")
     cks = compile_checks("!!!")
-    from minireason.log import artifact_id
-    aid = artifact_id("inline:!!!", "utf8",
-                      {"commitments": [c["id"] for c in cks], "refs": []})
-    for c in cks:
-        s.register_commitments([c])
-    s.register_candidates([(aid, "!!!", cks)], "pi-0", "mechanist", None)
-    s.refute(aid, [{"commitment": "skeleton-wf", "eval": "program:skeleton_wf",
-                    "verdict": "fail"}])
-    ok, reason = gate.check("b" * 64, "???", s.state)
+    commitment_ids = s.register_commitments(cks)
+    prior = s.build_candidate("!!!", commitment_ids, "mechanist")
+    s.register_candidates([(prior, [])], "pi-0", None)
+    s.refute(prior.id, [{"commitment": "skeleton-wf", "eval": "program:skeleton_wf",
+                         "verdict": "fail"}])
+    candidate = s.build_candidate("???", commitment_ids, "mechanist")
+    ok, reason = s.admit_candidate(candidate)
     assert not ok and "to refuted" in reason
 
 
@@ -130,14 +124,16 @@ def test_resume_after_stop_continues_the_same_log(tmp_path):
     root = tmp_path / "run"
     run([("pi-0", "d")], MockEndpoint([_conj(json.dumps(
         {"claim": "a", "mechanism": "m",
-         "forbidden": [{"case": "c", "eval": "rubric:std"}]}))]),
+         "forbidden": [{"case": "c", "eval": "program:json-wf"}]}))]),
         budget=10**6, root=root, turnover_k=1, max_cycles=1)
     n1 = len(Session(root).state.events)
     # Second run appends to the same root; seqs stay consecutive.
-    run([("pi-1", "d2")], MockEndpoint([_conj(json.dumps(
+    resumed = run([("pi-1", "d2")], MockEndpoint([_conj(json.dumps(
         {"claim": "b", "mechanism": "m",
-         "forbidden": [{"case": "c", "eval": "rubric:std"}]}))]),
+         "forbidden": [{"case": "c", "eval": "program:json-wf"}]}))]),
         budget=10**6, root=root, turnover_k=1, max_cycles=1)
+    assert resumed["meter_equals_log"]
+    assert resumed["logged_tokens_this_run"] == resumed["tokens"]["total"]
     state = replay(root)
     assert len(state.events) > n1
     assert set(state.problems) == {"pi-0", "pi-1"}

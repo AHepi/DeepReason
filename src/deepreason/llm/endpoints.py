@@ -10,6 +10,8 @@ import time
 import urllib.error
 import urllib.request
 
+from deepreason.llm.repair import OutputMechanism
+
 _RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 _BACKOFFS = (2, 4, 8)
 # Bounded read-timeout policy. One authoritative default wait per attempt
@@ -22,6 +24,19 @@ _BACKOFFS = (2, 4, 8)
 # than the base wait, one wider retry is justified — more is not.
 DEFAULT_TIMEOUT_S = 300
 TIMEOUT_FACTORS = (1, 2)
+
+# JSON-value grammar accepted by llama.cpp-compatible constrained decoders.
+# Semantic field constraints remain in the WireContract validator.
+JSON_GBNF = r'''root ::= ws value ws
+value ::= object | array | string | number | "true" | "false" | "null"
+object ::= "{" ws (pair (ws "," ws pair)*)? ws "}"
+pair ::= string ws ":" ws value
+array ::= "[" ws (value (ws "," ws value)*)? ws "]"
+string ::= "\"" chars "\""
+chars ::= ([^"\\] | "\\" (["\\/bfnrt] | "u" hex hex hex hex))*
+number ::= "-"? ("0" | [1-9] [0-9]*) ("." [0-9]+)? ([eE] [+-]? [0-9]+)?
+hex ::= [0-9a-fA-F]
+ws ::= [ \t\n\r]*'''
 
 
 class EndpointError(RuntimeError):
@@ -137,9 +152,16 @@ class MockEndpoint:
         self.model = model
         self.last_usage: dict | None = None
         self.last_images: list[bytes] = []
+        self.last_kwargs: dict = {}
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics: list[str] = []
 
-    def complete(self, prompt: str, images: list[bytes] | None = None) -> str:
+    def complete(self, prompt: str, images: list[bytes] | None = None, **kwargs) -> str:
+        self.last_usage = None
+        self.last_transport_attempts = 1
+        self.last_transport_diagnostics = []
         self.last_images = list(images) if images else []  # test-inspectable
+        self.last_kwargs = dict(kwargs)
         if self._fn is not None:
             response = self._fn(prompt)
         elif self._responses:
@@ -169,6 +191,7 @@ class OpenAICompatEndpoint:
         request_logprobs: bool = False,
         reasoning: str | int | None = None,
         provider: str | None = None,
+        output_mechanism: str | OutputMechanism = OutputMechanism.JSON_TEXT,
     ) -> None:
         from deepreason.llm.providers import infer_provider
 
@@ -186,11 +209,22 @@ class OpenAICompatEndpoint:
         # the dominant cost lever (docs/TOKEN_ECONOMY.md angle 1).
         self.reasoning = reasoning
         self.provider = provider or infer_provider(base_url)
+        self.output_mechanism = OutputMechanism(output_mechanism).value
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
         self.last_mean_surprisal: float | None = None
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics: list[str] = []
 
-    def build_body(self, prompt: str, images: list[bytes] | None = None) -> dict:
+    def build_body(
+        self,
+        prompt: str,
+        images: list[bytes] | None = None,
+        *,
+        response_schema: dict | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        stop: list[str] | None = None,
+    ) -> dict:
         from deepreason.llm.providers import reasoning_body
 
         # Vision (multimodal): with images, content becomes OpenAI content
@@ -217,15 +251,52 @@ class OpenAICompatEndpoint:
             body["temperature"] = self.temperature
         if self.max_tokens is not None:
             body["max_tokens"] = self.max_tokens
-        if self.json_mode:
+        mechanism = OutputMechanism(output_mechanism) if output_mechanism else None
+        if mechanism == OutputMechanism.NATIVE_JSON_SCHEMA:
+            if not response_schema:
+                raise EndpointError("native_json_schema requires response_schema")
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "deepreason_output",
+                    "strict": True,
+                    "schema": response_schema,
+                },
+            }
+        elif mechanism == OutputMechanism.GRAMMAR:
+            # Grammar is a fixed lease property. Unsupported providers reject
+            # the request; this method never falls back to a different mode.
+            body["grammar"] = JSON_GBNF
+        elif self.json_mode and mechanism is None:
             body["response_format"] = {"type": "json_object"}
+        if stop:
+            body["stop"] = list(stop)
         if self.request_logprobs:
             body["logprobs"] = True
         body.update(reasoning_body(self.provider, self.reasoning))
         return body
 
-    def complete(self, prompt: str, images: list[bytes] | None = None) -> str:
-        body = self.build_body(prompt, images)
+    def complete(
+        self,
+        prompt: str,
+        images: list[bytes] | None = None,
+        *,
+        response_schema: dict | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        stop: list[str] | None = None,
+    ) -> str:
+        self.last_usage = None
+        self.last_finish_reason = None
+        self.last_mean_surprisal = None
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics = []
+        body = self.build_body(
+            prompt,
+            images,
+            response_schema=response_schema,
+            output_mechanism=output_mechanism,
+            stop=stop,
+        )
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -246,6 +317,14 @@ class OpenAICompatEndpoint:
         # its signature and its other callers are untouched.
         read_timeouts = 0
 
+        def _note_transport(error: Exception) -> None:
+            code = getattr(error, "code", None)
+            label = type(error).__name__ + (f":HTTP-{code}" if code else "")
+            detail = str(error).replace("\n", " ")[:200]
+            self.last_transport_diagnostics.append(
+                f"{label}:{detail}" if detail else label
+            )
+
         def _timed_out(e: Exception) -> bool:
             return isinstance(e, TimeoutError) or (
                 isinstance(e, urllib.error.URLError)
@@ -254,6 +333,7 @@ class OpenAICompatEndpoint:
 
         def _once() -> dict:
             nonlocal read_timeouts
+            self.last_transport_attempts += 1
             timeout = self.timeout_s * TIMEOUT_FACTORS[read_timeouts]
             try:
                 # The stall can hit at connect/first byte (urlopen) or
@@ -266,6 +346,7 @@ class OpenAICompatEndpoint:
                         # transient in practice — let the retry loop take it.
                         raise _TransientBody(f"non-JSON response body: {e}") from e
             except Exception as e:
+                _note_transport(e)
                 if _timed_out(e):
                     read_timeouts += 1
                     if read_timeouts >= len(TIMEOUT_FACTORS):
@@ -283,13 +364,17 @@ class OpenAICompatEndpoint:
             # the post-retry guards below still catch the persistent case.
             try:
                 if data["choices"][0]["message"]["content"] is None:
-                    raise _TransientBody(
+                    error = _TransientBody(
                         f"null content (finish_reason="
                         f"{data['choices'][0].get('finish_reason')!r})"
                     )
+                    _note_transport(error)
+                    raise error
             except (KeyError, IndexError, TypeError) as e:
                 detail = data.get("error") if isinstance(data, dict) else data
-                raise _TransientBody(f"malformed completion response: {detail!r}") from e
+                error = _TransientBody(f"malformed completion response: {detail!r}")
+                _note_transport(error)
+                raise error from e
             return data
 
         data = request_with_retries(_once)

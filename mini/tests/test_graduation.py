@@ -17,9 +17,9 @@ def _skeleton(i: int) -> str:
     return json.dumps({
         "claim": f"claim {i}", "mechanism": f"mechanism {i}",
         "forbidden": [{"case": "must state a mechanism",
-                       "eval": "predicate:'mechanism' in content"},
-                      {"case": "a rubric-only case rides along",
-                       "eval": "rubric:std-hist"}]})
+                       "eval": "program:json-wf"},
+                      {"case": "the skeleton must remain valid JSON",
+                       "eval": "program:json-wf"}]})
 
 
 def _mixed_run(root):
@@ -28,8 +28,8 @@ def _mixed_run(root):
     reseed) and Reseed."""
     doomed = json.dumps({
         "claim": "doomed", "mechanism": "wrong",
-        "forbidden": [{"case": "must mention the striped animal",
-                       "eval": "predicate:'ze'+'bra' in content"}]})
+        "forbidden": [{"case": "must be a website manifest",
+                       "eval": "program:manifest_wf"}]})
     calls = {"n": 0}
 
     def endpoint_fn(prompt):
@@ -67,6 +67,28 @@ def test_parent_ingests_mini_root_without_violations(tmp_path):
     assert report["stats"]["refuted"] >= 1
     assert report["stats"]["dropped_calls"] >= 1
     assert report["stats"]["logged_tokens"] == summary["logged_tokens"]
+
+
+def test_graduation_is_a_literal_no_op_for_log_and_process_metadata(tmp_path):
+    """Opening a mini root in full DeepReason performs no conversion."""
+    from deepreason.invariants import verify_root
+
+    root = tmp_path / "mini-run"
+    _mixed_run(root)
+    tracked = {
+        path.relative_to(root): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+    deepreason_harness.Harness(root)
+    verify_root(root)
+
+    assert {
+        path.relative_to(root): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    } == tracked
 
 
 def test_statuses_agree_between_mini_and_parent(tmp_path):

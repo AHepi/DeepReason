@@ -12,6 +12,37 @@ import importlib.util
 from deepreason.ontology import Problem, ProblemProvenance
 
 
+class EngineProfileError(ValueError):
+    """A workload was sent to an engine surface that cannot execute it."""
+
+    def __init__(self, code: str, profile: str, workload: str) -> None:
+        self.code = code
+        self.profile = profile
+        self.workload = workload
+        super().__init__(
+            f"{code}: engine_profile={profile!r} cannot execute {workload}; "
+            "run it through the matching engine surface"
+        )
+
+
+def require_full_engine(subject, *, workload: str) -> None:
+    """Fail before model calls when MiniReason is sent to a full-only path.
+
+    ``subject`` may be a Config, RunManifest, or explicit profile string.
+    The check lives in shared operations so CLI, MCP, and direct callers use
+    the same stable error codes instead of treating ``engine_profile`` as
+    reporting-only metadata.
+    """
+    profile = str(getattr(subject, "engine_profile", subject))
+    if profile == "full":
+        return
+    if workload == "website":
+        code = "ENGINE_PROFILE_UNSUPPORTED_FOR_WEBSITE"
+    else:
+        code = "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN"
+    raise EngineProfileError(code, profile, workload)
+
+
 def resolve_prefix(harness, prefix: str) -> str:
     """Resolve an artifact-id prefix; unique match wins, ambiguity raises."""
     matches = [i for i in harness.state.artifacts if i.startswith(prefix)]
@@ -219,7 +250,7 @@ def report_research_failure(harness, problem_id: str, source: str, reason: str,
 
 
 def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
-                  on_cycle=None):
+                  on_cycle=None, run_manifest=None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
     (result, meter, accounting). An explicit token_budget of 0 is a real
     ceiling. Raises ValueError when no conjecturer role is configured.
@@ -228,13 +259,28 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     invocation (the log may carry prior runs on a resumed root): silent
     spend was the pipeline's most-recurrent bug class, so the check ships
     in-band with every run rather than living in an operator's habits."""
+    require_full_engine(run_manifest or config, workload="full scheduler")
+
+    if run_manifest is not None:
+        from deepreason.run_manifest import preflight_harness
+
+        preflight_harness(run_manifest, harness, config)
+
     from deepreason.llm.adapter import build_adapter
     from deepreason.llm.budget import TokenMeter
     from deepreason.scheduler.scheduler import Scheduler
 
     logged_before = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     meter = TokenMeter(budget=token_budget) if token_budget is not None else None
-    adapter = build_adapter(config, harness.blobs, meter=meter)
+    adapter = build_adapter(
+        config,
+        harness.blobs,
+        meter=meter,
+        run_manifest=run_manifest,
+        # Later-call direct -> compact recovery is append-only process state.
+        # Rehydrate it on every scheduler resume without reading model raws.
+        process_events=harness.log.read(),
+    )
     if not adapter.has_role("conjecturer"):
         raise ValueError(
             "no conjecturer endpoint configured — set roles.conjecturer "

@@ -14,7 +14,7 @@ SKELETON = json.dumps({
     "scope": {"covers": ["eastern mediterranean"], "excludes": ["egypt proper"]},
     "forbidden": [
         {"case": "content must mention trade",
-         "eval": "predicate:'trade' in content.lower()"},
+         "eval": "program:json-wf"},
         {"case": "a purely climatic account suffices",
          "eval": "rubric:std-hist"},
     ],
@@ -27,6 +27,10 @@ def test_parse_skeleton():
     assert parse_skeleton("not json") is None
     assert parse_skeleton('{"claim": "x"}') is None  # mechanism required
     assert parse_skeleton(json.dumps({"claim": 1, "mechanism": []})) is None
+    assert parse_skeleton(json.dumps({
+        "claim": "x", "mechanism": "m",
+        "forbidden": [{"case": "unsafe", "eval": "predicate:True"}],
+    })) is None
 
 
 def test_skeleton_wf_requires_forbidden_cases():
@@ -67,15 +71,15 @@ def test_compile_and_run_checks():
     # Mechanical checks pass on the skeleton itself; the rubric one is
     # carried but not judged.
     assert run_checks(SKELETON, checks) == []
-    # A content that violates its own forbidden case is refuted for free.
-    # ('ze'+'bra' avoids the self-reference: the eval string is part of the
-    # content the predicate runs over.)
+    # A content that names a canonical program it fails is refuted for free.
     bad_obj = json.loads(SKELETON)
-    bad_obj["forbidden"][0] = {"case": "must mention the striped animal",
-                               "eval": "predicate:'ze'+'bra' in content"}
+    bad_obj["forbidden"][0] = {
+        "case": "must be a website manifest",
+        "eval": "program:manifest_wf",
+    }
     bad = json.dumps(bad_obj)
     failures = run_checks(bad, compile_checks(bad))
-    assert failures and failures[0]["eval"].startswith("predicate:")
+    assert failures and failures[0]["eval"] == "program:manifest_wf"
 
 
 def test_malformed_corpus_all_refuted():
@@ -91,15 +95,38 @@ def test_malformed_corpus_all_refuted():
 
 def test_commitment_id_parity_with_parent():
     """Same forbidden case => the parent's fc: id, byte-for-byte (G6)."""
-    parent = pytest.importorskip("deepreason.canonical")
+    pytest.importorskip("deepreason.canonical")
+    from deepreason.informal.skeleton import forbidden_commitment
     from minireason.checks import ForbiddenCase
 
-    case = ForbiddenCase(case="content must mention trade",
-                         eval="predicate:'trade' in content.lower()")
-    expected = "fc:" + parent.sha256_hex(parent.canonical_json({
-        "case": case.case, "eval": case.eval,
-        "observation_valued": case.observation_valued}))[:12]
-    assert forbidden_commitment_id(case) == expected
+    case = ForbiddenCase(case="content must be valid JSON", eval="program:json-wf")
+    assert forbidden_commitment_id(case) == forbidden_commitment(case).id
+
+
+def test_canonical_lineage_program_can_refute_without_mini_registry():
+    from deepreason.ontology import Budget, Commitment
+
+    content = json.dumps({
+        "claim": "unconnected",
+        "mechanism": "appeared from nowhere",
+        "forbidden": [{"case": "valid JSON", "eval": "program:json-wf"}],
+    })
+    lineage = Commitment(
+        id="lineage-check",
+        eval="program:lineage_ref",
+        budget=Budget(extra={"endpoints": "required-source"}),
+    )
+    failures = run_checks(
+        content,
+        [lineage.model_dump(mode="json", by_alias=True)],
+    )
+
+    assert failures == [{
+        "commitment": "lineage-check",
+        "eval": "program:lineage_ref",
+        "verdict": "fail",
+        "reason": "no dependence ref into the connection lineage",
+    }]
 
 
 def test_artifact_id_parity_with_parent():

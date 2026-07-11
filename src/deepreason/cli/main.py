@@ -34,7 +34,46 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
                                  "your API key privately")
-    sub.add_parser("config", help="print the complete effective configuration")
+    config_cmd = sub.add_parser(
+        "config", help="print source config, or compile/inspect a frozen RunManifest"
+    )
+    config_sub = config_cmd.add_subparsers(dest="config_command")
+    compile_cmd = config_sub.add_parser(
+        "compile", help="resolve source configuration into a canonical RunManifest"
+    )
+    compile_cmd.add_argument("--single-model", default=None,
+                             help="assign this exact concrete model route to every active role")
+    compile_cmd.add_argument("--judge-family", default=None,
+                             help="configured endpoint id, model id, URL, or family for seat 2")
+    compile_cmd.add_argument("--profile", choices=("compact", "standard", "frontier"),
+                             default=None, help="model-facing presentation profile "
+                             "(default: explicit config, then doctor recommendation)")
+    compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
+    compile_cmd.add_argument(
+        "--rubric-policy", choices=("forbid", "require_cross_family"),
+        default="require_cross_family",
+    )
+    compile_cmd.add_argument("--concurrency", type=int, default=None)
+    compile_cmd.add_argument("--out", required=True, help="canonical manifest output path")
+    compile_cmd.add_argument("--dry-run", action="store_true",
+                             help="print the resolved matrix without writing it")
+    inspect_cmd = config_sub.add_parser(
+        "inspect", help="verify and print a compiled RunManifest"
+    )
+    inspect_cmd.add_argument("--run-manifest", required=True)
+    doctor_cmd = sub.add_parser(
+        "doctor", help="preflight one exact endpoint/model and run deterministic capability probes"
+    )
+    doctor_cmd.add_argument("--endpoint", required=True,
+                            help="endpoint URL, endpoint_id, or configured role name")
+    doctor_cmd.add_argument("--model", required=True, help="exact concrete model id")
+    doctor_cmd.add_argument("--provider", default=None)
+    doctor_cmd.add_argument("--family", default=None)
+    doctor_cmd.add_argument("--api-key-env", default=None)
+    doctor_cmd.add_argument("--revision", default=None,
+                            help="exact provider model revision when available")
+    doctor_cmd.add_argument("--dry-run", action="store_true",
+                            help="validate identity without contacting /models")
     make_cmd = sub.add_parser(
         "make", help='build a website from a description, e.g. '
                      'deepreason make "a recipe website" — plans it, designs '
@@ -46,6 +85,10 @@ def build_parser() -> argparse.ArgumentParser:
                                "stages (default 10 -> 2/2/6)")
     make_cmd.add_argument("--token-budget", type=int, default=150_000,
                           help="hard token ceiling (default 150000; 0 = unlimited)")
+    make_cmd.add_argument("--run-manifest", default=None,
+                          help="precompiled immutable role matrix")
+    make_cmd.add_argument("--dry-run", action="store_true",
+                          help="resolve and print the exact role matrix; make no model call")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -56,6 +99,10 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--problem", default=None, help="problem file (json/yaml) to register first")
     run.add_argument("--token-budget", type=int, default=None,
                      help="hard prompt+completion token ceiling (graceful stop)")
+    run.add_argument("--run-manifest", default=None,
+                     help="precompiled immutable role matrix")
+    run.add_argument("--dry-run", action="store_true",
+                     help="resolve and print the exact role matrix; make no model call")
     sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
     sub.add_parser(
@@ -164,7 +211,7 @@ def _main(argv: list[str] | None = None) -> int:
         easy.setup_wizard()
         return 0
 
-    if args.command == "config":
+    if args.command == "config" and args.config_command is None:
         import yaml
 
         from deepreason.config import load as load_config
@@ -173,12 +220,117 @@ def _main(argv: list[str] | None = None) -> int:
         print(yaml.safe_dump(configured.model_dump(mode="json"), sort_keys=False), end="")
         return 0
 
+    if args.command == "config" and args.config_command == "compile":
+        from deepreason.config import load as load_config
+        from deepreason.llm.capabilities import CapabilityCache
+        from deepreason.run_manifest import (
+            RunManifestError,
+            compile_run_manifest,
+            render_role_matrix,
+            write_run_manifest,
+        )
+
+        configured = load_config(Path(args.config) if args.config else None)
+        try:
+            manifest = compile_run_manifest(
+                configured,
+                engine_profile=args.engine_profile,
+                model_profile=args.profile,
+                single_model=args.single_model,
+                judge_family=args.judge_family,
+                rubric_policy=args.rubric_policy,
+                concurrency=args.concurrency,
+                capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
+            )
+        except RunManifestError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        print(render_role_matrix(manifest))
+        print(f"sha256={manifest.sha256}")
+        if not args.dry_run:
+            target, digest = write_run_manifest(manifest, args.out)
+            print(f"wrote {target} and {digest}")
+        return 0
+
+    if args.command == "config" and args.config_command == "inspect":
+        from deepreason.run_manifest import load_run_manifest, render_role_matrix
+
+        try:
+            manifest = load_run_manifest(args.run_manifest)
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        print(render_role_matrix(manifest))
+        print(f"sha256={manifest.sha256}")
+        print(json.dumps(manifest.model_dump(mode="json"), indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "doctor":
+        return _cmd_doctor(args)
+
     if args.command == "make":
+        from deepreason.config import load as load_config
+        from deepreason.llm.capabilities import CapabilityCache
+        from deepreason.ops import require_full_engine
+        from deepreason.run_manifest import (
+            MANIFEST_NAME,
+            RunManifestError,
+            bind_run_manifest,
+            compile_run_manifest,
+            load_run_manifest,
+            materialize_run_config,
+            preflight_payload,
+            render_role_matrix,
+        )
+
+        run_root = (
+            Path(args.root)
+            if args.root != ".deepreason"
+            else easy._fresh(Path("runs") / easy._slug(args.description))
+        )
+        try:
+            bound_path = run_root / MANIFEST_NAME
+            if bound_path.exists():
+                manifest = load_run_manifest(bound_path)
+                if args.run_manifest:
+                    requested = load_run_manifest(args.run_manifest)
+                    if requested.canonical_bytes() != manifest.canonical_bytes():
+                        raise RunManifestError(
+                            "RUN_MANIFEST_CONFLICT",
+                            "run root is already bound to a different manifest",
+                            f"/{MANIFEST_NAME}",
+                        )
+            elif args.run_manifest:
+                manifest = load_run_manifest(args.run_manifest)
+            else:
+                configured = load_config(Path(args.config) if args.config else None)
+                # Website commitments are program/predicate based. A rubric
+                # route is neither needed nor silently synthesized.
+                manifest = compile_run_manifest(
+                    configured, rubric_policy="forbid",
+                    capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
+                )
+            require_full_engine(manifest, workload="website")
+            preflight_payload(
+                manifest, {"problem": {"description": args.description}, "commitments": []}
+            )
+            if not args.dry_run:
+                bind_run_manifest(manifest, run_root)
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        if args.dry_run:
+            print(render_role_matrix(manifest))
+            print(f"sha256={manifest.sha256}")
+            return 0
+        compiled_config = materialize_run_config(manifest, run_root)
+        # easy.make remains the deterministic website workflow. It sees only
+        # the generated concrete role table, never source/decoy YAML. Passing
+        # the chosen root prevents a second hidden freshness decision.
         easy.make(
             args.description, out=args.out, cycles=args.cycles,
             token_budget=args.token_budget or None,
-            config=args.config,
-            root=None if args.root == ".deepreason" else args.root,
+            config=str(compiled_config), root=str(run_root),
         )
         return 0
 
@@ -468,32 +620,226 @@ def _main(argv: list[str] | None = None) -> int:
     return 1
 
 
-def _load_problem_file(harness: Harness, path: Path) -> str:
-    from deepreason.ops import seed_problem_payload
-
+def _read_problem_file(path: Path) -> dict:
+    """Parse one seed payload without mutating the harness (preflight seam)."""
     if path.suffix in (".yaml", ".yml"):
         import yaml
 
         data = yaml.safe_load(path.read_text())
     else:
         data = json.loads(path.read_text())
-    return seed_problem_payload(harness, data).id
+    if not isinstance(data, dict):
+        raise ValueError("problem file must contain an object")
+    return data
+
+
+def _cmd_doctor(args) -> int:
+    """Validate identity, inventory, then measure transport capabilities."""
+    import os
+    from dataclasses import asdict
+
+    from deepreason.config import load as load_config
+    from deepreason.llm.adapter import _endpoint_from_spec
+    from deepreason.llm.capabilities import CapabilityCache, probe_capabilities
+    from deepreason.llm.endpoints import EndpointError, list_models
+    from deepreason.llm.profiles import select_profile
+    from deepreason.llm.repair import select_output_mechanism
+    from deepreason.llm.providers import infer_provider
+    from deepreason.run_manifest import (
+        RouteSecretError,
+        infer_model_family,
+        validate_route_base_url,
+    )
+
+    if args.model in ("auto", "auto-alt"):
+        print("DOCTOR_MODEL_MUST_BE_CONCRETE: --model cannot be auto or auto-alt",
+              file=sys.stderr)
+        return 1
+    configured = load_config(Path(args.config) if args.config else None)
+    selected = None
+    for role, value in configured.roles.items():
+        seats = value if isinstance(value, list) else [value]
+        for seat in seats:
+            if not isinstance(seat, dict):
+                continue
+            if args.endpoint in {
+                role, str(seat.get("endpoint_id") or ""), str(seat.get("endpoint") or "")
+            }:
+                selected = dict(seat)
+                break
+        if selected is not None:
+            break
+    if selected is None:
+        if not (args.endpoint.startswith("http://") or args.endpoint.startswith("https://")):
+            print(
+                f"DOCTOR_ENDPOINT_NOT_FOUND: {args.endpoint!r} is not a URL, endpoint_id, "
+                "or configured role",
+                file=sys.stderr,
+            )
+            return 1
+        selected = {"endpoint": args.endpoint}
+    endpoint = str(selected.get("endpoint") or "")
+    try:
+        validate_route_base_url(endpoint)
+    except RouteSecretError as error:
+        # The validator deliberately carries no rejected URL, so neither the
+        # doctor result nor stderr can echo embedded credential material.
+        print(str(error), file=sys.stderr)
+        return 1
+    provider = str(args.provider or selected.get("provider") or infer_provider(endpoint))
+    family = str(args.family or selected.get("family")
+                 or infer_model_family(args.model, provider))
+    key_env = args.api_key_env or selected.get("api_key_env")
+    revision = args.revision or selected.get("model_revision") or ""
+    key = os.environ.get(key_env) if key_env else None
+    if key_env and not key:
+        print(f"DOCTOR_API_KEY_MISSING: environment variable {key_env} is unset",
+              file=sys.stderr)
+        return 1
+    result = {
+        "endpoint_id": selected.get("endpoint_id") or endpoint,
+        "base_url": endpoint,
+        "model_id": args.model,
+        "provider": provider,
+        "family": family,
+        "model_revision": revision or None,
+        "credential_env": key_env,
+        "credential_present": bool(key),
+        "contacted": False,
+    }
+    if not args.dry_run:
+        try:
+            available = list_models(endpoint, key)
+        except EndpointError as error:
+            print(f"DOCTOR_ENDPOINT_FAILED: {error}", file=sys.stderr)
+            return 1
+        result["contacted"] = True
+        result["model_available"] = args.model in available
+        result["available_models"] = available
+        if not result["model_available"]:
+            print(json.dumps(result, indent=2, sort_keys=True))
+            print(f"DOCTOR_MODEL_NOT_FOUND: {args.model!r} was not returned by /models",
+                  file=sys.stderr)
+            return 1
+        probe_spec = dict(selected)
+        probe_spec.update(
+            endpoint=endpoint,
+            model=args.model,
+            provider=provider,
+            family=family,
+            model_revision=revision or None,
+            api_key_env=key_env,
+            # Capability probes measure contract transport, not the source
+            # role's creative sampling policy. Freeze deterministic decoding
+            # with enough output headroom for the 4096-token length probe.
+            temperature=0.0,
+            reasoning="none",
+            max_tokens=5000,
+            logprobs=False,
+            json_mode=False,
+        )
+        probe_endpoint = _endpoint_from_spec(probe_spec)
+        cache = CapabilityCache(Path(args.root) / "capabilities.json")
+        capabilities = probe_capabilities(
+            probe_endpoint, revision=revision, cache=cache
+        )
+        result["capabilities"] = asdict(capabilities)
+        result["recommended_model_profile"] = select_profile(capabilities).name.value
+        result["selected_output_mechanism"] = select_output_mechanism(capabilities).value
+        result["capability_cache"] = str(cache.path)
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def _load_problem_file(harness: Harness, path: Path) -> str:
+    from deepreason.ops import seed_problem_payload
+
+    return seed_problem_payload(harness, _read_problem_file(path)).id
 
 
 def _cmd_run(args) -> int:
     from deepreason.config import load as load_config
-    from deepreason.ops import run_scheduler
+    from deepreason.llm.capabilities import CapabilityCache
+    from deepreason.ops import require_full_engine, run_scheduler
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        RunManifestError,
+        bind_run_manifest,
+        compile_run_manifest,
+        config_from_run_manifest,
+        load_run_manifest,
+        payload_has_rubric,
+        preflight_payload,
+        render_role_matrix,
+    )
 
     cycles = int(args.budget.split("=", 1)[1]) if "=" in args.budget else int(args.budget)
-    config = load_config(Path(args.config) if args.config else None)
-    harness = Harness(Path(args.root))
+    run_root = Path(args.root)
+    try:
+        bound_path = run_root / MANIFEST_NAME
+        if bound_path.exists():
+            manifest = load_run_manifest(bound_path)
+            if args.run_manifest:
+                requested = load_run_manifest(args.run_manifest)
+                if requested.canonical_bytes() != manifest.canonical_bytes():
+                    raise RunManifestError(
+                        "RUN_MANIFEST_CONFLICT",
+                        "run root is already bound to a different manifest",
+                        f"/{MANIFEST_NAME}",
+                    )
+            config = config_from_run_manifest(manifest)
+        elif args.run_manifest:
+            manifest = load_run_manifest(args.run_manifest)
+            config = config_from_run_manifest(manifest)
+        else:
+            config = load_config(Path(args.config) if args.config else None)
+            # Without a problem payload we cannot assume rubric is absent.
+            policy = (
+                "require_cross_family"
+                if args.problem and payload_has_rubric(_read_problem_file(Path(args.problem)))
+                else "forbid"
+            )
+            manifest = compile_run_manifest(
+                config, rubric_policy=policy,
+                capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
+            )
+            config = config_from_run_manifest(manifest)
+        require_full_engine(manifest, workload="full scheduler")
+        if args.problem:
+            preflight_payload(manifest, _read_problem_file(Path(args.problem)))
+        if not args.dry_run:
+            bind_run_manifest(manifest, run_root)
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    if args.dry_run:
+        print(render_role_matrix(manifest))
+        print(f"sha256={manifest.sha256}")
+        return 0
+    harness = Harness(run_root)
     if args.problem:
         _load_problem_file(harness, Path(args.problem))
+    elif manifest.rubric_policy == "forbid":
+        # A resumed root can already contain rubric criteria. Detect the
+        # conflict before an adapter/model call rather than midway through.
+        rubric_commitments = [
+            commitment.model_dump(mode="json")
+            for commitment in harness.commitments.values()
+            if commitment.eval.startswith("rubric:")
+        ]
+        if rubric_commitments:
+            try:
+                preflight_payload(manifest, {"commitments": rubric_commitments})
+            except ValueError as error:
+                print(str(error), file=sys.stderr)
+                return 1
     if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
     try:
-        result, meter, accounting = run_scheduler(harness, config, cycles, args.token_budget)
+        result, meter, accounting = run_scheduler(
+            harness, config, cycles, args.token_budget, run_manifest=manifest
+        )
     except ValueError as e:
         print(str(e), file=sys.stderr)
         return 1
