@@ -106,7 +106,20 @@ class Scheduler:
         self.adapter = adapter
         self.config = config
         self.embedder = embedder or HashingEmbedder()
-        self.research_backend = research_backend
+        # Research service (§12; research/backends.py). Accepts a
+        # ResearchService, a bare duck-typed backend (legacy tests: wrapped
+        # as an internal-fetcher service), or None (mode "off").
+        from deepreason.research.backends import ResearchService
+
+        if research_backend is None:
+            self.research = ResearchService("off")
+        elif isinstance(research_backend, ResearchService):
+            self.research = research_backend
+        else:
+            self.research = ResearchService(
+                getattr(research_backend, "name", "custom"), research_backend
+            )
+        self._research_episode: str | None = None  # awaiting/off dedup state
         # Browser oracle backend (rules/act.py, duck-typed like research
         # backends). None = feature off; set to None on BrowserUnavailable.
         self.browser_backend = browser_backend
@@ -735,24 +748,91 @@ class Scheduler:
             self._vision_done.add(aid)
             calls += 1
 
-    def _research_step(self) -> None:
-        """Standing exogenous schedule (§12): work one uncovered research
-        problem every RESEARCH_PERIOD cycles — every cycle under the
-        grounding brake (§11.4)."""
-        if self.research_backend is None:
+    def _research_signal(self, signal: str | None, *extra: str) -> None:
+        """Episode-deduplicated research state signal: emit only on a state
+        TRANSITION (None <-> off/awaiting), never per cycle — the log shows
+        each continuous unavailable/waiting episode exactly once. A new
+        episode after recovery logs a new event."""
+        if signal == self._research_episode:
             return
+        self._research_episode = signal
+        if signal is not None:
+            self.harness.record_measure(inputs=[signal, *extra])
+
+    def _research_step(self) -> None:
+        """Standing exogenous schedule (§12): at most ONE eligible internal
+        retrieval attempt per due cycle, problems in deterministic order,
+        failures logged and bounded (cooldown + per-strategy attempt cap,
+        both reconstructed from the log), backend exceptions caught at this
+        boundary. In "agent" mode there is no internal fetcher: uncovered
+        requests wait in ops.research_docket for the operating agent —
+        that is the ordinary waiting state, not research being off."""
+        from deepreason.ops import _research_events, open_research_problems
+        from deepreason.research.backends import pending, run_research
+
+        open_problems = open_research_problems(self.harness)
+        if not open_problems:
+            self._research_signal(None)
+            return
+        if self.research.mode == "off":
+            # Research deliberately disabled while requests go unmet: the
+            # record must say so honestly (once per episode) — the §11.4
+            # exogenous brake has no actuator here and must not spin.
+            self._research_signal("research-off")
+            return
+        if not self.research.internal:
+            # "agent" mode (or unattended ask-user): the docket is live and
+            # the agent may submit at any time. Silence is NOT evidence of
+            # absence — without a heartbeat protocol the harness cannot
+            # distinguish absent, delayed, or mid-search. Never research-off.
+            self._research_signal(
+                "research-awaiting-agent", *[p.id for p in open_problems[:8]]
+            )
+            return
+        self._research_signal(None)
+
         due = self.research_priority or self._cycles % self.config.RESEARCH_PERIOD == 0
         if not due:
             return
-        from deepreason.research.backends import pending, run_research
-
-        for problem in self.harness.state.problems.values():
-            if problem.provenance.trigger != SpawnTrigger.RESEARCH:
-                continue
+        attempts = _research_events(self.harness)
+        for problem in open_problems:  # deterministic order (sorted ids)
             if pending(self.harness, problem.id):
-                continue
-            if run_research(self.harness, problem, self.research_backend) is not None:
-                return  # one fetch per due cycle (budgeted)
+                continue  # sealed holdout: scheduled-pending, not failed
+            state = attempts.get(problem.id, {"attempts": 0, "last_cycle": -1})
+            if state["attempts"] >= self.config.RESEARCH_ATTEMPTS_MAX:
+                continue  # internal strategy exhausted (already logged)
+            if (
+                state["last_cycle"] >= 0
+                and self._cycles - state["last_cycle"] < self.config.RESEARCH_COOLDOWN
+            ):
+                continue  # cooling down after a failed attempt
+            try:
+                result = run_research(self.harness, problem, self.research.fetcher)
+            except Exception as e:  # noqa: BLE001 - retrieval must never kill the cycle
+                result = None
+                self._log_research_failure(problem.id, type(e).__name__, str(e))
+            else:
+                if result is None:
+                    self._log_research_failure(problem.id, "no-result", "backend returned nothing")
+            return  # exactly one internal attempt per due cycle, hit or miss
+
+    def _log_research_failure(self, pid: str, category: str, reason: str) -> None:
+        """research-fetch-failed carries [pid, cycle, strategy, ...] so the
+        cooldown/attempt state is a pure function of the log (replay-safe),
+        and the exhaustion transition is logged exactly once."""
+        from deepreason.ops import _research_events
+
+        self.harness.record_measure(inputs=[
+            "research-fetch-failed", pid, str(self._cycles),
+            self.research.mode, category, reason[:200],
+        ])
+        state = _research_events(self.harness).get(pid, {"attempts": 0})
+        if state["attempts"] == self.config.RESEARCH_ATTEMPTS_MAX:
+            # Attention only: internal fetching pauses; the problem stays
+            # open and the agent channel can still cover it at any time.
+            self.harness.record_measure(
+                inputs=["research-fetch-exhausted", pid, self.research.mode]
+            )
 
     def _lazy_hv(self) -> None:
         """One spot-check per cycle on an accepted, unmeasured artifact.

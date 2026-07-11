@@ -93,6 +93,36 @@ SIGNALS: dict[str, str] = {
                         "variator edits cannot fit a completion window "
                         "(inputs: [signal, artifact id, char count])",
     "spec-generation": "diversity-specification call for the cycle's problem",
+    # Research service (§12; research/backends.py, ops.py)
+    "research-off": "research is deliberately DISABLED (RESEARCH_BACKEND: "
+                    "null) while uncovered research problems exist — logged "
+                    "once per continuous unavailable-state episode",
+    "research-awaiting-agent": "agent mode: uncovered research problems are "
+                               "waiting in ops.research_docket for the "
+                               "operating agent — the ordinary waiting state "
+                               "(once per episode; inputs carry problem ids). "
+                               "Never emitted as research being off",
+    "research-agent-requested": "grounding-decay escalation (§11.4) of "
+                                "agent-serviced research problems to top "
+                                "priority — a capture-response intervention "
+                                "(inputs: [signal, triggering flag, problem "
+                                "ids...])",
+    "research-fetch-failed": "one retrieval attempt failed (inputs: [signal, "
+                             "problem id, cycle or '-', strategy, category, "
+                             "reason]). Operational only — never evidence, "
+                             "never a verdict; internal attempts feed the "
+                             "cooldown/cap reconstruction, 'agent' reports "
+                             "do not",
+    "research-fetch-exhausted": "a research problem hit RESEARCH_ATTEMPTS_MAX "
+                                "internal failures: that internal strategy "
+                                "pauses (attention only) — the problem stays "
+                                "open and the agent channel can still cover it",
+    "research-evidence-registered": "ops.submit_evidence registered candidate "
+                                    "evidence (inputs: [signal, problem id, "
+                                    "evidence id, source]). Registration is "
+                                    "not coverage: that is derived from the "
+                                    "graph after relevance and reliability "
+                                    "hold",
     # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
     "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
     "reach-provisional": "cross-problem survival on a battery below "
