@@ -229,6 +229,14 @@ class Config(BaseModel):
     # before trusting a config on a new embedder — the adjudicated record in
     # runs/embedder_design refuted every blind distribution-mapping shortcut.
     EMBEDDER_MODEL: str | None = None
+    # Chunked website builds (manifest.py, easy.py): components are bounded
+    # fragments composed by the deterministic assembler. CHUNK_MAX_CHARS is
+    # the default per-fragment size commitment (a manifest entry may set a
+    # tighter own bound); WEBSITE_CHUNKED False falls back to the legacy
+    # one-giant-page build — an explicit compatibility option, kept for
+    # replaying old roots, never a way to skip capture machinery.
+    CHUNK_MAX_CHARS: int = 4000
+    WEBSITE_CHUNKED: bool = True
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

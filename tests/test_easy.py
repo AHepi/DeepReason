@@ -188,7 +188,7 @@ def test_staged_make_runs_three_stages_and_exports(tmp_path, monkeypatch):
     lines = []
     paths = easy.make("my test site", out=str(tmp_path / "site"),
                       config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append)
+                      echo=lines.append, chunked=False)  # legacy compat mode
     assert [c["pid"] for c in calls] == ["pi-plan", "pi-design", "pi-website"]
     assert [c["focus_family"] for c in calls] == ["pi-plan", "pi-design", "pi-website"]
     # One global ceiling, threaded as the remainder.
@@ -228,7 +228,7 @@ def test_staged_make_stops_when_no_plan_survives(tmp_path, monkeypatch):
     lines = []
     paths = easy.make("doomed site", out=str(tmp_path / "site"),
                       config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append)
+                      echo=lines.append, chunked=False)
     assert paths == []
     assert calls == ["pi-plan"]  # later stages never ran
     joined = "\n".join(lines)

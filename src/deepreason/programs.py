@@ -153,6 +153,24 @@ def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
 # Named program registry. hv_floor is deliberately NOT here: it needs the
 # variator (measures/hv.py), and keeping it out makes B0 stratification
 # structural (spec §7).
+def _manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import manifest_wf
+
+    return manifest_wf(text, budget, artifact)
+
+
+def _component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import component_wf
+
+    return component_wf(text, budget, artifact)
+
+
+def _integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import integration_wf
+
+    return integration_wf(text, budget, artifact)
+
+
 PROGRAMS = {
     "json-wf": _json_wf,
     "skeleton_wf": _skeleton_wf,
@@ -161,6 +179,12 @@ PROGRAMS = {
     "property_oracle": _property_oracle,
     "generator_wf": _generator_wf,
     "checker_wf": _checker_wf,
+    # Chunked website builds (manifest.py): the design's component manifest,
+    # the per-chunk fragment contract, and assembled-page coherence. All
+    # static, deterministic functions of content + frozen spec.
+    "manifest_wf": _manifest_wf,
+    "component_wf": _component_wf,
+    "integration_wf": _integration_wf,
 }
 
 

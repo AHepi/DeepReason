@@ -93,6 +93,63 @@ _BUILD_TEMPLATE = (
     "groundwork, not suggestions.\n\n" + _DESCRIPTION_TEMPLATE + "\n" + _SCOPE_NOTE
 )
 
+# ---- chunked pipeline templates (manifest.py) -------------------------- #
+# The chunked build never asks one call for a whole page: the design stage
+# declares a component manifest, each component is its own bounded problem,
+# and repository code assembles the accepted fragments deterministically.
+
+_MANIFEST_NOTE = '''
+The design MUST end with a fenced COMPONENT MANIFEST block exactly in this
+shape (JSON inside a ```manifest fence):
+
+```manifest
+{{
+  "title": "<page title>",
+  "libs": ["classless"],
+  "components": [
+    {{"name": "header", "purpose": "one sentence", "element_id": "site-header",
+      "css_prefix": "hd-", "js_exports": [], "js_uses": [],
+      "events_emitted": [], "events_listened": [], "libs": [], "order": 0}}
+  ]
+}}
+```
+
+Manifest rules (machine-checked): 2-8 components, each small enough to
+build alone (its fragment must fit {chunk_max} characters); names,
+element_ids, css_prefixes and orders unique; js_exports are the
+window.<name> functions a component defines for the others; js_uses may
+name only other components' exports; custom events must be declared on
+both the emitting and listening component. "libs" selects from the
+vendored catalog — already-styled infrastructure that costs the build
+nothing: {libs}. Choose libs deliberately: selections are design
+decisions on the record, criticizable like everything else.'''
+
+_DESIGN_CHUNKED_TEMPLATE = _DESIGN_TEMPLATE + "\n" + _MANIFEST_NOTE
+
+_COMPONENT_TEMPLATE = """Build ONE component of a larger website: {name} — {purpose}
+
+The website: {description}
+
+Each candidate's `content` MUST be ONE self-contained HTML FRAGMENT — never
+a full document (no <!doctype>, <html>, <head> or <body> tags) — that
+implements just this component, faithful to the design in FOUNDATION.
+
+The component's contract (machine-checked):
+- Root element with id="{element_id}"; any extra ids must be
+  {element_id}-* (namespaces prevent collisions at assembly).
+- Custom CSS in <style> scoped to #{element_id} or .{css_prefix}* classes
+  ONLY. The assembled page already ships base styles ({libs}) — do NOT
+  re-derive resets, fonts, generic buttons/forms, or page-level layout.
+  Custom CSS is for THIS component's design-specific look.
+- JavaScript in <script>: define exactly these window exports: {exports}.
+  You may call other components' exports: {uses}. Custom events you may
+  emit: {emitted}; custom events you may listen for: {listened}.
+- HARD SIZE BOUND: at most {max_chars} characters total.
+
+Keep the fragment semantic and minimal; repository code assembles all
+components in declared order into the final page.
+""" + _SCOPE_NOTE
+
 MAKE_OVERRIDES = {
     # The validated app-run shape (runs/acting_loop_app2): no fuzz/property
     # machinery for a website build; browser evidence + criticism. Schools
@@ -357,6 +414,182 @@ def seed_build(harness, description: str, design_id: str):
     ))
 
 
+def seed_design_chunked(harness, description: str, plan_id: str):
+    """Stage 2 (chunked): the design problem additionally requires a valid
+    COMPONENT MANIFEST (program:manifest_wf) — the manifest lives inside the
+    ordinary, criticizable design artifact, never outside the graph."""
+    from deepreason import assets
+    from deepreason.manifest import manifest_commitment
+    from deepreason.ontology import Problem, ProblemProvenance
+    from deepreason.unification.isolation import lineage_ref_commitment
+
+    gate = _stage_gate("design-doc", _DESIGN_GATE_EXPR)
+    manifest_gate = manifest_commitment(assets.catalog_names())
+    lineage = lineage_ref_commitment([plan_id])
+    for kappa in (gate, manifest_gate, lineage):
+        if kappa.id not in harness.commitments:
+            harness.register_commitment(kappa)
+    return harness.register_problem(Problem(
+        id="pi-design",
+        description=_DESIGN_CHUNKED_TEMPLATE.format(
+            description=description.strip(),
+            chunk_max=4000,
+            libs=", ".join(sorted(assets.catalog_names())),
+        ),
+        criteria=[gate.id, manifest_gate.id, lineage.id],
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": "seed", "from": [plan_id]}),
+    ))
+
+
+def seed_component(harness, description: str, design_id: str, manifest,
+                   spec, chunk_max: int, suffix: str = "",
+                   repair_of: str | None = None):
+    """One component problem per manifest entry, seeded once the design
+    survivor is known. Criteria: the fragment contract (component_wf, spec
+    frozen in) + lineage binding to the design — candidates flow through the
+    ordinary Conj -> Crit -> Adj machinery like any other problem. A repair
+    problem (suffix != "") is a SUCCESSOR spawned from the implicated
+    component artifact: prior history is never mutated."""
+    from deepreason.manifest import component_commitment
+    from deepreason.ontology import Problem, ProblemProvenance
+    from deepreason.unification.isolation import lineage_ref_commitment
+
+    allowed_uses = sorted(set(spec.js_uses))
+    contract = component_commitment(spec, chunk_max, allowed_uses)
+    lineage = lineage_ref_commitment([design_id])
+    for kappa in (contract, lineage):
+        if kappa.id not in harness.commitments:
+            harness.register_commitment(kappa)
+    libs = sorted(set(manifest.libs) | set(spec.libs)) or ["baseline only"]
+    provenance = (
+        {"trigger": "successor", "from": [repair_of]}
+        if repair_of else {"trigger": "seed", "from": [design_id]}
+    )
+    return harness.register_problem(Problem(
+        id=f"pi-comp-{spec.name}{suffix}",
+        description=_COMPONENT_TEMPLATE.format(
+            name=spec.name,
+            purpose=spec.purpose or "see the design",
+            description=description.strip(),
+            element_id=spec.element_id,
+            css_prefix=spec.css_prefix,
+            libs=", ".join(libs),
+            exports=", ".join(spec.js_exports) or "none",
+            uses=", ".join(spec.js_uses) or "none",
+            emitted=", ".join(spec.events_emitted) or "none",
+            listened=", ".join(spec.events_listened) or "none",
+            max_chars=spec.max_chars or chunk_max,
+        ),
+        criteria=[contract.id, lineage.id],
+        provenance=ProblemProvenance.model_validate(provenance),
+    ))
+
+
+def register_assembly(harness, design_id: str, manifest, chosen: dict):
+    """Deterministic assembly (repository code, no LLM): compose the accepted
+    fragments into one page, register the selected vendored libs as import
+    artifacts, and register the assembled page carrying DEPENDENCE refs to
+    the design (manifest), every component, and every injected lib — full
+    traceability, and standard support semantics (a refuted foundation
+    suspends the assembly rather than deleting it). The page carries the
+    browser smoke commitment and the static integration commitment."""
+    from deepreason import assets
+    from deepreason.browser import browser_commitment
+    from deepreason.manifest import assemble_html, integration_commitment
+    from deepreason.ontology import Problem, ProblemProvenance, Provenance
+    from deepreason.ontology.artifact import Interface, Ref, RefRole
+    from deepreason.programs import content_text
+
+    lib_names = sorted(
+        set(manifest.libs) | {lib for c in manifest.components for lib in c.libs}
+    )
+    catalog = assets.catalog()
+    lib_css = {name: catalog[name] for name in lib_names}
+    lib_ids = []
+    for name in lib_names:
+        lib = harness.create_artifact(
+            f"/* vendored:{name} */\n" + lib_css[name],
+            codec="code:css",
+            provenance=Provenance(role="import"),
+        )
+        lib_ids.append(lib.id)
+
+    fragments = {
+        name: content_text(harness.state.artifacts[aid], harness.blobs)
+        for name, aid in chosen.items()
+    }
+    html = assemble_html(manifest, fragments, lib_css, assets.baseline())
+
+    browser = browser_commitment(WEBSITE_SCRIPT)
+    integration = integration_commitment(manifest)
+    for kappa in (browser, integration):
+        if kappa.id not in harness.commitments:
+            harness.register_commitment(kappa)
+    if "pi-website" not in harness.state.problems:
+        harness.register_problem(Problem(
+            id="pi-website",
+            description="the assembled website (deterministic composition of "
+                        "the accepted design manifest and component fragments)",
+            criteria=[browser.id, integration.id],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": [design_id]}),
+        ))
+    refs = [Ref(target=design_id, role=RefRole.DEPENDENCE)]
+    refs += [Ref(target=aid, role=RefRole.DEPENDENCE) for aid in sorted(chosen.values())]
+    refs += [Ref(target=lid, role=RefRole.DEPENDENCE) for lid in lib_ids]
+    interface = Interface(refs=refs, commitments=[browser.id, integration.id])
+    assembled = harness.create_artifact(
+        html,
+        codec="code:html",
+        interface=interface,
+        provenance=Provenance(role="seed"),
+        problem_id="pi-website",
+    )
+    harness.record_measure(inputs=["assembled", assembled.id, *sorted(chosen)])
+    return assembled
+
+
+def integration_criticism(harness, assembled_id: str, manifest, cfg,
+                          browser_backend=None) -> list[str]:
+    """Integration criticism over the WHOLE page: the static integration
+    commitment (duplicate ids, missing mounts, unmet dependencies, silent
+    events) through the ordinary crit_program verdict/warrant path, plus the
+    executable browser smoke run when a backend is available. Locally valid
+    components can still compose into a broken application — this is where
+    that shows up. Returns the manifest component names implicated by a
+    static failure (for TARGETED repair problems, never a full rebuild)."""
+    import json as _json
+
+    from deepreason.manifest import integration_commitment, integration_wf
+    from deepreason.rules.crit import crit_program
+
+    crit_program(harness, assembled_id)
+    if browser_backend is not None:
+        from deepreason.rules.act import needs_browser_run, run_browser_evidence
+
+        if needs_browser_run(harness, assembled_id):
+            run_browser_evidence(harness, assembled_id, browser_backend, cfg)
+    kappa = integration_commitment(manifest)
+    verdict, trace = integration_wf(
+        _page_text(harness, assembled_id), kappa.budget
+    )
+    if verdict == "pass":
+        return []
+    implicated = list(trace.get("implicated") or [])
+    harness.record_measure(
+        inputs=["integration-repair", assembled_id,
+                _json.dumps(sorted(implicated))]
+    )
+    return implicated
+
+
+def _page_text(harness, aid: str) -> str:
+    from deepreason.programs import content_text
+
+    return content_text(harness.state.artifacts[aid], harness.blobs)
+
+
 def pick_survivor(harness, root_pid: str) -> str | None:
     """Deterministic stage survivor: ACCEPTED candidate artifacts addressed
     into the stage's problem family; EARLIEST event_seq wins (the longest-
@@ -455,14 +688,18 @@ def _first_line(harness, aid: str, limit: int = 100) -> str:
 
 def make(description: str, out: str | None = None, cycles: int = 10,
          token_budget: int | None = 150_000, config: str | None = None,
-         root: str | None = None, echo=_echo, staged: bool = True) -> list[Path]:
+         root: str | None = None, echo=_echo, staged: bool = True,
+         chunked: bool | None = None) -> list[Path]:
     """Build a website from a plain-language description the way a person
-    would: PLAN it (what pages/features), DESIGN it (layout, look, behavior),
-    then BUILD it — each stage's survivor is enforced groundwork for the
-    next (lineage commitments + dependence edges, criticizable and on the
-    record like everything else). Exports what survives; returns the
-    exported file paths. staged=False runs the legacy single-stage loop
-    (programmatic/tests only)."""
+    would: PLAN it (what pages/features), DESIGN it (layout, look, behavior,
+    and — chunked mode — a component manifest), then BUILD it. In chunked
+    mode (the default, config WEBSITE_CHUNKED) each manifest component is
+    its own bounded problem and repository code assembles the accepted
+    fragments deterministically — no LLM call ever needs the whole page.
+    chunked=False (or WEBSITE_CHUNKED: false) is the legacy one-giant-page
+    compatibility mode; staged=False is the legacy single-stage loop
+    (programmatic/tests only). Neither compatibility mode disables capture
+    machinery. Exports what survives; returns the exported file paths."""
     from deepreason.config import load
     from deepreason.harness import Harness
     from deepreason.ontology import Status
@@ -499,6 +736,9 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     if not staged:
         return _make_single(harness, cfg, description, out_dir, cycles,
                             token_budget, echo)
+    if chunked if chunked is not None else cfg.WEBSITE_CHUNKED:
+        return _make_chunked(harness, cfg, description, out_dir, cycles,
+                             token_budget, echo)
 
     plan_cycles = max(2, cycles // 4)
     design_cycles = max(2, cycles // 4)
@@ -576,6 +816,157 @@ def make(description: str, out: str | None = None, cycles: int = 10,
         if harness.state.status.get(design_id) != Status.ACCEPTED:
             echo("(Note: the chosen design was itself refuted under later "
                  "criticism, so builds depending on it were suspended — "
+                 "orphaned, not proven wrong.)")
+    return paths
+
+
+def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
+                  token_budget: int | None, echo) -> list[Path]:
+    """plan -> design manifest -> component problems -> deterministic
+    assembly -> integration criticism (-> one targeted repair round).
+    Every stage seeds ordinary problems into the normal scheduler — schools,
+    VS, anti-relapse, criticism and lineage all apply; only the final
+    composition is repository code."""
+    import importlib.util
+
+    from deepreason import assets
+    from deepreason.manifest import parse_manifest
+    from deepreason.ontology import Status
+    from deepreason.programs import content_text
+    from deepreason.views.export import export_run
+
+    spent = 0
+
+    def remaining() -> int | None:
+        return None if token_budget is None else max(0, token_budget - spent)
+
+    def spend(accounting: dict) -> None:
+        nonlocal spent
+        spent += (accounting.get("metered_tokens")
+                  or accounting.get("logged_tokens_this_run") or 0)
+
+    plan_cycles = max(2, cycles // 5)
+    design_cycles = max(2, cycles // 5)
+    echo(f"Stages: planning (up to {plan_cycles} rounds) -> designing a "
+         f"component manifest (up to {design_cycles}) -> building each "
+         "component -> assembling deterministically -> integration checks\n")
+
+    # ---- stage 1: plan ----
+    seed_plan(harness, description)
+    spend(_run_stage(harness, cfg, label="planning", root_pid="pi-plan",
+                     cycles=plan_cycles, token_budget=remaining(), echo=echo,
+                     stop_on_survivor=True))
+    plan_id = pick_survivor(harness, "pi-plan")
+    if plan_id is None:
+        echo("\nNo plan survived criticism — that's the tool being honest. "
+             f'Try more rounds:\n  deepreason make "{description.strip()}" '
+             f"--cycles {cycles + 4}")
+        return []
+    harness.record_measure(inputs=["stage-pick", "plan", plan_id])
+    echo(f"  plan chosen: {_first_line(harness, plan_id)}\n")
+
+    # ---- stage 2: design + manifest ----
+    seed_design_chunked(harness, description, plan_id)
+    spend(_run_stage(harness, cfg, label="designing", root_pid="pi-design",
+                     cycles=design_cycles, token_budget=remaining(), echo=echo,
+                     stop_on_survivor=True))
+    design_id = pick_survivor(harness, "pi-design")
+    if design_id is None:
+        echo("\nA plan survived but no design (with a valid component "
+             "manifest) did — try more rounds:\n"
+             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
+        return []
+    harness.record_measure(inputs=["stage-pick", "design", design_id])
+    echo(f"  design chosen: {_first_line(harness, design_id)}")
+    manifest, error = parse_manifest(
+        content_text(harness.state.artifacts[design_id], harness.blobs),
+        known_libs=assets.catalog_names(),
+    )
+    if manifest is None:  # unreachable past manifest_wf, but stay honest
+        echo(f"\nThe chosen design's manifest failed to parse ({error}).")
+        return []
+    names = [c.name for c in manifest.ordered()]
+    echo(f"  components: {', '.join(names)}\n")
+
+    # ---- stage 3: one bounded problem per component ----
+    comp_cycles = max(1, (cycles - plan_cycles - design_cycles)
+                      // max(1, len(names)))
+    chosen: dict[str, str] = {}
+    for spec in manifest.ordered():
+        seed_component(harness, description, design_id, manifest, spec,
+                       cfg.CHUNK_MAX_CHARS)
+        spend(_run_stage(
+            harness, cfg, label=f"component {spec.name}",
+            root_pid=f"pi-comp-{spec.name}", cycles=comp_cycles,
+            token_budget=remaining(), echo=echo, stop_on_survivor=True))
+        survivor = pick_survivor(harness, f"pi-comp-{spec.name}")
+        if survivor is None:
+            echo(f"\nComponent {spec.name!r} produced no surviving fragment "
+                 "— that's the tool being honest. Try more rounds:\n"
+                 f'  deepreason make "{description.strip()}" '
+                 f"--cycles {cycles + 4}")
+            return []
+        chosen[spec.name] = survivor
+        harness.record_measure(
+            inputs=["stage-pick", f"component:{spec.name}", survivor])
+        echo(f"  component {spec.name}: fragment chosen\n")
+
+    # ---- stage 4: deterministic assembly + integration criticism ----
+    browser_backend = None
+    if importlib.util.find_spec("playwright") is not None:
+        from deepreason.browser import PlaywrightBrowser
+
+        browser_backend = PlaywrightBrowser()
+    assembled = register_assembly(harness, design_id, manifest, chosen)
+    echo("  assembled deterministically from the accepted fragments")
+    implicated = integration_criticism(
+        harness, assembled.id, manifest, cfg, browser_backend)
+
+    # ---- one TARGETED repair round: successor problems for the implicated
+    # components only, never a full rebuild ----
+    if implicated:
+        echo(f"  integration flagged: {', '.join(sorted(implicated))} — "
+             "spawning targeted repair problems\n")
+        for spec in manifest.ordered():
+            if spec.name not in implicated:
+                continue
+            seed_component(harness, description, design_id, manifest, spec,
+                           cfg.CHUNK_MAX_CHARS, suffix="-r2",
+                           repair_of=chosen[spec.name])
+            spend(_run_stage(
+                harness, cfg, label=f"repairing {spec.name}",
+                root_pid=f"pi-comp-{spec.name}-r2", cycles=comp_cycles,
+                token_budget=remaining(), echo=echo, stop_on_survivor=True))
+            fixed = pick_survivor(harness, f"pi-comp-{spec.name}-r2")
+            if fixed is not None:
+                chosen[spec.name] = fixed
+        assembled = register_assembly(harness, design_id, manifest, chosen)
+        integration_criticism(
+            harness, assembled.id, manifest, cfg, browser_backend)
+
+    echo(f"\nDone thinking ({spent:,} tokens).")
+    paths = export_run(harness, out_dir)
+    for stage, aid in (("plan", plan_id), ("design", design_id)):
+        doc = out_dir / f"{stage}-{aid[:12]}.md"
+        doc.write_text(content_text(harness.state.artifacts[aid], harness.blobs))
+        paths.append(doc)
+    pages = [p for p in paths if p.suffix == ".html"]
+    if pages:
+        echo(f"\nYour website is ready — assembled from {len(names)} "
+             "component(s) that each survived criticism:")
+        for p in pages:
+            echo(f"  {p.resolve()}")
+        echo("\nDouble-click one to open it in your browser. The folder also "
+             "holds the plan and the design (with its component manifest); "
+             "the README explains why each piece survived.")
+    else:
+        echo("\nComponents survived but the assembled page did not pass "
+             "integration criticism — that's the tool being honest, not "
+             "broken. Try again with more rounds:\n"
+             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
+        if harness.state.status.get(assembled.id) == Status.SUSPENDED_UNSUPPORTED:
+            echo("(Note: a foundation the assembly depends on was refuted "
+                 "under later criticism, so the page was suspended — "
                  "orphaned, not proven wrong.)")
     return paths
 

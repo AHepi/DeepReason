@@ -29,6 +29,13 @@ SIGNALS: dict[str, str] = {
                          "unavailable; the run degraded to the hashing "
                          "embedder (inputs: [signal, model, reason])",
     # Staged pipeline (easy.py make: plan -> design -> build)
+    "assembled": "chunked build: repository code composed the accepted "
+                 "component fragments into a page artifact (inputs: [signal, "
+                 "assembled artifact id, component names...])",
+    "integration-repair": "static integration criticism failed on an "
+                          "assembled page; the implicated components get "
+                          "TARGETED successor repair problems (inputs: "
+                          "[signal, assembled id, implicated-names JSON])",
     "stage-pick": "staged pipeline chose a stage's surviving artifact as the "
                   "next stage's frozen foundation (inputs: [signal, stage, "
                   "artifact id]) — attention only; the lineage commitment "
