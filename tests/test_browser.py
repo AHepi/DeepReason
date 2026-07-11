@@ -11,6 +11,7 @@ from deepreason.browser import (  # noqa: E402
     BROWSER_PROGRAM,
     PlaywrightBrowser,
     browser_commitment,
+    chromium_executable,
     load_spec,
 )
 
@@ -40,6 +41,14 @@ PASSING = [
 @pytest.fixture(scope="module")
 def browser():
     return PlaywrightBrowser()
+
+
+def test_configured_chromium_path_is_discovered(tmp_path, monkeypatch):
+    executable = tmp_path / "chromium"
+    executable.write_text("#!/bin/sh\nexit 0\n")
+    executable.chmod(0o755)
+    monkeypatch.setenv("DEEPREASON_CHROMIUM_PATH", str(executable))
+    assert chromium_executable() == str(executable)
 
 
 def test_commitment_is_content_addressed_and_observation_valued():

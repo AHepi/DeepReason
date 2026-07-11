@@ -27,7 +27,10 @@ raises BrowserUnavailable with install instructions when missing.
 """
 
 import json
+import os
+import shutil
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.commitment import Budget, Commitment
@@ -53,6 +56,28 @@ _STEP_OPS = frozenset(
 
 class BrowserUnavailable(RuntimeError):
     """playwright is not installed (optional dependency)."""
+
+
+def chromium_executable() -> str | None:
+    """An explicitly supplied or locally discoverable Chromium binary.
+
+    Playwright's Python package and its browser payload are separate. Managed
+    and offline environments often provide the executable through another
+    channel, so a missing Playwright-managed download must not force a stale
+    hard-coded path or disable browser verification.
+    """
+    configured = os.environ.get("DEEPREASON_CHROMIUM_PATH")
+    candidates = [
+        configured,
+        shutil.which("chromium"),
+        shutil.which("chromium-browser"),
+        shutil.which("google-chrome"),
+        _CHROMIUM_FALLBACK,
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file() and os.access(candidate, os.X_OK):
+            return str(Path(candidate))
+    return None
 
 
 @dataclass
@@ -114,8 +139,14 @@ class PlaywrightBrowser:
         with sync_playwright() as p:
             try:
                 browser = p.chromium.launch()
-            except Exception:  # noqa: BLE001 - version-skew fallback (build 1194)
-                browser = p.chromium.launch(executable_path=_CHROMIUM_FALLBACK)
+            except Exception as primary:  # noqa: BLE001 - external browser fallback
+                executable = chromium_executable()
+                if executable is None:
+                    raise BrowserUnavailable(
+                        "Playwright is installed but no Chromium executable is available; "
+                        "install its browser payload or set DEEPREASON_CHROMIUM_PATH"
+                    ) from primary
+                browser = p.chromium.launch(executable_path=executable)
             try:
                 page = browser.new_page(
                     viewport=viewport, device_scale_factor=1, reduced_motion="reduce"
