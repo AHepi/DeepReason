@@ -97,6 +97,26 @@ def test_overrides_share_yaml_parsing_and_full_schema_validation():
         apply_overrides(configured, {"roles.conjecturer.max_tokens": 0})
 
 
+def test_timeout_s_is_a_validated_role_knob():
+    """The transport read timeout is role-table config (a run died on the
+    old hardcoded 120s with no knob to turn): settable per role, dotted-path
+    overridable, and rejected when non-positive."""
+    configured = Config(
+        roles={
+            "variator": {
+                "endpoint": "https://example.invalid",
+                "model": "m",
+                "timeout_s": 600,
+            }
+        }
+    )
+    assert configured.roles["variator"]["timeout_s"] == 600
+    overridden = apply_overrides(configured, {"roles.variator.timeout_s": 900})
+    assert overridden.roles["variator"]["timeout_s"] == 900
+    with pytest.raises(ValidationError, match="greater than 0"):
+        apply_overrides(configured, {"roles.variator.timeout_s": 0})
+
+
 def test_config_assignment_is_validated():
     configured = Config()
     with pytest.raises(ValidationError):

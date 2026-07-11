@@ -34,6 +34,10 @@ class EndpointSpec(BaseModel):
     max_tokens: int | None = Field(default=None, gt=0)
     json_mode: bool = False
     logprobs: bool = False
+    # Transport read timeout (seconds) for one completion attempt. None keeps
+    # the endpoint default. Slow hosted open-model endpoints need headroom:
+    # a run was killed by ~110s+ generations against a fixed 120s wait.
+    timeout_s: int | None = Field(default=None, gt=0)
 
 
 class Config(BaseModel):

@@ -35,6 +35,12 @@ CRIT_BATCH_K: 3
 # v4-pro call was reasoning we never asked for); an int is a token budget;
 # null keeps the provider default. Downgrades are certified by the audit
 # battery (planted-flaw, paraphrase-flip, valid-JSON), not assumed.
+# timeout_s: transport read timeout per completion attempt (default 300).
+# After a read timeout the retry waits 2x; a second read timeout is
+# terminal, so the total wait is bounded at 3x. Raise timeout_s for slow
+# hosted open-model endpoints whose full generations exceed the wait — a
+# run lost two variator calls to a 120s ceiling while ~110s generations
+# were succeeding at the same endpoint.
 roles:
   conjecturer:          { endpoint: "https://api.deepseek.com", model: auto, temperature: 1.0, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true, logprobs: true }
   argumentative_critic: { endpoint: "https://api.deepseek.com", model: auto, temperature: 0.7, api_key_env: DEEPSEEK_API_KEY, reasoning: none, max_tokens: 2800, json_mode: true }  # sized for CRIT_BATCH_K cases per call

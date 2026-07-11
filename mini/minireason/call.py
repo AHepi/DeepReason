@@ -20,6 +20,7 @@ from minireason.log import BlobStore, Call
 
 _RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 _BACKOFFS = (2, 4, 8)
+_TIMEOUT_FACTORS = (1, 2)  # bounded read-timeout escalation; see HttpEndpoint
 
 
 class BudgetExceeded(RuntimeError):
@@ -118,7 +119,7 @@ class HttpEndpoint:
 
     def __init__(self, base_url: str, model: str, api_key: str | None = None,
                  temperature: float | None = None, max_tokens: int | None = None,
-                 json_mode: bool = True, timeout_s: int = 120) -> None:
+                 json_mode: bool = True, timeout_s: int = 300) -> None:
         self.name, self.model, self.api_key = base_url, model, api_key
         self.temperature, self.max_tokens = temperature, max_tokens
         self.json_mode, self.timeout_s = json_mode, timeout_s
@@ -140,9 +141,15 @@ class HttpEndpoint:
             self.name.rstrip("/") + "/chat/completions",
             data=json.dumps(body).encode(), headers=headers)
         last: Exception | None = None
+        # Bounded read-timeout escalation (mirrors llm/endpoints.py): a read
+        # timeout proves only that no complete response arrived before the
+        # deadline; the retry waits 2x and a second read timeout is terminal
+        # (max total wait 3x the base), other transport faults keep backoff.
+        read_timeouts = 0
         for delay in (*_BACKOFFS, None):
+            timeout = self.timeout_s * _TIMEOUT_FACTORS[read_timeouts]
             try:
-                with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
                     data = json.load(response)
                 choice = data["choices"][0]
                 content = choice["message"]["content"]
@@ -158,6 +165,17 @@ class HttpEndpoint:
                 last = e
             except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
                     ValueError, KeyError, IndexError, TypeError) as e:
+                if isinstance(e, TimeoutError) or (
+                    isinstance(e, urllib.error.URLError)
+                    and isinstance(e.reason, TimeoutError)
+                ):
+                    read_timeouts += 1
+                    if read_timeouts >= len(_TIMEOUT_FACTORS):
+                        waits = ", ".join(
+                            f"{self.timeout_s * f}s" for f in _TIMEOUT_FACTORS)
+                        raise EndpointError(
+                            f"no complete response within escalated read "
+                            f"timeouts ({waits}): {e}") from e
                 last = e  # malformed 200 shapes are transient in practice
             if delay is None:
                 break

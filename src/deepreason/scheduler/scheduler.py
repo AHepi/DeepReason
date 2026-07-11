@@ -443,12 +443,12 @@ class Scheduler:
             # Futility tracking: every selection is an attempt — resolved,
             # 'neither', blocked, or rivals-missing alike (each burned the
             # cycle). Cooldown + attempt cap keep an unresolvable rivalry
-            # from starving the rest of the run (_disc_paused).
-            self._disc_attempts[problem.id] = self._disc_attempts.get(problem.id, 0) + 1
+            # from starving the rest of the run (_disc_paused). EXCEPTION:
+            # a transport-dropped ruling is no verdict at all — it must not
+            # count toward the PERMANENT cap (the cooldown still applies via
+            # _disc_last; only the epistemic attempt is preserved).
             self._disc_last[problem.id] = self._cycles
-            if self._disc_attempts[problem.id] == self.config.DISC_ATTEMPTS_MAX:
-                # Observability: from here on, selection skips this problem.
-                harness.record_measure(inputs=["disc-attempts-exhausted", problem.id])
+            transport_deferred = False
             rivals = [
                 i for i in problem.provenance.from_
                 if harness.state.status.get(i) == Status.ACCEPTED
@@ -461,6 +461,20 @@ class Scheduler:
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
+                    if isinstance(e, EndpointError):
+                        transport_deferred = True
+                        harness.record_measure(
+                            inputs=["disc-transport-deferred", problem.id]
+                        )
+            if not transport_deferred:
+                self._disc_attempts[problem.id] = (
+                    self._disc_attempts.get(problem.id, 0) + 1
+                )
+                if self._disc_attempts[problem.id] == self.config.DISC_ATTEMPTS_MAX:
+                    # Observability: from here on, selection skips this problem.
+                    harness.record_measure(
+                        inputs=["disc-attempts-exhausted", problem.id]
+                    )
             reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)
             self._capture_step()
             self._cycles += 1

@@ -125,3 +125,59 @@ def test_default_config_no_longer_starves(tmp_path):
         scheduler.step()
     assert _blocked_attempts(harness) <= 3  # DISC_ATTEMPTS_MAX default
     assert conj_calls[0] > 0
+
+
+def test_transport_drop_defers_instead_of_burning_the_futility_cap(tmp_path):
+    """A transport failure is not an epistemic verdict: a dropped ruling
+    must not count toward DISC_ATTEMPTS_MAX (which pauses the problem
+    PERMANENTLY) — the rivalry stays schedulable for when transport heals."""
+    from deepreason.llm.endpoints import EndpointError
+
+    harness = Harness(tmp_path / "run")
+    a = harness.create_artifact("rival moon A", provenance=Provenance(role="conjecturer"))
+    b = harness.create_artifact("rival moon B", provenance=Provenance(role="conjecturer"))
+    harness.register_problem(
+        Problem(
+            id="disc:rivals", description="discriminate the rivals", criteria=[],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "discrimination", "from": [a.id, b.id]}
+            ),
+        )
+    )
+
+    def _judge_down(prompt):
+        raise EndpointError(
+            "no complete response within escalated read timeouts (1s, 2s)"
+        )
+
+    adapter = LLMAdapter(
+        {
+            "conjecturer": MockEndpoint(lambda prompt: MOON),
+            "judge": MockEndpoint(_judge_down),
+        },
+        harness.blobs,
+        retry_max=2,
+    )
+    scheduler = Scheduler(
+        harness, adapter,
+        Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0, DISC_ATTEMPTS_MAX=2, DISC_COOLDOWN=0),
+    )
+    for _ in range(4):
+        scheduler.step()
+
+    deferred = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.inputs
+        and e.inputs[0] == "disc-transport-deferred"
+    ]
+    exhausted = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.inputs
+        and e.inputs[0] == "disc-attempts-exhausted"
+    ]
+    # The drops are logged and deferred; the permanent cap never fires and
+    # the problem is still eligible for future selection.
+    assert len(deferred) >= 2 and deferred[0].inputs[1] == "disc:rivals"
+    assert not exhausted
+    assert scheduler._disc_attempts.get("disc:rivals", 0) == 0
+    assert not scheduler._disc_paused(harness.state.problems["disc:rivals"])

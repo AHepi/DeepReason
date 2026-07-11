@@ -12,6 +12,16 @@ import urllib.request
 
 _RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 _BACKOFFS = (2, 4, 8)
+# Bounded read-timeout policy. One authoritative default wait per attempt
+# (endpoints inherit it; the role table overrides via timeout_s), and a
+# fixed escalation: attempt 1 waits 1x, the retry after a read timeout
+# waits 2x, and a second read timeout is terminal — max total wait 3x the
+# base (900s at the 300s default), never an unbounded ladder. A read
+# timeout proves only that no complete response arrived before the
+# deadline; since non-streaming completions can legitimately need longer
+# than the base wait, one wider retry is justified — more is not.
+DEFAULT_TIMEOUT_S = 300
+TIMEOUT_FACTORS = (1, 2)
 
 
 class EndpointError(RuntimeError):
@@ -153,7 +163,7 @@ class OpenAICompatEndpoint:
         model: str,
         api_key: str | None = None,
         temperature: float | None = None,
-        timeout_s: int = 120,
+        timeout_s: int = DEFAULT_TIMEOUT_S,
         max_tokens: int | None = None,
         json_mode: bool = False,
         request_logprobs: bool = False,
@@ -225,14 +235,49 @@ class OpenAICompatEndpoint:
             headers=headers,
         )
 
+        # Bounded read-timeout escalation (TIMEOUT_FACTORS): retrying an
+        # identical wait after a read timeout fails identically (observed
+        # live: two variator calls dropped after 4 x 120s waits while ~110s
+        # generations were succeeding at the same endpoint), so the retry
+        # waits 2x — and a second read timeout is terminal, keeping the
+        # total wait bounded at 3x. Read timeouts are counted separately
+        # from other transport faults, which keep the plain retry/backoff.
+        # The counter lives in the closure so request_with_retries keeps
+        # its signature and its other callers are untouched.
+        read_timeouts = 0
+
+        def _timed_out(e: Exception) -> bool:
+            return isinstance(e, TimeoutError) or (
+                isinstance(e, urllib.error.URLError)
+                and isinstance(e.reason, TimeoutError)
+            )
+
         def _once() -> dict:
-            with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
-                try:
-                    data = json.load(response)
-                except ValueError as e:
-                    # 200 with a non-JSON body (gateway/proxy hiccup):
-                    # transient in practice — let the retry loop take it.
-                    raise _TransientBody(f"non-JSON response body: {e}") from e
+            nonlocal read_timeouts
+            timeout = self.timeout_s * TIMEOUT_FACTORS[read_timeouts]
+            try:
+                # The stall can hit at connect/first byte (urlopen) or
+                # mid-body (json.load reading the socket): both count.
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    try:
+                        data = json.load(response)
+                    except ValueError as e:
+                        # 200 with a non-JSON body (gateway/proxy hiccup):
+                        # transient in practice — let the retry loop take it.
+                        raise _TransientBody(f"non-JSON response body: {e}") from e
+            except Exception as e:
+                if _timed_out(e):
+                    read_timeouts += 1
+                    if read_timeouts >= len(TIMEOUT_FACTORS):
+                        waits = ", ".join(
+                            f"{self.timeout_s * f}s" for f in TIMEOUT_FACTORS
+                        )
+                        # EndpointError is not retryable: terminal by design.
+                        raise EndpointError(
+                            f"no complete response within escalated read "
+                            f"timeouts ({waits}): {e}"
+                        ) from e
+                raise
             # Malformed 200 shapes (empty body, missing choices, null content)
             # are usually transient server faults: surface them as retryable;
             # the post-retry guards below still catch the persistent case.

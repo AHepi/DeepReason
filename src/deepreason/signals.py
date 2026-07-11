@@ -76,6 +76,11 @@ SIGNALS: dict[str, str] = {
     "disc-attempts-exhausted": "a discrimination problem hit its attempt cap "
                                "and is paused permanently — recorded as "
                                "unresolved, not retried into starvation",
+    "disc-transport-deferred": "a discrimination ruling was dropped by a "
+                               "TRANSPORT failure: not an epistemic verdict, "
+                               "so it does not count toward the permanent "
+                               "attempt cap — the rivalry stays schedulable "
+                               "(inputs: [signal, problem id])",
     "hv-skip-oversize": "lazy HV spot-check skipped: the artifact's content "
                         "exceeds HV_CONTENT_MAX_CHARS, so K whole-content "
                         "variator edits cannot fit a completion window "

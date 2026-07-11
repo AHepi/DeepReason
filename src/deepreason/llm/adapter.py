@@ -215,6 +215,9 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     api_key_env = spec.get("api_key_env") or ""
     api_key = os.environ.get(api_key_env) if api_key_env else None
     model = resolve_model(spec.get("model") or "", spec["endpoint"], api_key)
+    timeout_kwargs = (
+        {"timeout_s": spec["timeout_s"]} if spec.get("timeout_s") else {}
+    )
     return OpenAICompatEndpoint(
         base_url=spec["endpoint"],
         model=model,
@@ -225,6 +228,7 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
         request_logprobs=bool(spec.get("logprobs", False)),
         reasoning=spec.get("reasoning"),
         provider=spec.get("provider"),
+        **timeout_kwargs,
     )
 
 
