@@ -116,6 +116,30 @@ class Config(BaseModel):
     REACH_COVERAGE_MIN: float = 0.5
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
+    # Research service mode (§12; research/backends.py:build_service):
+    #   "agent" (default)  — the operating agent retrieves; the harness
+    #                        exposes ops.research_docket and accepts
+    #                        ops.submit_evidence. Research is ACTIVE.
+    #   "static:<file>"    — deterministic local fixture backend (curated
+    #                        offline evidence; NOT local RAG — no indexing).
+    #   "ask-user"         — attended human retrieval (see RESEARCH_ATTENDED).
+    #   null               — research deliberately DISABLED (tests, explicit
+    #                        offline runs, the pre-registered lambda=0 arm).
+    #                        Logged as research-off when requests go unmet.
+    # Invalid values fail loudly at startup. Do not mutate this mid-run out
+    # of band: a backend-policy change affects scheduling and must be part
+    # of the replayable run history (use separate runs/configs).
+    RESEARCH_BACKEND: str | None = "agent"
+    # Attended vs unattended is explicit and replay-visible: only an
+    # attended run may surface ask-user questions synchronously; unattended
+    # runs never block — requests stay visible in the docket.
+    RESEARCH_ATTENDED: bool = False
+    # Internal-retrieval futility bounds (attention only, never status):
+    # cycles between attempts per problem, and the per-strategy attempt cap
+    # after which internal fetching pauses (research-fetch-exhausted). The
+    # agent channel can still cover an exhausted problem at any time.
+    RESEARCH_COOLDOWN: int = Field(default=3, ge=0)
+    RESEARCH_ATTEMPTS_MAX: int = Field(default=5, gt=0)
     # Budget triage (§14; attention only, never status)
     ARG_CRIT_PER_CYCLE: int | None = None      # cap argumentative-critic TARGETS per cycle
     RUBRIC_TRIALS_PER_ARTIFACT: int | None = None  # cap rubric trials per artifact per cycle

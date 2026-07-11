@@ -68,6 +68,156 @@ def make_embedder(harness, config):
         return None
 
 
+def make_research_service(harness, config):
+    """The research service a run actually gets (§12): built from
+    RESEARCH_BACKEND, failing loudly on invalid modes or missing fixture
+    files — enabling research must never require a source edit, and a
+    misconfiguration must never silently degrade to no research."""
+    from deepreason.research.backends import build_service
+
+    return build_service(config)
+
+
+def _research_events(harness):
+    """Per-problem internal attempt state, reconstructed from the LOG (no
+    hidden counters — replay reproduces the same eligibility decisions).
+    Returns {problem_id: {"attempts": int, "last_cycle": int}} counting
+    only INTERNAL strategy attempts (via != 'agent')."""
+    from deepreason.ontology import Rule
+
+    out: dict[str, dict] = {}
+    for event in harness.log.read():
+        if event.rule != Rule.MEASURE or not event.inputs:
+            continue
+        if event.inputs[0] != "research-fetch-failed" or len(event.inputs) < 4:
+            continue
+        _, pid, cycle, via = event.inputs[:4]
+        if via == "agent":
+            continue  # operator-reported failures never burn the internal cap
+        entry = out.setdefault(pid, {"attempts": 0, "last_cycle": -1})
+        entry["attempts"] += 1
+        try:
+            entry["last_cycle"] = max(entry["last_cycle"], int(cycle))
+        except ValueError:
+            pass
+    return out
+
+
+def open_research_problems(harness) -> list:
+    """Uncovered research problems in deterministic order (§12): openness
+    is DERIVED from the graph — no mutable covered flag."""
+    from deepreason.ontology import SpawnTrigger
+    from deepreason.research.backends import covered
+
+    return sorted(
+        (
+            p for p in harness.state.problems.values()
+            if p.provenance.trigger == SpawnTrigger.RESEARCH
+            and not covered(harness, p.id)
+        ),
+        key=lambda p: p.id,
+    )
+
+
+def _escalated_research(harness) -> set[str]:
+    """Problem ids named by the most recent grounding-decay escalation
+    (research-agent-requested) — log-derived, so docket priority is a pure
+    function of the record."""
+    from deepreason.ontology import Rule
+
+    latest: set[str] = set()
+    for event in harness.log.read():
+        if (event.rule == Rule.MEASURE and event.inputs
+                and event.inputs[0] == "research-agent-requested"):
+            latest = set(event.inputs[2:])
+    return latest
+
+
+def research_docket(harness, config, cycle: int | None = None) -> list[dict]:
+    """Deterministic, read-only view of open evidence requests — what the
+    operating agent reads to know what to retrieve. Escalated entries (the
+    grounding-decay brake) order first; ties break on problem id. Never
+    mutates state."""
+    attempts = _research_events(harness)
+    escalated = _escalated_research(harness)
+    entries = []
+    for problem in open_research_problems(harness):
+        state = attempts.get(problem.id, {"attempts": 0, "last_cycle": -1})
+        cooldown_left = 0
+        if cycle is not None and state["last_cycle"] >= 0:
+            cooldown_left = max(
+                0, config.RESEARCH_COOLDOWN - (cycle - state["last_cycle"])
+            )
+        entries.append({
+            "problem": problem.id,
+            "artifact": problem.provenance.from_[0] if problem.provenance.from_ else None,
+            "commitment": problem.provenance.from_[1] if len(problem.provenance.from_) > 1 else None,
+            "claim": problem.description,
+            "backend_mode": config.RESEARCH_BACKEND or "off",
+            "failed_internal_attempts": state["attempts"],
+            "last_attempt_cycle": state["last_cycle"] if state["last_cycle"] >= 0 else None,
+            "cooldown_remaining": cooldown_left,
+            "internal_exhausted": state["attempts"] >= config.RESEARCH_ATTEMPTS_MAX,
+            "external_submission_open": config.RESEARCH_BACKEND is not None,
+            "priority": "escalated" if problem.id in escalated else "normal",
+        })
+    entries.sort(key=lambda e: (e["priority"] != "escalated", e["problem"]))
+    return entries
+
+
+def submit_evidence(harness, problem_id: str, source: str, content: str | bytes,
+                    *, codec: str = "utf8", role: str = "import",
+                    metadata: dict | None = None):
+    """Register CANDIDATE evidence retrieved by the operating agent (or a
+    human — role='user' only when a human genuinely supplied it; agent
+    material is always 'import'). Registration does not itself establish
+    coverage: the candidate carries the research problem's relevance/scope
+    commitments and a dependence on its source-reliability assertion, and
+    coverage is derived only while it passes those commitments and remains
+    accepted and supported. The agent-claimed retrieval time (metadata,
+    e.g. {'retrieved_at': ...}) is provenance claim data on the record —
+    Event.ts stays harness-controlled; ordering never trusts it. The
+    retrieved bytes are content-addressed; replay reads them, never the
+    live URL."""
+    from deepreason.ontology import SpawnTrigger
+    from deepreason.research.backends import register_evidence
+    from deepreason.rules.crit import crit_program
+
+    problem = harness.state.problems.get(problem_id)
+    if problem is None or problem.provenance.trigger != SpawnTrigger.RESEARCH:
+        known = [p.id for p in open_research_problems(harness)][:8]
+        raise ValueError(
+            f"{problem_id!r} is not a research problem; open requests: {known}"
+        )
+    if role not in ("import", "user"):
+        raise ValueError("evidence role must be 'import' (agent) or 'user' (human)")
+    evidence = register_evidence(
+        harness, problem, content, source, via="agent", role=role,
+        codec=codec, metadata=metadata,
+    )
+    # Relevance/scope commitments are evaluated NOW through the ordinary
+    # crit path (a failure is a warranted refutation of the candidate, not
+    # a bespoke rejection); coverage is then read off the recomputed graph.
+    crit_program(harness, evidence.id)
+    harness.record_measure(
+        inputs=["research-evidence-registered", problem_id, evidence.id, source[:120]]
+    )
+    return evidence
+
+
+def report_research_failure(harness, problem_id: str, source: str, reason: str,
+                            *, category: str = "fetch-error",
+                            detail: str | None = None) -> None:
+    """A failed retrieval is an OPERATIONAL event, not evidence: it lands
+    as a Measure with the reason, and touches no artifact, commitment, or
+    status — absence of evidence is never a failed verdict (§12)."""
+    inputs = ["research-fetch-failed", problem_id, "-", "agent",
+              category, f"{source[:120]}: {reason[:200]}"]
+    if detail:
+        inputs.append(str(detail)[:200])
+    harness.record_measure(inputs=inputs)
+
+
 def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
                   on_cycle=None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
@@ -111,6 +261,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     result = Scheduler(
         harness, adapter, config, embedder=make_embedder(harness, config),
         browser_backend=browser_backend, controller=controller,
+        research_backend=make_research_service(harness, config),
     ).run(int(cycles), on_cycle=on_cycle)
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {
