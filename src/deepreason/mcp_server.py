@@ -18,7 +18,12 @@ from pathlib import Path
 
 _PROTOCOL = "2024-11-05"
 _ROOT = {"root": {"type": "string", "description": "harness state directory", "default": ".deepreason"}}
-_CONFIG = {"config": {"type": "string", "description": "knob file path (default: config/default.yaml)"}}
+_CONFIG = {
+    "config": {
+        "type": "string",
+        "description": "partial YAML profile path (default: built-in typed defaults)",
+    }
+}
 
 
 def _tools() -> list[dict]:
@@ -242,7 +247,7 @@ def call_tool(name: str, arguments: dict) -> str:
         from deepreason.views.why import why
 
         harness = _harness(arguments)
-        return why(_resolve(harness, arguments["id"]), harness.state)
+        return why(_resolve(harness, arguments["id"]), harness.state, harness.warrants)
 
     if name == "narrate":
         from deepreason.views.narrate import narrate
@@ -314,6 +319,9 @@ def handle(message: dict) -> dict | None:
 
 def main() -> int:
     """Newline-delimited JSON-RPC over stdio (MCP stdio transport)."""
+    from deepreason.easy import load_credentials
+
+    load_credentials()  # keys stored by `deepreason setup` reach MCP runs too
     for line in sys.stdin:
         line = line.strip()
         if not line:

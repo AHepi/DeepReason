@@ -19,10 +19,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from deepreason.config import (  # noqa: E402
+    apply_overrides,
+    load as load_config,
+    parse_value,
+    role_api_key_envs,
+)
 from deepreason.harness import Harness  # noqa: E402
-from deepreason.llm.adapter import LLMAdapter, SchemaRepairError  # noqa: E402
+from deepreason.llm.adapter import SchemaRepairError, build_adapter  # noqa: E402
 from deepreason.llm.budget import TokenBudgetExceeded, TokenMeter  # noqa: E402
-from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint  # noqa: E402
+from deepreason.llm.endpoints import EndpointError  # noqa: E402
 from deepreason.storage.blobs import BlobStore  # noqa: E402
 from deepreason.views.thesis import render_thesis, thesis  # noqa: E402
 
@@ -32,30 +38,55 @@ def main() -> int:
     parser.add_argument("--root", required=True)
     parser.add_argument("--problem", default=None,
                         help="problem id (default: the root's seed problem)")
-    parser.add_argument("--model", default="deepseek-v4-flash")
-    parser.add_argument("--base-url", default="https://api.deepseek.com")
-    parser.add_argument("--api-key-env", default="DEEPSEEK_API_KEY")
+    parser.add_argument(
+        "--config",
+        default=str(Path(__file__).resolve().parents[1] / "config" / "deepseek.yaml"),
+        help="partial YAML profile containing a thesis role",
+    )
+    parser.add_argument("--model", default=None, help="exact thesis model override")
+    parser.add_argument("--base-url", default=None, help="thesis endpoint override")
+    parser.add_argument("--api-key-env", default=None,
+                        help="thesis API-key environment-name override")
     parser.add_argument("--budget", type=int, default=6000,
                         help="evidence pack budget in TOKENS (chars/4)")
     parser.add_argument("--token-budget", type=int, default=40_000,
                         help="hard meter ceiling for the thesis call(s)")
-    parser.add_argument("--reasoning", default="none")
+    parser.add_argument("--reasoning", default="policy",
+                        help="thesis reasoning override: policy|default|none|high|max")
     parser.add_argument("--out", default=None, help="also write markdown here")
     args = parser.parse_args()
 
-    api_key = os.environ.get(args.api_key_env)
-    if not api_key:
-        print(f"{args.api_key_env} not set", file=sys.stderr)
+    try:
+        config = load_config(Path(args.config))
+        if "thesis" not in config.roles:
+            raise ValueError("profile has no thesis role")
+        overrides = {}
+        if args.model is not None:
+            overrides["roles.thesis.model"] = args.model
+        if args.base_url is not None:
+            overrides["roles.thesis.endpoint"] = args.base_url
+        if args.api_key_env is not None:
+            overrides["roles.thesis.api_key_env"] = args.api_key_env
+        if args.reasoning != "policy":
+            overrides["roles.thesis.reasoning"] = (
+                None if args.reasoning == "default" else parse_value(args.reasoning)
+            )
+        config = apply_overrides(config, overrides)
+    except (OSError, ValueError) as error:
+        print(f"invalid config: {error}", file=sys.stderr)
+        return 1
+    missing = sorted(
+        name for name in role_api_key_envs(config, {"thesis"})
+        if not os.environ.get(name)
+    )
+    if missing:
+        print(f"{', '.join(missing)} not set", file=sys.stderr)
         return 1
 
     harness = Harness(Path(args.root))
-    endpoint = OpenAICompatEndpoint(
-        args.base_url, args.model, api_key=api_key, temperature=0.3,
-        max_tokens=6000, json_mode=True,
-        reasoning=None if args.reasoning == "default" else args.reasoning)
     meter = TokenMeter(budget=args.token_budget)
     scratch = BlobStore(Path(tempfile.mkdtemp(prefix="thesis-blobs-")))
-    adapter = LLMAdapter({"thesis": endpoint}, scratch, retry_max=2, meter=meter)
+    adapter = build_adapter(config, scratch, meter=meter, only_roles={"thesis"})
 
     try:
         result = thesis(harness, adapter, problem_id=args.problem,

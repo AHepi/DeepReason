@@ -68,7 +68,7 @@ def _claim_line(text: str) -> str:
 def _decisive_from_warrants(harness, attacker) -> str:
     """The trial decisive_point (or program-check error) behind an attack,
     duck-typed over the trace shapes the harness actually writes."""
-    for wid in attacker.warrants:
+    for wid in harness.carried_warrant_ids(attacker.id):
         warrant = harness.warrants.get(wid)
         if warrant is None or not warrant.trace_ref:
             continue

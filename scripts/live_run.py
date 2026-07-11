@@ -6,10 +6,10 @@ Usage:
         --root runs/live --cycles 4 --suite republic \
         --token-budget 400000 [--model deepseek-v4-pro] [--dry-run]
 
-Model ids resolve against the provider's /models list (--model wins if
-listed; else v4+pro > v4 > pro > chat > first). The judge ensemble is the
-primary model plus the most different other model available — a
-same-provider approximation of the §9 cross-family rule, noted honestly.
+Role routing comes entirely from the selected config profile. ``auto`` and
+``auto-alt`` model ids resolve against the provider's /models list through the
+same adapter path used by the CLI and MCP. ``--model`` is an exact primary-seat
+override; the second judge seat remains ``auto-alt``.
 
 Suites:
   tides     — formal-ish: program predicates only, every verdict exogenous.
@@ -25,92 +25,59 @@ import argparse
 import json
 import os
 import sys
-import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from deepreason.config import load as load_config  # noqa: E402
+from deepreason.config import (  # noqa: E402
+    Config,
+    apply_overrides,
+    load as load_config,
+    parse_overrides,
+    parse_value,
+    role_api_key_envs,
+)
 from deepreason.harness import Harness  # noqa: E402
 from deepreason.informal.skeleton import skeleton_wf_commitment  # noqa: E402
 from deepreason.informal.standards import register_standard  # noqa: E402
-from deepreason.llm.adapter import LLMAdapter  # noqa: E402
+from deepreason.llm.adapter import build_adapter  # noqa: E402
 from deepreason.llm.budget import TokenMeter  # noqa: E402
-from deepreason.llm.endpoints import OpenAICompatEndpoint  # noqa: E402
 from deepreason.ontology import Commitment, Problem, ProblemProvenance  # noqa: E402
 from deepreason.report import eval_report  # noqa: E402
 from deepreason.scheduler.scheduler import Scheduler  # noqa: E402
 from deepreason.views.theory import theory  # noqa: E402
 
-# Per-role completion caps. Calibrated from live-run data: 1600 truncated
-# VS_K skeleton candidates mid-JSON (every completion hit the cap exactly),
-# so skeleton-bearing roles get real headroom; the adapter also detects
-# finish_reason=length and asks for compression instead of blind retries.
-MAX_TOKENS = {
-    "conjecturer": 4000,
-    "argumentative_critic": 2800,  # 1400 fit one case; batched calls carry up to CRIT_BATCH_K
-    "defender": 900,
-    "variator": 3000,  # 2000 truncated paraphrases of large skeleton exchanges
-    "synthesizer": 1400,  # 900 truncated a relation proposal
-    "judge": 2400,  # 1200 length-truncated 5/40 cycles on late-run packs (criticism suite)
-    "judge_alt": 2400,
-}
-
-# Per-role reasoning policy (docs/TOKEN_ECONOMY.md angle 1): reasoning off
-# for prose/skeleton generation and aux roles — quality is carried by
-# criticism (D2), and the eval report certifies the change. The judge keeps
-# the provider default pending audit data. Overridable via --reasoning.
-REASONING = {
-    "conjecturer": "none",
-    "argumentative_critic": "none",
-    "defender": "none",
-    "variator": "none",
-    "synthesizer": "none",
-    # Certified by the planted-flaw battery (judge_battery_report.json):
-    # the PRIMARY (pro) judge seat matches its reasoning-on accuracy with
-    # reasoning off at half the tokens; the ALT (flash) seat needs
-    # reasoning (0.125 error / 0.375 verbosity bias without it).
-    "judge": "none",
-    "judge_alt": None,
-}
+def _runtime_role_overrides(config: Config, args) -> Config:
+    """Translate legacy live-run flags into the canonical role table."""
+    data = config.model_dump(mode="python")
+    for role, configured in data["roles"].items():
+        seats = configured if isinstance(configured, list) else [configured]
+        for index, seat in enumerate(seats):
+            if not isinstance(seat, dict):
+                continue
+            if args.base_url is not None:
+                seat["endpoint"] = args.base_url
+            if args.api_key_env is not None:
+                seat["api_key_env"] = args.api_key_env
+            if args.model is not None:
+                seat["model"] = "auto-alt" if role == "judge" and index else args.model
+    conjecturer = data["roles"].get("conjecturer")
+    if isinstance(conjecturer, dict):
+        if args.reasoning != "policy":
+            conjecturer["reasoning"] = (
+                None if args.reasoning == "default" else parse_value(args.reasoning)
+            )
+        if args.starve_cap is not None:
+            conjecturer["max_tokens"] = args.starve_cap
+    return Config.model_validate(data)
 
 
-def yaml_value(raw: str):
-    """Parse a --set value with YAML scalar rules (ints, floats, bools, null)."""
-    import yaml
-
-    return yaml.safe_load(raw)
-
-
-def list_models(base_url: str, api_key: str) -> list[str]:
-    request = urllib.request.Request(
-        base_url.rstrip("/") + "/models",
-        headers={"Authorization": f"Bearer {api_key}"},
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        data = json.load(response)
-    return [m["id"] for m in data.get("data", [])]
-
-
-def pick_model(available: list[str], preferred: str | None) -> str:
-    if preferred and preferred in available:
-        return preferred
-    for want in (("v4", "pro"), ("v4",), ("pro",), ("chat",)):
-        hits = [m for m in available if all(w in m.lower() for w in want)]
-        if hits:
-            return sorted(hits)[0]
-    if not available:
-        raise SystemExit("provider returned no models")
-    return sorted(available)[0]
-
-
-def pick_alt(available: list[str], primary: str) -> str:
-    others = [m for m in available if m != primary]
-    for want in ("reason", "r1"):
-        hits = [m for m in others if want in m.lower()]
-        if hits:
-            return sorted(hits)[0]
-    return sorted(others)[0] if others else primary
+def _resolved_models(adapter) -> dict[str, list[str]]:
+    return {
+        role: [endpoint.model for endpoint in (configured if isinstance(configured, list)
+                                                else [configured])]
+        for role, configured in adapter.endpoints.items()
+    }
 
 
 def seed_tides(harness: Harness) -> None:
@@ -692,10 +659,15 @@ def main() -> int:
     parser.add_argument("--cycles", type=int, default=4)
     parser.add_argument("--suite", choices=sorted(SUITES), default="tides")
     parser.add_argument("--token-budget", type=int, default=400_000)
-    parser.add_argument("--model", default=None, help="preferred model id (e.g. a V4 pro variant)")
-    parser.add_argument("--base-url", default="https://api.deepseek.com")
-    parser.add_argument("--api-key-env", default="DEEPSEEK_API_KEY")
-    parser.add_argument("--config", default=str(Path(__file__).resolve().parents[1] / "config" / "deepseek.yaml"))
+    parser.add_argument("--model", default=None, help="exact primary model override")
+    parser.add_argument("--base-url", default=None, help="override every role endpoint")
+    parser.add_argument("--api-key-env", default=None,
+                        help="override every role's API-key environment name")
+    parser.add_argument(
+        "--config",
+        default=str(Path(__file__).resolve().parents[1] / "config" / "deepseek.yaml"),
+        help="partial YAML profile",
+    )
     parser.add_argument("--dry-run", action="store_true", help="resolve models and exit")
     parser.add_argument("--reasoning", default="policy",
                         help="conjecturer reasoning override: policy|default|none|high|max|<int>")
@@ -715,66 +687,37 @@ def main() -> int:
                         help="start the conjecturer completion cap here (controller demo)")
     args = parser.parse_args()
 
-    api_key = os.environ.get(args.api_key_env)
-    if not api_key:
-        print(f"{args.api_key_env} is not set — add the key and rerun.", file=sys.stderr)
+    try:
+        config = load_config(Path(args.config))
+        values = {}
+        if args.spec_injection:
+            values["SPEC_INJECTION"] = True
+        if args.schools is not None:
+            values["N_SCHOOLS"] = args.schools
+        if args.stance_decay is not None:
+            values["STANCE_DECAY"] = args.stance_decay
+        if args.liveness:
+            values["LIVENESS_QUEUE"] = True
+        config = apply_overrides(config, values)
+        config = _runtime_role_overrides(config, args)
+        config = apply_overrides(config, parse_overrides(args.set))
+    except (OSError, ValueError) as error:
+        print(f"invalid config: {error}", file=sys.stderr)
         return 1
 
-    available = list_models(args.base_url, api_key)
-    primary = pick_model(available, args.model)
-    alt = pick_alt(available, primary)
-    print(f"models available: {available}")
-    print(f"primary model: {primary}   judge alternate: {alt}")
+    missing = sorted(name for name in role_api_key_envs(config) if not os.environ.get(name))
+    if missing:
+        print(f"{', '.join(missing)} is not set — add the key and rerun.", file=sys.stderr)
+        return 1
+    meter = TokenMeter(budget=args.token_budget)
+    adapter = build_adapter(config, None, meter=meter)
+    if not adapter.has_role("conjecturer"):
+        print("config has no enabled conjecturer endpoint", file=sys.stderr)
+        return 1
+    print(f"resolved models: {json.dumps(_resolved_models(adapter), sort_keys=True)}")
     print(f"suite: {args.suite}   token budget: {args.token_budget}")
     if args.dry_run:
         return 0
-
-    config = load_config(Path(args.config))
-    if args.spec_injection:
-        config.SPEC_INJECTION = True
-    if args.schools is not None:
-        config.N_SCHOOLS = args.schools
-    if args.stance_decay is not None:
-        config.STANCE_DECAY = args.stance_decay
-    for override in args.set:
-        key, _, raw = override.partition("=")
-        if not hasattr(config, key):
-            print(f"unknown config knob: {key}", file=sys.stderr)
-            return 1
-        current = getattr(config, key)
-        value = yaml_value(raw)
-        setattr(config, key, type(current)(value) if current is not None and value is not None else value)
-    meter = TokenMeter(budget=args.token_budget)
-
-    if args.liveness:
-        config.LIVENESS_QUEUE = True
-
-    def endpoint(role: str, model: str, temperature: float) -> OpenAICompatEndpoint:
-        reasoning = REASONING.get(role)
-        if role == "conjecturer" and args.reasoning != "policy":
-            reasoning = None if args.reasoning == "default" else args.reasoning
-        cap = MAX_TOKENS.get(role)
-        if role == "conjecturer" and args.starve_cap is not None:
-            cap = args.starve_cap  # controller demo: start starved, watch it recover
-        return OpenAICompatEndpoint(
-            args.base_url, model, api_key=api_key, temperature=temperature,
-            max_tokens=cap, json_mode=True, request_logprobs=True,
-            reasoning=reasoning,
-        )
-
-    adapter = LLMAdapter(
-        {
-            "conjecturer": endpoint("conjecturer", primary, 1.0),
-            "argumentative_critic": endpoint("argumentative_critic", primary, 0.7),
-            "defender": endpoint("defender", primary, 0.7),
-            "variator": endpoint("variator", primary, 1.0),
-            "synthesizer": endpoint("synthesizer", primary, 0.9),
-            "judge": [endpoint("judge", primary, 0.0), endpoint("judge_alt", alt, 0.0)],
-        },
-        None,
-        retry_max=config.RETRY_MAX,
-        meter=meter,
-    )
 
     harness = Harness(Path(args.root))
     adapter.blobs = harness.blobs

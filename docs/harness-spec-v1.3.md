@@ -3,6 +3,11 @@
 **Status:** build spec, **v1.3**. Source: *The Necessity of Creativity* (creativity-calculus).
 **Audience:** implementing LLM / engineer. Rationale lives in the companion human-readable plan; this file is normative and terse.
 
+**Implementation clarifications:** warrant carriage is an explicit append-only
+`carry ⊆ A × W` relation and is not part of artifact identity; validity nodes
+grounded in recorded evidence use an `evidence` ref whose dependency lineage
+participates in attack closure. Both keep status computation inside `att`/`dep`.
+
 **Changes from v1.2** (capture control; all via attention/provenance/gates — no new acceptance semantics, no types):
 
 1. **New §11 (Capture control).** Two capture surfaces named: generator (variation collapse) and adjudicator (criticism ritualizing). Schools — islands in conjecture, panmixia in criticism — with lineage-based constitution and provenance-ownership allocation (no per-problem curation). Graph-native ritual detection + generator-side embedding detection, all as replay programs over the event log. Exogenous grounding ratio λ with floor + reactive brake. Response ladder as logged scheduler rules with hysteresis. Old §§11–16 renumbered §§12–17.
@@ -38,7 +43,7 @@
   "codec": "utf8 | json | csv | f64le | i64le | code:<lang> | raw",
   "interface": {
     "commitments": ["<commitment-id>", "..."],
-    "refs": [{ "target": "<artifact-id>", "role": "dependence | mention" }]
+    "refs": [{ "target": "<artifact-id>", "role": "dependence | mention | evidence" }]
   },
   "warrants": ["<warrant-id>", "..."],
   "provenance": { "role": "conjecturer|critic|variator|synthesizer|seed|import|user", "school": "<school-id>|null", "event_seq": 0 }
@@ -46,7 +51,15 @@
 ```
 
 - `refs[].role == "dependence"` ⇒ contributes a support edge (this → target) to `dep`.
-- Each carried warrant ⇒ contributes an attack edge (this → warrant.target) to `att`.
+- Warrant carriage is logically an explicit append-only relation
+  `carry ⊆ A × W`. `artifact.warrants` is its legacy/on-record shorthand, not
+  part of artifact identity. A later event MAY add `(artifact, warrant)` to
+  `carry` without changing the artifact id. Each pair contributes an attack
+  edge `(artifact → warrant.target)` to `att`.
+- `refs[].role == "evidence"` is permitted on a warrant validity node and
+  declares load-bearing evidence. Attackers of that evidence, or of anything
+  in its transitive `dependence` lineage, attack the validity node during
+  `att` construction. Plain `mention` refs remain non-load-bearing.
 - `dep` MUST remain a DAG. Reject any dependence ref that would create a cycle.
 - `provenance.school` records which conditioning regime (§11.1) generated the artifact. Provenance is never a warrant (D2), so school membership is epistemically inert **by construction**: it can shape packs and scheduling, never adjudication.
 
@@ -64,6 +77,15 @@
 - `budget` is a structured object interpreted by the test program τκ. Canonical keys: `steps`, `time_ms`; program evals may declare extended structured budgets (e.g. `k`, `per_edit_steps` for `hv-floor`, §7). Total resource is always finite and declared.
 - Verdict `V(κ, c) = U^{≤β}(τκ, c) ∈ {pass, fail, overrun}`. Extensional, budgeted, decidable (budgeting keeps Rice at bay).
 - **Budget honesty is deterministic (§0).** A verdict is a pure function of content: wall-clock time never drives it, and no wall-clock value enters the content-addressed trace — otherwise two harnesses replaying identical inputs under different machine load would fork their logs. Budget enforcement, where a program enforces one, must be a deterministic bound (step count, item count); `time_ms` is a declared intent, not a verdict input. `overrun` therefore means "the verdict is unobtainable within the declared deterministic budget" (e.g. no variator kernel available, §7) — never "the machine was slow".
+- **Oracle isolation is not adjudication.** Untrusted candidate, checker,
+  generator, and gate modules execute in a fresh subprocess, with the
+  deterministic step tracer installed before module top-level code runs. OS
+  memory/CPU ceilings and a parent watchdog are emergency containment only. A
+  containment kill produces no epistemic verdict and MUST NOT mint a warrant,
+  confer execution supremacy, enter a verdict cache, or mark a fuzz target
+  clean. The implementation exposes this no-result condition through the
+  existing `overrun` API envelope plus `sandbox_abort`; it is outside `V` and
+  must not be written as evidence.
 - `eval:program|predicate` ⇒ computed by execution (reliable).
 - `eval:rubric` ⇒ computed by the judge LLM role under the trial protocol (§3 guard, §10). `<spec-id>` MUST resolve to a registered **standard artifact** (§10); the standard's content specifies the evaluation mode: `absolute | anchored | pairwise`. Noisy; every structural mitigation in §10 applies.
 - `observation_valued == true` and no covering evidence artifact ⇒ Spawn a research problem (§12). Evidence registered **sealed** (holdout, §10) does not count as covering before its reveal; the commitment is scheduled-pending, not failed.
@@ -84,6 +106,12 @@
 
 - **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction.
 - **Closure extension (case law):** the ν of any rubric-derived warrant MUST carry a `mention` ref to the standard artifact it applied. `att` construction adds an edge (x → ν) for every registered attacker x of that standard. Consequence, all in pass 1: refute a standard ⇒ every ν citing it is attacked ⇒ every warrant under it falls ⇒ targets reinstated (Lemma 3.1 mechanics). This is the parallel-fifths reinstatement, computed, not curated.
+- **Closure extension (evidence):** a ν grounded in recorded evidence MUST
+  carry an `evidence` ref to it. `att` construction adds `(x → ν)` for every
+  attacker `x` of the evidence or any artifact in its transitive dependence
+  lineage. The ordinary closure rule then attacks every carrier of the
+  warrant, so invalidating a source can reinstate the target without any
+  status rule outside `att`/`dep`.
 - Both warrant types are contentful (packaged in artifacts); **a bare verdict is never an edge**.
 
 **Problem** (Def 3.2)
@@ -103,10 +131,12 @@
 **Epistemic state** (materialized view; Def 3.3)
 
 ```
-S = (A, Π, att, dep, addr, status, hv, reach, conn)
+S = (A, Π, carry, att, dep, addr, status, hv, reach, conn)
 ```
 
-Recompute from the event log at any `seq` for time-travel.
+Recompute from the event log at any `seq` for time-travel. A historical view
+is physically read-only: opening it MUST NOT create directories, repair a
+torn log tail, materialize a reveal, or write objects, blobs, or events.
 
 **Event** (source of truth; append-only JSONL)
 
@@ -116,7 +146,7 @@ Recompute from the event log at any `seq` for time-travel.
   "rule": "Conj|Crit|Adj|Spawn|Refl|Register|Merge|Measure|Reveal|Reseed",
   "inputs": ["<id>"], "outputs": ["<id>"],
   "llm": { "role": "...", "model": "...", "endpoint": "...", "prompt_ref": "<blob>", "raw_ref": "<blob>", "tokens": 0, "ms": 0 },
-  "state_diff": { "att+": [], "dep+": [], "A+": [], "Π+": [], "status_changed": [] }
+  "state_diff": { "carry+": [], "att+": [], "dep+": [], "A+": [], "Π+": [], "status_changed": [] }
 }
 ```
 
@@ -124,14 +154,20 @@ Embedder calls (§9, §11) are logged exactly like any other role — prompt/inp
 
 ## 2. Formation rules (well-formedness; §3.2)
 
-A state is well-formed iff: every attack edge carries a registered warrant; every problem criterion is a commitment schema; every `addr` pair is declared; the validity-node closure (including the case-law extension) holds; `dep` is acyclic; **and every rubric-derived demonstrative warrant's `trace_ref` contains a conforming trial transcript (§3 rubric-verdict guard)**. All transition rules preserve well-formedness.
+A state is well-formed iff: every `(carrier,warrant)` pair names a registered
+artifact and warrant; every attack edge derives from such a pair; every problem
+criterion is a commitment schema; every `addr` pair is declared; the
+validity-node closure (including case-law and evidence extensions) holds; `dep`
+is acyclic; **and every rubric-derived demonstrative warrant's `trace_ref`
+contains a conforming trial transcript (§3 rubric-verdict guard)**. All
+transition rules preserve well-formedness.
 
 ## 3. Transition rules (§3.3)
 
 | Rule  | Enabling condition                          | Effect |
 |-------|---------------------------------------------|--------|
 | Conj  | `Π ≠ ∅`; a problem π selected               | `a = γ(π, S)` via conjecturer role under the assigned school's render policy (§11.2), born-connected (§7); `A += a`, `addr += (a,π)`, interface attached |
-| Crit  | target `a ∈ A`; a valid warrant `w` for `(k,a)` | `A += k`, `att += (k,a)`, `W(k,a)=w` |
+| Crit  | target `a ∈ A`; a valid warrant `w` for `(k,a)` | register `k` if new; `carry += (k,w)`; derive `att += (k,a)` |
 | Adj   | after any registration                      | recompute two-pass labels (§4) |
 | Spawn | any trigger below                           | register new problem with provenance |
 | Refl  | always available                            | rule-artifacts, demarcation criterion, adjudication semantics, standards, guard procedures, and school-policy artifacts are registered artifacts in `A`, attackable |
@@ -451,7 +487,10 @@ Question: does the harness's exogenous anchoring earn exemption from closed-loop
 
 Backend pluggable: web-search | local-RAG | ask-user (doubles as the appellate channel, §10.6). Research cadence is part of the standing exogenous schedule that keeps λ above floor (§11.3).
 
-Evidence enters as an artifact carrying a source-reliability `validity_node`; attackable like anything else.
+Evidence enters as an artifact depending on a source-reliability assertion;
+any warrant grounded in it declares an `evidence` ref from its validity node.
+Attacking the evidence or its source therefore propagates through the explicit
+evidence closure and can reinstate the warrant's target.
 
 ## 13. Interface (CLI first)
 
@@ -463,11 +502,36 @@ Thin custom scheduler over a rule registry — control flow is "apply enabled ru
 
 Frontier of problems + global budgets (κ budgets generalized). School allocation per §11.2; focus selection per Pareto retention (§11.7). Short horizon: one problem, N cycles, return the Pareto frontier of G-members. Long horizon: persistent frontier across sessions. Integration work capped by `INTEGRATION_BUDGET_SHARE`; audits by `AUDIT_PERIOD`; user queue by `USER_RULINGS_BUDGET`; `Reveal` events per holdout policy; capture-response rules per §11.4 with hysteresis.
 
-**Storage:** flat content-addressed JSON files + append-only JSONL log, git-native; sealed holdout blobs in a `holdout/` namespace excluded from pack rendering until their `Reveal` event; refuted-index (embedding NN over refuted artifacts) rebuilt deterministically from the log. Save = git commit. Merge = componentwise set-union + re-adjudicate (G-Set CRDT; no conflicts possible); school-policy artifacts union like any artifact, and the scheduler reconciles active rosters from config. SQLite/FAISS-style index only if scale demands.
+**Storage:** schema-namespaced content-addressed JSON files
+(`objects/<schema>/<sha256(id)>.json`) + an append-only JSONL log, git-native.
+Legacy flat object records remain readable. Validated ontology records and
+their nested collections are immutable. Because event references contain an
+untyped object id, an id is globally unambiguous within a root: every stored
+copy of an id MUST have the same schema and canonical bytes. A conflicting
+registration or merge is rejected rather than silently choosing a record.
+Event sequence numbers MUST be exactly `0..N-1`; duplicates, gaps, and
+out-of-order appends are corruption. Sealed holdout blobs live in a `holdout/`
+namespace excluded from pack rendering until their `Reveal` event;
+refuted-index (embedding NN over refuted artifacts) is rebuilt
+deterministically from the log. Save = git commit. Merge = componentwise
+set-union + re-adjudicate when common ids are identical; school-policy
+artifacts union like any artifact, and the scheduler reconciles active rosters
+from config. SQLite/FAISS-style index only if scale demands.
 
 Pydantic models throughout.
 
-## 15. Config knobs (single file, exposed)
+## 15. Config knobs (single typed schema, optional profile)
+
+`deepreason.config.Config` is the sole source of defaults and accepted field
+names. A YAML config is a partial profile containing only intentional
+overrides; omitted values inherit the typed defaults, while unknown top-level
+knobs or role-seat fields are errors. Profile-driven CLI, MCP,
+setup-generated configs, and general-purpose live scripts MUST load through
+`deepreason.config.load` and construct endpoints through
+`deepreason.llm.adapter.build_adapter`. Pre-registered experiment arms MAY
+instantiate the same schema directly to keep their manipulations explicit.
+`deepreason config` renders the complete effective configuration for
+inspection.
 
 | Knob | Meaning | Start |
 |------|---------|-------|

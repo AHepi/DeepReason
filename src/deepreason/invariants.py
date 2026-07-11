@@ -73,6 +73,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             fail("warrant-validity", f"{wid}: validity node not registered")
         if w.target not in h.state.artifacts:
             fail("warrant-target", f"{wid}: target not registered")
+    for carrier, wid in h.state.carries:
+        if carrier not in h.state.artifacts:
+            fail("carry-carrier", f"{carrier}: carrier artifact not registered")
+        if wid not in h.warrants:
+            fail("carry-warrant", f"{wid}: carried warrant not registered")
     for x, t in h.state.att:
         if x not in h.state.artifacts or t not in h.state.artifacts:
             fail("att-endpoints", f"dangling attack edge ({x[:12]}, {t[:12]})")

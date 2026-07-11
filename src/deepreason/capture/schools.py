@@ -12,7 +12,7 @@ adjudication, or statuses.
 
 import json
 
-from deepreason.ontology import Provenance, Rule, SpawnTrigger
+from deepreason.ontology import Provenance, Rule, SpawnTrigger, Status
 
 # One-time global curation, declared (§11.1 cold start; §17 residue).
 STANCE_LIBRARY = {
@@ -28,10 +28,17 @@ STANCE_LIBRARY = {
 _STANCES = list(STANCE_LIBRARY)
 
 
-def _policy_content(school_id: str, stance: str, reseed_of: str | None = None) -> str:
+def _policy_content(
+    school_id: str,
+    stance: str,
+    reseed_of: str | None = None,
+    crossover_from: str | None = None,
+) -> str:
     body = {"school_policy": {"school": school_id, "stance": stance}}
     if reseed_of:
         body["school_policy"]["reseed_of"] = reseed_of
+    if crossover_from:
+        body["school_policy"]["crossover_from"] = crossover_from
     return json.dumps(body, sort_keys=True)
 
 
@@ -68,18 +75,49 @@ def init_schools(harness, config) -> dict[str, dict]:
     return roster(harness)
 
 
-def reseed(harness, school_id: str, current: dict, reason: str) -> dict:
+def reseed(
+    harness, school_id: str, current: dict, reason: str, crossover_from: str | None = None
+) -> dict:
     """Rotate the laggard's stance seed; logged as a Reseed event. The prior
-    policy artifact persists (D8) — succession, not deletion."""
+    policy artifact persists (D8) — succession, not deletion. crossover_from
+    (§11.4) records the most-distant school so the reseeded school's next
+    gamma-calls draw that foreign lineage's exemplars — rotating the stance
+    alone just yields the same echo in a new voice (a skeptic mutating its own
+    math). Attention only; never status."""
     next_stance = _STANCES[(_STANCES.index(current["stance"]) + 1) % len(_STANCES)]
     harness.create_artifact(
-        _policy_content(school_id, next_stance, reseed_of=current["artifact_id"]),
+        _policy_content(
+            school_id, next_stance,
+            reseed_of=current["artifact_id"], crossover_from=crossover_from,
+        ),
         codec="json",
         provenance=Provenance(role="seed", school=school_id),
         rule=Rule.RESEED,
     )
     harness.record_measure(inputs=["intervention:reseed", f"school:{school_id}", reason])
     return roster(harness)[school_id]
+
+
+def crossover_exemplars(harness, school_id: str, k: int = 3) -> list[str]:
+    """§11.4 forced crossover: if the school's current policy names a
+    crossover_from (set on a convergence reseed), return that foreign school's
+    top-k accepted conjecture artifacts (most recent lineage first,
+    deterministic id tiebreak) so gamma must reconcile divergent lineages
+    instead of mutating its own echo chamber. Empty when no crossover is
+    pending. Attention only — pack shaping, never status (D2)."""
+    foreign = (roster(harness).get(school_id) or {}).get("crossover_from")
+    if not foreign:
+        return []
+    state = harness.state
+    cands = [
+        aid
+        for aid, a in state.artifacts.items()
+        if a.provenance.school == foreign
+        and a.provenance.role.value in ("conjecturer", "synthesizer")
+        and state.status.get(aid) == Status.ACCEPTED
+    ]
+    cands.sort(key=lambda aid: (-state.artifacts[aid].provenance.event_seq, aid))
+    return cands[:k]
 
 
 def lineage_size(harness, school_id: str) -> int:

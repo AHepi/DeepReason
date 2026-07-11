@@ -7,6 +7,8 @@ Surface-specific concerns — argv/JSON parsing, exit codes vs isError
 payloads — stay in cli/main.py and mcp_server.py.
 """
 
+import importlib.util
+
 from deepreason.ontology import Problem, ProblemProvenance
 
 
@@ -46,7 +48,28 @@ def seed_problem_payload(harness, data: dict) -> Problem:
     return harness.register_problem(Problem.model_validate(spec))
 
 
-def run_scheduler(harness, config, cycles: int, token_budget: int | None = None):
+def make_embedder(harness, config):
+    """The embedder a run actually gets. EMBEDDER_MODEL unset => the
+    zero-dependency hashing default (None: the Scheduler constructs it).
+    Set but unavailable => hashing fallback with `embedder-fallback` on the
+    log — degraded geometry must be visible to the post-hoc reader, never
+    silent (the browser-oracle precedent records nothing because absence
+    disables a feature; here the run still embeds, just worse)."""
+    if not config.EMBEDDER_MODEL:
+        return None
+    from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
+
+    try:
+        return build_embedder(config.EMBEDDER_MODEL)
+    except EmbedderUnavailable as e:
+        harness.record_measure(
+            inputs=["embedder-fallback", config.EMBEDDER_MODEL, str(e)[:160]]
+        )
+        return None
+
+
+def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
+                  on_cycle=None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
     (result, meter, accounting). An explicit token_budget of 0 is a real
     ceiling. Raises ValueError when no conjecturer role is configured.
@@ -67,7 +90,18 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None)
             "no conjecturer endpoint configured — set roles.conjecturer "
             "(endpoint, model, api_key_env) in the config knob file (§15)"
         )
-    result = Scheduler(harness, adapter, config).run(int(cycles))
+    # Browser oracle (rules/act.py): available iff playwright is importable
+    # (optional dependency) — otherwise the feature is silently off, exactly
+    # like an absent research backend.
+    browser_backend = None
+    if importlib.util.find_spec("playwright") is not None:
+        from deepreason.browser import PlaywrightBrowser
+
+        browser_backend = PlaywrightBrowser()
+    result = Scheduler(
+        harness, adapter, config, embedder=make_embedder(harness, config),
+        browser_backend=browser_backend,
+    ).run(int(cycles), on_cycle=on_cycle)
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {
         "metered_tokens": meter.total if meter is not None else None,

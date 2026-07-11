@@ -8,24 +8,36 @@ checked by program.
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import Field, field_validator
+
+from deepreason.ontology.frozen import FrozenList, FrozenRecord
 
 
 class RefRole(str, Enum):
     DEPENDENCE = "dependence"  # contributes a support edge (this -> target) to dep
     MENTION = "mention"
+    # Load-bearing evidence for a warrant validity node. Unlike a plain
+    # mention, attackers of the evidence (or of anything it depends on) are
+    # lifted onto the validity node by build_att. This keeps evidence
+    # invalidation inside the att/dep calculus instead of a view-level check.
+    EVIDENCE = "evidence"
 
 
-class Ref(BaseModel):
+class Ref(FrozenRecord):
     target: str  # artifact id
     role: RefRole
 
 
-class Interface(BaseModel):
+class Interface(FrozenRecord):
     """Attack surface + support declarations."""
 
-    commitments: list[str] = Field(default_factory=list)  # commitment ids
-    refs: list[Ref] = Field(default_factory=list)
+    commitments: list[str] = Field(default_factory=FrozenList)  # commitment ids
+    refs: list[Ref] = Field(default_factory=FrozenList)
+
+    @field_validator("commitments", "refs", mode="after")
+    @classmethod
+    def _freeze_sequences(cls, value):
+        return FrozenList(value)
 
 
 class ProvenanceRole(str, Enum):
@@ -40,9 +52,15 @@ class ProvenanceRole(str, Enum):
     # artifacts. Provenance-only like every role — epistemically inert (D2);
     # a policy steers generation, never adjudication.
     CONTROLLER = "controller"
+    # Experiment design (rules/experiment.py): emits input GENERATORS for
+    # property oracles — def gen(k) sources the fuzz pass enumerates. Inert
+    # like every role: a generator never decides anything (the frozen gate
+    # admits every input, the frozen checker decides every violation); it
+    # only chooses where the harness looks.
+    EXPERIMENTER = "experimenter"
 
 
-class Provenance(BaseModel):
+class Provenance(FrozenRecord):
     """Provenance is never a warrant (D2): epistemically inert by construction.
 
     ``school`` records the conditioning regime (§11.1) that generated the
@@ -57,15 +75,23 @@ class Provenance(BaseModel):
 Codec = Literal["utf8", "json", "csv", "f64le", "i64le", "raw"] | str  # + "code:<lang>"
 
 
-class Artifact(BaseModel):
+class Artifact(FrozenRecord):
     """id = sha256(canonical(content_ref, codec, interface)) — content-addressed."""
 
     id: str
     content_ref: str  # blob hash or inline string
     codec: str = "utf8"
     interface: Interface = Field(default_factory=Interface)
-    warrants: list[str] = Field(default_factory=list)  # warrant ids carried
+    # Legacy/on-record shorthand for initial carriage. The materialized
+    # EpistemicState.carries relation is authoritative and may gain additional
+    # (artifact, warrant) pairs without changing this content identity.
+    warrants: list[str] = Field(default_factory=FrozenList)
     provenance: Provenance
+
+    @field_validator("warrants", mode="after")
+    @classmethod
+    def _freeze_warrants(cls, value):
+        return FrozenList(value)
 
     @staticmethod
     def compute_id(content_ref: str, codec: str, interface: Interface) -> str:

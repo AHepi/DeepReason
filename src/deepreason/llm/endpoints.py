@@ -3,6 +3,8 @@ OpenAI-compatible — mix freely per role. MockEndpoint serves tests and
 replay experiments without network.
 """
 
+import base64
+import http.client
 import json
 import time
 import urllib.error
@@ -32,7 +34,10 @@ def request_with_retries(fn):
             if e.code not in _RETRYABLE_HTTP:
                 raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
             last = e
-        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                http.client.HTTPException) as e:
+            # HTTPException covers IncompleteRead — a mid-stream drop the
+            # OSError net misses (observed live: killed two runs at cycle 1).
             last = e
         if delay is None:
             break
@@ -121,8 +126,10 @@ class MockEndpoint:
         self.name = name
         self.model = model
         self.last_usage: dict | None = None
+        self.last_images: list[bytes] = []
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images: list[bytes] | None = None) -> str:
+        self.last_images = list(images) if images else []  # test-inspectable
         if self._fn is not None:
             response = self._fn(prompt)
         elif self._responses:
@@ -173,10 +180,29 @@ class OpenAICompatEndpoint:
         self.last_finish_reason: str | None = None
         self.last_mean_surprisal: float | None = None
 
-    def build_body(self, prompt: str) -> dict:
+    def build_body(self, prompt: str, images: list[bytes] | None = None) -> dict:
         from deepreason.llm.providers import reasoning_body
 
-        body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
+        # Vision (multimodal): with images, content becomes OpenAI content
+        # parts — text first, then one image_url part per PNG as a base64
+        # data URL. Without images the body is byte-identical to before.
+        if images:
+            content: object = [
+                {"type": "text", "text": prompt},
+                *(
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "data:image/png;base64,"
+                            + base64.b64encode(png).decode()
+                        },
+                    }
+                    for png in images
+                ),
+            ]
+        else:
+            content = prompt
+        body: dict = {"model": self.model, "messages": [{"role": "user", "content": content}]}
         if self.temperature is not None:
             body["temperature"] = self.temperature
         if self.max_tokens is not None:
@@ -188,8 +214,8 @@ class OpenAICompatEndpoint:
         body.update(reasoning_body(self.provider, self.reasoning))
         return body
 
-    def complete(self, prompt: str) -> str:
-        body = self.build_body(prompt)
+    def complete(self, prompt: str, images: list[bytes] | None = None) -> str:
+        body = self.build_body(prompt, images)
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"

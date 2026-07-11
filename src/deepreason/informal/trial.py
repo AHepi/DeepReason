@@ -25,7 +25,7 @@ from deepreason.llm.contracts import (
 from deepreason.canonical import canonical_json
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
-from deepreason.rules.warrants import register_fail_warrant
+from deepreason.rules.warrants import execution_backed, register_fail_warrant
 
 
 def conforming_transcript(blobs, trace_ref: str) -> bool:
@@ -301,6 +301,12 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
 
     loser = b_id if ruling1.winner == "A" else a_id
     winner = a_id if ruling1.winner == "A" else b_id
+    if execution_backed(harness, loser):
+        # Execution supremacy (§3): the loser passes its exec-oracle, so a
+        # verdict from reality stands. A pairwise PREFERENCE cannot refute it —
+        # the rivalry stands unresolved, exactly as for a 'neither' ruling. The
+        # judge calls remain logged (the finally records them).
+        return None
     before = set(harness.state.artifacts)
     trace_ref = harness.blobs.put(canonical_json({
         "pairwise": {"problem": problem.id, "winner": winner, "loser": loser,

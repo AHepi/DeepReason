@@ -24,11 +24,18 @@ class ConcurrentWriterError(RuntimeError):
     """The log grew outside this writer: two live sessions on one root."""
 
 
+class EventSequenceError(CorruptLogError):
+    """An event stream skipped, duplicated, or rewound a sequence number."""
+
+
 class EventLog:
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, read_only: bool = False) -> None:
         self.path = Path(path)
-        self._repair_torn_tail()
+        self.read_only = read_only
+        if not read_only:
+            self._repair_torn_tail()
         self._size = self.path.stat().st_size if self.path.exists() else 0
+        self._next_seq: int | None = None
 
     def _repair_torn_tail(self) -> None:
         """Truncate a torn FINAL line at open (crash mid-append). Without
@@ -77,6 +84,8 @@ class EventLog:
                 os.fsync(f.fileno())
 
     def append(self, event: Event) -> None:
+        if self.read_only:
+            raise RuntimeError("event log is read-only")
         # Single-writer fence: a second live Harness on this root would
         # append a duplicate seq — silent corruption surfacing only at the
         # next replay (found by the MiniReason chaos battery). Fail here.
@@ -85,12 +94,20 @@ class EventLog:
             raise ConcurrentWriterError(
                 f"{self.path}: log advanced under us "
                 f"({actual} != {self._size} bytes): concurrent writer")
+        if self._next_seq is None:
+            for _ in self.read():
+                pass
+        if event.seq != self._next_seq:
+            raise EventSequenceError(
+                f"{self.path}: append seq={event.seq}, expected {self._next_seq}"
+            )
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(event.model_dump_json(by_alias=True) + "\n")
             f.flush()
             os.fsync(f.fileno())
             self._size = f.tell()
+            self._next_seq += 1
 
     def read(self, upto_seq: int | None = None) -> Iterator[Event]:
         """Iterate events in order, optionally truncated for time-travel.
@@ -101,7 +118,19 @@ class EventLog:
         unopenable. A bad line anywhere else is real corruption and raises.
         """
         if not self.path.exists():
+            self._next_seq = 0
             return
+        expected_seq = 0
+
+        def validate_seq(event: Event, lineno: int) -> None:
+            nonlocal expected_seq
+            if event.seq != expected_seq:
+                raise EventSequenceError(
+                    f"{self.path}: line {lineno} has seq={event.seq}, "
+                    f"expected {expected_seq}"
+                )
+            expected_seq += 1
+
         pending: tuple[int, str] | None = None  # one-line lookahead
         with open(self.path, encoding="utf-8") as f:
             for lineno, line in enumerate(f, start=1):
@@ -115,6 +144,7 @@ class EventLog:
                         raise CorruptLogError(
                             f"{self.path}: bad line {pending[0]}: {e}"
                         ) from e
+                    validate_seq(event, pending[0])
                     if upto_seq is not None and event.seq > upto_seq:
                         return
                     yield event
@@ -129,6 +159,8 @@ class EventLog:
                     stacklevel=2,
                 )
                 return
+            validate_seq(event, pending[0])
             if upto_seq is not None and event.seq > upto_seq:
                 return
             yield event
+        self._next_seq = expected_seq

@@ -27,8 +27,25 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--root", default=".deepreason", help="harness state directory (blobs, objects, log)"
     )
-    parser.add_argument("--config", default=None, help="knob file (default: config/default.yaml)")
+    parser.add_argument(
+        "--config", default=None,
+        help="partial YAML profile (default: built-in typed defaults)",
+    )
     sub = parser.add_subparsers(dest="command")
+    sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
+                                 "your API key privately")
+    sub.add_parser("config", help="print the complete effective configuration")
+    make_cmd = sub.add_parser(
+        "make", help='build a website from a description, e.g. '
+                     'deepreason make "a recipe website" — plans it, designs '
+                     'it, then builds it, criticizing each stage')
+    make_cmd.add_argument("description", help="what to build, in plain language")
+    make_cmd.add_argument("--out", default=None, help="output folder (default: <slug>-site)")
+    make_cmd.add_argument("--cycles", type=int, default=10,
+                          help="total rounds across the plan/design/build "
+                               "stages (default 10 -> 2/2/6)")
+    make_cmd.add_argument("--token-budget", type=int, default=150_000,
+                          help="hard token ceiling (default 150000; 0 = unlimited)")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -41,6 +58,21 @@ def build_parser() -> argparse.ArgumentParser:
                      help="hard prompt+completion token ceiling (graceful stop)")
     sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
+    sub.add_parser(
+        "evidence", help="full dossier for an artifact: warrants, verdicts, "
+                         "browser/vision evidence, LLM calls, dependencies"
+    ).add_argument("id")
+    blob_cmd = sub.add_parser("blob", help="dump a blob by ref (or unique prefix)")
+    blob_cmd.add_argument("ref")
+    blob_cmd.add_argument("--out", default=None,
+                          help="write bytes to this file (required for binary blobs)")
+    sub.add_parser("signals", help="list every log signal kind with meaning and count")
+    export_cmd = sub.add_parser(
+        "export", help="write surviving deliverables (app files, screenshots, README) to a directory"
+    )
+    export_cmd.add_argument("--out", required=True, help="output directory")
+    export_cmd.add_argument("--id", default=None,
+                            help="artifact id prefix (default: all surviving deliverables)")
     sub.add_parser("theory", help="render the theory view (spec 8)").add_argument("id")
     sub.add_parser("prose", help="render skeleton as narrative").add_argument("id")
     sub.add_parser("docket", help="disagreement-ranked user queue (spec 10.6)")
@@ -49,11 +81,22 @@ def build_parser() -> argparse.ArgumentParser:
     rule_cmd.add_argument("--holding", required=True, help="the one-line holding")
     rule_cmd.add_argument("--standard", required=True, help="spec id the ruling calibrates")
     sub.add_parser("schools", help="rosters, centroid distances, stance weights")
+    calibrate_cmd = sub.add_parser(
+        "calibrate", help="distance-threshold calibration for an embedder on this "
+                          "corpus (planted duplicates vs siblings vs unrelated)"
+    )
+    calibrate_cmd.add_argument(
+        "--model", default=None,
+        help="fastembed model id (default: the config's EMBEDDER_MODEL, "
+             "else the hashing embedder)")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
     sub.add_parser("merge", help="merge another saved graph (G-Set union)").add_argument("path")
-    sub.add_parser("trace", help="print the events touching an id").add_argument("id")
+    trace_cmd = sub.add_parser("trace", help="print the events touching an id")
+    trace_cmd.add_argument("id")
+    trace_cmd.add_argument("--json", action="store_true",
+                           help="raw event JSON lines (legacy format)")
     narrate_cmd = sub.add_parser(
         "narrate", help="render the event log as chain-of-thought prose (view, spec 8)"
     )
@@ -74,9 +117,48 @@ def _resolve(harness: Harness, prefix: str) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Entry point: _main wrapped so piping into `head`/`less` (which closes
+    stdout early) exits quietly instead of tracebacking on BrokenPipeError."""
+    try:
+        return _main(argv)
+    except BrokenPipeError:
+        try:
+            sys.stdout.close()
+        except Exception:  # noqa: BLE001 - already broken; nothing to save
+            pass
+        return 0
+
+
+def _main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command is None:
         build_parser().print_help()
+        return 0
+
+    from deepreason import easy
+
+    easy.load_credentials()  # stored keys reach every command; env vars win
+
+    if args.command == "setup":
+        easy.setup_wizard()
+        return 0
+
+    if args.command == "config":
+        import yaml
+
+        from deepreason.config import load as load_config
+
+        configured = load_config(Path(args.config) if args.config else None)
+        print(yaml.safe_dump(configured.model_dump(mode="json"), sort_keys=False), end="")
+        return 0
+
+    if args.command == "make":
+        easy.make(
+            args.description, out=args.out, cycles=args.cycles,
+            token_budget=args.token_budget or None,
+            config=args.config,
+            root=None if args.root == ".deepreason" else args.root,
+        )
         return 0
 
     if args.command == "frontier":
@@ -89,17 +171,87 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "why":
         harness = Harness(Path(args.root))
-        print(why(_resolve(harness, args.id), harness.state))
+        print(why(_resolve(harness, args.id), harness.state, harness.warrants))
+        return 0
+
+    if args.command == "evidence":
+        from deepreason.views.evidence import evidence
+
+        harness = Harness(Path(args.root))
+        print(evidence(harness, _resolve(harness, args.id)))
+        return 0
+
+    if args.command == "blob":
+        harness = Harness(Path(args.root))
+        try:
+            ref = harness.blobs.resolve_prefix(args.ref)
+        except (KeyError, ValueError) as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        data = harness.blobs.get(ref)
+        if args.out:
+            Path(args.out).write_bytes(data)
+            print(f"wrote {len(data)} bytes to {args.out}")
+            return 0
+        kind = "image/png" if data.startswith(b"\x89PNG\r\n\x1a\n") else None
+        if kind is None:
+            try:
+                print(data.decode("utf-8"))
+                return 0
+            except UnicodeDecodeError:
+                kind = "binary"
+        print(f"({kind}, {len(data)} bytes — pass --out FILE to write it)",
+              file=sys.stderr)
+        return 1
+
+    if args.command == "signals":
+        from collections import Counter
+
+        from deepreason.signals import PREFIXES, SIGNALS, event_signal, family
+
+        harness = Harness(Path(args.root))
+        counts: Counter[str] = Counter()
+        for event in harness.log.read():
+            signal = event_signal(event)
+            if signal is not None:
+                counts[family(signal)] += 1
+        for name, meaning in {**SIGNALS, **{k + "*": v for k, v in PREFIXES.items()}}.items():
+            print(f"{counts.get(name, 0):6}  {name}: {meaning}")
+        unregistered = {k: n for k, n in counts.items()
+                        if k not in SIGNALS and not k.endswith("*")}
+        for name, n in sorted(unregistered.items()):
+            print(f"{n:6}  {name}: (unregistered signal)")
+        return 0
+
+    if args.command == "export":
+        from deepreason.views.export import export_run, render_export_summary
+
+        harness = Harness(Path(args.root))
+        artifact_id = _resolve(harness, args.id) if args.id else None
+        paths = export_run(harness, args.out, artifact_id)
+        print(render_export_summary(paths))
         return 0
 
     if args.command == "trace":
+        from deepreason.signals import describe, event_signal
+
         harness = Harness(Path(args.root))
         found = False
         for event in harness.log.read():
             ids = list(event.inputs) + list(event.outputs)
-            if any(i.startswith(args.id) for i in ids):
+            if not any(i.startswith(args.id) for i in ids):
+                continue
+            found = True
+            if args.json:
                 print(event.model_dump_json(by_alias=True))
-                found = True
+                continue
+            signal = event_signal(event)
+            what = (f"{signal} — {describe(signal)[:60]}" if signal
+                    else f"{', '.join(i[:12] for i in event.inputs) or '-'} -> "
+                         f"{', '.join(o[:12] for o in event.outputs) or '-'}")
+            llm = (f"  [llm {event.llm.role}/{event.llm.model} "
+                   f"tok={event.llm.tokens}]" if event.llm else "")
+            print(f"#{event.seq:<5} {event.ts[:19]} {event.rule.value:<8} {what}{llm}")
         if not found:
             print(f"(no events touching {args.id!r})")
         return 0
@@ -143,6 +295,22 @@ def main(argv: list[str] | None = None) -> int:
             )
         return 0
 
+    if args.command == "calibrate":
+        from deepreason.config import load as load_config
+        from deepreason.llm.embedder import EmbedderUnavailable, build_embedder
+        from deepreason.views.basin import threshold_calibration
+
+        harness = Harness(Path(args.root))
+        config = load_config(Path(args.config) if args.config else None)
+        try:
+            embedder = build_embedder(args.model or config.EMBEDDER_MODEL)
+        except EmbedderUnavailable as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        print(json.dumps(threshold_calibration(harness, embedder),
+                         indent=2, sort_keys=True))
+        return 0
+
     if args.command == "capture":
         from deepreason.capture import detection
         from deepreason.config import load as load_config
@@ -156,6 +324,7 @@ def main(argv: list[str] | None = None) -> int:
             "generator": detection.generator_metrics(harness, embedder, window),
             "adjudicator": detection.adjudicator_metrics(harness, window),
             "lambda": detection.grounding_lambda(harness, window),
+            "evidence_lambda": detection.evidence_lambda(harness),
             "raw_flags": detection.raw_flags(harness, embedder, config),
         }
         print(json.dumps(dashboard, indent=2, sort_keys=True))
@@ -189,7 +358,11 @@ def main(argv: list[str] | None = None) -> int:
         from deepreason.informal.appellate import rule as appellate_rule
 
         harness = Harness(Path(args.root))
-        precedent = appellate_rule(harness, args.case_id, args.holding, args.standard)
+        try:
+            precedent = appellate_rule(harness, args.case_id, args.holding, args.standard)
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            return 1
         print(f"precedent registered: {precedent.id[:12]}")
         return 0
 

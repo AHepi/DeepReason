@@ -65,6 +65,12 @@ def test_eval_report_from_scheduler_run(tmp_path):
     assert set(report["schools"]["roster"]) == {"school-0", "school-1"}
     assert report["interventions"][-1]["rule"] == "stagnation-recruit"
     assert report["capture"]["lambda"] == 1.0  # program verdicts only
+    # The signals block: the log's table of contents, family-normalized.
+    signals = report["signals"]
+    assert signals["cycle"] == 4                      # one heartbeat per cycle
+    assert signals["trial-blocked:*"] == 1
+    assert signals["intervention:*"] >= 1
+    assert signals["judge-error-rate:*"] == 1
 
 
 def test_valid_json_rate_counts_repair_attempts(tmp_path):

@@ -7,8 +7,11 @@ replay-deterministic.
 """
 
 from enum import Enum
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, Field, field_validator
+
+from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 
 
 class Rule(str, Enum):
@@ -24,7 +27,7 @@ class Rule(str, Enum):
     RESEED = "Reseed"
 
 
-class LLMCall(BaseModel):
+class LLMCall(FrozenRecord):
     role: str
     model: str
     endpoint: str
@@ -44,25 +47,52 @@ class LLMCall(BaseModel):
     mean_surprisal: float | None = None
 
 
-class StateDiff(BaseModel):
-    att_add: list[tuple[str, str]] = Field(default_factory=list, alias="att+")
-    dep_add: list[tuple[str, str]] = Field(default_factory=list, alias="dep+")
-    a_add: list[str] = Field(default_factory=list, alias="A+")
-    pi_add: list[str] = Field(default_factory=list, alias="Π+")
-    status_changed: list[str] = Field(default_factory=list)
+class StateDiff(FrozenRecord):
+    att_add: list[tuple[str, str]] = Field(default_factory=FrozenList, alias="att+")
+    dep_add: list[tuple[str, str]] = Field(default_factory=FrozenList, alias="dep+")
+    a_add: list[str] = Field(default_factory=FrozenList, alias="A+")
+    pi_add: list[str] = Field(default_factory=FrozenList, alias="Π+")
+    status_changed: list[str] = Field(default_factory=FrozenList)
     # Measure-rule payloads (§6): estimates recorded in the event so replay
     # applies them without re-running the variator (raws are logged too).
-    hv_set: dict[str, float] = Field(default_factory=dict)
-    reach_set: dict[str, float] = Field(default_factory=dict)
+    hv_set: Mapping[str, float] = Field(default_factory=FrozenDict)
+    reach_set: Mapping[str, float] = Field(default_factory=FrozenDict)
+    # Normative amendment (reach, Def 3.7): a FULL reach hit - genuine
+    # cross-problem survival of another problem's non-trivial battery -
+    # registers the artifact as ADDRESSING that problem. Carried in the
+    # event so replay applies it without re-running the sweep.
+    addr_add: list[tuple[str, str]] = Field(default_factory=FrozenList, alias="addr+")
+    # Append-only warrant carriage. Kept out of Artifact.compute_id so an
+    # artifact remains the same content object when it packages more than one
+    # attack; old events remain compatible through the default empty list.
+    carry_add: list[tuple[str, str]] = Field(default_factory=FrozenList, alias="carry+")
 
-    model_config = {"populate_by_name": True}
+    model_config = ConfigDict(frozen=True, populate_by_name=True)
+
+    @field_validator("hv_set", "reach_set", mode="after")
+    @classmethod
+    def _freeze_maps(cls, value):
+        return FrozenDict(value)
+
+    @field_validator(
+        "att_add", "dep_add", "a_add", "pi_add", "status_changed", "addr_add",
+        "carry_add", mode="after",
+    )
+    @classmethod
+    def _freeze_sequences(cls, value):
+        return FrozenList(value)
 
 
-class Event(BaseModel):
+class Event(FrozenRecord):
     seq: int
     ts: str  # iso8601
     rule: Rule
-    inputs: list[str] = Field(default_factory=list)
-    outputs: list[str] = Field(default_factory=list)
+    inputs: list[str] = Field(default_factory=FrozenList)
+    outputs: list[str] = Field(default_factory=FrozenList)
     llm: LLMCall | None = None
     state_diff: StateDiff = Field(default_factory=StateDiff)
+
+    @field_validator("inputs", "outputs", mode="after")
+    @classmethod
+    def _freeze_sequences(cls, value):
+        return FrozenList(value)

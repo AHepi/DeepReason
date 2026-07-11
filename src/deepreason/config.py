@@ -1,17 +1,43 @@
-"""Config loading (spec §15) — single exposed knob file (config/default.yaml).
+"""The single configuration boundary for DeepReason (spec §15).
 
-Knobs whose spec start value is "tune" load as None and must be set before
-the phases that consume them.
+``Config`` owns every default and validates every knob. YAML files are partial
+profiles: they contain only deliberate differences from the built-in schema.
+Profile-driven entry points load here and build role endpoints through
+``deepreason.llm.adapter.build_adapter``; general-purpose scripts must not
+carry private copies of role caps, reasoning policy, or model-selection logic.
+Pre-registered experiment arms may still instantiate ``Config`` directly so
+their manipulated conditions remain explicit in the experiment source.
+
+Knobs whose spec start value is "tune" default to ``None`` and must be set
+before the phases that consume them.
 """
 
+from collections.abc import Iterable, Mapping
 from pathlib import Path
+from typing import Any
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class EndpointSpec(BaseModel):
+    """Validated shape of one role endpoint while preserving dict consumers."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    endpoint: str | None = None
+    model: str | None = None
+    temperature: float | None = None
+    api_key_env: str | None = None
+    provider: str | None = None
+    reasoning: str | int | None = None
+    max_tokens: int | None = Field(default=None, gt=0)
+    json_mode: bool = False
+    logprobs: bool = False
 
 
 class Config(BaseModel):
-    model_config = {"extra": "allow"}
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     # Unification (§7)
     FLOOR: int = 1
@@ -31,6 +57,15 @@ class Config(BaseModel):
     STANCE_DECAY: float | None = None  # lineage size at which stance weight hits 0 (None => 20)
     XEXAM_SHARE: float = 0.15
     RESEED_DIST_MIN: float | None = None
+    # Embedder-AGNOSTIC school-convergence firing path (detection.raw_flags):
+    # school_convergence also fires when inter_school_dist_ratio (min inter-
+    # school centroid distance / mean within-stream pairwise distance) drops
+    # below this. RESEED_DIST_MIN is an ABSOLUTE distance and must be calibrated
+    # to the embedder (the HashingEmbedder runs hot, ~0.6-0.9, so the shipped
+    # 0.15 can never fire); this ratio is scale-free (~1.0 = as separated as the
+    # stream, ->0 = converged). None (default) = disabled: opt in and calibrate
+    # against views/basin.embedder_calibration before trusting it in a config.
+    RESEED_RATIO_MAX: float | None = None
     # Refuted-attractor orbiting floor (basin study, docs/BASIN_REPORT.md):
     # gate blocks per CAPTURE_W event window before the ladder rotates the
     # orbiting school's stance. Healthy runs measured exactly 0; orbiting
@@ -45,11 +80,28 @@ class Config(BaseModel):
     COMPLEMENT_ALWAYS: bool = False  # force the §11.4 complement directive every cycle
     PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage"])
     LAMBDA_FLOOR: float | None = None
+    # Opt-in: drive the grounding-decay brake off the stricter evidence_lambda
+    # (fraction of observation_valued claims actually covered by external
+    # evidence) instead of the spec lambda (which counts internal well-
+    # formedness program checks as grounding, so it pegs at 1.0 on
+    # program-heavy runs and the brake never fires). Default False preserves
+    # spec §11.3 semantics and the §11.8 experiment; evidence_lambda is always
+    # reported as a diagnostic regardless. Only bites when the run makes
+    # empirical claims — a pure design problem reads N/A and never trips it.
+    GROUNDING_USE_EVIDENCE_LAMBDA: bool = False
     CAPTURE_W: int = 20
     # Adjudication-ritual thresholds (§11.3; empirical per family/domain, §17)
     ATTACK_ENTROPY_FLOOR: float = 0.2
     CRIT_DEBT_CEILING: float = 0.5
     MIN_ATTACKS_FOR_RITUAL: int = 5
+    # Reach (Def 3.7 as amended): a foreign problem's qualifying
+    # (substantive, evaluable) criteria must cover at least this fraction of
+    # its TOTAL criteria for a full reach hit (which registers addressing and
+    # can raise explanation debt); below it the hit is provisional - logged,
+    # grounding nothing. Guards against reach minted from thin or unguarded
+    # batteries (rubric-heavy problems stay provisional until their guarded
+    # procedures put survivals on the record).
+    REACH_COVERAGE_MIN: float = 0.5
     # Research (§12)
     RESEARCH_PERIOD: int = 5  # cycles between research fetches (standing exogenous schedule)
     # Budget triage (§14; attention only, never status)
@@ -59,25 +111,221 @@ class Config(BaseModel):
     # admitted targets share ONE argumentative-critic call; warrants remain
     # per-target. None = one call per target (legacy behavior).
     CRIT_BATCH_K: int | None = None
+    # Counterexample feedback retries (§3 execution supremacy): when an attack
+    # on an execution-backed target fails to ground (missing / gate-rejected /
+    # property-held counterexample), re-ask the critic up to this many times
+    # WITH the deterministic rejection reason echoed back — the gate's verdict
+    # is information the one-shot caller otherwise never sees. 0 disables.
+    CX_RETRY_MAX: int = 1
+    # Standing re-criticism (§14 attention only): unused ARG_CRIT_PER_CYCLE
+    # slots sweep ACCEPTED artifacts with no warrant on record (round-robin,
+    # execution-oracle carriers first). Off = legacy behavior, where an
+    # artifact is only criticized in the cycle it was admitted and anything
+    # accepted early is never attacked again (accepted-by-neglect).
+    RECRIT_STANDING: bool = True
+    # Deterministic fuzz criticism (§3): inputs enumerated per property-oracle
+    # commitment carrying a generator (def gen(k), pure in k). The harness
+    # experiments mechanically — sandboxed executions, zero LLM calls, replay-
+    # stable. 0 disables.
+    FUZZ_N: int = 64
+    # Experiment design (rules/experiment.py): every this-many cycles, ask the
+    # EXPERIMENTER (conjecturer endpoint, experimenter template) to propose
+    # def gen(k) input generators for a property oracle that has fewer than
+    # GEN_MAX accepted ones. Proposals are adjudicated mechanically
+    # (generator_wf: compile/yield/novelty) — no judge. 0 disables.
+    GEN_PROPOSE_PERIOD: int = 5
+    GEN_MAX: int = 3
+    # Proposed properties (rules/experiment.py): every this-many cycles, ask
+    # the property_designer role to conjecture correctness properties the
+    # problem statement demands but the current checker does not enforce.
+    # Adjudication: checker_wf (mechanical non-vacuity) + cross-family
+    # relevance trial (unanimity) + population wipeout guard at use time +
+    # the source-artifact att closure (refute the property => its verdicts
+    # collapse). Requires the property_designer AND judge roles. 0 disables.
+    PROP_PROPOSE_PERIOD: int = 7
+    PROP_MAX: int = 3
+    # Discrimination futility backoff (§14 attention only; the run-3
+    # starvation: an order-swap-deadlocked pairwise trial stayed 'unsolved'
+    # and won unsolved-first selection 18 times while the root problem got
+    # one conjecturer call). Each attempt starts a cooldown; after the cap
+    # the problem is paused permanently — recorded as unresolved, never
+    # retried into starvation. None = unlimited attempts (legacy).
+    DISC_ATTEMPTS_MAX: int | None = 3
+    DISC_COOLDOWN: int = 4
+    # Lazy HV spot-checks ask the variator for K whole-content edits in one
+    # JSON reply; on app-sized artifacts (multi-KB HTML) that reliably blows
+    # the completion window (observed live: 9 dropped variator calls in one
+    # run, all length-limit). Artifacts whose content exceeds this many chars
+    # are skipped by _lazy_hv (attention-only machinery — skipping estimates
+    # is legal; skipping criticism would not be), logged once as
+    # hv-skip-oversize. None disables the gate.
+    HV_CONTENT_MAX_CHARS: int | None = 8000
+    # Browser oracle (rules/act.py): app candidates carrying browser
+    # commitments are rendered + driven in headless Chromium, at most this
+    # many NEW runs per cycle (each is one exogenous evidence registration;
+    # re-runs never happen — pending() guards). 0 disables.
+    BROWSER_PER_CYCLE: int = 1
+    # Vision criticism (rules/vision.py): targets with recorded screenshots
+    # get one vision-critic look each, at most this many calls per cycle.
+    # Requires the vision_critic role. 0 disables.
+    VISION_CRIT_PER_CYCLE: int = 1
+    # The ratchet: an active property older than this many EVENTS is promoted
+    # — it may then refute without population support (the standard holds the
+    # line even when every current candidate fails it). Promotion is trust,
+    # never finality: the source-artifact closure still collapses a promoted
+    # property's verdicts if it is ever refuted. 0 disables promotion.
+    PROP_PROBATION_EVENTS: int = 80
     # Focus lock (attention only): when set, the scheduler works ONLY this
     # problem — used by controlled experiments to eliminate side-problem
     # dilution (spawn triggers still record problems; they are just unworked).
     FOCUS_PROBLEM: str | None = None
+    # Family lock (attention only): when set, selection is restricted to the
+    # named problem's transitive FAMILY — the problem plus everything spawned
+    # from it or from artifacts addressing it (successors, discriminations,
+    # lineage problems). Unlike FOCUS_PROBLEM, in-family successor iteration
+    # keeps working. Used by staged pipelines (easy.make: plan -> design ->
+    # build) so one stage's leftovers cannot out-age the next stage's seed
+    # under the liveness queue. FOCUS_PROBLEM takes precedence when both set.
+    FOCUS_FAMILY: str | None = None
     # Level-2 diversity injection always-on (llm/specs.py); the stagnation
     # ladder can also switch it on reactively (§11.4).
     SPEC_INJECTION: bool = False
     # Self-calibration liveness queue (docs/CONTROLLER_SPEC.md): replaces
     # unsolved-first rotation with aging priority (age x unsolvedness) so no
-    # registered problem starves. Attention only, never status.
-    LIVENESS_QUEUE: bool = False
+    # registered problem starves. Attention only, never status. Default ON
+    # since the ground-truth run-3 starvation: under unsolved-first, a SOLVED
+    # root problem is never selected while ANY unsolved spawn exists, so the
+    # very process that could overturn its survivor is starved by that
+    # survivor's own acceptance. False = legacy unsolved-first.
+    LIVENESS_QUEUE: bool = True
+    # Embedder (§9, §11.5): None = HashingEmbedder (zero-dependency default,
+    # lexical geometry). Set a fastembed model id to enable NeuralEmbedder —
+    # verified on this repo: "BAAI/bge-small-en-v1.5" (prose margins) and
+    # "jinaai/jina-embeddings-v2-base-code" (code margins); requires the
+    # optional dependency group (pip install 'deepreason[embed]'). If the
+    # backend is unavailable at run start the scheduler falls back to hashing
+    # and records `embedder-fallback` on the log. EVERY distance threshold
+    # (NEAR_DUP_EPS, RESEED_DIST_MIN, atlas radii) is scale-specific:
+    # recalibrate via `deepreason calibrate` (views/basin.threshold_calibration)
+    # before trusting a config on a new embedder — the adjudicated record in
+    # runs/embedder_design refuted every blind distribution-mapping shortcut.
+    EMBEDDER_MODEL: str | None = None
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2
-    roles: dict = Field(default_factory=dict)
+    roles: dict[
+        str,
+        dict[str, Any] | list[dict[str, Any]] | None,
+    ] = Field(default_factory=dict)
+
+    @field_validator("roles")
+    @classmethod
+    def _validate_roles(cls, value):
+        for role, configured in value.items():
+            if configured is None:
+                continue
+            seats = configured if isinstance(configured, list) else [configured]
+            if not seats:
+                raise ValueError(f"role {role!r} has an empty endpoint ensemble")
+            for index, seat in enumerate(seats):
+                try:
+                    EndpointSpec.model_validate(seat)
+                except ValueError as error:
+                    raise ValueError(
+                        f"invalid endpoint for role {role!r} seat {index}: {error}"
+                    ) from error
+        return value
 
 
 def load(path: Path | None = None) -> Config:
+    """Load a partial YAML profile over the canonical typed defaults.
+
+    With no path, no file-system lookup occurs: installed packages, the CLI,
+    MCP, tests, and scripts all receive exactly ``Config()``.
+    """
     if path is None:
-        path = Path(__file__).resolve().parents[2] / "config" / "default.yaml"
-    with open(path) as f:
-        return Config.model_validate(yaml.safe_load(f) or {})
+        return Config()
+    data = yaml.safe_load(Path(path).read_text()) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"config profile must be a mapping: {path}")
+    return Config.model_validate(data)
+
+
+def parse_overrides(items: Iterable[str]) -> dict[str, Any]:
+    """Parse repeatable ``KEY=YAML_VALUE`` command-line overrides."""
+    parsed: dict[str, Any] = {}
+    for item in items:
+        key, separator, raw = item.partition("=")
+        if not separator or not key.strip():
+            raise ValueError(f"invalid config override {item!r}; expected KEY=VALUE")
+        parsed[key.strip()] = parse_value(raw)
+    return parsed
+
+
+def parse_value(raw: str) -> Any:
+    """Parse one command-line value with the profile's YAML scalar rules."""
+    return yaml.safe_load(raw)
+
+
+def apply_overrides(config: Config, values: Mapping[str, Any]) -> Config:
+    """Return a revalidated config with top-level or dotted-path overrides.
+
+    Dotted role paths such as ``roles.conjecturer.reasoning`` and indexed
+    ensemble paths such as ``roles.judge.1.model`` use the same validation as
+    a YAML profile. Unknown paths fail loudly instead of becoming inert knobs.
+    """
+    data = config.model_dump(mode="python")
+    for path, value in values.items():
+        parts = path.split(".")
+        cursor: Any = data
+        for part in parts[:-1]:
+            if isinstance(cursor, list):
+                try:
+                    index = int(part)
+                except ValueError as error:
+                    raise ValueError(f"config path {path!r}: {part!r} is not a list index") from error
+                if index < 0 or index >= len(cursor):
+                    raise ValueError(f"unknown config path: {path}")
+                cursor = cursor[index]
+            elif isinstance(cursor, dict) and part in cursor:
+                cursor = cursor[part]
+            elif parts[0] == "roles" and cursor is data["roles"]:
+                cursor[part] = {}
+                cursor = cursor[part]
+            else:
+                raise ValueError(f"unknown config path: {path}")
+        leaf = parts[-1]
+        if isinstance(cursor, list):
+            try:
+                index = int(leaf)
+            except ValueError as error:
+                raise ValueError(f"config path {path!r}: {leaf!r} is not a list index") from error
+            if index < 0 or index >= len(cursor):
+                raise ValueError(f"unknown config path: {path}")
+            cursor[index] = value
+        elif isinstance(cursor, dict) and (
+            leaf in cursor
+            or (parts[0] == "roles" and leaf in EndpointSpec.model_fields)
+            or (parts[0] == "roles" and cursor is data["roles"])
+        ):
+            cursor[leaf] = value
+        else:
+            raise ValueError(f"unknown config path: {path}")
+    return Config.model_validate(data)
+
+
+def role_api_key_envs(
+    config: Config,
+    roles: Iterable[str] | None = None,
+) -> set[str]:
+    """Environment-variable names referenced by selected enabled roles."""
+    names: set[str] = set()
+    selected = config.roles.values() if roles is None else (
+        config.roles.get(role) for role in roles
+    )
+    for configured in selected:
+        seats = configured if isinstance(configured, list) else [configured]
+        for seat in seats:
+            if isinstance(seat, dict) and seat.get("endpoint") and seat.get("api_key_env"):
+                names.add(str(seat["api_key_env"]))
+    return names

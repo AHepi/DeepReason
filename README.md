@@ -20,6 +20,26 @@ section below.
 
 ## Quickstart
 
+### The two-command path (no configuration knowledge needed)
+
+```bash
+pip install ".[browser]"
+
+deepreason setup      # one time: pick your AI provider, paste your API key
+deepreason make "a pomodoro timer website"
+```
+
+`setup` asks two questions and stores your key privately in
+`~/.deepreason/credentials` (owner-only file; the key never appears in any
+config, prompt, or log). `make` proposes several complete single-file
+websites, criticizes them (each candidate is really loaded in headless
+Chromium; with a vision-capable provider a vision critic judges the rendered
+screenshots), and exports the survivors as `.html` files you can double-click
+— with a README explaining why each survived. If nothing survives, it says so
+and suggests more rounds: refutation is the tool working, not failing. The
+two commands run the very same machinery as everything below and leave the
+same replayable record in `runs/`.
+
 ### Full harness
 
 ```bash
@@ -42,6 +62,8 @@ claude mcp add deepreason -- deepreason-mcp
 
 Engine models are per-role config, no code changes — see
 [`docs/AGENT.md`](docs/AGENT.md).
+Configuration has one typed source of defaults; YAML files are partial
+profiles, and `deepreason config` prints the complete effective result.
 
 ### MiniReason
 
@@ -134,9 +156,13 @@ harness can open it and keep going.
 ## What you can trust, and what you can't
 
 **Trust:** every run is deterministic and byte-for-byte replayable from its
-log; token accounting is checked (`deepreason.invariants.verify_root` — it
-caught a real 1% leak in a million-token run this project ran). Nothing is
-deleted; state is a pure function of the append-only log.
+log; ontology records are immutable, event sequence numbers are continuous,
+and historical views cannot write to the run they inspect. Object ids resolve
+to one schema and one canonical record, so a conflicting registration or
+merge fails loudly instead of changing history. Token accounting is checked
+(`deepreason.invariants.verify_root` — it caught a real 1% leak in a
+million-token run this project ran). Nothing is deleted; state is a pure
+function of the append-only log.
 
 **Read with care** (documented honestly in
 [`docs/MINI_STRESS_REPORT.md`](docs/MINI_STRESS_REPORT.md) and the arrow
@@ -151,9 +177,12 @@ comparison):
 - A thesis argues from **the run's own record**, not outside knowledge — it
   commits to what *this run* adjudicated, and will say so.
 
-Security: forbidden-case predicates come from untrusted model output and are
-sandboxed (an AST guard blocks the `eval` escape family). See
-[`tests/test_security.py`](tests/test_security.py).
+Security: forbidden-case predicates use an AST guard against the `eval` escape
+family. Execution-oracle candidates, checkers, generators, and admission gates
+additionally run in fresh subprocesses with deterministic line budgets and
+emergency OS resource containment; module top-level code never runs in the
+harness process. See [`tests/test_security.py`](tests/test_security.py) and
+[`tests/test_oracle.py`](tests/test_oracle.py).
 
 ## Development
 

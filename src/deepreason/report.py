@@ -13,8 +13,9 @@ stream around the intervention seq and is correlational, not causal.
 
 from deepreason.capture import detection, schools
 from deepreason.llm.embedder import HashingEmbedder, distance
-from deepreason.ontology import Rule, Status
+from deepreason.ontology import Rule, SpawnTrigger, Status
 from deepreason.programs import content_text
+from deepreason.research.backends import covered
 
 
 def _distribution(values: list[float]) -> dict:
@@ -81,7 +82,8 @@ def eval_report(harness, config, embedder=None) -> dict:
         row["mean_surprisal"] = sum(values) / len(values) if values else None
 
     # --- Attack validity: do registered attacks stand? ----------------- #
-    attackers = [a for a in state.artifacts.values() if a.warrants]
+    carrier_ids = {carrier for carrier, _ in state.carries}
+    attackers = [a for a in state.artifacts.values() if a.id in carrier_ids]
     standing = sum(
         1 for a in attackers if state.status.get(a.id) == Status.ACCEPTED
     )
@@ -151,6 +153,16 @@ def eval_report(harness, config, embedder=None) -> dict:
     }
     reseeds = sum(1 for e in events if e.rule == Rule.RESEED)
 
+    # --- Research grounding: uncovered research problems are silently pending #
+    # (no backend configured, or no fetch yet). Surfacing the count turns a
+    # silent-failure mode (an empirical claim waiting forever on evidence that
+    # never arrives) into a visible signal (§12; docs/OPERATOR_DIAGNOSIS.md).
+    research_problems = [
+        p for p in state.problems.values()
+        if p.provenance.trigger == SpawnTrigger.RESEARCH
+    ]
+    uncovered_research = [p for p in research_problems if not covered(harness, p.id)]
+
     # --- Escape efficacy per response rule (§11.4: measured, not vibes) - #
     stream = [
         (a.provenance.event_seq, content_text(a, harness.blobs))
@@ -185,6 +197,15 @@ def eval_report(harness, config, embedder=None) -> dict:
                 }
             )
 
+    from deepreason.signals import event_signal, family
+
+    signal_counts: dict[str, int] = {}
+    for e in events:
+        signal = event_signal(e)
+        if signal is not None:
+            key = family(signal)
+            signal_counts[key] = signal_counts.get(key, 0) + 1
+
     return {
         "totals": {
             "events": len(events),
@@ -194,6 +215,9 @@ def eval_report(harness, config, embedder=None) -> dict:
             "survivors": len(survivors),
             "llm_tokens": total_tokens,
         },
+        # Every measure signal, normalized to its registry family — the log's
+        # own table of contents (see src/deepreason/signals.py for meanings).
+        "signals": dict(sorted(signal_counts.items())),
         "llm": per_role,
         "attack_validity_rate": attack_validity,
         "survivor_hv": survivor_hv,
@@ -212,9 +236,18 @@ def eval_report(harness, config, embedder=None) -> dict:
         "spec_transmission": spec_transmission,
         "schools": {"roster": school_rows, "reseeds": reseeds},
         "interventions": interventions,
+        "research": {
+            "problems": len(research_problems),
+            "uncovered": len(uncovered_research),
+            "note": (
+                "uncovered research problems have no accepted evidence — configure a "
+                "research_backend or they stay scheduled-pending indefinitely (§12)"
+            ) if uncovered_research else "",
+        },
         "capture": {
             "generator": detection.generator_metrics(harness, embedder, window),
             "adjudicator": detection.adjudicator_metrics(harness, window),
             "lambda": detection.grounding_lambda(harness, window),
+            "evidence_lambda": detection.evidence_lambda(harness),
         },
     }

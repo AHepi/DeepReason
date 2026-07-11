@@ -99,11 +99,16 @@ class LLMAdapter:
         output_model: type[BaseModel],
         endpoint_index: int = 0,
         template_role: str | None = None,
+        images: list[bytes] | None = None,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
         lets an auxiliary contract (e.g. spec generation) reuse a configured
-        endpoint with a different prompt template."""
+        endpoint with a different prompt template. ``images`` (PNG bytes)
+        makes the request multimodal (vision roles): image bytes are NOT
+        duplicated into the log — callers pass content-addressed evidence
+        artifacts and the pack text names their ids, so prompt_ref still
+        honestly reconstructs the exchange (§0)."""
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
         endpoint = self._resolve(role, endpoint_index)
@@ -153,7 +158,11 @@ class LLMAdapter:
             # produced (replay/audit reconstructs the wire exchange, §0).
             prompt_ref = prompt_ref if not error else self.blobs.put(request.encode())
             try:
-                raw = endpoint.complete(request)
+                raw = (
+                    endpoint.complete(request, images=images)
+                    if images
+                    else endpoint.complete(request)
+                )
             except EndpointError as e:
                 # Prior attempts may have spent tokens — hand the caller the
                 # spend record so the drop site can log it.
@@ -219,11 +228,15 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     )
 
 
-def build_adapter(config, blob_store, meter=None) -> LLMAdapter:
+def build_adapter(config, blob_store, meter=None, only_roles: set[str] | None = None) -> LLMAdapter:
     """Build from the §15 role table. Roles with a null endpoint are absent
-    (has_role False); a list spec becomes an ensemble (judge, §9)."""
+    (has_role False); a list spec becomes an ensemble (judge, §9).
+    ``only_roles`` lets a single-purpose view use its configured seat without
+    resolving or requiring credentials for unrelated engine roles."""
     endpoints: dict[str, object] = {}
     for role, spec in (config.roles or {}).items():
+        if only_roles is not None and role not in only_roles:
+            continue
         if isinstance(spec, list):
             built = [e for e in (_endpoint_from_spec(s) for s in spec) if e is not None]
             if built:

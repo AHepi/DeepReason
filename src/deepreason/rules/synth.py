@@ -26,7 +26,12 @@ def synthesize(
     lines = [f"PROBLEM {problem.id}", problem.description, "", "ARTIFACTS TO CONNECT:"]
     for aid in endpoints:
         lines.append(f"- {aid}: {content_text(harness.state.artifacts[aid], harness.blobs)[:200]}")
-    lines += ["", "DIRECTIVE: propose one relation; list the ids it connects."]
+    lines += ["", "DIRECTIVE: propose ONE SUBSTANTIVE relation and list the "
+              "ids it connects. Name the relation kind (depends on / reduces "
+              "to / shares mechanism / compatible with / inherits / "
+              "integrates / contradicts / abstracts) and state what the "
+              "relation is REFUTED IF. A summary of the endpoints is not a "
+              "relation and fails on form."]
     output, llm_call = adapter.call("synthesizer", "\n".join(lines), SynthesizerOutput)
 
     connects = [i for i in output.connects if i in harness.state.artifacts]

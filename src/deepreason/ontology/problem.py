@@ -6,7 +6,9 @@ problem, no conjecture. The Popper battery is auto-pinned into criteria.
 
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, Field, field_validator
+
+from deepreason.ontology.frozen import FrozenList, FrozenRecord
 
 
 # Popper battery (spec §1): commitment-schema ids auto-pinned into every
@@ -27,16 +29,26 @@ class SpawnTrigger(str, Enum):
     RESEARCH = "research"                      # observation-valued, no covering evidence (§12)
 
 
-class ProblemProvenance(BaseModel):
+class ProblemProvenance(FrozenRecord):
     trigger: SpawnTrigger
-    from_: list[str] = Field(default_factory=list, alias="from")
+    from_: list[str] = Field(default_factory=FrozenList, alias="from")
 
-    model_config = {"populate_by_name": True}
+    model_config = ConfigDict(frozen=True, populate_by_name=True)
+
+    @field_validator("from_", mode="after")
+    @classmethod
+    def _freeze_sources(cls, value):
+        return FrozenList(value)
 
 
-class Problem(BaseModel):
+class Problem(FrozenRecord):
     id: str
     description: str
     # Commitment-schema ids, instantiated per candidate; Popper battery auto-pinned.
-    criteria: list[str] = Field(default_factory=list)
+    criteria: list[str] = Field(default_factory=FrozenList)
     provenance: ProblemProvenance
+
+    @field_validator("criteria", mode="after")
+    @classmethod
+    def _freeze_criteria(cls, value):
+        return FrozenList(value)
