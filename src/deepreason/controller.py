@@ -1,5 +1,18 @@
 """Self-calibrating controller (docs/CONTROLLER_SPEC.md) — minimal core.
 
+This is FIXED, deterministic policy execution — an implementation detail
+of scheduler rules (spec §11.4: logged rules with hysteresis; a learned
+controller is explicitly out of scope). Nothing here invokes an LLM,
+learns during the run, or holds epistemic state: every decision is a pure
+function of the log prefix and the constants below (thresholds, envelopes,
+dwell), and every applied decision is itself a logged, attackable,
+replayable artifact.
+
+It is also conceptually SEPARATE from capture control (capture/): capture
+watches the epistemic dynamics (generator and adjudicator surfaces); this
+module watches process health (truncation, schema repair, transport). The
+timeout rule below is a TRANSPORT-POLICY rule, not a capture response.
+
 Implements the cheap, high-confidence components of the spec: the
 two-ledger CONSTITUTION, the process-only UPDATE RULE inside
 control-barrier ENVELOPES, policy-as-logged-artifact with FAIL-STATIC,
@@ -29,7 +42,7 @@ from deepreason.ontology import Provenance, Rule, Status
 # gate, the trial guard, or criticism INTENSITY reads is tribunal. Per-role
 # completion caps are keyed "cap:<role>". Checkable by diff (forbidden #1).
 GENERATOR_LEDGER = frozenset(
-    {"VS_K", "PACK_TOKEN_BUDGET", "SPEC_INJECTION"}
+    {"VS_K", "PACK_TOKEN_BUDGET", "SPEC_INJECTION", "timeout:transport"}
     | {f"cap:{r}" for r in (
         "conjecturer", "argumentative_critic", "defender",
         "variator", "synthesizer", "judge",
@@ -61,7 +74,23 @@ ENVELOPES = {
     "cap:variator": {"min": 800, "max": 4000, "step": 1.6, "dwell": 2},
     "cap:synthesizer": {"min": 600, "max": 2500, "step": 1.6, "dwell": 2},
     "cap:judge": {"min": 600, "max": 2500, "step": 1.6, "dwell": 2},
+    # TRANSPORT-POLICY rule (not capture): read timeout, seconds, applied
+    # to every endpoint (drop events carry no role). Deterministic and
+    # bounded: threshold = any fresh transport drop, step/dwell/min/max
+    # fixed here, inputs replayable from the log. Widen-only in practice —
+    # an unused wide timeout costs nothing, and the live failure it
+    # addresses (generations outlasting a fixed wait, dropped after
+    # retries) recurs until the wait is widened.
+    "timeout:transport": {"min": 120, "max": 900, "step": 1.5, "dwell": 2},
 }
+
+# Transport-drop signal (process-only): the drop site (scheduler._drop)
+# tags a Measure event "dropped-call" with the transport reason. A dropped
+# call is process degradation upstream of all adjudication — reading its
+# tag admits no outcome metric. Budget-exhaustion drops are excluded by
+# the reason match.
+TRANSPORT_DROP_TAG = "dropped-call"
+TRANSPORT_REASONS = ("timed out", "timeout", "transport failed")
 
 TRUNC_HI = 0.25          # widen when >25% of recent calls truncated
 CLEAN_WINDOWS = 3        # narrow only after this many spotless windows
@@ -88,6 +117,7 @@ class Controller:
         self._last_move: dict[str, int] = {}  # knob -> cycle it last moved
         self._policies: list[str] = []  # policy artifact ids, in emission order
         self._cycle = 0
+        self._drops_seen = 0  # transport-drop events already consumed
 
     # -- process signals: touches ONLY event.llm process fields ----------- #
     def _process_signals(self) -> dict[str, dict]:
@@ -145,6 +175,51 @@ class Controller:
                         deltas[knob] = new
         return deltas
 
+    def _new_transport_drops(self) -> int:
+        """Count transport-layer dropped calls not yet consumed by a prior
+        step. Reads only the drop tag + reason the drop site wrote — a
+        process signal (the call produced nothing to adjudicate)."""
+        fresh = 0
+        total = 0
+        for event in self.harness.log.read():
+            inputs = event.inputs or []
+            if not inputs or inputs[0] != TRANSPORT_DROP_TAG:
+                continue
+            total += 1
+            reason = inputs[1] if len(inputs) > 1 else ""
+            if total > self._drops_seen and any(m in reason for m in TRANSPORT_REASONS):
+                fresh += 1
+        self._drops_seen = total
+        return fresh
+
+    def _current_timeout(self) -> int | None:
+        for entry in self.adapter.endpoints.values():
+            for e in (entry if isinstance(entry, (list, tuple)) else [entry]):
+                t = getattr(e, "timeout_s", None)
+                if t is not None:
+                    return t
+        return None
+
+    def _propose_timeout(self, deltas: dict[str, int], evidence: dict) -> None:
+        """Fresh transport drops -> widen the read timeout one envelope
+        step. The signal is drop events, not truncation: a generation that
+        outlasts the wait dies with no llm record at all."""
+        knob = "timeout:transport"
+        drops = self._new_transport_drops()
+        if not drops:
+            return
+        evidence["transport"] = {"new_drops": drops}
+        if self._cycle - self._last_move.get(knob, -999) < self.envelopes.get(
+            knob, ENVELOPES[knob]
+        )["dwell"]:
+            return
+        cur = self._current_timeout()
+        if cur is None:
+            return
+        new = clamp(knob, round(cur * ENVELOPES[knob]["step"]))
+        if new != cur:
+            deltas[knob] = new
+
     def _clean_streak(self, role: str) -> int:
         streak = 0
         for event in reversed(list(self.harness.log.read())):
@@ -180,6 +255,8 @@ class Controller:
         signals = self._process_signals()
         caps = self._current_caps()
         deltas = self._propose(caps, signals)
+        evidence = dict(signals)
+        self._propose_timeout(deltas, evidence)
         if not deltas:
             return None
 
@@ -188,10 +265,17 @@ class Controller:
             assert knob not in TRIBUNAL_LEDGER, f"controller touched tribunal knob {knob}"
             self._apply_cap(knob, value)
             self._last_move[knob] = self._cycle
-        self._emit_policy(deltas, signals)
+        self._emit_policy(deltas, evidence)
         return deltas
 
     def _apply_cap(self, knob: str, value: int) -> None:
+        if knob == "timeout:transport":
+            # Drop events carry no role, so the wait widens everywhere.
+            for entry in self.adapter.endpoints.values():
+                for e in (entry if isinstance(entry, (list, tuple)) else [entry]):
+                    if hasattr(e, "timeout_s"):
+                        e.timeout_s = value
+            return
         role = knob.split(":", 1)[1]
         ep = self.adapter.endpoints.get(role)
         if ep is None:

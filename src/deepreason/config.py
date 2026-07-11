@@ -67,9 +67,11 @@ class Config(BaseModel):
     # below this. RESEED_DIST_MIN is an ABSOLUTE distance and must be calibrated
     # to the embedder (the HashingEmbedder runs hot, ~0.6-0.9, so the shipped
     # 0.15 can never fire); this ratio is scale-free (~1.0 = as separated as the
-    # stream, ->0 = converged). None (default) = disabled: opt in and calibrate
-    # against views/basin.embedder_calibration before trusting it in a config.
-    RESEED_RATIO_MAX: float | None = None
+    # stream, ->0 = converged). Default 0.3: conservative (fires only on strong
+    # convergence), safe under any embedder including the hashing default —
+    # a live run shipped with every convergence tripwire silently off. None
+    # disables; calibrate against views/basin.embedder_calibration to tighten.
+    RESEED_RATIO_MAX: float | None = 0.3
     # Refuted-attractor orbiting floor (basin study, docs/BASIN_REPORT.md):
     # gate blocks per CAPTURE_W event window before the ladder rotates the
     # orbiting school's stance. Healthy runs measured exactly 0; orbiting
@@ -83,7 +85,13 @@ class Config(BaseModel):
     NEIGHBOURHOOD_N: int = 8  # exemplars shown per conj pack (0 = blind)
     COMPLEMENT_ALWAYS: bool = False  # force the §11.4 complement directive every cycle
     PARETO_AXES: list[str] = Field(default_factory=lambda: ["hv", "reach", "coverage"])
-    LAMBDA_FLOOR: float | None = None
+    # Grounding-ratio alarm line (spec §11.3): the grounding-decay brake
+    # fires when windowed λ drops below this. Default 0.3 (the live-run
+    # profile's value): program-heavy runs peg spec-λ at 1.0 and never trip
+    # it, so the default only bites where it should — rubric-heavy runs
+    # drifting away from exogenous anchors. None disables (explicit
+    # replay/experiment configurations only).
+    LAMBDA_FLOOR: float | None = 0.3
     # Opt-in: drive the grounding-decay brake off the stricter evidence_lambda
     # (fraction of observation_valued claims actually covered by external
     # evidence) instead of the spec lambda (which counts internal well-
@@ -202,6 +210,13 @@ class Config(BaseModel):
     # very process that could overturn its survivor is starved by that
     # survivor's own acceptance. False = legacy unsolved-first.
     LIVENESS_QUEUE: bool = True
+    # Self-calibration controller (docs/CONTROLLER_SPEC.md, controller.py):
+    # process-signal-driven live tuning of generator knobs inside safe
+    # envelopes. Default ON for every run built through ops.run_scheduler —
+    # a live run shipped without it (it was reachable only via a research
+    # script flag) and the loop could not heal its own transport failures.
+    # False = no controller (controlled experiments, replay of old roots).
+    CONTROLLER: bool = True
     # Embedder (§9, §11.5): None = HashingEmbedder (zero-dependency default,
     # lexical geometry). Set a fastembed model id to enable NeuralEmbedder —
     # verified on this repo: "BAAI/bge-small-en-v1.5" (prose margins) and

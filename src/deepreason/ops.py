@@ -98,9 +98,19 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         from deepreason.browser import PlaywrightBrowser
 
         browser_backend = PlaywrightBrowser()
+    # Self-calibration controller (docs/CONTROLLER_SPEC.md): ON by default.
+    # It used to be reachable only through a research-script flag, so every
+    # CLI/MCP run silently shipped without live tuning — the loop could not
+    # heal its own process failures. config.CONTROLLER=False opts out
+    # (controlled experiments, replays of pre-controller roots).
+    controller = None
+    if config.CONTROLLER:
+        from deepreason.controller import Controller
+
+        controller = Controller(harness, adapter)
     result = Scheduler(
         harness, adapter, config, embedder=make_embedder(harness, config),
-        browser_backend=browser_backend,
+        browser_backend=browser_backend, controller=controller,
     ).run(int(cycles), on_cycle=on_cycle)
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {

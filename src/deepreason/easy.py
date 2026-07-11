@@ -94,9 +94,14 @@ _BUILD_TEMPLATE = (
 )
 
 MAKE_OVERRIDES = {
-    # The validated app-run shape (runs/acting_loop_app2): no schools/fuzz/
-    # property machinery for a website build; browser evidence + criticism.
-    "FLOOR": 1, "K": 4, "VS_K": 2, "N_SCHOOLS": 0, "FUZZ_N": 0,
+    # The validated app-run shape (runs/acting_loop_app2): no fuzz/property
+    # machinery for a website build; browser evidence + criticism. Schools
+    # are NOT zeroed: capture control (spec §11) is mandatory in normal
+    # runs — N_SCHOOLS inherits the configured default so the convergence
+    # tripwires and the reseed ladder have a population to act on.
+    # Disabling capture is an explicit replay/test configuration, never a
+    # side effect of the app profile.
+    "FLOOR": 1, "K": 4, "VS_K": 2, "FUZZ_N": 0,
     "GEN_PROPOSE_PERIOD": 0, "PROP_PROPOSE_PERIOD": 0,
     "BROWSER_PER_CYCLE": 2, "ARG_CRIT_PER_CYCLE": 2, "CRIT_BATCH_K": 2,
     # 6000: a stage pack must fit the FOUNDATION section (a full plan or
