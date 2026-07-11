@@ -27,8 +27,9 @@ LLM — verdicts and assembled pages replay byte-for-byte.
 
 import json
 import re
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.commitment import Budget, Commitment
@@ -59,6 +60,102 @@ _WINDOW_BUILTINS = frozenset({
     "prompt", "open", "fetch", "atob", "btoa", "structuredClone",
 })
 
+CapabilitySlot = Literal[
+    "core-animation", "scroll-coordination", "visual-rendering",
+    "navigation-transition",
+]
+
+
+class ArtDirection(BaseModel):
+    """The design language comes first; packages are only its substrate."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    motion_language: str = Field(min_length=1)
+    scroll_narrative: str = Field(min_length=1)
+    depth_structure: str = Field(min_length=1)
+    transition_grammar: str = Field(min_length=1)
+    texture_language: str = Field(min_length=1)
+    reduced_motion_version: str = Field(min_length=1)
+    static_fallback: str = Field(min_length=1)
+
+
+class ImportBudget(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    javascript_bytes: int = Field(default=0, ge=0)
+    css_bytes: int = Field(default=0, ge=0)
+
+
+class DependencyRequest(BaseModel):
+    """What an accepted design wants, never an unresolved install record."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    capability_slot: CapabilitySlot
+    artistic_requirement: str = Field(min_length=1)
+    technical_capability: str = Field(min_length=1)
+    preferred_provider: str = Field(pattern=r"^[a-z][a-z0-9-]*$")
+    package: str | None = None
+    alias: str = Field(pattern=r"^[A-Za-z_$][\w$]*$")
+    required_features: list[str] = Field(min_length=1)
+    intended_components: list[str] = Field(min_length=1)
+    reduced_motion: str = Field(min_length=1)
+    fallback: str = Field(min_length=1)
+    lifecycle: str = Field(min_length=1)
+    budget: ImportBudget
+    ownership: str | None = None
+    compatibility_commitment: str | None = None
+    canvas_id: str | None = None
+    pixel_ratio_cap: float | None = Field(default=None, gt=0)
+    context_loss: str | None = None
+
+    @field_validator("package")
+    @classmethod
+    def _request_never_resolves_versions(cls, value):
+        if value is None:
+            return value
+        # Scoped package names contain one leading @; a second @ is a version.
+        tail = value[1:] if value.startswith("@") else value
+        if "@" in tail or any(c in value for c in "*^~<>= "):
+            raise ValueError("dependency requests name packages but never versions or ranges")
+        return value
+
+    @model_validator(mode="after")
+    def _runtime_request_has_a_budget(self):
+        if (self.preferred_provider != "native"
+                and self.budget.javascript_bytes == 0
+                and self.budget.css_bytes == 0):
+            raise ValueError("runtime dependency requests require a non-zero bundle budget")
+        return self
+
+
+class AnimationLifecycle(BaseModel):
+    """Bounded component ownership for listeners, observers and animation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    animated: bool = False
+    initializer: str | None = None
+    cleanup: str | None = None
+    frame_loop_owner: Literal["none", "shared", "component"] = "none"
+    webgl_canvas_id: str | None = None
+    pixel_ratio_cap: float | None = Field(default=None, gt=0)
+    context_loss: str | None = None
+    static_fallback: str | None = None
+
+    @model_validator(mode="after")
+    def _animated_contract_is_bounded(self):
+        if self.animated and (not self.initializer or not self.cleanup):
+            raise ValueError("animated components require initializer and cleanup exports")
+        if self.webgl_canvas_id and (
+            self.pixel_ratio_cap is None or not self.context_loss or not self.static_fallback
+        ):
+            raise ValueError(
+                "WebGL ownership requires pixel_ratio_cap, context_loss and static_fallback"
+            )
+        return self
+
 
 class ComponentSpec(BaseModel):
     """One manifest entry: a component's identity and integration contract."""
@@ -74,6 +171,8 @@ class ComponentSpec(BaseModel):
     events_emitted: list[str] = Field(default_factory=list)
     events_listened: list[str] = Field(default_factory=list)
     libs: list[str] = Field(default_factory=list)         # vendored catalog picks
+    runtime_imports: list[str] = Field(default_factory=list)  # design aliases only
+    lifecycle: AnimationLifecycle = Field(default_factory=AnimationLifecycle)
     order: int = 0                                        # assembly position
     max_chars: int | None = Field(default=None, gt=0)     # per-chunk size bound
 
@@ -85,6 +184,14 @@ class ComponentSpec(BaseModel):
                 raise ValueError(f"not a JS identifier: {name!r}")
         return value
 
+    @model_validator(mode="after")
+    def _lifecycle_exports_exist(self):
+        required = {x for x in (self.lifecycle.initializer, self.lifecycle.cleanup) if x}
+        missing = sorted(required - set(self.js_exports))
+        if missing:
+            raise ValueError(f"lifecycle export(s) missing from js_exports: {missing}")
+        return self
+
 
 class Manifest(BaseModel):
     """The parseable contract block inside a design artifact."""
@@ -92,7 +199,10 @@ class Manifest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     title: str = ""
+    architecture: Literal["single-document", "multi-page"] = "single-document"
     libs: list[str] = Field(default_factory=list)  # page-level catalog picks
+    art_direction: ArtDirection | None = None
+    dependencies: list[DependencyRequest] = Field(default_factory=list)
     components: list[ComponentSpec] = Field(min_length=1, max_length=12)
 
     @field_validator("components")
@@ -112,6 +222,94 @@ class Manifest(BaseModel):
                     )
                 exports[name] = c.name
         return comps
+
+    @model_validator(mode="after")
+    def _dependency_plan_is_coherent(self):
+        if self.dependencies and self.art_direction is None:
+            raise ValueError("runtime dependencies require art_direction before package choices")
+        component_names = {c.name for c in self.components}
+        aliases: set[str] = set()
+        by_slot: dict[str, list[DependencyRequest]] = {}
+        by_provider: dict[str, DependencyRequest] = {}
+        for request in self.dependencies:
+            if request.alias in aliases:
+                raise ValueError(f"duplicate dependency alias {request.alias!r}")
+            aliases.add(request.alias)
+            unknown = sorted(set(request.intended_components) - component_names)
+            if unknown:
+                raise ValueError(
+                    f"dependency {request.alias!r} names unknown components {unknown}"
+                )
+            by_slot.setdefault(request.capability_slot, []).append(request)
+            by_provider[request.preferred_provider] = request
+            if request.preferred_provider == "swup" and self.architecture != "multi-page":
+                raise ValueError("Swup requires an accepted multi-page architecture")
+            if request.capability_slot == "visual-rendering" and request.preferred_provider in {
+                "paper-shaders", "ogl",
+            } and (not request.canvas_id or request.pixel_ratio_cap is None
+                   or not request.context_loss):
+                raise ValueError(
+                    f"{request.preferred_provider} requires canvas_id, pixel_ratio_cap "
+                    "and context_loss"
+                )
+        if len(by_slot.get("scroll-coordination", [])) > 1:
+            raise ValueError("multiple smooth-scroll coordinators are forbidden")
+        core = by_slot.get("core-animation", [])
+        if len(core) > 1 and any(
+            not r.ownership or not r.compatibility_commitment for r in core
+        ):
+            raise ValueError(
+                "overlapping core animation engines require non-overlapping ownership "
+                "and an explicit compatibility commitment"
+            )
+        if len(core) > 1 and len({r.ownership for r in core}) != len(core):
+            raise ValueError("core animation engine ownership must be non-overlapping")
+        if {"paper-shaders", "ogl"} <= set(by_provider):
+            paper, ogl = by_provider["paper-shaders"], by_provider["ogl"]
+            if (paper.canvas_id == ogl.canvas_id or not paper.ownership or not ogl.ownership
+                    or not paper.compatibility_commitment or not ogl.compatibility_commitment):
+                raise ValueError(
+                    "Paper Shaders and OGL require separate canvases, ownership and "
+                    "compatibility commitments"
+                )
+        for component in self.components:
+            undeclared = sorted(set(component.runtime_imports) - aliases)
+            if undeclared:
+                raise ValueError(
+                    f"component {component.name!r} uses undeclared import aliases {undeclared}"
+                )
+            for alias in component.runtime_imports:
+                request = next(r for r in self.dependencies if r.alias == alias)
+                if request.preferred_provider == "native":
+                    raise ValueError(
+                        f"native capability {alias!r} uses browser APIs, not an import alias"
+                    )
+                if component.name not in request.intended_components:
+                    raise ValueError(
+                        f"component {component.name!r} is outside alias {alias!r} ownership"
+                    )
+        components = {c.name: c for c in self.components}
+        for request in self.dependencies:
+            if request.capability_slot in {
+                "core-animation", "scroll-coordination", "visual-rendering",
+            }:
+                unbounded = sorted(
+                    name for name in request.intended_components
+                    if not components[name].lifecycle.animated
+                )
+                if unbounded:
+                    raise ValueError(
+                        f"animated import {request.alias!r} requires bounded lifecycle "
+                        f"contracts on {unbounded}"
+                    )
+            if request.canvas_id and not any(
+                components[name].lifecycle.webgl_canvas_id == request.canvas_id
+                for name in request.intended_components
+            ):
+                raise ValueError(
+                    f"canvas {request.canvas_id!r} has no owning component lifecycle"
+                )
+        return self
 
     def ordered(self) -> list[ComponentSpec]:
         return sorted(self.components, key=lambda c: (c.order, c.name))
@@ -207,6 +405,18 @@ def _css_violations(css: str, element_id: str, css_prefix: str) -> list[str]:
 def _js_violations(js: str, spec: ComponentSpec, allowed_uses: set[str]) -> list[str]:
     out = []
     js = re.sub(r"//[^\n]*", "", re.sub(r"/\*.*?\*/", "", js, flags=re.S))
+    if re.search(r"\bimport\s*(?:\(|[\s{*])|\brequire\s*\(", js):
+        out.append(
+            "direct or dynamic package imports are forbidden; use DeepReasonImports aliases"
+        )
+    if re.search(r"(?:https?:)?//|\b(?:fetch|XMLHttpRequest)\s*\(", js):
+        out.append("remote dependencies or network imports are forbidden")
+    aliases = set(re.findall(
+        r"\bDeepReasonImports\.([A-Za-z_$][\w$]*)", js
+    ))
+    undeclared_aliases = sorted(aliases - set(spec.runtime_imports))
+    if undeclared_aliases:
+        out.append(f"undeclared runtime import alias(es): {', '.join(undeclared_aliases)}")
     assigned = set(re.findall(r"window\.([A-Za-z_$][\w$]*)\s*=(?!=)", js))
     undeclared = sorted(assigned - set(spec.js_exports))
     if undeclared:
@@ -230,6 +440,14 @@ def _js_violations(js: str, spec: ComponentSpec, allowed_uses: set[str]) -> list
     )
     if rogue_listen:
         out.append(f"undeclared custom event(s) listened for: {', '.join(rogue_listen)}")
+    if spec.lifecycle.animated:
+        if "prefers-reduced-motion" not in js:
+            out.append("animated component does not implement prefers-reduced-motion")
+        cleanup = spec.lifecycle.cleanup or ""
+        if cleanup and not re.search(rf"window\.{re.escape(cleanup)}\s*=(?!=)", js):
+            out.append(f"cleanup export {cleanup!r} is not defined")
+        if "requestAnimationFrame" in js and "cancelAnimationFrame" not in js:
+            out.append("animation frame loop has no cancellation path")
     return out
 
 
@@ -242,6 +460,7 @@ def component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
         spec = ComponentSpec.model_validate(spec_blob["component"])
         max_chars = int(spec_blob.get("max_chars") or 4000)
         allowed_uses = set(spec_blob.get("allowed_uses") or [])
+        import_ids = set(spec_blob.get("import_ids") or [])
     except (ValueError, KeyError, TypeError) as e:
         return FAIL, {"reason": f"unreadable component spec: {e}"}
 
@@ -267,6 +486,17 @@ def component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
         violations.extend(_css_violations(css, spec.element_id, spec.css_prefix))
     for js in _script_blocks(text):
         violations.extend(_js_violations(js, spec, allowed_uses))
+    if import_ids and artifact is not None:
+        declared = {
+            ref.target for ref in artifact.interface.refs
+            if str(ref.role.value if hasattr(ref.role, "value") else ref.role) == "dependence"
+        }
+        missing_import_refs = sorted(import_ids - declared)
+        if missing_import_refs:
+            violations.append(
+                "missing dependence ref(s) to resolved import record: "
+                + ", ".join(x[:12] for x in missing_import_refs)
+            )
     if violations:
         return FAIL, {"component": spec.name, "violations": violations}
     return PASS, {"component": spec.name, "chars": len(text)}
@@ -288,6 +518,14 @@ def integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     implicated: set[str] = set()
     if len(re.findall(r"<!doctype", text, re.I)) != 1:
         violations.append("assembled page must contain exactly one doctype")
+    if re.search(
+        r"<(?:script|link|img|source)\b[^>]+(?:src|href)\s*=\s*[\"'](?:https?:)?//"
+        r"|\bimport\s*\(\s*[\"']https?://"
+        r"|url\(\s*[\"']?https?://",
+        text,
+        re.I,
+    ):
+        violations.append("assembled page retains a remote dependency")
     ids = _ids_in(text)
     counts: dict[str, int] = {}
     for i in ids:
@@ -359,11 +597,13 @@ def manifest_commitment(known_libs: set[str]) -> Commitment:
 
 
 def component_commitment(spec: ComponentSpec, max_chars: int,
-                         allowed_uses: list[str]) -> Commitment:
+                         allowed_uses: list[str],
+                         import_ids: list[str] | None = None) -> Commitment:
     blob = {
         "component": spec.model_dump(),
         "max_chars": max_chars,
         "allowed_uses": sorted(allowed_uses),
+        "import_ids": sorted(import_ids or []),
     }
     digest = sha256_hex(canonical_json(blob))[:12]
     return Commitment(
@@ -388,7 +628,8 @@ def integration_commitment(manifest: Manifest) -> Commitment:
 
 
 def assemble_html(manifest: Manifest, fragments: dict[str, str],
-                  lib_css: dict[str, str], baseline_css: str = "") -> str:
+                  lib_css: dict[str, str], baseline_css: str = "",
+                  runtime_css: str = "", runtime_js: str = "") -> str:
     """Compose accepted component fragments into one self-contained page:
     shell + baseline + selected vendored libs + fragments in declared
     order. Pure function — the same inputs assemble the same bytes."""
@@ -400,6 +641,8 @@ def assemble_html(manifest: Manifest, fragments: dict[str, str],
         styles.append(f"<style>\n/* vendored: baseline */\n{baseline_css}\n</style>")
     for name in sorted(lib_css):
         styles.append(f"<style>\n/* vendored: {name} */\n{lib_css[name]}\n</style>")
+    if runtime_css:
+        styles.append(f"<style>\n/* runtime bundle */\n{runtime_css}\n</style>")
     body = []
     for spec in manifest.ordered():
         body.append(f"<!-- component: {spec.name} -->")
@@ -413,5 +656,6 @@ def assemble_html(manifest: Manifest, fragments: dict[str, str],
         + "\n".join(styles)
         + "\n</head>\n<body>\n"
         + "\n".join(body)
+        + (f"\n<script>\n/* runtime bundle */\n{runtime_js}\n</script>" if runtime_js else "")
         + "\n</body>\n</html>\n"
     )

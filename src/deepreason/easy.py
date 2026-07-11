@@ -106,10 +106,13 @@ shape (JSON inside a ```manifest fence):
 {{
   "title": "<page title>",
   "libs": ["classless"],
+  "art_direction": null,
+  "dependencies": [],
   "components": [
     {{"name": "header", "purpose": "one sentence", "element_id": "site-header",
       "css_prefix": "hd-", "js_exports": [], "js_uses": [],
-      "events_emitted": [], "events_listened": [], "libs": [], "order": 0}}
+      "events_emitted": [], "events_listened": [], "libs": [],
+      "runtime_imports": [], "order": 0}}
   ]
 }}
 ```
@@ -124,7 +127,23 @@ vendored catalog — already-styled infrastructure that costs the build
 nothing: {libs}. Choose libs deliberately: selections are design
 decisions on the record, criticizable like everything else.'''
 
-_DESIGN_CHUNKED_TEMPLATE = _DESIGN_TEMPLATE + "\n" + _MANIFEST_NOTE
+_IMPORT_NOTE = '''
+
+Runtime dependencies are OPTIONAL. Prefer native CSS animation, Web
+Animations, IntersectionObserver, sticky positioning, View Transitions and
+scroll-driven timelines when they suffice. If the art direction genuinely
+needs a project library, describe `art_direction` first (motion language,
+scroll narrative, depth structure, transition grammar, texture language,
+reduced-motion version and static fallback), then add a dependency request.
+Each request declares: capability_slot, artistic_requirement,
+technical_capability, preferred_provider, alias, required_features,
+intended_components, reduced_motion, fallback, lifecycle and byte budget.
+Components may use only the declared alias through
+`DeepReasonImports.<alias>`; they never install or directly import packages.
+The harness researches and resolves exact bytes after the design survives.
+Do not choose a package merely to demonstrate it.'''
+
+_DESIGN_CHUNKED_TEMPLATE = _DESIGN_TEMPLATE + "\n" + _MANIFEST_NOTE + _IMPORT_NOTE
 
 _COMPONENT_TEMPLATE = """Build ONE component of a larger website: {name} — {purpose}
 
@@ -144,6 +163,15 @@ The component's contract (machine-checked):
 - JavaScript in <script>: define exactly these window exports: {exports}.
   You may call other components' exports: {uses}. Custom events you may
   emit: {emitted}; custom events you may listen for: {listened}.
+- Approved project aliases: {runtime_aliases}. Access them only through
+  DeepReasonImports.<alias>; direct imports, require(), CDNs and network
+  fetching are forbidden. The bounded verified API capsules are:
+{api_capsules}
+- Import lineage refs required in the candidate interface: {import_refs}.
+- Animated code must implement the declared initializer/cleanup lifecycle,
+  release listeners/observers/timelines/canvases/RAF callbacks, respect
+  prefers-reduced-motion, and preserve the static fallback.
+  Lifecycle contract: {lifecycle}.
 - HARD SIZE BOUND: at most {max_chars} characters total.
 
 Keep the fragment semantic and minimal; repository code assembles all
@@ -444,7 +472,7 @@ def seed_design_chunked(harness, description: str, plan_id: str):
 
 def seed_component(harness, description: str, design_id: str, manifest,
                    spec, chunk_max: int, suffix: str = "",
-                   repair_of: str | None = None):
+                   repair_of: str | None = None, resolved_imports=None):
     """One component problem per manifest entry, seeded once the design
     survivor is known. Criteria: the fragment contract (component_wf, spec
     frozen in) + lineage binding to the design — candidates flow through the
@@ -456,12 +484,24 @@ def seed_component(harness, description: str, design_id: str, manifest,
     from deepreason.unification.isolation import lineage_ref_commitment
 
     allowed_uses = sorted(set(spec.js_uses))
-    contract = component_commitment(spec, chunk_max, allowed_uses)
+    import_ids = [resolved_imports.record_id] if (
+        resolved_imports is not None and spec.runtime_imports
+    ) else []
+    contract = component_commitment(spec, chunk_max, allowed_uses, import_ids)
     lineage = lineage_ref_commitment([design_id])
     for kappa in (contract, lineage):
         if kappa.id not in harness.commitments:
             harness.register_commitment(kappa)
     libs = sorted(set(manifest.libs) | set(spec.libs)) or ["baseline only"]
+    capsules = []
+    if resolved_imports is not None:
+        from deepreason.programs import content_text
+
+        for request, capsule_id in zip(
+            resolved_imports.requests, resolved_imports.capsule_ids, strict=True
+        ):
+            if request.alias in spec.runtime_imports:
+                capsules.append(content_text(harness.state.artifacts[capsule_id], harness.blobs))
     provenance = (
         {"trigger": "successor", "from": [repair_of]}
         if repair_of else {"trigger": "seed", "from": [design_id]}
@@ -479,6 +519,10 @@ def seed_component(harness, description: str, design_id: str, manifest,
             uses=", ".join(spec.js_uses) or "none",
             emitted=", ".join(spec.events_emitted) or "none",
             listened=", ".join(spec.events_listened) or "none",
+            runtime_aliases=", ".join(spec.runtime_imports) or "none",
+            api_capsules="\n".join(capsules) or "  none",
+            import_refs=", ".join(import_ids) or "none",
+            lifecycle=spec.lifecycle.model_dump_json(),
             max_chars=spec.max_chars or chunk_max,
         ),
         criteria=[contract.id, lineage.id],
@@ -486,7 +530,8 @@ def seed_component(harness, description: str, design_id: str, manifest,
     ))
 
 
-def register_assembly(harness, design_id: str, manifest, chosen: dict):
+def register_assembly(harness, design_id: str, manifest, chosen: dict,
+                      resolved_imports=None, import_policy=None):
     """Deterministic assembly (repository code, no LLM): compose the accepted
     fragments into one page, register the selected vendored libs as import
     artifacts, and register the assembled page carrying DEPENDENCE refs to
@@ -519,7 +564,50 @@ def register_assembly(harness, design_id: str, manifest, chosen: dict):
         name: content_text(harness.state.artifacts[aid], harness.blobs)
         for name, aid in chosen.items()
     }
-    html = assemble_html(manifest, fragments, lib_css, assets.baseline())
+    runtime_css = ""
+    runtime_js = ""
+    runtime_ids: list[str] = []
+    bundle_metadata_id = None
+    if resolved_imports is not None:
+        from deepreason.config import ImportPolicy
+        from deepreason.imports import ImportService
+
+        service = ImportService(harness, import_policy or ImportPolicy())
+        bundle = service.bundle_components(manifest, fragments, resolved_imports)
+        fragments = bundle.fragments
+        runtime_css = bundle.css
+        runtime_js = bundle.javascript
+        runtime_ids = resolved_imports.dependence_ids
+        lifecycle_id = None
+        if bundle.lifecycle_source:
+            lifecycle = harness.create_artifact(
+                bundle.lifecycle_source,
+                codec="code:javascript",
+                interface=Interface(refs=[
+                    Ref(target=design_id, role=RefRole.DEPENDENCE),
+                    Ref(target=resolved_imports.record_id, role=RefRole.DEPENDENCE),
+                ]),
+                provenance=Provenance(role="import"),
+            )
+            lifecycle_id = lifecycle.id
+            runtime_ids.append(lifecycle.id)
+        metadata_refs = [
+            Ref(target=resolved_imports.toolchain_id, role=RefRole.DEPENDENCE),
+            Ref(target=resolved_imports.record_id, role=RefRole.DEPENDENCE),
+        ]
+        if lifecycle_id:
+            metadata_refs.append(Ref(target=lifecycle_id, role=RefRole.DEPENDENCE))
+        metadata = harness.create_artifact(
+            __import__("json").dumps(bundle.metadata, sort_keys=True),
+            codec="json",
+            interface=Interface(refs=metadata_refs),
+            provenance=Provenance(role="import"),
+        )
+        bundle_metadata_id = metadata.id
+        runtime_ids.append(metadata.id)
+    html = assemble_html(
+        manifest, fragments, lib_css, assets.baseline(), runtime_css, runtime_js
+    )
 
     browser = browser_commitment(WEBSITE_SCRIPT)
     integration = integration_commitment(manifest)
@@ -538,6 +626,7 @@ def register_assembly(harness, design_id: str, manifest, chosen: dict):
     refs = [Ref(target=design_id, role=RefRole.DEPENDENCE)]
     refs += [Ref(target=aid, role=RefRole.DEPENDENCE) for aid in sorted(chosen.values())]
     refs += [Ref(target=lid, role=RefRole.DEPENDENCE) for lid in lib_ids]
+    refs += [Ref(target=rid, role=RefRole.DEPENDENCE) for rid in runtime_ids]
     interface = Interface(refs=refs, commitments=[browser.id, integration.id])
     assembled = harness.create_artifact(
         html,
@@ -546,7 +635,10 @@ def register_assembly(harness, design_id: str, manifest, chosen: dict):
         provenance=Provenance(role="seed"),
         problem_id="pi-website",
     )
-    harness.record_measure(inputs=["assembled", assembled.id, *sorted(chosen)])
+    measure = ["assembled", assembled.id, *sorted(chosen)]
+    if bundle_metadata_id:
+        measure.extend(["bundle-metadata", bundle_metadata_id])
+    harness.record_measure(inputs=measure)
     return assembled
 
 
@@ -888,13 +980,35 @@ def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
     names = [c.name for c in manifest.ordered()]
     echo(f"  components: {', '.join(names)}\n")
 
+    # The import plan is accepted and resolved before component problems
+    # exist. A component therefore cannot mutate package selection later.
+    from deepreason.imports import (
+        ImportPlanError,
+        OperationalImportError,
+        register_epistemic_import_failure,
+        resolve_for_design,
+    )
+
+    has_runtime = any(d.preferred_provider != "native" for d in manifest.dependencies)
+    resolved_imports = resolve_for_design(harness, design_id, manifest, cfg)
+    if has_runtime and resolved_imports is None:
+        if harness.state.status.get(design_id) == Status.REFUTED:
+            echo("  dependency plan failed an accepted import commitment; "
+                 "the evidence-backed criticism is on the record")
+        else:
+            echo("  dependency resolution was deferred after an operational "
+                 "failure; the design remains schedulable")
+        return []
+    if resolved_imports is not None:
+        echo("  runtime imports resolved exactly and verified offline\n")
+
     # ---- stage 3: one bounded problem per component ----
     comp_cycles = max(1, (cycles - plan_cycles - design_cycles)
                       // max(1, len(names)))
     chosen: dict[str, str] = {}
     for spec in manifest.ordered():
         seed_component(harness, description, design_id, manifest, spec,
-                       cfg.CHUNK_MAX_CHARS)
+                       cfg.CHUNK_MAX_CHARS, resolved_imports=resolved_imports)
         spend(_run_stage(
             harness, cfg, label=f"component {spec.name}",
             root_pid=f"pi-comp-{spec.name}", cycles=comp_cycles,
@@ -917,7 +1031,18 @@ def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
         from deepreason.browser import PlaywrightBrowser
 
         browser_backend = PlaywrightBrowser()
-    assembled = register_assembly(harness, design_id, manifest, chosen)
+    try:
+        assembled = register_assembly(
+            harness, design_id, manifest, chosen, resolved_imports, cfg.IMPORT_POLICY
+        )
+    except OperationalImportError as exc:
+        harness.record_measure(inputs=["import-deferred", design_id, exc.code])
+        echo("  bundling was deferred after an operational toolchain failure")
+        return []
+    except ImportPlanError as exc:
+        register_epistemic_import_failure(harness, design_id, exc)
+        echo("  bundled imports failed an accepted size or export commitment")
+        return []
     echo("  assembled deterministically from the accepted fragments")
     implicated = integration_criticism(
         harness, assembled.id, manifest, cfg, browser_backend)
@@ -932,7 +1057,8 @@ def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
                 continue
             seed_component(harness, description, design_id, manifest, spec,
                            cfg.CHUNK_MAX_CHARS, suffix="-r2",
-                           repair_of=chosen[spec.name])
+                           repair_of=chosen[spec.name],
+                           resolved_imports=resolved_imports)
             spend(_run_stage(
                 harness, cfg, label=f"repairing {spec.name}",
                 root_pid=f"pi-comp-{spec.name}-r2", cycles=comp_cycles,
@@ -940,7 +1066,17 @@ def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
             fixed = pick_survivor(harness, f"pi-comp-{spec.name}-r2")
             if fixed is not None:
                 chosen[spec.name] = fixed
-        assembled = register_assembly(harness, design_id, manifest, chosen)
+        try:
+            assembled = register_assembly(
+                harness, design_id, manifest, chosen,
+                resolved_imports, cfg.IMPORT_POLICY,
+            )
+        except OperationalImportError as exc:
+            harness.record_measure(inputs=["import-deferred", design_id, exc.code])
+            return []
+        except ImportPlanError as exc:
+            register_epistemic_import_failure(harness, design_id, exc)
+            return []
         integration_criticism(
             harness, assembled.id, manifest, cfg, browser_backend)
 

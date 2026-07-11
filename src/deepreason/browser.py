@@ -120,6 +120,16 @@ class PlaywrightBrowser:
                 page = browser.new_page(
                     viewport=viewport, device_scale_factor=1, reduced_motion="reduce"
                 )
+                # `set_content` itself is local, but page assets or app code
+                # could still try the network. Abort every HTTP(S) request so
+                # the executable check enforces the same offline commitment
+                # as the static assembler gate.
+                page.route(
+                    "**/*",
+                    lambda route: route.abort()
+                    if route.request.url.startswith(("http://", "https://"))
+                    else route.continue_(),
+                )
                 page.set_default_timeout(_STEP_TIMEOUT_MS)
                 # Virtual time MUST install before the app's scripts run.
                 page.clock.install(time=_EPOCH_MS)

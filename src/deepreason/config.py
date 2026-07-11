@@ -12,6 +12,7 @@ Knobs whose spec start value is "tune" default to ``None`` and must be set
 before the phases that consume them.
 """
 
+import re
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any
@@ -38,6 +39,64 @@ class EndpointSpec(BaseModel):
     # the endpoint default. Slow hosted open-model endpoints need headroom:
     # a run was killed by ~110s+ generations against a fixed 120s wait.
     timeout_s: int | None = Field(default=None, gt=0)
+
+
+class ImportPolicy(BaseModel):
+    """One typed policy boundary for project-local browser dependencies.
+
+    Runtime packages are never Python dependencies or repository dependencies.
+    These limits are frozen into each resolved import record, so changing the
+    defaults affects future resolutions only and cannot rewrite an old run.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    enabled: bool = True
+    discovery_beyond_catalog: bool = False
+    permitted_registries: list[str] = Field(
+        default_factory=lambda: ["https://registry.npmjs.org"]
+    )
+    exact_versions_required: bool = True
+    lifecycle_scripts_forbidden: bool = True
+    max_direct_dependencies: int = Field(default=4, ge=0)
+    max_transitive_dependencies: int = Field(default=64, ge=0)
+    max_javascript_bytes: int = Field(default=250_000, ge=0)
+    max_css_bytes: int = Field(default=80_000, ge=0)
+    permitted_licenses: list[str] = Field(default_factory=lambda: [
+        "MIT", "Apache-2.0", "0BSD", "BSD-2-Clause", "BSD-3-Clause", "ISC",
+        "Unlicense",
+    ])
+    allow_gsap_license: bool = False
+    # One is normal; two is the hard ceiling for a manifest that explicitly
+    # proves non-overlapping ownership and compatibility.
+    max_core_animation_engines: int = Field(default=2, ge=0)
+    max_scroll_coordinators: int = Field(default=1, ge=0)
+    max_webgl_canvases: int = Field(default=1, ge=0)
+    max_pixel_ratio: float = Field(default=2.0, gt=0)
+    # Both references are effective run inputs. The catalog contains metadata
+    # only; the exact builder package is resolved and archived with the run.
+    catalog_ref: str = Field(default="runtime-web-catalog-v1", min_length=1)
+    builder_toolchain_ref: str = Field(default="esbuild@0.28.1", min_length=1)
+
+    @field_validator("permitted_registries")
+    @classmethod
+    def _https_registries(cls, value):
+        if not value:
+            raise ValueError("at least one permitted registry is required")
+        for registry in value:
+            if not registry.startswith("https://"):
+                raise ValueError(f"registry must use https: {registry!r}")
+        return value
+
+    @field_validator("builder_toolchain_ref")
+    @classmethod
+    def _exact_builder(cls, value):
+        name, marker, version = value.rpartition("@")
+        if (not marker or not name or not version
+                or any(c in version for c in "*^~<>= ")
+                or re.fullmatch(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?", version) is None):
+            raise ValueError("builder_toolchain_ref must be an exact package@version")
+        return value
 
 
 class Config(BaseModel):
@@ -261,6 +320,10 @@ class Config(BaseModel):
     # replaying old roots, never a way to skip capture machinery.
     CHUNK_MAX_CHARS: int = 4000
     WEBSITE_CHUNKED: bool = True
+    # Runtime project imports (imports.py): one nested, typed policy. Keeping
+    # this under a single field prevents package-security and byte-budget
+    # controls from drifting into unrelated controller/transport settings.
+    IMPORT_POLICY: ImportPolicy = Field(default_factory=ImportPolicy)
     # LLM adapter (§9)
     PACK_TOKEN_BUDGET: int = 2500
     RETRY_MAX: int = 2

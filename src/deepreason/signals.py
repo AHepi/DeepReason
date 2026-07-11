@@ -36,6 +36,11 @@ SIGNALS: dict[str, str] = {
                           "assembled page; the implicated components get "
                           "TARGETED successor repair problems (inputs: "
                           "[signal, assembled id, implicated-names JSON])",
+    "import-deferred": "runtime package resolution or bundling hit an "
+                       "operational failure (registry, archive, integrity, "
+                       "sandbox or toolchain): no verdict or warrant is "
+                       "created and the accepted design stays schedulable "
+                       "(inputs: [signal, design id, failure category])",
     "stage-pick": "staged pipeline chose a stage's surviving artifact as the "
                   "next stage's frozen foundation (inputs: [signal, stage, "
                   "artifact id]) — attention only; the lineage commitment "
