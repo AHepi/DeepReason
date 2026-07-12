@@ -39,6 +39,45 @@ stores provider credentials privately in
 `~/.deepreason/credentials` (owner-only file; the key never appears in any
 config, prompt, or log).
 
+Long runs expose append-only, workload-neutral progress and can be watched or
+resumed without replacing their bound manifest:
+
+```bash
+deepreason --root runs/my-question watch
+deepreason --root runs/my-question continue --budget cycles=4 --token-budget 50000
+```
+
+Pinned code, simulation, and Lean operations are available through
+`deepreason code`, `deepreason simulate`, `deepreason prove`, and
+`deepreason check-proof`. They evaluate only workload-declared commands,
+finite inputs, and exact toolchains. A Lean pass means kernel acceptance under
+the declared assumptions; it is not a proof that an informal or empirical
+claim is true.
+
+### Explicit skills and local memory
+
+Cross-run skills and the optional brain are advisory inputs only. They never
+transfer an old verdict, status, warrant, or evidence credit. Skill capsules
+must come from a verified accepted source fence, and adopted tests are rerun
+in the current run.
+
+```bash
+deepreason distill --source runs/source --seq 42 --artifact <id> \
+  --draft capsule-draft.yaml --out capsule.json
+deepreason --root runs/current skills --capsule capsule.json \
+  --query "bounded partition" --school alpha --school blind
+
+deepreason brain init ./my-brain
+deepreason brain ingest ./my-brain notes.txt proof.lean
+deepreason brain query ./my-brain "bounded partition" --day 2026-01-01
+```
+
+The brain path and every ingested file are explicit. Retrieval is bounded and
+receipt-pinned; run-local snapshots can replay selected cards and bodies after
+the external brain is removed. `brain inspect`, `reinforce`, `pin`, `unpin`,
+`distill-run`, and `reindex` provide the remaining explicit maintenance
+operations.
+
 ### Website compatibility workflow
 
 ```bash

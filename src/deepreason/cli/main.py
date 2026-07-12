@@ -106,6 +106,47 @@ def build_parser() -> argparse.ArgumentParser:
     reason_cmd.add_argument("--cycles", type=int, default=12)
     reason_cmd.add_argument("--token-budget", default="200000")
     reason_cmd.add_argument("--dry-run", action="store_true")
+    skills_cmd = sub.add_parser(
+        "skills", help="snapshot and retrieve from explicit advisory skill capsules"
+    )
+    skills_cmd.add_argument("--capsule", action="append", required=True)
+    skills_cmd.add_argument("--query", required=True)
+    skills_cmd.add_argument("--school", action="append", default=[])
+    skills_cmd.add_argument("--top-k", type=int, default=12)
+    distill_cmd = sub.add_parser(
+        "distill", help="distill one verified accepted source into a positive skill capsule"
+    )
+    distill_cmd.add_argument("--source", required=True, help="source run root")
+    distill_cmd.add_argument("--seq", required=True, type=int, help="source event fence")
+    distill_cmd.add_argument("--artifact", required=True, help="accepted source artifact id")
+    distill_cmd.add_argument("--draft", required=True, help="positive capsule draft JSON/YAML")
+    distill_cmd.add_argument("--out", required=True, help="capsule JSON output")
+    brain_cmd = sub.add_parser("brain", help="manage an explicit local advisory-memory store")
+    brain_sub = brain_cmd.add_subparsers(dest="brain_command", required=True)
+    brain_sub.add_parser("init").add_argument("path")
+    brain_ingest = brain_sub.add_parser("ingest")
+    brain_ingest.add_argument("path")
+    brain_ingest.add_argument("files", nargs="+")
+    brain_distill = brain_sub.add_parser("distill-run")
+    brain_distill.add_argument("path")
+    brain_distill.add_argument("--source", required=True)
+    brain_distill.add_argument("--seq", required=True, type=int)
+    brain_distill.add_argument("--artifact", required=True)
+    brain_distill.add_argument("--lesson", required=True, help="constructive lesson JSON/YAML")
+    brain_query = brain_sub.add_parser("query")
+    brain_query.add_argument("path")
+    brain_query.add_argument("query")
+    brain_query.add_argument("--day", default=None, help="fixed retrieval day (YYYY-MM-DD)")
+    brain_inspect = brain_sub.add_parser("inspect")
+    brain_inspect.add_argument("path")
+    brain_inspect.add_argument("id", nargs="?")
+    for command_name in ("reinforce", "pin", "unpin"):
+        brain_record = brain_sub.add_parser(command_name)
+        brain_record.add_argument("path")
+        brain_record.add_argument("id")
+        if command_name == "pin":
+            brain_record.add_argument("--floor", type=float, default=1.0)
+    brain_sub.add_parser("reindex").add_argument("path")
     continue_cmd = sub.add_parser(
         "continue", help="continue a stopped run under its bound immutable manifest"
     )
@@ -336,6 +377,15 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "reason":
         return _cmd_reason(args)
+
+    if args.command == "skills":
+        return _cmd_skills(args)
+
+    if args.command == "distill":
+        return _cmd_distill(args)
+
+    if args.command == "brain":
+        return _cmd_brain(args)
 
     if args.command == "continue":
         return _cmd_continue(args)
@@ -1033,6 +1083,146 @@ def _cmd_reason(args) -> int:
     )
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
+
+
+def _cmd_skills(args) -> int:
+    """Snapshot explicit capsules and emit a replayable retrieval receipt."""
+
+    from deepreason.skills.models import SkillCapsule
+    from deepreason.skills.retrieve import retrieve_skills
+    from deepreason.skills.snapshot import snapshot_library
+
+    try:
+        capsules = tuple(
+            SkillCapsule.model_validate_json(Path(path).read_bytes())
+            for path in args.capsule
+        )
+        if not args.school:
+            raise ValueError("skills retrieval requires at least one explicit --school")
+        harness = Harness(Path(args.root))
+        snapshot = snapshot_library(capsules, harness.blobs, library_id="cli-explicit")
+        receipt = retrieve_skills(
+            snapshot,
+            args.query,
+            args.school,
+            harness.blobs,
+            problem_id=args.query,
+            top_k=args.top_k,
+            harness=harness,
+        )
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(json.dumps(receipt.model_dump(mode="json", by_alias=True), indent=2, sort_keys=True))
+    return 0
+
+
+def _cmd_distill(args) -> int:
+    """Create a capsule only after accepted-source time-travel validation."""
+
+    from deepreason.canonical import canonical_json
+    from deepreason.skills.distill import distill_capsule
+    from deepreason.skills.models import CapsuleDraft
+    from deepreason.skills.validate import validate_distillation_source
+
+    try:
+        draft = CapsuleDraft.model_validate(_read_problem_file(Path(args.draft)))
+        source = validate_distillation_source(
+            args.source,
+            source_event_seq=args.seq,
+            accepted_artifact_id=args.artifact,
+            distiller_version="cli-v1",
+        )
+        capsule = distill_capsule(source, draft)
+        target = Path(args.out)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(canonical_json(capsule.model_dump(mode="json", by_alias=True)))
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(f"wrote {target} ({capsule.id})")
+    return 0
+
+
+def _cmd_brain(args) -> int:
+    """Operate only on the brain root and files explicitly supplied by the user."""
+
+    from datetime import date
+
+    from deepreason.brain import BrainStore, ingest_files, retrieve
+
+    try:
+        if args.brain_command == "init":
+            store = BrainStore.init(args.path)
+            print(json.dumps(store.manifest.model_dump(mode="json", by_alias=True), indent=2))
+            return 0
+
+        store = BrainStore(args.path)
+        if args.brain_command == "ingest":
+            ids = ingest_files(store, args.files)
+            print(json.dumps({"record_ids": ids}, indent=2))
+            return 0
+        if args.brain_command == "query":
+            query_day = date.fromisoformat(args.day) if args.day else date.today()
+            result = retrieve(store, args.query, query_day=query_day)
+            payload = {
+                "receipt": result.receipt.model_dump(mode="json", by_alias=True),
+                "cards": [item.model_dump(mode="json", by_alias=True) for item in result.cards],
+            }
+            print(json.dumps(payload, indent=2, sort_keys=True))
+            return 0
+        if args.brain_command == "inspect":
+            if args.id:
+                payload = store.get_memory(args.id).model_dump(mode="json", by_alias=True)
+            else:
+                payload = {
+                    "manifest": store.manifest.model_dump(mode="json", by_alias=True),
+                    "record_count": len(store.record_ids()),
+                    "event_count": len(store.events),
+                }
+            print(json.dumps(payload, indent=2, sort_keys=True))
+            return 0
+        if args.brain_command == "reinforce":
+            event = store.reinforce(args.id)
+        elif args.brain_command == "pin":
+            event = store.pin(args.id, floor=args.floor)
+        elif args.brain_command == "unpin":
+            event = store.unpin(args.id)
+        elif args.brain_command == "reindex":
+            from deepreason.brain.index import build_index
+
+            projection = build_index(store, force=True)
+            print(json.dumps({"projection": str(projection)}, indent=2))
+            return 0
+        elif args.brain_command == "distill-run":
+            from deepreason.brain.distill import distill_lesson
+            from deepreason.brain.models import LessonRecord
+            from deepreason.skills.validate import validate_distillation_source
+
+            lesson = LessonRecord.model_validate(_read_problem_file(Path(args.lesson)))
+            source = validate_distillation_source(
+                args.source,
+                source_event_seq=args.seq,
+                accepted_artifact_id=args.artifact,
+                distiller_version="brain-cli-v1",
+            )
+            record_id = distill_lesson(
+                store,
+                lesson,
+                source_ref=(
+                    f"run:{source.source_snapshot_digest}:"
+                    f"{source.accepted_artifact_id}@{source.source_event_seq}"
+                ),
+            )
+            print(json.dumps({"record_id": record_id}, indent=2))
+            return 0
+        else:  # pragma: no cover - argparse owns the finite command set
+            raise ValueError(f"unknown brain command: {args.brain_command}")
+        print(event.model_dump_json(by_alias=True, indent=2))
+        return 0
+    except (OSError, ValueError, KeyError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
 
 
 def _cmd_continue(args) -> int:
