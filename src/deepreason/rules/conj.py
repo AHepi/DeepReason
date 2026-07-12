@@ -13,22 +13,18 @@ marks atypical (§11.6).
 
 from deepreason.llm.contracts import ConjecturerOutput
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
-from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Warrant
+from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
+from deepreason.workloads.models import MandatoryInterface, compile_interface
 
 
 def _resolve_ref(target: str, artifacts: dict) -> str | None:
-    """Resolve a candidate ref to a registered artifact id. Models reliably
-    emit truncated ids (packs show 12-char heads), and silently dropping the
-    ref would mechanically refute a lineage-bound candidate — so a UNIQUE
-    prefix resolves to the full id (deterministic; the resolved ref enters
-    the content-addressed identity exactly as a correctly-typed one would).
-    Ambiguous or unknown targets drop, as before."""
+    """Backward-compatible unique-prefix resolver used by older callers."""
     if not target:
         return None
     if target in artifacts:
         return target
-    matches = [aid for aid in artifacts if aid.startswith(target)]
+    matches = [artifact_id for artifact_id in artifacts if artifact_id.startswith(target)]
     return matches[0] if len(matches) == 1 else None
 
 
@@ -44,6 +40,10 @@ def conj(
     complement: bool = False,
     specs: list[str] | None = None,
     embedder=None,
+    mandatory_interface: MandatoryInterface | None = None,
+    workload_profile: str | None = None,
+    contract_id: str = "conjecturer.direct.v1",
+    component_spec: str | None = None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -78,27 +78,15 @@ def conj(
         candidates.sort(key=lambda c: c.typicality)
 
     batch: list[tuple[Artifact, list[Warrant]]] = []
+    candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
     seen: set[str] = set()
     for candidate in candidates[: config.VS_K]:
-        commitments = [c for c in problem.criteria if c in harness.commitments]
-        # Skeleton discipline (§10.1): content that parses as a skeleton has
-        # its forbidden cases compiled into commitments — at registration,
-        # BEFORE id computation, deterministically.
-        from deepreason.informal.skeleton import compile_forbidden_commitments, parse_skeleton
-
-        skeleton = parse_skeleton(candidate.content)
-        if skeleton is not None:
-            commitments += [
-                c for c in compile_forbidden_commitments(harness, skeleton)
-                if c not in commitments
-            ]
-        interface = Interface(
-            commitments=commitments,
-            refs=[
-                Ref(target=resolved, role=r.role)
-                for r in candidate.refs
-                if (resolved := _resolve_ref(r.target, harness.state.artifacts))
-            ],
+        interface = compile_interface(
+            harness,
+            problem,
+            candidate.content,
+            mandatory=mandatory_interface,
+            optional_refs=((ref.target, ref.role) for ref in candidate.refs),
         )
         content_ref = f"inline:{candidate.content}"
         artifact = Artifact(
@@ -113,8 +101,26 @@ def conj(
             ),
         )
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
+        domain = (
+            anti_relapse.relapse_domain(
+                artifact,
+                harness,
+                workload_profile=workload_profile,
+                problem_family=problem.id,
+                contract_id=contract_id,
+                mandatory_refs=(mandatory_interface or MandatoryInterface()).refs,
+                component_spec=component_spec,
+            )
+            if workload_profile is not None
+            else None
+        )
         admitted, reason = anti_relapse.check(
-            artifact, [], harness, embedder=embedder, near_dup_eps=config.NEAR_DUP_EPS
+            artifact,
+            [],
+            harness,
+            embedder=embedder,
+            near_dup_eps=config.NEAR_DUP_EPS,
+            domain=domain,
         )
         if diagnostics is not None:
             diagnostics.append({"candidate": artifact.id[:12], "gate": reason})
@@ -129,7 +135,14 @@ def conj(
             continue  # attention-level dedupe of a registered twin — never a block (§0)
         seen.add(artifact.id)
         batch.append((artifact, []))
-    registered = harness.register_batch(batch, problem_id=problem_id, rule=Rule.CONJ, llm=llm_call)
+        if domain is not None:
+            candidate_domains[artifact.id] = domain
+    for artifact, _warrants in batch:
+        if artifact.id in candidate_domains:
+            anti_relapse.record_domain(harness, artifact.id, candidate_domains[artifact.id])
+    registered = harness.register_batch(
+        batch, problem_id=problem_id, rule=Rule.CONJ, llm=llm_call
+    )
     if not registered:
         # All candidates gate-blocked or deduped => no Conj event committed;
         # the gamma call still spent tokens and must reach the log once (§0).

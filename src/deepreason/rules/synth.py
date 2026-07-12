@@ -40,7 +40,14 @@ def synthesize(
         aliases=aliases_for_values(endpoints, prefix="A"),
     )
 
-    connects = [i for i in output.connects if i in harness.state.artifacts]
+    # The problem provenance owns the mandatory endpoints.  Model-proposed
+    # refs may add mentions, but omitting a deterministic endpoint cannot
+    # remove it from the relation interface.
+    connects = list(
+        dict.fromkeys(
+            endpoints + [i for i in output.connects if i in harness.state.artifacts]
+        )
+    )
     if not connects:
         # No registrable relation => no Conj event; the synthesizer call
         # still spent tokens and must reach the log once (§0).
@@ -60,13 +67,30 @@ def synthesize(
             role="synthesizer", school=school_id, event_seq=harness._next_seq
         ),
     )
+    domain = anti_relapse.relapse_domain(
+        artifact,
+        harness,
+        workload_profile="text",
+        problem_family=problem.id,
+        contract_id="synthesizer.relation.v1",
+        mandatory_refs=endpoints,
+    )
     admitted, _ = anti_relapse.check(
-        artifact, [], harness, embedder=embedder, near_dup_eps=config.NEAR_DUP_EPS
+        artifact,
+        [],
+        harness,
+        embedder=embedder,
+        near_dup_eps=config.NEAR_DUP_EPS,
+        domain=domain,
     )
     if not admitted or artifact.id in harness.state.artifacts:
         harness.record_llm_calls([llm_call], "synth-noregister")
         return None
+    anti_relapse.record_domain(harness, artifact.id, domain)
     harness.register_batch(
-        [(artifact, [])], problem_id=problem.id, rule=Rule.CONJ, llm=llm_call
+        [(artifact, [])],
+        problem_id=problem.id,
+        rule=Rule.CONJ,
+        llm=llm_call,
     )
     return harness.state.artifacts[artifact.id]

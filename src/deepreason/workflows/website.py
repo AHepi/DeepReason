@@ -1181,7 +1181,7 @@ class WebsiteWorkflow:
 
     def _register_compact_design(self, outline, contracts, art_direction, manifest):
         """Register generator output through ordinary Conj gates and critics."""
-        from deepreason.ontology import Artifact, Interface, Provenance, Ref, Rule, Status
+        from deepreason.ontology import Artifact, Provenance, Rule, Status
         from deepreason.rules.crit import crit_argumentative, crit_program
         from deepreason.rules.guards import anti_relapse
 
@@ -1189,12 +1189,14 @@ class WebsiteWorkflow:
         content = self._compiled_design_document(
             outline, contracts, art_direction, manifest
         )
-        interface = Interface(
-            commitments=[
-                commitment for commitment in problem.criteria
-                if commitment in self.harness.commitments
-            ],
-            refs=[Ref(target=self.plan_id, role="dependence")],
+        from deepreason.workloads.models import MandatoryInterface, compile_interface
+
+        mandatory = MandatoryInterface(refs=(self.plan_id,))
+        interface = compile_interface(
+            self.harness,
+            problem,
+            content,
+            mandatory=mandatory,
         )
         content_ref = f"inline:{content}"
         artifact = Artifact(
@@ -1207,17 +1209,28 @@ class WebsiteWorkflow:
                 event_seq=self.harness._next_seq,
             ),
         )
+        domain = anti_relapse.relapse_domain(
+            artifact,
+            self.harness,
+            workload_profile="website",
+            problem_family=problem.id,
+            contract_id="website.design.compact.v1",
+            mandatory_refs=mandatory.refs,
+            component_spec=content,
+        )
         admitted, reason = anti_relapse.check(
             artifact,
             [],
             self.harness,
             near_dup_eps=self.cfg.NEAR_DUP_EPS,
+            domain=domain,
         )
         if not admitted:
             self.harness.record_measure(
                 inputs=[f"gate:{reason}", artifact.id, "pi-design"]
             )
             return None
+        anti_relapse.record_domain(self.harness, artifact.id, domain)
         self.harness.register_batch(
             [(artifact, [])],
             problem_id="pi-design",
