@@ -1,0 +1,47 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+# Product Plan: The Bio-Digital Archive (Data-Centric)
+
+## Pages
+A single-page dashboard layout with embedded interactive modules.
+
+## Feature List
+- A data-grid showing nucleotide sequences.
+- A 'Live Simulation' window for transcription.
+- Parallax depth created via CSS transforms on data-cards.
+- 2026 'Cyber-Organic' visual design (deep greens, iridescent purples).
+
+## Key Interactions
+- **Sequence Scrubbing**: Dragging a slider moves a 'reading head' across a DNA sequence, causing the corresponding mRNA bases to appear in real-time (Causal link: Slider position -> Index lookup -> Visual render).
+- **Layered Depth**: Background elements move at 0.2x speed, midground at 0.5x, and foreground at 1.0x relative to scroll.
+- **Motion Control**: Global `isMotionEnabled` variable set via `prefers-reduced-motion` query; if false, parallax offsets are set to 0.
+
+## Content Inventory
+- **Header**: "The DNA Archive: Digitalized Life"
+- **Data Table**: "Sequence: ATGC... | Complement: TACG..."
+- **Replication Guide**: "DNA replication is semi-conservative; each new helix contains one old strand and one new strand."
+- **Transcription Guide**: "Transcription converts DNA into mRNA in the nucleus. This allows the original code to remain protected."
+- **Factoid**: "Human DNA contains approximately 3 billion base pairs."
+
+## Acceptance Criteria
+1. [ ] Single local HTML file.
+2. [ ] Slider accurately simulates transcription base-pairing.
+3. [ ] Parallax depth is visible on scroll.
+4. [ ] `prefers-reduced-motion` removes all parallax and sliding effects.
+5. [ ] Color palette matches the 'Cyber-Organic' 2026 specification.
+
+BATTERY THE EDITS WILL FACE:
+- predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+DIRECTIVE: produce exactly 8 bounded edits.

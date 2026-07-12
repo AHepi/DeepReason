@@ -1,0 +1,70 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-plan) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Write a PRODUCT PLAN for this website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational 
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- plan-doc@e5c72fde8cc0: predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Product Plan: The Helix Odyssey
+
+## Pages
+Single-page scrolling experience with five logical sections.
+
+## Feature List
+- GPU-accelerated 3D DNA helix that rotates on scroll.
+- Parallax layers of nucleotides drifting in the background.
+- Interactive 'Transcription Trigger' button.
+- Automatic motion reduction based on `prefers-reduced-motion`.
+- 2026 Neon-Glassmorphism UI style.
+
+## Key Interactions
+- **Scroll-driven Animation**: As the user scrolls, the double helix unzips to reveal the internal base pairs.
+- **The Transcription Event**: Clicking 'Synthesize' triggers a sequence where an mRNA strand is built from a DNA template using a causal chain of animations (Template -> Enzyme binding -> Nucleotide addition).
+- **Accessibility**: If `prefers-reduced-motion` is true, all parallax and smooth-scrolls are replaced with instant jumps and static high-contrast images.
+
+## Content Inventory
+- **Hero Title**: "DNA: The Architecture of Life"
+- **Intro Copy**: "A four-letter alphabet that writes the story of every living cell."
+- **Replication Section**: 
+  - Heading: "The Copy Machine"
+  - Fact: "Helicase unwinds the strand; DNA Polymerase builds the new match."
+- **Transcription Section**: 
+  - Heading: "From Code to Action"
+  - Fact: "RNA Polymerase reads the DNA to create a messenger molecule called mRNA."
+- **Footer**: "Designed for 2026 | Local HTML Edition"
+
+## Acceptance Criteria
+1. [ ] Page is a single .html file with internal CSS/JS.
+2. [ ] Helix rotates dynamically during scroll.
+3. [ ] 'Synthesize' button produces a visual mRNA strand.
+4. [ ] No animations trigger if `prefers-reduced-motion` is enabled in system settings.
+5. [ ] Visual style uses vibrant 2026 gradients and blur effects.
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

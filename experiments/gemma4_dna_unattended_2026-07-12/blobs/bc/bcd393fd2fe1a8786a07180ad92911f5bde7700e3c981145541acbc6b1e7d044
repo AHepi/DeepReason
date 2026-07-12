@@ -1,0 +1,26 @@
+```json
+{
+  "alias": "C2",
+  "content_requirements": [
+    "Tri-Planar parallax layers (Background, Midground, Foreground)",
+    "Bioluminescent Green and Iridescent Purple color accents",
+    "Glassmorphism and digital grain textures",
+    "Low-frequency sine-wave oscillation for floating elements"
+  ],
+  "depends_on": [],
+  "exports": [
+    "updateParallaxOffset",
+    "toggleMotionReduced"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "parallax-bg-root",
+    "parallax-layer-far",
+    "parallax-layer-mid",
+    "parallax-layer-near"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

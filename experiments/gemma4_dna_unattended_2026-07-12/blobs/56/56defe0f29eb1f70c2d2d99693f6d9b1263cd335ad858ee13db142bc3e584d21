@@ -1,0 +1,70 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-design) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Produce a DESIGN SPECIFICATION for this website:
+Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+It must implement the plan shown in FOUNDATION faithfully — deviations from
+the plan are criticism bait. Each candidate's `content` MUST be one design
+document in plain prose or markdown—not implementation HTML, JavaScript, or
+CSS—with one exception: the chunked workflow's explicitly required fenced
+COMPONENT MANIFEST is allowed as structured design metadata. Cover layout per
+page, visual direction (palette, typography, spacing), component inventory,
+interaction and state behavior, and the responsive strategy. Diffe
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- design-doc@217f1c095a03: predicate:len(content) > 600 and 'doctype' not in content.lower()[:200]
+- manifest-wf@5a2676bd79ba: program:manifest_wf
+- lineage-ref@1a0b577decde: program:lineage_ref
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Design specification
+
+This single-document website follows the adjudicated product plan. The harness assigned component identifiers and integration order; the following model-authored local values remain criticizable.
+
+## Required-design synopsis
+- Layout: one responsive scrolling page in order C1 → C2 → C3 → C4 → C5 → C6.
+- Visual system: palette Cyber-Organic 2026: Deep Obsidian (#050A0C), Bioluminescent Green (#39FF14), Iridescent Purple (#B026FF), Cyan Glaze (#0; typography Headings: Geometric Sans-Serif (Inter or Montserrat) with wide tracking. Body: Monospace (JetBrains Mono or Roboto Mono); spacing Fluid 8pt grid with exaggerated whitespace (padding: 2rem to 5rem) to create a gallery-like aether around data modules..
+- Components: C1 Cyber-Organic header with the title 'The DNA Archive: Digitalized Life'; C2 Parallax-driven background layers for depth and visual atmosphere; C3 Nucleotide sequence data-grid for viewing base pairs; C4 Interactive transcription simulator with sequence scrubbing slider; C5 Visual guide explaining semi-conservative DNA replication; C6 Informational section for mRNA transcription and genetic factoids.
+- Interaction and state: Bioluminescent Feedback: Hover states trigger a glow-bleed (box-shadow) and subtle scale-up (1.02x). Active states shift colors from Green to Cyan..
+- Responsive behavior: Adaptive Columnar: 3-column data grid on desktop, collapsing to a single vertical stream on mobile with scaled-down typography and touch-optimized slider handles..
+- Motion behavior: Organic Precision: Smooth, eased-out cubic-bezier(0.25, 1, 0.5, 1) transitions. Elements float with a low-frequency sine-wave oscillation to mimic fluid suspension..
+- Reduced-motion behavior: Static-Positioning: All parallax offsets are neutralized to 0; oscillation is disabled; fade-ins are replaced by immediate visibility; sliders trigger instant state updates..
+- Static alternative: Flat Data-Dashboard: Fixed layout with h
+
+[HARNESS PACK EXCERPT: middle bytes omitted only for the model-facing budget. They remain in the logged target. This omission is not a fault; do not claim that unshown sections are missing.]
+
+are replaced by static side-by-side comparison diagrams and text descriptions.",
+        "webgl_canvas_id": null
+      },
+      "max_chars": null,
+      "name": "c6",
+      "order": 5,
+      "purpose": "Informational section for mRNA transcription and genetic factoids Requirements: mRNA transcription detailed explanation; Genetic factoids curated as data-points; Cyber-Organic 2026 visual styling",
+      "runtime_imports": []
+    }
+  ],
+  "dependencies": [],
+  "libs": [],
+  "title": "Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scro"
+}
+```
+
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

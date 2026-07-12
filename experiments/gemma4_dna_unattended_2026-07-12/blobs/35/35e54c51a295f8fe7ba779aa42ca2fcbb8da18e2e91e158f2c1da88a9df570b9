@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "# Product Plan: The Helix Odyssey\n\n## Pages\nSingle-page scrolling experience with five logical sections.\n\n## Feature List\n- GPU-accelerated 3D DNA helix that rotates on scroll.\n- Parallax layers of nucleotides drifting in the background.\n- Interactive 'Transcription Trigger' button.\n- Automatic motion reduction based on `prefers-reduced-motion`.\n- 2026 Neon-Glassmorphism UI style.\n\n## Key Interactions\n- **Scroll-driven Animation**: As the user scrolls, the double helix unzips to reveal the internal base pairs.\n- **The Transcription Event**: Clicking 'Synthesize' triggers a sequence where an mRNA strand is built from a DNA template using a causal chain of animations (Template -> Enzyme binding -> Nucleotide addition).\n- **Accessibility**: If `prefers-reduced-motion` is true, all parallax and smooth-scrolls are replaced with instant jumps and static high-contrast images.\n\n## Content Inventory\n- **Hero Title**: \"DNA: The Architecture of Life\"\n- **Intro Copy**: \"A four-letter alphabet that writes the story of every living cell.\"\n- **Replication Section**: \n  - Heading: \"The Copy Machine\"\n  - Fact: \"Helicase unwinds the strand; DNA Polymerase builds the new match.\"\n- **Transcription Section**: \n  - Heading: \"From Code to Action\"\n  - Fact: \"RNA Polymerase reads the DNA to create a messenger molecule called mRNA.\"\n- **Footer**: \"Designed for 2026 | Local HTML Edition\"\n\n## Acceptance Criteria\n1. [ ] Page is a single .html file with internal CSS/JS.\n2. [ ] Helix rotates dynamically during scroll.\n3. [ ] 'Synthesize' button produces a visual mRNA strand.\n4. [ ] No animations trigger if `prefers-reduced-motion` is enabled in system settings.\n5. [ ] Visual style uses vibrant 2026 gradients and blur effects.",
+      "typicality": 0.9,
+      "neighbours": [
+        "A1",
+        "A4"
+      ]
+    },
+    {
+      "content": "# Product Plan: Molecular Minimalism (The Abstract Approach)\n\n## Pages\nOne ultra-minimalist page using white-space and bold typography.\n\n## Feature List\n- SVG-based vector animations of DNA strands.\n- Scroll-triggered text reveals.\n- A 'Reduced Motion' manual toggle that overrides system settings (but respects them by default).\n- High-contrast 2026 'Acid Graphic' aesthetic.\n\n## Key Interactions\n- **The Unfold**: The page starts as a single dot. Scrolling 'unfolds' the DNA sequence linearly.\n- **The Mechanism**: A causal loop animation showing the energy cycle (ATP) powering the replication process, moving from energy source to physical strand movement.\n- **System Logic**: JS check for `window.matchMedia('(prefers-reduced-motion: reduce)')` is performed before the animation engine initializes.\n\n## Content Inventory\n- **Main Title**: \"GENOME\"\n- **The Core Truth**: \"Adenine pairs with Thymine. Cytosine pairs with Guanine.\"\n- **The Process (Replication)**: \"Step 1: Unzipping. Step 2: Pairing. Step 3: Joining.\"\n- **The Process (Transcription)**: \"DNA is the blueprint; RNA is the messenger. The messenger carries the instructions to the ribosome.\"\n- **Closing Statement**: \"Information is the only currency of biology.\"\n\n## Acceptance Criteria\n1. [ ] Single local HTML file.\n2. [ ] Vector DNA expands based on scroll depth.\n3. [ ] Transcription process is depicted as a linear causal sequence of events.\n4. [ ] `prefers-reduced-motion` prevents the 'Unfold' animation from occurring.\n5. [ ] Typography follows 2026 experimental brutalist trends.",
+      "typicality": 0.5,
+      "neighbours": [
+        "A2",
+        "A3"
+      ]
+    },
+    {
+      "content": "# Product Plan: The Bio-Digital Archive (Data-Centric)\n\n## Pages\nA single-page dashboard layout with embedded interactive modules.\n\n## Feature List\n- A data-grid showing nucleotide sequences.\n- A 'Live Simulation' window for transcription.\n- Parallax depth created via CSS transforms on data-cards.\n- 2026 'Cyber-Organic' visual design (deep greens, iridescent purples).\n\n## Key Interactions\n- **Sequence Scrubbing**: Dragging a slider moves a 'reading head' across a DNA sequence, causing the corresponding mRNA bases to appear in real-time (Causal link: Slider position -> Index lookup -> Visual render).\n- **Layered Depth**: Background elements move at 0.2x speed, midground at 0.5x, and foreground at 1.0x relative to scroll.\n- **Motion Control**: Global `isMotionEnabled` variable set via `prefers-reduced-motion` query; if false, parallax offsets are set to 0.\n\n## Content Inventory\n- **Header**: \"The DNA Archive: Digitalized Life\"\n- **Data Table**: \"Sequence: ATGC... | Complement: TACG...\"\n- **Replication Guide**: \"DNA replication is semi-conservative; each new helix contains one old strand and one new strand.\"\n- **Transcription Guide**: \"Transcription converts DNA into mRNA in the nucleus. This allows the original code to remain protected.\"\n- **Factoid**: \"Human DNA contains approximately 3 billion base pairs.\"\n\n## Acceptance Criteria\n1. [ ] Single local HTML file.\n2. [ ] Slider accurately simulates transcription base-pairing.\n3. [ ] Parallax depth is visible on scroll.\n4. [ ] `prefers-reduced-motion` removes all parallax and sliding effects.\n5. [ ] Color palette matches the 'Cyber-Organic' 2026 specification.",
+      "typicality": 0.3,
+      "neighbours": [
+        "A4"
+      ]
+    },
+    {
+      "content": "# Product Plan: The Genetic Poem (Artistic Narrative)\n\n## Pages\nA single, vertical-canvas narrative piece.\n\n## Feature List\n- Fluid-simulation background that reacts to mouse movement.\n- Typography that 'morphs' between DNA and RNA states.\n- Cinematic parallax scrolling through a 'cellular void'.\n- 2026 'Ethereal-Light' design (soft glows, translucent surfaces).\n\n## Key Interactions\n- **The Morph**: As the user scrolls to the Transcription section, the word \"DNA\" physically transforms into \"mRNA\" via a causal animation of shifting letters.\n- **Depth Immersion**: Using `z-index` and `transform: translateZ`, the user 'flies through' a DNA strand.\n- **Accessibility Logic**: If `prefers-reduced-motion` is active, the fluid simulation is disabled and the morphing letters are replaced by simple cross-fades.\n\n## Content Inventory\n- **Opening Line**: \"In the beginning, there was a code.\"\n- **The Wonder**: \"The double helix is not just a shape; it is a storage system of infinite complexity.\"\n- **Replication Narrative**: \"One becomes two. The enzyme Helicase breaks the hydrogen bonds, and the story repeats itself.\"\n- **Transcription Narrative**: \"A whisper of the original. The mRNA carries the secret from the nucleus to the protein factory.\"\n- **Final Thought**: \"We are the living expression of these four letters.\"\n\n## Acceptance Criteria\n1. [ ] Single local HTML file.\n2. [ ] Fluid simulation functions in the background.\n3. [ ] Word morphing occurs during the transcription scroll-point.\n4. [ ] `prefers-reduced-motion` completely halts the 'fly-through' and fluid effects.\n5. [ ] Visuals utilize 2026 translucent glassmorphism.",
+      "typicality": 0.2,
+      "neighbours": [
+        "A3"
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,30 @@
+```json
+{
+  "alias": "C5",
+  "content_requirements": [
+    "Visual demonstration of DNA double helix splitting",
+    "Illustration of parent strands serving as templates",
+    "Visual representation of new complementary strand synthesis",
+    "Labeling of semi-conservative mechanism"
+  ],
+  "depends_on": [
+    "C2"
+  ],
+  "exports": [
+    "triggerReplicationAnimation",
+    "resetReplicationCycle"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "dna-replication-root",
+    "replication-canvas",
+    "strand-parent-1",
+    "strand-parent-2",
+    "strand-daughter-1",
+    "strand-daughter-2"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

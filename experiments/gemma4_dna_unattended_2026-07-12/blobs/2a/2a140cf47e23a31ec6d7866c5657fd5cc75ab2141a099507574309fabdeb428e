@@ -1,0 +1,25 @@
+```json
+{
+  "alias": "C3",
+  "content_requirements": [
+    "Base pair sequence data grid",
+    "Nucleotide labels (A, T, C, G)",
+    "Bioluminescent feedback states",
+    "Monospace typography for sequences"
+  ],
+  "depends_on": [],
+  "exports": [
+    "updateSequence",
+    "highlightBasePair"
+  ],
+  "motion_requirement": "limited",
+  "owned_dom_ids": [
+    "dna-grid-root",
+    "dna-grid-container",
+    "dna-grid-viewport"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "# Product Plan: The Genetic Poem (Interactive Bio-Digital Narrative)",
+      "changed_fields": [
+        "TARGET CONTENT"
+      ]
+    },
+    {
+      "content": "A single, vertical-canvas narrative piece optimized for high-refresh displays.",
+      "changed_fields": [
+        "Pages"
+      ]
+    },
+    {
+      "content": "- Fluid-simulation background with real-time Navier-Stokes reactivity.\n- Typography that 'morphs' between DNA and RNA states via SVG path interpolation.\n- Cinematic parallax scrolling through a 'cellular void' using WebGL layers.\n- 2026 'Ethereal-Light' design (soft glows, translucent surfaces, neo-glassmorphism).",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **The Morph**: As the user scrolls to the Transcription section, the word \"DNA\" physically transforms into \"mRNA\" via a causal animation of shifting vectors.\n- **Depth Immersion**: Using `z-index` and `transform: translateZ` within a 3D perspective container, the user 'flies through' a DNA strand.\n- **Accessibility Logic**: If `prefers-reduced-motion` is active, the fluid simulation is disabled and the morphing letters are replaced by simple opacity cross-fades.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **Opening Line**: \"In the beginning, there was a code—a silent blueprint of existence.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **The Wonder**: \"The double helix is not just a shape; it is a biological storage system of infinite complexity and precision.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **Replication Narrative**: \"One becomes two. The enzyme Helicase unzips the hydrogen bonds, and the story of the self repeats itself.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "1. [ ] Single local HTML file containing all CSS/JS.\n2. [ ] Fluid simulation functions in the background without frame drops.\n3. [ ] Word morphing occurs precisely during the transcription scroll-trigger.\n4. [ ] `prefers-reduced-motion` completely halts the 'fly-through' and fluid effects.\n5. [ ] Visuals utilize 2026 translucent glassmorphism with variable blur.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    }
+  ]
+}
+```

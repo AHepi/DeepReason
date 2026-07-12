@@ -1,0 +1,21 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"header-root\" class=\"c1-header\">\n  <div class=\"c1-title-container\">\n    <h1 class=\"c1-title\">The DNA Archive: Digitalized Life</h1>\n    <div class=\"c1-glow-line\"></div>\n  </div>\n  <style>\n    #header-root {\n      background: #050A0C;\n      padding: 3rem 2rem;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n      border-bottom: 1px solid #39FF14;\n    }\n    .c1-title {\n      font-family: 'Inter', 'Montserrat', sans-serif;\n      color: #39FF14;\n      font-size: clamp(2rem, 5vw, 4rem);\n      letter-spacing: 0.2em;\n      text-transform: uppercase;\n      margin: 0;\n      text-shadow: 0 0 15px #39FF14, 0 0 30px #00FFFF;\n    }\n    .c1-glow-line {\n      height: 2px;\n      width: 0%;\n      background: linear-gradient(90deg, #39FF14, #00FFFF);\n      margin-top: 1rem;\n      transition: width 1.5s ease-out;\n    }\n    .c1-header.mounted .c1-glow-line {\n      width: 100%;\n    }\n  </style>\n  <script>\n    window.c1_updateHeaderGlow = (intensity) => {\n      const title = document.querySelector('.c1-title');\n      if (title) title.style.textShadow = `0 0 ${15 * intensity}px #39FF14, 0 0 ${30 * intensity}px #00FFFF`;\n    };\n    window.c1_mount = () => {\n      const root = document.getElementById('header-root');\n      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {\n        root.classList.add('mounted');\n      }\n    };\n    window.c1_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.9,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"header-root\">\n  <div class=\"c1-visual-wrapper\">\n    <div class=\"c1-dna-strand\"></div>\n    <h1 class=\"c1-title\">The DNA Archive: Digitalized Life</h1>\n  </div>\n  <style>\n    #header-root {\n      position: relative;\n      background: #050A0C;\n      min-height: 200px;\n      display: grid;\n      place-items: center;\n      overflow: hidden;\n    }\n    .c1-title {\n      font-family: 'Inter', sans-serif;\n      color: #00FFFF;\n      letter-spacing: 0.3em;\n      z-index: 2;\n      text-shadow: 0 0 10px #39FF14;\n    }\n    .c1-dna-strand {\n      position: absolute;\n      width: 200%;\n      height: 100%;\n      background: repeating-linear-gradient(45deg, transparent, transparent 20px, #39FF14 21px, #39FF14 22px);\n      opacity: 0.2;\n      animation: c1-drift 10s linear infinite;\n    }\n    @keyframes c1-drift {\n      from { transform: translateX(-10%); } to { transform: translateX(0%); }\n    }\n    @media (prefers-reduced-motion: reduce) { .c1-dna-strand { animation: none; }\n    }\n  </style>\n  <script>\n    window.c1_mount = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {\n        document.querySelector('.c1-dna-strand').style.display = 'none';\n      }\n    };\n    window.c1_updateHeaderGlow = (v) => {};\n    window.c1_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.6,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"header-root\">\n  <div class=\"c1-static-fallback\">\n    <h1 style=\"color:#39FF14; border: 2px solid #00FFFF; padding: 20px; font-family: monospace;\">The DNA Archive: Digitalized Life</h1>\n    <p style=\"color:#00FFFF; font-family: monospace;\">[STATIC DATA-DASHBOARD MODE]</p>\n  </div>\n  <style>\n    #header-root { background: #050A0C; padding: 2rem; text-align: center; }\n  </style>\n  <script>\n    window.c1_mount = () => {};\n    window.c1_updateHeaderGlow = () => {};\n    window.c1_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.3,
+      "neighbours": []
+    }
+  ]
+}
+```
