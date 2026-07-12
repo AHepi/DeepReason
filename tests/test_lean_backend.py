@@ -130,6 +130,22 @@ def test_exact_import_lock_is_required_for_imports(tmp_path: Path, fake_lean: Pa
     assert declared.verdict == "pass"
 
 
+def test_malformed_import_lock_is_operational_overrun(tmp_path: Path, fake_lean: Path):
+    backend, blobs = _backend(tmp_path, fake_lean)
+    lock_ref = blobs.put(b"not-json")
+    result = backend.verify(
+        _request(
+            blobs,
+            "import Std\ntheorem sample : True := by trivial",
+            imports_lock_ref=lock_ref,
+        )
+    )
+
+    assert result.verdict == "overrun"
+    assert not result.fail_warrant_eligible
+    assert _diagnostics(blobs, result.diagnostics_ref)["reason"] == "invalid_imports_lock"
+
+
 def test_missing_toolchain_is_operational_overrun_without_fail_warrant(tmp_path: Path):
     blobs = BlobStore(tmp_path / "blobs")
     backend = LeanBackend(

@@ -261,6 +261,31 @@ PROGRAMS: dict[str, ProgramSpec] = {
 }
 
 
+def programs_by_class() -> dict[ProgramClass, tuple[str, ...]]:
+    """Stable process-reporting inventory; never feeds adjudication."""
+
+    classes: dict[ProgramClass, list[str]] = {
+        "structural": [],
+        "execution": [],
+        "simulation": [],
+        "formal": [],
+        "observation": [],
+    }
+    for name, spec in sorted(PROGRAMS.items()):
+        classes[spec.class_].append(name)
+    return {class_: tuple(names) for class_, names in classes.items()}
+
+
+def external_toolchains() -> dict[str, tuple[str, ...]]:
+    """Map pinned-backend families to the registered programs they serve."""
+
+    grouped: dict[str, list[str]] = {}
+    for name, spec in sorted(PROGRAMS.items()):
+        if spec.external_toolchain is not None:
+            grouped.setdefault(spec.external_toolchain, []).append(name)
+    return {toolchain: tuple(names) for toolchain, names in sorted(grouped.items())}
+
+
 def evaluable(commitment: Commitment) -> bool:
     kind, _, arg = commitment.eval.partition(":")
     return kind == "predicate" or (kind == "program" and arg in PROGRAMS)

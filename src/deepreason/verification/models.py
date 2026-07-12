@@ -63,6 +63,10 @@ class VerificationRequest(BaseModel):
                 raise ValueError("toolchain_id must pin an exact Lean 4 version")
             if self.source_ref is None:
                 raise ValueError("Lean verification requires source_ref")
+            if self.allow_sorry:
+                raise ValueError("Lean verification never permits sorry or admit")
+            if not self.target_theorems:
+                raise ValueError("Lean verification requires at least one target theorem")
         elif self.payload is None and self.source_ref is None:
             raise ValueError("generic verification requires payload or source_ref")
         return self

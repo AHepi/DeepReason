@@ -403,7 +403,7 @@ class LeanBackend:
                 request=request,
                 fingerprint=fingerprint,
                 source_sha256=source_sha256,
-                verdict="fail",
+                verdict="overrun",
                 diagnostics={
                     **diagnostic_base,
                     "reason": "invalid_imports_lock",

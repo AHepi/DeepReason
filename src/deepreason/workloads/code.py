@@ -39,6 +39,7 @@ _LANGUAGES = {
 }
 _DEFAULT_PATCH_BYTES = 256 * 1024
 _DEFAULT_CARD_LINES = 80
+_DEFAULT_CHECK_ITEM_LIMIT = 100_000
 
 
 class _FrozenModel(BaseModel):
@@ -99,7 +100,12 @@ class CheckSpec(_FrozenModel):
     argv: tuple[str, ...] = Field(min_length=1)
     cwd: str = "."
     env: dict[str, str] = Field(default_factory=dict)
-    step_or_item_limit: int = Field(default=0, ge=0)
+    # Commands remain trusted workload input.  This finite ceiling bounds the
+    # number of newline-delimited result items a check may emit; the runner
+    # enforces it in addition to its byte, CPU, memory, and wall-clock
+    # containment limits.  Structured checkers may also read the declared
+    # value from their frozen CheckSpec and apply a stronger domain step bound.
+    step_or_item_limit: int = Field(default=_DEFAULT_CHECK_ITEM_LIMIT, ge=1)
     expected_exit: int = 0
 
     @field_validator("argv")
@@ -546,15 +552,19 @@ def _replace_occurrence(text: str, edit: PatchEdit) -> str:
     count = text.count(edit.anchor_before)
     if count == 0:
         raise PatchApplicationError("anchor-missing", "exact anchor not found", path=edit.path)
-    if edit.occurrence > count:
+    if count != 1:
         raise PatchApplicationError(
-            "anchor-occurrence", f"requested occurrence {edit.occurrence}, found {count}", path=edit.path
+            "anchor-ambiguous",
+            f"localized patch anchors must be unique; found {count}",
+            path=edit.path,
         )
-    start = -1
-    cursor = 0
-    for _ in range(edit.occurrence):
-        start = text.find(edit.anchor_before, cursor)
-        cursor = start + len(edit.anchor_before)
+    if edit.occurrence != 1:
+        raise PatchApplicationError(
+            "anchor-occurrence",
+            "a unique anchor only has occurrence 1",
+            path=edit.path,
+        )
+    start = text.find(edit.anchor_before)
     return text[:start] + edit.replacement + text[start + len(edit.anchor_before) :]
 
 

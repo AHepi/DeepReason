@@ -74,6 +74,20 @@ def _kill(process: subprocess.Popen[bytes]) -> None:
         pass
 
 
+def _output_items(stdout: bytes, stderr: bytes) -> int:
+    """Count finite newline-delimited result records from a trusted check.
+
+    A non-empty final fragment is one item even without a trailing newline.
+    The count deliberately ignores command meaning: it is containment, never
+    evidence that a candidate passed or failed its declared check.
+    """
+
+    def count(stream: bytes) -> int:
+        return stream.count(b"\n") + int(bool(stream) and not stream.endswith(b"\n"))
+
+    return count(stdout) + count(stderr)
+
+
 class TrustedCheckRunner:
     def __init__(self, *, containment_timeout_s: int = 60, output_limit: int = _OUTPUT_LIMIT) -> None:
         if containment_timeout_s <= 0 or output_limit <= 0:
@@ -153,6 +167,22 @@ class TrustedCheckRunner:
                 blobs,
                 {"sandbox_abort": "output containment limit"},
             )
+        output_items = _output_items(stdout, stderr)
+        if output_items > check.step_or_item_limit:
+            return self._result(
+                check,
+                command_sha,
+                "overrun",
+                process.returncode,
+                stdout,
+                stderr,
+                blobs,
+                {
+                    "sandbox_abort": "declared item containment limit",
+                    "output_items": output_items,
+                    "step_or_item_limit": check.step_or_item_limit,
+                },
+            )
         if process.returncode is not None and process.returncode < 0:
             return self._result(
                 check,
@@ -173,7 +203,10 @@ class TrustedCheckRunner:
             stdout,
             stderr,
             blobs,
-            {},
+            {
+                "output_items": output_items,
+                "step_or_item_limit": check.step_or_item_limit,
+            },
         )
 
     @staticmethod

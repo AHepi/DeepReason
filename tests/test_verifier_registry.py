@@ -55,6 +55,13 @@ def test_program_registry_values_carry_metadata_without_losing_callability():
         formal = programs.PROGRAMS[name]
         assert formal.class_ == "formal"
         assert formal.external_toolchain == "lean4"
+    assert "json-wf" in programs.programs_by_class()["structural"]
+    assert programs.external_toolchains()["lean4"] == (
+        "lean_axiom_policy",
+        "lean_kernel",
+        "lean_no_sorry",
+        "lean_parse",
+    )
 
 
 def test_registry_pins_fingerprint_and_runner_checks_backend_contract():
