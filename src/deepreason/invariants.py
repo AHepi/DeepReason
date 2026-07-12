@@ -53,13 +53,23 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             manifest = load_run_manifest(manifest_path)
             if manifest_path.read_bytes() != manifest.canonical_bytes():
                 fail("run-manifest-canonical", "manifest bytes are not canonical JSON")
-            if manifest.pack_profile != manifest.model_profile:
+            # V1 froze one shared compatibility profile.  V2 deliberately
+            # separates workload pack shape, transport model capacity, and
+            # output wire shape (e.g. reasoning.text.v1 / compact /
+            # compact.v2); equality would reject every legal v2 root.
+            if (
+                manifest.schema_version == 1
+                and manifest.pack_profile != manifest.model_profile
+            ):
                 fail(
                     "profile-metadata",
                     f"pack_profile={manifest.pack_profile!r} differs from "
                     f"model_profile={manifest.model_profile!r}",
                 )
-            if manifest.output_profile != manifest.model_profile:
+            if (
+                manifest.schema_version == 1
+                and manifest.output_profile != manifest.model_profile
+            ):
                 fail(
                     "profile-metadata",
                     f"output_profile={manifest.output_profile!r} differs from "

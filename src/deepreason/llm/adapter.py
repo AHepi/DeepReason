@@ -29,7 +29,7 @@ from deepreason.llm.firewall import (
     sanitize_model_control_fields_for_repair,
     select_lease,
 )
-from deepreason.llm.packs import apply_model_profile
+from deepreason.llm.packs import AllocatedPack, apply_model_profile
 from deepreason.llm.profiles import ModelProfile, get_profile
 from deepreason.llm.repair import (
     BoundedRepairSession,
@@ -340,9 +340,13 @@ class LLMAdapter:
         schema_value = wire_contract.model_json_schema()
         schema = json.dumps(schema_value, sort_keys=True)
         rendered_pack = pack
-        if wire_contract.variant == "compact" and wire_contract.aliases.aliases:
+        pack_is_allocated = isinstance(pack, AllocatedPack)
+        if (
+            wire_contract.variant.startswith("compact")
+            and wire_contract.aliases.aliases
+        ):
             rendered_pack = wire_contract.aliases.render_pack(rendered_pack)
-        if profile is not None:
+        if profile is not None and not pack_is_allocated:
             # Alias before clipping: otherwise a long canonical identifier can
             # be cut in half, evade replacement, or expand beyond the profile
             # budget after the clip has already been applied.

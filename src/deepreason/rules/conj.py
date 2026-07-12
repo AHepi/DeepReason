@@ -50,6 +50,7 @@ def conj(
     workload_profile: str | None = None,
     contract_id: str = "conjecturer.direct.v1",
     component_spec: str | None = None,
+    theorem_interface: str | None = None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -89,7 +90,13 @@ def conj(
 
     candidate_rows: list[tuple[ConjectureCandidate, tuple[str, ...], str]] = []
     if reasoning:
-        for proposal in output.candidates:
+        # Selection is attention-only, so it must happen before compiling
+        # countercondition commitments.  Otherwise discarded proposals still
+        # mutate the append-only commitment registry.
+        proposals = list(output.candidates)
+        if tail_weighted:
+            proposals.sort(key=lambda proposal: proposal.typicality)
+        for proposal in proposals[: config.VS_K]:
             envelope = proposal_envelope(proposal)
             content = envelope_json(envelope)
             compiled = tuple(compile_countercondition_commitments(harness, envelope))
@@ -108,14 +115,18 @@ def conj(
                 )
             )
     else:
-        candidate_rows = [(candidate, (), "productive") for candidate in output.candidates]
-    if tail_weighted:  # stagnation response (§11.4): fund the atypical tail
-        candidate_rows.sort(key=lambda row: row[0].typicality)
+        proposals = list(output.candidates)
+        if tail_weighted:  # stagnation response (§11.4): fund the atypical tail
+            proposals.sort(key=lambda proposal: proposal.typicality)
+        candidate_rows = [
+            (candidate, (), "productive")
+            for candidate in proposals[: config.VS_K]
+        ]
 
     batch: list[tuple[Artifact, list[Warrant]]] = []
     candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
     seen: set[str] = set()
-    for candidate, compiled_commitments, search_signal in candidate_rows[: config.VS_K]:
+    for candidate, compiled_commitments, search_signal in candidate_rows:
         base = mandatory_interface or MandatoryInterface()
         candidate_mandatory = MandatoryInterface(
             commitments=tuple(dict.fromkeys((*base.commitments, *compiled_commitments))),
@@ -152,8 +163,9 @@ def conj(
                 workload_profile=effective_workload,
                 problem_family=problem.id,
                 contract_id=effective_contract,
-                mandatory_refs=candidate_mandatory.refs,
+                mandatory_refs=candidate_mandatory.domain_refs(),
                 component_spec=component_spec,
+                theorem_interface=theorem_interface,
             )
             if effective_workload is not None
             else None

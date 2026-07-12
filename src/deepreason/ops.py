@@ -250,7 +250,8 @@ def report_research_failure(harness, problem_id: str, source: str, reason: str,
 
 
 def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
-                  on_cycle=None, run_manifest=None):
+                  on_cycle=None, run_manifest=None, *, stop_controller=None,
+                  progress_sink=None):
     """Meter + adapter + conjecturer check + Scheduler.run. Returns
     (result, meter, accounting). An explicit token_budget of 0 is a real
     ceiling. Raises ValueError when no conjecturer role is configured.
@@ -304,11 +305,32 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         from deepreason.controller import Controller
 
         controller = Controller(harness, adapter)
-    result = Scheduler(
+    if (
+        stop_controller is None
+        and getattr(run_manifest, "schema_version", 1) == 2
+    ):
+        from deepreason.runtime.stop import StopController, StopPolicy
+
+        stop_controller = StopController(
+            StopPolicy.model_validate(
+                getattr(run_manifest, "stop_policy", None) or {}
+            )
+        )
+    scheduler = Scheduler(
         harness, adapter, config, embedder=make_embedder(harness, config),
         browser_backend=browser_backend, controller=controller,
         research_backend=make_research_service(harness, config),
-    ).run(int(cycles), on_cycle=on_cycle)
+    )
+    # Set after construction to preserve the long-standing duck-typed
+    # Scheduler seam used by integrations and tests.  The real scheduler
+    # consumes this before its first Conj call.
+    # V2 manifests carry an explicit workload.  V1/legacy website pipelines
+    # do not; leaving None preserves their established website-specific Conj
+    # and domain paths instead of silently relabelling them as text.
+    scheduler.workload_profile = getattr(run_manifest, "workload_profile", None)
+    scheduler.stop_controller = stop_controller
+    scheduler.progress_sink = progress_sink
+    result = scheduler.run(int(cycles), on_cycle=on_cycle)
     logged_now = sum(e.llm.tokens for e in harness.log.read() if e.llm)
     accounting = {
         "metered_tokens": meter.total if meter is not None else None,

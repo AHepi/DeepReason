@@ -19,6 +19,8 @@ from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
 from deepreason.ontology.state import EpistemicState, Status
 from deepreason.oracle import EXEC_PROGRAMS
+from deepreason.packs import PackIR, PackSection, allocate_pack
+from deepreason.packs.allocate import approximate_tokens
 from deepreason.programs import content_text
 from deepreason.llm.profiles import ModelProfile, ProfileSpec, clip_pack
 from deepreason.llm.wire import AliasTable
@@ -29,6 +31,10 @@ ATTACKERS_N = 5
 FOUNDATION_CHARS = 8000  # total across all lineage endpoints in one pack
 
 _EXECUTION_EVALS = {f"program:{p}" for p in EXEC_PROGRAMS}
+
+
+class AllocatedPack(str):
+    """Marker for a pack already budgeted section-by-section by PackIR."""
 
 _COUNTEREXAMPLE_NOTE = (
     "EXECUTION-BACKED TARGETS: a target whose commitments include an "
@@ -167,6 +173,45 @@ def _clip(text: str, token_budget: int) -> str:
     return text[: token_budget * _CHARS_PER_TOKEN]
 
 
+def _pack_section(
+    identifier: str,
+    text: str,
+    priority: int,
+    *,
+    droppable: bool,
+    compressible: bool,
+    min_tokens: int = 0,
+    provenance_refs: tuple[str, ...] = (),
+) -> PackSection:
+    source_tokens = approximate_tokens(text)
+    return PackSection(
+        id=identifier,
+        text_ref=f"inline:{text}",
+        priority=priority,
+        min_tokens=min(source_tokens, min_tokens),
+        max_tokens=source_tokens,
+        droppable=droppable,
+        compressible=compressible,
+        cache_group=identifier,
+        provenance_refs=provenance_refs,
+    )
+
+
+def _allocate_sections(
+    role: str, token_budget: int, sections: list[PackSection]
+) -> str:
+    """Render one finite PackIR without ever clipping the aggregate prefix."""
+    result = allocate_pack(
+        PackIR(
+            profile=f"legacy.{role}.pack-ir.v1",
+            template_role=role,
+            target_tokens=token_budget,
+            sections=tuple(sections),
+        )
+    )
+    return AllocatedPack(result.text)
+
+
 def _document_excerpt(text: str, char_budget: int) -> str:
     """Budget a long target without making its tail look deleted.
 
@@ -250,24 +295,58 @@ def render_conj_pack(
     candidate k must realize spec k (llm/specs.py). neighbourhood_n caps
     the exemplar section (0 = blind generation — the basin study's
     conditioning-vs-repertoire manipulation); presentation only."""
-    lines = [
-        f"PROBLEM {problem.id}",
-        problem.description,
-        "",
-        "CRITERIA (commitments every candidate will carry and face):",
+    sections = [
+        _pack_section(
+            "problem",
+            f"PROBLEM {problem.id}\n{problem.description}",
+            1,
+            droppable=False,
+            compressible=False,
+            provenance_refs=(problem.id,),
+        )
     ]
+    criteria = ["CRITERIA (commitments every candidate will carry and face):"]
     for cid in problem.criteria:
         kappa = commitments.get(cid)
-        lines.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
+        criteria.append(f"- {cid}: {kappa.eval if kappa else '(schema pending)'}")
+    sections.append(
+        _pack_section(
+            "criteria",
+            "\n".join(criteria),
+            2,
+            droppable=False,
+            compressible=False,
+            provenance_refs=tuple(problem.criteria),
+        )
+    )
     # FOUNDATION before the volatile sections: frozen into the lineage
     # commitment's id, hence static per problem (cache-prefix, angle 4).
-    lines += _lineage_foundation(problem, state, commitments, blobs)
+    foundation = _lineage_foundation(problem, state, commitments, blobs)
+    if foundation:
+        sections.append(
+            _pack_section(
+                "mandatory-interface",
+                "\n".join(foundation).strip(),
+                3,
+                droppable=False,
+                compressible=False,
+                provenance_refs=tuple(problem.criteria),
+            )
+        )
     claims = _active_property_claims(state, blobs, problem.criteria)
     if claims:
-        lines += ["", "ACTIVE PROPERTIES (conjectured standards the run has "
-                      "validated — candidates violating them are refuted by "
-                      "execution):"]
-        lines += [f"- {c[:200]}" for c in claims]
+        sections.append(
+            _pack_section(
+                "active-properties",
+                "ACTIVE PROPERTIES (conjectured standards the run has "
+                "validated — candidates violating them are refuted by "
+                "execution):\n" + "\n".join(f"- {c[:200]}" for c in claims),
+                4,
+                droppable=True,
+                compressible=True,
+                min_tokens=24,
+            )
+        )
     accepted = [aid for aid, status in state.status.items() if status == Status.ACCEPTED]
     if school is not None:
         lineage = [
@@ -281,37 +360,88 @@ def render_conj_pack(
     # Stance before neighbourhood: the stance text is stable per school while
     # the neighbourhood changes every cycle — cache-prefix ordering (angle 4).
     if school is not None and school.get("weight", 0) > 0:
-        lines += ["", f"SCHOOL STANCE (weight {school['weight']:.2f}): {school['stance_text']}"]
+        sections.append(
+            _pack_section(
+                "school-stance",
+                f"SCHOOL STANCE (weight {school['weight']:.2f}): "
+                f"{school['stance_text']}",
+                5,
+                droppable=False,
+                compressible=True,
+                min_tokens=24,
+            )
+        )
     if accepted:
-        lines += ["", "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"]
+        neighbourhood = [
+            "NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):"
+        ]
         for aid in accepted:
-            lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+            neighbourhood.append(f"- {aid}: {_head(state, aid, blobs)}")
+        sections.append(
+            _pack_section(
+                "neighbourhood",
+                "\n".join(neighbourhood),
+                8,
+                droppable=True,
+                compressible=True,
+                min_tokens=32,
+                provenance_refs=tuple(accepted),
+            )
+        )
     crossover = (school or {}).get("crossover") if school else None
     if crossover:
-        lines += [
-            "",
+        crossover_lines = [
             "CROSSOVER (a divergent lineage from the most distant school — "
             "your school just reseeded on convergence; reconcile or bridge "
             "these, do NOT echo your own lineage):",
         ]
         for aid in crossover:
             if aid in state.artifacts:
-                lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+                crossover_lines.append(f"- {aid}: {_head(state, aid, blobs)}")
+        sections.append(
+            _pack_section(
+                "crossover",
+                "\n".join(crossover_lines),
+                9,
+                droppable=True,
+                compressible=True,
+                min_tokens=24,
+                provenance_refs=tuple(crossover),
+            )
+        )
     if complement:
-        lines += [
-            "",
-            "COMPLEMENT DIRECTIVE: produce the attempt these summaries make "
-            "least likely — avoid the modal continuation of the neighbourhood.",
-        ]
+        sections.append(
+            _pack_section(
+                "complement-directive",
+                "COMPLEMENT DIRECTIVE: produce the attempt these summaries make "
+                "least likely — avoid the modal continuation of the neighbourhood.",
+                10,
+                droppable=False,
+                compressible=False,
+            )
+        )
     if specs:
-        lines += ["", "DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):"]
-        lines += [f"  spec {i + 1}: {s}" for i, s in enumerate(specs)]
-    lines += [
-        "",
-        f"DIRECTIVE: return exactly {vs_k} diverse candidates with typicality "
-        "estimates. Include atypical candidates, not just the modal answer.",
-    ]
-    return _clip("\n".join(lines), token_budget)
+        sections.append(
+            _pack_section(
+                "diversity-specifications",
+                "DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):\n"
+                + "\n".join(f"  spec {i + 1}: {s}" for i, s in enumerate(specs)),
+                11,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    sections.append(
+        _pack_section(
+            "output-contract",
+            f"DIRECTIVE: return exactly {vs_k} diverse candidates with typicality "
+            "estimates. Include atypical candidates, not just the modal answer.",
+            12,
+            droppable=False,
+            compressible=False,
+        )
+    )
+    return _allocate_sections("conjecturer", token_budget, sections)
 
 
 def render_batch_crit_pack(
@@ -557,36 +687,114 @@ def render_crit_pack(
     # each interface list, so sibling targets share this section verbatim
     # and the cacheable prefix runs through it.
     context_limit = 900 if token_budget <= 1200 else 1500
-    lines = _problem_context(
+    problem_context = _problem_context(
         state, [target_id], description_limit=context_limit
     )
-    lines += ["TARGET COMMITMENTS (the target's declared attack surface):"]
+    commitments_lines = [
+        "TARGET COMMITMENTS (the target's declared attack surface):"
+    ]
     for cid in target.interface.commitments:
         kappa = commitments.get(cid)
-        lines.append(f"- {cid}: {kappa.eval if kappa else '(unregistered)'}")
+        commitments_lines.append(
+            f"- {cid}: {kappa.eval if kappa else '(unregistered)'}"
+        )
         if kappa is not None:
-            lines += _execution_spec_lines(kappa)
-    lines += ["", _MACHINE_EVAL_NOTE]
-    suffix: list[str] = []
+            commitments_lines += _execution_spec_lines(kappa)
+    sections: list[PackSection] = []
+    if problem_context:
+        sections.append(
+            _pack_section(
+                "problem-context",
+                "\n".join(problem_context).strip(),
+                1,
+                droppable=False,
+                compressible=True,
+                min_tokens=64,
+            )
+        )
+    sections.extend(
+        [
+            _pack_section(
+                "target-commitments",
+                "\n".join(commitments_lines),
+                2,
+                droppable=False,
+                compressible=False,
+                provenance_refs=tuple(target.interface.commitments),
+            ),
+            _pack_section(
+                "machine-evaluation-boundary",
+                _MACHINE_EVAL_NOTE,
+                3,
+                droppable=False,
+                compressible=False,
+            ),
+        ]
+    )
+    optional_suffix: list[str] = []
     attackers = [x for x, t in sorted(state.att) if t == target_id][:ATTACKERS_N]
     if attackers:
-        suffix += ["", "STANDING ATTACKS (do not repeat these):"]
+        optional_suffix.append("STANDING ATTACKS (do not repeat these):")
         for x in attackers:
             status = state.status.get(x)
-            suffix.append(
+            optional_suffix.append(
                 f"- {x} [{status.value if status else '?'}]: "
                 f"{_head(state, x, blobs)}"
             )
-    if _carries_execution_oracle(target, commitments):
-        suffix += ["", _COUNTEREXAMPLE_NOTE]
-    suffix += [
-        "",
+        sections.append(
+            _pack_section(
+                "standing-attacks",
+                "\n".join(optional_suffix),
+                5,
+                droppable=True,
+                compressible=True,
+                min_tokens=24,
+                provenance_refs=tuple(attackers),
+            )
+        )
+    counterexample_note = (
+        _COUNTEREXAMPLE_NOTE
+        if _carries_execution_oracle(target, commitments)
+        else ""
+    )
+    directive = (
         "DIRECTIVE: mount the strongest NEW specific case against the target, "
-        "or attack=false if you find no genuine fault.",
-    ]
-    target_header = ["", f"TARGET {target_id}"]
+        "or attack=false if you find no genuine fault."
+    )
     total_chars = token_budget * _CHARS_PER_TOKEN
-    overhead = len("\n".join(lines + target_header + suffix)) + 2
+    overhead = sum(
+        len(section.text_ref.removeprefix("inline:")) + len(section.id) + 6
+        for section in sections
+    ) + len(counterexample_note) + len(directive) + len(target_id) + 32
     target_budget = max(256, total_chars - overhead)
     target_text = _document_excerpt(content_text(target, blobs), target_budget)
-    return _clip("\n".join(lines + target_header + [target_text] + suffix), token_budget)
+    sections.append(
+        _pack_section(
+            "target",
+            f"TARGET {target_id}\n{target_text}",
+            4,
+            droppable=False,
+            compressible=False,
+            provenance_refs=(target_id,),
+        )
+    )
+    if counterexample_note:
+        sections.append(
+            _pack_section(
+                "counterexample-recourse",
+                counterexample_note,
+                6,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    sections.append(
+        _pack_section(
+            "output-contract",
+            directive,
+            7,
+            droppable=False,
+            compressible=False,
+        )
+    )
+    return _allocate_sections("argumentative-critic", token_budget, sections)

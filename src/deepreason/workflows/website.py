@@ -1215,8 +1215,20 @@ class WebsiteWorkflow:
             workload_profile="website",
             problem_family=problem.id,
             contract_id="website.design.compact.v1",
-            mandatory_refs=mandatory.refs,
-            component_spec=content,
+            mandatory_refs=mandatory.domain_refs(),
+            # Scope from frozen input-side identity, never from generator
+            # output.  Different candidates for the same design problem must
+            # face the same negative-case-law domain.
+            component_spec=json.dumps(
+                {
+                    "problem": problem.id,
+                    "description": problem.description,
+                    "criteria": list(problem.criteria),
+                    "plan": self.plan_id,
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
         )
         admitted, reason = anti_relapse.check(
             artifact,

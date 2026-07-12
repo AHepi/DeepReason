@@ -10,6 +10,7 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 """
 
 from collections.abc import Iterable
+import json
 
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
@@ -24,6 +25,7 @@ from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
+from deepreason.workloads.models import MandatoryInterface, MandatoryRef
 
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 # Reflexive theory-building work: problems ABOUT the run's own artifacts
@@ -100,9 +102,72 @@ def problem_family(state, root_pid: str) -> set[str]:
     return family
 
 
+def problem_family_key(state, problem_id: str) -> str:
+    """Return the stable provenance-root identity of a problem family.
+
+    Successor problem ids are fresh attention objects.  Using them directly
+    as anti-relapse domains lets a refuted approach re-enter unchanged on its
+    next successor.  This walk follows problem and addressed-artifact
+    provenance back to independently seeded roots without changing ontology.
+    """
+    addressed: dict[str, set[str]] = {}
+    for artifact_id, pid in state.addr:
+        addressed.setdefault(artifact_id, set()).add(pid)
+
+    def roots(pid: str, visiting: frozenset[str]) -> set[str]:
+        if pid in visiting or pid not in state.problems:
+            return {pid}
+        problem = state.problems[pid]
+        parents: set[str] = set()
+        for source in problem.provenance.from_:
+            if source in state.problems:
+                parents.add(source)
+            else:
+                parents.update(addressed.get(source, ()))
+        if not parents:
+            return {pid}
+        found: set[str] = set()
+        for parent in sorted(parents):
+            found.update(roots(parent, visiting | {pid}))
+        return found or {pid}
+
+    return "|".join(sorted(roots(problem_id, frozenset())))
+
+
+def lineage_endpoints(problem, commitments, state) -> tuple[str, ...]:
+    """Registered endpoints frozen by structural lineage commitments."""
+    endpoints: list[str] = []
+    for commitment_id in problem.criteria:
+        commitment = commitments.get(commitment_id)
+        if commitment is None or commitment.eval != "program:lineage_ref":
+            continue
+        for endpoint in str(
+            commitment.budget.extra.get("endpoints", "")
+        ).split(","):
+            if endpoint in state.artifacts and endpoint not in endpoints:
+                endpoints.append(endpoint)
+    return tuple(endpoints)
+
+
+def stable_component_spec(problem, endpoints: tuple[str, ...]) -> str:
+    """Frozen input-side component identity; never candidate output bytes."""
+    return json.dumps(
+        {
+            "problem": problem.id,
+            "description": problem.description,
+            "criteria": list(problem.criteria),
+            "lineage_endpoints": list(endpoints),
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
 class Scheduler:
     def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
-                 controller=None, browser_backend=None) -> None:
+                 controller=None, browser_backend=None,
+                 workload_profile: str | None = None, stop_controller=None,
+                 progress_sink=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
@@ -129,6 +194,15 @@ class Scheduler:
         # fixed knobs (legacy). It reads process signals and tunes generator
         # caps; it cannot touch a status (§0 preserved structurally).
         self.controller = controller
+        # None preserves the pre-workload behavior for direct legacy callers.
+        # Shared production operations always set an explicit profile before
+        # run(), while reasoning-envelope problems self-identify inside Conj.
+        self.workload_profile = workload_profile
+        # Operational completion is optional and evaluated only after a full
+        # cycle.  Neither collaborator participates in adjudication.
+        self.stop_controller = stop_controller
+        self.progress_sink = progress_sink
+        self.last_stop_decision = None
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
@@ -526,11 +600,39 @@ class Scheduler:
                     )
                     admitted = [relation] if relation else []
                 else:
+                    endpoints = lineage_endpoints(
+                        problem, harness.commitments, harness.state
+                    )
+                    mandatory = MandatoryInterface(
+                        refs=tuple(
+                            MandatoryRef(target=endpoint, role="dependence")
+                            for endpoint in endpoints
+                        ) if self.workload_profile is not None else ()
+                    )
+                    component_spec = (
+                        stable_component_spec(problem, endpoints)
+                        if self.workload_profile in {"code", "website"}
+                        else None
+                    )
+                    theorem_interface = (
+                        stable_component_spec(problem, endpoints)
+                        if self.workload_profile == "formal"
+                        else None
+                    )
                     admitted = conj(
                         harness, problem.id, self.adapter, config, self.diagnostics,
                         school=school, tail_weighted=self.tail_weighted,
                         complement=self.complement, specs=specs,
                         embedder=self.embedder,
+                        mandatory_interface=mandatory,
+                        workload_profile=self.workload_profile,
+                        contract_id=(
+                            f"scheduler.conjecturer.{self.workload_profile}.v1"
+                            if self.workload_profile is not None
+                            else "conjecturer.direct.v1"
+                        ),
+                        component_spec=component_spec,
+                        theorem_interface=theorem_interface,
                     )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
@@ -894,6 +996,120 @@ class Scheduler:
 
     # -------------------------------------------------------------- #
 
+    def _stop_snapshot(self) -> dict:
+        report = self.report()
+        state = self.harness.state
+        accepted = {
+            artifact_id
+            for artifact_id, _ in state.addr
+            if state.status.get(artifact_id) == Status.ACCEPTED
+        }
+        return {
+            "frontier": frozenset(report["frontier"]),
+            "statuses": dict(state.status),
+            "problems": frozenset(state.problems),
+            "admissions": frozenset(accepted),
+        }
+
+    def _stop_metrics(self, before: dict, diagnostic_start: int):
+        """Compile process-only convergence inputs at a safe cycle boundary."""
+        from deepreason.ops import open_research_problems
+        from deepreason.runtime.stop import StopMetrics
+
+        after = self._stop_snapshot()
+        status_ids = set(before["statuses"]) | set(after["statuses"])
+        status_churn = sum(
+            before["statuses"].get(artifact_id)
+            != after["statuses"].get(artifact_id)
+            for artifact_id in status_ids
+        )
+        recent_diagnostics = self.diagnostics[diagnostic_start:]
+        stuck_signal = any(
+            item.get("search_signal") == "stuck"
+            for item in recent_diagnostics
+        )
+        gate_orbit = any(
+            str(item.get("gate", "")).startswith(("battery-equivalent", "hash:"))
+            for item in recent_diagnostics
+        )
+        repair_exhausted = any(
+            "schema" in str(item.get("dropped", "")).casefold()
+            or "repair" in str(item.get("dropped", "")).casefold()
+            for item in recent_diagnostics
+        )
+        debt = detection.adjudicator_metrics(
+            self.harness, self.config.CAPTURE_W
+        )["criticism_debt"]
+        metrics = StopMetrics(
+            cycle=self._cycles,
+            frontier_delta=len(before["frontier"] ^ after["frontier"]),
+            status_churn=status_churn,
+            new_problems=len(after["problems"] - before["problems"]),
+            new_admissions=len(after["admissions"] - before["admissions"]),
+            # Deterministic checks run synchronously in _criticize before this
+            # boundary; no hidden worker queue exists in this scheduler.
+            pending_deterministic_checks=0,
+            criticism_debt=debt,
+            open_research=len(open_research_problems(self.harness)),
+            stuck_signal=stuck_signal,
+            gate_orbit=gate_orbit,
+            repair_exhausted=repair_exhausted,
+        )
+        return metrics, after
+
+    def _emit_progress(self, metrics, decision) -> None:
+        if self.progress_sink is None:
+            return
+        state = self.harness.state
+        counts = {"accepted": 0, "refuted": 0, "suspended": 0}
+        for status in state.status.values():
+            if status == Status.ACCEPTED:
+                counts["accepted"] += 1
+            elif status == Status.REFUTED:
+                counts["refuted"] += 1
+            else:
+                counts["suspended"] += 1
+        stopped = decision is not None and decision.stop
+        self.progress_sink.emit(
+            state="completed" if stopped else "running",
+            phase="convergence",
+            activity=(
+                f"stop: {decision.reason}"
+                if stopped
+                else (
+                    f"escape: {decision.escape_action}"
+                    if decision is not None and decision.escape_action
+                    else "cycle evaluated"
+                )
+            ),
+            cycle=metrics.cycle,
+            frontier_size=len(self.report()["frontier"]),
+            accepted=counts["accepted"],
+            refuted=counts["refuted"],
+            suspended=counts["suspended"],
+            queued_checks=metrics.pending_deterministic_checks,
+            determinate=False,
+            stop_reason=decision.reason if stopped else None,
+        )
+
+    def _record_stop(self, decision, metrics) -> None:
+        from deepreason.runtime.stop import write_stop_record
+
+        self.harness.record_measure(
+            inputs=[
+                "scheduler-stop",
+                str(decision.reason),
+                self.stop_controller.policy.digest,
+            ]
+        )
+        write_stop_record(
+            self.harness.root,
+            reason=decision.reason,
+            policy=self.stop_controller.policy,
+            metrics=metrics,
+            event_seq=max(0, self.harness._next_seq - 1),
+        )
+
     def run(self, cycles: int, on_cycle=None) -> dict:
         """on_cycle(self) fires after every completed cycle — a read-only
         progress hook (easy.make's friendly ticker); it must not register.
@@ -902,11 +1118,33 @@ class Scheduler:
         wipe the attention caches)."""
         from deepreason.llm.budget import TokenBudgetExceeded
 
+        stop_snapshot = (
+            self._stop_snapshot() if self.stop_controller is not None else None
+        )
         for _ in range(cycles):
             try:
+                diagnostic_start = len(self.diagnostics)
                 self.step()
                 if on_cycle is not None and on_cycle(self):
                     break
+                if self.stop_controller is not None and stop_snapshot is not None:
+                    metrics, stop_snapshot = self._stop_metrics(
+                        stop_snapshot, diagnostic_start
+                    )
+                    decision = self.stop_controller.evaluate(metrics)
+                    self.last_stop_decision = decision
+                    if decision.escape_action:
+                        self.harness.record_measure(
+                            inputs=[
+                                "stop-escape",
+                                decision.escape_action,
+                                str(metrics.cycle),
+                            ]
+                        )
+                    self._emit_progress(metrics, decision)
+                    if decision.stop:
+                        self._record_stop(decision, metrics)
+                        break
             except RouteFirewallError as e:
                 # A leased route changing during a run is a fail-closed
                 # security/configuration error, not an ordinary model or
@@ -927,7 +1165,10 @@ class Scheduler:
                     self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
                 break
-        return self.report()
+        report = self.report()
+        if self.last_stop_decision is not None and self.last_stop_decision.stop:
+            report["stop_reason"] = self.last_stop_decision.reason
+        return report
 
     def report(self) -> dict:
         """Pareto retention (§11.7): focus/reporting keeps the frontier over

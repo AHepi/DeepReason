@@ -133,6 +133,12 @@ SIGNALS: dict[str, str] = {
                         "variator edits cannot fit a completion window "
                         "(inputs: [signal, artifact id, char count])",
     "spec-generation": "diversity-specification call for the cycle's problem",
+    "stop-escape": "convergence policy selected one bounded escape-ladder "
+                   "action at a completed cycle boundary (inputs: [signal, "
+                   "action, cycle]); attention only",
+    "scheduler-stop": "the deterministic stop policy ended scheduling at a "
+                      "completed cycle boundary (inputs: [signal, reason, "
+                      "policy digest]); no epistemic status is changed",
     # Research service (§12; research/backends.py, ops.py)
     "research-off": "research is deliberately DISABLED (RESEARCH_BACKEND: "
                     "null) while uncovered research problems exist — logged "

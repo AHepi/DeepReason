@@ -4,7 +4,6 @@ Workload models are process metadata around ordinary artifacts. They never add
 ontology types or set status.
 """
 
-from deepreason.workloads.models import MandatoryInterface, compile_interface
 from deepreason.workloads.formal import (
     FormalClaim,
     FormalizationRelation,
@@ -13,6 +12,7 @@ from deepreason.workloads.formal import (
     PinnedLeanRequest,
     register_formal_workflow,
 )
+from deepreason.workloads.models import MandatoryInterface, MandatoryRef, compile_interface
 from deepreason.workloads.registry import WORKLOADS, WorkloadRegistry
 from deepreason.workloads.text import TEXT_WORKLOAD
 from deepreason.workloads.website import WEBSITE_WORKLOAD
@@ -25,6 +25,7 @@ for _adapter in (TEXT_WORKLOAD, WEBSITE_WORKLOAD):
 
 __all__ = [
     "MandatoryInterface",
+    "MandatoryRef",
     "FormalClaim",
     "FormalizationRelation",
     "FormalMismatchTest",
