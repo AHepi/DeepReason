@@ -1,0 +1,74 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-comp-c1) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Build ONE component of a larger website: c1 — Header and introductory workshop branding. Requirements: Workshop branding title; Introductory heading; Visual anchor for the DNA theme
+
+The website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be ONE self-contained HTML FRAGMENT — never
+a full document (no <!doctype>, <html>, <head> or <body> tags) — that
+implements just this component, faithful to the design in FOUNDATION.
+
+The component's contract (machine-checked):
+- Root element with id="header-root"; any extra ids must be
+  header-root-* (namespaces prevent collisions at ass
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- component-wf@c4dbc81887c9: program:component_wf
+- lineage-ref@2756970c52af: program:lineage_ref
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+<div id="header-root">
+  <style>
+    #header-root { background: #0A0A12; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-family: 'Montserrat', sans-serif; }
+    .c1-workshop { color: #FF00E5; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 4px; }
+    .c1-main-h { font-size: clamp(3rem, 8vw, 6rem); color: #00F2FF; text-align: center; margin: 20px 0; }
+    #header-root-canvas { width: 300px; height: 300px; }
+  </style>
+  <div class="c1-workshop">WORKSHOP // DNA_WONDERS</div>
+  <h1 class="c1-main-h">DECODING THE SPIRAL</h1>
+  <canvas id="header-root-canvas"></canvas>
+  <script>
+    let rafId;
+    window.c1_mount = () => {
+      c1_initializeHeaderAnimation();
+    };
+    window.c1_destroy = () => {
+      cancelAnimationFrame(rafId);
+    };
+    window.c1_initializeHeaderAnimation = () => {
+      const canvas = document.getElementById('header-root-canvas');
+      if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const ctx = canvas.getContext('2d');
+      let angle = 0;
+      const render = () => {
+        ctx.clearRect(0,0,300,300);
+        ctx.strokeStyle = '#00F2FF';
+        ctx.beginPath();
+        ctx.arc(150, 150, 80, angle, angle + Math.PI);
+        ctx.stroke();
+        angle += 0.05;
+        rafId = requestAnimationFrame(render);
+      };
+      render();
+    };
+  </script>
+</div>
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

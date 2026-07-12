@@ -1,0 +1,16 @@
+```json
+{
+  "palette": "Deep space obsidian (#0A0A12) background; Neon Cyan (#00F2FF) and Electric Magenta (#FF00E5) for complementary base pairs; Bioluminescent Lime (#BFFF00) for enzymes; Frosted Glass white (#FFFFFF1A) for UI overlays.",
+  "typography": "Headings: Geometric Sans-Serif (e.g., Montserrat) with wide tracking; Body: High-legibility Mono (e.g., JetBrains Mono) for a technical, sequenced feel; Accent: Italicized Serif for scientific annotations.",
+  "spacing_strategy": "Modular 8px grid; expansive whitespace between conceptual sections (120px+); tight, precision-based padding (16px) within tool-workbench modules to evoke a lab instrument aesthetic.",
+  "responsive_strategy": "Fluid scale; workbench tools stack vertically on mobile; interactive DNA strands shift from horizontal scrolls to vertical reels; zoom-in interactions transition from hover-magnification to full-screen modal views.",
+  "interaction_state_model": "Default: Subtle pulsing glow on interactive nodes; Hover: High-contrast highlight with scale-up (1.05x); Active: Haptic-style snap-in animation with color flash; Disabled: Desaturated grayscale with 50% opacity.",
+  "motion_language": "Organic fluid dynamics for molecular movement; elastic snapping for nucleotide pairing; smooth, decelerating eases (cubic-bezier 0.22, 1, 0.36, 1) for enzyme traversal; parallax-driven depth layers.",
+  "scroll_narrative": "Linear progression from macroscopic helix to microscopic base-pairs; scroll-triggered 'unzipping' of the DNA strand as the user descends; sticky-positioning for the Glossary as the user navigates the workbench.",
+  "depth_structure": "Z-axis layering: Background (Deep Space) -> Midground (Parallax DNA strands) -> Foreground (Glassmorphic UI panels) -> Top-layer (Active tooltips and drag-and-drop elements).",
+  "transition_grammar": "Cross-fades for state changes; slide-and-fade for instructional panels; orbit-based rotations for the 3D helix elements; seamless morphing between DNA and mRNA visualization states.",
+  "texture_language": "Micro-grain noise for organic depth; subtle Gaussian blur on background 'bokeh' nucleotides; sharp, vector-perfect lines for chemical bonds; semi-transparent frosted glass with 10px backdrop-filter.",
+  "reduced_motion_version": "All parallax and fluid animations replaced by instant state transitions; 'Simulation' button switches to a manual 'Next/Prev' frame toggle; pulsing glows replaced by static high-contrast borders.",
+  "static_fallback": "Flat layout with fixed-position workbench; simulations replaced by a series of labeled static diagrams (Before/After); interaction-based reveals replaced by expanded accordion panels."
+}
+```

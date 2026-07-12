@@ -1,0 +1,47 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+# Product Plan: DNA Odyssey (Experimental/Abstract Focus)
+
+## Scope
+An abstract, art-gallery style page where DNA is represented by generative patterns and fluid shapes rather than literal diagrams.
+
+## Feature List
+- **Fluid-Motion Background**: An SVG filter-based 'liquid' background that reacts to mouse movement.
+- **Abstract Process Mapping**: Replication is visualized as a cell splitting into two glowing orbs.
+- **Typography-as-Art**: Large, overlapping sans-serif fonts that shift perspective based on scroll position.
+- **Motion Safety**: Implementation of a global `no-motion` class triggered by `window.matchMedia('(prefers-reduced-motion: reduce)')`.
+
+## Key Interactions
+- **The 'Unwind' Scroll**: Scrolling 'unwinds' a spiral of text that forms the DNA sequence.
+- **Color Shift**: The background shifts from deep violet to neon cyan as the user moves from DNA to RNA sections.
+- **Organic Transitions**: Elements emerge from the center using scale and opacity transforms.
+
+## Content Inventory
+- **Opening Statement**: "Complexity. Symmetry. Life."
+- **Concept 1: The Code**: "Four letters. Infinite possibilities. A, T, C, G."
+- **Concept 2: The Copy**: "Replication is the act of biological immortality. One becomes two, perfectly mirrored."
+- **Concept 3: The Message**: "Transcription is the translation of a hidden script into a visible action."
+- **Closing Thought**: "We are the read-out of a four-billion-year-old program."
+
+## Acceptance Criteria
+1. Single-file HTML format.
+2. The background responds to mouse coordinates via CSS variables.
+3. All animations are suppressed when `prefers-reduced-motion` is active.
+4. The visual transition between DNA and RNA is distinct and color-coded.
+5. All abstract text elements are accessible to screen readers.
+
+BATTERY THE EDITS WILL FACE:
+- predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+DIRECTIVE: produce exactly 8 bounded edits.

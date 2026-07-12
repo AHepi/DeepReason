@@ -1,0 +1,23 @@
+```json
+{
+  "alias": "C1",
+  "content_requirements": [
+    "Workshop branding title",
+    "Introductory heading",
+    "Visual anchor for the DNA theme"
+  ],
+  "depends_on": [],
+  "exports": [
+    "initializeHeaderAnimation"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "header-root",
+    "header-title",
+    "header-branding-logo"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

@@ -1,0 +1,30 @@
+```json
+{
+  "components": [
+    {
+      "alias": "C1",
+      "purpose": "Header and introductory workshop branding."
+    },
+    {
+      "alias": "C2",
+      "purpose": "Interactive Sequence Builder for nucleotide base pairing."
+    },
+    {
+      "alias": "C3",
+      "purpose": "Step-through Process Simulator for RNA polymerase motion."
+    },
+    {
+      "alias": "C4",
+      "purpose": "Side-by-side DNA and mRNA Comparison View."
+    },
+    {
+      "alias": "C5",
+      "purpose": "High-detail Zoom-In viewer for hydrogen bonding."
+    },
+    {
+      "alias": "C6",
+      "purpose": "Educational Glossary for key genomic terminology."
+    }
+  ]
+}
+```

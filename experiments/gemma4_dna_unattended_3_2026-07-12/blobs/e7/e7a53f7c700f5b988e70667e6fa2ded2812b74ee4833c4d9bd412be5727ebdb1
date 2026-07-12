@@ -1,0 +1,24 @@
+```json
+{
+  "alias": "C6",
+  "content_requirements": [
+    "Genomic terminology definitions",
+    "Cross-references to molecular processes",
+    "Search or filter functionality for terms"
+  ],
+  "depends_on": [],
+  "exports": [
+    "highlightTerm",
+    "filterGlossary"
+  ],
+  "motion_requirement": "limited",
+  "owned_dom_ids": [
+    "glossary-root",
+    "glossary-search-input",
+    "glossary-term-list"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

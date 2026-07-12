@@ -1,0 +1,26 @@
+```json
+{
+  "alias": "C2",
+  "content_requirements": [
+    "Nucleotide base pairing logic (A-T, C-G)",
+    "Interactive drag-and-drop or selection interface",
+    "Visual feedback for correct/incorrect pairings",
+    "Sequence input/output display"
+  ],
+  "depends_on": [],
+  "exports": [
+    "validateSequence",
+    "resetBuilder"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "sequence-builder-root",
+    "nucleotide-palette",
+    "pairing-workbench",
+    "sequence-feedback-panel"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

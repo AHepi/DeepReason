@@ -1,0 +1,75 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+PROBLEM pi-comp-c1
+Build ONE component of a larger website: c1 — Header and introductory workshop branding. Requirements: Workshop branding title; Introductory heading; Visual anchor for the DNA theme
+
+The website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be ONE self-contained HTML FRAGMENT — never
+a full document (no <!doctype>, <html>, <head> or <body> tags) — that
+implements just this component, faithful to the design in FOUNDATION.
+
+The component's contract (machine-checked):
+- Root element with id="header-root"; any extra ids must be
+  header-root-* (namespaces prevent collisions at assembly).
+- Custom CSS in <style> scoped to #header-root or .c1-* classes
+  ONLY. The assembled page already ships base styles (baseline only) — do NOT
+  re-derive resets, fonts, generic buttons/forms, or page-level layout.
+  Custom CSS is for THIS component's design-specific look.
+- JavaScript in <script>: define exactly these window exports: c1_initializeHeaderAnimation, c1_mount, c1_destroy.
+  You may call other components' exports: none. Custom events you may
+  emit: none; custom events you may listen for: none.
+- Approved project aliases: none. Access them only through
+  DeepReasonImports.<alias>; direct imports, require(), CDNs and network
+  fetching are forbidden. The bounded verified API capsules are:
+  none
+- Import lineage refs required in the candidate interface: none.
+- Animated code must implement the declared initializer/cleanup lifecycle,
+  release listeners/observers/timelines/canvases/RAF callbacks, respect
+  prefers-reduced-motion, and preserve the static fallback. JavaScript must
+  explicitly query window.matchMedia('(prefers-reduced-motion: reduce)') and
+  choose the static path when it matches; a manual motion toggle alone does
+  not implement the operating-system preference.
+  Lifecycle contract: {"animated":true,"initializer":"c1_mount","cleanup":"c1_destroy","frame_loop_owner":"component","webgl_canvas_id":null,"pixel_ratio_cap":null,"context_loss":null,"static_fallback":"Flat layout with fixed-position workbench; simulations replaced by a series of labeled static diagrams (Before/After); interaction-based reveals replaced by expanded accordion panels."}.
+- HARD SIZE BOUND: at most 4000 characters total.
+
+Keep the fragment semantic and minimal; repository code assembles all
+components in declared order into the final page.
+
+SCOPE (binding for candidates and critics alike): this is a small,
+self-contained, client-only website delivered as ONE local HTML file — no
+server, no accounts, no analytics, and no data leaving the browser. A FAULT
+is a missing or wrong element that would make the finished website fail its
+stated purpose for its user. Proposals to ADD scope (compliance programs,
+integrations, infrastructure, enterprise concerns) are design choices, not
+faults.
+
+CRITERIA (commitments every candidate will carry and face):
+- component-wf@c4dbc81887c9: program:component_wf
+- lineage-ref@2756970c52af: program:lineage_ref
+
+FOUNDATION (adjudicated groundwork this problem builds on — your candidate MUST implement it faithfully):
+--- foundation artifact A1 ---
+# Design specification
+
+This single-document website follows the adjudicated product plan. The harness assigned component identifiers and integration order; the following model-authored local values remain criticizable.
+
+## Required-design synopsis
+- Layout: one responsive scrolling page in order C1 → C2 → C3 → C4 → C5 → C6.
+- Visual system: palette Deep space obsidian (#0A0A12) background; Neon Cyan (#00F2FF) and Electric Magenta (#FF00E5) for complementary base pair; typography Headings: Geometric Sans-Serif (e.g., Montserrat) with wide tracking; Body: High-legibility Mono (e.g., JetBrains Mono) ; spacing Modular 8px grid; expansive whitespace between conceptual sections (120px+); tight, precision-based padding (16px) withi.
+- Components: C1 Header and introductory workshop branding.; C2 Interactive Sequence Builder for nucleotide base pairing.; C3 Step-through Process Simulator for RNA polymerase motion.; C4 Side-by-side DNA and mRNA Comparison View.; C5 High-detail Zoom-In viewer for hydrogen bonding.; C6 Educational Glossary for key genomic terminology..
+- Interaction and state: Default: Subtle pulsing glow on interactive nodes; Hover: High-contrast highlight with scale-up (1.05x); Active: Haptic-style snap-in animation with color flash; Disabled: Desaturated grayscale w

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{},"steps":100000,"time_ms":2000},"eval":"predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]","id":"plan-doc@e5c72fde8cc0","observation_valued":false},"id":"plan-doc@e5c72fde8cc0","schema":"commitment"}

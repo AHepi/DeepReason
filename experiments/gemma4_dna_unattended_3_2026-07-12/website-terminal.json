@@ -1,0 +1,19 @@
+{
+  "checkpoint_ref": "/workspace/scratch/73809fe08518/DeepReason-gemma-fixed/runs/gemma4-dna-unattended-3/website-checkpoint.json",
+  "compact_calls": 30,
+  "critic_refutations": 4,
+  "diagnostics": [
+    {
+      "code": "NO_COMPONENT_SURVIVOR",
+      "component": "c2",
+      "path": "/components/c2"
+    }
+  ],
+  "direct_calls": 0,
+  "failed_stage": "COMPONENT_BUILD",
+  "last_valid_intermediate": "c6",
+  "manifest_sha256": "ff87020d28a19d1d05ee1d8c6d8a108daff9b6bccba08d4b1f6ef3ea83951418",
+  "manifest_wf_failures_by_code": {},
+  "resume_command": "deepreason --root /workspace/scratch/73809fe08518/DeepReason-gemma-fixed/runs/gemma4-dna-unattended-3 make 'Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.' --out /workspace/scratch/73809fe08518/DeepReason-gemma-fixed/runs/gemma4-dna-unattended-3/site --cycles 14 --run-manifest /workspace/scratch/73809fe08518/DeepReason-gemma-fixed/runs/gemma4-dna-unattended-3/run-manifest.json --token-budget 0",
+  "schema_failures_by_path": {}
+}

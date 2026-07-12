@@ -1,0 +1,69 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-design) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Produce a DESIGN SPECIFICATION for this website:
+Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+It must implement the plan shown in FOUNDATION faithfully — deviations from
+the plan are criticism bait. Each candidate's `content` MUST be one design
+document in plain prose or markdown—not implementation HTML, JavaScript, or
+CSS—with one exception: the chunked workflow's explicitly required fenced
+COMPONENT MANIFEST is allowed as structured design metadata. Cover layout per
+page, visual direction (palette, typography, spacing), component inventory,
+interaction and state behavior, and the responsive strategy. Diffe
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- design-doc@217f1c095a03: predicate:len(content) > 600 and 'doctype' not in content.lower()[:200]
+- manifest-wf@5a2676bd79ba: program:manifest_wf
+- lineage-ref@35ffa0b66afe: program:lineage_ref
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Design specification
+
+This single-document website follows the adjudicated product plan. The harness assigned component identifiers and integration order; the following model-authored local values remain criticizable.
+
+## Required-design synopsis
+- Layout: one responsive scrolling page in order C1 → C2 → C3 → C4 → C5 → C6.
+- Visual system: palette Deep space obsidian (#0A0A12) background; Neon Cyan (#00F2FF) and Electric Magenta (#FF00E5) for complementary base pair; typography Headings: Geometric Sans-Serif (e.g., Montserrat) with wide tracking; Body: High-legibility Mono (e.g., JetBrains Mono) ; spacing Modular 8px grid; expansive whitespace between conceptual sections (120px+); tight, precision-based padding (16px) withi.
+- Components: C1 Header and introductory workshop branding.; C2 Interactive Sequence Builder for nucleotide base pairing.; C3 Step-through Process Simulator for RNA polymerase motion.; C4 Side-by-side DNA and mRNA Comparison View.; C5 High-detail Zoom-In viewer for hydrogen bonding.; C6 Educational Glossary for key genomic terminology..
+- Interaction and state: Default: Subtle pulsing glow on interactive nodes; Hover: High-contrast highlight with scale-up (1.05x); Active: Haptic-style snap-in animation with color flash; Disabled: Desaturated grayscale with 50% opacity..
+- Responsive behavior: Fluid scale; workbench tools stack vertically on mobile; interactive DNA strands shift from horizontal scrolls to vertical reels; zoom-in interactions transition from hover-magnification to full-screen modal views..
+- Motion behavior: Organic fluid dynamics for molecular movement; elastic snapping for nucleotide pairing; smooth, decelerating eases (cubic-bezier 0.22, 1, 0.36, 1) for enzyme traversal; parallax-dr.
+- Reduced-motion behavior: All parallax and fluid animations replaced by instant state transitions; 'Simulation' button switches to a manual 'Next/Prev' frame toggle; pulsing glows replaced by static high-contras
+
+[HARNESS PACK EXCERPT: middle bytes omitted only for the model-facing budget. They remain in the logged target. This omission is not a fault; do not claim that unshown sections are missing.]
+
+tatic diagrams (Before/After); interaction-based reveals replaced by expanded accordion panels.",
+        "webgl_canvas_id": null
+      },
+      "max_chars": null,
+      "name": "c6",
+      "order": 5,
+      "purpose": "Educational Glossary for key genomic terminology. Requirements: Genomic terminology definitions; Cross-references to molecular processes; Search or filter functionality for terms",
+      "runtime_imports": []
+    }
+  ],
+  "dependencies": [],
+  "libs": [],
+  "title": "Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scro"
+}
+```
+
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

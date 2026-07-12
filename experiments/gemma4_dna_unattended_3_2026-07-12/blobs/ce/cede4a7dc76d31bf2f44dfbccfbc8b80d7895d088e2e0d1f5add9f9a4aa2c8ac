@@ -1,0 +1,65 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-plan) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Write a PRODUCT PLAN for this website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational 
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- plan-doc@e5c72fde8cc0: predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Product Plan: DNA Data-Viz (Analytical/Minimalist Focus)
+
+## Scope
+An information-dense, a-symmetric grid layout that treats DNA as a data-structure, emphasizing the logic of replication over cinematic flair.
+
+## Feature List
+- **Interactive Sequence Map**: A clickable sequence of base pairs that triggers detailed tooltips.
+- **Step-by-Step Mechanism Guide**: A linear progression system for replication and transcription.
+- **Contrast-Driven Design**: High-saturation neon accents on a deep obsidian background (2026 Aesthetic).
+- **Motion Control**: System-level `prefers-reduced-motion` detection; if true, the 'step-by-step' guide becomes a static list.
+
+## Key Interactions
+- **Sequence Clicking**: Clicking 'G' highlights its partner 'C' and displays the triple-bond property.
+- **Process Toggle**: A switch to swap between 'Replication Mode' and 'Transcription Mode'.
+- **Depth Layers**: CSS Grid with overlapping z-index layers to simulate depth without heavy GPU movement.
+
+## Content Inventory
+- **Main Title**: "GENOME: The Logic of Life"
+- **Section 1: The Structure**: "The double helix consists of two antiparallel strands. The sugar-phosphate backbone provides stability."
+- **Section 2: Replication**: Heading: "Semiconservative Replication". Copy: "Each new DNA molecule consists of one old strand and one newly synthesized strand."
+- **Section 3: Transcription**: Heading: "The Messenger". Copy: "Transcription occurs in the nucleus, where the DNA sequence is transcribed into a complementary RNA strand."
+- **Data Points**: "A-T (2 bonds), G-C (3 bonds), 5' to 3' directionality."
+
+## Acceptance Criteria
+1. Single-file HTML delivery.
+2. Clicking a base pair highlights the corresponding partner base.
+3. No motion occurs if `prefers-reduced-motion` is enabled.
+4. The layout remains functional and aesthetically 'modern' on both mobile and desktop.
+5. Transcription logic correctly illustrates the movement of RNA Polymerase.
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.
