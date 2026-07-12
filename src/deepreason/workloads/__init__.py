@@ -1,4 +1,8 @@
-"""Reasoning-first workload contracts and harness-owned compilation helpers."""
+"""Reasoning-first workload contracts and harness-owned compilation helpers.
+
+Workload models are process metadata around ordinary artifacts. They never add
+ontology types or set status.
+"""
 
 from deepreason.workloads.models import MandatoryInterface, compile_interface
 from deepreason.workloads.registry import WORKLOADS, WorkloadRegistry
