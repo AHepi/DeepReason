@@ -73,12 +73,12 @@ class Countercondition(BaseModel):
 
 class AnalogyClaim(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
-    source_memory_refs: tuple[str, ...] = ()
-    shared_structure: tuple[str, ...] = ()
-    disanalogies: tuple[str, ...] = ()
-    transfer_claims: tuple[str, ...] = ()
+    source_memory_refs: tuple[str, ...] = Field(min_length=1, max_length=32)
+    shared_structure: tuple[str, ...] = Field(min_length=1, max_length=32)
+    disanalogies: tuple[str, ...] = Field(min_length=1, max_length=32)
+    transfer_claims: tuple[str, ...] = Field(min_length=1, max_length=32)
     adopted_commitment_refs: tuple[str, ...] = ()
-    overturn_conditions: tuple[str, ...] = ()
+    overturn_conditions: tuple[str, ...] = Field(min_length=1, max_length=32)
 
 
 class ReasoningEnvelopeV1(BaseModel):
@@ -128,6 +128,7 @@ class ReasoningCandidateProposal(BaseModel):
     counterconditions: tuple[str, ...] = Field(min_length=1, max_length=32)
     typicality: float = Field(ge=0.0, le=1.0)
     optional_refs: tuple[str, ...] = ()
+    analogy: AnalogyClaim | None = None
     sidecar: OperationalSidecar = Field(default_factory=OperationalSidecar)
 
 
@@ -144,6 +145,7 @@ def proposal_envelope(candidate: ReasoningCandidateProposal) -> ReasoningEnvelop
             Countercondition(case=case, eval="observation")
             for case in candidate.counterconditions
         ),
+        analogy=candidate.analogy,
     )
 
 

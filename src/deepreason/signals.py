@@ -157,6 +157,16 @@ SIGNALS: dict[str, str] = {
                                     "not coverage: that is derived from the "
                                     "graph after relevance and reliability "
                                     "hold",
+    # Cross-run skills (skills/): pinned attention and explicit current reruns
+    "skills-retrieval": "an immutable skill snapshot was ranked and sliced "
+                        "for schools (inputs: [signal, receipt digest, receipt "
+                        "blob]). Attention only; it supplies no support, "
+                        "evidence, warrant, grounding, or status credit",
+    "skills-adoption": "a current candidate explicitly adopted exact test "
+                       "definitions and reran them now (inputs: [signal, "
+                       "capsule id, source candidate id, adopted candidate "
+                       "id, commitment:verdict...]). Old source verdicts do "
+                       "not transfer",
     # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
     "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
     "reach-provisional": "cross-problem survival on a battery below "
