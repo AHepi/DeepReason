@@ -14,11 +14,41 @@ and may enforce a DETERMINISTIC bound (e.g. step count) internally; the
 import ast
 import json
 import re
+from dataclasses import dataclass
+from typing import Callable, Literal
 
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 
 PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+
+ProgramClass = Literal[
+    "structural",
+    "execution",
+    "simulation",
+    "formal",
+    "observation",
+]
+ProgramFunction = Callable[[str, object, object | None], tuple[str, dict]]
+
+
+@dataclass(frozen=True)
+class ProgramSpec:
+    """Registered program plus process-only classification metadata.
+
+    ``class_`` and ``external_toolchain`` are reporting and scheduling facts.
+    They do not alter commitment syntax, verdict interpretation, or labels.
+    Calling a spec delegates to its function so existing direct uses of
+    ``PROGRAMS[name](...)`` remain compatible.
+    """
+
+    name: str
+    fn: ProgramFunction
+    class_: ProgramClass
+    external_toolchain: str | None = None
+
+    def __call__(self, text: str, budget, artifact=None) -> tuple[str, dict]:
+        return self.fn(text, budget, artifact)
 
 
 class UnsafePredicate(ValueError):
@@ -181,22 +211,53 @@ def _reasoning_observation_pending(text: str, budget, artifact=None) -> tuple[st
     return OVERRUN, {"reason": "observation requires registered evidence"}
 
 
-PROGRAMS = {
-    "json-wf": _json_wf,
-    "skeleton_wf": _skeleton_wf,
-    "lineage_ref": _lineage_ref,
-    "exec_oracle": _exec_oracle,
-    "property_oracle": _property_oracle,
-    "generator_wf": _generator_wf,
-    "checker_wf": _checker_wf,
+def _lean_external_check(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Defer Lean checks to the pinned verifier service.
+
+    Program commitments retain their normal ``program:<name>`` spelling, but
+    invoking a kernel is not a pure in-process text function.  Until a formal
+    workflow binds the verifier receipt, direct generic program evaluation is
+    therefore an operational overrun, never a failed proof or a warrant.
+    """
+
+    return OVERRUN, {
+        "reason": "external-verifier-required",
+        "toolchain": "lean4",
+    }
+
+
+PROGRAMS: dict[str, ProgramSpec] = {
+    "json-wf": ProgramSpec("json-wf", _json_wf, "structural"),
+    "skeleton_wf": ProgramSpec("skeleton_wf", _skeleton_wf, "structural"),
+    "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
+    "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
+    "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
+    "generator_wf": ProgramSpec("generator_wf", _generator_wf, "structural"),
+    "checker_wf": ProgramSpec("checker_wf", _checker_wf, "structural"),
     # Chunked website builds (manifest.py): the design's component manifest,
     # the per-chunk fragment contract, and assembled-page coherence. All
     # static, deterministic functions of content + frozen spec.
-    "manifest_wf": _manifest_wf,
-    "component_wf": _component_wf,
-    "integration_wf": _integration_wf,
-    "reasoning-envelope-wf": _reasoning_envelope_wf,
-    "reasoning_observation_pending": _reasoning_observation_pending,
+    "manifest_wf": ProgramSpec("manifest_wf", _manifest_wf, "structural"),
+    "component_wf": ProgramSpec("component_wf", _component_wf, "structural"),
+    "integration_wf": ProgramSpec("integration_wf", _integration_wf, "structural"),
+    "reasoning-envelope-wf": ProgramSpec(
+        "reasoning-envelope-wf", _reasoning_envelope_wf, "structural"
+    ),
+    "reasoning_observation_pending": ProgramSpec(
+        "reasoning_observation_pending", _reasoning_observation_pending, "observation"
+    ),
+    "lean_parse": ProgramSpec(
+        "lean_parse", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_no_sorry": ProgramSpec(
+        "lean_no_sorry", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_axiom_policy": ProgramSpec(
+        "lean_axiom_policy", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_kernel": ProgramSpec(
+        "lean_kernel", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
 }
 
 

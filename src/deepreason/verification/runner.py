@@ -202,3 +202,23 @@ class TrustedCheckRunner:
             stderr_sha256=sha256_hex(stderr),
             detail=detail,
         )
+
+
+class VerifierOperationalError(RuntimeError):
+    """No verifier verdict exists; callers must not create a fail warrant."""
+
+
+class VerificationRunner:
+    def __init__(self, registry) -> None:
+        self.registry = registry
+
+    def verify(self, request, blobs=None):
+        from deepreason.verification.registry import VerifierRegistryError
+
+        try:
+            return self.registry.verify(request.backend, request, blobs)
+        except VerifierRegistryError as error:
+            raise VerifierOperationalError(str(error)) from error
+
+
+VerifierRunner = VerificationRunner
