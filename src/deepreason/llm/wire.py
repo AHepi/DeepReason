@@ -29,6 +29,11 @@ from deepreason.llm.contracts import (
 )
 from deepreason.llm.profiles import ModelProfile, get_profile
 from deepreason.llm.repair import parse_one_json_value
+from deepreason.workloads.text import (
+    OperationalSidecar,
+    ReasoningCandidateProposal,
+    ReasoningConjecturerOutput,
+)
 
 
 CanonicalOutput = TypeVar("CanonicalOutput", bound=BaseModel)
@@ -304,6 +309,43 @@ class ReferenceFreeConjecturerWireContract(WireContract[ConjecturerOutput]):
         )
 
 
+class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput]):
+    """Compact-v2 reasoning values with harness-resolved optional aliases."""
+
+    def __init__(self, aliases: AliasTable) -> None:
+        super().__init__(
+            "reasoning.conjecturer.compact.v2",
+            ReasoningConjecturerOutput,
+            ReasoningConjecturerOutput,
+            aliases=aliases,
+            variant="compact.v2",
+        )
+
+    def compile(self, wire: ReasoningConjecturerOutput) -> ReasoningConjecturerOutput:
+        candidates = []
+        for candidate in wire.candidates:
+            optional_refs = tuple(
+                self.aliases.resolve(alias) for alias in candidate.optional_refs
+            )
+            requested = tuple(
+                self.aliases.resolve(alias)
+                for alias in candidate.sidecar.requested_context_aliases
+            )
+            candidates.append(
+                ReasoningCandidateProposal(
+                    claim=candidate.claim,
+                    mechanism=candidate.mechanism,
+                    counterconditions=candidate.counterconditions,
+                    typicality=candidate.typicality,
+                    optional_refs=optional_refs,
+                    sidecar=OperationalSidecar(
+                        search_signal=candidate.sidecar.search_signal,
+                        requested_context_aliases=requested,
+                    ),
+                )
+            )
+        return ReasoningConjecturerOutput(candidates=tuple(candidates))
+
 class CompactCritic(StrictWireModel):
     attack: bool
     target_alias: str
@@ -492,6 +534,16 @@ def wire_contract_for(
 ) -> WireContract[CanonicalOutput]:
     """Return a role transport while keeping the canonical output unchanged."""
     spec = get_profile(profile)
+    if (
+        not spec.direct_contracts
+        and role == "conjecturer"
+        and output_model is ReasoningConjecturerOutput
+    ):
+        if aliases is None:
+            raise AliasTableRequiredError(
+                "compact reasoning calls require an explicit call-local AliasTable"
+            )
+        return ReasoningConjecturerWireContract(aliases)
     if spec.direct_contracts:
         return DirectWireContract(output_model)
     # Alias-dependent roles remain on their canonical direct transport until

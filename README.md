@@ -19,18 +19,34 @@ most important decision, so it has its own section below.
 
 ## Quickstart
 
-### The two-command path (no configuration knowledge needed)
+### Reason over a text question
+
+```bash
+pip install .
+
+deepreason setup
+deepreason --config config/my-provider.yaml config compile \
+  --schema-version 2 --workload-profile text --profile compact \
+  --single-model gemma4:31b --rubric-policy forbid --out run-manifest.json
+deepreason --root runs/my-question reason --text "why does X happen?" \
+  --run-manifest run-manifest.json
+```
+
+The text-first path generates rival explanatory claims, compiles their
+counterconditions into current-run commitments, criticizes the candidates,
+and retains the surviving argument graph in a replayable run root. `setup`
+stores provider credentials privately in
+`~/.deepreason/credentials` (owner-only file; the key never appears in any
+config, prompt, or log).
+
+### Website compatibility workflow
 
 ```bash
 pip install ".[browser]"
-
-deepreason setup      # one time: pick your AI provider, paste your API key
 deepreason make "a pomodoro timer website"
 ```
 
-`setup` asks two questions and stores your key privately in
-`~/.deepreason/credentials` (owner-only file; the key never appears in any
-config, prompt, or log). `make` proposes designs, builds their components as
+`make` proposes designs, builds their components as
 separately criticized problems, assembles them deterministically, loads the
 result in headless Chromium, and exports surviving `.html` files you can
 double-click

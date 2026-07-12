@@ -171,6 +171,16 @@ def _integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     return integration_wf(text, budget, artifact)
 
 
+def _reasoning_envelope_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.workloads.text import reasoning_wf_program
+
+    return reasoning_wf_program(text, budget, artifact)
+
+
+def _reasoning_observation_pending(text: str, budget, artifact=None) -> tuple[str, dict]:
+    return OVERRUN, {"reason": "observation requires registered evidence"}
+
+
 PROGRAMS = {
     "json-wf": _json_wf,
     "skeleton_wf": _skeleton_wf,
@@ -185,6 +195,8 @@ PROGRAMS = {
     "manifest_wf": _manifest_wf,
     "component_wf": _component_wf,
     "integration_wf": _integration_wf,
+    "reasoning-envelope-wf": _reasoning_envelope_wf,
+    "reasoning_observation_pending": _reasoning_observation_pending,
 }
 
 

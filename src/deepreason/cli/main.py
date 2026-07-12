@@ -49,6 +49,12 @@ def build_parser() -> argparse.ArgumentParser:
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
     compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
+    compile_cmd.add_argument("--schema-version", choices=(1, 2), type=int, default=1)
+    compile_cmd.add_argument(
+        "--workload-profile", choices=("text", "code", "formal", "website"), default=None
+    )
+    compile_cmd.add_argument("--pack-profile", default=None)
+    compile_cmd.add_argument("--output-profile", default=None)
     compile_cmd.add_argument(
         "--rubric-policy", choices=("forbid", "require_cross_family"),
         default="require_cross_family",
@@ -89,6 +95,16 @@ def build_parser() -> argparse.ArgumentParser:
                           help="precompiled immutable role matrix")
     make_cmd.add_argument("--dry-run", action="store_true",
                           help="resolve and print the exact role matrix; make no model call")
+    reason_cmd = sub.add_parser(
+        "reason", help="reason over a text question using conjecture and criticism"
+    )
+    reason_input = reason_cmd.add_mutually_exclusive_group(required=True)
+    reason_input.add_argument("--problem", help="deepreason-text-workload-v1 YAML/JSON")
+    reason_input.add_argument("--text", help="plain explanatory question")
+    reason_cmd.add_argument("--run-manifest", default=None)
+    reason_cmd.add_argument("--cycles", type=int, default=12)
+    reason_cmd.add_argument("--token-budget", default="200000")
+    reason_cmd.add_argument("--dry-run", action="store_true")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -241,6 +257,10 @@ def _main(argv: list[str] | None = None) -> int:
                 rubric_policy=args.rubric_policy,
                 concurrency=args.concurrency,
                 capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
+                schema_version=args.schema_version,
+                workload_profile=args.workload_profile,
+                pack_profile=args.pack_profile,
+                output_profile=args.output_profile,
             )
         except RunManifestError as error:
             print(str(error), file=sys.stderr)
@@ -267,6 +287,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "doctor":
         return _cmd_doctor(args)
+
+    if args.command == "reason":
+        return _cmd_reason(args)
 
     if args.command == "make":
         from deepreason.config import load as load_config
@@ -755,6 +778,158 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
     from deepreason.ops import seed_problem_payload
 
     return seed_problem_payload(harness, _read_problem_file(path)).id
+
+
+def _cmd_reason(args) -> int:
+    from deepreason.config import load as load_config
+    from deepreason.llm.capabilities import CapabilityCache
+    from deepreason.ops import require_full_engine, run_scheduler
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        RunManifestError,
+        bind_run_manifest,
+        compile_run_manifest,
+        config_from_run_manifest,
+        load_run_manifest,
+        render_role_matrix,
+    )
+    from deepreason.runtime.progress import ProgressSink, _atomic_json
+    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+    from deepreason.workloads.text import (
+        ReasoningWorkloadSpec,
+        seed_reasoning_workload,
+        spec_from_text,
+    )
+
+    if args.cycles < 1:
+        print("reason --cycles must be positive", file=sys.stderr)
+        return 1
+    token_text = str(args.token_budget).strip().casefold()
+    token_budget = None if token_text in {"unlimited", "0"} else int(token_text)
+    if token_budget is not None and token_budget < 1:
+        print("reason --token-budget must be positive or unlimited", file=sys.stderr)
+        return 1
+    if args.problem:
+        data = _read_problem_file(Path(args.problem))
+        try:
+            spec = ReasoningWorkloadSpec.model_validate(data)
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+    else:
+        spec = spec_from_text(args.text)
+
+    root = Path(args.root)
+    try:
+        bound = root / MANIFEST_NAME
+        if bound.exists():
+            manifest = load_run_manifest(bound)
+            if args.run_manifest:
+                requested = load_run_manifest(args.run_manifest)
+                if requested.canonical_bytes() != manifest.canonical_bytes():
+                    raise RunManifestError(
+                        "RUN_MANIFEST_CONFLICT",
+                        "run root is already bound to a different manifest",
+                        f"/{MANIFEST_NAME}",
+                    )
+        elif args.run_manifest:
+            manifest = load_run_manifest(args.run_manifest)
+        else:
+            configured = load_config(Path(args.config) if args.config else None)
+            manifest = compile_run_manifest(
+                configured,
+                rubric_policy=(
+                    "require_cross_family"
+                    if any(item.eval.startswith("rubric:") for item in spec.criteria)
+                    else "forbid"
+                ),
+                schema_version=2,
+                workload_profile="text",
+                capability_cache=CapabilityCache(root / "capabilities.json"),
+            )
+        require_full_engine(manifest, workload="text reasoning")
+        if manifest.schema_version == 2 and manifest.workload_profile != "text":
+            raise RunManifestError(
+                "WORKLOAD_PROFILE_MISMATCH",
+                f"reason requires text, got {manifest.workload_profile}",
+                "/workload_profile",
+            )
+        config = config_from_run_manifest(manifest)
+        if not args.dry_run:
+            bind_run_manifest(manifest, root)
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    if args.dry_run:
+        print(render_role_matrix(manifest))
+        print(f"sha256={manifest.sha256}")
+        return 0
+
+    harness = Harness(root)
+    problem = seed_reasoning_workload(harness, spec)
+    progress = ProgressSink(root, run_id=manifest.sha256, workload="text")
+    progress.emit(state="starting", phase="workload", activity="loaded", problem_id=problem.id)
+
+    def on_cycle(scheduler):
+        status = scheduler.harness.state.status
+        counts = {name: 0 for name in ("accepted", "refuted", "suspended")}
+        for label in status.values():
+            if label.value in counts:
+                counts[label.value] += 1
+        progress.emit(
+            state="running",
+            phase="reasoning",
+            activity="cycle complete",
+            cycle=scheduler._cycles,
+            problem_id=problem.id,
+            accepted=counts["accepted"],
+            refuted=counts["refuted"],
+            suspended=counts["suspended"],
+            token_limit=token_budget,
+            determinate=False,
+        )
+        return progress.cancellation_requested()
+
+    result, meter, accounting = run_scheduler(
+        harness,
+        config,
+        args.cycles,
+        token_budget,
+        on_cycle=on_cycle,
+        run_manifest=manifest,
+    )
+    cancelled = progress.cancellation_requested()
+    reason = "operator_cancelled" if cancelled else "workload_terminal"
+    stop = write_stop_record(
+        root,
+        reason=reason,
+        policy=StopPolicy(),
+        metrics=StopMetrics(cycle=args.cycles),
+        event_seq=harness._next_seq,
+    )
+    payload = {
+        "schema": "deepreason-run-result-v1",
+        "workload": "text",
+        "problem_id": problem.id,
+        "frontier": result["frontier"],
+        "survivors": result["survivors"],
+        "accounting": accounting,
+        "stop": stop,
+    }
+    _atomic_json(root / "run-result.json", payload)
+    progress.emit(
+        state="cancelled" if cancelled else "completed",
+        phase="stop",
+        activity=reason,
+        cycle=args.cycles,
+        problem_id=problem.id,
+        token_spend=meter.total if meter is not None else 0,
+        token_limit=token_budget,
+        determinate=False,
+        stop_reason=reason,
+    )
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
 
 
 def _cmd_run(args) -> int:

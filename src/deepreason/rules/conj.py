@@ -11,11 +11,17 @@ the harness spends budget tail-first on the candidates the model itself
 marks atypical (§11.6).
 """
 
-from deepreason.llm.contracts import ConjecturerOutput
+from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
 from deepreason.workloads.models import MandatoryInterface, compile_interface
+from deepreason.workloads.text import (
+    ReasoningConjecturerOutput,
+    compile_countercondition_commitments,
+    envelope_json,
+    proposal_envelope,
+)
 
 
 def _resolve_ref(target: str, artifacts: dict) -> str | None:
@@ -61,31 +67,65 @@ def conj(
         neighbourhood_n=config.NEIGHBOURHOOD_N,
     )
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
-    output, llm_call = adapter.call(
-        "conjecturer", pack, ConjecturerOutput, aliases=aliases
+    reasoning = any(
+        harness.commitments[commitment_id].eval == "program:reasoning-envelope-wf"
+        for commitment_id in problem.criteria
+        if commitment_id in harness.commitments
     )
+    output_model = ReasoningConjecturerOutput if reasoning else ConjecturerOutput
+    output, llm_call = adapter.call("conjecturer", pack, output_model, aliases=aliases)
     # Level-2 transmission diagnostic (attention/reporting only, §0): did
     # candidate k actually realize spec k? Logged as a replayable Measure.
     if specs and embedder is not None:
         from deepreason.llm.specs import transmission_score
 
-        score = transmission_score(specs, [c.content for c in output.candidates], embedder)
+        proposal_text = [
+            getattr(candidate, "content", None) or getattr(candidate, "claim", "")
+            for candidate in output.candidates
+        ]
+        score = transmission_score(specs, proposal_text, embedder)
         if score is not None:
             harness.record_measure(inputs=[f"spec-transmission:{score:.4f}", problem_id])
 
-    candidates = list(output.candidates)
+    candidate_rows: list[tuple[ConjectureCandidate, tuple[str, ...], str]] = []
+    if reasoning:
+        for proposal in output.candidates:
+            envelope = proposal_envelope(proposal)
+            content = envelope_json(envelope)
+            compiled = tuple(compile_countercondition_commitments(harness, envelope))
+            candidate_rows.append(
+                (
+                    ConjectureCandidate(
+                        content=content,
+                        typicality=proposal.typicality,
+                        refs=[
+                            CandidateRef(target=target, role="mention")
+                            for target in proposal.optional_refs
+                        ],
+                    ),
+                    compiled,
+                    proposal.sidecar.search_signal,
+                )
+            )
+    else:
+        candidate_rows = [(candidate, (), "productive") for candidate in output.candidates]
     if tail_weighted:  # stagnation response (§11.4): fund the atypical tail
-        candidates.sort(key=lambda c: c.typicality)
+        candidate_rows.sort(key=lambda row: row[0].typicality)
 
     batch: list[tuple[Artifact, list[Warrant]]] = []
     candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
     seen: set[str] = set()
-    for candidate in candidates[: config.VS_K]:
+    for candidate, compiled_commitments, search_signal in candidate_rows[: config.VS_K]:
+        base = mandatory_interface or MandatoryInterface()
+        candidate_mandatory = MandatoryInterface(
+            commitments=tuple(dict.fromkeys((*base.commitments, *compiled_commitments))),
+            refs=base.refs,
+        )
         interface = compile_interface(
             harness,
             problem,
             candidate.content,
-            mandatory=mandatory_interface,
+            mandatory=candidate_mandatory,
             optional_refs=((ref.target, ref.role) for ref in candidate.refs),
         )
         content_ref = f"inline:{candidate.content}"
@@ -101,17 +141,21 @@ def conj(
             ),
         )
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
+        effective_workload = "text" if reasoning else workload_profile
+        effective_contract = (
+            "reasoning.conjecturer.compact.v2" if reasoning else contract_id
+        )
         domain = (
             anti_relapse.relapse_domain(
                 artifact,
                 harness,
-                workload_profile=workload_profile,
+                workload_profile=effective_workload,
                 problem_family=problem.id,
-                contract_id=contract_id,
-                mandatory_refs=(mandatory_interface or MandatoryInterface()).refs,
+                contract_id=effective_contract,
+                mandatory_refs=candidate_mandatory.refs,
                 component_spec=component_spec,
             )
-            if workload_profile is not None
+            if effective_workload is not None
             else None
         )
         admitted, reason = anti_relapse.check(
@@ -123,7 +167,13 @@ def conj(
             domain=domain,
         )
         if diagnostics is not None:
-            diagnostics.append({"candidate": artifact.id[:12], "gate": reason})
+            diagnostics.append(
+                {
+                    "candidate": artifact.id[:12],
+                    "gate": reason,
+                    "search_signal": search_signal,
+                }
+            )
         if not admitted:
             # Persist the block (stress campaign T7 finding): gate decisions
             # were in-memory only, so a finished run could not be audited for
