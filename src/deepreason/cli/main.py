@@ -1,6 +1,7 @@
 """CLI entry point (spec §13).
 
-Commands: frontier · focus <id> · expand · attack <id> · step ·
+Commands: reason · code · simulate · prove/check-proof · continue · watch ·
+frontier · focus <id> · expand · attack <id> · step ·
 run --budget <spec> · why <id> · theory <id> · prose <id> · docket ·
 rule <case-id> · schools · capture · reseed <school-id> · merge <path> ·
 trace <id>.
@@ -105,6 +106,51 @@ def build_parser() -> argparse.ArgumentParser:
     reason_cmd.add_argument("--cycles", type=int, default=12)
     reason_cmd.add_argument("--token-budget", default="200000")
     reason_cmd.add_argument("--dry-run", action="store_true")
+    continue_cmd = sub.add_parser(
+        "continue", help="continue a stopped run under its bound immutable manifest"
+    )
+    continue_cmd.add_argument(
+        "--budget", required=True, help="cycles=<N>|unlimited"
+    )
+    continue_cmd.add_argument(
+        "--token-budget", default="unlimited", help="positive integer or unlimited"
+    )
+    continue_cmd.add_argument("--expected-manifest-digest", default=None)
+    watch_cmd = sub.add_parser("watch", help="watch read-only structured run progress")
+    watch_cmd.add_argument("--once", action="store_true", help="render one snapshot and exit")
+    watch_cmd.add_argument("--interval", type=float, default=0.25)
+    for command_name in ("prove", "check-proof"):
+        proof_cmd = sub.add_parser(
+            command_name,
+            help="check Lean source with the pinned manifest kernel and assumptions",
+        )
+        proof_cmd.add_argument("--source", required=True, help="operator-supplied Lean source")
+        proof_cmd.add_argument(
+            "--run-manifest",
+            default=None,
+            help="formal v2 manifest (default: the manifest already bound to root)",
+        )
+        proof_cmd.add_argument(
+            "--theorem", action="append", required=True,
+            help="theorem whose axiom dependencies must be reported",
+        )
+        proof_cmd.add_argument("--max-heartbeats", type=int, default=200_000)
+        proof_cmd.add_argument("--max-rec-depth", type=int, default=1_000)
+    code_cmd = sub.add_parser(
+        "code", help="verify a localized patch with checks declared by a trusted workload"
+    )
+    code_cmd.add_argument("--workload", required=True, help="code workload YAML/JSON")
+    code_cmd.add_argument("--patch", required=True, help="compiled localized patch YAML/JSON")
+    code_cmd.add_argument("--run-manifest", required=True, help="precompiled v2 code manifest")
+    simulate_cmd = sub.add_parser(
+        "simulate", help="run a pinned deterministic simulation and checker"
+    )
+    simulate_cmd.add_argument("--workload", required=True, help="code workload YAML/JSON")
+    simulate_cmd.add_argument("--source", required=True, help="operator-supplied model source")
+    simulate_cmd.add_argument("--inputs", required=True, help="pinned finite JSON inputs")
+    simulate_cmd.add_argument("--checker", required=True, help="pinned checker source")
+    simulate_cmd.add_argument("--simulation-index", type=int, default=0)
+    simulate_cmd.add_argument("--run-manifest", required=True, help="precompiled v2 code manifest")
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -290,6 +336,28 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "reason":
         return _cmd_reason(args)
+
+    if args.command == "continue":
+        return _cmd_continue(args)
+
+    if args.command == "watch":
+        from deepreason.ui.terminal import watch_run
+
+        try:
+            watch_run(Path(args.root), interval=args.interval, once=args.once)
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        return 0
+
+    if args.command in {"prove", "check-proof"}:
+        return _cmd_check_proof(args)
+
+    if args.command == "code":
+        return _cmd_code(args)
+
+    if args.command == "simulate":
+        return _cmd_simulate(args)
 
     if args.command == "make":
         from deepreason.config import load as load_config
@@ -865,12 +933,27 @@ def _cmd_reason(args) -> int:
         print(f"sha256={manifest.sha256}")
         return 0
 
+    _atomic_json(
+        root / "run-request.json",
+        {
+            "schema": "deepreason-run-request-v1",
+            "workload": "text",
+            "problem": {
+                "id": spec.problem.id,
+                "description": spec.problem.description,
+            },
+        },
+    )
     harness = Harness(root)
     problem = seed_reasoning_workload(harness, spec)
     progress = ProgressSink(root, run_id=manifest.sha256, workload="text")
     progress.emit(state="starting", phase="workload", activity="loaded", problem_id=problem.id)
 
+    completed_cycles = 0
+
     def on_cycle(scheduler):
+        nonlocal completed_cycles
+        completed_cycles = scheduler._cycles
         status = scheduler.harness.state.status
         counts = {name: 0 for name in ("accepted", "refuted", "suspended")}
         for label in status.values():
@@ -899,13 +982,33 @@ def _cmd_reason(args) -> int:
         run_manifest=manifest,
     )
     cancelled = progress.cancellation_requested()
-    reason = "operator_cancelled" if cancelled else "workload_terminal"
+    reason = "operator_cancelled" if cancelled else "budget_exhausted"
+    policy = StopPolicy()
+    metrics = StopMetrics(cycle=completed_cycles)
+    harness.record_measure(
+        inputs=[
+            "run-stop",
+            policy.digest,
+            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+            reason,
+            str(harness._next_seq),
+        ]
+    )
     stop = write_stop_record(
         root,
         reason=reason,
-        policy=StopPolicy(),
-        metrics=StopMetrics(cycle=args.cycles),
-        event_seq=harness._next_seq,
+        policy=policy,
+        metrics=metrics,
+        event_seq=max(0, harness._next_seq - 1),
+    )
+    _atomic_json(
+        root / "checkpoint.json",
+        {
+            "schema": "deepreason-checkpoint-v1",
+            "manifest_digest": manifest.sha256,
+            "stop_digest": stop["digest"],
+            "event_seq": harness._next_seq,
+        },
     )
     payload = {
         "schema": "deepreason-run-result-v1",
@@ -921,7 +1024,7 @@ def _cmd_reason(args) -> int:
         state="cancelled" if cancelled else "completed",
         phase="stop",
         activity=reason,
-        cycle=args.cycles,
+        cycle=completed_cycles,
         problem_id=problem.id,
         token_spend=meter.total if meter is not None else 0,
         token_limit=token_budget,
@@ -930,6 +1033,235 @@ def _cmd_reason(args) -> int:
     )
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
+
+
+def _cmd_continue(args) -> int:
+    from deepreason import mcp_server
+
+    raw_cycles = str(args.budget).strip()
+    if raw_cycles.startswith("cycles="):
+        raw_cycles = raw_cycles.partition("=")[2]
+    try:
+        result = mcp_server._start_run(
+            {
+                "root": args.root,
+                "budget": {
+                    "cycles": raw_cycles,
+                    "token_budget": args.token_budget,
+                },
+                "expected_manifest_digest": args.expected_manifest_digest,
+            },
+            continuation=True,
+        )
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    key = str(Path(result["root"]).resolve())
+    thread = mcp_server._RUN_THREADS[key]
+    thread.join()
+    try:
+        payload = mcp_server._read_run_result(Path(result["root"]))
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
+def _cmd_check_proof(args) -> int:
+    from deepreason.runtime.progress import _atomic_json
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        RunManifestError,
+        bind_run_manifest,
+        load_run_manifest,
+    )
+    from deepreason.verification.lean import LeanBackend
+    from deepreason.verification.models import VerificationRequest
+
+    root = Path(args.root)
+    bound_path = root / MANIFEST_NAME
+    try:
+        if bound_path.exists():
+            manifest = load_run_manifest(bound_path)
+            if args.run_manifest:
+                requested = load_run_manifest(args.run_manifest)
+                if requested.canonical_bytes() != manifest.canonical_bytes():
+                    raise RunManifestError(
+                        "RUN_MANIFEST_CONFLICT",
+                        "run root is already bound to a different manifest",
+                        f"/{MANIFEST_NAME}",
+                    )
+        elif args.run_manifest:
+            manifest = load_run_manifest(args.run_manifest)
+        else:
+            raise ValueError("PROOF_MANIFEST_REQUIRED: pass --run-manifest or use a bound root")
+        if manifest.schema_version != 2 or manifest.workload_profile != "formal":
+            raise ValueError("PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2 formal manifest")
+        candidates = [
+            item
+            for item in manifest.toolchains
+            if item.id.startswith("lean4@") and "lean_kernel" in item.allowed_programs
+        ]
+        if len(candidates) != 1:
+            raise ValueError("PROOF_TOOLCHAIN_REQUIRED: manifest must pin one Lean kernel")
+        toolchain = candidates[0]
+        if toolchain.runner != "local":
+            raise ValueError("PROOF_RUNNER_UNSUPPORTED: this command requires a local Lean kernel")
+        if args.max_heartbeats <= 0 or args.max_rec_depth <= 0:
+            raise ValueError("proof operation limits must be finite and positive")
+        source = Path(args.source).read_bytes()
+        bind_run_manifest(manifest, root)
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+
+    harness = Harness(root)
+    source_ref = harness.blobs.put(source)
+    backend = LeanBackend(
+        harness.blobs,
+        executable=toolchain.executable,
+        toolchain_id=toolchain.id,
+    )
+    fingerprint = backend.fingerprint()
+    if fingerprint.get("version_output_sha256") != toolchain.version_output_sha256:
+        print("PROOF_TOOLCHAIN_FINGERPRINT_MISMATCH", file=sys.stderr)
+        return 1
+    request = VerificationRequest(
+        backend="lean4",
+        toolchain_id=toolchain.id,
+        source_ref=source_ref,
+        imports_lock_ref=toolchain.lock_digest,
+        max_heartbeats=args.max_heartbeats,
+        max_rec_depth=args.max_rec_depth,
+        allow_sorry=False,
+        allowed_axioms=[],
+        target_theorems=args.theorem,
+    )
+    result = backend.verify(request)
+    payload = result.model_dump(mode="json")
+    payload["claim"] = (
+        "kernel acceptance under pinned imports and axioms; not informal or empirical truth"
+    )
+    payload["schema"] = "deepreason-proof-result-v1"
+    _atomic_json(root / "proof-result.json", payload)
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if result.verdict == "pass" else 1
+
+
+def _bind_cli_manifest(root: Path, requested_path: str, *, workload: str):
+    from deepreason.run_manifest import MANIFEST_NAME, RunManifestError
+    from deepreason.run_manifest import bind_run_manifest, load_run_manifest
+
+    requested = load_run_manifest(requested_path)
+    bound = root / MANIFEST_NAME
+    if bound.exists():
+        manifest = load_run_manifest(bound)
+        if requested.canonical_bytes() != manifest.canonical_bytes():
+            raise RunManifestError(
+                "RUN_MANIFEST_CONFLICT",
+                "run root is already bound to a different manifest",
+                f"/{MANIFEST_NAME}",
+            )
+    else:
+        manifest = requested
+    if manifest.schema_version != 2 or manifest.workload_profile != workload:
+        raise ValueError(
+            f"{workload.upper()}_MANIFEST_WORKLOAD_MISMATCH: expected v2 {workload} manifest"
+        )
+    bind_run_manifest(manifest, root)
+    return manifest
+
+
+def _cmd_code(args) -> int:
+    from deepreason.runtime.progress import _atomic_json
+    from deepreason.verification.code import verify_code_patch
+    from deepreason.workloads.code import (
+        CodePatch,
+        CodeWorkloadSpec,
+        snapshot_workspace,
+    )
+
+    root = Path(args.root)
+    try:
+        manifest = _bind_cli_manifest(root, args.run_manifest, workload="code")
+        workload = CodeWorkloadSpec.model_validate(_read_problem_file(Path(args.workload)))
+        patch = CodePatch.model_validate(_read_problem_file(Path(args.patch)))
+        if not any(
+            "repo_test" in toolchain.allowed_programs
+            for toolchain in manifest.toolchains
+        ):
+            raise ValueError("CODE_TOOLCHAIN_REQUIRED: manifest must allow repo_test")
+        harness = Harness(root)
+        snapshot = snapshot_workspace(workload.workspace, blobs=harness.blobs)
+        result = verify_code_patch(
+            workload,
+            snapshot,
+            patch,
+            blobs=harness.blobs,
+        )
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    payload = result.model_dump(mode="json")
+    payload["schema"] = "deepreason-code-result-v1"
+    _atomic_json(root / "code-result.json", payload)
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if result.verdict == "pass" else 1
+
+
+def _cmd_simulate(args) -> int:
+    from deepreason.runtime.progress import _atomic_json
+    from deepreason.verification.simulation import (
+        SimulationBackend,
+        SimulationRequest,
+    )
+    from deepreason.workloads.code import CodeWorkloadSpec
+
+    root = Path(args.root)
+    try:
+        manifest = _bind_cli_manifest(root, args.run_manifest, workload="code")
+        workload = CodeWorkloadSpec.model_validate(_read_problem_file(Path(args.workload)))
+        if args.simulation_index < 0 or args.simulation_index >= len(workload.simulations):
+            raise ValueError("SIMULATION_INDEX_INVALID")
+        spec = workload.simulations[args.simulation_index]
+        candidates = [
+            item
+            for item in manifest.toolchains
+            if item.id == spec.toolchain_id
+            and "simulation_oracle" in item.allowed_programs
+        ]
+        if len(candidates) != 1 or candidates[0].runner != "local":
+            raise ValueError(
+                "SIMULATION_TOOLCHAIN_REQUIRED: manifest must pin the declared local oracle"
+            )
+        harness = Harness(root)
+        source_ref = harness.blobs.put(Path(args.source).read_bytes())
+        inputs_ref = harness.blobs.put(Path(args.inputs).read_bytes())
+        checker_ref = harness.blobs.put(Path(args.checker).read_bytes())
+        if inputs_ref != spec.inputs_ref or checker_ref != spec.checker_ref:
+            raise ValueError("SIMULATION_INPUT_DIGEST_MISMATCH")
+        backend = SimulationBackend(toolchain_id=spec.toolchain_id)
+        fingerprint = backend.fingerprint()
+        toolchain = candidates[0]
+        if (
+            fingerprint["executable"] != str(Path(toolchain.executable).resolve())
+            or fingerprint["version_output_sha256"] != toolchain.version_output_sha256
+        ):
+            raise ValueError("SIMULATION_TOOLCHAIN_FINGERPRINT_MISMATCH")
+        result = backend.verify(
+            SimulationRequest(source_ref=source_ref, spec=spec),
+            harness.blobs,
+        )
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    payload = result.model_dump(mode="json")
+    payload["schema"] = "deepreason-simulation-result-v1"
+    payload["claim"] = "checker result for the pinned model and inputs, not the world"
+    _atomic_json(root / "simulation-result.json", payload)
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0 if result.verdict == "pass" else 1
 
 
 def _cmd_run(args) -> int:

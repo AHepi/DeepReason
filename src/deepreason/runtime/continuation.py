@@ -52,6 +52,7 @@ def prepare_continuation(
     cycles: int | str | Limit,
     tokens: int | str | None | Limit,
     expected_manifest_digest: str | None = None,
+    check_operator_lock: bool = True,
 ) -> dict:
     root_path = Path(root)
     manifest = load_run_manifest(root_path / MANIFEST_NAME)
@@ -61,14 +62,36 @@ def prepare_continuation(
     if not stop_path.exists():
         raise ValueError("CONTINUE_STOP_REQUIRED")
     stop = json.loads(stop_path.read_text(encoding="utf-8"))
-    stop_digest = stop.get("digest") or _digest(stop)
+    if not isinstance(stop, dict):
+        raise ValueError("CONTINUE_STOP_INVALID")
+    claimed_stop_digest = stop.get("digest")
+    unsigned_stop = {key: value for key, value in stop.items() if key != "digest"}
+    stop_digest = _digest(unsigned_stop)
+    if claimed_stop_digest not in (None, stop_digest):
+        raise ValueError("CONTINUE_STOP_DIGEST_MISMATCH")
     checkpoint = root_path / "checkpoint.json"
+    if manifest.schema_version == 2 and not checkpoint.exists():
+        raise ValueError("CONTINUE_CHECKPOINT_REQUIRED")
     if checkpoint.exists():
         try:
-            json.loads(checkpoint.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as error:
+            fence = json.loads(checkpoint.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
             raise ValueError("CONTINUE_CHECKPOINT_INVALID") from error
-    _assert_no_live_lock(root_path)
+        expected = {
+            "schema": "deepreason-checkpoint-v1",
+            "manifest_digest": manifest.sha256,
+            "stop_digest": stop_digest,
+        }
+        if not isinstance(fence, dict) or any(
+            fence.get(key) != value for key, value in expected.items()
+        ):
+            raise ValueError("CONTINUE_CHECKPOINT_MISMATCH")
+        from deepreason.harness import Harness
+
+        if fence.get("event_seq") != Harness(root_path)._next_seq:
+            raise ValueError("CONTINUE_CHECKPOINT_EVENT_FENCE_MISMATCH")
+    if check_operator_lock:
+        _assert_no_live_lock(root_path)
     cycle_limit, cycle_diagnostic = parse_limit(cycles, optional=False)
     token_limit, token_diagnostic = parse_limit(tokens)
     request = ContinuationRequest(cycles=cycle_limit, tokens=token_limit)

@@ -44,13 +44,16 @@ def test_initialize_and_tools_list():
         assert tool["description"] and tool["inputSchema"]["type"] == "object"
 
 
-def test_default_surface_is_only_harness_owned_make_tools(monkeypatch):
+def test_default_surface_is_only_harness_owned_run_and_make_tools(monkeypatch):
     monkeypatch.delenv("DEEPREASON_ENABLE_LEGACY_MCP", raising=False)
     tools = mcp_server.handle(
         {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
     )
     names = {tool["name"] for tool in tools["result"]["tools"]}
-    assert names == {"start_make", "make_status", "make_result"}
+    assert names == {
+        "start_run", "run_status", "run_result", "continue_run", "cancel_run",
+        "start_make", "make_status", "make_result",
+    }
 
     hidden = _call("run_cycles", {"cycles": 1})
     assert hidden["isError"]

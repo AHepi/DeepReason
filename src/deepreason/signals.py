@@ -19,6 +19,12 @@ SIGNALS: dict[str, str] = {
     "cycle": "cycle heartbeat: [cycle, number, selected problem id or '-'] — "
              "every event that follows (by seq) until the next heartbeat "
              "belongs to this cycle",
+    "run-resume": "same-root continuation began under the unchanged bound "
+                  "manifest (inputs: [signal, prior stop digest, manifest "
+                  "digest]); process-only and never an epistemic signal",
+    "run-stop": "operational run stop at a safe boundary (inputs: [signal, "
+                "stop-policy digest, canonical metrics, reason, event "
+                "sequence]); never truth, completeness, or ontology status",
     # Embedder geometry identity (llm/embedder.py; adjudicated in
     # runs/embedder_design — cross-environment drift is detected, never denied)
     "embedder": "geometry identity stamp, once per run before the first "

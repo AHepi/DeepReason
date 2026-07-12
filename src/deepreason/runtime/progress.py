@@ -104,10 +104,22 @@ class ProgressSink:
         return self.root / "cancel.requested"
 
     def request_cancel(self) -> None:
-        self.cancel_path.write_text(self.run_id + "\n", encoding="utf-8")
+        _atomic_json(
+            self.cancel_path,
+            {"schema": "deepreason-cancel-request-v1", "run_id": self.run_id},
+        )
 
     def cancellation_requested(self) -> bool:
-        return self.cancel_path.exists()
+        if not self.cancel_path.exists():
+            return False
+        try:
+            payload = json.loads(self.cancel_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("invalid cancellation request") from error
+        return payload == {
+            "schema": "deepreason-cancel-request-v1",
+            "run_id": self.run_id,
+        }
 
     def clear_cancellation(self) -> None:
         if self.cancel_path.exists():

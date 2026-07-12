@@ -56,3 +56,20 @@ def test_continue_keeps_manifest_and_appends_after_stop(tmp_path):
     assert len((tmp_path / "continuations.jsonl").read_text().splitlines()) == 2
     assert (tmp_path / "run-manifest.json").read_bytes() == manifest.canonical_bytes()
     assert (tmp_path / "run-stops" / f"{10:012d}-{stop['digest']}.json").exists()
+
+
+def test_continue_rejects_tampered_stop_digest(tmp_path):
+    manifest = _manifest()
+    bind_run_manifest(manifest, tmp_path)
+    stop = write_stop_record(
+        tmp_path, reason="converged", policy=StopPolicy(),
+        metrics=StopMetrics(cycle=8), event_seq=10,
+    )
+    stop["reason"] = "completed"
+    (tmp_path / "run-stop.json").write_text(json.dumps(stop), encoding="utf-8")
+    try:
+        prepare_continuation(tmp_path, cycles=1, tokens=10)
+    except ValueError as error:
+        assert str(error) == "CONTINUE_STOP_DIGEST_MISMATCH"
+    else:  # pragma: no cover - assertion clarity
+        raise AssertionError("tampered stop record was accepted")

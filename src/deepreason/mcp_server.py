@@ -1,10 +1,9 @@
-"""Narrow MCP facade for harness-owned website execution.
+"""Narrow MCP facade for harness-owned reasoning and website execution.
 
-The production surface exposes only ``start_make``, ``make_status``, and
-``make_result``.  Endpoint models never receive MCP tools and cannot select
-routes, edit configuration, browse repositories, write events, or alter
-guards/status.  The historical research/operator verbs remain quarantined
-behind ``DEEPREASON_ENABLE_LEGACY_MCP=1`` for explicit migration work.
+Endpoint models never receive MCP tools and cannot select routes, edit
+configuration, browse repositories, write events, or alter guards/status.
+The historical research/operator verbs remain quarantined behind
+``DEEPREASON_ENABLE_LEGACY_MCP=1`` for explicit migration work.
 """
 
 import fcntl
@@ -24,12 +23,118 @@ _CONFIG = {
 }
 _MAKE_STATUS_NAME = "make-status.json"
 _MAKE_OPERATOR_LOCK_NAME = ".make-operator.lock"
+_RUN_OPERATOR_LOCK_NAME = ".run-operator.lock"
 _MAKE_THREADS: dict[str, threading.Thread] = {}
 _MAKE_LOCK = threading.Lock()
+_RUN_THREADS: dict[str, threading.Thread] = {}
+_RUN_LOCK = threading.Lock()
+
+
+def _limit_schema(*, legacy_zero: bool = False) -> dict:
+    minimum = 0 if legacy_zero else 1
+    return {
+        "anyOf": [
+            {"type": "integer", "minimum": minimum},
+            {"type": "string", "enum": ["unlimited"]},
+        ]
+    }
+
+
+def _run_tools() -> list[dict]:
+    budget = {
+        "type": "object",
+        "properties": {
+            "cycles": _limit_schema(),
+            "token_budget": _limit_schema(legacy_zero=True),
+        },
+        "required": ["cycles", "token_budget"],
+        "additionalProperties": False,
+    }
+    return [
+        {
+            "name": "start_run",
+            "description": (
+                "Start a harness-owned reasoning run from a typed workload and "
+                "precompiled immutable RunManifest. Exposes no shell, path browser, "
+                "route editor, event writer, guard bypass, or status setter."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "workload": {"type": "string", "enum": ["text"]},
+                    "problem": {
+                        "type": "object",
+                        "properties": {
+                            "description": {"type": "string", "minLength": 1},
+                        },
+                        "required": ["description"],
+                        "additionalProperties": False,
+                    },
+                    "run_manifest_ref": {"type": "string", "minLength": 1},
+                    "budget": budget,
+                },
+                "required": ["workload", "problem", "run_manifest_ref", "budget"],
+                "additionalProperties": False,
+            },
+        },
+        {
+            "name": "run_status",
+            "description": (
+                "Read the latest operational snapshot and append-only progress "
+                "events after since_seq; never changes graph state."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "since_seq": {"type": "integer", "minimum": -1, "default": -1},
+                },
+                "additionalProperties": False,
+            },
+        },
+        {
+            "name": "run_result",
+            "description": "Read the fixed terminal run result below the run root.",
+            "inputSchema": {
+                "type": "object", "properties": {**_ROOT},
+                "additionalProperties": False,
+            },
+        },
+        {
+            "name": "continue_run",
+            "description": (
+                "Continue the same stopped run under its bound manifest and append "
+                "new events without deleting prior stops."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_ROOT,
+                    "budget": budget,
+                    "expected_manifest_digest": {"type": "string", "minLength": 64},
+                },
+                "required": ["budget"],
+                "additionalProperties": False,
+            },
+        },
+        {
+            "name": "cancel_run",
+            "description": (
+                "Request cancellation. The harness observes it only at the next "
+                "safe completed-cycle boundary."
+            ),
+            "inputSchema": {
+                "type": "object", "properties": {**_ROOT},
+                "additionalProperties": False,
+            },
+        },
+    ]
 
 
 def _legacy_tools() -> list[dict]:
     return [
+        *_run_tools(),
         {
             "name": "start_make",
             "description": (
@@ -271,7 +376,12 @@ def _legacy_tools() -> list[dict]:
     ]
 
 
-_NARROW_TOOL_NAMES = frozenset({"start_make", "make_status", "make_result"})
+_NARROW_TOOL_NAMES = frozenset(
+    {
+        "start_run", "run_status", "run_result", "continue_run", "cancel_run",
+        "start_make", "make_status", "make_result",
+    }
+)
 
 
 def _tools() -> list[dict]:
@@ -317,25 +427,41 @@ def _read_make_status(root: Path) -> dict:
     return data
 
 
-def _acquire_make_operator_lock(root: Path):
-    """Claim one run root across MCP processes for the worker lifetime."""
+def _acquire_operator_locks(root: Path, *, owner: str):
+    """Claim both legacy lock names so run and make cannot share one root."""
     root.mkdir(parents=True, exist_ok=True)
-    stream = open(root / _MAKE_OPERATOR_LOCK_NAME, "a+b")
+    streams = []
     try:
-        fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        for name in sorted({_MAKE_OPERATOR_LOCK_NAME, _RUN_OPERATOR_LOCK_NAME}):
+            stream = open(root / name, "a+b")
+            streams.append(stream)
+            fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError as error:
-        stream.close()
+        _release_operator_locks(streams)
         raise ValueError(
-            "MAKE_ALREADY_RUNNING: another process owns this run root"
+            f"{owner.upper()}_ALREADY_RUNNING: another operator owns this run root"
         ) from error
-    return stream
+    return tuple(streams)
 
 
-def _release_make_operator_lock(stream) -> None:
-    try:
-        fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
-    finally:
-        stream.close()
+def _acquire_make_operator_lock(root: Path):
+    return _acquire_operator_locks(root, owner="make")
+
+
+def _acquire_run_operator_lock(root: Path):
+    return _acquire_operator_locks(root, owner="run")
+
+
+def _release_operator_locks(streams) -> None:
+    for stream in reversed(streams):
+        try:
+            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+        finally:
+            stream.close()
+
+
+def _release_make_operator_lock(streams) -> None:
+    _release_operator_locks(streams)
 
 
 def _read_website_terminal(root: Path, manifest_sha256: str) -> dict | None:
@@ -564,7 +690,386 @@ def _start_make(arguments: dict) -> dict:
     }
 
 
+def _parse_run_budget(budget: dict) -> tuple[object, object, int | None, int]:
+    from deepreason.runtime.budget import parse_limit
+
+    if not isinstance(budget, dict):
+        raise ValueError("run budget must be an object")
+    cycles, _ = parse_limit(budget.get("cycles"), optional=False)
+    tokens, _ = parse_limit(budget.get("token_budget"))
+    token_budget = tokens.value if tokens.mode == "bounded" else None
+    scheduler_cycles = cycles.value if cycles.mode == "bounded" else sys.maxsize
+    return cycles, tokens, token_budget, int(scheduler_cycles)
+
+
+def _missing_manifest_credentials(manifest) -> list[str]:
+    return sorted(
+        {
+            route.api_key_env
+            for routes in manifest.roles.values()
+            for route in routes
+            if route.api_key_env and not os.environ.get(route.api_key_env)
+        }
+    )
+
+
+def _run_request(root: Path) -> dict:
+    target = root / "run-request.json"
+    if not target.exists():
+        raise ValueError("RUN_REQUEST_MISSING: fixed run-request.json is absent")
+    data = json.loads(target.read_text(encoding="utf-8"))
+    if (
+        not isinstance(data, dict)
+        or data.get("schema") != "deepreason-run-request-v1"
+        or data.get("workload") != "text"
+        or not isinstance(data.get("problem"), dict)
+        or not str(data["problem"].get("description") or "").strip()
+    ):
+        raise ValueError("RUN_REQUEST_INVALID: fixed run request is not valid text input")
+    return data
+
+
+def _start_run(
+    arguments: dict,
+    *,
+    continuation: bool = False,
+    progress_callback=None,
+) -> dict:
+    """Start one run-neutral worker under a durable cross-process lock."""
+    from deepreason.ops import require_full_engine
+    from deepreason.run_manifest import (
+        MANIFEST_NAME,
+        bind_run_manifest,
+        load_run_manifest,
+        preflight_payload,
+    )
+    from deepreason.runtime.continuation import prepare_continuation
+    from deepreason.runtime.progress import ProgressSink, _atomic_json
+
+    def notify_progress(event) -> None:
+        if progress_callback is None:
+            return
+        try:
+            progress_callback(event.model_dump(mode="json"))
+        except Exception:
+            # Presentation transport failure cannot change run execution.
+            pass
+
+    root = Path(arguments.get("root") or ".deepreason").resolve()
+    cycles, tokens, token_budget, scheduler_cycles = _parse_run_budget(arguments["budget"])
+    if continuation:
+        manifest = load_run_manifest(root / MANIFEST_NAME)
+        request = _run_request(root)
+        expected = arguments.get("expected_manifest_digest")
+        if expected and expected != manifest.sha256:
+            raise ValueError("CONTINUE_MANIFEST_MISMATCH")
+    else:
+        workload = arguments.get("workload")
+        if workload != "text":
+            raise ValueError("RUN_WORKLOAD_UNSUPPORTED: start_run currently executes text")
+        problem = arguments.get("problem")
+        if not isinstance(problem, dict) or not str(problem.get("description") or "").strip():
+            raise ValueError("start_run.problem.description must be a non-empty string")
+        manifest = load_run_manifest(arguments["run_manifest_ref"])
+        request = {
+            "schema": "deepreason-run-request-v1",
+            "workload": "text",
+            "problem": {"description": str(problem["description"]).strip()},
+        }
+    require_full_engine(manifest, workload="text reasoning")
+    if manifest.schema_version != 2 or manifest.workload_profile != "text":
+        raise ValueError("RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires v2 text manifest")
+    preflight_payload(manifest, {"problem": request["problem"], "commitments": []})
+    missing_credentials = _missing_manifest_credentials(manifest)
+    if missing_credentials:
+        raise ValueError(
+            "RUN_CREDENTIAL_MISSING: required environment variable(s) are unset: "
+            + ", ".join(missing_credentials)
+        )
+
+    key = str(root)
+    with _RUN_LOCK:
+        existing = _RUN_THREADS.get(key)
+        if existing is not None and existing.is_alive():
+            raise ValueError("RUN_ALREADY_RUNNING: this root has an active run")
+        operator_locks = _acquire_run_operator_lock(root)
+        try:
+            if continuation:
+                continuation_record = prepare_continuation(
+                    root,
+                    cycles=cycles,
+                    tokens=tokens,
+                    expected_manifest_digest=manifest.sha256,
+                    check_operator_lock=False,
+                )
+                progress = ProgressSink(
+                    root, run_id=manifest.sha256, workload="text"
+                )
+            else:
+                if (root / "progress.jsonl").exists() or (root / "run-result.json").exists():
+                    raise ValueError("RUN_ALREADY_STARTED: choose a fresh root or continue_run")
+                bind_run_manifest(manifest, root)
+                _atomic_json(root / "run-request.json", request)
+                progress = ProgressSink(
+                    root, run_id=manifest.sha256, workload="text"
+                )
+                progress.clear_cancellation()
+                initial = progress.emit(
+                    state="starting",
+                    phase="manifest",
+                    activity="bound",
+                    token_limit=token_budget,
+                    determinate=False,
+                    message="immutable text manifest bound",
+                )
+                notify_progress(initial)
+                continuation_record = None
+        except BaseException:
+            _release_operator_locks(operator_locks)
+            raise
+
+        def worker() -> None:
+            from deepreason.harness import Harness
+            from deepreason.ops import run_scheduler
+            from deepreason.run_manifest import config_from_run_manifest
+            from deepreason.runtime.stop import (
+                StopMetrics,
+                StopPolicy,
+                write_stop_record,
+            )
+            from deepreason.workloads.text import (
+                WorkloadProblem,
+                seed_reasoning_workload,
+                spec_from_text,
+            )
+
+            harness = Harness(root)
+            latest_cycle = 0
+            try:
+                spec = spec_from_text(request["problem"]["description"])
+                if request["problem"].get("id"):
+                    spec = spec.model_copy(
+                        update={
+                            "problem": WorkloadProblem(
+                                id=request["problem"]["id"],
+                                description=request["problem"]["description"],
+                            )
+                        }
+                    )
+                if continuation:
+                    if spec.problem.id not in harness.state.problems:
+                        raise ValueError("CONTINUE_PROBLEM_MISSING: seeded problem is absent")
+                    harness.record_measure(
+                        inputs=[
+                            "run-resume",
+                            continuation_record["prior_stop_digest"],
+                            manifest.sha256,
+                        ]
+                    )
+                else:
+                    seed_reasoning_workload(harness, spec)
+                prior = progress.read_since(-1)
+                base_cycle = max((event.cycle for event in prior), default=0)
+                base_token_spend = sum(
+                    event.llm.tokens for event in harness.log.read() if event.llm
+                )
+                display_token_limit = (
+                    None if token_budget is None else base_token_spend + token_budget
+                )
+                loaded = progress.emit(
+                    state="running",
+                    phase="workload",
+                    activity="loaded",
+                    cycle=base_cycle,
+                    problem_id=spec.problem.id,
+                    token_spend=base_token_spend,
+                    token_limit=display_token_limit,
+                    determinate=False,
+                )
+                notify_progress(loaded)
+
+                def on_cycle(scheduler):
+                    nonlocal latest_cycle
+                    latest_cycle = base_cycle + scheduler._cycles
+                    counts = {name: 0 for name in ("accepted", "refuted", "suspended")}
+                    for label in scheduler.harness.state.status.values():
+                        if label.value in counts:
+                            counts[label.value] += 1
+                    cycle_report = scheduler.report()
+                    token_spend = sum(
+                        event.llm.tokens for event in scheduler.harness.log.read() if event.llm
+                    )
+                    event = progress.emit(
+                        state="running",
+                        phase="reasoning",
+                        activity="cycle complete",
+                        cycle=latest_cycle,
+                        problem_id=spec.problem.id,
+                        frontier_size=len(cycle_report["frontier"]),
+                        accepted=counts["accepted"],
+                        refuted=counts["refuted"],
+                        suspended=counts["suspended"],
+                        token_spend=token_spend,
+                        token_limit=display_token_limit,
+                        determinate=False,
+                    )
+                    notify_progress(event)
+                    return progress.cancellation_requested()
+
+                result, meter, accounting = run_scheduler(
+                    harness,
+                    config_from_run_manifest(manifest),
+                    scheduler_cycles,
+                    token_budget,
+                    on_cycle=on_cycle,
+                    run_manifest=manifest,
+                )
+                cancelled = progress.cancellation_requested()
+                stop_reason = "operator_cancelled" if cancelled else "budget_exhausted"
+                metrics = StopMetrics(cycle=latest_cycle)
+                policy = StopPolicy()
+                harness.record_measure(
+                    inputs=[
+                        "run-stop",
+                        policy.digest,
+                        json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+                        stop_reason,
+                        str(harness._next_seq),
+                    ]
+                )
+                stop = write_stop_record(
+                    root,
+                    reason=stop_reason,
+                    policy=policy,
+                    metrics=metrics,
+                    event_seq=max(0, harness._next_seq - 1),
+                )
+                _atomic_json(
+                    root / "checkpoint.json",
+                    {
+                        "schema": "deepreason-checkpoint-v1",
+                        "manifest_digest": manifest.sha256,
+                        "stop_digest": stop["digest"],
+                        "event_seq": harness._next_seq,
+                    },
+                )
+                payload = {
+                    "schema": "deepreason-run-result-v1",
+                    "state": "cancelled" if cancelled else "completed",
+                    "workload": "text",
+                    "problem_id": spec.problem.id,
+                    "frontier": result["frontier"],
+                    "survivors": result["survivors"],
+                    "accounting": accounting,
+                    "stop": stop,
+                }
+                _atomic_json(root / "run-result.json", payload)
+                terminal = progress.emit(
+                    state=payload["state"],
+                    phase="stop",
+                    activity=stop_reason,
+                    cycle=latest_cycle,
+                    problem_id=spec.problem.id,
+                    token_spend=sum(
+                        event.llm.tokens for event in harness.log.read() if event.llm
+                    ),
+                    token_limit=display_token_limit,
+                    determinate=False,
+                    stop_reason=stop_reason,
+                )
+                notify_progress(terminal)
+            except (Exception, SystemExit) as error:
+                policy = StopPolicy()
+                metrics = StopMetrics(cycle=latest_cycle)
+                try:
+                    harness.record_measure(
+                        inputs=[
+                            "run-stop",
+                            policy.digest,
+                            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+                            "operational_failure",
+                            type(error).__name__,
+                        ]
+                    )
+                    stop = write_stop_record(
+                        root,
+                        reason="operational_failure",
+                        policy=policy,
+                        metrics=metrics,
+                        event_seq=max(0, harness._next_seq - 1),
+                    )
+                    _atomic_json(
+                        root / "checkpoint.json",
+                        {
+                            "schema": "deepreason-checkpoint-v1",
+                            "manifest_digest": manifest.sha256,
+                            "stop_digest": stop["digest"],
+                            "event_seq": harness._next_seq,
+                        },
+                    )
+                    payload = {
+                        "schema": "deepreason-run-result-v1",
+                        "state": "failed",
+                        "workload": "text",
+                        "error_type": type(error).__name__,
+                        "error": str(error)[:2000],
+                        "stop": stop,
+                    }
+                    _atomic_json(root / "run-result.json", payload)
+                    failed = progress.emit(
+                        state="failed",
+                        phase="stop",
+                        activity="operational failure",
+                        cycle=latest_cycle,
+                        token_limit=token_budget,
+                        determinate=False,
+                        message=str(error)[:500],
+                        stop_reason="operational_failure",
+                    )
+                    notify_progress(failed)
+                except Exception:
+                    pass
+            finally:
+                _release_operator_locks(operator_locks)
+
+        thread = threading.Thread(
+            target=worker,
+            name=f"deepreason-run-{manifest.sha256[:8]}",
+            daemon=True,
+        )
+        _RUN_THREADS[key] = thread
+        try:
+            thread.start()
+        except BaseException:
+            _RUN_THREADS.pop(key, None)
+            _release_operator_locks(operator_locks)
+            raise
+    return {
+        "state": "running",
+        "root": str(root),
+        "manifest_sha256": manifest.sha256,
+        "workload": "text",
+        "status_operation": "run_status",
+        "result_operation": "run_result",
+    }
+
+
+def _read_run_result(root: Path) -> dict:
+    target = root / "run-result.json"
+    if not target.exists():
+        from deepreason.ui.status import read_run_status
+
+        state = read_run_status(root).get("state", "not-started")
+        raise ValueError(f"RUN_RESULT_NOT_READY: current state is {state}")
+    data = json.loads(target.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or data.get("schema") != "deepreason-run-result-v1":
+        raise ValueError("RUN_RESULT_INVALID")
+    return data
+
+
 _REQUIRED_ARGS = {
+    "start_run": ("workload", "problem", "run_manifest_ref", "budget"),
+    "continue_run": ("budget",),
     "start_make": ("problem", "run_manifest_ref", "budget"),
     "seed_problem": ("problem",),
     "run_cycles": ("cycles",),
@@ -576,7 +1081,7 @@ _REQUIRED_ARGS = {
 }
 
 
-def call_tool(name: str, arguments: dict) -> str:
+def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
     """Execute one tool; returns the text payload (raises on error)."""
     exposed = {tool["name"] for tool in _tools()}
     if name not in exposed:
@@ -597,6 +1102,66 @@ def call_tool(name: str, arguments: dict) -> str:
             f"{name}: missing required argument(s) {missing}; received "
             f"{sorted(k for k in arguments if k != 'root')}. "
             f"Required: {list(_REQUIRED_ARGS[name])}."
+        )
+
+    if name == "start_run":
+        return json.dumps(
+            _start_run(arguments, progress_callback=progress_callback),
+            indent=2,
+            sort_keys=True,
+        )
+
+    if name == "run_status":
+        from deepreason.ui.status import read_run_status
+
+        root = Path(arguments.get("root") or ".deepreason").resolve()
+        return json.dumps(
+            read_run_status(root, since_seq=int(arguments.get("since_seq", -1))),
+            indent=2,
+            sort_keys=True,
+        )
+
+    if name == "run_result":
+        root = Path(arguments.get("root") or ".deepreason").resolve()
+        return json.dumps(_read_run_result(root), indent=2, sort_keys=True)
+
+    if name == "continue_run":
+        return json.dumps(
+            _start_run(
+                arguments,
+                continuation=True,
+                progress_callback=progress_callback,
+            ),
+            indent=2,
+            sort_keys=True,
+        )
+
+    if name == "cancel_run":
+        from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+        from deepreason.runtime.progress import ProgressSink
+        from deepreason.ui.status import read_run_status
+
+        root = Path(arguments.get("root") or ".deepreason").resolve()
+        status = read_run_status(root)
+        if status.get("state") not in {"starting", "running"}:
+            raise ValueError(
+                f"RUN_NOT_ACTIVE: current state is {status.get('state', 'unknown')}"
+            )
+        manifest = load_run_manifest(root / MANIFEST_NAME)
+        sink = ProgressSink(
+            root,
+            run_id=manifest.sha256,
+            workload=manifest.workload_profile or "text",
+        )
+        sink.request_cancel()
+        return json.dumps(
+            {
+                "state": "cancellation-requested",
+                "root": str(root),
+                "safe_boundary": "completed-cycle",
+            },
+            indent=2,
+            sort_keys=True,
         )
 
     if name == "start_make":
@@ -789,7 +1354,7 @@ def call_tool(name: str, arguments: dict) -> str:
     raise ValueError(f"unknown tool: {name}")
 
 
-def handle(message: dict) -> dict | None:
+def handle(message: dict, *, notification_sink=None) -> dict | None:
     """One JSON-RPC message in, one response out (None for notifications)."""
     method = message.get("method")
     msg_id = message.get("id")
@@ -812,7 +1377,29 @@ def handle(message: dict) -> dict | None:
     if method == "tools/call":
         params = message.get("params") or {}
         try:
-            text = call_tool(params.get("name", ""), params.get("arguments") or {})
+            meta = params.get("_meta") or {}
+            progress_token = meta.get("progressToken")
+
+            def progress_callback(event: dict) -> None:
+                if notification_sink is None or progress_token is None:
+                    return
+                notification_sink(
+                    {
+                        "jsonrpc": "2.0",
+                        "method": "notifications/progress",
+                        "params": {
+                            "progressToken": progress_token,
+                            "progress": event["seq"],
+                            "message": event.get("message") or event.get("activity") or "",
+                        },
+                    }
+                )
+
+            text = call_tool(
+                params.get("name", ""),
+                params.get("arguments") or {},
+                progress_callback=progress_callback,
+            )
             result = {"content": [{"type": "text", "text": text}], "isError": False}
         except Exception as e:  # tool errors are results, not protocol errors
             result = {"content": [{"type": "text", "text": f"{type(e).__name__}: {e}"}], "isError": True}
@@ -831,6 +1418,12 @@ def main() -> int:
     from deepreason.easy import load_credentials
 
     load_credentials()  # keys stored by `deepreason setup` reach MCP runs too
+    output_lock = threading.Lock()
+
+    def emit(payload: dict) -> None:
+        with output_lock:
+            print(json.dumps(payload), flush=True)
+
     for line in sys.stdin:
         line = line.strip()
         if not line:
@@ -838,15 +1431,14 @@ def main() -> int:
         try:
             message = json.loads(line)
         except json.JSONDecodeError as e:
-            print(
-                json.dumps({"jsonrpc": "2.0", "id": None,
-                            "error": {"code": -32700, "message": f"parse error: {e}"}}),
-                flush=True,
+            emit(
+                {"jsonrpc": "2.0", "id": None,
+                 "error": {"code": -32700, "message": f"parse error: {e}"}},
             )
             continue
-        response = handle(message)
+        response = handle(message, notification_sink=emit)
         if response is not None:
-            print(json.dumps(response), flush=True)
+            emit(response)
     return 0
 
 
