@@ -58,9 +58,13 @@ class _SchedulerView:
 def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
     manifest, manifest_path = _manifest(tmp_path)
 
-    def fake_run(harness, _config, _cycles, token_budget, on_cycle, run_manifest):
+    def fake_run(
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
+    ):
         assert run_manifest == manifest
         assert token_budget is None
+        assert progress_sink is not None
         on_cycle(_SchedulerView(harness, 1))
         return (
             {"frontier": [], "survivors": [], "problems": [], "diagnostics": []},
@@ -105,7 +109,8 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
     release_cycle = threading.Event()
 
     def blocked_run(
-        harness, _config, _cycles, token_budget, on_cycle, run_manifest
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
     ):
         assert token_budget is None and run_manifest == manifest
         cycle_started.set()
@@ -140,7 +145,8 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
     assert _payload(_call("run_result", {"root": str(root)}))["state"] == "cancelled"
 
     def resumed_run(
-        harness, _config, _cycles, token_budget, on_cycle, run_manifest
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
     ):
         assert token_budget is None and run_manifest == manifest
         assert not (root / "cancel.requested").exists()
@@ -170,6 +176,57 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
         event.inputs and event.inputs[0] == "run-resume"
         for event in __import__("deepreason.harness", fromlist=["Harness"]).Harness(root).log.read()
     )
+
+
+def test_scheduler_convergence_stop_is_not_overwritten(tmp_path, monkeypatch):
+    manifest, manifest_path = _manifest(tmp_path)
+
+    def converged_run(
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
+    ):
+        from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+
+        on_cycle(_SchedulerView(harness, 3))
+        policy = StopPolicy()
+        metrics = StopMetrics(cycle=3)
+        harness.record_measure(inputs=["scheduler-stop", "converged", policy.digest])
+        write_stop_record(
+            harness.root,
+            reason="converged",
+            policy=policy,
+            metrics=metrics,
+            event_seq=harness._next_seq - 1,
+        )
+        return (
+            {
+                "frontier": [],
+                "survivors": [],
+                "problems": [],
+                "diagnostics": [],
+                "stop_reason": "converged",
+            },
+            None,
+            {"metered_tokens": None, "logged_tokens_this_run": 0, "delta": None},
+        )
+
+    monkeypatch.setattr("deepreason.ops.run_scheduler", converged_run)
+    root = tmp_path / "converged-run"
+    _payload(
+        _call(
+            "start_run",
+            {
+                "root": str(root),
+                "workload": "text",
+                "problem": {"description": "When should search converge?"},
+                "run_manifest_ref": str(manifest_path),
+                "budget": {"cycles": 12, "token_budget": "unlimited"},
+            },
+        )
+    )
+    mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
+    assert _payload(_call("run_result", {"root": str(root)}))["stop"]["reason"] == "converged"
+    assert len(list((root / "run-stops").glob("*.json"))) == 1
 
 
 def test_watch_once_is_read_only(tmp_path, capsys):

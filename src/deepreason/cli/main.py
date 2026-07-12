@@ -1030,27 +1030,36 @@ def _cmd_reason(args) -> int:
         token_budget,
         on_cycle=on_cycle,
         run_manifest=manifest,
+        progress_sink=progress,
     )
     cancelled = progress.cancellation_requested()
-    reason = "operator_cancelled" if cancelled else "budget_exhausted"
-    policy = StopPolicy()
-    metrics = StopMetrics(cycle=completed_cycles)
-    harness.record_measure(
-        inputs=[
-            "run-stop",
-            policy.digest,
-            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
-            reason,
-            str(harness._next_seq),
-        ]
+    scheduler_reason = result.get("stop_reason")
+    reason = (
+        "operator_cancelled"
+        if cancelled
+        else scheduler_reason or "budget_exhausted"
     )
-    stop = write_stop_record(
-        root,
-        reason=reason,
-        policy=policy,
-        metrics=metrics,
-        event_seq=max(0, harness._next_seq - 1),
-    )
+    if scheduler_reason and not cancelled:
+        stop = json.loads((root / "run-stop.json").read_text())
+    else:
+        policy = StopPolicy()
+        metrics = StopMetrics(cycle=completed_cycles)
+        harness.record_measure(
+            inputs=[
+                "run-stop",
+                policy.digest,
+                json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+                reason,
+                str(harness._next_seq),
+            ]
+        )
+        stop = write_stop_record(
+            root,
+            reason=reason,
+            policy=policy,
+            metrics=metrics,
+            event_seq=max(0, harness._next_seq - 1),
+        )
     _atomic_json(
         root / "checkpoint.json",
         {
