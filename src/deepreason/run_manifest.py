@@ -27,6 +27,7 @@ from deepreason.llm.providers import infer_provider
 
 
 SCHEMA_VERSION = 1
+LATEST_SCHEMA_VERSION = 2
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
 _UNRESOLVED_MODELS = {"auto", "auto-alt"}
@@ -172,20 +173,59 @@ class Route(BaseModel):
         }
 
 
+class ToolchainEntry(BaseModel):
+    """Resolved, secret-free verifier/program toolchain coordinates."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    id: str = Field(min_length=1)
+    runner: Literal["local", "container"]
+    executable: str = Field(min_length=1)
+    version_output_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    lock_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    network: Literal[False] = False
+    environment: dict[str, str] = Field(default_factory=dict)
+    allowed_programs: tuple[str, ...] = ()
+
+    @field_validator("executable")
+    @classmethod
+    def _resolved_executable(cls, value: str) -> str:
+        if value.strip().casefold() in {
+            "auto",
+            "unresolved",
+            "<resolved path or image digest>",
+        }:
+            raise ValueError("toolchain executable must be resolved before use")
+        return value
+
+    @field_validator("environment", mode="after")
+    @classmethod
+    def _secret_free_environment(cls, value: dict[str, str]):
+        secret_markers = ("KEY", "TOKEN", "SECRET", "PASSWORD", "CREDENTIAL")
+        if any(marker in key.upper() for key in value for marker in secret_markers):
+            raise ValueError("toolchain environment cannot contain credential fields")
+        return _FrozenDict(dict(value))
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    schema_version: Literal[1] = SCHEMA_VERSION
+    schema_version: Literal[1, 2] = SCHEMA_VERSION
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
+    workload_profile: Literal["text", "code", "formal", "website"] | None = None
     roles: dict[str, tuple[Route, ...]]
     rubric_policy: Literal["forbid", "require_cross_family"] = "require_cross_family"
     provider_fallback: Literal[False] = False
     concurrency: int = Field(default=1, ge=1)
     pack_profile: str = Field(min_length=1)
     output_profile: str = Field(min_length=1)
+    toolchains: tuple[ToolchainEntry, ...] = ()
+    budget_policy: dict[str, Any] = Field(default_factory=dict)
+    stop_policy: dict[str, Any] = Field(default_factory=dict)
+    memory_policy: dict[str, Any] = Field(default_factory=dict)
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
     # Canonical full engine configuration without a role table.  Runtime
@@ -197,6 +237,11 @@ class RunManifest(BaseModel):
     @classmethod
     def _freeze_roles(cls, value: dict[str, tuple[Route, ...]]):
         return _FrozenDict({role: tuple(routes) for role, routes in value.items()})
+
+    @field_validator("budget_policy", "stop_policy", "memory_policy", mode="after")
+    @classmethod
+    def _freeze_policies(cls, value: dict[str, Any]):
+        return _FrozenDict(json.loads(json.dumps(value)))
 
     @field_validator("compiled_at")
     @classmethod
@@ -211,6 +256,13 @@ class RunManifest(BaseModel):
 
     @model_validator(mode="after")
     def _production_routes_are_concrete(self):
+        if self.schema_version == 1:
+            if self.workload_profile is not None or self.toolchains:
+                raise ValueError("v1 manifest cannot carry v2 workload/toolchain fields")
+            if self.budget_policy or self.stop_policy or self.memory_policy:
+                raise ValueError("v1 manifest cannot carry v2 process policies")
+        elif self.workload_profile is None:
+            raise ValueError("v2 manifest requires workload_profile")
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -231,7 +283,19 @@ class RunManifest(BaseModel):
         return self
 
     def canonical_bytes(self) -> bytes:
-        return _canonical_json(self.model_dump(mode="json"))
+        payload = self.model_dump(mode="json")
+        if self.schema_version == 1:
+            # Preserve the exact canonical v1 byte and hash contract.  The v2
+            # fields did not exist and must not appear as serialized defaults.
+            for field in (
+                "workload_profile",
+                "toolchains",
+                "budget_policy",
+                "stop_policy",
+                "memory_policy",
+            ):
+                payload.pop(field, None)
+        return _canonical_json(payload)
 
     @property
     def sha256(self) -> str:
@@ -443,6 +507,14 @@ def compile_run_manifest(
     concurrency: int | None = None,
     compiled_at: str | None = None,
     capability_cache=None,
+    schema_version: Literal[1, 2] = SCHEMA_VERSION,
+    workload_profile: Literal["text", "code", "formal", "website"] | None = None,
+    pack_profile: str | None = None,
+    output_profile: str | None = None,
+    toolchains: tuple[ToolchainEntry, ...] = (),
+    budget_policy: dict[str, Any] | None = None,
+    stop_policy: dict[str, Any] | None = None,
+    memory_policy: dict[str, Any] | None = None,
 ) -> RunManifest:
     """Resolve and freeze the role matrix before any role-model call.
 
@@ -548,14 +620,38 @@ def compile_run_manifest(
     engine_config = dict(data)
     engine_config["roles"] = {}
     stamp = compiled_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    if schema_version == 2 and workload_profile is None:
+        raise RunManifestError(
+            "WORKLOAD_PROFILE_REQUIRED",
+            "schema v2 requires a text, code, formal, or website workload profile",
+            "/workload_profile",
+        )
+    default_pack_profiles = {
+        "text": "reasoning.text.v1",
+        "code": "reasoning.code.v1",
+        "formal": "reasoning.formal.v1",
+        "website": "website.v1",
+    }
     return RunManifest(
+        schema_version=schema_version,
         engine_profile=engine_profile,
         model_profile=model_profile,
+        workload_profile=workload_profile,
         roles=roles,
         rubric_policy=rubric_policy,
         concurrency=concurrency,
-        pack_profile=model_profile,
-        output_profile=model_profile,
+        pack_profile=(
+            pack_profile
+            or (default_pack_profiles[workload_profile] if workload_profile else model_profile)
+        ),
+        output_profile=(
+            output_profile
+            or ("compact.v2" if schema_version == 2 and model_profile == "compact" else model_profile)
+        ),
+        toolchains=toolchains,
+        budget_policy=budget_policy or {},
+        stop_policy=stop_policy or {},
+        memory_policy=memory_policy or {},
         source_config_hash=source_config_hash(data),
         compiled_at=stamp,
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),

@@ -10,6 +10,7 @@ from deepreason.run_manifest import (
     Route,
     RouteSecretError,
     RunManifestError,
+    ToolchainEntry,
     bind_run_manifest,
     compile_run_manifest,
     config_from_run_manifest,
@@ -417,6 +418,54 @@ def test_same_inputs_and_timestamp_compile_to_same_bytes_and_source_hash():
     )
     assert first.canonical_bytes() == second.canonical_bytes()
     assert first.source_config_hash == second.source_config_hash
+
+
+def test_v1_canonical_bytes_and_hash_exclude_v2_defaults():
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", rubric_policy="forbid",
+        compiled_at=STAMP, schema_version=1,
+    )
+    payload = manifest.model_dump(mode="json")
+    for field in (
+        "workload_profile", "toolchains", "budget_policy", "stop_policy", "memory_policy"
+    ):
+        payload.pop(field)
+    expected = json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode()
+    assert manifest.canonical_bytes() == expected
+
+
+def test_v2_manifest_is_immutable_replayable_and_toolchains_are_resolved(tmp_path):
+    toolchain = ToolchainEntry(
+        id="lean4@4.19.0",
+        runner="local",
+        executable="/usr/bin/lean",
+        version_output_sha256="a" * 64,
+        lock_digest=None,
+        network=False,
+        environment={"LANG": "C"},
+        allowed_programs=("lean_kernel",),
+    )
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", rubric_policy="forbid",
+        compiled_at=STAMP, schema_version=2, workload_profile="formal",
+        model_profile="compact",
+        toolchains=(toolchain,), budget_policy={"cycles": {"mode": "unlimited", "value": None}},
+        stop_policy={"enabled": True}, memory_policy={"enabled": False},
+    )
+    assert manifest.schema_version == 2
+    assert manifest.pack_profile == "reasoning.formal.v1"
+    assert manifest.output_profile == "compact.v2"
+    path, _ = persist_run_manifest(manifest, tmp_path)
+    assert load_run_manifest(path) == manifest
+    with pytest.raises(TypeError, match="immutable"):
+        manifest.budget_policy["cycles"] = {}
+    with pytest.raises(ValueError, match="resolved"):
+        ToolchainEntry(
+            id="lean4@4.x", runner="local", executable="unresolved",
+            version_output_sha256="b" * 64, network=False,
+        )
 
 
 def test_run_root_binding_is_idempotent_and_never_overwrites_conflict(tmp_path):

@@ -34,10 +34,16 @@ class ProfileSpec:
     examples: int
 
     def pack_budget(self, requested: int | None = None) -> int:
-        """Clamp only presentation size; never change an epistemic budget."""
+        """Return a finite presentation target.
+
+        An explicit target belongs to the pack profile and may exceed this
+        model profile's preset when the frozen route supports it.
+        """
         if requested is None:
             return self.pack_tokens_max
-        return max(self.pack_tokens_min, min(int(requested), self.pack_tokens_max))
+        if int(requested) <= 0:
+            raise ValueError("pack target must be positive")
+        return int(requested)
 
 
 PROFILES: dict[ModelProfile, ProfileSpec] = {
@@ -131,9 +137,10 @@ def apply_profile_to_config(config, profile: str | ModelProfile | ProfileSpec):
     """
     spec = get_profile(profile)
     updates = {
-        "PACK_TOKEN_BUDGET": spec.pack_budget(
-            getattr(config, "PACK_TOKEN_BUDGET", None)
-        )
+        # Legacy Config has no separate explicit pack-profile field. Preserve
+        # its measured preset; reasoning-first PackIR accepts an explicit
+        # larger target without mutating this compatibility path.
+        "PACK_TOKEN_BUDGET": spec.pack_budget()
     }
     if spec.name == ModelProfile.COMPACT:
         updates.update(VS_K=4, CRIT_BATCH_K=None)
