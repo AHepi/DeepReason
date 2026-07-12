@@ -5,6 +5,9 @@ from __future__ import annotations
 import json
 import sys
 
+from deepreason.harness import Harness
+from deepreason.ontology import Commitment, Status
+from deepreason.rules.warrants import register_fail_warrant
 from deepreason.storage.blobs import BlobStore
 from deepreason.verification.registry import VerifierRegistry
 from deepreason.verification.simulation import (
@@ -12,6 +15,12 @@ from deepreason.verification.simulation import (
     SimulationRequest,
 )
 from deepreason.workloads.code import SimulationSpec
+from deepreason.workloads.simulation import (
+    SimulationClaim,
+    SimulationMismatchTest,
+    SimulationRelevanceRelation,
+    register_simulation_workflow,
+)
 
 
 def _request(tmp_path, source: str, checker: str, *, seeds=(0, 7), inputs=(1, 5)):
@@ -64,6 +73,68 @@ def test_checker_rejection_is_about_the_declared_model(tmp_path):
     relation = {"model_result": result.output_ref, "relevant_to_world": False}
     relation["relevant_to_world"] = True
     assert result.output_ref == original_ref
+
+
+def test_relevance_relation_is_attackable_without_rewriting_result(tmp_path):
+    harness = Harness(tmp_path / "run")
+    source_ref = harness.blobs.put(
+        b"def simulate(item, rng):\n    return {'value': item}\n"
+    )
+    inputs_ref = harness.blobs.put(b"[1]")
+    checker_ref = harness.blobs.put(
+        b"def check(item, seed, output):\n    return output['value'] == item\n"
+    )
+    spec = SimulationSpec(
+        entry="simulate",
+        seed_set=(0,),
+        inputs_ref=inputs_ref,
+        observables=("value",),
+        checker_ref=checker_ref,
+        deterministic_step_limit=10_000,
+        sample_limit=1,
+        toolchain_id=f"python@{sys.version_info.major}.{sys.version_info.minor}",
+    )
+    result = SimulationBackend().verify(
+        SimulationRequest(source_ref=source_ref, spec=spec), harness.blobs
+    )
+    relation = SimulationRelevanceRelation(
+        result_ref=result.output_ref,
+        target_claim="The measured system preserves every input.",
+        assumptions=("the executable model matches the measured system",),
+        scope="the pinned one-item simulation",
+        counterconditions=("the real system has an unmodelled transition",),
+        mismatch_tests=(
+            SimulationMismatchTest(
+                id="unmodelled-transition",
+                case="exercise a transition absent from the model",
+                model_expectation="identity",
+                world_expectation="may differ",
+            ),
+        ),
+    )
+    artifacts = register_simulation_workflow(
+        harness,
+        result,
+        relation,
+        SimulationClaim(statement=relation.target_claim),
+        explicit_model_dependence=True,
+    )
+    result_bytes = harness.blobs.get(result.output_ref)
+    commitment = Commitment(id="simulation-relevance-mismatch", eval="predicate:False")
+    harness.register_commitment(commitment)
+    register_fail_warrant(
+        harness,
+        commitment_id=commitment.id,
+        target_id=artifacts.relation.id,
+        nu_content="nu: the mismatch case discriminates simulation relevance",
+        critic_content="critic: the executable omits a relevant transition",
+        trace_ref=harness.blobs.put(b"unmodelled-transition"),
+    )
+
+    assert harness.state.status[artifacts.result.id] == Status.ACCEPTED
+    assert harness.state.status[artifacts.relation.id] == Status.REFUTED
+    assert harness.state.status[artifacts.claim.id] == Status.SUSPENDED_UNSUPPORTED
+    assert harness.blobs.get(result.output_ref) == result_bytes
 
 
 def test_ambient_imports_and_filesystem_are_unavailable(tmp_path):
