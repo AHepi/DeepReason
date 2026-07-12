@@ -13,6 +13,7 @@ from deepreason.ontology import Commitment, Status
 from deepreason.ontology.artifact import RefRole
 from deepreason.rules.warrants import register_fail_warrant
 from deepreason.verification.models import VerificationRequest, VerificationResult
+from deepreason.verification._sandbox import seccomp_available
 from deepreason.verification.runner import TrustedCheckRunner
 from deepreason.workloads.code import CheckSpec
 from deepreason.workloads.formal import (
@@ -122,6 +123,32 @@ def test_check_limit_is_positive_and_enforced_as_finite_result_items(tmp_path: P
         "output_items": 3,
         "step_or_item_limit": 2,
     }
+
+
+def test_trusted_code_check_has_no_network_when_seccomp_is_available(tmp_path: Path):
+    if not seccomp_available():
+        pytest.skip("libseccomp is unavailable")
+    source = (
+        "import socket\n"
+        "try:\n"
+        "    socket.socket()\n"
+        "except PermissionError:\n"
+        "    print('network denied')\n"
+        "else:\n"
+        "    raise SystemExit(2)\n"
+    )
+    result = TrustedCheckRunner().run(
+        CheckSpec(
+            id="no-network",
+            runner="command",
+            argv=(sys.executable, "-c", source),
+            step_or_item_limit=4,
+        ),
+        tmp_path,
+    )
+
+    assert result.verdict == "pass"
+    assert result.detail["network_isolated"] is True
 
 
 def test_proof_pass_is_a_receipt_not_an_acceptance_edge(tmp_path: Path):

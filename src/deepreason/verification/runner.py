@@ -11,16 +11,19 @@ from __future__ import annotations
 import os
 import signal
 import subprocess
+import sys
 from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.verification._sandbox import seccomp_available
 from deepreason.workloads.code import CheckSpec
 
 _OUTPUT_LIMIT = 8 * 1024 * 1024
 _MEMORY_LIMIT = 1024 * 1024 * 1024
+_SANDBOX_ABORT = b"DEEPREASON_SANDBOX_ABORT:"
 
 
 class CheckResult(BaseModel):
@@ -105,6 +108,20 @@ class TrustedCheckRunner:
         if not cwd.is_dir():
             raise ValueError(f"trusted check cwd is not a directory: {check.cwd}")
         argv = list(check.argv)
+        network_isolated = seccomp_available()
+        command = argv
+        if network_isolated:
+            command = [
+                sys.executable,
+                "-m",
+                "deepreason.verification._sandbox",
+                "--cpu-seconds",
+                "30",
+                "--memory-bytes",
+                str(_MEMORY_LIMIT),
+                "--",
+                *argv,
+            ]
         command_sha = sha256_hex(
             canonical_json(
                 {
@@ -120,7 +137,7 @@ class TrustedCheckRunner:
         )
         try:
             process = subprocess.Popen(  # noqa: S603 - argv is trusted workload input
-                argv,
+                command,
                 cwd=cwd,
                 env=_minimal_environment(workspace, check.env),
                 stdin=subprocess.DEVNULL,
@@ -167,6 +184,17 @@ class TrustedCheckRunner:
                 blobs,
                 {"sandbox_abort": "output containment limit"},
             )
+        if _SANDBOX_ABORT in stderr:
+            return self._result(
+                check,
+                command_sha,
+                "overrun",
+                process.returncode,
+                stdout,
+                stderr,
+                blobs,
+                {"sandbox_abort": "network containment setup failed"},
+            )
         output_items = _output_items(stdout, stderr)
         if output_items > check.step_or_item_limit:
             return self._result(
@@ -206,6 +234,7 @@ class TrustedCheckRunner:
             {
                 "output_items": output_items,
                 "step_or_item_limit": check.step_or_item_limit,
+                "network_isolated": network_isolated,
             },
         )
 
