@@ -56,6 +56,61 @@ def _latest_tagged(events, prefix: str) -> float | None:
     return value
 
 
+def _program_grounding_breakdown(harness) -> dict:
+    """Classify recorded verdict warrants without rerunning any evaluator.
+
+    These are diagnostic shares of the warrant-producing verdict stream. They
+    do not replace the normative ``grounding_lambda`` or grant evidence credit.
+    In particular, structural well-formedness remains visibly separate from
+    execution, simulation, formal verification, and observation.
+    """
+
+    from deepreason.programs import PROGRAMS
+
+    classes = {
+        "structural": 0,
+        "execution": 0,
+        "simulation": 0,
+        "formal": 0,
+        "observation": 0,
+    }
+    rubric = 0
+    predicate = 0
+    total = 0
+    for warrant in harness.warrants.values():
+        commitment = harness.commitments.get(warrant.commitment)
+        if commitment is None:
+            continue
+        total += 1
+        kind, _, name = commitment.eval.partition(":")
+        if kind == "program" and name in PROGRAMS:
+            classes[PROGRAMS[name].class_] += 1
+        elif kind == "rubric":
+            rubric += 1
+        elif kind == "predicate":
+            predicate += 1
+    program_total = sum(classes.values())
+
+    def share(count: int) -> float | None:
+        return (count / total) if total else None
+
+    return {
+        "verdict_warrants": total,
+        "program_warrants": program_total,
+        "structural_program_fraction": (
+            classes["structural"] / program_total if program_total else None
+        ),
+        "execution_lambda": share(classes["execution"]),
+        "simulation_lambda": share(classes["simulation"]),
+        "formal_lambda": share(classes["formal"]),
+        "observation_lambda": share(classes["observation"]),
+        "rubric_fraction": share(rubric),
+        "predicate_fraction": share(predicate),
+        "counts": classes,
+        "note": "diagnostic verdict shares only; evidence_lambda is reported separately",
+    }
+
+
 def _process_report(harness, events) -> dict:
     """Replay-derived compatibility metrics, isolated from epistemic state.
 
@@ -422,5 +477,6 @@ def eval_report(harness, config, embedder=None) -> dict:
             "adjudicator": detection.adjudicator_metrics(harness, window),
             "lambda": detection.grounding_lambda(harness, window),
             "evidence_lambda": detection.evidence_lambda(harness),
+            "program_grounding": _program_grounding_breakdown(harness),
         },
     }

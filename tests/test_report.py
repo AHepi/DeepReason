@@ -65,6 +65,16 @@ def test_eval_report_from_scheduler_run(tmp_path):
     assert set(report["schools"]["roster"]) == {"school-0", "school-1"}
     assert report["interventions"][-1]["rule"] == "stagnation-recruit"
     assert report["capture"]["lambda"] == 1.0  # program verdicts only
+    grounding = report["capture"]["program_grounding"]
+    assert set(grounding["counts"]) == {
+        "structural", "execution", "simulation", "formal", "observation"
+    }
+    assert grounding["structural_program_fraction"] == 1.0
+    assert grounding["execution_lambda"] == 0.0
+    assert grounding["simulation_lambda"] == 0.0
+    assert grounding["formal_lambda"] == 0.0
+    assert grounding["rubric_fraction"] == 0.0
+    assert 0.0 < grounding["predicate_fraction"] < 1.0
     # The signals block: the log's table of contents, family-normalized.
     signals = report["signals"]
     assert signals["cycle"] == 4                      # one heartbeat per cycle
