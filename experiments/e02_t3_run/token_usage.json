@@ -1,0 +1,12 @@
+{
+  "prompt_tokens": 39004,
+  "completion_tokens": 51951,
+  "calls": 90,
+  "phases": {
+    "judge-zoo:gpt-oss:120b": {
+      "prompt_tokens": 39004,
+      "completion_tokens": 51951,
+      "calls": 90
+    }
+  }
+}
