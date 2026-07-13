@@ -54,3 +54,20 @@ decision_rules:
     experiments/results/judge_liability_index_report.json; index line
 budget:
   llm_tokens: 0
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/judge_liability_index_report.json
+  verdicts: {P1: REFUTED, P2: CONFIRMED, P3: CONFIRMED}
+  measured:
+    index_rank_worst_first: [qwen-seat, gpt-oss-A, gpt-oss-B]
+    truth_rank_worst_first: [qwen-seat, gpt-oss-B, gpt-oss-A]
+    weakest_over_strongest_ratio: 4.35   # threshold 2
+    uncalibrated_rule: holds mechanically
+  reading: the index isolates the genuinely weak seat without ground
+    truth (4.35x separation) and enforces uncalibrated-not-clean, but
+    cannot order two near-tied seats (indices 0.0482 vs 0.0470); the
+    decay-sensitivity sweep is recorded and the primary constant was not
+    revised post hoc. Per the prereg consequence, battery certification
+    stays load-bearing; the index graduates only as a weak-seat alarm,
+    not a ranking, pending a multi-tranche follow-up.

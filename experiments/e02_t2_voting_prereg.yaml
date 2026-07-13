@@ -49,3 +49,20 @@ decision_rules:
     experiments/results/e02_t2_voting_report.json; index line appended
 budget:
   llm_tokens: <= 400000 (clean-item generation + 4 seat-configs x 40 items)
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/e02_t2_voting_report.json
+  verdicts: {P1: CONFIRMED, P2: REFUTED, P3: REFUTED}
+  measured:
+    cross_family_unknown_catch: {require_both: 0.175, either_suffices: 0.75}
+    cross_family_clean_fp: {require_both: 0.025, either_suffices: 0.60}
+    net: catch gain +57.5pp vs FP rise +57.5pp (exact tie)
+    live_tokens: 238088
+  decision: vote change REJECTED per the prereg's own P2 falsifier (clean
+    false positives 0.60 > 0.40) despite the large catch gain. Mechanism
+    now understood - the tranche-1 inversion was a seat severity split
+    (gpt-oss seats flag 58-63 percent of clean items, qwen 5 percent);
+    either-suffices imports the lenient seats' false alarms wholesale.
+    Next candidate is per-seat calibration before aggregation, not a bare
+    vote-rule change.

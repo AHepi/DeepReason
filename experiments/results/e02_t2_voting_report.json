@@ -1,0 +1,4162 @@
+{
+  "schema": "deepreason-e02-t2-report-v1",
+  "prereg": "experiments/e02_t2_voting_prereg.yaml",
+  "generated_at": "2026-07-13T09:29:37.136796+00:00",
+  "design": {
+    "arm_a": "zero-token re-aggregation of tranche-1 judgments",
+    "arm_b": "40 clean items generated (clean mode) + judged live",
+    "judges": {
+      "same_family_pair": [
+        "gpt-oss:120b",
+        "gpt-oss:120b"
+      ],
+      "cross_family_pair": [
+        "gpt-oss:120b",
+        "qwen3-coder:480b"
+      ],
+      "temperature": 0.0
+    },
+    "adversary_model_clean_mode": "deepseek-v4-pro",
+    "concurrency_max_in_flight": 3
+  },
+  "volumes": {
+    "unknown_flaw": 40,
+    "known_flaw": 40,
+    "clean": 40
+  },
+  "rate_table": {
+    "structure": "rule -> pair -> battery; rate is catch rate for unknown_flaw/known_flaw, false-positive rate for clean",
+    "require_both": {
+      "same_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 22,
+          "splits_1_1": 6,
+          "rate": 0.55
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 39,
+          "splits_1_1": 0,
+          "rate": 0.975
+        },
+        "clean": {
+          "n": 40,
+          "flagged": 19,
+          "splits_1_1": 10,
+          "rate": 0.475
+        }
+      },
+      "cross_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 7,
+          "splits_1_1": 23,
+          "rate": 0.175
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 37,
+          "splits_1_1": 3,
+          "rate": 0.925
+        },
+        "clean": {
+          "n": 40,
+          "flagged": 1,
+          "splits_1_1": 23,
+          "rate": 0.025
+        }
+      }
+    },
+    "either_suffices": {
+      "same_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 28,
+          "splits_1_1": 6,
+          "rate": 0.7
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 39,
+          "splits_1_1": 0,
+          "rate": 0.975
+        },
+        "clean": {
+          "n": 40,
+          "flagged": 29,
+          "splits_1_1": 10,
+          "rate": 0.725
+        }
+      },
+      "cross_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 30,
+          "splits_1_1": 23,
+          "rate": 0.75
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 40,
+          "splits_1_1": 3,
+          "rate": 1.0
+        },
+        "clean": {
+          "n": 40,
+          "flagged": 24,
+          "splits_1_1": 23,
+          "rate": 0.6
+        }
+      }
+    }
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "CONFIRMED",
+      "measured": {
+        "cross_family_either_suffices_unknown_catch": 0.75,
+        "cross_family_require_both_unknown_catch": 0.175,
+        "t1_baseline_require_both": 0.175
+      },
+      "threshold": ">= 0.55"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "measured": {
+        "cross_family_either_suffices_clean_fp": 0.6,
+        "same_family_either_suffices_clean_fp": 0.725
+      },
+      "thresholds": {
+        "confirm": "<= 0.25",
+        "reject_vote_change": "> 0.40"
+      }
+    },
+    "P3": {
+      "verdict": "REFUTED",
+      "measured": {
+        "unknown_catch_gain_pp_cross_family": 57.5,
+        "clean_fp_rise_pp_cross_family": 57.5,
+        "net_pp": 0.0
+      },
+      "threshold": "catch gain pp > FP rise pp"
+    }
+  },
+  "adoption": {
+    "adoption_condition": "adoption requires BOTH a confirmed P3 AND the recusal design requirement (untestable on this fixture; registered as binding for the live adoption experiment)",
+    "p3_confirmed": false,
+    "recusal_requirement_tested_here": false,
+    "adopted_by_this_experiment": false
+  },
+  "token_spend": {
+    "tranche2_live": {
+      "prompt_tokens": 113428,
+      "completion_tokens": 124660,
+      "calls": 229,
+      "phases": {
+        "adversary-clean": {
+          "prompt_tokens": 15744,
+          "completion_tokens": 24271,
+          "calls": 57
+        },
+        "judge-same-B": {
+          "prompt_tokens": 24230,
+          "completion_tokens": 31406,
+          "calls": 42
+        },
+        "judge-cross-B": {
+          "prompt_tokens": 21198,
+          "completion_tokens": 568,
+          "calls": 40
+        },
+        "judge-cross-A": {
+          "prompt_tokens": 26788,
+          "completion_tokens": 35221,
+          "calls": 46
+        },
+        "judge-same-A": {
+          "prompt_tokens": 25468,
+          "completion_tokens": 33194,
+          "calls": 44
+        }
+      }
+    },
+    "tranche2_total_tokens": 238088,
+    "tranche2_ceiling": 400000,
+    "tranche1_ledger_context": {
+      "total_tokens": 629674,
+      "note": "arm A re-used these committed judgments at zero new cost"
+    }
+  },
+  "caveats": [
+    "Arm A is a zero-token re-aggregation of the tranche-1 raw seat verdicts; per the prereg this file was committed before the first look at per-seat union behavior.",
+    "Clean items are generated-as-sound by the tranche-1 adversary model (deepseek-v4-pro) under a soundness prompt and mechanical validation only; soundness was not independently verified, so any genuinely defective 'clean' item inflates the measured false-positive rate (conservative against either-suffices).",
+    "Topic-pool mismatch: all 40 clean items draw from the restricted safe-topic pool, while part of the tranche-1 unknown-flaw corpus predates that restriction; catch and FP rates therefore come from overlapping but not identical topic distributions.",
+    "P2/P3 verdicts are evaluated on the cross-family pair (the adoption candidate named by P1/P3); the same-family rates are reported in the same table.",
+    "Clean-arm seat parse failures: 0 of 160 seat calls (parse failures count as flawed=false, i.e. against catching and against false-positives).",
+    "1-1 pair splits are reported per battery; under require-both a split is a no-catch (and a no-flag on clean items), under either-suffices it is a catch (and a false positive on clean items).",
+    "Vote-rule adoption is NOT effected by this report: the prereg conditions adoption on P3 AND the recusal design requirement, which this fixture cannot test."
+  ],
+  "per_item": [
+    {
+      "id": "cl-00",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-01",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-02",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-03",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-04",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-05",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-06",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-07",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-08",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-09",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-10",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-11",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-12",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-13",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-14",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-15",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-16",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-17",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-18",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-19",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-20",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-21",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-22",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-23",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-24",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-25",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-26",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-27",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-28",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-29",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-30",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-31",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-32",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-33",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-34",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-35",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-36",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-37",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-38",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "cl-39",
+      "sub_battery": "clean",
+      "class": "clean",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-00",
+      "sub_battery": "known_flaw",
+      "class": "circularity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-01",
+      "sub_battery": "known_flaw",
+      "class": "equivocation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-02",
+      "sub_battery": "known_flaw",
+      "class": "affirming_the_consequent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-03",
+      "sub_battery": "known_flaw",
+      "class": "denying_the_antecedent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-04",
+      "sub_battery": "known_flaw",
+      "class": "false_arithmetic_premise",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-05",
+      "sub_battery": "known_flaw",
+      "class": "base_rate_neglect",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-06",
+      "sub_battery": "known_flaw",
+      "class": "composition",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-07",
+      "sub_battery": "known_flaw",
+      "class": "post_hoc_causation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-08",
+      "sub_battery": "known_flaw",
+      "class": "hasty_generalization",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-09",
+      "sub_battery": "known_flaw",
+      "class": "dormitive_vacuity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-10",
+      "sub_battery": "known_flaw",
+      "class": "arithmetic_resource_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-fix-11",
+      "sub_battery": "known_flaw",
+      "class": "conjunction_fallacy",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-00",
+      "sub_battery": "known_flaw",
+      "class": "base_rate_neglect",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-01",
+      "sub_battery": "known_flaw",
+      "class": "circularity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-02",
+      "sub_battery": "known_flaw",
+      "class": "circularity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-03",
+      "sub_battery": "known_flaw",
+      "class": "equivocation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-04",
+      "sub_battery": "known_flaw",
+      "class": "denying_the_antecedent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-05",
+      "sub_battery": "known_flaw",
+      "class": "circularity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-06",
+      "sub_battery": "known_flaw",
+      "class": "false_arithmetic_premise",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-07",
+      "sub_battery": "known_flaw",
+      "class": "base_rate_neglect",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-08",
+      "sub_battery": "known_flaw",
+      "class": "post_hoc_causation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-09",
+      "sub_battery": "known_flaw",
+      "class": "dormitive_vacuity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-10",
+      "sub_battery": "known_flaw",
+      "class": "composition",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-11",
+      "sub_battery": "known_flaw",
+      "class": "dormitive_vacuity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-12",
+      "sub_battery": "known_flaw",
+      "class": "circularity",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-13",
+      "sub_battery": "known_flaw",
+      "class": "false_arithmetic_premise",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-14",
+      "sub_battery": "known_flaw",
+      "class": "denying_the_antecedent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-15",
+      "sub_battery": "known_flaw",
+      "class": "equivocation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-16",
+      "sub_battery": "known_flaw",
+      "class": "affirming_the_consequent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-17",
+      "sub_battery": "known_flaw",
+      "class": "denying_the_antecedent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-18",
+      "sub_battery": "known_flaw",
+      "class": "false_arithmetic_premise",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-19",
+      "sub_battery": "known_flaw",
+      "class": "post_hoc_causation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-20",
+      "sub_battery": "known_flaw",
+      "class": "conjunction_fallacy",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-21",
+      "sub_battery": "known_flaw",
+      "class": "base_rate_neglect",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-22",
+      "sub_battery": "known_flaw",
+      "class": "equivocation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-23",
+      "sub_battery": "known_flaw",
+      "class": "hasty_generalization",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-24",
+      "sub_battery": "known_flaw",
+      "class": "arithmetic_resource_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-25",
+      "sub_battery": "known_flaw",
+      "class": "composition",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-26",
+      "sub_battery": "known_flaw",
+      "class": "denying_the_antecedent",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "kf-var-27",
+      "sub_battery": "known_flaw",
+      "class": "post_hoc_causation",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-00",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-01",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-02",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-03",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-04",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-05",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-06",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-07",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-08",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-circ-09",
+      "sub_battery": "unknown_flaw",
+      "class": "circular_support",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-00",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-01",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-02",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-03",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-04",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-05",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-06",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-07",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-08",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-unit-09",
+      "sub_battery": "unknown_flaw",
+      "class": "subtle_unit_error",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-00",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-01",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-02",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-03",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-04",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-05",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-06",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-07",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-08",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vac-09",
+      "sub_battery": "unknown_flaw",
+      "class": "vacuous_generality",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-00",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-01",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-02",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-03",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-04",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-05",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": false,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-06",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-07",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-08",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            true,
+            true
+          ],
+          "require_both": true,
+          "either_suffices": true,
+          "split": false,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "id": "uf-vsw-09",
+      "sub_battery": "unknown_flaw",
+      "class": "verifier_shaped_but_wrong",
+      "pairs": {
+        "same_family": {
+          "votes": [
+            false,
+            true
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        },
+        "cross_family": {
+          "votes": [
+            true,
+            false
+          ],
+          "require_both": false,
+          "either_suffices": true,
+          "split": true,
+          "parse_failures": [
+            false,
+            false
+          ]
+        }
+      }
+    }
+  ]
+}
