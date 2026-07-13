@@ -1,0 +1,55 @@
+# E0.2 tranche 3: the judge zoo — PRE-REGISTERED. Committed before any
+# new judging call. Tests whether the tranche-1/2 judge diagnoses
+# generalize across model families or were two-family artifacts.
+
+design:
+  corpus: the frozen tranche-1/2 items, reused unchanged - 40 known-flaw,
+    40 unknown-flaw, 40 clean (experiments/e02_t1_items/,
+    experiments/e02_t2_items/clean_items.json). Zero generation spend.
+  seats: single seats, temperature 0, judged individually (aggregation
+    rules are simulated offline from raw verdicts, never baked into
+    collection). Target roster, subject to availability probe:
+    [gpt-oss:120b, qwen3-coder:480b]  # anchors, comparable to t1/t2
+    plus [deepseek-v4-flash, deepseek-v4-pro, glm-5.2, kimi-k2.6,
+    minimax-m2.7, mistral-large-3:675b, nemotron-3-ultra, qwen3.5:397b,
+    gemma3:27b]. Roster changes for unavailability are recorded, never
+    silent.
+  reasoning_arm: three models [deepseek-v4-flash, gpt-oss:120b, kimi-k2.6]
+    re-judge all 120 items with reasoning low (vs the default none).
+  per_seat_metrics: known catch, unknown catch, clean false-positive rate
+
+predictions:
+  P1:
+    statement: the generalization gap is judge-general - median
+      unknown/known catch ratio across all seats < 0.8
+    falsifier: median >= 0.8 -> tranche-1's headline finding is demoted
+      to a two-family artifact
+  P2:
+    statement: severity is a real per-model spectrum - clean FP rates
+      span >= 30 percentage points across seats
+  P3:
+    statement: a Pareto-decent judge exists - at least one seat reaches
+      unknown catch >= 0.5 AND clean FP <= 0.15
+    consequence_if_confirmed: seat selection precedes and may replace
+      severity calibration and vote engineering
+  P4:
+    statement: reasoning matters - enabling reasoning lifts unknown catch
+      by >= 10pp on >= 2 of 3 arm models without a larger clean-FP rise
+
+exploratory_observables: >
+  Recorded and reported, explicitly NON-verdict-bearing (hypothesis
+  generation for other harness aspects): per-seat wire discipline (parse
+  failures, retries) extending the compat picture; per-judgment latency
+  and token cost (Tier 2 seat affordability); response-length vs verdict
+  correlation (verbosity-bias raw material); full inter-seat agreement
+  matrix and family clustering (a free preview of the E2.2 assumption
+  that families are distinct repertoires); deepseek-seat performance on
+  deepseek-authored flaws vs other seats (self-family blind-spot
+  hypothesis); per-flaw-class difficulty across families (battery-growth
+  targeting).
+
+decision_rules:
+  - verdicts against literal numbers; report at
+    experiments/results/e02_t3_judge_zoo_report.json; index line appended
+budget:
+  llm_tokens: <= 1500000, max 3 in flight
