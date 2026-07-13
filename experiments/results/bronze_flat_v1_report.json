@@ -1,0 +1,249 @@
+{
+ "schema": "deepreason-bronze-flat-v1",
+ "prereg": "experiments/bronze_flat_v1_prereg.yaml",
+ "question": "pi-bronze (Late Bronze Age collapse with differential survival)",
+ "streams": {
+  "deepseek-v4-pro": {
+   "model": "deepseek-v4-pro",
+   "verify_root_violations": [],
+   "events": 648,
+   "cycles_completed": 50,
+   "tokens": 206432,
+   "artifacts": 34,
+   "accepted": 23,
+   "refuted": 11,
+   "refuted_by_kind": {
+    "standard-or-seed": 1,
+    "school-stance-seed": 4,
+    "conjecture": 6
+   },
+   "conjectures": [
+    {
+     "id": "7a9fbb5476ec",
+     "status": "refuted",
+     "claim": "The Late Bronze Age collapse was caused by a systemic failure of the interdependent palatial trade and diplomacy network, triggered by a cascade of disruptions that the redistributive palace economies were too rigid to absorb.",
+     "mechanism": "Palaces operated as centralized hubs for collection, storage, and redistribution of agricultural surplus and luxury goods, and for organizing long-distance trade. This created a tightly coupled system where a shock to one node (e.g., crop failure, earthquake, or trade route disruption) would cascade through the network. When multiple shocks hit simultaneously, the administrative and economic compl",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "5d2a70c35835",
+     "status": "refuted",
+     "claim": "The collapse was primarily driven by a rapid and widespread shift in military technology and tactics, specifically the adoption of massed, mobile infantry (javelin-throwers and swordsmen) that rendered the elite, chariot-based armies of the palatial states obsolete.",
+     "mechanism": "The palatial states' power and internal legitimacy rested on a military monopoly held by a chariot-riding aristocracy. The development of new infantry tactics and weaponry (like the Naue II sword and javelin) by peripheral or 'barbarian' groups allowed them to overwhelm the expensive and tactically rigid chariot forces. This military defeat was swift and decisive, leading to the sacking of palaces",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "c503924fa779",
+     "status": "refuted",
+     "claim": "The collapse was a consequence of a pandemic or series of virulent plagues that swept through the densely populated and interconnected palatial centers, causing acute demographic and social collapse from which the complex administrative structures could not recover.",
+     "mechanism": "The highly concentrated urban centers and extensive trade routes of the Late Bronze Age provided an ideal environment for the rapid transmission of infectious diseases. A pathogen with high mortality, introduced via trade or migration, would have decimated the bureaucratic and artisan classes essential to the palace economy. The loss of specialized knowledge (e.g., Linear B scribes) and labor led ",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "65e69166cab4",
+     "status": "refuted",
+     "claim": "",
+     "mechanism": "",
+     "malformed_skeleton": true
+    },
+    {
+     "id": "3f3ab9266baa",
+     "status": "refuted",
+     "claim": "",
+     "mechanism": "",
+     "malformed_skeleton": true
+    },
+    {
+     "id": "0aebf7929c39",
+     "status": "refuted",
+     "claim": "",
+     "mechanism": "",
+     "malformed_skeleton": true
+    }
+   ],
+   "llm_calls_by_role": {
+    "conjecturer": 58,
+    "argumentative_critic": 40,
+    "defender": 9,
+    "judge": 18
+   },
+   "anti_relapse_gate_blocks": 165,
+   "conj_noregister": 55,
+   "noop_registers_content_dedup": 273,
+   "trials_llm": 36,
+   "trials_blocked_ensemble_split": 1,
+   "interventions": {
+    "reseed": 3
+   },
+   "dropped_cycles": 1
+  },
+  "qwen3.5:397b": {
+   "model": "qwen3.5:397b",
+   "verify_root_violations": [],
+   "events": 565,
+   "cycles_completed": 50,
+   "tokens": 200936,
+   "artifacts": 25,
+   "accepted": 17,
+   "refuted": 8,
+   "refuted_by_kind": {
+    "standard-or-seed": 1,
+    "school-stance-seed": 4,
+    "conjecture": 3
+   },
+   "conjectures": [
+    {
+     "id": "3b163f382274",
+     "status": "refuted",
+     "claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic damage and supply chain fragmentation.",
+     "mechanism": "A cluster of earthquakes (earthquake storm) destroyed key palace centers and ports, disrupting the tightly coupled bronze and grain trade networks. The rigid, centralized bureaucracies could not adapt to the sudden loss of surplus, leading to internal revolt and abandonment, whereas Egypt's more decentralized Nile-based agriculture allowed it to absorb the shock.",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "c6d796328c0e",
+     "status": "refuted",
+     "claim": "The collapse was driven by the militarization of marginal populations using new infantry tactics that overwhelmed chariot-based aristocracies.",
+     "mechanism": "The diffusion of iron-working and light infantry tactics (javelin throwers, slashers) empowered decentralized groups ('Sea Peoples') and internal dissidents. The palace economies, optimized for expensive chariot warfare and reliant on a small warrior elite, could not mobilize quickly enough against fast-moving, low-cost infantry raids, causing a rapid cascade of political legitimacy failures.",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "56ee8fc14849",
+     "status": "refuted",
+     "claim": "The collapse resulted from a climate-induced famine that triggered a migratory domino effect, where displaced groups consumed the resources of neighboring states.",
+     "mechanism": "A prolonged megadrought (verified by pollen cores) caused crop failures across the Eastern Mediterranean. This forced mass migration of starving populations (the 'Sea Peoples') who moved sequentially from west to east or north to south. Each arriving group stripped the next polity of its remaining grain reserves, creating a chain reaction of state failure that Egypt halted only through massive mil",
+     "malformed_skeleton": false
+    }
+   ],
+   "llm_calls_by_role": {
+    "conjecturer": 63,
+    "argumentative_critic": 46,
+    "defender": 4,
+    "judge": 8
+   },
+   "anti_relapse_gate_blocks": 183,
+   "conj_noregister": 61,
+   "noop_registers_content_dedup": 183,
+   "trials_llm": 18,
+   "trials_blocked_ensemble_split": 1,
+   "interventions": {
+    "reseed": 3
+   },
+   "dropped_cycles": 1
+  },
+  "kimi-k2.6": {
+   "model": "kimi-k2.6",
+   "verify_root_violations": [],
+   "events": 1591,
+   "cycles_completed": 50,
+   "tokens": 407578,
+   "artifacts": 15,
+   "accepted": 11,
+   "refuted": 4,
+   "refuted_by_kind": {
+    "conjecture": 4
+   },
+   "conjectures": [
+    {
+     "id": "1a806ed092b1",
+     "status": "refuted",
+     "claim": "The Sea Peoples were not merely raiders but symptom-bearers of a systemic maritime-trade network collapse that cascaded through palace economies dependent on bulk bronze and luxury goods circulation",
+     "mechanism": "Maritime supply-chain fragmentation: the Late Bronze Age Mediterranean was integrated by naval technology and harbor infrastructure that created network externalities. When piracy/raiding crossed a threshold (~LH IIIB2), insurance costs and route abandonment triggered positive feedback\u2014palaces lost tin (Cornwall/Afghanistan) and copper (Cyprus) access simultaneously, making bronze production impos",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "6903360868d2",
+     "status": "refuted",
+     "claim": "Anthropogenic climate anomaly (volcanic winter or megadrought) triggered agricultural subsistence crises that palace redistributive economies could not buffer, with differential recovery based on irrigation infrastructure",
+     "mechanism": "Palace fiscal overextension under climatic shock: Eastern Mediterranean polities operated extractive tributary economies storing surplus against aristocratic consumption and military expenditure, not peasant subsistence security. A ~1.5\u00b0C temperature depression or 20% precipitation reduction (attested in Anatolian tree rings, Dead Sea levels) eliminated the narrow surplus margin; palaces prioritiz",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "6480735f5f7a",
+     "status": "refuted",
+     "claim": "The collapse was an emergent property of ironworking diffusion disrupting the bronze-monopoly political economy, with Egypt surviving through asymmetric metallurgical conservatism enforced by priestly-military elites",
+     "mechanism": "Technological obsolescence of political legitimacy: Bronze Age palaces controlled power through monopoly of tin-bronze weaponry and ceremonial goods, requiring long-distance extraction networks that centralized authority. Widespread iron smelting (requiring only bog ore and charcoal, available everywhere) democratized military capability and eliminated the material basis for palatial redistributio",
+     "malformed_skeleton": false
+    },
+    {
+     "id": "e2441696f20a",
+     "status": "refuted",
+     "claim": "",
+     "mechanism": "",
+     "malformed_skeleton": true
+    }
+   ],
+   "llm_calls_by_role": {
+    "conjecturer": 132,
+    "argumentative_critic": 65,
+    "defender": 15,
+    "judge": 30
+   },
+   "anti_relapse_gate_blocks": 269,
+   "conj_noregister": 89,
+   "noop_registers_content_dedup": 927,
+   "trials_llm": 60,
+   "trials_blocked_ensemble_split": 6,
+   "interventions": {
+    "stagnation-recruit": 3
+   },
+   "dropped_cycles": 2
+  }
+ },
+ "totals": {
+  "tokens": 814946,
+  "budget": 1500000
+ },
+ "cross_stream_mechanism_inventory": {
+  "note": "committed reading of every substantive conjecture; interpretive but exhaustive over the 10 non-malformed conjectures",
+  "mechanism_classes": {
+   "systems-network-collapse": [
+    "deepseek-v4-pro",
+    "qwen3.5:397b",
+    "kimi-k2.6"
+   ],
+   "military-technology-shift": [
+    "deepseek-v4-pro",
+    "qwen3.5:397b",
+    "kimi-k2.6"
+   ],
+   "climate-drought-famine": [
+    "qwen3.5:397b",
+    "kimi-k2.6"
+   ],
+   "pandemic": [
+    "deepseek-v4-pro"
+   ],
+   "earthquake-storm": [
+    "qwen3.5:397b"
+   ]
+  },
+  "opening_conjecture_all_streams": "systems-network-collapse",
+  "novel_mechanisms_beyond_published_scholarship": 0,
+  "reading": "every proposed mechanism maps onto a published scholarly position (systems collapse, military revolution, drought migration, earthquake storm, plague, iron diffusion); the streams reproduced the historiography menu with high cross-family convergence and zero novel mechanisms"
+ },
+ "criticism_dynamics": {
+  "substantive_conjectures_proposed": 10,
+  "substantive_conjectures_refuted": 10,
+  "frontier_survivors": 0,
+  "reinstatements": 0,
+  "objection_pattern_reading": "dominant conviction ground is a scope-formalism charge: the skeleton's covers/excludes fields must exclude Egypt (it did not collapse), but any use of Egypt's survival inside the mechanism is then charged as a scope-vs-mechanism contradiction. The question's own differential-survival clause is thereby converted into an automatic conviction device. A minority of objections are genuinely substantive (Kassite Babylonia comparison, iron diffusion chronology)."
+ },
+ "findings": {
+  "F3": "the argumentative critic refuted the run's own normative infrastructure: in the deepseek and qwen streams it attacked and killed 4 school-stance seeds each and the std-hist standard itself (objection-equals-warrant shields nothing; there is no protected class of artifacts)",
+  "F4": "proposal mass is dominated by repeats: 273/183/927 no-op content-address re-registrations and 165/183/269 anti-relapse gate blocks against the first refuted conjecture's battery equivalence class - after the first kill, no stream escaped its opening idea's equivalence class for the rest of the run"
+ },
+ "registered_observables_readings": {
+  "novelty_trajectory": "admitted conjectures are genuinely diverse under nomic (mean pairwise distance 0.57/0.53/0.58 vs paraphrase margin 0.19) - unlike the gemma corpora. But admission is the survivor filter: the blocked/deduped mass shows default gravity toward the refuted basin.",
+  "differential_survival_contact": "spontaneous in all three streams, in two forms: inside conjecture prose (Nile resilience, Nubian gold, metallurgical conservatism) and, perversely, as the critics' favourite conviction weapon (scope-formalism).",
+  "forbidden_case_quality": "sampled cases are concrete and discriminating (e.g. 'evidence of a single simultaneous military conquest by a unified enemy'); the qwen critic attacked the standard itself over counterfactual-observation coherence.",
+  "detector_signals": "generator dist_slope +0.29/n-a/-0.05; trial-blocked:ensemble-split 1/1/6 (cross-family abstention working as designed); criticism_debt 0 everywhere.",
+  "wire_discipline": "dropped conjecturer cycles 1/1/2 (schema-invalid after bounded repair), runs continued; kimi spent 2x tokens of the other streams for fewer artifacts."
+ },
+ "narrative_reading_interpretive": "Three strong models each opened with the strongest available theory (systems collapse), stated real mechanisms with real falsifiers, and spontaneously engaged the differential-survival clause. The court then convicted everything: 10 of 10 substantive conjectures refuted, zero survivors, zero reinstatements, and in two streams the critic also struck down the run's own standard and stance seeds. After each opening kill, every stream circled its first idea's equivalence class for dozens of cycles (F4) while the anti-relapse gate - correctly - refused re-entry. The run is a live, unscripted confirmation of the courtroom diagnosis: the archive held (all roots verify clean, replay intact), the repertoire was scholarly but not novel, and the criticism climate, not the problem, dominated the dynamics. As hypothesis generators: (1) observe-only or witness-routed criticism is a precondition for seeing what the generative layer can actually build over long horizons; (2) infrastructure artifacts need either protected status or trial-gated attack admission (F3); (3) the covers/excludes skeleton needs an explicit differential-outcome field so explaining a survivor is not chargeable as a contradiction.",
+ "caveats": [
+  "observational case study, n=3 streams, one question; no verdicts",
+  "legacy live_run.py path: no RunManifest, no preflight (manifest_present false in verify_root stats); the manifest path (ops.run_scheduler + preflight_harness) is the evidence-grade route for future preregs",
+  "judge seat 2 (gpt-oss:120b) shared across streams per amendment 1",
+  "refuted/accepted statuses reflect the known-indiscriminate critic, not ground truth (recorded up front in the prereg)"
+ ]
+}

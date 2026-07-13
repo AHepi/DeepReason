@@ -120,3 +120,42 @@ amendment_1:
     criticism climate therefore reflect the stream model's critic and
     first judge seat, with an identical second opinion everywhere.
   tokens_spent_before_amendment: 0
+
+# --- appended after the run (readings against the prereg as written) ---
+result:
+  report: experiments/results/bronze_flat_v1_report.json
+  roots: experiments/bronze_flat_2026-07-13/ (all three verify_root clean,
+    zero violations)
+  completed: 50/50 cycles per stream; 814946 of 1500000 tokens
+    (deepseek 206k, qwen 201k, kimi 408k)
+  headline_observations:  # descriptive, per the no-verdicts commitment
+    - repertoire is scholarly, convergent, and non-novel - all three
+      streams opened with systems-network collapse, then covered the
+      published historiography menu (military technology, drought,
+      earthquake storm, pandemic, iron diffusion); zero mechanisms beyond
+      the literature
+    - the court convicted everything - 10/10 substantive conjectures
+      refuted, zero frontier survivors, zero reinstatements; live
+      unscripted confirmation of the critic_specificity diagnosis
+    - dominant conviction ground is a scope-formalism trap - the
+      skeleton's covers/excludes format turns the question's own
+      differential-survival clause into an automatic contradiction charge
+    - F3 - the critic also refuted the run's own std-hist standard and 8
+      school-stance seeds across two streams; no artifact class is
+      shielded from objection-equals-warrant
+    - F4 - after each opening kill, every stream circled its first idea's
+      battery-equivalence class for the rest of the run (165/183/269 gate
+      blocks, 273/183/927 content-address no-op re-registrations); the
+      admitted stream is diverse under nomic (0.53-0.58 mean pairwise)
+      but admission is the survivor filter
+  hypotheses_generated_for_future_preregs:
+    - observe-only or witness-routed criticism is a precondition for
+      observing long-horizon generative capability
+    - infrastructure artifacts (standards, stance seeds) need protected
+      status or trial-gated attack admission
+    - the skeleton needs an explicit differential-outcome field so
+      explaining a survivor is not chargeable as scope contradiction
+  operational: legacy live_run.py path used (manifest_present false);
+    future preregs should compile a RunManifest and go through
+    ops.run_scheduler preflight. Judge ensemble-split blocked 1/1/6
+    rubric trials (protective abstention working as designed).
