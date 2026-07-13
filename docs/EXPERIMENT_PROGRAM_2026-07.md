@@ -4,17 +4,16 @@
 below still requires its own pre-registration file with literal thresholds
 committed before first data, per `docs/SELF_IMPROVEMENT.md`.
 
-**Substrate:** every experiment in this program executes against the harness
-on branch `claude/append-log-results-fix-kjmrhb`, pinned at commit `3d839b3`.
-The harness on `main` has already been tested; the pinned branch rebuilt it
-substantially (verifier-backed text/code/formal/simulation workloads, the
-website state machine with browser and vision oracles, PackIR context
-allocation, the brain store, skills distillation and adoption, refutable
-cross-run analogies, the small-model compatibility kernel, resumable runs
-with StopPolicy, torn-append log repair, structural-vs-verifier grounding
-metrics) and that new machinery is what this program stresses. Where a file
-path below is branch-specific it means the pinned branch unless stated
-otherwise.
+**Substrate:** every experiment in this program executes against the rebuilt
+harness that this branch carries (base: `claude/append-log-results-fix-kjmrhb`
+at commit `3d839b3`). The harness on `main` has already been tested; the
+rebuild changed it substantially (verifier-backed text/code/formal/simulation
+workloads, the website state machine with browser and vision oracles, PackIR
+context allocation, the brain store, skills distillation and adoption,
+refutable cross-run analogies, the small-model compatibility kernel,
+resumable runs with StopPolicy, torn-append log repair,
+structural-vs-verifier grounding metrics) and that new machinery is what
+this program stresses. Every file path below resolves in this branch's tree.
 
 **Goal chain:** validate the instruments (Tier 0), find the harness's actual
 limits (Tier 1), settle the capture-control science the spec pre-registered
@@ -102,13 +101,13 @@ scale-blind 128-dim `HashingEmbedder` with a real embedding model?
 **What it does.** No new LLM runs. Install the `.[embed]` extra (fastembed
 ONNX) and set the branch's `EMBEDDER_MODEL` knob. Re-score, offline, every
 recoverable run root in the record (basin corpora, lambda pilot roots, T2
-replication roots, the two live gemma runs on the pinned branch) under both
+replication roots, the two live gemma runs in this branch) under both
 embedders via replay: mean pairwise distance, nearest-prior-conjecture
 novelty, late/early ratio, echo-vs-chance, inter-school centroid distance.
 Corpus note: the pre-rebuild result files were retired from the working tree
 on 2026-07-13 (recovery SHA in `experiments/results/INDEX_2026-07-13.md`);
 raw historical roots live at the operator's site or in the archive commit,
-and the gemma roots on the pinned branch are the only in-repo replayable
+and the gemma roots in this branch are the only in-repo replayable
 roots. E0.1 recovers its corpus from those sources at run time; whatever is
 genuinely unrecoverable is reported as excluded, not silently skipped.
 Then calibrate every absolute distance threshold (`RESEED_DIST_MIN`,
@@ -246,7 +245,7 @@ oracle-divergence detector spec.
 
 ## Tier 1: harness stress and limits
 
-Aimed squarely at the machinery that is new on the pinned branch: resumable
+Aimed squarely at the machinery that is new in this rebuild: resumable
 runs, torn-append repair, PackIR, the brain store, the compat kernel, the
 transport hardening, and the report's new grounding split.
 
@@ -306,7 +305,7 @@ oracle-divergence detector.
 **Question.** Which harness stages fail for which small models, and does the
 compat kernel actually move the failure boundary?
 
-**What it does.** Completes the pinned branch's own awaiting artifacts: runs
+**What it does.** Completes this branch's own awaiting artifacts: runs
 the 60-prompt `experiments/website_compat_matrix_v1.json` non-mock, and
 collects the live evidence `experiments/frontier_compat_baseline_prereg_v1.json`
 declares (`status: not_collected`, `evidence_required: live`). Matrix:
@@ -676,7 +675,7 @@ echo-vs-chance vs curriculum position.
 **Why.** Memory is the only mechanism by which the system could exhibit
 cumulative creativity (the interesting kind), and simultaneously the most
 plausible capture vector. The brain, skills, and analogy machinery are all
-new on the pinned branch and have never been measured in anger; this
+new in this rebuild and have never been measured in anger; this
 measures both directions at once with the placebo control the prior record
 lacked.
 

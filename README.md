@@ -194,7 +194,9 @@ Concretely, good fits:
 | Producing a *defensible* conclusion, not just an answer | The thesis view commits to the best-supported survivor and cites the log |
 
 We tested this end-to-end on "why does time have an arrow?" (see
-[`experiments/results/mini_arrow_comparison.md`](experiments/results/mini_arrow_comparison.md)).
+`experiments/results/mini_arrow_comparison.md`, retired to git history; recovery
+instructions in
+[`experiments/results/INDEX_2026-07-13.md`](experiments/results/INDEX_2026-07-13.md)).
 The full harness spun one question into a 224-problem graph, produced 20
 argued survivors spanning every major position in the literature, and then
 wrote a committed thesis citing its own record. MiniReason reconstructed the
