@@ -46,6 +46,7 @@ from deepreason.llm.wire import (
     wire_contract_for,
 )
 from deepreason.ontology.event import LLMAttempt, LLMCall
+from deepreason.run_manifest import infer_model_family
 
 
 def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
@@ -674,7 +675,12 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
     # Preserve compile-time identities when a standalone manifest has been
     # materialized as Config for an existing workflow facade.
     endpoint.endpoint_id = spec.get("endpoint_id") or spec["endpoint"]
-    endpoint.family = spec.get("family") or ""
+    # Default to the same deterministic inference the route lease uses
+    # (route_from_endpoint), so a config without an explicit family key can
+    # never disagree with its own lease and fail closed at the first call.
+    endpoint.family = spec.get("family") or infer_model_family(
+        model, spec.get("provider") or ""
+    )
     endpoint.model_revision = spec.get("model_revision") or None
     return endpoint
 

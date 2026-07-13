@@ -95,3 +95,28 @@ commitments:
 
 budget:
   llm_tokens: <= 1500000 total (500000 per stream), max 3 in flight
+
+# --- amendment 1, recorded BEFORE any live call (zero tokens spent) ---
+amendment_1:
+  when: first launch attempt, 2026-07-13
+  what_happened: all three streams crashed pre-dispatch (no request left
+    the machine) on ROUTE_LEASE_MISMATCH - finding F2, the shipped
+    config/ollama-live.yaml stamps an empty family on every endpoint while
+    the route lease infers a real one, so the route firewall fails closed
+    on the first call of ANY live root using that config. Fixed in code
+    (endpoint family now defaults to the same deterministic inference the
+    lease uses; explicit config override still wins) with a regression
+    test in tests/test_providers.py.
+  design_change: pure single-model streams are impossible for this suite
+    by the harness's own normative invariant - rubric trials require two
+    judge seats from DIFFERENT model families
+    (require_cross_family_judge_ensemble), and the bronze suite's
+    kappa-hist commitment makes rubric trials certain. Amended design:
+    all generative roles (conjecturer, variator, argumentative critic,
+    defender, synthesizer, thesis) and judge seat 1 remain the stream's
+    model; judge seat 2 is gpt-oss:120b in ALL three streams (held
+    constant across streams as a control; family openai-gpt is distinct
+    from deepseek, qwen, and ollama:kimi). Cross-stream comparisons of
+    criticism climate therefore reflect the stream model's critic and
+    first judge seat, with an identical second opinion everywhere.
+  tokens_spent_before_amendment: 0

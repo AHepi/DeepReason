@@ -78,3 +78,25 @@ def test_role_table_is_the_model_change_plug():
     assert ep.reasoning == "none"
     assert ep.max_tokens == 1400
     assert ep.json_mode is True and ep.request_logprobs is True
+
+
+def test_endpoint_family_defaults_to_lease_inference():
+    """A config without an explicit family key must produce an endpoint whose
+    family matches what route_from_endpoint infers, so the route firewall
+    cannot fail closed on the first call (bronze flat run finding F2)."""
+    from deepreason.llm.firewall import route_from_endpoint
+
+    spec = {
+        "endpoint": "https://ollama.com/v1",
+        "model": "deepseek-v4-pro",
+        "provider": "ollama",
+        "temperature": 0.0,
+        "json_mode": True,
+    }
+    ep = _endpoint_from_spec(spec)
+    assert ep.family == "deepseek"
+    route = route_from_endpoint(ep)
+    assert route.family == ep.family
+    # explicit override still wins
+    ep2 = _endpoint_from_spec({**spec, "family": "custom"})
+    assert ep2.family == "custom"
