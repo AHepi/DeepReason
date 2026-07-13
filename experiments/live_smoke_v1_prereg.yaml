@@ -1,0 +1,59 @@
+# Live smoke suite v1 — PRE-REGISTERED. Committed BEFORE any live token is
+# spent. First live runs of the rebuilt harness, and the first live runs
+# under the neural embedder default.
+#
+# Question: does the rebuilt harness hold its wire, accounting, and
+# instrument contracts against real Ollama Cloud endpoints across three
+# model families?
+
+provider:
+  endpoint: https://ollama.com/v1
+  config: config/ollama-live.yaml
+  concurrency_note: subscription allows 3 concurrent requests; each run is
+    single-threaded, so exactly 3 runs execute in parallel, one per model
+
+runs:
+  - {root: runs/live-smoke-gptoss,  model: "gpt-oss:120b"}
+  - {root: runs/live-smoke-qwen,    model: "qwen3-coder:480b"}
+  - {root: runs/live-smoke-dsflash, model: "deepseek-v4-flash"}
+
+design:
+  workload: text (deepreason reason --text)
+  question: >
+    Why does technological progress cluster into golden ages instead of
+    advancing steadily?
+  cycles: 8
+  token_budget_per_run: 60000
+  rubric_policy: forbid            # no rubric trials, so no judge seats used
+  single_model: one concrete model for every active role, per run
+  embedder: nomic-ai/nomic-embed-text-v1.5 (the new default)
+
+predictions:
+  P1:
+    statement: conjecturer eventual_valid_rate >= 0.8 in 3 of 3 runs
+    rationale: schema compliance held for gemma4:31b under the compact
+      profile; these are larger models
+  P2:
+    statement: every run ends with >= 1 ACCEPTED artifact
+  P3:
+    statement: verify_root reports zero violations on all 3 roots AND
+      logged tokens <= 60000 per run (TokenMeter ceiling holds live)
+  P4:
+    statement: transport_dropped == 0 across all runs (transport hardening
+      holds against a live hosted endpoint at 600s timeouts)
+  P5:
+    statement: no embedder-fallback measure on any log (the neural default
+      actually loads in live runs), and the neural conjecture novelty
+      series computes for every registered conjecture on every root
+
+decision_rules:
+  - verdicts CONFIRMED / REFUTED / UNDECIDED per prediction against the
+    literal numbers, no post-hoc reinterpretation
+  - report lands at experiments/results/live_smoke_v1_report.json
+  - one line appended to experiments/results/INDEX_2026-07-13.md
+  - run roots are operator-site artifacts (runs/, gitignored); the report
+    carries the measured numbers
+
+budget:
+  llm_tokens: <= 180000 total (60000 x 3, hard TokenMeter ceilings)
+  wall_clock: expected 15-60 minutes per run, parallel

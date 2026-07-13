@@ -1,0 +1,26 @@
+# Ollama Cloud live profile. OpenAI-compatible; set OLLAMA_API_KEY in the
+# environment (or ~/.deepreason/credentials). Model ids here are sentinels:
+# live runs compile with --single-model <id>, which assigns one concrete
+# model to every active role. provider: ollama routes the reasoning knob
+# correctly (reasoning: none actually disables thinking on Ollama).
+# timeout_s raised for hosted open-model endpoints: full generations on the
+# large models can exceed the default 300s read window.
+# Subscription note: max 3 concurrent requests account-wide; the scheduler
+# is single-threaded per run, so run at most 3 roots in parallel.
+
+N_SCHOOLS: 2
+STANCE_DECAY: 20
+VS_K: 3
+ARG_CRIT_PER_CYCLE: 3
+CRIT_BATCH_K: 3
+
+roles:
+  conjecturer:          { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 1.0, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 4000, json_mode: true, timeout_s: 600 }
+  argumentative_critic: { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.7, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 2800, json_mode: true, timeout_s: 600 }
+  defender:             { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.7, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 900, json_mode: true, timeout_s: 600 }
+  variator:             { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 1.0, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 3000, json_mode: true, timeout_s: 600 }
+  judge:
+    - { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.0, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 2400, json_mode: true, timeout_s: 600 }
+    - { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.0, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 2400, json_mode: true, timeout_s: 600 }
+  synthesizer:          { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.9, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 1400, json_mode: true, timeout_s: 600 }
+  thesis:               { endpoint: "https://ollama.com/v1", model: auto, provider: ollama, temperature: 0.3, api_key_env: OLLAMA_API_KEY, reasoning: none, max_tokens: 6000, json_mode: true, timeout_s: 600 }
