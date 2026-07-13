@@ -1,0 +1,56 @@
+# Judge liability index, validation tranche — PRE-REGISTERED. Committed
+# BEFORE the index program is run against any data.
+#
+# Question: can an event-driven, per-seat exhibited-error index -- built
+# only from signals the log already emits -- rank judge seats by their
+# true error rates, so that judge penalties become live and proportional
+# instead of battery-lagged and static?
+
+instrument:
+  program: scripts/judge_liability.py (new; a pure replay/scoring program,
+    zero LLM tokens)
+  signals_consumed:
+    - cross-instrument contradiction: a seat passed an item that a
+      stronger layer (here the argumentative critic, or ground truth
+      where available) failed on substantially the same ground
+    - per-seat disagreement under paraphrase/order variation where the
+      tranche data contains it
+    - exposure: the count of a seat's rulings that received corroborating
+      scrutiny; seats below an exposure floor are reported UNCALIBRATED,
+      never clean
+  scoring: exhibited errors per scrutinized ruling, decaying with
+    subsequent clean scrutinized rulings (decay constant recorded in the
+    report; attention-style, never a status input)
+
+validation_data: the committed tranche-1 corpus and raw judgments
+  (ground truth known by construction), plus tranche-2 clean items when
+  available. Ground truth is used ONLY to score the index, never as an
+  index input.
+
+predictions:
+  P1:
+    statement: the index, computed without ground truth, ranks the three
+      distinct seat configurations in the same order as their true
+      false-negative rates on unknown flaws (exact rank agreement, n=3)
+  P2:
+    statement: the index separates the weakest seat from the strongest
+      with a score ratio >= 2x
+  P3:
+    statement: every seat's exposure count is reported, and no seat with
+      zero scrutinized rulings receives a clean score (mechanical check
+      of the uncalibrated-not-clean rule)
+
+consequences:
+  if_confirmed: the index graduates to a live replay program candidate;
+    a follow-up prereg wires it to attention-only responses (corroboration
+    quota, audit spawn, recusal priority) with hysteresis, per the
+    measures-never-adjudicate invariant
+  if_refuted: event-driven judge scoring is recorded as not yet workable
+    from existing signals; battery certification stays load-bearing and
+    its known-taxonomy limits stay stamped on every rubric verdict
+
+decision_rules:
+  - verdicts against literal numbers; report at
+    experiments/results/judge_liability_index_report.json; index line
+budget:
+  llm_tokens: 0
