@@ -1,0 +1,25 @@
+# Circularity screen v1, validation tranche - PRE-REGISTERED, committed
+# before the program runs against any corpus item. Motivated by t3
+# exploratory finding: circular support is the universal judge blind spot
+# (18 percent pooled catch; all 3 universally-missed items circular).
+instrument: >
+  scripts/circularity_check.py - a deterministic program (zero LLM
+  tokens; local neural embedder only): sentence-segments an argument,
+  identifies conclusion and support sentences via discourse markers,
+  flags circularity when a support sentence is semantically near-identical
+  to the conclusion it supports (cosine distance below a threshold
+  calibrated on the committed paraphrase pairs, fixed before scoring) or
+  when stated derivation references form a cycle. A prototype screen over
+  prose, not yet an ontology verifier; graduation requires a follow-up.
+validation: the frozen corpus - 10 circular-support items, 30 other
+  unknown-flaw items, 40 original clean items (uncorrected set, so this
+  tranche is independent of t2b).
+predictions:
+  P1: {statement: "detects >= 7 of 10 circular-support items (judges
+    pooled 18 percent)"}
+  P2: {statement: "flags <= 2 of 40 clean items"}
+  P3: {statement: "beats the best single zoo seat's circular-class catch
+    by >= 30 percentage points"}
+decision_rules: {report: experiments/results/circularity_verifier_report.json,
+  index_line: true}
+budget: {llm_tokens: 0}

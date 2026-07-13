@@ -1,0 +1,23 @@
+# E0.2-t2b: re-adjudication of suspect clean items - PRE-REGISTERED,
+# committed before any adjudication call. Motivated by t3 exploratory
+# finding: 11 of 40 "clean" items drew flags from >=5 of 13 seats.
+method: >
+  Each of the 11 suspect items (>=5-of-13 zoo flags) is adjudicated by two
+  high-precision instruments: (a) the argumentative critic
+  (deepseek-v4-flash, t1-certified as the effective defense), required to
+  name one specific, checkable defect, and (b) mistral-large-3:675b (zoo
+  clean FP 0.00), strict-JSON verdict. An item is reclassified DEFECTIVE
+  only if BOTH concur (conservative conjunction). The corrected clean set
+  then re-scores t2's P2/P3 (reported as a correction record; the original
+  t2 verdicts are never edited, only superseded).
+predictions:
+  P1: {statement: ">=3 of 11 suspect items are reclassified defective
+    (ensemble unanimity is corpus signal, not herd noise)"}
+  P2: {statement: "on the corrected clean set, either-suffices cross-family
+    FP falls to <= 0.40 (the t2 rejection line), reopening the vote-rule
+    question", falsifier: "stays > 0.40 and the t2 rejection stands"}
+  P3: {statement: "the corrected t2 net (catch gain pp minus FP rise pp,
+    cross-family) becomes strictly positive"}
+decision_rules: {report: experiments/results/e02_t2b_readjudication_report.json,
+  index_line: true, original_t2_result_block: never edited}
+budget: {llm_tokens: 120000}
