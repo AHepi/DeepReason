@@ -1,0 +1,93 @@
+# E0.3 Detection-surface calibration on scripted dynamics — PRE-REGISTERED
+# (experiment program docs/EXPERIMENT_PROGRAM_2026-07.md, Tier 0).
+# Committed BEFORE any synthetic log is generated or scored. Zero LLM tokens.
+#
+# Question: what are the false-positive and false-negative rates of the
+# capture detectors on run dynamics whose ground truth is known by
+# construction?
+
+scope_note: >
+  First pass at reduced scale relative to the program sketch (10 logs per
+  regime instead of 50; the HV-Goodhart ritual regime is DEFERRED to a
+  follow-up registration because its oracle-scoring program does not exist
+  yet and building it inside this experiment would mean designing the
+  instrument on the data). Five regimes, fifty synthetic runs.
+
+generation:
+  method: >
+    Synthetic runs are fabricated through the REAL harness registration
+    path (ontology events, anti-relapse guard, warrant plumbing), not by
+    writing raw JSONL, so every log is replay-valid by construction and
+    gate blocks are emitted by the genuine gate. Content is drawn from
+    fixed topic pools with a fixed per-run seed; no LLM is called.
+  runs_per_regime: 10
+  cycles_per_run: about 30 registrations (parameter-jittered by seed)
+
+regimes:
+  healthy: diverse topic pool throughout; sparse refutations across
+    distinct targets; at least one reinstatement; no repeated submission
+    of refuted content
+  soft_basin: first third diverse, then content converges to paraphrases
+    of one cluster; no refuted-content resubmission; statuses unremarkable
+  hard_circling: one early conjecture is refuted, then near-copies of it
+    are resubmitted repeatedly (the refuted-attractor orbit); the real
+    anti-relapse gate blocks them
+  wrong_but_stable: a mutually consistent cluster of conjectures whose
+    content encodes a claim tagged false by construction (the tag is
+    invisible to every detector); criticism keeps evaluating and passing;
+    no reinstatements; low but nonzero attack spread
+  adversarial_mimicry: wrong_but_stable with cosmetic lexical rotation
+    (synonym and phrasing changes per conjecture) designed to defeat
+    embedding-contraction detectors
+
+detectors_scored:
+  - gate_block_rate (per-window anti-relapse blocks)
+  - generator contraction (mean pairwise embedding distance and slope,
+    hashing embedder, the production default)
+  - attack_target_entropy
+  - criticism_debt
+  - g_churn (status changes per window)
+  - reinstatement_rate
+  - raw_flags (capture.detection composite)
+
+metric: >
+  For each detector and each pathological regime, AUC of separating that
+  regime's 10 runs from the 10 healthy runs using the detector's per-run
+  summary value (direction chosen per detector a priori: higher gate
+  blocks = worse, lower contraction distance = worse, lower attack entropy
+  = worse, higher criticism debt = worse, lower reinstatement = worse).
+
+predictions:
+  P1:
+    statement: gate_block_rate separates hard_circling from healthy with
+      AUC >= 0.95
+    rationale: replicates the basin study's perfect-separation claim under
+      adversarial parameter jitter
+  P2:
+    statement: (pre-registered as EXPECTED TO FAIL) no scored detector
+      separates wrong_but_stable from healthy with AUC >= 0.7
+    consequence_if_confirmed_failure: the documented blind spot is real
+      and quantified; the oracle-divergence detector design (E1.1, E2.1)
+      inherits these numbers as its baseline to beat
+    consequence_if_a_detector_succeeds: the spec section 17 concession is
+      too pessimistic; record which detector sees it and why
+  P3:
+    statement: generator contraction separates soft_basin from healthy
+      with AUC >= 0.8
+  P4:
+    statement: adversarial_mimicry drops the contraction detector below
+      AUC 0.7 while wrong_but_stable-style adjudicator metrics stay
+      unchanged relative to P2 (mimicry defeats the generator surface
+      specifically)
+
+decision_rules:
+  - verdicts CONFIRMED / REFUTED / UNDECIDED against the literal numbers,
+    per prediction, no post-hoc reinterpretation
+  - report lands at experiments/results/e03_detector_calibration_report.json
+  - one line appended to experiments/results/INDEX_2026-07-13.md
+  - all synthetic roots verify under deepreason.invariants.verify_root;
+    any violation invalidates the run set and is reported, not patched
+
+budget:
+  llm_tokens: 0
+  wall_clock: tens of minutes
