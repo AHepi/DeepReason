@@ -34,12 +34,6 @@
           "nodes_expanded_small": 1,
           "nontrivial": true
         }
-      ],
-      "template_kinds": [
-        "graded_interaction",
-        "unary_power",
-        "graded_interaction",
-        "commutation_like"
       ]
     },
     {
@@ -76,13 +70,6 @@
           "nodes_expanded_small": 1,
           "nontrivial": true
         }
-      ],
-      "template_kinds": [
-        "unary_power",
-        "unary_power",
-        "unary_hom",
-        "unit_like",
-        "commutation_like"
       ]
     },
     {
@@ -119,15 +106,6 @@
           "nodes_expanded_small": 1,
           "nontrivial": true
         }
-      ],
-      "template_kinds": [
-        "unary_power",
-        "commutation_like",
-        "assoc_like",
-        "unit_like",
-        "unary_power",
-        "assoc_like",
-        "graded_interaction"
       ]
     }
   ],

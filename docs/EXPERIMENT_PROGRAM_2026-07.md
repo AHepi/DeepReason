@@ -572,7 +572,7 @@ self-diversity, the record's loudest gap.
 classes across the branch's three verifier families (the problems double as
 the oracle sets for E2.1 and E2.2, built once):
 
-1. **Synthetic-domain problems (contamination-impossible).** A freshly
+1. **Synthetic-domain problems (instance-fresh).** A freshly
    invented axiomatic system: randomized axiom sets over fresh symbols,
    pinned in Lean4, with machine-enumerated theorem targets of graded depth
    (nontriviality certified by failure of a bounded brute-force prover).
@@ -772,7 +772,7 @@ graph); all capture detectors longitudinally; a final human-readable
 
 **Why.** This is the experiment the whole program points at. Everything else
 de-risks it. Its result, either depth-5 cumulative verified structure in a
-contamination-impossible domain or a documented wall, is the program's
+instance-fresh domain or a documented wall, is the program's
 answer to "are LLMs capable of creativity", stated in falsifiable,
 verifier-grounded terms.
 
@@ -837,7 +837,7 @@ record's preference for measures over machinery:
   (Tier 2).
 - The creativity question gets its first ground-truth instrument, a measured
   answer to "is the basin a wall", and a flagship result in a
-  contamination-impossible domain that is falsifiable in both directions
+  instance-fresh domain that is falsifiable in both directions
   (Tier 3).
 
 Honest limits, stated in advance: harness lift measures what

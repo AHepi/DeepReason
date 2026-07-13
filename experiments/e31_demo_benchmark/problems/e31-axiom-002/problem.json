@@ -9,11 +9,12 @@
     "kreimulp(kreimulp(x, y), z) = kreimulp(x, kroveil(y, z))",
     "kroveil(x, kreimulp(x, y)) = kreimulp(x, kroveil(x, y))"
   ],
+  "depth_semantics": "depth grades are bounded_canonical_rewrite_depth values: relative to the build-time bounded forward-chaining prover, never a lower bound on all proof methods",
   "generator_version": "e31-axiom-domains-v1",
   "id": "e31-axiom-002",
   "schema": "e31-axiom-problem-v1",
   "sealed_refs": {
-    "certificate.json": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799"
+    "certificate.json": "7c2f4e13e5bfcc51b06a7591ef238b40e5f4cfaa8ccdecd312485b74652d0431"
   },
   "seed": "20260713/axiom/2",
   "signature": {
@@ -52,14 +53,5 @@
       "lean_name": "gleiglorl_d4_t4",
       "statement": "forall y. kroveil(skarsnein, kreimulp(vogrer(y), skarsnein)) = kroveil(skarsnein, y)"
     }
-  ],
-  "template_kinds": [
-    "unary_power",
-    "commutation_like",
-    "assoc_like",
-    "unit_like",
-    "unary_power",
-    "assoc_like",
-    "graded_interaction"
   ]
 }

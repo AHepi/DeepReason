@@ -28,13 +28,19 @@ REVEAL_POLICY = "post_hoc_reveal_only"
 @dataclass(frozen=True)
 class SealedProblem:
     """One problem's withheld material: named blobs (verifier, answer key,
-    difficulty certificate), all sealed together."""
+    difficulty certificate), all sealed together.
+
+    ``generator_metadata`` carries generator-internal facts (e.g. which
+    schema templates produced a domain's axioms) that must stay out of
+    every problem-facing rendering; it is recorded on the sealed holdout
+    manifest, inside the ``holdout/`` namespace."""
 
     problem_id: str
     problem_class: str
     seed: str
     blobs: dict[str, bytes] = field(repr=False)
     certificate_blob: str = "certificate.json"
+    generator_metadata: dict[str, Any] | None = None
 
     def refs(self) -> dict[str, str]:
         """Content addresses (hash-visible per §10.5) without storing bytes."""
@@ -65,15 +71,16 @@ def seal_holdout(holdout_root: Path, sealed: list[SealedProblem]) -> dict[str, A
             if ref != sha256_hex(data):
                 raise RuntimeError(f"blob store returned a non-content digest for {name}")
             refs[name] = ref
-        entries.append(
-            {
-                "id": problem.problem_id,
-                "class": problem.problem_class,
-                "seed": problem.seed,
-                "certificate_digest": problem.certificate_digest,
-                "sealed_refs": refs,
-            }
-        )
+        entry: dict[str, Any] = {
+            "id": problem.problem_id,
+            "class": problem.problem_class,
+            "seed": problem.seed,
+            "certificate_digest": problem.certificate_digest,
+            "sealed_refs": refs,
+        }
+        if problem.generator_metadata is not None:
+            entry["generator_metadata"] = problem.generator_metadata
+        entries.append(entry)
     manifest = {
         "schema": HOLDOUT_MANIFEST_SCHEMA,
         "namespace": "holdout/",

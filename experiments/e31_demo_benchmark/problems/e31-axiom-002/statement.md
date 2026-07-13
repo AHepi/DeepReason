@@ -1,7 +1,11 @@
 # e31-axiom-002 — synthetic axiom domain (Gleiglorl)
 
-Class 1 (contamination-impossible): a freshly generated axiomatic
-system over uninterpreted symbols, pinned in Lean 4 (`domain.lean`).
+Class 1 (instance-fresh): a freshly generated axiomatic system over
+uninterpreted symbols, pinned in Lean 4 (`domain.lean`).  Schema
+templates are recognizable structure a model may know in the
+abstract; every instance (symbols, operator assignments,
+orientations) is freshly generated at build time, so this exact
+problem cannot appear in any training corpus.
 Prove the target theorems from the class hypotheses; the pinned
 verification request (`pinned_lean_request.json`) forbids `sorry`.
 
@@ -15,7 +19,8 @@ verification request (`pinned_lean_request.json`) forbids `sorry`.
 - `kreimulp(kreimulp(x, y), z) = kreimulp(x, kroveil(y, z))`
 - `kroveil(x, kreimulp(x, y)) = kreimulp(x, kroveil(x, y))`
 
-## Targets (depth-graded)
+## Targets (graded by bounded canonical rewrite depth — relative
+to the build-time bounded prover, not a bound on all proof methods)
 
 - `gleiglorl_d1_t1` (depth grade 1): `forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(skarsnein, y)`
 - `gleiglorl_d2_t2` (depth grade 2): `forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(y, skarsnein)`

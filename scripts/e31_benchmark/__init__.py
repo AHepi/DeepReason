@@ -1,7 +1,9 @@
 """E3.1 ground-truth novelty benchmark builders (docs/EXPERIMENT_PROGRAM_2026-07.md).
 
-Deterministic, zero-LLM generators for the benchmark's contamination-resistance
-classes plus the sealed-holdout wiring:
+Deterministic, zero-LLM generators for the benchmark's instance-fresh problem
+classes (schema templates are recognizable structure; every emitted instance
+is freshly generated, so no specific instance predates the build) plus the
+sealed-holdout wiring:
 
 - ``axiom_domains``  — fresh axiomatic systems pinned in Lean 4, with a
   machine enumerator of depth-graded theorem targets;

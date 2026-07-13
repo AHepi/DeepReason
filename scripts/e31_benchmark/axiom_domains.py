@@ -1,4 +1,10 @@
-"""Generator of fresh axiomatic systems for E3.1 class 1 (contamination-impossible).
+"""Generator of fresh axiomatic systems for E3.1 class 1 (instance-fresh).
+
+Instance-fresh, not contamination-proof: the axiom-schema templates below
+are recognizable structure a trained model may have seen in the abstract,
+but every emitted instance (symbols, operator assignments, orientations) is
+freshly generated at build time, so no specific problem instance can appear
+in any training corpus.
 
 Given a seed this module deterministically emits:
 
@@ -376,7 +382,7 @@ def enumerate_targets(
         )
         if not certificate["outcome_large"]["proved"]:
             continue  # ball truncation artifact; never emit an uncertified target
-        graded_depth = certificate["depth"]
+        graded_depth = certificate["bounded_canonical_rewrite_depth"]
         targets.append(
             TheoremTarget(
                 lean_name=f"{domain.signature.class_name.lower()}_d{graded_depth}"
@@ -476,7 +482,9 @@ def pinned_request(lean_source: bytes, targets: list[TheoremTarget]) -> PinnedLe
 
 def domain_public_json(domain: AxiomDomain, targets: list[TheoremTarget]) -> dict[str, Any]:
     """Problem-facing description: axioms + graded statements, no certificates,
-    no derivations (those are sealed)."""
+    no derivations, and no generator-template metadata (template kinds are
+    sealed holdout material — publishing them would tell a solver which
+    schema generated each axiom)."""
 
     return {
         "schema": "e31-axiom-problem-v1",
@@ -485,7 +493,11 @@ def domain_public_json(domain: AxiomDomain, targets: list[TheoremTarget]) -> dic
         "attempt": domain.attempt,
         "signature": domain.signature.to_json(),
         "axioms": domain.axiom_strings(),
-        "template_kinds": list(domain.template_kinds),
+        "depth_semantics": (
+            "depth grades are bounded_canonical_rewrite_depth values: "
+            "relative to the build-time bounded forward-chaining prover, "
+            "never a lower bound on all proof methods"
+        ),
         "targets": [
             {
                 "lean_name": target.lean_name,
@@ -508,6 +520,9 @@ def domain_sealed_certificate(
         "generator_version": GENERATOR_VERSION,
         "seed": domain.seed,
         "attempt": domain.attempt,
+        # Generator-template metadata is sealed (problem-facing JSON must
+        # not reveal which schema produced each axiom).
+        "template_kinds": list(domain.template_kinds),
         "collapse_check": domain.collapse_check,
         "axioms": [
             {"lhs": term_to_json(lhs), "rhs": term_to_json(rhs)}
@@ -517,7 +532,7 @@ def domain_sealed_certificate(
             {
                 "lean_name": target.lean_name,
                 "statement": target.statement,
-                "depth": target.depth,
+                "bounded_canonical_rewrite_depth": target.depth,
                 "certificate": target.certificate,
             }
             for target in targets

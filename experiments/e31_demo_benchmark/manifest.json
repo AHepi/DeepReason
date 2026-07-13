@@ -22,7 +22,7 @@
   },
   "problems": [
     {
-      "certificate_digest": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025",
+      "certificate_digest": "461f42b0d7600a36d2fbcbc6e215edd2ea88ac8dc583cc66306b62d5be4ffaa9",
       "class": "axiom_domain",
       "files": [
         "domain.lean",
@@ -33,7 +33,7 @@
       "id": "e31-axiom-000",
       "lean_source_sha256": "417a54e1be2d821af4914bc02ad300218c1d546e3c0c1b0bbfeb8cd712be720a",
       "sealed_refs": {
-        "certificate.json": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025"
+        "certificate.json": "461f42b0d7600a36d2fbcbc6e215edd2ea88ac8dc583cc66306b62d5be4ffaa9"
       },
       "seed": "20260713/axiom/0",
       "target_theorems": [
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "certificate_digest": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292",
+      "certificate_digest": "582db4a68cfccd7d9d252e789b3cd054e64037940d039adbb1573b66d655ac36",
       "class": "axiom_domain",
       "files": [
         "domain.lean",
@@ -55,7 +55,7 @@
       "id": "e31-axiom-001",
       "lean_source_sha256": "d524f78b0c65509a94b077229f1823c37dc82f77a26d61a4dfd57bce93b7a7f7",
       "sealed_refs": {
-        "certificate.json": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292"
+        "certificate.json": "582db4a68cfccd7d9d252e789b3cd054e64037940d039adbb1573b66d655ac36"
       },
       "seed": "20260713/axiom/1",
       "target_theorems": [
@@ -66,7 +66,7 @@
       ]
     },
     {
-      "certificate_digest": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799",
+      "certificate_digest": "7c2f4e13e5bfcc51b06a7591ef238b40e5f4cfaa8ccdecd312485b74652d0431",
       "class": "axiom_domain",
       "files": [
         "domain.lean",
@@ -77,7 +77,7 @@
       "id": "e31-axiom-002",
       "lean_source_sha256": "4505cd71c9243b611647212a402a3aa169f6b157fa01b7cb15f130e8b111c49a",
       "sealed_refs": {
-        "certificate.json": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799"
+        "certificate.json": "7c2f4e13e5bfcc51b06a7591ef238b40e5f4cfaa8ccdecd312485b74652d0431"
       },
       "seed": "20260713/axiom/2",
       "target_theorems": [

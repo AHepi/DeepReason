@@ -7,11 +7,12 @@
     "broplaum(x, vugleil) = x",
     "skaumark(x, y) = skaumark(y, x)"
   ],
+  "depth_semantics": "depth grades are bounded_canonical_rewrite_depth values: relative to the build-time bounded forward-chaining prover, never a lower bound on all proof methods",
   "generator_version": "e31-axiom-domains-v1",
   "id": "e31-axiom-001",
   "schema": "e31-axiom-problem-v1",
   "sealed_refs": {
-    "certificate.json": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292"
+    "certificate.json": "582db4a68cfccd7d9d252e789b3cd054e64037940d039adbb1573b66d655ac36"
   },
   "seed": "20260713/axiom/1",
   "signature": {
@@ -50,12 +51,5 @@
       "lean_name": "breidrov_d4_t4",
       "statement": "forall x. zeizoth(zeizoth(broplaum(zeizoth(x), freifrarr))) = broplaum(skaumark(x, x), zeizoth(zeizoth(freifrarr)))"
     }
-  ],
-  "template_kinds": [
-    "unary_power",
-    "unary_power",
-    "unary_hom",
-    "unit_like",
-    "commutation_like"
   ]
 }

@@ -72,8 +72,12 @@ def _axiom_statement_md(problem_id: str, public: dict[str, Any]) -> str:
     lines = [
         f"# {problem_id} — synthetic axiom domain ({public['signature']['class_name']})",
         "",
-        "Class 1 (contamination-impossible): a freshly generated axiomatic",
-        "system over uninterpreted symbols, pinned in Lean 4 (`domain.lean`).",
+        "Class 1 (instance-fresh): a freshly generated axiomatic system over",
+        "uninterpreted symbols, pinned in Lean 4 (`domain.lean`).  Schema",
+        "templates are recognizable structure a model may know in the",
+        "abstract; every instance (symbols, operator assignments,",
+        "orientations) is freshly generated at build time, so this exact",
+        "problem cannot appear in any training corpus.",
         "Prove the target theorems from the class hypotheses; the pinned",
         "verification request (`pinned_lean_request.json`) forbids `sorry`.",
         "",
@@ -81,7 +85,12 @@ def _axiom_statement_md(problem_id: str, public: dict[str, Any]) -> str:
         "",
     ]
     lines += [f"- `{axiom}`" for axiom in public["axioms"]]
-    lines += ["", "## Targets (depth-graded)", ""]
+    lines += [
+        "",
+        "## Targets (graded by bounded canonical rewrite depth — relative",
+        "to the build-time bounded prover, not a bound on all proof methods)",
+        "",
+    ]
     lines += [
         f"- `{target['lean_name']}` (depth grade {target['depth_grade']}): "
         f"`{target['statement']}`"
@@ -154,6 +163,12 @@ def build_benchmark(out_dir: Path, *, seed: int = DEMO_SEED) -> dict[str, Any]:
             problem_class="axiom_domain",
             seed=problem_seed,
             blobs={"certificate.json": _dump(certificate)},
+            # Generator-template metadata lives ONLY in the sealed holdout
+            # namespace; problem-facing JSON must not name the schema
+            # templates behind each axiom.
+            generator_metadata={
+                "template_kinds": list(domain.template_kinds),
+            },
         )
         sealed_problems.append(sealed)
         public["sealed_refs"] = sealed.refs()
@@ -187,7 +202,8 @@ def build_benchmark(out_dir: Path, *, seed: int = DEMO_SEED) -> dict[str, Any]:
                 "class_name": domain.signature.class_name,
                 "attempt": domain.attempt,
                 "n_axioms": len(domain.axioms),
-                "template_kinds": list(domain.template_kinds),
+                # template_kinds intentionally absent: generator-template
+                # metadata is sealed holdout material, not report material.
                 "targets": [
                     {
                         "lean_name": target.lean_name,

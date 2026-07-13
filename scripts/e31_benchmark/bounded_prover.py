@@ -19,9 +19,12 @@ expanded-node count, term size).
 
 Definitions used by the benchmark:
 
-- **depth** of a proved target = length of the shortest rewrite chain found
-  (the minimal-derivation-length estimate used for grading; exact within the
-  budget whenever the search was not truncated);
+- **bounded_canonical_rewrite_depth** of a proved target = length of the
+  shortest rewrite chain found by THIS prover (the minimal-derivation-length
+  estimate used for grading; exact within the budget whenever the search was
+  not truncated).  The claim is relative to the bounded forward-chaining
+  prover and its recorded pruning conditions — it is never a lower bound on
+  the difficulty of all proof methods;
 - **difficulty certificate**: a target is *nontrivial* iff the prover fails
   at ``B_small`` but a derivation exists at ``B_large``; both outcomes are
   recorded verbatim.
@@ -303,6 +306,50 @@ def reachable_ball(
     return distances, truncated
 
 
+def prover_conditions(axioms: list[tuple[Term, Term]]) -> dict[str, Any]:
+    """Every pruning/truncation condition this prover applies, recorded so a
+    certificate reader can see exactly which searches were NOT performed.
+
+    The bounded forward-chaining prover is one particular instrument; the
+    conditions below define (and limit) what any of its claims mean.
+    """
+
+    raw_orientations = 2 * len(axioms)
+    admitted = len(prepare_rules(axioms))
+    return {
+        "prover": (
+            "deterministic bounded forward-chaining BFS rewrite search "
+            "(e31_benchmark/bounded_prover.py)"
+        ),
+        "rewrite_orientation_pruning": {
+            "raw_orientations": raw_orientations,
+            "admitted_rules": admitted,
+            "pruned": raw_orientations - admitted,
+            "rule": (
+                "an orientation p -> q is admitted only when vars(q) <= "
+                "vars(p) and p is not a bare variable; duplicate and "
+                "identity orientations are dropped"
+            ),
+        },
+        "truncation_bounds": [
+            "max_depth: BFS stops after budget.max_depth levels; a live "
+            "frontier cut this way sets outcome.truncated",
+            "max_nodes: expansion stops after budget.max_nodes node "
+            "expansions; sets outcome.truncated",
+            "max_term_size: successor terms larger than "
+            "budget.max_term_size are silently discarded (pruning is NOT "
+            "reflected in outcome.truncated)",
+        ],
+        "other_conditions": [
+            "skolemization: the target equation's free variables are frozen "
+            "as fresh constants before search (sound for the universal "
+            "closure; the search space is the skolemized rewrite graph)",
+            "deduplication: previously reached terms are never re-expanded "
+            "(BFS distances stay minimal within the searched space)",
+        ],
+    }
+
+
 def difficulty_certificate(
     axioms: list[tuple[Term, Term]],
     lhs: Term,
@@ -312,12 +359,20 @@ def difficulty_certificate(
     large: Budget,
 ) -> dict[str, Any]:
     """Certificate: nontrivial iff the prover fails at ``small`` but a
-    derivation exists at ``large``.  Both runs are recorded verbatim."""
+    derivation exists at ``large``.  Both runs are recorded verbatim.
+
+    The graded claim is ``bounded_canonical_rewrite_depth``: the length of
+    the shortest rewrite chain found by THIS bounded forward-chaining
+    prover under the recorded pruning/truncation conditions.  It is a
+    statement relative to that one instrument only — NEVER a lower bound on
+    the difficulty of all proof methods (a different prover, a human, or
+    Lean automation may reach the target far more directly).
+    """
 
     outcome_small = prove_equation(axioms, lhs, rhs, small)
     outcome_large = prove_equation(axioms, lhs, rhs, large)
     return {
-        "schema": "e31-difficulty-certificate-v1",
+        "schema": "e31-difficulty-certificate-v2",
         "statement": f"forall vars: {term_str(lhs)} = {term_str(rhs)}",
         "lhs": term_to_json(lhs),
         "rhs": term_to_json(rhs),
@@ -326,5 +381,11 @@ def difficulty_certificate(
         "outcome_small": outcome_small.to_json(),
         "outcome_large": outcome_large.to_json(),
         "nontrivial": (not outcome_small.proved) and outcome_large.proved,
-        "depth": outcome_large.depth,
+        "bounded_canonical_rewrite_depth": outcome_large.depth,
+        "depth_semantics": (
+            "bounded_canonical_rewrite_depth is relative to the bounded "
+            "forward-chaining prover recorded in prover_conditions; it is "
+            "never a lower bound on all proof methods"
+        ),
+        "prover_conditions": prover_conditions(axioms),
     }

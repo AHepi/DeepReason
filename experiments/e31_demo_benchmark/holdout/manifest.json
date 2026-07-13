@@ -3,29 +3,57 @@
   "note": "Digests are visible; bytes are excluded from every problem-facing rendering until a Reveal event.  Verifiers and answer keys are withheld from any run loop and revealed only post-hoc.",
   "problems": [
     {
-      "certificate_digest": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025",
+      "certificate_digest": "461f42b0d7600a36d2fbcbc6e215edd2ea88ac8dc583cc66306b62d5be4ffaa9",
       "class": "axiom_domain",
+      "generator_metadata": {
+        "template_kinds": [
+          "graded_interaction",
+          "unary_power",
+          "graded_interaction",
+          "commutation_like"
+        ]
+      },
       "id": "e31-axiom-000",
       "sealed_refs": {
-        "certificate.json": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025"
+        "certificate.json": "461f42b0d7600a36d2fbcbc6e215edd2ea88ac8dc583cc66306b62d5be4ffaa9"
       },
       "seed": "20260713/axiom/0"
     },
     {
-      "certificate_digest": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292",
+      "certificate_digest": "582db4a68cfccd7d9d252e789b3cd054e64037940d039adbb1573b66d655ac36",
       "class": "axiom_domain",
+      "generator_metadata": {
+        "template_kinds": [
+          "unary_power",
+          "unary_power",
+          "unary_hom",
+          "unit_like",
+          "commutation_like"
+        ]
+      },
       "id": "e31-axiom-001",
       "sealed_refs": {
-        "certificate.json": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292"
+        "certificate.json": "582db4a68cfccd7d9d252e789b3cd054e64037940d039adbb1573b66d655ac36"
       },
       "seed": "20260713/axiom/1"
     },
     {
-      "certificate_digest": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799",
+      "certificate_digest": "7c2f4e13e5bfcc51b06a7591ef238b40e5f4cfaa8ccdecd312485b74652d0431",
       "class": "axiom_domain",
+      "generator_metadata": {
+        "template_kinds": [
+          "unary_power",
+          "commutation_like",
+          "assoc_like",
+          "unit_like",
+          "unary_power",
+          "assoc_like",
+          "graded_interaction"
+        ]
+      },
       "id": "e31-axiom-002",
       "sealed_refs": {
-        "certificate.json": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799"
+        "certificate.json": "7c2f4e13e5bfcc51b06a7591ef238b40e5f4cfaa8ccdecd312485b74652d0431"
       },
       "seed": "20260713/axiom/2"
     },

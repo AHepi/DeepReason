@@ -273,7 +273,9 @@
   "seed": "20260713/axiom/2",
   "targets": [
     {
+      "bounded_canonical_rewrite_depth": 1,
       "certificate": {
+        "bounded_canonical_rewrite_depth": 1,
         "budget_large": {
           "max_depth": 6,
           "max_nodes": 3000,
@@ -284,7 +286,7 @@
           "max_nodes": 200,
           "max_term_size": 15
         },
-        "depth": 1,
+        "depth_semantics": "bounded_canonical_rewrite_depth is relative to the bounded forward-chaining prover recorded in prover_conditions; it is never a lower bound on all proof methods",
         "lhs": [
           "f",
           "kreimulp",
@@ -332,6 +334,24 @@
           "proved": true,
           "truncated": false
         },
+        "prover_conditions": {
+          "other_conditions": [
+            "skolemization: the target equation's free variables are frozen as fresh constants before search (sound for the universal closure; the search space is the skolemized rewrite graph)",
+            "deduplication: previously reached terms are never re-expanded (BFS distances stay minimal within the searched space)"
+          ],
+          "prover": "deterministic bounded forward-chaining BFS rewrite search (e31_benchmark/bounded_prover.py)",
+          "rewrite_orientation_pruning": {
+            "admitted_rules": 12,
+            "pruned": 2,
+            "raw_orientations": 14,
+            "rule": "an orientation p -> q is admitted only when vars(q) <= vars(p) and p is not a bare variable; duplicate and identity orientations are dropped"
+          },
+          "truncation_bounds": [
+            "max_depth: BFS stops after budget.max_depth levels; a live frontier cut this way sets outcome.truncated",
+            "max_nodes: expansion stops after budget.max_nodes node expansions; sets outcome.truncated",
+            "max_term_size: successor terms larger than budget.max_term_size are silently discarded (pruning is NOT reflected in outcome.truncated)"
+          ]
+        },
         "rhs": [
           "f",
           "kreimulp",
@@ -346,15 +366,16 @@
             ]
           ]
         ],
-        "schema": "e31-difficulty-certificate-v1",
+        "schema": "e31-difficulty-certificate-v2",
         "statement": "forall vars: kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(skarsnein, y)"
       },
-      "depth": 1,
       "lean_name": "gleiglorl_d1_t1",
       "statement": "forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(skarsnein, y)"
     },
     {
+      "bounded_canonical_rewrite_depth": 2,
       "certificate": {
+        "bounded_canonical_rewrite_depth": 2,
         "budget_large": {
           "max_depth": 6,
           "max_nodes": 3000,
@@ -365,7 +386,7 @@
           "max_nodes": 200,
           "max_term_size": 15
         },
-        "depth": 2,
+        "depth_semantics": "bounded_canonical_rewrite_depth is relative to the bounded forward-chaining prover recorded in prover_conditions; it is never a lower bound on all proof methods",
         "lhs": [
           "f",
           "kreimulp",
@@ -411,6 +432,24 @@
           "proved": false,
           "truncated": true
         },
+        "prover_conditions": {
+          "other_conditions": [
+            "skolemization: the target equation's free variables are frozen as fresh constants before search (sound for the universal closure; the search space is the skolemized rewrite graph)",
+            "deduplication: previously reached terms are never re-expanded (BFS distances stay minimal within the searched space)"
+          ],
+          "prover": "deterministic bounded forward-chaining BFS rewrite search (e31_benchmark/bounded_prover.py)",
+          "rewrite_orientation_pruning": {
+            "admitted_rules": 12,
+            "pruned": 2,
+            "raw_orientations": 14,
+            "rule": "an orientation p -> q is admitted only when vars(q) <= vars(p) and p is not a bare variable; duplicate and identity orientations are dropped"
+          },
+          "truncation_bounds": [
+            "max_depth: BFS stops after budget.max_depth levels; a live frontier cut this way sets outcome.truncated",
+            "max_nodes: expansion stops after budget.max_nodes node expansions; sets outcome.truncated",
+            "max_term_size: successor terms larger than budget.max_term_size are silently discarded (pruning is NOT reflected in outcome.truncated)"
+          ]
+        },
         "rhs": [
           "f",
           "kreimulp",
@@ -425,15 +464,16 @@
             ]
           ]
         ],
-        "schema": "e31-difficulty-certificate-v1",
+        "schema": "e31-difficulty-certificate-v2",
         "statement": "forall vars: kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(y, skarsnein)"
       },
-      "depth": 2,
       "lean_name": "gleiglorl_d2_t2",
       "statement": "forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(y, skarsnein)"
     },
     {
+      "bounded_canonical_rewrite_depth": 3,
       "certificate": {
+        "bounded_canonical_rewrite_depth": 3,
         "budget_large": {
           "max_depth": 6,
           "max_nodes": 3000,
@@ -444,7 +484,7 @@
           "max_nodes": 200,
           "max_term_size": 15
         },
-        "depth": 3,
+        "depth_semantics": "bounded_canonical_rewrite_depth is relative to the bounded forward-chaining prover recorded in prover_conditions; it is never a lower bound on all proof methods",
         "lhs": [
           "f",
           "vogrer",
@@ -491,6 +531,24 @@
           "proved": false,
           "truncated": true
         },
+        "prover_conditions": {
+          "other_conditions": [
+            "skolemization: the target equation's free variables are frozen as fresh constants before search (sound for the universal closure; the search space is the skolemized rewrite graph)",
+            "deduplication: previously reached terms are never re-expanded (BFS distances stay minimal within the searched space)"
+          ],
+          "prover": "deterministic bounded forward-chaining BFS rewrite search (e31_benchmark/bounded_prover.py)",
+          "rewrite_orientation_pruning": {
+            "admitted_rules": 12,
+            "pruned": 2,
+            "raw_orientations": 14,
+            "rule": "an orientation p -> q is admitted only when vars(q) <= vars(p) and p is not a bare variable; duplicate and identity orientations are dropped"
+          },
+          "truncation_bounds": [
+            "max_depth: BFS stops after budget.max_depth levels; a live frontier cut this way sets outcome.truncated",
+            "max_nodes: expansion stops after budget.max_nodes node expansions; sets outcome.truncated",
+            "max_term_size: successor terms larger than budget.max_term_size are silently discarded (pruning is NOT reflected in outcome.truncated)"
+          ]
+        },
         "rhs": [
           "f",
           "grathrux",
@@ -501,15 +559,16 @@
             ]
           ]
         ],
-        "schema": "e31-difficulty-certificate-v1",
+        "schema": "e31-difficulty-certificate-v2",
         "statement": "forall vars: vogrer(kroveil(grathrux(x), skarsnein)) = grathrux(x)"
       },
-      "depth": 3,
       "lean_name": "gleiglorl_d3_t3",
       "statement": "forall x. vogrer(kroveil(grathrux(x), skarsnein)) = grathrux(x)"
     },
     {
+      "bounded_canonical_rewrite_depth": 4,
       "certificate": {
+        "bounded_canonical_rewrite_depth": 4,
         "budget_large": {
           "max_depth": 6,
           "max_nodes": 3000,
@@ -520,7 +579,7 @@
           "max_nodes": 200,
           "max_term_size": 15
         },
-        "depth": 4,
+        "depth_semantics": "bounded_canonical_rewrite_depth is relative to the bounded forward-chaining prover recorded in prover_conditions; it is never a lower bound on all proof methods",
         "lhs": [
           "f",
           "kroveil",
@@ -572,6 +631,24 @@
           "proved": false,
           "truncated": true
         },
+        "prover_conditions": {
+          "other_conditions": [
+            "skolemization: the target equation's free variables are frozen as fresh constants before search (sound for the universal closure; the search space is the skolemized rewrite graph)",
+            "deduplication: previously reached terms are never re-expanded (BFS distances stay minimal within the searched space)"
+          ],
+          "prover": "deterministic bounded forward-chaining BFS rewrite search (e31_benchmark/bounded_prover.py)",
+          "rewrite_orientation_pruning": {
+            "admitted_rules": 12,
+            "pruned": 2,
+            "raw_orientations": 14,
+            "rule": "an orientation p -> q is admitted only when vars(q) <= vars(p) and p is not a bare variable; duplicate and identity orientations are dropped"
+          },
+          "truncation_bounds": [
+            "max_depth: BFS stops after budget.max_depth levels; a live frontier cut this way sets outcome.truncated",
+            "max_nodes: expansion stops after budget.max_nodes node expansions; sets outcome.truncated",
+            "max_term_size: successor terms larger than budget.max_term_size are silently discarded (pruning is NOT reflected in outcome.truncated)"
+          ]
+        },
         "rhs": [
           "f",
           "kroveil",
@@ -586,12 +663,20 @@
             ]
           ]
         ],
-        "schema": "e31-difficulty-certificate-v1",
+        "schema": "e31-difficulty-certificate-v2",
         "statement": "forall vars: kroveil(skarsnein, kreimulp(vogrer(y), skarsnein)) = kroveil(skarsnein, y)"
       },
-      "depth": 4,
       "lean_name": "gleiglorl_d4_t4",
       "statement": "forall y. kroveil(skarsnein, kreimulp(vogrer(y), skarsnein)) = kroveil(skarsnein, y)"
     }
+  ],
+  "template_kinds": [
+    "unary_power",
+    "commutation_like",
+    "assoc_like",
+    "unit_like",
+    "unary_power",
+    "assoc_like",
+    "graded_interaction"
   ]
 }

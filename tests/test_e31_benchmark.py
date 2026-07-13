@@ -129,7 +129,15 @@ def test_difficulty_certificate_grades_nontriviality():
         small=Budget(max_depth=1, max_nodes=200, max_term_size=15),
         large=_BUDGET,
     )
-    assert deep["nontrivial"] and deep["depth"] == 2
+    assert deep["nontrivial"] and deep["bounded_canonical_rewrite_depth"] == 2
+    # Every pruning/truncation condition of the prover is on the payload,
+    # and the claim is explicitly relative to this prover.
+    conditions = deep["prover_conditions"]
+    assert conditions["rewrite_orientation_pruning"]["admitted_rules"] >= 1
+    assert any("max_depth" in bound for bound in conditions["truncation_bounds"])
+    assert any("max_nodes" in bound for bound in conditions["truncation_bounds"])
+    assert any("max_term_size" in bound for bound in conditions["truncation_bounds"])
+    assert "never a lower bound on all proof methods" in deep["depth_semantics"]
     shallow = difficulty_certificate(
         _ASSOC,
         app("f", app("f", x, y), z),
@@ -137,7 +145,8 @@ def test_difficulty_certificate_grades_nontriviality():
         small=Budget(max_depth=1, max_nodes=200, max_term_size=15),
         large=_BUDGET,
     )
-    assert not shallow["nontrivial"] and shallow["depth"] == 1
+    assert not shallow["nontrivial"]
+    assert shallow["bounded_canonical_rewrite_depth"] == 1
 
 
 def test_enumerated_targets_carry_valid_certificates():
@@ -149,7 +158,8 @@ def test_enumerated_targets_carry_valid_certificates():
     for target in targets:
         certificate = target.certificate
         assert certificate["outcome_large"]["proved"]
-        assert certificate["depth"] == target.depth
+        assert certificate["bounded_canonical_rewrite_depth"] == target.depth
+        assert certificate["prover_conditions"]["truncation_bounds"]
         if target.depth > axiom_domains.B_SMALL.max_depth:
             assert certificate["nontrivial"]
 
@@ -272,6 +282,41 @@ def test_pinned_lean_requests_are_valid_and_pin_the_sources(demo_build):
         for theorem in request.target_theorems:
             assert f"theorem {theorem} " in source_text
     assert manifest["lean_kernel_validation"]["status"] in {"pending", "validated"}
+
+
+def test_public_payload_contains_no_sealed_metadata(demo_build):
+    """Generator-template metadata (template_kinds, template names) must be
+    absent from every problem-facing payload — it lives only in the sealed
+    holdout namespace."""
+
+    template_names = (
+        b"template_kinds",
+        b"assoc_like",
+        b"absorption_like",
+        b"unary_hom",
+        b"unary_power",
+        b"unit_like",
+        b"graded_interaction",
+        b"commutation_like",
+    )
+    public_files = _tree_bytes(demo_build / "problems")
+    public_files["manifest.json"] = (demo_build / "manifest.json").read_bytes()
+    public_files["build_report.json"] = (demo_build / "build_report.json").read_bytes()
+    for rel_path, content in public_files.items():
+        for probe in template_names:
+            assert probe not in content, (
+                f"sealed generator metadata {probe!r} leaked into {rel_path}"
+            )
+    # ... and it IS preserved in the sealed holdout manifest for post-hoc use.
+    holdout_manifest = json.loads((demo_build / "holdout" / "manifest.json").read_text())
+    axiom_entries = [
+        entry for entry in holdout_manifest["problems"]
+        if entry["class"] == "axiom_domain"
+    ]
+    assert axiom_entries
+    for entry in axiom_entries:
+        kinds = entry["generator_metadata"]["template_kinds"]
+        assert kinds and all(isinstance(kind, str) for kind in kinds)
 
 
 def test_build_report_records_certificates(demo_build):
