@@ -1,0 +1,66 @@
+# E0.2 Judge and skeleton red-team — PRE-REGISTERED, tranche 1.
+# (experiment program docs/EXPERIMENT_PROGRAM_2026-07.md, Tier 0.)
+# Committed BEFORE any adversarial artifact is generated or judged.
+#
+# Question: can an adversarial generator get worthless artifacts past the
+# judges and the skeleton machinery, and does flaw detection generalize
+# past the known planted-flaw taxonomy?
+
+scope_note: >
+  Tranche 1 at reduced scale relative to the program sketch (40 artifacts
+  per sub-battery instead of 200; two judge models instead of four; text
+  workload only). The full matrix runs when tranche-1 numbers justify the
+  spend. Sub-battery (c) bias-at-scale is DEFERRED to its own registration.
+
+provider:
+  endpoint: https://ollama.com/v1 (config/ollama-live.yaml routes)
+  concurrency: max 3 in flight, per subscription
+
+design:
+  adversary: deepseek-v4-pro (via Ollama Cloud), prompted out-of-band to
+    produce (a) plausible-but-flawed explanatory artifacts with flaw
+    classes OUTSIDE the known planted-flaw taxonomy (subtle unit errors,
+    vacuous generality, circular support, verifier-shaped-but-wrong) and
+    (b) ReasoningEnvelopes whose counterconditions are deliberately
+    toothless (never triggerable, or trivially satisfied)
+  judges:
+    same_family_pair: [gpt-oss:120b, gpt-oss:120b]
+    cross_family_pair: [gpt-oss:120b, qwen3-coder:480b]
+  volumes:
+    unknown_flaw_artifacts: 40
+    known_flaw_artifacts: 40   # from the existing planted-flaw battery
+    toothless_envelopes: 40
+  judging: each artifact judged by both pairs; a catch = the pair flags
+    the flaw (majority of 2 seats; ties count as no-catch, recorded)
+
+measurements:
+  M1: unknown-flaw catch rate vs known-flaw catch rate, per pair
+  M2: toothless-envelope admission rate through gate + criticism + judge
+  M3: cross-family minus same-family catch rate, percentage points
+
+predictions:
+  P1:
+    statement: unknown-flaw catch rate >= 0.8 x known-flaw catch rate
+      (cross-family pair)
+    falsifier: < 0.5x, and planted-flaw certification only certifies
+      memorized flaw classes; judge audit numbers are demoted in reports
+  P2:
+    statement: toothless-envelope admission <= 10 percent
+    falsifier: > 30 percent, and skeletons are gameable; a countercondition
+      satisfiability checker becomes a mandatory gate for Tier 2/3
+      survivor counts
+  P3:
+    statement: cross-family pair catches >= 5 percentage points more
+      adversarial flaws than the same-family pair
+    falsifier: no difference, and the cross-family rule is superstition
+
+decision_rules:
+  - verdicts CONFIRMED / REFUTED / UNDECIDED against the literal numbers
+  - report lands at experiments/results/e02_judge_redteam_t1_report.json
+  - one line appended to experiments/results/INDEX_2026-07-13.md
+  - adversarial prompts and raw judgments retained under the report's
+    blobs (small, committed) so the tranche is auditable
+
+budget:
+  llm_tokens: <= 2000000 (adversary generation + 4 judgments x 120 items)
+  wall_clock: hours, parallel at 3
