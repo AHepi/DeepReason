@@ -159,3 +159,20 @@ result:
     future preregs should compile a RunManifest and go through
     ops.run_scheduler preflight. Judge ensemble-split blocked 1/1/6
     rubric trials (protective abstention working as designed).
+
+# --- correction 1, appended after operator review (record never edited) ---
+correction_1:
+  corrects: the result block above and the report's narrative reading
+  detail: experiments/results/bronze_flat_v1_correction1.json
+  summary: the run's novelty figures were hashing-128, not nomic (live_run
+    constructs Scheduler without an embedder; the nomic default never
+    reaches that path) - true offline nomic distances show topic dominance
+    (distinct mechanisms at the paraphrase margin), so embedding novelty
+    cannot resolve mechanism diversity either way. F4 is reattributed - the
+    blocked proposals were mechanism-diverse (verified from raw responses);
+    the embargo was manufactured by the gate stack (one-bit skeleton-wf
+    battery + NEAR_DUP_EPS None disabling the semantic stage + no
+    RelapseDomain scoping + the admit-with-counter-warrant escape
+    unreachable because production Conj passes an empty warrant list).
+    The prosecutor-alone conviction path is confirmed in code and log
+    (batch kill at seq 53/55/57, no defender or judge participation).
