@@ -1,12 +1,42 @@
 {
-  "prompt_tokens": 17706,
-  "completion_tokens": 24503,
-  "calls": 54,
+  "prompt_tokens": 56764,
+  "completion_tokens": 68043,
+  "calls": 157,
   "phases": {
     "adversary-unknown": {
-      "prompt_tokens": 17706,
-      "completion_tokens": 24503,
-      "calls": 54
+      "prompt_tokens": 28049,
+      "completion_tokens": 39185,
+      "calls": 86
+    },
+    "adversary-toothless": {
+      "prompt_tokens": 15704,
+      "completion_tokens": 18522,
+      "calls": 43
+    },
+    "judge-same-A": {
+      "prompt_tokens": 3166,
+      "completion_tokens": 3789,
+      "calls": 7
+    },
+    "judge-same-B": {
+      "prompt_tokens": 3166,
+      "completion_tokens": 3504,
+      "calls": 7
+    },
+    "judge-cross-A": {
+      "prompt_tokens": 2647,
+      "completion_tokens": 2778,
+      "calls": 6
+    },
+    "judge-cross-B": {
+      "prompt_tokens": 3024,
+      "completion_tokens": 92,
+      "calls": 7
+    },
+    "critic-funnel": {
+      "prompt_tokens": 1008,
+      "completion_tokens": 173,
+      "calls": 1
     }
   }
 }

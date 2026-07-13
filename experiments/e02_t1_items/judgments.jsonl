@@ -1,0 +1,27 @@
+{"flawed": true, "item_id": "kf-fix-00", "kind": "circular reasoning", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "known_flaw"}
+{"flawed": true, "item_id": "kf-fix-00", "kind": "circular reasoning", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "known_flaw"}
+{"flawed": true, "item_id": "kf-fix-00", "kind": "circular reasoning", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "known_flaw"}
+{"flawed": true, "item_id": "kf-fix-00", "kind": "Circular reasoning", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "known_flaw"}
+{"flawed": false, "item_id": "tl-00", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "toothless_envelope"}
+{"flawed": false, "item_id": "uf-circ-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-00", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-01", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-01", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-01", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-02", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-02", "kind": "misapplied heat capacity", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-02", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-01", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-02", "kind": "false cause", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-03", "kind": "incorrect noise dominance assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-03", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-03", "kind": "incorrect shot-noise dominance claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-03", "kind": "misstated shot-noise dominance", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-05", "kind": "ignores infiltration and system losses", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-05", "kind": "ignores furnace efficiency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-05", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}

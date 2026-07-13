@@ -193,6 +193,36 @@ TOPICS = [
     "how battery-backed grids smooth evening demand peaks",
 ]
 
+# Operational topic constraint (tranche-1 completion runs): all NEW
+# adversarial generation is restricted to these domains only — tides,
+# bridge engineering, chess openings, plate tectonics, bronze-age trade,
+# clock mechanisms, postal-network economics. No biology / chemistry /
+# medicine. Items generated before this constraint are frozen corpus and
+# keep their original topics.
+SAFE_TOPICS = [
+    "why spring tides are larger than neap tides",
+    "how tidal bores form in funnel-shaped estuaries",
+    "why some coasts see one high tide a day and others two",
+    "why suspension bridge main cables hang in their particular curve",
+    "how truss bridges carry load through triangulated members",
+    "why long-span bridges need expansion joints",
+    "why controlling the center matters in chess openings",
+    "how gambit openings trade material for development tempo",
+    "why early queen sorties are punished in chess openings",
+    "how mid-ocean ridges produce symmetric magnetic striping",
+    "why earthquakes cluster along transform plate boundaries",
+    "how subduction zones build volcanic arcs",
+    "how bronze-age tin traveled from distant mines to Mediterranean forges",
+    "why bronze-age palace economies kept detailed clay-tablet ledgers",
+    "how weight standards enabled long-distance bronze-age exchange",
+    "why pendulum clocks keep better time than verge-and-foliot clocks",
+    "how an escapement doles out a clock spring's energy",
+    "why marine chronometers needed temperature compensation",
+    "why postal networks route mail through hub sorting centers",
+    "how uniform postage rates changed postal-network economics",
+    "why last-mile delivery dominates postal costs",
+]
+
 FLAW_CLASSES: dict[str, str] = {
     "subtle_unit_error": (
         "Plant EXACTLY ONE subtle unit or dimensional-analysis error that "
@@ -276,11 +306,28 @@ Reply with EXACTLY one JSON object, no other text:
   "hidden_flaw_annotation": "<the ground-truth annotation>"}}"""
 
 
+def _first_str(parsed: dict, keys: tuple[str, ...]) -> str | None:
+    """Tolerant key lookup: models drift on field names; ground truth must
+    not be lost to a synonymous key."""
+    lowered = {k.lower().replace("-", "_"): v for k, v in parsed.items()}
+    for key in keys:
+        value = lowered.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+
 def validate_unknown(parsed: dict) -> str | None:
-    artifact = parsed.get("artifact")
-    note = parsed.get("hidden_flaw_annotation")
-    if not isinstance(artifact, str) or not isinstance(note, str):
-        return "missing artifact/hidden_flaw_annotation string fields"
+    artifact = _first_str(parsed, ("artifact", "artifact_text", "text"))
+    note = _first_str(parsed, ("hidden_flaw_annotation", "hidden_annotation",
+                               "hiddenflawannotation", "annotation"))
+    if artifact is not None:
+        parsed["artifact"] = artifact
+    if note is not None:
+        parsed["hidden_flaw_annotation"] = note
+    if artifact is None or note is None:
+        return ("missing artifact/hidden_flaw_annotation string fields "
+                f"(got keys: {sorted(parsed.keys())[:8]})")
     if len(artifact.split()) < 120:
         return "artifact too short (need 180-320 words)"
     if not note.strip():
@@ -315,8 +362,9 @@ def generate_unknown_item(item_id: str, flaw_class: str, topic: str,
                 "judged_text": parsed["artifact"].strip(),
                 "hidden_annotation": parsed["hidden_flaw_annotation"].strip(),
             }
-        if attempts >= 5:
+        if attempts >= 8:
             raise RuntimeError(f"{item_id}: unusable after {attempts} attempts: {problem}")
+        print(f"  {item_id}: rejected attempt {attempts} ({problem})", flush=True)
         complaint = (f"\n\nYour previous attempt was rejected by a mechanical "
                      f"validator: {problem}. Produce a fresh, compliant JSON object.")
 
@@ -374,13 +422,17 @@ TOOTHLESS_GIVEAWAY = [
 
 
 def validate_toothless(parsed: dict) -> tuple[str | None, ReasoningEnvelopeV1 | None]:
-    claim = parsed.get("claim")
-    mechanism = parsed.get("mechanism")
-    counters = parsed.get("counterconditions")
-    note = parsed.get("hidden_toothless_annotation")
+    claim = _first_str(parsed, ("claim",))
+    mechanism = _first_str(parsed, ("mechanism",))
+    counters = parsed.get("counterconditions") or parsed.get("counter_conditions")
+    note = _first_str(parsed, ("hidden_toothless_annotation",
+                               "hidden_annotation", "annotation",
+                               "hiddentoothlessannotation"))
     if not (isinstance(claim, str) and isinstance(mechanism, str)
             and isinstance(counters, list) and isinstance(note, str)):
-        return "missing/badly-typed fields", None
+        return ("missing/badly-typed fields "
+                f"(got keys: {sorted(parsed.keys())[:8]})"), None
+    parsed["hidden_toothless_annotation"] = note
     if not (2 <= len(counters) <= 3) or not all(
             isinstance(c, str) and c.strip() for c in counters):
         return "need 2-3 nonempty countercondition strings", None
@@ -430,8 +482,9 @@ def generate_toothless_item(item_id: str, topic: str, mode: tuple[str, str],
                 "judged_text": envelope_json(envelope),
                 "hidden_annotation": parsed["hidden_toothless_annotation"].strip(),
             }
-        if attempts >= 5:
+        if attempts >= 8:
             raise RuntimeError(f"{item_id}: unusable after {attempts} attempts: {problem}")
+        print(f"  {item_id}: rejected attempt {attempts} ({problem})", flush=True)
         complaint = (f"\n\nYour previous attempt was rejected by a mechanical "
                      f"validator: {problem}. Produce a fresh, compliant JSON object.")
 
@@ -636,17 +689,23 @@ def main() -> int:
     for flaw_class in FLAW_CLASSES:
         for k in range(10):
             item_id = f"uf-{CLASS_PREFIX[flaw_class]}-{k:02d}"
-            topic = TOPICS[topic_index % len(TOPICS)]
+            topic = SAFE_TOPICS[topic_index % len(SAFE_TOPICS)]
             topic_index += 1
             if item_id not in done_ids:
                 jobs.append((item_id, flaw_class, topic))
+    failures: list[str] = []
     if jobs:
         print(f"generating {len(jobs)} unknown-flaw artifacts...", flush=True)
         with concurrent.futures.ThreadPoolExecutor(MAX_IN_FLIGHT) as pool:
             futures = [pool.submit(generate_unknown_item, i, c, t, ledger)
                        for i, c, t in jobs]
             for future in concurrent.futures.as_completed(futures):
-                existing.append(future.result())
+                try:
+                    existing.append(future.result())
+                except Exception as e:  # keep the batch; re-run fills gaps
+                    failures.append(str(e))
+                    print(f"  ITEM FAILED: {e}", flush=True)
+                    continue
                 existing.sort(key=lambda item: item["id"])
                 unknown_path.write_text(json.dumps(existing, indent=2) + "\n")
     print(f"unknown_flaws.json: {len(existing)} items", flush=True)
@@ -661,7 +720,7 @@ def main() -> int:
         item_id = f"tl-{k:02d}"
         if item_id in done_t:
             continue
-        topic = TOPICS[(seed_for(item_id) + k) % len(TOPICS)]
+        topic = SAFE_TOPICS[(seed_for(item_id) + k) % len(SAFE_TOPICS)]
         mode = TOOTHLESS_MODES[k % 2]
         jobs_t.append((item_id, topic, mode))
     if jobs_t:
@@ -670,10 +729,17 @@ def main() -> int:
             futures = [pool.submit(generate_toothless_item, i, t, m, ledger)
                        for i, t, m in jobs_t]
             for future in concurrent.futures.as_completed(futures):
-                existing_t.append(future.result())
+                try:
+                    existing_t.append(future.result())
+                except Exception as e:
+                    failures.append(str(e))
+                    print(f"  ITEM FAILED: {e}", flush=True)
+                    continue
                 existing_t.sort(key=lambda item: item["id"])
                 toothless_path.write_text(json.dumps(existing_t, indent=2) + "\n")
     print(f"toothless_envelopes.json: {len(existing_t)} items", flush=True)
+    if failures:
+        print(f"{len(failures)} item(s) failed; re-run to fill gaps", flush=True)
 
     meta = {
         "schema": "deepreason-e02-t1-items-meta-v1",
@@ -687,7 +753,10 @@ def main() -> int:
             "functions of the item id (sha256). Provider-side sampling at "
             "temperature 1.0 is NOT seedable via the OpenAI-compatible "
             "surface, so re-running regenerates different texts for missing "
-            "items only; committed items are the frozen corpus."),
+            "items only; committed items are the frozen corpus. Items "
+            "generated after the tranche-1 restart draw topics from "
+            "SAFE_TOPICS (operational topic constraint); earlier items keep "
+            "their original TOPICS assignment."),
         "known_flaw_source": (
             "12 FLAWED fixtures from scripts/judge_battery.py plus 28 "
             "deterministic template variants over the same taxonomy"),

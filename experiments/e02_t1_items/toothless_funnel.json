@@ -1,0 +1,20 @@
+[
+  {
+    "item_id": "tl-00",
+    "wf_verdict": "pass",
+    "wf_detail": {
+      "claim": "Induction cooktops boil water faster than radiant coils because they transfer energy directly into the cookware's molecular structure via magnetic hysteresis, b",
+      "premises": 0,
+      "counterconditions": 3
+    },
+    "gate_admitted": true,
+    "gate_reason": "admitted",
+    "passes_gate": true,
+    "status_after_crit_program": "accepted",
+    "critic_error": null,
+    "critic_attacked": true,
+    "status_after_criticism": "refuted",
+    "survives_criticism": false,
+    "critic_tokens": 1181
+  }
+]
