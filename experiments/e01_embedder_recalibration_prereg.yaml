@@ -83,3 +83,19 @@ decision_rules:
 budget:
   llm_tokens: 0
   wall_clock: minutes (offline replay only)
+
+# --- appended after the run, per methodology (verdict against the prereg
+# --- as written; the sections above are unedited) ---
+result:
+  report: experiments/results/e01_embedder_recalibration_report.json
+  verdicts: {P1: REFUTED, P2: REFUTED, P3: REFUTED, P4: REFUTED}
+  measured:
+    M1_spearman: [0.5125, 0.4937]      # threshold 0.5 on 2/2 -> refuted (marginal)
+    M2_contamination: [1.0, 1.0]       # threshold 0.20, falsifier 0.40 -> decisive
+    M3_candidate_separable: false      # on both roots
+    M4_would_fire: false               # absolute and ratio paths, both roots
+  consequences_triggered:
+    - hash-embedder per-conjecture novelty rankings demoted to unverified
+    - soft-basin finding flagged possible-embedder-artifact; E2.3 is gating
+    - NeuralEmbedder does not fix the near-dup gate on website corpora
+    - reseed tripwires still never observed firing on any recoverable run

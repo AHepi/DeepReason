@@ -1,0 +1,219 @@
+{
+  "M1_values": [
+    0.5124830703695819,
+    0.4937287878400742
+  ],
+  "M2_values": [
+    1.0,
+    1.0
+  ],
+  "diagnostic_notes": [
+    "P1 marginal: Spearman 0.51/0.49 vs the 0.5 line; hash and neural novelty orderings agree only weakly, so per-conjecture hash novelty rankings are demoted to unverified per the prereg.",
+    "P2 decisive: contamination 1.0 on both roots, far past the 0.40 falsifier. Under the neural embedder the corpus cross-problem median distance (0.26) sits BELOW the planted-paraphrase median (0.32): the entire gemma conjecture stream is more homogeneous than typical paraphrase pairs. What hashing scored as variation is near-duplication at neural scale. Consequence per prereg: the soft-basin finding is flagged as a possible embedder artifact until E2.3 re-measures it on text workloads.",
+    "P3: the neural embedder is ALSO not duplicate-vs-sibling separable on this corpus, because true siblings here are themselves near-duplicates (within-problem p10 0.037). The docstring claim that NeuralEmbedder fixes the gate does not hold on website-workload corpora; the calibration question is ill-posed when siblings are duplicates.",
+    "P4: neither the calibrated absolute threshold nor the 0.3 ratio path would ever have fired on the recoverable corpus; schools remained genuinely separated (ratio 0.93 and 1.94) inside a globally compact stream. The reseed tripwires have still never been observed live.",
+    "Scope: n=2 roots, both gemma4:31b website runs; none of the above generalizes to text workloads or other models without E2.3."
+  ],
+  "embedders": {
+    "candidate": {
+      "model": "BAAI/bge-small-en-v1.5",
+      "sentinel": "38f32b6f4f059254",
+      "version": "fastembed-0.8.0+onnxruntime-1.27.0"
+    },
+    "incumbent": {
+      "model": "hashing-128",
+      "sentinel": "4226e035204776db",
+      "version": "1"
+    }
+  },
+  "llm_tokens_spent": 0,
+  "planted_pairs": 63,
+  "prereg": "experiments/e01_embedder_recalibration_prereg.yaml",
+  "roots": {
+    "experiments/gemma4_dna_unattended_2026-07-12": {
+      "M1_spearman": 0.5125,
+      "M2_contamination": 1.0,
+      "M3_candidate": {
+        "cross_problem": {
+          "median": 0.26025077907623273,
+          "n": 72,
+          "p10": 0.16871402659182289,
+          "p90": 0.3830143393708507
+        },
+        "embedder": {
+          "model": "BAAI/bge-small-en-v1.5",
+          "sentinel": "38f32b6f4f059254",
+          "version": "fastembed-0.8.0+onnxruntime-1.27.0"
+        },
+        "note": "thresholds are valid only for a matching embedder fingerprint; recalibrate on any drift (\u00a711.5, \u00a717)",
+        "planted_duplicate": {
+          "max": 0.5072,
+          "median": 0.3224,
+          "min": 0.134,
+          "n": 63,
+          "p10": 0.2414,
+          "p90": 0.4151
+        },
+        "recommended": {
+          "NEAR_DUP_EPS": 0.5072,
+          "RESEED_DIST_MIN": 0.0374
+        },
+        "separable": {
+          "near_dup_gate": false,
+          "reseed": true
+        },
+        "within_problem": {
+          "median": 0.10744087776097289,
+          "n": 19,
+          "p10": 0.037376255613104314,
+          "p90": 0.3998820848497471
+        }
+      },
+      "M3_incumbent": {
+        "cross_problem": {
+          "median": 0.9375623187311672,
+          "n": 72,
+          "p10": 0.6622551719980811,
+          "p90": 1.0651592430648578
+        },
+        "embedder": {
+          "model": "hashing-128",
+          "sentinel": "4226e035204776db",
+          "version": "1"
+        },
+        "note": "thresholds are valid only for a matching embedder fingerprint; recalibrate on any drift (\u00a711.5, \u00a717)",
+        "planted_duplicate": {
+          "max": 1.1925,
+          "median": 0.8886,
+          "min": 0.6704,
+          "n": 63,
+          "p10": 0.7571,
+          "p90": 1.0401
+        },
+        "recommended": {
+          "NEAR_DUP_EPS": 1.1925,
+          "RESEED_DIST_MIN": 0.306
+        },
+        "separable": {
+          "near_dup_gate": false,
+          "reseed": true
+        },
+        "within_problem": {
+          "median": 0.43701768548286657,
+          "n": 19,
+          "p10": 0.305974945027053,
+          "p90": 0.9717270356773343
+        }
+      },
+      "M4": {
+        "absolute_would_fire": false,
+        "inter_school_dist_ratio": 1.9391,
+        "min_inter_school_centroid_dist": 0.2472,
+        "ratio_would_fire_at_0.3": false,
+        "recommended_RESEED_DIST_MIN": 0.0374
+      },
+      "n_conjectures_aligned": 13,
+      "schools_seen": [
+        "school-0",
+        "school-1",
+        "school-2"
+      ]
+    },
+    "experiments/gemma4_dna_unattended_3_2026-07-12": {
+      "M1_spearman": 0.4937,
+      "M2_contamination": 1.0,
+      "M3_candidate": {
+        "cross_problem": {
+          "median": 0.25004777613438334,
+          "n": 33,
+          "p10": 0.17386801705269816,
+          "p90": 0.2985259268047715
+        },
+        "embedder": {
+          "model": "BAAI/bge-small-en-v1.5",
+          "sentinel": "38f32b6f4f059254",
+          "version": "fastembed-0.8.0+onnxruntime-1.27.0"
+        },
+        "note": "thresholds are valid only for a matching embedder fingerprint; recalibrate on any drift (\u00a711.5, \u00a717)",
+        "planted_duplicate": {
+          "max": 0.5072,
+          "median": 0.3224,
+          "min": 0.134,
+          "n": 63,
+          "p10": 0.2414,
+          "p90": 0.4151
+        },
+        "recommended": {
+          "NEAR_DUP_EPS": 0.5072,
+          "RESEED_DIST_MIN": 0.0368
+        },
+        "separable": {
+          "near_dup_gate": false,
+          "reseed": true
+        },
+        "within_problem": {
+          "median": 0.08329688300950544,
+          "n": 12,
+          "p10": 0.036799126916255864,
+          "p90": 0.1364802108020825
+        }
+      },
+      "M3_incumbent": {
+        "cross_problem": {
+          "median": 0.9104250769065568,
+          "n": 33,
+          "p10": 0.7445517459418023,
+          "p90": 1.0659774083586995
+        },
+        "embedder": {
+          "model": "hashing-128",
+          "sentinel": "4226e035204776db",
+          "version": "1"
+        },
+        "note": "thresholds are valid only for a matching embedder fingerprint; recalibrate on any drift (\u00a711.5, \u00a717)",
+        "planted_duplicate": {
+          "max": 1.1925,
+          "median": 0.8886,
+          "min": 0.6704,
+          "n": 63,
+          "p10": 0.7571,
+          "p90": 1.0401
+        },
+        "recommended": {
+          "NEAR_DUP_EPS": 1.1925,
+          "RESEED_DIST_MIN": 0.3416
+        },
+        "separable": {
+          "near_dup_gate": false,
+          "reseed": true
+        },
+        "within_problem": {
+          "median": 0.40725148345967144,
+          "n": 12,
+          "p10": 0.3416144288259777,
+          "p90": 0.5164861561125818
+        }
+      },
+      "M4": {
+        "absolute_would_fire": false,
+        "inter_school_dist_ratio": 0.9279,
+        "min_inter_school_centroid_dist": 0.1013,
+        "ratio_would_fire_at_0.3": false,
+        "recommended_RESEED_DIST_MIN": 0.0368
+      },
+      "n_conjectures_aligned": 9,
+      "schools_seen": [
+        "school-0",
+        "school-1",
+        "school-2"
+      ]
+    }
+  },
+  "schema": "deepreason-e01-report-v1",
+  "verdicts": {
+    "P1": "REFUTED",
+    "P2": "REFUTED",
+    "P3": "REFUTED",
+    "P4": "REFUTED"
+  }
+}
