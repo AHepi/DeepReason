@@ -3,13 +3,40 @@ OpenAI-compatible — mix freely per role. MockEndpoint serves tests and
 replay experiments without network.
 """
 
+import base64
+import http.client
 import json
 import time
 import urllib.error
 import urllib.request
 
+from deepreason.llm.repair import OutputMechanism
+
 _RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 _BACKOFFS = (2, 4, 8)
+# Bounded read-timeout policy. One authoritative default wait per attempt
+# (endpoints inherit it; the role table overrides via timeout_s), and a
+# fixed escalation: attempt 1 waits 1x, the retry after a read timeout
+# waits 2x, and a second read timeout is terminal — max total wait 3x the
+# base (900s at the 300s default), never an unbounded ladder. A read
+# timeout proves only that no complete response arrived before the
+# deadline; since non-streaming completions can legitimately need longer
+# than the base wait, one wider retry is justified — more is not.
+DEFAULT_TIMEOUT_S = 300
+TIMEOUT_FACTORS = (1, 2)
+
+# JSON-value grammar accepted by llama.cpp-compatible constrained decoders.
+# Semantic field constraints remain in the WireContract validator.
+JSON_GBNF = r'''root ::= ws value ws
+value ::= object | array | string | number | "true" | "false" | "null"
+object ::= "{" ws (pair (ws "," ws pair)*)? ws "}"
+pair ::= string ws ":" ws value
+array ::= "[" ws (value (ws "," ws value)*)? ws "]"
+string ::= "\"" chars "\""
+chars ::= ([^"\\] | "\\" (["\\/bfnrt] | "u" hex hex hex hex))*
+number ::= "-"? ("0" | [1-9] [0-9]*) ("." [0-9]+)? ([eE] [+-]? [0-9]+)?
+hex ::= [0-9a-fA-F]
+ws ::= [ \t\n\r]*'''
 
 
 class EndpointError(RuntimeError):
@@ -32,7 +59,10 @@ def request_with_retries(fn):
             if e.code not in _RETRYABLE_HTTP:
                 raise EndpointError(f"HTTP {e.code}: {e.reason}") from e
             last = e
-        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError,
+                http.client.HTTPException) as e:
+            # HTTPException covers IncompleteRead — a mid-stream drop the
+            # OSError net misses (observed live: killed two runs at cycle 1).
             last = e
         if delay is None:
             break
@@ -121,8 +151,17 @@ class MockEndpoint:
         self.name = name
         self.model = model
         self.last_usage: dict | None = None
+        self.last_images: list[bytes] = []
+        self.last_kwargs: dict = {}
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics: list[str] = []
 
-    def complete(self, prompt: str) -> str:
+    def complete(self, prompt: str, images: list[bytes] | None = None, **kwargs) -> str:
+        self.last_usage = None
+        self.last_transport_attempts = 1
+        self.last_transport_diagnostics = []
+        self.last_images = list(images) if images else []  # test-inspectable
+        self.last_kwargs = dict(kwargs)
         if self._fn is not None:
             response = self._fn(prompt)
         elif self._responses:
@@ -146,12 +185,13 @@ class OpenAICompatEndpoint:
         model: str,
         api_key: str | None = None,
         temperature: float | None = None,
-        timeout_s: int = 120,
+        timeout_s: int = DEFAULT_TIMEOUT_S,
         max_tokens: int | None = None,
         json_mode: bool = False,
         request_logprobs: bool = False,
         reasoning: str | int | None = None,
         provider: str | None = None,
+        output_mechanism: str | OutputMechanism = OutputMechanism.JSON_TEXT,
     ) -> None:
         from deepreason.llm.providers import infer_provider
 
@@ -169,27 +209,94 @@ class OpenAICompatEndpoint:
         # the dominant cost lever (docs/TOKEN_ECONOMY.md angle 1).
         self.reasoning = reasoning
         self.provider = provider or infer_provider(base_url)
+        self.output_mechanism = OutputMechanism(output_mechanism).value
         self.last_usage: dict | None = None
         self.last_finish_reason: str | None = None
         self.last_mean_surprisal: float | None = None
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics: list[str] = []
 
-    def build_body(self, prompt: str) -> dict:
+    def build_body(
+        self,
+        prompt: str,
+        images: list[bytes] | None = None,
+        *,
+        response_schema: dict | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        stop: list[str] | None = None,
+    ) -> dict:
         from deepreason.llm.providers import reasoning_body
 
-        body: dict = {"model": self.model, "messages": [{"role": "user", "content": prompt}]}
+        # Vision (multimodal): with images, content becomes OpenAI content
+        # parts — text first, then one image_url part per PNG as a base64
+        # data URL. Without images the body is byte-identical to before.
+        if images:
+            content: object = [
+                {"type": "text", "text": prompt},
+                *(
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "data:image/png;base64,"
+                            + base64.b64encode(png).decode()
+                        },
+                    }
+                    for png in images
+                ),
+            ]
+        else:
+            content = prompt
+        body: dict = {"model": self.model, "messages": [{"role": "user", "content": content}]}
         if self.temperature is not None:
             body["temperature"] = self.temperature
         if self.max_tokens is not None:
             body["max_tokens"] = self.max_tokens
-        if self.json_mode:
+        mechanism = OutputMechanism(output_mechanism) if output_mechanism else None
+        if mechanism == OutputMechanism.NATIVE_JSON_SCHEMA:
+            if not response_schema:
+                raise EndpointError("native_json_schema requires response_schema")
+            body["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "deepreason_output",
+                    "strict": True,
+                    "schema": response_schema,
+                },
+            }
+        elif mechanism == OutputMechanism.GRAMMAR:
+            # Grammar is a fixed lease property. Unsupported providers reject
+            # the request; this method never falls back to a different mode.
+            body["grammar"] = JSON_GBNF
+        elif self.json_mode and mechanism is None:
             body["response_format"] = {"type": "json_object"}
+        if stop:
+            body["stop"] = list(stop)
         if self.request_logprobs:
             body["logprobs"] = True
         body.update(reasoning_body(self.provider, self.reasoning))
         return body
 
-    def complete(self, prompt: str) -> str:
-        body = self.build_body(prompt)
+    def complete(
+        self,
+        prompt: str,
+        images: list[bytes] | None = None,
+        *,
+        response_schema: dict | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        stop: list[str] | None = None,
+    ) -> str:
+        self.last_usage = None
+        self.last_finish_reason = None
+        self.last_mean_surprisal = None
+        self.last_transport_attempts = 0
+        self.last_transport_diagnostics = []
+        body = self.build_body(
+            prompt,
+            images,
+            response_schema=response_schema,
+            output_mechanism=output_mechanism,
+            stop=stop,
+        )
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
@@ -199,26 +306,75 @@ class OpenAICompatEndpoint:
             headers=headers,
         )
 
+        # Bounded read-timeout escalation (TIMEOUT_FACTORS): retrying an
+        # identical wait after a read timeout fails identically (observed
+        # live: two variator calls dropped after 4 x 120s waits while ~110s
+        # generations were succeeding at the same endpoint), so the retry
+        # waits 2x — and a second read timeout is terminal, keeping the
+        # total wait bounded at 3x. Read timeouts are counted separately
+        # from other transport faults, which keep the plain retry/backoff.
+        # The counter lives in the closure so request_with_retries keeps
+        # its signature and its other callers are untouched.
+        read_timeouts = 0
+
+        def _note_transport(error: Exception) -> None:
+            code = getattr(error, "code", None)
+            label = type(error).__name__ + (f":HTTP-{code}" if code else "")
+            detail = str(error).replace("\n", " ")[:200]
+            self.last_transport_diagnostics.append(
+                f"{label}:{detail}" if detail else label
+            )
+
+        def _timed_out(e: Exception) -> bool:
+            return isinstance(e, TimeoutError) or (
+                isinstance(e, urllib.error.URLError)
+                and isinstance(e.reason, TimeoutError)
+            )
+
         def _once() -> dict:
-            with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
-                try:
-                    data = json.load(response)
-                except ValueError as e:
-                    # 200 with a non-JSON body (gateway/proxy hiccup):
-                    # transient in practice — let the retry loop take it.
-                    raise _TransientBody(f"non-JSON response body: {e}") from e
+            nonlocal read_timeouts
+            self.last_transport_attempts += 1
+            timeout = self.timeout_s * TIMEOUT_FACTORS[read_timeouts]
+            try:
+                # The stall can hit at connect/first byte (urlopen) or
+                # mid-body (json.load reading the socket): both count.
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    try:
+                        data = json.load(response)
+                    except ValueError as e:
+                        # 200 with a non-JSON body (gateway/proxy hiccup):
+                        # transient in practice — let the retry loop take it.
+                        raise _TransientBody(f"non-JSON response body: {e}") from e
+            except Exception as e:
+                _note_transport(e)
+                if _timed_out(e):
+                    read_timeouts += 1
+                    if read_timeouts >= len(TIMEOUT_FACTORS):
+                        waits = ", ".join(
+                            f"{self.timeout_s * f}s" for f in TIMEOUT_FACTORS
+                        )
+                        # EndpointError is not retryable: terminal by design.
+                        raise EndpointError(
+                            f"no complete response within escalated read "
+                            f"timeouts ({waits}): {e}"
+                        ) from e
+                raise
             # Malformed 200 shapes (empty body, missing choices, null content)
             # are usually transient server faults: surface them as retryable;
             # the post-retry guards below still catch the persistent case.
             try:
                 if data["choices"][0]["message"]["content"] is None:
-                    raise _TransientBody(
+                    error = _TransientBody(
                         f"null content (finish_reason="
                         f"{data['choices'][0].get('finish_reason')!r})"
                     )
+                    _note_transport(error)
+                    raise error
             except (KeyError, IndexError, TypeError) as e:
                 detail = data.get("error") if isinstance(data, dict) else data
-                raise _TransientBody(f"malformed completion response: {detail!r}") from e
+                error = _TransientBody(f"malformed completion response: {detail!r}")
+                _note_transport(error)
+                raise error from e
             return data
 
         data = request_with_retries(_once)

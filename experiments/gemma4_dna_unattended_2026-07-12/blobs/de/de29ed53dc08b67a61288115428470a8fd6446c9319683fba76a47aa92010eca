@@ -1,0 +1,65 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+A9
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+PROBLEM pi-plan
+Write a PRODUCT PLAN for this website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational text" or "a philosophical question." When motion is requested,
+the plan must apply the user's system-level `prefers-reduced-motion` setting
+before any animation starts; a manual toggle may supplement but cannot replace
+that automatic behavior. Differ
+substantively across candidates (different scopes and priorities), not
+rewordings.
+
+SCOPE (binding for candidates and critics alike): this is a small,
+self-contained, client-only website delivered as ONE local HTML file — no
+server, no accounts, no analytics, and no data leaving the browser. A FAULT
+is a missing or wrong element that would make the finished website fail its
+stated purpose for its user. Proposals to ADD scope (compliance programs,
+integrations, infrastructure, enterprise concerns) are design choices, not
+faults.
+
+CRITERIA (commitments every candidate will carry and face):
+- plan-doc@e5c72fde8cc0: predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+SCHOOL STANCE (weight 1.00): anchor in cases
+
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: {"school_policy": {"school": "school-3", "stance": "empiric"}}
+- A2: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- A3: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- A4: {"school_policy": {"school": "school-2", "stance": "unifier"}}
+- A5: # Product Plan: The Bio-Digital Archive (Data-Centric)  ## Pages A single-page dashboard layout with embedded interactive modules.  ## Feature List - A data-gri
+- A6: # Product Plan: The Genetic Poem (Artistic Narrative)  ## Pages A single, vertical-canvas narrative piece.  ## Feature List - Fluid-simulation background that r
+- A7: nu: argumentative case 2912500c7d749718 against A8 is sound
+- A9: The content inventory fails to provide the actual explanatory copy and data required by the problem context, instead providing only brief fragments and labels. 
+
+DIRECTIVE: return exactly 4 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

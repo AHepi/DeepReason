@@ -57,6 +57,20 @@ def generator_metrics(harness, embedder, window: int) -> dict:
         for i, a in enumerate(ids)
         for b in ids[i + 1 :]
     ]
+    inter_min = min(inter) if inter else None
+    # Scale-normalized school separation: inter_school_min_dist relative to the
+    # within-stream spread. Embedder-AGNOSTIC (~1.0 = schools as separated as
+    # the stream at large, ->0 = converged), unlike inter_school_min_dist whose
+    # absolute scale depends on the embedder. The school_convergence flag
+    # compares the ABSOLUTE distance to RESEED_DIST_MIN, so that knob must be
+    # calibrated to the embedder in use: with the default HashingEmbedder,
+    # pairwise distances run "hot" (~0.6-0.9), so a small absolute
+    # RESEED_DIST_MIN (e.g. the shipped 0.15) can never fire on real content.
+    # Read this ratio (or views/basin.embedder_calibration) to set
+    # RESEED_DIST_MIN on-scale.
+    inter_ratio = (
+        (inter_min / mean_dist) if (inter_min is not None and mean_dist) else None
+    )
     # Token-level uncertainty (docs/research: alignment tax) — response
     # diversity can collapse while token surprisal stays informative, so
     # this catches contraction the embedding metrics can miss.
@@ -81,7 +95,8 @@ def generator_metrics(harness, embedder, window: int) -> dict:
         "stream_len": len(stream),
         "mean_pairwise_dist": mean_dist,
         "dist_slope": slope,
-        "inter_school_min_dist": min(inter) if inter else None,
+        "inter_school_min_dist": inter_min,
+        "inter_school_dist_ratio": inter_ratio,
         "mean_token_surprisal": surprisal_mean,
         "surprisal_slope": surprisal_slope,
     }
@@ -102,6 +117,31 @@ def school_novelty(harness, embedder, window: int) -> dict[str, float]:
         if school:
             out.setdefault(school, []).append(distance(vec, centroid))
     return {s: sum(d) / len(d) for s, d in out.items()}
+
+
+def school_centroids(harness, embedder, window: int) -> dict[str, list[float]]:
+    """Embedding centroid of each school's recent conjecture stream."""
+    stream = _conjecture_stream(harness)[-window:]
+    by_school: dict[str, list[list[float]]] = {}
+    for aid in stream:
+        school = harness.state.artifacts[aid].provenance.school
+        if school:
+            by_school.setdefault(school, []).append(harness.embed_artifact(embedder, aid))
+    return {s: [sum(c) / len(c) for c in zip(*v)] for s, v in by_school.items() if v}
+
+
+def most_distant_school(harness, embedder, window: int, of: str) -> str | None:
+    """The school whose recent centroid is farthest from ``of`` (deterministic
+    tiebreak by school id). Drives forced cross-school crossover on a
+    convergence reseed (§11.4): reconcile the most divergent lineage, not a
+    near neighbour."""
+    cents = school_centroids(harness, embedder, window)
+    if of not in cents:
+        return None
+    others = sorted(s for s in cents if s != of)  # id order first (tiebreak)
+    if not others:
+        return None
+    return max(others, key=lambda s: distance(cents[of], cents[s]))
 
 
 def adjudicator_metrics(harness, window: int) -> dict:
@@ -180,6 +220,42 @@ def grounding_lambda(harness, window: int) -> float:
     return exogenous / len(verdicts)
 
 
+def evidence_lambda(harness, window: int | None = None) -> float | None:
+    """Stricter, truly-exogenous grounding ratio: of the empirical claims the
+    run has committed to (non-refuted artifacts carrying observation_valued
+    commitments), the fraction actually COVERED by accepted external evidence
+    (import-role artifacts / revealed holdout, via research.backends.covered).
+
+    Distinct from grounding_lambda, which per spec §11.3 counts every
+    program/predicate verdict as exogenous — INCLUDING pure well-formedness
+    checks (skeleton-wf, lineage_ref) that inject no external information. On a
+    program-heavy run grounding_lambda pegs at 1.0 while nothing external was
+    consulted, so the grounding-decay brake it feeds can never fire. This
+    metric credits only real external contact.
+
+    Returns None when the run makes NO empirical claims (no observation_valued
+    commitments): exogenous grounding is then not applicable, and a pure
+    design/explanatory problem SHOULD read None, not 0.0, so the opt-in brake
+    never fires spuriously on it. Graph property, not windowed (coverage is
+    cumulative); the window arg is accepted for call-site parity. Diagnostic /
+    attention only — never a status input (§0)."""
+    from deepreason.research.backends import covered
+
+    state = harness.state
+    pairs: list[tuple[str, str]] = []
+    for aid, artifact in state.artifacts.items():
+        if state.status.get(aid) == Status.REFUTED:
+            continue
+        for cid in artifact.interface.commitments:
+            kappa = harness.commitments.get(cid)
+            if kappa is not None and kappa.observation_valued:
+                pairs.append((cid, aid))
+    if not pairs:
+        return None
+    grounded = sum(1 for cid, aid in pairs if covered(harness, f"research:{cid}:{aid[:12]}"))
+    return grounded / len(pairs)
+
+
 def gate_block_count(harness, window: int) -> int:
     """Anti-relapse refusals in the recent event window. The basin study
     (docs/BASIN_REPORT.md) measured this as the clean circling signal:
@@ -228,10 +304,15 @@ def raw_flags(harness, embedder, config) -> dict[str, bool]:
     flat = adj["g_churn"] == 0
     stagnation = contraction and flat
 
+    # Absolute path (embedder-scale-dependent) OR the scale-free ratio path.
     convergence = (
         config.RESEED_DIST_MIN is not None
         and gen["inter_school_min_dist"] is not None
         and gen["inter_school_min_dist"] < config.RESEED_DIST_MIN
+    ) or (
+        getattr(config, "RESEED_RATIO_MAX", None) is not None
+        and gen["inter_school_dist_ratio"] is not None
+        and gen["inter_school_dist_ratio"] < config.RESEED_RATIO_MAX
     )
 
     ritual_conditions = [
@@ -245,7 +326,16 @@ def raw_flags(harness, embedder, config) -> dict[str, bool]:
     ]
     ritual = sum(ritual_conditions) >= 2
 
-    grounding_decay = config.LAMBDA_FLOOR is not None and lam < config.LAMBDA_FLOOR
+    # Grounding-decay brake keys off the spec lambda by default. Opt in to the
+    # stricter evidence_lambda (truly-exogenous only) — but only when the run
+    # actually makes empirical claims (evidence_lambda not None), so a pure
+    # design problem never trips the brake spuriously.
+    lam_for_brake = lam
+    if getattr(config, "GROUNDING_USE_EVIDENCE_LAMBDA", False):
+        ev = evidence_lambda(harness)
+        if ev is not None:
+            lam_for_brake = ev
+    grounding_decay = config.LAMBDA_FLOOR is not None and lam_for_brake < config.LAMBDA_FLOOR
 
     # Refuted-attractor orbiting (basin study): the generator keeps
     # re-proposing battery-equivalents of a refuted artifact and the gate

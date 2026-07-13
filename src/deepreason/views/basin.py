@@ -191,6 +191,115 @@ def embedder_calibration(harness, embedder, cap: int = 400) -> dict:
     return {"within_problem": _stats(within), "cross_problem": _stats(cross)}
 
 
+# Labeled near-duplicate pairs for threshold calibration: the SAME claim or
+# algorithm, reworded/renamed — exactly the distinction the hashing embedder
+# measurably cannot see (reworded prose read 0.71 vs the 0.35 gate; renamed
+# code read 0.62 while a different algorithm read 0.29). A calibrated
+# NEAR_DUP_EPS must catch every one of these while admitting genuine
+# siblings. Extend per-domain; never calibrate on corpus quantiles alone
+# (the blind distribution-mapping designs were each refuted on the
+# runs/embedder_design record).
+DEFAULT_PLANTED: list[tuple[str, str]] = [
+    (
+        "The scheduler must never let a registered problem starve: aging "
+        "priority grows without bound, so every problem is eventually "
+        "selected no matter how many rivals arrive.",
+        "No registered problem can starve under the scheduler — selection "
+        "priority ages upward forever, so each one is eventually chosen "
+        "regardless of how many competitors show up.",
+    ),
+    (
+        "def solve(nodes, edges):\n"
+        "    deps = {n: set() for n in nodes}\n"
+        "    for a, b in edges:\n"
+        "        deps[a].add(b)\n"
+        "    order = []\n"
+        "    while len(order) < len(nodes):\n"
+        "        ready = [n for n in nodes if n not in order and deps[n] <= set(order)]\n"
+        "        order.append(min(ready))\n"
+        "    return order\n",
+        "def solve(items, links):\n"
+        "    requires = {x: set() for x in items}\n"
+        "    for src, dst in links:\n"
+        "        requires[src].add(dst)\n"
+        "    result = []\n"
+        "    while len(result) < len(items):\n"
+        "        available = [x for x in items if x not in result "
+        "and requires[x] <= set(result)]\n"
+        "        result.append(min(available))\n"
+        "    return result\n",
+    ),
+    (
+        "Criticism is the engine of progress: a conjecture earns its keep "
+        "only by surviving serious attempts to refute it.",
+        "Progress runs on criticism — an idea deserves to stay only if it "
+        "withstands genuine efforts to knock it down.",
+    ),
+]
+
+
+def _quantiles(xs: list[float]) -> dict | None:
+    if not xs:
+        return None
+    xs = sorted(xs)
+    return {"n": len(xs), "min": round(xs[0], 4),
+            "p10": round(xs[len(xs) // 10], 4),
+            "median": round(xs[len(xs) // 2], 4),
+            "p90": round(xs[(len(xs) * 9) // 10], 4),
+            "max": round(xs[-1], 4)}
+
+
+def threshold_calibration(harness, embedder,
+                          planted: list[tuple[str, str]] | None = None) -> dict:
+    """Calibrate the distance knobs for THIS embedder on THIS corpus — the
+    reproducible command the runs/embedder_design record demands in place of
+    hand-tuned numbers. Three labeled distributions:
+
+      planted_duplicate — known same-content pairs (DEFAULT_PLANTED or
+                          caller-supplied): the gate MUST catch these.
+      within_problem    — same-problem sibling conjectures (related,
+                          distinct): the gate must NOT block these.
+      cross_problem     — unrelated pairs: the far anchor.
+
+    Recommendations place each knob between the labeled classes it must
+    separate; `separable` reports whether the embedder can honor them at
+    all (hashing measurably cannot: its duplicate distances overlap its
+    sibling distances). Never a blind quantile map from the old scale —
+    the refuted designs' shared mistake."""
+    corpus = embedder_calibration(harness, embedder)
+    dup = [distance(embedder.embed(a), embedder.embed(b))
+           for a, b in (planted if planted is not None else DEFAULT_PLANTED)]
+    dup_stats = _quantiles(dup)
+    within, cross = corpus["within_problem"], corpus["cross_problem"]
+
+    recommended: dict[str, float | None] = {"NEAR_DUP_EPS": None, "RESEED_DIST_MIN": None}
+    separable = {"near_dup_gate": None, "reseed": None}
+    if dup_stats and within:
+        separable["near_dup_gate"] = dup_stats["max"] < within["p10"]
+        # Catch every planted duplicate, admit typical siblings: midpoint of
+        # the gap when separable; the duplicate ceiling (flagged) when not.
+        recommended["NEAR_DUP_EPS"] = round(
+            (dup_stats["max"] + within["p10"]) / 2 if separable["near_dup_gate"]
+            else dup_stats["max"], 4)
+    if within and cross:
+        separable["reseed"] = within["median"] < cross["p10"]
+        # Convergence = schools closer than typical same-problem siblings.
+        recommended["RESEED_DIST_MIN"] = round(within["p10"], 4)
+
+    fp = getattr(embedder, "fingerprint", None)
+    return {
+        "embedder": fp() if callable(fp) else {
+            "model": getattr(embedder, "model", type(embedder).__name__)},
+        "planted_duplicate": dup_stats,
+        "within_problem": within,
+        "cross_problem": cross,
+        "separable": separable,
+        "recommended": recommended,
+        "note": "thresholds are valid only for a matching embedder "
+                "fingerprint; recalibrate on any drift (§11.5, §17)",
+    }
+
+
 def basin_onset(series: list[dict], w: int = 8, floor_frac: float = 0.5) -> dict:
     """WHEN: first conjecture index where rolling-median novelty falls
     below floor_frac x the early-run baseline and never recovers. Returns

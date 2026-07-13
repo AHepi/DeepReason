@@ -9,7 +9,27 @@ from deepreason.llm.providers import infer_provider, reasoning_body
 def test_infer_provider():
     assert infer_provider("https://api.deepseek.com") == "deepseek"
     assert infer_provider("https://api.openai.com/v1") == "openai"
-    assert infer_provider("http://localhost:11434/v1") == "generic"
+    assert infer_provider("https://ollama.com/v1") == "ollama"  # cloud
+    assert infer_provider("http://localhost:11434/v1") == "generic"  # local host, no "ollama"
+
+
+def test_ollama_reasoning_passthrough():
+    # Ollama's reasoning_effort takes the neutral vocabulary natively, so
+    # `none` actually disables thinking (unlike the openai mapping -> minimal).
+    assert reasoning_body("ollama", None) == {}
+    assert reasoning_body("ollama", "none") == {"reasoning_effort": "none"}
+    assert reasoning_body("ollama", "medium") == {"reasoning_effort": "medium"}
+    assert reasoning_body("ollama", "max") == {"reasoning_effort": "max"}
+    assert reasoning_body("ollama", 1500) == {"reasoning_effort": "low"}
+    assert reasoning_body("ollama", 5000) == {"reasoning_effort": "high"}
+
+
+def test_ollama_endpoint_maps_reasoning_none_to_disabled_effort():
+    ep = OpenAICompatEndpoint(
+        "https://ollama.com/v1", "gpt-oss:120b", json_mode=True, reasoning="none",
+    )
+    assert ep.provider == "ollama"
+    assert ep.build_body("PROMPT")["reasoning_effort"] == "none"
 
 
 def test_deepseek_reasoning_mapping():

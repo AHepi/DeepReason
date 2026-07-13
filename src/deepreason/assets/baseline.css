@@ -1,0 +1,20 @@
+/* DeepReason vendored baseline — TECHNICAL floor, not an aesthetic.
+   Injected universally by the assembler (documented in assets/__init__.py):
+   box-model sanity, media bounds, focus visibility, reduced-motion respect.
+   Every visual decision above this floor is a design choice that must be
+   selected in the manifest and remains criticizable. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; }
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

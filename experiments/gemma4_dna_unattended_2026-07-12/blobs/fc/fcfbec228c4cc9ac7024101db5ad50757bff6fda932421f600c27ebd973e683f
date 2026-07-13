@@ -1,0 +1,71 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+<div id="parallax-bg-root" class="c2-container">
+  <style>
+    #parallax-bg-root {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+      background: #050A0C; overflow: hidden; perspective: 1000px;
+    }
+    .c2-layer {
+      position: absolute; width: 120%; height: 120%; top: -10%; left: -10%;
+      will-change: transform; pointer-events: none;
+    }
+    .c2-bg { background: radial-gradient(circle at center, #0B1218 0%, #050A0C 100%); }
+    .c2-mid {
+      background-image: radial-gradient(#B026FF 1px, transparent 1px);
+      background-size: 50px 50px; opacity: 0.3; filter: blur(1px);
+    }
+    .c2-fg {
+      background-image: radial-gradient(#39FF14 2px, transparent 2px);
+      background-size: 100px 100px; opacity: 0.2;
+    }
+    .c2-grain { position: absolute; inset: 0; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsHWBGAAAAMF5S...'); opacity: 0.05; mix-blend-mode: overlay; }
+    .c2-float { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: rgba(176, 38, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(57, 255, 20, 0.3); }
+  </style>
+  <div class="c2-layer c2-bg" id="parallax-bg-root-L1"></div>
+  <div class="c2-layer c2-mid" id="parallax-bg-root-L2"></div>
+  <div class="c2-layer c2-fg" id="parallax-bg-root-L3"></div>
+  <div class="c2-grain"></div>
+  <div id="parallax-bg-root-float" class="c2-float" style="top:20%; left:20%"></div>
+  <script>
+    let rafId, reduced = false, offset = 0;
+    const L1 = document.getElementById('parallax-bg-root-L1'), L2 = document.getElementById('parallax-bg-root-L2'), L3 = document.getElementById('parallax-bg-root-L3'), FL = document.getElementById('parallax-bg-root-float');
+    window.c2_updateParallaxOffset = (val) => { offset = val; if(!reduced) requestAnimationFrame(render); };
+    window.c2_toggleMotionReduced = (val) => { reduced = val; if(reduced) render(true); };
+    function render(forceStatic = false) {
+      if(reduced && !forceStatic) return;
+      const t = Date.now() / 1000;
+      const y = offset * 0.1;
+      L1.style.transform = `translate3d(0, ${-y * 0.2}px, 0)`;
+      L2.style.transform = `translate3d(0, ${-y * 0.5}px, 0)`;
+      L3.style.transform = `translate3d(0, ${-y * 1.0}px, 0)`;
+      if(!reduced) {
+        const wave = Math.sin(t) * 20;
+        FL.style.transform = `translate3d(0, ${wave}px, 0)`;
+      }
+    }
+    window.c2_mount = () => {
+      reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!reduced) rafId = requestAnimationFrame(function loop() { render(); rafId = requestAnimationFrame(loop); });
+      else render(true);
+    };
+    window.c2_destroy = () => { cancelAnimationFrame(rafId); };
+  </script>
+</div>
+
+BATTERY THE EDITS WILL FACE:
+- program:component_wf
+- program:lineage_ref
+
+DIRECTIVE: produce exactly 8 bounded edits.

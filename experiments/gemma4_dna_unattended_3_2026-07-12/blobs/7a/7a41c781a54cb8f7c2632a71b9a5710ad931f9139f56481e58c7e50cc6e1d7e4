@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "# Product Plan: DNA Odyssey (Experimental/Abstract Focus)\n\n## Scope\nAn abstract, art-gallery style page where DNA is represented by generative patterns and fluid shapes rather than literal diagrams.",
+      "changed_fields": [
+        "Scope"
+      ]
+    },
+    {
+      "content": "- **Fluid-Motion Background**: An SVG filter-based 'liquid' background that reacts to mouse movement.\n- **Abstract Process Mapping**: Replication is visualized as a cell splitting into two glowing orbs.\n- **Typography-as-Art**: Large, overlapping sans-serif fonts that shift perspective based on scroll position.\n- **Motion Safety**: Implementation of a global `no-motion` class triggered by `window.matchMedia('(prefers-reduced-motion: reduce)')`.",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **The 'Unwind' Scroll**: Scrolling 'unwinds' a spiral of text that forms the DNA sequence.\n- **Color Shift**: The background shifts from deep violet to neon cyan as the user moves from DNA to RNA sections.\n- **Organic Transitions**: Elements emerge from the center using scale and opacity transforms.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **Opening Statement**: \"Complexity. Symmetry. Life.\"\n- **Concept 1: The Code**: \"Four letters. Infinite possibilities. A, T, C, G.\"\n- **Concept 2: The Copy**: \"Replication is the act of biological immortality. One becomes two, perfectly mirrored.\"\n- **Concept 3: The Message**: \"Transcription is the translation of a hidden script into a visible action.\"\n- **Closing Thought**: \"We are the read-out of a four-billion-year-old program.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "1. Single-file HTML format.\n2. The background responds to mouse coordinates via CSS variables.\n3. All animations are suppressed when `prefers-reduced-motion` is active.\n4. The visual transition between DNA and RNA is distinct and color-coded.\n5. All abstract text elements are accessible to screen readers.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    },
+    {
+      "content": "## Scope\nAn abstract, art-gallery style page where DNA is represented by generative patterns and fluid shapes rather than literal diagrams. The goal is to evoke the feeling of molecular biology without utilizing sterile clinical imagery.",
+      "changed_fields": [
+        "Scope"
+      ]
+    },
+    {
+      "content": "- **Fluid-Motion Background**: An SVG filter-based 'liquid' background that reacts to mouse movement via coordinate mapping.\n- **Abstract Process Mapping**: Replication is visualized as a cell splitting into two glowing orbs using CSS keyframes.\n- **Typography-as-Art**: Large, overlapping sans-serif fonts that shift perspective based on scroll position.\n- **Motion Safety**: Implementation of a global `no-motion` class triggered by `window.matchMedia('(prefers-reduced-motion: reduce)')`.",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **The 'Unwind' Scroll**: Scrolling 'unwinds' a spiral of text that forms the DNA sequence using a 3D transform pipeline.\n- **Color Shift**: The background shifts from deep violet to neon cyan as the user moves from DNA to RNA sections.\n- **Organic Transitions**: Elements emerge from the center using scale and opacity transforms for a breathing effect.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    }
+  ]
+}
+```

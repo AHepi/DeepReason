@@ -1,0 +1,27 @@
+```json
+{
+  "alias": "C3",
+  "content_requirements": [
+    "Visual representation of RNA polymerase enzyme",
+    "Step-by-step animation of transcription process",
+    "Dynamic mRNA strand elongation",
+    "DNA template strand unzipping visual",
+    "Step-through control interface (Next/Prev/Reset)"
+  ],
+  "depends_on": [],
+  "exports": [
+    "triggerNextStep",
+    "resetSimulation",
+    "updatePolymerasePosition"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "sim-polymerase-root",
+    "sim-polymerase-canvas",
+    "sim-polymerase-controls"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

@@ -11,6 +11,7 @@ from deepreason.harness import Harness, WellFormednessError
 from deepreason.informal.standards import register_standard
 from deepreason.informal.trial import pairwise_discriminate, run_trial
 from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.ontology import (
     Commitment,
@@ -45,19 +46,31 @@ def _setup(harness) -> tuple[str, Commitment]:
     return target.id, kappa
 
 
-def _adapter(harness, judge_responses, *, judge2=None, with_variator=True):
+def _adapter(
+    harness,
+    judge_responses,
+    *,
+    judge2=None,
+    with_variator=True,
+    meter=None,
+):
     endpoints = {
         "argumentative_critic": MockEndpoint([CRITIC]),
         "defender": MockEndpoint([DEFENDER]),
-        "judge": (
-            [MockEndpoint(judge_responses), MockEndpoint(judge2)]
-            if judge2 is not None
-            else MockEndpoint(judge_responses)
-        ),
+        "judge": [
+            MockEndpoint(
+                judge_responses, name="mock://judge-gemma", model="gemma-test"
+            ),
+            MockEndpoint(
+                judge2 if judge2 is not None else judge_responses,
+                name="mock://judge-qwen",
+                model="qwen-test",
+            ),
+        ],
     }
     if with_variator:
         endpoints["variator"] = MockEndpoint([PARAPHRASES])
-    return LLMAdapter(endpoints, harness.blobs, retry_max=2)
+    return LLMAdapter(endpoints, harness.blobs, retry_max=2, meter=meter)
 
 
 def test_surviving_trial_packages_rubric_warrant(tmp_path):
@@ -114,6 +127,36 @@ def test_paraphrase_flip_blocks_warrant(harness):
     adapter = _adapter(harness, [FAIL_RULING, FAIL_RULING, PASS_RULING])
     assert run_trial(harness, target_id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2)) is None
     assert harness.state.status[target_id] == Status.ACCEPTED
+
+
+def test_paraphrase_second_seat_flip_blocks_and_logs_entire_ensemble(harness):
+    """A paraphrase cannot be cleared by seat zero alone.  Every re-ruling
+    reaches both preflighted families, and a second-seat flip blocks while
+    retaining all seven calls (critic, defence, variator, and four rulings)."""
+    target_id, kappa = _setup(harness)
+    meter = TokenMeter()
+    adapter = _adapter(
+        harness,
+        [FAIL_RULING, FAIL_RULING],
+        judge2=[FAIL_RULING, PASS_RULING],
+        meter=meter,
+    )
+
+    assert run_trial(
+        harness,
+        target_id,
+        kappa,
+        adapter,
+        Config(TRIAL_PARAPHRASE_N=1),
+    ) is None
+    assert harness.state.status[target_id] == Status.ACCEPTED
+    assert any(
+        "trial-blocked:ensemble-split" in event.inputs
+        for event in harness.log.read()
+    )
+    logged_calls = [event.llm for event in harness.log.read() if event.llm]
+    assert meter.calls == len(logged_calls) == 7
+    assert sum(call.tokens for call in logged_calls) == meter.total
 
 
 def test_ensemble_split_blocks_and_logs(harness):

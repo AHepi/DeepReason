@@ -7,6 +7,7 @@ the adjudication).
 """
 
 from deepreason.llm.contracts import SynthesizerOutput
+from deepreason.llm.packs import aliases_for_values
 from deepreason.ontology import Artifact, Interface, Problem, Provenance, Ref, Rule
 from deepreason.programs import content_text
 from deepreason.rules.guards import anti_relapse
@@ -26,10 +27,27 @@ def synthesize(
     lines = [f"PROBLEM {problem.id}", problem.description, "", "ARTIFACTS TO CONNECT:"]
     for aid in endpoints:
         lines.append(f"- {aid}: {content_text(harness.state.artifacts[aid], harness.blobs)[:200]}")
-    lines += ["", "DIRECTIVE: propose one relation; list the ids it connects."]
-    output, llm_call = adapter.call("synthesizer", "\n".join(lines), SynthesizerOutput)
+    lines += ["", "DIRECTIVE: propose ONE SUBSTANTIVE relation and list the "
+              "ids it connects. Name the relation kind (depends on / reduces "
+              "to / shares mechanism / compatible with / inherits / "
+              "integrates / contradicts / abstracts) and state what the "
+              "relation is REFUTED IF. A summary of the endpoints is not a "
+              "relation and fails on form."]
+    output, llm_call = adapter.call(
+        "synthesizer",
+        "\n".join(lines),
+        SynthesizerOutput,
+        aliases=aliases_for_values(endpoints, prefix="A"),
+    )
 
-    connects = [i for i in output.connects if i in harness.state.artifacts]
+    # The problem provenance owns the mandatory endpoints.  Model-proposed
+    # refs may add mentions, but omitting a deterministic endpoint cannot
+    # remove it from the relation interface.
+    connects = list(
+        dict.fromkeys(
+            endpoints + [i for i in output.connects if i in harness.state.artifacts]
+        )
+    )
     if not connects:
         # No registrable relation => no Conj event; the synthesizer call
         # still spent tokens and must reach the log once (§0).
@@ -49,13 +67,30 @@ def synthesize(
             role="synthesizer", school=school_id, event_seq=harness._next_seq
         ),
     )
+    domain = anti_relapse.relapse_domain(
+        artifact,
+        harness,
+        workload_profile="text",
+        problem_family=problem.id,
+        contract_id="synthesizer.relation.v1",
+        mandatory_refs=endpoints,
+    )
     admitted, _ = anti_relapse.check(
-        artifact, [], harness, embedder=embedder, near_dup_eps=config.NEAR_DUP_EPS
+        artifact,
+        [],
+        harness,
+        embedder=embedder,
+        near_dup_eps=config.NEAR_DUP_EPS,
+        domain=domain,
     )
     if not admitted or artifact.id in harness.state.artifacts:
         harness.record_llm_calls([llm_call], "synth-noregister")
         return None
+    anti_relapse.record_domain(harness, artifact.id, domain)
     harness.register_batch(
-        [(artifact, [])], problem_id=problem.id, rule=Rule.CONJ, llm=llm_call
+        [(artifact, [])],
+        problem_id=problem.id,
+        rule=Rule.CONJ,
+        llm=llm_call,
     )
     return harness.state.artifacts[artifact.id]

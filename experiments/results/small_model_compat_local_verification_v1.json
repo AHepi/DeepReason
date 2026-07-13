@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-11T16:06:25Z",
+  "implementation_plan": "deepreason-small-model-compat-v1",
+  "scope": "full",
+  "passed": true,
+  "evidence_class": "local_execution",
+  "source_head_before_commit": "65051677684c5708b02ce33c8aa926870d459cca",
+  "checks": {
+    "pytest": {
+      "passed": 751,
+      "skipped": 1,
+      "failed": 0,
+      "command": "PYTHONPATH=src:mini DEEPREASON_CHROMIUM_PATH=/tmp/deepreason-chromium/chromium DEEPREASON_CHROMIUM_ARGS=--no-sandbox python -m pytest -p no:cacheprovider -q -rs",
+      "skip_reason": "Optional fastembed dependency is not installed."
+    },
+    "browser": {
+      "backend": "Chromium 149.0.7827.0",
+      "real_browser_exercised": true,
+      "result": "pass"
+    },
+    "ruff": {
+      "command": "python -m ruff check src tests mini scripts",
+      "result": "pass"
+    },
+    "compileall": {
+      "command": "PYTHONPATH=src:mini python -m compileall -q src mini scripts",
+      "result": "pass"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  },
+  "covered_acceptance": {
+    "A1": "local reproduction tests pass",
+    "A2": "local firewall and malicious-output tests pass",
+    "A7": "state-machine and invalid-manifest transition tests pass",
+    "A8": "full available local suite passes",
+    "A10": "frontier fast-path and recovery-transition tests pass",
+    "A11": "MiniReason graduation and shared-kernel tests pass",
+    "A12": "process-metadata isolation tests pass"
+  },
+  "live_acceptance": {
+    "status": "not_collected",
+    "reason": "No live provider credential is available in the verification environment.",
+    "criteria_requiring_live_evidence": ["A3", "A4", "A5", "A6", "A9"],
+    "claim": "No live Gemma or frontier quality threshold is claimed by this record."
+  }
+}

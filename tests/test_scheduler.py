@@ -126,3 +126,57 @@ def test_integration_budget_share_caps_connection_work(tmp_path):
     conn_problems = [p for p in harness.state.problems if p.startswith("conn:")]
     worked = {pid for _, pid in harness.state.addr}
     assert not (worked & set(conn_problems))
+
+
+def test_focus_family_restricts_selection(tmp_path):
+    """FOCUS_FAMILY (staged pipelines): selection is limited to the named
+    problem's transitive family — in-family successors keep working, but an
+    unrelated unsolved problem never wins, no matter its liveness age."""
+    from deepreason.ontology import Provenance
+    from deepreason.scheduler.scheduler import problem_family
+
+    harness = Harness(tmp_path / "run")
+    harness.register_commitment(Commitment(id="k-a", eval="predicate:len(content) > 0"))
+    for pid in ("pi-stage", "pi-other"):
+        harness.register_problem(Problem(
+            id=pid, description=pid, criteria=["k-a"],
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        ))
+    # A refuted candidate on pi-stage spawns a successor into the family.
+    doomed = harness.create_artifact(
+        "x", provenance=Provenance(role="conjecturer"), problem_id="pi-stage")
+    from deepreason.rules.warrants import register_fail_warrant
+    register_fail_warrant(
+        harness, commitment_id="k-a", target_id=doomed.id,
+        nu_content="nu", critic_content="critic", trace_ref="")
+    conj = json.dumps({"candidates": [{"content": "another idea", "typicality": 0.9}]})
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint([conj] * 6)}, harness.blobs, retry_max=2)
+    scheduler = Scheduler(
+        harness, adapter, Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0,
+                                 FOCUS_FAMILY="pi-stage"))
+    for _ in range(4):
+        scheduler.step()
+    family = problem_family(harness.state, "pi-stage")
+    assert "pi-stage" in family
+    assert any(pid.startswith("succ:") for pid in family)  # successor joined
+    worked = set(scheduler._problem_worked)
+    assert worked and worked <= family          # never left the family
+    assert "pi-other" not in worked
+
+
+def test_on_cycle_true_stops_the_run_early(tmp_path):
+    harness = Harness(tmp_path / "run")
+    harness.register_commitment(Commitment(id="k-a", eval="predicate:len(content) > 0"))
+    harness.register_problem(Problem(
+        id="pi-a", description="a", criteria=["k-a"],
+        provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    ))
+    conj = json.dumps({"candidates": [{"content": "idea", "typicality": 0.9}]})
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint([conj] * 10)}, harness.blobs, retry_max=2)
+    scheduler = Scheduler(harness, adapter, Config(VS_K=1, N_SCHOOLS=0, FUZZ_N=0))
+    seen = []
+    scheduler.run(10, on_cycle=lambda s: seen.append(s._cycles) or len(seen) >= 2)
+    assert seen == [1, 2]        # stopped after the 2nd cycle, not 10
+    assert scheduler._cycles == 2

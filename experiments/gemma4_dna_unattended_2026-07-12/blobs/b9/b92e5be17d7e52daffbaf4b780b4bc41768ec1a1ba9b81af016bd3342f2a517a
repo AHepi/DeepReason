@@ -1,0 +1,16 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { display: flex; flex-direction: column; gap: 1rem; padding: 2rem; color: #39FF14; font-family: 'JetBrains Mono', 'Roboto Mono', monospace; background: #050A0C; }\n    .c3-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; border: 1px solid #B026FF; padding: 10px; }\n    .c3-base { text-align: center; padding: 8px; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; color: #00FFFF; }\n    .c3-base:hover { background: #39FF14; color: #050A0C; box-shadow: 0 0 15px #39FF14; }\n    .c3-base.highlighted { background: #B026FF; color: white; box-shadow: 0 0 20px #B026FF; }\n    .c3-label { font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem; }\n  </style>\n  <div class=\"c3-label\">GENOMIC SEQUENCE VIEW</div>\n  <div id=\"dna-grid-root-container\" class=\"c3-grid\"></div>\n  <script>\n    window.c3_mount = () => {\n      const container = document.getElementById('dna-grid-root-container');\n      c3_updateSequence('ATGCGATACGTTTAGCCTAGATCG');\n    };\n    window.c3_updateSequence = (seq) => {\n      const container = document.getElementById('dna-grid-root-container');\n      container.innerHTML = seq.split('').map((b, i) => `<div class=\"c3-base\" data-idx=\"${i}\">${b}</div>`).join('');\n    };\n    window.c3_highlightBasePair = (idx) => {\n      const bases = document.querySelectorAll('.c3-base');\n      bases.forEach(b => b.classList.remove('highlighted'));\n      if(bases[idx]) bases[idx].classList.add('highlighted');\n    };\n    window.c3_destroy = () => {\n      const root = document.getElementById('dna-grid-root');\n      if(root) root.innerHTML = '';\n    };\n  </script>\n</div>",
+      "typicality": 0.9,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { padding: 3rem; background: #050A0C; font-family: monospace; }\n    .c3-static-grid { display: flex; flex-wrap: wrap; gap: 10px; border: 2px solid #39FF14; padding: 20px; color: #00FFFF; }\n    .c3-base-static { border: 1px solid #B026FF; padding: 5px 10px; }\n    .c3-fallback-msg { color: #B026FF; font-size: 0.7rem; margin-top: 1rem; }\n  </style>\n  <div id=\"dna-grid-root-display\" class=\"c3-static-grid\"></div>\n  <div class=\"c3-fallback-msg\">Static Data-Dashboard Mode</div>\n  <script>\n    window.c3_mount = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {\n        c3_updateSequence('GCTAGCTAGCTA');\n      }\n    };\n    window.c3_updateSequence = (seq) => {\n      const container = document.getElementById('dna-grid-root-display');\n      container.innerHTML = seq.split('').map(b => `<span class=\"c3-base-static\">${b}</span>`).join('');\n    };\n    window.c3_highlightBasePair = (idx) => {};\n    window.c3_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.4,
+      "neighbours": []
+    }
+  ]
+}
+```

@@ -67,6 +67,40 @@ def test_batch_registers_per_target_warrants(harness):
     assert len(llm_events) == 1
 
 
+def test_shared_case_text_still_attacks_each_target(harness):
+    """Critic content is an artifact; carriage is a separate relation.
+
+    A genuinely shared fault may be stated byte-for-byte identically for two
+    targets. Content-addressing should dedupe the prose without deduping either
+    warrant carried by that prose artifact.
+    """
+    a, b = _two_targets(harness)
+    shared = "both claims omit the same boundary condition"
+    adapter = _adapter(
+        harness,
+        [
+            _batch(
+                {"target": a.id, "attack": True, "case": shared},
+                {"target": b.id, "attack": True, "case": shared},
+            )
+        ],
+    )
+
+    critics = crit_argumentative_batch(harness, [a.id, b.id], adapter, Config())
+
+    assert len({critic.id for critic in critics}) == 1  # prose dedupes
+    carrier_id = critics[0].id
+    carried = set(harness.carried_warrant_ids(carrier_id))
+    assert carried == {
+        w.id for w in harness.warrants.values() if w.target in {a.id, b.id}
+    }
+    assert len(carried) == 2
+    assert harness.state.status[a.id] == Status.REFUTED
+    assert harness.state.status[b.id] == Status.REFUTED
+    # The shared model call is still accounted exactly once.
+    assert sum(e.llm is not None for e in harness.log.read()) == 1
+
+
 def test_case_against_unlisted_target_is_dropped(harness):
     a, b = _two_targets(harness)
     outsider = harness.create_artifact("an artifact the critic was never shown")
@@ -168,3 +202,93 @@ def test_arg_crit_cap_counts_targets_not_calls(tmp_path):
     # Only 2 of the 3 admitted targets were shown to the critic.
     last_prompt = [e for e in harness.log.read() if e.rule == Rule.MEASURE and e.llm][-1]
     assert len(last_prompt.inputs) - 1 == 2  # ["batch-crit", t1, t2]
+
+
+def test_standing_survivor_swept_into_leftover_slots(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic), CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4
+    )
+    # Accepted BEFORE any cycle: under legacy behavior it would never be
+    # criticized (only freshly admitted artifacts reached the critic).
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    # 3 fresh admits + 1 leftover slot -> the standing survivor was shown.
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert shown
+
+
+def test_standing_goodhart_trap_is_fuzz_refuted_in_the_sweep(tmp_path):
+    """End-to-end (mock LLM): a seeded candidate passes its frozen property
+    inputs (execution-backed Goodhart survivor) but is wrong in general. The
+    standing sweep runs the deterministic fuzz pass BEFORE spending an LLM
+    call, and the trap falls to a machine-found counterexample — refuted by
+    a demonstrative warrant, no critic model involved."""
+    from deepreason.ontology import Interface, Provenance, WarrantType
+    from deepreason.oracle import property_oracle_commitment
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic), CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4
+    )
+    checker = (
+        "def check(inp, out):\n"
+        "    xs = inp[0]\n"
+        "    return isinstance(out, list) and sorted(xs) == out\n"
+    )
+    gen = (
+        "def gen(k):\n"
+        "    n = 1 + k % 4\n"
+        "    xs = []\n"
+        "    j = k\n"
+        "    for i in range(n):\n"
+        "        xs.append((j * 7 + i * 3) % 10)\n"
+        "        j = j // 2 + 1\n"
+        "    return [xs]\n"
+    )
+    c = property_oracle_commitment(
+        "solve", [[[3, 1, 2]]], checker, generator=gen
+    )
+    harness.register_commitment(c)
+    trap = harness.create_artifact(
+        "def solve(xs):\n"
+        "    if len(xs) > 2:\n"
+        "        return sorted(xs)\n"
+        "    return xs\n",
+        codec="code:python",
+        interface=Interface(commitments=[c.id]),
+        provenance=Provenance(role="conjecturer"),
+    )
+    assert harness.state.status[trap.id] == Status.ACCEPTED  # frozen input passes
+    scheduler.step()
+    assert harness.state.status[trap.id] == Status.REFUTED
+    w = next(w for w in harness.warrants.values() if w.target == trap.id)
+    assert w.type == WarrantType.DEMONSTRATIVE  # machine experiment, not a judge
+
+
+def test_recrit_standing_off_preserves_legacy(tmp_path):
+    from deepreason.ontology import Provenance
+
+    critic = _CountingCritic()
+    harness, scheduler = _seeded_scheduler(
+        tmp_path, MockEndpoint(critic),
+        CRIT_BATCH_K=4, ARG_CRIT_PER_CYCLE=4, RECRIT_STANDING=False,
+    )
+    standing = harness.create_artifact(
+        "an early accepted moon claim nobody ever attacked",
+        provenance=Provenance(role="conjecturer"),
+    )
+    scheduler.step()
+    shown = [
+        e for e in harness.log.read()
+        if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
+    ]
+    assert not shown  # legacy: only freshly admitted artifacts are criticized

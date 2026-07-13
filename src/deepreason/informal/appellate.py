@@ -13,7 +13,7 @@ visible, which is the most the design can do (§17).
 
 import json
 
-from deepreason.informal.standards import resolve_standard
+from deepreason.informal.standards import registered_specs, resolve_standard
 from deepreason.ontology import Interface, Provenance, Ref, SpawnTrigger, Status
 
 
@@ -97,7 +97,21 @@ def rule(harness, case_id: str, holding: str, spec_id: str):
     """Enter an appellate ruling: a precedent artifact calibrating spec_id."""
     standard = resolve_standard(harness, spec_id)
     if standard is None:
-        raise KeyError(f"no standard registered for spec {spec_id!r}")
+        # Actionable precondition (a survivor of the usability run + a known
+        # OPERATOR_DIAGNOSIS cut): name what is missing and which spec ids are
+        # valid, instead of a bare KeyError the operator can't act on.
+        available = registered_specs(harness)
+        hint = (
+            f"registered standards: {available}"
+            if available
+            else "no standards are registered — this case is not a rubric case, so "
+            "appellate_rule is not its instrument"
+        )
+        raise ValueError(
+            f"appellate_rule: no standard registered for spec {spec_id!r}. {hint}. "
+            "Pass the standard's spec id (the docket entry's 'standards' field), "
+            "not a severity label."
+        )
     return harness.create_artifact(
         json.dumps(
             {"precedent": {"case": case_id, "holding": holding}}, sort_keys=True

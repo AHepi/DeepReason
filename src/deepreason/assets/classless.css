@@ -1,0 +1,72 @@
+/* DeepReason vendored option "classless" — semantic base styles.
+   Selectable via the design manifest (libs: ["classless"]); never injected
+   silently. Styles bare semantic HTML so components spend zero effort on
+   typography/forms/tables; custom CSS stays for design-specific decisions. */
+:root {
+  --cl-fg: #1b1f24;
+  --cl-bg: #ffffff;
+  --cl-muted: #57606a;
+  --cl-accent: #0b57d0;
+  --cl-surface: #f6f8fa;
+  --cl-border: #d0d7de;
+  --cl-radius: 8px;
+  --cl-measure: 70ch;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cl-fg: #e6edf3;
+    --cl-bg: #0d1117;
+    --cl-muted: #9198a1;
+    --cl-accent: #6ea8fe;
+    --cl-surface: #161b22;
+    --cl-border: #30363d;
+  }
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  color: var(--cl-fg);
+  background: var(--cl-bg);
+}
+main, section, article { max-width: var(--cl-measure); margin-inline: auto; padding: 1rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin: 1.5em 0 0.5em; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+p, ul, ol { margin: 0.75em 0; }
+a { color: var(--cl-accent); }
+small { color: var(--cl-muted); }
+hr { border: none; border-top: 1px solid var(--cl-border); margin: 2rem 0; }
+button, input[type="submit"] {
+  padding: 0.5em 1em;
+  border: 1px solid var(--cl-border);
+  border-radius: var(--cl-radius);
+  background: var(--cl-surface);
+  color: var(--cl-fg);
+  cursor: pointer;
+}
+button:hover { border-color: var(--cl-accent); }
+input, textarea, select {
+  padding: 0.5em;
+  border: 1px solid var(--cl-border);
+  border-radius: var(--cl-radius);
+  background: var(--cl-bg);
+  color: var(--cl-fg);
+  width: 100%;
+  max-width: 100%;
+}
+label { display: block; margin: 0.5em 0 0.25em; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid var(--cl-border); padding: 0.5em; text-align: left; }
+th { background: var(--cl-surface); }
+code, pre { background: var(--cl-surface); border-radius: var(--cl-radius); }
+code { padding: 0.15em 0.35em; }
+pre { padding: 1em; overflow-x: auto; }
+blockquote {
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid var(--cl-accent);
+  background: var(--cl-surface);
+}
+details { border: 1px solid var(--cl-border); border-radius: var(--cl-radius); padding: 0.5em 1em; }
+summary { cursor: pointer; }

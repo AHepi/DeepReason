@@ -1,0 +1,48 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+<div id="header-root">
+  <style>
+    #header-root { position: relative; height: 200px; background: #050A0C; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .c1-text { color: #39FF14; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2.5rem; letter-spacing: 8px; z-index: 2; text-shadow: 0 0 15px #39FF14, 0 0 30px #00FFFF; }
+    .c1-dna-strand { position: absolute; width: 100%; height: 100%; opacity: 0.4; }
+  </style>
+  <canvas id="header-root-canvas" class="c1-dna-strand"></canvas>
+  <div class="c1-text">The DNA Archive: Digitalized Life</div>
+  <script>
+    let ctx, animId, canvas;
+    window.c1_mount = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      canvas = document.getElementById('header-root-canvas');
+      ctx = canvas.getContext('2d');
+      const render = () => {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#00FFFF';
+        ctx.beginPath();
+        ctx.moveTo(0, 100);
+        ctx.bezierCurveTo(100, 50, 200, 150, 300, 100);
+        ctx.stroke();
+        animId = requestAnimationFrame(render);
+      };
+      render();
+    };
+    window.c1_destroy = () => { cancelAnimationFrame(animId); };
+    window.c1_updateHeaderGlow = () => {};
+  </script>
+</div>
+
+BATTERY THE EDITS WILL FACE:
+- program:component_wf
+- program:lineage_ref
+
+DIRECTIVE: produce exactly 8 bounded edits.

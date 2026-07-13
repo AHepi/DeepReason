@@ -1,0 +1,27 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"header-root\" class=\"c1-container\">\n  <style>\n    #header-root {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      padding: 4rem 2rem;\n      background: #050A0C;\n      position: relative;\n      overflow: hidden;\n      font-family: 'Inter', 'Montserrat', sans-serif;\n    }\n    .c1-title {\n      color: #39FF14;\n      font-size: clamp(2rem, 5vw, 4rem);\n      text-transform: uppercase;\n      letter-spacing: 0.2em;\n      text-align: center;\n      text-shadow: 0 0 20px rgba(57, 255, 20, 0.6);\n      z-index: 10;\n      transition: text-shadow 0.3s ease;\n    }\n    .c1-glow-overlay {\n      position: absolute;\n      top: 0; left: 0; width: 100%; height: 100%;\n      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 255, 255, 0.15) 0%, transparent 50%);\n      pointer-events: none;\n    }\n  </style>\n  <div class=\"c1-glow-overlay\" id=\"header-root-glow\"></div>\n  <h1 class=\"c1-title\">The DNA Archive: Digitalized Life</h1>\n  <script>\n    let rafId;\n    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n    window.c1_mount = () => {\n      if (reducedMotion) return;\n      const glow = document.getElementById('header-root-glow');\n      const update = (e) => {\n        const rect = glow.getBoundingClientRect();\n        glow.style.setProperty('--x', `${((e.clientX - rect.left) / rect.width) * 100}%`);\n        glow.style.setProperty('--y', `${((e.clientY - rect.top) / rect.height) * 100}%`);\n        rafId = requestAnimationFrame(() => {});\n      };\n      window.addEventListener('mousemove', update);\n      window.c1_updateHeaderGlow = update;\n    };\n    window.c1_destroy = () => {\n      window.removeEventListener('mousemove', window.c1_updateHeaderGlow);\n      cancelAnimationFrame(rafId);\n    };\n    window.c1_updateHeaderGlow = () => {};\n  </script>\n</div>",
+      "typicality": 0.9,
+      "neighbours": [
+        "A1"
+      ]
+    },
+    {
+      "content": "<div id=\"header-root\" class=\"c1-static-fallback\">\n  <style>\n    #header-root {\n      padding: 5rem 2rem;\n      background: #050A0C;\n      border-bottom: 4px solid #39FF14;\n      text-align: center;\n      font-family: 'Inter', sans-serif;\n    }\n    .c1-title {\n      color: #39FF14;\n      font-size: 3rem;\n      letter-spacing: 0.3em;\n      border: 2px solid #00FFFF;\n      display: inline-block;\n      padding: 1rem 2rem;\n      box-shadow: 0 0 10px #00FFFF;\n    }\n  </style>\n  <h1 class=\"c1-title\">The DNA Archive: Digitalized Life</h1>\n  <script>\n    window.c1_mount = () => {};\n    window.c1_destroy = () => {};\n    window.c1_updateHeaderGlow = () => {};\n  </script>\n</div>",
+      "typicality": 0.4,
+      "neighbours": [
+        "A1"
+      ]
+    },
+    {
+      "content": "<div id=\"header-root\">\n  <style>\n    #header-root { position: relative; height: 200px; background: #050A0C; display: flex; align-items: center; justify-content: center; overflow: hidden; }\n    .c1-text { color: #39FF14; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2.5rem; letter-spacing: 8px; z-index: 2; text-shadow: 0 0 15px #39FF14, 0 0 30px #00FFFF; }\n    .c1-dna-strand { position: absolute; width: 100%; height: 100%; opacity: 0.4; }\n  </style>\n  <canvas id=\"header-root-canvas\" class=\"c1-dna-strand\"></canvas>\n  <div class=\"c1-text\">The DNA Archive: Digitalized Life</div>\n  <script>\n    let ctx, animId, canvas;\n    window.c1_mount = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;\n      canvas = document.getElementById('header-root-canvas');\n      ctx = canvas.getContext('2d');\n      const render = () => {\n        ctx.clearRect(0,0, canvas.width, canvas.height);\n        ctx.strokeStyle = '#00FFFF';\n        ctx.beginPath();\n        ctx.moveTo(0, 100);\n        ctx.bezierCurveTo(100, 50, 200, 150, 300, 100);\n        ctx.stroke();\n        animId = requestAnimationFrame(render);\n      };\n      render();\n    };\n    window.c1_destroy = () => { cancelAnimationFrame(animId); };\n    window.c1_updateHeaderGlow = () => {};\n  </script>\n</div>",
+      "typicality": 0.7,
+      "neighbours": [
+        "A1"
+      ]
+    }
+  ]
+}
+```

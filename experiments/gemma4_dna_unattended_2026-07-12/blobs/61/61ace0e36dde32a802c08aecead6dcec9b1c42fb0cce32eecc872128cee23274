@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "A high-density, single-page dashboard layout utilizing an embedded grid of interactive biological modules designed for data-centric exploration.",
+      "changed_fields": [
+        "Pages"
+      ]
+    },
+    {
+      "content": "- A high-performance data-grid visualizing multi-strand nucleotide sequences.\n- A 'Live Simulation' window for real-time transcription synthesis.\n- Parallax depth created via CSS 3D transforms on data-cards for spatial hierarchy.\n- 2026 'Cyber-Organic' visual design (deep emerald greens, iridescent electric purples).",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "**Sequence Scrubbing**: Dragging a slider moves a 'reading head' across a DNA sequence, triggering a real-time index lookup that renders corresponding mRNA bases (Causal link: Slider position -> Index lookup -> Visual render).",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "**Layered Depth**: Background elements shift at 0.2x speed, midground at 0.5x, and foreground at 1.0x relative to the viewport scroll velocity.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "**Motion Control**: Global `isMotionEnabled` state derived from `prefers-reduced-motion` media query; if false, all parallax offsets and kinetic transitions are zeroed.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **Header**: \"The Bio-Digital Archive: Mapping Digitalized Life\"\n- **Data Table**: \"Sequence: ATGC... | Complement: TACG... | Status: Verified\"\n- **Replication Guide**: \"DNA replication is semi-conservative; each resulting double helix contains one parental strand and one newly synthesized strand.\"\n- **Transcription Guide**: \"Transcription converts genomic DNA into messenger RNA (mRNA) within the nucleus, ensuring the primary code remains protected.\"\n- **Factoid**: \"The human genome contains approximately 3.2 billion base pairs across 23 pairs of chromosomes.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "1. [ ] Self-contained single local HTML file including all CSS/JS.\n2. [ ] Slider accurately simulates transcription base-pairing logic (A->U, T->A, C->G, G->C).\n3. [ ] Parallax depth is clearly perceptible upon vertical scroll.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    },
+    {
+      "content": "4. [ ] `prefers-reduced-motion` system setting completely disables parallax and sliding animations.\n5. [ ] Hex color palette strictly adheres to the 'Cyber-Organic' 2026 design specification.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    }
+  ]
+}
+```

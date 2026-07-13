@@ -24,7 +24,8 @@ _OPENERS = {
 # flushed as one deliberation aside rather than a sentence per call.
 _NOISE_TAGS = (
     "trial-llm", "audit-llm", "conj-noregister", "synth-noregister",
-    "batch-crit", "arg-crit", "hv-floor-nomeasure",
+    "batch-crit", "arg-crit", "hv-floor-nomeasure", "hv-nomeasure",
+    "property-relevance-trial", "spec-generation",
 )
 
 _SPAWN_LINES = {
@@ -36,6 +37,51 @@ _SPAWN_LINES = {
     SpawnTrigger.EXPLANATION_DEBT: "unexpected reach raised an explanation debt",
     SpawnTrigger.RESEARCH: "an observation-valued commitment demanded evidence, so a research problem was opened",
     SpawnTrigger.AUDIT_CRITIC: "the critic itself came under audit",
+}
+
+# Named-signal prose (checked BEFORE the _NOISE_TAGS startswith sweep, which
+# would otherwise swallow the arg-crit-*/batch-crit-* variants).
+_SIGNAL_LINES = {
+    "browser-pass": ("progress",
+                     "the candidate was rendered and driven in the browser and "
+                     "passed every scripted step"),
+    "browser-spec-overrun": ("hedge",
+                             "the browser interaction spec was unusable — a spec "
+                             "defect, not the candidate's fault"),
+    "vision-crit": ("progress",
+                    "the vision critic looked at the rendered screenshots and "
+                    "found no visible fault"),
+    "vision-crit-overridden-by-execution": ("hedge",
+                                            "a visual complaint was overridden: "
+                                            "the target's execution oracle passes"),
+    "arg-crit-overridden-by-execution": ("hedge",
+                                         "an argued case was overridden: the "
+                                         "target's execution oracle passes"),
+    "arg-crit-cx-rejected": ("setback",
+                             "the critic's counterexample failed to ground, and "
+                             "the rejection reason was echoed back for a retry"),
+    "batch-crit-cx-retry": ("consequence",
+                            "the overridden critics got one shared retry with "
+                            "the gate's verdicts in hand"),
+    "property-wipeout-quarantine": ("hedge",
+                                    "a proposed property indicted every "
+                                    "candidate at once, so its verdict was "
+                                    "quarantined"),
+    "experiment-design": ("progress",
+                          "the experimenter proposed new input generators"),
+    "property-design": ("progress",
+                        "the property designer conjectured new correctness "
+                        "checkers"),
+    "disc-attempts-exhausted": ("consequence",
+                                "an unresolvable rivalry hit its attempt cap "
+                                "and was set aside as unresolved"),
+    "embedder": ("progress",
+                 "the run stamped its embedding geometry — model, library "
+                 "versions, sentinel hash — so drift is detectable on the "
+                 "record"),
+    "embedder-fallback": ("setback",
+                          "the configured embedding backend was unavailable, "
+                          "so the run degraded to the hashing embedder"),
 }
 
 _BLOCK_LINES = {
@@ -193,6 +239,21 @@ def _narrate_event(harness, event, prose: _Prose) -> None:
         return
 
     if event.rule == Rule.MEASURE:
+        # Named-signal prose FIRST: the noise sweep below matches by
+        # startswith, so 'arg-crit' would otherwise swallow
+        # 'arg-crit-overridden-by-execution' etc.
+        if tag == "cycle":
+            n = event.inputs[1] if len(event.inputs) > 1 else "?"
+            focus = event.inputs[2] if len(event.inputs) > 2 else "-"
+            prose.paragraph()
+            prose.say("progress",
+                      (f"cycle {n} turned to {focus}" if focus != "-"
+                       else f"cycle {n} found nothing to work"), seq)
+            return
+        if tag in _SIGNAL_LINES:
+            kind, line = _SIGNAL_LINES[tag]
+            prose.say(kind, line, seq)
+            return
         if any(t.startswith(_NOISE_TAGS) or t in _NOISE_TAGS for t in inputs):
             prose.aside()
             return

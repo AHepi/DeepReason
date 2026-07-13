@@ -14,11 +14,41 @@ and may enforce a DETERMINISTIC bound (e.g. step count) internally; the
 import ast
 import json
 import re
+from dataclasses import dataclass
+from typing import Callable, Literal
 
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 
 PASS, FAIL, OVERRUN = "pass", "fail", "overrun"
+
+ProgramClass = Literal[
+    "structural",
+    "execution",
+    "simulation",
+    "formal",
+    "observation",
+]
+ProgramFunction = Callable[[str, object, object | None], tuple[str, dict]]
+
+
+@dataclass(frozen=True)
+class ProgramSpec:
+    """Registered program plus process-only classification metadata.
+
+    ``class_`` and ``external_toolchain`` are reporting and scheduling facts.
+    They do not alter commitment syntax, verdict interpretation, or labels.
+    Calling a spec delegates to its function so existing direct uses of
+    ``PROGRAMS[name](...)`` remain compatible.
+    """
+
+    name: str
+    fn: ProgramFunction
+    class_: ProgramClass
+    external_toolchain: str | None = None
+
+    def __call__(self, text: str, budget, artifact=None) -> tuple[str, dict]:
+        return self.fn(text, budget, artifact)
 
 
 class UnsafePredicate(ValueError):
@@ -70,7 +100,7 @@ _SAFE_NAMES = {
 }
 
 
-def _json_wf(text: str, budget) -> tuple[str, dict]:
+def _json_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     try:
         json.loads(text)
         return PASS, {"parsed": True}
@@ -78,19 +108,182 @@ def _json_wf(text: str, budget) -> tuple[str, dict]:
         return FAIL, {"error": str(e)}
 
 
-def _skeleton_wf(text: str, budget) -> tuple[str, dict]:
+def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
     return skeleton_wf_program(text, budget)
 
 
+def _exec_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """The acting evaluator (oracle.py): RUN the candidate against fixed tests
+    and take the verdict from the result — criticism grounded in execution, not
+    in a rubric judge or a well-formedness check. Deterministic + sandboxed."""
+    from deepreason.oracle import run_from_spec
+
+    return run_from_spec(text, budget)
+
+
+def _property_oracle(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Reference-free acting evaluator (oracle.py): RUN the candidate on fixed
+    inputs and check each output with the spec's `def check(inp, out)` — no
+    expected outputs anywhere, so the harness can pose problems nobody has
+    solved, and critics can ground refutations in NEW inputs (counterexamples).
+    Deterministic + sandboxed, same as exec_oracle."""
+    from deepreason.oracle import run_property_from_spec
+
+    return run_property_from_spec(text, budget)
+
+
+def _generator_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Adjudicate an experimenter-proposed input generator BY ITS FRUITS
+    (oracle.py): compile under the guard, enumerate, and PASS iff it yields
+    enough gate-valid inputs including at least one novel one. Deterministic;
+    a generator never decides refutations, so this well-formedness verdict is
+    the ONLY adjudication a generator needs."""
+    from deepreason.oracle import check_generator_from_spec
+
+    return check_generator_from_spec(text, budget)
+
+
+def _checker_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Mechanical admission for a PROPOSED property checker (oracle.py):
+    compiles under the guard, bounded, and non-vacuous (rejects at least one
+    degenerate output). Deliberately narrow: whether the property FOLLOWS
+    FROM THE PROBLEM is an informal claim and goes to the relevance trial
+    (rules/experiment.py), never to a program."""
+    from deepreason.oracle import check_checker_from_spec
+
+    return check_checker_from_spec(text, budget)
+
+
+def _lineage_ref(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Structural born-connected check (§7 L1): a candidate on a connection
+    problem must carry a `dependence` ref into the problem's declared lineage
+    (its isolated node or a ranked neighbour), frozen into budget.extra by
+    unification.isolation.lineage_ref_commitment. This catches 'abstraction
+    escape' — a skeleton imported from nowhere, unconnected to the graph — at
+    the PROGRAM level, before it reaches a rubric judge and while criticism
+    debt is high. It does NOT adjudicate on semantics (§0): the verdict is a
+    pure function of interface STRUCTURE, which is part of the artifact's
+    content-addressed identity, so it is replay-deterministic."""
+    from deepreason.ontology.artifact import RefRole
+
+    allowed = {e for e in str(budget.extra.get("endpoints", "")).split(",") if e}
+    if not allowed or artifact is None:
+        return PASS, {"endpoints": len(allowed)}  # nothing to enforce
+    for ref in artifact.interface.refs:
+        if ref.role == RefRole.DEPENDENCE and any(
+            ref.target == e or ref.target.startswith(e) or e.startswith(ref.target)
+            for e in allowed
+        ):
+            return PASS, {"connected_to": ref.target[:12]}
+    return FAIL, {"reason": "no dependence ref into the connection lineage"}
+
+
 # Named program registry. hv_floor is deliberately NOT here: it needs the
 # variator (measures/hv.py), and keeping it out makes B0 stratification
 # structural (spec §7).
-PROGRAMS = {
-    "json-wf": _json_wf,
-    "skeleton_wf": _skeleton_wf,
+def _manifest_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import manifest_wf
+
+    return manifest_wf(text, budget, artifact)
+
+
+def _component_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import component_wf
+
+    return component_wf(text, budget, artifact)
+
+
+def _integration_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.manifest import integration_wf
+
+    return integration_wf(text, budget, artifact)
+
+
+def _reasoning_envelope_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.workloads.text import reasoning_wf_program
+
+    return reasoning_wf_program(text, budget, artifact)
+
+
+def _reasoning_observation_pending(text: str, budget, artifact=None) -> tuple[str, dict]:
+    return OVERRUN, {"reason": "observation requires registered evidence"}
+
+
+def _lean_external_check(text: str, budget, artifact=None) -> tuple[str, dict]:
+    """Defer Lean checks to the pinned verifier service.
+
+    Program commitments retain their normal ``program:<name>`` spelling, but
+    invoking a kernel is not a pure in-process text function.  Until a formal
+    workflow binds the verifier receipt, direct generic program evaluation is
+    therefore an operational overrun, never a failed proof or a warrant.
+    """
+
+    return OVERRUN, {
+        "reason": "external-verifier-required",
+        "toolchain": "lean4",
+    }
+
+
+PROGRAMS: dict[str, ProgramSpec] = {
+    "json-wf": ProgramSpec("json-wf", _json_wf, "structural"),
+    "skeleton_wf": ProgramSpec("skeleton_wf", _skeleton_wf, "structural"),
+    "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
+    "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
+    "property_oracle": ProgramSpec("property_oracle", _property_oracle, "execution"),
+    "generator_wf": ProgramSpec("generator_wf", _generator_wf, "structural"),
+    "checker_wf": ProgramSpec("checker_wf", _checker_wf, "structural"),
+    # Chunked website builds (manifest.py): the design's component manifest,
+    # the per-chunk fragment contract, and assembled-page coherence. All
+    # static, deterministic functions of content + frozen spec.
+    "manifest_wf": ProgramSpec("manifest_wf", _manifest_wf, "structural"),
+    "component_wf": ProgramSpec("component_wf", _component_wf, "structural"),
+    "integration_wf": ProgramSpec("integration_wf", _integration_wf, "structural"),
+    "reasoning-envelope-wf": ProgramSpec(
+        "reasoning-envelope-wf", _reasoning_envelope_wf, "structural"
+    ),
+    "reasoning_observation_pending": ProgramSpec(
+        "reasoning_observation_pending", _reasoning_observation_pending, "observation"
+    ),
+    "lean_parse": ProgramSpec(
+        "lean_parse", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_no_sorry": ProgramSpec(
+        "lean_no_sorry", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_axiom_policy": ProgramSpec(
+        "lean_axiom_policy", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
+    "lean_kernel": ProgramSpec(
+        "lean_kernel", _lean_external_check, "formal", external_toolchain="lean4"
+    ),
 }
+
+
+def programs_by_class() -> dict[ProgramClass, tuple[str, ...]]:
+    """Stable process-reporting inventory; never feeds adjudication."""
+
+    classes: dict[ProgramClass, list[str]] = {
+        "structural": [],
+        "execution": [],
+        "simulation": [],
+        "formal": [],
+        "observation": [],
+    }
+    for name, spec in sorted(PROGRAMS.items()):
+        classes[spec.class_].append(name)
+    return {class_: tuple(names) for class_, names in classes.items()}
+
+
+def external_toolchains() -> dict[str, tuple[str, ...]]:
+    """Map pinned-backend families to the registered programs they serve."""
+
+    grouped: dict[str, list[str]] = {}
+    for name, spec in sorted(PROGRAMS.items()):
+        if spec.external_toolchain is not None:
+            grouped.setdefault(spec.external_toolchain, []).append(name)
+    return {toolchain: tuple(names) for toolchain, names in sorted(grouped.items())}
 
 
 def evaluable(commitment: Commitment) -> bool:
@@ -122,7 +315,10 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
         fn = PROGRAMS.get(arg)
         if fn is None:
             raise NotEvaluable(f"unknown program: {arg}")
-        verdict, detail = fn(text, commitment.budget)
+        # Programs receive the artifact too: structural checks (lineage_ref)
+        # read interface.refs, which is part of the content-addressed id, so
+        # the verdict stays a pure function of the artifact (§0).
+        verdict, detail = fn(text, commitment.budget, artifact)
     elif kind == "rubric":
         raise NotEvaluable("rubric verdicts require the trial protocol (spec §3/§10, P5)")
     else:

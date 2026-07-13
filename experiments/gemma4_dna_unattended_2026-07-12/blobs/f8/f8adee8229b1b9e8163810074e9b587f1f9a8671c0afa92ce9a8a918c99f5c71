@@ -1,0 +1,1 @@
+{"commitment":"component-wf@d947939db8d2","component":"c1","eval":"program:component_wf","verdict":"fail","violations":["undeclared global assignment(s): window.c1_raf_id"]}

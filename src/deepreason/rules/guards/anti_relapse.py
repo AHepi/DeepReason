@@ -16,11 +16,210 @@ Negative case law lives here, at the gate — never rendered into packs.
 """
 
 from collections.abc import Iterable
+import hashlib
+import json
+import os
+from pathlib import Path
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field
 
 from deepreason import programs
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.state import Status
 from deepreason.ontology.warrant import Warrant
+
+
+def _digest(value) -> str:
+    payload = json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+class RelapseDomain(BaseModel):
+    """Process-only scope for semantic anti-relapse comparisons.
+
+    The record is deliberately absent from :class:`Artifact`: it cannot alter
+    identity, status, commitments, or verdict interpretation.  Exact-hash
+    blocking remains global; this scope is consulted only before the
+    battery-equivalence stage.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    workload_profile: Literal["text", "code", "formal", "website"]
+    problem_family: str = Field(min_length=1)
+    contract_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    codec_family: str = Field(min_length=1)
+    mandatory_ref_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    active_battery_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    toolchain_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    component_spec_digest: str | None = Field(
+        default=None, pattern=r"^[0-9a-f]{64}$"
+    )
+    theorem_interface_digest: str | None = Field(
+        default=None, pattern=r"^[0-9a-f]{64}$"
+    )
+
+    @property
+    def digest(self) -> str:
+        return _digest(self.model_dump(mode="json"))
+
+    def compatible(self, other: "RelapseDomain") -> tuple[bool, str]:
+        required = (
+            "workload_profile",
+            "problem_family",
+            "contract_digest",
+            "mandatory_ref_digest",
+            "active_battery_digest",
+        )
+        for field in required:
+            if getattr(self, field) != getattr(other, field):
+                return False, field
+        if self.codec_family != other.codec_family:
+            return False, "codec_family"
+        if self.toolchain_digest != other.toolchain_digest:
+            return False, "toolchain_digest"
+        if self.workload_profile in {"code", "website"}:
+            if (
+                not self.component_spec_digest
+                or self.component_spec_digest != other.component_spec_digest
+            ):
+                return False, "component_spec_digest"
+        if self.workload_profile == "formal":
+            if (
+                not self.theorem_interface_digest
+                or self.theorem_interface_digest != other.theorem_interface_digest
+            ):
+                return False, "theorem_interface_digest"
+        return True, "compatible"
+
+
+def relapse_domain(
+    artifact: Artifact,
+    harness,
+    *,
+    workload_profile: Literal["text", "code", "formal", "website"],
+    problem_family: str,
+    contract_id: str,
+    mandatory_refs: Iterable[str] = (),
+    toolchain_digest: str | None = None,
+    component_spec: str | None = None,
+    theorem_interface: str | None = None,
+) -> RelapseDomain:
+    """Compile a deterministic domain from harness-owned interface facts."""
+    battery = sorted(
+        cid
+        for cid in artifact.interface.commitments
+        if cid in harness.commitments and programs.evaluable(harness.commitments[cid])
+    )
+    codec_family = artifact.codec.split(":", 1)[0].strip().casefold() or "raw"
+    return RelapseDomain(
+        workload_profile=workload_profile,
+        problem_family=problem_family,
+        contract_digest=_digest(contract_id),
+        codec_family=codec_family,
+        mandatory_ref_digest=_digest(sorted(set(mandatory_refs))),
+        active_battery_digest=_digest(battery),
+        toolchain_digest=toolchain_digest,
+        component_spec_digest=_digest(component_spec) if component_spec is not None else None,
+        theorem_interface_digest=(
+            _digest(theorem_interface) if theorem_interface is not None else None
+        ),
+    )
+
+
+_RELAPSE_LOG = "relapse.log.jsonl"
+
+
+def _append_operational(harness, payload: dict) -> None:
+    """Append gate process data without advancing the epistemic event log."""
+    if getattr(harness, "_read_only", False):
+        return
+    path = Path(harness.root) / _RELAPSE_LOG
+    line = json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n"
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(line)
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def record_domain(harness, artifact_id: str, domain: RelapseDomain) -> None:
+    """Append replayable process metadata without touching the ontology."""
+    _append_operational(
+        harness,
+        {
+            "type": "domain",
+            "artifact_id": artifact_id,
+            "domain": domain.model_dump(mode="json"),
+        },
+    )
+
+
+def domain_log_input(artifact_id: str, domain: RelapseDomain) -> str:
+    """Self-contained event input for atomic registration with an artifact."""
+    return "relapse-domain:" + json.dumps(
+        {
+            "artifact_id": artifact_id,
+            "domain": domain.model_dump(mode="json"),
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def recorded_domains(harness) -> dict[str, RelapseDomain]:
+    domains: dict[str, RelapseDomain] = {}
+    path = Path(harness.root) / _RELAPSE_LOG
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            try:
+                payload = json.loads(line)
+                if payload.get("type") == "domain":
+                    domains[payload["artifact_id"]] = RelapseDomain.model_validate(
+                        payload["domain"]
+                    )
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+    # Backward-read the short-lived Measure/event-input encodings produced by
+    # development builds.  New runs use the operational log above so gate
+    # telemetry cannot perturb scheduler event-sequence policy.
+    for event in harness.log.read():
+        if len(event.inputs) == 3 and event.inputs[0] == "relapse-domain":
+            try:
+                domains[event.inputs[1]] = RelapseDomain.model_validate_json(
+                    event.inputs[2]
+                )
+            except ValueError:
+                pass
+        for value in event.inputs:
+            if not value.startswith("relapse-domain:"):
+                continue
+            try:
+                payload = json.loads(value.removeprefix("relapse-domain:"))
+                domains[payload["artifact_id"]] = RelapseDomain.model_validate(
+                    payload["domain"]
+                )
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                # Historical operational diagnostics are not ontology input.
+                # A malformed old record cannot authorize semantic blocking.
+                continue
+    return domains
+
+
+def _record_scope_diagnostic(
+    harness, candidate: Artifact, prior_id: str, label: str, detail: str
+) -> None:
+    _append_operational(
+        harness,
+        {
+            "type": label,
+            "candidate_id": candidate.id,
+            "prior_id": prior_id,
+            "detail": detail,
+        },
+    )
 
 
 def _battery(candidate: Artifact, prior: Artifact, commitments) -> list[str]:
@@ -44,6 +243,8 @@ def check(
     harness,
     embedder=None,
     near_dup_eps: float | None = None,
+    domain: RelapseDomain | None = None,
+    prior_domains: dict[str, RelapseDomain] | None = None,
 ) -> tuple[bool, str]:
     """(admit, reason). Blocks ONLY relapse onto refuted-equivalents (§0)."""
     status = harness.state.status
@@ -65,10 +266,34 @@ def check(
         prior_ids = index.nearest(candidate_vec, near_dup_eps)
     else:
         prior_ids = [aid for aid, s in status.items() if s == Status.REFUTED]
+    known_domains = prior_domains
+    if domain is not None and known_domains is None:
+        known_domains = recorded_domains(harness)
     for prior_id in prior_ids:
         if prior_id == candidate.id:
             continue
         prior = harness.state.artifacts[prior_id]
+        if domain is not None:
+            prior_domain = (known_domains or {}).get(prior_id)
+            if prior_domain is None:
+                _record_scope_diagnostic(
+                    harness,
+                    candidate,
+                    prior_id,
+                    "relapse-domain-rejected",
+                    "prior-domain-missing",
+                )
+                continue
+            compatible, mismatch = domain.compatible(prior_domain)
+            if not compatible:
+                _record_scope_diagnostic(
+                    harness,
+                    candidate,
+                    prior_id,
+                    "relapse-domain-rejected",
+                    mismatch,
+                )
+                continue
         battery = _battery(candidate, prior, harness.commitments)
         if not battery:
             continue  # no shared evaluable battery => no equivalence claim
@@ -76,7 +301,14 @@ def check(
         if verdict_vector(candidate, battery, harness) != verdict_vector(
             prior, battery, harness
         ):
-            continue  # verdicts differ => admit; near-miss logged by caller
+            _record_scope_diagnostic(
+                harness,
+                candidate,
+                prior_id,
+                "relapse-near-miss",
+                "verdict-vector-differs",
+            )
+            continue
         refuters = {
             x for x, t in att if t == prior_id and status.get(x) == Status.ACCEPTED
         }

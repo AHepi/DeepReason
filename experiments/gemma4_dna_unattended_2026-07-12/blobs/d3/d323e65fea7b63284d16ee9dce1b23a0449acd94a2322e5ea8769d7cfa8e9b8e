@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "background: #020506;",
+      "changed_fields": [
+        "#header-root"
+      ]
+    },
+    {
+      "content": "letter-spacing: 0.3em;",
+      "changed_fields": [
+        ".c1-title"
+      ]
+    },
+    {
+      "content": "text-shadow: 0 0 25px rgba(57, 255, 20, 0.8);",
+      "changed_fields": [
+        ".c1-title"
+      ]
+    },
+    {
+      "content": "background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 255, 150, 0.2) 0%, transparent 60%);",
+      "changed_fields": [
+        ".c1-glow-overlay"
+      ]
+    },
+    {
+      "content": "<h1 class=\"c1-title\">The DNA Archive: Genomic Legacy</h1>",
+      "changed_fields": [
+        ".c1-title"
+      ]
+    },
+    {
+      "content": "const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches || false;",
+      "changed_fields": [
+        "reducedMotion"
+      ]
+    },
+    {
+      "content": "glow.style.setProperty('--x', `${Math.round(((e.clientX - rect.left) / rect.width) * 100)}%`);",
+      "changed_fields": [
+        "update"
+      ]
+    },
+    {
+      "content": "glow.style.setProperty('--y', `${Math.round(((e.clientY - rect.top) / rect.height) * 100)}%`);",
+      "changed_fields": [
+        "update"
+      ]
+    }
+  ]
+}
+```

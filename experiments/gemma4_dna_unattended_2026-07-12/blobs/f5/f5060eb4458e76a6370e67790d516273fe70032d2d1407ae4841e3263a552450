@@ -1,0 +1,47 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+# Product Plan: The Genetic Poem (Artistic Narrative)
+
+## Pages
+A single, vertical-canvas narrative piece.
+
+## Feature List
+- Fluid-simulation background that reacts to mouse movement.
+- Typography that 'morphs' between DNA and RNA states.
+- Cinematic parallax scrolling through a 'cellular void'.
+- 2026 'Ethereal-Light' design (soft glows, translucent surfaces).
+
+## Key Interactions
+- **The Morph**: As the user scrolls to the Transcription section, the word "DNA" physically transforms into "mRNA" via a causal animation of shifting letters.
+- **Depth Immersion**: Using `z-index` and `transform: translateZ`, the user 'flies through' a DNA strand.
+- **Accessibility Logic**: If `prefers-reduced-motion` is active, the fluid simulation is disabled and the morphing letters are replaced by simple cross-fades.
+
+## Content Inventory
+- **Opening Line**: "In the beginning, there was a code."
+- **The Wonder**: "The double helix is not just a shape; it is a storage system of infinite complexity."
+- **Replication Narrative**: "One becomes two. The enzyme Helicase breaks the hydrogen bonds, and the story repeats itself."
+- **Transcription Narrative**: "A whisper of the original. The mRNA carries the secret from the nucleus to the protein factory."
+- **Final Thought**: "We are the living expression of these four letters."
+
+## Acceptance Criteria
+1. [ ] Single local HTML file.
+2. [ ] Fluid simulation functions in the background.
+3. [ ] Word morphing occurs during the transcription scroll-point.
+4. [ ] `prefers-reduced-motion` completely halts the 'fly-through' and fluid effects.
+5. [ ] Visuals utilize 2026 translucent glassmorphism.
+
+BATTERY THE EDITS WILL FACE:
+- predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+DIRECTIVE: produce exactly 8 bounded edits.
