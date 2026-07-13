@@ -1,7 +1,7 @@
 {
-  "prompt_tokens": 312534,
-  "completion_tokens": 106153,
-  "calls": 750,
+  "prompt_tokens": 313232,
+  "completion_tokens": 108185,
+  "calls": 753,
   "phases": {
     "judge-zoo:gpt-oss:120b": {
       "prompt_tokens": 65681,
@@ -34,9 +34,9 @@
       "calls": 119
     },
     "judge-zoo:minimax-m2.7": {
-      "prompt_tokens": 3469,
-      "completion_tokens": 7706,
-      "calls": 15
+      "prompt_tokens": 4167,
+      "completion_tokens": 9738,
+      "calls": 18
     }
   }
 }
