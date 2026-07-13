@@ -25,3 +25,99 @@
 {"flawed": true, "item_id": "uf-circ-05", "kind": "ignores infiltration and system losses", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
 {"flawed": true, "item_id": "uf-circ-05", "kind": "ignores furnace efficiency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
 {"flawed": false, "item_id": "uf-circ-05", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-04", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-06", "kind": "misunderstood orbital energy threshold", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-05", "kind": "overgeneralized linear scaling of heating load", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-06", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-06", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-06", "kind": "incorrect binding energy threshold", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-07", "kind": "invalid selective cancellation premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-07", "kind": "unsupported selectivity claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-07", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-07", "kind": "mischaracterized selectivity", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-08", "kind": "invalid velocity magnitude assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-08", "kind": "unsupported constant-velocity assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-08", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-09", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-circ-08", "kind": "incorrect assumption about slope-independent secondary flow", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-circ-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-00", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-00", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-01", "kind": "unit conversion error", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-01", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-02", "kind": "linear scaling of nonlinear degradation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-01", "kind": "incorrect unit conversion", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-02", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-02", "kind": "incorrect energy throughput calculation", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-01", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-03", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-04", "kind": "incorrect energy estimate", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-04", "kind": "incorrect mass used", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-04", "kind": "misapplies heat conduction model", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-02", "kind": "linear scaling assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-04", "kind": "incorrect mass in energy calc", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-05", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-05", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-05", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-05", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-06", "kind": "incorrect drag scaling with speed", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-06", "kind": "incorrect drag scaling with density", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-06", "kind": "misapplied drag equation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-06", "kind": "incorrect thrust and fuel consumption relationship", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-07", "kind": "quantitative unit error", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-07", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-08", "kind": "confuses lm/W with conversion efficiency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-07", "kind": "unit inconsistency and magnitude error", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-08", "kind": "confusing luminous with energy efficiency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-unit-08", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-08", "kind": "incorrect LED efficiency assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-07", "kind": "unit inconsistency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-09", "kind": "ignores other heat sinks", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-09", "kind": "Overestimated temperature increase", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-09", "kind": "ignores heat losses", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-unit-09", "kind": "ignoring heat losses", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-00", "kind": "unsupported causal claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-00", "kind": "untestable theoretical speculation", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-00", "kind": "false premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-01", "kind": "misunderstanding of GPS correction mechanism", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-00", "kind": "false dichotomy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-01", "kind": "Circular reasoning and undefined technical terms", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-01", "kind": "incorrect conservation claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-01", "kind": "invalid conservation claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-02", "kind": "incorrect linear scaling", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-02", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-02", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-02", "kind": "incorrect linear dependence claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-03", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-04", "kind": "post hoc causal inference", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-04", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-04", "kind": "post hoc causal fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-05", "kind": "overgeneralization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-05", "kind": "false premise: ignores external rhizobial input", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-04", "kind": "unsupported causal inference", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-05", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-05", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-06", "kind": "thermodynamic misinterpretation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-06", "kind": "invalid COP assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-06", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-06", "kind": "incorrect COP assumption (work > heat removed)", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-07", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-07", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-07", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-08", "kind": "circular reasoning", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-07", "kind": "unsupported causal claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-08", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
+{"flawed": true, "item_id": "uf-vac-08", "kind": "affirming the consequent", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "unknown_flaw"}
+{"flawed": false, "item_id": "uf-vac-09", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "unknown_flaw"}
