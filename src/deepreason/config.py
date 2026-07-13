@@ -328,18 +328,20 @@ class Config(BaseModel):
     # script flag) and the loop could not heal its own transport failures.
     # False = no controller (controlled experiments, replay of old roots).
     CONTROLLER: bool = True
-    # Embedder (§9, §11.5): None = HashingEmbedder (zero-dependency default,
-    # lexical geometry). Set a fastembed model id to enable NeuralEmbedder —
-    # verified on this repo: "BAAI/bge-small-en-v1.5" (prose margins) and
-    # "jinaai/jina-embeddings-v2-base-code" (code margins); requires the
-    # optional dependency group (pip install 'deepreason[embed]'). If the
-    # backend is unavailable at run start the scheduler falls back to hashing
-    # and records `embedder-fallback` on the log. EVERY distance threshold
+    # Embedder (§9, §11.5): default is the neural model (E0.1,
+    # experiments/results/e01_embedder_recalibration_report.json: hashing
+    # novelty rankings demoted to unverified; contamination 1.0/1.0). Set to
+    # None for the zero-dependency HashingEmbedder (lexical geometry) —
+    # controlled experiments and replay of old roots. Requires the optional
+    # dependency group (pip install 'deepreason[embed]'); first use fetches
+    # ~0.5 GB of ONNX weights. If the backend is unavailable at run start
+    # the scheduler falls back to hashing and records `embedder-fallback`
+    # on the log, so offline installs keep working. EVERY distance threshold
     # (NEAR_DUP_EPS, RESEED_DIST_MIN, atlas radii) is scale-specific:
     # recalibrate via `deepreason calibrate` (views/basin.threshold_calibration)
     # before trusting a config on a new embedder — the adjudicated record in
     # runs/embedder_design refuted every blind distribution-mapping shortcut.
-    EMBEDDER_MODEL: str | None = None
+    EMBEDDER_MODEL: str | None = "nomic-ai/nomic-embed-text-v1.5"
     # Chunked website builds (manifest.py, easy.py): components are bounded
     # fragments composed by the deterministic assembler. CHUNK_MAX_CHARS is
     # the default per-fragment size commitment (a manifest entry may set a

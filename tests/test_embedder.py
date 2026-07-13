@@ -62,10 +62,19 @@ def test_make_embedder_fallback_lands_on_the_log(monkeypatch, tmp_path):
     assert falls[0].inputs[1] == "BAAI/bge-small-en-v1.5"
     assert "fastembed" in falls[0].inputs[2]
 
-    # Unset knob: no fallback, no measure — hashing is the intended default.
+    # Default config now names the neural model (E0.1), so a missing backend
+    # degrades VISIBLY there too, citing the default model id.
     harness2 = Harness(tmp_path / "run2")
     assert make_embedder(harness2, Config()) is None
-    assert not [e for e in harness2.log.read()
+    falls2 = [e for e in harness2.log.read()
+              if e.inputs and e.inputs[0] == "embedder-fallback"]
+    assert len(falls2) == 1
+    assert falls2[0].inputs[1] == "nomic-ai/nomic-embed-text-v1.5"
+
+    # Explicit None: hashing is chosen deliberately — no fallback, no measure.
+    harness3 = Harness(tmp_path / "run3")
+    assert make_embedder(harness3, Config(EMBEDDER_MODEL=None)) is None
+    assert not [e for e in harness3.log.read()
                 if e.inputs and e.inputs[0] == "embedder-fallback"]
 
 

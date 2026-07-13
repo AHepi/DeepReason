@@ -76,15 +76,31 @@ class HashingEmbedder:
                 "sentinel": _sentinel_hash(self)}
 
 
+# Default neural model, chosen against three operator constraints and the
+# E0.1 record (experiments/results/e01_embedder_recalibration_report.json):
+# accuracy at meaning scale (bge-small's 512-token window was also not
+# duplicate-vs-sibling separable on website corpora), long inputs (nomic's
+# 8192-token window covers all but extreme artifacts natively; beyond it the
+# deterministic chunk-mean below takes over), and consumer-laptop viability
+# (~0.5 GB ONNX, CPU-only, few hundred MB resident).
+DEFAULT_NEURAL_MODEL = "nomic-ai/nomic-embed-text-v1.5"
+
+# Conservative character budget per single embed call. 8192 tokens at the
+# usual ~4 chars/token is ~32k chars; staying below it keeps the backend's
+# own silent truncation from ever being the effective chunker.
+_CHUNK_CHARS = 24_000
+
+
 class NeuralEmbedder:
     """fastembed (ONNX, CPU, no torch) behind the same duck-typed surface.
     Verified models on this repo's artifacts: BAAI/bge-small-en-v1.5
     (best prose margins) and jinaai/jina-embeddings-v2-base-code (best
-    code margins). Raises EmbedderUnavailable if fastembed is absent or
-    the model cannot initialize — the playwright/browser-oracle precedent:
-    the harness runs unchanged without the optional dependency."""
+    code margins); nomic-embed-text-v1.5 is the default for its 8192-token
+    window (E0.1 follow-up). Raises EmbedderUnavailable if fastembed is
+    absent or the model cannot initialize — the playwright/browser-oracle
+    precedent: the harness runs unchanged without the optional dependency."""
 
-    def __init__(self, model: str = "BAAI/bge-small-en-v1.5") -> None:
+    def __init__(self, model: str = DEFAULT_NEURAL_MODEL) -> None:
         try:
             from fastembed import TextEmbedding
         except ImportError as e:
@@ -100,9 +116,14 @@ class NeuralEmbedder:
         self.version = _library_versions()
 
     def embed(self, text: str) -> list[float]:
-        # fastembed truncates to the model's context window itself; normalize
-        # defensively so distance() stays cosine even if a model config drifts.
-        vec = [float(x) for x in next(iter(self._backend.embed([text])))]
+        # Texts within the window embed in one call. Longer texts use
+        # deterministic mean pooling over fixed-size character chunks so the
+        # whole input contributes, instead of the backend silently truncating
+        # to the first window. Normalize defensively so distance() stays
+        # cosine even if a model config drifts.
+        chunks = [text[i:i + _CHUNK_CHARS] for i in range(0, len(text), _CHUNK_CHARS)] or [""]
+        vecs = [[float(x) for x in v] for v in self._backend.embed(chunks)]
+        vec = [sum(col) / len(vecs) for col in zip(*vecs)]
         norm = math.sqrt(sum(x * x for x in vec))
         return [x / norm for x in vec] if norm else vec
 

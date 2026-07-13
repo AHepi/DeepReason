@@ -1,0 +1,38 @@
+{
+  "default_model": "nomic-ai/nomic-embed-text-v1.5",
+  "embedder": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "sentinel": "d6e3599ce0377000",
+    "version": "fastembed-0.8.0+onnxruntime-1.27.0"
+  },
+  "motivating_report": "experiments/results/e01_embedder_recalibration_report.json",
+  "roots": {
+    "experiments/gemma4_dna_unattended_2026-07-12": {
+      "cross_median": 0.4065481652730172,
+      "dup_max": 0.4675,
+      "recommended": {
+        "NEAR_DUP_EPS": 0.4675,
+        "RESEED_DIST_MIN": 0.0808
+      },
+      "separable": {
+        "near_dup_gate": false,
+        "reseed": true
+      },
+      "within_p10": 0.08080337569439633
+    },
+    "experiments/gemma4_dna_unattended_3_2026-07-12": {
+      "cross_median": 0.4243418826090233,
+      "dup_max": 0.4675,
+      "recommended": {
+        "NEAR_DUP_EPS": 0.4675,
+        "RESEED_DIST_MIN": 0.0883
+      },
+      "separable": {
+        "near_dup_gate": false,
+        "reseed": true
+      },
+      "within_p10": 0.08826990923395994
+    }
+  },
+  "schema": "deepreason-embedder-install-v1"
+}
