@@ -21,3 +21,19 @@ predictions:
 decision_rules: {report: experiments/results/e02_t2b_readjudication_report.json,
   index_line: true, original_t2_result_block: never edited}
 budget: {llm_tokens: 120000}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/e02_t2b_readjudication_report.json
+  verdicts: {P1: REFUTED, P2: REFUTED, P3: REFUTED}
+  measured: {reclassified: 0 of 11, critic_convicted: 11 of 11,
+    mistral_acquitted: 11 of 11, corrected_fp: 0.60 unchanged,
+    tokens: 14807}
+  reading: the conservative conjunction produced zero reclassifications
+    because the two instruments MAXIMALLY disagreed - the critic convicts
+    everything, the strict judge acquits everything. The t2 vote-rule
+    rejection stands as recorded. The real finding is about the critic -
+    its t1 reputation as "the wall" (40/40 toothless kills) is now
+    confounded with indiscriminate prosecutorial zeal; the critic's
+    SPECIFICITY on known-clean material is unmeasured and is the next
+    natural prereg before "criticism is the wall" is relied on further.

@@ -1,0 +1,526 @@
+{
+  "schema": "deepreason-e02-t2b-v1",
+  "prereg": "experiments/e02_t2b_clean_readjudication_prereg.yaml",
+  "generated_at": "2026-07-13T12:20:32.771924+00:00",
+  "design": {
+    "suspect_rule": ">= 5 of 13 t3 seats flagged",
+    "instruments": {
+      "argumentative_critic": {
+        "model": "deepseek-v4-flash",
+        "temperature": 0.0,
+        "schema": "{\"defect_found\": bool, \"defect\": str}",
+        "conviction": "defect_found AND a named, non-trivial defect string"
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "temperature": 0.0,
+        "schema": "{\"flawed\": bool, \"kind\": str}",
+        "prompt": "identical to zoo seats (scripts/e02_judge.py)"
+      }
+    },
+    "reclassification_rule": "DEFECTIVE iff BOTH instruments convict (conservative conjunction)",
+    "concurrency_max_in_flight": 3
+  },
+  "suspects": [
+    {
+      "id": "cl-37",
+      "t3_zoo_flags": 12,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-28",
+      "t3_zoo_flags": 10,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-23",
+      "t3_zoo_flags": 9,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-01",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-05",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-30",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-07",
+      "t3_zoo_flags": 7,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-17",
+      "t3_zoo_flags": 6,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-39",
+      "t3_zoo_flags": 6,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-18",
+      "t3_zoo_flags": 5,
+      "t3_seats": 13
+    },
+    {
+      "id": "cl-21",
+      "t3_zoo_flags": 5,
+      "t3_seats": 13
+    }
+  ],
+  "adjudications": [
+    {
+      "id": "cl-37",
+      "t3_zoo_flags": 12,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The claim that 'the energy delivered per impulse is therefore E = T_escape * \u0394\u03b8_escape' is incorrect because it conflates the work done on the escape wheel with the energy delivered to the balance wheel. The torque T_escape and angular displacement \u0394\u03b8_escape describe the work done by the escape wheel, but the escapement's anchor does not rotate through \u0394\u03b8_escape; the anchor's angular displacement ",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-28",
+      "t3_zoo_flags": 10,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that after 5 moves in the Danish Gambit, White's development-tempo metric is 4 (two bishops, one knight, plus castling rights intact) and Black's is 1 (queen moved). However, the line given (1.e4 e5 2.d4 exd4 3.c3 dxc3 4.Bc4 cxb2 5.Bxb2) involves White moving the bishop twice (to c4 and then to b2), which counts as two piece moves, plus the pawn moves on d4 and c3, and the bish",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-23",
+      "t3_zoo_flags": 9,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that a narrow-mouthed bay with length L and mean depth h satisfying L \u2248 (T/4)\u221a(gh) for T = 12.42 h will exhibit resonant semidiurnal amplification, and L \u2248 (T/2)\u221a(gh) for T = 24.84 h yields diurnal amplification. This is quantitatively wrong: for a quarter-wave resonance, the fundamental period T = 4L/\u221a(gh), so L = (T/4)\u221a(gh) is correct for the fundamental mode. However, for a ",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-01",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that the falsifiable prediction is that a bore forms only if F = (A\u2080 \u03c9 L)/(g h\u00b2 B\u2080) exceeds unity. However, the parameter F is dimensionally inconsistent: A\u2080 has dimension length, \u03c9 has dimension 1/time, L has dimension length, g has dimension length/time\u00b2, h\u00b2 has dimension length\u00b2, and B\u2080 has dimension length. The numerator has dimension length\u00b2/time, the denominator has dimen",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-05",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that for a diurnal temperature rise of 15\u00b0C, strain gauges at midspan between two fixed bearings should record negligible change in longitudinal stress (less than 5 MPa) because the deck is free to elongate. This is wrong: if the bearings are fixed (as stated: 'between two fixed bearings'), the deck cannot elongate freely at that location; the expansion joints only decouple seg",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-30",
+      "t3_zoo_flags": 8,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims: 'the width of the central magnetic anomaly should equal the width of the neovolcanic zone times the spreading rate divided by the reversal rate.' This is dimensionally and physically wrong. The width of the central anomaly is determined by the amount of crust formed during the current polarity interval, which equals spreading rate times the duration of the current polarity (no",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-07",
+      "t3_zoo_flags": 7,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that after 3.Nf3, Black's move 3...g5 'further weakens Black\u2019s kingside and creates long-term structural liabilities' and that this is the typical response. However, in the King's Gambit Accepted, the main line after 3.Nf3 is actually 3...d6 (or 3...Nf6, the Fischer Defense), not 3...g5. The move 3...g5 is a known inferior line (the Kieseritzky Gambit is 3...g5 4.h4 g4 5.Ne5, b",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-17",
+      "t3_zoo_flags": 6,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that if a chronometer with an Elinvar spring 'remained stable across that temperature span without any bimetallic compensation, the primary role of thermal elastic softening in the original problem would be confirmed.' This is a logical error: demonstrating that a temperature-invariant spring eliminates the rate error does not confirm that elastic-modulus variation is the domin",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-39",
+      "t3_zoo_flags": 6,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that the threshold for hub viability is V* = C_f / (c_d \u2212 c_v), but this formula is derived from an incorrect cost comparison. The hub model's total sorting cost is C_f + c_v\u00b7V, while the direct-exchange model's sorting cost is c_d\u00b7V (since no fixed hub cost). Setting them equal gives C_f + c_v\u00b7V = c_d\u00b7V, so V* = C_f / (c_d \u2212 c_v). However, the direct-exchange model also requir",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-18",
+      "t3_zoo_flags": 5,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that if the fixed cost of a vehicle trip approaches zero, 'direct point-to-point routing would become economically optimal.' This is a false inference because the artifact's own reasoning about sorting machinery economies of scale remains: 'a single high-throughput facility amortizes its capital cost over millions of items, whereas distributed sorting would require duplicating ",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    },
+    {
+      "id": "cl-21",
+      "t3_zoo_flags": 5,
+      "t3_seats": 13,
+      "critic": {
+        "model": "deepseek-v4-flash",
+        "defect_found": true,
+        "defect": "The artifact claims that at quadrature, the net amplitude is the difference of the two contributions, proportional to 1 \u2212 0.46 = 0.54. However, when the solar forcing is orthogonal to the lunar forcing, the combined amplitude is the vector sum, not the scalar difference. The correct net amplitude is sqrt(1^2 + 0.46^2) \u2248 1.10, not 0.54. This error invalidates the computed spring-to-neap ratio of 2.",
+        "convicts": true,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "judge": {
+        "model": "mistral-large-3:675b",
+        "flawed": false,
+        "kind": "none",
+        "convicts": false,
+        "parse_failure": false,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "reclassified_defective": false
+    }
+  ],
+  "reclassified_defective_ids": [],
+  "corrected_rate_table": {
+    "structure": "rule -> pair -> battery; clean_corrected excludes reclassified items from the FP denominator; clean_original reproduces the t2 rows",
+    "require_both": {
+      "same_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 22,
+          "splits_1_1": 6,
+          "rate": 0.55
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 39,
+          "splits_1_1": 0,
+          "rate": 0.975
+        },
+        "clean_corrected": {
+          "n": 40,
+          "flagged": 19,
+          "splits_1_1": 10,
+          "rate": 0.475
+        },
+        "clean_original": {
+          "n": 40,
+          "flagged": 19,
+          "splits_1_1": 10,
+          "rate": 0.475
+        }
+      },
+      "cross_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 7,
+          "splits_1_1": 23,
+          "rate": 0.175
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 37,
+          "splits_1_1": 3,
+          "rate": 0.925
+        },
+        "clean_corrected": {
+          "n": 40,
+          "flagged": 1,
+          "splits_1_1": 23,
+          "rate": 0.025
+        },
+        "clean_original": {
+          "n": 40,
+          "flagged": 1,
+          "splits_1_1": 23,
+          "rate": 0.025
+        }
+      }
+    },
+    "either_suffices": {
+      "same_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 28,
+          "splits_1_1": 6,
+          "rate": 0.7
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 39,
+          "splits_1_1": 0,
+          "rate": 0.975
+        },
+        "clean_corrected": {
+          "n": 40,
+          "flagged": 29,
+          "splits_1_1": 10,
+          "rate": 0.725
+        },
+        "clean_original": {
+          "n": 40,
+          "flagged": 29,
+          "splits_1_1": 10,
+          "rate": 0.725
+        }
+      },
+      "cross_family": {
+        "unknown_flaw": {
+          "n": 40,
+          "flagged": 30,
+          "splits_1_1": 23,
+          "rate": 0.75
+        },
+        "known_flaw": {
+          "n": 40,
+          "flagged": 40,
+          "splits_1_1": 3,
+          "rate": 1.0
+        },
+        "clean_corrected": {
+          "n": 40,
+          "flagged": 24,
+          "splits_1_1": 23,
+          "rate": 0.6
+        },
+        "clean_original": {
+          "n": 40,
+          "flagged": 24,
+          "splits_1_1": 23,
+          "rate": 0.6
+        }
+      }
+    }
+  },
+  "volumes": {
+    "unknown_flaw": 40,
+    "known_flaw": 40,
+    "clean_corrected": 40,
+    "clean_original": 40
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "REFUTED",
+      "measured": {
+        "suspects": 11,
+        "reclassified_defective": 0,
+        "defective_ids": []
+      },
+      "threshold": ">= 3 of 11 reclassified defective"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "measured": {
+        "corrected_cross_family_either_suffices_clean_fp": 0.6,
+        "original_t2_value": 0.6,
+        "corrected_same_family_either_suffices_clean_fp": 0.725
+      },
+      "threshold": "<= 0.40 (t2 rejection line)"
+    },
+    "P3": {
+      "verdict": "REFUTED",
+      "measured": {
+        "unknown_catch_gain_pp_cross_family": 57.5,
+        "corrected_clean_fp_rise_pp_cross_family": 57.5,
+        "net_pp": 0.0,
+        "original_t2_net_pp": 0.0
+      },
+      "threshold": "net pp strictly > 0"
+    }
+  },
+  "token_spend": {
+    "ledger": {
+      "prompt_tokens": 12234,
+      "completion_tokens": 2573,
+      "calls": 22,
+      "phases": {
+        "critic": {
+          "prompt_tokens": 6207,
+          "completion_tokens": 2375,
+          "calls": 11
+        },
+        "judge": {
+          "prompt_tokens": 6027,
+          "completion_tokens": 198,
+          "calls": 11
+        }
+      }
+    },
+    "total_tokens": 14807,
+    "ceiling": 120000
+  },
+  "caveats": [
+    "Both adjudication instruments are themselves fallible LLM judges; the conjunction rule was chosen for precision over recall, so the corrected clean set is a LOWER bound on contamination \u2014 suspects acquitted here may still be defective, and un-suspected items were never re-examined.",
+    "The suspect list is conditioned on the t3 zoo (>=5 of 13 seats): items every seat missed stay in the clean denominator untouched.",
+    "The critic (deepseek-v4-flash) shares no family with the t2 judge pairs, but mistral-large-3:675b's clean FP 0.00 in t3 was measured on these very 40 items; its acquittals here are therefore correlated with the original FP measurement (conservative direction: it under-convicts, shrinking the correction).",
+    "All 40 clean items were authored by one adversary model (deepseek-v4-pro); adjudication verdicts inherit any family blindness toward its style.",
+    "The critic conviction additionally requires a named defect string of >= 20 chars not equal to 'none' (the prereg's 'specific, checkable defect' clause, enforced mechanically; defect text is recorded per item but its checkability was not independently verified by a third instrument).",
+    "Parse failures (none occurred unless recorded per item) count as acquittal \u2014 a failed instrument never convicts.",
+    "The original t2 verdict block is never edited; this report is a correction record that supersedes only the clean-FP rows.",
+    "Catch rates on the flawed batteries are recomputed unchanged from the committed t1 judgments; only the clean denominator shrinks (40 -> 40)."
+  ]
+}

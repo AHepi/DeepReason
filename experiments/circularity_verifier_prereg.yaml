@@ -23,3 +23,19 @@ predictions:
 decision_rules: {report: experiments/results/circularity_verifier_report.json,
   index_line: true}
 budget: {llm_tokens: 0}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/circularity_verifier_report.json
+  verdicts: {P1: CONFIRMED, P2: REFUTED, P3: REFUTED}
+  measured: {circular_caught: 8 of 10 (beats every judge seat),
+    clean_flagged: 24 of 40, radius: 0.4675 (calibration classes did not
+    separate - recorded, not hidden), reference_cycle_arm_fires: 0}
+  reading: the screen out-detects every judge on circularity (P1) but is
+    unusable as built (P2) - the exploratory sweep shows NO radius jointly
+    satisfies catch and false-positive bars, because at this embedder's
+    geometry clean same-topic support is as close to its conclusion as
+    circular restatement. The prose-proximity premise is refuted; a real
+    circularity verifier must consume STRUCTURE (the ontology's stated
+    derivation references, where the cycle check is exact), which is a
+    workload-integration prereg, not a threshold fix.

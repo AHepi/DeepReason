@@ -1,0 +1,17 @@
+{
+  "prompt_tokens": 12234,
+  "completion_tokens": 2573,
+  "calls": 22,
+  "phases": {
+    "critic": {
+      "prompt_tokens": 6207,
+      "completion_tokens": 2375,
+      "calls": 11
+    },
+    "judge": {
+      "prompt_tokens": 6027,
+      "completion_tokens": 198,
+      "calls": 11
+    }
+  }
+}
