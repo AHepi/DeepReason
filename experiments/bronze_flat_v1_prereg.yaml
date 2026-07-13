@@ -1,0 +1,97 @@
+# Bronze flat run v1 - PRE-REGISTERED OBSERVATIONAL CASE STUDY, committed
+# before any live call. Operator directive: stop the micro-testing; run one
+# flat experiment on a single difficult question with the strongest models
+# and watch what happens. This file registers what will be recorded and
+# reported. It deliberately registers NO verdict thresholds: a case study
+# with n=3 streams cannot confirm or refute anything about creativity, and
+# pretending otherwise would be exactly the false precision the methodology
+# forbids. Its product is a replayable trace and a committed reading of it.
+# Any threshold-bearing claim that grows out of this run requires its own
+# fresh prereg before the confirming data is collected.
+
+question:
+  suite: bronze (pi-bronze, seeded by scripts/live_run.py seed_bronze,
+    frozen in-code before this prereg)
+  text: why did the interconnected palace civilizations of the Eastern
+    Mediterranean (Mycenaean Greece, Hittite Anatolia, Ugarit, the
+    Levantine city-states) collapse nearly simultaneously around
+    1200-1150 BC after centuries of stability, while Egypt survived
+    diminished?
+  why_this_question: a genuinely open scholarly problem (no answer key to
+    memorize), with hard checkable contact (chronology, the Ugarit
+    archive, destruction layers, paleoclimate data, geography), whose
+    differential-survival clause kills single-cause answers and forces
+    explanatory structure. The suite's std-hist rubric and skeleton
+    discipline (claim / mechanism / scope / forbidden cases) make every
+    conjecture state what would have refuted it.
+
+design:
+  streams: 3 independent single-model roots, identical seed, identical
+    budget. All roles (conjecturer, variator, argumentative critic,
+    defender, judges, synthesizer) are played by the stream's one model.
+  models:
+    - deepseek-v4-pro     # the near-Pareto judge seat (t3: FP 0.125)
+    - qwen3.5:397b        # large dense family, mid-severity
+    - kimi-k2.6           # the most severe seat in the zoo (t3: FP 0.80)
+  temperament_note: the spread of measured judge severity across the three
+    models is deliberate - each stream's internal criticism climate is
+    part of what is being observed.
+  cycles: 50 per stream (budget guard may stop a stream earlier)
+  token_budget: 500000 per stream, reserve-settle meter
+  reasoning: policy defaults (config/ollama-live.yaml pinned per model)
+  concurrency: scheduler is single-threaded per root; 3 roots in parallel
+    = 3 requests in flight account-wide (subscription ceiling)
+  roots: runs/bronze_flat/<model> during execution; on completion each
+    root is copied to experiments/bronze_flat_2026-07-13/<model>/ and must
+    pass verify_root with zero violations to count as evidence
+
+instrument_context_recorded_up_front:
+  - the argumentative critic is a known indiscriminate prosecutor
+    (critic_specificity: convicts 0.675 of verified-sound arguments), and
+    LLM judges have a universal generalization gap (e02 t3). Refuted and
+    accepted statuses inside these runs are therefore treated as the
+    behavior of the criticism climate, NOT as ground truth about the
+    conjectures. The full trace is the record; readings re-examine kills.
+  - no observe-only criticism policy exists in this build; the standard
+    loop runs as-is. That the dynamics may be dominated by critic
+    temperament is an anticipated finding, not a surprise.
+
+registered_observables:  # committed to report, all descriptive
+  - novelty trajectory per stream under the nomic embedder: pairwise
+    near-duplicate rate, mean sibling distance, distance-to-seed over
+    cycles (does variation collapse into paraphrase, as E0.1 found for
+    gemma, or do strong models actually move?)
+  - mechanism inventory: distinct causal mechanisms proposed per stream,
+    counted two ways - embedder clusters and a committed human reading of
+    every surviving and every killed conjecture
+  - cross-stream convergence: do the three families propose the same
+    mechanisms or partition the explanation space? overlap matrix by
+    mechanism class
+  - criticism dynamics: kills, survivals, reinstatements, reinstatement
+    fights per stream; whether any killed-then-reinstated line ends as a
+    frontier survivor
+  - differential-survival contact: does any stream spontaneously use the
+    Egypt/Assyria survival asymmetry as a weapon against its own or rival
+    conjectures (the mark of taking the hard clause seriously)?
+  - forbidden-case quality: are registered forbidden cases concrete and
+    datable, or vacuous? counts by committed reading
+  - detector signals as emitted (contraction, gate blocks, g_churn,
+    attack-target entropy) - recorded, non-adjudicating
+  - wire discipline per model (parse failures, retries, malformed cycles)
+    extending the compat picture
+  - tokens, latency, cycles completed per stream
+  - anything anomalous, logged as F-numbered findings (the two prior live
+    tranches each produced one unplanned finding)
+
+commitments:
+  report: experiments/results/bronze_flat_v1_report.json plus a narrative
+    reading (case-study prose, clearly marked interpretive) in the report
+  index_line: appended to experiments/results/INDEX_2026-07-13.md
+  no_creativity_verdicts: this run neither confirms nor refutes LLM
+    creativity; it generates candidate phenomena and preregisterable
+    hypotheses
+  replay: retained roots must pass verify_root clean; the run is evidence
+    only if byte-replayable
+
+budget:
+  llm_tokens: <= 1500000 total (500000 per stream), max 3 in flight
