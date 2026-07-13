@@ -1,0 +1,85 @@
+# E0.1 Real-embedder recalibration — PRE-REGISTERED (experiment program
+# docs/EXPERIMENT_PROGRAM_2026-07.md, Tier 0). Committed BEFORE any
+# measurement is computed. Zero LLM tokens.
+#
+# Question: do novelty/basin metrics computed with the scale-blind
+# 128-dim HashingEmbedder survive under a real embedding model, and can
+# the distance thresholds be calibrated so the convergence machinery can
+# actually fire?
+
+corpus:
+  roots:
+    - experiments/gemma4_dna_unattended_2026-07-12
+    - experiments/gemma4_dna_unattended_3_2026-07-12
+  excluded_and_why: >
+    The pre-rebuild basin/lambda/T2 raw run roots were never committed to
+    this repository (only their report JSONs were, now retired per
+    experiments/results/INDEX_2026-07-13.md). They are recorded here as
+    EXCLUDED, not silently skipped. The recoverable in-repo corpus is the
+    two live gemma4:31b unattended website-workload roots.
+  caveats_stated_in_advance:
+    - n=2 roots, both website workload, both gemma4:31b, single provider
+    - small corpora (35 and 22 artifacts); rank statistics will be coarse
+    - generalization to text-workload conjecture streams is NOT claimed
+      here; that is E2.3's job
+
+embedders:
+  incumbent: hashing-128 (deepreason.llm.embedder.HashingEmbedder)
+  candidate: BAAI/bge-small-en-v1.5 (fastembed ONNX via build_embedder)
+  fingerprints: recorded in the report at run time
+
+planted_duplicates:
+  source: views/basin.DEFAULT_PLANTED plus 60 deterministic
+    template-generated paraphrase pairs from scripts/e01_paraphrase_pairs.py
+    (fixed seed 20260713, committed with this prereg, generated without
+    reference to corpus content)
+
+measurements:
+  M1: per root, Spearman rank correlation between per-conjecture
+      novelty_global (views/basin.conjecture_series) under incumbent vs
+      candidate embedder
+  M2: per root, contamination = fraction of hash-novel conjectures (top
+      50 percent by incumbent novelty_global, ties broken by artifact id)
+      whose candidate-embedder nearest-prior distance is below the
+      candidate's planted-duplicate ceiling (planted_duplicate.max from
+      threshold_calibration under the candidate)
+  M3: threshold_calibration (views/basin.threshold_calibration) under
+      both embedders on both roots; report separable flags and
+      recommended NEAR_DUP_EPS / RESEED_DIST_MIN
+  M4: school-convergence firing check, CONDITIONAL on school geometry
+      being present in the corpus (the website roots may contain none)
+
+predictions:
+  P1:
+    statement: M1 Spearman >= 0.5 on 2 of 2 roots
+    falsifier: any root below 0.5 -> every hash-embedder novelty number in
+      the prior record is demoted to unverified in the next index
+  P2:
+    statement: M2 contamination <= 0.20 on both roots
+    falsifier: contamination > 0.40 on any root -> the soft-basin finding
+      is flagged as a possible embedder artifact and E2.3 must run before
+      the basin claim is repeated anywhere
+  P3:
+    statement: candidate separable.near_dup_gate == true on >= 1 root AND
+      incumbent separable.near_dup_gate == false on both roots (tests the
+      embedder module docstring's claim that hashing measurably cannot
+      separate duplicates from siblings)
+    falsifier: candidate not separable on either root -> NeuralEmbedder
+      does not fix the near-duplicate gate and the E0.1 upgrade path is
+      refuted as built
+  P4:
+    statement: conditional on M4 data existing, the calibrated
+      RESEED_DIST_MIN under the candidate would have fired at least once
+      across the corpus
+    if_no_school_data: recorded UNDECIDED with reason no-school-geometry,
+      not counted for or against
+
+decision_rules:
+  - each prediction is reported CONFIRMED / REFUTED / UNDECIDED against
+    the literal numbers above, no post-hoc reinterpretation
+  - report lands at experiments/results/e01_embedder_recalibration_report.json
+  - one line appended to experiments/results/INDEX_2026-07-13.md
+
+budget:
+  llm_tokens: 0
+  wall_clock: minutes (offline replay only)
