@@ -1,0 +1,33 @@
+# Critic specificity - PRE-REGISTERED, committed before any corpus item or
+# critic call. Motivated by t2b: the critic convicted 11/11 disputed items;
+# its sensitivity is proven (t1: 40/40 toothless kills), its specificity
+# (ability to ACQUIT sound material) has never been measured. Everything
+# downstream ("survived criticism" as the harness's core currency) leans
+# on this number.
+design:
+  sensitivity_anchor: the 40 frozen known-flawed t1 items, critic-attacked
+    with the same prompt shape as t1/t2b (deepseek-v4-flash, strict JSON,
+    attack must name one specific checkable defect)
+  specificity_set: 40 VERIFIER-ANCHORED sound arguments - deepseek-v4-pro
+    writes an argument whose central claim is mechanically checkable
+    (arithmetic, combinatorial, algorithmic facts on the neutral topic
+    pools); a trusted local program (authored in the runner, never by the
+    model) verifies the claim true; only verified-true-claim arguments
+    enter the set. Soundness of the central claim is thus established
+    independently of any LLM opinion.
+  instrument: the argumentative critic exactly as fielded (same role,
+    model, prompt shape); concurrency <= 3
+metrics: conviction rate on flawed (sensitivity) and on verified-sound
+  (1 - specificity); exploratory, non-verdict-bearing - taxonomy of the
+  defects named on sound-item convictions (periphery vs central claim)
+predictions:
+  P1: {statement: "critic convicts >= 0.85 of the flawed set (sensitivity
+    replicates under this corpus)"}
+  P2: {statement: "critic acquits >= 0.60 of the verified-sound set",
+    falsifier: "acquittal < 0.40 - the critic is an indiscriminate
+    prosecutor; survived-criticism metrics are demoted record-wide and
+    Tier 2/3 survivor counting requires a defended-trial redesign before
+    any creativity conclusion is drawn"}
+decision_rules: {report: experiments/results/critic_specificity_report.json,
+  index_line: true}
+budget: {llm_tokens: <= 250000}
