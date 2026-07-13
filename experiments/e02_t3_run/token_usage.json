@@ -1,12 +1,42 @@
 {
-  "prompt_tokens": 49971,
-  "completion_tokens": 66835,
-  "calls": 109,
+  "prompt_tokens": 312534,
+  "completion_tokens": 106153,
+  "calls": 750,
   "phases": {
     "judge-zoo:gpt-oss:120b": {
-      "prompt_tokens": 49971,
-      "completion_tokens": 66835,
-      "calls": 109
+      "prompt_tokens": 65681,
+      "completion_tokens": 88515,
+      "calls": 136
+    },
+    "judge-zoo:qwen3-coder:480b": {
+      "prompt_tokens": 49551,
+      "completion_tokens": 1860,
+      "calls": 120
+    },
+    "judge-zoo:deepseek-v4-flash": {
+      "prompt_tokens": 48328,
+      "completion_tokens": 2066,
+      "calls": 120
+    },
+    "judge-zoo:deepseek-v4-pro": {
+      "prompt_tokens": 48328,
+      "completion_tokens": 1989,
+      "calls": 120
+    },
+    "judge-zoo:glm-5.2": {
+      "prompt_tokens": 48733,
+      "completion_tokens": 2058,
+      "calls": 120
+    },
+    "judge-zoo:kimi-k2.6": {
+      "prompt_tokens": 48444,
+      "completion_tokens": 1959,
+      "calls": 119
+    },
+    "judge-zoo:minimax-m2.7": {
+      "prompt_tokens": 3469,
+      "completion_tokens": 7706,
+      "calls": 15
     }
   }
 }
