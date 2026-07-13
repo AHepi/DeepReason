@@ -91,3 +91,32 @@ decision_rules:
 budget:
   llm_tokens: 0
   wall_clock: tens of minutes
+
+# --- appended after the run, per methodology (verdict against the prereg
+# --- as written; the sections above are unedited) ---
+result:
+  report: experiments/results/e03_detector_calibration_report.json
+  verdicts: {P1: CONFIRMED, P2: REFUTED, P3: CONFIRMED, P4: CONFIRMED}
+  measured:
+    P1_gate_block_auc: 1.0            # threshold 0.95; healthy blocks exactly 0
+    P2_detectors_crossing_0.7:        # prereg expected none to cross
+      contraction_mean_pairwise_dist: 1.0
+      g_churn: 1.0
+      reinstatement_rate: 1.0
+      attack_target_entropy: 0.895
+    P3_soft_basin_contraction_auc: 1.0
+    P4_mimicry_contraction_auc: 0.41  # from 1.0 on wrong_but_stable
+    verify_root_violations: 0          # across all 50 roots
+  reading_of_P2: >
+    The refutation runs in the prereg's if-a-detector-succeeds branch, and
+    the report explains why it does NOT close the live blind spot: the
+    contraction hit is a lexical topic-concentration side channel (P4 shows
+    cosmetic rotation defeats it), and the adjudicator hits are scripted
+    into the fixture (healthy alone reinstates). The oracle-divergence
+    detector remains motivated; these AUCs are its baseline to beat.
+  consequences_triggered:
+    - gate-block rate re-certified as the hard-circling detector (AUC 1.0)
+    - contraction detector shown defeatable by cosmetic rotation under the
+      hashing embedder; pairs with E0.1's demotion of hash-scale distances
+    - fixture-realism limits recorded; live wrong-but-stable detection
+      still requires the E1.1/E2.1 oracle-divergence instrument
