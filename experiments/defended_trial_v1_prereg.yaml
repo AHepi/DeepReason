@@ -1,0 +1,39 @@
+# Defended trial v1 - PRE-REGISTERED, committed before any call. The
+# decisive bet of the epistemic-authority-v2 plan, run BEFORE the v2
+# machinery is built (measurement-first per docs/SELF_IMPROVEMENT.md):
+# does defense restore the acquittal of provably sound arguments that
+# bare criticism destroys (critic_specificity: acquittal 0.325)?
+design:
+  items: the frozen 40 verified-sound (experiments/critic_spec_items/) and
+    40 known-flawed (experiments/e02_t1_items/known_flaws.json) items
+  arms:
+    A_baseline: bare prosecutorial critic - REPLAYED from the committed
+      critic_specificity judgments, zero new tokens
+    B_neutral: same critic model (deepseek-v4-flash, temp 0, strict JSON),
+      prompt stripped of prosecutorial framing (neutral "assess for one
+      material, checkable defect"); no defense
+    C_defended: arm-B objection (convictions only) -> independent defender
+      (deepseek-v4-pro, sees artifact + objection, argues against) ->
+      adjudicator (mistral-large-3:675b, the 0.00-FP zoo seat, temp 0,
+      strict JSON verdict sustain|overrule|abstain) run TWICE with
+      presentation order swapped; any disagreement or malformed reply =
+      abstain. Only sustain = conviction. Arm-B acquittals pass through
+      as acquittals (no trial without an objection).
+  concurrency: max 3 in flight
+metrics: per arm - conviction rate on sound (false conviction), on flawed
+  (sensitivity); arm-C abstention rates; exploratory non-verdict-bearing -
+  defender argument taxonomy, order-swap disagreement rate
+predictions:
+  P1: {statement: "neutral framing alone lifts sound acquittal by >= 15pp
+    over baseline (0.325 -> >= 0.475)"}
+  P2: {statement: "defended trial acquits >= 0.70 of verified-sound items
+    while flawed conviction stays >= 0.60",
+    falsifier: "sound acquittal < 0.50 under full defense - defense does
+    not restore specificity; observe-only becomes the default criticism
+    policy and the v2 build narrows to the scrutiny view plus
+    attention-only objections"}
+  P3: {statement: "arm-C abstention on flawed items <= 0.40 (the court
+    still decides; wholesale abstention is observe-only in disguise)"}
+decision_rules: {report: experiments/results/defended_trial_v1_report.json,
+  index_line: true}
+budget: {llm_tokens: <= 400000}
