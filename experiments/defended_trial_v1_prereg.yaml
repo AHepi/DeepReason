@@ -37,3 +37,39 @@ predictions:
 decision_rules: {report: experiments/results/defended_trial_v1_report.json,
   index_line: true}
 budget: {llm_tokens: <= 400000}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/defended_trial_v1_report.json
+  verdicts: {P1: REFUTED, P2: REFUTED, P3: CONFIRMED}
+  falsifier_triggered: false   # sound acquittal 0.95 >= 0.50
+  measured:
+    sound_acquittal: {arm_a_baseline: 0.325, arm_b_neutral: 0.20,
+      arm_c_defended: 0.95}
+    flawed_conviction: {arm_a: 1.00, arm_b: 1.00, arm_c: 0.375}
+    arm_c_flawed: {sustain: 15, overrule: 19, abstain: 6}
+    order_swap_disagreement: 6/72   # 8.3 percent; two-pass protocol stable
+    live_tokens: 141604   # cap 400000
+  headline_readings:
+    - P1 refuted and inverted - neutral framing LOWERED sound acquittal
+      (0.325 -> 0.20); prosecutorial wording was never the mechanism, the
+      critic model convicts under any framing
+    - P2 split, not falsified - defense restores specificity spectacularly
+      (sound acquittal 0.95, only 2 sustained convictions, both
+      disputes-central-claim) but destroys sensitivity (flawed conviction
+      0.375): the adjudicator overrules 19/40 objections to genuinely
+      flawed artifacts. Defense is persuasive independent of ground truth
+    - P3 confirmed - the court decides (flawed abstention 0.15); the
+      failure mode is wrong decisions, not refusal to decide
+  confound_recorded: the adjudicator (mistral-large-3:675b) was chosen as
+    the zoo's 0.00-FP seat, i.e. the most acquittal-prone seat in the
+    catalog; adjudicator leniency and defense persuasiveness are not
+    separable in this design. A stricter-adjudicator arm is the cheapest
+    discriminating follow-up.
+  decision: per the prereg, observe-only-by-default is NOT forced (the
+    falsifier did not fire). The P2 split routes to the pre-specified
+    follow-up - verifier-contact witness routing (v2 plan P3): when an
+    objection's ground is mechanically checkable, the trial must consult
+    the checker as a witness rather than weigh prose against prose.
+    Trial machinery is built only with witness routing plus a
+    stricter-adjudicator control, never as bare prose adjudication.
