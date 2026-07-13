@@ -27,6 +27,3 @@ runs/
 # Transient validation-study checkpoint (durable output is validation_report.json)
 experiments/results/validation_checkpoint*.json
 
-# In-flight E0.2-t3 run intermediates; un-ignore and commit frozen state at completion
-experiments/e02_t3_run/
-experiments/e02_t3_run_live.out

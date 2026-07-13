@@ -1,0 +1,37 @@
+{
+  "probed_at": "2026-07-13T10:20:56Z",
+  "endpoint": "https://ollama.com/v1/models",
+  "available_model_count": 34,
+  "roster_requested": [
+    "gpt-oss:120b",
+    "qwen3-coder:480b",
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
+    "glm-5.2",
+    "kimi-k2.6",
+    "minimax-m2.7",
+    "mistral-large-3:675b",
+    "nemotron-3-ultra",
+    "qwen3.5:397b",
+    "gemma3:27b"
+  ],
+  "roster_as_run": [
+    "gpt-oss:120b",
+    "qwen3-coder:480b",
+    "deepseek-v4-flash",
+    "deepseek-v4-pro",
+    "glm-5.2",
+    "kimi-k2.6",
+    "minimax-m2.7",
+    "mistral-large-3:675b",
+    "nemotron-3-ultra",
+    "qwen3.5:397b",
+    "gemma3:27b"
+  ],
+  "substitutions": [],
+  "reasoning_arm": [
+    "deepseek-v4-flash",
+    "gpt-oss:120b",
+    "kimi-k2.6"
+  ]
+}

@@ -53,3 +53,32 @@ decision_rules:
     experiments/results/e02_t3_judge_zoo_report.json; index line appended
 budget:
   llm_tokens: <= 1500000, max 3 in flight
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/e02_t3_judge_zoo_report.json
+  verdicts: {P1: CONFIRMED, P2: CONFIRMED, P3: REFUTED, P4: REFUTED}
+  measured:
+    median_generalization_ratio: 0.475     # line 0.8; gap is judge-general
+    clean_fp_span_pp: 80                   # 0.00 (mistral-large) to 0.80 (kimi)
+    best_pareto_candidate: deepseek-v4-pro (0.475 unknown catch at 0.125 FP;
+      misses the 0.50 bar by one item)
+    reasoning_arm: reasoning low DEGRADED unknown-flaw catch on both
+      completed models (v4-flash 0.625 to 0.40; gpt-oss 0.70 to 0.575),
+      so P4 is decidable and refuted without the incomplete kimi arm
+    budget: guard fired at 1500494/1500000 tokens; all 11 primary seats
+      complete (120/120 each), rlow-kimi 1/120 (recorded shortfall)
+  headline_readings:
+    - the tranche-1 generalization gap is a property of LLM judges across
+      all eight families tested, not a two-family artifact
+    - severity is a real per-model spectrum spanning the full range
+    - no Pareto-decent judge exists in this catalog at these settings;
+      judge shopping does not fix the layer
+    - the reasoning-budget confound is dead - thinking time did not
+      rescue and mildly harmed novel-flaw detection
+    - exploratory (non-verdict-bearing, in report): circular reasoning is
+      a universal blind spot (18 percent pooled catch; the only three
+      universally-missed items are all circular); 11 of 40 clean items
+      drew >=5-of-13-seat flags, making ensemble unanimity a corpus-QC
+      instrument and motivating re-adjudication of the t2 clean corpus;
+      provider latency is decoupled from model size
