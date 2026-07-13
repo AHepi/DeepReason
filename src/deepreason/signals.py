@@ -15,6 +15,12 @@ their payload, not their inputs.
 """
 
 SIGNALS: dict[str, str] = {
+    "proposal-envelope-invalid": "a wire-valid conjecture proposal failed "
+                                 "envelope compilation and was skipped "
+                                 "(inputs: [signal, exception type]); the "
+                                 "containment backstop from live_smoke_v1 "
+                                 "finding F1 - model output never crashes "
+                                 "the loop",
     # Scheduler heartbeat
     "cycle": "cycle heartbeat: [cycle, number, selected problem id or '-'] — "
              "every event that follows (by seq) until the next heartbeat "

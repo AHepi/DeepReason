@@ -57,3 +57,28 @@ decision_rules:
 budget:
   llm_tokens: <= 180000 total (60000 x 3, hard TokenMeter ceilings)
   wall_clock: expected 15-60 minutes per run, parallel
+
+# --- appended after the run, per methodology (verdict against the prereg
+# --- as written; the sections above are unedited) ---
+result:
+  report: experiments/results/live_smoke_v1_report.json
+  verdicts: {P1: CONFIRMED, P2: CONFIRMED, P3: REFUTED, P4: CONFIRMED, P5: CONFIRMED}
+  measured:
+    eventual_valid_rate: [1.0, 1.0, 0.8]
+    accepted: [33, 34, 30]
+    tokens_logged: [51429, 60871, 60062]   # P3 refuted: ceiling overshoot by one in-flight call
+    transport_dropped: 0
+    embedder_fallback: false
+  finding_F1: >
+    gpt-oss:120b run killed mid-flight by an unhandled ValidationError: an
+    empty countercondition string passed the wire schema and crashed
+    envelope compilation outside the repair loop. Fixed in the same commit
+    (wire schema item constraint + conj compile-or-skip backstop +
+    regression tests). Post-fix rerun (labeled, not part of the verdicts):
+    budget_exhausted, 35 accepted, zero verify_root violations, zero
+    backstop skips.
+  consequences_triggered:
+    - budget-matched arms in Tier 2/3 must state a one-call overshoot
+      tolerance, or TokenMeter needs a pre-reservation mode (candidate
+      improvement, needs its own prereg)
+    - containment discipline extended to envelope compilation

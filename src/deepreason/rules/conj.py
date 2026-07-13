@@ -11,6 +11,8 @@ the harness spends budget tail-first on the candidates the model itself
 marks atypical (§11.6).
 """
 
+from pydantic import ValidationError
+
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
@@ -97,7 +99,18 @@ def conj(
         if tail_weighted:
             proposals.sort(key=lambda proposal: proposal.typicality)
         for proposal in proposals[: config.VS_K]:
-            envelope = proposal_envelope(proposal)
+            # Containment backstop (live_smoke_v1 finding F1): a proposal
+            # that passed the wire schema but cannot compile into an
+            # envelope is skipped with a logged measure — model output must
+            # never crash the loop. The wire schema mirrors the envelope
+            # constraints, so this path only fires on future schema drift.
+            try:
+                envelope = proposal_envelope(proposal)
+            except (ValidationError, ValueError) as error:
+                harness.record_measure(
+                    inputs=["proposal-envelope-invalid", type(error).__name__]
+                )
+                continue
             content = envelope_json(envelope)
             compiled = tuple(compile_countercondition_commitments(harness, envelope))
             candidate_rows.append(

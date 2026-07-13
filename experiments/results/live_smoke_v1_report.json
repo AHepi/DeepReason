@@ -1,0 +1,67 @@
+{
+  "schema": "deepreason-live-smoke-v1",
+  "prereg": "experiments/live_smoke_v1_prereg.yaml",
+  "date": "2026-07-13",
+  "provider": "https://ollama.com/v1",
+  "embedder": "nomic-ai/nomic-embed-text-v1.5 (new default, loaded live on all roots)",
+  "runs": {
+    "gpt-oss:120b": {
+      "root": "runs/live-smoke-gptoss (operator-site, not committed)",
+      "terminal": "OPERATIONAL CRASH mid-run (finding F1) after 51429 tokens",
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid_rate": 1.0,
+      "transport_dropped": 0,
+      "accepted": 33,
+      "verify_root_violations": 0,
+      "embedder_fallback": false,
+      "novelty_series_complete": true
+    },
+    "qwen3-coder:480b": {
+      "root": "runs/live-smoke-qwen (operator-site, not committed)",
+      "terminal": "budget_exhausted, 6 survivors",
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid_rate": 1.0,
+      "transport_dropped": 0,
+      "accepted": 34,
+      "tokens_logged": 60871,
+      "verify_root_violations": 0,
+      "embedder_fallback": false,
+      "novelty_series_complete": true
+    },
+    "deepseek-v4-flash": {
+      "root": "runs/live-smoke-dsflash (operator-site, not committed)",
+      "terminal": "budget_exhausted, 2 survivors",
+      "eventual_valid_rate": 0.8,
+      "first_pass_valid_rate": 0.8,
+      "transport_dropped": 0,
+      "accepted": 30,
+      "tokens_logged": 60062,
+      "verify_root_violations": 0,
+      "embedder_fallback": false,
+      "novelty_series_complete": true
+    }
+  },
+  "verdicts": {
+    "P1": {"statement": "conjecturer eventual_valid_rate >= 0.8 in 3/3", "measured": [1.0, 1.0, 0.8], "verdict": "CONFIRMED"},
+    "P2": {"statement": ">= 1 ACCEPTED artifact per run", "measured": [33, 34, 30], "verdict": "CONFIRMED"},
+    "P3": {
+      "statement": "verify_root zero violations AND logged tokens <= 60000 per run",
+      "measured_violations": [0, 0, 0],
+      "measured_tokens": [51429, 60871, 60062],
+      "verdict": "REFUTED",
+      "diagnostic": "TokenMeter blocks the NEXT call once total >= budget, so the final in-flight call overshoots the ceiling (here by 1.45% and 0.10%). Documented design, but it makes 'budget-matched arms' soft by up to one call's max_tokens; budget-matching claims in Tier 2/3 must state tolerance or the meter needs a pre-reservation mode."
+    },
+    "P4": {"statement": "transport_dropped == 0 across all runs", "measured": 0, "verdict": "CONFIRMED"},
+    "P5": {"statement": "neural embedder loads live, no fallback, novelty series complete", "verdict": "CONFIRMED"}
+  },
+  "findings": {
+    "F1": {
+      "severity": "P1-operational",
+      "summary": "gpt-oss:120b emitted a countercondition with an empty string; the reply passed the wire schema (item-level lengths unconstrained) and crashed proposal_envelope during compilation, outside the repair loop, killing the run with an unhandled ValidationError (workloads/text.py:144).",
+      "containment_violated": "model output must never crash the loop",
+      "fix": "two layers, committed with this report: wire schema now mirrors the envelope constraint (empty countercondition strings are schema-invalid and route through ordinary repair), and the conj rule gains a compile-or-skip backstop with a logged proposal-envelope-invalid measure. Regression tests in tests/test_live_smoke_regressions.py.",
+      "post_fix_rerun": "runs/live-smoke-gptoss-postfix; outcome recorded in the prereg result block (labeled post-fix, not part of the pre-registered verdicts)"
+    }
+  },
+  "budget": {"llm_tokens_total_original_three": 172362, "ceiling": 180000}
+}

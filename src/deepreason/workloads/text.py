@@ -5,9 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
 
@@ -125,7 +125,15 @@ class ReasoningCandidateProposal(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     claim: str = Field(min_length=1)
     mechanism: str = Field(min_length=1)
-    counterconditions: tuple[str, ...] = Field(min_length=1, max_length=32)
+    # Item-level min_length mirrors Countercondition.case so that a
+    # wire-valid proposal is always envelope-constructible: a live
+    # gpt-oss:120b reply carried an empty countercondition string, passed
+    # this schema as it stood, and crashed proposal_envelope outside the
+    # repair loop (live_smoke_v1 finding F1). Rejecting it here routes the
+    # reply through ordinary schema repair instead.
+    counterconditions: tuple[Annotated[str, StringConstraints(min_length=1)], ...] = Field(
+        min_length=1, max_length=32
+    )
     typicality: float = Field(ge=0.0, le=1.0)
     optional_refs: tuple[str, ...] = ()
     analogy: AnalogyClaim | None = None
