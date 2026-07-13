@@ -32,16 +32,34 @@ def test_llmcall_records_tokens(tmp_path):
 
 
 def test_budget_hard_stop_before_spending(tmp_path):
-    meter = TokenMeter(budget=1)  # exhausted after the first call
+    # Reserve-settle semantics (llm/budget.py): a dispatch is admitted only
+    # when spent + reserved + its conservative bound fits the ceiling.  The
+    # first call's bound is ~994 tokens here (chars/3 prompt estimate + the
+    # mock's 512 completion cap), so 1100 admits exactly one call.
+    meter = TokenMeter(budget=1100)
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint([GOOD, GOOD])}, BlobStore(tmp_path / "b"),
         retry_max=2, meter=meter,
     )
     adapter.call("conjecturer", "PACK", ConjecturerOutput)
     spent = meter.total
+    assert 0 < spent <= 1100  # settled to reported usage, under the ceiling
     with pytest.raises(TokenBudgetExceeded):
         adapter.call("conjecturer", "PACK", ConjecturerOutput)
     assert meter.total == spent  # the blocked call spent nothing
+
+
+def test_budget_smaller_than_any_bound_blocks_the_first_dispatch(tmp_path):
+    """The ceiling is never overshot, not even by the first call: a budget
+    below the call's reserved bound rejects the dispatch before spending."""
+    meter = TokenMeter(budget=1)
+    adapter = LLMAdapter(
+        {"conjecturer": MockEndpoint([GOOD])}, BlobStore(tmp_path / "b"),
+        retry_max=2, meter=meter,
+    )
+    with pytest.raises(TokenBudgetExceeded):
+        adapter.call("conjecturer", "PACK", ConjecturerOutput)
+    assert meter.total == 0 and meter.reserved == 0
 
 
 def test_scheduler_stops_gracefully_on_budget(tmp_path):
@@ -61,7 +79,7 @@ def test_scheduler_stops_gracefully_on_budget(tmp_path):
             {"candidates": [{"content": f"the moon pulls the sea {calls['n']}", "typicality": 0.5}]}
         )
 
-    meter = TokenMeter(budget=800)  # a couple of calls' worth
+    meter = TokenMeter(budget=2500)  # a few calls' worth of reserved bounds
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint(conjecture)}, harness.blobs, retry_max=2, meter=meter
     )
@@ -69,8 +87,10 @@ def test_scheduler_stops_gracefully_on_budget(tmp_path):
     result = scheduler.run(50)  # would be 50 cycles unbounded
 
     stopped = [d for d in result["diagnostics"] if "stopped" in d]
-    assert stopped and "token budget exhausted" in stopped[-1]["stopped"]
-    assert meter.total >= 800  # ran up to the ceiling, then stopped
+    assert stopped and "token budget" in stopped[-1]["stopped"]
+    # Ran until a dispatch could no longer be reserved, then stopped; the
+    # reserve-settle meter never lets the logged total exceed the ceiling.
+    assert 0 < meter.total <= 2500
     # State is consistent and the report still renders (tokens included).
     report = eval_report(harness, Config())
     assert report["totals"]["llm_tokens"] == sum(

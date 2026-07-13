@@ -53,6 +53,9 @@ def _route(model: str, endpoint: str, *, endpoint_id: str, family: str) -> dict:
         "family": family,
         "reasoning": "none",
         "temperature": 0.0,
+        # A compiled completion cap: the reserve-settle TokenMeter fails
+        # closed when a finite budget meets a route with no max_tokens.
+        "max_tokens": 2048,
         "output_mechanism": "json_text",
     }
 

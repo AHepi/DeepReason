@@ -141,7 +141,13 @@ class MockEndpoint:
     given a callable — computes each response from the prompt. Reports an
     estimated usage (chars/4) so token accounting is testable."""
 
-    def __init__(self, responses, name: str = "mock", model: str = "mock") -> None:
+    def __init__(
+        self,
+        responses,
+        name: str = "mock",
+        model: str = "mock",
+        max_tokens: int | None = 512,
+    ) -> None:
         if callable(responses):
             self._fn = responses
             self._responses: list[str] | None = None
@@ -150,6 +156,10 @@ class MockEndpoint:
             self._responses = list(responses)
         self.name = name
         self.model = model
+        # Mocks declare a completion cap so a metered adapter can reserve a
+        # finite pre-dispatch bound (llm/budget.py fails closed on an
+        # unknown bound whenever a hard ceiling is set).
+        self.max_tokens = max_tokens
         self.last_usage: dict | None = None
         self.last_images: list[bytes] = []
         self.last_kwargs: dict = {}

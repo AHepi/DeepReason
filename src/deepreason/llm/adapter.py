@@ -470,6 +470,21 @@ class LLMAdapter:
                     endpoint, "timeout_s", lease.route.timeout_s
                 ),
             }
+            # Reserve-settle (llm/budget.py): book the call's conservative
+            # upper bound (chars/3 prompt estimate + the transport
+            # max_tokens cap) BEFORE dispatch.  Against a finite ceiling an
+            # unboundable call fails closed; concurrent dispatchers can
+            # never jointly push the logged total past the ceiling.
+            reservation = None
+            if self.meter is not None:
+                try:
+                    reservation = self.meter.reserve(
+                        prompt_text=request,
+                        max_tokens=transport_limits["max_tokens"],
+                    )
+                except TokenBudgetExceeded as e:
+                    e.spend = _spend(attempt)
+                    raise
             try:
                 kwargs = {}
                 if images:
@@ -481,6 +496,11 @@ class LLMAdapter:
                     )
                 raw = endpoint.complete(request, **kwargs)
             except EndpointError as e:
+                if reservation is not None:
+                    # Usage unknown: return the reserve without recording
+                    # spend (matches the pre-reserve accounting for calls
+                    # that died in transport before any usage report).
+                    reservation.release()
                 diagnostic_payload = json.dumps(
                     {
                         "contract": wire_contract.contract_id,
@@ -518,13 +538,19 @@ class LLMAdapter:
                 # reachable through this spend record.
                 e.spend = _spend(attempt + 1)
                 raise
+            except BaseException:
+                if reservation is not None:
+                    reservation.release()
+                raise
             if getattr(endpoint, "last_finish_reason", None) == "length":
                 truncated_any = True  # process signal for the controller
             usage = _usage_tokens(getattr(endpoint, "last_usage", None), request, raw)
             attempt_tokens = usage["prompt_tokens"] + usage["completion_tokens"]
             tokens_used += attempt_tokens
-            if self.meter is not None:
-                self.meter.add(usage)
+            if reservation is not None:
+                # Settle the reservation to provider-reported usage; the
+                # bound shrinks to reality under the meter lock.
+                reservation.settle(usage)
             raw_ref = self.blobs.put(raw.encode())
             try:
                 candidate = repair.candidate_from_raw(turn, raw)

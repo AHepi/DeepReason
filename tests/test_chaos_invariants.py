@@ -122,7 +122,10 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
     root = tmp_path / "run"
     h = Harness(root)
     _seed(h)
-    meter = TokenMeter(budget=250)  # dies after roughly one garbage attempt
+    # Reserve-settle sizing: the garbage attempts reserve ~1093/665/651 and
+    # settle ~440/119/108 tokens, so 1150 admits attempts 1-2 and rejects
+    # the third reservation mid-retry with spend already on the meter.
+    meter = TokenMeter(budget=1150)
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint(lambda p: "never valid json {{{")},
         h.blobs, retry_max=2, meter=meter)
@@ -130,6 +133,7 @@ def test_budget_exhaustion_mid_retry_still_reconciles(tmp_path):
 
     logged = sum(e.llm.tokens for e in h.log.read() if e.llm)
     assert meter.total > 0
+    assert meter.total <= 1150  # the ceiling is never overshot
     assert logged == meter.total  # nothing invisible, even at the death
     result = verify_root(root, meter.total)
     assert result["violations"] == [], result["violations"]

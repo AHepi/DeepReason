@@ -26,6 +26,9 @@ def _manifest(endpoint, *, engine_profile="full", model_profile="compact"):
         model_id=endpoint.model,
         provider="mock",
         family="mock-family",
+        # Authorize the mock's completion cap so attempt-limit invariants
+        # see a route-sanctioned max_tokens on every trace.
+        max_tokens=endpoint.max_tokens,
     )
     return RunManifest(
         engine_profile=engine_profile,

@@ -138,13 +138,15 @@ def test_partial_usage_dict_trips_budget(tmp_path):
             self.last_usage = {"total_tokens": 1000}  # partial shape
             return out
 
-    meter = TokenMeter(budget=500)
+    # 1100 admits the first dispatch's reserved bound (~994: chars/3 prompt
+    # estimate + the mock's 512 completion cap) under reserve-settle.
+    meter = TokenMeter(budget=1100)
     adapter = LLMAdapter(
         {"conjecturer": PartialUsageEndpoint([GOOD, GOOD])},
         BlobStore(tmp_path / "b"), retry_max=2, meter=meter,
     )
     adapter.call("conjecturer", "PACK", ConjecturerOutput)
-    assert meter.total == 1000  # not zero
+    assert meter.total == 1000  # not zero: the partial shape settled fully
     with pytest.raises(TokenBudgetExceeded):
         adapter.call("conjecturer", "PACK", ConjecturerOutput)
 

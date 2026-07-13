@@ -1,0 +1,37 @@
+{
+  "prompt_tokens": 118876,
+  "completion_tokens": 22728,
+  "calls": 296,
+  "phases": {
+    "arm_b_flawed": {
+      "prompt_tokens": 7208,
+      "completion_tokens": 3537,
+      "calls": 40
+    },
+    "arm_b_sound": {
+      "prompt_tokens": 12690,
+      "completion_tokens": 6511,
+      "calls": 40
+    },
+    "arm_c_defender_sound": {
+      "prompt_tokens": 14493,
+      "completion_tokens": 4910,
+      "calls": 32
+    },
+    "arm_c_adjudicator_sound": {
+      "prompt_tokens": 41806,
+      "completion_tokens": 832,
+      "calls": 64
+    },
+    "arm_c_defender_flawed": {
+      "prompt_tokens": 9985,
+      "completion_tokens": 5898,
+      "calls": 40
+    },
+    "arm_c_adjudicator_flawed": {
+      "prompt_tokens": 32694,
+      "completion_tokens": 1040,
+      "calls": 80
+    }
+  }
+}
