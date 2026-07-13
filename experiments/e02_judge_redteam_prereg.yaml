@@ -64,3 +64,39 @@ decision_rules:
 budget:
   llm_tokens: <= 2000000 (adversary generation + 4 judgments x 120 items)
   wall_clock: hours, parallel at 3
+
+# --- appended after the run, per methodology (verdict against the prereg
+# --- as written; the sections above are unedited) ---
+result:
+  report: experiments/results/e02_judge_redteam_t1_report.json
+  verdicts: {P1: REFUTED, P2: CONFIRMED, P3: REFUTED}
+  measured:
+    unknown_vs_known_ratio_cross_family: 0.189   # falsifier line was 0.5
+    known_catch_rates: {same_family: 0.975, cross_family: 0.925}
+    unknown_catch_rates: {same_family: 0.55, cross_family: 0.175}
+    toothless_admission: 0.0
+    toothless_funnel: {passed_gate: 40, survived_criticism: 0,
+                       not_flagged_by_judge: 30, admitted: 0}
+    cross_minus_same_family_pp: -41.25            # confirm line was +5
+    total_tokens: 629674
+  readings:
+    - P1 refuted DECISIVELY, below even the falsifier line: judges catch
+      92-98 percent of memorized flaw classes but only 18-55 percent of
+      novel ones. Planted-flaw certification certifies the taxonomy, not
+      flaw detection. All judge-audit numbers in reports must carry this
+      demotion until a broader battery exists.
+    - P2 confirmed, but the funnel shows WHERE the defense lives, and it
+      is not the judges: all 40 toothless envelopes passed validation and
+      the gate, the argumentative critic killed all 40, and the judges
+      would have admitted 30 of 40. Criticism is the wall; judging alone
+      is gameable.
+    - P3 refuted AND INVERTED: the cross-family pair is 41pp WORSE on
+      adversarial flaws. Mechanism: majority-of-2 with tie-as-no-catch
+      means a pair catches only when BOTH seats agree; a second seat from
+      a different family disagrees more, so cross-family pairing VETOES
+      catches instead of adding coverage. The cross-family rule as
+      aggregated today reduces adversarial-flaw detection; either the
+      aggregation (require-either instead of require-both) or the rule
+      needs a follow-up prereg before Tier 2/3 rely on it.
+  caveats: single adversary model; text workload only; majority-of-2
+    crudeness; 40 items per cell; neutral-topic constraint on corpus

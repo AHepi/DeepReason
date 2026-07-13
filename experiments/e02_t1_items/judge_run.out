@@ -3,3 +3,100 @@ judging: 453 seat-calls to run (27 already checkpointed)
   40/453 judgments (tokens so far: 197883)
   60/453 judgments (tokens so far: 221903)
   80/453 judgments (tokens so far: 241371)
+  100/453 judgments (tokens so far: 262394)
+  120/453 judgments (tokens so far: 304673)
+  140/453 judgments (tokens so far: 328626)
+  160/453 judgments (tokens so far: 340200)
+  180/453 judgments (tokens so far: 347926)
+  200/453 judgments (tokens so far: 357795)
+  220/453 judgments (tokens so far: 367238)
+  240/453 judgments (tokens so far: 375729)
+  260/453 judgments (tokens so far: 384388)
+  280/453 judgments (tokens so far: 394303)
+  300/453 judgments (tokens so far: 409995)
+  320/453 judgments (tokens so far: 431181)
+  340/453 judgments (tokens so far: 457500)
+  360/453 judgments (tokens so far: 478091)
+  380/453 judgments (tokens so far: 499161)
+  400/453 judgments (tokens so far: 520426)
+  420/453 judgments (tokens so far: 546438)
+  440/453 judgments (tokens so far: 567854)
+judging complete; total tokens 582334
+funnel: 39 envelopes to run (1 done)
+  tl-02: gate=True survives_crit=False
+  tl-03: gate=True survives_crit=False
+  tl-01: gate=True survives_crit=False
+  tl-06: gate=True survives_crit=False
+  tl-04: gate=True survives_crit=False
+  tl-05: gate=True survives_crit=False
+  tl-07: gate=True survives_crit=False
+  tl-08: gate=True survives_crit=False
+  tl-10: gate=True survives_crit=False
+  tl-09: gate=True survives_crit=False
+  tl-11: gate=True survives_crit=False
+  tl-12: gate=True survives_crit=False
+  tl-14: gate=True survives_crit=False
+  tl-16: gate=True survives_crit=False
+  tl-13: gate=True survives_crit=False
+  tl-15: gate=True survives_crit=False
+  tl-17: gate=True survives_crit=False
+  tl-18: gate=True survives_crit=False
+  tl-21: gate=True survives_crit=False
+  tl-22: gate=True survives_crit=False
+  tl-19: gate=True survives_crit=False
+  tl-23: gate=True survives_crit=False
+  tl-20: gate=True survives_crit=False
+  tl-24: gate=True survives_crit=False
+  tl-27: gate=True survives_crit=False
+  tl-25: gate=True survives_crit=False
+  tl-26: gate=True survives_crit=False
+  tl-29: gate=True survives_crit=False
+  tl-28: gate=True survives_crit=False
+  tl-31: gate=True survives_crit=False
+  tl-30: gate=True survives_crit=False
+  tl-32: gate=True survives_crit=False
+  tl-33: gate=True survives_crit=False
+  tl-34: gate=True survives_crit=False
+  tl-35: gate=True survives_crit=False
+  tl-36: gate=True survives_crit=False
+  tl-37: gate=True survives_crit=False
+  tl-38: gate=True survives_crit=False
+  tl-39: gate=True survives_crit=False
+funnel complete
+{
+  "adversary-unknown": {
+    "prompt_tokens": 28049,
+    "completion_tokens": 39185,
+    "calls": 86
+  },
+  "adversary-toothless": {
+    "prompt_tokens": 15704,
+    "completion_tokens": 18522,
+    "calls": 43
+  },
+  "judge-same-A": {
+    "prompt_tokens": 63430,
+    "completion_tokens": 79963,
+    "calls": 131
+  },
+  "judge-same-B": {
+    "prompt_tokens": 62969,
+    "completion_tokens": 76404,
+    "calls": 130
+  },
+  "judge-cross-A": {
+    "prompt_tokens": 63462,
+    "completion_tokens": 81168,
+    "calls": 131
+  },
+  "judge-cross-B": {
+    "prompt_tokens": 50422,
+    "completion_tokens": 1875,
+    "calls": 120
+  },
+  "critic-funnel": {
+    "prompt_tokens": 38308,
+    "completion_tokens": 10213,
+    "calls": 40
+  }
+}
