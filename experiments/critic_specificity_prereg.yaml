@@ -31,3 +31,27 @@ predictions:
 decision_rules: {report: experiments/results/critic_specificity_report.json,
   index_line: true}
 budget: {llm_tokens: <= 250000}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/critic_specificity_report.json
+  verdicts: {P1: CONFIRMED, P2: REFUTED - FALSIFIER TRIGGERED}
+  measured:
+    sensitivity: 1.00 (40/40 flawed convicted)
+    acquittal_of_verified_sound: 0.325 (13/40; falsifier line 0.40)
+    central_claim_disputed: 18 of 27 sound convictions name the
+      machine-verified-true number itself as the defect
+    tokens: 47767
+  consequences_triggered_per_prereg:
+    - the critic is an indiscriminate prosecutor under the fielded prompt;
+      survived-criticism metrics are demoted record-wide
+    - Tier 2/3 survivor counting requires a defended-trial redesign
+      (critic PLUS defender PLUS adjudication - the machinery exists in
+      the harness but was not fielded in the bare-criticism experiments)
+      before any creativity conclusion is drawn
+    - the anti-relapse negative atlas inherits suspicion: refutations
+      feeding it may be unsound; atlas hygiene needs its own check
+  caveat_on_framing: the fielded prompt carries prosecutorial framing
+    (identical across both batteries, so the sensitivity/specificity
+    CONTRAST is clean); a neutral-framing arm and a defended-trial arm are
+    the immediate follow-up preregs

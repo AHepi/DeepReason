@@ -1,0 +1,1302 @@
+[
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 125 complete tidal cycles fit within 65 days (that is, within 93600 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "125",
+        "65"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-00",
+    "judged_text": "The claim states that exactly 125 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 65 days, where 65 days equals exactly 93600 minutes. To verify this, we first confirm the total minutes in 65 days: 65 days \u00d7 24 hours/day \u00d7 60 minutes/hour = 93600 minutes. Next, we divide the total minutes by the duration of one tidal cycle: 93600 minutes \u00f7 745 minutes/cycle. Performing the division, 745 \u00d7 125 = 93125, and 745 \u00d7 126 = 93870, which exceeds 93600. Since 125 \u00d7 745 = 93125, and 93125 is less than or equal to 93600, exactly 125 complete cycles fit within the 93600-minute period. Therefore, the claim is correct.",
+    "params": {
+      "claimed_cycles": 125,
+      "cycle_minutes": 745,
+      "days": 65
+    },
+    "seed": 184695759992091,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 170 complete tidal cycles fit within 88 days (that is, within 126720 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "170",
+        "88"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-01",
+    "judged_text": "The claim states that exactly 170 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 88 days (126720 minutes). To verify this, multiply the number of cycles by the duration of one cycle: 170 \u00d7 745 minutes = 126650 minutes. The total available time is 88 days, which converts to 88 \u00d7 24 \u00d7 60 = 126720 minutes. Since 126650 minutes is less than or equal to 126720 minutes, 170 complete cycles fit within the interval. The next whole cycle (171) would require 171 \u00d7 745 = 127395 minutes, which exceeds 126720 minutes. Therefore, exactly 170 complete tidal cycles fit within 88 days.",
+    "params": {
+      "claimed_cycles": 170,
+      "cycle_minutes": 745,
+      "days": 88
+    },
+    "seed": 242789853382282,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 69 complete tidal cycles fit within 36 days (that is, within 51840 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "69",
+        "36"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-02",
+    "judged_text": "The claim states that exactly 69 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 36 days (51840 minutes). To verify this, multiply the number of cycles by the duration of one cycle: 69 \u00d7 745 minutes. Performing the multiplication, 69 \u00d7 700 = 48300, and 69 \u00d7 45 = 3105; summing these gives 48300 + 3105 = 51405 minutes. The total available time is 36 days, which is 36 \u00d7 24 \u00d7 60 = 51840 minutes. Since 51405 minutes is less than 51840 minutes, 69 complete cycles fit, and the next cycle (70 \u00d7 745 = 52150 minutes) would exceed the 51840-minute limit. Therefore, exactly 69 complete tidal cycles fit within 36 days.",
+    "params": {
+      "claimed_cycles": 69,
+      "cycle_minutes": 745,
+      "days": 36
+    },
+    "seed": 214296333916326,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 73 complete tidal cycles fit within 38 days (that is, within 54720 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "73",
+        "38"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-03",
+    "judged_text": "The claim states that exactly 73 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 38 days, where 38 days equals exactly 54720 minutes. To verify, multiply the number of cycles by the duration of one cycle: 73 \u00d7 745 = 54385 minutes. This product is less than or equal to 54720 minutes, so 73 cycles fit. To confirm that 73 is the maximum integer number of complete cycles, consider 74 cycles: 74 \u00d7 745 = 55130 minutes, which exceeds 54720 minutes. Therefore, exactly 73 complete tidal cycles fit within 54720 minutes.",
+    "params": {
+      "claimed_cycles": 73,
+      "cycle_minutes": 745,
+      "days": 38
+    },
+    "seed": 277004410090850,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 102 complete tidal cycles fit within 53 days (that is, within 76320 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "102",
+        "53"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-04",
+    "judged_text": "The claim states that exactly 102 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 53 days, which is exactly 76320 minutes. To verify this, we multiply the number of cycles by the duration of one cycle: 102 \u00d7 745 minutes = 75990 minutes. This product is the total time occupied by 102 cycles. We then compare this to the total available time of 76320 minutes. Since 75990 minutes is less than 76320 minutes, 102 complete cycles fit within the 53-day period. Furthermore, adding a 103rd cycle would require 75990 + 745 = 76735 minutes, which exceeds 76320 minutes, confirming that 102 is the maximum exact integer number of complete cycles.",
+    "params": {
+      "claimed_cycles": 102,
+      "cycle_minutes": 745,
+      "days": 53
+    },
+    "seed": 758325105082,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_tides_cycles",
+    "claim": "Assuming each lunar semidiurnal (M2) tidal cycle lasts exactly 745 minutes, exactly 77 complete tidal cycles fit within 40 days (that is, within 57600 minutes).",
+    "hidden_annotation": {
+      "checker": "check_tides_cycles",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "77",
+        "40"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-05",
+    "judged_text": "The claim states that exactly 77 complete M2 tidal cycles, each lasting exactly 745 minutes, fit within 40 days, where 40 days equals exactly 57600 minutes. To verify this, we multiply the number of cycles by the duration of one cycle: 77 \u00d7 745 minutes. Performing the multiplication, 77 \u00d7 700 = 53900, and 77 \u00d7 45 = 3465; summing these gives 53900 + 3465 = 57365 minutes. Since 57365 is less than 57600, 77 complete cycles fit within the 57600-minute period. The remaining time is 57600 \u2212 57365 = 235 minutes, which is insufficient for a 78th cycle of 745 minutes. Therefore, exactly 77 complete tidal cycles fit within 40 days.",
+    "params": {
+      "claimed_cycles": 77,
+      "cycle_minutes": 745,
+      "days": 40
+    },
+    "seed": 193695475361213,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "tides_cycles",
+    "topic": "tides"
+  },
+  {
+    "checker": "check_bridge_truss",
+    "claim": "A planar pin-jointed bridge truss with 6 joints, 9 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 9 + 3 = 12.",
+    "hidden_annotation": {
+      "checker": "check_bridge_truss",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "9",
+        "6",
+        "12"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-06",
+    "judged_text": "The planar truss has m = 9 members, r = 3 support reaction components, and j = 6 joints. The necessary condition for static determinacy of a planar pin-jointed truss is m + r = 2j. Substituting the given values yields 9 + 3 = 12 on the left side and 2 \u00d7 6 = 12 on the right side. Since both sides equal 12, the equation is satisfied exactly. Therefore, the truss meets the count condition for static determinacy.",
+    "params": {
+      "joints": 6,
+      "members": 9,
+      "reactions": 3
+    },
+    "seed": 18187545261158,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "bridge_truss",
+    "topic": "bridge engineering"
+  },
+  {
+    "checker": "check_bridge_truss",
+    "claim": "A planar pin-jointed bridge truss with 15 joints, 27 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 27 + 3 = 30.",
+    "hidden_annotation": {
+      "checker": "check_bridge_truss",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "27",
+        "15",
+        "30"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-07",
+    "judged_text": "The claim is that a planar pin-jointed bridge truss with 15 joints, 27 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 27 + 3 = 30. For a planar truss, the necessary condition for static determinacy is that the number of members m plus the number of independent reaction components r equals twice the number of joints j. Substituting the given values, m = 27, r = 3, and j = 15, the left side m + r evaluates to 27 + 3 = 30. The right side 2j evaluates to 2 \u00d7 15 = 30. Since both sides equal 30, the equation m + r = 2j is satisfied exactly. Therefore, the truss meets the numerical condition for static determinacy.",
+    "params": {
+      "joints": 15,
+      "members": 27,
+      "reactions": 3
+    },
+    "seed": 207307271978586,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "bridge_truss",
+    "topic": "bridge engineering"
+  },
+  {
+    "checker": "check_bridge_truss",
+    "claim": "A planar pin-jointed bridge truss with 9 joints, 15 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 15 + 3 = 18.",
+    "hidden_annotation": {
+      "checker": "check_bridge_truss",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "15",
+        "9",
+        "18"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-08",
+    "judged_text": "The claim is that a planar pin-jointed bridge truss with 9 joints, 15 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 15 + 3 = 18. Here, m is the number of members, r is the number of support reaction components, and j is the number of joints. Substituting the given values, m + r = 15 + 3 = 18, and 2j = 2 \u00d7 9 = 18. Since both sides of the equation equal 18, the necessary condition m + r = 2j is exactly satisfied. This confirms that the truss meets the counting requirement for static determinacy.",
+    "params": {
+      "joints": 9,
+      "members": 15,
+      "reactions": 3
+    },
+    "seed": 251618450062441,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "bridge_truss",
+    "topic": "bridge engineering"
+  },
+  {
+    "checker": "check_bridge_truss",
+    "claim": "A planar pin-jointed bridge truss with 22 joints, 41 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 41 + 3 = 44.",
+    "hidden_annotation": {
+      "checker": "check_bridge_truss",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "41",
+        "22",
+        "44"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-09",
+    "judged_text": "The planar pin-jointed bridge truss has 22 joints, 41 members, and 3 support reaction components. For a planar truss, the necessary condition for static determinacy is m + r = 2j, where m is the number of members, r is the number of independent reaction components, and j is the number of joints. Substituting the given values, m + r = 41 + 3 = 44, and 2j = 2 \u00d7 22 = 44. Since 44 equals 44, the count condition m + r = 2j is satisfied exactly. Therefore, the truss satisfies the necessary numerical condition for static determinacy.",
+    "params": {
+      "joints": 22,
+      "members": 41,
+      "reactions": 3
+    },
+    "seed": 115782635416522,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "bridge_truss",
+    "topic": "bridge engineering"
+  },
+  {
+    "checker": "check_bridge_truss",
+    "claim": "A planar pin-jointed bridge truss with 18 joints, 33 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j, since 33 + 3 = 36.",
+    "hidden_annotation": {
+      "checker": "check_bridge_truss",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "33",
+        "18",
+        "36"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-10",
+    "judged_text": "The claim is that a planar pin-jointed bridge truss with 18 joints, 33 members, and 3 support reaction components satisfies the count condition for static determinacy, m + r = 2j. Here, m is the number of members, r is the number of independent reaction components, and j is the number of joints. Substituting the given values, m = 33, r = 3, and j = 18, into the left side gives 33 + 3 = 36. The right side is 2j = 2 \u00d7 18 = 36. Since both sides equal 36, the equation m + r = 2j holds exactly. Therefore, the truss satisfies the necessary count condition for static determinacy.",
+    "params": {
+      "joints": 18,
+      "members": 33,
+      "reactions": 3
+    },
+    "seed": 103751877787413,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "bridge_truss",
+    "topic": "bridge engineering"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on a5 of an otherwise empty chessboard attacks exactly 4 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "a5",
+        "4"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-11",
+    "judged_text": "The claim states that a knight on a5 of an otherwise empty chessboard attacks exactly 4 squares. A knight moves in an L-shape: two squares in one orthogonal direction and one square perpendicular. From a5 (file a, rank 5), the possible moves are: two squares up to rank 7 and one square right to file b (b7), two squares up to rank 7 and one square left (off the board, invalid), two squares down to rank 3 and one square right to file b (b3), two squares down to rank 3 and one square left (off the board), two squares right to file c and one square up to rank 6 (c6), two squares right to file c and one square down to rank 4 (c4), two squares left (off the board) and one square up or down (both invalid). The valid destination squares are b7, b3, c6, and c4, totaling exactly 4 squares.",
+    "params": {
+      "claimed_attacked": 4,
+      "square": "a5"
+    },
+    "seed": 113076635071811,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on h6 of an otherwise empty chessboard attacks exactly 4 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "h6",
+        "4"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-12",
+    "judged_text": "The claim states that a knight on h6 of an otherwise empty chessboard attacks exactly 4 squares. A knight moves in an L-shape: two squares in one orthogonal direction and then one square perpendicular. From h6, moving two squares up (toward rank 8) is impossible because the knight would move off the board; moving two squares down yields the squares f5 (two down, one left) and f7 (two down, one right). Moving two squares left yields g8 (two left, one up) and g4 (two left, one down). Moving two squares right is impossible because the knight would move off the board. The four reachable squares are f5, f7, g8, and g4, confirming the knight attacks exactly 4 squares.",
+    "params": {
+      "claimed_attacked": 4,
+      "square": "h6"
+    },
+    "seed": 161002904630621,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on c1 of an otherwise empty chessboard attacks exactly 4 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "c1",
+        "4"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-13",
+    "judged_text": "The claim states that a knight on c1 of an otherwise empty chessboard attacks exactly 4 squares. A knight moves in an L-shape: two squares in one orthogonal direction and one square perpendicular, or one square in one orthogonal direction and two squares perpendicular. From c1, moving two squares up the board (north) and one square right (east) reaches d3; two up and one left reaches b3. Moving two squares right and one up reaches e2; two right and one down is impossible because the board ends. Moving two squares left and one up reaches a2; two left and one down is off the board. Moving two squares down and one right reaches d0, which does not exist; two down and one left reaches b0, also off the board. Moving one square up and two right reaches e3, which is on the board; one up and two left reaches a3. The valid attacked squares are a2, b3, d3, e2, a3, and e3, totaling 6 squares, not 4. Therefore, the claim is false.",
+    "params": {
+      "claimed_attacked": 4,
+      "square": "c1"
+    },
+    "seed": 48646537887598,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on e4 of an otherwise empty chessboard attacks exactly 8 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "e4",
+        "8"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-14",
+    "judged_text": "A knight on e4 attacks exactly 8 squares. The knight moves in an L-shape: two squares in one orthogonal direction and one square perpendicular. From e4, moving two squares vertically and one horizontally yields c3, c5, g3, g5. Moving two squares horizontally and one vertically yields d2, d6, f2, f6. All eight resulting squares are within the board boundaries. Therefore, the knight on e4 attacks exactly 8 squares.",
+    "params": {
+      "claimed_attacked": 8,
+      "square": "e4"
+    },
+    "seed": 104650250879624,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on h5 of an otherwise empty chessboard attacks exactly 4 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "h5",
+        "4"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-15",
+    "judged_text": "The claim states that a knight on h5 of an otherwise empty chessboard attacks exactly 4 squares. A knight moves in an L-shape: two squares in one orthogonal direction and one square perpendicular. From h5, moving two squares up (toward rank 8) and one square right reaches g7; two up and one left reaches f7. Moving two squares right (toward the h-file) and one up reaches g6; two right and one down reaches g4. Moving two squares down (toward rank 1) and one right reaches g3; two down and one left reaches f3. Moving two squares left (toward the a-file) and one up reaches f6; two left and one down reaches f4. However, squares f7, f6, f4, and f3 lie off the board (rank 0 or file 0), leaving only g7, g6, g4, and g3 as valid squares. Thus, the knight attacks exactly 4 squares.",
+    "params": {
+      "claimed_attacked": 4,
+      "square": "h5"
+    },
+    "seed": 126649501993034,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_chess_knight",
+    "claim": "In the opening position analysis of chess, a knight standing on d6 of an otherwise empty chessboard attacks exactly 8 squares.",
+    "hidden_annotation": {
+      "checker": "check_chess_knight",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "d6",
+        "8"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-16",
+    "judged_text": "The claim states that a knight on d6 of an otherwise empty chessboard attacks exactly 8 squares. A knight moves in an L-shape: two squares in one orthogonal direction and one square perpendicular, or one square in one orthogonal direction and two squares perpendicular. From d6, the knight can move two squares up the d-file to d8 and one square left to c8 or right to e8, yielding c8 and e8. It can move two squares down to d4 and one square left to c4 or right to e4, yielding c4 and e4. It can move two squares left to b6 and one square up to b7 or down to b5, yielding b7 and b5. It can move two squares right to f6 and one square up to f7 or down to f5, yielding f7 and f5. All eight destination squares (c8, e8, c4, e4, b7, b5, f7, f5) are within the board and distinct, confirming the knight attacks exactly 8 squares.",
+    "params": {
+      "claimed_attacked": 8,
+      "square": "d6"
+    },
+    "seed": 182438514575618,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "chess_knight",
+    "topic": "chess openings"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 63 millimetres per year travels exactly 441 kilometres in 7 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "441",
+        "63",
+        "7"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-17",
+    "judged_text": "The claim states that a tectonic plate moving at a constant speed of 63 millimetres per year travels exactly 441 kilometres in 7 million years. To verify this, we first convert the speed to kilometres per year: 63 millimetres per year is equal to 63 \u00d7 10\u207b\u2076 kilometres per year, which is 0.000063 kilometres per year. Multiplying this speed by the time interval of 7,000,000 years gives the total distance: 0.000063 km/year \u00d7 7,000,000 years = 441 kilometres. The calculation is exact because 63 \u00d7 7 = 441, and the unit conversions involve exact powers of ten. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 441,
+      "myr": 7,
+      "rate_mm_yr": 63
+    },
+    "seed": 273997295693230,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 32 millimetres per year travels exactly 192 kilometres in 6 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "192",
+        "32",
+        "6"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-18",
+    "judged_text": "The claim states that a tectonic plate moving at a constant speed of 32 millimetres per year travels exactly 192 kilometres in 6 million years. To verify this, first convert the speed to kilometres per year: 32 millimetres per year equals 0.000032 kilometres per year. Multiplying this speed by the time interval of 6,000,000 years yields 0.000032 \u00d7 6,000,000 = 192 kilometres. The calculation confirms the exact distance traveled. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 192,
+      "myr": 6,
+      "rate_mm_yr": 32
+    },
+    "seed": 109932773891352,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 91 millimetres per year travels exactly 819 kilometres in 9 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "819",
+        "91",
+        "9"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-19",
+    "judged_text": "The claim states that a tectonic plate moving at a constant 91 millimetres per year travels exactly 819 kilometres in 9 million years. To verify this, first convert the speed to kilometres per year: 91 millimetres per year is equal to 0.000091 kilometres per year. Multiplying this speed by the time interval of 9,000,000 years yields 0.000091 km/year \u00d7 9,000,000 years = 819 kilometres. The calculation uses exact conversions and no rounding, confirming the result. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 819,
+      "myr": 9,
+      "rate_mm_yr": 91
+    },
+    "seed": 256983110669002,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 41 millimetres per year travels exactly 82 kilometres in 2 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "82",
+        "41",
+        "2"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-20",
+    "judged_text": "The claim states that a tectonic plate moving at a constant 41 millimetres per year travels exactly 82 kilometres in 2 million years. To verify this, first convert the speed to kilometres per year: 41 millimetres per year is equal to 41 \u00d7 10\u207b\u2076 kilometres per year. Multiplying this speed by the time interval of 2 million years (2,000,000 years) gives the total distance: 41 \u00d7 10\u207b\u2076 km/year \u00d7 2,000,000 years = 41 \u00d7 2 km = 82 km. The calculation uses exact values and unit conversion, confirming the distance is exactly 82 kilometres. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 82,
+      "myr": 2,
+      "rate_mm_yr": 41
+    },
+    "seed": 107266962251102,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 32 millimetres per year travels exactly 256 kilometres in 8 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "256",
+        "32",
+        "8"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-21",
+    "judged_text": "The claim states that a tectonic plate moving at a constant 32 millimetres per year travels exactly 256 kilometres in 8 million years. To verify this, convert the speed to kilometres per year: 32 millimetres per year equals 0.000032 kilometres per year. Multiply this speed by the time span of 8,000,000 years: 0.000032 km/year \u00d7 8,000,000 years = 256 kilometres. The calculation confirms the exact distance traveled. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 256,
+      "myr": 8,
+      "rate_mm_yr": 32
+    },
+    "seed": 209604872764307,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_plate_distance",
+    "claim": "A tectonic plate moving at a constant 54 millimetres per year travels exactly 162 kilometres in 3 million years.",
+    "hidden_annotation": {
+      "checker": "check_plate_distance",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "162",
+        "54",
+        "3"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-22",
+    "judged_text": "The claim states that a tectonic plate moving at a constant 54 millimetres per year travels exactly 162 kilometres in 3 million years. To verify this, first convert the speed to kilometres per year: 54 millimetres per year is equal to 54 \u00d7 10\u207b\u2076 kilometres per year, which is 0.000054 kilometres per year. Multiplying this speed by the time interval of 3,000,000 years gives the total distance: 0.000054 km/year \u00d7 3,000,000 years = 162 kilometres. The calculation uses exact conversions and no rounding, confirming the result. Therefore, the claim is correct.",
+    "params": {
+      "claimed_km": 162,
+      "myr": 3,
+      "rate_mm_yr": 54
+    },
+    "seed": 51915662665251,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "plate_distance",
+    "topic": "plate tectonics"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Knossos to Troy takes 6 days; Troy to Byblos takes 3 days; Knossos to Byblos takes 4 days; Byblos to Ugarit takes 4 days; Troy to Ugarit takes 5 days; Ugarit to Memphis takes 3 days; Byblos to Memphis takes 3 days \u2014 the shortest possible travel time from Knossos to Memphis is exactly 7 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "7",
+        "Knossos",
+        "Memphis"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-23",
+    "judged_text": "The claim is that the shortest travel time from Knossos to Memphis is exactly 7 days. To verify this, we examine all possible routes from Knossos to Memphis through the given network. One route is Knossos \u2192 Byblos (4 days) then Byblos \u2192 Memphis (3 days), totaling 7 days. Another is Knossos \u2192 Troy (6 days), Troy \u2192 Byblos (3 days), Byblos \u2192 Memphis (3 days), totaling 12 days. The route Knossos \u2192 Byblos (4 days), Byblos \u2192 Ugarit (4 days), Ugarit \u2192 Memphis (3 days) takes 11 days. The route Knossos \u2192 Troy (6 days), Troy \u2192 Ugarit (5 days), Ugarit \u2192 Memphis (3 days) takes 14 days. Since the direct Knossos\u2013Byblos\u2013Memphis path yields 7 days and all other paths are longer, the shortest possible travel time is exactly 7 days.",
+    "params": {
+      "cities": [
+        "Knossos",
+        "Troy",
+        "Byblos",
+        "Ugarit",
+        "Memphis"
+      ],
+      "claimed_days": 7,
+      "destination": "Memphis",
+      "edges": [
+        [
+          "Knossos",
+          "Troy",
+          6
+        ],
+        [
+          "Troy",
+          "Byblos",
+          3
+        ],
+        [
+          "Knossos",
+          "Byblos",
+          4
+        ],
+        [
+          "Byblos",
+          "Ugarit",
+          4
+        ],
+        [
+          "Troy",
+          "Ugarit",
+          5
+        ],
+        [
+          "Ugarit",
+          "Memphis",
+          3
+        ],
+        [
+          "Byblos",
+          "Memphis",
+          3
+        ]
+      ],
+      "origin": "Knossos"
+    },
+    "seed": 18306558759879,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Uruk to Troy takes 9 days; Troy to Ugarit takes 9 days; Uruk to Ugarit takes 2 days; Ugarit to Byblos takes 4 days; Troy to Byblos takes 3 days; Byblos to Ashur takes 9 days; Ugarit to Ashur takes 5 days \u2014 the shortest possible travel time from Uruk to Ashur is exactly 7 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "7",
+        "Uruk",
+        "Ashur"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-24",
+    "judged_text": "The claim is that the shortest travel time from Uruk to Ashur is exactly 7 days. To verify this, we examine all possible routes from Uruk to Ashur. The direct route Uruk \u2192 Ugarit \u2192 Ashur takes 2 + 5 = 7 days. The route Uruk \u2192 Troy \u2192 Byblos \u2192 Ashur takes 9 + 3 + 9 = 21 days. The route Uruk \u2192 Troy \u2192 Ugarit \u2192 Ashur takes 9 + 9 + 5 = 23 days. The route Uruk \u2192 Ugarit \u2192 Byblos \u2192 Ashur takes 2 + 4 + 9 = 15 days. The route Uruk \u2192 Troy \u2192 Ugarit \u2192 Byblos \u2192 Ashur takes 9 + 9 + 4 + 9 = 31 days. No other sequence of caravan routes connects Uruk to Ashur. The minimum among these computed travel times is 7 days, achieved by the Uruk \u2192 Ugarit \u2192 Ashur path.",
+    "params": {
+      "cities": [
+        "Uruk",
+        "Troy",
+        "Ugarit",
+        "Byblos",
+        "Ashur"
+      ],
+      "claimed_days": 7,
+      "destination": "Ashur",
+      "edges": [
+        [
+          "Uruk",
+          "Troy",
+          9
+        ],
+        [
+          "Troy",
+          "Ugarit",
+          9
+        ],
+        [
+          "Uruk",
+          "Ugarit",
+          2
+        ],
+        [
+          "Ugarit",
+          "Byblos",
+          4
+        ],
+        [
+          "Troy",
+          "Byblos",
+          3
+        ],
+        [
+          "Byblos",
+          "Ashur",
+          9
+        ],
+        [
+          "Ugarit",
+          "Ashur",
+          5
+        ]
+      ],
+      "origin": "Uruk"
+    },
+    "seed": 170412312120116,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Ugarit to Hattusa takes 7 days; Hattusa to Byblos takes 5 days; Ugarit to Byblos takes 8 days; Byblos to Memphis takes 8 days; Hattusa to Memphis takes 6 days; Memphis to Uruk takes 8 days; Byblos to Uruk takes 3 days \u2014 the shortest possible travel time from Ugarit to Uruk is exactly 11 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "11",
+        "Ugarit",
+        "Uruk"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-25",
+    "judged_text": "The claim is that the shortest travel time from Ugarit to Uruk is exactly 11 days. To verify this, we examine all possible routes from Ugarit to Uruk through the given network. One route is Ugarit to Byblos (8 days) then Byblos to Uruk (3 days), totaling 11 days. Another route is Ugarit to Hattusa (7 days) then Hattusa to Memphis (6 days) then Memphis to Uruk (8 days), totaling 21 days. A third route is Ugarit to Hattusa (7 days), Hattusa to Byblos (5 days), then Byblos to Uruk (3 days), totaling 15 days. The route Ugarit to Byblos (8 days) to Memphis (8 days) to Uruk (8 days) totals 24 days. No other sequence of caravan routes connects Ugarit to Uruk. The minimum sum among these path lengths is 11 days, confirming the claim.",
+    "params": {
+      "cities": [
+        "Ugarit",
+        "Hattusa",
+        "Byblos",
+        "Memphis",
+        "Uruk"
+      ],
+      "claimed_days": 11,
+      "destination": "Uruk",
+      "edges": [
+        [
+          "Ugarit",
+          "Hattusa",
+          7
+        ],
+        [
+          "Hattusa",
+          "Byblos",
+          5
+        ],
+        [
+          "Ugarit",
+          "Byblos",
+          8
+        ],
+        [
+          "Byblos",
+          "Memphis",
+          8
+        ],
+        [
+          "Hattusa",
+          "Memphis",
+          6
+        ],
+        [
+          "Memphis",
+          "Uruk",
+          8
+        ],
+        [
+          "Byblos",
+          "Uruk",
+          3
+        ]
+      ],
+      "origin": "Ugarit"
+    },
+    "seed": 261529181766240,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Troy to Ugarit takes 2 days; Ugarit to Hattusa takes 8 days; Troy to Hattusa takes 5 days; Hattusa to Memphis takes 2 days; Ugarit to Memphis takes 2 days; Memphis to Uruk takes 7 days; Hattusa to Uruk takes 2 days \u2014 the shortest possible travel time from Troy to Uruk is exactly 7 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "7",
+        "Troy",
+        "Uruk"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-26",
+    "judged_text": "The claim is that the shortest possible travel time from Troy to Uruk is exactly 7 days. To verify this, we examine all possible routes from Troy to Uruk through the given network. One direct route is Troy to Hattusa (5 days) then Hattusa to Uruk (2 days), totaling 7 days. Another route is Troy to Ugarit (2 days), Ugarit to Hattusa (8 days), then Hattusa to Uruk (2 days), totaling 12 days. A third route is Troy to Ugarit (2 days), Ugarit to Memphis (2 days), Memphis to Uruk (7 days), totaling 11 days. The route Troy to Hattusa (5 days), Hattusa to Memphis (2 days), Memphis to Uruk (7 days) totals 14 days. No other sequence of caravan routes connects Troy to Uruk. The minimum sum among these valid paths is 7 days, confirming the claim.",
+    "params": {
+      "cities": [
+        "Troy",
+        "Ugarit",
+        "Hattusa",
+        "Memphis",
+        "Uruk"
+      ],
+      "claimed_days": 7,
+      "destination": "Uruk",
+      "edges": [
+        [
+          "Troy",
+          "Ugarit",
+          2
+        ],
+        [
+          "Ugarit",
+          "Hattusa",
+          8
+        ],
+        [
+          "Troy",
+          "Hattusa",
+          5
+        ],
+        [
+          "Hattusa",
+          "Memphis",
+          2
+        ],
+        [
+          "Ugarit",
+          "Memphis",
+          2
+        ],
+        [
+          "Memphis",
+          "Uruk",
+          7
+        ],
+        [
+          "Hattusa",
+          "Uruk",
+          2
+        ]
+      ],
+      "origin": "Troy"
+    },
+    "seed": 239978554379245,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Knossos to Ugarit takes 4 days; Ugarit to Troy takes 5 days; Knossos to Troy takes 6 days; Troy to Hattusa takes 6 days; Ugarit to Hattusa takes 4 days; Hattusa to Uruk takes 3 days; Troy to Uruk takes 6 days \u2014 the shortest possible travel time from Knossos to Uruk is exactly 11 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "11",
+        "Knossos",
+        "Uruk"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-27",
+    "judged_text": "The claim is that the shortest travel time from Knossos to Uruk is exactly 11 days. To verify this, we examine all possible routes from Knossos to Uruk through the given network. One route is Knossos \u2192 Ugarit (4 days) \u2192 Hattusa (4 days) \u2192 Uruk (3 days), which sums to 4 + 4 + 3 = 11 days. Another route is Knossos \u2192 Troy (6 days) \u2192 Uruk (6 days), summing to 12 days. The route Knossos \u2192 Troy (6 days) \u2192 Hattusa (6 days) \u2192 Uruk (3 days) takes 15 days, and Knossos \u2192 Ugarit (4 days) \u2192 Troy (5 days) \u2192 Uruk (6 days) takes 15 days. No other path exists, and the minimum among these sums is 11. Therefore, the shortest possible travel time from Knossos to Uruk is exactly 11 days.",
+    "params": {
+      "cities": [
+        "Knossos",
+        "Ugarit",
+        "Troy",
+        "Hattusa",
+        "Uruk"
+      ],
+      "claimed_days": 11,
+      "destination": "Uruk",
+      "edges": [
+        [
+          "Knossos",
+          "Ugarit",
+          4
+        ],
+        [
+          "Ugarit",
+          "Troy",
+          5
+        ],
+        [
+          "Knossos",
+          "Troy",
+          6
+        ],
+        [
+          "Troy",
+          "Hattusa",
+          6
+        ],
+        [
+          "Ugarit",
+          "Hattusa",
+          4
+        ],
+        [
+          "Hattusa",
+          "Uruk",
+          3
+        ],
+        [
+          "Troy",
+          "Uruk",
+          6
+        ]
+      ],
+      "origin": "Knossos"
+    },
+    "seed": 199041276898208,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_trade_shortest_path",
+    "claim": "In a bronze-age trade network whose only caravan routes are: Memphis to Hattusa takes 2 days; Hattusa to Ashur takes 6 days; Memphis to Ashur takes 3 days; Ashur to Ugarit takes 6 days; Hattusa to Ugarit takes 2 days; Ugarit to Uruk takes 4 days; Ashur to Uruk takes 8 days \u2014 the shortest possible travel time from Memphis to Uruk is exactly 8 days.",
+    "hidden_annotation": {
+      "checker": "check_trade_shortest_path",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "8",
+        "Memphis",
+        "Uruk"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-28",
+    "judged_text": "The claim is that the shortest travel time from Memphis to Uruk is exactly 8 days. To verify this, we examine all possible routes from Memphis to Uruk in the given network. One route is Memphis to Ashur (3 days) then Ashur to Uruk (8 days), totaling 11 days. Another is Memphis to Hattusa (2 days), Hattusa to Ugarit (2 days), then Ugarit to Uruk (4 days), totaling 8 days. A third is Memphis to Hattusa (2 days), Hattusa to Ashur (6 days), then Ashur to Uruk (8 days), totaling 16 days. The route Memphis to Ashur (3 days), Ashur to Ugarit (6 days), then Ugarit to Uruk (4 days) totals 13 days. No other sequence of caravan routes connects Memphis to Uruk. The minimum of these totals is 8 days, confirming the claim.",
+    "params": {
+      "cities": [
+        "Memphis",
+        "Hattusa",
+        "Ashur",
+        "Ugarit",
+        "Uruk"
+      ],
+      "claimed_days": 8,
+      "destination": "Uruk",
+      "edges": [
+        [
+          "Memphis",
+          "Hattusa",
+          2
+        ],
+        [
+          "Hattusa",
+          "Ashur",
+          6
+        ],
+        [
+          "Memphis",
+          "Ashur",
+          3
+        ],
+        [
+          "Ashur",
+          "Ugarit",
+          6
+        ],
+        [
+          "Hattusa",
+          "Ugarit",
+          2
+        ],
+        [
+          "Ugarit",
+          "Uruk",
+          4
+        ],
+        [
+          "Ashur",
+          "Uruk",
+          8
+        ]
+      ],
+      "origin": "Memphis"
+    },
+    "seed": 35744581007842,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "trade_shortest_path",
+    "topic": "bronze-age trade"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 12-tooth pinion drives a 48-tooth wheel, and a 10-tooth pinion mounted on that wheel's arbor drives a 40-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 16:1, because (48 x 40) / (12 x 10) = 16.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "16",
+        "48",
+        "40",
+        "12",
+        "10"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-29",
+    "judged_text": "The overall velocity reduction from the first pinion to the final wheel is exactly 16:1. The first stage consists of a 12-tooth pinion driving a 48-tooth wheel, producing a reduction ratio of 48/12 = 4:1. The second stage has a 10-tooth pinion on the same arbor as the 48-tooth wheel driving a 40-tooth wheel, yielding a reduction of 40/10 = 4:1. Because the stages are compounded, the total reduction is the product of the individual stage ratios: (48/12) \u00d7 (40/10) = 4 \u00d7 4 = 16. Therefore, the final wheel turns exactly 16 times slower than the first pinion.",
+    "params": {
+      "claimed_ratio": 16,
+      "pinion1": 12,
+      "pinion2": 10,
+      "wheel1": 48,
+      "wheel2": 40
+    },
+    "seed": 215519877586744,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 10-tooth pinion drives a 60-tooth wheel, and a 16-tooth pinion mounted on that wheel's arbor drives a 128-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 48:1, because (60 x 128) / (10 x 16) = 48.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "48",
+        "60",
+        "128",
+        "10",
+        "16"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-30",
+    "judged_text": "The overall velocity reduction from the first pinion to the final wheel is exactly 48:1. The first stage consists of a 10-tooth pinion driving a 60-tooth wheel, yielding a reduction ratio of 60/10. The second stage has a 16-tooth pinion on the same arbor as the 60-tooth wheel driving a 128-tooth wheel, yielding a reduction ratio of 128/16. The total reduction is the product of the individual stage ratios: (60/10) \u00d7 (128/16). Computing this gives (60 \u00d7 128) / (10 \u00d7 16) = 7680 / 160 = 48. Thus, the final wheel turns exactly 48 times slower than the first pinion.",
+    "params": {
+      "claimed_ratio": 48,
+      "pinion1": 10,
+      "pinion2": 16,
+      "wheel1": 60,
+      "wheel2": 128
+    },
+    "seed": 204026482079770,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 8-tooth pinion drives a 24-tooth wheel, and a 10-tooth pinion mounted on that wheel's arbor drives a 30-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 9:1, because (24 x 30) / (8 x 10) = 9.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "9",
+        "24",
+        "30",
+        "8",
+        "10"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-31",
+    "judged_text": "The overall velocity reduction from the first 8-tooth pinion to the final 30-tooth wheel is exactly 9:1. The first stage pairs an 8-tooth pinion driving a 24-tooth wheel, yielding a reduction ratio of 24/8 = 3:1. The second stage pairs a 10-tooth pinion on the 24-tooth wheel's arbor driving a 30-tooth wheel, yielding a reduction ratio of 30/10 = 3:1. The total reduction is the product of the individual stage ratios: (24/8) \u00d7 (30/10) = 3 \u00d7 3 = 9. Therefore, the final wheel turns once for every 9 turns of the first pinion, confirming the 9:1 overall reduction.",
+    "params": {
+      "claimed_ratio": 9,
+      "pinion1": 8,
+      "pinion2": 10,
+      "wheel1": 24,
+      "wheel2": 30
+    },
+    "seed": 90151857942964,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 16-tooth pinion drives a 80-tooth wheel, and a 10-tooth pinion mounted on that wheel's arbor drives a 60-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 30:1, because (80 x 60) / (16 x 10) = 30.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "30",
+        "80",
+        "60",
+        "16",
+        "10"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-32",
+    "judged_text": "The overall velocity reduction from the first pinion to the final wheel is exactly 30:1. The first stage consists of a 16-tooth pinion driving an 80-tooth wheel, producing a reduction ratio of 80/16 = 5. The second stage has a 10-tooth pinion on the same arbor as the 80-tooth wheel driving a 60-tooth wheel, yielding a reduction of 60/10 = 6. Since the stages are compounded, the total reduction is the product of the individual stage ratios: 5 \u00d7 6 = 30. This confirms that (80 \u00d7 60) / (16 \u00d7 10) = 4800 / 160 = 30, establishing the claim.",
+    "params": {
+      "claimed_ratio": 30,
+      "pinion1": 16,
+      "pinion2": 10,
+      "wheel1": 80,
+      "wheel2": 60
+    },
+    "seed": 149679359100925,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 12-tooth pinion drives a 48-tooth wheel, and a 8-tooth pinion mounted on that wheel's arbor drives a 32-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 16:1, because (48 x 32) / (12 x 8) = 16.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "16",
+        "48",
+        "32",
+        "12",
+        "8"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-33",
+    "judged_text": "The overall velocity reduction from the first 12-tooth pinion to the final 32-tooth wheel is exactly 16:1. The first stage consists of a 12-tooth pinion driving a 48-tooth wheel, yielding a reduction ratio of 48/12 = 4:1. The second stage has an 8-tooth pinion on the same arbor as the 48-tooth wheel driving a 32-tooth wheel, giving a reduction of 32/8 = 4:1. The total reduction is the product of the individual stage ratios: (48/12) \u00d7 (32/8) = 4 \u00d7 4 = 16. This calculation is equivalent to (48 \u00d7 32) / (12 \u00d7 8) = 1536 / 96 = 16. Therefore, the final wheel turns exactly 16 times slower than the first pinion.",
+    "params": {
+      "claimed_ratio": 16,
+      "pinion1": 12,
+      "pinion2": 8,
+      "wheel1": 48,
+      "wheel2": 32
+    },
+    "seed": 87777789300612,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_clock_gear",
+    "claim": "In a clock gear train where a 12-tooth pinion drives a 36-tooth wheel, and a 8-tooth pinion mounted on that wheel's arbor drives a 64-tooth wheel, the overall velocity reduction from the first pinion to the final wheel is exactly 24:1, because (36 x 64) / (12 x 8) = 24.",
+    "hidden_annotation": {
+      "checker": "check_clock_gear",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "24",
+        "36",
+        "64",
+        "12",
+        "8"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-34",
+    "judged_text": "The overall velocity reduction from the first pinion to the final wheel is exactly 24:1. The first stage consists of a 12-tooth pinion driving a 36-tooth wheel, producing a reduction ratio of 36/12 = 3:1. The second stage has an 8-tooth pinion on the same arbor as the 36-tooth wheel driving a 64-tooth wheel, yielding a reduction of 64/8 = 8:1. The total reduction is the product of the individual stage ratios: 3 \u00d7 8 = 24. This is confirmed by the compound gear train formula (36 \u00d7 64) / (12 \u00d7 8) = 2304 / 96 = 24. Therefore, the final wheel turns exactly 24 times slower than the first pinion.",
+    "params": {
+      "claimed_ratio": 24,
+      "pinion1": 12,
+      "pinion2": 8,
+      "wheel1": 36,
+      "wheel2": 64
+    },
+    "seed": 176623236859851,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "clock_gear",
+    "topic": "clock mechanisms"
+  },
+  {
+    "checker": "check_postal_routes",
+    "claim": "A postal network in which every pair of its 23 sorting offices is joined by one dedicated direct route requires exactly 253 routes, since 23 x 22 / 2 = 253.",
+    "hidden_annotation": {
+      "checker": "check_postal_routes",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "253",
+        "23"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-35",
+    "judged_text": "The claim is that a postal network with 23 sorting offices, where every distinct pair of offices is connected by exactly one dedicated direct route, requires exactly 253 routes. This is a complete graph on 23 vertices, and the number of edges in such a graph is given by the combination formula C(n, 2) = n(n-1)/2. Substituting n = 23 yields 23 \u00d7 22 / 2. The product 23 \u00d7 22 equals 506, and dividing 506 by 2 gives 253. Therefore, exactly 253 direct routes are required.",
+    "params": {
+      "claimed_routes": 253,
+      "offices": 23
+    },
+    "seed": 216731171545956,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "postal_routes",
+    "topic": "postal-network economics"
+  },
+  {
+    "checker": "check_postal_routes",
+    "claim": "A postal network in which every pair of its 34 sorting offices is joined by one dedicated direct route requires exactly 561 routes, since 34 x 33 / 2 = 561.",
+    "hidden_annotation": {
+      "checker": "check_postal_routes",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "561",
+        "34"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-36",
+    "judged_text": "The claim states that a postal network with 34 sorting offices, where every distinct pair of offices is connected by exactly one dedicated direct route, requires exactly 561 routes. This is a combinatorial problem of selecting 2 distinct offices from a set of 34, where order does not matter. The number of such pairs is given by the combination formula C(n, k) = n! / (k!(n-k)!), with n = 34 and k = 2. This simplifies to (34 \u00d7 33) / (2 \u00d7 1), which equals 1122 / 2. The result of this calculation is exactly 561. Therefore, the network requires precisely 561 routes.",
+    "params": {
+      "claimed_routes": 561,
+      "offices": 34
+    },
+    "seed": 153558579821219,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "postal_routes",
+    "topic": "postal-network economics"
+  },
+  {
+    "checker": "check_postal_routes",
+    "claim": "A postal network in which every pair of its 26 sorting offices is joined by one dedicated direct route requires exactly 325 routes, since 26 x 25 / 2 = 325.",
+    "hidden_annotation": {
+      "checker": "check_postal_routes",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "325",
+        "26"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-37",
+    "judged_text": "The claim states that a postal network with 26 sorting offices, where every pair of offices is connected by exactly one dedicated direct route, requires precisely 325 routes. This is a complete graph on 26 vertices, and the number of edges in such a graph is given by the combination formula C(n,2) = n(n\u22121)/2. Substituting n = 26 yields 26 \u00d7 25 / 2. The product 26 \u00d7 25 equals 650, and dividing 650 by 2 gives 325. Therefore, exactly 325 routes are necessary and sufficient to connect all pairs of the 26 offices with a single direct route each.",
+    "params": {
+      "claimed_routes": 325,
+      "offices": 26
+    },
+    "seed": 14955258811258,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "postal_routes",
+    "topic": "postal-network economics"
+  },
+  {
+    "checker": "check_postal_weekday",
+    "claim": "A mail coach that serves 26 towns on consecutive days, one town per day with no rest days, starting on a Monday, delivers to the final town on a Friday.",
+    "hidden_annotation": {
+      "checker": "check_postal_weekday",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "26",
+        "Friday"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-38",
+    "judged_text": "The claim states that a mail coach serves 26 towns on consecutive days, one town per day with no rest days, starting on a Monday, and delivers to the final town on a Friday. Since the coach serves one town per day without interruption, the number of days required to serve all 26 towns is exactly 26 days. Starting on a Monday, the first town is served on day 1 (Monday). The 26th town is served on the 26th day. Because the weekly cycle repeats every 7 days, the day of the week for the 26th day is found by computing 26 mod 7, which equals 5. Day 5 of the week, counting Monday as day 1, is Friday. Therefore, the final town is indeed delivered to on a Friday.",
+    "params": {
+      "claimed_weekday": "Friday",
+      "towns": 26
+    },
+    "seed": 146614829950607,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "postal_weekday",
+    "topic": "postal-network economics"
+  },
+  {
+    "checker": "check_postal_weekday",
+    "claim": "A mail coach that serves 28 towns on consecutive days, one town per day with no rest days, starting on a Monday, delivers to the final town on a Sunday.",
+    "hidden_annotation": {
+      "checker": "check_postal_weekday",
+      "checker_rejects": 0,
+      "key_numbers": [
+        "28",
+        "Sunday"
+      ],
+      "verified_true": true
+    },
+    "id": "csp-39",
+    "judged_text": "The claim states that a mail coach serves 28 towns on consecutive days, one town per day with no rest days, starting on a Monday, and delivers to the final town on a Sunday. The coach serves the first town on Monday, which is day 1. Since there are 28 towns and one is served each consecutive day, the final town is served on day 28. To determine the day of the week for day 28, we calculate 28 modulo 7, which equals 0, corresponding to the seventh day of the week. With Monday as day 1, Sunday is day 7. Therefore, day 28 falls on a Sunday, confirming the claim.",
+    "params": {
+      "claimed_weekday": "Sunday",
+      "towns": 28
+    },
+    "seed": 187829206059646,
+    "source": "scripts/critic_spec_corpus.py trusted checker + deepseek-v4-pro argument",
+    "sub_battery": "verified_sound",
+    "template": "postal_weekday",
+    "topic": "postal-network economics"
+  }
+]
