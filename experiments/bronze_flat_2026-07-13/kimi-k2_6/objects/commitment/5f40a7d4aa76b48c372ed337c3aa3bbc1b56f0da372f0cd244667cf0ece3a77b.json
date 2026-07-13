@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Collapse sequences show clear temporal ordering with directional contagion (e.g. Anatolia→Cyprus→Levant→Greece) rather than synchronized transitions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-hist","id":"fc:10206d0ae3f2","observation_valued":false},"id":"fc:10206d0ae3f2","schema":"commitment"}

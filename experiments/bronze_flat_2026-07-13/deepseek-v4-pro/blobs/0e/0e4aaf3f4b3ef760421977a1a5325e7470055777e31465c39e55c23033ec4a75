@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48",
+      "attack": true,
+      "case": "The target declares a standard for historical-mechanism accounts but provides no actual historical account to evaluate. It offers only a meta-rubric without instantiating it in any concrete claim about a specific historical event, institution, or process. A standard without an applied account is vacuous for evaluation—there is nothing to assess for mechanism, forbidden cases, or inevitability claims.",
+      "counterexample": null
+    },
+    {
+      "target": "ba687c5f145e404c53a84549cf366e6b0106eec67404c07231357fed09ed672",
+      "attack": true,
+      "case": "The target asserts a 'mechanist' stance for school-0 but provides no substantive content—no mechanism is named, no causal process described, no forbidden cases specified. A bare label ('mechanist') without any articulated account is indistinguishable from an empty assertion and fails to meet the very standard the mechanist school presumably endorses.",
+      "counterexample": null
+    },
+    {
+      "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845",
+      "attack": true,
+      "case": "The target asserts a 'skeptic' stance for school-1 but provides no substantive content—no specific claim is being doubted, no grounds for skepticism are offered, and no alternative account is presented. A bare label ('skeptic') without an object of skepticism or reasoning is an empty posture, not a genuine argumentative position.",
+      "counterexample": null
+    }
+  ]
+}

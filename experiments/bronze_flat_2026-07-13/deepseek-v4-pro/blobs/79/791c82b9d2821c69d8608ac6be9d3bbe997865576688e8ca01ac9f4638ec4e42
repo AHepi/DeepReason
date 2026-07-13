@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed infantry warfare that rendered chariot-based palatial armies obsolete.\", \"mechanism\": \"Iron metallurgy and new infantry tactics enabled mass mobilization of commoners, overwhelming elite chariot corps and destabilizing palace-centered military aristocracies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records show no adoption of infantry-based tactics or iron weapons during this period, and their chariot forces remained dominant against the Sea Peoples.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains why palace systems dependent on chariot elites fell while Egypt, which repelled Sea Peoples using combined arms including chariots, survived. The military revolution hypothesis accounts for the rapidity and selectivity of collapse.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A6", "A4"]
+    },
+    {
+      "content": "{\"claim\": \"A prolonged drought triggered famine that unraveled the interconnected palatial trade and diplomatic network, causing cascading collapse.\", \"mechanism\": \"Climate change reduced agricultural yields across the Eastern Mediterranean, leading to grain shortages, famine, and elite delegitimization. Palaces dependent on complex redistribution and long-distance trade collapsed when their stores failed.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Nile flood records and grain storage accounts show Egypt suffered equivalent or worse harvest failures than affected regions during the collapse window.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to the Nile's perennial flooding being more resilient than rain-fed agriculture elsewhere, and its massive grain storage infrastructure. The drought hypothesis is widely discussed but struggles with precise chronological alignment.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A3", "A1"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a mass psychogenic epidemic of despair spreading along trade routes, causing civilizational suicide.\", \"mechanism\": \"Dense palatial bureaucracies created existential ennui among elites who, upon encountering a novel memetic pathogen—a nihilistic belief system—voluntarily abandoned their posts, dismantled institutions, and ceased reproduction, spreading the malaise via diplomatic and trade contacts.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows violent destruction layers, hoards of valuables hidden in panic, and skeletal remains with perimortem trauma at multiple sites.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, speculative account emphasizing ideological contagion over material factors. Egypt's survival is attributed to its more resilient state religion and cultural immune system. Highly criticizable for ignoring clear evidence of violence.\"}",
+      "typicality": 0.1,
+      "neighbours": ["A9"]
+    }
+  ]
+}

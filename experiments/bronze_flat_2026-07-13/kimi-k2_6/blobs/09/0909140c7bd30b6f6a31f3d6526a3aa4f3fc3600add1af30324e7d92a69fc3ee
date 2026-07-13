@@ -1,0 +1,21 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Climate-driven systems collapse (megadrought + seismic clustering)\", \"mechanism\": \"Environmental-stochastic; cascading resource failure\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt proper (Nile hydrology buffer)\", \"Sea Peoples as independent cause\"]}, \"forbidden\": [{\"case\": \"Paleoclimate proxies show no significant aridification anomaly c.1200 BC\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian collapse contemporaneous with others rather than delayed/surviving diminished\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Annual-dispatch register; deterministic-naturalist angle; compound trigger structure\"}",
+      "typicality": 0.35,
+      "neighbours": ["A1", "A2", "A7"]
+    },
+    {
+      "content": "{\"claim\": \"Network fragility from overcentralized palatial redistributive economies\", \"mechanism\": \"Institutional-sociological; nodes-and-hubs vulnerability\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt (decentralized temple economies)\", \"climate-first explanations\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust non-palatial economic networks co-surviving or replacing collapse\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egypt exhibiting comparable palatial centralization without survival\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Monograph register; structural-functional angle; network topology structure\"}",
+      "typicality": 0.72,
+      "neighbours": ["A4", "A5", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"Contagion of military innovation (ironworking + naval raiding) diffused via displaced mercenaries\", \"mechanism\": \"Technological-military; actor-driven diffusion\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt (absorbed and adapted innovations militarily)\", \"environmental determinism\"]}, \"forbidden\": [{\"case\": \"Iron weapons/armor absent from destruction layers pre-dating collapse horizons\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egypt defeated rather than incorporating Sea Peoples technologically\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Biography register; agentic-strategic angle; cascade/epidemic structure\"}",
+      "typicality": 0.18,
+      "neighbours": ["A3", "A8", "A9", "A10", "A11"]
+    }
+  ]
+}
+```

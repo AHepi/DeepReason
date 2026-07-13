@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid climatic shift—the 3.2 ka BP event—that triggered widespread drought, crop failures, and famine across the Eastern Mediterranean, fatally weakening the interconnected palatial redistributive economies.\", \"mechanism\": \"Climatic drought (3.2 ka BP event) → agricultural collapse → famine → breakdown of palatial redistributive systems → elite infighting and population migration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian grain prices remained stable and Nile flood records show no anomalies between 1220-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic climate/environmental hypothesis. Egypt survived because the Nile’s annual flood was buffered against the Mediterranean-wide drought, allowing grain reserves to persist while trade partners starved.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A1", "A2", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid military revolution in infantry tactics and mass-produced iron weapons that rendered the bronze-age chariot aristocracies obsolete, enabling disenfranchised inland and lower-class groups to overwhelm the palaces.\", \"mechanism\": \"Iron smelting proliferation → cheap, mass-produced infantry weapons → shift from elite chariot warfare to mass infantry tactics → internal revolts and external ‘Sea Peoples’ invasions overwhelm chariot-based palace armies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological strata show iron weapons were rare before 1100 BC and bronze remained the dominant military metal through the collapse horizon\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account leans on a technological-determinist ‘infantry revolution’ thesis. Egypt survived because its military adapted faster, integrating Sherden and other mercenaries, and because the Nile’s geography favoured defence against mass infantry assaults.\"}",
+      "typicality": 0.3,
+      "neighbours": ["A3", "A9", "A7"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of the Late Bronze Age ‘Club of Great Powers’ diplomatic system, where a single shock—the destruction of the Hittite core by the Sea Peoples—severed the mutual-aid and trade protocols that had stabilised the entire network, causing a domino effect of economic strangulation and legitimacy crises for client kings.\", \"mechanism\": \"Sea Peoples destroy Hittite core → diplomatic network loses central node → trade and mutual-aid protocols collapse → remaining palaces face simultaneous economic crisis and loss of ideological legitimacy → internal rebellion and abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"The Hittite capital Hattusa shows evidence of gradual abandonment before any destruction layer, and Ugarit’s destruction letters describe attacks from the sea, not a loss of trade partners\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a systems-collapse account emphasising network fragility. Egypt survived because it was a net grain exporter and less dependent on the diplomatic gift-exchange network for staple goods, and because it successfully repelled the Sea Peoples at the Battle of the Delta.\"}",
+      "typicality": 0.5,
+      "neighbours": ["A4", "A5", "A8", "A10", "A11"]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A severe multi-year drought disrupted rain-fed agriculture across the Eastern Mediterranean, leading to famine, internal rebellion, and the abandonment of palatial centers.\", \"mechanism\": \"Climatic shift reduced crop yields, eroding the resource base needed to sustain administrative elites, military forces, and trade networks, triggering a cascade of internal revolts and migrations.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"If Egypt had experienced the same degree of agricultural collapse and internal rebellion as the Hittite or Mycenaean states during the same period, the drought-only account would be refuted.\"}], \"prose_notes\": \"Egypt's survival is attributed to the Nile's predictable flood cycle, which was less dependent on local rainfall and buffered by grain storage, allowing it to weather the climatic downturn that devastated rain-fed agrarian systems elsewhere.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A3", "A5", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"The simultaneous collapse was caused by a rapid, disruptive military innovation—the shift from chariot-based elites to massed infantry tactics—which democratized warfare and destabilized the existing palace-controlled power structures.\", \"mechanism\": \"The adoption of new weapons (like the Naue II sword) and infantry formations by peripheral or lower-status groups (the 'Sea Peoples') overwhelmed the expensive, elite-focused chariot armies, making the palatial system militarily obsolete.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"If Egypt had not successfully repelled the Sea Peoples using similar chariot-based and infantry tactics at the Battle of the Delta, the claim that the military innovation was universally decisive would be refuted.\"}], \"prose_notes\": \"Egypt's survival is explained by its ability to adapt its military and its geographical buffer, allowing it to defeat the Sea Peoples in a defensive battle, unlike the other states that were overrun or fatally weakened by them.\"}",
+      "typicality": 0.6,
+      "neighbours": ["A6", "A8"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a general systems collapse where the specialized, interdependent palatial economies failed after a minor disruption, because their extreme complexity and lack of redundancy made them fragile.\", \"mechanism\": \"A small shock (e.g., a single bad harvest or a temporary trade disruption) cascaded through the tightly coupled network, causing the specialized production of goods, administrative control, and long-distance trade to unravel rapidly and irreversibly.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"If the palatial centers had shown evidence of a slow, gradual decline with diversified and resilient local economies rather than a rapid, simultaneous collapse of specialized administrative functions.\"}], \"prose_notes\": \"Egypt survived because its economy was less specialized and less tightly coupled to the broader Eastern Mediterranean trade network; its redistributive economy was more vertically integrated and self-sufficient, making it resilient to network failures.\"}",
+      "typicality": 0.4,
+      "neighbours": ["A1", "A2", "A3"]
+    }
+  ]
+}

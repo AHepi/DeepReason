@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—a pandemic decimating bureaucratic and artisan classes—predicts a primary archaeological signature of mass burials without perimortem violence, as the population succumbs to disease. However, the target explicitly lists as a forbidden case: 'Archaeological or textual evidence shows the destruction layers are associated with widespread conflagration and violent trauma on human remains, rather than mass burials without perimortem violence.' This forbidden case is precisely what the standard archaeological record shows for the Mycenaean palatial centers, Hittite Anatolia, and Ugarit—sites the target claims to cover. The target thus immunizes itself against the very evidence that would falsify its mechanism, violating the standard's requirement that a historical-mechanism account must state forbidden cases that are concrete observations which could realistically have obtained. The target's own scope admits the evidence exists but excludes it from counting against the theory.",
+  "counterexample": [
+    "The destruction layer at Mycenaean Pylos contains widespread burning and conflagration debris, not a pattern of unburied plague victims or mass graves without violence.",
+    "Textual evidence from Ugarit (tablet RS 18.147) describes the city under attack and burning, not a plague-induced abandonment.",
+    "Hattusa, the Hittite capital, shows evidence of destruction by fire and violent conflagration, not mass burials consistent with epidemic mortality."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic fragility in hyper-specialized, interdependent palace economies that could not absorb simultaneous shocks to trade routes and grain supplies.\", \"mechanism\": \"Cascading failure of just-in-time redistribution networks where the loss of one node (e.g., Ugarit) severed critical supply lines for others (e.g., Hittite grain from Egypt), leading to rapid internal destabilization and peasant revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continued robust long-distance trade between surviving nodes during the initial phase of collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate leans on the 'systems collapse' theory, emphasizing economic interdependence over military defeat. It explains the simultaneity via network topology rather than a single invading force.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"A climate-induced megadrought lasting decades caused widespread famine, triggering mass migration and conflict over dwindling resources.\", \"mechanism\": \"Environmental stress reduced agricultural yields below subsistence levels, forcing pastoralist populations to migrate aggressively into settled zones while undermining the tax base of centralized palaces.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Nile Delta region\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data indicating normal or above-average precipitation in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the 'climate change' hypothesis. It is highly typical but relies heavily on proxy data interpretation. The exclusion of Egypt is justified by the Nile's unique flooding mechanism independent of local Levantine rains.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate, coordinated insurrection by subaltern classes (peasants, slaves, displaced pastoralists) exploiting the distraction of elite chariot warfare.\", \"mechanism\": \"Internal social contract breakdown where the cost of maintaining warrior elites exceeded their protective value, leading to synchronized uprisings that targeted administrative centers specifically while sparing rural production.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as external invaders\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence of significant reconstruction of palace fortifications immediately prior to destruction layers, suggesting preparation for external rather than internal threats.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, Marxist-leaning interpretation that reframes 'Sea Peoples' not as invaders but as a label for displaced internal refugees. It challenges the external invasion narrative dominant in popular history.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.35
+    }
+  ]
+}

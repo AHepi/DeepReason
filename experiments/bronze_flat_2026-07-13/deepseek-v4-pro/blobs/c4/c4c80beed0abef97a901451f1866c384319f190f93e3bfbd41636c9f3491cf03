@@ -1,0 +1,46 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A systemic drought, evidenced by paleoclimatic data, triggered a cascade of famines that destabilized the highly specialized, trade-dependent palatial economies, leading to internal revolts and the collapse of central authorities.\", \"mechanism\": \"Reduced precipitation caused crop failures across the Eastern Mediterranean. The palatial economies, optimized for surplus extraction and redistribution of grain, olive oil, and wine, could not adapt. Famine led to social unrest, elite delegitimization, and the violent destruction of palaces, which severed the trade networks that had previously buffered against local shortfalls.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data shows the climate was stable and wet during the collapse period.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Archaeological evidence shows no signs of widespread malnutrition or famine in the affected regions.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The destruction layers in Mycenaean and Hittite centers are securely dated to a period of peak agricultural output.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This explanation accounts for Egypt's survival by noting the Nile's predictable, non-rainfall-dependent agriculture, which made it resilient to the drought that crippled rain-fed systems. The mechanism links environmental trigger to socio-political collapse through the specific vulnerability of the palatial economic structure.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed08e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5e50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a 'General Systems Collapse' where a minor perturbation in one part of the tightly coupled trade and diplomacy network cascaded into a catastrophic, domino-effect failure of the entire Eastern Mediterranean system.\", \"mechanism\": \"The palatial civilizations formed a complex, interdependent network. A localized disruption (e.g., a dynastic struggle in Mycenae, a raid on a trade emporium) interrupted the flow of critical resources like tin and copper. This caused secondary failures in other centers, leading to a runaway feedback loop of economic contraction, elite delegitimization, and the eventual, near-simultaneous collapse of all nodes in the network.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"The affected civilizations were largely autarkic and did not depend on long-distance trade for essential resources.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The collapse occurred sequentially over 200 years, not within a single 50-year period.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"There is no archaeological evidence for the existence of a complex trade network linking these regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This conjecture shifts the cause from an external shock (earthquake, drought, invasion) to an internal systemic fragility. Egypt's survival is explained by its relative economic independence and lesser integration into the specific, brittle trade network that linked the Aegean, Anatolia, and the Levant.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed08e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5e50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A specific military innovation—the adoption of the Naue II slashing sword and new infantry tactics by 'barbarian' mercenaries—allowed these groups to overwhelm the chariot-based armies of the palaces, leading to a rapid and violent military collapse.\", \"mechanism\": \"The palatial states relied on elite chariot warriors. Peripheral or mercenary groups, equipped with cheap, mass-produced Naue II swords and javelins, developed effective swarm tactics that neutralized chariot charges. These groups, initially hired as mercenaries, turned on their employers, sacking the poorly defended palatial centers in a short, violent wave.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\"], \"excludes\": [\"Egypt\", \"Ugarit\", \"Levantine city-states\"]}, \"forbidden\": [{\"case\": \"The Naue II sword was not in widespread use until after the palatial destructions.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The destruction layers show evidence of prolonged sieges and widespread burning from external attack.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records describe the Sea Peoples as fighting primarily as chariot-based aristocracies.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This conjecture is more atypical as it focuses narrowly on a military-technological shift and limits its scope to the Aegean and Anatolia, where the Naue II sword was prevalent. It explains the survival of Egypt through their successful adaptation and defeat of these new infantry tactics, as recorded at Medinet Habu.\"}",
+      "typicality": 0.4,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5e50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "d7dfc6e3935c5ab35dd0a94a473140a9025c3d07b272b83db40ebd3e1443f"
+        }
+      ]
+    }
+  ]
+}

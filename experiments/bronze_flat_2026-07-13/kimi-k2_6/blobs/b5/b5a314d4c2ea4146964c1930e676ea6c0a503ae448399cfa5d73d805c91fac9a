@@ -1,0 +1,9 @@
+```json
+{
+  "specs": [
+    "{\"angle\": \"climatic-determinist\",\"mechanism_family\": \"environmental-catastrophism\",\"structure\": \"monocausal-teleological\",\"register\": \"natural-sciences-quantitative\"}",
+    "{\"angle\": \"systems-vulnerability\",\"mechanism_family\": \"network-cascade-failure\",\"structure\": \"complex-adaptive\",\"register\": \"social-sciences-formal\"}",
+    "{\"angle\": \"imperial-agency\",\"mechanism_family\": \"political-military-contingency\",\"structure\": \"actor-centered-narrative\",\"register\": \"humanistic-thick-description\"}"
+  ]
+}
+```

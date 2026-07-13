@@ -1,0 +1,104 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "claim": "The collapse was triggered by a rapid, systemic shift in infantry warfare technology (the 'Naue II' cut-and-thrust sword and javelin) that neutralized the military advantage of the chariot-riding palatial elites, enabling massed infantry to overwhelm the interdependent palace states.",
+        "mechanism": "The diffusion of cheap, mass-producible bronze slashing swords and javelins allowed large numbers of non-elite infantry (including marauding 'Sea Peoples') to defeat chariot-based armies. The palatial system's legitimacy and resource extraction depended on elite chariot warriors controlling territory and trade routes. Once infantry could reliably defeat chariots, the palaces lost their coercive edge, leading to military defeat, loss of trade route control, and rapid administrative collapse across the interconnected network.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows Naue II swords and javelins were already widespread and integrated into palatial armies for generations before the collapse, with no disruption to palace control.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records from the period depict their own forces as still primarily chariot-based and successfully repelling Sea Peoples with those same chariot tactics, without adopting massed infantry formations.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This is a classic 'military revolution' conjecture. It explains the simultaneity (technology diffuses fast), the selectivity (Egypt's narrow Nile geography negated the infantry advantage, allowing chariots to remain effective), and the total collapse of palace institutions (the elite's military basis was destroyed). Typicality 0.7: a well-known but still debated hypothesis."
+      },
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473140a9025c3d07b272b83db40eb3ebebe143f3"
+        }
+      ]
+    },
+    {
+      "content": {
+        "claim": "A prolonged mega-drought across the Eastern Mediterranean (c. 1250-1100 BC) caused cascading agricultural failures, famine, and mass migration, which fractured the specialized, interdependent palatial economies that relied on surplus extraction and long-distance trade, while Egypt's Nile-based agriculture provided a resilient buffer.",
+        "mechanism": "The palatial system was a tightly coupled network of specialized production (e.g., Mycenaean olive oil, Cypriot copper) and elite-mediated exchange. A multi-year drought, evidenced by paleoclimate proxies, collapsed the agricultural base needed to sustain the non-farming administrative and artisan classes. This triggered internal rebellions, the breakdown of the trade network, and population movements (including the 'Sea Peoples') seeking resources. Egypt survived because the Nile's predictable flood, fed by distant equatorial rainfall, was less affected by the Mediterranean drought, allowing it to maintain agricultural output and military defense.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "High-resolution paleoclimate data from the region shows no significant deviation from normal rainfall patterns during the period 1250-1100 BC.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records from the period detail widespread famine and internal strife, including the first recorded labor strike, indicating its agricultural system was equally devastated by the drought.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This is the environmental-stress hypothesis, often linked to climate change. It accounts for the wide geographic scope and the interconnected nature of the collapse. The exclusion of Egypt is explained by its unique hydrological system. Typicality 0.8: a dominant, widely-cited explanation, though the exact role of climate is still debated."
+      },
+      "typicality": 0.8,
+      "refs": []
+    },
+    {
+      "content": {
+        "claim": "The collapse was a 'systems accident' resulting from the inherent fragility of the palatial economic model: a breakdown in the specialized, hierarchical redistribution network triggered by a minor shock (like a single earthquake or raid) led to a catastrophic cascade of failures across the tightly coupled system, while Egypt's more diversified and less centralized economy absorbed the shock.",
+        "mechanism": "The palatial centers were nodes in a complex, long-distance trade network for strategic goods (tin, copper, grain). Each palace depended on others for essential resources. A disruption at one node—such as an earthquake destroying a key port or a raid severing a trade route—would halt production chains. Because the system had no redundancy and relied on administrative control rather than market mechanisms, the failure cascaded: famine led to social unrest, which led to further administrative breakdown, cutting off more trade, and so on. Egypt, with its broader agricultural base and more localized redistribution, was less dependent on any single trade link and could thus absorb the shock.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows the palatial economies were highly diversified and maintained large, local agricultural surpluses, making them resilient to the loss of any single trade link.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "The collapse occurred simultaneously across hundreds of miles within a very short timeframe, inconsistent with a single-point failure cascade that would take decades to unfold.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This applies Perrow's 'normal accident' theory to the Bronze Age collapse. It explains the simultaneity as a rapid cascade effect through a tightly coupled system. The exclusion of Egypt is due to its less centralized, more autarkic economic structure. Typicality 0.5: a sophisticated but less mainstream explanation that emphasizes internal systemic fragility over external shocks."
+      },
+      "typicality": 0.5,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a5aafc7a335580543dc67807f9790f1067f575f6deee70695f213489a5450d86"
+        }
+      ]
+    }
+  ]
+}

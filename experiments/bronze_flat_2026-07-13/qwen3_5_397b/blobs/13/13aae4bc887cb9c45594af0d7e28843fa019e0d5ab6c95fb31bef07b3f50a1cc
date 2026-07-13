@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze supply chain triggered by the disruption of tin sources in Central Asia, leading to economic paralysis.\", \"mechanism\": \"Supply chain cascading failure: The interdependence of palace economies on long-distance tin trade meant that a single point of failure (e.g., Lapis Lazuli road disruption) caused immediate inability to produce bronze weapons and tools, collapsing military and agricultural capacity.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local bronze production or alternative metal usage (iron) continuing uninterrupted in Ugarit during the initial disruption phase.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the high specialization hypothesis; typical explanation focusing on economic fragility.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"A climate-induced mega-drought lasting 300 years forced mass migration of agrarian populations, overwhelming static palace defense systems through sheer demographic pressure.\", \"mechanism\": \"Ecological push-factor: Persistent aridification reduced grain yields below subsistence levels, turning settled farmers into mobile raiders (Sea Peoples) who could not be stopped by chariot-based armies designed for set-piece battles, not guerrilla warfare or siege defense against desperate masses.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt's Nile Delta\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing normal or increased precipitation levels in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Integrates environmental determinism with migration theory; highly standard but dependent on specific pollen core interpretations.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an internal class revolt where disenfranchised lower classes and semi-nomadic peripherals allied to dismantle the extractive palace bureaucracy, exacerbated by a loss of ideological legitimacy.\", \"mechanism\": \"Sociopolitical implosion: The rigid redistribution economy created a large underclass with no stake in the system; when central authority showed weakness (perhaps from minor raids), the internal social contract shattered, leading to the burning of palaces from within rather than external conquest.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Purely external 'Sea Peoples' invasion narratives\"]}, \"forbidden\": [{\"case\": \"Evidence that the destruction layers of major palaces contain exclusively foreign weaponry types or lack signs of internal looting prior to burning.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Atypical emphasis on internal agency over external shock; challenges the 'invasion' paradigm by positing the 'Sea Peoples' as a symptom rather than the sole cause.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        },
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

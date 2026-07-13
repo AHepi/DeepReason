@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of international trade networks due to seismic activity disrupting port infrastructure.\", \"mechanism\": \"A cluster of earthquakes damaged key harbor cities, halting the bronze and grain trade essential for palace economies, leading to internal famine and revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows Ugarit's harbor remained structurally intact post-1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the 'Earthquake Storm' hypothesis; typical but contested due to lack of uniform seismic layers.\"}",
+      "typicality": 0.75,
+      "neighbours": [
+        "A3",
+        "A9"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an internal class revolution triggered by the obsolescence of the chariot-warrior elite.\", \"mechanism\": \"New infantry tactics (massed spearmen) rendered chariot aristocracies militarily obsolete, allowing disenfranchised populations to overthrow centralized palaces.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\"], \"excludes\": [\"Sea Peoples as external invaders\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Linear B tablets indicate palace redistribution systems were expanding immediately prior to destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Aligns with Marxist historiography; atypical in excluding external migration pressures entirely.\"}",
+      "typicality": 0.35,
+      "neighbours": [
+        "A6",
+        "A1"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A hyper-localized pandemic of ergotism or anthrax decimated the administrative core of palace societies.\", \"mechanism\": \"Contaminated grain stores or livestock led to mass mortality among the literate bureaucratic class, causing immediate administrative paralysis without widespread physical destruction.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Mycenaean Greece\", \"Ugarit\"], \"excludes\": [\"Rural villages\", \"Nomadic groups\"]}, \"forbidden\": [{\"case\": \"Skeletal remains from Pylos show no signs of epidemic disease or mass graves dated to 1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly atypical speculative candidate; explains sudden loss of literacy and administration better than invasion theories.\"}",
+      "typicality": 0.05,
+      "neighbours": [
+        "A12",
+        "A4"
+      ]
+    }
+  ]
+}

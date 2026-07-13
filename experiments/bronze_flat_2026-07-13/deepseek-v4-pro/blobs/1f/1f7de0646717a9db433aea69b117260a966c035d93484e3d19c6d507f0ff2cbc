@@ -1,0 +1,106 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "claim": "The collapse was triggered by a rapid, disruptive change in infantry tactics and weaponry (the 'Infantry Revolution') that rendered the elite chariot-based armies of the Mycenaean, Hittite, and Levantine palaces obsolete, while Egypt's survival is explained by its successful and rapid adoption of these new mercenary tactics.",
+        "mechanism": "The introduction of massed, highly mobile infantry (e.g., 'Sea Peoples' or Sherden-style mercenaries) wielding javelins, long swords, and using swarming tactics neutralized the military advantage of the chariot-riding aristocratic warrior class. Palatial states that depended on chariot warfare for territorial control and prestige collapsed when their military elite was defeated, while Egypt, under Ramesses III, quickly integrated these foreign infantry as mercenaries and reorganized its own forces, thus surviving the initial shock.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit and Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows that the palatial states collapsed before the widespread adoption of new infantry tactics and weapons in the region.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records show that they exclusively used traditional chariot-based forces to defeat the Sea Peoples, with no evidence of adopting new infantry tactics.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This conjecture inverts the standard 'Sea Peoples' narrative: the military innovation is the primary driver, not a desperate migration. The collapse is a consequence of military-technological obsolescence. Egypt's survival is not due to its strength, but its adaptability. This explains the simultaneity of collapse across different political entities."
+      },
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473a140902a5c3d07b272b3db40ebd3ebe144f3d"
+        }
+      ]
+    },
+    {
+      "content": {
+        "claim": "The collapse was a cascading failure of a specialized, interdependent 'palace economy' network triggered by a prolonged drought that caused a primary grain shortage, leading to famine, elite delegitimization, and a domino effect of trade disruption and refugee movement that Egypt survived only because of the Nile's unique, predictable, and non-rain-dependent floodplain agriculture.",
+        "mechanism": "The Late Bronze Age palatial system was a tightly coupled network of specialized economies (e.g., grain from Egypt, copper from Cyprus, tin from Afghanistan, textiles from Syria). A multi-year drought in the grain-producing regions (Anatolia, Greece) caused a primary food shortage. Palaces, whose legitimacy rested on storing and redistributing surplus, failed to feed their populations. This triggered internal revolts, the collapse of the inter-palatial trade network, and subsequent waves of desperate refugees ('Sea Peoples'). Egypt, irrigated by the Nile's predictable flood rather than rainfall, maintained agricultural output and thus its central authority, allowing it to absorb and repulse the resulting migrations.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit and the Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Paleoclimatic data shows a wetter-than-average period in the Eastern Mediterranean precisely during the 1200-1150 BC collapse window.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Archaeological evidence shows Egyptian grain shipments to the collapsing regions increased during the period, indicating a surplus-driven trade rather than a systemic famine.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This conjecture places climate as the ultimate cause but emphasizes the systemic economic vulnerability as the proximate mechanism. Egypt's survival is a negative case: it lacked the specific vulnerability (rain-fed agriculture) that doomed the others. This explains why the collapse was simultaneous and total for the interconnected network but spared the ecologically distinct Nile Valley."
+      },
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a5aafc7a335580543dc67807f9790f1067f575f6deee70695f213489a5450d86"
+        }
+      ]
+    },
+    {
+      "content": {
+        "claim": "The collapse was a synchronized, elite-driven dismantling of the palatial system, a 'Systemic Revolt' by subordinate social groups (merchants, mercenaries, rural producers) who had grown in power and resented the extractive, rigid palatial hierarchy, while Egypt's survival is explained by its pharaonic state's ability to violently suppress this internal revolt and re-centralize power.",
+        "mechanism": "Over centuries, the palatial redistributive economy inadvertently empowered a 'middle class' of merchants, artisans, and mercenaries who operated outside the palace's direct control. A conjunctural crisis (perhaps a bad harvest or a disruption in the metals trade) provided the spark. These groups, possibly in alliance with disenfranchised rural populations, launched a coordinated, violent revolt, burning the palaces (the symbols of extraction) and dismantling the administrative system (Linear B, cuneiform). Egypt, with a more centralized and theocratic state backed by a powerful standing army, crushed its own internal revolt, reasserting pharaonic control and absorbing the displaced mercenaries into its own forces.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit and the Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows the palaces were destroyed by external invaders, not by internal revolt, with no signs of class-based targeting of elite areas.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records from the period describe a strong, unified state with no internal revolts, contradicting the idea that Egypt survived by suppressing a similar internal uprising.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This conjecture reframes the 'Sea Peoples' not as external invaders but as internal rebels and mercenaries who turned on their masters. The simultaneity is explained by the shared structural vulnerability of the palatial system across the region. Egypt's survival is a counter-case: its state was strong enough to suppress the same internal contradictions, a classic 'survival of the most centralized' argument."
+      },
+      "typicality": 0.5,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "74fde5320d6c79520ea82d22a3e2c25a5ecc8e0cb50c3197058c5a3b0ecd284b"
+        }
+      ]
+    }
+  ]
+}

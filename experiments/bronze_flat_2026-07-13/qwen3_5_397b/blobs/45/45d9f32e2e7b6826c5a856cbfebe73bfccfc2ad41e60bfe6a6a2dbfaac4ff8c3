@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy when faced with prolonged drought and seismic activity, which broke the just-in-time supply chains essential for elite legitimacy.\", \"mechanism\": \"Ecological shock (drought/earthquakes) triggered a cascade failure in centralized bureaucratic logistics, leading to internal revolt and abandonment of palatial centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage and local autonomy in Mycenaean citadels during the terminal phase.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the fragility of hyper-specialized palace economies; explains simultaneity via regional climate event.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the rapid diffusion of inexpensive iron weaponry and new infantry tactics that rendered the chariot-based aristocratic military monopoly obsolete overnight.\", \"mechanism\": \"Technological democratization of warfare allowed decentralized groups to overwhelm expensive, rigid chariot armies, causing a sudden loss of elite coercive power.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that iron weapons were rare or ritually used rather than mass-produced for infantry during the 12th century BC destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on military sociology and technology; struggles with why Egypt (facing same foes) survived.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"A synchronized collapse of long-distance maritime trade networks caused by a pandemic or hyper-contagious social panic led to the instantaneous evaporation of the luxury goods basis for palatial authority.\", \"mechanism\": \"Epidemiological or psychological shock severed maritime links, causing immediate economic isolation and loss of prestige goods necessary for maintaining client-state loyalty.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Inland Assyria\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Bioarchaeological data showing no spike in mortality or pathogen presence in mass graves from 1200-1150 BC across the Eastern Mediterranean.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly speculative but accounts for speed and coastal focus; excludes inland powers less dependent on sea trade.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.25
+    }
+  ]
+}

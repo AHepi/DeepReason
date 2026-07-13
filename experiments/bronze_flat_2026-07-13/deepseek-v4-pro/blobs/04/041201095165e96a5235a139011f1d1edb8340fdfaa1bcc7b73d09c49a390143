@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target declares a school policy stance of 'mechanist' for 'school-0', but the provided artifact contains no definition, justification, or substantive content explaining what 'mechanist' entails in this context. A stance label without any supporting policy text, principles, or implementation details is vacuous and fails to constitute a meaningful school policy artifact.",
+  "counterexample": null
+}

@@ -1,0 +1,10 @@
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) because its proposed mechanism ('prolonged megadrought... caused crop failures') is logically incompatible with the forbidden case ('normal rainfall levels in the Aegean and Anatolia between 1200-1150 BC'). If rainfall was normal in these core regions (which include Mycenaean Greece and Hittite Anatolia), the specific causal chain of drought-induced crop failure triggering mass migration cannot have occurred as described. The target fails to provide an alternative mechanism for famine or migration that operates independently of the drought, rendering the 'domino effect' claim unsupported by the physical reality defined in the forbidden case.",
+  "counterexample": [
+    {
+      "case": "Paleoclimatic data indicates normal rainfall levels in the Aegean and Anatolia between 1200-1150 BC.",
+      "eval": "rubric:std-hist"
+    }
+  ]
+}

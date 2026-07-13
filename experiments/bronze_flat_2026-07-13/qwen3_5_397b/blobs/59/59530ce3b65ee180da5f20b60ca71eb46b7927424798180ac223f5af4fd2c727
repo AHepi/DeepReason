@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a synchronized failure of the international bronze trade network due to tin scarcity.\", \"mechanism\": \"Resource depletion led to economic paralysis and inability to maintain military elites.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant tin stockpiles in Ugarit dated to 1190 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on supply chain fragility rather than invasion.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A3", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"A sudden shift in infantry tactics rendered the chariot-based aristocratic military obsolete.\", \"mechanism\": \"Decentralized light infantry overwhelmed rigid state armies, causing political fragmentation.\", \"scope\": {\"covers\": [\"Sea Peoples\", \"Mycenaean Greece\", \"Levantine city-states\"], \"excludes\": [\"Assyria\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Records showing chariot units successfully defeating infantry bands after 1175 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Emphasizes technological and tactical disruption over environmental factors.\"}",
+      "typicality": 0.60,
+      "neighbours": ["A6", "A4"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an internal sociopolitical implosion triggered by the disenfranchisement of lower classes.\", \"mechanism\": \"Over-centralization created brittle societies that fractured under minor stress without external invasion.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Mycenaean Greece\"], \"excludes\": [\"Sea Peoples\", \"Egypt\", \"Philistines\"]}, \"forbidden\": [{\"case\": \"Contemporary inscriptions detailing massive foreign fleet landings prior to palace destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Rejects the 'Sea Peoples' as primary agents, viewing them as symptoms rather than causes.\"}",
+      "typicality": 0.25,
+      "neighbours": ["A1", "A12"]
+    }
+  ]
+}

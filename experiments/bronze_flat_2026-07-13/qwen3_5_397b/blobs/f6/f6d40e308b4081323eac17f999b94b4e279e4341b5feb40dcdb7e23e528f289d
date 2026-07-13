@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Systemic fragility of hyper-specialized palatial economies triggered a cascading failure upon the disruption of any single node.\", \"mechanism\": \"The Late Bronze Age civilizations operated as a tightly coupled, just-in-time supply chain for bronze (copper from Cyprus, tin from Afghanistan). When maritime trade routes were severed by initial shocks (earthquakes or raids), the inability to import tin halted bronze production, crippling military and agricultural capacity, leading to rapid internal collapse and abandonment of centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of significant local tin stockpiles or alternative bronze production methods sustaining palaces for decades after trade cessation.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' theory, highly typical in current historiography, emphasizing economic interdependence over single causes.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"A revolutionary shift in military technology and tactics rendered the chariot-based aristocratic order obsolete overnight.\", \"mechanism\": \"The widespread adoption of light infantry tactics, utilizing javelins and long swords by decentralized groups (including the Sea Peoples), overwhelmed the rigid, expensive chariot corps that formed the backbone of palace armies. The social contract, based on the king's monopoly on violence via chariots, dissolved as local warlords and invaders proved the superiority of flexible infantry, leading to the burning of administrative centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Sea Peoples\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence showing chariot units successfully defeating infantry-heavy forces in major battles during the collapse period (e.g., Kadesh II equivalent).\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military-determinist explanation; typical but often criticized for oversimplifying the social dimensions of the collapse.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "{\"claim\": \"A multi-decadal 'megadrought' caused by climate change induced mass migration that overwhelmed the demographic carrying capacity of the region.\", \"mechanism\": \"Paleoclimatic data indicates a severe, prolonged drought across the Eastern Mediterranean starting c. 1200 BC. This caused catastrophic crop failures, leading to famine-driven mass migrations from the hinterlands and the north. These desperate populations moved south and east, not as organized armies but as refugees, consuming resources and destabilizing the grain-dependent palace bureaucracies which could not redistribute food. Egypt survived only due to the Nile's independent hydrology.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Sediment core or pollen data showing normal or above-average precipitation levels in the Levant and Anatolia between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate in older historiography but gaining high traction recently; included here as a distinct environmental driver rather than a purely systemic or military one.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.65
+    }
+  ]
+}

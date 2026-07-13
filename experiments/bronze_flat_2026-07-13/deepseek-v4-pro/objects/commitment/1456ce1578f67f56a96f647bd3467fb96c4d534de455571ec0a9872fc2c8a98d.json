@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"The collapse was a gradual process occurring over a century, with each center failing independently due to local factors, not a simultaneous network failure."},"steps":100000,"time_ms":2000},"eval":"rubric:std-hist","id":"fc:a6810818a6c3","observation_valued":false},"id":"fc:a6810818a6c3","schema":"commitment"}

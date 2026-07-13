@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy triggered by prolonged drought and seismic activity, which severed the fragile supply chains holding the interconnected states together.\", \"mechanism\": \"Cascading resource scarcity led to the inability of centralized bureaucracies to pay mercenaries or feed populations, resulting in internal revolt and external migration pressures that the rigid systems could not absorb.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed layers of Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating climate data (drought) with socio-economic fragility. It aligns with current consensus on multi-causal environmental stress.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was primarily driven by the rapid diffusion of inexpensive iron weaponry and new infantry tactics that democratized violence, rendering the chariot-based aristocratic military monopoly obsolete overnight.\", \"mechanism\": \"Technological disruption allowed non-state actors and marginalized groups to challenge palace armies effectively, leading to the swift overthrow of elite classes who could not adapt their martial traditions quickly enough.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician survivors\"]}, \"forbidden\": [{\"case\": \"Dating of widespread iron artifact proliferation to post-1100 BC, after the main destruction layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A bold, technology-focused explanation that challenges the primacy of environmental factors. It is atypical because recent scholarship suggests iron working was not yet widespread enough to be the sole primary cause, but it offers a distinct mechanistic angle on social upheaval.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.45
+    },
+    {
+      "content": "{\"claim\": \"The simultaneity of collapse is an illusion created by modern periodization; in reality, a highly contagious ideological contagion regarding the illegitimacy of divine kingship spread via merchant networks, causing synchronized voluntary abdication and dismantling of palatial structures rather than violent destruction.\", \"mechanism\": \"Memetic transmission of anti-monarchist sentiment through the literate scribal class eroded the theological foundation of the palace economies, leading to a coordinated, non-violent dissolution of authority that left archaeological layers ambiguous.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Rural hinterlands\"]}, \"forbidden\": [{\"case\": \"Evidence of mass burning, unburied skeletons, or violent trauma in the destruction horizons of major palaces\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a highly atypical, speculative candidate proposing a sociological/ideological cause over material ones. It directly contradicts the standard view of violent invasion and fire, making it easily falsifiable but theoretically interesting as a 'covering principle' for non-material collapse.\"}",
+      "refs": [],
+      "typicality": 0.15
+    }
+  ]
+}

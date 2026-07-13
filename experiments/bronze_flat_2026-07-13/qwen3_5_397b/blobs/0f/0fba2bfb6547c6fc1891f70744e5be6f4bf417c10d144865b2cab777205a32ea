@@ -1,0 +1,1 @@
+{"contract":"conjecturer.direct.v1","path":"","error":"Input should be a valid dictionary or instance of ConjecturerOutput","received":"complete JSON value","allowed":"type='object'","repair_scope":"","skeleton":{"candidates":[{"content":"","typicality":0.0}]}}

@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the highly specialized, interdependent palace redistribution networks when faced with simultaneous disruptions to trade routes.\", \"mechanism\": \"Cascading supply chain collapse: The interruption of tin and copper flows paralyzed bronze production, leading to economic paralysis and loss of elite legitimacy across the tightly coupled system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local subsistence agriculture continuing uninterrupted in palace centers during the destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' theory, emphasizing fragility through hyper-specialization.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"A rapid climatic shift (300-year drought) reduced agricultural surplus below the threshold required to sustain the bureaucratic elite and standing armies.\", \"mechanism\": \"Ecological carrying capacity breach: Prolonged aridification led to famine, depopulation, and internal revolts that overwhelmed centralized authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Nile Delta regions\", \"Northern Assyrian highlands\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing normal or increased precipitation levels in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on environmental determinism as the primary driver, explaining the geographic specificity via rainfall dependency.\"}",
+      "refs": [],
+      "typicality": 0.78
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an intentional, coordinated insurgency by subject populations and marginalized groups exploiting the weakening of central military monopolies.\", \"mechanism\": \"Asymmetric warfare and class revolt: The diffusion of iron-working allowed non-elites to arm themselves, breaking the chariot-aristocracy's monopoly on violence.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as external invaders\"]}, \"forbidden\": [{\"case\": \"Absence of iron weapons in destruction layers predating the final collapse of the palaces.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical social-revolutionary take that reframes 'Sea Peoples' not as invaders but as displaced internal refugees or rebels.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.35
+    }
+  ]
+}

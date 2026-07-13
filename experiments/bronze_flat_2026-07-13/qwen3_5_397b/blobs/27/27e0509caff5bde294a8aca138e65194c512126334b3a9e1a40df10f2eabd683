@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze trade network due to the sudden unavailability of tin, triggering economic cascade failure.\", \"mechanism\": \"Supply chain fragility: The palatial economies were hyper-specialized and dependent on long-distance tin imports from Afghanistan or Europe; a disruption in any single node caused immediate production halts in bronze weaponry and tools, leading to loss of military monopoly and internal revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local tin stockpiles or alternative copper-arsenic alloy production continuing uninterrupted through 1200 BC in collapsed zones.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality economic determinist view, aligning with current scholarship on Late Bronze Age interconnectivity (e.g., Cline). It explains the simultaneity via network theory but struggles slightly with why Egypt, also part of the network, survived.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A climate-induced 'megadrought' lasting decades caused mass famine and migration, overwhelming static palace defenses.\", \"mechanism\": \"Ecological shock: Paleoclimatic data (pollen cores, sediment layers) indicates a severe aridification event around 1200 BC; this collapsed agricultural surplus, the tax base of the palaces, forcing desperate populations (Sea Peoples) to migrate and raid, while centralized granaries failed to distribute scarce resources.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt's Nile Delta\", \"Interior Assyria\"]}, \"forbidden\": [{\"case\": \"High-resolution paleoclimate proxies showing normal or wet precipitation levels in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Increasingly typical due to recent scientific data. It naturally excludes Egypt because the Nile is fed by tropical rains unaffected by Mediterranean drought patterns. It frames the 'Sea Peoples' as refugees rather than invaders.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate political revolution by subject populations and lower-ranking elites against the extractive, rigid palatial bureaucracy.\", \"mechanism\": \"Internal class warfare: The 'palace' system extracted excessive surplus for elite luxury and monumental building while providing little protection during minor stresses; localized uprisings burned the administrative centers (palaces) specifically to erase debt records and redistribute land, rather than being conquered by external armies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Sea Peoples as primary causative agents\", \"Egypt\", \"Phoenician coastal enclaves\"]}, \"forbidden\": [{\"case\": \"Evidence that palace destruction layers are consistently associated with foreign weaponry or mass graves of defenders rather than signs of internal looting and selective burning of archives.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, Marxist-leaning interpretation. It challenges the dominant 'invasion' narrative by positing that the 'Sea Peoples' were largely a symptom or later opportunistic scavengers, not the cause. It requires explaining why this revolution happened simultaneously across independent states.\"}",
+      "typicality": 0.35,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    }
+  ]
+}

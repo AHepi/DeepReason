@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a rapid shift to massed infantry tactics (the 'Infantry Revolution'), which rendered the chariot-based military aristocracies of the palatial states obsolete.\", \"mechanism\": \"Barbarian groups (Sea Peoples) adopted flexible, massed infantry with javelins and slashing swords, overwhelming the expensive, brittle chariot armies. Palatial states could not adapt institutionally because their political power was tied to chariot elites, leading to military defeat and administrative collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records depict Ramesses III's victory over the Sea Peoples as a conventional chariot battle, not an infantry swarm.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains the synchronous military overmatch across different palatial cultures while accounting for Egyptian survival through their rapid adoption of foreign mercenaries and infantry.\"}",
+      "typicality": 0.4,
+      "neighbours": ["A10"]
+    },
+    {
+      "content": "{\"claim\": \"A massive, multi-year drought caused systemic agricultural failure, leading to famine, state revenue collapse, and eventual abandonment of the palatial centers.\", \"mechanism\": \"Palatial economies relied on surplus extraction for redistribution and luxury-goods trade. Sustained drought broke this chain: crop failures led to peasant flight, which starved the administrative centers of taxes and labor, causing the palaces to lose control and be abandoned or burned.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatological proxies (e.g., pollen, sediment cores) from the affected regions show no significant deviation in aridity during the 1200-1150 BC window compared to the preceding stable centuries.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's annual flood was fed by monsoon rains in the Ethiopian highlands, buffering it from the Levantine/Anatolian drought.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A7"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a general systems collapse: the palatial economies were highly specialized, interdependent nodes in a fragile network. The disruption of one node (e.g., Pylos) triggered a catastrophic cascade of trade failures, resource shortages, and social unrest across the entire Eastern Mediterranean.\", \"mechanism\": \"The palaces were optimized for efficiency, not resilience. They relied on imports of tin (for bronze) and grain. A localized disruption (pirate raids, earthquake) broke a critical trade link, causing a domino effect of bronze shortages, military defeats, and administrative collapse as scribal elites lost the ability to command loyalty without redistributable goods.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that the affected regions had diversified their supply chains and maintained large, local stockpiles of tin and grain, making them resilient to the loss of a single trade partner.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its grain supply was entirely domestic (Nile Valley) and its military was not dependent on complex long-distance trade for bronze, allowing it to weather the network collapse.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A7"]
+    }
+  ]
+}

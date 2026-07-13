@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which broke the trust necessary for long-distance trade.\", \"mechanism\": \"Climate-induced agricultural failure led to famine, reducing the surplus required to sustain specialized artisans and bureaucrats. This triggered internal social unrest and made the centralized centers vulnerable to opportunistic raids by displaced populations (Sea Peoples), while Egypt's access to the Nile buffer allowed it to absorb the shock without total systemic failure.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage and stable population levels in Ugarit immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' theory, integrating climate,地震, and social factors. It relies on the interdependence of the Bronze Age trade network.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was primarily a military revolution where the adoption of cheap iron weaponry and new infantry tactics by marginalized groups overwhelmed the expensive chariot-based aristocracies.\", \"mechanism\": \"The democratization of warfare via iron smelting (which does not require rare tin) allowed non-state actors and peripheral tribes to field effective infantry. These forces bypassed or shattered the static defense strategies of the chariot-elite states. Egypt survived because its geography allowed it to fight defensive battles on its own terms (e.g., at the Delta) rather than projecting power into the chaos.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Evidence that iron weapons were not widespread or militarily superior to bronze until after 1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A more traditional, military-focused explanation. It struggles with the timing of iron adoption but offers a clear mechanism for the asymmetry between the fall of land powers and the survival of Egypt.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a contagious sociopolitical epidemic of 'de-legitimation' where the ideological authority of the God-King collapsed simultaneously across the region due to a shared cosmological crisis, leading to voluntary abandonment of palaces.\", \"mechanism\": \"Rather than external invasion or climate, a synchronized failure of the religious ideology underpinning the palatial system occurred. When the kings failed to intercede for rain or victory, the populace ceased to recognize their authority, leading to mass migration away from centers and a refusal to maintain the bureaucracy. The centers were not destroyed by enemies but abandoned and looted later. Egypt survived due to its unique, deeply entrenched solar theology which was more resilient to specific local failures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Forensic evidence of mass violence, burning, or hasty burial in the destruction layers of Pylos or Hattusa indicating violent conquest rather than abandonment.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, ideational approach. It challenges the materialist consensus by positing a psychological/ideological cascade. It is highly criticizable given the physical evidence of destruction, hence the lower typicality.\"}",
+      "typicality": 0.15,
+      "refs": []
+    }
+  ]
+}

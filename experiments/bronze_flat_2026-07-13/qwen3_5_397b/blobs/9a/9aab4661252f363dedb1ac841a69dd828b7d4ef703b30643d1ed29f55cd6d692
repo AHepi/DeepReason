@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which severed the supply chains essential for maintaining centralized authority.\", \"mechanism\": \"Cascading resource scarcity triggered by climate change (drought) and earthquake storms undermined the legitimacy and logistical capacity of the wanax/kings to feed their populations and pay retainers, leading to internal revolt and abandonment of centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage or intact administrative records in Ugarit at the moment of destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating environmental stressors with economic fragility. It aligns with current consensus on the 1200 BC drought event.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the rapid diffusion of inexpensive iron weaponry and new infantry tactics that rendered the bronze-dependent chariot aristocracy militarily obsolete.\", \"mechanism\": \"Technological democratization of warfare: the shift from expensive, state-controlled bronze chariot forces to cheaper, locally producible iron infantry allowed decentralized groups (including Sea Peoples) to overwhelm rigid, elite-focused military structures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that major palace destructions occurred before the widespread availability of smelted iron tools or weapons in the region\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic but increasingly criticized hypothesis. It is included as a moderate-typicality candidate because while iron use grew post-collapse, the timing of the initial shocks often predates full iron adoption, making it a partial rather than total explanation.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a contingent outcome of a specific migratory domino effect initiated by displacement in the Central Balkans, which propagated instability eastward and southward only where political integration was shallow.\", \"mechanism\": \"Kinetic chain reaction: displaced populations (Sea Peoples) acted as a shockwave; societies with deep vertical integration (Egypt) absorbed the shock via mobilization, while horizontally linked but vertically weak palace networks (Ugarit, Mycenae) fractured under the pressure of refugee influx and mercenary betrayal.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\", \"Hittite Anatolia\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Babylonia\"]}, \"forbidden\": [{\"case\": \"Historical record of coordinated, simultaneous multi-front attacks by Sea Peoples rather than sequential migration waves\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate focusing on the vector of migration and the specific structural vulnerability of 'shallow' integration compared to Egypt's 'deep' state capacity. It challenges the idea of a uniform cause, emphasizing the transmission mechanism over the root trigger.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "mention",
+          "target": "f0a9dc411f47eb708019aec77c7b53d5c6c58d6cefc605188da87e6c179cbcfa"
+        }
+      ],
+      "typicality": 0.38
+    }
+  ]
+}

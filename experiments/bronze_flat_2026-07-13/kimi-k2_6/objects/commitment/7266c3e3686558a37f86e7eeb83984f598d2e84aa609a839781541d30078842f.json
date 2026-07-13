@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Network simulation showing robustness of actual attested alliance graphs to single-node removal without assumption of unobserved brittle credit interdependencies"},"steps":100000,"time_ms":2000},"eval":"rubric:std-hist","id":"fc:4f2d28e7c264","observation_valued":false},"id":"fc:4f2d28e7c264","schema":"commitment"}

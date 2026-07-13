@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze supply chain triggered by the loss of Cyprus as a central node.\", \"mechanism\": \"Hyper-specialized palace economies depended on long-distance trade for tin and copper; the disruption of Cypriot production or shipping routes created an immediate material crisis that rigid bureaucracies could not substitute, leading to internal revolt and abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous, uninterrupted bronze production in Ugarit or Mycenae during the destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate leans on the 'systems collapse' theory but specifies the metallurgical bottleneck as the primary trigger rather than a general complexity threshold. It excludes Cyprus paradoxically because if Cyprus was the source of the shock, its own fate (survival vs destruction) determines the mechanism's validity; here we assume Cyprus was the epicenter of the disruption rather than a victim of the same spread.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "22c6e6564ec36c58b8f2206b610d4f88e41b7093b7e450b970271feb53df6cba"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A rapid climatic shift (300-year drought) reduced agricultural surplus below the threshold required to sustain professional chariot armies and palace bureaucracies.\", \"mechanism\": \"Palace economies were extractive institutions relying on high agricultural yields to feed non-producing elites and soldiers; a sustained megadrought collapsed the tax base, causing armies to disband or mutiny and forcing the abandonment of centralized storage systems.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data indicating normal or above-average rainfall in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality environmental determinist view. It excludes Egypt because the Nile's flood cycle is independent of Levantine rainfall, providing a natural buffer. It excludes Mesopotamia to avoid the counter-example of continued urbanization there despite similar regional aridity trends.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the diffusion of low-cost infantry tactics (javelinists, raiders) that rendered the expensive chariot-based monopoly on violence obsolete.\", \"mechanism\": \"Decentralized groups utilizing flexible infantry tactics could raid with impunity, breaking the prestige and economic monopoly of the chariot aristocracy; this encouraged internal fragmentation and made the defense of large, static palace centers economically unsustainable.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as a unified ethnic entity\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot warfare remained the dominant and decisive military format in successful battles throughout the 12th century BC in these regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical take that reframes 'Sea Peoples' not as a migrating nation but as a symptom of tactical democratization. It excludes Egypt because Egypt successfully adapted its military to incorporate foreign mercenaries and maintained a riverine defense that nullified the raiding advantage. It explicitly excludes the Sea Peoples as a singular causal agent to focus on the technological/tactical shift.\"}",
+      "typicality": 0.45,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    }
+  ]
+}

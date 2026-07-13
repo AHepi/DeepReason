@@ -1,0 +1,97 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "candidates": [
+    {
+      "content": {
+        "claim": "A systemic drought, evidenced by paleoclimatic data, triggered cascading agricultural failures that uniquely destabilized the palatial redistributive economies of the Mycenaeans, Hittites, and Levant, while Egypt's direct Nilotic irrigation management buffered it from the worst effects.",
+        "mechanism": "The palatial systems relied on surplus extraction to fund administrative, military, and trade apparatuses. A multi-year drought reduced yields below the critical threshold needed to maintain these complex systems, leading to a loss of confidence in the palatial elite, internal revolts, and the abandonment of the economic center, which in turn collapsed the interdependent trade network. Egypt's irrigation was managed at a local level (nomes) and was less dependent on a single palace-complex for redistribution, allowing it to absorb the shock.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Paleoclimatic proxies (e.g., pollen, speleothems, lake sediments) from the region show no significant aridification event between 1250-1100 BC.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Archaeological evidence shows Egyptian grain yields and Nile flood levels suffered a catastrophic, prolonged failure identical in timing and severity to the drought in Anatolia and Greece.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This account differentiates the collapse from mere climate determinism by focusing on the specific institutional vulnerability of palace economies to multi-year harvest failures, contrasting it with Egypt's more resilient, locally-managed hydrological system."
+      },
+      "typicality": 0.85
+    },
+    {
+      "content": {
+        "claim": "The collapse was caused by a 'systems collapse' triggered by the rapid spread of cheap, mass-produced iron weaponry, which democratized violence and allowed marauding infantry (the 'Sea Peoples') to overwhelm the bronze-age chariot-based militaries of the palace states, while Egypt survived by rapidly adopting these same iron technologies for its own defense.",
+        "mechanism": "The palatial elites monopolized the production of expensive bronze weapons and chariots, forming a military aristocracy. The diffusion of iron-smelting technology from the north shattered this monopoly, enabling large-scale, lightly-armed infantry forces to destroy the chariot armies. The Sea Peoples were a symptom of this technological shift, not its root cause. Egypt, facing an existential threat, quickly integrated iron weapons into its military, allowing it to repel the Sea Peoples at the Battle of the Delta.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Metallurgical analysis of weapons from the period 1200-1150 BC shows no significant increase in the prevalence of iron over bronze in the Eastern Mediterranean.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records and archaeology show they continued to rely exclusively on bronze weaponry and did not adopt iron smelting until centuries after repelling the Sea Peoples.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This conjecture reframes the Bronze Age collapse as a military-technological revolution, where the material basis of elite power (bronze) was undercut by a new, more accessible material (iron), leading to a 'democratization' of destruction that the old order could not withstand."
+      },
+      "typicality": 0.55
+    },
+    {
+      "content": {
+        "claim": "The collapse was a cascading failure of the diplomatic gift-exchange network. When the Hittite Empire fragmented due to internal succession crises, the resulting disruption to the flow of prestige goods and diplomatic marriages caused a rapid, fatal loss of legitimacy for the dependent client kings in Mycenae and the Levant, leading to simultaneous palace revolts. Egypt, a net exporter of prestige goods (gold, grain) rather than a dependent, was insulated from this specific network failure.",
+        "mechanism": "The Late Bronze Age international order was a club of 'Great Kings' who exchanged lavish gifts, brides, and specialists. This exchange was not just symbolic; it was the primary mechanism for legitimizing local rule. When the Hittite state collapsed, the network hub failed. Client kings in Ugarit and Mycenae, suddenly cut off from the prestige goods that signaled their divine favor and elite status, were overthrown by internal rivals. The collapse was a rapid unraveling of elite legitimacy, not a conquest by outsiders. Egypt, as a primary source of gold and grain, was a net exporter of prestige and thus not dependent on the network for its internal legitimacy.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Ugarit",
+            "Levantine city-states"
+          ],
+          "excludes": [
+            "Egypt",
+            "Hittite Anatolia (as a victim of the same mechanism)"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows a massive, simultaneous destruction by foreign invaders across all Mycenaean and Levantine sites, with no signs of internal factional conflict or selective destruction of elite quarters.",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "The Hittite state did not collapse before the other palace centers; textual and archaeological evidence conclusively shows the Hittite capital Hattusa fell after the destruction of Ugarit and the Mycenaean palaces.",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "This conjecture posits a 'domino effect' of elite delegitimization. The Hittite collapse is the trigger, but the mechanism for the other collapses is internal revolt driven by a sudden loss of the prestige goods that underpinned the kings' status, rather than direct military conquest or environmental factors."
+      },
+      "typicality": 0.35
+    }
+  ]
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.direct.v1", "error": "extra field at /candidates/0/content/claim", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "", "typicality": 0.0}]}}

@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A systemic collapse of international bronze supply chains triggered a cascading economic failure across palace economies.\", \"mechanism\": \"Interdependent trade networks created single points of failure; the loss of one node (e.g., Cyprus copper) paralyzed production in all connected states.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing uninterrupted local bronze production in Ugarit during the destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate emphasizes economic fragility over military defeat, aligning with the 'covering principle' of systemic interdependence.\"}",
+      "typicality": 0.85,
+      "neighbours": [
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by a climate-induced agricultural catastrophe that delegitimized divine kingship.\", \"mechanism\": \"Prolonged drought led to famine, causing populations to lose faith in the palace's ability to intercede with gods, resulting in internal revolt rather than external invasion.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Levantine city-states\", \"Mycenaean Greece\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data indicating normal rainfall levels in Anatolia between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Shifts agency from external 'Sea Peoples' to internal socio-political fracture caused by environmental stress, a common but debated historiographical angle.\"}",
+      "typicality": 0.65,
+      "neighbours": [
+        "A4",
+        "A6"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The adoption of inexpensive iron weaponry by marginalized groups democratized violence, rendering chariot-based palace defense obsolete.\", \"mechanism\": \"Technological diffusion allowed non-elites to equip themselves cheaply, overwhelming the expensive, specialized military aristocracy that sustained palace power.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Levantine city-states\"], \"excludes\": [\"Hittite Anatolia\", \"Egypt\", \"Sea Peoples as a unified entity\"]}, \"forbidden\": [{\"case\": \"Metallurgical analysis showing iron artifacts were rare and ceremonial, not widespread military tools, prior to 1100 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical technological determinist view that challenges the standard 'invasion' narrative by focusing on class warfare enabled by material shifts.\"}",
+      "typicality": 0.25,
+      "neighbours": [
+        "A7",
+        "A9",
+        "A12"
+      ]
+    }
+  ]
+}

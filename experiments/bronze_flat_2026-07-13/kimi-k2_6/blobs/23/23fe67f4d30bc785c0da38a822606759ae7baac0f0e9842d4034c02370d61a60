@@ -1,0 +1,21 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Sea Peoples invasions were the primary cause of simultaneous collapse\", \"mechanism\": \"Naval and land migrations of armed groups destroyed political centers and severed trade networks through direct military destruction, with Egypt surviving due to superior military organization and geographic buffer zones\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt proper\", \"Mesopotamian interior\", \"Cyprus post-1150\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows widespread destruction layers at Mycenaean and Hittite sites dating 50-100 years before first Sea Peoples attestation in Egyptian records\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B archives demonstrate continued palace administration at several Mycenaean sites after destruction of major centers\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Hittite capital relocation and fragmentation precedes Sea Peoples attacks by multiple generations\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Traditional monocausal account; struggles with chronology mismatch and treats Egypt as passive survivor rather than differently-structured system\"}",
+      "typicality": 0.75,
+      "neighbours": ["A2", "A10", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"Climate-induced subsistence crisis triggered systemic collapse of redistribution economies\", \"mechanism\": \"Severe multi-decadal drought reduced agricultural surplus below threshold for palace-based redistribution; interconnected economies amplified local failures through trade-dependency, while Egypt's Nile-based irrigation buffered against rainfall variation\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"interregional trade networks\"], \"excludes\": [\"Egypt proper\", \"Mesopotamian riverine systems\"]}, \"forbidden\": [{\"case\": \"Paleoclimate proxies show no significant anomaly in Eastern Mediterranean 1250-1150 BC compared to preceding centuries\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records document famine and price inflation during this period comparable to palatial regions\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Non-palatial societies in same climatic zones (e.g., highland Greece, pastoral Levant) also experienced collapse or disruption\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Palace economies show signs of stress and adaptation decades before abrupt termination\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Systems-complexity approach; vulnerability lies in coupling tightness rather than climate severity per se\"}",
+      "typicality": 0.6,
+      "neighbours": ["A1", "A2", "A7", "A8"]
+    },
+    {
+      "content": "{\"claim\": \"Internal legitimacy crisis of warrior-elite ideology precipitated decentralization and fragmentation\", \"mechanism\": \"Charismatic kingship and gift-exchange obligations became unsustainable under territorial expansion; elite competition over limited prestige goods shifted to local patronage networks, dissolving supra-regional authority without requiring external shock\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Levantine city-states\", \"Egypt proper\", \"Cycladic islands\"]}, \"forbidden\": [{\"case\": \"Linear B records show no increase in local autonomy or elite titles preceding destruction horizons\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Foreign mercenary or slave populations appear in palace records as proportionally declining, not rising\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Material culture demonstrates continuity of elite burial practices and iconography at sites after palace destruction\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian New Kingdom shows similar warrior-elite ideology without comparable fragmentation\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Endogenous institutionalist account; treats 'collapse' as distributed renegotiation rather than catastrophe; difficult to falsify given fragmentary evidence\"}",
+      "typicality": 0.25,
+      "neighbours": ["A3", "A4", "A5", "A6", "A9"]
+    }
+  ]
+}
+```

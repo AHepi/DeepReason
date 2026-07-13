@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry (the 'Infantry Revolution'), which rendered chariot-based palatial armies obsolete.\", \"mechanism\": \"Technological and tactical diffusion of iron weapons and massed infantry formations (like the Greek phalanx or Sea Peoples' tactics) negated the military superiority of chariot-riding elites, leading to the sacking of palatial centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian monuments and records from the reign of Ramesses III show no adoption of massed infantry tactics and continue to depict chariot-based warfare as dominant.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains why palace-based chariot kingdoms fell while Egypt, which could adapt its military, survived. It is directly refuted by Egyptian records showing they continued to rely on chariots and foreign mercenaries rather than a domestic infantry revolution.\"}",
+      "typicality": 0.4,
+      "neighbours": ["A9", "A10", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"A severe and prolonged megadrought caused systemic agricultural collapse across the Eastern Mediterranean, leading to famine, social unrest, and the abandonment of palatial centers.\", \"mechanism\": \"Climate change shifted precipitation patterns, causing multi-year crop failures that the interconnected but brittle palatial redistribution economies could not buffer, triggering internal revolts and population movements.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"High-resolution paleoclimate proxies (e.g., lake sediments, speleothems) from the Nile Delta and Upper Egypt show no significant aridification during the 1200-1150 BC period, with Nile flood levels remaining normal.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account is popular but struggles to explain Egyptian survival. The forbidden case highlights that if the drought was the primary cause, Egypt—equally dependent on agriculture—should have collapsed too, unless it was uniquely spared by the climate, which evidence suggests it was not.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A1", "A2", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a general systems collapse: the palatial economies were so tightly coupled and specialized that a minor disruption in the trade network cascaded into a catastrophic failure of all interdependent nodes.\", \"mechanism\": \"Palaces relied on each other for essential resources (e.g., tin from Anatolia, grain from Egypt, oil from Greece). A localized disruption (like a pirate raid on a key port) broke critical links, causing a domino effect of shortages, elite delegitimization, and administrative collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that trade between Egypt and the Levantine city-states continued, albeit at a reduced volume, throughout the crisis period, and Egypt maintained access to Anatolian tin via alternative Red Sea routes.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the simultaneity of collapse through network theory. The forbidden case challenges the idea of a complete network failure by showing Egypt maintained alternative supply lines, undermining the 'tight coupling' premise.\"}",
+      "typicality": 0.6,
+      "neighbours": ["A3", "A4", "A5", "A6"]
+    }
+  ]
+}

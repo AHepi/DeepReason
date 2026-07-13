@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the interdependent trade networks.\", \"mechanism\": \"Climate-induced agricultural failure led to the inability of centralized bureaucracies to provision dependent populations and maintain mercenary forces, triggering internal revolt and abandonment of sites.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust grain storage facilities full at the time of destruction layers in Mycenaean citadels.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal climate-systemic view, relying on the fragility of just-in-time palace economies.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by a technological shift in warfare where decentralized infantry utilizing javelins and long swords overwhelmed the rigid chariot-based aristocracies.\", \"mechanism\": \"The democratization of lethal force via cheap infantry equipment allowed non-state actors and mercenaries to defeat elite chariot corps, leading to the rapid decapitation of palace leadership.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Sea Peoples as a unified ethnic group\"]}, \"forbidden\": [{\"case\": \"Evidence that Mycenaean or Hittite armies had already integrated large-scale independent infantry units capable of repelling such tactics prior to 1200 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A military-determinist explanation focusing on tactical obsolescence rather than environmental stress.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a cascading failure of international legitimacy where the loss of faith in the divine kings' ability to guarantee order triggered simultaneous internal uprisings across disconnected regions.\", \"mechanism\": \"Ideological contagion: as one palace fell to internal dissent due to perceived divine abandonment, the news traveled faster than armies, causing preemptive revolts in neighboring states before any external invasion occurred.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Minoan remnants\"]}, \"forbidden\": [{\"case\": \"Inscriptions from Ugarit or Hatti indicating confidence in royal divine protection immediately prior to the final destruction layer.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical sociological explanation prioritizing information propagation and ideological fragility over material causes.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "f0a9dc411f47eb708019aec77c7b53d5c6c58d6cefc605188da87e6c179cbcfa"
+        }
+      ],
+      "typicality": 0.28
+    }
+  ]
+}

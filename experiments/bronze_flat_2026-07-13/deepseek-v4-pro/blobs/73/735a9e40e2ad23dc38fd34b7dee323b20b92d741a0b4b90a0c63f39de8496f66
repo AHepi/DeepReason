@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic breakdown of the palatial redistributive economy triggered by a prolonged drought that simultaneously reduced agricultural yields across the Eastern Mediterranean, starving the specialized labor forces and bureaucracies that the palaces depended on.\", \"mechanism\": \"A multi-year drought (evidenced by paleoclimate proxies) reduced grain harvests. Palace economies, which collected, stored, and redistributed surplus to support scribes, artisans, soldiers, and dependent laborers, could no longer meet their obligations. This led to a rapid, cascading loss of legitimacy and administrative capacity, causing elites to hoard, subjects to flee, and the entire top-heavy system to implode in a short period.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data shows no significant, synchronous multi-year drought across the Eastern Mediterranean in the late 13th/early 12th century BC.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Archaeological evidence shows that palatial storage facilities were full of grain at the time of their destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the simultaneity and selectivity of the collapse. Egypt survived because the Nile's annual flood was less dependent on local rainfall, buffering it against the drought that crippled rain-fed agricultural systems. The mechanism is a direct failure of the core economic institution (palatial redistribution) that defined these societies.\"}",
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e6b0e0106e67404c31357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3768e7604b8174a2ad5e50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by a rapid, disruptive shift in military technology and tactics—the massed infantry assault—which rendered the elite chariot-based armies of the palace states obsolete and allowed internal or external infantry forces to overwhelm the palatial centers.\", \"mechanism\": \"The development of new infantry weapons (like the Naue II slashing sword) and tactics (massed shock troops) negated the battlefield dominance of the chariot. Chariots were the military expression of the palatial elite's power and a key tool for suppressing internal revolt and defending borders. When infantry forces (whether Sea Peoples, rural rebels, or neighboring tribes) could defeat chariot armies, the palaces lost their coercive grip and were sacked in quick succession.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that chariot use and production increased, not decreased, in the period immediately preceding the collapse.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The destruction layers at collapsed sites show no evidence of infantry-type weapons or battle tactics distinct from earlier periods.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the military defeats and burn layers. Egypt survived because it adapted quickly, integrating infantry (including Sherden mercenaries) into its forces and using its infantry-based army to defeat the Sea Peoples at the Battle of the Delta, as recorded at Medinet Habu.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473140a9025c3d07b272b83db40ebd3e1443f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a cascading failure of the bronze trade network due to a supply shock in tin, which made the palatial elite's control over weapons production and prestige goods impossible, leading to a rapid loss of authority and the fragmentation of the interdependent palace system.\", \"mechanism\": \"Tin, essential for bronze, was scarce and sourced from distant mines (e.g., Afghanistan, Cornwall) through a complex, diplomatically-maintained trade network. A disruption at a key source or along the route (due to conflict, climate, or political change) caused a sudden, catastrophic tin shortage. Without bronze, the palaces could not equip their armies, reward their elites, or produce the prestige goods that symbolized their power. This led to immediate military vulnerability and a crisis of legitimacy, causing the system to collapse in a domino effect.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows no disruption in the long-distance tin trade and tin was readily available in the Eastern Mediterranean during the collapse period.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Iron tools and weapons were already in widespread use before the collapse, making a bronze shortage irrelevant.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the simultaneity through a single-point failure in a critical resource network. Egypt survived because it had greater domestic reserves, alternative supply routes via the Red Sea, or a more robust state capacity to hoard and recycle bronze, allowing it to weather the temporary supply shock.\"}",
+      "typicality": 0.4,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e6b0e0106e67404c31357fed09e672"
+        }
+      ]
+    }
+  ]
+}

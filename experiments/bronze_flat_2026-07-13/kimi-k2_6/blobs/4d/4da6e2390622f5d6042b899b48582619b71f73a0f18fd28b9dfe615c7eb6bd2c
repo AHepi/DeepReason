@@ -1,0 +1,9 @@
+```json
+{
+  "specs": [
+    "{\"angle\": \"systems-complexity\", \"mechanism_family\": \"cascading-failure\", \"structure\": \"network-model\", \"register\": \"technical-diagrammatic\"}",
+    "{\"angle\": \"ideological-legitimacy\", \"mechanism_family\": \"symbolic-contagion\", \"structure\": \"genealogy-of-rhetoric\", \"register\": \"philological-hermeneutic\"}",
+    "{\"angle\": \"bio-geographic\", \"mechanism_family\": \"pathogen-vector\", \"structure\": \"epidemiological-narrative\", \"register\": \"natural-scientific\"}"
+  ]
+}
+```

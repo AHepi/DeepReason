@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy when confronted with prolonged drought and seismic activity, which broke the just-in-time supply chains essential for elite legitimacy.\", \"mechanism\": \"Cascading resource starvation: Climate-induced crop failures reduced the surplus available for redistribution, causing client populations to abandon centers and mercenaries to defect, leading to a rapid loss of central authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of full granaries at the moment of destruction in Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' view, integrating climate data with economic fragility. It explains the simultaneity via a regional climate event but struggles slightly with why Egypt's similar bureaucracy held.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48",
+          "role": "dependence"
+        },
+        {
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9",
+          "role": "mention"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a specific technological shift in infantry warfare (massed light infantry with javelins) that rendered the chariot-based aristocratic military monopoly obsolete, triggering internal class warfare.\", \"mechanism\": \"Military obsolescence and insurrection: The diffusion of affordable infantry tactics allowed marginalized groups and mercenaries to defeat elite chariot corps, leading to the physical destruction of palace centers by internal rebels rather than external invaders.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Sea Peoples as a unified migrating nation\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot forces successfully defeated massed infantry in the region after 1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A more atypical, military-determinist take. It reframes the 'Sea Peoples' not as a cause but as a symptom of displaced warriors. It excludes Egypt because its geography allowed it to absorb these shocks differently.\"}",
+      "typicality": 0.45,
+      "refs": [
+        {
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a contagious sociopolitical epidemic where the loss of prestige in one major center triggered a rapid, mimetic withdrawal of allegiance across the interconnected diplomatic network.\", \"mechanism\": \"Prestige cascade: The interconnectedness of the Great Powers meant that the visible failure of one (e.g., Hattusa) instantly devalued the divine/royal status of others, causing vassals and trade partners to preemptively sever ties and raid neighbors before their own legitimacy evaporated.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Non-palatial rural settlements\"]}, \"forbidden\": [{\"case\": \"Diplomatic correspondence continuing normally between centers after the first known destruction layer\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly atypical, focusing on information theory and social psychology rather than material causes. It posits that the network itself was the vulnerability, explaining the speed but requiring a trigger event.\"}",
+      "typicality": 0.15,
+      "refs": [
+        {
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b",
+          "role": "mention"
+        }
+      ]
+    }
+  ]
+}

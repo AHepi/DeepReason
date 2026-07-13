@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze supply chain due to the disruption of tin sources, leading to economic paralysis.\", \"mechanism\": \"Resource dependency shock: The palace economies were hyper-specialized and relied on long-distance trade for tin (essential for bronze). When minor disruptions in Afghanistan or Central Asia occurred, the inability to substitute materials caused a cascading failure of military and artisanal production, triggering internal revolts.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local bronze stockpiles or alternative alloy usage during the transition period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality economic determinist view, aligning with standard interpretations of Late Bronze Age interconnectivity.\"}",
+      "typicality": 0.88,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a synergistic 'perfect storm' of climate change-induced famine, seismic activity, and migratory pressure that overwhelmed rigid administrative structures.\", \"mechanism\": \"Complex systems cascade: A prolonged drought (verified by pollen data) reduced agricultural surplus, weakening state legitimacy. Concurrent earthquakes damaged key infrastructure. These stresses lowered the threshold for resistance against external migratory groups (Sea Peoples), causing a domino effect where the fall of one node severed trade lines for others.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing normal rainfall patterns in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A very common multi-causal synthesis found in modern scholarship, balancing environmental and social factors.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an intentional, coordinated insurrection by subaltern classes and marginalized peripheral groups against the extractive palace monopoly.\", \"mechanism\": \"Class warfare/Internal revolution: The palace system extracted excessive surplus for elite consumption and monumental building, leaving the populace vulnerable. Rather than external invasion, the 'Sea Peoples' were largely displaced locals and runaway serfs who coordinated attacks to dismantle the redistribution centers, sparing Egypt only because its decentralized temple economy and geographic buffer allowed it to absorb the shock without total structural failure.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Purely external nomadic invasions\"]}, \"forbidden\": [{\"case\": \"Textual evidence indicating the primary destroyers were foreign kings with no prior connection to the collapsed states.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, more radical sociological interpretation that shifts agency from external 'barbarians' to internal systemic contradictions.\"}",
+      "typicality": 0.35,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        },
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    }
+  ]
+}

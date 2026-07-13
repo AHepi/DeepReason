@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a rapid, climate-driven shift in military technology and tactics that rendered chariot-based palatial armies obsolete, enabling mass infantry to overwhelm the interconnected but brittle palace states.\", \"mechanism\": \"A prolonged drought (c. 1250-1150 BC) caused widespread famine, eroding the tax-base and manpower of palace elites. This forced a shift from expensive chariot corps to cheaper mass infantry (e.g., Naue II swords, javelin-armed skirmishers). The palatial network, optimized for chariot warfare and elite exchange, could not adapt its centralized production or social contract. Displaced 'Sea Peoples' and internal rebels, now militarily effective, sacked one palace after another in a cascade, exploiting the network's interdependence to move and strike.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows widespread adoption of mass infantry tactics and Naue II swords in the palatial core decades before the destruction layers.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Climate proxies show a stable, wet period with no significant drought in the Eastern Mediterranean between 1250-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the synchronicity and selectivity of the collapse. Egypt survived because its centralized New Kingdom state under Ramesses III could mobilize mass infantry and mercenaries to counter the new threat, as depicted at Medinet Habu, while the brittle palatial chariot-kingdoms could not adapt their socio-military structure in time.\"}",
+      "typicality": 0.8,
+      "refs": [
+        {
+          "target": "d7dfc6e5c95235ab0dd94a473140a9025c3d07b27283db83ebe40d3ebe3d1443f",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a synchronized peasant revolt and social revolution against extractive palatial elites, coordinated through the very trade and diplomatic networks the palaces had built, leading to a systemic implosion of the entire interconnected system.\", \"mechanism\": \"The palatial system was a network of mutually recognized, extractive elites who traded prestige goods and supported each other against internal dissent. A prolonged period of drought and famine (the '3.2 ka BP event') eroded the legitimacy of these elites. Exploiting the diplomatic and trade routes, a revolutionary ideology or movement spread among disenfranchised rural populations and lower urban classes. This network of dissent enabled simultaneous, coordinated uprisings that burned the palaces and destroyed the administrative apparatus, deliberately targeting the symbols of elite power. The collapse was not an external invasion but an internal, network-enabled implosion.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Destruction layers at major sites show clear evidence of foreign military equipment and tactics inconsistent with local populations, with no evidence of class-targeted destruction of elite goods.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B tablets from Pylos and other sites indicate the palaces were preparing for an external seaborne attack, not internal revolt, just before their destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains why the entire network fell simultaneously: the very connectivity that made the system rich also made it vulnerable to a coordinated revolutionary contagion. Egypt's survival is attributed to its more resilient, centralized, and theocratic structure, which was better able to suppress internal dissent through a combination of ideology and force.\"}",
+      "typicality": 0.5,
+      "refs": [
+        {
+          "target": "a5aafc7a335580543dc67807f9790f1067f575f6deee70695f213489a5450d86d",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of the bronze supply chain, triggered by the disruption of tin trade routes from Central Asia, which caused a systemic military and economic meltdown of the interdependent palatial states.\", \"mechanism\": \"The palatial economies were built on bronze for weapons, tools, and prestige goods. Tin, the rarer component, came from distant mines in Central Asia (e.g., Afghanistan, Uzbekistan) via long-distance trade routes passing through Anatolia and the Levant. A disruption of these routes—possibly due to the expansion of the Urnfield culture or steppe nomads in the Balkans and Anatolia—cut off the tin supply. Without tin, bronze production collapsed. This led to a rapid military disadvantage, a breakdown of the prestige-goods economy that underpinned elite legitimacy, and a failure of agricultural tools, causing famine. The network transmitted this supply shock instantly, causing simultaneous collapse. Egypt survived by securing an alternative tin source via maritime trade with the western Mediterranean (Iberia) or by using its gold reserves to outbid others for the remaining supply.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeometallurgical analysis of bronze artifacts from the destruction layers shows no change in tin isotope ratios, indicating a stable supply source up to the moment of destruction.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The Uluburun shipwreck (c. 1300 BC) and other evidence show that tin was primarily sourced from the west (Iberia, Cornwall) and was still abundant in the network a century before the collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a materialist, single-point-of-failure account. It explains the synchronicity through the instant transmission of a critical resource shock across a tightly coupled system. The exclusion of Egypt is explained by its unique ability to access an alternative supply chain, a hypothesis that is testable through trace element analysis of Egyptian bronze from the 12th century BC.\"}",
+      "typicality": 0.3,
+      "refs": [
+        {
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672",
+          "role": "dependence"
+        }
+      ]
+    }
+  ]
+}

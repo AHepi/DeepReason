@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which shattered the surplus buffer required to maintain specialized labor and military elites.\", \"mechanism\": \"Cascading resource starvation: Climate-induced agricultural failure reduced grain surpluses, preventing the payment of mercenaries and maintenance of trade fleets, leading to internal revolt and inability to repel opportunistic raids.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in Mycenaean citadels dated to post-1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Aligns with paleoclimatic data (e.g., pollen records) suggesting a '3.2ka event'; explains simultaneity via regional climate shock but struggles with why Egypt's Nile-dependent agriculture was less affected.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the obsolescence of chariot-based aristocratic warfare against decentralized, flexible infantry tactics employed by sea-borne raiders and internal dissidents.\", \"mechanism\": \"Tactical asymmetry: The high-cost, rigid chariot corps of the palace states could not respond to fast-moving, small-unit infantry attacks, leading to rapid military decapitation and loss of central authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that Sea Peoples primarily utilized chariot warfare or that palace armies successfully deployed infantry as their primary defense prior to collapse\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on military sociology; explains the speed of collapse but requires assuming a sudden tactical shift by attackers that archaeological records only partially support.\"}",
+      "typicality": 0.75,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate, coordinated insurrection by subaltern groups (peasants, nomads, displaced workers) exploiting the fragility of hyper-centralized bureaucratic networks.\", \"mechanism\": \"Network fragmentation: The highly interconnected yet brittle supply chains of the Late Bronze Age meant that localized revolts disrupted critical nodes (palaces), causing a domino effect of logistical failure that the centers could not repair.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Discovery of unified command structures or foreign leadership among the destroyers of specific palaces indicating external conquest rather than internal uprising\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Inverts the 'external invader' narrative; posits that the 'Sea Peoples' were largely refugees created by the collapse itself, not the sole cause. Challenges the notion of simultaneous external pressure.\"}",
+      "typicality": 0.45,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        },
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    }
+  ]
+}

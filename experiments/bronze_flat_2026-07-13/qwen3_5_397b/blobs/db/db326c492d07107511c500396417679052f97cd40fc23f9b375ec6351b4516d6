@@ -1,0 +1,1 @@
+{"allowed": "complete JSON value", "contract": "conjecturer.direct.v1", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "", "typicality": 0.0}]}}

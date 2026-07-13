@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which broke the feedback loops required to maintain specialized labor and military elites.\", \"mechanism\": \"Climate-induced agricultural shortfall triggered a cascade failure in the centralized grain-storage and tribute systems, leading to internal revolt and the abandonment of literacy-dependent administration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores at the moment of destruction in Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating environmental stressors with economic fragility. It relies on the dependency that these specific states were more centrally integrated than their neighbors.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the rapid diffusion of inexpensive iron weaponry and new infantry tactics that democratized violence, rendering the chariot-based aristocratic monopoly on force obsolete.\", \"mechanism\": \"Technological disruption lowered the barrier to entry for warfare, allowing marginalized groups and mercenaries to overwhelm expensive, rigid professional armies reliant on bronze and chariots.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Sea Peoples as a unified polity\"]}, \"forbidden\": [{\"case\": \"Evidence that iron weapons were widespread and decisive in battle prior to 1150 BC in the Levant\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic but increasingly contested military-determinist view. It is marked atypical here because recent scholarship suggests iron was not yet dominant enough to cause such total systemic failure, and it struggles to explain why Egypt, which also faced these tactics, survived.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.45
+    },
+    {
+      "content": "{\"claim\": \"The event was not a collapse of civilization but a strategic dissolution of palatial centers by subordinate populations who rejected the extractive tax burdens of the Late Bronze Age international order.\", \"mechanism\": \"Endogenous social revolution where the cost of maintaining the palace bureaucracy exceeded its protective value, prompting local communities to burn the records and kill the administrators to reset the social contract.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Nomadic pastoralists\", \"Sea Peoples\"]}, \"forbidden\": [{\"case\": \"Signs of external invasion forces (foreign weaponry, mass graves of non-locals) at the primary destruction layers of Megiddo or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, revisionist candidate that flips the 'invasion' narrative to focus on class struggle and anti-state sentiment. It explicitly excludes the 'Sea Peoples' as a causal agent, framing them instead as a symptom or a separate phenomenon, challenging the standard external shock models.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "dependence",
+          "target": "622df8284c8cfbb2440fbd47810355121576722b77c5d114d04f0faf4889b22a"
+        }
+      ],
+      "typicality": 0.28
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the international bronze supply chain due to the simultaneous exhaustion of major tin sources.\", \"mechanism\": \"Resource depletion led to an inability to produce bronze weapons and tools, causing military inferiority and economic paralysis in centralized palace economies that could not pivot to iron quickly enough.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant tin stockpiles in destroyed layers of Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate leans on the 'systems collapse' theory but narrows it specifically to metallurgical dependency, explaining why Egypt (with access to different trade routes or local substitutes) survived while landlocked or maritime-dependent powers fell.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"A rapid climatic shift (the 3.2ka event) caused a multi-decade megadrought that shattered the agricultural surplus required to sustain the palatial bureaucracies.\", \"mechanism\": \"Persistent drought led to famine, internal rebellion, and mass migration as populations scrambled for resources, overwhelming the static defensive capabilities of the bronze-age states.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Nile Delta Egypt\", \"Mesopotamia alluvial plain\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing normal rainfall levels in the Eastern Mediterranean between 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This addresses the simultaneity of the collapse via a regional environmental driver. It excludes Egypt because the Nile's flood cycle is driven by East African rains, insulating it from Levantine drought patterns.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by the sudden proliferation of low-cost iron weaponry among marginalized peripheral groups, democratizing violence against chariot-based elites.\", \"mechanism\": \"New smelting techniques allowed non-state actors to equip large infantry forces with iron swords, rendering the expensive, elite chariot corps of the palace states obsolete and vulnerable to asymmetric warfare.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Sea Peoples as a unified ethnic entity\"]}, \"forbidden\": [{\"case\": \"Absence of iron artifacts in destruction layers predating 1150 BC in the affected regions\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical take focusing on technological disruption rather than migration or climate. It posits that the 'Sea Peoples' were not a migrating nation but a label for various groups empowered by this tactical shift. Egypt is excluded from the primary collapse because its geography allowed it to fight defensive battles on its own terms despite the tactical shift.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "mention",
+          "target": "200b682dadc361e7368e72902764ea461d8b9eb8951ef1ba9383c54cf6dfa589"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

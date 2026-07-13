@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the tribute flows necessary to maintain centralized authority.\", \"mechanism\": \"Climate-induced agricultural collapse leading to the breakdown of the command economy and subsequent internal revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage and stable population levels in Ugarit immediately prior to 1190 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with the dominant climate-change hypothesis (e.g., Kaniewski et al.), relying on the fragility of just-in-time palace economies.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the obsolescence of the chariot-based aristocratic military model against decentralized, flexible infantry tactics employed by sea-borne raiders and highland groups.\", \"mechanism\": \"Military technological and tactical shift where low-cost infantry overwhelmed expensive, rigid chariot corps, causing rapid elite decapitation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Elam\"]}, \"forbidden\": [{\"case\": \"Evidence that Hittite or Mycenaean armies successfully integrated mass infantry formations prior to the attacks\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A moderate-typicality candidate focusing on military history (e.g., Drews), but often criticized for not explaining the total societal erasure rather than just regime change.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of international trade networks triggered by the sudden loss of Cyprus as a critical copper hub, causing economic paralysis in dependent palace states.\", \"mechanism\": \"Supply chain shock: The interruption of bronze production materials led to currency devaluation, inability to pay mercenaries, and immediate social contract dissolution.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Hittite Anatolia\", \"Egypt\", \"Inland Assyria\"]}, \"forbidden\": [{\"case\": \"Discovery of substantial alternative tin/bronze stockpiles in Mycenaean citadels dated to the destruction layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate emphasizing economic interdependence over climate or war; it struggles with the inclusion of the Hittites who had more diverse resources, hence their exclusion in this specific formulation.\"}",
+      "typicality": 0.28,
+      "refs": [
+        {
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b",
+          "role": "dependence"
+        },
+        {
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9",
+          "role": "mention"
+        }
+      ]
+    }
+  ]
+}

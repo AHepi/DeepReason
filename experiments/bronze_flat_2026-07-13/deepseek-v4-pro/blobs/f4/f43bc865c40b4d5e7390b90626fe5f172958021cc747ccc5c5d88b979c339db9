@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The Late Bronze Age collapse was caused by a systemic failure of the interdependent palatial trade and diplomacy network, triggered by a cascade of disruptions that the redistributive palace economies were too rigid to absorb.\", \"mechanism\": \"Palaces operated as centralized hubs for collection, storage, and redistribution of agricultural surplus and luxury goods, and for organizing long-distance trade. This created a tightly coupled system where a shock to one node (e.g., crop failure, earthquake, or trade route disruption) would cascade through the network. When multiple shocks hit simultaneously, the administrative and economic complexity of the palaces became a liability: they could not adapt quickly enough, leading to a loss of faith in the elite, abandonment of the palaces, and a systemic collapse of the entire Eastern Mediterranean network.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Evidence of a single, simultaneous military conquest across all regions by a unified external enemy (e.g., a single 'Sea Peoples' army).\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Evidence that all affected regions experienced identical, simultaneous, and total environmental catastrophes (e.g., a single mega-drought) with no regional variation.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its geography (the Nile) provided a more resilient agricultural base and a more unified state structure that could absorb shocks and repel the disparate 'Sea Peoples' migrations, which were a symptom, not the root cause, of the systemic collapse.\"}",
+      "typicality": 0.8,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba6875c5f145e404c53a84539cf366e0b6e0106eec674c07231357fed09e672"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was primarily driven by a rapid and widespread shift in military technology and tactics, specifically the adoption of massed, mobile infantry (javelin-throwers and swordsmen) that rendered the elite, chariot-based armies of the palatial states obsolete.\", \"mechanism\": \"The palatial states' power and internal legitimacy rested on a military monopoly held by a chariot-riding aristocracy. The development of new infantry tactics and weaponry (like the Naue II sword and javelin) by peripheral or 'barbarian' groups allowed them to overwhelm the expensive and tactically rigid chariot forces. This military defeat was swift and decisive, leading to the sacking of palaces and the collapse of the administrative centers that controlled the economy. The 'Sea Peoples' were a manifestation of this military revolution, not its cause.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows the widespread destruction was caused by a prolonged siege or a weapon system effective against fortifications, rather than by assault troops overwhelming defenders in the field.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Textual evidence shows the palatial chariot armies successfully adapted to and defeated the new infantry tactics in multiple major engagements.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its New Kingdom military, under Ramesses III, had already begun incorporating Sherden and other mercenaries familiar with these infantry tactics, allowing them to adapt and counter the threat at the Battle of the Delta, unlike the more conservative Hittite and Mycenaean forces.\"}",
+      "typicality": 0.5,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba6875c5f145e404c53a84539cf366e0b6e0106eec674c07231357fed09e672"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a consequence of a pandemic or series of virulent plagues that swept through the densely populated and interconnected palatial centers, causing acute demographic and social collapse from which the complex administrative structures could not recover.\", \"mechanism\": \"The highly concentrated urban centers and extensive trade routes of the Late Bronze Age provided an ideal environment for the rapid transmission of infectious diseases. A pathogen with high mortality, introduced via trade or migration, would have decimated the bureaucratic and artisan classes essential to the palace economy. The loss of specialized knowledge (e.g., Linear B scribes) and labor led to a rapid systems collapse, with survivors abandoning the plague-ridden centers. The 'Sea Peoples' migrations were a secondary effect of these demographic pressures and power vacuums.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological or textual evidence shows the destruction layers are associated with widespread conflagration and violent trauma on human remains, rather than mass burials without perimortem violence.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Ancient DNA analysis of remains from the period reveals no novel pathogen with a high mortality rate across the affected regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to its more dispersed population along the Nile and a lower dependency on the kind of dense, centralized palace complexes that were epidemiological tinderboxes. The Nile's geography may have also acted as a natural quarantine barrier.\"}",
+      "typicality": 0.2,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba6875c5f145e404c53a84539cf366e0b6e0106eec674c07231357fed09e672"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy when faced with prolonged drought and seismic activity, which broke the just-in-time supply chains essential for elite stability.\", \"mechanism\": \"Ecological shock (drought/earthquakes) triggered a cascade failure in centralized bureaucratic logistics, preventing food distribution to dependent populations and mercenaries.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage or local agricultural surplus in collapsed regions during the drought period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'Systems Collapse' theory, attributing failure to interconnected fragility rather than a single invader.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the rapid diffusion of inexpensive iron weaponry and new infantry tactics that rendered the bronze-dependent chariot aristocracy militarily obsolete overnight.\", \"mechanism\": \"Technological democratization allowed decentralized groups to defeat professional standing armies, leading to the overthrow of palace elites by internal revolts or egalitarian raiders.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician coastal enclaves\"]}, \"forbidden\": [{\"case\": \"Evidence that iron weapons were rare, ritualistic, or inferior to bronze in the late 13th century BC battlefields.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A technological determinist view; often criticized for overstating the speed of the Iron Age transition relative to the collapse timeline.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate, coordinated insurgency by marginalized maritime networks ('Sea Peoples') who exploited the vacuum left by the withdrawal of Egyptian imperial oversight from the Levant.\", \"mechanism\": \"Geopolitical shift: As Egypt retrenched to defend its core, it abandoned its buffer states, allowing a confederation of displaced naval powers to systematically dismantle the Hittite and Mycenaean spheres without facing a unified imperial response.\", \"scope\": {\"covers\": [\"Ugarit\", \"Levantine city-states\", \"Hittite Anatolia\", \"Mycenaean Greece\"], \"excludes\": [\"Egypt\", \"Nubia\", \"Inland Assyria\"]}, \"forbidden\": [{\"case\": \"Records indicating the Sea Peoples were fragmented, uncoordinated, or acted solely as refugees rather than an organized military force.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical agency-focused model that treats the 'Sea Peoples' as a coherent political entity rather than a symptom of chaos, relying on specific Egyptian strategic choices.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "dependence",
+          "target": "f06b3cabf9fc833417c5ceb4f0c88a7f9d49b36e10e668a2f23abf58c48c4115"
+        }
+      ],
+      "typicality": 0.28
+    }
+  ]
+}

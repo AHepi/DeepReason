@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry (the 'Naue II' sword and javelin-armed skirmishers) rendering chariot-based palatial armies obsolete.\", \"mechanism\": \"New military technology and tactics allowed large numbers of lightly equipped infantry to overwhelm the expensive chariot corps that were the backbone of palatial power, destroying the military basis of the ruling elites.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt also relied heavily on chariot-based armies and faced the same invaders (the 'Sea Peoples') yet repelled them successfully.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains why palatial centers dependent on chariot warfare fell while Egypt, which adapted by incorporating mercenary infantry and using its greater manpower, survived. The mechanism is military-technological rather than climatic or economic.\"}",
+      "typicality": 0.3,
+      "neighbours": ["A9", "A10", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"A severe and sustained drought triggered famine, which in turn caused mass migration, internal rebellion, and the breakdown of the interdependent palatial redistribution economies.\", \"mechanism\": \"Climate change reduced agricultural yields across the Eastern Mediterranean, starving the palatial workforces, eroding tax bases, and sparking violent movements of desperate populations that overwhelmed the brittle, centrally-planned palace systems.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt, which relied on the same regional climate and the Nile's annual flood, experienced no such famine or collapse and instead recorded grain shipments to starving Hittites.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"The account must explain why the Nile's predictable flooding buffered Egypt from a drought that supposedly devastated its rain-fed neighbors. The mechanism is primarily climatic, with societal collapse as a second-order effect.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A1", "A2"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was the result of a systemic failure of the palatial trade and diplomacy network, where the destruction of one node triggered a catastrophic cascade of economic and political collapse through the entire interconnected system.\", \"mechanism\": \"Palaces were dependent on a complex network for essential imports like tin and copper. The disruption of trade routes, possibly by piracy or the loss of a key node, caused a domino effect, starving industries of raw materials and making the entire system of gift-exchange and elite legitimacy unsustainable.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt remained a major, stable power in the same network, continuing to trade and project power, which contradicts the idea of a total systemic network failure that selectively spared one of its most central participants.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account focuses on economic interdependence and systems theory. The key challenge is explaining why the network failure was so absolute for the other palaces but left Egypt, a major consumer and power within that same network, relatively intact and even able to repel invasions.\"}",
+      "typicality": 0.6,
+      "neighbours": ["A6", "A7", "A8"]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+A9
+A10
+A11
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM pi-bronze
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.95): counterexample first
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- A2: {"standard": {"mode": "absolute", "rubric": "A historical-mechanism account must: (1) name a specific causal mechanism \u2014 an institution, incentive, or proc
+- A3: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- A4: nu: argumentative case 5aa38b9764e37ce3 against A5 is sound
+- A6: The mechanism claims that Egypt survived because 'Nubian gold substituted for trade income,' but this contradicts the scope's explicit exclusion of 'Egypt prope
+- A7: nu: argumentative case 2d6adcaaf4f6df6b against A8 is sound
+- A9: The mechanism asserts that palaces 'prioritized elite maintenance over grain distribution, triggering peasant flight to pastoralism or highland refuge,' but thi
+- A10: nu: argumentative case 9078550ddd6562f1 against A11 is sound
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: {"claim": "Climate-forced systems collapse", "mechanism": "Multi-decade megadrought → agricultural failure → palace redistribution system seizure → peripheral rebellion → chain abandonment", "scope": {"covers": ["Anatolia", "Greece", "Levant", " Aegean trade circuits"], "excludes": ["Egypt proper", "Mesopotamian irrigation heartland", "non-palatial mountain refugia"]}, "forbidden": [{"case": "Paleoclimate proxies showing stable or pluvial conditions 1250-1150 BC", "eval": "rubric:std-hist"}, {"case": "Linear B archives showing sustained grain surplus redistribution through 1180 BC", "eval": "rubric:std-hist"}, {"case": "Archaeological continuity of palace central buildings without destruction horizons at Mycenae, Pylos, Hattusa, Ugarit", "eval": "rubric:std-hist"}, {"case": "Egyptian New Kingdom collapse simultaneous with or preceding palatial systems", "eval": "rubric:std-hist"}], "prose_notes": "Climate deterministic; materialist angle; positive-feedback cascade structure; archaeological register"}
+  spec 2: {"claim": "Sea Peoples as symptom of Hittite imperial vacuum militarization", "mechanism": "Great Kings warfare → displaced mercenary bands → raiding-coalescence into mobile confederations → systematic port destruction → trade-dependent palace insolvency", "scope": {"covers": ["Hittite-Anatolian interface", "Cilician and Syrian coasts", "Aegean maritime corridors"], "excludes": ["Mycenaean interior Argolid", "Egyptian Delta military response capacity", "Mesopotamian riverine bulk trade"]}, "forbidden": [{"case": "Merneptah/Ramesses III inscriptions absent Sea Peoples coalitions or depicting them as state actors pre-1208 BC", "eval": "rubric:std-hist"}, {"case": "Ugaritic archives showing no hiring of foreign fighters nor defensive fleet buildup before destruction", "eval": "rubric:std-hist"}, {"case": "Hittite collapse postdating rather than predating earliest Sea Peoples attacks in Levant", "eval": "rubric:std-hist"}, {"case": "Egyptian military incapacity to defeat Sea Peoples invasions of Delta", "eval": "rubric:std-hist"}], "prose_notes": "Political-military voluntarist angle; agency-driven mechanism; network-perturbation structure; epigraphic-register"}
+  spec 3: {"claim": "Earthquake storm destabilizing religious-political legitimacy", "mechanism": "Seismic clustering → sanctuary/palace destruction interpreted as divine abandonment → elite authority crisis → internal factional violence → deliberate system rejection by subject populations", "scope": {"covers": ["Anatolian North-South fault zones", "Aegean arc volcanism", "Levantine rift settlements"], "excludes": ["Egyptian alluvial floodplain (aseismic zone)", "Nile theological system", "desert-margin pastoral networks"]}, "forbidden": [{"case": "Seismic damage absent from destruction layers at Hattusa, Mycenae, Troy VIIa, Ugarit", "eval": "rubric:std-hist"}, {"case": "Contemporary texts attributing collapse to invasion or famine rather than divine displeasure via natural disaster", "eval": "rubric:std-hist"}, {"case": "Egyptian temples and mortuary complexes showing equivalent earthquake damage without state continuity", "eval": "rubric:std-hist"}, {"case": "Post-palatial Greece showing immediate palace reconstruction rather than abandonment and dispersal to villages", "eval": "rubric:std-hist"}], "prose_notes": "Cultural-religious idealist angle; legitimation-crisis mechanism; interpretive-rupture structure; archaeoseismic and textual register"}
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

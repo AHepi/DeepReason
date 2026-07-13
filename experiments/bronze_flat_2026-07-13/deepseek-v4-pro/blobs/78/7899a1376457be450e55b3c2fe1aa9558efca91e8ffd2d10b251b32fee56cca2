@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad6ea50e120cc5c4e6c0a75dfad48",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target": "74fde5320d6c79520ea82d3a22e3c25a5ecc8e0cb50c3197058c5a3b0ecd2845",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}

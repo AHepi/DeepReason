@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry rendering chariot-based armies obsolete.\", \"mechanism\": \"Iron metallurgy and new military tactics enabled larger, cheaper infantry forces that overwhelmed the chariot-based warrior elites of the palatial states.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records from the reign of Ramesses III show no adoption of iron weapons or massed infantry tactics during their successful defense against the Sea Peoples.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"The military revolution hypothesis argues that the chariot-riding aristocracies of the Late Bronze Age were made obsolete by new infantry tactics and iron weaponry. Egypt survived because it adapted quickly, incorporating Sea Peoples as mercenaries and maintaining a professional standing army.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A6", "A7", "A8"]
+    },
+    {
+      "content": "{\"claim\": \"A pandemic swept through densely populated palatial centers as the primary cause of collapse.\", \"mechanism\": \"An unidentified pathogen spread rapidly along trade routes, decimating the administrative and military elites concentrated in palace complexes, leading to systemic administrative collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian mummies and medical papyri from the 12th century BC show no evidence of a novel epidemic disease affecting the population.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"The pandemic hypothesis suggests that the very interconnectedness that enabled prosperity also facilitated the spread of disease. Egypt's survival is attributed to its more dispersed settlement pattern along the Nile and natural quarantine barriers.\"}",
+      "typicality": 0.5,
+      "neighbours": ["A9", "A10", "A11"]
+    },
+    {
+      "content": "{\"claim\": \"The Sea Peoples were not external invaders but internal rebels and displaced populations from within the palatial system itself.\", \"mechanism\": \"Economic inequality and environmental stress led to a class-based uprising of disenfranchised laborers, mercenaries, and rural populations against the palatial elites, with the 'Sea Peoples' being a retrospective label for these internal insurgents.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian inscriptions at Medinet Habu depict the Sea Peoples with distinct non-local material culture, including feathered headdresses, ox-carts with women and children, and pottery styles foreign to the Aegean and Levant.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This counterintuitive account reinterprets the Sea Peoples not as external invaders but as a symptom of internal collapse. The palatial economies created wealth disparities that eventually led to a peasant and mercenary revolt. Egypt survived because its pharaonic system maintained stronger ideological control and a more integrated military structure.\"}",
+      "typicality": 0.2,
+      "neighbours": ["A1", "A2", "A3"]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "cases": [
+    {
+      "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672",
+      "attack": false
+    },
+    {
+      "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845",
+      "attack": false
+    },
+    {
+      "target": "f37338f5e4c3a2c59c4ce1899609d2dcc0d8d95b6f1f9a859454040e33d7958e",
+      "attack": true,
+      "case": "The artifact declares itself a 'reseed_of' ba687c5f... but adopts a 'skeptic' stance while the original target holds a 'mechanist' stance for the same school 'school-0'. This creates an unresolved contradiction: a reseed implies continuity or replacement of the original artifact, yet the fundamental policy stance is inverted without any accompanying justification, transition rationale, or explanation of how the school's position changed. The artifact is therefore internally incoherent as a reseed.",
+      "counterexample": null
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A synchronized multi-decadal megadrought caused agricultural failure across the Eastern Mediterranean.\", \"mechanism\": \"Climate-forced resource scarcity triggered internal social unrest and external migration pressures that overwhelmed static palace economies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data showing stable precipitation levels in Anatolia between 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the assumption of uniform climate impact; struggles to explain why Egypt's Nile-dependent agriculture was insulated while rain-fed systems failed.\"}",
+      "typicality": 0.92,
+      "neighbours": ["A3", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a systemic failure of complex network interdependence rather than a single external shock.\", \"mechanism\": \"Hyper-specialization and tight coupling of trade networks meant that the failure of one node (e.g., Cyprus copper supply) cascaded rapidly through the entire system, causing economic paralysis.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Non-palatial rural societies\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust, localized subsistence economies persisting uninterrupted in Ugarit during the transition period\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Addresses the simultaneity via network theory; excludes Egypt due to its larger internal market and lower dependence on imported bronze.\"}",
+      "typicality": 0.75,
+      "neighbours": ["A1", "A4"]
+    },
+    {
+      "content": "{\"claim\": \"The proliferation of inexpensive iron weaponry democratized violence, allowing marginalized groups to overthrow chariot-based aristocracies.\", \"mechanism\": \"Technological diffusion of iron smelting reduced the cost of weaponry, breaking the monopoly of force held by palace elites and enabling decentralized insurgencies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Sea Peoples as a unified ethnic entity\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Metallurgical analysis proving iron tools were rare and ritually significant rather than mass-produced for warfare before 1100 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly atypical as mainstream chronology places widespread iron weaponization slightly later than the initial collapse; attempts to re-date the technological shift.\"}",
+      "typicality": 0.28,
+      "neighbours": ["A6", "A7", "A12"]
+    }
+  ]
+}

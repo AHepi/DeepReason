@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the resource flows necessary to maintain centralized authority.\", \"mechanism\": \"Climate-induced agricultural collapse leading to the breakdown of the command economy and subsequent civil unrest.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed layers of Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with current climatological data (e.g., pollen records) suggesting a mega-drought, though it struggles to explain why Egypt's similar climate exposure did not cause total collapse.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a sudden shift in military technology and tactics, specifically the rise of light infantry and javelin throwers capable of defeating expensive chariot aristocracies.\", \"mechanism\": \"Military obsolescence of the chariot-based elite warrior class against decentralized, flexible infantry forces.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Sea Peoples as a unified ethnic group\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot units remained effective or dominant in battles post-1200 BC in the region\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military explanation, but often criticized for failing to account for the simultaneous destruction of non-military infrastructure and the survival of Egypt which also faced these tactics.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a cascading failure of international trade networks (the 'globalization' of the Bronze Age), where the loss of a single critical node (like Cyprus for copper) caused a systemic economic depression that destabilized all dependent palaces.\", \"mechanism\": \"Complex system fragility: interdependence meant that localized disruptions propagated rapidly across the entire network, causing simultaneous political fragmentation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"inland agrarian communities\"]}, \"forbidden\": [{\"case\": \"Evidence that local production of bronze or essential goods continued uninterrupted in isolated palace centers after trade routes were cut\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical but increasingly popular systems-theory approach; it explains simultaneity well but requires assuming a higher degree of economic integration than some archaeological records support.\"}",
+      "typicality": 0.35,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        },
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    }
+  ]
+}
