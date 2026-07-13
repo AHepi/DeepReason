@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""E3.1 trusted checker for e31-constr-004 (family forbidden_words).
+
+Sealed holdout artifact (harness-spec-v1.3 SS10.5): withheld from any
+run loop, revealed only post-hoc.  Exit 0 iff the candidate passes."""
+import json
+
+PARAMS = json.loads("{\"forbidden\": [\"0110\", \"1010\", \"1100\"], \"k\": 6, \"n\": 15}")
+
+def check_forbidden_words(params, candidate):
+    n, k = params["n"], params["k"]
+    forbidden = params["forbidden"]
+    if not isinstance(candidate, str) or len(candidate) != n:
+        return False, f"candidate must be a string of length {n}"
+    if any(ch not in "01" for ch in candidate):
+        return False, "candidate must be a binary string"
+    if candidate.count("1") != k:
+        return False, f"candidate must contain exactly {k} ones"
+    for word in forbidden:
+        if word in candidate:
+            return False, f"candidate contains forbidden substring {word}"
+    return True, "all properties satisfied"
+
+
+def main():
+    import sys
+    path = sys.argv[1] if len(sys.argv) > 1 else "candidate.json"
+    with open(path, encoding="utf-8") as handle:
+        candidate = json.load(handle)
+    ok, reason = check_forbidden_words(PARAMS, candidate)
+    print(("PASS: " if ok else "FAIL: ") + reason)
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,36 @@
+{
+  "attempt": 0,
+  "candidate_file": "candidate.json",
+  "check_spec": {
+    "argv": [
+      "python3",
+      "checker.py",
+      "candidate.json"
+    ],
+    "cwd": ".",
+    "env": {},
+    "expected_exit": 0,
+    "id": "e31-constr-005-check",
+    "runner": "command",
+    "step_or_item_limit": 2000000
+  },
+  "family": "displaced_permutation",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-005",
+  "parameters": {
+    "banned_displacements": [
+      1,
+      2
+    ],
+    "n": 8,
+    "q": 3,
+    "r": 0
+  },
+  "schema": "e31-construction-problem-v1",
+  "sealed_refs": {
+    "answer_key.json": "5a6df66b70a7ebf32c433532a3d24d531765ee24af0540ee21960b7f9625dff3",
+    "checker.py": "17a4555baf607be68c169ebae6c2ae9ff5a8ccbb06da618b693901ad56454a4a"
+  },
+  "seed": "20260713",
+  "statement": "Construct a permutation p of 0..7 such that (P1) p has no fixed point, (P2) no index i has |p[i] - i| in {1, 2}, and (P3) the sum of |p[i] - i| over all i is congruent to 0 mod 3.  Submit p as a JSON list (candidate.json)."
+}

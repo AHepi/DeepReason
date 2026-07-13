@@ -1,0 +1,139 @@
+{
+  "builder_version": "e31-build-demo-v1",
+  "counts": {
+    "axiom_domain": 3,
+    "construction": 3,
+    "total": 6
+  },
+  "generator_versions": {
+    "axiom_domains": "e31-axiom-domains-v1",
+    "constructions": "e31-constructions-v1"
+  },
+  "holdout": {
+    "manifest": "holdout/manifest.json",
+    "namespace": "holdout/",
+    "reveal_policy": "post_hoc_reveal_only"
+  },
+  "lean_kernel_validation": {
+    "lean_sources_emitted": true,
+    "reason": "toolchain_missing: no lean executable on PATH; pinned lean4@4.19.0 not installed at build time",
+    "status": "pending",
+    "toolchain_id": "lean4@4.19.0"
+  },
+  "problems": [
+    {
+      "certificate_digest": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025",
+      "class": "axiom_domain",
+      "files": [
+        "domain.lean",
+        "pinned_lean_request.json",
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-axiom-000",
+      "lean_source_sha256": "417a54e1be2d821af4914bc02ad300218c1d546e3c0c1b0bbfeb8cd712be720a",
+      "sealed_refs": {
+        "certificate.json": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025"
+      },
+      "seed": "20260713/axiom/0",
+      "target_theorems": [
+        "nuskorl_d1_t1",
+        "nuskorl_d2_t2",
+        "nuskorl_d3_t3",
+        "nuskorl_d4_t4"
+      ]
+    },
+    {
+      "certificate_digest": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292",
+      "class": "axiom_domain",
+      "files": [
+        "domain.lean",
+        "pinned_lean_request.json",
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-axiom-001",
+      "lean_source_sha256": "d524f78b0c65509a94b077229f1823c37dc82f77a26d61a4dfd57bce93b7a7f7",
+      "sealed_refs": {
+        "certificate.json": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292"
+      },
+      "seed": "20260713/axiom/1",
+      "target_theorems": [
+        "breidrov_d1_t1",
+        "breidrov_d2_t2",
+        "breidrov_d3_t3",
+        "breidrov_d4_t4"
+      ]
+    },
+    {
+      "certificate_digest": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799",
+      "class": "axiom_domain",
+      "files": [
+        "domain.lean",
+        "pinned_lean_request.json",
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-axiom-002",
+      "lean_source_sha256": "4505cd71c9243b611647212a402a3aa169f6b157fa01b7cb15f130e8b111c49a",
+      "sealed_refs": {
+        "certificate.json": "2e3ae006f3c9844b75b57faf467091ce6f41910f86dd3d1cdabdcbd4e9b70799"
+      },
+      "seed": "20260713/axiom/2",
+      "target_theorems": [
+        "gleiglorl_d1_t1",
+        "gleiglorl_d2_t2",
+        "gleiglorl_d3_t3",
+        "gleiglorl_d4_t4"
+      ]
+    },
+    {
+      "certificate_digest": "2d8475261767bad5d997633090762dce383ab65323c384703632ad4a1c2ce6b4",
+      "class": "construction",
+      "family": "sidon_residue",
+      "files": [
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-constr-003",
+      "sealed_refs": {
+        "answer_key.json": "2d8475261767bad5d997633090762dce383ab65323c384703632ad4a1c2ce6b4",
+        "checker.py": "6caecb2e66ef428b1b7983addafdf770157523489b9d0880f42932072ee62de4"
+      },
+      "seed": "20260713"
+    },
+    {
+      "certificate_digest": "87d51e462790ccdb8c57bfb9565e81ba6a5dbf18c59f0bb9eb3804b0113ae275",
+      "class": "construction",
+      "family": "forbidden_words",
+      "files": [
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-constr-004",
+      "sealed_refs": {
+        "answer_key.json": "87d51e462790ccdb8c57bfb9565e81ba6a5dbf18c59f0bb9eb3804b0113ae275",
+        "checker.py": "84240c615393159c3893cb3d9c7d75ec6d4328b45893e0cffeec96e4e7669946"
+      },
+      "seed": "20260713"
+    },
+    {
+      "certificate_digest": "5a6df66b70a7ebf32c433532a3d24d531765ee24af0540ee21960b7f9625dff3",
+      "class": "construction",
+      "family": "displaced_permutation",
+      "files": [
+        "problem.json",
+        "statement.md"
+      ],
+      "id": "e31-constr-005",
+      "sealed_refs": {
+        "answer_key.json": "5a6df66b70a7ebf32c433532a3d24d531765ee24af0540ee21960b7f9625dff3",
+        "checker.py": "17a4555baf607be68c169ebae6c2ae9ff5a8ccbb06da618b693901ad56454a4a"
+      },
+      "seed": "20260713"
+    }
+  ],
+  "program_doc": "docs/EXPERIMENT_PROGRAM_2026-07.md (E3.1)",
+  "schema": "e31-benchmark-manifest-v1",
+  "seed": 20260713
+}

@@ -1,0 +1,31 @@
+{
+  "attempt": 1,
+  "brute_force": {
+    "candidates_enumerated": 38760,
+    "cap_hit": false,
+    "enumeration_cap": 2000000,
+    "enumeration_steps": 40745,
+    "search_space_note": "C(20,6) increasing n-subsets of [1,20]",
+    "search_space_size": 38760,
+    "solutions_found": 744,
+    "witness": [
+      1,
+      2,
+      3,
+      5,
+      8,
+      13
+    ]
+  },
+  "family": "sidon_residue",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-003",
+  "parameters": {
+    "m": 20,
+    "n": 6,
+    "q": 5,
+    "r": 2
+  },
+  "schema": "e31-construction-certificate-v1",
+  "seed": "20260713"
+}

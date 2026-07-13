@@ -1,0 +1,58 @@
+{
+  "attempt": 0,
+  "axioms": [
+    "frithreith(glaglor(x), y) = glaglor(frithreith(x, y))",
+    "glaglor(glaglor(x)) = x",
+    "frithreith(x, novaux(x, y)) = novaux(x, frithreith(x, y))",
+    "frithreith(x, y) = frithreith(y, x)"
+  ],
+  "generator_version": "e31-axiom-domains-v1",
+  "id": "e31-axiom-000",
+  "schema": "e31-axiom-problem-v1",
+  "sealed_refs": {
+    "certificate.json": "93e6f45b14c2e42701b87ce959182036cc2076401c8783b8c5cd3d4f5939d025"
+  },
+  "seed": "20260713/axiom/0",
+  "signature": {
+    "binary_ops": [
+      "frithreith",
+      "novaux"
+    ],
+    "class_name": "Nuskorl",
+    "constants": [
+      "freinir",
+      "snormox"
+    ],
+    "unary_ops": [
+      "glaglor"
+    ]
+  },
+  "targets": [
+    {
+      "depth_grade": 1,
+      "lean_name": "nuskorl_d1_t1",
+      "statement": "forall x. frithreith(snormox, x) = frithreith(x, snormox)"
+    },
+    {
+      "depth_grade": 2,
+      "lean_name": "nuskorl_d2_t2",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = glaglor(frithreith(x, freinir))"
+    },
+    {
+      "depth_grade": 3,
+      "lean_name": "nuskorl_d3_t3",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = glaglor(frithreith(freinir, x))"
+    },
+    {
+      "depth_grade": 4,
+      "lean_name": "nuskorl_d4_t4",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = frithreith(glaglor(freinir), x)"
+    }
+  ],
+  "template_kinds": [
+    "graded_interaction",
+    "unary_power",
+    "graded_interaction",
+    "commutation_like"
+  ]
+}

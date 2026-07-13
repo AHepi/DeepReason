@@ -1,0 +1,33 @@
+{
+  "attempt": 1,
+  "candidate_file": "candidate.json",
+  "check_spec": {
+    "argv": [
+      "python3",
+      "checker.py",
+      "candidate.json"
+    ],
+    "cwd": ".",
+    "env": {},
+    "expected_exit": 0,
+    "id": "e31-constr-003-check",
+    "runner": "command",
+    "step_or_item_limit": 2000000
+  },
+  "family": "sidon_residue",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-003",
+  "parameters": {
+    "m": 20,
+    "n": 6,
+    "q": 5,
+    "r": 2
+  },
+  "schema": "e31-construction-problem-v1",
+  "sealed_refs": {
+    "answer_key.json": "2d8475261767bad5d997633090762dce383ab65323c384703632ad4a1c2ce6b4",
+    "checker.py": "6caecb2e66ef428b1b7983addafdf770157523489b9d0880f42932072ee62de4"
+  },
+  "seed": "20260713",
+  "statement": "Construct a list of 6 distinct integers, each in [1, 20], such that (P1) all pairwise sums are distinct (Sidon property) and (P2) the total sum is congruent to 2 mod 5.  Submit the list as JSON (candidate.json)."
+}

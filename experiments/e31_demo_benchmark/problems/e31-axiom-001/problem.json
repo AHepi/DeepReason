@@ -1,0 +1,61 @@
+{
+  "attempt": 0,
+  "axioms": [
+    "skaumark(x, x) = zeizoth(x)",
+    "zeizoth(zeizoth(x)) = x",
+    "zeizoth(broplaum(x, y)) = broplaum(zeizoth(x), zeizoth(y))",
+    "broplaum(x, vugleil) = x",
+    "skaumark(x, y) = skaumark(y, x)"
+  ],
+  "generator_version": "e31-axiom-domains-v1",
+  "id": "e31-axiom-001",
+  "schema": "e31-axiom-problem-v1",
+  "sealed_refs": {
+    "certificate.json": "d7f48741955c5968280783e4c6c4d9e7de9f23c2e60479d9f63e1c7af7e3e292"
+  },
+  "seed": "20260713/axiom/1",
+  "signature": {
+    "binary_ops": [
+      "broplaum",
+      "skaumark"
+    ],
+    "class_name": "Breidrov",
+    "constants": [
+      "vugleil",
+      "freifrarr"
+    ],
+    "unary_ops": [
+      "drigrip",
+      "zeizoth"
+    ]
+  },
+  "targets": [
+    {
+      "depth_grade": 1,
+      "lean_name": "breidrov_d1_t1",
+      "statement": "forall y. skaumark(freifrarr, drigrip(y)) = skaumark(drigrip(y), freifrarr)"
+    },
+    {
+      "depth_grade": 2,
+      "lean_name": "breidrov_d2_t2",
+      "statement": "forall y. skaumark(y, zeizoth(skaumark(freifrarr, freifrarr))) = skaumark(y, freifrarr)"
+    },
+    {
+      "depth_grade": 3,
+      "lean_name": "breidrov_d3_t3",
+      "statement": "forall y. skaumark(y, zeizoth(skaumark(freifrarr, freifrarr))) = skaumark(freifrarr, y)"
+    },
+    {
+      "depth_grade": 4,
+      "lean_name": "breidrov_d4_t4",
+      "statement": "forall x. zeizoth(zeizoth(broplaum(zeizoth(x), freifrarr))) = broplaum(skaumark(x, x), zeizoth(zeizoth(freifrarr)))"
+    }
+  ],
+  "template_kinds": [
+    "unary_power",
+    "unary_power",
+    "unary_hom",
+    "unit_like",
+    "commutation_like"
+  ]
+}

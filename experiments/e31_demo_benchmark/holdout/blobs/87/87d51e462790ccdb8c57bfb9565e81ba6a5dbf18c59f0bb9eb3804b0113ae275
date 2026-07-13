@@ -1,0 +1,27 @@
+{
+  "attempt": 1,
+  "brute_force": {
+    "candidates_enumerated": 5005,
+    "cap_hit": false,
+    "enumeration_cap": 2000000,
+    "enumeration_steps": 5005,
+    "search_space_note": "2^15 binary strings (C(15,6)=5005 with the ones-count constraint)",
+    "search_space_size": 32768,
+    "solutions_found": 180,
+    "witness": "100100100100101"
+  },
+  "family": "forbidden_words",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-004",
+  "parameters": {
+    "forbidden": [
+      "0110",
+      "1010",
+      "1100"
+    ],
+    "k": 6,
+    "n": 15
+  },
+  "schema": "e31-construction-certificate-v1",
+  "seed": "20260713"
+}

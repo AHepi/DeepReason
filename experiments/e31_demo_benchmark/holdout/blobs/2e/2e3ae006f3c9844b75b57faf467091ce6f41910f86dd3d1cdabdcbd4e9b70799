@@ -1,0 +1,597 @@
+{
+  "attempt": 0,
+  "axioms": [
+    {
+      "lhs": [
+        "f",
+        "vogrer",
+        [
+          [
+            "f",
+            "vogrer",
+            [
+              [
+                "v",
+                "x"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "rhs": [
+        "v",
+        "x"
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "kreimulp",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "v",
+            "y"
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "kreimulp",
+        [
+          [
+            "v",
+            "y"
+          ],
+          [
+            "v",
+            "x"
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "kroveil",
+        [
+          [
+            "f",
+            "kroveil",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ],
+          [
+            "v",
+            "z"
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "kroveil",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "kreimulp",
+            [
+              [
+                "v",
+                "y"
+              ],
+              [
+                "v",
+                "z"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "kroveil",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "c",
+            "skarsnein"
+          ]
+        ]
+      ],
+      "rhs": [
+        "v",
+        "x"
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "vogrer",
+        [
+          [
+            "f",
+            "vogrer",
+            [
+              [
+                "v",
+                "x"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "vogrer",
+        [
+          [
+            "v",
+            "x"
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "kreimulp",
+        [
+          [
+            "f",
+            "kreimulp",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ],
+          [
+            "v",
+            "z"
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "kreimulp",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "kroveil",
+            [
+              [
+                "v",
+                "y"
+              ],
+              [
+                "v",
+                "z"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "kroveil",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "kreimulp",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "kreimulp",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "kroveil",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "collapse_check": {
+    "budget": {
+      "max_depth": 4,
+      "max_nodes": 1200,
+      "max_term_size": 12
+    },
+    "collapsed": false,
+    "outcome": {
+      "depth": null,
+      "derivation": null,
+      "nodes_expanded": 1,
+      "proved": false,
+      "truncated": false
+    },
+    "probe": "forall x y. x = y"
+  },
+  "generator_version": "e31-axiom-domains-v1",
+  "schema": "e31-axiom-certificate-v1",
+  "seed": "20260713/axiom/2",
+  "targets": [
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 1,
+        "lhs": [
+          "f",
+          "kreimulp",
+          [
+            [
+              "f",
+              "vogrer",
+              [
+                [
+                  "f",
+                  "vogrer",
+                  [
+                    [
+                      "c",
+                      "skarsnein"
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "v",
+              "y"
+            ]
+          ]
+        ],
+        "nontrivial": false,
+        "outcome_large": {
+          "depth": 1,
+          "derivation": [
+            "kreimulp(vogrer(vogrer(skarsnein)), #y)",
+            "kreimulp(skarsnein, #y)"
+          ],
+          "nodes_expanded": 1,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": 1,
+          "derivation": [
+            "kreimulp(vogrer(vogrer(skarsnein)), #y)",
+            "kreimulp(skarsnein, #y)"
+          ],
+          "nodes_expanded": 1,
+          "proved": true,
+          "truncated": false
+        },
+        "rhs": [
+          "f",
+          "kreimulp",
+          [
+            [
+              "c",
+              "skarsnein"
+            ],
+            [
+              "v",
+              "y"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(skarsnein, y)"
+      },
+      "depth": 1,
+      "lean_name": "gleiglorl_d1_t1",
+      "statement": "forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(skarsnein, y)"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 2,
+        "lhs": [
+          "f",
+          "kreimulp",
+          [
+            [
+              "f",
+              "vogrer",
+              [
+                [
+                  "f",
+                  "vogrer",
+                  [
+                    [
+                      "c",
+                      "skarsnein"
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "v",
+              "y"
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 2,
+          "derivation": [
+            "kreimulp(vogrer(vogrer(skarsnein)), #y)",
+            "kreimulp(#y, vogrer(vogrer(skarsnein)))",
+            "kreimulp(#y, skarsnein)"
+          ],
+          "nodes_expanded": 2,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "kreimulp",
+          [
+            [
+              "v",
+              "y"
+            ],
+            [
+              "c",
+              "skarsnein"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(y, skarsnein)"
+      },
+      "depth": 2,
+      "lean_name": "gleiglorl_d2_t2",
+      "statement": "forall y. kreimulp(vogrer(vogrer(skarsnein)), y) = kreimulp(y, skarsnein)"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 3,
+        "lhs": [
+          "f",
+          "vogrer",
+          [
+            [
+              "f",
+              "kroveil",
+              [
+                [
+                  "f",
+                  "grathrux",
+                  [
+                    [
+                      "v",
+                      "x"
+                    ]
+                  ]
+                ],
+                [
+                  "c",
+                  "skarsnein"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 3,
+          "derivation": [
+            "vogrer(kroveil(grathrux(#x), skarsnein))",
+            "vogrer(grathrux(#x))",
+            "vogrer(vogrer(grathrux(#x)))",
+            "grathrux(#x)"
+          ],
+          "nodes_expanded": 4,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "grathrux",
+          [
+            [
+              "v",
+              "x"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: vogrer(kroveil(grathrux(x), skarsnein)) = grathrux(x)"
+      },
+      "depth": 3,
+      "lean_name": "gleiglorl_d3_t3",
+      "statement": "forall x. vogrer(kroveil(grathrux(x), skarsnein)) = grathrux(x)"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 4,
+        "lhs": [
+          "f",
+          "kroveil",
+          [
+            [
+              "c",
+              "skarsnein"
+            ],
+            [
+              "f",
+              "kreimulp",
+              [
+                [
+                  "f",
+                  "vogrer",
+                  [
+                    [
+                      "v",
+                      "y"
+                    ]
+                  ]
+                ],
+                [
+                  "c",
+                  "skarsnein"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 4,
+          "derivation": [
+            "kroveil(skarsnein, kreimulp(vogrer(#y), skarsnein))",
+            "kroveil(skarsnein, kreimulp(vogrer(vogrer(#y)), skarsnein))",
+            "kroveil(skarsnein, kreimulp(#y, skarsnein))",
+            "kroveil(kroveil(skarsnein, #y), skarsnein)",
+            "kroveil(skarsnein, #y)"
+          ],
+          "nodes_expanded": 18,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "kroveil",
+          [
+            [
+              "c",
+              "skarsnein"
+            ],
+            [
+              "v",
+              "y"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: kroveil(skarsnein, kreimulp(vogrer(y), skarsnein)) = kroveil(skarsnein, y)"
+      },
+      "depth": 4,
+      "lean_name": "gleiglorl_d4_t4",
+      "statement": "forall y. kroveil(skarsnein, kreimulp(vogrer(y), skarsnein)) = kroveil(skarsnein, y)"
+    }
+  ]
+}

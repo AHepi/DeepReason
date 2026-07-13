@@ -1,0 +1,479 @@
+{
+  "attempt": 0,
+  "axioms": [
+    {
+      "lhs": [
+        "f",
+        "frithreith",
+        [
+          [
+            "f",
+            "glaglor",
+            [
+              [
+                "v",
+                "x"
+              ]
+            ]
+          ],
+          [
+            "v",
+            "y"
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "glaglor",
+        [
+          [
+            "f",
+            "frithreith",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "glaglor",
+        [
+          [
+            "f",
+            "glaglor",
+            [
+              [
+                "v",
+                "x"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "rhs": [
+        "v",
+        "x"
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "frithreith",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "novaux",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "novaux",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "f",
+            "frithreith",
+            [
+              [
+                "v",
+                "x"
+              ],
+              [
+                "v",
+                "y"
+              ]
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "lhs": [
+        "f",
+        "frithreith",
+        [
+          [
+            "v",
+            "x"
+          ],
+          [
+            "v",
+            "y"
+          ]
+        ]
+      ],
+      "rhs": [
+        "f",
+        "frithreith",
+        [
+          [
+            "v",
+            "y"
+          ],
+          [
+            "v",
+            "x"
+          ]
+        ]
+      ]
+    }
+  ],
+  "collapse_check": {
+    "budget": {
+      "max_depth": 4,
+      "max_nodes": 1200,
+      "max_term_size": 12
+    },
+    "collapsed": false,
+    "outcome": {
+      "depth": null,
+      "derivation": null,
+      "nodes_expanded": 1,
+      "proved": false,
+      "truncated": false
+    },
+    "probe": "forall x y. x = y"
+  },
+  "generator_version": "e31-axiom-domains-v1",
+  "schema": "e31-axiom-certificate-v1",
+  "seed": "20260713/axiom/0",
+  "targets": [
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 1,
+        "lhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "c",
+              "snormox"
+            ],
+            [
+              "v",
+              "x"
+            ]
+          ]
+        ],
+        "nontrivial": false,
+        "outcome_large": {
+          "depth": 1,
+          "derivation": [
+            "frithreith(snormox, #x)",
+            "frithreith(#x, snormox)"
+          ],
+          "nodes_expanded": 1,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": 1,
+          "derivation": [
+            "frithreith(snormox, #x)",
+            "frithreith(#x, snormox)"
+          ],
+          "nodes_expanded": 1,
+          "proved": true,
+          "truncated": false
+        },
+        "rhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "v",
+              "x"
+            ],
+            [
+              "c",
+              "snormox"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: frithreith(snormox, x) = frithreith(x, snormox)"
+      },
+      "depth": 1,
+      "lean_name": "nuskorl_d1_t1",
+      "statement": "forall x. frithreith(snormox, x) = frithreith(x, snormox)"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 2,
+        "lhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "c",
+              "freinir"
+            ],
+            [
+              "f",
+              "glaglor",
+              [
+                [
+                  "v",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 2,
+          "derivation": [
+            "frithreith(freinir, glaglor(#x))",
+            "frithreith(glaglor(#x), freinir)",
+            "glaglor(frithreith(#x, freinir))"
+          ],
+          "nodes_expanded": 2,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "glaglor",
+          [
+            [
+              "f",
+              "frithreith",
+              [
+                [
+                  "v",
+                  "x"
+                ],
+                [
+                  "c",
+                  "freinir"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: frithreith(freinir, glaglor(x)) = glaglor(frithreith(x, freinir))"
+      },
+      "depth": 2,
+      "lean_name": "nuskorl_d2_t2",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = glaglor(frithreith(x, freinir))"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 3,
+        "lhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "c",
+              "freinir"
+            ],
+            [
+              "f",
+              "glaglor",
+              [
+                [
+                  "v",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 3,
+          "derivation": [
+            "frithreith(freinir, glaglor(#x))",
+            "frithreith(glaglor(#x), freinir)",
+            "glaglor(frithreith(#x, freinir))",
+            "glaglor(frithreith(freinir, #x))"
+          ],
+          "nodes_expanded": 3,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "glaglor",
+          [
+            [
+              "f",
+              "frithreith",
+              [
+                [
+                  "c",
+                  "freinir"
+                ],
+                [
+                  "v",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: frithreith(freinir, glaglor(x)) = glaglor(frithreith(freinir, x))"
+      },
+      "depth": 3,
+      "lean_name": "nuskorl_d3_t3",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = glaglor(frithreith(freinir, x))"
+    },
+    {
+      "certificate": {
+        "budget_large": {
+          "max_depth": 6,
+          "max_nodes": 3000,
+          "max_term_size": 15
+        },
+        "budget_small": {
+          "max_depth": 1,
+          "max_nodes": 200,
+          "max_term_size": 15
+        },
+        "depth": 4,
+        "lhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "c",
+              "freinir"
+            ],
+            [
+              "f",
+              "glaglor",
+              [
+                [
+                  "v",
+                  "x"
+                ]
+              ]
+            ]
+          ]
+        ],
+        "nontrivial": true,
+        "outcome_large": {
+          "depth": 4,
+          "derivation": [
+            "frithreith(freinir, glaglor(#x))",
+            "frithreith(glaglor(#x), freinir)",
+            "glaglor(frithreith(#x, freinir))",
+            "glaglor(frithreith(freinir, #x))",
+            "frithreith(glaglor(freinir), #x)"
+          ],
+          "nodes_expanded": 4,
+          "proved": true,
+          "truncated": false
+        },
+        "outcome_small": {
+          "depth": null,
+          "derivation": null,
+          "nodes_expanded": 1,
+          "proved": false,
+          "truncated": true
+        },
+        "rhs": [
+          "f",
+          "frithreith",
+          [
+            [
+              "f",
+              "glaglor",
+              [
+                [
+                  "c",
+                  "freinir"
+                ]
+              ]
+            ],
+            [
+              "v",
+              "x"
+            ]
+          ]
+        ],
+        "schema": "e31-difficulty-certificate-v1",
+        "statement": "forall vars: frithreith(freinir, glaglor(x)) = frithreith(glaglor(freinir), x)"
+      },
+      "depth": 4,
+      "lean_name": "nuskorl_d4_t4",
+      "statement": "forall x. frithreith(freinir, glaglor(x)) = frithreith(glaglor(freinir), x)"
+    }
+  ]
+}

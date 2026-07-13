@@ -57,8 +57,8 @@ LEAN_ALLOWED_AXIOMS = ("propext", "Classical.choice", "Quot.sound")
 
 # Default certificate budgets.  B_SMALL is the "shallow layer" a lookup-like
 # solver gets for free; B_LARGE is the build-time grading horizon.
-B_SMALL = Budget(max_depth=1, max_nodes=200, max_term_size=13)
-B_LARGE = Budget(max_depth=5, max_nodes=1500, max_term_size=13)
+B_SMALL = Budget(max_depth=1, max_nodes=200, max_term_size=15)
+B_LARGE = Budget(max_depth=6, max_nodes=3000, max_term_size=15)
 _COLLAPSE_BUDGET = Budget(max_depth=4, max_nodes=1200, max_term_size=12)
 
 _ONSETS = ("br", "dr", "fr", "gl", "gr", "kr", "m", "n", "pl", "qu", "sk", "sn", "thr", "v", "z")
@@ -317,7 +317,7 @@ def enumerate_targets(
     *,
     small: Budget = B_SMALL,
     large: Budget = B_LARGE,
-    n_seeds: int = 8,
+    n_seeds: int = 32,
     max_targets: int = 4,
     max_rhs_size: int = 11,
 ) -> list[TheoremTarget]:
@@ -334,13 +334,19 @@ def enumerate_targets(
     rng = random.Random(f"{GENERATOR_VERSION}:targets:{domain.seed}:{domain.attempt}")
     pool = [
         term
-        for term in _term_pool(domain.signature)
-        if term[0] == "f" and 3 <= term_size(term) <= 5 and term_vars(term)
+        for term in _term_pool(domain.signature, max_size=6)
+        if term[0] == "f" and 3 <= term_size(term) <= 6 and term_vars(term)
     ]
-    seeds = rng.sample(pool, min(n_seeds, len(pool))) if pool else []
+    order = list(pool)
+    rng.shuffle(order)
 
     candidates: dict[int, list[tuple[Any, Any]]] = {}
-    for source in seeds:
+    # Sweep seed terms in deterministic shuffled order; stop early once three
+    # depth grades are represented (or the sweep cap is reached).
+    sweep_cap = min(len(order), max(n_seeds, 1) * 4)
+    for index, source in enumerate(order[:sweep_cap]):
+        if index >= n_seeds and len(candidates) >= 3:
+            break
         distances, _truncated = reachable_ball(domain.axioms, source, large)
         for reached, depth in distances.items():
             if depth < 1:

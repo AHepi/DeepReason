@@ -1,0 +1,21 @@
+{
+  "allow_sorry": false,
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "backend": "lean4",
+  "imports_lock_ref": null,
+  "max_heartbeats": 400000,
+  "max_rec_depth": 1000,
+  "payload": null,
+  "source_ref": "417a54e1be2d821af4914bc02ad300218c1d546e3c0c1b0bbfeb8cd712be720a",
+  "target_theorems": [
+    "nuskorl_d1_t1",
+    "nuskorl_d2_t2",
+    "nuskorl_d3_t3",
+    "nuskorl_d4_t4"
+  ],
+  "toolchain_id": "lean4@4.19.0"
+}
