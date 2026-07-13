@@ -1,0 +1,127 @@
+{"flawed": true, "item_id": "cl-00", "kind": "oversimplified tidal model", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-00", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-00", "kind": "incorrect observed ratio", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-01", "kind": "parameter not dimensionless", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-01", "kind": "dimensional inconsistency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-01", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-01", "kind": "dimensional inconsistency in derived criterion", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-00", "kind": "quantitative error", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-02", "kind": "unjustified sufficiency claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-02", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-02", "kind": "overly simplistic sufficiency claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-02", "kind": "false premise about zero diurnal at equator", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-03", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-03", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-04", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-05", "kind": "contradictory bearing premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-04", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-05", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-05", "kind": "contradictory bearing assumptions", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-05", "kind": "contradictory boundary condition", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-06", "kind": "unsupported universal claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-06", "kind": "hasty generalization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-06", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-06", "kind": "overgeneralization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-07", "kind": "false premise (misidentified line)", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-07", "kind": "incorrect premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-07", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-07", "kind": "unfalsifiable prediction", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-08", "kind": "causal oversimplification", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-08", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-08", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-08", "kind": "overgeneralization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-09", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-09", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-10", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-10", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-10", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-11", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-10", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-11", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-11", "kind": "unsupported causal inference", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-11", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-12", "kind": "correlation-causation fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-12", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-12", "kind": "correlation does not imply causation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-13", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-12", "kind": "hasty generalization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-13", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-13", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-14", "kind": "post hoc causal fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-14", "kind": "causal fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-14", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-13", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-14", "kind": "correlation vs causation fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-15", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-15", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-15", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-15", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-16", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-16", "kind": "unsupported causal claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-16", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-16", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-17", "kind": "confounding variables", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-17", "kind": "confounding variables", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-17", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-18", "kind": "incorrect optimality claim under zero fixed cost", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-18", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-18", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-19", "kind": "causal oversimplification", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-17", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-18", "kind": "inconsistent cost scaling assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-19", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-20", "kind": "false proportionality assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-19", "kind": "Conflating admin and transport distance costs", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-19", "kind": "unsupported quantitative claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-20", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-20", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-21", "kind": "incorrect vector addition", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-20", "kind": "unsupported linear scaling assumption", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-21", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-22", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-21", "kind": "incorrect vector addition", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-21", "kind": "incorrect vector addition", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-22", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-22", "kind": "misapplied linear wave speed formula", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-22", "kind": "inconsistent wave speed formula", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-23", "kind": "incorrect latitude premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-23", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-23", "kind": "incorrect resonance formula", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-24", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-24", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-24", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-24", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-23", "kind": "incorrect high latitude bulge reasoning", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-25", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-25", "kind": "incorrect axial force calculation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-25", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-25", "kind": "contradictory bending moment claim", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-26", "kind": "confusing restrained vs unrestrained", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-26", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-26", "kind": "confusing unrestrained vs restrained premise", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-27", "kind": "move-count fallacy", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-27", "kind": "overgeneralization: central control always increases move count", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-27", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-27", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-28", "kind": "incorrect metric calculation", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-26", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-28", "kind": "unfalsifiable prediction", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-28", "kind": "incorrect premise about piece movement", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-28", "kind": "incorrect piece movement count", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-29", "kind": "incorrect move effect assessment", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-29", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-29", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-29", "kind": "overgeneralization", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-30", "kind": "dimensional inconsistency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-30", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-30", "kind": "dimensional inconsistency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-A", "sub_battery": "clean"}
+{"flawed": true, "item_id": "cl-30", "kind": "dimensional inconsistency", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-31", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "same-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-31", "kind": "none", "model": "qwen3-coder:480b", "parse_failure": false, "seat": "cross-B", "sub_battery": "clean"}
+{"flawed": false, "item_id": "cl-31", "kind": "none", "model": "gpt-oss:120b", "parse_failure": false, "seat": "cross-A", "sub_battery": "clean"}

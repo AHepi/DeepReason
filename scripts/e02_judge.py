@@ -339,10 +339,25 @@ def main() -> int:
     parser.add_argument("--items-dir", default="experiments/e02_t1_items")
     parser.add_argument("--skip-judging", action="store_true")
     parser.add_argument("--skip-funnel", action="store_true")
+    parser.add_argument("--clean", action="store_true",
+                        help="tranche-2 clean arm: judge clean_items.json in "
+                             "--items-dir through all four seats (same "
+                             "prompt, models, temperature); no funnel")
+    parser.add_argument("--token-ceiling", type=int, default=None,
+                        help="hard token ceiling for this items-dir's ledger")
     args = parser.parse_args()
     load_credentials()
     items_dir = REPO / args.items_dir
-    ledger = UsageLedger(items_dir / "token_usage.json")
+    ledger = (UsageLedger(items_dir / "token_usage.json",
+                          ceiling=args.token_ceiling)
+              if args.token_ceiling
+              else UsageLedger(items_dir / "token_usage.json"))
+    if args.clean:
+        items = json.loads((items_dir / "clean_items.json").read_text())
+        assert len(items) == 40, f"expected 40 clean items, found {len(items)}"
+        run_judging(items, items_dir, ledger)
+        print(json.dumps(ledger.state["phases"], indent=2), flush=True)
+        return 0
     items = load_items(items_dir)
     assert len(items) == 120, f"expected 120 items, found {len(items)}"
     if not args.skip_judging:
