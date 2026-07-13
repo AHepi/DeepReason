@@ -1,0 +1,12 @@
+{
+  "prompt_tokens": 17706,
+  "completion_tokens": 24503,
+  "calls": 54,
+  "phases": {
+    "adversary-unknown": {
+      "prompt_tokens": 17706,
+      "completion_tokens": 24503,
+      "calls": 54
+    }
+  }
+}
