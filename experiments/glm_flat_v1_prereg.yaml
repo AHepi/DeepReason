@@ -1,0 +1,19 @@
+# GLM flat run v1 - PRE-REGISTERED OBSERVATIONAL, committed before any call.
+# Operator directive: one more flat run - glm-5.2 (untested family, absent
+# from all prior tranches) in every role, thinking off, 1M tokens, the
+# bronze problem. Court-cross showed critic families make no difference;
+# this run observes a fresh family under the standing observe-only policy.
+design:
+  model: glm-5.2 in ALL roles except judge seat 2 (gpt-oss:120b - the
+    cross-family judge invariant is compile-enforced for rubric workloads)
+  reasoning: none (thinking off)
+  suite: bronze (pi-bronze, unchanged)
+  runtime: evidence mode (schema-v2 manifest, preflight), observe-only
+    (standing policy), NEAR_DUP_EPS 0.35, CONTROLLER false, nomic embedder
+  budget: 1000000 tokens, reserve-settle; cycles 100 (budget-bound)
+  monitoring: operator receives a log digest every 2 minutes during the run
+observational: no verdict thresholds; registered observables as in
+  bronze_flat_v1 (emitted population, statuses, scrutiny, gate receipts,
+  novelty under nomic, wire discipline, anomalies as F-findings)
+commitments: report experiments/results/glm_flat_v1_report.json; index
+  line; root retained and verify_root clean
