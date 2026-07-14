@@ -128,7 +128,10 @@ def main() -> int:
     print(f"after program criticism: {harness.state.status.get(artifact.id).value}")
 
     kappa = harness.commitments["kappa-autonomics"]
-    run_trial(harness, artifact.id, kappa, adapter, config, diagnostics)
+    run_trial(
+        harness, artifact.id, kappa, adapter, config, diagnostics,
+        authority="legacy_status",
+    )
     print(f"after rubric trial: {harness.state.status.get(artifact.id).value}")
 
     if harness.state.status.get(artifact.id) == Status.ACCEPTED:

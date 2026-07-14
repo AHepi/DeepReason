@@ -251,7 +251,8 @@ def test_compact_trial_preserves_ensemble_and_referential_integrity(tmp_path):
         model_profile="compact",
     )
     result = run_trial(
-        harness, target.id, commitment, adapter, Config(TRIAL_PARAPHRASE_N=0)
+        harness, target.id, commitment, adapter, Config(TRIAL_PARAPHRASE_N=0),
+        authority="legacy_status",
     )
     assert result is not None
     assert harness.state.status[target.id] == Status.REFUTED
@@ -287,7 +288,8 @@ def test_compact_pairwise_aliases_preserve_order_swap(harness):
         {"judge": endpoint}, harness.blobs, model_profile="compact"
     )
     ruling = pairwise_discriminate(
-        harness, problem, first.id, second.id, adapter, Config()
+        harness, problem, first.id, second.id, adapter, Config(),
+        authority="legacy_status",
     )
     assert ruling is not None
     assert harness.state.status[second.id] == Status.REFUTED

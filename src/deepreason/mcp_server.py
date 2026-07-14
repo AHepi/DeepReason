@@ -837,6 +837,7 @@ def _start_run(
                 StopPolicy,
                 write_stop_record,
             )
+            from deepreason.status_display import display_status_counts
             from deepreason.workloads.text import (
                 WorkloadProblem,
                 seed_reasoning_workload,
@@ -885,6 +886,7 @@ def _start_run(
                     token_spend=base_token_spend,
                     token_limit=display_token_limit,
                     determinate=False,
+                    display_status_counts=display_status_counts(harness, manifest),
                 )
                 notify_progress(loaded)
 
@@ -909,6 +911,9 @@ def _start_run(
                         accepted=counts["accepted"],
                         refuted=counts["refuted"],
                         suspended=counts["suspended"],
+                        display_status_counts=display_status_counts(
+                            scheduler.harness, manifest
+                        ),
                         token_spend=token_spend,
                         token_limit=display_token_limit,
                         determinate=False,
@@ -969,6 +974,9 @@ def _start_run(
                     "problem_id": spec.problem.id,
                     "frontier": result["frontier"],
                     "survivors": result["survivors"],
+                    "display": {
+                        "status_counts": display_status_counts(harness, manifest),
+                    },
                     "accounting": accounting,
                     "stop": stop,
                 }
@@ -985,6 +993,7 @@ def _start_run(
                     token_limit=display_token_limit,
                     determinate=False,
                     stop_reason=stop_reason,
+                    display_status_counts=display_status_counts(harness, manifest),
                 )
                 notify_progress(terminal)
             except (Exception, SystemExit) as error:

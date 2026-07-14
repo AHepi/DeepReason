@@ -73,7 +73,10 @@ def _refute_by_trial(harness) -> tuple[str, str]:
         },
         harness.blobs, retry_max=2,
     )
-    run_trial(harness, target.id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2))
+    run_trial(
+        harness, target.id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2),
+        authority="legacy_status",
+    )
     assert harness.state.status[target.id] == Status.REFUTED
     warrant = next(w for w in harness.warrants.values() if w.target == target.id)
     return target.id, warrant.validity_node

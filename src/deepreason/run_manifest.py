@@ -527,6 +527,15 @@ def compile_run_manifest(
         else "model_profile" in config
     )
     data = _source_config_data(config)
+    if schema_version == 2 and workload_profile is None:
+        raise RunManifestError(
+            "WORKLOAD_PROFILE_REQUIRED",
+            "schema v2 requires a text, code, formal, or website workload profile",
+            "/workload_profile",
+        )
+    # This must precede route resolution: a rejected authority policy cannot
+    # spend an endpoint/model-discovery call merely to learn that it is unsafe.
+    _preflight_text_authority(config, schema_version, workload_profile)
     engine_profile = engine_profile or data.get("engine_profile") or "full"
     if model_profile is None:
         model_profile = data.get("model_profile") or "standard"
@@ -620,12 +629,6 @@ def compile_run_manifest(
     engine_config = dict(data)
     engine_config["roles"] = {}
     stamp = compiled_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    if schema_version == 2 and workload_profile is None:
-        raise RunManifestError(
-            "WORKLOAD_PROFILE_REQUIRED",
-            "schema v2 requires a text, code, formal, or website workload profile",
-            "/workload_profile",
-        )
     default_pack_profiles = {
         "text": "reasoning.text.v1",
         "code": "reasoning.code.v1",
@@ -895,6 +898,23 @@ def payload_has_rubric(payload: dict[str, Any]) -> bool:
     )
 
 
+def _preflight_text_authority(
+    config,
+    schema_version: int,
+    workload_profile: str | None,
+) -> None:
+    """Fail closed before any endpoint exists for text status authority."""
+
+    if schema_version != 2 or workload_profile != "text":
+        return
+    from deepreason.authority import text_status_authority_issues
+
+    issues = text_status_authority_issues(config, workload_profile)
+    if issues:
+        issue = issues[0]
+        raise RunManifestError(issue.code, issue.message, issue.pointer)
+
+
 def preflight_payload(manifest: RunManifest, payload: dict[str, Any]) -> None:
     """Reject workload/manifest policy conflicts before the first call."""
     if payload_has_rubric(payload) and manifest.rubric_policy == "forbid":
@@ -921,6 +941,29 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
     rubric trial later.  This check operates on the replayed canonical state
     and the frozen engine config, while remaining purely read-only.
     """
+    _preflight_text_authority(
+        config,
+        manifest.schema_version,
+        manifest.workload_profile,
+    )
+    if manifest.schema_version == 2 and manifest.workload_profile == "text":
+        # The policy that authorizes a status-changing text judgement is part
+        # of the frozen manifest, not a knob a caller may replace between
+        # manifest compilation and adapter construction. Reconstruct through
+        # Config so older manifests with newly introduced fields retain their
+        # safe defaults during replay.
+        from deepreason.authority import authority_policy_snapshot
+
+        frozen_config = config_from_run_manifest(manifest)
+        if (
+            authority_policy_snapshot(config)
+            != authority_policy_snapshot(frozen_config)
+        ):
+            raise RunManifestError(
+                "TEXT_AUTHORITY_POLICY_MANIFEST_MISMATCH",
+                "runtime text authority policy differs from the frozen manifest",
+                "/engine_config",
+            )
     active_commitments = {
         commitment_id: harness.commitments[commitment_id]
         for problem in harness.state.problems.values()

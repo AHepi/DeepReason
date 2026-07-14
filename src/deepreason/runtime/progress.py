@@ -28,6 +28,9 @@ class ProgressEvent(BaseModel):
     accepted: int = Field(default=0, ge=0)
     refuted: int = Field(default=0, ge=0)
     suspended: int = Field(default=0, ge=0)
+    # Non-breaking presentation labels. Text workloads use ``standing`` here
+    # while the legacy numeric fields retain their internal-status meaning.
+    display_status_counts: dict[str, int] = Field(default_factory=dict)
     queued_checks: int = Field(default=0, ge=0)
     queued_criticism: int = Field(default=0, ge=0)
     token_spend: int = Field(default=0, ge=0)

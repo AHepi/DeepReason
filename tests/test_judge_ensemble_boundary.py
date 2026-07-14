@@ -79,7 +79,10 @@ def test_trial_rejects_invalid_direct_ensemble_before_any_endpoint_call(
     adapter = _trial_adapter(harness, judges, calls)
 
     with pytest.raises(JudgeEnsemblePolicyError) as raised:
-        run_trial(harness, target.id, commitment, adapter, Config())
+        run_trial(
+            harness, target.id, commitment, adapter, Config(),
+            authority="legacy_status",
+        )
 
     assert raised.value.code == "SECOND_JUDGE_FAMILY_REQUIRED"
     assert calls == []
@@ -102,7 +105,8 @@ def test_trial_accepts_frozen_cross_family_direct_ensemble(harness):
     ]
 
     result = run_trial(
-        harness, target.id, commitment, _trial_adapter(harness, judges, calls), Config()
+        harness, target.id, commitment, _trial_adapter(harness, judges, calls), Config(),
+        authority="legacy_status",
     )
 
     assert result is None

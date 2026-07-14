@@ -12,6 +12,7 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 from collections.abc import Iterable
 import json
 
+from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
@@ -216,6 +217,7 @@ class Scheduler:
         self._cycles = 0
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
+        self._advisory_trials_this_cycle = 0
         self._recrit_cursor = 0  # round-robin over standing survivors (§14)
         self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
         self._hv_skipped: set[str] = set()  # oversize hv skips, logged once each
@@ -387,16 +389,24 @@ class Scheduler:
 
                 if harness.state.status.get(artifact.id) != Status.ACCEPTED:
                     continue  # budget triage: already felled
+                authority = trial_authority_for(
+                    config, self.workload_profile, AuthoritySurface.RUBRIC
+                )
+                if authority == TrialAuthority.OBSERVE_ONLY:
+                    if self._advisory_trials_this_cycle >= config.ADVISORY_TRIALS_PER_CYCLE:
+                        continue
                 if (
                     config.RUBRIC_TRIALS_PER_ARTIFACT is not None
                     and trials >= config.RUBRIC_TRIALS_PER_ARTIFACT
                 ):
                     continue  # budget triage (§14): remaining trials next cycle
                 trials += 1
+                if authority == TrialAuthority.OBSERVE_ONLY:
+                    self._advisory_trials_this_cycle += 1
                 try:
                     run_trial(
                         harness, artifact.id, kappa, self.adapter, self.config,
-                        self.diagnostics, embedder=self.embedder,
+                        self.diagnostics, embedder=self.embedder, authority=authority,
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
@@ -497,6 +507,7 @@ class Scheduler:
     def step(self) -> None:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
+        self._advisory_trials_this_cycle = 0
         if not self._embedder_stamped:
             # Geometry identity on the record (§11.5/§17, adjudicated in
             # runs/embedder_design): model + library versions + sentinel-
@@ -548,10 +559,22 @@ class Scheduler:
             ][:2]
             if len(rivals) == 2:
                 try:
-                    pairwise_discriminate(
-                        harness, problem, rivals[0], rivals[1],
-                        self.adapter, config, self.diagnostics,
+                    authority = trial_authority_for(
+                        config, self.workload_profile, AuthoritySurface.PAIRWISE
                     )
+                    run_pairwise = authority != TrialAuthority.OBSERVE_ONLY
+                    if (
+                        authority == TrialAuthority.OBSERVE_ONLY
+                        and self._advisory_trials_this_cycle
+                        < config.ADVISORY_TRIALS_PER_CYCLE
+                    ):
+                        self._advisory_trials_this_cycle += 1
+                        run_pairwise = True
+                    if run_pairwise:
+                        pairwise_discriminate(
+                            harness, problem, rivals[0], rivals[1],
+                            self.adapter, config, self.diagnostics, authority=authority,
+                        )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
                     if isinstance(e, EndpointError):
@@ -1065,6 +1088,8 @@ class Scheduler:
     def _emit_progress(self, metrics, decision) -> None:
         if self.progress_sink is None:
             return
+        from deepreason.status_display import display_status_counts
+
         state = self.harness.state
         counts = {"accepted": 0, "refuted": 0, "suspended": 0}
         for status in state.status.values():
@@ -1092,6 +1117,9 @@ class Scheduler:
             accepted=counts["accepted"],
             refuted=counts["refuted"],
             suspended=counts["suspended"],
+            display_status_counts=display_status_counts(
+                self.harness, workload_profile=self.workload_profile
+            ),
             queued_checks=metrics.pending_deterministic_checks,
             determinate=False,
             stop_reason=decision.reason if stopped else None,

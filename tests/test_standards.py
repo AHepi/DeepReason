@@ -58,8 +58,10 @@ def test_standard_refutation_collapses_and_reinstates_replayed(tmp_path):
     harness.register_commitment(kappa)
     target = art(harness, "a chorale passage with parallel fifths in bar 3",
                  interface=Interface(commitments=["kappa-taste"]))
-    run_trial(harness, target.id, kappa, _trial_adapter(harness, [FAIL] * 3),
-              Config(TRIAL_PARAPHRASE_N=2))
+    run_trial(
+        harness, target.id, kappa, _trial_adapter(harness, [FAIL] * 3),
+        Config(TRIAL_PARAPHRASE_N=2), authority="legacy_status",
+    )
     assert harness.state.status[target.id] == Status.REFUTED
 
     attack(harness, standard.id, "fifths-are-fine-now")  # the Beethoven move
@@ -90,7 +92,10 @@ def test_user_ruling_enters_precedent_slice_and_is_revisable(harness):
     target = art(harness, "a chorale passage with parallel fifths in bar 3",
                  interface=Interface(commitments=["kappa-taste"]))
     adapter = _trial_adapter(harness, [FAIL] * 3)
-    run_trial(harness, target.id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2))
+    run_trial(
+        harness, target.id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2),
+        authority="legacy_status",
+    )
     judge_prompt = harness.blobs.get(
         next(e.llm.prompt_ref for e in harness.log.read() if e.llm and e.llm.role == "judge")
     ).decode()

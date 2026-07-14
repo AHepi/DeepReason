@@ -319,7 +319,9 @@ def test_pairwise_preference_cannot_refute_execution_backed_loser(harness):
         {"winner": "A", "decisive_point": "return x + x"},
         {"winner": "B", "decisive_point": "return x + x"},
     )
-    critic = pairwise_discriminate(harness, p, a.id, b.id, adapter, Config())
+    critic = pairwise_discriminate(
+        harness, p, a.id, b.id, adapter, Config(), authority="legacy_status"
+    )
     assert critic is None                                 # rivalry stands unresolved
     assert harness.state.status[b.id] == Status.ACCEPTED  # preference can't beat execution
     assert not any(w.target == b.id for w in harness.warrants.values())
@@ -346,7 +348,9 @@ def test_pairwise_preference_still_refutes_a_non_execution_loser(harness):
         {"winner": "A", "decisive_point": "just an assertion"},
         {"winner": "B", "decisive_point": "just an assertion"},
     )
-    critic = pairwise_discriminate(harness, p, a.id, b.id, adapter, Config())
+    critic = pairwise_discriminate(
+        harness, p, a.id, b.id, adapter, Config(), authority="legacy_status"
+    )
     assert critic is not None
     assert harness.state.status[b.id] == Status.REFUTED
 

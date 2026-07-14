@@ -85,15 +85,19 @@ def review_infrastructure(harness, adapter, config, artifact_id: str):
     attacked. They are excluded from the scheduler's ordinary standing
     criticism pool, so criticism of them must be a deliberate operation.
 
-    Flow: the argumentative_critic drafts a case against the named artifact;
-    the case then goes through the defended trial (defender answers, the
-    frozen cross-family judge ensemble rules, guard checks screen the
-    ruling). Only a guard-accepted sustained ruling mints the ARGUMENTATIVE
-    warrant; any other outcome lands as a trial-declined Measure. Returns
-    the registered critic artifact, or None."""
+    Flow: the argumentative_critic drafts a case against the named artifact.
+    The default observe-only policy records that case as scrutiny; an explicit
+    status policy sends it through the defended trial. This operation is
+    deliberately separate from ordinary scheduler criticism."""
+    from deepreason.authority import (
+        AuthoritySurface,
+        TrialAuthority,
+        trial_authority_for,
+    )
     from deepreason.informal.trial import run_argument_trial_from_case
     from deepreason.llm.contracts import ArgumentativeCriticOutput
     from deepreason.programs import content_text
+    from deepreason.rules.crit import _observe_case
 
     artifact_id = resolve_prefix(harness, artifact_id)
     target = harness.state.artifacts.get(artifact_id)
@@ -115,8 +119,14 @@ def review_infrastructure(harness, adapter, config, artifact_id: str):
     if not case_out.attack or not case_out.case.strip():
         harness.record_measure(inputs=["infra-review-no-case", artifact_id], llm=llm_call)
         return None
+    authority = trial_authority_for(
+        config, "text", AuthoritySurface.INFRASTRUCTURE
+    )
+    if authority == TrialAuthority.OBSERVE_ONLY:
+        return _observe_case(harness, artifact_id, case_out.case, llm_call)
     return run_argument_trial_from_case(
-        harness, adapter, config, artifact_id, case_out.case, llm_call
+        harness, adapter, config, artifact_id, case_out.case, llm_call,
+        authority=authority,
     )
 
 

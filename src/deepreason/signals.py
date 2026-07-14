@@ -104,6 +104,15 @@ SIGNALS: dict[str, str] = {
     "trial-declined": "trial_required criticism authority: the defended "
                       "trial over a precomputed case did not sustain "
                       "(inputs: [signal, target id, reason]); no warrant",
+    "trial-observation": "advisory rubric trial completed without a warrant "
+                         "or attack edge (inputs: [signal, target id, "
+                         "observation artifact id, outcome]); the artifact "
+                         "retains the case, defence, rulings, and guard result",
+    "pairwise-observation": "advisory pairwise comparison completed without "
+                            "a warrant or status change (inputs: [signal, "
+                            "problem id, observation artifact id, outcome]); "
+                            "the artifact retains both preferences and the "
+                            "order-swap result",
     "infra-review-no-case": "explicit infrastructure review ran and the "
                             "critic mounted no case (inputs: [signal, "
                             "artifact id]); the call is on the record",

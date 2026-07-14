@@ -913,6 +913,7 @@ def _cmd_reason(args) -> int:
     )
     from deepreason.runtime.progress import ProgressSink, _atomic_json
     from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+    from deepreason.status_display import display_status_counts
     from deepreason.workloads.text import (
         ReasoningWorkloadSpec,
         seed_reasoning_workload,
@@ -1005,6 +1006,7 @@ def _cmd_reason(args) -> int:
         nonlocal completed_cycles
         completed_cycles = scheduler._cycles
         status = scheduler.harness.state.status
+        display_counts = display_status_counts(scheduler.harness, manifest)
         counts = {name: 0 for name in ("accepted", "refuted", "suspended")}
         for label in status.values():
             if label.value in counts:
@@ -1018,6 +1020,7 @@ def _cmd_reason(args) -> int:
             accepted=counts["accepted"],
             refuted=counts["refuted"],
             suspended=counts["suspended"],
+            display_status_counts=display_counts,
             token_limit=token_budget,
             determinate=False,
         )
@@ -1075,6 +1078,9 @@ def _cmd_reason(args) -> int:
         "problem_id": problem.id,
         "frontier": result["frontier"],
         "survivors": result["survivors"],
+        "display": {
+            "status_counts": display_status_counts(harness, manifest),
+        },
         "accounting": accounting,
         "stop": stop,
     }
@@ -1085,6 +1091,7 @@ def _cmd_reason(args) -> int:
         activity=reason,
         cycle=completed_cycles,
         problem_id=problem.id,
+        display_status_counts=display_status_counts(harness, manifest),
         token_spend=meter.total if meter is not None else 0,
         token_limit=token_budget,
         determinate=False,

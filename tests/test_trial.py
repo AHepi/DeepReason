@@ -80,7 +80,9 @@ def test_surviving_trial_packages_rubric_warrant(tmp_path):
     config = Config(TRIAL_PARAPHRASE_N=2)
     # judge: initial ruling + 2 paraphrase re-rulings, all fail.
     adapter = _adapter(harness, [FAIL_RULING, FAIL_RULING, FAIL_RULING])
-    critic = run_trial(harness, target_id, kappa, adapter, config)
+    critic = run_trial(
+        harness, target_id, kappa, adapter, config, authority="legacy_status"
+    )
     assert critic is not None
     assert harness.state.status[target_id] == Status.REFUTED
     warrant = next(w for w in harness.warrants.values() if w.target == target_id)
@@ -115,7 +117,9 @@ def test_referential_integrity_blocks_unresolvable_ruling(harness):
     target_id, kappa = _setup(harness)
     bad = json.dumps({"verdict": "fail", "decisive_point": "a point nobody made"})
     adapter = _adapter(harness, [bad])
-    assert run_trial(harness, target_id, kappa, adapter, Config()) is None
+    assert run_trial(
+        harness, target_id, kappa, adapter, Config(), authority="legacy_status"
+    ) is None
     assert harness.state.status[target_id] == Status.ACCEPTED  # no warrant
     blocks = [e for e in harness.log.read()
               if any(t == "trial-blocked:referential-integrity" for t in e.inputs)]
@@ -125,7 +129,10 @@ def test_referential_integrity_blocks_unresolvable_ruling(harness):
 def test_paraphrase_flip_blocks_warrant(harness):
     target_id, kappa = _setup(harness)
     adapter = _adapter(harness, [FAIL_RULING, FAIL_RULING, PASS_RULING])
-    assert run_trial(harness, target_id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2)) is None
+    assert run_trial(
+        harness, target_id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2),
+        authority="legacy_status",
+    ) is None
     assert harness.state.status[target_id] == Status.ACCEPTED
 
 
@@ -148,6 +155,7 @@ def test_paraphrase_second_seat_flip_blocks_and_logs_entire_ensemble(harness):
         kappa,
         adapter,
         Config(TRIAL_PARAPHRASE_N=1),
+        authority="legacy_status",
     ) is None
     assert harness.state.status[target_id] == Status.ACCEPTED
     assert any(
@@ -163,7 +171,9 @@ def test_ensemble_split_blocks_and_logs(harness):
     target_id, kappa = _setup(harness)
     adapter = _adapter(harness, [FAIL_RULING], judge2=[PASS_RULING])
     assert adapter.ensemble_size("judge") == 2
-    assert run_trial(harness, target_id, kappa, adapter, Config()) is None
+    assert run_trial(
+        harness, target_id, kappa, adapter, Config(), authority="legacy_status"
+    ) is None
     blocks = [e for e in harness.log.read()
               if any(t == "trial-blocked:ensemble-split" for t in e.inputs)]
     assert blocks  # disagreement is a signal, never averaged away (§10.4)
@@ -191,7 +201,9 @@ def test_order_swap_inconsistency_blocks_pairwise(harness):
     adapter = LLMAdapter(
         {"judge": MockEndpoint([ruling_a, ruling_a])}, harness.blobs, retry_max=2
     )
-    assert pairwise_discriminate(harness, problem, a.id, b.id, adapter, Config()) is None
+    assert pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="legacy_status"
+    ) is None
     assert harness.state.status[a.id] == Status.ACCEPTED
     assert harness.state.status[b.id] == Status.ACCEPTED  # unresolved, correctly
     blocks = [e for e in harness.log.read()
@@ -206,7 +218,9 @@ def test_consistent_pairwise_registers_indexed_warrant(harness):
         json.dumps({"winner": "B", "decisive_point": "differential pull"}),  # swapped order
     ]
     adapter = LLMAdapter({"judge": MockEndpoint(responses)}, harness.blobs, retry_max=2)
-    ruling = pairwise_discriminate(harness, problem, a.id, b.id, adapter, Config())
+    ruling = pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="legacy_status"
+    )
     assert ruling is not None
     assert harness.state.status[b.id] == Status.REFUTED   # loser, for pi only
     assert harness.state.status[a.id] == Status.ACCEPTED
@@ -220,6 +234,8 @@ def test_judge_cannot_discriminate_registers_nothing(harness):
     problem, a, b = _pairwise_setup(harness)
     neither = json.dumps({"winner": "neither", "decisive_point": ""})
     adapter = LLMAdapter({"judge": MockEndpoint([neither])}, harness.blobs, retry_max=2)
-    assert pairwise_discriminate(harness, problem, a.id, b.id, adapter, Config()) is None
+    assert pairwise_discriminate(
+        harness, problem, a.id, b.id, adapter, Config(), authority="legacy_status"
+    ) is None
     assert harness.state.status[a.id] == Status.ACCEPTED
     assert harness.state.status[b.id] == Status.ACCEPTED

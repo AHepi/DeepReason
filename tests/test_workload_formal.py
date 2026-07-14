@@ -7,7 +7,9 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.ontology import Commitment, Status
 from deepreason.ontology.artifact import RefRole
@@ -183,6 +185,21 @@ def test_valid_fail_refutes_only_theorem_and_cascades_through_explicit_support(t
             (artifacts.claim.id, artifacts.relation.id),
         }
     )
+
+
+def test_formal_verifier_authority_survives_text_policy_layer(tmp_path: Path):
+    """The new text gate cannot demote a verifier-backed formal failure."""
+    assert (
+        trial_authority_for(Config(), "formal", AuthoritySurface.RUBRIC)
+        == TrialAuthority.STATUS
+    )
+    harness = Harness(tmp_path / "run")
+    spec = _spec(harness, explicit=True)
+
+    artifacts = register_formal_workflow(harness, spec, result=_result(harness, spec, "fail"))
+
+    assert artifacts.criticism is not None
+    assert harness.state.status[artifacts.theorem.id] == Status.REFUTED
 
 
 def test_relation_is_separately_refutable_and_suspends_only_explicit_dependent(tmp_path: Path):

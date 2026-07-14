@@ -14,6 +14,7 @@
 """
 
 from deepreason import programs
+from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
 from deepreason.llm.packs import (
@@ -37,9 +38,13 @@ def _register_nu(harness, content: str) -> Artifact:
 
 
 def _authority(config) -> str:
-    """ARGUMENTATIVE_AUTHORITY (RC1). Duck-typed configs without the field
-    (archived experiment shims) keep the pre-repair behavior explicitly."""
-    return getattr(config, "ARGUMENTATIVE_AUTHORITY", "legacy_direct")
+    """ARGUMENTATIVE_AUTHORITY (RC1), fail-safe for direct helper callers.
+
+    Historical shims must now state ``legacy_direct`` explicitly. Missing or
+    malformed duck-typed values are observe-only rather than an implicit route
+    to prose-derived status authority.
+    """
+    return argumentative_authority_mode(config)
 
 
 def _observe_case(harness, target_id: str, case_text: str, llm_call):
@@ -539,7 +544,8 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         from deepreason.informal.trial import run_argument_trial_from_case
 
         return run_argument_trial_from_case(
-            harness, adapter, config, target_id, output.case, llm_call
+            harness, adapter, config, target_id, output.case, llm_call,
+            authority="status",
         )
     case_hash = sha256_hex(output.case.encode())[:16]
     nu = _register_nu(
@@ -649,7 +655,8 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             from deepreason.informal.trial import run_argument_trial_from_case
 
             trial_critic = run_argument_trial_from_case(
-                harness, adapter, config, case.target, case.case, llm_pending
+                harness, adapter, config, case.target, case.case, llm_pending,
+                authority="status",
             )
             if llm_pending is not None:
                 llm_pending = None  # accounted inside the trial (trial-llm)

@@ -14,6 +14,7 @@ of blocks is a critic-gaming signal.
 
 import json
 
+from deepreason.authority import TrialAuthority
 from deepreason.informal.standards import precedent_slice, resolve_standard, standard_body
 from deepreason.llm.contracts import (
     ArgumentativeCriticOutput,
@@ -76,6 +77,96 @@ def _decline(harness, target_id: str, reason: str, diagnostics) -> None:
     return None
 
 
+def _coerce_trial_authority(authority: TrialAuthority | str) -> TrialAuthority:
+    return authority if isinstance(authority, TrialAuthority) else TrialAuthority(authority)
+
+
+def _record_trial_observation(
+    harness,
+    *,
+    target_id: str,
+    commitment_id: str,
+    standard_id: str,
+    case: str,
+    answer: str,
+    rulings: list,
+    checks: dict,
+    outcome: str,
+    trace_ref: str | None,
+    llm_call,
+    diagnostics,
+):
+    """Record a completed advisory rubric trial without an attack edge."""
+
+    payload = {
+        "trial_observation": {
+            "kind": "rubric",
+            "target": target_id,
+            "commitment": commitment_id,
+            "standard": standard_id,
+            "case": case,
+            "answer": answer,
+            "rulings": [ruling.model_dump(mode="json") for ruling in rulings],
+            "checks": checks,
+            "outcome": outcome,
+            "trace_ref": trace_ref,
+        }
+    }
+    before = set(harness.state.artifacts)
+    observation = harness.create_artifact(
+        json.dumps(payload, sort_keys=True),
+        codec="json",
+        provenance=Provenance(role="critic"),
+        rule=Rule.CRIT,
+        llm=llm_call,
+    )
+    carried = observation.id not in before
+    harness.record_measure(
+        inputs=["trial-observation", target_id, observation.id, outcome],
+        llm=None if carried else llm_call,
+    )
+    if diagnostics is not None:
+        diagnostics.append({"trial": target_id[:12], "advisory": outcome})
+    return observation
+
+
+def _advisory_trial_result(
+    harness,
+    *,
+    target_id: str,
+    commitment_id: str,
+    standard_id: str,
+    case: str,
+    answer: str,
+    rulings: list,
+    checks: dict,
+    outcome: str,
+    trace_ref: str | None,
+    llm_call,
+    diagnostics,
+    calls: list,
+):
+    observation = _record_trial_observation(
+        harness,
+        target_id=target_id,
+        commitment_id=commitment_id,
+        standard_id=standard_id,
+        case=case,
+        answer=answer,
+        rulings=rulings,
+        checks=checks,
+        outcome=outcome,
+        trace_ref=trace_ref,
+        llm_call=llm_call,
+        diagnostics=diagnostics,
+    )
+    # The representative judge call is carried by either the observation
+    # artifact or its dedupe Measure; the finally block must not log it again.
+    if llm_call is not None and llm_call in calls:
+        calls.remove(llm_call)
+    return observation
+
+
 def _judge_pack(harness, config, body, target_text, case, answer,
                 standard_id, anchor_text=None, swapped=False) -> str:
     lines = [f"STANDARD {body['spec']} (mode: {body['mode']}):", body["rubric"], ""]
@@ -130,9 +221,15 @@ def _judge_all(
 
 
 def run_trial(harness, target_id: str, commitment, adapter, config,
-              diagnostics: list | None = None, embedder=None):
-    """Full §3 guard. Returns the registered critic artifact, or None (the
-    ruling was pass / blocked — nothing registers, correctly)."""
+              diagnostics: list | None = None, embedder=None, *,
+              authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY):
+    """Full §3 guard in status or advisory mode.
+
+    Status mode preserves the historical warrant path. Advisory mode records
+    the critic case, defence, rulings, and guard result as an observation
+    artifact, never a warrant or attack edge.
+    """
+    authority = _coerce_trial_authority(authority)
     # The trial needs critic + defender + judge (variator is optional, §3);
     # a config missing any is a logged no-op, not a mid-run KeyError crash.
     for role in ("argumentative_critic", "defender", "judge"):
@@ -151,14 +248,14 @@ def run_trial(harness, target_id: str, commitment, adapter, config,
     calls: list = []
     try:
         return _trial_steps(
-            harness, target_id, commitment, adapter, config, diagnostics, calls
+            harness, target_id, commitment, adapter, config, diagnostics, calls, authority
         )
     finally:
         harness.record_llm_calls(calls, "trial-llm")
 
 
 def _trial_steps(harness, target_id: str, commitment, adapter, config,
-                 diagnostics, calls: list):
+                 diagnostics, calls: list, authority: TrialAuthority):
     spec_id = commitment.eval.split(":", 1)[1]
     standard = resolve_standard(harness, spec_id)
     if standard is None:
@@ -219,8 +316,40 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         harness, adapter, pack, diagnostics, target_id, calls, judge_aliases
     )
     if ruling is None:
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_trial_result(
+                harness,
+                target_id=target_id,
+                commitment_id=commitment.id,
+                standard_id=standard.id,
+                case=case_out.case,
+                answer=defence.answer,
+                rulings=judge_rulings,
+                checks={"ensemble": len(adapter.require_cross_family_judges())},
+                outcome="blocked:ensemble-split",
+                trace_ref=None,
+                llm_call=judge_calls[0],
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return _block(harness, "ensemble-split", target_id, diagnostics)
     if ruling.verdict != "fail":
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_trial_result(
+                harness,
+                target_id=target_id,
+                commitment_id=commitment.id,
+                standard_id=standard.id,
+                case=case_out.case,
+                answer=defence.answer,
+                rulings=judge_rulings,
+                checks={"ensemble": len(adapter.require_cross_family_judges())},
+                outcome="defence-sustained",
+                trace_ref=None,
+                llm_call=judge_calls[0],
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return None  # the work survives; nothing registers
 
     exchange = f"{case_out.case}\n{defence.answer}"
@@ -228,6 +357,22 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
 
     # 4. Referential integrity (program check).
     if any(item.decisive_point not in exchange for item in judge_rulings):
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_trial_result(
+                harness,
+                target_id=target_id,
+                commitment_id=commitment.id,
+                standard_id=standard.id,
+                case=case_out.case,
+                answer=defence.answer,
+                rulings=judge_rulings,
+                checks=checks,
+                outcome="blocked:referential-integrity",
+                trace_ref=None,
+                llm_call=judge_calls[0],
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return _block(harness, "referential-integrity", target_id, diagnostics)
     checks["referential_integrity"] = True
 
@@ -245,8 +390,40 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
             judge_aliases,
         )
         if swapped is None or swapped.verdict != ruling.verdict:
+            if authority == TrialAuthority.OBSERVE_ONLY:
+                return _advisory_trial_result(
+                    harness,
+                    target_id=target_id,
+                    commitment_id=commitment.id,
+                    standard_id=standard.id,
+                    case=case_out.case,
+                    answer=defence.answer,
+                    rulings=judge_rulings + swapped_rulings,
+                    checks=checks,
+                    outcome="blocked:order-swap",
+                    trace_ref=None,
+                    llm_call=judge_calls[0],
+                    diagnostics=diagnostics,
+                    calls=calls,
+                )
             return _block(harness, "order-swap", target_id, diagnostics)
         if any(item.decisive_point not in exchange for item in swapped_rulings):
+            if authority == TrialAuthority.OBSERVE_ONLY:
+                return _advisory_trial_result(
+                    harness,
+                    target_id=target_id,
+                    commitment_id=commitment.id,
+                    standard_id=standard.id,
+                    case=case_out.case,
+                    answer=defence.answer,
+                    rulings=judge_rulings + swapped_rulings,
+                    checks=checks,
+                    outcome="blocked:referential-integrity",
+                    trace_ref=None,
+                    llm_call=judge_calls[0],
+                    diagnostics=diagnostics,
+                    calls=calls,
+                )
             return _block(harness, "referential-integrity", target_id, diagnostics)
         checks["order_swap"] = "pass"
     else:
@@ -260,6 +437,22 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         harness, adapter, config, pack, exchange, target_id, diagnostics, calls
     )
     if block_reason is not None:
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_trial_result(
+                harness,
+                target_id=target_id,
+                commitment_id=commitment.id,
+                standard_id=standard.id,
+                case=case_out.case,
+                answer=defence.answer,
+                rulings=judge_rulings,
+                checks=checks,
+                outcome=f"blocked:{block_reason}",
+                trace_ref=None,
+                llm_call=judge_calls[0],
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return _block(harness, block_reason, target_id, diagnostics)
     checks["paraphrase"] = paraphrase_result
 
@@ -272,6 +465,22 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
         mode=body["mode"],
     )
     judge_llm = judge_calls[0]
+    if authority == TrialAuthority.OBSERVE_ONLY:
+        return _advisory_trial_result(
+            harness,
+            target_id=target_id,
+            commitment_id=commitment.id,
+            standard_id=standard.id,
+            case=case_out.case,
+            answer=defence.answer,
+            rulings=judge_rulings,
+            checks=checks,
+            outcome="sustained",
+            trace_ref=trace_ref,
+            llm_call=judge_llm,
+            diagnostics=diagnostics,
+            calls=calls,
+        )
     before = set(harness.state.artifacts)
     critic = register_fail_warrant(
         harness,
@@ -339,11 +548,14 @@ def _paraphrase_screen(
 
 def run_argument_trial_from_case(
     harness, adapter, config, target_id: str, case_text: str, llm_call=None,
-    diagnostics: list | None = None,
+    diagnostics: list | None = None, *,
+    authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY,
 ):
     """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
 
-    The critic call already happened upstream; its LLMCall arrives as
+    New calls are advisory by default. An explicit ``status`` or
+    ``legacy_status`` authority is required to enter the historical defended
+    court path. The critic call already happened upstream; its LLMCall arrives as
     ``llm_call`` and is accounted here exactly once (a trial-llm Measure, or
     riding the critic registration when the decisive ruling commits; the
     upstream caller must not log it again). The defender answers, the frozen
@@ -352,6 +564,11 @@ def run_argument_trial_from_case(
     invariance). Only a guard-accepted sustained (fail) ruling mints the
     ARGUMENTATIVE warrant; every other outcome records a
     ["trial-declined", target, reason] Measure and registers no warrant."""
+    authority = _coerce_trial_authority(authority)
+    if authority == TrialAuthority.OBSERVE_ONLY:
+        from deepreason.rules.crit import _observe_case
+
+        return _observe_case(harness, target_id, case_text, llm_call)
     calls: list = []
     if llm_call is not None:
         calls.append(llm_call)
@@ -462,12 +679,100 @@ def _argument_trial_steps(
     return critic
 
 
+def _record_pairwise_observation(
+    harness,
+    *,
+    problem,
+    a_id: str,
+    b_id: str,
+    ruling1,
+    ruling2,
+    winner: str | None,
+    loser: str | None,
+    order_swap: str,
+    outcome: str,
+    llm_call,
+    diagnostics,
+):
+    """Record a pairwise comparison without an argumentative warrant."""
+
+    payload = {
+        "pairwise_observation": {
+            "problem": problem.id,
+            "a": a_id,
+            "b": b_id,
+            "winner": winner,
+            "loser": loser,
+            "first_ruling": ruling1.model_dump(mode="json"),
+            "second_ruling": (
+                ruling2.model_dump(mode="json") if ruling2 is not None else None
+            ),
+            "order_swap": order_swap,
+            "outcome": outcome,
+        }
+    }
+    before = set(harness.state.artifacts)
+    observation = harness.create_artifact(
+        json.dumps(payload, sort_keys=True),
+        codec="json",
+        provenance=Provenance(role="critic"),
+        rule=Rule.CRIT,
+        llm=llm_call,
+        problem_id=problem.id,
+    )
+    carried = observation.id not in before
+    harness.record_measure(
+        inputs=["pairwise-observation", problem.id, observation.id, outcome],
+        llm=None if carried else llm_call,
+    )
+    if diagnostics is not None:
+        diagnostics.append({"pairwise": problem.id, "advisory": outcome})
+    return observation
+
+
+def _advisory_pairwise_result(
+    harness,
+    *,
+    problem,
+    a_id: str,
+    b_id: str,
+    ruling1,
+    ruling2,
+    winner: str | None,
+    loser: str | None,
+    order_swap: str,
+    outcome: str,
+    llm_call,
+    diagnostics,
+    calls: list,
+):
+    observation = _record_pairwise_observation(
+        harness,
+        problem=problem,
+        a_id=a_id,
+        b_id=b_id,
+        ruling1=ruling1,
+        ruling2=ruling2,
+        winner=winner,
+        loser=loser,
+        order_swap=order_swap,
+        outcome=outcome,
+        llm_call=llm_call,
+        diagnostics=diagnostics,
+    )
+    if llm_call is not None and llm_call in calls:
+        calls.remove(llm_call)
+    return observation
+
+
 def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, config,
-                          diagnostics: list | None = None):
+                          diagnostics: list | None = None, *,
+                          authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY):
     """§10.2: (A, B, pi, criteria) -> winner + decisive_point, mandatory
-    order-swap. Registers an argumentative warrant against the loser,
-    indexed to pi — never a global ranking. 'neither' registers nothing:
-    the rivalry stands, correctly unresolved."""
+    order-swap. Status mode registers an argumentative warrant against the
+    loser, indexed to pi — never a global ranking. Advisory mode records the
+    comparison without a warrant; 'neither' remains unresolved in both."""
+    authority = _coerce_trial_authority(authority)
     a_text = content_text(harness.state.artifacts[a_id], harness.blobs)
     b_text = content_text(harness.state.artifacts[b_id], harness.blobs)
     criteria = "\n".join(f"- {c}" for c in problem.criteria)
@@ -484,13 +789,13 @@ def pairwise_discriminate(harness, problem, a_id: str, b_id: str, adapter, confi
     calls: list = []
     try:
         return _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text,
-                               pack, adapter, diagnostics, calls)
+                               pack, adapter, diagnostics, calls, authority)
     finally:
         harness.record_llm_calls(calls, "trial-llm")
 
 
 def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
-                    adapter, diagnostics, calls: list):
+                    adapter, diagnostics, calls: list, authority: TrialAuthority):
     aliases = aliases_for_values([a_text, b_text], prefix="K")
     ruling1, llm_call = adapter.call(
         "judge",
@@ -500,6 +805,22 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
     )
     calls.append(llm_call)
     if ruling1.winner == "neither":
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=None,
+                winner=None,
+                loser=None,
+                order_swap="not-run",
+                outcome="neither",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return None
     ruling2, call = adapter.call(
         "judge",
@@ -515,6 +836,22 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
         or (ruling1.winner == "B" and ruling2.winner == "A")
     )
     if not consistent:
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=ruling2,
+                winner=None,
+                loser=None,
+                order_swap="failed",
+                outcome="blocked:order-swap",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return _block(harness, "order-swap", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
     # Referential integrity (§3): a named winner MUST quote a span of a
     # candidate. An empty decisive_point is unscreened LLM adjudication —
@@ -522,6 +859,22 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
     # of everything, so it would otherwise pass vacuously). PairwiseRuling
     # allows "" only for 'neither', handled above.
     if not ruling1.decisive_point or ruling1.decisive_point not in f"{a_text}\n{b_text}":
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=ruling2,
+                winner=None,
+                loser=None,
+                order_swap="pass",
+                outcome="blocked:referential-integrity",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return _block(harness, "referential-integrity", f"{a_id[:12]}v{b_id[:12]}", diagnostics)
 
     loser = b_id if ruling1.winner == "A" else a_id
@@ -531,7 +884,39 @@ def _pairwise_steps(harness, problem, a_id, b_id, a_text, b_text, pack,
         # verdict from reality stands. A pairwise PREFERENCE cannot refute it —
         # the rivalry stands unresolved, exactly as for a 'neither' ruling. The
         # judge calls remain logged (the finally records them).
+        if authority == TrialAuthority.OBSERVE_ONLY:
+            return _advisory_pairwise_result(
+                harness,
+                problem=problem,
+                a_id=a_id,
+                b_id=b_id,
+                ruling1=ruling1,
+                ruling2=ruling2,
+                winner=winner,
+                loser=loser,
+                order_swap="pass",
+                outcome="execution-backed-loser",
+                llm_call=llm_call,
+                diagnostics=diagnostics,
+                calls=calls,
+            )
         return None
+    if authority == TrialAuthority.OBSERVE_ONLY:
+        return _advisory_pairwise_result(
+            harness,
+            problem=problem,
+            a_id=a_id,
+            b_id=b_id,
+            ruling1=ruling1,
+            ruling2=ruling2,
+            winner=winner,
+            loser=loser,
+            order_swap="pass",
+            outcome="consistent-preference",
+            llm_call=llm_call,
+            diagnostics=diagnostics,
+            calls=calls,
+        )
     before = set(harness.state.artifacts)
     trace_ref = harness.blobs.put(canonical_json({
         "pairwise": {"problem": problem.id, "winner": winner, "loser": loser,

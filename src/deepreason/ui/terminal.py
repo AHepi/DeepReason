@@ -23,10 +23,16 @@ def render_terminal_status(status: dict, *, pulse: int = 0) -> str:
     focus = status.get("problem_id") or status.get("artifact_id") or "-"
     token_limit = status.get("token_limit")
     tokens = f"{status.get('token_spend', 0)}/{token_limit if token_limit else 'unlimited'}"
-    labels = (
-        f"A:{status.get('accepted', 0)} R:{status.get('refuted', 0)} "
-        f"S:{status.get('suspended', 0)}"
-    )
+    display_counts = status.get("display_status_counts")
+    if isinstance(display_counts, dict) and display_counts:
+        labels = " ".join(
+            f"{label}:{count}" for label, count in sorted(display_counts.items())
+        )
+    else:
+        labels = (
+            f"A:{status.get('accepted', 0)} R:{status.get('refuted', 0)} "
+            f"S:{status.get('suspended', 0)}"
+        )
     queues = (
         f"checks:{status.get('queued_checks', 0)} "
         f"criticism:{status.get('queued_criticism', 0)}"

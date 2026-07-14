@@ -20,6 +20,8 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from deepreason.authority import TextAuthorityMode
+
 
 _ENV_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
@@ -249,6 +251,21 @@ class Config(BaseModel):
     ARGUMENTATIVE_AUTHORITY: Literal[
         "observe_only", "trial_required", "legacy_direct"
     ] = "observe_only"
+    # LLM-mediated text adjudication has its own policy surface.  A status
+    # mode is prospective only: schema-v2 text manifests preflight it against
+    # CALIBRATION_RECEIPT before any endpoint is built.  observe_only records
+    # scrutiny/comparison data without creating a warrant or attack edge.
+    TEXT_RUBRIC_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
+    PAIRWISE_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
+    INFRASTRUCTURE_REVIEW_AUTHORITY: TextAuthorityMode = TextAuthorityMode.OBSERVE_ONLY
+    # Immutable reference to the calibration receipt that authorizes a
+    # calibrated text-status mode. The manifest stores this source config
+    # field; preflight fails closed when a status mode omits the reference.
+    CALIBRATION_RECEIPT: str | None = None
+    # Default text runs do not spend judge tokens on rubric trials.  Setting a
+    # positive budget opts into bounded advisory trials only while the rubric
+    # authority remains observe_only.
+    ADVISORY_TRIALS_PER_CYCLE: int = Field(default=0, ge=0)
     # Counterexample feedback retries (§3 execution supremacy): when an attack
     # on an execution-backed target fails to ground (missing / gate-rejected /
     # property-held counterexample), re-ask the critic up to this many times
