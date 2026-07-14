@@ -47,3 +47,32 @@ decision_rules: report experiments/results/court_calibration_v1_report.json;
   index line appended
 budget: {llm_tokens: <= 700000, max 3 in flight, launched only after the
   schema comparator releases the concurrency slots}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/court_calibration_v1_report.json
+  verdicts: {P1_the_gate: REFUTED, P2: REFUTED, P3: CONFIRMED}
+  measured:
+    sensitivity: 0.119    # bound 0.80 - the gate fails decisively
+    false_conviction: 0.0 # bound 0.15 - perfect specificity, by inertness
+    per_class: {causal-non-sequitur: 5/7, chronology-error: 0/7,
+      evidence-misquotation: 0/7, scope-contradiction: 0/7,
+      unsupported-comparison: 0/7, vacuous-forbidden-case: 0/7}
+    critic_objection_rate: 1.0 on clean AND corrupted
+  headline_readings:
+    - the defended court is perfectly specific because it is nearly inert -
+      it missed 88 percent of provable planted defects, including ALL seven
+      genuine formal scope contradictions, while the same court grounds
+      three quarters of its objections in scope formalism. The scope
+      obsession is performative - it does not track real scope defects
+    - the only caught class is the blatant causal non sequitur - the court
+      convicts only what contradicts itself inside one sentence
+    - with known labels the full criticism-layer picture is now measured:
+      bare critic 67.5 percent false conviction (critic_specificity),
+      prose trials rescue half the guilty (defended_trial_v1), defended
+      court catches 12 percent of the guilty (here). No configuration
+      tested can EARN status authority on informal text
+  standing_policy_adopted: observe-only for text workloads (the code
+    default since the repair; now empirically forced rather than
+    precautionary). Feedback v2's active arm is cancelled per its gate 2;
+    the study does not run.

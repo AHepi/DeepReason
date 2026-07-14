@@ -78,3 +78,13 @@ decision_rules: report experiments/results/bronze_feedback_v2_report.json;
   index line appended; run-level values all persisted
 budget: {llm_tokens: <= 2200000 total (8 runs x 250k plus scoring), max 3
   in flight}
+
+# --- gate resolution (no live call was ever made under this prereg) ---
+gate_resolution:
+  gate_1_schema: resolved - original skeleton retained (schema comparator
+    P1 refuted; the 18.8pp partial effect recorded, below the adoption bar)
+  gate_2_calibration: FAILED - court_calibration_v1 sensitivity 0.119 vs
+    the 0.80 bound. Per this prereg's own terms the active arm is
+    cancelled, the study does not run, and observe-only is adopted as the
+    standing criticism policy for text workloads.
+  tokens_spent_under_this_prereg: 0

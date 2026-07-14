@@ -1,22 +1,22 @@
 {
-  "prompt_tokens": 58723,
-  "completion_tokens": 17182,
-  "calls": 72,
+  "prompt_tokens": 415132,
+  "completion_tokens": 131399,
+  "calls": 529,
   "phases": {
     "calibration_critic": {
-      "prompt_tokens": 7367,
-      "completion_tokens": 1671,
-      "calls": 13
+      "prompt_tokens": 44361,
+      "completion_tokens": 10262,
+      "calls": 85
     },
     "calibration_defender": {
-      "prompt_tokens": 8791,
-      "completion_tokens": 2667,
-      "calls": 13
+      "prompt_tokens": 54847,
+      "completion_tokens": 17263,
+      "calls": 87
     },
     "calibration_seat": {
-      "prompt_tokens": 42565,
-      "completion_tokens": 12844,
-      "calls": 46
+      "prompt_tokens": 315924,
+      "completion_tokens": 103874,
+      "calls": 357
     }
   }
 }
