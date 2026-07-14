@@ -1,0 +1,40 @@
+# Bronze court-cross v1 - PRE-REGISTERED, committed before any live call.
+# Phase J study 2: measure court temperament without changing the candidate
+# population. The candidate pool is FROZEN and BLINDED before any judging
+# call; the treatment is the critic/judge configuration alone.
+
+candidate_pool:
+  source: the bronze flat v1 emitted-proposal census
+    (experiments/results/bronze_flat_v1_census.json) - registered AND
+    gate-blocked proposals both included, deduplicated by content hash,
+    stripped of stream/model provenance before judging (blinding)
+  frozen: pool content hashes listed in the report before the first call
+
+design:
+  treatment: critic and judge configuration, crossed over the same pool
+  arms:
+    - critic deepseek-v4-flash, judges [deepseek-v4-pro, gpt-oss:120b]
+    - critic kimi-k2.6, judges [kimi-k2.6, gpt-oss:120b]
+    - critic mistral-large-3:675b, judges [mistral-large-3:675b, gpt-oss:120b]
+  authority: observe_only - no status changes anywhere; this study measures
+    verdict DISTRIBUTIONS, not survivors
+  per_item: objection (if any), defender response, two-seat ruling with
+    order swap - the defended-trial protocol from defended_trial_v1
+
+predictions:
+  P1:
+    statement: court temperament dominates candidate identity - the
+      between-arm spread in objection rate on the SAME pool is >= 25
+      percentage points (consistent with the zoo severity span)
+  P2:
+    statement: the scope-formalism conviction ground replicates across
+      courts - >= 30 percent of each arm's objections to skeleton items
+      dispute covers/excludes consistency rather than mechanism substance
+      (coding rules frozen with the pool)
+  P3:
+    statement: order-swap disagreement stays <= 0.15 per arm (protocol
+      stability under new critics)
+
+decision_rules: report experiments/results/bronze_court_cross_v1_report.json;
+  index line appended
+budget: {llm_tokens: <= 600000, max 3 in flight}

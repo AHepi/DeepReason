@@ -1,0 +1,41 @@
+# Bronze feedback v1 - PRE-REGISTERED, committed before any live call.
+# Phase J study 3, runs LAST: only after the court-cross study has produced
+# a calibrated court and the repaired control flow has passed the pilot.
+# Question: does criticism feedback help or hurt the search itself?
+
+design:
+  generator: fixed (single model, chosen from repertoire v2's report as the
+    arm with the widest emitted mechanism coverage; named here before launch
+    via amendment, never after data)
+  arms:
+    active: calibrated court verdicts feed back (trial-gated authority per
+      the repaired flow); refutations remove candidates from the frontier
+    observe_only: identical court runs, verdicts recorded but statuses
+      untouched
+  matched: same seed, same cycles (30), same token budget per arm, same
+    manifest, same embedder
+  scoring: FROZEN EXTERNAL evidence dossier (compiled and committed before
+    the run: dated chronology anchors, destruction-layer list, paleoclimate
+    series references) + emitted-population diversity from the census
+    program. Court-created survivor counts are NOT an outcome (plan
+    do_not_use_survivor_count_as_quality honored).
+
+predictions:
+  P1:
+    statement: active feedback changes the emitted population - mechanism-
+      class distribution differs between arms beyond seed noise (chi-square
+      on blind-coded classes, protocol frozen before unblinding)
+  P2:
+    statement: active feedback does NOT reduce evidence contact - the
+      fraction of emitted proposals citing at least one dossier-checkable
+      anchor is within 10 percentage points of the observe-only arm
+    falsifier: active arm >= 20 points BELOW observe-only - feedback
+      pressure trades evidence contact for court appeasement, and active
+      authority stays off by default for text workloads
+  P3:
+    statement: no gate pathology recurs - zero structural-only battery
+      blocks and 100 percent receipt completeness in both arms
+
+decision_rules: report experiments/results/bronze_feedback_v1_report.json;
+  index line appended
+budget: {llm_tokens: <= 800000, max 3 in flight}

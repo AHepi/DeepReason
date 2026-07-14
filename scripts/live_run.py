@@ -685,6 +685,14 @@ def main() -> int:
                         help="enable the aging liveness queue for problem selection")
     parser.add_argument("--starve-cap", type=int, default=None,
                         help="start the conjecturer completion cap here (controller demo)")
+    parser.add_argument("--legacy-direct", action="store_true",
+                        help="run the pre-manifest direct Scheduler path; the "
+                        "resulting root is NOT evidence-grade (no bound manifest, "
+                        "no preflight, no in-band accounting, hashing embedder)")
+    parser.add_argument("--workload-profile", default="text",
+                        choices=["text", "code", "formal", "website"],
+                        help="workload profile compiled into the run manifest "
+                        "(evidence mode only)")
     args = parser.parse_args()
 
     try:
@@ -727,17 +735,72 @@ def main() -> int:
     else:
         seed(harness)
 
-    controller = None
-    if args.controller:
-        from deepreason.controller import Controller
+    if not args.legacy_direct:
+        # Evidence mode (default): compile a schema-v2 manifest, bind it to
+        # the root, and run through ops.run_scheduler so preflight, the
+        # configured embedder, workload/domain scoping, and in-band meter
+        # accounting all apply. The direct Scheduler path stays available
+        # behind --legacy-direct for replays of pre-manifest roots.
+        from deepreason import ops
+        from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 
-        controller = Controller(harness, adapter)
-        caps0 = {r: getattr(e[0] if isinstance(e, list) else e, "max_tokens", None)
-                 for r, e in adapter.endpoints.items()}
-        print(f"controller ON; initial caps: {caps0}")
+        try:
+            manifest = compile_run_manifest(
+                config,
+                schema_version=2,
+                workload_profile=args.workload_profile,
+                rubric_policy="require_cross_family",
+            )
+            bind_run_manifest(manifest, Path(args.root))
+        except Exception as error:
+            print(f"manifest compile/bind failed: {error}", file=sys.stderr)
+            return 1
+        judge_families = sorted(
+            {route.family for route in manifest.roles.get("judge", ())}
+        )
+        print("=== EVIDENCE-MODE PREFLIGHT ===")
+        print(json.dumps({
+            "manifest_sha256": manifest.sha256,
+            "schema_version": manifest.schema_version,
+            "workload_profile": manifest.workload_profile,
+            "rubric_policy": manifest.rubric_policy,
+            "judge_families": judge_families,
+            "argumentative_authority": getattr(
+                config, "ARGUMENTATIVE_AUTHORITY", "legacy_direct"
+            ),
+            "embedder_model": getattr(config, "EMBEDDER_MODEL", None),
+            "near_dup_eps": config.NEAR_DUP_EPS,
+            "controller": bool(config.CONTROLLER) or args.controller,
+            "research": bool(getattr(config, "RESEARCH_ENABLED", False)),
+            "token_budget": args.token_budget,
+        }, indent=2, sort_keys=True))
+        if config.NEAR_DUP_EPS is None:
+            print("WARNING: NEAR_DUP_EPS is unset; the semantic anti-relapse "
+                  "stage will run degraded (exact-hash only)")
+        if args.controller:
+            config = apply_overrides(config, {"CONTROLLER": True})
+        result, run_meter, accounting = ops.run_scheduler(
+            harness, config, args.cycles,
+            token_budget=args.token_budget, run_manifest=manifest,
+        )
+        meter = run_meter or meter
+        print("\n=== ACCOUNTING (meter vs log) ===")
+        print(json.dumps(accounting, indent=2, sort_keys=True))
+        controller = None
+    else:
+        print("LEGACY-DIRECT MODE: this root carries no manifest and is not "
+              "evidence-grade")
+        controller = None
+        if args.controller:
+            from deepreason.controller import Controller
 
-    scheduler = Scheduler(harness, adapter, config, controller=controller)
-    result = scheduler.run(args.cycles)
+            controller = Controller(harness, adapter)
+            caps0 = {r: getattr(e[0] if isinstance(e, list) else e, "max_tokens", None)
+                     for r, e in adapter.endpoints.items()}
+            print(f"controller ON; initial caps: {caps0}")
+
+        scheduler = Scheduler(harness, adapter, config, controller=controller)
+        result = scheduler.run(args.cycles)
 
     if controller is not None:
         caps1 = {r: getattr(e[0] if isinstance(e, list) else e, "max_tokens", None)

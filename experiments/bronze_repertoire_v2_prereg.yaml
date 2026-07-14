@@ -1,0 +1,47 @@
+# Bronze repertoire v2 - PRE-REGISTERED, committed before any live call.
+# Successor to bronze flat v1 per the post-run repair plan (phase J): vary
+# ONLY the generator model; measure the emitted proposal population, not
+# the court's survivors. Runs only after the repaired control flow (gate
+# receipts, observe-only authority, two-phase compilation) has passed the
+# phase-I pilot release gates.
+
+question: pi-bronze, unchanged from bronze_flat_v1_prereg.yaml
+
+design:
+  treatment: generator model only. Prompts, role policy, budget, embedder,
+    scoring, and the downstream pipeline are held fixed across arms.
+  arms: [deepseek-v4-pro, qwen3.5:397b, kimi-k2.6, gpt-oss:120b]
+  criticism_policy: ARGUMENTATIVE_AUTHORITY=observe_only - objections are
+    recorded as scrutiny, never status-changing; program and execution
+    verdicts keep authority
+  runtime: manifest-bound (schema v2, workload text, nomic embedder with
+    calibrated NEAR_DUP_EPS, controller off, research off)
+  cycles: 30 per arm
+  budget: 300000 tokens per arm, reserve-settle meter, max 3 in flight
+  analysis_population: EVERY emitted candidate (census program), not the
+    admitted subset - dispositions joined per candidate with gate receipts
+
+predictions:  # literal thresholds, decided against the census output
+  P1:
+    statement: with the repaired gate, admitted distinct-mechanism count
+      per arm is >= 3x bronze flat v1's per-stream admitted count (which
+      the broken gate capped at 3-6)
+  P2:
+    statement: generator families differ in emitted mechanism-class
+      coverage - at least one mechanism class is emitted by one arm and
+      absent from another arm's full census (blind-coded classes, coding
+      protocol frozen before unblinding)
+  P3:
+    statement: emitted-population near-duplicate rate (nomic, calibrated
+      radius recorded before scoring) is < 0.5 for every arm - i.e. the
+      majority of emitted proposals are not paraphrases of earlier ones
+    falsifier: any arm >= 0.7 - that generator's repertoire is
+      paraphrase-dominated and repertoire claims for it are withheld
+
+mechanism_novelty: reported as not_measured unless a frozen literature
+  baseline and blind coding protocol are committed BEFORE unblinding
+  (plan do_not_claim_novelty_from_embeddings_alone honored)
+
+decision_rules: report experiments/results/bronze_repertoire_v2_report.json
+  (census-derived, no hard-coded numbers); index line appended
+budget: {llm_tokens: <= 1200000}
