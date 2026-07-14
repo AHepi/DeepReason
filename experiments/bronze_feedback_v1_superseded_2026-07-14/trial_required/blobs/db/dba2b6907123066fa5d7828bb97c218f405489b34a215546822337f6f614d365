@@ -1,0 +1,3 @@
+{
+  "answer": "The target does not claim that failure to reject the null model confirms the null or logically entails the structural account is false. It states a conditional: the former account is refuted *if* the latter's null model cannot be rejected. This is a claim about the empirical testability of the structural account, not a logical proof of its falsehood. In hypothesis testing, a model that makes restrictive predictions can be abandoned when its predictions fail to outperform a baseline that assumes no structure, because the structural account then lacks the explanatory power it claimed. The critic’s charge of non-sequitur misreads the target’s conditional as asserting a deductive entailment from non-rejection to falsehood, which the target does not state."
+}

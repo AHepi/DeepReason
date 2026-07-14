@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's mechanism fails to satisfy std-hist clause (1) because it does not name a specific causal mechanism—'linear coastal geography' and 'compact riparian geography with unified command' are static geographic features, not institutions, incentives, or processes. The claim that geography 'enabled' or 'allowed' outcomes is a description of spatial layout, not a mechanism that explains how invasions caused destruction or how Egypt absorbed refugees. Furthermore, the target's forbidden case 1 directly contradicts its core claim: if archaeological evidence shows destruction layers post-date administrative collapse and abandonment, then the invasions cannot be the cause of destruction, violating clause (2) by ignoring a concrete observation that could realistically have obtained. The target asserts a causal direction (invasions → destruction) that the forbidden case undermines, making the mechanism empirically false under the standard.",
+  "counterexample": ["At Ugarit, destruction layers from Sea Peoples appear after the site had already been abandoned, indicating that administrative collapse preceded any putative invasion."]
+}

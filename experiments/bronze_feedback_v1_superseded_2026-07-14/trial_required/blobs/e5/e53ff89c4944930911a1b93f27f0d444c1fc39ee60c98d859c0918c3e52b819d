@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target's mechanism claims that 'network models predict phase transitions where hub-dependent architectures collapse suddenly when peripheral nodes gain edge-formation autonomy,' yet the forbidden case 'Network analysis of Ugarit tablets shows egalitarian peer-polity trade structure rather than hub-and-pole palace centrality' directly contradicts the premise that the system was hub-dependent. If Ugarit's trade was peer-polity, then the mechanism's core causal condition—a hub-and-spoke architecture vulnerable to peripheral autonomy—is falsified by the very evidence the target itself acknowledges as a forbidden case. The target fails to specify why this counterexample does not obtain, and thus violates std-hist by asserting a mechanism that is contradicted by a concrete, datable observation (the Ugarit tablet network analysis).",
+"counterexample": ["Ugarit tablets", "egalitarian peer-polity trade structure", "hub-and-spoke palace centrality"]
+}

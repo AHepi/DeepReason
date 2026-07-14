@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target violates the 'forbidden case' clause: 'Archaeological demonstration that administrative abandonment postdated physical destruction layers (fire, weapon trauma) at multiple palace sites.' The claim asserts that elite defection and administrative demobilization caused collapse, but the forbidden case—if observed—would show that physical destruction preceded administrative abandonment, directly contradicting the causal order (ideological crisis → demobilization → collapse). The target does not provide evidence that this forbidden case is false; it merely asserts a mechanism. Since the forbidden case is a concrete, realistic observation that would falsify the claim, and the target offers no counterargument or exclusion, the claim fails the standard.",
+"counterexample": ["At multiple palace sites (e.g., Mycenaean Pylos, Hittite Hattusa), destruction layers with fire and weapon trauma are stratigraphically earlier than the cessation of administrative sealing and tablet production, indicating physical destruction caused abandonment, not ideological demobilization."]
+}

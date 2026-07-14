@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "15c9cb544971e9e1956d8b70020314172d1810a28f75ee19f956a2eab4d6e177",
+      "attack": true,
+      "case": "The claim asserts that Egypt survived due to 'superior defensive geography and institutional resilience,' but the forbidden case about Egyptian military frontiers being breached and destroyed contemporaneously with other centers is not refuted by the target's own scope or mechanism. The target provides no specific evidence that Egyptian geography or institutions actually prevented such a breach; it merely asserts the outcome. This makes the claim of 'superior defensive geography' a post-hoc rationalization rather than a demonstrated causal factor, and the target fails to address the possibility that Egypt's survival was due to contingent factors (e.g., Ramesses III's specific military campaigns) rather than structural advantages."
+    },
+    {
+      "target": "6eecdaad3c9f8bce2453ff0f81e2ee34d8e90d30ece5310f50cec91fc1a83fc9",
+      "attack": true,
+      "case": "The target's mechanism relies on 'drought-induced subsistence crisis' as a trigger, but the forbidden case about paleoclimatic reconstruction showing 1200-1150 BC as climatically unremarkable is not addressed. The target does not cite any specific paleoclimatic data to support the claim of a significant drought in the Eastern Mediterranean core zones during that period. Without such evidence, the mechanism is speculative and fails to establish that climatic-triggered agricultural shortfalls actually occurred, undermining the entire causal chain."
+    },
+    {
+      "target": "c3a117d767bb0b38b0b1847231eeff7862e8573efd9a0f2f8225cd4f06537adf",
+      "attack": true,
+      "case": "The claim denies a unified causal structure but then attributes Egyptian persistence to 'Ramesses III's exceptional military expenditure that happened to succeed.' This is itself a unified causal mechanism (contingent military success) applied to Egypt, contradicting the anti-typological stance. The target fails to explain why this same mechanism did not apply to other polities (e.g., Hittites also had military expenditures), and the forbidden case about Egyptian crisis indicators being less severe is not engaged. The account thus inconsistently invokes a specific cause for Egypt while denying causes elsewhere."
+    }
+  ]
+}

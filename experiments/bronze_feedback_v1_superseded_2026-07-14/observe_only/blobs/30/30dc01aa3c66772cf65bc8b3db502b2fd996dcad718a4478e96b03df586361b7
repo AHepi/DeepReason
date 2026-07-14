@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's mechanism fails to satisfy the standard's requirement for a specific causal mechanism because it posits an 'equine epizootic' with no direct paleopathological evidence, relying instead on an invisible disease event. Moreover, the first forbidden case—'Hittite and Mycenaean textual or zooarchaeological evidence shows normal horse mortality rates and continued chariot deployment up to destruction horizons'—directly contradicts the claim. If such evidence existed, it would demonstrate that the posited mechanism did not occur, rendering the explanation empirically false. The target does not provide any counterargument or qualification to this forbidden case, thus violating the standard's demand that the account state a mechanism that is not contradicted by observable evidence.",
+  "counterexample": ["Hittite texts from the late 13th century BC record chariot forces in battle accounts and inventories without mention of mass horse die-offs", "Mycenaean Linear B tablets at Pylos and Knossos list chariot wheels and horse allocations up to the destruction levels"]
+}

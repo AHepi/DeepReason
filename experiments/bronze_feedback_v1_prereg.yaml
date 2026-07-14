@@ -62,3 +62,41 @@ amendment_1:
   runtime: evidence mode, 30 cycles, 400000 tokens per arm, NEAR_DUP_EPS
     0.35, CONTROLLER false, both arms concurrent (2 in flight)
   tokens_spent_before_amendment: 0
+
+# --- supersession, recorded after the run but BEFORE scoring ---
+superseded_before_scoring:
+  what_happened: both arms launched under amendment 1 and ran to their
+    budget guards (792840 tokens total) before operator review halted the
+    program. The operator identified fatal design flaws; P1-P3 are NOT
+    scored - verdicts from this design would be uninterpretable.
+  flaws_identified_by_operator_review:
+    - near-inert treatment - the chosen court sustains almost nothing, so
+      trial_required vs observe_only compares nearly identical processes
+    - evidence-contact metric saturates on topic name-drops ("ugarit" is
+      in the problem statement itself); mention, use, and correct use are
+      conflated
+    - proposal-level chi-square treats dependent emissions from one
+      evolving root as independent subjects; the run/paired-seed is the
+      experimental unit, and n=1 seed per arm cannot support P1
+    - the unchanged covers/excludes skeleton manufactures most objections
+      (court-cross P2), so active feedback would largely train appeasement
+      of a formatting trap
+  zero_cost_checks_on_the_spent_data:  # the salvage
+    treatment_near_inertness_CONFIRMED: trial_required minted exactly 1
+      argumentative warrant (16 trials declined) vs observe_only 0; 3 vs 0
+      refutations; one sustained trial per ~400k tokens cannot separate
+      arms at n=1 seed
+    evidence_metric_ceiling_CONFIRMED: dossier contact 15/15 and 17/18
+      conjectures; "ugarit" alone matches 13/15 and 17/18; the metric has
+      no discriminating power as designed
+    cost_finding: rubric-trial machinery consumed most of both budgets
+      (11 and 7 cycles completed of 30; trial-llm 275 and 288 calls) -
+      the court dominates spend even in observe-only mode
+  roots_retained: experiments/bronze_feedback_v1_superseded_2026-07-14/
+    (candidate paired-seed material for a corrected feedback v2)
+  supersession_path: corrected program per operator review - (1) schema
+    comparator test on the frozen court-cross pool, (2) matched-pair court
+    calibration with sensitivity/specificity gates before any active
+    authority, (3) feedback v2 with 3-5 paired seeds, structured evidence
+    links, multi-label mechanism codebook, and a fail-closed embedder
+    policy for evidence mode

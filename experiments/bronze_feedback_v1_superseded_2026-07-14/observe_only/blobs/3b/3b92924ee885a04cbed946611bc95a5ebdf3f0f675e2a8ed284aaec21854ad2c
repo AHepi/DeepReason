@@ -1,0 +1,10 @@
+{
+  "attack": true,
+  "case": "The target fails the standard because it does not provide contemporaneous textual evidence of mass religious conversion or theological polemic against divine kingship in palatial archives before collapse, as required by the first forbidden case. The mechanism posits an 'ideological innovation' that delegitimized divine kingship, yet the target offers no specific archival texts—such as administrative records, royal correspondence, or temple inventories—from any of the covered polities (Mycenaean Greece, Hittite Anatolia, Ugarit, Levantine city-states) that document widespread conversion or explicit theological attacks on the king's divinity prior to the collapse. Instead, the argument relies on anachronistic concepts like 'disenchantment' and later developments (Atenism, Yahwism) that are not attested in the relevant pre-collapse archives. This absence of the required evidence means the mechanism is not grounded in contemporaneous sources, violating the structural demand for a concrete, testable causal mechanism.",
+  "counterexample": [
+    "No Mycenaean Linear B tablets contain polemics against wanax divinity or evidence of mass religious conversion.",
+    "No Hittite royal archives from the late Bronze Age record theological critiques of the king's divine status or widespread adoption of a new transcendent monotheism.",
+    "No Ugaritic administrative or ritual texts document a rejection of the king's role as divine intermediary or mass conversion away from traditional cults.",
+    "No Levantine palatial correspondence (e.g., Amarna letters) from before the collapse shows systematic theological opposition to divine kingship."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "9781fce4dfd97189194b0f2430b0e55e872a840a5dbcc2e2fa4a8a4ec0b4610f",
+      "attack": true,
+      "case": "The target asserts a contradiction between two accounts, but the relation it states ('contradicts') is not substantively argued: it merely juxtaposes a structural buffer explanation against a stochastic null model and says the former is refuted if the latter cannot be rejected. That is a conditional logical relation, not a substantive dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction between the two accounts themselves. The target fails to name a kind of relation and state what it is refuted by, as required by the problem context for 3c884acf0d40."
+    },
+    {
+      "target": "0bba8e2b69407f3a1b6f1f6316400b53409e30547e4ab30e77078fea9c16a193",
+      "attack": true,
+      "case": "The target's forbidden case 1 ('Archaeological evidence shows Sea Peoples destruction layers post-date administrative collapse and abandonment at major sites') is a historical observation that, if true, would refute the claim that Sea Peoples invasions caused direct military destruction of palace centers. However, the target's own prose_notes acknowledge that the account is 'vulnerable to criticism that it reverses cause and effect if collapse preceded invasions.' This admission undercuts the target's own forbidden case: if the target itself recognizes the vulnerability, then the forbidden case is not a genuine refutation but rather a known weakness the target already concedes. The rubric requires forbidden cases that would have refuted the account had they obtained — not cases the account already anticipates and accommodates. Thus the target fails to meet the rubric:std-hist standard for forbidden cases."
+    },
+    {
+      "target": "e8282b4c3acdcd3a94f390e85537fe4b5c9d6e082c22ab9d6c5a78f259ec7e7a",
+      "attack": true,
+      "case": "The target's forbidden case 2 ('Egyptian temple-building programs show uninterrupted scaling 1250-1150 despite alleged seismic disruption') is a historical observation that, if true, would refute the claim that earthquake storms disrupted Egyptian infrastructure. However, the target's mechanism explicitly distinguishes between centralized storage/administrative infrastructure (which was destroyed) and Egyptian bureaucratic decentralization into nomarchic provisioning (which permitted reconstruction). The forbidden case addresses temple-building programs, not the specific storage and administrative infrastructure the mechanism targets. Since the mechanism does not claim that all Egyptian construction was disrupted, the forbidden case does not actually refute the account — it attacks a claim the account does not make. Thus the target fails the rubric:std-hist requirement that forbidden cases be observations that would have refuted the account had they obtained."
+    }
+  ]
+}

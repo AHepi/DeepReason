@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates the 'std-hist' standard by failing to name a specific causal mechanism for Egyptian persistence. It attributes recovery to 'Ramesses III's exceptional military expenditure that happened to succeed' — this is not a mechanism but a description of a contingent event with no account of how or why that expenditure succeeded where other polities' responses failed. The standard requires a named institution, incentive, or process; 'happened to succeed' is mere luck, not a mechanism. Additionally, the target's forbidden case (2) is itself violated: it asserts that Egyptian crisis indicators were not substantially less severe than those in Anatolia or Greece, but the target provides no comparative evidence or argument to support this claim, instead merely listing Egyptian stressors (strikes, harem conspiracy, invasions) without demonstrating their relative severity. The target thus fails to meet the standard's requirement to state a concrete, testable forbidden case.",
+  "counterexample": null
+}

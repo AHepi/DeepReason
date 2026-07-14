@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "decisive_point": "The target does name a kind of relation: it explicitly states that the two accounts are in a relation of contradiction. It then specifies what is refuted by what: the structural-buffer explanation (3c884acf0d40) is refuted if the stochastic null model (c3a117d0bb0b) cannot be rejected, because the latter's claim of random survival directly contradicts the former's claim of a causal structural advantage."
+}

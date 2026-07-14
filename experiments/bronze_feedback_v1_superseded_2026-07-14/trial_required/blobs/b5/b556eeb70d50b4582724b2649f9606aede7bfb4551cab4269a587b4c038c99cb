@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target's forbidden case 'Paleoclimate reconstructions showing no significant precipitation anomaly c. 1200-1150 in Anatolian or Aegean catchments' is a concrete observation that could realistically obtain (e.g., a published speleothem or pollen record). If such evidence existed, it would directly falsify the claim that a drought regime reduced carrying capacity, which is the necessary trigger for the proposed mechanism. The target's mechanism depends on a specific climatic event; without it, the entire causal chain collapses. Therefore, the target violates the std-hist standard by including a forbidden case that, if true, would undermine the mechanism's factual basis.",
+"counterexample": ["A published paleoclimate study showing that Anatolian and Aegean catchments experienced no significant precipitation anomaly between 1200 and 1150 BCE, based on lake sediment cores or stalagmite oxygen isotopes."]
+}

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "68eec3a468e8a66b34d09cc4eefefd7b8ec73256c6dcdfa48772bd80c56f10b6",
+      "attack": true,
+      "case": "The candidate's forbidden case about Egyptian agricultural records showing no drought stress is contradicted by the candidate's own scope exclusion of Egypt; the forbidden case is therefore irrelevant to the claim, but the candidate fails to address that the Hittite heartland (covered) has textual evidence of grain shipments from Egypt and Canaan during the crisis, which undercuts the claim that drought alone caused simultaneous collapse across the covered regions.",
+      "counterexample": null
+    },
+    {
+      "target": "7e981456fc6aeb36b2c56d55564af4b3d86fd80bdc722ada85b2f692457dd3c7",
+      "attack": true,
+      "case": "The candidate's mechanism asserts that Egyptian temple estates maintained parallel surplus networks that buffered failure, but the forbidden case about Ugarit having multiple merchant guilds and parallel administrative structures is not adequately refuted: the candidate's scope excludes Ugarit, so the comparison is not tested, but the claim that Mycenaean and Hittite systems collapsed through single-point failure is contradicted by evidence that Hittite vassal networks had multiple supply lines and that Mycenaean palatial centers fell sequentially, not simultaneously from a single point.",
+      "counterexample": null
+    },
+    {
+      "target": "2c148325ddb38b312222e6413906708cbb2a1cd81f54c4e66da249548d132538",
+      "attack": true,
+      "case": "The candidate's forbidden case about Egypt being equally trade-dependent on Levantine timber and incense is not addressed in the prose notes or mechanism; the claim that Egypt's semi-autarkic grain production decoupled it from network failure ignores that Egypt imported significant amounts of timber and incense, and the candidate provides no evidence that these imports were non-critical or substitutable, so the exclusion of Egypt from the network failure is unsupported.",
+      "counterexample": null
+    }
+  ]
+}

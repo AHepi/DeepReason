@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target claim violates the 'forbidden case' clause: it asserts that Sea Peoples invasions were the primary cause of collapse, yet the forbidden case posits 'unequivocal evidence that Sea Peoples arrived only after collapse had already occurred at all major palace centers.' The target does not provide any mechanism to rule out this counterfactual, nor does it address the possibility that the Sea Peoples were a symptom rather than a cause. The mechanism offered ('concatenation of maritime raiding and migratory incursions') assumes the invasions were the trigger, but if the forbidden case holds, the mechanism is factually reversed—the collapse preceded the invasions, making the claimed causal mechanism false. The target thus fails to satisfy the standard's requirement to state forbidden cases that are concrete observations which could realistically have obtained, and it does not engage with the specific forbidden case that would undermine its entire causal narrative.",
+  "counterexample": [
+    "Archaeological evidence from Ugarit shows destruction layers dated to ~1185 BC, but earlier signs of administrative decline and abandonment of outlying settlements appear by ~1200 BC, suggesting internal decay preceded the Sea Peoples' arrival.",
+    "Hittite capital Hattusa was abandoned around 1190 BC, with no clear evidence of Sea Peoples involvement in its destruction; instead, grain shortages and internal rebellion are documented.",
+    "Mycenaean palatial centers (e.g., Pylos, Mycenae) show destruction around 1200 BC, but Linear B tablets from Pylos indicate economic strain and defensive preparations before any attack, implying the palaces were already weakened."
+  ]
+}

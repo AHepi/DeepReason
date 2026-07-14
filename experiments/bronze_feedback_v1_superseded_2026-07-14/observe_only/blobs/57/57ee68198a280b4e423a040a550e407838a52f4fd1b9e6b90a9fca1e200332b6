@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (pi-bronze) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:759927ed3040: rubric:std-hist
+- fc:d9fdd04b2072: rubric:std-hist
+- fc:458486bd5312: rubric:std-hist
+- fc:5a63096f78a9: rubric:std-hist
+- fc:f3614c8a61ee: rubric:std-hist
+- fc:e8146e04676e: rubric:std-hist
+- fc:e9ba9319b33f: rubric:std-hist
+- fc:73d0d11aedc4: rubric:std-hist
+- fc:ba03781819db: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET 68eec3a468e8a66b34d09cc4eefefd7b8ec73256c6dcdfa48772bd80c56f10b6
+{"claim": "The Sea Peoples were not a primary cause but a symptom of systemic collapse triggered by climatic anomaly","mechanism": "A prolonged regional drought (c. 1250-1150 BC) caused crop failures, famine, and social unrest that simultaneously destabilized palace economies dependent on surplus extraction; the Sea Peoples were displaced populations fleeing ecological stress, whose invasions were opportunistic rather than causally primary","scope": {"covers": ["Hittite Anatolia", "Ugarit", "Mycenaean Greece", "Levantine city-states"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Egyptian agricultural records show no drought stress during 1250-1150 BC and the Nile flood levels remained stable", "eval": "rubric:std-hist"}, {"case": "Palace economies showed continued surplus storage capacity without administrative contraction before destruction layers", "eval": "rubric:std-hist"}, {"case": "The Sea Peoples are attested as organized polities with territorial ambitions in contemporary texts predating the collapses", "eval": "rubric:std-hist"}], "prose_notes": "Candidate foregrounds environmental determinism; Egypt excluded because Nile hydrology buffered against rainfall-dependent agriculture. Typicality reflects mainstream but contested climate-catastrophe narrative."}
+commitments: skeleton-wf, kappa-hist, fc:759927ed3040, fc:d9fdd04b2072, fc:458486bd5312
+
+TARGET 7e981456fc6aeb36b2c56d55564af4b3d86fd80bdc722ada85b2f692457dd3c7
+{"claim": "Egypt survived because its centralized temple-state redistributive apparatus was structurally antifragile compared to peer-polity palace systems","mechanism": "The New Kingdom combined pharaonic ideology with temple estates (Amun, Ptah, Ra) that maintained parallel surplus networks; when one node failed, others compensated, unlike Mycenaean wanax-systems or Hittite vassal networks that collapsed through single-point administrative failure","scope": {"covers": ["Egypt", "Mycenaean Greece", "Hittite Anatolia"], "excludes": ["Ugarit", "Levantine city-states"]}, "forbidden": [{"case": "Egyptian temple estates show simultaneous collapse and centralization under Ramesses III, not mutual buffering", "eval": "rubric:std-hist"}, {"case": "Ugarit had multiple merchant guilds and parallel administrative structures analogous to Egyptian temple networks", "eval": "rubric:std-hist"}, {"case": "The Egyptian state under Ramesses III experienced precisely the same invasion pressures but with identical institutional responses to peer polities", "eval": "rubric:std-hist"}], "prose_notes": "Institutional-comparison candidate; deliberately atypical in applying Taleb-style antifragility to Bronze Age. Requires Egypt as controlled exception."}
+commitments: skeleton-wf, kappa-hist, fc:5a63096f78a9, fc:f3614c8a61ee, fc:e8146e04676e
+
+TARGET 2c148325ddb38b312222e6413906708cbb2a1cd81f54c4e66da249548d132538
+{"claim": "The collapse was epiphenomenal to a hyperconnectivity crisis in an early 'globalized' trade network that amplified local shocks into systemic failure","mechanism": "The Uluburun shipwreck model of interdependence created systemic coupling: Aegean silver, Anatolian copper, Levantine grain, and Cypriot copper were nodally specialized; a shock in any region propagated through debt-bond relations ( documented in Ugarit archives ) causing simultaneous insolvency cascades, while Egypt's semi-autarkic grain production decoupled it from network failure","scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Cyprus"], "excludes": ["Egypt", "Mesopotamia"]}, "forbidden": [{"case": "Ugarit archives show no debt-crisis correspondence between regions contemporaneous with collapse", "eval": "rubric:std-hist"}, {"case": "Material culture shows regional autarky rather than specialization in the decades before collapse", "eval": "rubric:std-hist"}, {"case": "Egypt was equally trade-dependent on Levantine timber and incense, and records show no substitution or domestic provision", "eval": "rubric:std-hist"}], "prose_notes": "Atypical network-systems candidate applying modern financial-crisis analogies to pre-monetary exchange; deliberately provocative anachronism."}
+commitments: skeleton-wf, kappa-hist, fc:e9ba9319b33f, fc:73d0d11aedc4, fc:ba03781819db
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "7565f6f2cd5201ed8fb4700e69c15dd267047db30df70cf27e8e336e12de5c17",
+      "attack": true,
+      "case": "The mechanism requires that alternative accounting practices and merchant alphabets diffused widely enough to erode scribal monopolies across all four regions, yet the archaeological record shows that Linear B was confined to Crete and mainland Greece, while Hittite Anatolia and Ugarit used cuneiform scripts that were not replaced by alphabetic writing until after the collapse; the claim thus posits a uniform information-technology shift across polities with fundamentally different scribal traditions, which is unsupported by evidence.",
+      "counterexample": null
+    },
+    {
+      "target": "c6c3e6182f080ab7a6af6aaede26c91ef7c51cc6c83d8468c4e8567ae5e8b2bd",
+      "attack": true,
+      "case": "The mechanism depends on a specific volcanic event (Hekla 3 or Santorini) causing a volcanic winter that shifts the ITCZ, but the timing of Hekla 3 is debated and often placed around 1000 BC, not 1200-1150 BC, and Santorini erupted centuries earlier (~1600 BC); the claim therefore requires a volcanic excursion that is not securely dated to the collapse horizon, making the causal chain speculative and unsupported by current paleoclimate chronologies.",
+      "counterexample": null
+    },
+    {
+      "target": "86f5982684fe39963a54e32c723626fe367e6cb8ce1bd3dc7f241c8c99233810",
+      "attack": true,
+      "case": "The claim posits a coordinated revolutionary conspiracy across multiple polities via intermarriage and gift-exchange networks, but there is no contemporary textual or archaeological evidence of such transnational class consciousness or collective action among chariot-warrior aristocracies; the Hittite and Mycenaean records show no discourse of class struggle or coordinated rebellion, and the mechanism relies on an anachronistic Marxist framework that is not attested in the Late Bronze Age sources.",
+      "counterexample": null
+    }
+  ]
+}

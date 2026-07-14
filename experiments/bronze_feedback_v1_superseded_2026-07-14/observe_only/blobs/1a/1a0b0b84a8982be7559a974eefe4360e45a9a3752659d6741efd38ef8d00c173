@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) because its forbidden cases are not concrete observations that could realistically have obtained. Forbidden case 1 ('Ugarit archives show no debt-crisis correspondence between regions contemporaneous with collapse') is a negative claim about absence of evidence, not a concrete observation of a record, event, or datable pattern that could have been found. Forbidden case 2 ('Material culture shows regional autarky rather than specialization in the decades before collapse') is a vague interpretive claim about 'material culture' without specifying which artifacts, sites, or strata would constitute the counterexample. Forbidden case 3 ('Egypt was equally trade-dependent on Levantine timber and incense, and records show no substitution or domestic provision') is a counterfactual assertion about what records 'show no substitution' — again a negative claim, not a concrete observation. None of these forbidden cases meet the standard's requirement for 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).'",
+  "counterexample": null
+}

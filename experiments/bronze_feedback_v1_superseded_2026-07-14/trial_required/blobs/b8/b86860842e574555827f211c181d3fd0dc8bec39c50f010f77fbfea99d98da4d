@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "0bba8e2b69407f3a1b6f1f6316400b53409e30547e4ab30e77078fea9c16a193",
+      "attack": true,
+      "case": "The claim that Egypt's geographic depth and fortified Nile corridor enabled survival is contradicted by the fact that the Egyptian delta itself is geographically flat and open to coastal incursions, lacking the 'compact riparian geography with unified command' asserted; the 19th Dynasty faced repeated Libyan and Sea Peoples attacks penetrating deep into the delta, and the survival of Egypt is better explained by its institutional resilience than by the geographic mechanism proposed."
+    },
+    {
+      "target": "e8282b4c3acdcd3a94f390e85537fe4b5c9d6e082c22ab9d6c5a78f259ec7e7a",
+      "attack": true,
+      "case": "The mechanism fails because paleoseismic evidence shows that earthquake storms in the Eastern Mediterranean typically cluster over decades, not the century-long window required to sequentially destroy multiple palace centers across different regions; moreover, the claim that Egyptian bureaucratic decentralization into nomarchic provisioning permitted reconstruction is unsupported by evidence that the Egyptian state actually centralized grain storage under the Ramesside period, not decentralized it."
+    },
+    {
+      "target": "ff6e65722db49d5cb2eda63c8a5ad11573b5355406934b924aeb7974bf9fbf2d",
+      "attack": true,
+      "case": "The claim that Mycenaean wanax legitimacy required demonstrable divine favor through prosperity and victory is contradicted by the fact that Linear B tablets show the wanax was primarily a religious and redistributive figure, not a military leader whose legitimacy depended on victory; the disappearance of the wanax title correlates with the collapse of the palatial administrative system itself, not with a crisis of faith, and post-palatial basileis retained ritual functions, undermining the ideological crisis mechanism."
+    }
+  ]
+}

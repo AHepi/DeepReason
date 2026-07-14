@@ -1,0 +1,14 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"claim": "The collapse was epiphenomenal to a hyperconnectivity crisis in an early 'globalized' trade network that amplified local shocks into systemic failure","mechanism": "The Uluburun shipwreck model of interdependence created systemic coupling: Aegean silver, Anatolian copper, Levantine grain, and Cypriot copper were nodally specialized; a shock in any region propagated through debt-bond relations ( documented in Ugarit archives ) causing simultaneous insolvency cascades, while Egypt's semi-autarkic grain production decoupled it from network failure","scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Cyprus"], "excludes": ["Egypt", "Mesopotamia"]}, "forbidden": [{"case": "Ugarit archives show no debt-crisis correspondence between regions contemporaneous with collapse", "eval": "rubric:std-hist"}, {"case": "Material culture shows regional autarky rather than specialization in the decades before collapse", "eval": "rubric:std-hist"}, {"case": "Egypt was equally trade-dependent on Levantine timber and incense, and records show no substitution or domestic provision", "eval": "rubric:std-hist"}], "prose_notes": "Atypical network-systems candidate applying modern financial-crisis analogies to pre-monetary exchange; deliberately provocative anachronism."}
+
+BATTERY THE EDITS WILL FACE:
+- program:skeleton_wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

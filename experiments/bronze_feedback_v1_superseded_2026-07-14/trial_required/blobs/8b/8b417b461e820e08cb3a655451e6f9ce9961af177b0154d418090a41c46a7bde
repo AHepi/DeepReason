@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's mechanism fails to satisfy the standard's requirement to 'state forbidden cases that are concrete observations which could realistically have obtained.' Specifically, the target lists as a forbidden case: 'Egyptian documentary record indicates palace economy with centralized redistribution comparable to Mycenaean wanax system rather than temple/private estate heterogeneity.' This is not a concrete observation that could realistically have obtained; it is a hypothetical counterfactual about what the Egyptian documentary record *might* indicate, not an actual record, event, or datable pattern. The standard demands forbidden cases be 'concrete observations' (e.g., a specific text, a dated flood level, a quantifiable trade record), not speculative interpretations of what evidence could show. Therefore, the target violates the standard by including a non-concrete, non-observational forbidden case.",
+  "counterexample": ["A concrete forbidden case would be: 'Papyrus Harris I records no grain redistribution to temples in Year 32 of Ramesses III.' That is a specific, observable, datable claim."]
+}

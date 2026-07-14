@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target violates the std-hist standard because its forbidden case 'Egyptian temples show concentrated, not dispersed, grain storage in New Kingdom administrative papyri' is a concrete observation that could realistically have obtained, yet the target's mechanism explicitly asserts that Egyptian temple networks were 'geographically dispersed and redundantly stored across multiple nodal points.' This is a direct factual contradiction: if the forbidden case is true, then the mechanism's claim about Egyptian storage is false, and the mechanism fails to name a causal mechanism that holds for the excluded region. Moreover, the target's mechanism relies on the contrast between Egyptian 'antifragility' and palatial vulnerability, but the forbidden case undermines that contrast, making the mechanism's explanatory scope incoherent. The target does not provide any evidence or argument to rebut the forbidden case, so it fails to satisfy the standard's requirement that forbidden cases be concrete observations that could realistically have obtained.",
+"counterexample": null
+}

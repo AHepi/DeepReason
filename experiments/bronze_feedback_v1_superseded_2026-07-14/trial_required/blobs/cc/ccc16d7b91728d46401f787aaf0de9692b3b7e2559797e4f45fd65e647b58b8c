@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+contradicts: 3c884acf0d40 attributes Egypt's persistence to a specific structural buffer (dispersed irrigation/private entrepreneurship), while c3a117d0bb0b attributes it to stochastic variation without causal structure. The former is refuted if the latter's null model (random survival) cannot be rejected.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target asserts a contradiction between two accounts, but the relation it states ('contradicts') is not substantively argued: it merely juxtaposes a structural buffer explanation against a stochastic null model and says the former is refuted if the latter cannot be rejected. That is a conditional logical relation, not a substantive dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction between the two accounts themselves. The target fails to name a kind of relation and state what it is refuted by, as required by the problem context for 3c884acf0d40.
+
+THE DEFENCE:
+The target does name a kind of relation: it explicitly states that the two accounts are in a relation of contradiction. It then specifies what is refuted by what: the structural-buffer explanation (3c884acf0d40) is refuted if the stochastic null model (c3a117d0bb0b) cannot be rejected, because the latter's claim of random survival directly contradicts the former's claim of a causal structural advantage. The conditional framing does not make the relation any less substantive; it articulates a clear logical incompatibility between the two accounts, which is precisely a contradiction.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

@@ -1,0 +1,17 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+TARGET:
+contradicts: 3c884acf0d40 attributes Egypt's persistence to a specific structural buffer (dispersed irrigation/private entrepreneurship), while c3a117d0bb0b attributes it to stochastic variation without causal structure. The former is refuted if the latter's null model (random survival) cannot be rejected.
+
+QUESTION: does the case establish a decisive fault in the target? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims that the former account is refuted if the latter's null model cannot be rejected, but this conflates statistical non-rejection with confirmation of the null. A null model that cannot be rejected does not entail that the structural account is false; it only means the data are consistent with both. The target asserts a refutation condition that is logically too strong, making the relation a non-sequitur rather than a genuine contradiction.
+
+THE DEFENCE:
+The target does not claim that failure to reject the null model confirms the null or logically entails the structural account is false. It states a conditional: the former account is refuted *if* the latter's null model cannot be rejected. This is a claim about the empirical testability of the structural account, not a logical proof of its falsehood. In hypothesis testing, a model that makes restrictive predictions can be abandoned when its predictions fail to outperform a baseline that assumes no structure, because the structural account then lacks the explanatory power it claimed. The critic’s charge of non-sequitur misreads the target’s conditional as asserting a deductive entailment from non-rejection to falsehood, which the target does not state.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

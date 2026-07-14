@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "210313ed94caa67b60d52d6088186ca65d8a4c89369f6caa59c50f8f7c92f0ce",
+      "attack": true,
+      "case": "The mechanism asserts that the Cypriot copper-tin alloy trade collapsed due to combined Tin Route disruption and maritime piracy, but the target's own forbidden cases include evidence of continued foreign bronze deliveries or only mild tin-price inflation in Linear B and Hittite texts through 1225-1180 BC. The target does not address the possibility that textual records show no severe disruption in the period immediately preceding collapse, which would undermine the claim that a supply-chain crisis was the primary trigger."
+    },
+    {
+      "target": "827be44b885ff51913a81ce2f2f5bd5a330300929dc8f019491283798d5cc18f",
+      "attack": true,
+      "case": "The mechanism posits that palace debt levels rose due to compound interest obligations and that marginal lands were brought under plow, but the target's own forbidden cases include evidence of palace debt levels stable or declining relative to stored surplus in Linear B and Hittite archives 1250-1200 BC, and no expansion onto marginal land in palatial territories 1300-1250 BC. The target does not reconcile how a debt-austerity spiral could occur if the archival and settlement evidence shows no such fiscal strain or land expansion in the relevant period."
+    },
+    {
+      "target": "34242181ebff4b569289adc72af9af5250617041d50863dd3e8552510055f2a8",
+      "attack": true,
+      "case": "The mechanism claims that Ugaritic and Cypriot merchant families deliberately diverted bulk cargo from palace routes and facilitated Sea Peoples recruitment, but the target's own forbidden cases include Ugaritic merchant archives showing continued royal commercial monopoly enforcement and merchant petitions for palace protection 1225-1190 BC. The target does not account for how merchants could have been orchestrating a coordinated sabotage while simultaneously petitioning the palace for protection, which contradicts the claimed agency and timing of the merchant-led diversion."
+    }
+  ]
+}

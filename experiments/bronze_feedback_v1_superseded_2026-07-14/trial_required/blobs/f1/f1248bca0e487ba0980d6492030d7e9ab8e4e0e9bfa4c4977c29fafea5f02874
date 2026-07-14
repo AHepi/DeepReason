@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "ff6e65722db49d5cb2eda63c8a5ad11573b5355406934b924aeb7974bf9fbf2d",
+      "attack": true,
+      "case": "The target's forbidden case about Hittite theological flexibility (temporary divine disfavor without regime collapse) is presented as a refutation, but the target's own mechanism explicitly requires that legitimacy depended on demonstrable divine favor through prosperity and victory. If Hittite texts show that temporary disfavor was accommodated without collapse, then the target's core causal link (legitimation crisis from failed reciprocity) is falsified for Hittite Anatolia, which is within the target's scope. The target fails to address this counterevidence, making the account empirically unsupported for a key civilization it claims to explain."
+    },
+    {
+      "target": "5811659b44364d30a3277bfaa7dc946cc3f1e4698779b76f4f11e77ff2c62cce",
+      "attack": true,
+      "case": "The target's forbidden case about Ugarit archives showing functioning private maritime trade networks independent of palace redistribution directly undermines the target's mechanism, which asserts that palace centers lacked flexible market mechanisms to source alternative supplies. If private trade networks existed and were independent of the palace, then the claimed absence of substitution mechanisms is false for Ugarit, a key case within the target's scope. The target does not reconcile this evidence, so the mechanism fails for a civilization it must cover."
+    },
+    {
+      "target": "b8ccc2a3be1487c620e4030d70cea68486f459f849e8413d268579cc047af10f",
+      "attack": true,
+      "case": "The target's forbidden case about Cyprus and Levantine centers showing uninterrupted palace continuity through 1200-1150 BCE despite technology diffusion directly contradicts the target's claim that technological diffusion enabled non-palace actors to bypass or overwhelm palace monopoly, causing collapse. If those centers remained intact, then the proposed mechanism (phase transition from hub-dependent architecture) is not supported for regions where the technology diffused but collapse did not occur. The target fails to account for this counterexample within its scope."
+    }
+  ]
+}

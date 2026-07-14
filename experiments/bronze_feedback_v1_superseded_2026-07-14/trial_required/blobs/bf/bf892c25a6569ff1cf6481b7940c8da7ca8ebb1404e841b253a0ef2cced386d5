@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case 1 is a concrete observation that could realistically have obtained (paleoseismic dating of earthquake clusters 50-100 years before collapse), yet the target's mechanism claims that earthquake storms sequentially destroyed infrastructure *at the collapse horizon* (c. 1225-1175 BCE). The forbidden case directly contradicts the temporal specificity of the mechanism: if major earthquakes cluster 50-100 years *before* the collapse horizon, they cannot be the proximate cause of the sequential destruction of centralized storage and administrative infrastructure at the claimed time. The target fails to address this counter-evidence, violating the std-hist requirement that forbidden cases be concrete observations that could realistically have obtained and that the account must not ignore such cases. The mechanism is thus falsified by the forbidden case's temporal mismatch.",
+  "counterexample": ["Paleoseismic data showing earthquake clusters at 1300-1250 BCE, not 1225-1175 BCE, would still leave the collapse horizon undestroyed by the claimed seismic storm sequence."]
+}

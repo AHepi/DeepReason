@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target violates the 'forbidden case' clause: it explicitly lists as a forbidden case 'Egyptian texts describing bronze rather than gold/silver as the critical shortage material,' yet the target's own mechanism claims that Egypt's 'local copper reserves permitted bronze substitution and retrenchment.' This directly contradicts the forbidden case because if Egyptian texts described bronze as the critical shortage, that would be a concrete observation that could realistically have obtained and would falsify the target's claim that Egypt had sufficient copper for substitution. The target's mechanism therefore depends on an assumption that is vulnerable to a specific, realistic counterexample that the target itself acknowledges as forbidden. This is a logical inconsistency: the target's own standard for falsification (the forbidden case) would, if realized, undermine the mechanism it proposes.",
+"counterexample": ["An Egyptian papyrus from the reign of Ramesses III (c. 1180 BC) recording a shortage of bronze for chariot repairs, with no mention of gold or silver scarcity"]
+}

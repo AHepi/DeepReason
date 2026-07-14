@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target fails std-hist requirement (1) because its 'mechanism' is not a specific causal mechanism but a vague label ('Tectonic-cum-institutional fragility') that conflates a geological event with a diffuse institutional condition, lacking a named institution, incentive, or process that would actually link earthquake clusters to sequential destruction and recovery. The forbidden cases further expose this: case 1 (paleoseismic dating 50-100 years before collapse) directly contradicts the claim's timing of destruction c. 1225-1175 BCE, showing the mechanism is unsupported by evidence; case 2 (uninterrupted Egyptian temple-building 1250-1150) undermines the supposed Egyptian resilience mechanism, as no institutional adaptation is specified to explain why Egypt avoided the same fate; case 3 (Linear B archives showing no seismic preparation) indicates the Mycenaean side lacked the claimed fragility mechanism. Thus the target violates the standard by offering no concrete causal process and by being contradicted by its own listed forbidden cases.",
+  "counterexample": [
+    "Paleoseismic dating shows major Eastern Mediterranean earthquakes cluster 50-100 years before collapse horizon",
+    "Egyptian temple-building programs show uninterrupted scaling 1250-1150 despite alleged seismic disruption",
+    "Linear B archives from Pylos document continued central planning immediately before destruction without seismic preparation"
+  ]
+}
