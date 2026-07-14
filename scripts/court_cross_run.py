@@ -39,7 +39,10 @@ from defended_trial_run import (  # noqa: E402
 POOL = REPO / "experiments/court_cross_pool_v1.json"
 RUN_DIR = REPO / "experiments/court_cross_run"
 LEDGER_PATH = RUN_DIR / "token_usage.json"
-TOKEN_CEILING = 600_000
+# Amendment 2: measured ~7k tokens/item; ceiling covers the two
+# remaining arms on the outcome-blind 85-item effective pool.
+TOKEN_CEILING = 1_600_000
+EFFECTIVE_POOL = 85
 # Overridable so the runner can share the account-wide 3-in-flight
 # ceiling with a concurrently running scheduler root.
 MAX_IN_FLIGHT = int(__import__("os").environ.get("CC_MAX_IN_FLIGHT", "3"))
@@ -126,7 +129,7 @@ def main() -> int:
     if not os.environ.get("OLLAMA_API_KEY"):
         from deepreason.easy import load_credentials
         load_credentials()
-    pool = json.loads(POOL.read_text())["items"]
+    pool = json.loads(POOL.read_text())["items"][:EFFECTIVE_POOL]
     ledger = UsageLedger(LEDGER_PATH, TOKEN_CEILING)
     for arm, spec in ARMS.items():
         ckpt = RUN_DIR / f"arm_{arm}.jsonl"

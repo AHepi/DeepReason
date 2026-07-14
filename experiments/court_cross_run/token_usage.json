@@ -1,22 +1,37 @@
 {
-  "prompt_tokens": 55083,
-  "completion_tokens": 16656,
-  "calls": 69,
+  "prompt_tokens": 469775,
+  "completion_tokens": 160666,
+  "calls": 606,
   "phases": {
     "dsflash_critic": {
-      "prompt_tokens": 6492,
-      "completion_tokens": 1539,
-      "calls": 12
+      "prompt_tokens": 43493,
+      "completion_tokens": 10898,
+      "calls": 88
     },
     "dsflash_defender": {
-      "prompt_tokens": 7803,
-      "completion_tokens": 2383,
-      "calls": 12
+      "prompt_tokens": 52108,
+      "completion_tokens": 18109,
+      "calls": 87
     },
     "dsflash_seat": {
-      "prompt_tokens": 40788,
-      "completion_tokens": 12734,
-      "calls": 45
+      "prompt_tokens": 352125,
+      "completion_tokens": 124845,
+      "calls": 405
+    },
+    "kimi_critic": {
+      "prompt_tokens": 3400,
+      "completion_tokens": 1466,
+      "calls": 6
+    },
+    "kimi_defender": {
+      "prompt_tokens": 3990,
+      "completion_tokens": 1385,
+      "calls": 5
+    },
+    "kimi_seat": {
+      "prompt_tokens": 14659,
+      "completion_tokens": 3963,
+      "calls": 15
     }
   }
 }
