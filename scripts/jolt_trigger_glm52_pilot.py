@@ -233,12 +233,23 @@ def trigger_receipt(harness: Harness) -> dict:
         for r in recent
     )
     novel_classes = sorted(value for value in recent_classes - earlier_classes if value)
-    fired = len(recent) == 8 and improvements == 0 and not novel_classes
+    current_best, _, _ = _current_best(harness)
+    known_optimum, _ = finite_optimum()
+    remaining_headroom = known_optimum - current_best
+    fired = (
+        len(recent) == 8
+        and improvements == 0
+        and not novel_classes
+        and remaining_headroom > 0
+    )
     payload = {
         "schema": "deepreason-functional-soft-trigger-v1",
         "valid_admissions": len(valid), "window": len(recent),
         "improvements_in_window": improvements,
         "new_mechanism_classes": novel_classes, "trigger": fired,
+        "current_best": current_best,
+        "known_optimum": known_optimum,
+        "remaining_objective_headroom": remaining_headroom,
         "source_event_seqs": [r.event_seq for r in recent],
     }
     payload["digest"] = sha256_hex(canonical_json(payload))

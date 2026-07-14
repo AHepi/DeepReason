@@ -47,3 +47,13 @@ def test_frozen_finite_optimum_is_exhaustively_known():
     best, winners = MODULE.finite_optimum()
     assert best == 675675
     assert winners == ((5, 7, 9, 11, 13, 15),)
+
+
+def test_trigger_requires_positive_objective_headroom(tmp_path):
+    source = MODULE.Harness(tmp_path / "source")
+    MODULE.seed(source)
+    # With no observations the trigger is ineligible; the exhaustive optimum
+    # guard is exercised in the historical v2 forensic fixture/report.
+    receipt = MODULE.trigger_receipt(source)
+    assert receipt["trigger"] is False
+    assert receipt["remaining_objective_headroom"] == 675675
