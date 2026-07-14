@@ -17,3 +17,17 @@ observational: no verdict thresholds; registered observables as in
   novelty under nomic, wire discipline, anomalies as F-findings)
 commitments: report experiments/results/glm_flat_v1_report.json; index
   line; root retained and verify_root clean
+
+# --- amendment 1 (operator correction before the run proper) ---
+amendment_1:
+  correction: the operator's directive was misread - the problem to pose
+    is the JUDGE problem (the harness's self-referential criticism suite,
+    pi-criticism - under what conditions does criticism-filtered voting
+    beat self-consistency, with the repo's measured validation data in the
+    problem statement), NOT the bronze question. The bronze launch was
+    killed at 2253 tokens; root runs/glm_flat discarded (never an
+    experiment, never scored).
+  corrected_design: suite=criticism, everything else unchanged (glm-5.2
+    all roles, gpt-oss:120b judge seat 2 by compile invariant, thinking
+    off, 1M budget, evidence mode, observe-only, 2-minute log digests)
+  root: runs/glm_judge
