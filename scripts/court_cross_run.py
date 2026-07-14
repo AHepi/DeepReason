@@ -41,7 +41,7 @@ RUN_DIR = REPO / "experiments/court_cross_run"
 LEDGER_PATH = RUN_DIR / "token_usage.json"
 # Amendment 2: measured ~7k tokens/item; ceiling covers the two
 # remaining arms on the outcome-blind 85-item effective pool.
-TOKEN_CEILING = 1_600_000
+TOKEN_CEILING = 2_000_000  # amendment 3
 EFFECTIVE_POOL = 85
 # Overridable so the runner can share the account-wide 3-in-flight
 # ceiling with a concurrently running scheduler root.
