@@ -1,0 +1,35 @@
+{
+  "aggregate_call_ceiling": 552,
+  "aggregate_token_ceiling": 1600000,
+  "authority": {
+    "critic_calls": 0,
+    "judge_calls": 0,
+    "roles": [
+      "conjecturer"
+    ],
+    "rubric_policy": "forbid",
+    "status": "deterministic verifier only"
+  },
+  "calibration_instances_sha256": "79bb06dc59fbda7c204d092050d0664b9f46ff2d8b3d04080213cf2eb9cddd25",
+  "evaluator_fingerprint": "7542d3e406cc4aae0d80fab3cdc6c4c4b86ee08de33ac845c1b3b05fe8d1a253",
+  "experimental_instances_sha256": "108cc6260d87d4f5cf45e1009cd9877ba10b825d22e807c624fcc7aed3778e39",
+  "jolts": false,
+  "manifest_sha256": "3a4af9cb1dd02b4cd65fbae48bc9490dd7db1139a3a20303416ff6458423b338",
+  "maximum_calls_per_instance": 32,
+  "optima_sha256": "346d3de4d846bbffaf861f98242b5ee888338f9c0bba53749d9687a14b7e8b56",
+  "protocol": "jolt-positive-headroom-v3.1",
+  "provider": {
+    "endpoint": "https://ollama.com/v1",
+    "model": "glm-5.2",
+    "temperature": 1.0,
+    "thinking": "off"
+  },
+  "schema": "deepreason-jolt-positive-headroom-calibration-plan-v3.1",
+  "score_feedback_required": true,
+  "seeds": [
+    20260701,
+    20260702,
+    20260703
+  ],
+  "threshold_selection": "select replay-observed R_med/R_low for >=2/3 positive-headroom non-improving windows and zero improving-window fires; otherwise stop"
+}

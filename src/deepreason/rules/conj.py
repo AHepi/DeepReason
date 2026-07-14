@@ -67,6 +67,7 @@ def conj(
     theorem_interface: str | None = None,
     generation_context: str | None = None,
     suppressed_exemplars: tuple[str, ...] = (),
+    capture_candidate_content: bool = False,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -220,13 +221,17 @@ def conj(
             commitments=overlay,
         )
         if diagnostics is not None:
-            diagnostics.append(
-                {
-                    "candidate": artifact.id[:12],
-                    "gate": reason,
-                    "search_signal": search_signal,
-                }
-            )
+            diagnostic = {
+                "candidate": artifact.id[:12],
+                "gate": reason,
+                "search_signal": search_signal,
+            }
+            if capture_candidate_content:
+                # Experimental observation only.  The default keeps the
+                # historical diagnostic shape and prompt/actuation path.
+                diagnostic["artifact_id"] = artifact.id
+                diagnostic["candidate_content"] = candidate.content
+            diagnostics.append(diagnostic)
         if not admitted:
             # Persist the block (stress campaign T7 finding): gate decisions
             # were in-memory only, so a finished run could not be audited for

@@ -108,6 +108,17 @@ def _json_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
         return FAIL, {"error": str(e)}
 
 
+def _tsp14_tour_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
+    from deepreason.experiments.jolt_tsp import parse_tour
+
+    tour = parse_tour(text)
+    return (
+        (PASS, {"canonical_tour": list(tour)})
+        if tour is not None
+        else (FAIL, {"reason": "invalid 14-city tour schema or permutation"})
+    )
+
+
 def _skeleton_wf(text: str, budget, artifact=None) -> tuple[str, dict]:
     from deepreason.informal.skeleton import skeleton_wf_program
 
@@ -228,6 +239,7 @@ def _lean_external_check(text: str, budget, artifact=None) -> tuple[str, dict]:
 
 PROGRAMS: dict[str, ProgramSpec] = {
     "json-wf": ProgramSpec("json-wf", _json_wf, "structural"),
+    "tsp14_tour_wf": ProgramSpec("tsp14_tour_wf", _tsp14_tour_wf, "execution"),
     "skeleton_wf": ProgramSpec("skeleton_wf", _skeleton_wf, "structural"),
     "lineage_ref": ProgramSpec("lineage_ref", _lineage_ref, "structural"),
     "exec_oracle": ProgramSpec("exec_oracle", _exec_oracle, "execution"),
