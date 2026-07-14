@@ -1,22 +1,22 @@
 {
-  "prompt_tokens": 104992,
-  "completion_tokens": 26644,
-  "calls": 204,
+  "prompt_tokens": 122338,
+  "completion_tokens": 31558,
+  "calls": 240,
   "phases": {
     "dsflash_B_comparator_aware": {
-      "prompt_tokens": 42394,
-      "completion_tokens": 8762,
-      "calls": 68
+      "prompt_tokens": 49434,
+      "completion_tokens": 10409,
+      "calls": 80
     },
     "dsflash_A_original": {
-      "prompt_tokens": 34949,
-      "completion_tokens": 8834,
-      "calls": 69
+      "prompt_tokens": 39981,
+      "completion_tokens": 10302,
+      "calls": 80
     },
     "dsflash_C_scope_neutral_prose": {
-      "prompt_tokens": 27649,
-      "completion_tokens": 9048,
-      "calls": 67
+      "prompt_tokens": 32923,
+      "completion_tokens": 10847,
+      "calls": 80
     }
   }
 }
