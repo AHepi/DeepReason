@@ -1,0 +1,22 @@
+{
+  "prompt_tokens": 104992,
+  "completion_tokens": 26644,
+  "calls": 204,
+  "phases": {
+    "dsflash_B_comparator_aware": {
+      "prompt_tokens": 42394,
+      "completion_tokens": 8762,
+      "calls": 68
+    },
+    "dsflash_A_original": {
+      "prompt_tokens": 34949,
+      "completion_tokens": 8834,
+      "calls": 69
+    },
+    "dsflash_C_scope_neutral_prose": {
+      "prompt_tokens": 27649,
+      "completion_tokens": 9048,
+      "calls": 67
+    }
+  }
+}
