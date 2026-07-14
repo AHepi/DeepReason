@@ -40,7 +40,9 @@ POOL = REPO / "experiments/court_cross_pool_v1.json"
 RUN_DIR = REPO / "experiments/court_cross_run"
 LEDGER_PATH = RUN_DIR / "token_usage.json"
 TOKEN_CEILING = 600_000
-MAX_IN_FLIGHT = 3
+# Overridable so the runner can share the account-wide 3-in-flight
+# ceiling with a concurrently running scheduler root.
+MAX_IN_FLIGHT = int(__import__("os").environ.get("CC_MAX_IN_FLIGHT", "3"))
 DEFENDER_MODEL = "deepseek-v4-pro"
 
 ARMS = {
