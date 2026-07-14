@@ -1,0 +1,40 @@
+{
+ "schema": "deepreason-bronze-flat-v1-forensic-addendum",
+ "supersedes_interpretation_of": "experiments/results/bronze_flat_v1_report.json",
+ "prior_corrections": [
+  "experiments/results/bronze_flat_v1_correction1.json",
+  "bronze_flat_v1_prereg.yaml correction_2"
+ ],
+ "plan": "deepreason-postrun-repair-plan-v2 (operator-supplied)",
+ "corrected_headline": "The direct argumentative critic plus a coarse, unscoped anti-relapse gate closed the admitted search after the first batch. The raw proposal repertoire was not measured.",
+ "claim_status": {
+  "mechanically_supported": [
+   "all three streams completed 50/50 cycles; roots pass verify_root with zero violations",
+   "814946 logged LLM tokens (206432/200936/407578)",
+   "10 substantive conjectures registered; all 10 REFUTED; frontier empty; zero reinstatements",
+   "batch argumentative-critic kill of the three deepseek conjectures at events seq 53/55/57; shared LLM call carried on seq 53 only; no defender or judge call in that path",
+   "first rubric-trial call precedes the batch kill (trial-llm at seq 16); trial-blocked:ensemble-split 1/1/6",
+   "anti-relapse gate blocks 165/183/269, overwhelmingly against each stream's first refuted conjecture",
+   "runtime embedder was hashing-128 in all three roots (fingerprint stamped)",
+   "in the deepseek and qwen streams the critic refuted the std-hist standard artifact and 4 school-stance seeds each (F3)",
+   "925/927 of kimi's Register-without-A+ events output new fc:* forbidden-case commitments (pre-gate registry mutation by blocked proposals)"
+  ],
+  "interpretive_but_supported": [
+   "the dominant conviction ground reads as a scope-formalism charge around the Egypt differential-survival clause (verified on all sampled objections)",
+   "admitted repertoire maps onto published scholarly positions (verified by reading all 10 admitted conjectures)",
+   "sampled blocked proposals are mechanism-diverse (3.2 ka BP event, lower-class revolutionary dismantling, tin-supply cascade read directly from raw responses)"
+  ],
+  "unsupported_by_retained_record_withdrawn": [
+   "'diverse under nomic (0.53-0.58)' - those were hashing-128 figures; withdrawn in correction 1",
+   "F4 as model circling - the embargo was gate-manufactured; reattributed in correction 1",
+   "273/183/927 as content-dedup of resubmitted proposals - they are new commitment registrations; withdrawn in correction 2",
+   "'the court convicted everything' - the decisive kills were direct argumentative warrants from one batch critic; the defended cross-family rubric court did not authorize them",
+   "'zero novel mechanisms' as a measured result - measured only over the 10 admitted conjectures, not the emitted population"
+  ],
+  "not_measured_in_v1": [
+   "nomic novelty trajectory in-run (prereg observable; instrument never loaded on this path)",
+   "emitted-proposal census and dispositions (built post hoc in the counterfactual forensics report)",
+   "mechanism novelty against a frozen literature baseline (requires blind coding protocol)"
+  ]
+ }
+}
