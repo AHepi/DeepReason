@@ -1,7 +1,7 @@
 {
-  "prompt_tokens": 197393,
-  "completion_tokens": 62193,
-  "calls": 384,
+  "prompt_tokens": 208016,
+  "completion_tokens": 67068,
+  "calls": 406,
   "phases": {
     "dsflash_B_comparator_aware": {
       "prompt_tokens": 52003,
@@ -19,19 +19,19 @@
       "calls": 85
     },
     "kimi_A_original": {
-      "prompt_tokens": 23052,
-      "completion_tokens": 9912,
-      "calls": 44
+      "prompt_tokens": 26445,
+      "completion_tokens": 11284,
+      "calls": 51
     },
     "kimi_B_comparator_aware": {
-      "prompt_tokens": 26861,
-      "completion_tokens": 8997,
-      "calls": 42
+      "prompt_tokens": 31460,
+      "completion_tokens": 10681,
+      "calls": 50
     },
     "kimi_C_scope_neutral_prose": {
-      "prompt_tokens": 17881,
-      "completion_tokens": 9785,
-      "calls": 42
+      "prompt_tokens": 20512,
+      "completion_tokens": 11604,
+      "calls": 49
     }
   }
 }
