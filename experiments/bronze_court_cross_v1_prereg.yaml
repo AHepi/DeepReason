@@ -78,3 +78,15 @@ amendment_2:
     everything_else: unchanged (same courts, defender, order-split
       protocol, runner, checkpoints)
   tokens_spent_at_amendment: 601578
+
+# --- amendment 3, recorded BEFORE further spend (P1 undecidable at the
+# --- mistral arm's 41/85 shortfall) ---
+amendment_3:
+  why: at the second ledger stop the dsflash and kimi arms are complete
+    (85/85) and mistral sits at 41/85. P2 is already decidable (worst-case
+    floor 26/85 = 0.306 >= 0.30 in the mistral arm; other arms far above).
+    P1 is NOT decidable - mistral's completed objection rate spans 0.482
+    to 1.0 depending on the unjudged 44 items, straddling the 25pp line.
+  action: ceiling raised to 2000000 (measured mistral cost ~8k/item x 44
+    remaining) to complete the mistral arm ONLY; no other change.
+  tokens_spent_at_amendment: 1602115
