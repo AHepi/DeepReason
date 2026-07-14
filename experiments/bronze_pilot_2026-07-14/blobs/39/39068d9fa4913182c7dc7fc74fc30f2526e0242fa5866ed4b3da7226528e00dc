@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism relies on the proliferation of iron smelting as a key enabler of the military revolution that democratized violence. However, the target itself lists a forbidden case stating that 'Iron smelting technology demonstrably post-dates the collapse by at least a century in the affected regions.' If this forbidden case is true, the causal mechanism is temporally impossible—the technology cannot cause a collapse that occurred before it existed. The target fails to reconcile this contradiction, violating the standard's requirement that a mechanism must be a specific, viable process and that forbidden cases must be concrete observations that could realistically have obtained, not self-defeating counterfactuals.",
+  "counterexample": [
+    "Iron smelting technology demonstrably post-dates the collapse by at least a century in the affected regions."
+  ]
+}

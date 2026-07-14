@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The target's mechanism posits that the pandemic selectively killed the literate administrative class, which would itself explain why contemporary texts from multiple sites describe famine and invasion but not a plague affecting the ruling class: the very scribes who would have recorded such a plague were the ones dying."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

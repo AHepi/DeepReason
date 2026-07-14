@@ -1,0 +1,44 @@
+{
+ "schema": "deepreason-bronze-pilot-v1",
+ "plan_phase": "I (deepreason-postrun-repair-plan-v2)",
+ "design": {
+  "model": "deepseek-v4-pro",
+  "judge_seat_2": "gpt-oss:120b",
+  "cycles_requested": 12,
+  "token_cap": 60000,
+  "workload_profile": "text",
+  "argumentative_authority": "observe_only",
+  "controller": false,
+  "research": false,
+  "embedder": "nomic-ai/nomic-embed-text-v1.5",
+  "near_dup_eps": 0.35,
+  "runtime": "evidence mode (schema-v2 manifest, bound, preflighted)"
+ },
+ "release_gates": {
+  "manifest_present": true,
+  "verify_root_violations": 0,
+  "meter_log_delta": 0,
+  "direct_argumentative_status_changes": 0,
+  "ordinary_infrastructure_attacks": 0,
+  "structural_only_battery_blocks": 0,
+  "proposal_disposition_coverage": "6/6 emitted registered (1.0)",
+  "gate_receipt_completeness": "vacuous (zero non-hash blocks); 6 domain records",
+  "embedder_fingerprint_matches_preflight": true,
+  "all_gates": "PASS"
+ },
+ "observed": {
+  "tokens": 55749,
+  "stop": "budget guard refused a dispatch that would cross the ceiling (55749 + 4371 > 60000) - reserve-settle meter working live",
+  "statuses": {
+   "accepted": 12,
+   "refuted": 0
+  },
+  "warrants": 0,
+  "scrutiny_records": 3,
+  "rubric_trial_calls": 42,
+  "trial_blocked_ensemble_split": 3,
+  "trial_blocked_referential_integrity": 1,
+  "frontier": "one substantive conjecture standing accepted (the first standing survivor of any bronze run); criticism recorded as scrutiny, not conviction"
+ },
+ "root": "experiments/bronze_pilot_2026-07-14/"
+}

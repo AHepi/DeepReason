@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "a297d918c7cb004462dfe7c71f0161f151ec5ade598815a717a63b767a2fe365",
+      "attack": true,
+      "case": "The claim's mechanism relies on a disruption of maritime trade in bulk goods (copper, tin, grain) to explain the simultaneous collapse of palace economies. However, the Hittite heartland in central Anatolia was not dependent on maritime trade for its core subsistence or military provisioning; it was a land-based empire with overland supply networks and local metal sources. A collapse of Aegean-Levantine sea routes cannot explain the near-simultaneous fall of Hattusa, which was geographically insulated from that specific maritime network failure.",
+      "counterexample": null
+    },
+    {
+      "target": "2bf66d2d2c5de8fe7566f81ea70deec4cbb446abb3d72706f08299d87c6a5db2",
+      "attack": true,
+      "case": "The mechanism asserts that iron weaponry democratized violence and enabled the overthrow of palace elites, but the target's own forbidden case correctly identifies that iron smelting post-dates the collapse in the affected regions. The target therefore concedes the factual premise of its own mechanism is historically false, leaving the claim without a valid causal engine for the military revolution it describes.",
+      "counterexample": null
+    },
+    {
+      "target": "d5674893c9cd517675531377e78c5ec670f7db7d3821d47acb9a6d875dc920d9",
+      "attack": true,
+      "case": "The mechanism requires a pathogen that selectively kills the literate administrative class while sparing the general population, but provides no biological or historical basis for a disease with such class-specific lethality. The 'high elite density' argument conflates occupational proximity with differential mortality; a virulent zoonotic disease spreading through palace storerooms and diplomatic contact would not discriminate between scribes and the servants, guards, and laborers who also inhabited those same dense palace complexes, making selective elite decapitation epidemiologically implausible.",
+      "counterexample": null
+    }
+  ]
+}
