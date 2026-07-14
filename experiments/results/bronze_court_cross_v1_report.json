@@ -1,0 +1,67 @@
+{
+ "arms": {
+  "dsflash": {
+   "n": 85,
+   "objection_rate": 1.0,
+   "objections": 85,
+   "outcomes": {
+    "abstain": 48,
+    "no_ruling": 1,
+    "overrule": 36
+   },
+   "ruled": 84,
+   "scope_formalism_objections": 72,
+   "scope_formalism_share": 0.8471,
+   "seat_disagreement_rate": 0.1071,
+   "sustained": 0
+  },
+  "kimi": {
+   "n": 85,
+   "objection_rate": 1.0,
+   "objections": 85,
+   "outcomes": {
+    "abstain": 52,
+    "overrule": 30,
+    "sustain": 3
+   },
+   "ruled": 85,
+   "scope_formalism_objections": 79,
+   "scope_formalism_share": 0.9294,
+   "seat_disagreement_rate": 0.0941,
+   "sustained": 3
+  },
+  "mistral": {
+   "n": 85,
+   "objection_rate": 0.9882,
+   "objections": 84,
+   "outcomes": {
+    "abstain": 56,
+    "overrule": 28
+   },
+   "ruled": 84,
+   "scope_formalism_objections": 62,
+   "scope_formalism_share": 0.7381,
+   "seat_disagreement_rate": 0.131,
+   "sustained": 0
+  }
+ },
+ "caveats": [
+  "P3 measures seat-plus-order disagreement (amendment 1), not a pure order effect",
+  "observe-only study: no status changed anywhere; verdict DISTRIBUTIONS are the outcome",
+  "scope-formalism share uses a deterministic keyword rule; borderline objections not hand-adjudicated"
+ ],
+ "pool": "experiments/court_cross_pool_v1.json (first 85 in frozen order, amendment 2)",
+ "prereg": "experiments/bronze_court_cross_v1_prereg.yaml",
+ "schema": "deepreason-bronze-court-cross-v1",
+ "tokens": {
+  "calls": 1746,
+  "completion_tokens": 483707,
+  "prompt_tokens": 1444672
+ },
+ "verdicts": {
+  "P1": "REFUTED",
+  "P1_measured_spread_pp": 1.18,
+  "P2": "CONFIRMED",
+  "P3": "CONFIRMED"
+ }
+}

@@ -90,3 +90,31 @@ amendment_3:
   action: ceiling raised to 2000000 (measured mistral cost ~8k/item x 44
     remaining) to complete the mistral arm ONLY; no other change.
   tokens_spent_at_amendment: 1602115
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/bronze_court_cross_v1_report.json
+  verdicts: {P1: REFUTED, P2: CONFIRMED, P3: CONFIRMED}
+  measured:
+    objection_rates: {dsflash: 1.0, kimi: 1.0, mistral: 0.9882}
+    p1_spread_pp: 1.18   # bar 25 - refuted by two orders of magnitude
+    scope_formalism_share: {dsflash: 0.847, kimi: 0.929, mistral: 0.738}
+    seat_disagreement: {dsflash: 0.107, kimi: 0.094, mistral: 0.131}
+    outcomes_pooled: {overrule: 94, abstain: 156, sustain: 3, no_ruling: 1}
+    tokens: 1949271 of 2000000 (amendments 2-3)
+  headline_readings:
+    - P1 refuted in the most informative way - court temperament does not
+      dominate because there is NO temperament variance on real harness
+      output; every critic family objects to essentially every artifact.
+      The judge zoo's severity spectrum was a property of curated test
+      corpora, not of criticism in the wild
+    - the scope-formalism conviction ground is court-universal (74-93
+      percent of objections), confirming it is manufactured by the
+      skeleton's covers/excludes format, not by any model family
+    - the defended protocol is the only working filter - 3 sustains in 255
+      trials, seat-stable everywhere (P3 confirmed); prosecution is
+      unconditional, conviction is rare
+  feedback_v1_gate: the prereg's "calibrated court" precondition is met in
+    protocol terms (stable, known distributions), not in court-selection
+    terms (no court differentiates). The defended protocol itself is the
+    calibration.
