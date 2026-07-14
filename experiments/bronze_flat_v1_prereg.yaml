@@ -176,3 +176,18 @@ correction_1:
     unreachable because production Conj passes an empty warrant list).
     The prosecutor-alone conviction path is confirmed in code and log
     (batch kill at seq 53/55/57, no defender or judge participation).
+
+# --- correction 2, appended after external plan review (record never edited) ---
+correction_2:
+  corrects: the report's and correction_1's reading of Register-without-A+
+    event counts (273/183/927) as content-address dedup of resubmitted
+    proposals
+  verified_actual: those events are NEW commitment registrations - 925 of
+    kimi's 927 have a single fc:* (forbidden-case) output; register_commitment
+    commits an event only for NEW commitments (dedup returns early with no
+    event), and compile_interface registers model-authored forbidden-case
+    commitments BEFORE the anti-relapse gate runs. The counts are therefore
+    evidence of pre-gate registry mutation by blocked proposals (each blocked
+    skeleton still adds its forbidden cases to the commitment registry), not
+    of byte-identical resubmission. Credit - external repair-plan review
+    (deepreason-postrun-repair-plan-v2), root cause RC5.
