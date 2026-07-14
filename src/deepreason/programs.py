@@ -286,6 +286,22 @@ def external_toolchains() -> dict[str, tuple[str, ...]]:
     return {toolchain: tuple(names) for toolchain, names in sorted(grouped.items())}
 
 
+def program_class(commitment: Commitment) -> ProgramClass | None:
+    """Process classification of one evaluable commitment (never a verdict).
+
+    Registered programs report their registry class ("structural" marks
+    well-formedness checks: skeleton_wf, json-wf, manifest_wf, and kin).
+    Predicates are substantive content criteria and report None. The
+    anti-relapse gate consumes this: a battery whose evaluable commitments
+    are ALL structural cannot establish relapse equivalence (RC2).
+    """
+    kind, _, arg = commitment.eval.partition(":")
+    if kind == "program":
+        spec = PROGRAMS.get(arg)
+        return spec.class_ if spec is not None else None
+    return None
+
+
 def evaluable(commitment: Commitment) -> bool:
     kind, _, arg = commitment.eval.partition(":")
     return kind == "predicate" or (kind == "program" and arg in PROGRAMS)

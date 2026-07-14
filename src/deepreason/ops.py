@@ -79,6 +79,47 @@ def seed_problem_payload(harness, data: dict) -> Problem:
     return harness.register_problem(Problem.model_validate(spec))
 
 
+def review_infrastructure(harness, adapter, config, artifact_id: str):
+    """Explicit infrastructure review (RC6): the ONLY route by which
+    infrastructure artifacts (standards, stance policies, seeds) can be
+    attacked. They are excluded from the scheduler's ordinary standing
+    criticism pool, so criticism of them must be a deliberate operation.
+
+    Flow: the argumentative_critic drafts a case against the named artifact;
+    the case then goes through the defended trial (defender answers, the
+    frozen cross-family judge ensemble rules, guard checks screen the
+    ruling). Only a guard-accepted sustained ruling mints the ARGUMENTATIVE
+    warrant; any other outcome lands as a trial-declined Measure. Returns
+    the registered critic artifact, or None."""
+    from deepreason.informal.trial import run_argument_trial_from_case
+    from deepreason.llm.contracts import ArgumentativeCriticOutput
+    from deepreason.programs import content_text
+
+    artifact_id = resolve_prefix(harness, artifact_id)
+    target = harness.state.artifacts.get(artifact_id)
+    if target is None:
+        raise ValueError(f"unknown artifact: {artifact_id}")
+    if not adapter.has_role("argumentative_critic"):
+        raise ValueError("infrastructure review requires the argumentative_critic role")
+    pack = "\n".join([
+        "INFRASTRUCTURE UNDER REVIEW (standard / stance / policy artifact):",
+        content_text(target, harness.blobs),
+        "",
+        "Draft the strongest case that this infrastructure is unsound or "
+        "unfit for its role, citing specific clauses, or attack=false if "
+        "none exists.",
+    ])
+    case_out, llm_call = adapter.call(
+        "argumentative_critic", pack, ArgumentativeCriticOutput
+    )
+    if not case_out.attack or not case_out.case.strip():
+        harness.record_measure(inputs=["infra-review-no-case", artifact_id], llm=llm_call)
+        return None
+    return run_argument_trial_from_case(
+        harness, adapter, config, artifact_id, case_out.case, llm_call
+    )
+
+
 def make_embedder(harness, config):
     """The embedder a run actually gets. EMBEDDER_MODEL unset => the
     zero-dependency hashing default (None: the Scheduler constructs it).

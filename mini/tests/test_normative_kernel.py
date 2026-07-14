@@ -157,20 +157,13 @@ def test_blocked_model_candidate_leaves_no_commitment_residue(tmp_path):
         ],
     )
 
-    blocked = json.dumps(
-        {
-            "claim": "candidate",
-            "mechanism": "same program verdicts",
-            "forbidden": [
-                {"case": "candidate-only case", "eval": "program:json-wf"}
-            ],
-        }
-    )
-    blocked_checks = compile_checks(blocked)
-    candidate_only_ids = {
-        check["id"] for check in blocked_checks
-    } - set(prior_ids)
-    assert candidate_only_ids
+    # Contract change (bronze flat v1 repair): a structural-only battery no
+    # longer blocks, so the only reachable block in mini's check vocabulary
+    # is stage-1 exact hash - the model re-emitting the refuted prior. The
+    # invariant under test is unchanged: a blocked candidate must leave the
+    # commitment registry and artifact set untouched.
+    blocked = prior
+    commitments_before = set(session.harness.commitments)
 
     summary = run(
         [("pi-0", "why?")],
@@ -193,11 +186,11 @@ def test_blocked_model_candidate_leaves_no_commitment_residue(tmp_path):
 
     reopened = Session(root)
     assert summary["gate_blocks"] == 1
-    assert candidate_only_ids.isdisjoint(reopened.harness.commitments)
-    assert blocked not in {
+    assert set(reopened.harness.commitments) == commitments_before
+    assert [
         artifact.content_ref.removeprefix("inline:")
         for artifact in reopened.harness.state.artifacts.values()
-    }
+    ].count(blocked) == 1  # the prior itself, never a second registration
 
 
 def test_problem_identity_conflict_uses_parent_well_formedness(tmp_path):

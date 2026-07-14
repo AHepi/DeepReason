@@ -234,6 +234,21 @@ class Config(BaseModel):
     # admitted targets share ONE argumentative-critic call; warrants remain
     # per-target. None = one call per target (legacy behavior).
     CRIT_BATCH_K: int | None = None
+    # Criticism authority (bronze postrun repair, RC1): what a prose-only
+    # argumentative case may do to a NON-execution-backed target.
+    #   observe_only   - the case registers as scrutiny evidence (critic-role
+    #                    artifact, no warrant) plus a Measure; no status change.
+    #   trial_required - the case goes to the defended cross-family trial;
+    #                    only a guard-accepted sustained ruling mints the
+    #                    ARGUMENTATIVE warrant.
+    #   legacy_direct  - pre-repair behavior: the critic's self-authored
+    #                    validity node certifies the case. Explicit opt-in for
+    #                    replay of old roots and pre-registered experiments.
+    # Demonstrative outcomes (counterexamples, program/verifier failures)
+    # remain status-changing under every mode.
+    ARGUMENTATIVE_AUTHORITY: Literal[
+        "observe_only", "trial_required", "legacy_direct"
+    ] = "observe_only"
     # Counterexample feedback retries (§3 execution supremacy): when an attack
     # on an execution-backed target fails to ground (missing / gate-rejected /
     # property-held counterexample), re-ask the critic up to this many times

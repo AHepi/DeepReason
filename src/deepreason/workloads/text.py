@@ -165,11 +165,14 @@ def envelope_json(envelope: ReasoningEnvelopeV1) -> str:
     )
 
 
-def compile_countercondition_commitments(harness, envelope: ReasoningEnvelopeV1) -> list[str]:
-    """Compile safe, bounded current-run counterconditions before identity."""
+def draft_countercondition_commitments(envelope: ReasoningEnvelopeV1) -> list[Commitment]:
+    """Pure construction of safe, bounded countercondition Commitments.
+
+    No registry writes: two-phase compilation (RC5) gates on these drafts
+    and registers them only after admission."""
     from deepreason import programs
 
-    compiled: list[str] = []
+    drafts: list[Commitment] = []
     for countercondition in envelope.counterconditions:
         evaluation = countercondition.eval
         observation_valued = evaluation == "observation"
@@ -186,11 +189,20 @@ def compile_countercondition_commitments(harness, envelope: ReasoningEnvelopeV1)
                 separators=(",", ":"),
             ).encode()
         ).hexdigest()
-        commitment = Commitment(
-            id=f"reason-counter@{digest[:24]}",
-            eval=evaluation,
-            observation_valued=observation_valued,
+        drafts.append(
+            Commitment(
+                id=f"reason-counter@{digest[:24]}",
+                eval=evaluation,
+                observation_valued=observation_valued,
+            )
         )
+    return drafts
+
+
+def compile_countercondition_commitments(harness, envelope: ReasoningEnvelopeV1) -> list[str]:
+    """Compile safe, bounded current-run counterconditions before identity."""
+    compiled: list[str] = []
+    for commitment in draft_countercondition_commitments(envelope):
         harness.register_commitment(commitment)
         compiled.append(commitment.id)
     return compiled

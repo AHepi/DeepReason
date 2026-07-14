@@ -10,6 +10,18 @@ from minireason.loop import Session
 BAD = '{"claim": "c", "mechanism": "m", "forbidden": []}'  # refuted on arrival
 
 
+def _relapse_receipts(session, kind):
+    import json as _json
+    path = session.root / "relapse.log.jsonl"
+    if not path.exists():
+        return []
+    return [
+        record
+        for line in path.read_text().splitlines()
+        if (record := _json.loads(line)).get("type") == kind
+    ]
+
+
 def _register(session, content, stance="mechanist", pid="pi-0"):
     cks = compile_checks(content)
     commitment_ids = session.register_commitments(cks)
@@ -34,11 +46,35 @@ def test_hash_relapse_blocked(tmp_path):
     assert not ok and reason.startswith("hash:") and artifact.id[:12] in reason
 
 
-def test_normalized_equivalence_blocks_paraphrase_order(tmp_path):
+def test_structural_battery_alone_admits_paraphrase_with_receipt(tmp_path):
+    """Contract change (bronze flat v1 repair): a battery whose evaluable
+    members are all structural well-formedness checks cannot establish
+    relapse equivalence. The paraphrase is admitted and the skip is
+    receipted, never silent."""
     s, prior, cks = _refuted_session(tmp_path)
-    # Different bytes, but the canonical program battery has the same verdict.
     shuffled = '{"mechanism": "m", "claim": "c", "forbidden": []}'
     candidate = s.build_candidate(shuffled, [c["id"] for c in cks], "mechanist")
+    ok, reason = s.admit_candidate(candidate)
+    assert ok and reason == "admitted"
+    receipts = _relapse_receipts(s, "relapse-structural-only")
+    assert any(
+        r["candidate_id"] == candidate.id and r["prior_id"] == prior.id
+        for r in receipts
+    )
+
+
+def test_substantive_battery_still_blocks_paraphrase(tmp_path):
+    """With at least one substantive commitment in the shared battery,
+    verdict-vector equivalence blocks exactly as before."""
+    s = Session(tmp_path / "run")
+    s.spawn_problem("pi-0", "d")
+    base = Commitment(id="base-sub", eval="predicate:len(content) > 3")
+    s.harness.register_commitment(base)
+    prior = s.build_candidate('{"claim": "c", "mechanism": "m"}', [base.id], "mechanist")
+    s.register_candidates([(prior, [])], "pi-0", None)
+    s.refute(prior.id, [{"commitment": base.id, "eval": base.eval, "verdict": "fail"}])
+    shuffled = '{"mechanism": "m", "claim": "c"}'
+    candidate = s.build_candidate(shuffled, [base.id], "mechanist")
     ok, reason = s.admit_candidate(candidate)
     assert not ok and "to refuted" in reason and prior.id[:12] in reason
 
@@ -72,8 +108,10 @@ def test_candidate_commitments_are_visible_only_in_temporary_guard_overlay(tmp_p
         id="candidate-only",
         eval="predicate:'new' in content",
     )
+    # A near-paraphrase of the prior: the semantic stage keeps the prior in
+    # range, so the battery comparison is what decides.
     candidate = session.build_candidate(
-        "new idea",
+        "old idea new",
         [base.id, candidate_only.id],
         "mechanist",
     )
@@ -81,7 +119,7 @@ def test_candidate_commitments_are_visible_only_in_temporary_guard_overlay(tmp_p
     # Without the candidate-only predicate, the active battery sees the same
     # verdict and blocks. The temporary overlay makes the differing verdict
     # visible, but does not mutate canonical commitments during admission.
-    assert anti_relapse.check(candidate, [], session.harness)[0] is False
+    assert session.admit_candidate(candidate)[0] is False
     assert session.admit_candidate(
         candidate,
         candidate_commitments=[candidate_only],
@@ -144,12 +182,21 @@ def test_mini_admission_matches_full_guard_for_all_outcomes(tmp_path):
             candidate,
             [],
             s.harness,
-            near_dup_eps=MINI_NEAR_DUP_EPS,
+            **s.guard_scope(candidate),
         )
 
 
 def test_counter_warrant_exception_is_identical_to_full_guard(tmp_path):
-    s, _, cks = _refuted_session(tmp_path)
+    """The counter-warrant exemption is reachable only through a substantive
+    battery (structural-only batteries never block, so there is nothing to
+    exempt); mini and the full guard agree on the whole path."""
+    s = Session(tmp_path / "run")
+    s.spawn_problem("pi-0", "d")
+    base = Commitment(id="base-cw", eval="predicate:len(content) > 3")
+    s.harness.register_commitment(base)
+    prior = s.build_candidate('{"claim": "c", "mechanism": "m"}', [base.id], "mechanist")
+    s.register_candidates([(prior, [])], "pi-0", None)
+    s.refute(prior.id, [{"commitment": base.id, "eval": base.eval, "verdict": "fail"}])
     refuter = next(
         attacker
         for attacker, target in s.harness.state.att
@@ -164,16 +211,17 @@ def test_counter_warrant_exception_is_identical_to_full_guard(tmp_path):
         type=WarrantType.ARGUMENTATIVE,
         validity_node=nu.id,
     )
-    content = '{"mechanism": "m", "claim": "c", "forbidden": []}'
-    candidate = s.build_candidate(
-        content, [c["id"] for c in cks], "mechanist", [counter]
-    )
+    shuffled = '{"mechanism": "m", "claim": "c"}'
+    candidate = s.build_candidate(shuffled, [base.id], "mechanist", [counter])
 
+    # Blocked without the counter-warrant, admitted with it; the full guard
+    # under identical scope returns the identical pair.
+    assert s.admit_candidate(candidate)[0] is False
     mini_result = s.admit_candidate(candidate, [counter])
     full_result = anti_relapse.check(
         candidate,
         [counter],
         s.harness,
-        near_dup_eps=MINI_NEAR_DUP_EPS,
+        **s.guard_scope(candidate),
     )
     assert mini_result == full_result == (True, "admitted")

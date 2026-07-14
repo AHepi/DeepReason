@@ -3,9 +3,14 @@
 - crit_program: run the target's evaluable commitments (tau_kappa); each
   ``fail`` packages an ordinary demonstrative warrant (commitment, verdict,
   trace_ref, attackable validity node nu). A bare verdict is never an edge.
-- crit_argumentative: the argumentative_critic role mounts a case; it
-  registers on its own merits as an argumentative warrant. Rubric verdicts
-  exist only downstream of the trial guard (P5).
+- crit_argumentative: the argumentative_critic role mounts a case. What the
+  case may do to a non-execution-backed target is governed by
+  config.ARGUMENTATIVE_AUTHORITY (RC1): observe_only records scrutiny
+  evidence, trial_required routes the case through the defended cross-family
+  trial, legacy_direct preserves the pre-repair self-certifying warrant.
+  Demonstrative outcomes (counterexamples run against the target) remain
+  status-changing under every mode. Rubric verdicts exist only downstream
+  of the trial guard (P5).
 """
 
 from deepreason import programs
@@ -29,6 +34,34 @@ from deepreason.rules.warrants import (
 
 def _register_nu(harness, content: str) -> Artifact:
     return harness.create_artifact(content, provenance=Provenance(role="critic"))
+
+
+def _authority(config) -> str:
+    """ARGUMENTATIVE_AUTHORITY (RC1). Duck-typed configs without the field
+    (archived experiment shims) keep the pre-repair behavior explicitly."""
+    return getattr(config, "ARGUMENTATIVE_AUTHORITY", "legacy_direct")
+
+
+def _observe_case(harness, target_id: str, case_text: str, llm_call):
+    """observe_only semantics: the case is scrutiny evidence, never a status
+    change. Registers the case as a critic-role artifact with NO warrants and
+    records a ["scrutiny", target, critic] Measure. A non-None llm_call is
+    accounted exactly once: on the registration event when it commits, on
+    the scrutiny Measure when the prose dedupes; callers passing a shared
+    call must treat it as spent after this returns."""
+    before = set(harness.state.artifacts)
+    critic = harness.create_artifact(
+        case_text,
+        provenance=Provenance(role="critic"),
+        rule=Rule.CRIT,
+        llm=llm_call,
+    )
+    carried = llm_call is not None and critic.id not in before
+    harness.record_measure(
+        inputs=["scrutiny", target_id, critic.id],
+        llm=None if carried else llm_call,
+    )
+    return critic
 
 
 def _has_property_oracle(harness, target_id: str) -> bool:
@@ -495,6 +528,19 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
             inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
         )
         return None
+    # Authority gate (RC1): only legacy_direct lets a prose case mint its own
+    # status-changing warrant against a non-execution-backed target. The
+    # try_counterexample / execution-supremacy paths above are unaffected;
+    # demonstrative outcomes stay status-changing under every mode.
+    authority = _authority(config)
+    if authority == "observe_only":
+        return _observe_case(harness, target_id, output.case, llm_call)
+    if authority == "trial_required":
+        from deepreason.informal.trial import run_argument_trial_from_case
+
+        return run_argument_trial_from_case(
+            harness, adapter, config, target_id, output.case, llm_call
+        )
     case_hash = sha256_hex(output.case.encode())[:16]
     nu = _register_nu(
         harness, f"nu: argumentative case {case_hash} against {target_id} is sound"
@@ -590,6 +636,25 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
                     {"target": case.target, "counterexample": case.counterexample,
                      "reason": reason, "case": case.case}
                 )
+            continue
+        # Authority gate (RC1), per target; the shared call stays accounted
+        # exactly once (observe/trial consume llm_pending when passed).
+        authority = _authority(config)
+        if authority == "observe_only":
+            critic = _observe_case(harness, case.target, case.case, llm_pending)
+            llm_pending = None  # accounted inside _observe_case
+            critics.append(critic)
+            continue
+        if authority == "trial_required":
+            from deepreason.informal.trial import run_argument_trial_from_case
+
+            trial_critic = run_argument_trial_from_case(
+                harness, adapter, config, case.target, case.case, llm_pending
+            )
+            if llm_pending is not None:
+                llm_pending = None  # accounted inside the trial (trial-llm)
+            if trial_critic is not None:
+                critics.append(trial_critic)
             continue
         case_hash = sha256_hex(case.case.encode())[:16]
         nu = _register_nu(

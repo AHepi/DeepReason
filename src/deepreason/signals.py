@@ -98,6 +98,15 @@ SIGNALS: dict[str, str] = {
                                         "nothing",
     "batch-crit": "batched critic call over the listed targets registered "
                   "nothing that committed an event",
+    "scrutiny": "observe-only criticism authority (RC1): the critic's case "
+                "registered as scrutiny evidence with NO warrant (inputs: "
+                "[signal, target id, critic artifact id]); status unchanged",
+    "trial-declined": "trial_required criticism authority: the defended "
+                      "trial over a precomputed case did not sustain "
+                      "(inputs: [signal, target id, reason]); no warrant",
+    "infra-review-no-case": "explicit infrastructure review ran and the "
+                            "critic mounted no case (inputs: [signal, "
+                            "artifact id]); the call is on the record",
     "batch-crit-cx-retry": "shared counterexample-retry call for the listed "
                            "overridden targets",
     "property-wipeout-quarantine": "a proposed property's violation was "

@@ -1,18 +1,31 @@
-"""Anti-relapse gate (spec §3, §11.5) — mandatory before Conj commit.
+"""Anti-relapse gate (spec §3, §11.5): mandatory before Conj commit.
 
 Three stages, cheap first:
-1. Hash: candidate id matches an existing refuted artifact => block.
+1. Hash: candidate id matches an existing refuted artifact => block. Global,
+   unconditional.
 2. Semantic trigger (P2): embedding NN against the refuted index within
-   NEAR_DUP_EPS narrows which priors face stage 3. Until the embedder lands,
-   P1 runs stage 3 against every refuted prior (correct, just less cheap).
-3. Battery equivalence: verdict-vector over the active battery matches a
-   refuted prior's (~=_B, Def 3.5) => block UNLESS the candidate carries a
-   warrant against that prior's refuter. Verdicts differ => admit; the
-   near-miss is a capture diagnostic (§11.3).
+   NEAR_DUP_EPS narrows which priors face stage 3. Stages 2-3 run ONLY when
+   a RelapseDomain, an embedder, AND a calibrated NEAR_DUP_EPS are all
+   present; a missing input degrades the gate to hash-only (fail open) with
+   a relapse-gate-degraded operational receipt (RC3 - the bronze run's gate
+   compared every refuted prior globally and closed the search).
+3. Battery equivalence: verdict-vector over the shared evaluable battery
+   matches a refuted prior's (~=_B, Def 3.5) => block. A battery whose
+   evaluable commitments are ALL structural (well-formedness programs:
+   skeleton_wf, json-wf, manifest_wf, ...) cannot establish equivalence and
+   is skipped with a relapse-structural-only receipt (RC2). Verdicts differ
+   => admit; the near-miss is a capture diagnostic (§11.3).
 
-Near-duplicates of ACCEPTED artifacts are never blocked — attention-deduped
+The counter-warrant exemption remains for callers that supply warrants: a
+candidate carrying a warrant against the prior's accepted refuter is
+admitted. Production Conj supplies no warrants; it uses the receipt/defer
+contract instead - every non-hash block appends an operational receipt
+naming the prior's refuter ids, so a later cycle can mount an explicit
+challenge against the refuter.
+
+Near-duplicates of ACCEPTED artifacts are never blocked; attention-deduped
 only (blocking them would be a diversity gate adjudicating, forbidden §0).
-Negative case law lives here, at the gate — never rendered into packs.
+Negative case law lives here, at the gate, and is never rendered into packs.
 """
 
 from collections.abc import Iterable
@@ -107,12 +120,19 @@ def relapse_domain(
     toolchain_digest: str | None = None,
     component_spec: str | None = None,
     theorem_interface: str | None = None,
+    commitments=None,
 ) -> RelapseDomain:
-    """Compile a deterministic domain from harness-owned interface facts."""
+    """Compile a deterministic domain from harness-owned interface facts.
+
+    ``commitments`` optionally overlays the harness registry with draft
+    (not-yet-registered) commitments so a two-phase candidate's battery
+    digest matches its post-admission identity.
+    """
+    lookup = harness.commitments if commitments is None else commitments
     battery = sorted(
         cid
         for cid in artifact.interface.commitments
-        if cid in harness.commitments and programs.evaluable(harness.commitments[cid])
+        if cid in lookup and programs.evaluable(lookup[cid])
     )
     codec_family = artifact.codec.split(":", 1)[0].strip().casefold() or "raw"
     return RelapseDomain(
@@ -230,11 +250,27 @@ def _battery(candidate: Artifact, prior: Artifact, commitments) -> list[str]:
     )
 
 
-def verdict_vector(artifact: Artifact, battery: list[str], harness) -> tuple[str, ...]:
+def verdict_vector(
+    artifact: Artifact, battery: list[str], harness, commitments=None
+) -> tuple[str, ...]:
+    lookup = harness.commitments if commitments is None else commitments
     return tuple(
-        programs.evaluate(harness.commitments[cid], artifact, harness.blobs)[0]
+        programs.evaluate(lookup[cid], artifact, harness.blobs)[0]
         for cid in battery
     )
+
+
+def _embedder_fingerprint(embedder) -> dict:
+    """fingerprint() when the embedder provides it; a minimal duck-typed
+    identity otherwise, mirroring the scheduler's run stamp."""
+    fp = getattr(embedder, "fingerprint", None)
+    if callable(fp):
+        return fp()
+    return {
+        "model": getattr(embedder, "model", type(embedder).__name__),
+        "version": getattr(embedder, "version", "?"),
+        "sentinel": "-",
+    }
 
 
 def check(
@@ -245,62 +281,102 @@ def check(
     near_dup_eps: float | None = None,
     domain: RelapseDomain | None = None,
     prior_domains: dict[str, RelapseDomain] | None = None,
+    commitments=None,
 ) -> tuple[bool, str]:
-    """(admit, reason). Blocks ONLY relapse onto refuted-equivalents (§0)."""
+    """(admit, reason). Blocks ONLY relapse onto refuted-equivalents (§0).
+
+    ``commitments`` optionally overlays the harness registry with draft
+    commitments (two-phase compilation: harness commitments plus the
+    candidate's unregistered forbidden-case commitments) for the battery
+    and verdict-vector stages.
+    """
     status = harness.state.status
-    # Stage 1 — hash.
+    lookup = harness.commitments if commitments is None else commitments
+    # Stage 1, hash: global, unconditional.
     if status.get(candidate.id) == Status.REFUTED:
         return False, f"hash: {candidate.id[:12]} is a refuted artifact"
+    # Stages 2-3 require full scope: a RelapseDomain, an embedder, and a
+    # calibrated threshold. Anything missing degrades to hash-only (fail
+    # open) with an operational receipt, never a silent global comparison.
+    missing = [
+        name
+        for name, value in (
+            ("domain", domain),
+            ("embedder", embedder),
+            ("near_dup_eps", near_dup_eps),
+        )
+        if value is None
+    ]
+    if missing:
+        _append_operational(
+            harness,
+            {
+                "type": "relapse-gate-degraded",
+                "missing": missing,
+                "candidate_id": candidate.id,
+            },
+        )
+        return True, "admitted-degraded:" + ",".join(missing)
     counter_targets = {w.target for w in warrants}
     att = set(harness.state.att)
-    # Stage 2 — semantic trigger (§11.5): with an embedder, only refuted
-    # priors within NEAR_DUP_EPS face the battery check; without one, every
-    # refuted prior does (correct, just less cheap).
-    if embedder is not None and near_dup_eps is not None:
-        from deepreason.capture.atlas import RefutedIndex
-        from deepreason.programs import content_text
+    from deepreason.capture.atlas import RefutedIndex
+    from deepreason.llm.embedder import distance
+    from deepreason.programs import content_text
 
-        index = RefutedIndex(embedder)
-        index.rebuild(harness)
-        candidate_vec = embedder.embed(content_text(candidate, harness.blobs))
-        prior_ids = index.nearest(candidate_vec, near_dup_eps)
-    else:
-        prior_ids = [aid for aid, s in status.items() if s == Status.REFUTED]
+    # Stage 2, semantic trigger (§11.5): only refuted priors within
+    # NEAR_DUP_EPS face the battery check.
+    index = RefutedIndex(embedder)
+    index.rebuild(harness)
+    candidate_vec = embedder.embed(content_text(candidate, harness.blobs))
+    prior_ids = index.nearest(candidate_vec, near_dup_eps)
     known_domains = prior_domains
-    if domain is not None and known_domains is None:
+    if known_domains is None:
         known_domains = recorded_domains(harness)
     for prior_id in prior_ids:
         if prior_id == candidate.id:
             continue
         prior = harness.state.artifacts[prior_id]
-        if domain is not None:
-            prior_domain = (known_domains or {}).get(prior_id)
-            if prior_domain is None:
-                _record_scope_diagnostic(
-                    harness,
-                    candidate,
-                    prior_id,
-                    "relapse-domain-rejected",
-                    "prior-domain-missing",
-                )
-                continue
-            compatible, mismatch = domain.compatible(prior_domain)
-            if not compatible:
-                _record_scope_diagnostic(
-                    harness,
-                    candidate,
-                    prior_id,
-                    "relapse-domain-rejected",
-                    mismatch,
-                )
-                continue
-        battery = _battery(candidate, prior, harness.commitments)
+        prior_domain = (known_domains or {}).get(prior_id)
+        if prior_domain is None:
+            _record_scope_diagnostic(
+                harness,
+                candidate,
+                prior_id,
+                "relapse-domain-rejected",
+                "prior-domain-missing",
+            )
+            continue
+        compatible, mismatch = domain.compatible(prior_domain)
+        if not compatible:
+            _record_scope_diagnostic(
+                harness,
+                candidate,
+                prior_id,
+                "relapse-domain-rejected",
+                mismatch,
+            )
+            continue
+        battery = _battery(candidate, prior, lookup)
         if not battery:
             continue  # no shared evaluable battery => no equivalence claim
+        # Discriminating battery (RC2): structural well-formedness programs
+        # pass on every valid candidate, so a battery made only of them
+        # cannot distinguish ideas; it establishes no equivalence.
+        if all(programs.program_class(lookup[cid]) == "structural" for cid in battery):
+            _append_operational(
+                harness,
+                {
+                    "type": "relapse-structural-only",
+                    "candidate_id": candidate.id,
+                    "prior_id": prior_id,
+                    "battery": battery,
+                },
+            )
+            continue
         # Stage 3 — battery equivalence (~=_B).
-        if verdict_vector(candidate, battery, harness) != verdict_vector(
-            prior, battery, harness
-        ):
+        candidate_verdicts = verdict_vector(candidate, battery, harness, lookup)
+        prior_verdicts = verdict_vector(prior, battery, harness, lookup)
+        if candidate_verdicts != prior_verdicts:
             _record_scope_diagnostic(
                 harness,
                 candidate,
@@ -309,10 +385,30 @@ def check(
                 "verdict-vector-differs",
             )
             continue
-        refuters = {
+        refuters = sorted(
             x for x, t in att if t == prior_id and status.get(x) == Status.ACCEPTED
-        }
-        if counter_targets & refuters:
+        )
+        if counter_targets & set(refuters):
             continue  # carries a warrant against the prior's refuter => admit
+        # Block receipt (receipt/defer contract): complete enough for a
+        # later cycle to audit the block and challenge the named refuters.
+        _append_operational(
+            harness,
+            {
+                "type": "relapse-block",
+                "candidate_id": candidate.id,
+                "prior_id": prior_id,
+                "domain_digest": domain.digest,
+                "embedder_fingerprint": _embedder_fingerprint(embedder),
+                "distance": distance(
+                    candidate_vec, harness.embed_artifact(embedder, prior_id)
+                ),
+                "threshold": near_dup_eps,
+                "battery": battery,
+                "candidate_verdicts": list(candidate_verdicts),
+                "prior_verdicts": list(prior_verdicts),
+                "refuter_ids": refuters,
+            },
+        )
         return False, f"battery-equivalent (~=_B) to refuted {prior_id[:12]}"
     return True, "admitted"

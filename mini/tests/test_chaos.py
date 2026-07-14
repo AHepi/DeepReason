@@ -50,8 +50,11 @@ def test_hostile_content_survives_the_full_trip(tmp_path):
     assert deepreason.verify_root(root)["violations"] == []
 
 
-def test_punctuation_only_contents_share_an_equivalence_class(tmp_path):
-    """The canonical battery equates two skeleton-wf failures."""
+def test_punctuation_only_contents_no_longer_share_an_equivalence_class(tmp_path):
+    """Contract change (bronze flat v1 repair): two skeleton-wf failures are
+    a structural-only equivalence, which cannot block. The garbage candidate
+    is admitted and then killed on arrival by the executed check itself -
+    refutation authority stays with execution, not with the gate."""
     s = Session(tmp_path / "run")
     s.spawn_problem("pi-0", "d")
     cks = compile_checks("!!!")
@@ -62,7 +65,7 @@ def test_punctuation_only_contents_share_an_equivalence_class(tmp_path):
                          "verdict": "fail"}])
     candidate = s.build_candidate("???", commitment_ids, "mechanist")
     ok, reason = s.admit_candidate(candidate)
-    assert not ok and "to refuted" in reason
+    assert ok and reason == "admitted"
 
 
 def test_predicate_bomb_is_bounded(tmp_path):

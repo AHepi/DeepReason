@@ -89,6 +89,12 @@ class Session:
         self.state = State(self.harness)
         manifest_path = self.root / MANIFEST_NAME
         self.manifest = load_run_manifest(manifest_path) if manifest_path.exists() else None
+        # The repaired guard runs its battery and semantic stages only with a
+        # full scope stack (domain, embedder, eps); mini supplies the parent
+        # HashingEmbedder so kernel admission keeps the parent semantics.
+        from deepreason.llm.embedder import HashingEmbedder
+
+        self._gate_embedder = HashingEmbedder()
 
     def _rubric_commitments(self, commitments: list[dict]) -> list[str]:
         resolved: list[dict] = []
@@ -192,6 +198,35 @@ class Session:
             ),
         )
 
+    def guard_scope(
+        self,
+        artifact: Artifact,
+        candidate_commitments: list[Commitment] | None = None,
+        near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
+    ) -> dict:
+        """The full scope stack the repaired guard requires for its battery
+        and semantic stages: session embedder, calibrated eps, and a domain
+        compiled from the candidate (overlay commitments included). Exposed
+        so parity tests can call the full guard with identical inputs."""
+        overlay = None
+        if candidate_commitments:
+            overlay = dict(self.harness.commitments)
+            overlay.update({c.id: c for c in candidate_commitments})
+        domain = anti_relapse.relapse_domain(
+            artifact,
+            self.harness,
+            workload_profile="text",
+            problem_family="mini",
+            contract_id="mini.conjecturer.v1",
+            commitments=overlay,
+        )
+        return {
+            "embedder": self._gate_embedder,
+            "near_dup_eps": near_dup_eps,
+            "domain": domain,
+            "commitments": overlay,
+        }
+
     def admit_candidate(
         self,
         artifact: Artifact,
@@ -202,17 +237,16 @@ class Session:
         near_dup_eps: float | None = MINI_NEAR_DUP_EPS,
     ) -> tuple[bool, str]:
         """Delegate admission with a non-persistent commitment overlay."""
-        guard_harness = (
-            _CommitmentOverlayHarness(self.harness, candidate_commitments)
-            if candidate_commitments
-            else self.harness
+        scope = self.guard_scope(
+            artifact, candidate_commitments, near_dup_eps=near_dup_eps
         )
+        if embedder is not None:
+            scope["embedder"] = embedder
         return anti_relapse.check(
             artifact,
             list(warrants or []),
-            guard_harness,
-            embedder=embedder,
-            near_dup_eps=near_dup_eps,
+            self.harness,
+            **scope,
         )
 
     def register_candidates(
@@ -246,6 +280,15 @@ class Session:
             rule=Rule.CONJ,
             llm=spend,
         )
+        # Record each artifact's relapse domain so it can serve as a scoped
+        # prior in later admission checks (priors without a recorded domain
+        # are skipped by the repaired guard, never blocked against).
+        for artifact, _warrants in canonical_entries:
+            anti_relapse.record_domain(
+                self.harness,
+                artifact.id,
+                self.guard_scope(artifact)["domain"],
+            )
         return ids
 
     def refute(self, target: str, failures: list[dict]) -> None:

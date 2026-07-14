@@ -9,6 +9,7 @@ from deepreason.ontology import (
     Provenance,
     Status,
 )
+from deepreason.llm.embedder import HashingEmbedder
 from deepreason.rules.crit import crit_program
 from deepreason.rules.guards import anti_relapse
 from deepreason.workloads.models import MandatoryInterface, compile_interface
@@ -26,6 +27,12 @@ def _problem(harness, problem_id: str) -> Problem:
             ),
         )
     )
+
+
+# The archived regression predates the calibrated semantic stage; a wide
+# radius routes every prior through the domain checks it exercises.
+EMBEDDER = HashingEmbedder()
+EPS = 1.5
 
 
 def _candidate(text: str) -> Artifact:
@@ -73,7 +80,10 @@ def test_archived_gemma_shape_scopes_battery_equivalence(harness):
         contract_id="website.component.compact.v1",
         component_spec="copy-v1",
     )
-    admitted, _ = anti_relapse.check(copy_candidate, [], harness, domain=copy_domain)
+    admitted, _ = anti_relapse.check(
+        copy_candidate, [], harness, embedder=EMBEDDER, near_dup_eps=EPS,
+        domain=copy_domain,
+    )
     assert admitted
 
     planning_candidate = _candidate("plan omits the element")
@@ -86,7 +96,8 @@ def test_archived_gemma_shape_scopes_battery_equivalence(harness):
         component_spec="plan-v1",
     )
     admitted, _ = anti_relapse.check(
-        planning_candidate, [], harness, domain=planning_domain
+        planning_candidate, [], harness, embedder=EMBEDDER, near_dup_eps=EPS,
+        domain=planning_domain,
     )
     assert admitted
 
@@ -99,7 +110,10 @@ def test_archived_gemma_shape_scopes_battery_equivalence(harness):
         contract_id="website.component.compact.v1",
         component_spec="hero-v2",
     )
-    admitted, _ = anti_relapse.check(later_candidate, [], harness, domain=later_domain)
+    admitted, _ = anti_relapse.check(
+        later_candidate, [], harness, embedder=EMBEDDER, near_dup_eps=EPS,
+        domain=later_domain,
+    )
     assert admitted
 
     same_domain_candidate = _candidate("same hero again omits the element")
@@ -112,7 +126,8 @@ def test_archived_gemma_shape_scopes_battery_equivalence(harness):
         component_spec="hero-v1",
     )
     admitted, reason = anti_relapse.check(
-        same_domain_candidate, [], harness, domain=same_domain
+        same_domain_candidate, [], harness, embedder=EMBEDDER, near_dup_eps=EPS,
+        domain=same_domain,
     )
     assert not admitted
     assert "battery-equivalent" in reason

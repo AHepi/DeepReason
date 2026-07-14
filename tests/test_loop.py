@@ -154,7 +154,9 @@ def test_gate_block_is_persisted_to_the_log(harness):
 
 def test_argumentative_critic_attack_registers(harness):
     _setup(harness)
-    config = Config(VS_K=1)
+    # Direct argumentative refutation is the pre-repair authority (RC1):
+    # this regression opts into legacy_direct explicitly.
+    config = Config(VS_K=1, ARGUMENTATIVE_AUTHORITY="legacy_direct")
     attack_case = json.dumps(
         {"attack": True, "case": "resonance alone cannot explain diurnal asymmetry"}
     )

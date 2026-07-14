@@ -17,10 +17,10 @@ from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, Conjectu
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
-from deepreason.workloads.models import MandatoryInterface, compile_interface
+from deepreason.workloads.models import MandatoryInterface, compile_interface_draft
 from deepreason.workloads.text import (
     ReasoningConjecturerOutput,
-    compile_countercondition_commitments,
+    draft_countercondition_commitments,
     envelope_json,
     proposal_envelope,
 )
@@ -34,6 +34,18 @@ def _resolve_ref(target: str, artifacts: dict) -> str | None:
         return target
     matches = [artifact_id for artifact_id in artifacts if artifact_id.startswith(target)]
     return matches[0] if len(matches) == 1 else None
+
+
+def root_problem_family(state, problem_id: str) -> str:
+    """Stable provenance-root family key for anti-relapse domains (RC3).
+
+    Successor problems (succ:*) are fresh attention objects; using their ids
+    as the domain's problem_family let a refuted approach re-enter unchanged
+    on its next successor. Walk the provenance chain back to the root
+    problem id(s) and scope the domain there instead."""
+    from deepreason.scheduler.scheduler import problem_family_key
+
+    return problem_family_key(state, problem_id)
 
 
 def conj(
@@ -90,11 +102,12 @@ def conj(
         if score is not None:
             harness.record_measure(inputs=[f"spec-transmission:{score:.4f}", problem_id])
 
-    candidate_rows: list[tuple[ConjectureCandidate, tuple[str, ...], str]] = []
+    candidate_rows: list[tuple[ConjectureCandidate, tuple, str]] = []
     if reasoning:
-        # Selection is attention-only, so it must happen before compiling
-        # countercondition commitments.  Otherwise discarded proposals still
-        # mutate the append-only commitment registry.
+        # Selection is attention-only, so it must happen before drafting
+        # countercondition commitments. Drafts are pure Commitment objects
+        # (RC5): nothing reaches the append-only registry until the
+        # candidate is gate-admitted.
         proposals = list(output.candidates)
         if tail_weighted:
             proposals.sort(key=lambda proposal: proposal.typicality)
@@ -112,7 +125,7 @@ def conj(
                 )
                 continue
             content = envelope_json(envelope)
-            compiled = tuple(compile_countercondition_commitments(harness, envelope))
+            compiled = tuple(draft_countercondition_commitments(envelope))
             candidate_rows.append(
                 (
                     ConjectureCandidate(
@@ -139,19 +152,28 @@ def conj(
     batch: list[tuple[Artifact, list[Warrant]]] = []
     candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
     seen: set[str] = set()
-    for candidate, compiled_commitments, search_signal in candidate_rows:
+    family = root_problem_family(harness.state, problem.id)
+    for candidate, draft_pool, search_signal in candidate_rows:
         base = mandatory_interface or MandatoryInterface()
         candidate_mandatory = MandatoryInterface(
-            commitments=tuple(dict.fromkeys((*base.commitments, *compiled_commitments))),
+            commitments=tuple(
+                dict.fromkeys(
+                    (*base.commitments, *(item.id for item in draft_pool))
+                )
+            ),
             refs=base.refs,
         )
-        interface = compile_interface(
+        # Two-phase compilation (RC5): the draft interface plus unregistered
+        # Commitment objects; nothing touches the registry before admission.
+        interface, draft = compile_interface_draft(
             harness,
             problem,
             candidate.content,
             mandatory=candidate_mandatory,
             optional_refs=((ref.target, ref.role) for ref in candidate.refs),
+            draft_commitments=draft_pool,
         )
+        overlay = {**harness.commitments, **{item.id: item for item in draft}}
         content_ref = f"inline:{candidate.content}"
         artifact = Artifact(
             id=Artifact.compute_id(content_ref, "utf8", interface),
@@ -174,11 +196,12 @@ def conj(
                 artifact,
                 harness,
                 workload_profile=effective_workload,
-                problem_family=problem.id,
+                problem_family=family,
                 contract_id=effective_contract,
                 mandatory_refs=candidate_mandatory.domain_refs(),
                 component_spec=component_spec,
                 theorem_interface=theorem_interface,
+                commitments=overlay,
             )
             if effective_workload is not None
             else None
@@ -190,6 +213,7 @@ def conj(
             embedder=embedder,
             near_dup_eps=config.NEAR_DUP_EPS,
             domain=domain,
+            commitments=overlay,
         )
         if diagnostics is not None:
             diagnostics.append(
@@ -203,11 +227,18 @@ def conj(
             # Persist the block (stress campaign T7 finding): gate decisions
             # were in-memory only, so a finished run could not be audited for
             # block counts — violating log-as-source-of-truth. A Measure is
-            # the right vehicle: attention/diagnostic, never a status.
+            # the right vehicle: attention/diagnostic, never a status. The
+            # blocked candidate registers NO commitments and emits NO
+            # Register events (RC5); the gate's operational receipt names
+            # the prior's refuters for a later explicit challenge.
             harness.record_measure(inputs=[f"gate:{reason}", artifact.id, problem_id])
             continue
         if artifact.id in seen or artifact.id in harness.state.artifacts:
             continue  # attention-level dedupe of a registered twin — never a block (§0)
+        # Commit after admission (RC5): only now do draft commitments reach
+        # the registry (idempotent for ids an earlier candidate registered).
+        for commitment in draft:
+            harness.register_commitment(commitment)
         seen.add(artifact.id)
         batch.append((artifact, []))
         if domain is not None:

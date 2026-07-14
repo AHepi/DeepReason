@@ -50,6 +50,12 @@ def _starvation_setup(tmp_path, **config_kwargs):
             ),
         )
     )
+    # The repaired anti-relapse gate (RC2/RC3) fails open without a domain
+    # and threshold, so the root's re-proposed candidate is now correctly
+    # admitted and a second discrimination problem can spawn later. These
+    # regressions are about the FUTILITY BACKOFF, so blocked-attempt counts
+    # are scoped to the seeded rivalry.
+    harness._rotation_pair = f"{a.id[:12]}v{b.id[:12]}"
     conj_calls = [0]  # conjecturer calls for the ROOT problem specifically
 
     def _conj(prompt):
@@ -70,10 +76,12 @@ def _starvation_setup(tmp_path, **config_kwargs):
 
 
 def _blocked_attempts(harness) -> int:
+    pair = getattr(harness, "_rotation_pair", None)
     return sum(
         1 for e in harness.log.read()
         if e.rule == Rule.MEASURE and e.inputs
         and str(e.inputs[0]).startswith("trial-blocked")
+        and (pair is None or (len(e.inputs) > 1 and e.inputs[1] == pair))
     )
 
 
@@ -102,8 +110,9 @@ def test_attempt_cap_frees_the_rotation(tmp_path):
         e for e in harness.log.read()
         if e.rule == Rule.MEASURE and e.inputs
         and e.inputs[0] == "disc-attempts-exhausted"
+        and e.inputs[1] == "disc:rivals"
     ]
-    assert len(exhausted) == 1 and exhausted[0].inputs[1] == "disc:rivals"
+    assert len(exhausted) == 1
 
 
 def test_cooldown_spaces_attempts_and_interleaves_root_work(tmp_path):

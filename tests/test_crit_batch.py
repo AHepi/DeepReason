@@ -52,7 +52,9 @@ def test_batch_registers_per_target_warrants(harness):
             )
         ],
     )
-    critics = crit_argumentative_batch(harness, [a.id, b.id], adapter, Config())
+    critics = crit_argumentative_batch(
+        harness, [a.id, b.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+    )
     assert len(critics) == 2
     warrants = [w for c in critics for w in harness.warrants.values() if w.target in (a.id, b.id)]
     assert {w.target for w in warrants} == {a.id, b.id}
@@ -86,7 +88,9 @@ def test_shared_case_text_still_attacks_each_target(harness):
         ],
     )
 
-    critics = crit_argumentative_batch(harness, [a.id, b.id], adapter, Config())
+    critics = crit_argumentative_batch(
+        harness, [a.id, b.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+    )
 
     assert len({critic.id for critic in critics}) == 1  # prose dedupes
     carrier_id = critics[0].id
@@ -127,7 +131,9 @@ def test_single_target_delegates_to_single_contract(harness):
     a = harness.create_artifact("the moon pulls the sea")
     # Response shaped for ArgumentativeCriticOutput — only valid via delegation.
     adapter = _adapter(harness, [json.dumps({"attack": True, "case": "no solar term"})])
-    critics = crit_argumentative_batch(harness, [a.id], adapter, Config())
+    critics = crit_argumentative_batch(
+        harness, [a.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+    )
     assert len(critics) == 1
     assert harness.state.status[a.id] == Status.REFUTED
 

@@ -12,7 +12,12 @@ from deepreason.workloads.formal import (
     PinnedLeanRequest,
     register_formal_workflow,
 )
-from deepreason.workloads.models import MandatoryInterface, MandatoryRef, compile_interface
+from deepreason.workloads.models import (
+    MandatoryInterface,
+    MandatoryRef,
+    compile_interface,
+    compile_interface_draft,
+)
 from deepreason.workloads.registry import WORKLOADS, WorkloadRegistry
 from deepreason.workloads.text import TEXT_WORKLOAD
 from deepreason.workloads.website import WEBSITE_WORKLOAD
@@ -36,5 +41,6 @@ __all__ = [
     "WORKLOADS",
     "WorkloadRegistry",
     "compile_interface",
+    "compile_interface_draft",
     "register_formal_workflow",
 ]

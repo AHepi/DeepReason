@@ -253,7 +253,12 @@ def test_argument_cannot_refute_passing_candidate(harness):
 def test_argument_still_refutes_failing_candidate(harness):
     _, bad = _oracle_candidate(harness, "def solve(x):\n    return x + 999")
 
-    critic = crit_argumentative(harness, bad.id, _attacking_critic(harness), Config())
+    # Direct argumentative refutation is the pre-repair authority (RC1):
+    # this regression opts into legacy_direct explicitly.
+    critic = crit_argumentative(
+        harness, bad.id, _attacking_critic(harness),
+        Config(ARGUMENTATIVE_AUTHORITY="legacy_direct"),
+    )
 
     assert critic is not None                             # not execution-backed: argument stands
     assert harness.state.status[bad.id] == Status.REFUTED

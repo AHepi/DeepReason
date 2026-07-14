@@ -69,36 +69,50 @@ def _resolve_ref(target: str, artifacts: dict) -> str | None:
     return matches[0] if len(matches) == 1 else None
 
 
-def compile_interface(
+def compile_interface_draft(
     harness,
     problem,
     content: str,
     *,
     mandatory: MandatoryInterface | None = None,
     optional_refs: Iterable[tuple[str, RefRole | str]] = (),
-) -> Interface:
-    """Compile criteria, safe content commitments, and refs before identity.
+    draft_commitments: Iterable = (),
+) -> tuple[Interface, list]:
+    """Compile the prospective interface WITHOUT touching the registry.
 
-    Unknown model aliases are ignored at this boundary.  Missing mandatory
+    Returns (interface, unregistered Commitment objects). The interface is
+    identical to what :func:`compile_interface` would produce; the caller
+    registers the returned drafts only after gate admission (RC5: a blocked
+    proposal must not mutate the commitment registry or emit Register
+    events). ``draft_commitments`` lets a caller thread additional
+    pre-compiled unregistered Commitments (e.g. reasoning counterconditions)
+    through the same interface/identity path.
+
+    Unknown model aliases are ignored at this boundary. Missing mandatory
     facts are not a schema error because the harness owns and supplies them.
     """
 
     owned = mandatory or MandatoryInterface()
+    drafts: dict[str, object] = {}
+    for commitment in draft_commitments:
+        drafts.setdefault(commitment.id, commitment)
     commitments = [
         commitment_id
         for commitment_id in (*problem.criteria, *owned.commitments)
-        if commitment_id in harness.commitments
+        if commitment_id in harness.commitments or commitment_id in drafts
     ]
 
-    # Existing safe skeleton compilation remains the only route by which
-    # model-authored counterconditions can add commitments.
-    from deepreason.informal.skeleton import compile_forbidden_commitments, parse_skeleton
+    # Safe skeleton compilation remains the only route by which model-
+    # authored counterconditions can add commitments. Drafted, not
+    # registered: registration is the caller's post-admission step.
+    from deepreason.informal.skeleton import draft_forbidden_commitments, parse_skeleton
 
     skeleton = parse_skeleton(content)
     if skeleton is not None:
-        for commitment_id in compile_forbidden_commitments(harness, skeleton):
-            if commitment_id not in commitments:
-                commitments.append(commitment_id)
+        for commitment in draft_forbidden_commitments(skeleton):
+            drafts.setdefault(commitment.id, commitment)
+            if commitment.id not in commitments:
+                commitments.append(commitment.id)
 
     refs: list[Ref] = []
     seen: set[tuple[str, RefRole]] = set()
@@ -122,4 +136,33 @@ def compile_interface(
         if key not in seen:
             refs.append(Ref(target=resolved, role=normalized_role))
             seen.add(key)
-    return Interface(commitments=list(dict.fromkeys(commitments)), refs=refs)
+    interface = Interface(commitments=list(dict.fromkeys(commitments)), refs=refs)
+    unregistered = [
+        drafts[cid]
+        for cid in interface.commitments
+        if cid in drafts and cid not in harness.commitments
+    ]
+    return interface, unregistered
+
+
+def compile_interface(
+    harness,
+    problem,
+    content: str,
+    *,
+    mandatory: MandatoryInterface | None = None,
+    optional_refs: Iterable[tuple[str, RefRole | str]] = (),
+) -> Interface:
+    """Compile criteria, safe content commitments, and refs before identity.
+
+    Single-phase spelling for callers that register unconditionally: drafts
+    the interface, then registers the forbidden-case commitments at once.
+    Gated callers use :func:`compile_interface_draft` and register only
+    after admission.
+    """
+    interface, drafts = compile_interface_draft(
+        harness, problem, content, mandatory=mandatory, optional_refs=optional_refs
+    )
+    for commitment in drafts:
+        harness.register_commitment(commitment)
+    return interface

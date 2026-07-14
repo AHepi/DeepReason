@@ -404,6 +404,9 @@ class Scheduler:
         """Standing survivors eligible for re-criticism (§14 attention only):
         ACCEPTED candidate-role artifacts with NO warrant on record against
         them — accepted-by-neglect is untested acceptance, not corroboration.
+        Seed infrastructure (standards, stance policies) is excluded (RC6):
+        infrastructure is attackable only through the explicit
+        ops.review_infrastructure trial path, never the ordinary sweep.
         Execution-oracle carriers order first: a passing oracle is the
         strongest standing claim on the graph, and a Goodhart survivor (right
         on the frozen inputs, wrong in general) can hide nowhere else.
@@ -424,7 +427,7 @@ class Scheduler:
             # criticism ever visited it — accepted-by-neglect on the criteria
             # side). Candidates by role; properties by codec.
             role = artifact.provenance.role if artifact.provenance else ""
-            if role not in ("conjecturer", "synthesizer", "seed") \
+            if role not in ("conjecturer", "synthesizer") \
                     and artifact.codec != "code:python-prop":
                 continue
             carries = any(
@@ -442,7 +445,9 @@ class Scheduler:
         ARG_CRIT_PER_CYCLE caps targets, batched or not. Unused slots go to
         STANDING survivors (round-robin): without this, an artifact was only
         ever criticized in the cycle it was admitted, so anything accepted
-        early — or seeded — was never attacked again (accepted-by-neglect)."""
+        early was never attacked again (accepted-by-neglect). Seed
+        infrastructure never enters the pool (RC6: ops.review_infrastructure
+        is the only route by which it can be attacked)."""
         harness, config = self.harness, self.config
         if not self.adapter.has_role("argumentative_critic"):
             return

@@ -24,7 +24,7 @@ from deepreason.llm.contracts import (
 )
 from deepreason.llm.packs import aliases_for_values
 from deepreason.llm.wire import wire_contract_for
-from deepreason.canonical import canonical_json
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology import Interface, Provenance, Ref, Rule, Warrant, WarrantType
 from deepreason.programs import content_text
 from deepreason.rules.warrants import execution_backed, register_fail_warrant
@@ -64,6 +64,15 @@ def _block(harness, reason: str, target_id: str, diagnostics) -> None:
     harness.record_measure(inputs=[f"trial-blocked:{reason}", target_id])
     if diagnostics is not None:
         diagnostics.append({"trial": target_id[:12], "blocked": reason})
+    return None
+
+
+def _decline(harness, target_id: str, reason: str, diagnostics) -> None:
+    """Non-sustained argument-trial outcome: a logged Measure, never a
+    warrant (phase C trial_required contract)."""
+    harness.record_measure(inputs=["trial-declined", target_id, reason])
+    if diagnostics is not None:
+        diagnostics.append({"trial": target_id[:12], "declined": reason})
     return None
 
 
@@ -247,40 +256,12 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
     # cross-family ensemble as the decisive ruling.  A lone seat can never
     # issue (or preserve) a rubric warrant: either a split or a unanimous
     # non-fail blocks the trial.
-    if adapter.has_role("variator"):
-        n = config.TRIAL_PARAPHRASE_N
-        para_out, call = adapter.call(
-            "variator",
-            f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly {n} "
-            "meaning-preserving paraphrases of this exchange.",
-            VariatorOutput,
-        )
-        calls.append(call)
-        flips = 0
-        for paraphrase in [e.content for e in para_out.edits[:n]]:
-            repack = pack.replace(exchange, paraphrase) if exchange in pack else (
-                pack + "\n\nPARAPHRASED EXCHANGE:\n" + paraphrase)
-            paraphrase_aliases = aliases_for_values([paraphrase], prefix="K")
-            reruling, _, _ = _judge_all(
-                harness,
-                adapter,
-                repack,
-                diagnostics,
-                target_id,
-                calls,
-                paraphrase_aliases,
-            )
-            if reruling is None:
-                return _block(
-                    harness, "ensemble-split", target_id, diagnostics
-                )
-            if reruling.verdict != "fail":
-                flips += 1
-        if flips:
-            return _block(harness, "paraphrase-flip", target_id, diagnostics)
-        checks["paraphrase"] = {"n": n, "flips": 0}
-    else:
-        checks["paraphrase"] = "skipped"
+    paraphrase_result, block_reason = _paraphrase_screen(
+        harness, adapter, config, pack, exchange, target_id, diagnostics, calls
+    )
+    if block_reason is not None:
+        return _block(harness, block_reason, target_id, diagnostics)
+    checks["paraphrase"] = paraphrase_result
 
     # Package: transcript blob, nu MENTIONING the standard (case-law closure
     # extension, §1), ordinary demonstrative warrant, critic artifact.
@@ -312,6 +293,171 @@ def _trial_steps(harness, target_id: str, commitment, adapter, config,
     # way (verify_root delta 10,022). Uncommitted => the call stays in
     # ``calls`` and lands as trial-llm.
     if critic is not None and critic.id not in before:
+        calls.remove(judge_llm)
+    return critic
+
+
+def _paraphrase_screen(
+    harness, adapter, config, pack: str, exchange: str, target_id: str,
+    diagnostics, calls: list,
+):
+    """Shared paraphrase spot-check. Returns (checks_value, block_reason):
+    block_reason is None when the fail ruling survived every meaning-
+    preserving paraphrase (or the variator role is absent)."""
+    if not adapter.has_role("variator"):
+        return "skipped", None
+    n = config.TRIAL_PARAPHRASE_N
+    para_out, call = adapter.call(
+        "variator",
+        f"TARGET CONTENT:\n{exchange}\n\nDIRECTIVE: produce exactly {n} "
+        "meaning-preserving paraphrases of this exchange.",
+        VariatorOutput,
+    )
+    calls.append(call)
+    flips = 0
+    for paraphrase in [e.content for e in para_out.edits[:n]]:
+        repack = pack.replace(exchange, paraphrase) if exchange in pack else (
+            pack + "\n\nPARAPHRASED EXCHANGE:\n" + paraphrase)
+        paraphrase_aliases = aliases_for_values([paraphrase], prefix="K")
+        reruling, _, _ = _judge_all(
+            harness,
+            adapter,
+            repack,
+            diagnostics,
+            target_id,
+            calls,
+            paraphrase_aliases,
+        )
+        if reruling is None:
+            return None, "ensemble-split"
+        if reruling.verdict != "fail":
+            flips += 1
+    if flips:
+        return None, "paraphrase-flip"
+    return {"n": n, "flips": 0}, None
+
+
+def run_argument_trial_from_case(
+    harness, adapter, config, target_id: str, case_text: str, llm_call=None,
+    diagnostics: list | None = None,
+):
+    """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
+
+    The critic call already happened upstream; its LLMCall arrives as
+    ``llm_call`` and is accounted here exactly once (a trial-llm Measure, or
+    riding the critic registration when the decisive ruling commits; the
+    upstream caller must not log it again). The defender answers, the frozen
+    cross-family judge ensemble rules, and the existing guard checks screen
+    the ruling (referential integrity, ensemble unanimity, paraphrase
+    invariance). Only a guard-accepted sustained (fail) ruling mints the
+    ARGUMENTATIVE warrant; every other outcome records a
+    ["trial-declined", target, reason] Measure and registers no warrant."""
+    calls: list = []
+    if llm_call is not None:
+        calls.append(llm_call)
+    try:
+        return _argument_trial_steps(
+            harness, adapter, config, target_id, case_text, diagnostics, calls
+        )
+    finally:
+        harness.record_llm_calls(calls, "trial-llm")
+
+
+def _argument_trial_steps(
+    harness, adapter, config, target_id: str, case_text: str, diagnostics,
+    calls: list,
+):
+    for role in ("defender", "judge"):
+        if not adapter.has_role(role):
+            return _decline(harness, target_id, f"no-{role}-role", diagnostics)
+    # Normative rubric policy is a process preflight, not a model decision:
+    # the frozen cross-family ensemble must verify before any seat spends.
+    adapter.require_cross_family_judges()
+    target = harness.state.artifacts.get(target_id)
+    if target is None:
+        return _decline(harness, target_id, "unknown-target", diagnostics)
+    if execution_backed(harness, target_id):
+        # Execution supremacy (§3): a verdict from reality stands; a prose
+        # case cannot reach a warrant against it through any trial.
+        return _decline(harness, target_id, "execution-backed", diagnostics)
+    if not case_text.strip():
+        return _decline(harness, target_id, "empty-case", diagnostics)
+    target_text = content_text(target, harness.blobs)
+
+    # 1. The defender answers the precomputed case.
+    defence_pack = f"THE CASE AGAINST THE TARGET:\n{case_text}\n\nTARGET:\n{target_text}"
+    defence, call = adapter.call(
+        "defender",
+        defence_pack,
+        DefenderOutput,
+        aliases=aliases_for_values([case_text], prefix="K"),
+    )
+    calls.append(call)
+
+    # 2. The judge ensemble rules on the exchange.
+    pack = "\n".join([
+        f"TARGET:\n{target_text}", "",
+        "QUESTION: does the case establish a decisive fault in the target? "
+        "verdict=fail iff it does.",
+        "", "THE CASE FOR FAIL:", case_text, "", "THE DEFENCE:", defence.answer,
+        "", "Rule on the exchange; decisive_point MUST quote a span of it.",
+    ])
+    judge_aliases = aliases_for_values([case_text, defence.answer], prefix="K")
+    ruling, judge_calls, judge_rulings = _judge_all(
+        harness, adapter, pack, diagnostics, target_id, calls, judge_aliases
+    )
+    if ruling is None:
+        return _decline(harness, target_id, "ensemble-split", diagnostics)
+    if ruling.verdict != "fail":
+        return _decline(harness, target_id, "defence-sustained", diagnostics)
+
+    exchange = f"{case_text}\n{defence.answer}"
+    checks: dict = {"ensemble": len(adapter.require_cross_family_judges())}
+
+    # 3. Referential integrity (program check).
+    if any(item.decisive_point not in exchange for item in judge_rulings):
+        return _decline(harness, target_id, "referential-integrity", diagnostics)
+    checks["referential_integrity"] = True
+
+    # 4. Paraphrase spot-check (same screen as the rubric trial).
+    paraphrase_result, block_reason = _paraphrase_screen(
+        harness, adapter, config, pack, exchange, target_id, diagnostics, calls
+    )
+    if block_reason is not None:
+        return _decline(harness, target_id, block_reason, diagnostics)
+    checks["paraphrase"] = paraphrase_result
+
+    # Package: transcript blob, nu, ARGUMENTATIVE warrant, critic artifact.
+    trace_ref = transcript_blob(
+        harness, case=case_text, answer=defence.answer,
+        decisive_point=ruling.decisive_point, checks=checks,
+        target=target_id, trial="argument",
+    )
+    case_hash = sha256_hex(case_text.encode())[:16]
+    nu = harness.create_artifact(
+        f"nu: the defended trial sustaining case {case_hash} against "
+        f"{target_id} is sound",
+        provenance=Provenance(role="critic"),
+    )
+    warrant = Warrant(
+        id=f"w:argtrial:{case_hash}:{target_id}",
+        target=target_id,
+        type=WarrantType.ARGUMENTATIVE,
+        trace_ref=trace_ref,
+        validity_node=nu.id,
+    )
+    judge_llm = judge_calls[0]
+    before = set(harness.state.artifacts)
+    critic = harness.create_artifact(
+        case_text,
+        provenance=Provenance(role="critic"),
+        warrants=[warrant],
+        rule=Rule.CRIT,
+        llm=judge_llm,
+    )
+    # The decisive ruling rides the critic event only when one actually
+    # committed; a deduped critic keeps the call in ``calls`` (trial-llm).
+    if critic.id not in before:
         calls.remove(judge_llm)
     return critic
 
