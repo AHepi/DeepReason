@@ -1,0 +1,41 @@
+{
+ "schema": "deepreason-glm-judge-forensic-addendum-v1",
+ "clarifies": "experiments/results/glm_judge_v1_report.json (original text unchanged)",
+ "census": "experiments/results/glm_judge_v1_theory_census.json",
+ "statement_classification": {
+  "mechanically_supported": [
+   "998291 of 1000000 tokens; 20 cycles; clean budget-guard stop; verify_root clean; nomic fingerprinted",
+   "46 admitted study-design artifacts; 14 standing; 32 refuted (30 by deterministic program checks, 2 by sustained defended trials); zero anti-relapse blocks",
+   "13 conjecturer, 33 variator, 8 synthesizer, 85 critic, 68 defender, 184 judge calls"
+  ],
+  "interpretive_but_reasonable": [
+   "the synthesizer artifacts perform consolidation by identifying reductions among designs (their claims are censused, not verified)",
+   "the court convicted two designs on apparently crisp quantitative or measurability grounds"
+  ],
+  "overstated_corrected": [
+   {
+    "was": "zero gate blocks means all 46 were genuinely non-equivalent",
+    "correction": "the repaired anti-relapse gate did not establish that any proposal was a forbidden relapse; admission is not proof of pairwise substantive uniqueness"
+   },
+   {
+    "was": "30 refutations killed malformed designs (implying content was tested)",
+    "correction": "program refutations establish malformed or structurally invalid representations only; they say nothing about the mathematical truth of the intended claims"
+   },
+   {
+    "was": "the court convicts on crisp quantitative claims (implying the rulings verify content)",
+    "correction": "two sustained LLM-court rulings are LLM-judge rulings, not formal proofs; they show the court sustained two objections, nothing more"
+   },
+   {
+    "was": "the model derived the campaign's conclusion as a theorem / precision-threshold theorem",
+    "correction": "GLM independently generated a quantitative candidate theory that compresses several empirical findings from the criticism campaign and identifies question-conditional critic alignment as the likely missing variable; no claim is a theorem until formalized and verified by executable enumeration, symbolic derivation, or simulation"
+   }
+  ],
+  "awaiting_formal_verification": [
+   "the majority-fragility window (three mutually inconsistent versions censused: upper bounds k/(k+2), k/(k+1), 1/2, plus T13's high-error band above 1/2)",
+   "every p_min / precision-threshold formula (T6's realized-ratio form and T7's closed form; T7's precision-as-FPR substitution is unproven and model-dependent until assumptions are explicit)",
+   "the identical-aggregates insufficiency meta-claims (T3, T10, T2, T12)"
+  ]
+ },
+ "strongest_supported_insight": "net value of criticism = wrong majorities repaired - correct majorities broken; criticism-filtered voting helps only when interventions concentrate on fixable wrong-majority questions and stay rare on fragile correct-majority questions. Global precision and recall may be insufficient statistics: two critics with identical aggregates can have opposite effects if their interventions are distributed differently across questions and majority margins. This is the primary hypothesis under executable test.",
+ "verification_program": "scripts/verify_glm_judge_theory.py -> experiments/results/glm_judge_v1_theory_verification.json"
+}

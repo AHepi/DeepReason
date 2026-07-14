@@ -1,0 +1,570 @@
+{
+ "schema": "deepreason-glm-judge-theory-census-v1",
+ "root": "experiments/glm_judge_2026-07-14",
+ "scope": "every structurally valid conjecturer or synthesizer artifact: 14 standing plus 2 refuted by sustained defended trials; the 30 program-refuted emissions are structurally invalid representations and are excluded (their refutations say nothing about mathematical content)",
+ "annotation_provenance": "operator committed reading; symbols are artifact-local and never merged",
+ "known_inconsistencies": [
+  "three distinct fragility-window upper bounds coexist: k/(k+2) (T4,T6,T7), k/(k+1) (T5), 1/2 (T8,T9) - not mutually consistent as stated",
+  "T11 (perfect-precision tail wins outside the window) directly contradicts the window-necessity claims of T5/T8/T9",
+  "two distinct precision thresholds: closed-form p_min (T7) vs realized-ratio threshold (T6)",
+  "precision-vs-FPR substitution in T7's mechanism is unproven"
+ ],
+ "artifacts": [
+  {
+   "artifact_id": "5597507043f5427f7073b4c80fe87419bbf3b32c9207ae3f808100790dd11909",
+   "final_status": "accepted",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "8e9b8d5285aa",
+    "30e483eb4940",
+    "c9386a6c7b30"
+   ],
+   "complete_claim": "abstraction: 8e9b8d5285aa (single fixed-precision critic yields zero net benefit) is the concrete base-case instance that 30e483eb and c9386a6c both negate and generalize \u2014 the former generalizes the failure to ALL fixed (precision, recall) regimes (claiming no such regime suffices), and the latter further abstracts the insufficiency to the full fixed-parameter space (p, phi, psi, k), identifying question-conditional alignment as the determining factor. The chain is 8e9b8d5285aa \u2192 30e483eb \u2192 c9386a6c: each successive artifact subsumes its predecessor's fixed-parameter failure mode under a strictly broader impossibility claim. REFUTED IF the three artifacts do not share a common fixed-parameter impossibility axis \u2014 i.e., if 30e483eb's 'fixed precision/recall' and c9386a6c's 'fixed (p, phi, psi, k)' are not parameter-space subsets of the same constraint family that 8e9b8d5285aa concretely instantiates.",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "S1-subsumption-chain",
+   "variables": {},
+   "filtering_rule": "n/a",
+   "ensemble_convention": "n/a",
+   "tie_handling": "n/a",
+   "independence": "n/a",
+   "claim_kind": "structural meta-claim about artifact subsumption",
+   "proposed_inequality": "8e9b8d5285aa is the base case generalized by T2 then T3",
+   "executable": "no - claim about artifact relationships; note 8e9b8d5285aa itself was refuted by a program check (structurally invalid), so the chain's base is not a censused theory",
+   "ambiguities": [
+    "base artifact structurally invalid"
+   ]
+  },
+  {
+   "artifact_id": "324c6fa9540384cf3fc3f2e3aa2a22bf6716654413b5a55a0c38f37ce7883040",
+   "final_status": "accepted",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "2d711b2eb5ff",
+    "7811dbda8316"
+   ],
+   "complete_claim": "7811dbda8316 reduces to / is a strict weakening of 2d711b2eb5ff: both artifacts share the identical derivation mechanism \u2014 a majority-vote fragility window anchored on the thresholds 1/(k+1) < e < k/(k+1) (the necessary condition for self-consistency to be improvable at all) \u2014 but 2d711b2eb5ff sharpens 7811dbda8316 by adding two hard gates that 7811dbda8316 omits: (1) restricting to odd k\u22657 (supplying the upper bound k/(k+2) > e as a sufficient beat-condition), and (2) requiring the critic to achieve precision P > e and recall R > 1\u2212e on the candidate subset, so that the harness gain is provably strict rather than merely possible. Thus 7811dbda8316's mid-zone claim is a necessary precondition that 2d711b2eb5ff inherits and concretizes with critic-quality and parity constraints. REFUTED IF: the two artifacts' bounds on e cannot be placed on the same k-parametrized majority-fragility curve (i.e., if 1/(k+1) < e < k/(k+1) is not literally the shared lower/upper envelope from which both derivations start), or if 2d711b2eb5ff's additional P > e / R > 1\u2212e gate is not genuinely sufficient (on top of the narrowed window and odd k\u22657) for the strict-beat claim \u2014 making the 'sharpening' false rather than merely stronger.",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "S2-T5-weakens-T4",
+   "variables": {},
+   "filtering_rule": "n/a",
+   "ensemble_convention": "n/a",
+   "tie_handling": "n/a",
+   "independence": "n/a",
+   "claim_kind": "reduction claim (T5 is a weakening of T4)",
+   "proposed_inequality": "window(T4) subset window(T5); T4 adds sufficiency gates",
+   "executable": "partially - the window nesting k/(k+2) < k/(k+1) is checkable algebra; the sufficiency part inherits T4's verdict",
+   "ambiguities": []
+  },
+  {
+   "artifact_id": "862de34bced36d488ac299f984c270812db349a12e50b3acf126462c0be93e72",
+   "final_status": "accepted",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "2d711b2eb5ff",
+    "7811dbda8316"
+   ],
+   "complete_claim": "reduces to: The lower bound of the 'majority-fragile' mid-zone (1/(k+1) < e) is a necessary condition for Harness to strictly beat self-consistency, but the first artifact's theorem (with its upper bound e < k/(k+2), critic precision P > e, and recall R > 1-e constraints) is a strictly tighter derivation. The specific error regime 1/(k+1) < e < k/(k+2) for odd k\u22657 reduces to the general 1/(k+1) < e < k/(k+1) mid-zone, as the former is a mechanistically-refined subset of the latter where the additional P and R critic constraints provably guarantee the strict advantage. REFUTED IF: the upper bound k/(k+2) (for odd k\u22657) does not provably satisfy k/(k+2) < k/(k+1), or if the strict-beat theorem can be proven under the first artifact's P and R conditions for any e \u2265 k/(k+2), breaking the dependence on the tighter upper bound.",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "S3-window-nesting",
+   "variables": {},
+   "filtering_rule": "n/a",
+   "ensemble_convention": "odd k >= 7",
+   "tie_handling": "n/a",
+   "independence": "n/a",
+   "claim_kind": "algebraic nesting claim",
+   "proposed_inequality": "k/(k+2) < k/(k+1) for k > 0",
+   "executable": "yes - trivial algebra",
+   "ambiguities": []
+  },
+  {
+   "artifact_id": "3c2294e394226aa806195f042eefa03f1b3fa37d282a3ca7f54c6ce94eedae72",
+   "final_status": "accepted",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "b79e4718c0fe",
+    "8e9b8d5285aa",
+    "edc14bbd1ae6",
+    "862de34bced3",
+    "7811dbda8316"
+   ],
+   "complete_claim": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) \u2014 specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold.",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "S4-k1-degenerate-reduction",
+   "variables": {},
+   "filtering_rule": "n/a",
+   "ensemble_convention": "claims k=1 collapse",
+   "tie_handling": "n/a",
+   "independence": "n/a",
+   "claim_kind": "dimensional-reduction claim",
+   "proposed_inequality": "p_min(e,r,1) equals the pairwise veto tradeoff",
+   "executable": "no as stated - p_min contains (k-1) factors, so k=1 gives 0/0 and a division by zero; the reduction is formally undefined",
+   "ambiguities": [
+    "k=1 substitution undefined in T7's formula"
+   ]
+  },
+  {
+   "artifact_id": "457a95bed9d3969f3ee5cd1388138a3078cb2461b90a1519d879af07a77a7b1f",
+   "final_status": "suspended_unsupported",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "2d711b2eb5ff",
+    "88f00f0d4243"
+   ],
+   "complete_claim": "reduces to: 88f00f0d4243 is the information-theoretic generalization that 2d711b2eb5ff reduces to under the specialization where candidate errors are i.i.d. with rate e and critic flags are conditionally independent given correctness with precision P>e and recall R>1-e. In that restricted regime, the joint-distribution mutual-information inequality between 'bad candidate' and 'critic flag' vs. 'majority is wrong' and 'critic flag' collapses to the scalar threshold k/(k+2) > e > 1/(k+1) (odd k\u22657), because the only free parameter left is the per-candidate error rate e, so the abstract MI condition evaluates to exactly that interval. REFUTED IF: plugging the i.i.d. conditional-independence parametrization (errors ~ Bernoulli(e), flags with precision P>e, recall R>1-e) into the mutual-information inequality from 88f00f0d4243 does not yield the boundary k/(k+2) > e > 1/(k+1) for odd k\u22657 \u2014 e.g., if the MI condition instead produces a different threshold, depends on P,R in the surviving term, or fails to reproduce the k/(k+2) upper bound at all.",
+   "refutation_path": "none - status suspended_unsupported (grounded-semantics support change, not an attack)",
+   "warrants_against": [],
+   "theorem_id": "S5-MI-collapse-claim",
+   "variables": {},
+   "filtering_rule": "n/a",
+   "ensemble_convention": "odd k >= 7",
+   "tie_handling": "n/a",
+   "independence": "i.i.d. errors, conditionally independent flags",
+   "claim_kind": "reduction claim: T12's MI inequality collapses to T4's window under i.i.d. specialization",
+   "proposed_inequality": "I(C;B) > I(C;M_wrong) evaluates to exactly 1/(k+1) < e < k/(k+2) under the stated restriction",
+   "executable": "yes in principle - both sides computable under the specialization; the 'exactly that interval' claim is strong and testable",
+   "ambiguities": [
+    "suspended_unsupported: its support parent T12 was court-refuted, so grounded semantics suspended it",
+    "'exactly' is doing enormous work - MI depends on P and R, the interval does not"
+   ]
+  },
+  {
+   "artifact_id": "a6806e68a370426a7c681b87ae20a5578788b756795fd67f8f840a411c2a656b",
+   "final_status": "suspended_unsupported",
+   "provenance_role": "synthesizer",
+   "parents_or_refs": [
+    "2d711b2eb5ff",
+    "88f00f0d4243"
+   ],
+   "complete_claim": "abstracts: 88f00f0d4243 is the information-theoretic generalization of the concrete sufficient condition in 2d711b2eb5ff. Both fix the same decision problem (does Harness strictly beat Self-Consistency over k odd samples?) and both answer it by comparing a critic-quality quantity to the candidate-error rate e. The concrete artifact operationalizes 'critic is informative' via a pair of scalar bounds\u2014precision P>e and recall R>1-e on the error subset\u2014which is exactly the specialization of the general artifact's criterion (mutual information I(bad candidate; critic flag) > I(majority wrong; critic flag)) to a binary-error / binary-flag model with uniform prior, where I = e\u00b7D(P||e) + (1-e)\u00b7D(R||1-e) and the majority-wrong entropy term is the SC baseline. The threshold pair {P>e, R>1-e} is a sufficient (not necessary) slice of the mutual-information inequality, so the general criterion reduces to the concrete one under the stated scalar parametrization. REFUTED IF: (a) the two artifacts answer different decision problems (e.g., one is not about strict Harness-vs-SC dominance), or (b) under a binary-error/binary-flag model with uniform prior the mutual-information criterion does NOT specialize to a monotone function of the precision/recall thresholds P>e and R>1-e, or (c) 2d711b2eb5ff's domain restriction (odd k\u22657, e\u2208(1/(k+1), k/(k+2))) is incompatible with 88f00f0d4243's 'majority is wrong' mutual-information baseline (e.g., the SC baseline term is not the binomial-majority-error entropy the general criterion subtracts).",
+   "refutation_path": "none - status suspended_unsupported (grounded-semantics support change, not an attack)",
+   "warrants_against": [],
+   "theorem_id": "S6-MI-specialization-formula",
+   "variables": {
+    "D(x||y)": "binary KL divergence (as written, applied to rate pairs)"
+   },
+   "filtering_rule": "n/a",
+   "ensemble_convention": "odd k",
+   "tie_handling": "n/a",
+   "independence": "binary-error/binary-flag model, uniform prior",
+   "claim_kind": "reduction claim with an explicit (truncated) MI decomposition I = e*D(P||e) + (1-e)*D(R||...)",
+   "proposed_inequality": "P > e and R > 1-e is the specialization of I(C;B) > I(C;M_wrong)",
+   "executable": "partially - the stated decomposition is checkable against the true MI formula; the artifact text is truncated mid-formula in the record",
+   "ambiguities": [
+    "suspended_unsupported (parent T12 refuted)",
+    "formula truncated in the emission",
+    "D(P||e) applies KL to a precision and a base rate - dimensionally suspect"
+   ]
+  },
+  {
+   "artifact_id": "5b4538abe4a712f8c9c0a33fe17fe62d43ac359f1375d97921d389955ef1f08a",
+   "final_status": "refuted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "495c5963dafb",
+    "ba687c5f145e"
+   ],
+   "complete_claim": "{\"claim\": \"Harness criticism strictly beats self-consistency only when candidate base error exceeds 50% so that self-consistency's majority is wrong, while critic recall on the wrong majority exceeds (1 - precision) times the fraction of correct-majority questions the critic will false-flag.\",\"mechanism\": \"Self-consistency computes the mode of k candidates; when base error > 0.5 the mode is the wrong answer. The critic acts as a binary classifier over candidate sets; it can add value only by vetoing the wrong majority while sparing the right one. Net benefit = recall_wrong * p_wrong_majority - FPR_right * p_right_majority, where FPR_right = 1 - precision on right-majority sets. Thus filtering strictly improves aggregate accuracy only in the intermediate regime: p_wrong_majority large enough and critic selectivity high enough that the first term dominates the second. The repository's measured null results (v4-pro hard: p_right_majority ~1, recall 1, precision 0.125) are the special case where there is nothing to fix and false flags are harmless only because the base majority was already right; at slightly higher base error the same precision would erode correct majorities and cause net loss.\",\"scope\": {\"covers\": [\"intermediate base error 0.35-0.65\", \"critic recall on wrong-majority sets >= 0.5\", \"critic precision >= 0.5\", \"k=5 or k=7\"], \"excludes\": [\"base error < 0.2 (majority already right, filtering can only hurt)\", \"base error > 0.8 (majority robustly wrong, critic recall unlikely to rescue)\", \"perfect or near-perfect critic precision with near-zero recall\"]},\"forbidden\": [{\"case\": \"Experiment arm with base error 0.40-0.55 and critic precision >= 0.5 and recall >= 0.5 shows harness accuracy <= self-consistency accuracy on >= 60% of questions in that regime\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Experiment arm with base error 0.40-0.55 and critic precision < 0.5 shows harness accuracy >= self-consistency accuracy on >= 50% of questions\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Across all intermediate-base-error arms, the measured quantity recall_wrong * p_wrong_majority - FPR_right * p_right_majority is negative while harness accuracy exceeds self-consistency\", \"eval\": \"rubric:std-crit-design\"}],\"prose_notes\": \"The decisive experiment: construct ~120 questions across five base-error bins (0.15, 0.30, 0.45, 0.60, 0.75) by mixing difficulty tiers and prompting noise; generate k=5 candidates per question with one shared pool; run critic filter and raw majority vote; record per-question majority correctness, critic verdict, critic precision/recall stratified by whether the majority was right or wrong; compute net-fixed-minus-broke per bin. Expected signature: harness strictly beats SC in the 0.45-0.60 bin when critic precision >= 0.5, and harness loses to SC in the 0.15-0.30 bin when critic precision < 0.4 because false flags erode already-correct majorities. Token budget: 120 q * 5 cand * ~800 tokens generation + 120 q * ~600 tokens critic + ~3000 tokens analysis ~= 147k tokens, within 300k.\"}",
+   "refutation_path": "sustained defended argumentative trial",
+   "warrants_against": [
+    {
+     "warrant": "w:pairwise:disc:pi-criticism:5b4538abe4a712f8c9c0a33fe17fe62d43ac359f1375d97921d389955ef1f08a",
+     "type": "argumentative"
+    }
+   ],
+   "theorem_id": "T1-e-above-half",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "ensemble size",
+    "recall_wrong": "question-level recall on wrong-majority candidate SETS",
+    "FPR_right": "1 - precision on right-majority sets (set level)"
+   },
+   "filtering_rule": "SET-LEVEL VETO of the majority answer (not candidate removal); post-veto fallback unspecified",
+   "ensemble_convention": "k=5 or 7 (odd)",
+   "tie_handling": "unspecified",
+   "independence": "candidate errors i.i.d. implied",
+   "claim_kind": "global necessary condition ('only when e > 0.5')",
+   "proposed_inequality": "strict beat only if e > 0.5 AND recall_wrong > (1-precision) * frac_right_flagged",
+   "executable": "partially - the e>0.5 necessity is enumerable under candidate-removal semantics; the set-veto semantics need a fallback rule",
+   "ambiguities": [
+    "post-veto fallback answer undefined",
+    "set-level vs candidate-level precision conflated"
+   ]
+  },
+  {
+   "artifact_id": "44c4273f5c5a9b2b39d6bcf3615259073155ac7d8a44c8f8c281d48c415dbc3e",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "c9386a6c7b30",
+    "30e483eb4940",
+    "74fde5320d6c",
+    "495c5963dafb"
+   ],
+   "complete_claim": "{\"claim\": \"No fixed (e, P, R, k) regime is sufficient to predict strict harness advantage; harness strictly beats SC only when the critic is question-adaptive such that its per-item flagging accuracy exceeds a threshold tied to that item's candidate error count, and otherwise the critic's fixed P/R can either help or hurt depending on question-difficulty alignment.\", \"mechanism\": \"Items are heterogeneous: each question q has a latent difficulty producing an error-count m_q in {0, ..., k}. A fixed-P/R critic applies the same flagging behavior to every q, but the net effect depends on m_q. For items where m_q >= ceil(k/2) (broken majority), the critic needs high recall on that specific item. For items where m_q < ceil(k/2) (correct majority), the critic needs high precision on that specific item. A critic with fixed aggregate P, R can have high P on easy items and low P on hard items (or vice versa), so the aggregate values do not determine the outcome. Harness strictly beats SC only when per-item critic accuracy is calibrated to the per-item error regime: high R on broken-majority items AND high P on correct-majority items. The observed v4-pro hard data (P=0.125, R=1.0, net=0) is consistent because the 1 item with an error had R=1.0 but the low P did not matter since all other items had m_q=0 (nothing to false-flag that mattered).\", \"scope\": {\"covers\": [\"per-item critic calibration as the key variable\", \"fixed-P/R critics acting on heterogeneous question pools\", \"decomposing net gain into per-item contributions conditional on m_q\"], \"excludes\": [\"any prediction from aggregate P, R alone\", \"homogeneous-question pools where all items share the same m_q\", \"regimes where the critic has access to the answer key\"]}, \"forbidden\": [{\"case\": \"Two experiments with identical aggregate (e=0.30, P=0.7, R=0.8, k=5) but different per-item critic calibration produce the same harness-vs-SC gap (contradicting the claim that calibration, not aggregate values, determines the outcome)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"A critic with perfect per-item calibration (R=1 on broken-majority items, P=1 on correct-majority items) fails to strictly beat SC at e=0.30, k=5 (contradicting the sufficiency claim)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"A critic with aggregate P=0.8, R=0.8 at e=0.30, k=5 strictly beats SC on one question set but strictly loses to SC on another with the same aggregate statistics (directly confirming per-item heterogeneity dominates)\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This supersedes the fixed-regime candidate by arguing that the observed null results are not explained by aggregate P/R alone but by the alignment between per-item critic behavior and per-item error structure. The decisive experiment must hold aggregate P/R approximately fixed while varying per-item calibration \u2014 achievable by sorting questions by difficulty and using two critic variants (one difficulty-correlated, one anti-correlated). Budget: 60 items * 2 critic variants * (5 candidates + 5 critiques + 5 re-votes) * ~500 tokens = ~300k tokens, at the budget boundary. If budget is tight, reduce to 40 items.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T10-no-fixed-tuple",
+   "variables": {
+    "m_q": "error count on question q",
+    "(e,P,R,k)": "aggregate tuple"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "any k",
+   "tie_handling": "unspecified",
+   "independence": "heterogeneous questions",
+   "claim_kind": "insufficiency meta-claim (no fixed tuple determines the sign)",
+   "proposed_inequality": "exists two settings with identical (e,P,R,k) and opposite harness-vs-SC signs",
+   "executable": "yes - existence claim; Experiment C is its direct test",
+   "ambiguities": []
+  },
+  {
+   "artifact_id": "92918f72767b73347fd0a1ddcddf0741e94701bf80b2fb4df588f1f06e66e5f3",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "3a28bc3e8bde",
+    "862de34bced3",
+    "74fde5320d6c",
+    "495c5963dafb"
+   ],
+   "complete_claim": "{\"claim\": \"Harness can strictly beat SC even at very low base error e (outside the fragile zone) provided the critic has near-perfect precision and the question pool contains at least one item where SC fails due to a bare-majority error cluster; the critical variable is not average e but the tail probability of a wrong-majority event times the critic's ability to catch it without collateral damage.\", \"mechanism\": \"SC fails only on items where >= ceil(k/2) candidates are wrong. Even at e=0.05 with k=5, the probability of 3+ errors in a batch is C(5,3)*0.05^3*0.95^2 + ... ~= 1.2%. Over 100+ items this produces measurable SC failures. If the critic has P=1.0 (zero false flags) and R>0, then every flagged item is a true error, so filtering can only help: it removes errors from broken majorities (potentially fixing them) and never damages correct majorities. The net gain is strictly positive whenever there exists at least one broken-majority item AND the critic flags at least one error candidate in that batch. The observed v4-flash data (P=0.333) does not refute this because P was far below 1.0; the false flags erased the gains. The v4-pro hard data (e=0.01) had at most 1 broken-majority item in 20 questions, yielding no measurable gap.\", \"scope\": {\"covers\": [\"P=1.0 (perfect precision), any R>0, any e>0, large question pool (n>=100)\", \"regimes where SC ceiling is not truly reached because rare broken majorities exist\", \"counterexample: P < 1.0 at low e where false flags erase the rare gains\"], \"excludes\": [\"P < 1.0 with small n (false-flag noise dominates)\", \"e so low that no broken-majority event occurs in the sample\", \"critic with access to answer key (trivial P=1, R=1)\"]}, \"forbidden\": [{\"case\": \"At k=5, e=0.05, P=1.0, R=0.5, n=100: harness does NOT strictly beat SC (no gain despite perfect precision and at least one broken-majority item)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e=0.05, P=0.95, R=0.5, n=100: harness strictly beats SC by the same margin as P=1.0 (false flags at P=0.95 cause zero damage, contradicting the claim that P<1.0 erodes gains)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e=0.05, P=1.0, R=1.0, n=100: SC and harness tie at 1.00 (no broken-majority event occurs, contradicting the predicted 1.2% event rate)\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This is the atypical candidate: it claims the fragile-zone boundary is not a necessary condition because rare tail events at low e can still produce SC failures that a perfect-precision critic can fix. The decisive experiment requires a large pool (n>=100) to observe the rare events and a critic architecture that achieves near-perfect precision (e.g., a critic that only flags when it assigns >0.95 probability of error). Budget: 100 items * (5 candidates + 5 critiques + 5 re-votes) * ~500 tokens = ~250k tokens, within budget. The counterexample-first stance is honored by the P=0.95 forbidden case: if false flags at 5% cause zero damage, the P=1.0 sufficiency claim is weakened.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T11-perfect-precision-tail",
+   "variables": {
+    "e": "per-candidate error probability (may be below window)",
+    "P": "critic precision = 1.0",
+    "R": "recall > 0",
+    "n": "question count >= 100"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "k = 5 in examples",
+   "tie_handling": "UNSPECIFIED and load-bearing (removing 1 of 3 wrong from k=5 can yield a 2-2 tie)",
+   "independence": "i.i.d.",
+   "claim_kind": "sufficient condition CONTRADICTING window necessity (T5/T8/T9)",
+   "proposed_inequality": "P = 1.0 AND R > 0 AND >= 1 broken-majority item with >= 1 flagged error => strictly positive net",
+   "executable": "yes - per tie rule; the contradiction with T5/T8/T9 is itself a censused fact",
+   "ambiguities": [
+    "'potentially fixing' vs 'strictly positive net' gap: partial removal may tie rather than fix"
+   ]
+  },
+  {
+   "artifact_id": "88f00f0d4243bf6a2e3c1acf713d99a20e752bd30cafb420aaf8f8a523da604d",
+   "final_status": "refuted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "324c6fa95403",
+    "7811dbda8316"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats SC iff the joint distribution of candidate errors and critic flags has higher mutual information between 'bad candidate' and 'critic flag' than between 'majority is wrong' and 'critic flags anything', i.e., I(C;B) > I(C;M_wrong) where C=flag pattern, B=per-candidate badness, M_wrong=majority error. This collapses to the fixed-regime window only under independence assumptions that real critics violate.\", \"mechanism\": \"Redefine the problem in information-theoretic terms: harness transforms the candidate pool by removing flagged candidates, changing the majority-vote input distribution. The benefit is a function of how much the flag pattern tells us about individual badness vs. how much it merely correlates with aggregate majority error. If the critic flags are correlated with majority-wrongness but not with individual badness (e.g., critic flags all candidates on hard questions), it has high I(C;M_wrong) but low I(C;B), and filtering merely removes random candidates from wrong-majority questions without fixing them. If flags are per-candidate-informative (high I(C;B)), filtering selectively removes bad candidates and can flip fragile wrong majorities. The fragility window and p_min threshold are special cases under the assumption that critic flags are conditionally independent given candidate quality.\", \"scope\": {\"covers\": [\"any k>=3\", \"critics with arbitrary flag-dependence structure\", \"both fixed and adaptive critic thresholds\", \"sets where critic flags may correlate with question difficulty\"], \"excludes\": [\"critic flags that are deterministic functions of candidate quality (trivial case, I(C;B)=H(B), harness always wins)\", \"k=1 (no majority to filter)\"]}, \"forbidden\": [{\"case\": \"I(C;B) > I(C;M_wrong) measured empirically but harness accuracy <= SC accuracy\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"I(C;B) <= I(C;M_wrong) but harness accuracy strictly exceeds SC accuracy\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Per-candidate flag accuracy > 0.6 but mutual information I(C;B) < I(C;M_wrong) and harness still beats SC\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"Atypical because it reframes the precision/recall regime as an information-theoretic inequality rather than a threshold condition. The experiment must measure both mutual informations empirically: generate pools, collect critic flags, compute I(C;B) from per-candidate flag-vs-truth tables and I(C;M_wrong) from flag-pattern-vs-majority-error tables, then test whether the inequality predicts harness>SC. Budget: ~100k for hard-set generation, ~40k for candidate pools, ~40k for critic flags, ~30k for MI estimation and evaluation. If the inequality is violated but harness still wins, the information-theoretic framing is refuted in favor of the threshold model.\"}",
+   "refutation_path": "sustained defended argumentative trial",
+   "warrants_against": [
+    {
+     "warrant": "w:pairwise:disc:succ:67b9e10ed74d:88f00f0d4243bf6a2e3c1acf713d99a20e752bd30cafb420aaf8f8a523da604d",
+     "type": "argumentative"
+    }
+   ],
+   "theorem_id": "T12-mutual-information",
+   "variables": {
+    "C": "flag pattern",
+    "B": "per-candidate badness",
+    "M_wrong": "majority-error indicator",
+    "I(.;.)": "mutual information"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "any k >= 3",
+   "tie_handling": "unspecified",
+   "independence": "arbitrary flag dependence permitted",
+   "claim_kind": "biconditional (iff) in information-theoretic form",
+   "proposed_inequality": "strict beat iff I(C;B) > I(C;M_wrong)",
+   "executable": "simulation only - MI computable, but the iff is a strong claim over all distributions",
+   "ambiguities": [
+    "MI compares scalars with different supports; no rate/threshold linking MI gap to accuracy gap"
+   ]
+  },
+  {
+   "artifact_id": "dea717ccf1eaefe5b8c4a898bf54bc124534ccb5768439bedef3f2f4157b5192",
+   "final_status": "suspended_unsupported",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "5b4538abe4a7",
+    "495c5963dafb",
+    "f7c88d08c494"
+   ],
+   "complete_claim": "{\"claim\": \"The strict-win regime exists only in a narrow intermediate band of base error (roughly 0.55 to 0.75 at k=5) combined with high critic recall (phi > 0.7) and moderate precision (psi > 0.3); at lower p, SC is already correct (nothing to fix); at higher p, no surviving correct minority remains to benefit from filtering; the strict-loss regime emerges when psi < 0.2 and SC was right, because false flags fragment the correct majority.\", \"mechanism\": \"At k=5 with p=0.55 (3 wrong, 2 correct typically), a critic with phi=0.7 flags ~2 of 3 wrong candidates, dropping the wrong count to ~1 while the 2 correct survive (if psi=0.3, ~0.4 correct are falsely flagged, so ~1.6 survive), and harness elects the correct answer. At p=0.75 (4 wrong, 1 correct), even perfect recall leaves 0-1 wrong candidates but only 1 correct, so filtering cannot create a correct plurality \u2014 at best a tie. At p=0.15 with low psi=0.15, the 4-5 correct candidates suffer ~0.6-0.75 false flags, and if even one wrong candidate survives unflagged, a 3-correct-vs-1-wrong majority can become 2-vs-1, still correct; but at k=7, p=0.15, psi=0.15, the 6 correct candidates suffer ~0.9 false flags, and 1 wrong candidate survives, giving 5.1-vs-1, still correct \u2014 so the loss mode requires psi low enough that false flags exceed the majority margin. The loss condition is: (1-psi) * n_correct > n_correct - n_wrong, i.e., false flags on correct candidates exceed the SC majority margin.\", \"scope\": {\"covers\": [\"p in (0.5, 0.8) at k=5\", \"phi > 0.6\", \"psi in (0.2, 0.5)\", \"k=5\", \"loss regime: p < 1/k, psi < majority_margin / n_correct\"], \"excludes\": [\"p > 0.8 (no surviving correct minority)\", \"p < 0.3 with psi > 0.3 (false flags too few to erode majority)\", \"k=2 (no meaningful plurality dynamics)\"]}, \"forbidden\": [{\"case\": \"At p=0.65, phi=0.75, psi=0.35, k=5, harness accuracy is NOT at least 8 percentage points above SC accuracy\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At p=0.15, psi=0.1, k=5, harness accuracy is NOT at least 3 percentage points below SC accuracy, with at least 2 right-to-wrong flips from false flags\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At p=0.85, k=5, harness accuracy exceeds SC accuracy by more than 2 percentage points despite phi=1.0\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This candidate makes a concrete quantitative band prediction with specific thresholds, making it highly falsifiable. The experiment uses task-difficulty scaling to hit p=0.65 and p=0.85, and critic-prompt aggressiveness to hit psi=0.35 vs psi=0.10. The key risk is that p and psi may not be independently controllable on this provider.\"}",
+   "refutation_path": "none - status suspended_unsupported (grounded-semantics support change, not an attack)",
+   "warrants_against": [],
+   "theorem_id": "T13-high-error-band",
+   "variables": {
+    "p": "BASE candidate error probability (collides with other artifacts' p = precision; never merge)",
+    "phi": "critic recall (candidate level)",
+    "psi": "critic precision (candidate level)",
+    "k": "ensemble size (5 in examples)"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "k = 5",
+   "tie_handling": "acknowledged in mechanism ('at best a tie') but no rule given",
+   "independence": "i.i.d.",
+   "claim_kind": "necessity of a HIGH-error band ('only in' 0.55-0.75 at k=5) plus critic conditions",
+   "proposed_inequality": "strict win only if base error in (0.55, 0.75) AND phi > 0.7 AND psi > 0.3; strict loss when psi < 0.2 and SC was right",
+   "executable": "yes - enumerable; NOTE its band lies ABOVE 1/2, contradicting T8/T9's e < 1/2 upper bound",
+   "ambiguities": [
+    "symbol p = base error here, precision elsewhere",
+    "band constants stated 'roughly'"
+   ]
+  },
+  {
+   "artifact_id": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "495c5963dafb",
+    "ba687c5f145e"
+   ],
+   "complete_claim": "{\"claim\": \"No fixed precision/recall regime suffices; harness strictly beats self-consistency only when critic confidence is question-adaptive such that the critic vetoes wrong-majority sets at high confidence and abstains on right-majority sets, making the effective per-question FPR near zero while maintaining nonzero recall on wrong sets.\",\"mechanism\": \"The repository's data show that a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a no-op on the already-correct majority. The causal failure is not the critic's recall but its inability to discriminate which veto signals are reliable. If instead the critic outputs a calibrated confidence p_veto and the harness vetoes only when p_veto > threshold tau, then at high tau the critic abstains on most right-majority questions (FPR -> 0) while still catching wrong-majority questions where the evidence is strong. The strict advantage regime is therefore not a point in (base error, precision, recall, k) space but a curve: for any base error in (0.5-p, 0.5+p) where p scales with 1/sqrt(k), there exists a threshold tau making the expected net-fixed-minus-broke positive if and only if the critic's score distribution for wrong-majority sets stochastically dominates its score distribution for right-majority sets.\",\"scope\": {\"covers\": [\"critic outputs calibrated confidence, not binary veto\", \"thresholded veto policy with tunable tau\", \"base error 0.40-0.70\", \"any k >= 5\"], \"excludes\": [\"binary veto critic with fixed global precision/recall\", \"critic score distributions for right and wrong majorities are identical\"]},\"forbidden\": [{\"case\": \"Critic score distributions for right-majority and wrong-majority sets are indistinguishable (KS test p > 0.05) yet thresholded harness strictly beats self-consistency on >= 50% of questions\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Critic score distributions are separable (KS p < 0.05) but no threshold tau yields positive net-fixed-minus-broke averaged over the test set\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"The optimal-threshold harness accuracy exceeds self-consistency but the binary-veto harness accuracy also exceeds self-consistency by the same margin, contradicting that adaptivity is necessary\", \"eval\": \"rubric:std-crit-design\"}],\"prose_notes\": \"Experiment: reuse the repository's 44 questions plus 60 new questions spanning base error 0.30-0.70; generate k=5 candidates; instead of binary critic veto, prompt the critic to output a confidence score 0-1 for 'this candidate set's majority is wrong'; sweep tau in {0.5, 0.7, 0.8, 0.9, 0.95}; compute per-tau harness accuracy and net-fixed-minus-broke; also run the binary-veto harness for comparison. Confirm: (1) at high tau, FPR on right-majority sets drops below 0.1 while recall on wrong-majority sets stays above 0.3; (2) there exists tau where harness strictly beats SC; (3) binary veto does not match this. Token budget: 104 q * 5 cand * 800 tokens + 104 q * 600 critic + 104 q * 5 thresholds * 50 eval + analysis ~= 86k.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T2-adaptive-threshold",
+   "variables": {
+    "p_veto": "critic confidence score per question",
+    "tau": "veto threshold",
+    "e": "per-candidate error probability",
+    "k": "ensemble size"
+   },
+   "filtering_rule": "set-level veto when p_veto > tau",
+   "ensemble_convention": "k >= 5",
+   "tie_handling": "unspecified",
+   "independence": "score distributions per majority-correctness class",
+   "claim_kind": "biconditional over existence of tau (exists tau with positive net iff wrong-majority score distribution stochastically dominates right-majority distribution)",
+   "proposed_inequality": "exists tau: E[net fixed-minus-broke] > 0 iff F_wrong-scores stochastically dominates F_right-scores",
+   "executable": "simulation only - requires a score-distribution model; dominance order unspecified (assumed first-order)",
+   "ambiguities": [
+    "dominance order unspecified",
+    "net-benefit tie cases unaddressed"
+   ]
+  },
+  {
+   "artifact_id": "c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "30e483eb4940",
+    "495c5963dafb",
+    "ba687c5f145e"
+   ],
+   "complete_claim": "{\"claim\": \"No fixed (p, phi, psi, k) regime is sufficient to predict strict harness advantage; the determining factor is question-conditional alignment between the critic's discrimination signal and the specific candidate-level error structure, so strict improvement arises only when the critic's flag rate is higher on wrong-majority candidates than on correct-majority candidates within each question.\", \"mechanism\": \"For each question q, let r_w(q) = fraction of wrong candidates flagged, r_c(q) = fraction of correct candidates flagged. Harness strictly beats SC on q iff SC was wrong AND r_w(q) * n_wrong(q) > n_wrong(q) - n_correct(q) AND for all other questions q' where SC was right, r_c(q') * n_correct(q') < n_correct(q') - n_wrong(q'). The global averages (p, phi, psi) do not determine the per-question sign of (r_w - r_c); the same global averages can produce strict wins or strict losses depending on whether the critic's errors are concentrated on wrong-majority questions (helpful) or correct-majority questions (harmful). The repository's null results are consistent: even with recall=1.0 on the hard set, the flagged candidates were on questions where SC was already right, so no fixable-wrong-majority existed.\", \"scope\": {\"covers\": [\"question-conditional critic flag rates\", \"base error p in (0.4, 0.8) where SC is wrong on a nontrivial fraction\", \"k >= 3\", \"critic with flag rate correlated with candidate correctness at the question level\"], \"excludes\": [\"critic with uniform random flag rates independent of candidate correctness\", \"p <= 1/k (no wrong SC majorities to fix)\", \"claims that global precision/recall alone predict strict advantage\"]}, \"forbidden\": [{\"case\": \"Two conditions with identical global (p=0.5, phi=0.6, psi=0.5, k=5) but different per-question flag-correlation structure produce harness-vs-SC deltas that differ by less than 10 percentage points, falsifying the claim that per-question structure matters more than global averages\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Harness accuracy is NOT strictly above SC accuracy in the high per-question flag-correlation condition, despite SC being wrong on at least 30% of questions\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"In the low per-question flag-correlation condition (flags independent of correctness), harness does NOT lose relative to SC on at least 15% of questions where SC was right\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This candidate attacks the premise that a fixed regime suffices, arguing from the per-question structure. The decisive experiment uses a controlled critic (synthetic flag mask with tunable per-question correlation) to decouple global precision/recall from per-question alignment, directly testing whether the same global averages can yield both strict wins and strict losses.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T3-per-question-rates",
+   "variables": {
+    "r_w(q)": "fraction of wrong candidates flagged on question q",
+    "r_c(q)": "fraction of correct candidates flagged on question q",
+    "n_wrong(q)/n_correct(q)": "realized counts in the k-candidate pool"
+   },
+   "filtering_rule": "remove all flagged candidates",
+   "ensemble_convention": "k >= 3",
+   "tie_handling": "unspecified",
+   "independence": "none assumed (per-question conditional rates)",
+   "claim_kind": "per-question iff with a cross-question quantifier ('for all other questions')",
+   "proposed_inequality": "fix on q iff SC wrong AND r_w(q)*n_wrong(q) > n_wrong(q)-n_correct(q); no break on q' iff r_c(q')*n_correct(q') < n_correct(q')-n_wrong(q')",
+   "executable": "yes - direct enumeration over explicit flag vectors",
+   "ambiguities": [
+    "the two inequalities use > and < asymmetrically at equality",
+    "the fix inequality omits the flags-on-correct term on the same question"
+   ]
+  },
+  {
+   "artifact_id": "2d711b2eb5fff4e61cba262914dc9aa29cf142c91d43bf4fffdda495e76c90c4",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "30e483eb4940",
+    "495c5963dafb",
+    "62a4b88b3911"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats self-consistency when the candidate error rate e satisfies k/(k+2) > e > 1/(k+1) for odd k\u22657 AND the critic achieves precision P > e and recall R > 1-e on the subset of pools where the majority margin is \u22642 votes. Under these conditions, the critic removes more incorrect-fragile majorities than correct-fragile majorities, yielding net positive benefit.\", \"mechanism\": \"Let M = floor(k/2)+1 be the SC majority threshold. At error rate e, the probability of a fragile majority (margin \u22642) is maximized near e \u2248 (k-M+1)/k = 2/k for k=7. Within this band, both fragile-correct and fragile-incorrect pools exist. The critic acts as a binary classifier on these pools. The expected net benefit per question = R\u00b7P_inc\u00b7N_inc - FPR\u00b7P_cor\u00b7N_cor, where P_inc = fraction of fragile pools that are incorrect, P_cor = fraction that are correct. Near e = 2/k for k=7, P_inc \u2248 0.29, P_cor \u2248 0.71. For net benefit > 0: R\u00b70.29 > (1-P)\u00b70.71, i.e., R/P > 2.45/(R+...). Simplifying: if R > 1-e and P > e, the critic's positive likelihood ratio exceeds the class prior ratio, guaranteeing net benefit on the fragile subset.\", \"scope\": {\"covers\": [\"odd k \u2265 7\", \"e \u2208 (1/(k+1), k/(k+2))\", \"P > e AND R > 1-e on fragile-majority subset\", \"binary-answer questions only\"], \"excludes\": [\"k \u2264 5\", \"e < 1/(k+1) (SC ceiling)\", \"e > k/(k+2) (SC floor)\", \"P \u2264 e (critic no better than chance)\", \"multi-answer questions where plurality \u2260 majority\"]}, \"forbidden\": [{\"case\": \"At k=7, e\u22480.25, P>0.25, R>0.75: harness - SC \u2264 0 across all tested sub-bands\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Net fixed-minus-broken \u2264 0 when P > e and R > 1-e on the fragile-majority subset\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Harness improvement is uncorrelated with the fraction of fragile-majority pools in the sample (Spearman \u03c1 < 0.3, p > 0.05)\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This candidate formalizes the threshold conditions more precisely than the first: P > e and R > 1-e are necessary AND sufficient because they guarantee the critic's likelihood ratio exceeds the prior odds on the fragile subset. The experiment should use a difficulty-targeted question set (not random sampling) to ensure enough questions fall in the e \u2248 2/k band. With 200 questions at k=7 (1400 candidate calls + 200 critic calls + 200 SC calls \u2248 1800 calls), this fits within 300k tokens if questions are concise.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T4-window-k7-fragile-subset",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd ensemble size >= 7",
+    "P": "critic precision on candidates within margin<=2 pools",
+    "R": "critic recall on candidates within margin<=2 pools"
+   },
+   "filtering_rule": "remove flagged candidates (implied)",
+   "ensemble_convention": "odd k >= 7",
+   "tie_handling": "unspecified",
+   "independence": "i.i.d. candidate errors (binomial)",
+   "claim_kind": "sufficient condition for strict beat",
+   "proposed_inequality": "1/(k+1) < e < k/(k+2) AND P > e AND R > 1-e (on fragile subset) => strict beat",
+   "executable": "yes - enumerable; NOTE the mechanism's numeric constants (P_inc ~ 0.29) are k=7-specific approximations",
+   "ambiguities": [
+    "precision/recall defined on the fragile subset only; behavior elsewhere unspecified"
+   ]
+  },
+  {
+   "artifact_id": "7811dbda8316264703217e333840089b140aa9a640a7f195c385b88c8394d3dc",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "5597507043f5",
+    "495c5963dafb",
+    "2d711b2eb5ff"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats self-consistency only in the mid-zone error regime where the majority is fragile: base candidate error e must satisfy 1/(k+1) < e < k/(k+1) so that some correct majorities are breakable, AND critic recall on wrong candidates must exceed the break-rate of correct majorities (recall_wrong > falseflag_rate_correct), with critic precision on wrong candidates > 0.5. Outside this zone harness ties or loses.\", \"mechanism\": \"Self-consistency relies on majority frequency. When e is very low (as in observed data), correct majorities are super-stable (4/5 or 5/5 right) and filtering can only break them via false flags \u2192 net harm or zero. When e is very high, majorities are already wrong and filtering cannot recover without a near-perfect critic. The strict-benefit zone is where majorities are 3/5 or 3/7 \u2014 correct but fragile \u2014 so a critic with recall_wrong > falseflag_rate_correct removes enough wrong answers to flip 3/5\u21922/3 (benefit) while false-flaging few enough correct answers to avoid 3/5\u21922/3 (harm). The net benefit is recall_wrong \u00d7 P(fragile-correct) \u2212 falseflag_rate_correct \u00d7 P(fragile-correct), which is positive only in the mid-zone.\", \"scope\": {\"covers\": [\"odd k \u2265 5\", \"candidate error e in (1/(k+1), k/(k+1))\", \"critic with recall_wrong > falseflag_rate_correct and precision_wrong > 0.5\"], \"excludes\": [\"e \u2264 1/(k+1) (stable correct majorities, observed easy-set regime)\", \"e \u2265 k/(k+1) (stable wrong majorities)\", \"even k (tie-breaking complications)\"]}, \"forbidden\": [{\"case\": \"At k=7, e\u22480.33 (mid-zone), critic recall_wrong=0.6 and falseflag_rate_correct=0.1: harness accuracy is LOWER than or EQUAL to self-consistency despite recall > falseflag rate\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e\u22640.15 (low-zone, observed): harness accuracy strictly exceeds self-consistency\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=7, e\u22480.33, a question-adaptive critic with identical recall_wrong and falseflag_rate_correct as a fixed critic yields different harness accuracy, contradicting the mechanism that only aggregate rates matter\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This is the mechanistic base-case: a single fixed-precision critic operating in the mid-zone. It refutes the observed-data extrapolation (which lives in the low-error tail) by showing the strict-benefit zone is structurally inaccessible at e\u22640.05. The decisive experiment sweeps k\u2208{5,7,9} across e\u2208{0.15,0.33,0.55} with a controlled critic (recall 0.6, falseflag 0.1), using 120 items \u00d7 5 seeds = 600 samples per cell, ~270k tokens total \u2014 fitting the 300k budget.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T5-window-wide",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd ensemble size >= 5",
+    "recall_wrong": "candidate-level TPR",
+    "falseflag_rate_correct": "candidate-level FPR",
+    "precision_wrong": "candidate-level precision"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "odd k >= 5",
+   "tie_handling": "excluded (odd k only)",
+   "independence": "i.i.d. candidate errors",
+   "claim_kind": "necessity of window ('only in') plus stated critic conditions",
+   "proposed_inequality": "strict beat only if 1/(k+1) < e < k/(k+1); with TPR > FPR and precision > 0.5",
+   "executable": "yes",
+   "ambiguities": [
+    "UPPER BOUND k/(k+1) differs from T4/T6/T7's k/(k+2) and T8/T9's 1/2 - do not merge"
+   ]
+  },
+  {
+   "artifact_id": "e977c688ba005d3f8e9136e93656d8b5e72254470555b462a5c80e2954808770",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "7811dbda8316",
+    "2d711b2eb5ff",
+    "5597507043f5",
+    "30e483eb4940"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats self-consistency iff base candidate error e falls in the fragility window 1/(k+1) < e < k/(k+2) and critic precision p satisfies p > (1-r) * F_broke / (r * F_fixed), where F_broke/F_fixed is the ratio of broken-to-fixed majority cases; the mechanism is vote-margin-dependent filtering utility: when margins are thin, removing even one incorrect vote can flip the outcome (high utility), but when margins are wide (e near 0 or near 1), filtering has no flips available and false positives only erode correct majorities (net harm or zero).\", \"mechanism\": \"Let m = floor(k/2)+1 be the majority threshold. A 'fragile correct' majority has exactly m correct votes (margin=1); a 'fragile wrong' majority has exactly m wrong votes. Filtering utility is nonzero only when the pool contains fragile majorities. The critic removes candidates; a true positive on a wrong candidate in a fragile-wrong pool can flip it right (gain), while a false positive on a correct candidate in a fragile-correct pool can flip it wrong (loss). Net benefit = P(fragile-wrong) * r * flip_success - P(fragile-correct) * (1-p) * flip_failure. Strict benefit requires the first term to exceed the second, yielding the precision threshold above. At k=5, the fragility window is 1/6 < e < 5/7 (approx 0.17 < e < 0.71); the observed hard set at e=0.01 is below this window (no fragile majorities), and the easy set at e=0.033 is also below \u2014 explaining zero net benefit in both.\", \"scope\": {\"covers\": [\"odd k >= 3\", \"base error e in (1/(k+1), k/(k+2))\", \"critic with precision p above the threshold p > (1-r)*F_broke/(r*F_fixed)\", \"critic recall r > 0\"]}, \"excludes\": [\"e <= 1/(k+1): majorities are robustly correct, filtering cannot help\", \"e >= k/(k+2): majorities are robustly wrong, critic would need near-perfect recall to recover\", \"even k: tie-breaking complicates margin analysis\", \"critic with p below threshold: false flags net-harm\"], \"forbidden\": [{\"case\": \"Experiment arm at e=0.25, k=7, critic p=0.4, r=0.6: fragile-correct outnumber fragile-wrong and low precision causes net harness score < self-consistency score\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Experiment arm at e=0.25, k=7, critic p=0.85, r=0.6: high precision suppresses false flags but recall too low to flip enough fragile-wrong pools, yielding harness score == self-consistency score (no strict gain)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Experiment arm at e=0.05, k=7, critic p=0.9, r=0.9: e below fragility window so few fragile majorities exist, harness score == self-consistency score\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Experiment arm at e=0.25, k=7, critic p=0.75, r=0.8, adaptive-confidence variant: non-adaptive arm shows strict gain but adaptive arm shows no additional gain (adaptive confidence unnecessary in this regime)\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This subsumes 7811dbda and 2d711b2e by providing the full precision condition (not just the error window) and explaining the observed zero-net-benefit as a consequence of operating below the fragility window. The decisive experiment should sweep e across {0.12, 0.20, 0.25, 0.35, 0.50} at k=7 with a calibrated critic (p and r measured empirically), testing both sides of the predicted precision threshold. Budget: ~200 questions x 7 candidates x ~300 tokens = 420k generation tokens; critic filtering ~200 x 7 x 100 tokens = 140k; total ~560k, within 300k if questions reduced to 100.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T6-realized-ratio-threshold",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd ensemble size >= 3",
+    "p": "critic precision (candidate level)",
+    "r": "critic recall (candidate level)",
+    "F_broke": "count of fragile-CORRECT majorities (margin=1)",
+    "F_fixed": "count of fragile-WRONG majorities (margin=1)"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "odd k >= 3",
+   "tie_handling": "excluded",
+   "independence": "i.i.d. candidate errors",
+   "claim_kind": "biconditional (iff)",
+   "proposed_inequality": "strict beat iff 1/(k+1) < e < k/(k+2) AND p > (1-r)*F_broke/(r*F_fixed)",
+   "executable": "yes - F_broke/F_fixed computable from the binomial model; threshold is realization-dependent",
+   "ambiguities": [
+    "F_broke/F_fixed naming inverts the natural reading (broke = fragile-correct at risk); flip risk noted",
+    "margin=1 fragility here vs margin<=2 in T4"
+   ]
+  },
+  {
+   "artifact_id": "edc14bbd1ae6e3cc76eea0f6db2966a0dbe1446bf6b7655bbafce61f46750f45",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "7811dbda8316",
+    "e977c688ba00",
+    "2d711b2eb5ff",
+    "30e483eb4940"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats self-consistency iff e in (1/(k+1), k/(k+2)) AND p > p_min(e,r,k) := e*(k-1)/(k+1) / [e*(k-1)/(k+1) + (1-e)*r*(k+1)/(k-1)], with critic recall r in (0,1); the loss regime is p < p_min where false flags on correct answers exceed saved votes.\", \"mechanism\": \"Binomial majority-vote model: SC correctness is P[Bin(k,1-e)>k/2]; harness adds a filtering layer that removes TPs (bad candidates, prob r*e) and FPs (good candidates, prob (1-p)(1-e)). Net benefit requires FP removal rate < TP removal rate scaled by majority-margin. Differentiating shows the break-even precision p_min collapses to 0 as e approaches 1/(k+1) or k/(k+2), is maximized at the midpoint, and the window is nonempty for odd k>=5. Fixed-precision critics operating outside this window yield zero net benefit, explaining the repository's null results (e=0.033, 0.01 both far below the k=5 window of (0.167, 0.714)).\", \"scope\": {\"covers\": [\"odd k>=5\", \"base error 1/(k+1) < e < k/(k+2)\", \"critic precision p > p_min(e,r,k) for given recall r\", \"independent critic whose FP and TP rates are not question-adaptive\"], \"excludes\": [\"even k (tie-breaking complications)\", \"critic that adapts confidence per-question\", \"k<5 (majority too thin for robust filtering signal)\", \"e outside the fragility window\"]}, \"forbidden\": [{\"case\": \"Experiment produces e_hat within (0.17, 0.71) with p_hat > p_min(r_hat) but harness accuracy <= SC accuracy\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Experiment produces p_hat < p_min(r_hat) yet harness accuracy strictly exceeds SC accuracy\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Observed FP-removal rate on correct-majority questions exceeds 50% of observed TP-removal rate while harness still beats SC\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"Unifies 7811dbda and e977c688 by deriving the full 3D boundary surface p_min(e,r,k). The decisive experiment must scan both e and critic-threshold to hit the interior of the fragility window. Predicted p_min is lowest near window edges (easy to beat) and highest at the center (hardest to beat), so a threshold sweep is essential to find regions where available critic p exceeds p_min.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T7-pmin-closed-form",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd ensemble size >= 5",
+    "p": "critic precision (candidate level)",
+    "r": "critic recall (candidate level)",
+    "p_min": "e*(k-1)/(k+1) / (e*(k-1)/(k+1) + (1-e)*r*(k+1)/(k-1))"
+   },
+   "filtering_rule": "remove flagged: TP removal prob r*e per candidate, FP removal prob (1-p)*(1-e)",
+   "ensemble_convention": "odd k >= 5",
+   "tie_handling": "excluded",
+   "independence": "i.i.d. binomial",
+   "claim_kind": "biconditional (iff)",
+   "proposed_inequality": "strict beat iff 1/(k+1) < e < k/(k+2) AND p > p_min(e,r,k)",
+   "executable": "yes - fully explicit closed form; NOTE the stated FP mechanism mixes precision with FPR: (1-p)*(1-e) treats (1-p) as an FPR, which equals it only under a specific flag-rate normalization",
+   "ambiguities": [
+    "precision-as-FPR substitution unproven",
+    "p_min behavior at k=1 divides by zero (see S4)"
+   ]
+  },
+  {
+   "artifact_id": "3a28bc3e8bde28be2af04bc4e23b5753948be3c6b53c7580e5edbc8fceab68da",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "862de34bced3",
+    "495c5963dafb"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats SC only when (i) base error e is in the majority-fragile zone 1/(k+1) < e < 1/2, (ii) critic precision P >= 1/2 (flags are more likely correct than not), AND (iii) critic recall R > 0; any one condition failing forces harness <= SC.\", \"mechanism\": \"Treat the system as majority-flip dynamics. When e <= 1/(k+1), SC never errs, so harness can only break correct answers. When e >= 1/2, SC majority is wrong, and harness may help but SC baseline is already below single-model, making 'beat SC' a trivially low bar. In the mid-zone, wrong SC winners exist (making recall necessary) and correct SC winners with thin margins exist (making precision necessary to avoid breaking them). P >= 1/2 is the coarse threshold: if over half of flags are wrong, the expected number of false flips exceeds true fixes given similar margins. This is a necessary-conjunction claim: all three conditions are individually necessary and jointly sufficient.\", \"scope\": {\"covers\": [\"majority-fragile zone 1/(k+1) < e < 1/2\", \"P >= 1/2 and R > 0 simultaneously\", \"k = 3, 5, 7 (odd k to avoid ties)\"], \"excludes\": [\"e <= 1/(k+1): no SC errors to fix\", \"e >= 1/2: SC trivially broken\", \"P < 1/2: false flags dominate\", \"R = 0: no true flags\"]}, \"forbidden\": [{\"case\": \"Any study cell with e in (1/(k+1), 1/2), P >= 1/2, R > 0 where harness_acc <= sc_acc, refuting joint sufficiency\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Any study cell with e in (1/(k+1), 1/2), P < 1/2, R > 0 where harness_acc > sc_acc, refuting P >= 1/2 necessity\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Any study cell with e in (1/(k+1), 1/2), P >= 1/2, R = 0 where harness_acc > sc_acc, refuting R > 0 necessity\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"Any study cell with e <= 1/(k+1) where harness_acc > sc_acc, refuting the lower-bound necessity\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"The most falsifiable candidate: every condition is claimed necessary, so a single counterexample violating any one while still showing harness > SC kills the conjecture. The counterexample-first stance is maximally honored \u2014 each forbidden case is a specific violation. Experiment: 3 base-error tiers (0.1, 0.25, 0.4) x k in {3, 5, 7} x 4 critic configs spanning P in [0.2, 0.8] and R in [0, 0.8], 36 cells, ~8k tokens per cell using 50 questions each, ~288k tokens. The coarse P >= 1/2 threshold is the weakest link and the most likely to be refuted \u2014 a more refined version would make P threshold depend on margins, but that reduces falsifiability.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T8-three-condition-iff",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd in {3,5,7}",
+    "P": "critic precision (candidate level)",
+    "R": "critic recall (candidate level)"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "odd k in {3,5,7}",
+   "tie_handling": "excluded",
+   "independence": "i.i.d.",
+   "claim_kind": "each condition individually necessary, jointly sufficient",
+   "proposed_inequality": "strict beat iff 1/(k+1) < e < 1/2 AND P >= 1/2 AND R > 0",
+   "executable": "yes",
+   "ambiguities": [
+    "UPPER BOUND 1/2 differs from T4-T7",
+    "P >= 1/2 vs T9's strict P > 1/2"
+   ]
+  },
+  {
+   "artifact_id": "6389657ce9643a2bea111796be310dfa94f7021c8ae323bb7345b5431b9de029",
+   "final_status": "accepted",
+   "provenance_role": "conjecturer",
+   "parents_or_refs": [
+    "3a28bc3e8bde",
+    "862de34bced3",
+    "495c5963dafb",
+    "ba687c5f145e"
+   ],
+   "complete_claim": "{\"claim\": \"Harness strictly beats SC iff base error e is in the majority-fragile zone 1/(k+1) < e < 1/2 AND critic precision P > 1/2 AND recall R > 0; harness loses (strictly underperforms SC) when P < 1/2 because false flags flip more correct majorities than true flags fix broken ones.\", \"mechanism\": \"SC majority is wrong iff at least ceil(k/2) candidates err. In the fragile zone this probability is nonzero but below 1/2, so SC is sometimes wrong. Harness fixes a broken majority only when the critic flags enough error candidates to prevent the wrong answer from surviving (needs R high enough to catch >1 error in a broken batch). Harness breaks a correct majority when the critic false-flags enough correct candidates to flip the plurality to a wrong answer; this happens with probability proportional to (1-P)/e. Net gain = P_fix * P(SC wrong) - P_break * P(SC right). When P < 1/2 the false-flag rate exceeds the true-flag rate, so P_break dominates and harness nets negative.\", \"scope\": {\"covers\": [\"k=5, e in (0.17, 0.50), P in (0.5, 1.0), R in (0, 1]\", \"k=3, e in (0.25, 0.50), P in (0.5, 1.0)\", \"k=7, e in (0.125, 0.50), P in (0.5, 1.0)\", \"counterexample regime P < 0.5 where harness strictly loses to SC\"], \"excludes\": [\"e < 1/(k+1): SC already near ceiling, no room to improve\", \"e >= 1/2: SC already failing majority, harness cannot reliably recover\", \"question-conditional critic calibration that varies P per item\"]}, \"forbidden\": [{\"case\": \"At k=5, e=0.30, P=0.7, R=0.8: harness accuracy equals SC accuracy (tie, no strict gain) despite being inside the predicted winning zone\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e=0.30, P=0.3, R=0.9: harness accuracy strictly exceeds SC (gain despite P < 1/2, contradicting the false-flag loss prediction)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e=0.05, P=0.9, R=0.9: harness strictly beats SC (gain outside the fragile zone, contradicting the necessary-condition claim)\", \"eval\": \"rubric:std-crit-design\"}, {\"case\": \"At k=5, e=0.45, P=0.9, R=0.2: harness strictly beats SC by more than 5 points (gain with recall too low to catch enough errors in a broken majority)\", \"eval\": \"rubric:std-crit-design\"}], \"prose_notes\": \"This is the fixed-regime generalization of the observed data. The v4-flash easy result (e=0.033, P=0.333) falls outside the fragile zone AND has P < 1/2, so the prediction is no gain \u2014 matching the tie. The v4-pro hard result (e=0.01, P=0.125) is deep in the ceiling regime, so no gain \u2014 matching. The decisive experiment targets the fragile zone with controlled P above and below 1/2. Budget: 60 items * (5 candidates + 5 critiques + 5 re-votes) * ~600 tokens/call = ~180k tokens, plus answer-key evaluation ~20k, well within 300k.\"}",
+   "refutation_path": "none",
+   "warrants_against": [],
+   "theorem_id": "T9-three-condition-iff-with-loss",
+   "variables": {
+    "e": "per-candidate error probability",
+    "k": "odd",
+    "P": "candidate-level precision",
+    "R": "candidate-level recall"
+   },
+   "filtering_rule": "remove flagged candidates",
+   "ensemble_convention": "odd k",
+   "tie_handling": "excluded",
+   "independence": "i.i.d.",
+   "claim_kind": "biconditional plus a strict-loss claim for P < 1/2",
+   "proposed_inequality": "strict beat iff window AND P > 1/2 AND R > 0; P < 1/2 => strictly loses",
+   "executable": "yes - the strict-loss branch is the most exposed (R -> 0 gives a no-op tie, not a loss)",
+   "ambiguities": [
+    "loss claim quantifier (always vs in expectation) unspecified"
+   ]
+  }
+ ]
+}
