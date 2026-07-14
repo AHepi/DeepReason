@@ -41,3 +41,9 @@ def test_acquisition_resume_count_uses_completed_conjecturer_events(tmp_path):
         event.llm is not None and event.llm.role == "conjecturer"
         for event in source.log.read()
     ) == 0
+
+
+def test_frozen_finite_optimum_is_exhaustively_known():
+    best, winners = MODULE.finite_optimum()
+    assert best == 675675
+    assert winners == ((5, 7, 9, 11, 13, 15),)

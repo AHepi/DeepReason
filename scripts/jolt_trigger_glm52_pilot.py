@@ -10,6 +10,7 @@ import os
 import sys
 from hashlib import sha256
 from pathlib import Path
+from itertools import combinations
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -115,6 +116,23 @@ def _selection(text: str) -> tuple[int, ...] | None:
 
 def _mechanism(selection: tuple[int, ...]) -> str:
     return "low-start" if selection[0] <= 3 else ("middle-start" if selection[0] <= 6 else "high-start")
+
+
+def finite_optimum() -> tuple[int, tuple[tuple[int, ...], ...]]:
+    """Exhaust the frozen task; this is part of the verifier, not model evidence."""
+    best = 0
+    winners: list[tuple[int, ...]] = []
+    for selection in combinations(range(1, 21), 6):
+        if sum(selection) != 60 or any(
+            right - left < 2 for left, right in zip(selection, selection[1:])
+        ):
+            continue
+        score = math.prod(selection)
+        if score > best:
+            best, winners = score, [selection]
+        elif score == best:
+            winners.append(selection)
+    return best, tuple(winners)
 
 
 def seed(harness: Harness) -> None:
@@ -265,7 +283,9 @@ def summarize_branch(harness: Harness, source_best: int, runtime: dict) -> dict:
         "dropped": runtime["dropped"],
         "warrants": len(harness.warrants),
         "attacks": len(harness.state.att),
-        "verify_root": verify_root(harness.root, runtime["meter"]["total"]),
+        # A branch log includes the copied source spend; branch-only meter totals
+        # are reported separately and must not be compared to whole-root spend.
+        "verify_root": verify_root(harness.root),
     }
 
 
@@ -342,6 +362,7 @@ def main() -> int:
     )
     roots = materialize_matched_branches(plan, BRANCHES)
     source_best, _, _ = _current_best(source)
+    known_optimum, optimum_winners = finite_optimum()
     results = {}
     public_failure = PublicVerifierFailure(
         label="best objective did not improve in the frozen eight-admission window",
@@ -365,6 +386,9 @@ def main() -> int:
         "model": {"id": "glm-5.2", "reasoning": "none"},
         "trigger": trigger, "acquisition": acquisition,
         "source_best": source_best, "branches": results,
+        "finite_domain_optimum": known_optimum,
+        "source_at_known_optimum": source_best == known_optimum,
+        "optimum_witnesses": [list(item) for item in optimum_winners],
         "estimand_limit": "conditional matched-state pilot; one state, no whole-run or hard-orbit claim",
     }
     Path(args.out).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")

@@ -1,0 +1,77 @@
+{
+  "schema": "deepreason-jolt-trigger-glm52-pilot-report-v1",
+  "status": "trigger_not_reached",
+  "trigger": {
+    "schema": "deepreason-functional-soft-trigger-v1",
+    "valid_admissions": 12,
+    "window": 8,
+    "improvements_in_window": 2,
+    "new_mechanism_classes": [
+      "middle-start"
+    ],
+    "trigger": false,
+    "source_event_seqs": [
+      35,
+      37,
+      38,
+      39,
+      44,
+      45,
+      47,
+      48
+    ],
+    "digest": "2eb213e3878acc9f4aed19ce2b1923554a084e22f3551b08d122fdcc9d61bec2"
+  },
+  "acquisition": {
+    "meter": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total": 0,
+      "budget": 56000,
+      "calls": 0,
+      "reserved": 0
+    },
+    "dropped": [],
+    "resumed_from_calls": 8,
+    "total_logged_tokens": 16778
+  },
+  "source_verify": {
+    "violations": [],
+    "stats": {
+      "events": 51,
+      "artifacts": 39,
+      "problems": 1,
+      "warrants": 9,
+      "accepted": 30,
+      "refuted": 9,
+      "logged_tokens": 16778,
+      "process": {
+        "manifest_present": true,
+        "manifest_sha256": "59908bf299adff330c2330f8ddf80613a695a4a9b689c4ba71225e87b5f628ea",
+        "engine_profile": "full",
+        "model_profile": "standard",
+        "profile_totals": {
+          "standard": {
+            "calls": 8,
+            "attempts": 10,
+            "repair_attempts": 2,
+            "tokens": 16778,
+            "traced_calls": 8,
+            "first_pass_valid": 6,
+            "eventual_valid": 8,
+            "schema_exhausted": 0,
+            "transport_dropped": 0,
+            "usage_unknown_attempts": 0,
+            "provider_transport_attempts": 10
+          }
+        }
+      },
+      "gate_blocks": 0,
+      "trial_blocks": 0,
+      "dropped_calls": 0,
+      "interventions": 0,
+      "reseeds": 0,
+      "max_problem_desc_len": 452
+    }
+  }
+}
