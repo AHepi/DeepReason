@@ -30,3 +30,14 @@ def test_mechanism_classes_are_deterministic():
     assert MODULE._mechanism((1, 4, 7, 12, 16, 20)) == "low-start"
     assert MODULE._mechanism((4, 7, 10, 12, 13, 14)) == "middle-start"
     assert MODULE._mechanism((7, 9, 11, 13, 15, 17)) == "high-start"
+
+
+def test_acquisition_resume_count_uses_completed_conjecturer_events(tmp_path):
+    # The live runner's resume boundary is append-only event count, never an
+    # in-memory loop cursor; detailed root replay is covered by the pilot suite.
+    source = MODULE.Harness(tmp_path / "source")
+    MODULE.seed(source)
+    assert sum(
+        event.llm is not None and event.llm.role == "conjecturer"
+        for event in source.log.read()
+    ) == 0

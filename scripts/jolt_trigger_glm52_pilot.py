@@ -37,6 +37,7 @@ from deepreason.run_manifest import (  # noqa: E402
     bind_run_manifest,
     compile_run_manifest,
     config_from_run_manifest,
+    load_run_manifest,
     preflight_harness,
     role_matrix,
 )
@@ -274,18 +275,38 @@ def main() -> int:
     args = parser.parse_args()
     if not os.environ.get("OLLAMA_API_KEY"):
         raise SystemExit("OLLAMA_API_KEY is required")
-    if SOURCE.exists() or BRANCHES.exists():
-        raise SystemExit(f"fresh roots required; move existing {RUNS} before running")
+    if BRANCHES.exists():
+        raise SystemExit(f"branch destination already exists: {BRANCHES}")
 
     cfg = config()
-    manifest = compile_run_manifest(cfg, schema_version=2, workload_profile="formal", rubric_policy="forbid")
-    source = Harness(SOURCE)
-    bind_run_manifest(manifest, SOURCE)
-    seed(source)
+    expected_manifest = compile_run_manifest(
+        cfg, schema_version=2, workload_profile="formal", rubric_policy="forbid"
+    )
+    if SOURCE.exists():
+        manifest = load_run_manifest(SOURCE)
+        if manifest.sha256 != expected_manifest.sha256:
+            raise SystemExit("source manifest differs from the frozen pilot manifest")
+        source = Harness(SOURCE)
+    else:
+        manifest = expected_manifest
+        source = Harness(SOURCE)
+        bind_run_manifest(manifest, SOURCE)
+        seed(source)
     preflight_harness(manifest, source, cfg)
-    acquisition = run_calls(source, manifest, 8, 56000)
+    completed_calls = sum(
+        1 for event in source.log.read()
+        if event.llm is not None and event.llm.role == "conjecturer"
+        and event.rule.value == "Conj"
+    )
+    if completed_calls > 8:
+        raise SystemExit("source advanced beyond the frozen eight-call acquisition")
+    acquisition = run_calls(source, manifest, 8 - completed_calls, 56000)
+    acquisition["resumed_from_calls"] = completed_calls
+    acquisition["total_logged_tokens"] = sum(
+        event.llm.tokens for event in source.log.read() if event.llm is not None
+    )
     trigger = trigger_receipt(source)
-    source_check = verify_root(SOURCE, acquisition["meter"]["total"])
+    source_check = verify_root(SOURCE)
     if source_check["violations"]:
         raise SystemExit("source root verification failed")
     if not trigger["trigger"]:
