@@ -45,3 +45,17 @@ mechanism_novelty: reported as not_measured unless a frozen literature
 decision_rules: report experiments/results/bronze_repertoire_v2_report.json
   (census-derived, no hard-coded numbers); index line appended
 budget: {llm_tokens: <= 1200000}
+
+# --- amendment 1, recorded BEFORE any live call (zero tokens spent) ---
+amendment_1:
+  what: the prereg fixed "role policy" across arms without naming the fixed
+    court. Pinned here before launch - ONLY the conjecturer varies per arm;
+    every other role (argumentative critic, defender, variator, synthesizer,
+    thesis, judge seat 1) is deepseek-v4-pro in ALL arms, judge seat 2 is
+    gpt-oss:120b in ALL arms (the pilot-validated matrix). The gpt-oss arm
+    therefore has conjecturer gpt-oss:120b under the same fixed court.
+  runtime: evidence mode, NEAR_DUP_EPS 0.35, CONTROLLER false, cycles 30,
+    300000 tokens per arm, reserve-settle meter
+  concurrency: arms run 3-at-a-time (subscription ceiling); the fourth arm
+    launches when a slot frees
+  tokens_spent_before_amendment: 0
