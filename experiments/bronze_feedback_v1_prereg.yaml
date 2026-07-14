@@ -39,3 +39,26 @@ predictions:
 decision_rules: report experiments/results/bronze_feedback_v1_report.json;
   index line appended
 budget: {llm_tokens: <= 800000, max 3 in flight}
+
+# --- amendment 1, recorded BEFORE any live call (zero tokens spent) ---
+amendment_1:
+  generator: kimi-k2.6, per the repertoire v2 report (widest emitted
+    mechanism-class coverage, lowest near-dup rate 0.25; the two
+    falsifier-flagged generators are excluded by their own verdicts)
+  court_both_arms: identical in both arms - critic deepseek-v4-flash
+    (cross-family to the generator, distributions known from court-cross),
+    defender deepseek-v4-pro, judges [deepseek-v4-pro, gpt-oss:120b].
+    The ONLY difference between arms is ARGUMENTATIVE_AUTHORITY:
+    trial_required (active) vs observe_only.
+  calibrated_court_gate: satisfied in protocol terms per the court-cross
+    result block - no court differentiates (P1 refuted at 1.18pp), so the
+    defended trial protocol itself is the calibration; sustained
+    convictions are rare (3/255) and seat-stable (P3 confirmed)
+  scoring_instruments: evidence contact = share of emitted proposals whose
+    text matches at least one anchor-term set in the frozen dossier
+    (experiments/bronze_evidence_dossier_v1.json, committed before launch);
+    mechanism classes = the frozen rep_v2_score coder; P1 chi-square at
+    p < 0.05 over class counts
+  runtime: evidence mode, 30 cycles, 400000 tokens per arm, NEAR_DUP_EPS
+    0.35, CONTROLLER false, both arms concurrent (2 in flight)
+  tokens_spent_before_amendment: 0
