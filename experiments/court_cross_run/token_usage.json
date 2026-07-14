@@ -1,7 +1,7 @@
 {
-  "prompt_tokens": 1215714,
-  "completion_tokens": 403899,
-  "calls": 1460,
+  "prompt_tokens": 1236626,
+  "completion_tokens": 411372,
+  "calls": 1487,
   "phases": {
     "dsflash_critic": {
       "prompt_tokens": 43493,
@@ -34,19 +34,19 @@
       "calls": 407
     },
     "mistral_critic": {
-      "prompt_tokens": 24478,
-      "completion_tokens": 8292,
-      "calls": 47
+      "prompt_tokens": 25930,
+      "completion_tokens": 8770,
+      "calls": 50
     },
     "mistral_defender": {
-      "prompt_tokens": 29823,
-      "completion_tokens": 10238,
-      "calls": 45
+      "prompt_tokens": 32191,
+      "completion_tokens": 10954,
+      "calls": 49
     },
     "mistral_seat": {
-      "prompt_tokens": 202510,
-      "completion_tokens": 66031,
-      "calls": 211
+      "prompt_tokens": 219602,
+      "completion_tokens": 72310,
+      "calls": 231
     }
   }
 }
