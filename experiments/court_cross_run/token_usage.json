@@ -1,0 +1,22 @@
+{
+  "prompt_tokens": 55083,
+  "completion_tokens": 16656,
+  "calls": 69,
+  "phases": {
+    "dsflash_critic": {
+      "prompt_tokens": 6492,
+      "completion_tokens": 1539,
+      "calls": 12
+    },
+    "dsflash_defender": {
+      "prompt_tokens": 7803,
+      "completion_tokens": 2383,
+      "calls": 12
+    },
+    "dsflash_seat": {
+      "prompt_tokens": 40788,
+      "completion_tokens": 12734,
+      "calls": 45
+    }
+  }
+}
