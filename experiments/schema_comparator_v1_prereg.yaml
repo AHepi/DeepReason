@@ -47,3 +47,24 @@ decision_rules: report experiments/results/schema_comparator_v1_report.json;
   index line appended; if P1 confirms, the comparator-aware schema becomes
   the engine change candidate with its own prereg before adoption
 budget: {llm_tokens: <= 1500000, max 3 in flight}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/schema_comparator_v1_report.json
+  verdicts: {P1: REFUTED, P2: CONFIRMED}
+  measured:
+    scope_share_A_to_B: {dsflash: 0.859 -> 0.671, kimi: 0.835 -> 0.647}
+    drop_pp: {dsflash: 18.8, kimi: 18.8}   # bar 30; falsifier 10 NOT fired
+    objection_rate: 1.0 in every cell
+    prose_form_scope_share: {dsflash: 0.729, kimi: 0.541}
+  reading: the representation is a real but partial cause of the
+    scope-formalism trap - restructuring to comparator-aware form removes
+    a stable ~19pp of scope-ground objections in both critic families, but
+    most of the scope obsession survives every representation, including
+    pure prose with no case lists at all. Prosecution appetite is
+    completely representation-invariant (P2).
+  consequence_per_feedback_v2_gate_1: P1 refuted - both feedback v2 arms
+    keep the original skeleton; the ~19pp partial effect is recorded as a
+    candidate engine improvement but does not meet the adoption bar, and
+    the scope-formalism background is a known constant, not a treatment
+    artifact.
