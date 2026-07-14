@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target names a mechanism ('external demographic pressure leading to maritime raider incursions') but fails to specify the concrete institutional, economic, or logistical process by which displaced populations organized into 'systematic' raiding fleets capable of simultaneously collapsing four distinct, fortified polities. The mechanism remains a demographic black box — it invokes pressure and movement but provides no causal account of how displaced groups acquired ships, coordinated multi‑polity attacks, or sustained operations without a state apparatus. This violates clause (1) of std-hist, which requires naming a specific institution, incentive, or process, not a vague demographic force. Furthermore, the single forbidden case is misaligned with the mechanism: the absence of destruction layers or foreign weaponry would falsify the military‑raiding claim but does not test the demographic‑pressure mechanism itself, violating the requirement that forbidden cases be concrete observations that could realistically obtain and directly challenge the proposed causal chain.",
+  "counterexample": [
+    "A specific process satisfying clause (1) would be: 'Displaced Aegean populations formed mercenary naval companies financed by Cypriot copper traders seeking to disrupt competing Levantine ports, as evidenced by the Amarna letters' references to hired sea‑raiders and the concentration of Naue II swords in mercenary‑associated shipwrecks.'",
+    "A proper forbidden case for the demographic‑pressure mechanism would be: 'Settlement surveys in the Aegean and southern Anatolia show no population displacement or abandonment in the decades preceding the destruction layers, indicating no demographic push factor existed.'"
+  ]
+}

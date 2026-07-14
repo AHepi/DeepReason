@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "616d51f454591f8739e476ee187f865b6d75a7fa90bdd7c820c4341c7c1c754f",
+      "attack": true,
+      "case": "The claimed contradiction is not substantive: the hyperarid-climate hypothesis (c4f54171b1e2) explains why Egypt survived while others collapsed, but does not claim Egypt was completely insulated from all regional disruption. The copper-production collapse hypothesis (dacf8df890d9) posits that loss of Cypriot copper harmed Egypt's military/economic stability, yet Egypt demonstrably survived (diminished). These two claims are compatible—Egypt could have been insulated from agricultural collapse by the Nile while still suffering economic/military strain from trade disruption. A genuine contradiction would require the climate hypothesis to assert Egypt was insulated from all regional effects, which it does not. The 'REFUTED IF' condition therefore tests a strawman conjunction, not a contradiction between the actual hypotheses.",
+      "counterexample": null
+    },
+    {
+      "target": "c4f54171b1e22fe11761abc4d1373cc53d2234e3b2677f53966b239b92137530",
+      "attack": true,
+      "case": "The forbidden case is too narrow to genuinely test the claim. The claim asserts a 'rapid, region-wide hyperarid climate shift' causing agricultural failures across the Eastern Mediterranean, yet the only forbidden case offered is a single speleothem record from Anatolia showing no drought. A single negative proxy from one region would not refute a region-wide hypothesis if other proxies across the covered regions showed drought—the hypothesis could survive by arguing Anatolia was a local exception. To genuinely risk refutation, the forbidden case should specify that multiple high-resolution proxies across the covered regions (Greece, Anatolia, Levant) simultaneously show no significant drought, or that the preponderance of paleoclimatic evidence contradicts a synchronous event.",
+      "counterexample": null
+    },
+    {
+      "target": "b5db134d313fcc0447764b2a13628d114e9e62ae72c5cd0ee20589ab8c1655767",
+      "attack": true,
+      "case": "The forbidden case is also too narrow: it specifies only Ugarit lacking destruction horizons or Sea Peoples artefacts. The Sea Peoples hypothesis does not require every covered site to show direct destruction—Ugarit could have collapsed from trade disruption or political destabilization caused by Sea Peoples activity elsewhere, without itself being sacked. A single site's peaceful abandonment would not refute the claim that Sea Peoples migrations and raids disrupted the broader inter-regional system. A properly risky forbidden case would require evidence that the Sea Peoples were not a coordinated phenomenon, or that destruction horizons across multiple covered sites predate or postdate the Sea Peoples' attested movements, or that inter-regional trade continued uninterrupted through the collapse period.",
+      "counterexample": null
+    }
+  ]
+}

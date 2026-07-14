@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (succ:ac7c58fb7070) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate ac7c58fb7070 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:00e8be711cab: rubric:std-hist
+- fc:cc02ac5e526c: rubric:std-hist
+- fc:71e1a964dc47: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET 7a40e40d5b75ceb000e7639583b3dbf24d551b65fefa5e52eaa8870a9ae71e53
+{"claim": "The administrative apparatus of the Late Bronze Age palace societies reached a complexity threshold that generated feedback loops of elite competition, fiscal overextension, and loss of bureaucratic cohesion.","mechanism": "Increasingly layered hierarchies amplified coordination costs, leading to rapid institutional decay once external shocks reduced surplus resources.","scope": {"covers": ["Mycenaean Greece","Hittite Anatolia"],"excludes": ["Ugarit","Levantine city‑states","Egypt"]},"forbidden": [{"case": "Inscriptions from Hattusa during the 12th c BCE demonstrate a streamlined, low‑overhead administration", "eval": "rubric:std-hist"}],"prose_notes": "A systems‑theoretic model that attributes collapse to internal network dynamics, independent of climate or external invasion."}
+commitments: skeleton-wf, kappa-hist, fc:00e8be711cab
+
+TARGET fee8511a09bf954e5e5dfbf79cffe9cd1b91cce2aa9f2d6badb0f02c391bc917
+{"claim": "Mass movements of displaced maritime communities formed autonomous seafaring coalitions that, seeking new trade routes, systematically disrupted inter‑city maritime commerce between 1200‑1150 BCE.","mechanism": "Network fragmentation reduced exchange of essential commodities (e.g., tin, oil), causing economic contraction and political destabilization in affected polities.","scope": {"covers": ["Mycenaean Greece","Ugarit","Levantine city‑states"],"excludes": ["Hittite Anatolia","Egypt"]},"forbidden": [{"case": "Contemporary Linear B tablets record uninterrupted grain imports from the Aegean during the crisis period", "eval": "rubric:std-hist"}],"prose_notes": "Focuses on commercial network disruption rather than violent raids, differentiating it from the canonical Sea Peoples narrative."}
+commitments: skeleton-wf, kappa-hist, fc:cc02ac5e526c
+
+TARGET 8a5d193d64afb25268ce253d1f789ac9349d43e42d4a48b0a9244efd7c0c02c9
+{"claim": "An abrupt shift to a colder, more variable climate around 1195‑1155 BCE caused recurrent early‑season frosts that destroyed cereal yields across the Eastern Mediterranean.","mechanism": "Climate‑induced agricultural shortfall reduced state tax revenues, precipitating elite indebtedness and forced abandonment of peripheral settlements.","scope": {"covers": ["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes": ["Egypt"]},"forbidden": [{"case": "Archaeobotanical records reveal no evidence of early‑season frost layers or sudden temperature drop in core sites", "eval": "rubric:std-hist"}],"prose_notes": "The hypothesis emphasizes a rapid climatic pivot rather than a protracted drought, distinguishing it from prevailing megadrought models."}
+commitments: skeleton-wf, kappa-hist, fc:71e1a964dc47
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

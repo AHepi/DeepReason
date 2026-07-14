@@ -1,0 +1,29 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Drought-induced crop failure caused mass migration of Sea Peoples who overwhelmed palace economies militarily but were absorbed by Egypt's Nile-irrigated surplus\", \"mechanism\": \"Climate anomaly → subsistence crisis → armed migration → differential military vulnerability based on agricultural resilience and buffer capacity\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples invasions\", \"Egyptian survival\"], \"excludes\": [\"Minoan collapse (earlier)\", \"Assyrian survival\", \"Babylonian continuity\"]}, \"forbidden\": [{\"case\": \"No climate anomaly detected in proxy records for 1200-1150 BC Eastern Mediterranean\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Sea Peoples attested as established mercenary forces within palace economies decades before collapse, not external migrants\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian agricultural system also collapsed; survival due solely to military factors\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Integrates climate and migration narratives but centers differential absorption capacity; Egypt's Nile irrigation created surplus buffer that Anatolian rain-fed and Greek mixed economies lacked\"}",
+      "refs": [
+        {"role": "dependence", "target": "a1e90b6f674c7b3d87daa70e668cdb5b264851ebd44019b877791883a452d6c3"}
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"Egypt survived because its ideological-theological structure allowed ritual delegation of military authority to generals without fracturing divine kingship, whereas Hittite and Mycenaean charismatic authority collapsed when kings personally failed in battle\", \"mechanism\": \"Variegated legitimation structures → differential resilience of central authority to military defeat → cascading administrative dissolution vs. hierarchical reconstitution\", \"scope\": {\"covers\": [\"Egyptian survival\", \"Hittite collapse\", \"Mycenaean collapse\", \"comparative political theology\"], \"excludes\": [\"Ugarit (merchant oligarchy, not kingship)\", \"Levantine city-states (heterogeneous political forms)\", \"material causes of military defeat\"]}, \"forbidden\": [{\"case\": \"Egyptian kingship also fragmented with Libyan and Nubian challengers establishing rival dynasties during same period\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Hittite kingship survived relocation to Syro-Hittite states with identical ideological structure intact\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Mycenaean wanax authority already weakened by 1300 BC with no recovery possible\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Directly challenges materialist explanations by centering political-theological variation; treats Egypt's 'diminished' survival as genuine institutional continuity requiring explanation; connects to skeptic school emphasis on counterexamples to monocausal materialism\"}",
+      "refs": [
+        {"role": "dependence", "target": "263738c8259bc4148e6f6816368a395fe17891165db7892347d95082bf955461"},
+        {"role": "dependence", "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"}
+      ],
+      "typicality": 0.45
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an emergent property of synchronized audit cycles across palace economies using similar scribal accounting technologies, creating temporal correlation of fiscal stress without shared external shock\", \"mechanism\": \"Isomorphic administrative systems → correlated internal contradictions (debt accumulation, patronage inflation, tax-base erosion) → simultaneous but causally independent state failures → opportunistic exploitation by peripheral actors (Sea Peoples) misread as unified cause\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"temporal clustering illusion\"], \"excludes\": [\"Egypt (different fiscal-military integration)\", \"genuine external shocks\", \"climate determinism\"]}, \"forbidden\": [{\"case\": \"Palace economies showed asynchronous collapse with 50+ year stagger rather than near-simultaneity\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B and cuneiform administrative systems substantively differed in fiscal forecasting and debt management\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Sea Peoples invasions demonstrably preceded and triggered palace collapses rather than postdating them\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Radically deflationary account: denies unified cause for 'collapse' itself while accepting synchronous timing as artifact of institutional isomorphism; treats Egypt as different regime type (temple-military rather than palace-redistributive); inspired by skeptic stance demanding we question whether simultaneous collapse requires single cause\"}",
+      "refs": [
+        {"role": "dependence", "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"},
+        {"role": "dependence", "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"}
+      ],
+      "typicality": 0.18
+    }
+  ]
+}
+```

@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean Greece, Hittite Anatolia, Ugarit and Levantine city‑states.\", \"mechanism\": \"environmental stress (climate‑induced water scarcity)\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city‑states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Pollen cores from the Levant and Anatolia show no significant decline in moisture levels during 1200–1150 BCE\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Chronological narrative links the onset of aridity with documented famines and decline in state capacities. Scholarly register, cites recent paleoclimatic data.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "{\"claim\": \"Increased pressure from displaced populations across the eastern Mediterranean generated Sea Peoples raiding fleets that systematically attacked Mycenaean, Hittite, Ugaritic and Levantine coastal centers, precipitating their collapse.\", \"mechanism\": \"external demographic pressure leading to maritime raider incursions\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city‑states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological layers at major coastal sites lack evidence of widespread destruction or foreign weaponry dating to 1200–1150 BCE\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Analytical matrix compares timing, intensity and geographic spread of raids across the four societies.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.27
+    },
+    {
+      "content": "{\"claim\": \"Ruling elites pursued expansive building programs, military campaigns and tribute extraction that overstretched fiscal resources, causing systemic economic failure across Mycenaean, Hittite, Ugaritic and Levantine polities.\", \"mechanism\": \"socio‑economic resource depletion due to elite over‑expansion\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city‑states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Contemporary accounts and inventories indicate sustained surplus production and balanced budgets after 1150 BCE\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Concise presentation uses a network‑flow diagram to illustrate resource outflows from elite centers to peripheral obligations.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        }
+      ],
+      "typicality": 0.62
+    }
+  ]
+}

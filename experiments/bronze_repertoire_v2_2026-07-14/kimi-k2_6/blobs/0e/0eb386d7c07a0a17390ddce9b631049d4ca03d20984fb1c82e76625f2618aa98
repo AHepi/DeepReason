@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target claims Egypt survived without 'fracturing divine kingship,' yet its own forbidden case explicitly states that 'Egyptian kingship also fragmented with Libyan and Nubian challengers establishing rival dynasties during same period.' This is a direct contradiction: the mechanism asserts differential resilience prevented fragmentation of divine kingship in Egypt, but the forbidden case documents precisely that fragmentation occurred. The target fails to explain how rival dynasties claiming kingship do not constitute fracturing, thereby violating the standard's requirement that a mechanism must be consistent with concrete observations. The forbidden case is a datable pattern (Libyan 22nd Dynasty, Nubian 25th Dynasty) that the mechanism cannot accommodate without self-contradiction.",
+  "counterexample": [
+    "Libyan 22nd Dynasty under Shoshenq I (c. 943 BC) established rival kingship in the Delta while a Theban line persisted",
+    "Nubian 25th Dynasty under Piye (c. 744 BC) conquered Egypt and claimed pharaonic legitimacy, creating competing divine kingships"
+  ]
+}

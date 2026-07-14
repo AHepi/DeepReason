@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—network contagion via multiplex ties exceeding Dunbar-limited trust thresholds—is a generalized sociological abstraction, not a specific historical institution or process. The claim that Egypt's 'riverine autarky' provided 'topological isolation' is directly falsifiable by the forbidden case 'Egyptian records showing dependence on Anatolian or Aegean grain imports during 1200-1150 BC.' If such records exist, they would demonstrate that Egypt was not isolated but integrated into the very maritime network the mechanism claims it was insulated from, thereby undermining the causal distinction between systemic fragility (collapsing nodes) and autarkic resilience (Egypt). The target thus fails the standard's requirement to name a specific causal mechanism because its central explanatory variable—topological isolation—is an empirical claim about trade dependence disguised as a network-theoretic property, and the forbidden case is precisely the observation that would refute it.",
+  "counterexample": [
+    "A dated Egyptian administrative papyrus from 1190 BC recording the receipt of 5,000 measures of Anatolian grain as famine relief, demonstrating dependence on the same maritime network whose collapse the mechanism claims Egypt was topologically isolated from."
+  ]
+}

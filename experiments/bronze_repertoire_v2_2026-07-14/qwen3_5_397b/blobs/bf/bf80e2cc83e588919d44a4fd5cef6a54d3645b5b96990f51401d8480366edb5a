@@ -1,0 +1,35 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+## problem-context
+PROBLEM CONTEXT (conn:ac8a8325664e) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated ac8a8325664e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@e0bc87a85067: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET A1
+contradicts: ac8a8325664e posits that the collapse was triggered by the democratization of iron-working making the palace's bronze monopoly obsolete, whereas 83eb7701, b6371e, and 7edd1384 all posit the collapse was triggered by a systemic failure of the international bronze supply chain. The former requires bronze to be the dominant, valued material whose control is suddenly undermined by a superior alternative (iron), while the latter requires bronze to remain the dominant, valued material whose sudden scarcity causes systemic collapse. These mechanisms are mutually exclusive: iron cannot simultaneously be a superior, adopted substitute and an irrelevant factor in a crisis driven by bronze scarcity. Refuted if evidence shows the iron transition and the tin-supply disruption were not contemporaneous or were causally independent.
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

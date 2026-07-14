@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target claims that a prolonged drought caused simultaneous harvest failures, leading to famine that eroded elite legitimacy and triggered internal revolts. The forbidden case states that archaeological evidence shows a significant increase in grain storage capacity and diversification of food sources in the decades immediately preceding the destruction. This directly contradicts the mechanism: a regime that demonstrably expanded its storage infrastructure and diversified its food base in the years just before the collapse was not a brittle, over-specialized system passively awaiting a single-point crop failure. The observed behavior is evidence of adaptive capacity and risk mitigation, which the target's mechanism explicitly rules out. The target therefore fails the std-hist requirement that a forbidden case be a concrete observation that could realistically have obtained but did not; here, the observation did obtain, and the mechanism cannot accommodate it without ad-hoc modification.",
+  "counterexample": null
+}

@@ -1,0 +1,11 @@
+{
+  "forbidden": false,
+  "id": "chatcmpl-6b0c0e0e-2c0a-4e0a-8c0a-0e0c0a0e0c0a",
+  "model": "gpt-4o",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 0,
+    "prompt_tokens": 0,
+    "total_tokens": 0
+  }
+}

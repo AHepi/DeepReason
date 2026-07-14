@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+null
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "variator.direct.v1", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {"edits": [{"content": ""}]}}

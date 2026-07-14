@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's mechanism of 'strategic abandonment' and 'active resistance' cannot explain the forbidden case of mass graves indicating rapid, unprepared violent death of non-combatants within citadels prior to burning.
+The standard requires a mechanism that accounts for concrete observations. The forbidden case describes non-combatants dying violently and unprepared inside citadels before the burning. This directly contradicts the target's mechanism of a coordinated, deliberate strategy by subordinate groups to dismantle centers and disperse. Unprepared mass death of non-combatants inside the very structures being burned is inconsistent with a planned, liberatory de-urbanization; it implies a sudden, catastrophic attack, not a strategic withdrawal.
+cites: {"claim": "The collapse was not a failure of the system but a successful, coordinated strategy of de-urbanization by subordinate kinship groups who deliberately dismantled palatial centers to escape tribute extraction, utilizing the mobility of the 'Sea Peoples' as a catalyst for a region-wide shift to egalitarian village life.", "mechanism": "Active resistance and strategic abandonment: marginalized populations exploited the distraction of inter-state rivalry to burn administrative records and disperse, preferring subsistence autonomy over palatial protection.", "scope": {"covers": ["Mycenaean Greece", "Levantine city-states", "Hittite periphery"], "excludes": ["Egyptian core", "Assyrian rising power"]}, "forbidden": [{"case": "Mass graves indicating rapid, unprepared violent death of non-combatant populations within the citadels prior to burning", "eval": "rubric:std-hist"}], "prose_notes": "Inverts the standard 'catastrophe' narrative (counterexample first stance) by framing the destruction as a liberatory act by the 6e2f... insurgency actors, challenging the notion of 'collapse' as purely negative."}
+
+TARGET:
+{"claim": "The collapse was not a failure of the system but a successful, coordinated strategy of de-urbanization by subordinate kinship groups who deliberately dismantled palatial centers to escape tribute extraction, utilizing the mobility of the 'Sea Peoples' as a catalyst for a region-wide shift to egalitarian village life.", "mechanism": "Active resistance and strategic abandonment: marginalized populations exploited the distraction of inter-state rivalry to burn administrative records and disperse, preferring subsistence autonomy over palatial protection.", "scope": {"covers": ["Mycenaean Greece", "Levantine city-states", "Hittite periphery"], "excludes": ["Egyptian core", "Assyrian rising power"]}, "forbidden": [{"case": "Mass graves indicating rapid, unprepared violent death of non-combatant populations within the citadels prior to burning", "eval": "rubric:std-hist"}], "prose_notes": "Inverts the standard 'catastrophe' narrative (counterexample first stance) by framing the destruction as a liberatory act by the 6e2f... insurgency actors, challenging the notion of 'collapse' as purely negative."}

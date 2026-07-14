@@ -1,0 +1,33 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was a synchronous institutional failure caused by the breakdown of the 'gift-exchange' diplomatic network that stabilized the Late Bronze Age, triggered by a single-point failure: the destruction of the Hittite state by a massive earthquake swarm, which severed the trade and diplomatic arteries.\", \"mechanism\": \"A seismic catastrophe in Anatolia (c. 1200 BC) physically destroyed the Hittite administrative and military core. This removed the central counterparty in the inter-palatial gift-exchange and trade system. Without Hittite demand and protection, the luxury goods and metal trade collapsed, starving the Mycenaean and Levantine palace economies of the prestige goods needed to maintain elite legitimacy and the bronze needed for military defense, leading to rapid internal revolt and abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows the Hittite capital Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The Mycenaean palaces show evidence of destruction by fire and violence, but their administrative records (Linear B tablets) indicate they were still receiving shipments of bronze and luxury goods right up until their destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account explains the simultaneity and the specific survival of Egypt, which was less dependent on the Anatolian-controlled trade routes and had a more self-sufficient, Nile-based agricultural system. It is a typical 'domino effect' explanation but pins the trigger on a natural disaster rather than human agency.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "5a8f4c9dee938d8322ad0cb6b173c297ad0591ae376c0348fa6c8b0581668cca"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a synchronous pandemic of a highly virulent, hemorrhagic fever (akin to a prehistoric Ebola) that spread along the very trade routes that connected the palaces, causing acute depopulation and social breakdown, while Egypt's relative geographic isolation and quarantine practices allowed it to survive.\", \"mechanism\": \"A zoonotic pathogen emerged in a densely populated urban center (likely Ugarit or a Cypriot port) and was rapidly disseminated by the intensive maritime and overland trade networks of the Late Bronze Age. The disease had a high mortality rate, killing a critical mass of the specialized administrative, artisan, and military classes. The sudden loss of institutional knowledge and manpower made the complex palace economies non-viable, leading to abandonment and a 'systems collapse' without the need for widespread warfare.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Mass graves from the period show a normal demographic profile with clear evidence of death by violence (weapon trauma, unburied bodies in destruction layers) rather than disease.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records from the reign of Ramesses III describe repelling waves of armed 'Sea Peoples' migrating with their families and livestock, indicating a military conflict, not a pandemic.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is an atypical, high-risk conjecture that accounts for the 'invisible enemy' aspect of the collapse and the lack of a single invading army. It explains the 'Sea Peoples' as desperate, uninfected refugees fleeing the disease-ridden core, not as conquerors. Egypt's survival is attributed to its quarantine measures and the Nile's natural barrier.\"}",
+      "typicality": 0.25,
+      "refs": []
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a synchronous institutional failure caused by a 'perfect storm' of climate-induced famine and a systemic breakdown in the bronze supply chain, which created a lethal feedback loop: famine drove desperate populations to raid for food, which destroyed the agricultural base and trade networks needed to import grain and tin, leading to more famine and the final military collapse of the weakened palaces.\", \"mechanism\": \"A prolonged drought (evidenced by paleoclimatic data) caused widespread crop failure across the Eastern Mediterranean. The interconnected palaces, operating on razor-thin agricultural surpluses, initially tried to use the diplomatic trade network to import grain. However, the simultaneous failure of the tin trade from Afghanistan (due to the same climate stress disrupting overland routes) meant they could not produce bronze weapons to defend their granaries or equip mercenaries. This created a 'starvation-raiding' cycle: hungry populations attacked storage centers, destroying the very administrative and agricultural infrastructure needed for recovery, leading to a rapid, domino-like collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that the destruction layers in the Mycenaean palaces contain large, unplundered stores of grain and olive oil, indicating the palaces fell suddenly with full storerooms, not after a prolonged famine.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The Hittites and Ugarit were destroyed before the major drought period, and the tin trade routes through Assyria remained operational and even flourished during the collapse period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a typical multi-causal 'systems collapse' explanation that synthesizes climate and economic factors. It explains the simultaneity through a common climatic shock and the specific vulnerability of the bronze-dependent military system. Egypt's survival is explained by its non-dependence on imported grain and tin, and the Nile's predictable flood providing a buffer against drought.\"}",
+      "typicality": 0.90,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "278429"
+        },
+        {
+          "role": "dependence",
+          "target": "81ae0c60edbe728fe7570842680582d7a7bf9e678dd78c4d5f3c9db1596b8337"
+        }
+      ]
+    }
+  ]
+}

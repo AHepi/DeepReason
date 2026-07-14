@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "a440e9c75cc3bebc97f382106b94ab768f1ecdd1f660549ce689261a080073c4",
+      "attack": true,
+      "case": "The claim attributes collapse to a cooler, wetter climate causing flood-induced soil erosion and reduced yields, but the forbidden case only guards against evidence of aridity. The account remains vulnerable to a different refutation: if high-resolution paleoclimatic proxies from the affected regions show that the 1190–1150 BCE wet phase was not anomalous relative to earlier wet periods that the same agricultural systems survived without collapse, then the mechanism loses its causal force. The target's single forbidden case fails to exclude this obvious alternative falsification, leaving the account under-specified and empirically fragile.",
+      "counterexample": null
+    },
+    {
+      "target": "b99ba6a6418c0b1c1d6a8a7e51ecd6a7e9e1607032a61e256898f85fa510dbd0",
+      "attack": true,
+      "case": "The claim posits a systematic naval blockade by 'emergent coastal alliances' that choked trade and destabilised palace economies, yet the forbidden case only addresses the absence of references to a maritime embargo in Egyptian and Hittite annals. The account is critically undermined by a different evidentiary gap: if the archaeological record of the affected palace centres shows no significant decline in imported prestige goods or non-local raw materials in the destruction layers immediately preceding their abandonment, then the asserted resource-inflow choke point did not occur. The target's forbidden case does not cover this direct material test of the mechanism, making the account inadequately constrained.",
+      "counterexample": null
+    },
+    {
+      "target": "b9fc574b7c01da8c243c1bc039f5c9f504cea45af0b9741a49027c2ccdedd393",
+      "attack": true,
+      "case": "The claim asserts that tin supply from Central Asian networks terminated abruptly after 1180 BCE, causing a bronze shortage that crippled elite armament production. The forbidden case only guards against isotopic evidence of continued Anatolian tin sourcing post-1150 BCE. The account is fatally exposed to a different refutation: if destruction layers at the collapsed palace centres contain substantial hoards of bronze weaponry and intact bronze objects abandoned in situ, this demonstrates that bronze scarcity was not the proximate cause of collapse—elites possessed bronze but could not or did not use it. The target's single forbidden case fails to exclude this direct archaeological falsification, leaving the mechanism empirically unguarded.",
+      "counterexample": null
+    }
+  ]
+}

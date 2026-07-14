@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "7ff775cbf2402d79150f5f685fd3a53e38e7c533c91ded06af73e7e968cdc372",
+      "attack": true,
+      "case": "The claim asserts Sea Peoples were 'absorbed by Egypt's Nile-irrigated surplus,' but the scope explicitly excludes 'Egyptian agricultural system also collapsed; survival due solely to military factors' as a forbidden case. This forbidden case is misaligned with the claim's own logic: if the mechanism is 'differential military vulnerability based on agricultural resilience,' then the forbidden case should test whether Egypt's agricultural resilience actually held, not whether survival was 'solely' military. The target's forbidden case sets a strawman threshold ('solely military') that would not refute the account even if Egypt's agriculture did suffer significant disruption alongside military success, because the account could retreat to a mixed explanation. The target thus fails to specify a genuinely risky forbidden observation that would discriminate its agricultural-absorption thesis from a military-survival thesis.",
+      "counterexample": null
+    },
+    {
+      "target": "351a1f9c777acd7b14905cc879ce09c13b95ce9545956dae5d0dfa3ec5941032",
+      "attack": true,
+      "case": "The target excludes Ugarit and Levantine city-states from its scope on the grounds that they had 'heterogeneous political forms' rather than kingship, yet the original problem explicitly asks why these very civilizations collapsed. An account that claims to explain the simultaneous collapse of 'Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states' but excludes Ugarit and the Levantine city-states from its explanatory scope fails to address the problem as stated. The scope restriction is an evasion, not a principled delimitation, because the problem requires an account that covers all the named civilizations, not just those with kingship structures amenable to the proposed mechanism.",
+      "counterexample": null
+    },
+    {
+      "target": "5f48ac70fe31700037c1147301979c82bf69fea54efb93d7dae80409489258a9",
+      "attack": true,
+      "case": "The claim treats the Sea Peoples as 'opportunistic exploitation by peripheral actors' that postdated palace collapses, and forbids the case that 'Sea Peoples invasions demonstrably preceded and triggered palace collapses.' However, the target's own mechanism requires that the collapses were 'causally independent' and merely temporally correlated by isomorphic audit cycles. The forbidden case is too weak: it only rules out Sea Peoples preceding and triggering collapses, but does not rule out Sea Peoples being a contributing factor operating concurrently with internal fiscal stress. If Sea Peoples raids began while palace economies were already stressed but not yet collapsed, and those raids accelerated the collapses, the account would be refuted—yet this scenario is not forbidden. The target's forbidden cases fail to protect against the most historically plausible hybrid scenario where external pressure and internal fragility interacted causally, which would undermine the claim of 'causally independent state failures.'",
+      "counterexample": null
+    }
+  ]
+}

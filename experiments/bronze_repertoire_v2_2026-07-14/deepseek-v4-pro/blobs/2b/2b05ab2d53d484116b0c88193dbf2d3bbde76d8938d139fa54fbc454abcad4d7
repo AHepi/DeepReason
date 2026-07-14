@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism relies on a specific factual claim—that Cypriot copper production declined due to resource exhaustion and deforestation before or around 1200 BC—but the first forbidden case directly contradicts this by stating that archaeometallurgical surveys show copper production peaked in the 12th century BC and forests remained extensive. If that forbidden case is a concrete, datable observation that could realistically have obtained, the target's causal mechanism is empirically falsified at its foundation, violating the standard's requirement that a mechanism be grounded in actual events rather than counterfactual premises.",
+  "counterexample": [
+    "Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive."
+  ]
+}

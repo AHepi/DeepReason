@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's 'forbidden' case is a concrete, datable observation that would falsify the claim, but the target fails to provide a second required forbidden case. The standard std-hist demands that a historical-mechanism account 'state forbidden cases' (plural) — i.e., at least two concrete observations that could realistically have obtained. The target supplies only one forbidden case, thereby violating the explicit requirement for multiple forbidden cases.
+
+TARGET:
+{"claim": "A sudden interruption of the Mediterranean thermohaline circulation caused by a massive Black Sea flood around 1220 BC led to a rapid regional aridification, starving the agrarian bases of Mycenaean, Hittite, Ugaritic and Levantine societies.", "mechanism": "Prolonged drought triggered by loss of warm Atlantic inflow, reducing river discharge and precipitating a cascade of settlement abandonment across the Eastern Mediterranean.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution speleothem and lake‑core records from the region show no significant drop in precipitation during 1200‑1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "The hypothesis draws on recent marine‑sediment reconstructions of Black Sea outburst floods and models of their impact on the Mediterranean overturning circulation, offering a climate‑driven collapse that does not rely on the hyperarid narrative common in the literature."}

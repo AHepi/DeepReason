@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:ac8a8325664e
+connect isolated ac8a8325664e to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- ac8a8325664e9737abca573620730102c4e80b0d47430299db3930cb107adee3: {"claim": "The collapse was triggered by a technological paradigm shift where the democratization of iron-working rendered the bronze-based monopoly of the palaces obsolete.", "mechanism": "The sudden
+- 83eb7701d283a11811abef542b20ac536c829d22f1944331011f27be5eaaa268: {"claim": "The collapse was triggered by a cascading failure of the international bronze supply chain, where the loss of a single critical tin source caused a systemic economic depression that delegit
+- b6371e69c7e3bca18f0c44b611bb451c7437ed4851972ce830146ff329a22aad: {"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source (e.g., from Afghanistan or Central
+- 7edd1384f4826b9e5dec2bb44c053711cf22f6a5a8e35b39ed3627acaf0fe917: {"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source triggered a bronze shortage that p
+- 2fc5700a688443f6c8a8cb33ae6652ac66897b25b9ca4036381643be7c8f9caf: {"claim": "The collapse was an endogenous political revolution where subject populations, exhausted by centuries of extractive tribute obligations and corvée labor required to maintain palatial grande
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

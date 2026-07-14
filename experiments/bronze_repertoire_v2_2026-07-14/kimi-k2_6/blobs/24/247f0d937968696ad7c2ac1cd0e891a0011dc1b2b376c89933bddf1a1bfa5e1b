@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims Hittite collapse resulted from a legitimation structure that could not survive the king's personal failure in battle, yet the forbidden case explicitly states that Hittite kingship survived relocation to Syro-Hittite states with identical ideological structure intact. This is a direct counterexample to the mechanism: if the ideological structure was identical and kingship persisted in those successor states, then the claimed causal link between that specific structure and collapse is falsified. The target's mechanism cannot explain why the 'identical ideological structure' produced collapse in Anatolia but survival in Syria, which violates the standard's requirement that forbidden cases be concrete observations that could realistically have obtained and that the mechanism must account for differential outcomes.",
+  "counterexample": [
+    "Hittite kingship survived in Syro-Hittite states (e.g., Carchemish, Malatya) with the same royal titulary, dynastic continuity, and ideological claims to divine favor, yet the target's mechanism predicts collapse wherever that structure faced military defeat of the king."
+  ]
+}

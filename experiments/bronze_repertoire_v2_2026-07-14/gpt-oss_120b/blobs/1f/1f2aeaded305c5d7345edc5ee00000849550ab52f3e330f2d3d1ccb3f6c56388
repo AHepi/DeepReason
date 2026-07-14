@@ -1,0 +1,39 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM succ:ac7c58fb7070
+supersede refuted candidate ac7c58fb7070 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.25): demand a causal mechanism
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f: {"claim": "Increased pressure from displaced populations across the eastern Mediterranean generated Sea Peoples raiding fleets that systematically attacked Myce
+- 58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440: {"claim": "A prolonged drought from c.1220–1160 BCE led to successive crop failures in the eastern Mediterranean, undermining the agricultural base of Mycenaean
+- bf338f675839fc938175d6842fd725cd9fe540cf412579b9a1cbd63d44ad407e: {"claim":"An overproduction of elite warrior class coupled with ideological erosion eroded legitimacy, causing systemic sociopolitical collapse.","mechanism":"S
+- abd00968ede0dff11d75c81bf4e81fe25946d6f6a5cb364b37f948f2bd5629c7: {"claim":"Prolonged megadrought between 1220‑1160 BCE triggered agricultural collapse across the Eastern Mediterranean.","mechanism":"Ecological‑economic resour
+- 39f756df083202fe336d5a5e42fbf2de48348228cf0c2d99d4c7d35179b0af86: {"claim":"Mass migrations of displaced coastal populations coalesced into the Sea Peoples, whose coordinated naval raids destabilized the political order of the
+- be8b603ecb572b2a54eb0bdb9cffa6a28ddb09103f350067787789c0938968c4: depends on: The climatic drought (58e798a0) is a necessary precondition for the economic collapse of copper production (dacf8df8) to trigger systemic failure, b
+- a440e9c75cc3bebc97f382106b94ab768f1ecdd1f660549ce689261a080073c4: {"claim":"A rapid shift to cooler, wetter climate around 1190‑1150 BCE caused agricultural system collapse in the Eastern Mediterranean.","mechanism":"Hydroclim
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: Angle: abrupt climate shift; Mechanism: prolonged drought reducing agricultural surplus; Structure: chronological cascade of settlement abandonment; Register: academic synthesis
+  spec 2: Angle: influx of seafaring groups; Mechanism: coordinated migration and armed incursions disrupting political hierarchies; Structure: network disruption matrix comparing affected polities; Register: comparative case study
+  spec 3: Angle: internal systemic complexity overload; Mechanism: sociopolitical network destabilization through elite competition and administrative fatigue; Structure: feedback‑loop model of institutional decay; Register: theoretical systems analysis
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

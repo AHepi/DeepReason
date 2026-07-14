@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism relies on a specific causal chain—drought reducing yields, centralized redistribution failing under multi-year shortfalls, and simultaneous grain-import collapse triggering military destabilization—but the first forbidden case directly contradicts this mechanism. If palace archives at Ugarit show abundant grain reserves and normal price stability until the destruction horizon, then the claimed failure of centralized storage and redistribution at a key node in the network is empirically false. This is not a minor exception; Ugarit is explicitly listed in the scope as a covered case, and its alleged grain-import role (from Egypt) is central to the cascade. A concrete observation of stable reserves and prices at the point of collapse would mean the drought-induced redistribution failure did not occur there, severing the causal link the mechanism asserts between climate shock and systemic collapse for that polity. The mechanism therefore fails the standard's requirement to state forbidden cases that are concrete observations which could realistically have obtained, because the target's own forbidden case describes exactly such an observation and the mechanism cannot accommodate it without contradiction.",
+  "counterexample": [
+    "Palace archives show abundant grain reserves and normal price stability at Ugarit until its destruction horizon"
+  ]
+}

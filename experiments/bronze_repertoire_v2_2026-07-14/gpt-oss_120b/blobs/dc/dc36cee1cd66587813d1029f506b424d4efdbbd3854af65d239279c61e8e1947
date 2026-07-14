@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "Mass migrations and raids by the Sea Peoples disrupted trade, political stability, and military defense across the Eastern Mediterranean, precipitating collapse.", "mechanism": "Coordinated external pressure from maritime raiders overwhelmed local militaries and broke inter‑regional trade networks, leading to internal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt (which repelled the Sea Peoples)"]}, "forbidden": [{"case": "Archaeological layers at Ugarit lacking any destruction horizon or Sea Peoples artefacts dated to 1200–1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "This is the classic ‘Sea Peoples’ hypothesis favored by many scholars; the counterexample of sites with no destruction evidence challenges its universality."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target's mechanism—'coordinated external pressure from maritime raiders overwhelmed local militaries and broke inter‑regional trade networks'—is stated at a high level of abstraction and fails to specify the concrete institutional, economic, or military process by which 'overwhelming' translated into 'internal collapse.' It does not name a specific causal mechanism such as a particular tax-base erosion, a breakdown in chariot-aristocracy recruitment, or a palace-redistribution failure, instead offering a generalized sequence of pressure and breakage. Under the standard, naming a specific institution, incentive, or process is required; a vague 'overwhelmed militaries and broke trade' does not satisfy this clause.
+
+THE DEFENCE:
+The target's mechanism is not impermissibly abstract; it identifies a concrete causal chain: maritime raiders applied coordinated military pressure that directly overwhelmed local armed forces, and by severing inter-regional trade networks they deprived palace-centered economies of the imported raw materials (especially copper and tin for bronze) and luxury goods essential to maintaining elite authority, military equipment, and administrative redistribution. The phrase 'overwhelmed local militaries' specifies the military process (defeat of defensive forces), and 'broke inter-regional trade networks' specifies the economic process (collapse of the supply chains on which palatial systems depended), which together constitute the specific institutional failure—the loss of the material basis for the palace economy and its military apparatus—that led to internal collapse. The standard does not require naming a particular tax or recruitment system; the mechanism as stated already identifies the concrete causal pathway from external military and economic disruption to systemic internal failure.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

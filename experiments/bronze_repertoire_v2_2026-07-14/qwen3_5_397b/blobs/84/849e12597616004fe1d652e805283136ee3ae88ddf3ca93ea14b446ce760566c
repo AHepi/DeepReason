@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's single forbidden case is not a concrete, realistically obtainable observation. It is a vague, theory-laden construct: 'Archaeological evidence of abundant tin stockpiles in destroyed palace layers dated post-1200 BC.' This fails the standard's requirement for a specific, datable pattern or record. The target does not specify which palace, what constitutes 'abundant,' or cite any actual excavation that could have produced such a finding. A valid forbidden case would be, for example, 'Excavation of the Palace of Nestor at Pylos reveals undisturbed storerooms containing over 100 kg of tin ingots in a destruction layer securely dated by pottery to LH IIIC early (c. 1190 BC).' The provided case is an abstract placeholder, not a concrete observation that could realistically have been found in the archaeological record.",
+  "counterexample": [
+    "Excavation of the Palace of Nestor at Pylos reveals undisturbed storerooms containing over 100 kg of tin ingots in a destruction layer securely dated by pottery to LH IIIC early (c. 1190 BC)."
+  ]
+}

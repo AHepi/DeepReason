@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claim posits a 'rapid, region-wide hyperarid climate shift' as the causal mechanism for collapse across the Eastern Mediterranean, explicitly including Anatolia (the Hittites) in its scope. The forbidden case presents a concrete, datable paleo-hydrological observation from Anatolia (speleothem data) showing 'no significant drought at 1200 BC'. This directly contradicts the claim's necessary empirical implication that a significant drought signal must be present in Anatolia. By failing to accommodate this specific, realistic counter-observation, the claim violates the standard's requirement that a historical-mechanism account must be consistent with concrete forbidden cases.
+
+TARGET:
+{"claim": "A rapid, region-wide hyperarid climate shift around 1200 BC caused severe agricultural failures in the Eastern Mediterranean, while Egypt's reliance on the Nile flood insulated it.", "mechanism": "Sharp decrease in precipitation leading to drought, crop failure, population stress, and eventual societal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleo‑hydrological data from speleothems in Anatolia showing no significant drought at 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Climate records from the Mediterranean are mixed; a clear, simultaneous drought would strongly support this model, but many high‑resolution proxies suggest only modest variability."}

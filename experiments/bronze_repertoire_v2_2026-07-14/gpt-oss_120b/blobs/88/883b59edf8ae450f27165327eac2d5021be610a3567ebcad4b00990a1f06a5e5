@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's forbidden case is ill‑formed under the std-hist standard because it does not state a concrete observation that could realistically have obtained. The case merely describes a continuation of a pre‑existing sourcing pattern ('isotopic analyses … continue to show tin sourced from Anatolian mines post‑1150 BCE'), which is fully compatible with the target's own claim about Central Asian supply collapse. Anatolian tin sourcing persisting after 1150 BCE does not contradict a Central Asian network termination, because Anatolia is not Central Asia. The forbidden case therefore fails to specify a datable pattern or record that would actually falsify the mechanism, violating clause (2) of the standard.
+
+TARGET:
+{"claim":"The abrupt termination of tin supply from Central Asian networks after 1180 BCE precipitated a bronze shortage that crippled elite armament production.","mechanism":"Supply‑chain collapse of tin leading to weapon scarcity, eroding palace military power and administrative cohesion.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"If isotopic analyses of Late Bronze Age bronze artefacts continue to show tin sourced from Anatolian mines post‑1150 BCE","eval":"rubric:std-hist"}],"prose_notes":"Quantitative modelling of commodity flow demonstrates a critical threshold where tin deficit translates into rapid sociopolitical decay, an angle less explored in existing literature."}

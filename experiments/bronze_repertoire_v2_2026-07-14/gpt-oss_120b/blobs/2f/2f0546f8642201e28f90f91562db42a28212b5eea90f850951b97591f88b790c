@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's mechanism of 'socioeconomic resource depletion via monumental construction and elite gift-exchange' is directly falsified by the forbidden case. If the mechanism were genuinely operating to exhaust fiscal reserves and undermine central authority, we would expect to observe fiscal shortfalls in the final decade before collapse. The forbidden case explicitly states that 'extant records reveal continued surplus revenues and no budget shortfalls' during this critical period. This concrete, datable observation contradicts the mechanism's necessary empirical footprint, meaning the mechanism fails the standard's requirement that a forbidden case be a realistic observation that would falsify the claim—yet here the forbidden case is precisely what the historical record shows, invalidating the mechanism's explanatory power for the collapse.
+
+TARGET:
+{"claim": "Palace elites pursued an unsustainable program of monumental construction and elite gift‑exchange, exhausting fiscal reserves and undermining central authority.", "mechanism": "socioeconomic resource depletion via elite over‑expansion", "scope": {"covers": ["Mycenaean palace centers", "Hittite royal administration", "Ugarit mercantile elite"], "excludes": ["Rural peasant economies", "Egyptian New Kingdom bureaucracy"]}, "forbidden": [{"case": "Extant records reveal continued surplus revenues and no budget shortfalls in the final decade before collapse", "eval": "rubric:std-hist"}], "prose_notes": "Network‑flow diagram illustrates resource extraction, redistribution, and the eventual breakdown of the elite‑state feedback loop."}

@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{"attack":true,"cited_input_aliases":["std-hist"],"claim":"The target's mechanism relies on an unobservable, aggregated 'earthquake storm' rather than a specific, datable causal process tied to each named site.","counterexample":["Pylos","Hattusa"],"grounds":"The standard requires naming a specific causal mechanism, not a mood or inevitability. The target's 'earthquake storm' is a generalized climatic/tectonic narrative that lacks a concrete, site-specific institution or process. The forbidden case explicitly demands archaeological layers at Pylos or Hattusa showing no seismic damage prior to destruction by fire, yet the target provides no dated seismic event or specific institutional breakdown at these sites, violating the requirement for concrete, datable observations.","target_alias":"A1"}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "argumentative_critic.compact.v1", "error": "unknown local alias 'std-hist'", "path": "", "repair_scope": "", "skeleton": {"attack": false, "target_alias": "A1"}}

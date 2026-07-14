@@ -1,0 +1,16 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:c28f7164035b
+connect isolated c28f7164035b to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- c28f7164035b9dfa2dc6450d13b0da256745deca11feee65bb5caa163b8009b6: {"pairwise": {"decisive_point": "Egypt survived because its ideological-theological structure allowed ritual delegation of military authority to generals without fracturing divine kingship, whereas Hi
+- 351a1f9c777acd7b14905cc879ce09c13b95ce9545956dae5d0dfa3ec5941032: {"claim": "Egypt survived because its ideological-theological structure allowed ritual delegation of military authority to generals without fracturing divine kingship, whereas Hittite and Mycenaean ch
+- 3544632a92cf7a50db302d9eb58b5864f9a4985d45faf911b478bcfe0de5f651: {"pairwise": {"decisive_point": "Egypt survived because its military organization (archer-based, riverine, temple-subsidized) was less chariot-aristocracy dependent and could absorb iron transition gr
+- 33b607e2ce02c00ba7631524ea3907b9830d39d465d3c7c3a40742bee07d1c45: The military resilience of Egypt (3544632a92cf) is a specific instance of the general mechanism in 263738c8259b: a state's survival during the Late Bronze Age collapse depended on whether its administ
+- 263738c8259bc4148e6f6816368a395fe17891165db7892347d95082bf955461: {"claim": "Complexity mismatch between palace administrative capacity and accelerating military-technological change produced recursive legitimation crises", "mechanism": "Ironworking diffusion from A
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

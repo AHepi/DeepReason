@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "bcbb521e047ea78a268601db3c09ebe4e7e692beb6793ec95b267cc25b4e8dbb",
+      "attack": true,
+      "case": "The account claims Egypt survived because its grain storage was 'decentralized across the Nile valley' and relied on 'temple-based rather than palace-based redistribution.' However, the New Kingdom Egyptian economy was in fact highly centralized through palace-controlled granaries and state redistribution, with temples functioning as extensions of royal administration rather than independent economic nodes. This mischaracterization undermines the structural vulnerability distinction that is essential to the differential survival claim.",
+      "counterexample": null
+    },
+    {
+      "target": "e7aacdcad8c8bd163e82aa9665cf3449d394e5768372109678d7422d7c2cc7a4",
+      "attack": true,
+      "case": "The account asserts that Egypt's bronze dependency was mitigated by 'Nubian gold-for-copper trade alternatives,' but this conflates two distinct economic functions: gold was a prestige and tribute good, not a substitute for copper in weapons and tool production. Egypt still required imported copper for its military equipment, and Nubian gold did not replace disrupted Cypriot copper supplies in any metallurgical sense. The claimed mitigation mechanism is therefore economically incoherent.",
+      "counterexample": null
+    },
+    {
+      "target": "e3628d3812013e1e2b162b4ef6554ba9808637fd1e1f36d66ea5aae8c0890a7b",
+      "attack": true,
+      "case": "The account invokes the Thera eruption (c.1600 BC) as a cultural memory driving collapse around 1200-1150 BC, a gap of roughly 400 years. No mechanism is provided for how a four-century-old memory would suddenly become delegitimating at the collapse horizon rather than being integrated into existing ritual frameworks long before. The temporal disconnect between the proposed cause and the observed effect is left entirely unbridged, making the causal chain implausible.",
+      "counterexample": null
+    }
+  ]
+}

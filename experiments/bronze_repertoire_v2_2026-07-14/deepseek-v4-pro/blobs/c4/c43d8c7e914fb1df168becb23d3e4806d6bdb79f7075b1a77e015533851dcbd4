@@ -1,0 +1,1 @@
+{"contract":"judgeruling.direct.v1","path":"","error":"extra field at /decision","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"verdict":"fail","decisive_point":"x"}}

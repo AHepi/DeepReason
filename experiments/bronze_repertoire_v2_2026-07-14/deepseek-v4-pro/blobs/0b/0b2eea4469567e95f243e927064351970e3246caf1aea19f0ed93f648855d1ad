@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism relies on a 'single-point failure' triggered by a massive earthquake swarm destroying the Hittite state, but the first forbidden case directly contradicts this causal trigger: it states that archaeological evidence shows Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction. This concrete, datable observation falsifies the claimed seismic cause and the timing of the collapse, violating the standard's requirement that a historical-mechanism account must be consistent with specific forbidden cases that could realistically have obtained.",
+  "counterexample": [
+    "Archaeological evidence shows the Hittite capital Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction."
+  ]
+}

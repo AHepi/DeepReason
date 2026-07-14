@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case is not a concrete, datable observation that could realistically obtain. It is a counterfactual conditional ('Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers') that describes what the archaeological record would look like if the theory were false, rather than citing an actual, documented archaeological finding that contradicts the mechanism. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)', not hypothetical evidence that has not been found. A valid forbidden case would cite a specific, published excavation report or dated destruction layer that demonstrates intact storage and port infrastructure contemporaneous with the collapse horizon.",
+  "counterexample": [
+    "A valid forbidden case: 'The 2021 excavation of Ugarit's lower city (Yon et al., 2021) revealed intact grain storage jars and unbreached port warehouses directly beneath the destruction layer dated to 1190 BCE, with no seismic damage to the quay foundations.'"
+  ]
+}

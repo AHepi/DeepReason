@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\\\"claim\\\": \\\"A multi-decadal drought reduced grain yields, precipitating fiscal insolvency in palace economies.\\\", \\\"mechanism\\\": \\\"Ecological stress depleted agricultural surplus, causing loss of tribute and collapse of centralized redistribution.\\\", \\\"scope\\\": {\\\"covers\\\": [\\\"Mycenaean Greece\\\",\\\"Hittite Anatolia\\\",\\\"Ugarit\\\",\\\"Levantine city‑states\\\"], \\\"excludes\\\": [\\\"Egypt\\\"]}, \\\"forbidden\\\": [{\\\"case\\\": \\\"Paleo‑hydrological data indicating stable precipitation and Nile flood levels throughout 1200‑1150 BC.\\\", \\\"eval\\\": \\\"rubric:std-hist\\\"}], \\\"prose_notes\\\": \\\"Formal abstract: The hypothesis posits a sequential causal chain from prolonged drought to economic breakdown, diverging from hyperarid climate narratives by emphasizing regional groundwater exhaustion.\\\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "c4f54171b1e22fe11761abc4d1373cc53d2234e3b2677f53966b239b92137530"
+        },
+        {
+          "role": "dependence",
+          "target": "616d51f454591f8739e476ee187f865b6d75a7fa90bdd7c820c4341c7c1c754f"
+        }
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "{\\\"claim\\\": \\\"State elites co‑opted Sea Peoples as auxiliary forces; the ensuing reliance on foreign mercenaries fractured internal power structures.\\\", \\\"mechanism\\\": \\\"Geopolitical‑military destabilization through overextension of mercenary troops undermined central authority.\\\", \\\"scope\\\": {\\\"covers\\\": [\\\"Mycenaean Greece\\\",\\\"Hittite Anatolia\\\",\\\"Ugarit\\\",\\\"Levantine city‑states\\\"], \\\"excludes\\\": [\\\"Egypt\\\"]}, \\\"forbidden\\\": [{\\\"case\\\": \\\"Contemporary records exclusively describing Sea Peoples as external raiders with no evidence of formal alliance or service.\\\", \\\"eval\\\": \\\"rubric:std-hist\\\"}], \\\"prose_notes\\\": \\\"Analytic report format compares the varying degrees of Sea Peoples integration across the four polities, arguing that internal militarization, not external pressure alone, precipitated collapse.\\\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "b5db134d313fcc044776b2a13628d114e9e62ae72c5cd0ee20589ab8c1655767"
+        }
+      ],
+      "typicality": 0.55
+    },
+    {
+      "content": "{\\\"claim\\\": \\\"Excessive elite gift‑exchange and monumental patronage generated unsustainable social expectations, eroding ideological legitimacy of palace rule.\\\", \\\"mechanism\\\": \\\"Systemic sociopolitical instability caused by elite overproduction and ideological fatigue.\\\", \\\"scope\\\": {\\\"covers\\\": [\\\"Mycenaean Greece\\\",\\\"Hittite Anatolia\\\",\\\"Ugarit\\\",\\\"Levantine city‑states\\\"], \\\"excludes\\\": [\\\"Egypt\\\"]}, \\\"forbidden\\\": [{\\\"case\\\": \\\"Archaeological datasets showing no significant increase in elite burial wealth or monumental construction during the Late Bronze Age.\\\", \\\"eval\\\": \\\"rubric:std-hist\\\"}], \\\"prose_notes\\\": \\\"Critical historiographical essay that questions the prevailing narrative of external shock by focusing on internal ideological decay.\\\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "79a2b17aeed06c52882267be4ecc46b7e954bcd911e7080bfa2bb5c8f7001f06"
+        }
+      ],
+      "typicality": 0.32
+    }
+  ]
+}

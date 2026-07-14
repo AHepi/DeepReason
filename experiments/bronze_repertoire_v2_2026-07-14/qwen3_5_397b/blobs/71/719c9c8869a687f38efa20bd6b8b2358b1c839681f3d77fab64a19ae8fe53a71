@@ -1,0 +1,16 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Pairwise discrimination (\u00a710.2): A-beats-B-for-pi, never a global\nranking. 'neither' registers nothing \u2014 the rivalry stands.", "properties": {"decisive_point": {"default": "", "title": "Decisive Point", "type": "string"}, "winner": {"enum": ["A", "B", "neither"], "title": "Winner", "type": "string"}}, "required": ["winner"], "title": "PairwiseRuling", "type": "object"}
+
+PROBLEM disc:pi-bronze: discriminate between 6 surviving rivals for pi-bronze
+CRITERIA:
+
+
+A:
+{"claim": "The collapse was triggered by a cascading failure of the international bronze supply chain, where the loss of a single critical tin source caused a systemic economic depression that delegitimized palace authority.", "mechanism": "Supply-side shock leading to currency debasement (in kind) and loss of elite monopoly on weaponry.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Cyprus"]}, "forbidden": [{"case": "Archaeological evidence of abundant tin stockpiles in destroyed palace layers dated post-1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the high interdependence of the Late Bronze Age gift-exchange economy; explains simultaneity via trade networks rather than migration."}
+
+B:
+{"claim": "The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.", "mechanism": "Asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups.", "eval": "rubric:std-hist"}], "prose_notes": "A traditional migration/invasion hypothesis, focusing on the military mismatch between rigid palace armies and flexible irregular forces."}
+
+QUESTION: which candidate better addresses the problem, for this problem only? winner=neither if you cannot discriminate. decisive_point MUST quote a span of a candidate.

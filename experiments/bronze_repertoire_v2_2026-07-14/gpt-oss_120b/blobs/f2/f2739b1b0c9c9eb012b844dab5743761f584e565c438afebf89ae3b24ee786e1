@@ -1,0 +1,39 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM succ:7a2649135d88
+supersede refuted candidate 7a2649135d88 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.85): demand a causal mechanism
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48: {"standard": {"mode": "absolute", "rubric": "A historical-mechanism account must: (1) name a specific causal mechanism \u2014 an institution, incentive, or proc
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- 80495a385adbd8d94ceb8c925bd2f8bd19bd237fa82bf49b03e8983fde58ae88: nu: verdict of skeleton-wf on ac7c58fb7070d2277f97494f95d5e8b63b8f2370a2eae7cf9ac1d71d5d83d931 is sound and relevant
+- 0e8ca5b6dc99f3ea76f1e408f6fc6e4f4e805927b078524a96e3ad79f03d1595: critic: skeleton-wf failed on ac7c58fb7070
+- 1611e40255e5fd2ecfe6d4635163864b54ee3cc9c4207919370ed7049c60175a: nu: verdict of skeleton-wf on 7a2649135d88ea8db21c3e58133635c2734deb33bf743db733da0f66e4280bc8 is sound and relevant
+- ce24ac1df133780f9bb35acfeec78a72208e607f1044599119baebc96f8d85f8: critic: skeleton-wf failed on 7a2649135d88
+- f669f6a851f89324391be090ba4a520e31a24bd7eab70de8213caeee608fbed3: nu: verdict of skeleton-wf on 8b8701212ea8ea1e24caee9bd8a26f0d22a3bf7efcdf349bb8cdf32544855f40 is sound and relevant
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: angle: climate-induced agricultural crisis; mechanism: environmental stress; structure: sequential timeline; register: scholarly
+  spec 2: angle: maritime raider incursions; mechanism: external demographic pressure; structure: comparative case matrix; register: analytical
+  spec 3: angle: elite over‑expansion and fiscal overstretch; mechanism: socioeconomic resource depletion; structure: network‑flow diagram; register: concise
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

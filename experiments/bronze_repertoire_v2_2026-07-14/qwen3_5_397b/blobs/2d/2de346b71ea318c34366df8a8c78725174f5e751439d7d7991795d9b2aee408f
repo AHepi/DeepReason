@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target violates clause (2) of std-hist because its forbidden case is not a concrete observation that could realistically have obtained given the target's own mechanism.
+The target's mechanism describes 'active resistance and strategic abandonment' where populations 'burn administrative records and disperse' to 'escape tribute extraction.' The forbidden case offered is 'Mass graves indicating rapid, unprepared violent death of non-combatant populations within the citadels prior to burning.' This forbidden case is not a realistic potential observation under the target's own theory, because the mechanism explicitly involves deliberate, coordinated dispersal and targeted burning of records, not unprepared mass killing of non-combatants. A mechanism of strategic abandonment and record-burning does not forbid mass graves of non-combatants; it simply does not predict them. The forbidden case must be something the mechanism genuinely risks being falsified by, such as 'archaeological evidence of continuous, uninterrupted palatial administration and tribute collection through the period in question.'
+cites: {"claim": "The collapse was not a failure of the system but a successful, coordinated strategy of de-urbanization by subordinate kinship groups who deliberately dismantled palatial centers to escape tribute extraction, utilizing the mobility of the 'Sea Peoples' as a catalyst for a region-wide shift to egalitarian village life.", "mechanism": "Active resistance and strategic abandonment: marginalized populations exploited the distraction of inter-state rivalry to burn administrative records and disperse, preferring subsistence autonomy over palatial protection.", "scope": {"covers": ["Mycenaean Greece", "Levantine city-states", "Hittite periphery"], "excludes": ["Egyptian core", "Assyrian rising power"]}, "forbidden": [{"case": "Mass graves indicating rapid, unprepared violent death of non-combatant populations within the citadels prior to burning", "eval": "rubric:std-hist"}], "prose_notes": "Inverts the standard 'catastrophe' narrative (counterexample first stance) by framing the destruction as a liberatory act by the 6e2f... insurgency actors, challenging the notion of 'collapse' as purely negative."}
+
+TARGET:
+{"claim": "The collapse was not a failure of the system but a successful, coordinated strategy of de-urbanization by subordinate kinship groups who deliberately dismantled palatial centers to escape tribute extraction, utilizing the mobility of the 'Sea Peoples' as a catalyst for a region-wide shift to egalitarian village life.", "mechanism": "Active resistance and strategic abandonment: marginalized populations exploited the distraction of inter-state rivalry to burn administrative records and disperse, preferring subsistence autonomy over palatial protection.", "scope": {"covers": ["Mycenaean Greece", "Levantine city-states", "Hittite periphery"], "excludes": ["Egyptian core", "Assyrian rising power"]}, "forbidden": [{"case": "Mass graves indicating rapid, unprepared violent death of non-combatant populations within the citadels prior to burning", "eval": "rubric:std-hist"}], "prose_notes": "Inverts the standard 'catastrophe' narrative (counterexample first stance) by framing the destruction as a liberatory act by the 6e2f... insurgency actors, challenging the notion of 'collapse' as purely negative."}

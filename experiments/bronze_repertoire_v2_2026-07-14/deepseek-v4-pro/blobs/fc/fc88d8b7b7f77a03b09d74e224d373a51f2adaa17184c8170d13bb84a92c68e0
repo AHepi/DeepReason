@@ -1,0 +1,1 @@
+{"contract":"defender.direct.v1","path":"/model","error":"MODEL_CONTROL_FIELD_FORBIDDEN","received":null,"allowed":"declared response-schema fields only","repair_scope":"/model","skeleton":null}

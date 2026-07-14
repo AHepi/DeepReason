@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's mechanism is falsified by its own forbidden case, which is concretely observable and datable.
+The target specifies a mechanism (tin-supply interruption halting bronze production, rendering chariot armies obsolete) and a forbidden case (evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC). The forbidden case is a concrete, datable observation that could realistically have obtained. If such evidence exists, the causal mechanism is directly contradicted. The target thus provides a clear empirical test that, if met, violates the standard's requirement for a valid mechanism by demonstrating the mechanism's failure in the specified regions.
+cites: {"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source triggered a bronze shortage that paralyzed military and elite status systems.", "mechanism": "Supply chain cascade: The interruption of tin from a specific source (e.g., Afghanistan or Cornwall) halted bronze production, rendering chariot armies obsolete and undermining the material basis of elite power, leading to rapid political disintegration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "regions with local copper/tin sources"]}, "forbidden": [{"case": "Evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain failure model (artifact 83eb7701, b6371e69) by specifying the mechanism of military obsolescence."}
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source triggered a bronze shortage that paralyzed military and elite status systems.", "mechanism": "Supply chain cascade: The interruption of tin from a specific source (e.g., Afghanistan or Cornwall) halted bronze production, rendering chariot armies obsolete and undermining the material basis of elite power, leading to rapid political disintegration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "regions with local copper/tin sources"]}, "forbidden": [{"case": "Evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain failure model (artifact 83eb7701, b6371e69) by specifying the mechanism of military obsolescence."}

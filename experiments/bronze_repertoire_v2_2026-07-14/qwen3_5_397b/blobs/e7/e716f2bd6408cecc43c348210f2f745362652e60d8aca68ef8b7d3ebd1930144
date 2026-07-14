@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+{"answer": {"eval": "rubric:std-hist", "verdict": "The critic's objection is valid. The forbidden case describes a general evidentiary category ('widespread, decentralized grain storage or dual-use toolkits') rather than a specific, concrete observation (e.g., a named site, a particular artifact assemblage, or a datable textual record). This fails to meet clause (2) of the std-hist standard, which requires forbidden cases to be 'concrete observations which could realistically have obtained.' The claim is therefore unfalsifiable in practice.", "rebuttal": "The target's forbidden case is insufficiently specified. It does not cite a specific archaeological find, site, or textual record from the late 13th century that could realistically have been observed. A vague evidentiary category does not constitute a concrete observation, and the defender cannot invent facts to remedy this deficiency. The claim fails the standard."}}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "defender.direct.v1", "error": "extra field at /answer/eval", "path": "", "repair_scope": "", "skeleton": {"answer": "x"}}

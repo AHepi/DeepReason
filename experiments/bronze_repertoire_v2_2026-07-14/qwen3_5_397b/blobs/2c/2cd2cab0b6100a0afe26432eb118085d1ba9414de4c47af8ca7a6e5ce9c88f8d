@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target explicitly forbids 'Archaeological evidence showing robust local subsistence economies continuing uninterrupted within palace zones during the transition period.' This forbidden case directly contradicts the target's own mechanism, which claims that 'local communities lacked the autonomy to survive independently' and that the palatial redistribution economy's failure caused a systemic collapse. If robust local subsistence economies continued uninterrupted within palace zones, it demonstrates that local communities did possess the autonomy to survive independently, thereby falsifying the claimed causal mechanism of cascading systemic fragility. The target thus violates the standard by forbidding a concrete, observable archaeological pattern that would constitute a direct counterexample to its central causal claim.",
+  "counterexample": [
+    "Archaeological evidence showing robust local subsistence economies continuing uninterrupted within palace zones during the transition period."
+  ]
+}

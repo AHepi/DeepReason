@@ -1,0 +1,9 @@
+{
+  "relation": "contradicts: ac8a8325664e posits that the collapse was triggered by the democratization of iron-working making the palace's bronze monopoly obsolete, whereas 83eb7701, b6371e, and 7edd1384 all posit the collapse was triggered by a systemic failure of the international bronze supply chain. The former requires bronze to be the dominant, valued material whose control is suddenly undermined by a superior alternative (iron), while the latter requires bronze to remain the dominant, valued material whose sudden scarcity causes systemic collapse. These mechanisms are mutually exclusive: iron cannot simultaneously be a superior, adopted substitute and an irrelevant factor in a crisis driven by bronze scarcity. Refuted if evidence shows the iron transition and the tin-supply disruption were not contemporaneous or were causally independent.",
+  "connects": [
+    "ac8a8325664e9737abca573620730102c4e80b0d47430299db3930cb107adee3",
+    "83eb7701d283a11811abef542b20ac536c829d22f9484331011f27be5eaaa268",
+    "b6371e69c7e3bca18f0c44b611bb451c7437ed4851972ce830146ff329a22aad",
+    "7edd1384f4826b9f5dec2bb44c053711cf22f6a5a8e35b39ed3627ac0fe917"
+  ]
+}

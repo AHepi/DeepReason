@@ -59,3 +59,39 @@ amendment_1:
   concurrency: arms run 3-at-a-time (subscription ceiling); the fourth arm
     launches when a slot frees
   tokens_spent_before_amendment: 0
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/bronze_repertoire_v2_report.json
+  roots: experiments/bronze_repertoire_v2_2026-07-14/ (all four verify
+    clean)
+  verdicts: {P1: REFUTED, P2: CONFIRMED, P3: REFUTED}
+  p3_falsifier: triggered for deepseek-v4-pro (0.867) and qwen3.5:397b
+    (0.75) - their repertoires are paraphrase-dominated at the frozen
+    radius and repertoire claims for them are withheld per the prereg
+  measured:
+    admitted: {deepseek: 15, qwen: 24, kimi: 12, gpt-oss: 24}
+    admitted_distinct_nomic_clusters: {deepseek: 2, qwen: 6, kimi: 9,
+      gpt-oss: 10}   # P1 bars 18/9/12/13 - all miss
+    emitted_near_dup_rate: {deepseek: 0.867, qwen: 0.75, kimi: 0.25,
+      gpt-oss: 0.576}
+    tokens: 1185308 of 1200000 (all four arms stopped by the reserve-settle
+      guard, zero overshoot)
+  headline_readings:
+    - the repaired gate admitted 12-24 conjectures per arm where the broken
+      gate had capped v1 at 3-6; the bottleneck moved from the gate to the
+      generators themselves
+    - P1 fails NOT because arms admitted little but because admitted sets
+      collapse under the frozen nomic 0.19 clustering; the correction-1
+      caveat applies in full - the instrument conflates same-topic distinct
+      mechanisms, so these counts are conservative lower bounds
+    - P2 confirms real family differences in emitted mechanism-class
+      coverage (kimi is the most diverse emitter at 0.25 near-dup; deepseek
+      the most repetitive at 0.867)
+    - widest-coverage generator by emitted class count and lowest near-dup
+      rate - kimi-k2.6 - becomes the feedback-v1 generator candidate per
+      that prereg's amendment procedure
+  instrument_caveat: verdicts stand as preregistered; the distinctness
+    instrument (frozen before unblinding) is known-conservative from
+    correction 1. A mechanism-level distinctness instrument (structural,
+    not embedding) is the open tooling gap.

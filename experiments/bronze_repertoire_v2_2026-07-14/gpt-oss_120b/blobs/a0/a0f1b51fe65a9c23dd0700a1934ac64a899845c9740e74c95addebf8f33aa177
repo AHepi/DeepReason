@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "c4f54171b1e22fe11761abc4d1373cc53dd2234e3b2677f53966b239b92137530",
+      "attack": true,
+      "case": "The claim asserts a 'rapid, region-wide hyperarid climate shift' as the cause, but the target's own prose_notes concede that 'many high‑resolution proxies suggest only modest variability.' This internal concession undermines the claim's factual premise: if the best available evidence does not support a severe, simultaneous drought, the mechanism of region-wide agricultural failure lacks empirical grounding. The single forbidden case (no drought in Anatolia) is too narrow; the broader failure is that the claim's central factual assertion is not robustly supported by the paleoclimatic record it invokes, making the account speculative rather than explanatory.",
+      "counterexample": null
+    },
+    {
+      "target": "b5db134d313fcc044776b2a13628d114e9e62ae72c5cd0ee20589ab8c1655767",
+      "attack": true,
+      "case": "The mechanism relies on 'coordinated external pressure from maritime raiders' overwhelming local militaries and trade networks, yet the scope excludes Egypt solely because it 'repelled the Sea Peoples.' This creates an explanatory asymmetry: if the Sea Peoples were a force capable of simultaneously collapsing Mycenaean Greece, the Hittite Empire, Ugarit, and the Levantine city-states, the account must explain why Egypt—geographically and economically integrated into the same Eastern Mediterranean system—was able to repel them while all others failed. Merely excluding Egypt from the scope does not address why the same external pressure produced catastrophic collapse elsewhere but only 'diminished' survival in Egypt, leaving the mechanism's claimed universality unjustified.",
+      "counterexample": null
+    },
+    {
+      "target": "dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67",
+      "attack": true,
+      "case": "The claim attributes collapse to the loss of Cypriot copper exports, but the scope excludes the Levantine city-states on the grounds that they 'relied less on copper.' This is historically questionable: Levantine polities such as Ugarit were deeply enmeshed in Late Bronze Age copper trade as entrepôts and consumers. If the copper trade's collapse was severe enough to bring down Mycenaean Greece and the Hittite Empire, it is implausible that neighboring trade-dependent Levantine city-states—which the problem statement explicitly lists among the collapsed civilizations—would be insulated. The exclusion contradicts the problem's premise that the Levantine city-states did collapse, and the account provides no alternative mechanism for their fall.",
+      "counterexample": null
+    }
+  ]
+}

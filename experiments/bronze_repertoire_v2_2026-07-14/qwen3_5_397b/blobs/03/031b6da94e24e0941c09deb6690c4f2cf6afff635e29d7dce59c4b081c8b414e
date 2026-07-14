@@ -1,0 +1,22 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target violates the historical-mechanism standard by failing to state forbidden cases that are concrete observations which could realistically have obtained.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case—'Evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC'—is not a concrete, realistically obtainable observation. It is a vague, theory-laden description of evidence rather than a specific record, event, or datable pattern (e.g., 'A Linear B tablet from Pylos dated to 1190 BC recording the manufacture of 50 bronze-tipped arrows' or 'A burial at Hattusa from 1180 BC containing an intact chariot with bronze fittings'). The formulation merely restates the negation of the claim in evidentiary terms without specifying what actual archaeological or textual find would count.
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source triggered a bronze shortage that paralyzed military and elite status systems.", "mechanism": "Supply chain cascade: The interruption of tin from a specific source (e.g., Afghanistan or Cornwall) halted bronze production, rendering chariot armies obsolete and undermining the material basis of elite power, leading to rapid political disintegration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "regions with local copper/tin sources"]}, "forbidden": [{"case": "Evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain failure model (artifact 83eb7701, b6371e69) by specifying the mechanism of military obsolescence."}

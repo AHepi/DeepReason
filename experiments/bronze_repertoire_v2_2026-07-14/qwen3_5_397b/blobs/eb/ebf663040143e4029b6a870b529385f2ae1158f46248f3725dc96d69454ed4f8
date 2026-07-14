@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not genuinely forbidden by the mechanism described.
+The target's mechanism claims that centralized storage and specialized labor created a single point of failure, and that the rigid bureaucratic apparatus could not adapt. However, the forbidden case—evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase—would actually falsify the mechanism's core claim that the apparatus was rigid and could not adapt. If such evidence were found, it would show adaptation occurred, directly contradicting the mechanism. A properly specified forbidden case under std-hist must be a concrete observation that is consistent with the mechanism's failure, not one that would disprove it. The target has therefore failed to state a valid forbidden case, violating clause (2) of the standard.
+cites: {"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where centralized storage and specialized labor created a single point of failure; when external shocks (drought, migration) disrupted input flows, the rigid bureaucratic apparatus could not adapt, leading to cascading institutional dissolution.", "mechanism": "Positive feedback loop of centralization reducing resilience: as states specialized to maximize surplus extraction, they lost the modular redundancy required to absorb local failures, causing a domino effect across the interconnected trade network.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus minor settlements"]}, "forbidden": [{"case": "Archaeological evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase", "eval": "rubric:std-hist"}], "prose_notes": "Aligns with the mechanist school (ba68...) and echoes the systemic failure hypothesis of 919f... but emphasizes the structural rigidity rather than just the trigger event."}
+
+TARGET:
+{"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where centralized storage and specialized labor created a single point of failure; when external shocks (drought, migration) disrupted input flows, the rigid bureaucratic apparatus could not adapt, leading to cascading institutional dissolution.", "mechanism": "Positive feedback loop of centralization reducing resilience: as states specialized to maximize surplus extraction, they lost the modular redundancy required to absorb local failures, causing a domino effect across the interconnected trade network.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus minor settlements"]}, "forbidden": [{"case": "Archaeological evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase", "eval": "rubric:std-hist"}], "prose_notes": "Aligns with the mechanist school (ba68...) and echoes the systemic failure hypothesis of 919f... but emphasizes the structural rigidity rather than just the trigger event."}

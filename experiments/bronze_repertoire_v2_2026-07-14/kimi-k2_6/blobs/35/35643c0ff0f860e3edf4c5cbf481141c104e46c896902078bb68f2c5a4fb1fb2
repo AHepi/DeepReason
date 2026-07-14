@@ -1,0 +1,14 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"claim": "Elite ideological delegitimation following solar eclipse and volcanic winter disrupted ritual foundations of kingship", "mechanism": "The Thera eruption (c.1600 BC, cultural memory) or a later unrecorded volcanic event, combined with the solar eclipse of 1223 BC, shattered the cosmic-ritual legitimation upon which Mycenaean wanax and Hittite Labarna kingship depended; palace economies required performative redistribution tied to divine favor, and when ritual failure became interpretable, competing elites abandoned centralized institutions for local patronage networks; Egyptian pharaonic ideology absorbed cosmic disorder through the Osiris-Seth cycle narrative, permitting 'restoration' rather than collapse narratives", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia"], "excludes": ["Ugarit", "Levantine city-states", "Egypt"]}, "forbidden": [{"case": "Hittite kingship was contractual-legal rather than ritually performative and cosmic", "eval": "rubric:std-hist"}, {"case": "No eclipse or omen references in contemporary Hittite or Greek texts near collapse horizon", "eval": "rubric:std-hist"}, {"case": "Egyptian New Kingdom showed no capacity to absorb ideological crisis (Amarna period caused permanent collapse)", "eval": "rubric:std-hist"}], "prose_notes": "Atypical: draws on Mary Douglas/ideology-of-risk tradition; treats collapse as interpretive failure rather than material constraint; intentionally narrow scope"}
+
+BATTERY THE EDITS WILL FACE:
+- program:skeleton_wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

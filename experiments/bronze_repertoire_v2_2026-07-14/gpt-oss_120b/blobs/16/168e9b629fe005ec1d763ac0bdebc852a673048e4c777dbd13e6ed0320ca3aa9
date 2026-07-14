@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67",
+      "attack": true,
+      "case": "The scope explicitly excludes 'Levantine city‑states that relied less on copper', but the problem asks why the Levantine city-states collapsed. This exclusion is an arbitrary gerrymander: it carves out a subset of the Levantine polities to avoid explaining their collapse, while the problem demands an account that covers the Levantine city-states as a class. A valid answer must explain why the Levantine city-states collapsed, not merely assert that some of them didn't rely on copper and therefore fall outside the theory's explanatory burden.",
+      "counterexample": null
+    },
+    {
+      "target": "616d51f454591f8739e476ee187f865b6d75a7fa90bdd7c820c4341c7c1c754f",
+      "attack": true,
+      "case": "The relation mischaracterises the copper-production collapse hypothesis (dacf8df890d9) as implying Egypt's insulation was 'insufficient' and that loss of Cypriot copper 'would have severed the trade networks essential for Egypt's own military and economic stability'. In fact, dacf8df890d9 explicitly excludes Egypt from its scope and states Egypt survived, making no claim that Egypt's stability was threatened by copper loss. The contradiction is therefore fabricated: it attacks a straw man of the copper hypothesis rather than identifying a genuine incompatibility between the two accounts.",
+      "counterexample": null
+    },
+    {
+      "target": "d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f",
+      "attack": true,
+      "case": "The forbidden case is set too high a bar to serve as a genuine refutation condition. It demands that archaeological layers at major coastal sites 'lack evidence of widespread destruction or foreign weaponry' entirely. But a Sea Peoples hypothesis can be refuted by positive evidence of peaceful transition, continuity of occupation, or destruction layers attributable to earthquakes or internal conflict rather than foreign raiders. By requiring a complete absence of destruction evidence, the forbidden case immunises the theory against the very kinds of archaeological findings that would most plausibly falsify it.",
+      "counterexample": null
+    }
+  ]
+}

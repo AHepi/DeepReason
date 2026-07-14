@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—'institutional path dependence in the military-ritual complex'—is asserted but not substantiated with a specific causal process linking chariot-aristocracy status to tactical inflexibility. The claim that adaptation was 'socially unthinkable' is a psychological/mood explanation, not an institutional one. The standard requires naming a specific institution, incentive, or process; 'chariot aristocracies cannot renegotiate status hierarchy without delegitimizing core extractive relationships' is a functionalist assertion of impossibility, not a demonstrated mechanism. Furthermore, the forbidden case 'Mycenaean pictorial kraters or sealings depicting non-chariot elite warfare after LH IIIB' is not a concrete observation that could realistically obtain if the theory were true—it merely restates the absence of evidence for adaptation, which is consistent with both the theory and with simple archaeological non-preservation. A genuine forbidden case would specify a datable, observable event (e.g., 'a Linear B tablet from Pylos dated to LH IIIC recording distribution of Naue II swords to elite warriors') rather than a general absence of a type of artifact.",
+  "counterexample": [
+    "The mechanism invokes 'socially unthinkable' adaptation, which is a psychological state, not an institution, incentive, or process as required by the standard.",
+    "The forbidden case 'Mycenaean pictorial kraters or sealings depicting non-chariot elite warfare after LH IIIB' is a negative observation (absence of evidence) rather than a concrete, potentially observable event or record."
+  ]
+}

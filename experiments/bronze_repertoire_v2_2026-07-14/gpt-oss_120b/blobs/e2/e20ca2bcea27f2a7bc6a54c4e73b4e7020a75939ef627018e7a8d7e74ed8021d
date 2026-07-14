@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eastern Mediterranean.", "mechanism": "environmental stress via volcanic winter", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution ice‑core and dendrochronological records show no significant temperature drop in 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Sequence: eruption → ash fallout → reduced solar insolation → crop failures → societal strain → collapse."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target's forbidden case is not a concrete observation that could realistically have obtained; it is a hypothetical negative finding ('records show no significant temperature drop') that merely negates the claim rather than specifying a datable pattern or event that would falsify the mechanism. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)', such as 'a dated ice-core layer from 1200 BC showing elevated sulfate but no corresponding narrow tree-ring growth anomaly in Anatolian dendrochronology for the following five years.' The provided forbidden case fails this specificity requirement.
+
+THE DEFENCE:
+The critic misreads the standard. The forbidden case is 'High‑resolution ice‑core and dendrochronological records show no significant temperature drop in 1200 BC.' This is not a mere negation of the claim; it specifies two concrete, datable proxy records (ice cores and tree rings) that could realistically exist and be examined for the year 1200 BC. A finding of 'no significant temperature drop' in those records is a specific, observable outcome that would directly contradict the proposed volcanic‑winter mechanism. The standard's examples ('a dated ice‑core layer… showing elevated sulfate but no corresponding narrow tree‑ring growth anomaly') are illustrations, not an exhaustive definition, and the target's case matches their structure: it identifies the type of record, the temporal target, and the precise negative finding that would falsify the mechanism. The case is therefore a concrete observation that could realistically have obtained.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

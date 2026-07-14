@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's 'forbidden' case is a concrete, datable observation that would falsify the claim, but the target fails to provide a second required forbidden case. The standard std-hist demands that a historical-mechanism account 'state forbidden cases' (plural) — i.e., at least two concrete observations that could realistically have obtained. The target supplies only one forbidden case, thereby violating the explicit requirement for multiple forbidden cases.",
+  "counterexample": null
+}

@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\":\"Prolonged megadrought between 1220‑1160 BCE triggered agricultural collapse across the Eastern Mediterranean.\",\"mechanism\":\"Ecological‑economic resource depletion leading to famine, loss of state revenue, and breakdown of elite redistribution.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Archaeobotanical pollen data from the period showing stable moisture levels in Anatolia.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Formal abstract summarizing climate proxy series and economic models.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\":\"Mass migrations of displaced coastal populations coalesced into the Sea Peoples, whose coordinated naval raids destabilized the political order of the eastern Mediterranean.\",\"mechanism\":\"Geopolitical‑military destabilization through destruction of trade routes and forcing defensive overextension.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Contemporary Egyptian inscriptions lacking any mention of Sea Peoples before 1175 BCE.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Analytic report comparing documented raids at Mycenaean citadels, Hittite annals, and Ugaritic tablets.\"}",
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\":\"An overproduction of elite warrior class coupled with ideological erosion eroded legitimacy, causing systemic sociopolitical collapse.\",\"mechanism\":\"Systemic sociopolitical instability via internal elite competition, loss of cultic authority, and failure of succession mechanisms.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city‑states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Evidence of continued stable royal succession in Mycenaean palaces until 1100 BCE.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"Critical historiographical essay interrogating elite recruitment patterns and religious texts.\"}",
+      "typicality": 0.6
+    }
+  ]
+}

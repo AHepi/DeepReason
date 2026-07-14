@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "278429cb6eef5cd184e71c353b7a878c2af9fa2b3af0d41d245c191d40c7b2b0",
+      "attack": true,
+      "case": "The account claims the collapse was triggered by a 'prolonged drought' causing simultaneous harvest failures, yet it excludes Egypt from the collapse despite Egypt also being a grain-dependent palatial economy that would have been equally vulnerable to the same regional drought. The mechanism fails to explain why Egypt's redistributive system survived the same climatic event that supposedly destroyed all others, making the scope exclusion arbitrary rather than mechanistically justified.",
+      "counterexample": null
+    },
+    {
+      "target": "79d71b90998ffc09d3b9f8ffc2218cd101447afcba09997a906741dfcb580710",
+      "attack": true,
+      "case": "The mechanism asserts that iron weaponry and infantry tactics overwhelmed chariot-based aristocracies, yet the Hittites were themselves pioneers in iron smelting and production. If iron technology diffused from the north through or near Hittite territory, the Hittite military elite—who controlled the very regions where this technology was emerging—should have been the first to adopt and monopolize it, not the last to be destroyed by it. The account provides no reason why the Hittites would have been victims rather than early beneficiaries of the iron revolution they were historically associated with.",
+      "counterexample": null
+    },
+    {
+      "target": "44a9051de10499f50f341b85859a415a0c4c47509c3de8e5e0b88bd784b92d3d",
+      "attack": true,
+      "case": "The pandemic mechanism requires the pathogen to selectively kill the administrative and craft-specialist classes while sparing the rural and peripheral populations who then opportunistically occupied the centers. No known historical pandemic exhibits this class-selective lethality; diseases spread through trade networks typically affect all exposed populations, and dense urban quarters would have included laborers, servants, and other non-elites who would also have been infected. The account offers no epidemiological basis for why the pathogen would discriminate between administrators and the general urban population, making the selective depopulation of only the ruling apparatus implausible.",
+      "counterexample": null
+    }
+  ]
+}

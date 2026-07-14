@@ -1,0 +1,22 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete observation that could realistically have obtained, violating clause (2) of the standard.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case — 'Archaeological evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase' — describes a type of evidence rather than a specific, datable observation. It does not name a particular site, artifact, stratigraphic layer, or dated event that could have been found. A compliant forbidden case would specify something like 'A Linear B tablet from Pylos dated to LH IIIB2 recording the redistribution of storage goods to local village headmen' or 'Destruction layers at Hattusa showing phased abandonment with continued domestic occupation in outbuildings.' The target's formulation is a thematic category of evidence, not a concrete, potentially observable record or event.
+
+TARGET:
+{"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where centralized storage and specialized labor created a single point of failure; when external shocks (drought, migration) disrupted input flows, the rigid bureaucratic apparatus could not adapt, leading to cascading institutional dissolution.", "mechanism": "Positive feedback loop of centralization reducing resilience: as states specialized to maximize surplus extraction, they lost the modular redundancy required to absorb local failures, causing a domino effect across the interconnected trade network.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus minor settlements"]}, "forbidden": [{"case": "Archaeological evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase", "eval": "rubric:std-hist"}], "prose_notes": "Aligns with the mechanist school (ba68...) and echoes the systemic failure hypothesis of 919f... but emphasizes the structural rigidity rather than just the trigger event."}

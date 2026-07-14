@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target claims a 'systematic naval blockade' by 'emergent coastal alliances' as the causal mechanism for collapse, yet explicitly excludes Egypt from its scope. The forbidden case states that if Egyptian and Hittite annals—the two most detailed and diplomatically interconnected chronicle traditions of the Late Bronze Age—record no reference to any large-scale maritime embargo, the claim fails. A systematic blockade of Eastern Mediterranean trade lanes would necessarily affect or at least be observable to Egypt, the region's dominant naval and commercial power, whose annals meticulously document trade disruptions, foreign relations, and military threats. The mechanism's own scope cannot coherently exclude Egypt from the blockade's effects while simultaneously claiming a 'systematic' closure of Eastern Mediterranean sea lanes, as Egyptian ports and shipping were integral to those very lanes. The absence of any mention in these annals therefore constitutes a specific, realistic, and datable counter-observation that directly falsifies the claimed mechanism.",
+  "counterexample": [
+    "Egyptian annals under Merneptah and Ramesses III detail grain shipments to the Hittites during famine, yet contain no mention of any coordinated maritime embargo disrupting these or other commercial shipments.",
+    "Hittite diplomatic correspondence and annals record threats from seaborne raiders but never reference an ongoing systematic blockade by coastal alliances."
+  ]
+}

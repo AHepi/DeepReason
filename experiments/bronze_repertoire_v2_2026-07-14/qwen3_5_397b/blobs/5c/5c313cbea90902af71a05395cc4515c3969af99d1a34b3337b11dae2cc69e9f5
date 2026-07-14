@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "919f88a2232e78974c00b651e5fb20d3a5ee8445e8c52f8aee4c23068e4adfca",
+      "attack": true,
+      "case": "The mechanism relies on seismic disruption of port infrastructure and grain stores to break the redistributive feedback loop, yet the forbidden case only guards against intact facilities at Ugarit. The account fails to specify why earthquake damage would be simultaneously catastrophic across the entire Eastern Mediterranean—a seismically active region where individual palace centers had weathered earthquakes before without systemic collapse. Without evidence of a single, temporally clustered seismic event horizon across all covered regions, the mechanism reduces to an ad hoc coincidence rather than a causal explanation.",
+      "counterexample": null
+    },
+    {
+      "target": "6e2f0cab2cf607d6e1a2deb865edc1313f76b7b7a8fcea6ca35cbbb40",
+      "attack": true,
+      "case": "The account claims the Sea Peoples exploited a vacuum left by Hittite military withdrawal, but this inverts the known chronology: the Hittite capital Hattusa was destroyed as part of the same collapse horizon, and Hittite records from Ugarit describe naval threats contemporaneous with—not prior to—the empire's fall. The mechanism requires the protector to vanish before the attack, yet the historical record suggests the attacks and the imperial collapse were simultaneous, making the 'vacuum' a post hoc rationalization rather than a trigger.",
+      "counterexample": null
+    },
+    {
+      "target": "edc32e579a5add689e4929e786f177de6cb8b66a6c9940e75e2d2aa798aae6ab",
+      "attack": true,
+      "case": "The account frames the collapse as a deliberate, coordinated dismantling of palatial bureaucracy by subject populations, yet it provides no mechanism for how illiterate or semi-literate subsistence farmers across disparate linguistic and cultural zones (Mycenaean, Hittite, Levantine) would coordinate a 'contagious' rebellion without the very administrative infrastructure they were allegedly revolting against. The 'contagion' metaphor masks an absence of any actual transmission mechanism across politically disconnected territories.",
+      "counterexample": null
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The mechanism relies on a speculative and unsubstantiated causal link: that a climatic shift disrupted the Etesian winds in a manner that made return voyages from the Aegean to the Levant and Egypt 'extremely difficult.' The target provides no specific evidence (e.g., paleo-wind proxy data, sediment grain-size analysis indicating wind regime change, or textual records of navigation failure) that the Etesian winds actually weakened, shifted direction, or became unreliable during the relevant period. The cited evidence (pollen and sediment cores) only supports drought and cooling, not wind disruption. This violates the standard's requirement to name a specific causal mechanism grounded in evidence, not a conjecture. Furthermore, the forbidden case 'Paleoclimatic data indicates a stable, unchanging climate in the Eastern Mediterranean between 1300 and 1100 BC' is not adequately addressed by the mechanism, as the claim of wind disruption is asserted without the specific paleo-wind data that would be required to falsify that forbidden case.",
+  "counterexample": [
+    "Paleoclimatic data indicates a stable, unchanging climate in the Eastern Mediterranean between 1300 and 1100 BC."
+  ]
+}

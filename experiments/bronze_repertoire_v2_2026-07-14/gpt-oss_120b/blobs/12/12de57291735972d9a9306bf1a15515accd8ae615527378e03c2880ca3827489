@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim":"A rapid shift to cooler, wetter climate around 1190‑1150 BCE caused agricultural system collapse in the Eastern Mediterranean.","mechanism":"Hydroclimatic regime shift leading to flood‑induced soil erosion and reduced yields.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"If high‑resolution speleothem records from the Aegean show sustained aridity rather than increased precipitation during 1190‑1150 BCE","eval":"rubric:std-hist"}],"prose_notes":"Interdisciplinary synthesis of paleoclimatic proxies (lake cores, pollen) suggests an anomalous wet phase that would stress flood‑prone agriculture, diverging from the drought narrative in neighbouring artefacts."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims a 'rapid shift to cooler, wetter climate' caused agricultural collapse via 'flood‑induced soil erosion and reduced yields.' However, the mechanism is specified as a 'hydroclimatic regime shift' — a description of a climate variable, not a concrete institutional, economic, or social process linking precipitation to societal collapse. The standard requires naming a specific causal mechanism (e.g., a particular farming practice, land‑tenure system, or state storage policy that failed under wet conditions), not merely asserting that a climate shift 'caused' collapse. The target's mechanism remains a climatic event, not a historical mechanism, violating clause (1) of the standard.
+
+THE DEFENCE:
+The critic misreads the standard. The target’s mechanism is not merely a climatic variable; it specifies a concrete causal chain: a hydroclimatic regime shift (the climatic trigger) leads to flood‑induced soil erosion and reduced yields (the agricultural and economic process). Flood‑induced soil erosion is a physical process that directly degrades the productive capacity of farmland, and reduced yields are the immediate economic consequence that stresses the subsistence base of societies. This chain links the climatic event to a specific, named agricultural failure mode — erosion of arable soils under anomalous wet conditions — which is a historical mechanism, not a bare climatic description. The target therefore satisfies clause (1) by identifying the precise pathway through which the climate shift translated into agricultural collapse, without needing to further specify a particular farming practice, land‑tenure system, or storage policy, as the standard does not require those additional institutional details when the biophysical mechanism is itself sufficient to explain systemic agricultural failure.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

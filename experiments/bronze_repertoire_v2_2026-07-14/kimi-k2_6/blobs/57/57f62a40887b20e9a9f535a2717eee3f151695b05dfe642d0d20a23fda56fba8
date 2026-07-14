@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "target": "33b607e2ce02c00ba0b7631524ea3907b9830d39d465d3c7c3a40742bee07d1c45",
+      "attack": true,
+      "case": "The target claims a SUBSTANTIVE relation (specific instance / abstraction) between 3544632a92cf and 263738c8259b, but the relation is not substantively established: it merely asserts that Egypt's survival 'is a specific instance' of a general mechanism without demonstrating that the mechanism in 263738c8259b actually entails or explains the features of 3544632a92cf. The 'REFUTED IF' clause tests Egypt's military characteristics, not whether the two accounts share the claimed abstraction relation. A genuine abstraction relation would be refuted if the general mechanism did not logically cover the specific case—i.e., if Egypt's survival could be explained without invoking ironworking diffusion and legitimation crises. The target never connects the specific military details of Egypt to the causal variables of the general mechanism, making the relation an unsupported label rather than a demonstrated dependence, reduction, or abstraction.",
+      "counterexample": null
+    },
+    {
+      "target": "bcbb521e047ea78a268601db3c09ebe4e7e692beb6793ec95b267cc25b4e8dbb",
+      "attack": true,
+      "case": "The claim's mechanism relies on earthquake storms destroying palatial storage and redistribution infrastructure, yet the scope explicitly excludes Egypt on the basis that its grain storage was decentralized and temple-based. However, the forbidden cases do not include the observation that major Egyptian sites (e.g., Pi-Ramesses, Memphis) also suffered seismic damage in the same period or that Egypt's New Kingdom temple economy was itself a redistributive system vulnerable to storage disruption. The account's survival of Egypt is attributed to a structural difference (temple-based vs. palace-based redistribution) that is asserted rather than defended against the known historical reality that Egyptian temples functioned as redistributive economic centers with significant grain storage. The forbidden cases test the Mycenaean/Hittite side of the mechanism but leave the Egypt-exclusion claim insulated from refutation by seismic evidence affecting Egyptian storage infrastructure.",
+      "counterexample": [
+        "Pi-Ramesses, the Egyptian capital during this period, shows archaeological evidence of seismic damage and subsequent abandonment, yet Egypt did not collapse—undermining the claim that seismic destruction of administrative centers was the differential factor."
+      ]
+    },
+    {
+      "target": "e7aacdcad8c8bd163e82aa9665cf3449d394e5768372109678d7422d7c2cc7a4",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    }
+  ]
+}

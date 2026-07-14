@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—'Climate anomaly → subsistence crisis → armed migration → differential military vulnerability based on agricultural resilience and buffer capacity'—is stated at a high level of abstraction but fails to specify a concrete institutional or processual mechanism for the critical step of 'differential military vulnerability.' The claim asserts that Egypt survived because of 'Nile-irrigated surplus,' yet the forbidden case 'Egyptian agricultural system also collapsed; survival due solely to military factors' is not adequately ruled out by the mechanism as stated. The mechanism merely invokes 'agricultural resilience and buffer capacity' without detailing the specific institutions (e.g., royal granaries, corvée labor mobilization, redistributive temple economies) that would translate agricultural surplus into sustained military defense, nor does it explain why such institutions would be uniquely robust in Egypt compared to the Hittite or Mycenaean palace economies, which also had centralized redistribution systems. The target thus violates clause (1) of the standard by substituting a vague comparative property ('buffer capacity') for a named causal institution or process.",
+  "counterexample": [
+    "Egyptian agricultural system also collapsed; survival due solely to military factors"
+  ]
+}

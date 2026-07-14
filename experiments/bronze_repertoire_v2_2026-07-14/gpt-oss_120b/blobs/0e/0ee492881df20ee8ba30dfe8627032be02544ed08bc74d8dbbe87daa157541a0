@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: High‑resolution speleothem and lake‑core records from the region show no significant drop in precipitation during 1200‑1150 BC
+TARGET:
+{"claim": "A sudden interruption of the Mediterranean thermohaline circulation caused by a massive Black Sea flood around 1220 BC led to a rapid regional aridification, starving the agrarian bases of Mycenaean, Hittite, Ugaritic and Levantine societies.", "mechanism": "Prolonged drought triggered by loss of warm Atlantic inflow, reducing river discharge and precipitating a cascade of settlement abandonment across the Eastern Mediterranean.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution speleothem and lake‑core records from the region show no significant drop in precipitation during 1200‑1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "The hypothesis draws on recent marine‑sediment reconstructions of Black Sea outburst floods and models of their impact on the Mediterranean overturning circulation, offering a climate‑driven collapse that does not rely on the hyperarid narrative common in the literature."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

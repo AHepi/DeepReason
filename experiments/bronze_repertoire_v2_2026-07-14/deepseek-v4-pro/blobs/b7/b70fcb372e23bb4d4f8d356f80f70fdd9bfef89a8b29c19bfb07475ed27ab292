@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{"forbidden":false,"id":"chatcmpl-6b0c0e0e-2c0a-4e0a-8c0a-0e0c0a0e0c0a","object":"chat.completion","usage":{"completion_tokens":0,"prompt_tokens":0,"total_tokens":0}}
+
+DIAGNOSTIC:
+{"allowed": "declared response-schema fields only", "contract": "defender.direct.v1", "error": "response contains a field outside the declared schema", "path": "", "repair_scope": "", "skeleton": {"answer": "x"}}

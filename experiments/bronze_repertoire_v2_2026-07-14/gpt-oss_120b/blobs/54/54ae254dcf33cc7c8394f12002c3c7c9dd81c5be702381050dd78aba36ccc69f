@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a mechanism of 'Geopolitical‑military destabilization through destruction of trade routes and forcing defensive overextension' caused by 'coordinated naval raids' of the Sea Peoples, yet it explicitly excludes Egypt from its scope. The forbidden case under trial is 'Contemporary Egyptian inscriptions lacking any mention of Sea Peoples before 1175 BCE.' This case is fatal because Egypt was a central, literate, and heavily engaged power in the eastern Mediterranean during this period. If the Sea Peoples' coordinated naval raids were extensive enough to destroy trade routes and destabilize polities from Mycenaean Greece to the Levant, the complete absence of any mention in contemporary Egyptian inscriptions before 1175 BCE is a concrete, datable observation that the mechanism cannot explain. The mechanism predicts widespread, disruptive naval activity across the eastern Mediterranean; Egypt's silence on such a scale of maritime threat in its own sphere of interest and record-keeping constitutes a direct counterexample to the claimed scope and causal process. The exclusion of Egypt from the scope is an ad hoc maneuver to evade this disconfirming evidence rather than a principled limitation.",
+  "counterexample": [
+    "Contemporary Egyptian inscriptions lacking any mention of Sea Peoples before 1175 BCE"
+  ]
+}

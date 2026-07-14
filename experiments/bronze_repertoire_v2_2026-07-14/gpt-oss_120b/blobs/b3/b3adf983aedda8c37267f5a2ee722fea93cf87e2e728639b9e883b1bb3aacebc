@@ -1,0 +1,16 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Pairwise discrimination (\u00a710.2): A-beats-B-for-pi, never a global\nranking. 'neither' registers nothing \u2014 the rivalry stands.", "properties": {"decisive_point": {"default": "", "title": "Decisive Point", "type": "string"}, "winner": {"enum": ["A", "B", "neither"], "title": "Winner", "type": "string"}}, "required": ["winner"], "title": "PairwiseRuling", "type": "object"}
+
+PROBLEM disc:pi-bronze: discriminate between 3 surviving rivals for pi-bronze
+CRITERIA:
+
+
+A:
+{"claim": "Mass migrations and raids by the Sea Peoples disrupted trade, political stability, and military defense across the Eastern Mediterranean, precipitating collapse.", "mechanism": "Coordinated external pressure from maritime raiders overwhelmed local militaries and broke inter‑regional trade networks, leading to internal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt (which repelled the Sea Peoples)"]}, "forbidden": [{"case": "Archaeological layers at Ugarit lacking any destruction horizon or Sea Peoples artefacts dated to 1200–1150 BC", "eval": "rubric:std-hist"}], "prose_notes": "This is the classic ‘Sea Peoples’ hypothesis favored by many scholars; the counterexample of sites with no destruction evidence challenges its universality."}
+
+B:
+{"claim": "A rapid, region-wide hyperarid climate shift around 1200 BC caused severe agricultural failures in the Eastern Mediterranean, while Egypt's reliance on the Nile flood insulated it.", "mechanism": "Sharp decrease in precipitation leading to drought, crop failure, population stress, and eventual societal collapse.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleo‑hydrological data from speleothems in Anatolia showing no significant drought at 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Climate records from the Mediterranean are mixed; a clear, simultaneous drought would strongly support this model, but many high‑resolution proxies suggest only modest variability."}
+
+QUESTION: which candidate better addresses the problem, for this problem only? winner=neither if you cannot discriminate. decisive_point MUST quote a span of a candidate.

@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.\", \"mechanism\": \"Cascading resource starvation triggered by earthquake damage to port infrastructure and grain stores, breaking the feedback loop between central authority and peripheral producers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'Systems Collapse' theory, attributing the event to fragility in interconnected supply chains exacerbated by natural disaster.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.\", \"mechanism\": \"Asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A traditional migration/invasion hypothesis, focusing on the military mismatch between rigid palace armies and flexible irregular forces.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an endogenous political revolution where subject populations deliberately dismantled the palatial bureaucracy to escape tribute obligations during a period of climate-induced stress.\", \"mechanism\": \"Social contract rupture: localized revolts against extractive institutions became contagious across the network as the cost of rebellion dropped below the cost of submission.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Settlement patterns showing continuous occupation of palace sites by the same elite class immediately following the destruction horizon without cultural break.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, internalist explanation framing the event not as a catastrophe inflicted from outside or nature, but as a successful class struggle against the palace system itself.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.35
+    }
+  ]
+}

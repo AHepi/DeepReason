@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+
+TARGET:
+{"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.", "mechanism": "Cascading resource starvation triggered by earthquake damage to port infrastructure and grain stores, breaking the feedback loop between central authority and peripheral producers.", "scope": {"covers": ["Mycenaean Greece", "Ugarit", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers.", "eval": "rubric:std-hist"}], "prose_notes": "This is the modal 'Systems Collapse' theory, attributing the event to fragility in interconnected supply chains exacerbated by natural disaster."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

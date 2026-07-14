@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic fragility in the palatial redistribution economy where hyper-specialization created a single point of failure; when seismic activity or minor trade disruptions broke the supply of critical bronze ingredients, the entire socio-political structure unraveled because local communities lacked the autonomy to survive independently.\", \"mechanism\": \"Cascading systemic failure triggered by supply chain interruption in a non-resilient, centralized network.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"independent rural villages\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust local subsistence economies continuing uninterrupted within palace zones during the transition period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate leans on the 'complexity collapse' theory, emphasizing internal structural weakness over external shock.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "919f88a2232e78974c00b651e5fb20d3a5ee8445e8c52f8aee4c23068e4adfca"
+        },
+        {
+          "role": "dependence",
+          "target": "d938b4d9c033f24f4d1b61c4978b3cdf267c21110b11bea04686d6a1469ba2a6"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"The simultaneous collapse resulted from a synchronized climatic shock (the 3.2ka event) causing prolonged drought that specifically devastated the rain-fed agricultural hinterlands of the Northern Levant and Anatolia, leading to mass migration and famine that overwhelmed the static palatial storage systems, while Egypt survived due to its reliance on predictable Nile flooding.\", \"mechanism\": \"Exogenous climatic forcing causing agricultural failure and subsequent demographic pressure/migration.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Mycenaean Greece\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A high-typicality environmental determinist explanation focusing on the specific vulnerability of rain-fed vs. irrigation-based agriculture.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "1a50596e47ff7d0a2982e8b98d58ed20a806dd9ccba5b62d9b61c20766e5a654"
+        }
+      ],
+      "typicality": 0.90
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an endogenous political revolution where subject populations, exhausted by centuries of extractive tribute obligations and corvée labor required to maintain palatial grandeur, deliberately dismantled the bureaucratic apparatus when central military power waned, rejecting the ideology of kingship itself rather than being conquered by outsiders.\", \"mechanism\": \"Internal class conflict and ideological rejection of the palatial social contract leading to voluntary decentralization.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Sea Peoples as a unified invading army\"]}, \"forbidden\": [{\"case\": \"Inscriptions or records from the period celebrating the restoration of kingship by the same local populations immediately after the destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, Marxist-leaning interpretation that reframes the 'Sea Peoples' not as invaders but as a symptom of internal revolt or misidentifies the primary agent of change as the peasantry.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "edc32e579a5add689e4929e786f177de6cb8b66a6c9940e75e2d2aa798aae6ab"
+        },
+        {
+          "role": "mention",
+          "target": "6e2f0cab2cf607d6e1a2deb865edc00e84e1313f76be7b7a8fcea6ca35cbbb40"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

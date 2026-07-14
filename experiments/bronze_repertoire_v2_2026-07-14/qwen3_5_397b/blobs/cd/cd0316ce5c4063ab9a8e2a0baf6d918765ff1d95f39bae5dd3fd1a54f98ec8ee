@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete observation that could realistically have obtained, but rather a negative finding that fails to falsify the mechanism.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The forbidden case provided is 'Archaeological layers at Pylos or Hattusa showing no evidence of seismic damage prior to destruction by fire.' This is a negative finding—an absence of evidence—not a positive, datable observation. The mechanism claims earthquakes physically destroyed palatial centers. The absence of seismic damage in layers *prior* to destruction does not contradict the claim that seismic damage occurred *at the time of* destruction; the destruction layer itself could be the seismic evidence. A proper forbidden case would be a concrete, positive observation, such as 'archaeological layers at Pylos showing clear evidence of gradual economic decline and orderly abandonment predating any destruction layer by a generation.'
+cites: {"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surpluses.", "mechanism": "A cluster of high-magnitude earthquakes (earthquake storm) physically destroyed key palatial centers and disrupted the fragile, centralized logistics network required to move grain and bronze, leading to famine and loss of military capacity.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "Mesopotamia"]}, "forbidden": [{"case": "Archaeological layers at Pylos or Hattusa showing no evidence of seismic damage prior to destruction by fire.", "eval": "rubric:std-hist"}], "prose_notes": "This aligns with the 'Earthquake Storm' hypothesis, explaining the simultaneity across fault lines while excluding Egypt which lies on a different tectonic plate."}
+
+TARGET:
+{"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surpluses.", "mechanism": "A cluster of high-magnitude earthquakes (earthquake storm) physically destroyed key palatial centers and disrupted the fragile, centralized logistics network required to move grain and bronze, leading to famine and loss of military capacity.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "Mesopotamia"]}, "forbidden": [{"case": "Archaeological layers at Pylos or Hattusa showing no evidence of seismic damage prior to destruction by fire.", "eval": "rubric:std-hist"}], "prose_notes": "This aligns with the 'Earthquake Storm' hypothesis, explaining the simultaneity across fault lines while excluding Egypt which lies on a different tectonic plate."}

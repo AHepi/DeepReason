@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "bf338d675839fc938175d6842fd725cd9fe540d6f6a579b9a1c63d44ad407e",
+      "attack": true,
+      "case": "The claim attributes collapse to 'overproduction of elite warrior class' and 'ideological erosion', but the mechanism fails to explain the near-simultaneous timing across four distinct political and cultural systems (Mycenaean, Hittite, Ugaritic, Levantine city-states). Internal elite competition and loss of cultic authority are system-specific processes that would unfold on different timelines in each polity; the account provides no transmission mechanism or common shock that would synchronize these independent internal failures within a single generation, which is the core explanatory demand of the problem.",
+      "counterexample": null
+    },
+    {
+      "target": "abd00968ede0dff11d75c81e4bfe25946d6f6a5cb364b37f948f7bd5629c7",
+      "attack": true,
+      "case": "The claim of a 'prolonged megadrought between 1220-1160 BCE' as the primary collapse driver is undermined by the survival of Egypt, which the scope explicitly excludes. Egypt's agricultural system depended on the same Nile hydrology that would be affected by a regional megadrought; the account provides no mechanism explaining why a drought severe enough to cause agricultural collapse in the Hittite and Mycenaean heartlands would spare Egypt, which was equally dependent on climate-sensitive water resources. The exclusion of Egypt from the scope is asserted but not mechanistically justified.",
+      "counterexample": null
+    },
+    {
+      "target": "39f756df202fe336d5a5e5fbf2de48348228cf0c2d99d4c7d35179b0af86",
+      "attack": true,
+      "case": "The claim that mass migrations 'coalesced into the Sea Peoples' who then caused collapse through naval raids inverts the archaeological and textual evidence: the Sea Peoples appear in the record as a consequence of the collapses, not their primary cause. Major destructions at Mycenaean centers (e.g., Pylos, Mycenae, Tiryns) show evidence of earthquake and internal conflict rather than coordinated naval assault, and the Hittite capital Hattusa was destroyed from inland, not by seaborne raiders. The mechanism of 'destruction of trade routes and forcing defensive overextension' is a secondary effect that presupposes the very collapse it purports to explain.",
+      "counterexample": null
+    }
+  ]
+}

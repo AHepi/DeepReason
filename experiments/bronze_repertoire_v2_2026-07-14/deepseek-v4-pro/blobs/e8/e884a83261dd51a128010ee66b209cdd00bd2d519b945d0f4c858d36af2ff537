@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: The 'network epidemic of institutional despair' (3cd717da) and the 'synchronous pandemic of hemorrhagic fever' (fb7a02bb) both model collapse as a contagion spreading along palatial networks, but they posit mutually exclusive transmission substrates—psychological despair versus a biological pathogen. They are refuted if the archaeological record contains evidence of mass mortality consistent with a biological agent (which would support the hemorrhagic fever model over the despair model) or, conversely, if it lacks such evidence and instead shows a continuity of human remains without disease markers (which would eliminate the biological substrate and favor the psychological one).",
+  "connects": [
+    "3cd717da70d6b0a4d594ef9006ec3588ba4dbef346019409253d707a32b4dc43",
+    "fb7a02bb838d41fcfc398af562d5b06f8f3d7053a7c6951a07052720689c3cbd"
+  ]
+}

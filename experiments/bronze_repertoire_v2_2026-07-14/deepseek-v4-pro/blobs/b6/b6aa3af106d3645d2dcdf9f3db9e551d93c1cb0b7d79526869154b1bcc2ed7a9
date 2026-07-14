@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—a single-point failure triggered by an earthquake swarm destroying the Hittite state—is directly contradicted by the first forbidden case, which states that archaeological evidence shows Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before its final destruction. This case is a concrete, datable observation that could realistically have obtained and is explicitly listed as forbidden. The target fails to account for this evidence, which undermines the claimed causal trigger and thus violates the standard's requirement to state forbidden cases that are concrete observations. Additionally, the second forbidden case—that Mycenaean palaces were still receiving bronze and luxury goods right up until their destruction—further weakens the mechanism's claim that the trade collapse starved the palaces of these goods before their fall, as the administrative records show no interruption in supply prior to destruction.",
+  "counterexample": [
+    "Archaeological evidence shows the Hittite capital Hattusa was destroyed by fire and war, not an earthquake, and that the city was partially abandoned before the final destruction."
+  ]
+}

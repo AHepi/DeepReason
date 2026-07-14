@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target names a mechanism ('asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines') but fails to state forbidden cases that are concrete, datable observations which could realistically have obtained. The single forbidden case provided ('Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups') is not a concrete observation or datable pattern; it is a hypothetical type of evidence that would disprove a premise of the claim. The standard requires forbidden cases to be specific records, events, or datable patterns that would falsify the causal mechanism if observed, not abstract evidentiary scenarios.
+
+TARGET:
+{"claim": "The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.", "mechanism": "Asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups.", "eval": "rubric:std-hist"}], "prose_notes": "A traditional migration/invasion hypothesis, focusing on the military mismatch between rigid palace armies and flexible irregular forces."}

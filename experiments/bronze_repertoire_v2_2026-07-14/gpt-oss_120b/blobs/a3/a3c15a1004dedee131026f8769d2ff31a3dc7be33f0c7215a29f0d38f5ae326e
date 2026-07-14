@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: The drought hypothesis (58e798a0) posits agricultural collapse as the primary trigger, but the copper-production collapse hypothesis (dacf8df8) refutes this by asserting that the economic engine of trade-dependent palace societies was already severed before the drought's peak effects, making the drought a secondary stressor rather than the decisive cause. REFUTED IF evidence shows copper production ceased only after widespread crop failures documented in 58e798a0.",
+  "connects": [
+    "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440",
+    "dacf8df890d9055c8b0a49fa44b9b6ae2f13d2953f4144d9ff8dd8c8a4150c67"
+  ]
+}

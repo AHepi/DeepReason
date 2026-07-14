@@ -106,15 +106,25 @@ def emitted_texts(root: Path, harness) -> list[str]:
             try:
                 raw = harness.blobs.get(ref)
                 raw = raw.decode() if isinstance(raw, bytes) else raw
-                data = json.loads(raw)
+                from deepreason.llm.repair import parse_one_json_value
+                data = json.loads(parse_one_json_value(raw).text)
                 if isinstance(data, str):
                     data = json.loads(data)
             except Exception:
                 continue
             if not isinstance(data, dict):
                 continue
-            for candidate in data.get("candidates") or []:
+            candidates = data.get("candidates")
+            if not isinstance(candidates, list):
+                # Bare skeleton response (census extract_candidates parity).
+                if "claim" in data and "mechanism" in data:
+                    candidates = [{"content": data}]
+                else:
+                    continue
+            for candidate in candidates:
                 content = candidate.get("content")
+                if isinstance(content, (dict, list)):
+                    content = json.dumps(content, sort_keys=True)
                 if not isinstance(content, str):
                     continue
                 try:

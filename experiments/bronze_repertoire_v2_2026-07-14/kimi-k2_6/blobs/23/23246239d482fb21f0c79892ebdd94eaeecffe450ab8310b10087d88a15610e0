@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The critic misreads the forbidden case. The case does not assert that the Amarna period caused permanent collapse; it states that the target’s mechanism—Egyptian absorption of cosmic disorder via the Osiris-Seth cycle—would be falsified if Egypt showed no capacity to absorb ideological crisis, with the Amarna period offered as a hypothetical example of a crisis that could have caused permanent collapse but did not."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

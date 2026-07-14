@@ -1,0 +1,24 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A rapid, region-wide hyperarid climate shift around 1200 BC caused severe agricultural failures in the Eastern Mediterranean, while Egypt's reliance on the Nile flood insulated it.\", \"mechanism\": \"Sharp decrease in precipitation leading to drought, crop failure, population stress, and eventual societal collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city‑states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleo‑hydrological data from speleothems in Anatolia showing no significant drought at 1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Climate records from the Mediterranean are mixed; a clear, simultaneous drought would strongly support this model, but many high‑resolution proxies suggest only modest variability.\"}",
+      "refs": [],
+      "typicality": 0.32
+    },
+    {
+      "content": "{\"claim\": \"Mass migrations and raids by the Sea Peoples disrupted trade, political stability, and military defense across the Eastern Mediterranean, precipitating collapse.\", \"mechanism\": \"Coordinated external pressure from maritime raiders overwhelmed local militaries and broke inter‑regional trade networks, leading to internal collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city‑states\"], \"excludes\": [\"Egypt (which repelled the Sea Peoples)\"]}, \"forbidden\": [{\"case\": \"Archaeological layers at Ugarit lacking any destruction horizon or Sea Peoples artefacts dated to 1200–1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic ‘Sea Peoples’ hypothesis favored by many scholars; the counterexample of sites with no destruction evidence challenges its universality.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        }
+      ],
+      "typicality": 0.78
+    },
+    {
+      "content": "{\"claim\": \"The collapse of the copper‑production system in Cyprus eliminated a key economic engine, causing a chain reaction of economic decline throughout the trade‑dependent palace societies.\", \"mechanism\": \"Loss of copper exports led to loss of elite revenues, reduced ability to fund military and monument projects, and triggered internal unrest.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Levantine city‑states that relied less on copper\", \"Egypt\"]}, \"forbidden\": [{\"case\": \"Late Bronze Age records from Hattusa showing continued receipt of copper shipments after 1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An economic‑centric explanation that downplays direct warfare; it is less common but offers a mechanistic view linking resource networks to collapse.\"}",
+      "refs": [],
+      "typicality": 0.55
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "attack": true,
+  "case": "The target's mechanism requires seismic destruction layers at major palatial sites contemporaneous with the collapse horizon as direct physical evidence of the claimed earthquake storms. The forbidden case states that archaeological evidence shows no such layers exist. This directly contradicts a necessary observable implication of the mechanism: if sequential earthquakes shattered administrative buildings and collapsed storerooms at Mycenaean, Hittite, and Ugaritic palatial centers during c.1225-1175 BC, then destruction layers with seismic signatures must be present at those sites dated to that window. The absence of this evidence falsifies the causal claim under the standard's requirement that forbidden cases be concrete observations which could realistically have obtained—here, the observation is a datable archaeological pattern that the mechanism predicts should exist but does not.",
+  "counterexample": [
+    "Pylos: destruction layer dated c.1180 BC shows evidence of fire, not seismic damage",
+    "Mycenae: no earthquake damage layer in LH IIIB2/C transition; destruction attributed to fire and possible human agency",
+    "Hattusa: no seismic destruction layer c.1200 BC; abandonment appears gradual with evidence of planned evacuation",
+    "Ugarit: destruction layer c.1190-1185 BC contains arrowheads and widespread burning consistent with military attack, not earthquake"
+  ]
+}

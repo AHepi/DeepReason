@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claims a volcanic eruption caused short-term climatic cooling via reduced solar insolation, but its own forbidden case states that high-resolution ice-core and dendrochronological records show no significant temperature drop in 1200 BC. Under the std-hist rubric, a valid mechanism must be consistent with concrete, datable observations. The specified proxy records directly contradict the posited cooling event, meaning the mechanism lacks the required empirical support and the forbidden case is not adequately excluded—it instead falsifies the central causal step. The target therefore fails to meet clause (2) of the standard, which demands that forbidden cases be concrete observations that could realistically have obtained and that the mechanism withstands them.
+
+TARGET:
+{"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eastern Mediterranean.", "mechanism": "environmental stress via volcanic winter", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution ice‑core and dendrochronological records show no significant temperature drop in 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Sequence: eruption → ash fallout → reduced solar insolation → crop failures → societal strain → collapse."}

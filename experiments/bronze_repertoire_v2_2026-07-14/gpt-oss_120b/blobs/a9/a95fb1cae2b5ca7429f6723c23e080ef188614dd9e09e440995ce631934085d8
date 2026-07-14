@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case is a single negative observation ('no increase in flood-derived deposits'), but the standard requires that a historical-mechanism account state forbidden cases that are 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The provided forbidden case is merely the absence of the predicted evidence, not a concrete, positively specified alternative observation. A valid forbidden case would describe a specific, datable pattern that would falsify the mechanism—for example, 'High-resolution lake sediment cores from the eastern Mediterranean show a stable, uninterrupted sequence of dry-season varves with no coarse-grained detrital layers between 1220 and 1180 BC, while archaeological sites in the same catchment show continuous, uninterrupted occupation and grain-storage facilities.' The target's formulation fails to specify what the sediment record would positively look like if the mechanism were false, reducing the forbidden case to a generic null finding rather than a concrete, realistically obtainable observation.",
+  "counterexample": null
+}

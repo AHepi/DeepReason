@@ -1,0 +1,24 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+
+TARGET:
+[A1] {"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where centralized storage and specialized labor created a single point of failure; when external shocks (drought, migration) disrupted input flows, the rigid bureaucratic apparatus could not adapt, leading to cascading institutional dissolution.", "mechanism": "Positive feedback loop of centralization reducing resilience: as states specialized to maximize surplus extraction, they lost the modular redundancy required to absorb local failures, causing a domino effect across the interconnected trade network.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus minor settlements"]}, "forbidden": [{"case": "Archaeological evidence of flexible, decentralized survival strategies within palace centers during the initial shock phase", "eval": "rubric:std-hist"}], "prose_notes": "Aligns with the mechanist school (ba68...) and echoes the systemic failure hypothesis of 919f... but emphasizes the structural rigidity rather than just the trigger event."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

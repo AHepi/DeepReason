@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's forbidden cases are not concrete observations that could realistically obtain given the claim's own scope and mechanism. The first forbidden case—'sustained, region-wide above-average rainfall'—is a strawman because the claim's mechanism is triggered by drought, not falsified by the absence of drought. The second forbidden case—'archaeological evidence that palatial storage facilities were full and trade continued uninterrupted through the collapse horizon'—is internally incoherent with the claim's own causal sequence: the mechanism states that drought caused agricultural failure which emptied the storage systems and disrupted trade. A 'full storage' observation at the collapse horizon would contradict the mechanism's own antecedent conditions, not serve as an independent test. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained'; these cases describe conditions that are either irrelevant to the mechanism or logically precluded by the mechanism's own premises, making them unfalsifiable in practice.",
+  "counterexample": [
+    "Archaeological evidence of full palatial storage magazines with grain carbon-dated to the collapse horizon at Pylos, Mycenae, and Hattusa, alongside shipwrecks showing uninterrupted trade goods exchange through the 12th century BC.",
+    "Dendrochronological and speleothem records from Anatolia, the Peloponnese, and the Levant showing a sustained wet period precisely during the 13th-12th centuries BC."
+  ]
+}

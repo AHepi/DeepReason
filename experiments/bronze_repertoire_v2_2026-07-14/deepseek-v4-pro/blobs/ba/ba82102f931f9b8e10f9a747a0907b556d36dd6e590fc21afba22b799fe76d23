@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "bd9b0674789955b5c194c28f5ca3ceeed4a28514b46d10981d38bfecb68593a4",
+      "attack": true,
+      "case": "The account claims a cascading failure of interdependent palatial redistribution networks, yet it excludes Egypt on the grounds that the Nile's flood was buffered against Mediterranean rainfall. This exclusion is inconsistent with the claimed mechanism: Egypt was a deeply integrated trading partner in the Eastern Mediterranean network, importing copper, timber, and luxury goods from the very regions that collapsed. If the mechanism were truly a domino effect of trade and diplomatic unraveling, Egypt should have suffered severe economic and political consequences from the simultaneous loss of all its major trade partners, regardless of its domestic agricultural resilience. The account provides no explanation for how Egypt's redistributive system could remain stable when the entire international exchange network on which it depended for strategic resources vanished.",
+      "counterexample": null
+    },
+    {
+      "target": "7dbbd147456de767f09d06f34978ec978bfda8244c7dc768cf6591b4a78de00f",
+      "attack": true,
+      "case": "The account attributes the collapse to a synchronized wave of internal rebellion by disenfranchised 'runners' overthrowing chariot-based aristocracies, yet it excludes Egypt on the grounds that Egypt co-opted mercenaries into its military. This exclusion contradicts the claimed mechanism: if the revolutionary energy was driven by population growth, land pressure, and a disenfranchised class, Egypt—with its own dense population, social hierarchy, and documented reliance on Libyan and other mercenary groups—should have been equally or more vulnerable to internal rebellion. The account offers no reason why Egypt's co-option strategy would succeed when the same mercenary groups (e.g., Shardana, Lukka) were supposedly the very agents of destruction elsewhere. If these groups were fundamentally revolutionary, their integration into Egypt's military should have imported the rebellion, not neutralized it.",
+      "counterexample": null
+    },
+    {
+      "target": "3cd717da70d6b0a4d594ef9006ec3588ba4dbef346019409253d707a32b4dc43",
+      "attack": true,
+      "case": "The account claims the collapse was triggered by earthquakes shattering the divine mandate of palace elites, leading to voluntary abandonment, yet it excludes Egypt on the grounds that the pharaoh was a living god and the Nile's cycle was 'earthquake-proof.' This exclusion is historically untenable: Egypt itself experienced significant earthquakes in the Late Bronze Age, and Egyptian theology did not render the pharaoh immune to challenges of legitimacy—the pharaoh's divine status was routinely tested by military defeats, succession crises, and natural disasters, which were interpreted as signs of cosmic disorder. The account fails to explain why earthquakes in the interconnected Eastern Mediterranean would not have been interpreted in Egypt as a failure of the pharaoh's divine mandate to maintain Ma'at, especially given that Egypt's own monuments and temples were vulnerable to seismic damage and that Egyptian texts record anxiety over foreign catastrophes as omens.",
+      "counterexample": null
+    }
+  ]
+}

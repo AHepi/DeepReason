@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a 'synchronous systems collapse' triggered by drought, but the first forbidden case directly contradicts the posited mechanism: it specifies that 'archaeological evidence shows a significant increase in grain storage capacity and diversification of food sources in the decades immediately preceding the destruction of Pylos and Hattusa.' This observation, if true, would demonstrate that the palatial administrative systems were not brittle and over-specialized but were actively adapting and building resilience against food stress. The mechanism therefore fails the standard's requirement to state a specific causal process that is consistent with observable evidence, because the forbidden case is a concrete, datable pattern that could realistically have obtained and would falsify the claimed vulnerability.",
+  "counterexample": [
+    "Archaeological evidence shows a significant increase in grain storage capacity and diversification of food sources in the decades immediately preceding the destruction of Pylos and Hattusa."
+  ]
+}

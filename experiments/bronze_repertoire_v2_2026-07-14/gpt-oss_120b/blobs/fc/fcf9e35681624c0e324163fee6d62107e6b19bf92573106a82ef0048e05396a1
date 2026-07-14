@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism predicts a specific, observable physical signature: increased flood-derived deposits in eastern Mediterranean sediment cores during 1220–1180 BC. The forbidden case explicitly states that no such increase is observed in high-resolution lake sediment cores from this region and period. This directly contradicts the mechanism's necessary empirical consequence, violating the standard's requirement that a historical-mechanism account must be falsifiable by concrete, datable observations. The absence of predicted flood layers undermines the claim that a hydro-climatic regime shift caused recurrent, unprecedented winter storm surges across the specified regions.",
+  "counterexample": [
+    "High-resolution lake sediment cores from the eastern Mediterranean show no increase in flood-derived deposits during 1220–1180 BC."
+  ]
+}

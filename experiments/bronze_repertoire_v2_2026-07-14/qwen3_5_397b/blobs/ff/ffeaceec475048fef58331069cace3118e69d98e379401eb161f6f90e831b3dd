@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "The collapse resulted from a coordinated insurgency of marginalized kinship groups (Sea Peoples) exploiting the vacuum left by the withdrawal of Hittite military protection.", "mechanism": "Asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups.", "eval": "rubric:std-hist"}], "prose_notes": "A traditional migration/invasion hypothesis, focusing on the military mismatch between rigid palace armies and flexible irregular forces."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target names a mechanism ('asymmetric warfare where decentralized, mobile warrior bands overwhelmed static palace fortifications that relied on chariot-based defense doctrines') but fails to state forbidden cases that are concrete, datable observations which could realistically have obtained. The single forbidden case provided ('Epigraphic evidence proving the Sea Peoples were a unified state actor with a centralized command structure rather than disparate migratory groups') is not a concrete observation or datable pattern; it is a hypothetical type of evidence that would disprove a premise of the claim. The standard requires forbidden cases to be specific records, events, or datable patterns that would falsify the causal mechanism if observed, not abstract evidentiary scenarios.
+
+THE DEFENCE:
+The critic misreads the standard. The forbidden case is not an abstract evidentiary scenario but a concrete, datable observation: the discovery of epigraphic evidence—such as royal annals, treaties, or administrative correspondence—that demonstrates the Sea Peoples operated under a unified, centralized command structure. Such a find would be a specific archaeological record with a datable context (e.g., a treaty tablet from a Levantine archive dated to the early 12th century BCE naming a single king or high commander of the Sea Peoples). This directly falsifies the mechanism, which requires decentralized, autonomous warrior bands; a unified state actor would not produce the asymmetric, irregular warfare pattern the mechanism describes. The case is therefore a legitimate potential falsifier under the rubric.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

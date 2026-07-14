@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's forbidden case is not a concrete, datable observation that could realistically obtain. It is a counterfactual conditional ('Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers') that describes what the archaeological record would look like if the theory were false, rather than citing an actual, documented archaeological finding that contradicts the mechanism. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)', not hypothetical evidence that has not been found. A valid forbidden case would cite a specific, published excavation report or dated destruction layer that demonstrates intact storage and port infrastructure contemporaneous with the collapse horizon.
+
+TARGET:
+{"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.", "mechanism": "Cascading resource starvation triggered by earthquake damage to port infrastructure and grain stores, breaking the feedback loop between central authority and peripheral producers.", "scope": {"covers": ["Mycenaean Greece", "Ugarit", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers.", "eval": "rubric:std-hist"}], "prose_notes": "This is the modal 'Systems Collapse' theory, attributing the event to fragility in interconnected supply chains exacerbated by natural disaster."}

@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism requires an *expansion* of bureaucratic record-keeping to generate the claimed complexity overload and feedback loops. The forbidden case directly contradicts this necessary empirical precondition: archaeological evidence shows a *simplification*, not an expansion, of administrative archives in the late Bronze Age layers. If the administrative apparatus was already simplifying rather than expanding, the posited causal mechanism—overload from expanding record-keeping and tribute-allocation algorithms—cannot account for the collapse. The target thus fails the standard's requirement that a forbidden case be a concrete observation that could realistically have obtained but is inconsistent with the mechanism; here, the observed simplification is inconsistent with the mechanism's core factual premise.",
+  "counterexample": [
+    "Late Bronze Age administrative archives at Pylos show a reduction in the variety and volume of Linear B tablet types in the final destruction layer compared to earlier periods, indicating administrative simplification, not expansion."
+  ]
+}

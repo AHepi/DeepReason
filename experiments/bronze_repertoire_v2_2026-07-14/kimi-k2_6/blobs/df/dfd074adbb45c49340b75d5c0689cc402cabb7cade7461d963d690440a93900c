@@ -1,0 +1,9 @@
+{
+  "attack": true,
+  "case": "The target's forbidden case 'Egyptian New Kingdom showed no capacity to absorb ideological crisis (Amarna period caused permanent collapse)' is a straw man that misrepresents the historical record. The Amarna period (c. 1353–1336 BC) did not cause permanent collapse; the New Kingdom demonstrably absorbed this ideological crisis through the Restoration Stela of Tutankhamun, the systematic damnatio memoriae of Akhenaten, and the subsequent Ramesside reconsolidation of Amun-Ra theology. Egypt continued as a major power for over two centuries after Amarna, fielding armies at Kadesh (1274 BC) and maintaining empire into the 20th Dynasty. The target's claim that Egypt 'absorbed cosmic disorder through the Osiris-Seth cycle narrative' is itself a mechanism of ideological recovery, yet the forbidden case asserts the opposite without engaging the actual evidence of successful absorption. This violates the standard's requirement that forbidden cases be 'concrete observations which could realistically have obtained'—the Amarna-to-permanent-collapse trajectory is counterfactual to the datable pattern of Egyptian recovery and continued New Kingdom institutional continuity.",
+  "counterexample": [
+    "Tutankhamun's Restoration Stela (c. 1332 BC) explicitly records the re-establishment of traditional cults and the repair of temples abandoned under Akhenaten, demonstrating institutional absorption of ideological crisis within a single generation.",
+    "The 19th Dynasty under Seti I and Ramesses II (1290–1213 BC) rebuilt and expanded the temple of Amun at Karnak, reasserting the cosmic-ritual legitimation of pharaonic kingship decades after Amarna.",
+    "Egyptian military and administrative records from the reign of Merneptah (1213–1203 BC) show continued palace-economic redistribution and imperial control in Canaan, contradicting any claim of permanent collapse following Amarna."
+  ]
+}

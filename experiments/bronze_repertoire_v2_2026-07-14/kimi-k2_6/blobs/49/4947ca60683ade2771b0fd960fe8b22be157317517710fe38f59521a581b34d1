@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—timber famine causing simultaneous collapse of monumental redistributive systems—requires that the material outputs of those systems (architectural timber, bronze) show observable degradation before the collapse. The forbidden case 'Destruction layers show no reduction in architectural timber quality or bronze output pre-collapse' directly tests this: if palace economies were suffering catastrophic timber shortages that crippled their energetic foundations, we would expect to see inferior timber in late-period construction and reduced bronze production. The target provides no causal pathway by which timber inputs could collapse while material outputs remain unchanged. This is not a mood or inevitability claim, but a specific, datable archaeological pattern that could realistically obtain and would falsify the mechanism. The mechanism thus fails the standard's requirement that forbidden cases be genuine counterexamples—this one is, and the target does not explain how it could be accommodated.",
+  "counterexample": [
+    "Destruction layers at Mycenae and Hattusa show no decline in architectural timber dimensions or quality in final building phases",
+    "Bronze hoards and production debris from 1250-1200 BC show no reduction in output volume or metallurgical quality"
+  ]
+}

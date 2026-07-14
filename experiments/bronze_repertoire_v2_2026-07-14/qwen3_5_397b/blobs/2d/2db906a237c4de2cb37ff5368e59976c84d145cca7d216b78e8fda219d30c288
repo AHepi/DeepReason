@@ -1,0 +1,33 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surpluses.\", \"mechanism\": \"A cluster of high-magnitude earthquakes (earthquake storm) physically destroyed key palatial centers and disrupted the fragile, centralized logistics network required to move grain and bronze, leading to famine and loss of military capacity.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Archaeological layers at Pylos or Hattusa showing no evidence of seismic damage prior to destruction by fire.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This aligns with the 'Earthquake Storm' hypothesis, explaining the simultaneity across fault lines while excluding Egypt which lies on a different tectonic plate.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "919f88a2232e78974c00b651e5fb20d3a5ee8445e8c52f8aee4c23068e4adfca"
+        },
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the palace economies.\", \"mechanism\": \"A multi-decadal mega-drought reduced agricultural yields below the threshold required to support the hyper-specialized, non-food-producing palace elites and standing armies, triggering internal revolt and mass migration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the 3.2ka BP aridification event; explains Egypt's survival via its reliance on Nile irrigation rather than rainfall.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "1a50596e47ff7d0a2982e8b98d58ed20a806dd9ccba5b62d9b61c20766e5a654"
+        }
+      ],
+      "typicality": 0.90
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a technological paradigm shift where the democratization of iron-working rendered the bronze-based monopoly of the palaces obsolete.\", \"mechanism\": \"The sudden availability of cheap iron tools and weapons allowed marginalized groups to bypass the palace-controlled tin/copper supply chain, eroding the economic basis of elite power and enabling successful asymmetrical warfare against bronze-equipped charioteers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Metallurgical analysis showing iron artifacts were rare, ritualistic, or inferior to bronze in the region until after 1100 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical view challenging the standard chronology that places widespread iron use post-collapse; posits technology as the driver rather than the result.\"}",
+      "refs": [],
+      "typicality": 0.35
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claims a specific causal mechanism — a coordinated 'Northern Confederation' using iron weaponry — but its own forbidden case states that contemporary inscriptions contain no mention of such a confederation or iron weaponry. Under the standard, a valid historical-mechanism account must name a specific causal mechanism, yet the absence of any epigraphic evidence for the named confederation or its iron weapons means the mechanism is not grounded in concrete, datable observations. The forbidden case directly contradicts the mechanism's existence in the historical record, violating the requirement that the mechanism be supported by concrete evidence rather than speculative entities.
+
+TARGET:
+{"claim": "A trans‑Mediterranean coalition of early Iron‑age hill‑state warriors, often identified in epigraphic fragments as the ‘Northern Confederation’, launched coordinated raids on coastal palaces, disrupting trade routes and overwhelming local militaries.", "mechanism": "Militant pressure from a mobile, iron‑armed confederation overwhelmed traditional bronze‑armed forces, precipitating political fragmentation and loss of elite control.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Contemporary inscriptions from the period contain no mention of a coordinated northern confederation or iron weaponry.", "eval": "rubric:std-hist"}], "prose_notes": "The model emphasizes a wave of militarization driven by early iron technology, distinguishing it from the Sea‑Peoples narrative while still accounting for widespread destruction observed in palace layers."}

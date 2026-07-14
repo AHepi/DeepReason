@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"hv_min":"0.5","k":8},"steps":100000,"time_ms":2000},"eval":"program:hv_floor","id":"hv-floor@2a45b7988522","observation_valued":false},"id":"hv-floor@2a45b7988522","schema":"commitment"}

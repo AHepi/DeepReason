@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a 'synchronized climatic shock' causing 'prolonged drought' in the Northern Levant and Anatolia as the specific causal mechanism. The forbidden case presents 'Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC.' This directly contradicts the mechanism's necessary empirical precondition—that a severe, prolonged drought occurred in the very region specified. If precipitation was normal, the claimed exogenous climatic forcing could not have caused the agricultural failure and subsequent collapse. The target therefore fails the standard's requirement that a mechanism be testable against concrete, datable observations; the forbidden case is a realistic, specific observation that would falsify the mechanism's operation in the stated scope.",
+  "counterexample": [
+    "Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC"
+  ]
+}
