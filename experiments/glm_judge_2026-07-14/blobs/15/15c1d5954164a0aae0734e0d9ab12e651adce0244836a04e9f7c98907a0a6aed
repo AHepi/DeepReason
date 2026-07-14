@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"the specified forbidden thresholds are equality and inequality relations (harness == SC, harness < SC, harness > SC) evaluated via the sign of the net of the aggregate net effect, not precise magnitude measurements requiring tight confidence intervals."}

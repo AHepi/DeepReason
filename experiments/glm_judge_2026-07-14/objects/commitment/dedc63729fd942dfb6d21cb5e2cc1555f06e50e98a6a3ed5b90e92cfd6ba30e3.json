@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Question-adaptive critic arm same distribution: harness score strictly > self-consistency score by at least 3 percentage points"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:e2ecf54634a0","observation_valued":false},"id":"fc:e2ecf54634a0","schema":"commitment"}

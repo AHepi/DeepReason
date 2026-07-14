@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"A same-family critic (e.g., v4-pro critic on v4-pro candidates) at k=7, e≈0.33 strictly beats self-consistency — if so, the orthogonality requirement is refuted"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:0a7618552264","observation_valued":false},"id":"fc:0a7618552264","schema":"commitment"}

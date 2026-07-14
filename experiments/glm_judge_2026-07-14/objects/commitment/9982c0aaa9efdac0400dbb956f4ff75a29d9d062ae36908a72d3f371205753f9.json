@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Adaptive-critic harness accuracy <= fixed-threshold harness accuracy on a set containing >= 30% fragile-majority questions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:af861bc1c3e8","observation_valued":false},"id":"fc:af861bc1c3e8","schema":"commitment"}

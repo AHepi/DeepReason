@@ -1,0 +1,20 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "\"The mechanism names a general information-theoretic condition — 'I(C;B) > I(C;M_wrong)' — but does not state the specific regime condition under which criticism-filtered voting diverges from unfiltered majority voting in measurable quantities of candidate base error rate, critic precision and recall, and ensemble size k.\""
+}

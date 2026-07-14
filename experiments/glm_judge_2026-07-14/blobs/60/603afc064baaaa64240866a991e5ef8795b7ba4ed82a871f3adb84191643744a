@@ -1,0 +1,4 @@
+{
+  "decisive_point": "\"mechanism\": \"Treat the system as majority-flip dynamics. When e <= 1/(k+1), SC never errs, so harness can only break correct answers. When e >= 1/2, SC majority is wrong, ... P >= 1/2 is the coarse threshold: ...\"",
+  "verdict": "pass"
+}

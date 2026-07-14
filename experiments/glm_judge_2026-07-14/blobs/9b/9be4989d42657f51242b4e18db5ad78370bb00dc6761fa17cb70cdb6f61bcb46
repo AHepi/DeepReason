@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The third forbidden case violates std-crit-design clause (2) and the repository-harness measurability requirement. The forbidden case posits: 'a question-adaptive critic with identical recall_wrong and falseflag_rate_correct as a fixed critic yields different harness accuracy.' This is not a concrete, measurable outcome of running the repository's validation harness"
+}

@@ -1,0 +1,4 @@
+{
+  "decisive_point": "Harness strictly beats self-consistency when the candidate error rate e satisfies k/(k+2) > e > 1/(k+1) for odd k≥7 AND the critic achieves precision P > e and recall R > 1-e on the subset of pools where the majority margin is ≤2 votes.",
+  "verdict": "pass"
+}

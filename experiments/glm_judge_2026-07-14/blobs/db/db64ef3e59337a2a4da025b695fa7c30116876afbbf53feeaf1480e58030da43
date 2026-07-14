@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target violates std-crit-design clause (1): the 'mechanism' must name the specific regime condition in measurable quantities (candidate base error rate, critic precision and recall, ensemble size k), not an aspiration or a non-executable curve. The target explicitly disclaims a point in (base error, precision, recall, k) space, substituting a stochastic-dominance existential ... that is a distributional property, not a pre-registrable operating point with numeric precision/recall and k.",
+  "verdict": "fail"
+}

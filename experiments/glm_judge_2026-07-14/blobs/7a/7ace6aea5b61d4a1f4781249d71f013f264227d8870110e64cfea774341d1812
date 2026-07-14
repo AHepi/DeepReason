@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target violates std-crit-design clause (1). The regime condition merges two independent requirements into a single threshold that is not stated as a measurable, pre-registerable quantity.",
+  "verdict": "fail"
+}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Any study cell with e in (1/(k+1), 1/2), P < 1/2, R > 0 where harness_acc > sc_acc, refuting P >= 1/2 necessity"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:04167bb76dae","observation_valued":false},"id":"fc:04167bb76dae","schema":"commitment"}

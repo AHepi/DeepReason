@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Any study cell with e <= 1/(k+1) where harness_acc > sc_acc, refuting the lower-bound necessity"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b6f4975fdf0b","observation_valued":false},"id":"fc:b6f4975fdf0b","schema":"commitment"}

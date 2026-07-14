@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Experiment shows harness > SC by >= 0.03 at P(fragile) = 0.1 with critic precision-on-fragile = 0.4 < 0.5, refuting the precision > 0.5 threshold in the claim"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:2e4b8a226b8d","observation_valued":false},"id":"fc:2e4b8a226b8d","schema":"commitment"}

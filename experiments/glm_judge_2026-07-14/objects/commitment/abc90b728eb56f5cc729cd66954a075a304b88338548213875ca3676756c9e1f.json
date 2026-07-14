@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Net fixed-minus-broken > 0 in any single tested (e, k, P, R) cell with significance surviving Bonferroni correction for multiple comparisons"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:0e78a34d6936","observation_valued":false},"id":"fc:0e78a34d6936","schema":"commitment"}

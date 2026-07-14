@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The stated forbidden cases require a KS test and a threshold sweep over a confidence score that the existing validation harness does not produce, and the proposed 60 new questions are outside this repository's candidate pool, violating the shared-pool and rerun-harness honesty requirement of std-crit-design clause (3)."}

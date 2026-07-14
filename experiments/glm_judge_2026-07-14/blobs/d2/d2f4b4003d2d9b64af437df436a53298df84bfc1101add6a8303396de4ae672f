@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The target violates std-crit-design clause (1) by proposing an adaptive mechanism whose threshold schedule is an aspiration, not a stated regime condition in measurable quantities."}

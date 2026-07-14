@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.05, P=1.0, R=0.5, n=100: harness does NOT strictly beat SC (no gain despite perfect precision and at least one broken-majority item)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b8ae7c60d0aa","observation_valued":false},"id":"fc:b8ae7c60d0aa","schema":"commitment"}

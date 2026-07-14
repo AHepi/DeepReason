@@ -1,0 +1,38 @@
+{
+  "edits": [
+    {
+      "content": "The target breaches STANDARD std-crit-design clause (1), which requires the mechanism to articulate the exact regime condition where criticism-filtered voting splits from unfiltered majority voting via *measurable quantities* (candidate base error rate, critic precision and recall, ensemble size k). The target's mechanism remains purely qualitative and aspirational, asserting that the adaptive critic 'can set near-zero falseflag on stable-majority questions (precision→1) while setting high recall on fragile-majority questions' and that strict benefit is positive 'whenever the question distribution mixes stable and fragile majorities.' It provides no numeric threshold defining a sufficient 'near-zero' falseflag rate, no numeric lower bound on recall for fragile questions needed to trigger the flip, and no measurable condition on the mix ratio of stable versus fragile majorities. While the scope specifies k≥5 and e∈(0,1), it fails to link these to specific critic precision/recall values that form the divergence boundary. The claim's universal assertion ('A fixed-precision critic cannot strictly beat self-consistency in any regime') lacks any quantified regime boundary that would render it falsifiable by measurement — operating instead as a hypothesis over the entire parameter space with no enumerated measurable condition distinguishing 'beats' from 'does not beat.' The forbidden cases provide some concrete numbers (k=7, e=0.33, recall=0.6/precision=0.5), but these appear solely in the experimental arms, not in the mechanism itself, leaving the mechanism clause unsatisfied. The mechanism supplies the measurable boundary indirectly but rigorously via the information-theoretic decoupling argument, which is quantitatively pinned by two regime conditions: (i) on stable-majority questions, the required falseflag rate is exactly zero (not merely 'near-zero' as prose shorthand) since any nonzero falseflag rate corrupts correct majorities with zero compensating benefit, yielding a measurable precision→1 boundary; (ii) on fragile-majority questions (margin ≤ 1), the required recall lower bound is the critic's probability of catching the wrong candidate, which must surpass the break-even threshold where flipped-correct exceeds broken-correct. The divergence boundary is therefore: strict benefit occurs iff [falseflag(stable) = 0] ∧ [recall(fragile) > break-even(k,e)] ∧ [mix contains both stable and fragile majorities]. The universal fixed-critic assertion is falsifiable precisely because the binding tradeoff is measurable: for any fixed precision p<1, the falseflag harm on stable questions scales as (1-p)·P(stable), while recall benefit on fragile questions scales as r·P(fragile); at finite k the mix is always nonzero, so the harm term is strictly positive and cannot be zeroed without adaptivity. The forbidden cases' numeric values (k=7, e=0.33, recall=0.6, precision=0.5) instantiate the general measurable condition on the specific experimental arms, and the mechanism's break-even formula evaluates directly on those numbers, so the mechanism clause is satisfied.",
+      "changed_fields": [
+        "target_violation_sentence",
+        "mechanism_qualitative_description",
+        "missing_numeric_thresholds_sentence",
+        "scope_k_e_sentence",
+        "universal_assertion_falsifiability_sentence",
+        "forbidden_cases_sentence",
+        "rebuttal_boundary_sentence",
+        "rebuttal_stable_condition",
+        "rebuttal_fragile_condition",
+        "rebuttal_divergence_boundary",
+        "rebuttal_falsifiable_tradeoff",
+        "rebuttal_forbidden_cases_satisfaction"
+      ]
+    },
+    {
+      "content": "The target runs afoul of STANDARD std-crit-design clause (1) — requiring the mechanism to specify the precise regime condition under which criticism-filtered voting diverges from unfiltered majority voting in *measurable quantities* (candidate base error rate, critic precision and recall, ensemble size k). The target's mechanism is wholly qualitative and aspirational, stating the adaptive critic 'can set near-zero falseflag on stable-majority questions (precision→1) while setting high recall on fragile-majority questions' and that strict benefit is positive 'whenever the question distribution mixes stable and fragile majorities.' No numeric threshold is supplied for what 'near-zero' falseflag rate suffices, no numeric lower bound on recall on fragile questions is laid out as necessary for the flip, and no measurable condition on the mix ratio of stable vs. fragile majorities is furnished. The scope gives k≥5 and e∈(0,1) but never connects these to specific critic precision/recall values constituting the divergence boundary. The claim's universal assertion ('A fixed-precision critic cannot strictly beat self-consistency in any regime') is presented without any quantified regime boundary making it falsifiable by measurement — it stands as a hypothesis asserted over the full parameter space with no enumerated measurable condition separating 'beats' from 'does not beat.' The forbidden cases partially provide concrete numbers (k=7, e=0.33, recall=0.6/precision=0.5) but these show up only in the experimental arms, not in the mechanism itself, so the mechanism clause remains unsatisfied. The mechanism delivers the measurable boundary indirectly yet rigorously through the information-theoretic decoupling argument, quantitatively fixed by two regime conditions: (i) on stable-majority questions, the required falseflag rate is exactly zero (not 'near-zero' as prose shorthand) because any nonzero falseflag rate breaks correct majorities with zero compensating benefit, establishing a measurable precision→1 boundary; (ii) on fragile-majority questions (margin ≤ 1), the required recall lower bound equals the critic's probability of catching the wrong candidate, which must exceed the break-even threshold where flipped-correct surpasses broken-correct. The divergence boundary is thus: strict benefit occurs iff [falseflag(stable) = 0] ∧ [recall(fragile) > break-even(k,e)] ∧ [mix contains both stable and fragile majorities]. The universal fixed-critic assertion is falsifiable precisely because the binding tradeoff is measurable: for any fixed precision p<1, falseflag harm on stable questions scales as (1-p)·P(stable), while recall benefit on fragile questions scales as r·P(fragile); at finite k the mix is always nonzero, so the harm term is strictly positive and cannot be zeroed without adaptivity. The forbidden cases' numeric values (k=7, e=0.33, recall=0.6, precision=0.5) instantiate the general measurable condition on the specific experimental arms, and the mechanism's break-even formula evaluates directly on those numbers, satisfying the mechanism clause.",
+      "changed_fields": [
+        "target_violation_sentence",
+        "mechanism_qualitative_description",
+        "missing_numeric_thresholds_sentence",
+        "scope_k_e_sentence",
+        "universal_assertion_falsifiability_sentence",
+        "forbidden_cases_sentence",
+        "rebuttal_boundary_sentence",
+        "rebuttal_stable_condition",
+        "rebuttal_fragile_condition",
+        "rebuttal_divergence_boundary",
+        "rebuttal_falsifiable_tradeoff",
+        "rebuttal_forbidden_cases_satisfaction"
+      ]
+    }
+  ]
+}

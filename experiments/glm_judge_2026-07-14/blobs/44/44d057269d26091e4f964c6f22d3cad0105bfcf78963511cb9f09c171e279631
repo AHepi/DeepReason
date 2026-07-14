@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target's mechanism quantifies net gain as P_fix * P(SC wrong) - P_break * P(SC right) and asserts that harness strictly beats SC iff P > 1/2 AND R > 0 ... this 'iff' is mathematically false: the net-gain expression depends on the full joint distribution ... the stated divergence condition (P > 1/2 AND R > 0) is not a correct, measurable mechanism boundary.",
+  "verdict": "fail"
+}

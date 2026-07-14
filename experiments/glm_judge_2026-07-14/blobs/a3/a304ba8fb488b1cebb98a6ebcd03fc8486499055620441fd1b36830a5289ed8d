@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The forbidden case posits: 'a question-adaptive critic with identical recall_wrong and falseflag_rate_correct as a fixed critic yields different harness accuracy.' This is not a concrete, measurable outcome of running the repository's validation harness — it requires constructing a *different* critic (question-adaptive) whose aggregate rates are forced equal to the fixed critic's, then comparing accuracies. The harness as described operates on a single fixed-precision critic per arm; it has no mechanism to synthesize an adaptive critic with matched aggregate rates, nor to verify rate-identity question-by-question."}
+```

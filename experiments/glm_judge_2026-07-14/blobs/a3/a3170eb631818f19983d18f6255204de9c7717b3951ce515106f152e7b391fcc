@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"\"At k=5 with p=0.55 (3 wrong, 2 correct typically), a critic with phi=0.7 flags ~2 of 3 wrong candidates, dropping the wrong count to ~1 while the 2 correct survive (if psi=0.3, ~0.4 correct are falsely flagged, so ~1.6 survive)\""}

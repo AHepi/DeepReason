@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The third forbidden case is: 'Across all intermediate-base-error arms, the measured quantity recall_wrong * p_wrong_majority - FPR_right * p_right_majority is negative while harness accuracy exceeds self-consistency.' This case is logically contradictory to the target's own model and cannot be measured by rerunning the validation harness."
+}

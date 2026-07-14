@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"The tent-shaped gain curve predicted as a function of base error does not appear at k=7, i.e., gain is flat or monotonically decreasing across [0.15, 0.35]"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:0b0e9dddc123","observation_valued":false},"id":"fc:0b0e9dddc123","schema":"commitment"}

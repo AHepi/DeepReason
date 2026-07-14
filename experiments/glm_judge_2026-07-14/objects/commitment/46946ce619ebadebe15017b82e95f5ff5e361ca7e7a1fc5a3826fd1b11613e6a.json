@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"k=7 and k=9 harness-minus-SC advantage is <= k=5 harness-minus-SC advantage at matched base error and critic precision"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:0a8dceeddbe3","observation_valued":false},"id":"fc:0a8dceeddbe3","schema":"commitment"}

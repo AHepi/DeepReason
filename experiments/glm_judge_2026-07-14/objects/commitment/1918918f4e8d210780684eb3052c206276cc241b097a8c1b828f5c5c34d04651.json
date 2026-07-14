@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Experiment arm at e=0.05, k=7, critic p=0.9, r=0.9: e below fragility window so few fragile majorities exist, harness score == self-consistency score"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b9ba834a2eaf","observation_valued":false},"id":"fc:b9ba834a2eaf","schema":"commitment"}

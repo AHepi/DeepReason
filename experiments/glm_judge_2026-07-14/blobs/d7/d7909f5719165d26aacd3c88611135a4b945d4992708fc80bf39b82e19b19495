@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "decisive_point": "The forbidden case at p=0.85 is not self-defeating but serves as a boundary‑exclusion guard consistent with the scope, which explicitly excludes p > 0.8. Its role is to pre‑register that the mechanism must NOT predict a strict‑win at p=0.85; if such a >2pp uplift were observed, it would refute the mechanism's core claim, satisfying std‑crit‑design clause (2)."
+}

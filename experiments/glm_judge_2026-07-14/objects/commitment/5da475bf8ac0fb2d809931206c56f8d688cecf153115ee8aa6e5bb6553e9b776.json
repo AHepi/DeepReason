@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.05, P=0.95, R=0.5, n=100: harness strictly beats SC by the same margin as P=1.0 (false flags at P=0.95 cause zero damage, contradicting the claim that P<1.0 erodes gains)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:908e86101799","observation_valued":false},"id":"fc:908e86101799","schema":"commitment"}

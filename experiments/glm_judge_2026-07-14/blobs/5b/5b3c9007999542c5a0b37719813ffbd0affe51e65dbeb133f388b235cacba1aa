@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The low-correlation condition is operationalized via a controlled flag mask where per-question flag rates are set to be uniform across correct and wrong candidates (r_w(q) = r_c(q)), not via an asymptotic certification of independence. Under this concrete construction, the mechanism's strict-loss inequality for SC-right questions (r_c(q') * n_correct(q') >= n_correct(q') - n_wrong(q')) becomes triggerable: uniform masking causes the harness to suppress correct candidates on SC-right questions whenever n_correct(q') - n_wrong(q') is small, which occurs on at least 15% of such questions for standard k=5 distributions."}
+```

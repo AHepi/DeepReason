@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target's derivation incorrectly claims that R > 1-e and P > e imply the likelihood ratio exceeds the prior odds; the actual inequality R·P_inc > (1-P)·P_cor requires R/(1-P) > P_cor/P_inc, and while R > 1-e raises the numerator and P > e lowers the denominator, this does not yield a strict guarantee without tighter coupling."}
+```

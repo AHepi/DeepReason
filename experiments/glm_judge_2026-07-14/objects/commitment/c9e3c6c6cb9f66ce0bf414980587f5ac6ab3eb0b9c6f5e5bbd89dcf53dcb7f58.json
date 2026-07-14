@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"I(C;B) > I(C;M_wrong) measured empirically but harness accuracy <= SC accuracy"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:2eb4c141cf97","observation_valued":false},"id":"fc:2eb4c141cf97","schema":"commitment"}

@@ -1,0 +1,30 @@
+You are the conjecture operator (gamma): you propose bold, criticizable explanations for the problem in the pack. You hold no state and decide nothing; the harness adjudicates. Verbalized Sampling: return a DISTRIBUTION of diverse candidates, each with your typicality estimate in [0,1] (typical candidates near 1, atypical near 0). Where natural, carry dependence refs to neighbourhood artifact ids (born-connected).
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"CandidateRef": {"additionalProperties": false, "properties": {"role": {"default": "dependence", "enum": ["dependence", "mention"], "title": "Role", "type": "string"}, "target": {"title": "Target", "type": "string"}}, "required": ["target"], "title": "CandidateRef", "type": "object"}, "ConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}, "refs": {"items": {"$ref": "#/$defs/CandidateRef"}, "title": "Refs", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "ConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/ConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "ConjecturerOutput", "type": "object"}
+
+## problem
+PROBLEM succ:5b9a8d2c753d
+supersede refuted candidate 5b9a8d2c753d on succ:730151585ab2. Original problem: Under what conditions does harness-style criticism (an adversarial critic filters the candidate pool before a majority vote) extract more reliable answers than self-consistency (unfiltered majority vote over the SAME pool)? Measured facts from this repository's validation studies (k=5 candidates per question, one shared pool per question, answer key held out from every model call): [easy set, 24 q] v4-pro: single=sc=harness=1.00 (ceiling); v4-flash: all three arms 0.958, critic precision 0.333, recall 0.25 at candidate base error 0.033. [hard set, 20 q] v4-pro: single 0.95, sc 1.00, harness 1.00; candidate base error 0.01; critic recall 1.0, precision 0.125; net fixed-minus-broke 0 — with 4/5 majorities already right, filtering changed nothing. Task: predict the regime (base error rate, critic precision/recall, k) in which the criticism-filtered arm STRICTLY beats self-consistency — including how filtering can LOSE when false flags erode correct majorities — and design the decisive experiment that would confirm or refute the prediction within a 300k-token budget on this provider. Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-crit-design"}], "prose_notes": str}. Forbidden cases must be measurable outcomes of the proposed experiment.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-crit: rubric:std-crit-design
+
+## school-stance
+SCHOOL STANCE (weight 0.30): counterexample first
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- 74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495: {"claim": "No fixed (p, phi, psi, k) regime is sufficient to predict strict harness advantage; the determining factor is question-conditional alignment between 
+- 862de34bced36d488ac299f984c270812db349a12e50b3acf126462c0be93e72: reduces to: The lower bound of the 'majority-fragile' mid-zone (1/(k+1) < e) is a necessary condition for Harness to strictly beat self-consistency, but the fir
+- 495c5963dafbd26bf2aa1838491e8428005b9a54825f21a8df1e5ead37908e7a: {"standard": {"mode": "absolute", "rubric": "A study-design proposal must: (1) name the specific mechanism or regime condition under which criticism-filtered vo
+- ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- 30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b: {"claim": "No fixed precision/recall regime suffices; harness strictly beats self-consistency only when critic confidence is question-adaptive such that the cri
+- ff2a925089bde69517780518ecb95c03f87e2742117640e222e5c776920605ea: nu: the trial ruling under std-crit-design on 3f11485bf64ede109b481dd40893951d7bcec46d454f2b107b5426f7f640c1de is sound
+- f7c88d08c494a83766a8454ca9a977a013b3694e868b7aab5de870943489d98f: critic: trial fail under std-crit-design on 3f11485bf64e — The forbidden case 'The improvement at k=7 is fully explained by base-error change alone with no int
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

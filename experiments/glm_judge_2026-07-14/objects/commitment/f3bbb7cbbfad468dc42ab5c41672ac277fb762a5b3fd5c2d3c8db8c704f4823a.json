@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Ambiguity rate alone (without critic tie-break accuracy) predicts harness-vs-SC delta with R-squared > 0.5 across all 12 cells (would refute: tie-break accuracy is also necessary)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:98d6be6e7789","observation_valued":false},"id":"fc:98d6be6e7789","schema":"commitment"}

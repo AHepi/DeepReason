@@ -1,0 +1,3 @@
+```json
+{"clauses":[{"item_alias":"K1","response":"The forbidden cases are stated as measurable outcomes of running the validation harness, not as generation procedures. The harness records question-level flag decisions alongside majority correctness for each configuration, so the quantities P(flag|majority-wrong), P(flag|majority-right), and per-question flag rates are directly computed from existing logs. Forbidden cases 1-3 describe outcome patterns that would refute the claim if observed among the evaluated configurations; they do not require synthesizing new critics. The harness measures these conditional alignment metrics, and the cases falsify the conjecture if the measured outcomes fall within the stated bounds."}]}
+```

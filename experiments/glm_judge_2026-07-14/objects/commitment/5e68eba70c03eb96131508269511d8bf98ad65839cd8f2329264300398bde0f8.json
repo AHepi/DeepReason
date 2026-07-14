@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"FP rate on robust-majority questions under adaptive threshold exceeds FP rate under fixed threshold"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:34bca6b0c20a","observation_valued":false},"id":"fc:34bca6b0c20a","schema":"commitment"}

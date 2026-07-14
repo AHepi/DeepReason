@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target's forbidden cases are not genuine refutation conditions because they are not pre-registered as measurable outcomes that would falsify the proposal if obtained — they are merely illustrative scenarios embedded in the design. The condition 'fragile-correct outnumber fragile-wrong' is not a measurable outcome of running the experiment — it is a population parameter determined by e and k, not an observed result."
+}

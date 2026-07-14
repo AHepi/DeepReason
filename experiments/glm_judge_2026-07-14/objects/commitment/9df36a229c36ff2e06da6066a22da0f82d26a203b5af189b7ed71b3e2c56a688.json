@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At p=0.15 and k=5, harness accuracy differs from SC accuracy by more than 2 percentage points in either direction"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:5d343a545d55","observation_valued":false},"id":"fc:5d343a545d55","schema":"commitment"}

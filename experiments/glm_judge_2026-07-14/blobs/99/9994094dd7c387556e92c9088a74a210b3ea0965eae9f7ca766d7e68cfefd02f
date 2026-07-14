@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target does specify a concrete, measurable regime under which divergence occurs: the excluded scope where the critic is trained on a different or harder distribution than the candidates, or has access to external information beyond candidate text. In these regimes the Bayes-optimality argument fails and harness can strictly outperform SC. The universal bound applies only within the covered scope (same-distribution, single-round, text-only critic), so the proposal does not claim non-divergence everywhere."}
+```

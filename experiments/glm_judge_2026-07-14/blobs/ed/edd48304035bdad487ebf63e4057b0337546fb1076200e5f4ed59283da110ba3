@@ -1,0 +1,14 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:8e9b8d5285aa
+connect isolated 8e9b8d5285aa to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 8e9b8d5285aa332e272b48bd2862621294a08fa6e51f5878c3d97849733bd29f: {"pairwise": {"decisive_point": "a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a n
+- 30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b: {"claim": "No fixed precision/recall regime suffices; harness strictly beats self-consistency only when critic confidence is question-adaptive such that the critic vetoes wrong-majority sets at high c
+- c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495: {"claim": "No fixed (p, phi, psi, k) regime is sufficient to predict strict harness advantage; the determining factor is question-conditional alignment between the critic's discrimination signal and t
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

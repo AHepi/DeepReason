@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"In the low per-question flag-correlation condition (flags independent of correctness), harness does NOT lose relative to SC on at least 15% of questions where SC was right"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:a5d2ecac460d","observation_valued":false},"id":"fc:a5d2ecac460d","schema":"commitment"}

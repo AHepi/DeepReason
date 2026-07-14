@@ -1,0 +1,36 @@
+{
+  "edits": [
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem). Setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe — the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min — is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem). Specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, making the artifact a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (such as a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental instead of a genuine dimensional collapse of the threshold.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a true dimensional collapse of the threshold.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold theorem.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold condition.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold surface.",
+      "changed_fields": ["content"]
+    },
+    {
+      "content": "reduces to: b79e4718c0fe (the pairwise decisive-point snapshot where filtering loses because false-flags on correct answers exceed saved votes at p < p_min) is the degenerate two-candidate reduction of edc14bbd (the general Harness-vs-SelfConsistency threshold theorem) — specifically, setting k=1 collapses the parametric threshold p_min(e,r,k) into the pairwise veto-vs-allow tradeoff, so the artifact is a low-dimensional instance of the general loss-regime boundary. REFUTED IF: substituting the pairwise tradeoff for a structurally different mechanism (e.g., a cost-of-veto rather than a false-flag-vs-saved-vote balance) still reproduces the same decisive point, since then the reduction would be coincidental rather than a genuine dimensional collapse of the threshold boundary.",
+      "changed_fields": ["content"]
+    }
+  ]
+}

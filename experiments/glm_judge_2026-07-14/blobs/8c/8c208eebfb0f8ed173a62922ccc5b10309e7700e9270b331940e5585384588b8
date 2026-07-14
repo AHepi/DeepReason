@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "At k=7, e≈0.33, a question-adaptive critic with identical recall_wrong and falseflag_rate_correct as a fixed critic yields different harness accuracy, contradicting the mechanism that only aggregate rates matter"}

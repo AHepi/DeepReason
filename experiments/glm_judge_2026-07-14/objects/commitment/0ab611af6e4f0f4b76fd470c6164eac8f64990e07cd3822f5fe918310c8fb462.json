@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Experiment arm with base error 0.40-0.55 and critic precision < 0.5 shows harness accuracy >= self-consistency accuracy on >= 50% of questions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:c680eda74051","observation_valued":false},"id":"fc:c680eda74051","schema":"commitment"}

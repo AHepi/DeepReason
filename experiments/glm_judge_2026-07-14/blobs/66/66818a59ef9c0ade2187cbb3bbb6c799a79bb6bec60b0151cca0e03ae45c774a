@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "target": "2d711b2eb5fff4e61cba262914dc9aa29cf142c91d43bf4fffdda495e76c90c4",
+      "attack": true,
+      "case": "The target's mechanism derivation is internally inconsistent and mathematically unjustified. It claims that the condition 'R > 1-e and P > e' guarantees net benefit because 'the critic's positive likelihood ratio exceeds the class prior ratio'. However, the positive likelihood ratio (LR+) is defined as TPR/FPR = R/(1-P). The target's condition P > e does NOT imply R/(1-P) > P_inc/P_cor. In fact, P > e implies 1-P < 1-e, so the denominator of LR+ is strictly bounded by 1-e. For the LR+ to exceed the prior ratio of ~2.45 (0.71/0.29), one needs R/(1-P) > 2.45. The target's condition R > 1-e only gives R/(1-P) > (1-e)/(1-P). Since P > e, 1-P < 1-e, so (1-e)/(1-P) > 1, but this does NOT guarantee it exceeds 2.45. The simplification 'R/P > 2.45/(R+...)' is nonsensical and the conclusion that 'R > 1-e and P > e' guarantees net benefit is a non-sequitur. The actual required condition is R/(1-P) > N_cor/N_inc ≈ 2.45, which is a strictly stronger constraint on the combination of R and P than either parameter individually exceeding e or 1-e. The predicted regime is therefore fundamentally flawed.",
+      "counterexample": null
+    },
+    {
+      "target": "5597507043f5427f7073b4c80fe87419bbf3b32c9207ae3f808100790dd11909",
+      "attack": false,
+      "case": ""
+    },
+    {
+      "target": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b",
+      "attack": true,
+      "case": "The target's claim asserts that 'no fixed precision/recall regime suffices' for harness to strictly beat self-consistency, but this is directly refuted by basic probability theory. Consider k=5 with base error e=0.45 (so wrong-majority pools occur with non-trivial probability) and a critic with fixed precision P=1.0 and recall R=0.5. This critic flags only incorrect-majority pools and catches half of them. Filtering these flagged pools removes wrong answers, converting some wrong SC majorities into correct ones (by unmasking the true majority among remaining candidates) while never touching correct majorities (P=1.0). This yields strictly positive net fixed-minus-broke, beating SC. The target's claim that NO fixed regime suffices is false: any fixed critic with P=1.0 and R>0 operating in a regime where wrong-majority pools exist will strictly beat SC. The target conflates the empirical observation that specific measured fixed-regime critics (with low precision) failed with a universal impossibility claim that is mathematically false.",
+      "counterexample": null
+    }
+  ]
+}

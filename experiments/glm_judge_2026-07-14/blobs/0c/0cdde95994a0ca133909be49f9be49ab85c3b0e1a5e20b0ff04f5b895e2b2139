@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The repository's validation harness scores whatever candidates the models actually produce on a fixed held-out hard set; it cannot be coerced to produce an exact 0.30 independent base error with a critic pinned to precision 0.60 / recall 0.70 at k=5. Those are latent population parameters, not arms the harness can randomize."}
+```

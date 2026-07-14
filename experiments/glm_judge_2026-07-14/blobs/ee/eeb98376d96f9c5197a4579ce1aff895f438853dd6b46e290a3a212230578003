@@ -1,0 +1,4 @@
+{
+  "verdict": "pass",
+  "decisive_point": "Forbidden case #2 demands: 'At p=0.15, psi=0.1, k=5, harness accuracy is NOT at least 3 percentage points below SC accuracy, with at least 2 right-to-wrong flips from false flags'—a concrete, measurable outcome that satisfies clause (2)."
+}

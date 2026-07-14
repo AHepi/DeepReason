@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"A critic with P>0.5, R>0.5 produces harness accuracy > SC accuracy at k=7, e=0.25 with lower 95% CI > 0"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:84017efab026","observation_valued":false},"id":"fc:84017efab026","schema":"commitment"}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, B=0.30, ambiguity rate >= 0.25, critic tie-break-correct probability >= 0.65, but harness does not strictly beat SC by >= 0.03 (would refute the tie-breaking sufficiency claim)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:6a556b0f70dc","observation_valued":false},"id":"fc:6a556b0f70dc","schema":"commitment"}

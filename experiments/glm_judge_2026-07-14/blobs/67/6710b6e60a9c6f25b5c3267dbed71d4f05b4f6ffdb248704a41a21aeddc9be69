@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"At precision = 0.3, p_right_majority = 0.5, the RHS is 0.35, satisfied by any recall_wrong > 0.35 — well within [0,1]. At precision = 0.1, p_right_majority = 0.4, RHS = 0.36, again feasible."}

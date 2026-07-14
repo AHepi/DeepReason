@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Observed FP-removal rate on correct-majority questions exceeds 50% of observed TP-removal rate while harness still beats SC"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:ded43b494127","observation_valued":false},"id":"fc:ded43b494127","schema":"commitment"}

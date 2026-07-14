@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Critic confidence c(q) shows no correlation with majority-margin (|rho| < 0.15) yet adaptive harness beats SC"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:a9724099bbfc","observation_valued":false},"id":"fc:a9724099bbfc","schema":"commitment"}

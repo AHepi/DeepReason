@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Experiment arm at e=0.25, k=7, critic p=0.4, r=0.6: fragile-correct outnumber fragile-wrong and low precision causes net harness score < self-consistency score"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:8a1b76b379e6","observation_valued":false},"id":"fc:8a1b76b379e6","schema":"commitment"}

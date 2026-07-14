@@ -1,0 +1,44 @@
+{
+ "calls": {
+  "argumentative_critic": 85,
+  "conjecturer": 13,
+  "defender": 68,
+  "dropped": 15,
+  "judge": 184,
+  "synthesizer": 8,
+  "variator": 33
+ },
+ "dynamics": {
+  "designs_total": 46,
+  "gate_blocks": 0,
+  "refutation_paths": {
+   "argumentative_court_sustained": 2,
+   "demonstrative_program": 30
+  },
+  "refuted": 32,
+  "scrutiny_records": 39,
+  "standing": 14,
+  "trial_blocked": 51,
+  "trial_measures": 319
+ },
+ "frontier_reading_interpretive": "GLM converged on a quantitative theory of the judge problem: harness-style criticism strictly beats self-consistency only inside a majority-fragility window (1/(k+1) < e < k/(k+2)) AND when critic precision clears an explicit threshold p_min(e,r,k); below it, false flags flip more correct majorities than criticism repairs wrong ones. Two standing meta-conjectures state that no fixed (e,P,R,k) regime suffices and the determining factor is question-conditional alignment of the critic signal with the item's error structure. The synthesizer artifacts perform genuine consolidation, identifying reductions and generalizations among rival designs. Against the repository's measured critic (precision 0.333, recall 0.25), the surviving theory's own thresholds (P > 1/2, or p > p_min) predict that criticism-filtered voting LOSES - the model, posed the judge problem cold, derived the session's empirical conclusion as an explicit precision-threshold theorem.",
+ "notable": [
+  "zero gate blocks across 46 admitted designs (repaired gate at scale)",
+  "the court refuted 2 designs via sustained defended trials - on crisp quantitative claims the cross-family court can convict, consistent with the calibration finding that it only catches analytic contradictions",
+  "30 refutations came from program checks (skeleton-wf executions on malformed emissions) - execution supremacy did most of the killing; glm wire discipline ~15 drops per ~390 calls",
+  "the court consumed the large majority of the budget (319 trial measures, 184 judge calls vs 13 conjecturer calls)"
+ ],
+ "prereg": "experiments/glm_flat_v1_prereg.yaml (amendment 1: pi-criticism)",
+ "root": "experiments/glm_judge_2026-07-14/ (verify_root clean)",
+ "run": {
+  "artifacts": 146,
+  "budget": 1000000,
+  "cycles": 20,
+  "events": 721,
+  "model": "glm-5.2 all roles (gpt-oss:120b judge seat 2 by compile invariant)",
+  "reasoning": "none",
+  "stop": "reserve-settle guard refused the over-ceiling dispatch",
+  "tokens": 998291
+ },
+ "schema": "deepreason-glm-judge-flat-v1"
+}

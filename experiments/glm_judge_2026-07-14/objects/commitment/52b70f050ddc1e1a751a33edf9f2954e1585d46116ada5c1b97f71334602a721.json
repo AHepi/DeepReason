@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"I(C;B) <= I(C;M_wrong) but harness accuracy strictly exceeds SC accuracy"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:45460958eac6","observation_valued":false},"id":"fc:45460958eac6","schema":"commitment"}

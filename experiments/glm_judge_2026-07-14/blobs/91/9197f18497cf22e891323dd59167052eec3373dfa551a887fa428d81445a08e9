@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "\"there exists a threshold tau making the expected net-fixed-minus-broke positive if and only if the critic's score distribution for wrong-majority sets stochastically dominates its score distribution for right-majority sets.\" The fail argument states: \"First-order stochastic dominance (FSD) of the wrong-majority score distribution over the right-majority distribution is a sufficient condition for the existence of a separating threshold, but it is in no way necessary... the 'only if' necessity does not hold,\" indicating the mechanism is incorrectly specified, violating std-crit-design clause (1)."
+}

@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The claim asserts that P > e and R > 1-e are 'necessary AND sufficient' ... but the mechanism's own algebra contradicts this. The net‑benefit inequality derived in the proposal is R·0.29 > (1-P)·0.71, i.e., R/P > 2.448. The proposed sufficient condition P > e and R > 1-e does NOT imply R/P > 2.448."}

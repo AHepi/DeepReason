@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"A critic with perfect per-item calibration (R=1 on broken-majority items, P=1 on correct-majority items) fails to strictly beat SC at e=0.30, k=5 (contradicting the sufficiency claim)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:7e0c170af809","observation_valued":false},"id":"fc:7e0c170af809","schema":"commitment"}

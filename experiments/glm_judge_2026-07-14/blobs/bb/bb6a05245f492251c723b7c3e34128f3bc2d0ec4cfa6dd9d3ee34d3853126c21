@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The criticism conflates the mechanism's *threshold condition* for the strict-benefit zone with the *magnitude* of the net-benefit term. The formula recall_wrong × P(fragile-correct) − falseflag_rate_correct × P(fragile-correct) correctly gives the sign and magnitude of the net change in correct majorities, and it is strictly positive iff recall_wrong > falseflag_rate_correct. The precision_wrong > 0.5 constraint is not a missing term in that difference; it is a *co-necessary feasibility condition* ensuring the critic can actually supply the required recall on wrong candidates without being swamped by false positives in the candidate pool."}
+```

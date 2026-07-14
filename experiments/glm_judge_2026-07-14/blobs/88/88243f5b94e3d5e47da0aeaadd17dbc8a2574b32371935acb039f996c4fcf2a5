@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The loss condition is: (1-psi) * n_correct > n_correct - n_wrong, i.e., false flags on correct candidates exceed the SC majority margin."}

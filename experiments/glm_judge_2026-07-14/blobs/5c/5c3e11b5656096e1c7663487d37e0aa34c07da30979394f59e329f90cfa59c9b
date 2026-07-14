@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target cannot simultaneously assert p=0.85 satisfies its precision condition and declare that same arm forbidden as a no-gain outcome without admitting the condition is not sufficient — meaning the proposal is self-refuting by its own forbidden-case list."}
+```

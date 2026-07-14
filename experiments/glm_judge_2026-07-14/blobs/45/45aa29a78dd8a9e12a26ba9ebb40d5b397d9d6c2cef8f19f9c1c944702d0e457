@@ -1,0 +1,10 @@
+```json
+{
+  "clauses": [
+    {
+      "item_alias": "K1",
+      "response": "The forbidden cases are measurable by rerunning the repository's validation harness because the harness executes both the self-consistency (SC) baseline and the harness-filtered candidate pipelines, logging the per-question final answers for both. The quantities specified in the forbidden cases are derived directly from these logged outputs. 'Ambiguity rate' is computed by checking whether the SC baseline produced a unique plurality (e.g., 5/0 or 4/1) or a non-unique tie (e.g., 3/2 or 2-2-1) for each question. 'Critic tie-break-correct probability' is evaluated by identifying the subset of questions where SC yielded a non-unique plurality, and measuring the accuracy of the harness-filtered answer on that exact subset. The 'harness-vs-SC delta' is simply the difference in overall accuracy between the two logged pipelines. Because all required quantities are deterministic functions of the baseline and filtered answer logs already produced by the repository's execution, no new instrumentation layer is required. Furthermore, the explanation for deltas of exactly 0.00 is falsifiable within the harness: if forbidden case 2 is observed (ambiguity rate = 0 but harness strictly beats SC by > 0.02), the 'zero ambiguity' explanation is directly refuted by the harness output."
+    }
+  ]
+}
+```

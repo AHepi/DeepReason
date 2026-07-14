@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "A single scalar predicate cannot identify a 'mechanism or regime condition under which criticism-filtered voting diverges from unfiltered majority voting' in the required measurable quantities (candidate base error rate, critic precision/recall, ensemble size k)"
+}

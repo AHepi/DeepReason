@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Experiment produces p_hat < p_min(r_hat) yet harness accuracy strictly exceeds SC accuracy"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b09232c6e250","observation_valued":false},"id":"fc:b09232c6e250","schema":"commitment"}

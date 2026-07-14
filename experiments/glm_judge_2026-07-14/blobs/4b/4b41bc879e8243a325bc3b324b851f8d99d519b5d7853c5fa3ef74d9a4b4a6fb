@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The case posits an 'adaptive-confidence variant' arm and forbids the outcome 'adaptive arm shows no additional gain over the non-adaptive arm.' But the claim, mechanism, and scope define the entire theory purely in terms of base error e, ensemble size k, critic precision p, and critic recall r — there is no variable, threshold, or predicted effect for an 'adaptive-confidence' variant."}
+```

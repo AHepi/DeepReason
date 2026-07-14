@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=7, e≈0.25, P>0.25, R>0.75: harness - SC ≤ 0 across all tested sub-bands"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:c9678691a152","observation_valued":false},"id":"fc:c9678691a152","schema":"commitment"}

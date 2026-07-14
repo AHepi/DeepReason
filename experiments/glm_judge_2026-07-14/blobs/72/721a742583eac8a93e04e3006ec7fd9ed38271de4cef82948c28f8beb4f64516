@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The case demands: \"Across all intermediate-base-error arms, the measured quantity recall_wrong * p_wrong_majority - FPR_right * p_right_majority is negative while harness accuracy exceeds self-consistency.\" This forbidden case cannot be evaluated by rerunning the repository's validation harness."}

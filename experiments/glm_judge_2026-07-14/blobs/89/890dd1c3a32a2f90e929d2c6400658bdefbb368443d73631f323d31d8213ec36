@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The case stipulates F_broke/F_fixed < 1 (fragile-correct outnumber fragile-wrong), which raises the precision threshold above 2/3; with r=0.6 the threshold is (2/3)*(F_broke/F_fixed). The arm fixes p=0.4 below that threshold"}

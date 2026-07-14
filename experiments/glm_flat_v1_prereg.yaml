@@ -31,3 +31,17 @@ amendment_1:
     all roles, gpt-oss:120b judge seat 2 by compile invariant, thinking
     off, 1M budget, evidence mode, observe-only, 2-minute log digests)
   root: runs/glm_judge
+
+# --- appended after the run (observational readings) ---
+result:
+  report: experiments/results/glm_judge_v1_report.json
+  root: experiments/glm_judge_2026-07-14/ (verify_root clean)
+  completed: 998291 of 1000000 tokens, 20 cycles, clean budget stop
+  headline: 46 designs admitted (zero gate blocks), 14 standing, 32
+    refuted (30 by program checks, 2 by sustained defended trials).
+    The frontier converged on an explicit theory - criticism beats
+    self-consistency only inside a majority-fragility window with critic
+    precision above a derived threshold p_min(e,r,k) - whose own numbers,
+    applied to the repository's measured critic (precision 0.333), predict
+    that criticism-filtered voting loses. The model derived the session's
+    empirical conclusion independently, as a theorem with thresholds.

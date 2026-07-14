@@ -1,0 +1,4 @@
+{
+  "decisive_point": "The target specifies a measurable regime condition \"critic precision > 0.5 * sqrt(5/k) with recall > 0.4\" and concrete forbidden cases such as \"k=7 and k=9 harness-minus-SC advantage is <= k=5 harness-minus-SC advantage at matched base error and critic precision\" which are quantifiable outcomes.",
+  "verdict": "pass"
+}

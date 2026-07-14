@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "Those are latent population parameters, not arms the harness can randomize. Consequently the forbidden case is a counterfactual about a regime the experiment cannot dial in, so it cannot be measured by rerunning the harness — exactly the failure mode clause (2) forbids."
+}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.05, P=0.9, R=0.9: harness strictly beats SC (gain outside the fragile zone, contradicting the necessary-condition claim)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:2ef7fc79d30e","observation_valued":false},"id":"fc:2ef7fc79d30e","schema":"commitment"}

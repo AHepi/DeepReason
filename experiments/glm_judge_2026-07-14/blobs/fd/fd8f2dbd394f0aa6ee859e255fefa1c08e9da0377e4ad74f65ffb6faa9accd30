@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The target violates std-crit-design clause (1): the proposal must name the SPECIFIC mechanism or regime condition under which criticism-filtered voting diverges from unfiltered majority voting, stated in measurable quantities (candidate base error rate, critic precision and recall, ensemble size k) — not an aspiration ('make criticism better'). The target's 'mechanism' field is a universal null theorem asserting E[harness_accuracy] ≤ E[SC_accuracy] + O(1/sqrt(n)) for ALL e, k, P, R. This is not a divergence condition — it is an aspiration that NO divergence exists."
+}

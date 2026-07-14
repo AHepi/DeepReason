@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target's claimed strict-advantage condition is 'the critic's score distribution for wrong-majority sets stochastically dominates its score distribution for right-majority sets.' Stochastic dominance is an infinite-dimensional distributional property, not a point in (base error, precision, recall, k) space."}
+```

@@ -1,0 +1,3 @@
+```json
+{"verdict": "pass", "decisive_point": "A condition with high per-question flag-correlation on wrong-majority questions can still coexist with harmful flag concentration on some SC-right questions, violating the second conjunct and producing no strict advantage. The proposal thus pre-registers a refutation case that is logically consistent with its own mechanism being true, making the forbidden case non-falsifying of the claim."}
+```

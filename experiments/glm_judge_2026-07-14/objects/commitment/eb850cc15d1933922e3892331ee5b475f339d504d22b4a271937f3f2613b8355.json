@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=9 and base error ~0.25, harness accuracy equals SC accuracy within 2 percentage points despite critic precision > 0.5"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:971df7a522f1","observation_valued":false},"id":"fc:971df7a522f1","schema":"commitment"}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.30, P=0.3, R=0.9: harness accuracy strictly exceeds SC (gain despite P < 1/2, contradicting the false-flag loss prediction)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:2698a2e3e5d5","observation_valued":false},"id":"fc:2698a2e3e5d5","schema":"commitment"}

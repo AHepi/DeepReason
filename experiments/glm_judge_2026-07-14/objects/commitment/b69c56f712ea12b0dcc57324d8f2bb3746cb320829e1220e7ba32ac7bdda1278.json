@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, base error 0.05, critic precision 0.80, critic recall 0.90, harness shows strict improvement over self-consistency > 0.02 (would contradict ceiling-attrition claim)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:d42ba485142c","observation_valued":false},"id":"fc:d42ba485142c","schema":"commitment"}
