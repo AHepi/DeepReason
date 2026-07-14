@@ -51,9 +51,9 @@ from deepreason.views.jolt_signals import (  # noqa: E402
     record_functional_observation,
 )
 
-PREREG = ROOT / "experiments" / "jolt_trigger_glm52_pilot_prereg.yaml"
-OUT = ROOT / "experiments" / "results" / "jolt_trigger_glm52_pilot_report.json"
-RUNS = ROOT / "runs" / "jolt_trigger_glm52_pilot"
+PREREG = ROOT / "experiments" / "jolt_trigger_glm52_pilot_v2_prereg.yaml"
+OUT = ROOT / "experiments" / "results" / "jolt_trigger_glm52_pilot_v2_report.json"
+RUNS = ROOT / "runs" / "jolt_trigger_glm52_pilot_v2"
 SOURCE = RUNS / "source"
 BRANCHES = RUNS / "branches"
 PROBLEM_ID = "pi-jolt-finite-selection-v1"
@@ -296,20 +296,32 @@ def main() -> int:
         if event.llm is not None and event.llm.role == "conjecturer"
         and event.rule.value == "Conj"
     )
-    if completed_calls > 8:
-        raise SystemExit("source advanced beyond the frozen eight-call acquisition")
-    acquisition = run_calls(source, manifest, 8 - completed_calls, 56000)
-    acquisition["resumed_from_calls"] = completed_calls
+    if completed_calls > 16:
+        raise SystemExit("source advanced beyond the frozen sixteen-call acquisition")
+    acquisition = {
+        "meter": {"prompt_tokens": 0, "completion_tokens": 0, "total": 0, "calls": 0},
+        "dropped": [], "resumed_from_calls": completed_calls,
+    }
+    trigger = trigger_receipt(source) if completed_calls >= 8 else {"trigger": False}
+    while completed_calls < 16 and not trigger["trigger"]:
+        logged = sum(event.llm.tokens for event in source.log.read() if event.llm is not None)
+        runtime = run_calls(source, manifest, 1, max(0, 112000 - logged))
+        for field in ("prompt_tokens", "completion_tokens", "total", "calls"):
+            acquisition["meter"][field] += runtime["meter"][field]
+        acquisition["dropped"].extend(runtime["dropped"])
+        completed_calls += 1
+        if completed_calls >= 8:
+            trigger = trigger_receipt(source)
     acquisition["total_logged_tokens"] = sum(
         event.llm.tokens for event in source.log.read() if event.llm is not None
     )
-    trigger = trigger_receipt(source)
+    acquisition["completed_calls"] = completed_calls
     source_check = verify_root(SOURCE)
     if source_check["violations"]:
         raise SystemExit("source root verification failed")
     if not trigger["trigger"]:
         Path(args.out).write_text(json.dumps({
-            "schema": "deepreason-jolt-trigger-glm52-pilot-report-v1",
+            "schema": "deepreason-jolt-trigger-glm52-pilot-report-v2",
             "status": "trigger_not_reached", "trigger": trigger,
             "acquisition": acquisition, "source_verify": source_check,
         }, indent=2) + "\n")
@@ -347,7 +359,7 @@ def main() -> int:
         results[branch.arm.value] = summarize_branch(harness, source_best, runtime)
 
     report = {
-        "schema": "deepreason-jolt-trigger-glm52-pilot-report-v1",
+        "schema": "deepreason-jolt-trigger-glm52-pilot-report-v2",
         "status": "complete", "preregistration_sha256": prereg_digest,
         "manifest_sha256": manifest.sha256, "plan_digest": plan.digest,
         "model": {"id": "glm-5.2", "reasoning": "none"},
