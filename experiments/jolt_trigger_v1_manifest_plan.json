@@ -1,0 +1,169 @@
+{
+  "schema": "deepreason-jolt-trigger-manifest-plan-v1",
+  "baseline_commit": "835096578f72ddbc88f69e67c05130f058d359c7",
+  "state": "blocked_for_live_execution_pending_review_commit_and_workload_receipts",
+  "live_model_calls_authorized": false,
+  "bound_artifacts": {
+    "experiments/jolt_trigger_v1_prereg.yaml": "f194f7019b07ff2ab7a0d368fcc49d5ca87650176c6c9943216e8ea4fa464f5a",
+    "experiments/results/jolt_trigger_code_census.json": "94e10d8d67744dab4582eaa31fbdc6377a6a7a83405ab8eb89a589d99c5605b1",
+    "experiments/results/jolt_trigger_signal_spec.json": "57faff180acc565486bc78b4600a7f01b53ee08634d8441c4d6c4e3d2a50218d",
+    "experiments/results/jolt_trigger_jolt_spec.json": "af020f969f883eee07bee9670eaa13f03877a91ec12756fa1a319115e7dc33e8",
+    "experiments/results/jolt_trigger_analysis_plan.json": "fd3ee7f27261e873d05c46c0afe57f61959b94148f9c3bcc571c2d3fd017544c"
+  },
+  "commit_fence": {
+    "required_before_live_execution": true,
+    "expected_commit": null,
+    "reason": "The user explicitly prohibited committing in this implementation phase; therefore the live-run preflight must remain closed."
+  },
+  "run_manifest_requirements": {
+    "schema_version": 2,
+    "engine_profile": "full",
+    "workload_profiles": ["code", "formal"],
+    "provider_fallback": false,
+    "rubric_policy": "forbid",
+    "concurrency": 1,
+    "roles_allowed": ["conjecturer"],
+    "roles_forbidden": [
+      "judge",
+      "argumentative_critic",
+      "defender",
+      "synthesizer",
+      "vision_critic",
+      "property_designer",
+      "researcher"
+    ],
+    "model_profile": "standard",
+    "output_mechanism": "json_text",
+    "api_key_reference_only": "OLLAMA_API_KEY",
+    "credential_value_in_manifest": false
+  },
+  "candidate_model_roster": {
+    "status": "availability_unverified_without_generation",
+    "pilot_requires_distinct_families": 2,
+    "candidates_from_existing_retained_manifests": [
+      {
+        "model_id": "deepseek-v4-pro",
+        "family": "deepseek",
+        "provider": "ollama",
+        "base_url": "https://ollama.com/v1"
+      },
+      {
+        "model_id": "qwen3.5:397b",
+        "family": "qwen",
+        "provider": "ollama",
+        "base_url": "https://ollama.com/v1"
+      },
+      {
+        "model_id": "kimi-k2.6",
+        "family": "ollama:kimi",
+        "provider": "ollama",
+        "base_url": "https://ollama.com/v1",
+        "status": "reserve_only"
+      }
+    ],
+    "selection_rule": "Freeze two available distinct families after a no-generation route preflight; do not substitute after outcomes are observed."
+  },
+  "engine_config_overrides": {
+    "N_SCHOOLS": 1,
+    "VS_K": 2,
+    "NEIGHBOURHOOD_N": 8,
+    "SPEC_INJECTION": false,
+    "COMPLEMENT_ALWAYS": false,
+    "CONTROLLER": false,
+    "RESEARCH_BACKEND": null,
+    "ARG_CRIT_PER_CYCLE": 0,
+    "RUBRIC_TRIALS_PER_ARTIFACT": 0,
+    "ADVISORY_TRIALS_PER_CYCLE": 0,
+    "PROP_PROPOSE_PERIOD": 0,
+    "VISION_CRIT_PER_CYCLE": 0,
+    "TEXT_RUBRIC_AUTHORITY": "observe_only",
+    "PAIRWISE_AUTHORITY": "observe_only",
+    "INFRASTRUCTURE_REVIEW_AUTHORITY": "observe_only",
+    "ARGUMENTATIVE_AUTHORITY": "observe_only",
+    "CALIBRATION_RECEIPT": null,
+    "EMBEDDER_MODEL": "nomic-ai/nomic-embed-text-v1.5",
+    "EMBEDDER_FAILURE_POLICY": "error"
+  },
+  "experimental_scheduler_requirements": {
+    "automatic_capture_diagnostics": true,
+    "automatic_capture_response_actuation": false,
+    "one_jolt_per_branch": true,
+    "post_trigger_conjecturer_calls": 5,
+    "controller": false,
+    "specification_generation": false,
+    "problem_spawning_after_branch_point": "may be logged by unchanged rules but may not become a treatment focus unless present and bound before randomisation",
+    "repeated_jolt": false
+  },
+  "embedder_fence": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.27.0",
+    "sentinel": "d6e3599ce0377000",
+    "exact_match_required": true,
+    "fallback_allowed": false,
+    "source_receipt": "experiments/results/embedder_install_verification.json"
+  },
+  "budget_policy": {
+    "maximum_acquisition_roots": 24,
+    "acquisition_conjecturer_calls_per_root": 24,
+    "target_trigger_blocks_per_diagnosis": 5,
+    "maximum_trigger_blocks_per_diagnosis": 8,
+    "maximum_healthy_blocks_per_diagnosis_arm_set": 3,
+    "branches_per_block": 4,
+    "post_trigger_calls_per_branch": 5,
+    "maximum_conjecturer_calls": 1016,
+    "prompt_tokens_per_call": 5000,
+    "completion_tokens_per_call": 2000,
+    "aggregate_hard_token_cap": 7112000,
+    "planning_estimate_tokens": 4064000,
+    "judge_tokens": 0,
+    "prose_critic_tokens": 0,
+    "pairwise_tokens": 0,
+    "synthesis_tokens": 0
+  },
+  "branch_manifest_required_fields": [
+    "experiment_manifest_plan_digest",
+    "source_root",
+    "source_state_digest",
+    "source_log_digest",
+    "source_event_seq",
+    "run_manifest_digest",
+    "route_matrix_digest",
+    "verifier_fingerprint",
+    "functional_evaluator_fingerprint",
+    "embedder_fingerprint",
+    "diagnosis",
+    "trigger_receipt_digest",
+    "arm",
+    "branch_seed",
+    "branch_execution_order",
+    "original_problem_id",
+    "related_problem_id_if_any",
+    "post_trigger_call_cap",
+    "prompt_token_cap",
+    "completion_token_cap"
+  ],
+  "unresolved_required_receipts": [
+    "exact four-problem corpus digest",
+    "per-problem public/withheld split digest",
+    "per-problem verifier fingerprint",
+    "per-problem functional evaluator fingerprint",
+    "selected two-family route matrix digest",
+    "committed preregistration digest",
+    "review approval",
+    "typed scheduler checkpoint and deterministic rehydration receipt"
+  ],
+  "preflight_failure_codes": [
+    "JOLT_PREREG_NOT_COMMITTED",
+    "JOLT_WORKLOAD_RECEIPTS_MISSING",
+    "JOLT_JUDGE_ROUTE_FORBIDDEN",
+    "JOLT_ADVISORY_BUDGET_NONZERO",
+    "JOLT_CAPTURE_RESPONSE_ACTIVE",
+    "JOLT_CONTROLLER_ACTIVE",
+    "JOLT_SPEC_INJECTION_ACTIVE",
+    "JOLT_EMBEDDER_UNAVAILABLE",
+    "JOLT_EMBEDDER_FINGERPRINT_MISMATCH",
+    "JOLT_BRANCH_STATE_MISMATCH",
+    "JOLT_SCHEDULER_CHECKPOINT_MISSING",
+    "JOLT_BUDGET_MISMATCH"
+  ]
+}

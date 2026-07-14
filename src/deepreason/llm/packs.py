@@ -287,6 +287,8 @@ def render_conj_pack(
     complement: bool = False,
     specs: list[str] | None = None,
     neighbourhood_n: int = NEIGHBOURHOOD_N,
+    generation_context: str | None = None,
+    suppressed_exemplars: tuple[str, ...] = (),
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -347,7 +349,12 @@ def render_conj_pack(
                 min_tokens=24,
             )
         )
-    accepted = [aid for aid, status in state.status.items() if status == Status.ACCEPTED]
+    suppressed = set(suppressed_exemplars)
+    accepted = [
+        aid
+        for aid, status in state.status.items()
+        if status == Status.ACCEPTED and aid not in suppressed
+    ]
     if school is not None:
         lineage = [
             aid for aid in accepted
@@ -369,6 +376,17 @@ def render_conj_pack(
                 droppable=False,
                 compressible=True,
                 min_tokens=24,
+            )
+        )
+    if generation_context:
+        sections.append(
+            _pack_section(
+                "experimental-generation-context",
+                "GENERATION CONTEXT (attention only; truth, admission, and "
+                "verifier standards are unchanged):\n" + generation_context,
+                6,
+                droppable=False,
+                compressible=False,
             )
         )
     if accepted:
@@ -396,7 +414,7 @@ def render_conj_pack(
             "these, do NOT echo your own lineage):",
         ]
         for aid in crossover:
-            if aid in state.artifacts:
+            if aid in state.artifacts and aid not in suppressed:
                 crossover_lines.append(f"- {aid}: {_head(state, aid, blobs)}")
         sections.append(
             _pack_section(
