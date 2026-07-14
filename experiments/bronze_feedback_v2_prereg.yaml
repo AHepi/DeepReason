@@ -1,0 +1,80 @@
+# Bronze feedback v2 - PRE-REGISTERED, GATED. Supersedes the design flaws
+# recorded in bronze_feedback_v1_prereg.yaml (superseded_before_scoring).
+# This file is committed before any live call; the study LAUNCHES only when
+# both gates below are met, and the launch configuration is recorded by
+# amendment at that time.
+
+question: does criticism feedback with real authority change what the
+  generator builds, and at what cost to evidence contact - measured at the
+  RUN level, with a court whose discrimination has been measured, on a
+  representation that does not manufacture objections?
+
+gates:  # both must be decided before launch
+  gate_1_schema: the schema comparator v1 verdict. If P1 confirms, both
+    arms run on the comparator-aware representation (engine change adopted
+    under its own prereg first). If P1 refutes, both arms keep the original
+    skeleton and the scope-formalism share is recorded as a known
+    background, not a treatment artifact.
+  gate_2_calibration: the court calibration run (matched pairs, planted
+    single defects). Active authority is granted ONLY if the critic+court
+    system catches >= 0.80 of planted defects while falsely convicting
+    <= 0.15 of clean controls. If the gate fails, the active arm is
+    cancelled and the record adopts observe-only as the standing policy
+    for text workloads (the original v2 plan's stop condition) - this
+    study then does not run.
+
+design:
+  generator: kimi-k2.6 (carried from repertoire v2; unchanged)
+  court_both_arms: identical; the calibration run's court configuration,
+    whatever passed the gate
+  arms: active (ARGUMENTATIVE_AUTHORITY=trial_required) vs observe_only;
+    the authority mode is the only difference
+  replicates: 4 independent runs PER ARM (8 roots). Cloud endpoints expose
+    no sampling seed, so strict seed pairing is unavailable; replicates
+    are paired by launch index for the paired analysis and the pairing
+    limitation is a recorded caveat. THE RUN IS THE EXPERIMENTAL UNIT.
+  per_run: 20 cycles, 250000 tokens, evidence mode, NEAR_DUP_EPS 0.35,
+    CONTROLLER false, EMBEDDER_FAILURE_POLICY=error (fail-closed geometry)
+  trial_budget_cap: rubric-trial spend is capped by config at launch
+    (knobs recorded in the amendment) - the v1 cost finding showed trials
+    consuming most of the budget before the generator ran
+  concurrency: max 3 roots at a time, account ceiling respected
+
+metrics:  # all computed per RUN, then compared across arms
+  mechanism_distribution: multi-label causal codebook
+    (scripts/mechanism_codebook.py, committed before scoring; every label
+    match recorded, not first-match-wins)
+  evidence_contact_three_tier:
+    mention: proposal text matches a dossier anchor term set EXCLUDING
+      topic anchors (anchors whose terms appear in the problem statement
+      are excluded from scoring by rule)
+    use: an anchor term co-occurs in one sentence with an inferential
+      connective (because, therefore, implies, predicts, consistent with,
+      contradicts) - deterministic rule
+    correct_use: blinded LLM evaluation of whether the stated inference is
+      accurate and relevant, frozen rubric, evaluator model named at
+      launch; reported as LLM-scored, never verdict-bearing alone
+  diversity: exact repeated emissions; chronological nearest-prior nomic
+    distance per emission with every value persisted; embedder fingerprint
+    in every scoring artifact
+
+predictions:  # decided by run-level paired permutation tests (all 8 runs)
+  P1:
+    statement: the active arm's run-level mechanism-class distributions
+      differ from observe-only beyond replicate noise (paired permutation
+      test on per-run class proportions, p < 0.05)
+  P2:
+    statement: active feedback does not reduce evidence contact - the
+      run-level mean "use" rate (tier 2) in the active arm is within 10
+      percentage points of observe-only
+    falsifier: active arm >= 20 points BELOW observe-only on tier-2 use -
+      feedback trades evidence contact for court appeasement; active
+      authority stays off for text workloads
+  P3:
+    statement: zero structural-only battery blocks and 100 percent
+      receipt completeness across all 8 roots
+
+decision_rules: report experiments/results/bronze_feedback_v2_report.json;
+  index line appended; run-level values all persisted
+budget: {llm_tokens: <= 2200000 total (8 runs x 250k plus scoring), max 3
+  in flight}
