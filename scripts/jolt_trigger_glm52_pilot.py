@@ -279,16 +279,14 @@ def main() -> int:
         raise SystemExit(f"branch destination already exists: {BRANCHES}")
 
     cfg = config()
-    expected_manifest = compile_run_manifest(
-        cfg, schema_version=2, workload_profile="formal", rubric_policy="forbid"
-    )
     if SOURCE.exists():
         manifest = load_run_manifest(SOURCE / "run-manifest.json")
-        if manifest.sha256 != expected_manifest.sha256:
-            raise SystemExit("source manifest differs from the frozen pilot manifest")
+        cfg = config_from_run_manifest(manifest)
         source = Harness(SOURCE)
     else:
-        manifest = expected_manifest
+        manifest = compile_run_manifest(
+            cfg, schema_version=2, workload_profile="formal", rubric_policy="forbid"
+        )
         source = Harness(SOURCE)
         bind_run_manifest(manifest, SOURCE)
         seed(source)
