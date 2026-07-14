@@ -65,6 +65,8 @@ def conj(
     contract_id: str = "conjecturer.direct.v1",
     component_spec: str | None = None,
     theorem_interface: str | None = None,
+    generation_context: str | None = None,
+    suppressed_exemplars: tuple[str, ...] = (),
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -80,6 +82,8 @@ def conj(
         complement=complement or bool(config.COMPLEMENT_ALWAYS),
         specs=specs,
         neighbourhood_n=config.NEIGHBOURHOOD_N,
+        generation_context=generation_context,
+        suppressed_exemplars=suppressed_exemplars,
     )
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
     reasoning = any(

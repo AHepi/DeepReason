@@ -168,7 +168,9 @@ class Scheduler:
     def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
                  controller=None, browser_backend=None,
                  workload_profile: str | None = None, stop_controller=None,
-                 progress_sink=None) -> None:
+                 progress_sink=None, capture_responses: bool = True,
+                 generation_context: str | None = None,
+                 suppressed_exemplars: tuple[str, ...] = ()) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
@@ -203,6 +205,13 @@ class Scheduler:
         # cycle.  Neither collaborator participates in adjudication.
         self.stop_controller = stop_controller
         self.progress_sink = progress_sink
+        # Controlled experiments may observe the replay-derived capture flags
+        # while holding the production response ladder inactive. Defaults retain
+        # production behavior. The generation overlay is presentation only and
+        # is empty for every ordinary caller.
+        self.capture_responses = capture_responses
+        self.generation_context = generation_context
+        self.suppressed_exemplars = tuple(suppressed_exemplars)
         self.last_stop_decision = None
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
@@ -661,6 +670,8 @@ class Scheduler:
                         ),
                         component_spec=component_spec,
                         theorem_interface=theorem_interface,
+                        generation_context=self.generation_context,
+                        suppressed_exemplars=self.suppressed_exemplars,
                     )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
@@ -1014,6 +1025,16 @@ class Scheduler:
             ):
                 active[flag] = True
         if active:
+            if not self.capture_responses:
+                self.diagnostics.append(
+                    {
+                        "cycle": self._cycles,
+                        "flags": sorted(active),
+                        "responses": [],
+                        "observed_only": True,
+                    }
+                )
+                return
             applied = ladder.respond(self, active)
             for flag in active:
                 self._cooldown[flag] = self._cycles + self.config.CAPTURE_W

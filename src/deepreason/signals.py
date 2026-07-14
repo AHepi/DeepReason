@@ -86,6 +86,20 @@ SIGNALS: dict[str, str] = {
                               "controller limits onto freshly constructed "
                               "endpoints (inputs: [signal, policy artifact "
                               "id, canonical knob JSON]); process-only",
+    # Pre-registered jolt-trigger pilot (views/jolt_signals.py, jolts.py).
+    "jolt-functional-observation": "deterministic domain evaluator receipt "
+                                   "for one candidate (inputs: [signal, "
+                                   "canonical typed JSON]); Measure only and "
+                                   "never status, a warrant, or a graph edge",
+    "jolt-trigger": "replay-derived hard-orbit/soft-exhaustion diagnosis "
+                    "receipt (inputs: [signal, canonical typed JSON]); an "
+                    "attention decision only",
+    "jolt-action": "one pre-registered prompt, representation, exemplar, or "
+                   "fixed problem-focus action (inputs: [signal, canonical "
+                   "typed JSON]); no status or adjudication mutation",
+    "jolt-false-trigger": "seeded healthy-state sample for estimating jolt "
+                          "harm (inputs: [signal, canonical JSON]); process "
+                          "metadata only",
     # Argumentative criticism accounting (rules/crit.py)
     "arg-crit": "argumentative critic ran and registered nothing new "
                 "(no fault found, or the critic artifact deduplicated)",

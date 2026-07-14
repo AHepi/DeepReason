@@ -1,0 +1,86 @@
+schema: deepreason-jolt-trigger-glm52-pilot-v1
+title: GLM-5.2 matched continuation pilot at a functional soft-stagnation state
+preregistered_at: 2026-07-15
+branch: claude/llm-creativity-experiments-at1zsa
+
+estimand: >-
+  Conditional difference from J0 in verifier-backed progress during five
+  conjecturer calls after a reached functional soft-stagnation state. This
+  pilot does not estimate a whole-run adaptive-policy effect or a hard-orbit
+  treatment effect.
+
+model:
+  provider: ollama
+  id: glm-5.2
+  reasoning: none
+  temperature: 1.0
+  roles: [conjecturer]
+
+workload:
+  id: pi-jolt-finite-selection-v1
+  domain: finite
+  task: >-
+    Select six strictly increasing, non-adjacent integers from 1 through 20
+    whose sum is 60. Maximise their product. Candidate content is a JSON object
+    with selection and rationale fields.
+  verifier: deterministic JSON and finite-constraint evaluator
+  objective: product of the six selected integers; larger is better
+  functional_identity: exact selected tuple
+  mechanism_class: low, middle, or high first-element bucket
+
+acquisition:
+  calls: 8
+  candidates_per_call: 3
+  trigger_window_admissions: 8
+  trigger: >-
+    At least eight valid admissions exist; none of the last eight improves the
+    running best objective; and those admissions introduce no mechanism class
+    absent from earlier valid admissions.
+  trigger_failure: stop without branching and report trigger scarcity
+
+matched_branches:
+  calls_per_branch: 5
+  token_cap_per_branch: 35000
+  branch_order_seed: glm52-jolt-pilot-v1
+  arms:
+    - J0_no_intervention
+    - J6_generic_complement
+    - J3_representation_reset
+    - J4_verifier_directed_challenge
+  common_state: copied append-only root plus identical run manifest
+  provider_nondeterminism: randomised branch order; no exact-output equivalence claim
+
+outcomes:
+  primary: any objective improvement over the frozen source best within five calls
+  secondary:
+    - maximum objective improvement
+    - valid admissions
+    - new exact selections
+    - tokens per objective improvement
+    - malformed or transport-dropped calls
+
+authority_and_contamination_controls:
+  rubric_policy: forbid
+  argumentative_critic_calls: 0
+  judge_calls: 0
+  pairwise_calls: 0
+  synthesizer_calls: 0
+  research_calls: 0
+  controller: false
+  capture_responses: false
+  jolt_status_effect: forbidden
+  jolt_warrant_effect: forbidden
+  status_sources: deterministic predicate only
+
+budget:
+  acquisition_token_cap: 56000
+  branch_token_cap_each: 35000
+  aggregate_hard_cap: 196000
+  maximum_model_calls: 28
+
+interpretation_limits:
+  - one model, one problem, one reached state, and one execution per arm
+  - descriptive conditional pilot only
+  - semantic novelty is not used because no stamped evidence embedder is available
+  - functional and objective outcomes are task-specific
+  - no claim about hard refuted-attractor orbiting

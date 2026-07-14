@@ -1,0 +1,141 @@
+{
+  "schema": "deepreason-jolt-trigger-signal-spec-v1",
+  "baseline_commit": "835096578f72ddbc88f69e67c05130f058d359c7",
+  "status": "frozen_for_review_not_live_execution",
+  "replay_boundary": {
+    "allowed_inputs": [
+      "append-only Event records",
+      "content-addressed Artifact, Problem, Commitment, and Warrant records reachable from those events",
+      "jolt-functional-observation Measure receipts",
+      "an exact expected embedder fingerprint"
+    ],
+    "forbidden_inputs": [
+      "scheduler in-memory diagnostics",
+      "wall-clock state",
+      "unlogged provider state",
+      "hidden-test text or identities",
+      "post-trigger outcomes when making a prospective decision"
+    ]
+  },
+  "embedder": {
+    "model": "nomic-ai/nomic-embed-text-v1.5",
+    "version": "fastembed-0.8.0+onnxruntime-1.27.0",
+    "sentinel": "d6e3599ce0377000",
+    "comparison": "exact equality on all three fields",
+    "fallback": "forbidden",
+    "error_on_mismatch": "JOLT_EMBEDDER_FINGERPRINT_MISMATCH",
+    "error_on_unavailable": "JOLT_EMBEDDER_UNAVAILABLE"
+  },
+  "functional_observation": {
+    "event_signal": "jolt-functional-observation",
+    "required_fields": [
+      "candidate_id",
+      "problem_id",
+      "problem_family",
+      "domain",
+      "evaluator_id",
+      "evaluator_fingerprint",
+      "admitted",
+      "functional_novelty",
+      "new_commitment",
+      "new_counterexample_class",
+      "status_source"
+    ],
+    "optional_fields": [
+      "mechanism_class",
+      "verifier_metric",
+      "semantic_novelty"
+    ],
+    "verifier_metric_rule": "delta is normalised by the domain evaluator so positive always means improvement",
+    "authoritative_status_sources": [
+      "execution",
+      "deterministic",
+      "formal",
+      "browser",
+      "property",
+      "fuzz",
+      "simulation",
+      "external_evidence"
+    ],
+    "judge_and_prose_sources_allowed": false
+  },
+  "completed_conjecturer_call": {
+    "terminal_record": "Event.llm.role equals conjecturer",
+    "no_register": "terminal Measure input jolt-independent signal conj-noregister",
+    "gate_blocks": "gate:* Measure events since the preceding conjecturer terminal record and before this terminal record",
+    "strict_empty_call": "a conj-noregister terminal with at least one gate block",
+    "exclusions": [
+      "pairwise discrimination cycles",
+      "synthesis calls",
+      "specification calls",
+      "cycles with no problem",
+      "transport drops with no conjecturer LLMCall"
+    ]
+  },
+  "hard_orbit_snapshot": {
+    "window": "latest 10 completed conjecturer calls",
+    "fields": [
+      "gate_block_count",
+      "gate_block_rate",
+      "empty_cycle_count",
+      "no_register_rate",
+      "tokens_per_admitted_candidate",
+      "blocked_target_concentration",
+      "blocked_lineage_concentration",
+      "time_since_last_admission_calls",
+      "time_since_last_verifier_improvement_calls",
+      "refuted_attractor_present",
+      "same_problem_family_block_share",
+      "source_event_seqs"
+    ],
+    "trigger": {
+      "minimum_completed_calls": 10,
+      "minimum_gate_blocks": 5,
+      "minimum_maximum_block_concentration": 0.6,
+      "verifier_improvements_allowed": 0,
+      "requires_refuted_attractor": true
+    },
+    "calibration_status": "candidate threshold from prior evidence; not production calibrated"
+  },
+  "soft_exhaustion_snapshot": {
+    "semantic_novelty": "nearest-prior cosine distance within problem family, normalised by the early within-run median",
+    "early_baseline": "first 8 non-null novelty values",
+    "recent_window": "latest 8 admitted observations strictly after the baseline",
+    "fields": [
+      "within_run_normalised_semantic_novelty",
+      "late_early_novelty_ratio",
+      "mechanism_class_discovery_rate",
+      "new_executable_commitment_rate",
+      "verifier_coverage_delta",
+      "best_objective_or_test_score_delta",
+      "new_counterexample_rate",
+      "semantic_cluster_growth_without_functional_growth",
+      "admissions_since_last_verifier_improvement",
+      "problem_age",
+      "recent_gate_block_count",
+      "source_event_seqs"
+    ],
+    "trigger": {
+      "maximum_late_early_novelty_ratio": 0.85,
+      "requires_no_new_mechanism_class": true,
+      "requires_no_new_executable_commitment": true,
+      "requires_no_verifier_improvement": true,
+      "maximum_recent_gate_blocks": 1
+    },
+    "raw_embedding_distance_threshold": null,
+    "calibration_status": "candidate within-run ratio; not production calibrated"
+  },
+  "diagnosis_rules": {
+    "hard_only": "hard trigger true and soft trigger false",
+    "soft_only": "soft trigger true and hard trigger false",
+    "ambiguous": "both triggers true; excluded from primary efficacy",
+    "healthy": "neither trigger true",
+    "insufficient_data": "either required window is unavailable"
+  },
+  "retrospective_oracle": {
+    "definition": "earliest state after which the next five unjolted calls contain no positive verifier delta",
+    "use": "analysis only",
+    "prospective_dispatch": "forbidden"
+  }
+}
+

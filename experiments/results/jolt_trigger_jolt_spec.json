@@ -1,0 +1,108 @@
+{
+  "schema": "deepreason-jolt-trigger-jolt-spec-v1",
+  "baseline_commit": "835096578f72ddbc88f69e67c05130f058d359c7",
+  "status": "frozen_for_review_not_live_execution",
+  "invariant": "Every pilot jolt is prompt, attention, representation, or fixed scheduling context only and is recorded as a Measure event.",
+  "forbidden_effects": [
+    "create or carry a warrant",
+    "add an attack or dependence edge",
+    "change an artifact status",
+    "alter an anti-relapse threshold or domain",
+    "alter a verifier, judge, acceptance, or survivor threshold",
+    "reveal hidden evaluation content",
+    "adapt a trigger threshold after observing outcomes"
+  ],
+  "arms": [
+    {
+      "id": "J0",
+      "name": "no_intervention",
+      "pilot_status": "enabled",
+      "allowed_changes": [],
+      "receipt": "jolt-action Measure with empty prompt and no focus change"
+    },
+    {
+      "id": "J1",
+      "name": "stance_rotation",
+      "pilot_status": "enabled_for_hard_orbit",
+      "allowed_changes": ["branch-local stance prompt", "temporary accepted-exemplar suppression"],
+      "selection": "deterministic frozen stance-opposition mapping",
+      "mapping": {
+        "mechanism-first": "counterexample-first",
+        "counterexample-first": "mechanism-first",
+        "local-repair": "architectural-replacement",
+        "architectural-replacement": "local-repair",
+        "optimise-current": "different-representation",
+        "different-representation": "optimise-current",
+        "proof-first": "adversarial-instance-first",
+        "adversarial-instance-first": "proof-first"
+      },
+      "status_safety": "does not call capture.schools.reseed and does not create a school-policy artifact"
+    },
+    {
+      "id": "J2",
+      "name": "problem_turnover",
+      "pilot_status": "enabled_for_hard_orbit_when_preexisting_related_problem_is_available",
+      "allowed_changes": ["problem focus schedule"],
+      "schedule": "calls 1-2 use the frozen related problem; calls 3-5 return to the original problem",
+      "eligibility": "related problem exists before randomisation and is bound in the branch manifest",
+      "primary_outcome_scope": "original problem only",
+      "forbidden": "creating a new easier problem after the trigger"
+    },
+    {
+      "id": "J3",
+      "name": "representation_reset",
+      "pilot_status": "enabled_for_soft_exhaustion",
+      "allowed_changes": ["frozen domain-specific operational-form prompt"],
+      "templates": {
+        "code": "Restate the next proposal as state, invariant, transition, and executable check.",
+        "finite": "Restate the next proposal as a finite-domain table, recurrence, or exhaustive predicate.",
+        "simulation": "Restate the next proposal as state variables, transition rule, seed, and deterministic score.",
+        "formal": "Restate the next proposal as assumptions, obligations, and a machine-checkable witness shape.",
+        "browser": "Restate the next proposal as page state, deterministic action sequence, and observable postconditions."
+      },
+      "forbidden": "adding a new factual or mathematical premise"
+    },
+    {
+      "id": "J4",
+      "name": "verifier_directed_challenge",
+      "pilot_status": "enabled_for_soft_exhaustion",
+      "allowed_changes": ["prompt context grounded in public deterministic failure classes"],
+      "prompt_shape": "Name one public unresolved failure class and request a proposal based on a different invariant.",
+      "forbidden": ["hidden test identity", "hidden input", "hidden excerpt", "hidden-test count", "withheld expected output"]
+    },
+    {
+      "id": "J5",
+      "name": "external_information_injection",
+      "pilot_status": "deferred",
+      "reason": "existing evidence registration changes support and status and information-limited task eligibility is not yet frozen"
+    },
+    {
+      "id": "J6",
+      "name": "generic_complement",
+      "pilot_status": "enabled_as_negative_control",
+      "allowed_changes": ["prompt context"],
+      "prompt": "Avoid the modal continuation of the displayed approaches; propose a structurally different attempt.",
+      "prior": "reduced prompt echo without material novelty restoration"
+    },
+    {
+      "id": "J7",
+      "name": "temperature_increase",
+      "pilot_status": "deferred",
+      "reason": "changes validity and transport risk as well as sampling diversity, and provider nondeterminism is already a major pilot limitation"
+    }
+  ],
+  "branch_rules": {
+    "one_action_per_branch": true,
+    "post_trigger_calls": 5,
+    "equal_prompt_token_cap": 25000,
+    "equal_completion_token_cap": 10000,
+    "no_jolt_branch_required": true,
+    "branch_order": "deterministic seeded permutation recorded before execution",
+    "persistent_pre_jolt_state_digest_must_match": true,
+    "live_scheduler_checkpoint_required": true,
+    "live_scheduler_rehydration_implemented": false,
+    "capture_response_actuation": false,
+    "controller": false,
+    "specification_injection": false
+  }
+}
