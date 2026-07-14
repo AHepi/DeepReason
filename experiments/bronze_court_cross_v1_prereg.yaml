@@ -58,3 +58,23 @@ amendment_1:
     experiments/court_cross_run/, ledger ceiling 600000, max 3 in flight,
     launched only after the repertoire arms release the concurrency slots
   tokens_spent_before_amendment: 0
+
+# --- amendment 2, recorded after arm 1 exhausted the ledger (recorded
+# --- BEFORE any further judging call) ---
+amendment_2:
+  what_happened: the per-item cost estimate in amendment 1 (~1.7k tokens,
+    from defended_trial_v1's short prose items) was wrong for this pool -
+    the skeleton JSON artifacts are far longer, and the dsflash arm alone
+    consumed the 600000 ledger at 85 of 110 items (~7k/item). The kimi and
+    mistral arms never started.
+  correction_before_further_spend:
+    effective_pool: the FIRST 85 pool items in the frozen deterministic
+      order (the exact set the dsflash arm completed; completion order is
+      content-hash order, independent of item content or verdicts, so the
+      subset is outcome-blind). All arms are scored on these 85 only; the
+      dsflash arm's remaining 25 items are not judged.
+    new_ceiling: 1600000 total (the original 600000 already spent plus
+      up to 1000000 for the two remaining arms at the measured ~7k/item)
+    everything_else: unchanged (same courts, defender, order-split
+      protocol, runner, checkpoints)
+  tokens_spent_at_amendment: 601578
