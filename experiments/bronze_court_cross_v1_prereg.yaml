@@ -38,3 +38,23 @@ predictions:
 decision_rules: report experiments/results/bronze_court_cross_v1_report.json;
   index line appended
 budget: {llm_tokens: <= 600000, max 3 in flight}
+
+# --- amendment 1, recorded BEFORE any judging call (zero tokens spent) ---
+amendment_1:
+  pool: the prereg's eligible set (registered + gate-blocked census
+    candidates, deduplicated) holds 627 unique items - beyond the judging
+    budget. Frozen deterministic subsample of 110 (seed 42 over sorted
+    content hashes) committed at experiments/court_cross_pool_v1.json
+    before any call.
+  defender: the prereg named critics and judge seats but no defender.
+    Pinned - deepseek-v4-pro in ALL arms (the defended_trial_v1 defender,
+    held constant so the treatment stays the court alone).
+  ruling_protocol: "two-seat ruling with order swap" is implemented as an
+    order SPLIT across the two seats (seat 1 sees objection first, seat 2
+    sees defence first) - one ruling per seat, fitting the 600k budget.
+    P3's disagreement measure is therefore seat-plus-order disagreement,
+    not a pure order effect; recorded as a known confound.
+  runner: scripts/court_cross_run.py, checkpoints under
+    experiments/court_cross_run/, ledger ceiling 600000, max 3 in flight,
+    launched only after the repertoire arms release the concurrency slots
+  tokens_spent_before_amendment: 0
