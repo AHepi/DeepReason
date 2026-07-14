@@ -1,0 +1,22 @@
+{
+  "prompt_tokens": 58723,
+  "completion_tokens": 17182,
+  "calls": 72,
+  "phases": {
+    "calibration_critic": {
+      "prompt_tokens": 7367,
+      "completion_tokens": 1671,
+      "calls": 13
+    },
+    "calibration_defender": {
+      "prompt_tokens": 8791,
+      "completion_tokens": 2667,
+      "calls": 13
+    },
+    "calibration_seat": {
+      "prompt_tokens": 42565,
+      "completion_tokens": 12844,
+      "calls": 46
+    }
+  }
+}
