@@ -1,0 +1,49 @@
+# Schema comparator v1 - PRE-REGISTERED, committed with the frozen forms
+# BEFORE any live call. Operator-designed causal test of the scope-formalism
+# diagnosis: court-cross v1 showed 74-93 percent of objections in every
+# court dispute covers/excludes consistency. If that is manufactured by the
+# representation, changing the representation - content held fixed - must
+# collapse it. If it persists across forms, the diagnosis is wrong.
+
+items: the frozen court-cross effective pool (first 85 of
+  experiments/court_cross_pool_v1.json). Items whose content does not parse
+  as a skeleton are excluded mechanically and counted in the report.
+
+forms:  # derived by the deterministic transformer, frozen at
+        # experiments/schema_comparator_forms_v1.json before any call
+  A_original: the pool content verbatim (covers/excludes skeleton)
+  B_comparator_aware: mechanical transform - scope.covers becomes
+    target_cases, scope.excludes becomes comparison_cases, and every
+    comparison case gains a differential_outcomes entry whose explanation
+    is the prose_notes sentence mentioning that case when one exists, else
+    an explicit "the account does not state a differential explanation for
+    this case". No content added or removed beyond the restructuring.
+  C_scope_neutral_prose: claim, mechanism, forbidden cases, and prose
+    notes rendered as labeled prose with NO case-list structure at all.
+
+critics: deepseek-v4-flash and kimi-k2.6 (the two highest scope-share
+  courts), NEUTRAL_CRITIC_PROMPT and conviction rule from
+  defended_trial_v1, temp 0. No defender, no judges - the measured outcome
+  is the objection GROUND, not adjudication.
+
+metrics: per critic x form - objection rate; scope-formalism share (the
+  keyword rule frozen in scripts/court_cross_score.py, unchanged)
+
+predictions:
+  P1:
+    statement: scope-formalism share under form B is >= 30 percentage
+      points lower than under form A for BOTH critics
+    falsifier: < 10pp drop for either critic - the schema diagnosis is
+      demoted; the trap lies in the critic or the question, not the
+      representation
+  P2:
+    statement: objection rate stays >= 0.90 under every form for both
+      critics (prosecution is unconditional; representation changes the
+      ground of objection, not the appetite)
+  P3_exploratory: form C shares reported, non-verdict-bearing (prose may
+    change more than scope structure alone)
+
+decision_rules: report experiments/results/schema_comparator_v1_report.json;
+  index line appended; if P1 confirms, the comparator-aware schema becomes
+  the engine change candidate with its own prereg before adoption
+budget: {llm_tokens: <= 1500000, max 3 in flight}

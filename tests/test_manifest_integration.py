@@ -78,3 +78,31 @@ def test_compile_bind_preflight_text_manifest(tmp_path):
             workload_profile="text",
             rubric_policy="require_cross_family",
         )
+
+
+def test_embedder_failure_policy_error_fails_closed(tmp_path, monkeypatch):
+    """Evidence mode: EMBEDDER_FAILURE_POLICY=error stops the run before
+    any model call when the neural backend is unavailable; the default
+    fallback policy still degrades visibly."""
+    from deepreason import ops
+    from deepreason.llm import embedder as embedder_module
+    from deepreason.llm.embedder import EmbedderUnavailable
+
+    def unavailable(model):
+        raise EmbedderUnavailable("backend missing")
+
+    monkeypatch.setattr(embedder_module, "build_embedder", unavailable)
+    monkeypatch.setattr(ops, "make_embedder", ops.make_embedder)
+
+    harness = Harness(tmp_path / "root")
+    strict = apply_overrides(Config(), {"EMBEDDER_FAILURE_POLICY": "error"})
+    with pytest.raises(EmbedderUnavailable):
+        ops.make_embedder(harness, strict)
+
+    lenient = Config()
+    assert ops.make_embedder(harness, lenient) is None
+    fallback_measures = [
+        e for e in harness.log.read()
+        if e.inputs and e.inputs[0] == "embedder-fallback"
+    ]
+    assert len(fallback_measures) == 1

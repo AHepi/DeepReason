@@ -134,6 +134,12 @@ def make_embedder(harness, config):
     try:
         return build_embedder(config.EMBEDDER_MODEL)
     except EmbedderUnavailable as e:
+        if getattr(config, "EMBEDDER_FAILURE_POLICY", "fallback") == "error":
+            # Evidence/scientific mode: a missing neural backend must stop
+            # the run BEFORE the first model call, never silently swap the
+            # geometry instrument (the bronze flat v1 novelty figures were
+            # misattributed for exactly this reason).
+            raise
         harness.record_measure(
             inputs=["embedder-fallback", config.EMBEDDER_MODEL, str(e)[:160]]
         )

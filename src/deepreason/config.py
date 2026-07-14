@@ -357,6 +357,11 @@ class Config(BaseModel):
     # before trusting a config on a new embedder — the adjudicated record in
     # runs/embedder_design refuted every blind distribution-mapping shortcut.
     EMBEDDER_MODEL: str | None = "nomic-ai/nomic-embed-text-v1.5"
+    # "fallback" (interactive default): unavailable backend degrades to
+    # hashing with an embedder-fallback measure. "error" (evidence mode):
+    # the run fails BEFORE the first model call rather than silently
+    # swapping the geometry instrument.
+    EMBEDDER_FAILURE_POLICY: str = "fallback"
     # Chunked website builds (manifest.py, easy.py): components are bounded
     # fragments composed by the deterministic assembler. CHUNK_MAX_CHARS is
     # the default per-fragment size commitment (a manifest entry may set a
