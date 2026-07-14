@@ -283,7 +283,7 @@ def main() -> int:
         cfg, schema_version=2, workload_profile="formal", rubric_policy="forbid"
     )
     if SOURCE.exists():
-        manifest = load_run_manifest(SOURCE)
+        manifest = load_run_manifest(SOURCE / "run-manifest.json")
         if manifest.sha256 != expected_manifest.sha256:
             raise SystemExit("source manifest differs from the frozen pilot manifest")
         source = Harness(SOURCE)
