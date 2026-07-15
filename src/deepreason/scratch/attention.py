@@ -304,17 +304,24 @@ class AttentionPlanner:
                     query_limit,
                 )
             ]
+        focus_ids = set(focus)
         if request.include_underexposed:
             channels[RetrievalChannel.UNDEREXPOSED] = [
-                item.id for item in self.service.underexposed_blocks(query_limit)
-            ]
+                item.id
+                for item in self.service.underexposed_blocks(query_limit + len(focus))
+                if item.id not in focus_ids
+            ][:query_limit]
         if request.include_exploratory:
             channels[RetrievalChannel.EXPLORATORY] = [
                 item.id
                 for item in self.service.sample_without_semantic_relevance(
-                    request.deterministic_seed, query_limit
+                    request.deterministic_seed, query_limit + len(focus)
                 )
+                if item.id not in focus_ids
             ]
+            channels[RetrievalChannel.EXPLORATORY] = channels[
+                RetrievalChannel.EXPLORATORY
+            ][:query_limit]
         coverage = CoverageController(self.service, self.policy)
         active = coverage.active_cycle()
         cycle_id = active.cycle.id if active is not None else None

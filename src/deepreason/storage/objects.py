@@ -12,6 +12,19 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from deepreason.bridge.models import (
+    BridgeOutputV1,
+    BridgeValidationFindingV1,
+    BridgeValidationReportV1,
+    ClaimLedgerEntryV1,
+    ClaimLedgerV1,
+    ClaimUseV1,
+    GroundingFindingV1,
+    GroundingReviewV1,
+    SourceConflictV1,
+    UncoveredRequirementV1,
+    UnresolvedItemV1,
+)
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
@@ -47,6 +60,17 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "scratch-visibility": VisibilityRecordV1,
     "scratch-coverage-cycle": CoverageCycleV1,
     "scratch-advisory-context": AdvisoryContextV1,
+    "bridge-ledger-entry": ClaimLedgerEntryV1,
+    "bridge-uncovered-requirement": UncoveredRequirementV1,
+    "bridge-source-conflict": SourceConflictV1,
+    "bridge-claim-ledger": ClaimLedgerV1,
+    "bridge-claim-use": ClaimUseV1,
+    "bridge-unresolved-item": UnresolvedItemV1,
+    "bridge-output": BridgeOutputV1,
+    "bridge-validation-finding": BridgeValidationFindingV1,
+    "bridge-validation-report": BridgeValidationReportV1,
+    "bridge-grounding-finding": GroundingFindingV1,
+    "bridge-grounding-review": GroundingReviewV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
@@ -77,9 +101,9 @@ def _object_data(schema: str, obj: BaseModel) -> dict:
     return obj.model_dump(
         mode="json",
         by_alias=True,
-        # Scratch canonical encoding omits absent optional fields. Formal
+        # Advisory canonical encodings omit absent optional fields. Formal
         # schemas retain their exact established byte representation.
-        exclude_none=schema.startswith("scratch-"),
+        exclude_none=schema.startswith(("scratch-", "bridge-")),
     )
 
 
