@@ -15,6 +15,8 @@ writes prompt/raw blobs via adapter.blobs). Spend is returned in the
 result — prose.py precedent: view calls stay off the run's log.
 """
 
+from pathlib import Path
+
 from deepreason.bridge.evidence_pack import legacy_pack as _pack
 from deepreason.bridge.evidence_pack import problem_family as problem_family
 from deepreason.llm.contracts import ThesisOutput
@@ -60,7 +62,12 @@ def thesis(harness, adapter, problem_id: str | None = None,
            budget_chars: int = 24_000, role: str = "thesis") -> dict:
     """Compose the committed thesis for a problem's record. Read-only over
     the root; the adapter must NOT share the run's blob store."""
-    if adapter.blobs is harness.blobs:
+    same_blob_root = (
+        hasattr(adapter.blobs, "root")
+        and hasattr(harness.blobs, "root")
+        and Path(adapter.blobs.root).resolve() == Path(harness.blobs.root).resolve()
+    )
+    if adapter.blobs is harness.blobs or same_blob_root:
         raise ValueError(
             "thesis() is read-only: give the adapter a scratch BlobStore, "
             "not the run root's (adapter.call writes prompt/raw blobs)")

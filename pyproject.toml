@@ -37,7 +37,7 @@ deepreason = "deepreason.cli.main:main"
 deepreason-mcp = "deepreason.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/deepreason"]
+packages = ["src/deepreason", "mini/minireason"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "mini/tests"]

@@ -47,6 +47,47 @@ deepreason --root runs/my-question watch
 deepreason --root runs/my-question continue --budget cycles=4 --token-budget 50000
 ```
 
+### Advisory scratchpad and grounded answers
+
+For an exploratory text run, enable `scratchpad.enabled: true` and
+`bridge.mode: grounded_two_stage` in the typed source profile and compile a
+RunManifest v3. The manifest freezes the bounded attention, coverage, role,
+review, repair, and output policies before any model call:
+
+```bash
+deepreason setup
+deepreason --config config/my-provider.yaml config compile \
+  --schema-version 3 --workload-profile text --profile compact \
+  --rubric-policy forbid --out run-manifest-v3.json
+deepreason --root runs/my-question reason --text "Why might X happen?" \
+  --run-manifest run-manifest-v3.json
+
+# Loose notes need only content. Optional prompts stay optional.
+deepreason --root runs/my-question scratch add \
+  --content "A provisional mechanism worth revisiting."
+deepreason --root runs/my-question scratch search "mechanism" --limit 10
+deepreason --root runs/my-question scratch map --limit 10
+
+# Stage A validates a claim ledger; Stage B composes only from that ledger.
+deepreason --root runs/my-question bridge build <problem-prefix> --target answer
+deepreason --root runs/my-question bridge claims --limit 25
+deepreason --root runs/my-question bridge result
+```
+
+Scratch objects are immutable, advisory, and separate from the formal graph.
+A scratch reference records intellectual provenance, never evidence. Links,
+clusters, guides, attention, coverage, and embedding similarity can improve
+navigation but cannot change a verdict, merge notes, or promote anything into
+the ontology. The bridge visibly separates grounded facts, recorded
+observations, supported inferences, surviving conjectures, explicit
+assumptions, unknowns, and conflicting evidence. Novel conjectures are allowed;
+category laundering is not. An unresolved or partial answer is a valid
+successful result.
+
+See the [ordinary-user guide](docs/SCRATCHPAD_GROUNDED_BRIDGE.md) and the
+[v1.4 normative amendment](docs/harness-spec-v1.4-amendment.md). The guide also
+shows the explicit, non-mutating `--derived-output` flow for v1/v2 run fences.
+
 Pinned code, simulation, and Lean operations are available through
 `deepreason code`, `deepreason simulate`, `deepreason prove`, and
 `deepreason check-proof`. They evaluate only workload-declared commands,
@@ -163,7 +204,9 @@ The reduced control loop lives in [`mini/`](mini/); it reuses the full
 package's canonical Harness, ontology, grounded/support adjudication,
 anti-relapse guard, warrant plumbing, storage, route firewall, model profiles,
 wire contracts, and bounded repair kernel so it cannot drift into a second
-protocol. See
+protocol. A v3 Mini run also uses `minireason.advisory.MiniAdvisorySession` to
+reuse the exact parent scratch, attention, and two-stage bridge implementation;
+it does not define a reduced advisory ontology. See
 [`mini/README.md`](mini/README.md).
 
 ---
@@ -284,6 +327,15 @@ pytest                      # full suite (parent + mini)
 ```
 
 Source is `src/deepreason/` (the full harness) and `mini/minireason/` (the
-compact build). The normative design spec is
-[`docs/harness-spec-v1.3.md`](docs/harness-spec-v1.3.md); the module-by-module
-map and phase status live there and in [`docs/AGENT.md`](docs/AGENT.md).
+compact build). The normative baseline is
+[`docs/harness-spec-v1.3.md`](docs/harness-spec-v1.3.md), amended explicitly by
+[`docs/harness-spec-v1.4-amendment.md`](docs/harness-spec-v1.4-amendment.md).
+The module-by-module map and operator contract live there and in
+[`docs/AGENT.md`](docs/AGENT.md).
+
+The installed-wheel portability gate is also runnable locally and makes no
+provider calls:
+
+```bash
+python scripts/wheel_smoke.py
+```

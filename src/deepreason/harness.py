@@ -41,7 +41,11 @@ from deepreason.ontology.problem import POPPER_BATTERY
 from deepreason.scratch.events import ScratchEventPayloadV1
 from deepreason.scratch.models import ScratchActor
 from deepreason.scratch.state import ScratchState
-from deepreason.storage.blobs import BlobStore
+from deepreason.storage.blobs import (
+    BlobStore,
+    FencedBlobStore,
+    historical_sealed_refs,
+)
 from deepreason.storage.objects import SCHEMAS, ObjectStore
 from deepreason.unification.isolation import conn_map
 
@@ -80,9 +84,19 @@ class Harness:
         self.objects = ObjectStore(self.root / "objects", read_only=self._read_only)
         self.log = EventLog(self.root / "log.jsonl", read_only=self._read_only)
         self._reset()
+        revealed_artifact_ids: set[str] = set()
         for event in self.log.read(upto_seq=upto_seq):
+            if event.rule == Rule.REVEAL:
+                revealed_artifact_ids.update(event.inputs)
             self._apply_event(event, adjudicate=False)
         self._adjudicate()
+        if self._read_only:
+            self.blobs = FencedBlobStore(
+                self.blobs,
+                historical_sealed_refs(
+                    self.blobs, self.state.artifacts, revealed_artifact_ids
+                ),
+            )
 
     _TAIL_CAP = 512  # bounded in-memory event tail (windows are ~CAPTURE_W)
 

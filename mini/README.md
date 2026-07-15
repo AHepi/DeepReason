@@ -63,6 +63,27 @@ before trusting a score.
 
 Live smoke (M2, ~30k tokens): `DEEPSEEK_API_KEY=... python mini/scripts/smoke.py`.
 
+## Shared advisory features
+
+Scratch and grounded final output are not reduced-engine protocols.
+`minireason.advisory.MiniAdvisorySession` opens an already-bound
+`engine_profile=mini` RunManifest v3 and delegates to the parent Harness,
+ScratchService, AttentionPlanner, object/blob stores, append-only log, route
+leases, bounded repair, and two-stage bridge. It creates no Mini-specific
+scratch schema, ledger, validator, or store.
+
+Legacy Mini runs continue to use their existing manifest and open unchanged.
+They are not mutated into v3. To opt in, compile and bind a v3 text manifest
+with scratch and `grounded_two_stage` policy, then open the session. Adapters
+passed to `build_bridge` must carry the exact manifest leases, model profile,
+repair ceiling, and run blob store; the facade never resolves a provider or
+makes an implicit call.
+
+Scratch references remain intellectual provenance rather than evidence.
+Similarity and attention remain retrieval-only, and an unknown or partial
+bridge resolution is a valid success. See
+[`../docs/SCRATCHPAD_GROUNDED_BRIDGE.md`](../docs/SCRATCHPAD_GROUNDED_BRIDGE.md).
+
 ## Graduation (mini -> full)
 
 The log is the contract: a MiniReason root is a valid DeepReason root.

@@ -165,6 +165,13 @@ class EvidencePackV1(CanonicalBridgeRecord):
 
     problem_ref: str = Field(min_length=1, max_length=512)
     formal_seq: StrictInt = Field(ge=0)
+    # Present only for an explicit dual-root derived view.  The digest binds
+    # this canonical pack to a path-independent source event prefix while the
+    # formal sequence records the exact source fence.  Same-root packs omit it
+    # so their historical canonical identities remain unchanged.
+    source_run_digest: str | None = Field(
+        default=None, pattern=r"^[0-9a-f]{64}$"
+    )
     problem_text: str = Field(min_length=1, max_length=262_144)
     problem_family_refs: list[str] = Field(
         min_length=1, max_length=MAX_EVIDENCE_PACK_ITEMS
@@ -279,15 +286,26 @@ def _append_unique(values: list[str], value: str | None) -> None:
 
 def _is_source_artifact(harness, artifact_id: str) -> bool:
     artifact = harness.state.artifacts.get(artifact_id)
-    if artifact is None:
+    if artifact is None or not _artifact_content_available(harness, artifact_id):
         return False
     return content_text(artifact, harness.blobs).startswith("source-reliability:")
+
+
+def _artifact_content_available(harness, artifact_id: str) -> bool:
+    artifact = harness.state.artifacts.get(artifact_id)
+    if artifact is None:
+        return False
+    if artifact.content_ref.startswith("inline:"):
+        return True
+    checker = getattr(harness.blobs, "is_grounding_available", None)
+    return True if checker is None else bool(checker(artifact.content_ref))
 
 
 def _is_evidence_artifact(harness, artifact_id: str) -> bool:
     artifact = harness.state.artifacts.get(artifact_id)
     return bool(
         artifact is not None
+        and _artifact_content_available(harness, artifact_id)
         and artifact.provenance.role.value in {"import", "user"}
         and not _is_source_artifact(harness, artifact_id)
     )
@@ -302,13 +320,19 @@ def _evidence_sources(harness, evidence_ref: str) -> list[str]:
     stack = [evidence_ref]
     while stack:
         current = stack.pop()
-        if current in seen or current not in artifacts:
+        if (
+            current in seen
+            or current not in artifacts
+            or not _artifact_content_available(harness, current)
+        ):
             continue
         seen.add(current)
         dependencies = [
             ref.target
             for ref in artifacts[current].interface.refs
-            if ref.role == RefRole.DEPENDENCE and ref.target in artifacts
+            if ref.role == RefRole.DEPENDENCE
+            and ref.target in artifacts
+            and _artifact_content_available(harness, ref.target)
         ]
         for dependency in dependencies:
             _append_unique(sources, dependency)
@@ -345,8 +369,11 @@ def _lineage(harness, artifact_ref: str) -> EvidenceLineageV1:
             _append_unique(sources, current)
         for ref in artifact.interface.refs:
             if ref.role == RefRole.EVIDENCE:
-                _append_unique(evidence, ref.target)
+                if _artifact_content_available(harness, ref.target):
+                    _append_unique(evidence, ref.target)
             elif ref.role == RefRole.DEPENDENCE:
+                if not _artifact_content_available(harness, ref.target):
+                    continue
                 _append_unique(dependencies, ref.target)
                 if _is_source_artifact(harness, ref.target):
                     _append_unique(sources, ref.target)
@@ -444,6 +471,8 @@ def _catalog_excerpt(harness, ref: str, fallback: str) -> str:
     artifact = harness.state.artifacts.get(ref)
     if artifact is None:
         return _bounded_structured_text(fallback, MAX_CATALOG_EXCERPT)
+    if not _artifact_content_available(harness, ref):
+        raise RuntimeError("unavailable artifact reached grounding catalog")
     text = content_text(artifact, harness.blobs)[:MAX_CATALOG_EXCERPT]
     return text if text.strip() else _bounded_structured_text(fallback, MAX_CATALOG_EXCERPT)
 
@@ -580,6 +609,7 @@ def assemble_evidence_pack(
     *,
     budget_chars: int = DEFAULT_EVIDENCE_PACK_BUDGET,
     formal_seq: int | None = None,
+    source_run_digest: str | None = None,
 ) -> EvidencePackV1:
     """Extract a bounded structured/legacy pack at one exact formal fence."""
 
@@ -611,6 +641,8 @@ def assemble_evidence_pack(
     refuted: list[str] = []
     for artifact_ref in dict.fromkeys(addressed):
         artifact = state.artifacts[artifact_ref]
+        if not _artifact_content_available(harness, artifact_ref):
+            continue
         if artifact.provenance.role.value not in ("conjecturer", "synthesizer"):
             continue
         status = state.status.get(artifact_ref)
@@ -669,6 +701,8 @@ def assemble_evidence_pack(
 
     pairwise_candidates: list[PairwiseRulingV1] = []
     for artifact_ref, artifact in state.artifacts.items():
+        if not _artifact_content_available(harness, artifact_ref):
+            continue
         text = content_text(artifact, harness.blobs)
         if not text.startswith('{"pairwise"'):
             continue
@@ -720,6 +754,8 @@ def assemble_evidence_pack(
         decisive_trace = None
         attacker_lineage = EvidenceLineageV1()
         for candidate in sorted(attackers_of.get(artifact_ref, []), key=lambda ref: rank[ref]):
+            if not _artifact_content_available(harness, candidate):
+                continue
             attacker = state.artifacts[candidate]
             attacker_ref = candidate
             attacker_citation_id = candidate[:12]
@@ -822,6 +858,7 @@ def assemble_evidence_pack(
     return EvidencePackV1.create(
         problem_ref=problem_id,
         formal_seq=seq,
+        source_run_digest=source_run_digest,
         problem_text=problem.description,
         problem_family_refs=family_order,
         survivors=survivors,

@@ -153,6 +153,19 @@ def register_bridge_commands(subparsers) -> None:
         help="v3 manifest (needed only when this run is not already bound)",
     )
     build.add_argument(
+        "--derived-output",
+        default=None,
+        metavar="DIRECTORY",
+        help="build from a historical source fence into a new v3 output directory",
+    )
+    build.add_argument(
+        "--at-seq",
+        type=int,
+        default=None,
+        metavar="SEQ",
+        help="historical source event fence (requires --derived-output)",
+    )
+    build.add_argument(
         "--focus-block", action="append", default=[], help="scratch block ID or prefix"
     )
     build.add_argument(
@@ -460,6 +473,8 @@ def _build(args) -> tuple[_BridgeSnapshot, int]:
     from deepreason.harness import Harness
     from deepreason.run_manifest import bind_run_manifest
 
+    if args.derived_output is not None or args.at_seq is not None:
+        return _build_derived(args)
     root = Path(args.root)
     if not root.is_dir():
         raise ValueError(f"BRIDGE_RUN_NOT_FOUND: {root}")
@@ -505,6 +520,78 @@ def _build(args) -> tuple[_BridgeSnapshot, int]:
             formatting_profile=policy.target_profile,
         )
         snapshot = _load_snapshot(root, terminal=terminal)
+        return snapshot, 0 if terminal.process_status == "success" else 1
+    finally:
+        locks.release()
+
+
+def _build_derived(args) -> tuple[_BridgeSnapshot, int]:
+    """Build an explicit dual-root view without mutating its source run."""
+
+    from deepreason.bridge.derived import (
+        build_derived_bridge,
+        open_derived_source,
+        reserve_derived_destination,
+    )
+    from deepreason.harness import Harness
+    from deepreason.run_manifest import bind_run_manifest
+
+    if args.derived_output is None or args.at_seq is None:
+        raise ValueError(
+            "BRIDGE_DERIVED_FLAGS_REQUIRED: --derived-output and --at-seq "
+            "must be supplied together"
+        )
+    if args.run_manifest is None:
+        raise ValueError(
+            "BRIDGE_DERIVED_MANIFEST_REQUIRED: pass a separate v3 --run-manifest"
+        )
+    block_refs = _bounded_focus(list(args.focus_block), "focus-block")
+    cluster_refs = _bounded_focus(list(args.focus_cluster), "focus-cluster")
+    if block_refs or cluster_refs:
+        raise ValueError(
+            "BRIDGE_DERIVED_SCRATCH_CONTEXT_UNAVAILABLE: derived focus requires "
+            "canonical destination receipts"
+        )
+
+    source = open_derived_source(args.root, args.derived_output, args.at_seq)
+    problem_id = _resolve_problem(source.harness, args.problem)
+    # Validate the supplied immutable v3 policy before creating the new root.
+    manifest = _load_bound_manifest(
+        source.destination_root, args.run_manifest, bind=False
+    )
+    reserve_derived_destination(source)
+    try:
+        locks = operator_locks(
+            source.destination_root, owner="bridge-derived", blocking=False
+        )
+    except ProcessLockBusy as error:
+        raise ValueError(
+            "BRIDGE_ALREADY_RUNNING: another operator owns the derived root"
+        ) from error
+    try:
+        bind_run_manifest(manifest, source.destination_root)
+        destination = Harness(source.destination_root)
+        adapter = _build_bridge_adapter(manifest, destination)
+        policy = manifest.bridge_policy
+        terminal = build_derived_bridge(
+            source,
+            destination,
+            problem_id,
+            args.target,
+            policy.workflow_policy(),
+            run_manifest_digest=manifest.sha256,
+            stage_a_adapter=adapter,
+            composition_adapter=adapter,
+            review_adapter=(adapter if policy.grounding_review else None),
+            repair_adapter=(
+                adapter
+                if policy.grounding_review and policy.max_grounding_repair_attempts
+                else None
+            ),
+            maximum_sections=policy.output_section_limit,
+            formatting_profile=policy.target_profile,
+        )
+        snapshot = _load_snapshot(source.destination_root, terminal=terminal)
         return snapshot, 0 if terminal.process_status == "success" else 1
     finally:
         locks.release()
@@ -608,9 +695,13 @@ def _load_snapshot(
     if pack is None:
         raise ValueError("BRIDGE_RESULT_INVALID: evidence pack object is absent")
     if pack is not None and (
-        pack.problem_ref != terminal.problem_id or pack.formal_seq != terminal.formal_seq
+        pack.problem_ref != terminal.problem_id
+        or pack.formal_seq != terminal.formal_seq
+        or pack.source_run_digest != terminal.source_run_digest
     ):
-        raise ValueError("BRIDGE_RESULT_INVALID: evidence-pack fence differs from result")
+        raise ValueError(
+            "BRIDGE_RESULT_INVALID: evidence-pack source fence differs from result"
+        )
     if ledger is not None and (
         ledger.problem_ref != terminal.problem_id
         or ledger.formal_seq != terminal.formal_seq

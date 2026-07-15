@@ -64,6 +64,14 @@ _WORKFLOW_EXPORTS = {
     "BridgeWorkflowResultV1",
 }
 _HARNESS_EXPORTS = {"BridgeTerminalResultV1", "build_grounded_bridge"}
+_DERIVED_EXPORTS = {
+    "DerivedBridgeError",
+    "DerivedBridgeSource",
+    "build_derived_bridge",
+    "open_derived_source",
+    "reserve_derived_destination",
+    "source_snapshot_digest",
+}
 _MODULE_EXPORTS = {
     "deepreason.bridge.ledger": _LEDGER_EXPORTS,
     "deepreason.bridge.compose": _COMPOSE_EXPORTS,
@@ -73,6 +81,7 @@ _MODULE_EXPORTS = {
     "deepreason.bridge.evidence_pack": _EVIDENCE_EXPORTS,
     "deepreason.bridge.workflow": _WORKFLOW_EXPORTS,
     "deepreason.bridge.harness": _HARNESS_EXPORTS,
+    "deepreason.bridge.derived": _DERIVED_EXPORTS,
 }
 __all__ = sorted(
     _EVENT_EXPORTS
@@ -85,6 +94,7 @@ __all__ = sorted(
     | _EVIDENCE_EXPORTS
     | _WORKFLOW_EXPORTS
     | _HARNESS_EXPORTS
+    | _DERIVED_EXPORTS
 )
 
 

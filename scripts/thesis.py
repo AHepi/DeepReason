@@ -33,11 +33,46 @@ from deepreason.storage.blobs import BlobStore  # noqa: E402
 from deepreason.views.thesis import render_thesis, thesis  # noqa: E402
 
 
-def main() -> int:
+def _open_harness(root: Path | str, at_seq: int | None) -> Harness:
+    """Open only a physically read-only view of the requested run fence."""
+
+    if at_seq is not None:
+        if isinstance(at_seq, bool) or at_seq < 0:
+            raise ValueError("--at-seq must be a non-negative event sequence")
+        return Harness.at(root, at_seq)
+    return Harness(root, read_only=True)
+
+
+def _validated_output_path(run_root: Path | str, output: Path | str | None) -> Path | None:
+    """Resolve an optional output without permitting writes into the run.
+
+    The thesis command opens both current and historical runs read-only.  Its
+    optional rendered copy must therefore live outside that same filesystem
+    tree, including when either path reaches the tree through a symlink.
+    """
+
+    if output is None:
+        return None
+    canonical_root = Path(run_root).resolve(strict=True)
+    canonical_output = Path(output).resolve(strict=False)
+    try:
+        canonical_output.relative_to(canonical_root)
+    except ValueError:
+        return canonical_output
+    raise ValueError("--out must be outside the read-only run root")
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", required=True)
     parser.add_argument("--problem", default=None,
                         help="problem id (default: the root's seed problem)")
+    parser.add_argument(
+        "--at-seq",
+        type=int,
+        default=None,
+        help="render from this physically read-only historical event sequence",
+    )
     parser.add_argument(
         "--config",
         default=str(Path(__file__).resolve().parents[1] / "config" / "deepseek.yaml"),
@@ -54,7 +89,11 @@ def main() -> int:
     parser.add_argument("--reasoning", default="policy",
                         help="thesis reasoning override: policy|default|none|high|max")
     parser.add_argument("--out", default=None, help="also write markdown here")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+
+    if args.at_seq is not None and args.at_seq < 0:
+        print("invalid sequence: --at-seq must be non-negative", file=sys.stderr)
+        return 1
 
     try:
         config = load_config(Path(args.config))
@@ -83,7 +122,16 @@ def main() -> int:
         print(f"{', '.join(missing)} not set", file=sys.stderr)
         return 1
 
-    harness = Harness(Path(args.root))
+    try:
+        harness = _open_harness(Path(args.root), args.at_seq)
+    except (OSError, ValueError) as error:
+        print(f"invalid run: {error}", file=sys.stderr)
+        return 1
+    try:
+        output_path = _validated_output_path(harness.root, args.out)
+    except (OSError, ValueError) as error:
+        print(f"invalid output: {error}", file=sys.stderr)
+        return 1
     meter = TokenMeter(budget=args.token_budget)
     scratch = BlobStore(Path(tempfile.mkdtemp(prefix="thesis-blobs-")))
     adapter = build_adapter(config, scratch, meter=meter, only_roles={"thesis"})
@@ -97,8 +145,8 @@ def main() -> int:
 
     prose = render_thesis(result)
     print(prose)
-    if args.out:
-        Path(args.out).write_text(prose + "\n\n---\n" + json.dumps(
+    if output_path is not None:
+        output_path.write_text(prose + "\n\n---\n" + json.dumps(
             {k: result[k] for k in ("problem", "citations", "citation_check",
                                     "pack_chars", "spend")}, indent=2) + "\n")
     return 0

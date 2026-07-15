@@ -81,16 +81,38 @@ a frozen second judge family; otherwise compilation fails with
 `SECOND_JUDGE_FAMILY_REQUIRED`. `--rubric-policy forbid` is valid only for
 program/predicate workloads and rejects rubric-bearing input at preflight.
 
+Scratchpad and grounded-output operation is opt-in and requires
+`--schema-version 3`. Source configuration still passes through the same typed,
+unknown-key-rejecting boundary. V3 freezes the eleven attention channels,
+coverage cadence, embedding/fallback identity, bounded pack sizes, bridge
+roles, ledger-amendment bound, schema/grounding repair limits, and output
+policy. Versions 1 and 2 retain their original bytes and hashes and are never
+migrated on open. See
+[`SCRATCHPAD_GROUNDED_BRIDGE.md`](SCRATCHPAD_GROUNDED_BRIDGE.md).
+
 ## MCP tool surface
 
-The default production surface is deliberately limited to three
-harness-owned website operations:
+The default production surface is the following exact 17-tool,
+harness-owned contract. All schemas are closed and bounded.
 
-| Tool | What it does |
-|---|---|
-| `start_make` | Start one website workflow from a typed problem and precompiled manifest reference |
-| `make_status` | Read operational progress without changing harness state |
-| `make_result` | Read terminal result metadata and output paths |
+| Family | Tools | What they do |
+|---|---|---|
+| reasoning operation | `start_run`, `run_status`, `run_result`, `continue_run`, `cancel_run` | Start, inspect, continue, or safely cancel the manifest-bound harness at completed-cycle boundaries |
+| website operation | `start_make`, `make_status`, `make_result` | Start one typed website workflow and read its operational status/result |
+| scratch reads | `scratch_map`, `scratch_search`, `scratch_open`, `scratch_related`, `scratch_attention` | Browse immutable scratch history or preview bounded deterministic attention without committing visibility or receipts |
+| grounded bridge | `start_bridge`, `bridge_status`, `bridge_result`, `bridge_claims` | Start the two-stage bridge and read replay-validated operational/result/ledger views |
+
+The scratch MCP surface is deliberately read-only. It has no add, revise,
+link, retire, cluster, receipt-write, guide-generation, or coverage-advance
+tool. `scratch_attention` is a pure preview. Bridge status is operational and
+non-epistemic; successful `underdetermined`, `insufficient_evidence`, partial,
+conflicting, and outside-scope results are not tool errors.
+
+Every run-starting operation accepts only a bounded root, typed workload, and
+precompiled immutable manifest reference. The server does not infer routes or
+read source YAML. Its one shared process-lock abstraction works on Windows,
+macOS, and Linux; a busy root returns a typed busy result rather than racing a
+second writer. Status and result tools never create a missing root.
 
 The historical spec §13 research/operator surface is quarantined. It is
 available only when a human explicitly starts the server with
@@ -138,10 +160,16 @@ does not touch any status. You return candidate evidence; the court does
 the rest. Your claimed retrieval time is stored as claim metadata — event
 time and ordering are harness-controlled.
 
-`start_make`, `make_status`, and `make_result` are the supported production
-path. The server intentionally exposes no generic model invoke,
-shell, arbitrary-file, route-edit, guard-bypass, event-write, or status-set
-operation. Endpoint models receive rendered packs only and have no tools.
+Only the exact 17 tools above are the supported production path. The server
+intentionally exposes no generic prompt or model invoke, shell, arbitrary-file
+read, provider credential, route edit, direct event/object write, scratch
+mutation, guard bypass, or status setter. Endpoint models receive a compact
+rendered pack and one output contract only; they receive no MCP tools.
+
+All scratch text, source excerpts, relation phrases, IDs, handles, and bridge
+text are untrusted data. They cannot influence routing. Requests reject path
+traversal, unsafe manifest/control-file links, oversized payloads, unknown
+fields, and mismatched canonical IDs without echoing rejected secrets.
 
 ## Rules for the explicitly enabled legacy client
 

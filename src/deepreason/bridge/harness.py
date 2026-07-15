@@ -46,6 +46,7 @@ class BridgeTerminalResultV1(FrozenRecord):
     )
     run_manifest_digest: str
     formal_seq: int = Field(ge=0)
+    source_run_digest: str | None = None
     terminal_event_seq: int = Field(ge=0)
     problem_id: str = Field(min_length=1, max_length=512)
     target: Literal["thesis", "summary", "answer"]
@@ -61,11 +62,13 @@ class BridgeTerminalResultV1(FrozenRecord):
     error_code: str | None = None
     error_message: str | None = Field(default=None, max_length=16_384)
 
-    @field_validator("run_manifest_digest")
+    @field_validator("run_manifest_digest", "source_run_digest")
     @classmethod
     def _manifest_digest(cls, value):
+        if value is None:
+            return value
         if _SHA256.fullmatch(value) is None:
-            raise ValueError("run_manifest_digest must be 64 lowercase hex characters")
+            raise ValueError("digest must be 64 lowercase hex characters")
         return value
 
     @field_validator("output_paths", mode="after")
@@ -85,7 +88,10 @@ class BridgeTerminalResultV1(FrozenRecord):
 
     @model_validator(mode="after")
     def _terminal_shape(self):
-        if self.terminal_event_seq <= self.formal_seq:
+        # In a same-root build the terminal event necessarily follows the
+        # formal fence in one sequence.  A derived build has two independent
+        # append-only logs, so comparing their sequence numbers is meaningless.
+        if self.source_run_digest is None and self.terminal_event_seq <= self.formal_seq:
             raise ValueError("terminal event must follow the fixed formal fence")
         if self.process_status == "success":
             if any(
@@ -218,6 +224,7 @@ def _terminal_record(
     return BridgeTerminalResultV1(
         run_manifest_digest=manifest_digest,
         formal_seq=evidence_pack.formal_seq,
+        source_run_digest=evidence_pack.source_run_digest,
         terminal_event_seq=terminal_event_seq,
         problem_id=problem_id,
         target=target,
@@ -250,6 +257,9 @@ def build_grounded_bridge(
     review_adapter=None,
     repair_adapter=None,
     attention_pack=None,
+    source_harness=None,
+    source_run_digest: str | None = None,
+    source_sealed_blob_refs: frozenset[str] | None = None,
     evidence_budget_chars: int = 24_000,
     desired_length_chars: int = 16_384,
     maximum_sections: int = 32,
@@ -258,7 +268,56 @@ def build_grounded_bridge(
     """Build and persist one grounded final view without touching formal state."""
 
     harness._ensure_writable()
-    if problem_id not in harness.state.problems:
+    derived = (
+        source_harness is not None
+        or source_run_digest is not None
+        or source_sealed_blob_refs is not None
+    )
+    if derived and (source_harness is None or source_run_digest is None):
+        raise ValueError(
+            "derived bridge requires both source_harness and source_run_digest"
+        )
+    if derived:
+        if not source_harness._read_only:
+            raise ValueError("derived bridge source harness must be read-only")
+        source_root = source_harness.root.resolve()
+        destination_root = harness.root.resolve()
+        if (
+            source_root == destination_root
+            or source_root.is_relative_to(destination_root)
+            or destination_root.is_relative_to(source_root)
+        ):
+            raise ValueError("derived bridge source and destination must not overlap")
+        if _SHA256.fullmatch(source_run_digest) is None:
+            raise ValueError("source_run_digest must be 64 lowercase hex characters")
+        from deepreason.bridge.derived import (
+            _DerivedSourceIntegrityError,
+            _source_snapshot,
+            _verified_source_view,
+        )
+
+        observed_digest, observed_sealed_refs = _source_snapshot(source_harness)
+        if observed_digest != source_run_digest:
+            raise ValueError("derived bridge source digest does not match source fence")
+        if (
+            source_sealed_blob_refs is not None
+            and source_sealed_blob_refs != observed_sealed_refs
+        ):
+            raise ValueError("derived bridge source availability does not match source fence")
+        source_sealed_blob_refs = observed_sealed_refs
+        if attention_pack is not None:
+            raise ValueError(
+                "derived bridge scratch attention must be canonically persisted first"
+            )
+        if any(vars(source_harness.scratch_state).values()):
+            raise ValueError(
+                "derived bridge does not accept source scratch state without "
+                "canonical destination receipts"
+            )
+        source = source_harness
+    else:
+        source = harness
+    if problem_id not in source.state.problems:
         raise KeyError(f"unknown problem {problem_id!r}")
     if target not in {"thesis", "summary", "answer"}:
         raise ValueError("target must be thesis, summary, or answer")
@@ -271,17 +330,46 @@ def build_grounded_bridge(
         scratch_service = ScratchService(harness)
         context = scratch_service.prepare_advisory_context(attention_pack)
 
-    formal_seq = harness._next_seq - 1
-    frozen = harness.at(harness.root, formal_seq)
-    formal_before = harness.state.model_dump_json()
-    commitments_before = dict(harness.commitments)
-    warrants_before = dict(harness.warrants)
-    evidence_pack = assemble_evidence_pack(
-        frozen,
-        problem_id,
-        budget_chars=evidence_budget_chars,
-        formal_seq=formal_seq,
+    formal_seq = source._next_seq - 1
+    frozen = (
+        _verified_source_view(source, sealed_refs=source_sealed_blob_refs)
+        if derived
+        else harness.at(harness.root, formal_seq)
     )
+    source_formal_before = source.state.model_dump_json()
+    source_commitments_before = dict(source.commitments)
+    source_warrants_before = dict(source.warrants)
+    sink_formal_before = harness.state.model_dump_json()
+    sink_commitments_before = dict(harness.commitments)
+    sink_warrants_before = dict(harness.warrants)
+    if derived:
+        try:
+            evidence_pack = assemble_evidence_pack(
+                frozen,
+                problem_id,
+                budget_chars=evidence_budget_chars,
+                formal_seq=formal_seq,
+                source_run_digest=source_run_digest,
+            )
+        except _DerivedSourceIntegrityError as error:
+            raise ValueError(
+                "derived bridge source blob changed during assembly"
+            ) from error
+    else:
+        evidence_pack = assemble_evidence_pack(
+            frozen,
+            problem_id,
+            budget_chars=evidence_budget_chars,
+            formal_seq=formal_seq,
+            source_run_digest=source_run_digest,
+        )
+    if derived:
+        final_digest, final_sealed_refs = _source_snapshot(source)
+        if (
+            final_digest != source_run_digest
+            or final_sealed_refs != source_sealed_blob_refs
+        ):
+            raise ValueError("derived bridge source changed while assembling evidence")
     catalog = build_claim_ledger_catalog(
         evidence_pack,
         target,
@@ -326,9 +414,12 @@ def build_grounded_bridge(
     result = workflow.run(catalog, composition_request, materials=materials)
 
     if (
-        harness.state.model_dump_json() != formal_before
-        or harness.commitments != commitments_before
-        or harness.warrants != warrants_before
+        source.state.model_dump_json() != source_formal_before
+        or source.commitments != source_commitments_before
+        or source.warrants != source_warrants_before
+        or harness.state.model_dump_json() != sink_formal_before
+        or harness.commitments != sink_commitments_before
+        or harness.warrants != sink_warrants_before
     ):
         raise RuntimeError("bridge workflow altered formal materialized state")
     terminal_seq = harness._next_seq - 1
