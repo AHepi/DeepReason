@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from deepreason.bridge.evidence_pack import EvidencePackV1
 from deepreason.bridge.ledger import ClaimLedgerInputCatalogV1
 from deepreason.bridge.models import (
+    BridgeFailureV1,
     BridgeOutputV1,
     BridgeValidationFindingV1,
     BridgeValidationReportV1,
@@ -75,6 +76,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "bridge-grounding-review": GroundingReviewV1,
     "bridge-ledger-input-catalog": ClaimLedgerInputCatalogV1,
     "bridge-evidence-pack": EvidencePackV1,
+    "bridge-failure": BridgeFailureV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the

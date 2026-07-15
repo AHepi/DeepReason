@@ -15,7 +15,11 @@ from deepreason.bridge.evidence_pack import (
     build_claim_ledger_catalog,
 )
 from deepreason.bridge.events import BridgeAction
-from deepreason.bridge.models import BridgeResolution
+from deepreason.bridge.models import (
+    BridgeFailureDiagnosticV1,
+    BridgeFailureV1,
+    BridgeResolution,
+)
 from deepreason.bridge.workflow import (
     BridgePersistenceBatch,
     BridgeWorkflow,
@@ -50,6 +54,7 @@ class BridgeTerminalResultV1(FrozenRecord):
     bridge_output_id: str | None = None
     validation_report_id: str | None = None
     review_id: str | None = None
+    failure_id: str | None = None
     resolution: BridgeResolution | None = None
     output_paths: list[str] = Field(default_factory=FrozenList, max_length=32)
     process_status: Literal["success", "failure"]
@@ -95,24 +100,86 @@ class BridgeTerminalResultV1(FrozenRecord):
                 raise ValueError("successful terminal result requires bridge object IDs")
             if self.error_code is not None or self.error_message is not None:
                 raise ValueError("successful terminal result cannot carry an error")
-        elif self.error_code is None or self.error_message is None:
-            raise ValueError("failed terminal result requires a typed error")
+            if self.failure_id is not None:
+                raise ValueError("successful terminal result cannot name a failure")
+        elif (
+            self.error_code is None
+            or self.error_message is None
+            or self.failure_id is None
+        ):
+            raise ValueError("failed terminal result requires replay-backed diagnostics")
         return self
 
 
 class _HarnessBridgeSink:
-    def __init__(self, harness, evidence_pack: EvidencePackV1) -> None:
+    def __init__(
+        self,
+        harness,
+        evidence_pack: EvidencePackV1,
+        catalog,
+        *,
+        manifest_digest: str,
+        problem_id: str,
+        target: str,
+    ) -> None:
         self.harness = harness
         self.evidence_pack = evidence_pack
+        self.catalog = catalog
+        self.manifest_digest = manifest_digest
+        self.problem_id = problem_id
+        self.target = target
         self._pack_written = False
+        self.failure: BridgeFailureV1 | None = None
 
     def persist_bridge_batch(self, batch: BridgePersistenceBatch) -> None:
         records = list(batch.records)
-        if batch.action == BridgeAction.LEDGER_CREATED:
-            if self._pack_written:
-                raise RuntimeError("one bridge workflow cannot create two initial ledgers")
+        first_material_event = batch.action in {
+            BridgeAction.LEDGER_CREATED,
+            BridgeAction.FAILED,
+        }
+        if first_material_event and not self._pack_written:
             records.insert(0, ("bridge-evidence-pack", self.evidence_pack))
+            if batch.action == BridgeAction.FAILED:
+                records.insert(1, ("bridge-ledger-input-catalog", self.catalog))
             self._pack_written = True
+        if batch.action == BridgeAction.FAILED:
+            if batch.error_code is None or batch.error_message is None:
+                raise RuntimeError("failed bridge batch lacks typed diagnostics")
+            if batch.failure_phase is None:
+                raise RuntimeError("failed bridge batch lacks a phase")
+
+            def partial_id(mapping):
+                matches = [object_id for object_id in batch.inputs if object_id in mapping]
+                if len(matches) > 1:
+                    raise RuntimeError("failed bridge batch has ambiguous partial objects")
+                return matches[0] if matches else None
+
+            state = self.harness.bridge_state
+            diagnostics = []
+            for item in batch.failure_diagnostics:
+                values = item.model_dump(mode="json")
+                code = str(values.get("code") or "")
+                if re.fullmatch(r"[A-Z][A-Z0-9_]{0,127}", code) is None:
+                    values["code"] = "BRIDGE_REPAIR_DIAGNOSTIC"
+                diagnostics.append(BridgeFailureDiagnosticV1.model_validate(values))
+            self.failure = BridgeFailureV1.create(
+                run_manifest_digest=self.manifest_digest,
+                formal_seq=self.evidence_pack.formal_seq,
+                problem_ref=self.problem_id,
+                output_target=self.target,
+                evidence_pack_id=self.evidence_pack.id,
+                catalog_id=self.catalog.id,
+                phase=batch.failure_phase,
+                error_code=batch.error_code,
+                error_message=batch.error_message,
+                claim_ledger_id=partial_id(state.ledgers),
+                bridge_output_id=partial_id(state.outputs),
+                validation_report_id=partial_id(state.validation_reports),
+                review_id=partial_id(state.grounding_reviews),
+                diagnostics=diagnostics,
+                terminal_inputs=list(batch.inputs),
+            )
+            records.append(("bridge-failure", self.failure))
         self.harness.record_bridge_event(
             batch.action,
             actor=batch.actor,
@@ -128,6 +195,8 @@ def _bound_manifest_digest(root, supplied: str) -> str:
     if _SHA256.fullmatch(supplied) is None:
         raise ValueError("run_manifest_digest must be 64 lowercase hex characters")
     path = root / "run-manifest.sha256"
+    if path.is_symlink():
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
     if path.is_file():
         bound = path.read_text(encoding="utf-8").strip()
         if bound != supplied:
@@ -143,6 +212,7 @@ def _terminal_record(
     problem_id: str,
     target: str,
     terminal_event_seq: int,
+    failure_id: str | None,
 ) -> BridgeTerminalResultV1:
     output = result.bridge_output
     return BridgeTerminalResultV1(
@@ -160,6 +230,7 @@ def _terminal_record(
         review_id=(
             result.grounded_review.id if result.grounded_review is not None else None
         ),
+        failure_id=failure_id,
         resolution=(output.resolution if output is not None else None),
         process_status=result.process_status,
         error_code=result.error_code,
@@ -194,9 +265,11 @@ def build_grounded_bridge(
     manifest_digest = _bound_manifest_digest(harness.root, run_manifest_digest)
     workflow_policy = BridgeWorkflowPolicy.model_validate(policy)
 
+    scratch_service = None
     context = None
     if attention_pack is not None:
-        context = ScratchService(harness).create_advisory_context(attention_pack)
+        scratch_service = ScratchService(harness)
+        context = scratch_service.prepare_advisory_context(attention_pack)
 
     formal_seq = harness._next_seq - 1
     frozen = harness.at(harness.root, formal_seq)
@@ -209,10 +282,6 @@ def build_grounded_bridge(
         budget_chars=evidence_budget_chars,
         formal_seq=formal_seq,
     )
-    if context is not None:
-        frozen_context = frozen.scratch_state.advisory_contexts.get(context.id)
-        if frozen_context != context:
-            raise RuntimeError("advisory context is not present at the bridge fence")
     catalog = build_claim_ledger_catalog(
         evidence_pack,
         target,
@@ -223,24 +292,38 @@ def build_grounded_bridge(
     materials = {
         item.ref: item.excerpt for item in catalog.items if item.kind != "scratch"
     }
+    sink = _HarnessBridgeSink(
+        harness,
+        evidence_pack,
+        catalog,
+        manifest_digest=manifest_digest,
+        problem_id=problem_id,
+        target=target,
+    )
     workflow = BridgeWorkflow(
         stage_a_adapter,
         composition_adapter or stage_a_adapter,
         review_adapter=review_adapter,
         repair_adapter=repair_adapter,
         policy=workflow_policy,
-        sink=_HarnessBridgeSink(harness, evidence_pack),
+        sink=sink,
     )
-    result = workflow.run(
-        catalog,
-        CompositionRequestV1(
-            output_target=target,
-            formatting_profile=formatting_profile,
-            desired_length_chars=desired_length_chars,
-            maximum_sections=maximum_sections,
-        ),
-        materials=materials,
+    composition_request = CompositionRequestV1(
+        output_target=target,
+        formatting_profile=formatting_profile,
+        desired_length_chars=desired_length_chars,
+        maximum_sections=maximum_sections,
     )
+    if context is not None:
+        assert scratch_service is not None
+        committed = scratch_service.commit_prepared_advisory_context(
+            attention_pack,
+            context,
+            context_ref=evidence_pack.id,
+        )
+        if committed != context:
+            raise RuntimeError("committed advisory context differs from prepared context")
+    result = workflow.run(catalog, composition_request, materials=materials)
 
     if (
         harness.state.model_dump_json() != formal_before
@@ -256,6 +339,7 @@ def build_grounded_bridge(
         problem_id=problem_id,
         target=target,
         terminal_event_seq=terminal_seq,
+        failure_id=sink.failure.id if sink.failure is not None else None,
     )
     payload = terminal.model_dump(mode="json", by_alias=True, exclude_none=True)
     _atomic_json(harness.root / BRIDGE_RESULT_NAME, payload)

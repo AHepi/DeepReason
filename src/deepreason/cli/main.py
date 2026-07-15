@@ -33,6 +33,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="partial YAML profile (default: built-in typed defaults)",
     )
     sub = parser.add_subparsers(dest="command")
+    from deepreason.cli.bridge import register_bridge_commands
+    from deepreason.cli.scratch import register_scratch_parser
+
+    register_scratch_parser(sub)
+    register_bridge_commands(sub)
     sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
                                  "your API key privately")
     config_cmd = sub.add_parser(
@@ -317,6 +322,16 @@ def _main(argv: list[str] | None = None) -> int:
     if args.command == "setup":
         easy.setup_wizard()
         return 0
+
+    if args.command == "scratch":
+        from deepreason.cli.scratch import dispatch_scratch
+
+        return dispatch_scratch(args)
+
+    if args.command == "bridge":
+        from deepreason.cli.bridge import handle_bridge_command
+
+        return handle_bridge_command(args)
 
     if args.command == "config" and args.config_command is None:
         import yaml

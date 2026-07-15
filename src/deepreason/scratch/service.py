@@ -17,6 +17,7 @@ from deepreason.scratch.errors import (
     ScratchClusterPrefixAmbiguous,
     ScratchLimitInvalid,
     ScratchLinkNotFound,
+    ScratchLinkPrefixAmbiguous,
     ScratchLinkRetired,
     ScratchNotMember,
     ScratchReadOnly,
@@ -31,6 +32,7 @@ from deepreason.scratch.models import (
     CoverageCycleV1,
     InstanceRef,
     MembershipAction,
+    RetrievalChannel,
     ScratchBlockBodyV1,
     ScratchBlockV1,
     ScratchClusterV1,
@@ -200,13 +202,17 @@ class ScratchService:
             location=location,
         )
 
-    def _link(self, link_id: str) -> ScratchLinkV1:
-        link = self.state.links.get(link_id)
-        if link is None:
-            raise ScratchLinkNotFound(
-                f"scratch link {link_id!r} does not exist", location="/link_id"
-            )
-        return link
+    def _link_id(self, value: str, location: str = "/link_id") -> str:
+        return self._resolve_prefix(
+            value,
+            self.state.links,
+            not_found=ScratchLinkNotFound,
+            ambiguous=ScratchLinkPrefixAmbiguous,
+            location=location,
+        )
+
+    def _link(self, link_id_or_unique_prefix: str) -> ScratchLinkV1:
+        return self.state.links[self._link_id(link_id_or_unique_prefix)]
 
     @staticmethod
     def _provenance(
@@ -529,32 +535,13 @@ class ScratchService:
         )
         return receipt
 
-    def create_advisory_context(
-        self,
-        pack,
-        *,
-        warning: str = (
-            "Scratch material is non-authoritative. It may be incomplete, "
-            "contradictory, mistaken, duplicated, stale, or abandoned."
-        ),
-    ) -> AdvisoryContextV1:
-        """Bind one already-rendered bounded attention pack for advisory use.
+    def _advisory_context_values(self, pack):
+        """Validate and collect canonical values without writing anything."""
 
-        The context is immutable provenance, not a promotion operation.  It
-        contains only records selected by the committed attention receipt and
-        can be reconstructed from the shared object store and scratch log.
-        """
-
-        self._ensure_writable()
         from deepreason.scratch.attention import AttentionPackV1
 
         pack = AttentionPackV1.model_validate(pack)
         receipt = AttentionReceiptV1.model_validate(pack.selection_receipt)
-        recorded = self.state.attention_receipts.get(receipt.id)
-        if recorded != receipt:
-            raise ValueError(
-                "/selection_receipt: commit the exact attention receipt first"
-            )
         block_ids = list(receipt.final_order)
         if [block.id for block in pack.blocks] != block_ids:
             raise ValueError("/blocks: attention pack does not match its receipt")
@@ -577,14 +564,57 @@ class ScratchService:
             if guide not in known:
                 raise ValueError("/cluster_guides: attention pack contains unknown guide")
             guides.append(guide)
+        return receipt, blocks, links, guides
+
+    def prepare_advisory_context(
+        self,
+        pack,
+        *,
+        warning: str = (
+            "Scratch material is non-authoritative. It may be incomplete, "
+            "contradictory, mistaken, duplicated, stale, or abandoned."
+        ),
+    ) -> AdvisoryContextV1:
+        """Purely prepare the exact context a later model call would consume.
+
+        An uncommitted attention plan predicts the context sequence immediately
+        after its receipt.  A previously committed receipt predicts the current
+        next sequence.  No object, event, visibility record, or coverage state
+        is changed by this method.
+        """
+
+        receipt, blocks, links, guides = self._advisory_context_values(pack)
+        recorded = self.state.attention_receipts.get(receipt.id)
+        if recorded is None:
+            if receipt.instance != self._instance():
+                raise ValueError(
+                    "/selection_receipt: attention receipt is not at the next event"
+                )
+            if receipt.state_seq != self.harness._next_seq - 1:
+                raise ValueError("/selection_receipt: attention plan is stale")
+            context_instance = InstanceRef(
+                run_id=self.run_id,
+                seq=self.harness._next_seq + 1,
+            )
+        elif recorded == receipt:
+            context_instance = self._instance()
+        else:
+            raise ValueError("/selection_receipt: stored attention receipt differs")
         context = AdvisoryContextV1.create(
             warning=warning,
             blocks=blocks,
             links=links or None,
             guides=guides or None,
             retrieval_receipt=receipt.id,
-            instance=self._instance(),
+            instance=context_instance,
         )
+        return context
+
+    def _record_advisory_context(
+        self,
+        context: AdvisoryContextV1,
+        receipt: AttentionReceiptV1,
+    ) -> AdvisoryContextV1:
         self.harness.objects.put("scratch-advisory-context", context)
         self._record(
             ScratchAction.ADVISORY_CONTEXT_CREATED,
@@ -593,6 +623,96 @@ class ScratchService:
             outputs=[context.id],
             retrieval_receipt_ref=receipt.id,
         )
+        return context
+
+    def create_advisory_context(
+        self,
+        pack,
+        *,
+        warning: str = (
+            "Scratch material is non-authoritative. It may be incomplete, "
+            "contradictory, mistaken, duplicated, stale, or abandoned."
+        ),
+    ) -> AdvisoryContextV1:
+        """Bind one already-rendered bounded attention pack for advisory use.
+
+        The context is immutable provenance, not a promotion operation.  It
+        contains only records selected by the committed attention receipt and
+        can be reconstructed from the shared object store and scratch log.
+        """
+
+        self._ensure_writable()
+        receipt, _, _, _ = self._advisory_context_values(pack)
+        recorded = self.state.attention_receipts.get(receipt.id)
+        if recorded != receipt:
+            raise ValueError(
+                "/selection_receipt: commit the exact attention receipt first"
+            )
+        context = self.prepare_advisory_context(pack, warning=warning)
+        return self._record_advisory_context(context, receipt)
+
+    def commit_prepared_advisory_context(
+        self,
+        pack,
+        context: AdvisoryContextV1,
+        *,
+        context_ref: str | None = None,
+        advance_coverage: bool = True,
+    ) -> AdvisoryContextV1:
+        """Commit a prevalidated context immediately before model consumption.
+
+        Planning and context preparation stay pure.  For a new plan, the
+        receipt (and therefore derived visibility), context, and any proven
+        coverage progress are appended only after the caller has completed all
+        deterministic pre-call preparation.
+        """
+
+        self._ensure_writable()
+        context = AdvisoryContextV1.model_validate(context)
+        expected = self.prepare_advisory_context(pack, warning=context.warning)
+        if context != expected:
+            raise ValueError("/context: prepared advisory context does not match plan")
+        receipt, _, _, _ = self._advisory_context_values(pack)
+        recorded = self.state.attention_receipts.get(receipt.id)
+        newly_committed = recorded is None
+
+        rendered_coverage: list[str] = []
+        if newly_committed and advance_coverage and receipt.coverage_cycle_id is not None:
+            progress = self.state.coverage_cycles.get(receipt.coverage_cycle_id)
+            if progress is None or progress.completed:
+                raise ValueError("/coverage_cycle_id: coverage cycle is not active")
+            rendered_coverage = [
+                block_id
+                for block_id in receipt.selected_by_channel.get(
+                    RetrievalChannel.COVERAGE, []
+                )
+                if block_id in receipt.final_order
+            ]
+            if any(
+                block_id not in progress.pending_block_ids
+                for block_id in rendered_coverage
+            ):
+                raise ValueError(
+                    "/coverage_cycle_id: receipt selects a non-pending coverage block"
+                )
+
+        if newly_committed:
+            self.record_attention_receipt(receipt, context_ref=context_ref)
+        elif recorded != receipt:
+            raise ValueError("/selection_receipt: stored attention receipt differs")
+        self._record_advisory_context(context, receipt)
+
+        if newly_committed and advance_coverage:
+            for block_id in rendered_coverage:
+                self.record_coverage_render(
+                    receipt.coverage_cycle_id,
+                    block_id,
+                    receipt.id,
+                )
+            if receipt.coverage_cycle_id is not None:
+                progress = self.state.coverage_cycles[receipt.coverage_cycle_id]
+                if not progress.pending_block_ids:
+                    self.complete_coverage_cycle(receipt.coverage_cycle_id)
         return context
 
     def active_coverage_cycle(self):
@@ -655,6 +775,9 @@ class ScratchService:
 
     def get_block(self, block_id_or_unique_prefix: str) -> ScratchBlockV1:
         return self.state.blocks[self._block_id(block_id_or_unique_prefix)]
+
+    def get_link(self, link_id_or_unique_prefix: str) -> ScratchLinkV1:
+        return self._link(link_id_or_unique_prefix)
 
     def get_blocks(self, ids: Iterable[str]) -> list[ScratchBlockV1]:
         values = list(islice(ids, _MAX_QUERY_LIMIT + 1))

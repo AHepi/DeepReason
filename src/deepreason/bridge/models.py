@@ -138,6 +138,85 @@ class CanonicalBridgeRecord(BridgeRecord):
         return self
 
 
+class BridgeFailureDiagnosticV1(BridgeRecord):
+    """Bounded, inert diagnostic retained inside a canonical failure."""
+
+    code: str = Field(pattern=r"^[A-Z][A-Z0-9_]{0,127}$")
+    span_id: str | None = Field(default=None, min_length=1, max_length=256)
+    message: str = Field(min_length=1, max_length=MAX_BRIDGE_SHORT_TEXT)
+    attempted_action: CorrectionMode | None = None
+
+    @field_validator("span_id", "message")
+    @classmethod
+    def _nonblank_diagnostic_text(cls, value):
+        return _nonblank(value)
+
+
+class BridgeFailureV1(CanonicalBridgeRecord):
+    """Replay-backed terminal process failure metadata.
+
+    Fixed-name result files are operational pointers, not a second source of
+    truth. This immutable record binds every terminal failure field that the
+    CLI or MCP may present to the append-only FAILED event.
+    """
+
+    schema_: Literal["bridge.failure.v1"] = Field(
+        "bridge.failure.v1", alias="schema"
+    )
+    ID_DOMAIN: ClassVar[str] = "bridge.failure.v1"
+
+    run_manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    formal_seq: StrictInt = Field(ge=0)
+    problem_ref: OpaqueRef
+    output_target: str = Field(min_length=1, max_length=512)
+    evidence_pack_id: HashRef
+    catalog_id: HashRef
+    phase: str = Field(min_length=1, max_length=128)
+    error_code: str = Field(pattern=r"^[A-Z][A-Z0-9_]{0,127}$")
+    error_message: str = Field(min_length=1, max_length=MAX_BRIDGE_SHORT_TEXT)
+    claim_ledger_id: HashRef | None = None
+    bridge_output_id: HashRef | None = None
+    validation_report_id: HashRef | None = None
+    review_id: HashRef | None = None
+    diagnostics: list[BridgeFailureDiagnosticV1] = Field(
+        default_factory=FrozenList, max_length=128
+    )
+    terminal_inputs: list[HashRef] = Field(
+        default_factory=FrozenList, max_length=4
+    )
+
+    @field_validator("output_target", "phase", "error_message")
+    @classmethod
+    def _nonblank_failure_text(cls, value):
+        return _nonblank(value)
+
+    @field_validator("terminal_inputs", mode="after")
+    @classmethod
+    def _freeze_terminal_inputs(cls, value):
+        return _freeze_unique(value, "terminal_inputs")
+
+    @field_validator("diagnostics", mode="after")
+    @classmethod
+    def _freeze_diagnostics(cls, value):
+        return FrozenList(value)
+
+    @model_validator(mode="after")
+    def _partial_ids_match_inputs(self):
+        expected = [
+            value
+            for value in (
+                self.claim_ledger_id,
+                self.bridge_output_id,
+                self.validation_report_id,
+                self.review_id,
+            )
+            if value is not None
+        ]
+        if list(self.terminal_inputs) != expected:
+            raise ValueError("terminal_inputs must exactly match partial bridge IDs")
+        return self
+
+
 class ClaimLedgerEntryV1(CanonicalBridgeRecord):
     schema_: Literal["bridge.claim-ledger.entry.v1"] = Field(
         "bridge.claim-ledger.entry.v1", alias="schema"
@@ -478,6 +557,8 @@ class GroundingReviewV1(CanonicalBridgeRecord):
 
 
 __all__ = [
+    "BridgeFailureDiagnosticV1",
+    "BridgeFailureV1",
     "BridgeOutputV1",
     "BridgeRecord",
     "BridgeResolution",

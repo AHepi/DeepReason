@@ -38,6 +38,9 @@ _VALIDATION_SCHEMAS = frozenset(
 _REVIEW_SCHEMAS = frozenset(
     {"bridge-grounding-finding", "bridge-grounding-review"}
 )
+_FAILURE_SCHEMAS = frozenset(
+    {"bridge-evidence-pack", "bridge-ledger-input-catalog", "bridge-failure"}
+)
 
 _ALLOWED_OUTPUT_SCHEMAS: dict[BridgeAction, frozenset[str]] = {
     BridgeAction.LEDGER_CREATED: _LEDGER_SCHEMAS,
@@ -51,7 +54,7 @@ _ALLOWED_OUTPUT_SCHEMAS: dict[BridgeAction, frozenset[str]] = {
     BridgeAction.GROUNDED_REVIEWED: _REVIEW_SCHEMAS,
     BridgeAction.REPAIR_ATTEMPTED: _OUTPUT_SCHEMAS,
     BridgeAction.COMPLETED: frozenset(),
-    BridgeAction.FAILED: frozenset(),
+    BridgeAction.FAILED: _FAILURE_SCHEMAS,
 }
 
 _PRIMARY_SCHEMA: dict[BridgeAction, str | None] = {
@@ -91,14 +94,33 @@ class BridgeState:
     validation_reports: dict[str, BaseModel] = field(default_factory=dict)
     grounding_findings: dict[str, BaseModel] = field(default_factory=dict)
     grounding_reviews: dict[str, BaseModel] = field(default_factory=dict)
+    failures: dict[str, BaseModel] = field(default_factory=dict)
     object_schemas: dict[str, str] = field(default_factory=dict)
     object_event_seq: dict[str, int] = field(default_factory=dict)
     event_seqs: list[int] = field(default_factory=list)
     events_by_action: dict[BridgeAction, list[int]] = field(default_factory=dict)
+    inputs_by_event: dict[int, list[str]] = field(default_factory=dict)
     outputs_by_event: dict[int, list[str]] = field(default_factory=dict)
     completed_events: list[int] = field(default_factory=list)
     failed_events: list[int] = field(default_factory=list)
     error_codes_by_event: dict[int, str] = field(default_factory=dict)
+
+    def _repair_lineage(self, output_id: str, review) -> bool:
+        return any(
+            output_id in self.outputs_by_event.get(seq, [])
+            and review.id in self.inputs_by_event.get(seq, [])
+            and review.bridge_output_id in self.inputs_by_event.get(seq, [])
+            for seq in self.events_by_action.get(BridgeAction.REPAIR_ATTEMPTED, [])
+        )
+
+    @staticmethod
+    def _assert_safe_repair(before, after) -> None:
+        from deepreason.bridge.repair import assert_safe_repair_diff
+
+        try:
+            assert_safe_repair_diff(before, after)
+        except RuntimeError as error:
+            raise ValueError(str(error)) from error
 
     @staticmethod
     def _one(
@@ -190,11 +212,88 @@ class BridgeState:
             raise ValueError(
                 f"bridge action {action.value} requires exactly one {primary_schema}"
             )
-        elif primary_schema is None and records:
+        elif primary_schema is None and records and action != BridgeAction.FAILED:
             raise ValueError(f"bridge action {action.value} cannot create objects")
 
         self._validate_finding_ref(payload, records)
         input_ids = set(payload.inputs)
+
+        if action == BridgeAction.FAILED and records:
+            _failure_id, failure = self._one(records, "bridge-failure")
+            packs = [
+                obj for schema, _oid, obj in records if schema == "bridge-evidence-pack"
+            ]
+            catalogs = [
+                obj
+                for schema, _oid, obj in records
+                if schema == "bridge-ledger-input-catalog"
+            ]
+            if len(packs) > 1 or len(catalogs) > 1:
+                raise ValueError("failed bridge event permits at most one pack and catalog")
+            if bool(packs) != bool(catalogs):
+                raise ValueError("a new failed bridge pack and catalog must be stored together")
+            pack = packs[0] if packs else self.evidence_packs.get(failure.evidence_pack_id)
+            catalog = catalogs[0] if catalogs else self.catalogs.get(failure.catalog_id)
+            if pack is None or pack.id != failure.evidence_pack_id:
+                raise ValueError("bridge failure names an unknown evidence pack")
+            if catalog is None or catalog.id != failure.catalog_id:
+                raise ValueError("bridge failure names an unknown input catalog")
+            if (
+                pack.problem_ref != failure.problem_ref
+                or pack.formal_seq != failure.formal_seq
+                or catalog.problem_ref != failure.problem_ref
+                or catalog.formal_seq != failure.formal_seq
+                or catalog.output_target != failure.output_target
+            ):
+                raise ValueError("bridge failure metadata differs from its pack or catalog")
+            if failure.error_code != payload.error_code:
+                raise ValueError("bridge failure error code differs from event payload")
+            if list(failure.terminal_inputs) != list(payload.inputs):
+                raise ValueError("bridge failure inputs differ from event payload")
+            for field_name, schema in (
+                ("claim_ledger_id", "bridge-claim-ledger"),
+                ("bridge_output_id", "bridge-output"),
+                ("validation_report_id", "bridge-validation-report"),
+                ("review_id", "bridge-grounding-review"),
+            ):
+                object_id = getattr(failure, field_name)
+                if object_id is not None and self._known_schema(object_id, records) != schema:
+                    raise ValueError(
+                        f"bridge failure {field_name} does not name a known {schema}"
+                    )
+            ledger = self.ledgers.get(failure.claim_ledger_id)
+            output = self.outputs.get(failure.bridge_output_id)
+            report = self.validation_reports.get(failure.validation_report_id)
+            review = self.grounding_reviews.get(failure.review_id)
+            if ledger is not None and (
+                ledger.problem_ref != failure.problem_ref
+                or ledger.formal_seq != failure.formal_seq
+                or ledger.output_target != failure.output_target
+            ):
+                raise ValueError("bridge failure ledger differs from terminal metadata")
+            if output is not None and (
+                ledger is None or output.claim_ledger_id != ledger.id
+            ):
+                raise ValueError("bridge failure output does not belong to its ledger")
+            if report is not None and (
+                ledger is None
+                or report.claim_ledger_id != ledger.id
+                or report.bridge_output_id != (
+                    output.id if output is not None else None
+                )
+            ):
+                raise ValueError("bridge failure report does not belong to partial output")
+            if review is not None and (
+                ledger is None
+                or output is None
+                or review.claim_ledger_id != ledger.id
+            ):
+                raise ValueError("bridge failure review does not belong to partial output")
+            if review is not None and (
+                review.bridge_output_id != output.id
+                and not self._repair_lineage(output.id, review)
+            ):
+                raise ValueError("bridge failure review lacks repaired-output lineage")
 
         if action in {BridgeAction.LEDGER_CREATED, BridgeAction.LEDGER_AMENDED}:
             _ledger_id, ledger = self._one(records, "bridge-claim-ledger")
@@ -319,13 +418,19 @@ class BridgeState:
                 raise ValueError("bridge output requires a valid claim-ledger report")
             if action == BridgeAction.REPAIR_ATTEMPTED:
                 failed_reviews = [review for review in reviews if not review.passed]
-                if not any(
-                    review.bridge_output_id in input_ids
-                    and review.claim_ledger_id == output.claim_ledger_id
+                matched_reviews = [
+                    review
                     for review in failed_reviews
-                ):
+                    if review.bridge_output_id in input_ids
+                    and review.claim_ledger_id == output.claim_ledger_id
+                ]
+                if not matched_reviews:
                     raise ValueError(
                         "repair output must retain the failed review's claim ledger"
+                    )
+                for review in matched_reviews:
+                    self._assert_safe_repair(
+                        self.outputs[review.bridge_output_id], output
                     )
             self._validate_auxiliary_membership(
                 records,
@@ -372,8 +477,8 @@ class BridgeState:
 
         elif action == BridgeAction.COMPLETED:
             completed_outputs = input_ids & self.outputs.keys()
-            if not completed_outputs:
-                raise ValueError("completed bridge event requires a bridge output input")
+            if len(completed_outputs) != 1:
+                raise ValueError("completed bridge event requires exactly one bridge output")
             for output_id in completed_outputs:
                 output = self.outputs[output_id]
                 if output.claim_ledger_id not in input_ids:
@@ -389,6 +494,27 @@ class BridgeState:
                     raise ValueError(
                         "completed bridge event must input its valid validation report"
                     )
+                review_ids = input_ids & self.grounding_reviews.keys()
+                if len(review_ids) > 1:
+                    raise ValueError("completed bridge event permits at most one review")
+                if review_ids:
+                    review = self.grounding_reviews[next(iter(review_ids))]
+                    if review.passed:
+                        if (
+                            review.claim_ledger_id != output.claim_ledger_id
+                            or review.bridge_output_id != output_id
+                        ):
+                            raise ValueError(
+                                "completed passed review must name the terminal output"
+                            )
+                    else:
+                        if not self._repair_lineage(output_id, review):
+                            raise ValueError(
+                                "completed failed review requires a replayed safe repair"
+                            )
+                        self._assert_safe_repair(
+                            self.outputs[review.bridge_output_id], output
+                        )
 
     def _register(self, schema: str, oid: str, obj: BaseModel, event_seq: int) -> None:
         existing = self.object_schemas.get(oid)
@@ -410,6 +536,7 @@ class BridgeState:
             "bridge-validation-report": self.validation_reports,
             "bridge-grounding-finding": self.grounding_findings,
             "bridge-grounding-review": self.grounding_reviews,
+            "bridge-failure": self.failures,
         }
         indexes[schema][oid] = obj
 
@@ -430,6 +557,7 @@ class BridgeState:
             self._register(schema, oid, obj, event.seq)
         self.event_seqs.append(event.seq)
         self.events_by_action.setdefault(payload.action, []).append(event.seq)
+        self.inputs_by_event[event.seq] = list(event.inputs)
         self.outputs_by_event[event.seq] = list(event.outputs)
         if payload.action == BridgeAction.COMPLETED:
             self.completed_events.append(event.seq)

@@ -7,6 +7,8 @@ cycle for direct ``deepreason.bridge.models`` consumers.
 
 _EVENT_EXPORTS = {"BridgeAction", "BridgeEventPayloadV1"}
 _MODEL_EXPORTS = {
+    "BridgeFailureDiagnosticV1",
+    "BridgeFailureV1",
     "BridgeOutputV1",
     "BridgeResolution",
     "BridgeValidationFindingV1",

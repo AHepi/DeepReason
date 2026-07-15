@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
+import deepreason.bridge.harness as bridge_harness
 from deepreason.bridge.compose import CompositionRequestV1
 from deepreason.bridge.events import BridgeAction
 from deepreason.bridge.ledger import (
@@ -15,6 +18,13 @@ from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.ontology import Problem, ProblemProvenance, Provenance
+from deepreason.scratch.attention import (
+    AttentionPlanner,
+    AttentionPolicyV1,
+    AttentionRequestV1,
+)
+from deepreason.scratch.models import RetrievalChannel, ScratchProvenanceV1
+from deepreason.scratch.service import ScratchService
 
 
 class _HarnessSink:
@@ -281,6 +291,75 @@ def test_failed_fact_review_is_removed_and_returns_safe_unresolved_success(tmp_p
     assert _actions(harness)[-1] == BridgeAction.COMPLETED
 
 
+def test_grounding_repair_exception_writes_typed_failed_event(tmp_path, monkeypatch):
+    harness = Harness(tmp_path / "run")
+    adapter = _adapter(
+        harness,
+        summarizer=[
+            json.dumps(
+                {
+                    "entries": [
+                        {
+                            "entry_key": "K1",
+                            "claim_class": "source_fact",
+                            "claim": "The recorded value is seven.",
+                            "source_handles": ["S1"],
+                        }
+                    ]
+                }
+            )
+        ],
+        thesis=[
+            json.dumps(
+                {
+                    "sections": [
+                        {
+                            "span_id": "S1",
+                            "text": "The value is seven.",
+                            "rendering_mode": "fact",
+                            "ledger_entry_handles": ["E1"],
+                        }
+                    ],
+                    "resolution": "answered",
+                }
+            )
+        ],
+        judge=[json.dumps({"finding": "unsupported"})],
+        retry_max=0,
+    )
+    monkeypatch.setattr(
+        "deepreason.bridge.workflow.GroundingRepairService.repair",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            RuntimeError("injected repair failure")
+        ),
+    )
+
+    result = BridgeWorkflow(
+        adapter,
+        adapter,
+        review_adapter=adapter,
+        repair_adapter=adapter,
+        policy={"max_grounding_repair_attempts": 1},
+        sink=_HarnessSink(harness),
+    ).run(
+        _catalog(_source_item()),
+        _request(),
+        materials={"source-1": "A different passage."},
+    )
+
+    assert result.process_status == "failure"
+    assert result.error_code == "BRIDGE_GROUNDING_REPAIR_FAILED"
+    assert _actions(harness)[-1] == BridgeAction.FAILED
+    terminal_event = list(harness.log.read())[-1]
+    assert terminal_event.bridge.error_code == "BRIDGE_GROUNDING_REPAIR_FAILED"
+    assert set(terminal_event.inputs) == {
+        result.claim_ledger.id,
+        result.bridge_output.id,
+        result.validation_report.id,
+        result.grounded_review.id,
+    }
+
+
 def test_corrected_wording_must_pass_a_second_grounded_review(tmp_path):
     harness = Harness(tmp_path / "run")
     adapter = _adapter(
@@ -509,3 +588,99 @@ def test_harness_composer_cannot_launder_conjecture_into_fact(tmp_path):
     )
     assert compose_event.llm.attempts == 2
     assert not compose_event.llm.attempt_trace[0].valid
+
+
+def test_post_plan_pre_call_failure_does_not_commit_attention_state(
+    tmp_path, monkeypatch
+):
+    """Deterministic bridge preparation must finish before render is recorded."""
+
+    harness = Harness(tmp_path / "run")
+    harness.register_problem(
+        Problem(
+            id="problem-attention-failure",
+            description="Can the bounded scratch context help?",
+            provenance=ProblemProvenance(trigger="seed", **{"from": []}),
+        )
+    )
+    service = ScratchService(harness)
+    block = service.create_block(
+        {"content": "A provisional scratch thought."},
+        ScratchProvenanceV1(actor="user", origin="bridge-attention-test"),
+    )
+    cycle = service.start_coverage_cycle()
+    channels = [
+        channel
+        for channel in RetrievalChannel
+        if channel != RetrievalChannel.DIRECT_OPEN
+    ]
+    planner = AttentionPlanner(
+        service,
+        AttentionPolicyV1(
+            max_blocks_per_pack=1,
+            max_guides_per_pack=0,
+            semantic_retrieval=False,
+            keyword_retrieval=False,
+            coverage_enabled=True,
+            coverage_slot_every_n_packs=1,
+            exploratory_fraction=0,
+            underexposed_fraction=0,
+            dormant_after_events=100,
+            similarity_top_k=1,
+            guide_max_open_threads=0,
+            guide_max_entry_points=0,
+            channel_priority=channels,
+            per_channel_limits={channel: 1 for channel in channels},
+        ),
+    )
+    pack = planner.plan(
+        AttentionRequestV1(
+            focus_blocks=[block.id],
+            maximum_blocks=1,
+            maximum_cluster_guides=0,
+            include_nearby=False,
+            include_recent=False,
+            include_loose=False,
+            include_dormant=False,
+            include_underexposed=False,
+            include_exploratory=False,
+            deterministic_seed=7,
+        )
+    )
+    endpoint = MockEndpoint(["must not be consumed"], name="unused-summarizer")
+    adapter = LLMAdapter(
+        {
+            "summarizer": endpoint,
+            "thesis": MockEndpoint([], name="unused-thesis"),
+        },
+        harness.blobs,
+        retry_max=0,
+    )
+    before_seq = harness._next_seq
+    before_pending = list(
+        harness.scratch_state.coverage_cycles[cycle.id].pending_block_ids
+    )
+
+    def fail_catalog(*_args, **_kwargs):
+        raise RuntimeError("injected deterministic catalog failure")
+
+    monkeypatch.setattr(bridge_harness, "build_claim_ledger_catalog", fail_catalog)
+    with pytest.raises(RuntimeError, match="injected deterministic catalog failure"):
+        harness.build_bridge(
+            "problem-attention-failure",
+            "answer",
+            {"grounding_review": False, "max_grounding_repair_attempts": 0},
+            run_manifest_digest="c" * 64,
+            stage_a_adapter=adapter,
+            attention_pack=pack,
+        )
+
+    assert harness._next_seq == before_seq
+    assert harness.scratch_state.attention_receipts == {}
+    assert harness.scratch_state.advisory_contexts == {}
+    assert harness.scratch_state.visibility == {}
+    progress = harness.scratch_state.coverage_cycles[cycle.id]
+    assert progress.pending_block_ids == before_pending
+    assert progress.rendered_block_ids == []
+    assert not progress.completed
+    assert endpoint.last_transport_attempts == 0

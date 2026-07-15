@@ -154,6 +154,59 @@ def test_context_requires_the_exact_committed_receipt(tmp_path):
     assert service.state.advisory_contexts == {}
 
 
+def test_prepared_context_is_pure_and_commits_exact_receipt_and_context(tmp_path):
+    service = ScratchService(tmp_path / "run")
+    block = service.create_block(
+        {"content": "Prepared but not yet rendered."},
+        ScratchProvenanceV1(actor="user", origin="context-test"),
+    )
+    cycle = service.start_coverage_cycle()
+    policy = _policy().model_copy(update={"coverage_enabled": True})
+    planner = AttentionPlanner(service, policy)
+    pack = planner.plan(
+        AttentionRequestV1(
+            focus_blocks=[block.id],
+            maximum_blocks=1,
+            maximum_cluster_guides=0,
+            include_nearby=False,
+            include_recent=False,
+            include_loose=False,
+            include_dormant=False,
+            include_underexposed=False,
+            include_exploratory=False,
+            deterministic_seed=4,
+        )
+    )
+    before_seq = service.harness._next_seq
+    before = _tree_digest(service.harness.root)
+
+    prepared = service.prepare_advisory_context(pack)
+
+    assert service.harness._next_seq == before_seq
+    assert _tree_digest(service.harness.root) == before
+    assert service.state.attention_receipts == {}
+    assert service.state.advisory_contexts == {}
+    assert service.state.visibility == {}
+
+    committed = service.commit_prepared_advisory_context(pack, prepared)
+
+    assert committed == prepared
+    assert service.state.attention_receipts[pack.selection_receipt.id] == (
+        pack.selection_receipt
+    )
+    assert service.state.advisory_contexts[prepared.id] == prepared
+    assert service.state.visibility[block.id].render_count == 1
+    assert service.state.coverage_cycles[cycle.id].rendered_block_ids == [block.id]
+    assert service.state.coverage_cycles[cycle.id].completed
+    reopened = Harness(service.harness.root)
+    assert reopened.scratch_state.attention_receipts == (
+        service.state.attention_receipts
+    )
+    assert reopened.scratch_state.advisory_contexts == (
+        service.state.advisory_contexts
+    )
+
+
 def test_raw_context_event_cannot_inject_an_out_of_selection_link(tmp_path):
     service = ScratchService(tmp_path / "run")
     provenance = ScratchProvenanceV1(actor="user", origin="context-test")

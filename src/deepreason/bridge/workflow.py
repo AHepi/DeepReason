@@ -33,7 +33,7 @@ from deepreason.bridge.models import (
     ClaimLedgerV1,
     GroundingReviewV1,
 )
-from deepreason.bridge.repair import GroundingRepairService
+from deepreason.bridge.repair import GroundingRepairService, RepairDisposition
 from deepreason.bridge.review import GroundingReviewService
 from deepreason.bridge.validate import validate_bridge_output
 from deepreason.ontology.event import LLMCall
@@ -66,6 +66,9 @@ class BridgePersistenceBatch:
     llm: LLMCall | None = None
     finding_ref: str | None = None
     error_code: str | None = None
+    error_message: str | None = None
+    failure_phase: str | None = None
+    failure_diagnostics: tuple[BaseModel, ...] = ()
     actor: str = "harness"
 
 
@@ -282,6 +285,7 @@ class BridgeWorkflow:
         amendment_count: int = 0,
         inputs: tuple[str, ...] = (),
         calls: list[LLMCall] | None = None,
+        diagnostics: tuple[BaseModel, ...] = (),
     ) -> BridgeWorkflowResultV1:
         error_code = _stable_error_code(error, default_code)
         message = (str(error).strip() or error_code)[:16_384]
@@ -291,12 +295,22 @@ class BridgeWorkflow:
         # A terminal failure event owns at most one otherwise-unrecorded call.
         # Multi-call review failures are emitted as attempt events before here.
         terminal_call = failed_calls[0] if len(failed_calls) == 1 else None
+        terminal_inputs = tuple(
+            item.id
+            for item in (ledger, output, report, review)
+            if item is not None
+        )
+        if not set(inputs).issubset(set(terminal_inputs)):
+            raise RuntimeError("bridge failure inputs are not retained partial objects")
         self._persist(
             BridgePersistenceBatch(
                 action=BridgeAction.FAILED,
-                inputs=inputs,
+                inputs=terminal_inputs,
                 llm=terminal_call,
                 error_code=error_code,
+                error_message=message,
+                failure_phase=phase,
+                failure_diagnostics=diagnostics,
             )
         )
         return self._result(
@@ -577,11 +591,25 @@ class BridgeWorkflow:
                         inputs=(ledger.id, output.id, review.id),
                         calls=[],
                     )
-                repaired = GroundingRepairService(
-                    self.repair_adapter,
-                    role=self.policy.reviewer_role,
-                    max_attempts=remaining,
-                ).repair(ledger, output, review)
+                try:
+                    repaired = GroundingRepairService(
+                        self.repair_adapter,
+                        role=self.policy.reviewer_role,
+                        max_attempts=remaining,
+                    ).repair(ledger, output, review)
+                except Exception as error:
+                    return self._failure(
+                        error,
+                        default_code="BRIDGE_GROUNDING_REPAIR_FAILED",
+                        formal_seq=formal_seq,
+                        phase="grounding_repair",
+                        ledger=ledger,
+                        output=output,
+                        report=report,
+                        review=review,
+                        amendment_count=amendment_count,
+                        inputs=(ledger.id, output.id, report.id, review.id),
+                    )
                 for call in repaired.calls:
                     repair_calls += 1
                     self._record_call(call)
@@ -625,6 +653,23 @@ class BridgeWorkflow:
                         amendment_count=amendment_count,
                         inputs=(ledger.id, output.id),
                         calls=[],
+                    )
+                if repaired.disposition == RepairDisposition.BOUNDED_FAILURE:
+                    return self._failure(
+                        RuntimeError(
+                            "grounding repair exhausted without a valid correction"
+                        ),
+                        default_code="BRIDGE_GROUNDING_REPAIR_BOUNDED_FAILURE",
+                        formal_seq=formal_seq,
+                        phase="grounding_repair",
+                        ledger=ledger,
+                        output=output,
+                        report=report,
+                        review=review,
+                        amendment_count=amendment_count,
+                        inputs=(ledger.id, output.id, report.id, review.id),
+                        calls=[],
+                        diagnostics=tuple(repaired.diagnostics),
                     )
                 if not repaired.requires_grounded_review:
                     break

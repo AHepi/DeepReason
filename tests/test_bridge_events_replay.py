@@ -493,6 +493,31 @@ def test_repair_attempt_preserves_old_and_new_outputs_on_replay(tmp_path):
     assert reopened.bridge_state.outputs[records["output"].id] == records["output"]
     assert reopened.bridge_state.outputs[repaired_output.id] == repaired_output
 
+    injected = ClaimUseV1.create(
+        span_id="span-injected",
+        text="An additional factual assertion.",
+        rendering_mode="fact",
+        ledger_entry_ids=[records["entry"].id],
+    )
+    unsafe_output = BridgeOutputV1.create(
+        claim_ledger_id=records["ledger"].id,
+        sections=[records["claim_use"], injected],
+        resolution="answered",
+    )
+    with pytest.raises(ValueError, match="cannot introduce a new span"):
+        harness.record_bridge_event(
+            BridgeAction.REPAIR_ATTEMPTED,
+            inputs=[records["ledger"].id, records["output"].id, failed_review.id],
+            records=[
+                ("bridge-claim-use", injected),
+                ("bridge-output", unsafe_output),
+            ],
+            finding_ref=failed_review.id,
+        )
+    assert not harness.objects._schema_path(
+        "bridge-output", unsafe_output.id
+    ).exists()
+
 
 def test_explicit_ledger_amendment_is_a_new_replayable_object(tmp_path):
     root = tmp_path / "run"

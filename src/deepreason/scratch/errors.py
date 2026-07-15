@@ -45,6 +45,10 @@ class ScratchLinkNotFound(ScratchServiceError):
     code = "SCRATCH_LINK_NOT_FOUND"
 
 
+class ScratchLinkPrefixAmbiguous(ScratchServiceError):
+    code = "SCRATCH_LINK_PREFIX_AMBIGUOUS"
+
+
 class ScratchClusterNotFound(ScratchServiceError):
     code = "SCRATCH_CLUSTER_NOT_FOUND"
 
@@ -81,6 +85,7 @@ __all__ = [
     "ScratchClusterPrefixAmbiguous",
     "ScratchLimitInvalid",
     "ScratchLinkNotFound",
+    "ScratchLinkPrefixAmbiguous",
     "ScratchLinkRetired",
     "ScratchNotMember",
     "ScratchReadOnly",
