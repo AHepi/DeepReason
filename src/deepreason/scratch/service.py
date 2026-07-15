@@ -242,6 +242,9 @@ class ScratchService:
         self,
         body: ScratchBlockBodyV1 | Mapping,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ScratchBlockV1:
         self._ensure_writable()
         provenance = self._provenance(provenance)
@@ -251,6 +254,8 @@ class ScratchService:
             ScratchAction.BLOCK_CREATED,
             actor=provenance.actor,
             outputs=[block.id],
+            llm=llm,
+            context_ref=context_ref,
         )
         return block
 
@@ -259,6 +264,9 @@ class ScratchService:
         block_id: str,
         body: ScratchBlockBodyV1 | Mapping,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ScratchBlockV1:
         self._ensure_writable()
         parent = self._block_id(block_id)
@@ -272,6 +280,8 @@ class ScratchService:
             actor=provenance.actor,
             inputs=[parent],
             outputs=[block.id],
+            llm=llm,
+            context_ref=context_ref,
         )
         return block
 
@@ -279,6 +289,9 @@ class ScratchService:
         self,
         body: ScratchLinkBodyV1 | Mapping,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ScratchLinkV1:
         self._ensure_writable()
         body = ScratchLinkBodyV1.model_validate(body)
@@ -293,6 +306,8 @@ class ScratchService:
             ScratchAction.LINK_CREATED,
             actor=provenance.actor,
             outputs=[link.id],
+            llm=llm,
+            context_ref=context_ref,
         )
         return link
 
@@ -316,6 +331,8 @@ class ScratchService:
         link_id: str,
         reason: str,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
     ) -> ScratchLinkV1:
         self._ensure_writable()
         if not isinstance(reason, str) or not reason.strip() or len(reason) > 262_144:
@@ -332,6 +349,7 @@ class ScratchService:
             actor=provenance.actor,
             inputs=[link.id],
             reason_ref=reason_ref,
+            llm=llm,
         )
         return link
 
@@ -339,6 +357,8 @@ class ScratchService:
         self,
         seed_focus: str,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
     ) -> ScratchClusterV1:
         self._ensure_writable()
         provenance = self._provenance(provenance)
@@ -348,6 +368,7 @@ class ScratchService:
             ScratchAction.CLUSTER_CREATED,
             actor=provenance.actor,
             outputs=[cluster.id],
+            llm=llm,
         )
         return cluster
 
@@ -358,6 +379,7 @@ class ScratchService:
         block_id: str,
         reason: str | None,
         provenance: ScratchProvenanceV1 | Mapping,
+        llm: LLMCall | None,
     ) -> ClusterMembershipV1:
         self._ensure_writable()
         cluster_id = self._cluster_id(cluster_id)
@@ -394,6 +416,7 @@ class ScratchService:
             inputs=[cluster_id, block_id],
             outputs=[record.id],
             reason_ref=reason_ref,
+            llm=llm,
         )
         return record
 
@@ -403,9 +426,11 @@ class ScratchService:
         block_id: str,
         reason: str | None,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
     ) -> ClusterMembershipV1:
         return self._membership(
-            MembershipAction.ADD, cluster_id, block_id, reason, provenance
+            MembershipAction.ADD, cluster_id, block_id, reason, provenance, llm
         )
 
     def remove_cluster_member(
@@ -414,13 +439,19 @@ class ScratchService:
         block_id: str,
         reason: str | None,
         provenance: ScratchProvenanceV1 | Mapping,
+        *,
+        llm: LLMCall | None = None,
     ) -> ClusterMembershipV1:
         return self._membership(
-            MembershipAction.REMOVE, cluster_id, block_id, reason, provenance
+            MembershipAction.REMOVE, cluster_id, block_id, reason, provenance, llm
         )
 
     def store_guide(
-        self, guide: ClusterGuideV1, *, llm: LLMCall | None = None
+        self,
+        guide: ClusterGuideV1,
+        *,
+        llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ClusterGuideV1:
         self._ensure_writable()
         guide = ClusterGuideV1.model_validate(guide)
@@ -440,6 +471,7 @@ class ScratchService:
             inputs=[cluster_id],
             outputs=[snapshot.id, guide.id],
             llm=llm,
+            context_ref=context_ref,
         )
         return guide
 

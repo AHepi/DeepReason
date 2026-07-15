@@ -261,6 +261,18 @@ def diagnostic_from_error(
             repair_scope=pointer,
             skeleton=None,
         )
+    if getattr(error, "code", "") == "SCRATCH_WIRE_REFERENCE_INVALID":
+        pointer = str(getattr(error, "pointer", ""))
+        child_schema = schema_at_pointer(schema, pointer) if pointer else schema
+        return RepairDiagnostic(
+            contract=contract,
+            path=pointer,
+            error="SCRATCH_WIRE_REFERENCE_INVALID",
+            received=None,
+            allowed="one supplied call-local handle or rendered-list index",
+            repair_scope=pointer,
+            skeleton=minimal_skeleton(child_schema, schema),
+        )
     if isinstance(error, ValidationError) and error.errors():
         detail = error.errors(include_url=False)[0]
         loc = tuple(detail.get("loc") or ())

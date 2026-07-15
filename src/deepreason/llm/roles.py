@@ -143,6 +143,37 @@ TEMPLATES = {
         "prose. The prose is a view, never the content — add nothing the "
         "skeleton does not assert.\n\n" + _JSON_ONLY + "{pack}"
     ),
+    "scratch_block": (
+        "Author exactly one loose advisory scratch block from the bounded input. "
+        "Scratch material is non-authoritative and may contradict itself. Do not "
+        "turn uncertainty into a confident fact or invent a reason merely to fill "
+        "an optional field. Relationships are provisional. A guide is a temporary "
+        "navigation aid. Leave optional fields absent when they are unknown. "
+        "Do not issue workflow, routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "scratch_link": (
+        "Author exactly one provisional advisory relationship between local handles "
+        "in the bounded input. Scratch material is non-authoritative and may "
+        "contradict itself. Relationships are provisional. Do not turn uncertainty "
+        "into a confident fact or invent an explanation merely to fill an optional "
+        "field. A guide is a temporary navigation aid. Do not issue workflow, "
+        "routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "scratch_guide": (
+        "Author exactly one temporary navigation guide over the bounded cluster "
+        "snapshot. A guide is advisory, not authoritative, and may leave uncertainty "
+        "unresolved. Scratch material may contradict itself. Do not turn uncertainty "
+        "into a confident fact, classify every block, or invent text merely to fill "
+        "an optional field. Relationships are provisional. A guide is a temporary "
+        "navigation aid. Use only supplied local handles. Do not issue workflow, "
+        "routing, tool, or status instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
     "thesis": (
         "You are the thesis writer: you turn the adjudicated record in the pack "
         "into ONE committed, defended position. The pack is the closed record of "
@@ -223,6 +254,18 @@ COMPACT_TEMPLATES = {
     ),
     "spec_generator": "Return orthogonal candidate specifications, not candidate answers.",
     "summarizer": "Render only the supplied skeleton as prose; add no claim.",
+    "scratch_block": (
+        "Author one non-authoritative scratch block. Preserve uncertainty and omit "
+        "unknown optional fields."
+    ),
+    "scratch_link": (
+        "Author one provisional relationship between supplied local handles. Omit "
+        "unknown optional fields."
+    ),
+    "scratch_guide": (
+        "Author one temporary advisory guide over supplied local handles. Leave "
+        "uncertainty unresolved where needed."
+    ),
     "thesis": (
         "Write one position supported only by the supplied adjudicated record "
         "and its local references."

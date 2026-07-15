@@ -217,6 +217,14 @@ SIGNALS: dict[str, str] = {
                        "capsule id, source candidate id, adopted candidate "
                        "id, commitment:verdict...]). Old source verdicts do "
                        "not transfer",
+    # Advisory scratch authoring (scratch/authoring.py)
+    "scratch-call-failed": "a bounded scratch authoring or guide call exhausted "
+                           "schema/endpoint repair and registered no authored "
+                           "content (inputs: [signal, contract id]); process-only",
+    "scratch-guide-stale": "a model-authored cluster guide completed after its "
+                           "bound snapshot stopped being current, so the guide "
+                           "was discarded (inputs: [signal, cluster id, snapshot "
+                           "hash]); attention-only and never authority",
     # Payload-recognized pseudo-signals (bare-id measures; see event_signal)
     "hv": "hard-to-vary estimate recorded (hv_set payload; inputs = artifact id)",
     "reach-provisional": "cross-problem survival on a battery below "
