@@ -1,0 +1,395 @@
+{
+  "missing_roots": 0,
+  "root_count": 9,
+  "roots": [
+    {
+      "root": "runs/jolt_positive_headroom_v3_1/calibration/20260701",
+      "state_digest": "c5c2555d40aeed5185ea6d2c92f3263a5547f188fd703dc056fd68a95d66d745",
+      "verification": {
+        "stats": {
+          "accepted": 42,
+          "artifacts": 45,
+          "dropped_calls": 18,
+          "events": 113,
+          "gate_blocks": 1,
+          "interventions": 0,
+          "logged_tokens": 126448,
+          "max_problem_desc_len": 508,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "3a4af9cb1dd02b4cd65fbae48bc9490dd7db1139a3a20303416ff6458423b338",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 88,
+                "calls": 32,
+                "eventual_valid": 14,
+                "first_pass_valid": 0,
+                "provider_transport_attempts": 88,
+                "repair_attempts": 56,
+                "schema_exhausted": 18,
+                "tokens": 126448,
+                "traced_calls": 32,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 3,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 3
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_positive_headroom_v3_1/calibration/20260702",
+      "state_digest": "ef926c6a4d18bc7003d6d6dd8918d9f21cf484fd8c0aef77579cdedc0b1a5bf1",
+      "verification": {
+        "stats": {
+          "accepted": 52,
+          "artifacts": 54,
+          "dropped_calls": 14,
+          "events": 120,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 123690,
+          "max_problem_desc_len": 509,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "3a4af9cb1dd02b4cd65fbae48bc9490dd7db1139a3a20303416ff6458423b338",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 77,
+                "calls": 32,
+                "eventual_valid": 18,
+                "first_pass_valid": 6,
+                "provider_transport_attempts": 77,
+                "repair_attempts": 45,
+                "schema_exhausted": 14,
+                "tokens": 123690,
+                "traced_calls": 32,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 2,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 2
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_positive_headroom_v3_1/calibration/20260703",
+      "state_digest": "5d26067a5635fe9a4bbe51cb7126651df304a43780106ec01711ce624cda4ba3",
+      "verification": {
+        "stats": {
+          "accepted": 96,
+          "artifacts": 96,
+          "dropped_calls": 0,
+          "events": 162,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 74030,
+          "max_problem_desc_len": 508,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "3a4af9cb1dd02b4cd65fbae48bc9490dd7db1139a3a20303416ff6458423b338",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 33,
+                "calls": 32,
+                "eventual_valid": 32,
+                "first_pass_valid": 31,
+                "provider_transport_attempts": 33,
+                "repair_attempts": 1,
+                "schema_exhausted": 0,
+                "tokens": 74030,
+                "traced_calls": 32,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 0,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 0
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot/source",
+      "state_digest": "e9dd6b06216b8a4d4b1724b63516e96c9fbd61c395287452233d85ede4f73a00",
+      "verification": {
+        "stats": {
+          "accepted": 30,
+          "artifacts": 39,
+          "dropped_calls": 0,
+          "events": 51,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 16778,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "59908bf299adff330c2330f8ddf80613a695a4a9b689c4ba71225e87b5f628ea",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 10,
+                "calls": 8,
+                "eventual_valid": 8,
+                "first_pass_valid": 6,
+                "provider_transport_attempts": 10,
+                "repair_attempts": 2,
+                "schema_exhausted": 0,
+                "tokens": 16778,
+                "traced_calls": 8,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 9,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 9
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot_v2/source",
+      "state_digest": "0c8941602f9a9b1d7045cafb353eb2e1078890682b59ca7c2f341ac5cac230d4",
+      "verification": {
+        "stats": {
+          "accepted": 61,
+          "artifacts": 78,
+          "dropped_calls": 0,
+          "events": 103,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 24842,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 15,
+                "calls": 15,
+                "eventual_valid": 15,
+                "first_pass_valid": 15,
+                "provider_transport_attempts": 15,
+                "repair_attempts": 0,
+                "schema_exhausted": 0,
+                "tokens": 24842,
+                "traced_calls": 15,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 17,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 17
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot_v2/branches/branch-00-J3",
+      "state_digest": "3a9445b08ece2854bd9e759c54028bbf989262f26010d9b35a3e7df654c33647",
+      "verification": {
+        "stats": {
+          "accepted": 77,
+          "artifacts": 95,
+          "dropped_calls": 0,
+          "events": 126,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 34533,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 20,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 20,
+                "provider_transport_attempts": 20,
+                "repair_attempts": 0,
+                "schema_exhausted": 0,
+                "tokens": 34533,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 18,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 18
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot_v2/branches/branch-01-J0",
+      "state_digest": "77a0788507a3f2cc6d67be0f84eb07bf6739e2e0a8dfd4cb727e84c9e5ba8a29",
+      "verification": {
+        "stats": {
+          "accepted": 84,
+          "artifacts": 109,
+          "dropped_calls": 0,
+          "events": 140,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 37256,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 19,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 1,
+                "schema_exhausted": 0,
+                "tokens": 37256,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 25,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 25
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot_v2/branches/branch-02-J4",
+      "state_digest": "21b5696037e02d3cfd65fd0553cec2236402181b505ffc9c95ed23922269dc20",
+      "verification": {
+        "stats": {
+          "accepted": 84,
+          "artifacts": 109,
+          "dropped_calls": 0,
+          "events": 140,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 34389,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 19,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 1,
+                "schema_exhausted": 0,
+                "tokens": 34389,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 25,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 25
+        },
+        "violations": []
+      }
+    },
+    {
+      "root": "runs/jolt_trigger_glm52_pilot_v2/branches/branch-03-J6",
+      "state_digest": "b1754334f442c85cdf0063171a9581b2ff7eec3efeb2eda6e593b86b6410b403",
+      "verification": {
+        "stats": {
+          "accepted": 83,
+          "artifacts": 110,
+          "dropped_calls": 0,
+          "events": 141,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 38743,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 19,
+                "eventual_valid": 19,
+                "first_pass_valid": 17,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 2,
+                "schema_exhausted": 0,
+                "tokens": 38743,
+                "traced_calls": 19,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 27,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 27
+        },
+        "violations": []
+      }
+    }
+  ],
+  "schema": "deepreason-jolt-positive-headroom-retained-root-verification-v3.1",
+  "violation_count": 0
+}

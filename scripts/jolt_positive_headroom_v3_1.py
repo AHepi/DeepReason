@@ -86,6 +86,7 @@ ANALYSIS_PLAN = EXPERIMENTS / "jolt_positive_headroom_v3_1_analysis_plan.json"
 RAW_REPORT = RESULTS / "jolt_positive_headroom_v3_1_raw_report.json"
 REPORT_JSON = RESULTS / "jolt_positive_headroom_v3_1_report.json"
 REPORT_MD = RESULTS / "jolt_positive_headroom_v3_1_report.md"
+VERIFY_REPORT = RESULTS / "jolt_positive_headroom_v3_1_retained_root_verification.json"
 FORENSIC = RESULTS / "jolt_positive_headroom_v3_1_forensic_addendum.md"
 LEDGER = RUNS / "aggregate_ledger.json"
 
@@ -872,6 +873,97 @@ def experiment() -> None:
 
 
 def report() -> None:
+    calibration = json.loads(CAL_REPORT_JSON.read_text())
+    if calibration["status"] == "calibration_failure":
+        roots = []
+        for seed in CAL_SEEDS:
+            root = RUNS / "calibration" / str(seed)
+            roots.append({"root": str(root.relative_to(ROOT)), "verify": verify_root(root)})
+        ledger = calibration["ledger"]
+        total_tokens, total_calls = _ledger_totals(ledger)
+        final = {
+            "schema": "deepreason-jolt-positive-headroom-report-v3.1",
+            "status": "calibration_failure",
+            "verdict": "calibration failure",
+            "preserved_prior_result": (
+                "A no-improvement window does not imply stagnation when the "
+                "registered objective has already been completed."
+            ),
+            "calibration": {
+                "thresholds": None,
+                "criterion": (
+                    "at least two of three held-out instances and zero fires "
+                    "in any window containing an improvement"
+                ),
+                "candidate_pairs_examined": 78,
+                "candidate_pairs_satisfying_criterion": 0,
+                "best_zero-improvement-window-fire_pairs": {
+                    "nonimproving_instances_reached": 0,
+                    "example": {"R_med": 1.0, "R_low": 0.35},
+                },
+                "most_selective_pair_reaching_all_three_nonimproving_instances": {
+                    "R_med": 0.7142857142857143,
+                    "R_low": 0.7142857142857143,
+                    "improving_window_fires": 10,
+                },
+                "instances": calibration["instances"],
+            },
+            "experimental_execution": {
+                "started": False,
+                "acquisition_calls": 0,
+                "matched_blocks": 0,
+                "branch_calls": 0,
+                "reason": "registered calibration-failure stop condition",
+            },
+            "live_usage": {
+                "conjecturer_call_opportunities": total_calls,
+                "tokens": total_tokens,
+                "judge_tokens": 0,
+                "critic_tokens": 0,
+                "research_tokens": 0,
+                "pairwise_tokens": 0,
+                "synthesis_tokens": 0,
+                "controller_tokens": 0,
+                "hard_token_ceiling": HARD_TOKENS,
+            },
+            "credential_audit": {
+                "storage": "environment only",
+                "plaintext_credentials_in_protocol_artifacts_or_roots": 0,
+                "credentials_committed": False,
+            },
+            "retained_root_verification": {
+                "roots": roots,
+                "violating_roots": [row for row in roots if row["verify"]["violations"]],
+            },
+            "interpretation": (
+                "The proposed overlap thresholds did not separate plateau "
+                "windows from windows still containing verifier improvement. "
+                "No jolt-effect estimand was observed and no efficacy claim is possible."
+            ),
+        }
+        _write_json(REPORT_JSON, final)
+        REPORT_MD.write_text(
+            "# Positive-Headroom Jolt Pilot v3.1\n\n"
+            "Verdict: **calibration failure**.\n\n"
+            "The held-out calibration completed 96 conjecturer opportunities, "
+            f"using {total_tokens:,} tokens. No candidate `R_med`/`R_low` pair "
+            "fired on at least two of three held-out instances while firing on "
+            "zero windows that contained an improvement. The experimental phase "
+            "therefore did not start.\n\n"
+            "The most selective pair that reached non-improving windows on all "
+            "three instances (`R_med = R_low = 5/7`) also fired on 10 windows "
+            "containing an improvement. Every zero-improvement-window-fire pair "
+            "reached zero non-improving instances. This means retained-edge "
+            "contraction, as calibrated here, did not identify an improvement-free "
+            "plateau without temporal false positives.\n\n"
+            "No experimental acquisition, matched branch, or jolt call was made. "
+            "Judge, critic, pairwise, synthesis, research, and controller token use "
+            "was zero. Novelty was not interpreted as useful progress.\n\n"
+            f"All {len(roots)} retained calibration roots verified with zero "
+            "violations.\n"
+        )
+        print(json.dumps(final, indent=2))
+        return
     raw = json.loads(RAW_REPORT.read_text())
     eligible = [row for row in raw["blocks"] if row["branches"]]
     comparisons = (("J3", "J0"), ("J4", "J0"), ("J1", "J0"), ("J3", "J1"), ("J4", "J1"), ("J6", "J0"))
@@ -955,9 +1047,46 @@ def report() -> None:
     print(json.dumps(report_value, indent=2))
 
 
+def verify() -> None:
+    roots = [
+        RUNS / "calibration" / str(seed) for seed in CAL_SEEDS
+    ] + [
+        ROOT / "runs" / "jolt_trigger_glm52_pilot" / "source",
+        ROOT / "runs" / "jolt_trigger_glm52_pilot_v2" / "source",
+        ROOT / "runs" / "jolt_trigger_glm52_pilot_v2" / "branches" / "branch-00-J3",
+        ROOT / "runs" / "jolt_trigger_glm52_pilot_v2" / "branches" / "branch-01-J0",
+        ROOT / "runs" / "jolt_trigger_glm52_pilot_v2" / "branches" / "branch-02-J4",
+        ROOT / "runs" / "jolt_trigger_glm52_pilot_v2" / "branches" / "branch-03-J6",
+    ]
+    rows = []
+    for root in roots:
+        if not root.exists():
+            rows.append({"root": str(root.relative_to(ROOT)), "missing": True})
+            continue
+        rows.append({
+            "root": str(root.relative_to(ROOT)),
+            "state_digest": root_state_digest(root),
+            "verification": verify_root(root),
+        })
+    value = {
+        "schema": "deepreason-jolt-positive-headroom-retained-root-verification-v3.1",
+        "roots": rows,
+        "root_count": len(rows),
+        "missing_roots": sum(bool(row.get("missing")) for row in rows),
+        "violation_count": sum(
+            len(row.get("verification", {}).get("violations", [])) for row in rows
+        ),
+    }
+    _write_json(VERIFY_REPORT, value)
+    print(json.dumps(value, indent=2))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=("prepare", "calibrate", "preregister", "experiment", "report"))
+    parser.add_argument(
+        "command",
+        choices=("prepare", "calibrate", "preregister", "experiment", "report", "verify"),
+    )
     args = parser.parse_args()
     globals()[args.command]()
     return 0
