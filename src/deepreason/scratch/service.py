@@ -658,6 +658,7 @@ class ScratchService:
         *,
         context_ref: str | None = None,
         advance_coverage: bool = True,
+        coverage_policy=None,
     ) -> AdvisoryContextV1:
         """Commit a prevalidated context immediately before model consumption.
 
@@ -703,16 +704,25 @@ class ScratchService:
         self._record_advisory_context(context, receipt)
 
         if newly_committed and advance_coverage:
-            for block_id in rendered_coverage:
-                self.record_coverage_render(
-                    receipt.coverage_cycle_id,
-                    block_id,
-                    receipt.id,
-                )
-            if receipt.coverage_cycle_id is not None:
-                progress = self.state.coverage_cycles[receipt.coverage_cycle_id]
-                if not progress.pending_block_ids:
-                    self.complete_coverage_cycle(receipt.coverage_cycle_id)
+            if coverage_policy is not None:
+                from deepreason.scratch.coverage import CoverageController
+
+                CoverageController(self, coverage_policy).record_receipt(receipt)
+            else:
+                # Backward-compatible low-level use can advance an already
+                # selected cycle. Starting the next cycle requires the exact
+                # compiled policy and is therefore reserved for policy-bound
+                # callers or AttentionPlanner.commit_render().
+                for block_id in rendered_coverage:
+                    self.record_coverage_render(
+                        receipt.coverage_cycle_id,
+                        block_id,
+                        receipt.id,
+                    )
+                if receipt.coverage_cycle_id is not None:
+                    progress = self.state.coverage_cycles[receipt.coverage_cycle_id]
+                    if not progress.pending_block_ids:
+                        self.complete_coverage_cycle(receipt.coverage_cycle_id)
         return context
 
     def active_coverage_cycle(self):

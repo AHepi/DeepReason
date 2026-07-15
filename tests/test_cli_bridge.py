@@ -323,6 +323,9 @@ def test_build_resolves_focus_prefixes_and_records_bounded_advisory_context(
     assert context.retrieval_receipt in harness.scratch_state.attention_receipts
     assert ledger.entries[0].scratch_refs == [built_bridge.block.id]
     assert not ledger.entries[0].source_refs
+    # A production, manifest-bound render starts anti-starvation only after the
+    # exact advisory context is durably committed; attention planning stays pure.
+    assert ScratchService(harness).active_coverage_cycle() is not None
 
 
 def test_json_result_and_claims_expose_full_typed_stable_ids(

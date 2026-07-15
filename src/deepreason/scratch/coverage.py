@@ -63,15 +63,26 @@ class CoverageController:
             self.service.complete_coverage_cycle(cycle_id)
 
     def record_receipt(self, receipt: AttentionReceiptV1) -> list[str]:
-        """Advance every coverage block actually present in a committed receipt."""
+        """Advance a committed receipt and keep deterministic coverage running.
+
+        Starting or restarting a cycle belongs to the durable-render boundary,
+        not planning: previews remain pure while continued committed attention
+        eventually gives every block a coverage slot.
+        """
+
+        if self.service.state.attention_receipts.get(receipt.id) != receipt:
+            raise ValueError("/receipt_ref: attention receipt is not committed")
 
         cycle_id = receipt.coverage_cycle_id
-        if cycle_id is None:
-            return []
-        selected = receipt.selected_by_channel.get(RetrievalChannel.COVERAGE, [])
-        rendered = [block_id for block_id in selected if block_id in receipt.final_order]
-        for block_id in rendered:
-            self.record_render(cycle_id, block_id, receipt)
+        rendered: list[str] = []
+        if cycle_id is not None:
+            selected = receipt.selected_by_channel.get(RetrievalChannel.COVERAGE, [])
+            rendered = [
+                block_id for block_id in selected if block_id in receipt.final_order
+            ]
+            for block_id in rendered:
+                self.record_render(cycle_id, block_id, receipt)
+        self.maybe_start_cycle()
         return rendered
 
 

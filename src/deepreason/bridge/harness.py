@@ -210,6 +210,32 @@ def _bound_manifest_digest(root, supplied: str) -> str:
     return supplied
 
 
+def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
+    """Load the sole compiled coverage authority for a model-bound pack.
+
+    Direct low-level fixtures predating RunManifest v3 may have no manifest.
+    Production v3 runs do, and must use its immutable scratch policy rather
+    than a caller-authored coverage knob.
+    """
+
+    if attention_pack is None:
+        return None
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+    path = root / MANIFEST_NAME
+    if path.is_symlink():
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    if not path.is_file():
+        return None
+    manifest = load_run_manifest(path)
+    if manifest.sha256 != manifest_digest:
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    scratch = manifest.scratch_policy
+    if manifest.schema_version != 3 or scratch is None or not scratch.enabled:
+        raise ValueError("BRIDGE_SCRATCH_MANIFEST_V3_REQUIRED")
+    return scratch.attention_policy()
+
+
 def _terminal_record(
     *,
     result: BridgeWorkflowResultV1,
@@ -322,6 +348,9 @@ def build_grounded_bridge(
     if target not in {"thesis", "summary", "answer"}:
         raise ValueError("target must be thesis, summary, or answer")
     manifest_digest = _bound_manifest_digest(harness.root, run_manifest_digest)
+    attention_policy = _bound_scratch_attention_policy(
+        harness.root, manifest_digest, attention_pack
+    )
     workflow_policy = BridgeWorkflowPolicy.model_validate(policy)
 
     scratch_service = None
@@ -408,6 +437,7 @@ def build_grounded_bridge(
             attention_pack,
             context,
             context_ref=evidence_pack.id,
+            coverage_policy=attention_policy,
         )
         if committed != context:
             raise RuntimeError("committed advisory context differs from prepared context")

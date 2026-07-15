@@ -234,7 +234,6 @@ def test_coverage_eventually_renders_irrelevant_buried_block_through_planner(tmp
     )
     cluster = service.create_cluster("Dormant cluster", _user())
     service.add_cluster_member(cluster.id, buried.id, "historical", _user())
-    service.start_coverage_cycle()
     policy = _policy(
         coverage_slot_every_n_packs=1,
         exploratory_fraction=0,
@@ -253,11 +252,20 @@ def test_coverage_eventually_renders_irrelevant_buried_block_through_planner(tmp
     )
 
     rendered: list[str] = []
-    for _ in range(4):
+    for index in range(5):
         pack = planner.plan(request)
+        if index == 0:
+            assert pack.selection_receipt.coverage_cycle_id is None
+            assert service.active_coverage_cycle() is None
         rendered.extend(pack.selection_receipt.final_order)
         planner.commit_render(pack)
-        if service.active_coverage_cycle() is None:
+        if index == 0:
+            assert service.active_coverage_cycle() is not None
+        if (
+            buried.id in service.state.visibility
+            and RetrievalChannel.COVERAGE
+            in service.state.visibility[buried.id].retrieval_channels_used
+        ):
             break
     assert buried.id in rendered
     visibility = service.state.visibility[buried.id]
