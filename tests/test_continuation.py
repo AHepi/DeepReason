@@ -1,4 +1,7 @@
 import json
+from types import SimpleNamespace
+
+import pytest
 
 from deepreason.config import Config
 from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
@@ -73,3 +76,20 @@ def test_continue_rejects_tampered_stop_digest(tmp_path):
         assert str(error) == "CONTINUE_STOP_DIGEST_MISMATCH"
     else:  # pragma: no cover - assertion clarity
         raise AssertionError("tampered stop record was accepted")
+
+
+def test_v3_continuation_requires_checkpoint(tmp_path, monkeypatch):
+    write_stop_record(
+        tmp_path,
+        reason="converged",
+        policy=StopPolicy(),
+        metrics=StopMetrics(cycle=8),
+        event_seq=10,
+    )
+    manifest = SimpleNamespace(schema_version=3, sha256="a" * 64)
+    monkeypatch.setattr(
+        "deepreason.runtime.continuation.load_run_manifest", lambda _path: manifest
+    )
+
+    with pytest.raises(ValueError, match="CONTINUE_CHECKPOINT_REQUIRED"):
+        prepare_continuation(tmp_path, cycles=1, tokens=10)

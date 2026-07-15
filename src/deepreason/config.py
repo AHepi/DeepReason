@@ -12,13 +12,14 @@ Knobs whose spec start value is "tune" default to ``None`` and must be set
 before the phases that consume them.
 """
 
+import math
 import re
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.authority import TextAuthorityMode
 
@@ -121,6 +122,109 @@ class ImportPolicy(BaseModel):
         return value
 
 
+class ScratchpadConfig(BaseModel):
+    """Typed source policy for the advisory scratch workspace.
+
+    These are setup inputs.  RunManifest compilation resolves profile-specific
+    ceilings and the complete channel policy before any scratch model call.
+    None of these values has formal-ontology or adjudicative authority.
+    """
+
+    model_config = ConfigDict(
+        extra="forbid", validate_assignment=True, hide_input_in_errors=True
+    )
+
+    enabled: bool = False
+    max_blocks_per_pack: int = Field(default=24, gt=0, le=1_000)
+    # Zero guides is an explicit, legal request for a block-only context.
+    max_guides_per_pack: int = Field(default=4, ge=0, le=100)
+    semantic_retrieval: bool = True
+    keyword_retrieval: bool = True
+    coverage_enabled: bool = True
+    coverage_slot_every_n_packs: int = Field(default=4, gt=0, le=100_000)
+    exploratory_fraction: float = Field(default=0.10, ge=0.0, le=1.0)
+    underexposed_fraction: float = Field(default=0.15, ge=0.0, le=1.0)
+    dormant_after_events: int = Field(default=200, ge=0)
+    similarity_top_k: int = Field(default=12, gt=0, le=10_000)
+    similarity_threshold: float | None = None
+    guide_max_open_threads: int = Field(default=8, ge=0, le=256)
+    guide_max_entry_points: int = Field(default=8, ge=0, le=256)
+
+    # These names match ScratchAuthoringService's deliberately narrow role
+    # surface.  They are content-authoring bindings, never route selectors
+    # supplied by scratch text.
+    block_role: Literal["conjecturer", "synthesizer"] = "conjecturer"
+    link_role: Literal["synthesizer"] = "synthesizer"
+    guide_role: Literal["summarizer"] = "summarizer"
+
+    @field_validator("similarity_threshold")
+    @classmethod
+    def _finite_similarity_threshold(cls, value: float | None) -> float | None:
+        if value is not None and not math.isfinite(value):
+            raise ValueError("similarity_threshold must be finite")
+        return value
+
+    @model_validator(mode="after")
+    def _reserved_attention_fractions_fit(self):
+        if self.exploratory_fraction + self.underexposed_fraction > 1.0:
+            raise ValueError("reserved scratch attention fractions must not exceed one")
+        return self
+
+
+class BridgeConfig(BaseModel):
+    """Typed source policy for legacy or grounded final-output construction."""
+
+    model_config = ConfigDict(
+        extra="forbid", validate_assignment=True, hide_input_in_errors=True
+    )
+
+    mode: Literal["legacy_thesis", "grounded_two_stage"] = "legacy_thesis"
+    allow_partial: bool = True
+    allow_abstention: bool = True
+    require_claim_ledger: bool = True
+    require_claim_uses: bool = True
+    grounding_review: bool = True
+    # The shared schema-repair kernel exposes at most two correction turns.
+    max_schema_repair_attempts: int = Field(default=2, ge=0, le=2)
+    # GroundingRepairService has a separate global semantic-call ceiling of 8.
+    max_grounding_repair_attempts: int = Field(default=4, ge=0, le=8)
+    # This tranche defines one reviewer stream.  A larger ensemble would need
+    # a separately specified deterministic aggregation rule.
+    reviewer_seats: int = Field(default=1, ge=1, le=1)
+    # Grounding review itself is bounded to at most 128 spans.
+    output_section_limit: int = Field(default=32, gt=0, le=128)
+    # Stage-B formatting identity.  This is deliberately not a model profile
+    # or a route selector; it feeds CompositionRequestV1.formatting_profile.
+    target_profile: str = Field(
+        default="plain",
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z][A-Za-z0-9_.:-]{0,127}$",
+    )
+
+    ledger_role: Literal["summarizer"] = "summarizer"
+    composer_role: Literal["thesis", "summarizer"] = "thesis"
+    reviewer_role: Literal["judge", "grounding_reviewer"] = "judge"
+
+    @model_validator(mode="after")
+    def _grounded_mode_preserves_valid_unresolved_results(self):
+        if self.mode != "grounded_two_stage":
+            return self
+        required = {
+            "allow_partial": self.allow_partial,
+            "allow_abstention": self.allow_abstention,
+            "require_claim_ledger": self.require_claim_ledger,
+            "require_claim_uses": self.require_claim_uses,
+        }
+        disabled = [name for name, enabled in required.items() if not enabled]
+        if disabled:
+            raise ValueError(
+                "grounded_two_stage requires unresolved-success-safe settings: "
+                + ", ".join(disabled)
+            )
+        return self
+
+
 class Config(BaseModel):
     model_config = ConfigDict(
         extra="forbid", validate_assignment=True, hide_input_in_errors=True
@@ -131,6 +235,8 @@ class Config(BaseModel):
     # contracts, batching and repair presentation. Neither is ontology data.
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
+    scratchpad: ScratchpadConfig = Field(default_factory=ScratchpadConfig)
+    bridge: BridgeConfig = Field(default_factory=BridgeConfig)
 
     # Unification (§7)
     FLOOR: int = 1
@@ -378,7 +484,7 @@ class Config(BaseModel):
     # hashing with an embedder-fallback measure. "error" (evidence mode):
     # the run fails BEFORE the first model call rather than silently
     # swapping the geometry instrument.
-    EMBEDDER_FAILURE_POLICY: str = "fallback"
+    EMBEDDER_FAILURE_POLICY: Literal["fallback", "error"] = "fallback"
     # Chunked website builds (manifest.py, easy.py): components are bounded
     # fragments composed by the deterministic assembler. CHUNK_MAX_CHARS is
     # the default per-fragment size commitment (a manifest entry may set a

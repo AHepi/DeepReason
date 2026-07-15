@@ -50,7 +50,7 @@ def build_parser() -> argparse.ArgumentParser:
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
     compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
-    compile_cmd.add_argument("--schema-version", choices=(1, 2), type=int, default=1)
+    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3), type=int, default=1)
     compile_cmd.add_argument(
         "--workload-profile", choices=("text", "code", "formal", "website"), default=None
     )
@@ -169,7 +169,7 @@ def build_parser() -> argparse.ArgumentParser:
         proof_cmd.add_argument(
             "--run-manifest",
             default=None,
-            help="formal v2 manifest (default: the manifest already bound to root)",
+            help="formal v2/v3 manifest (default: the manifest already bound to root)",
         )
         proof_cmd.add_argument(
             "--theorem", action="append", required=True,
@@ -182,7 +182,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     code_cmd.add_argument("--workload", required=True, help="code workload YAML/JSON")
     code_cmd.add_argument("--patch", required=True, help="compiled localized patch YAML/JSON")
-    code_cmd.add_argument("--run-manifest", required=True, help="precompiled v2 code manifest")
+    code_cmd.add_argument(
+        "--run-manifest", required=True, help="precompiled v2/v3 code manifest"
+    )
     simulate_cmd = sub.add_parser(
         "simulate", help="run a pinned deterministic simulation and checker"
     )
@@ -191,7 +193,9 @@ def build_parser() -> argparse.ArgumentParser:
     simulate_cmd.add_argument("--inputs", required=True, help="pinned finite JSON inputs")
     simulate_cmd.add_argument("--checker", required=True, help="pinned checker source")
     simulate_cmd.add_argument("--simulation-index", type=int, default=0)
-    simulate_cmd.add_argument("--run-manifest", required=True, help="precompiled v2 code manifest")
+    simulate_cmd.add_argument(
+        "--run-manifest", required=True, help="precompiled v2/v3 code manifest"
+    )
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
     sub.add_parser("expand", help="expand the focused node")
@@ -774,6 +778,131 @@ def _read_problem_file(path: Path) -> dict:
     return data
 
 
+def _doctor_role_seats(configured, role: str) -> dict:
+    """Report one source role without resolving, probing, or exposing secrets."""
+
+    value = configured.roles.get(role)
+    seats = value if isinstance(value, list) else ([] if value is None else [value])
+    concrete = 0
+    for seat in seats:
+        if hasattr(seat, "model_dump"):
+            seat = seat.model_dump(mode="json")
+        if not isinstance(seat, dict):
+            continue
+        endpoint = str(seat.get("endpoint") or "").strip()
+        model = str(seat.get("model") or "").strip()
+        if endpoint and model and model not in {"auto", "auto-alt"}:
+            concrete += 1
+    return {
+        "role": role,
+        "configured_seats": len(seats),
+        "concrete_seats": concrete,
+        "ready": concrete > 0,
+    }
+
+
+def _doctor_policy_readiness(configured) -> dict:
+    """Describe v3 scratch/bridge readiness without runtime route selection.
+
+    This is setup-time diagnostics only. It neither compiles a manifest nor
+    imports/initializes a neural model, so optional-package state cannot enter
+    canonical run identity.
+    """
+
+    import importlib.util
+
+    scratch = getattr(configured, "scratchpad", None)
+    bridge = getattr(configured, "bridge", None)
+
+    scratch_roles = {
+        "block": str(getattr(scratch, "block_role", "conjecturer")),
+        "link": str(getattr(scratch, "link_role", "synthesizer")),
+        "guide": str(getattr(scratch, "guide_role", "summarizer")),
+    }
+    bridge_roles = {
+        "ledger": str(getattr(bridge, "ledger_role", "summarizer")),
+        "composer": str(getattr(bridge, "composer_role", "thesis")),
+        "reviewer": str(getattr(bridge, "reviewer_role", "judge")),
+    }
+    grounding_review = bool(getattr(bridge, "grounding_review", True))
+    bridge_mode = getattr(bridge, "mode", "legacy_thesis")
+    bridge_mode = str(getattr(bridge_mode, "value", bridge_mode))
+    scratch_enabled = bool(getattr(scratch, "enabled", False))
+    bridge_enabled = bridge_mode == "grounded_two_stage"
+
+    authoring_roles = list(dict.fromkeys(scratch_roles.values()))
+    required_bridge_functions = ["ledger", "composer"]
+    if grounding_review:
+        required_bridge_functions.append("reviewer")
+    required_bridge = (
+        list(dict.fromkeys(bridge_roles[name] for name in required_bridge_functions))
+        if bridge_enabled
+        else []
+    )
+    all_roles = list(dict.fromkeys([*scratch_roles.values(), *bridge_roles.values()]))
+    role_status = {role: _doctor_role_seats(configured, role) for role in all_roles}
+    missing_authoring = [
+        role for role in authoring_roles if not role_status[role]["ready"]
+    ]
+    missing_bridge = [role for role in required_bridge if not role_status[role]["ready"]]
+
+    try:
+        dependency_available = importlib.util.find_spec("fastembed") is not None
+    except (ImportError, ModuleNotFoundError, ValueError):
+        dependency_available = False
+    embedder_model = getattr(configured, "EMBEDDER_MODEL", None)
+    failure_policy = str(getattr(configured, "EMBEDDER_FAILURE_POLICY", "fallback"))
+    configured_backend = (
+        "configured_neural" if embedder_model else "deterministic_hashing"
+    )
+    fallback_active = bool(
+        embedder_model and not dependency_available and failure_policy == "fallback"
+    )
+    embedder_ready = bool(
+        not embedder_model or dependency_available or failure_policy == "fallback"
+    )
+    semantic_retrieval = bool(getattr(scratch, "semantic_retrieval", False))
+    # Manual/deterministic scratch operation needs no LLM route. Authoring
+    # readiness is reported separately so missing content-authoring roles do
+    # not incorrectly disable the canonical scratch service.
+    scratch_ready = not scratch_enabled or not semantic_retrieval or embedder_ready
+    bridge_ready = not bridge_enabled or not missing_bridge
+
+    return {
+        "required_roles": {
+            "scratch": scratch_roles,
+            "bridge": {
+                **bridge_roles,
+                "reviewer_required": grounding_review,
+            },
+        },
+        "role_readiness": role_status,
+        "scratch_readiness": {
+            "enabled": scratch_enabled,
+            "ready": scratch_ready,
+            "authoring_ready": not missing_authoring,
+            "missing_authoring_roles": missing_authoring,
+            "semantic_retrieval": semantic_retrieval,
+        },
+        "bridge_readiness": {
+            "mode": bridge_mode,
+            "enabled": bridge_enabled,
+            "ready": bridge_ready,
+            "missing_roles": missing_bridge,
+            "grounding_review": grounding_review,
+        },
+        "embedder": {
+            "configured_backend": configured_backend,
+            "model": embedder_model,
+            "failure_policy": failure_policy,
+            "fallback_backend": "deterministic_hashing",
+            "dependency_available": dependency_available,
+            "fallback_active": fallback_active,
+            "ready": embedder_ready,
+        },
+    }
+
+
 def _cmd_doctor(args) -> int:
     """Validate identity, inventory, then measure transport capabilities."""
     import os
@@ -847,6 +976,16 @@ def _cmd_doctor(args) -> int:
         "credential_env": key_env,
         "credential_present": bool(key),
         "contacted": False,
+        "recommended_model_profile": None,
+        "compact_profile_recommended": None,
+        "output_mechanism_support": {
+            "measured": False,
+            "selected": selected.get("output_mechanism"),
+            "native_json_schema": None,
+            "grammar": None,
+            "json_text": True,
+        },
+        **_doctor_policy_readiness(configured),
     }
     if not args.dry_run:
         try:
@@ -885,8 +1024,18 @@ def _cmd_doctor(args) -> int:
             probe_endpoint, revision=revision, cache=cache
         )
         result["capabilities"] = asdict(capabilities)
-        result["recommended_model_profile"] = select_profile(capabilities).name.value
-        result["selected_output_mechanism"] = select_output_mechanism(capabilities).value
+        recommended_profile = select_profile(capabilities).name.value
+        selected_mechanism = select_output_mechanism(capabilities).value
+        result["recommended_model_profile"] = recommended_profile
+        result["compact_profile_recommended"] = recommended_profile == "compact"
+        result["selected_output_mechanism"] = selected_mechanism
+        result["output_mechanism_support"] = {
+            "measured": True,
+            "selected": selected_mechanism,
+            "native_json_schema": capabilities.native_json_schema,
+            "grammar": capabilities.grammar,
+            "json_text": True,
+        }
         result["capability_cache"] = str(cache.path)
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -896,6 +1045,23 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
     from deepreason.ops import seed_problem_payload
 
     return seed_problem_payload(harness, _read_problem_file(path)).id
+
+
+def _text_manifest_schema_version(configured) -> int:
+    """Select v3 only when source policy activates v3-only behavior.
+
+    Ordinary text runs retain their established v2 default. Scratch execution
+    and the grounded two-stage bridge cannot be represented by v2, so a user
+    who enables either typed source policy must not also know to select an
+    internal manifest version manually.
+    """
+
+    scratch = getattr(configured, "scratchpad", None)
+    bridge = getattr(configured, "bridge", None)
+    scratch_enabled = bool(getattr(scratch, "enabled", False))
+    bridge_mode = getattr(bridge, "mode", "legacy_thesis")
+    bridge_mode = getattr(bridge_mode, "value", bridge_mode)
+    return 3 if scratch_enabled or bridge_mode == "grounded_two_stage" else 2
 
 
 def _cmd_reason(args) -> int:
@@ -962,12 +1128,12 @@ def _cmd_reason(args) -> int:
                     if any(item.eval.startswith("rubric:") for item in spec.criteria)
                     else "forbid"
                 ),
-                schema_version=2,
+                schema_version=_text_manifest_schema_version(configured),
                 workload_profile="text",
                 capability_cache=CapabilityCache(root / "capabilities.json"),
             )
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version == 2 and manifest.workload_profile != "text":
+        if manifest.schema_version in {2, 3} and manifest.workload_profile != "text":
             raise RunManifestError(
                 "WORKLOAD_PROFILE_MISMATCH",
                 f"reason requires text, got {manifest.workload_profile}",
@@ -1302,8 +1468,10 @@ def _cmd_check_proof(args) -> int:
             manifest = load_run_manifest(args.run_manifest)
         else:
             raise ValueError("PROOF_MANIFEST_REQUIRED: pass --run-manifest or use a bound root")
-        if manifest.schema_version != 2 or manifest.workload_profile != "formal":
-            raise ValueError("PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2 formal manifest")
+        if manifest.schema_version not in {2, 3} or manifest.workload_profile != "formal":
+            raise ValueError(
+                "PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2/v3 formal manifest"
+            )
         candidates = [
             item
             for item in manifest.toolchains
@@ -1371,9 +1539,10 @@ def _bind_cli_manifest(root: Path, requested_path: str, *, workload: str):
             )
     else:
         manifest = requested
-    if manifest.schema_version != 2 or manifest.workload_profile != workload:
+    if manifest.schema_version not in {2, 3} or manifest.workload_profile != workload:
         raise ValueError(
-            f"{workload.upper()}_MANIFEST_WORKLOAD_MISMATCH: expected v2 {workload} manifest"
+            f"{workload.upper()}_MANIFEST_WORKLOAD_MISMATCH: "
+            f"expected v2/v3 {workload} manifest"
         )
     bind_run_manifest(manifest, root)
     return manifest

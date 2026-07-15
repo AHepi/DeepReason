@@ -20,14 +20,21 @@ from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlsplit
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 
 from deepreason.llm.endpoints import DEFAULT_TIMEOUT_S, resolve_model
 from deepreason.llm.providers import infer_provider
 
 
 SCHEMA_VERSION = 1
-LATEST_SCHEMA_VERSION = 2
+LATEST_SCHEMA_VERSION = 3
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
 _UNRESOLVED_MODELS = {"auto", "auto-alt"}
@@ -35,7 +42,7 @@ _UNRESOLVED_MODELS = {"auto", "auto-alt"}
 # Configured endpoint roles. Auxiliary prompt templates such as
 # ``batch_critic`` and ``experimenter`` reuse one of these seats and are not
 # independently routable roles.
-CANONICAL_ROLES = (
+LEGACY_CANONICAL_ROLES = (
     "conjecturer",
     "argumentative_critic",
     "defender",
@@ -46,6 +53,27 @@ CANONICAL_ROLES = (
     "vision_critic",
     "property_designer",
     "thesis",
+)
+
+# V1/v2 serialized an entry for every role in this exact tuple, including
+# inactive roles.  Extending that tuple in-place would therefore change old
+# canonical bytes and hashes merely by installing a newer DeepReason wheel.
+# The grounded-review seat is available only to manifests that opt into v3.
+V3_CANONICAL_ROLES = (*LEGACY_CANONICAL_ROLES, "grounding_reviewer")
+CANONICAL_ROLES = LEGACY_CANONICAL_ROLES
+
+_ATTENTION_CHANNELS = (
+    "focus",
+    "link",
+    "cluster",
+    "keyword",
+    "semantic",
+    "recent",
+    "loose",
+    "dormant",
+    "underexposed",
+    "exploratory",
+    "coverage",
 )
 
 
@@ -207,12 +235,184 @@ class ToolchainEntry(BaseModel):
         return _FrozenDict(dict(value))
 
 
-class RunManifest(BaseModel):
-    """Canonical, immutable routing and presentation plan for one run."""
+class ScratchPolicy(BaseModel):
+    """Resolved, immutable advisory-attention policy for manifest v3."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
-    schema_version: Literal[1, 2] = SCHEMA_VERSION
+    enabled: bool
+    max_blocks_per_pack: int = Field(gt=0, le=1_000)
+    max_guides_per_pack: int = Field(ge=0, le=100)
+    semantic_retrieval: bool
+    keyword_retrieval: bool
+    coverage_enabled: bool
+    coverage_slot_every_n_packs: int = Field(gt=0, le=100_000)
+    exploratory_fraction: float = Field(ge=0.0, le=1.0)
+    underexposed_fraction: float = Field(ge=0.0, le=1.0)
+    dormant_after_events: int = Field(ge=0)
+    similarity_top_k: int = Field(gt=0, le=10_000)
+    similarity_threshold: float | None = None
+    guide_max_open_threads: int = Field(ge=0, le=256)
+    guide_max_entry_points: int = Field(ge=0, le=256)
+    block_role: Literal["conjecturer", "synthesizer"]
+    link_role: Literal["synthesizer"]
+    guide_role: Literal["summarizer"]
+    channel_priority: tuple[str, ...]
+    per_channel_limits: dict[str, int]
+    embedder_backend: Literal["disabled", "deterministic_hashing", "neural"]
+    embedder_model: str | None = None
+    embedder_failure_policy: Literal["fallback", "error"]
+    fallback_embedder: Literal["deterministic_hashing"] = "deterministic_hashing"
+
+    @field_validator("similarity_threshold")
+    @classmethod
+    def _finite_similarity_threshold(cls, value: float | None) -> float | None:
+        if value is not None and not (-float("inf") < value < float("inf")):
+            raise ValueError("similarity_threshold must be finite")
+        return value
+
+    @field_validator("embedder_model")
+    @classmethod
+    def _concrete_embedder_model(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip()
+        if (
+            not normalized
+            or normalized != value
+            or normalized.casefold() in {"auto", "auto-alt", "unresolved"}
+        ):
+            raise ValueError("embedder model must be one exact concrete identifier")
+        return value
+
+    @field_validator("channel_priority", mode="after")
+    @classmethod
+    def _complete_channel_priority(cls, value: tuple[str, ...]):
+        if tuple(value) != _ATTENTION_CHANNELS:
+            raise ValueError("channel_priority must contain every channel in frozen order")
+        return tuple(value)
+
+    @field_validator("per_channel_limits", mode="after")
+    @classmethod
+    def _complete_channel_limits(cls, value: dict[str, int]):
+        if set(value) != set(_ATTENTION_CHANNELS):
+            raise ValueError("per_channel_limits must name every attention channel")
+        if any(
+            isinstance(limit, bool) or not isinstance(limit, int) or not 0 < limit <= 10_000
+            for limit in value.values()
+        ):
+            raise ValueError("per-channel limits must be integers from 1 through 10000")
+        return _FrozenDict(dict(value))
+
+    @model_validator(mode="after")
+    def _resolved_policy_is_consistent(self):
+        if self.exploratory_fraction + self.underexposed_fraction > 1.0:
+            raise ValueError("reserved attention fractions must not exceed one")
+        if self.embedder_backend == "neural" and self.embedder_model is None:
+            raise ValueError("neural embedder backend requires one exact model")
+        if self.embedder_backend != "neural" and self.embedder_model is not None:
+            raise ValueError("only the neural embedder backend may name a model")
+        if not self.enabled or not self.semantic_retrieval:
+            if self.embedder_backend != "disabled":
+                raise ValueError("disabled semantic retrieval requires disabled embedder backend")
+        elif self.embedder_backend == "disabled":
+            raise ValueError("enabled semantic retrieval requires a deterministic backend")
+        return self
+
+    def attention_policy(self):
+        """Return the canonical C4 policy without leaking manifest-only fields."""
+
+        from deepreason.scratch.attention import AttentionPolicyV1
+
+        return AttentionPolicyV1(
+            max_blocks_per_pack=self.max_blocks_per_pack,
+            max_guides_per_pack=self.max_guides_per_pack,
+            semantic_retrieval=self.semantic_retrieval,
+            keyword_retrieval=self.keyword_retrieval,
+            coverage_enabled=self.coverage_enabled,
+            coverage_slot_every_n_packs=self.coverage_slot_every_n_packs,
+            exploratory_fraction=self.exploratory_fraction,
+            underexposed_fraction=self.underexposed_fraction,
+            dormant_after_events=self.dormant_after_events,
+            similarity_top_k=self.similarity_top_k,
+            similarity_threshold=self.similarity_threshold,
+            guide_max_open_threads=self.guide_max_open_threads,
+            guide_max_entry_points=self.guide_max_entry_points,
+            channel_priority=self.channel_priority,
+            per_channel_limits=self.per_channel_limits,
+        )
+
+
+class BridgePolicy(BaseModel):
+    """Resolved two-stage output and repair policy for manifest v3."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    mode: Literal["legacy_thesis", "grounded_two_stage"]
+    allow_partial: bool
+    allow_abstention: bool
+    require_claim_ledger: bool
+    require_claim_uses: bool
+    grounding_review: bool
+    max_schema_repair_attempts: int = Field(ge=0, le=2)
+    max_grounding_repair_attempts: int = Field(ge=0, le=8)
+    max_ledger_amendments: Literal[1] = 1
+    reviewer_seats: Literal[1] = 1
+    reviewer_seat: Literal[0] = 0
+    output_section_limit: int = Field(gt=0, le=128)
+    target_profile: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z][A-Za-z0-9_.:-]{0,127}$",
+    )
+    ledger_role: Literal["summarizer"]
+    composer_role: Literal["thesis", "summarizer"]
+    reviewer_role: Literal["judge", "grounding_reviewer"]
+    grounding_repair_role: Literal["judge", "grounding_reviewer"]
+
+    @model_validator(mode="after")
+    def _grounded_contract_is_complete(self):
+        if self.mode == "grounded_two_stage" and not all(
+            (
+                self.allow_partial,
+                self.allow_abstention,
+                self.require_claim_ledger,
+                self.require_claim_uses,
+            )
+        ):
+            raise ValueError(
+                "grounded_two_stage requires partial and abstention outcomes, "
+                "a claim ledger, and typed claim uses"
+            )
+        if self.grounding_repair_role != self.reviewer_role:
+            raise ValueError(
+                "grounding_repair_role must equal the frozen reviewer_role"
+            )
+        return self
+
+    def workflow_policy(self):
+        """Compile the manifest policy into C8's exact orchestration contract."""
+
+        from deepreason.bridge.workflow import BridgeWorkflowPolicy
+
+        return BridgeWorkflowPolicy(
+            grounding_review=self.grounding_review,
+            max_ledger_amendments=self.max_ledger_amendments,
+            max_grounding_repair_attempts=self.max_grounding_repair_attempts,
+            ledger_role=self.ledger_role,
+            composer_role=self.composer_role,
+            reviewer_role=self.reviewer_role,
+        )
+
+
+class RunManifest(BaseModel):
+    """Canonical, immutable routing and presentation plan for one run."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, hide_input_in_errors=True
+    )
+
+    schema_version: Literal[1, 2, 3] = SCHEMA_VERSION
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
     workload_profile: Literal["text", "code", "formal", "website"] | None = None
@@ -226,11 +426,14 @@ class RunManifest(BaseModel):
     budget_policy: dict[str, Any] = Field(default_factory=dict)
     stop_policy: dict[str, Any] = Field(default_factory=dict)
     memory_policy: dict[str, Any] = Field(default_factory=dict)
+    scratch_policy: ScratchPolicy | None = None
+    bridge_policy: BridgePolicy | None = None
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
-    # Canonical full engine configuration without a role table.  Runtime
-    # reconstruction injects routes solely from ``roles``, so a decoy provider
-    # in the source file is observationally irrelevant after compilation.
+    # Canonical engine configuration without a role table. Runtime
+    # reconstruction injects routes solely from ``roles`` and injects v3
+    # scratch/bridge settings solely from their typed policies. Thus neither a
+    # decoy provider nor a duplicate policy can become a second authority.
     engine_config_json: str = Field(min_length=2, repr=False)
 
     @field_validator("roles", mode="after")
@@ -254,6 +457,17 @@ class RunManifest(BaseModel):
             raise ValueError("compiled_at must include a timezone")
         return value
 
+    @model_serializer(mode="wrap")
+    def _versioned_serialization(self, handler):
+        payload = handler(self)
+        if self.schema_version < 3:
+            # Preserve the public model_dump shape of historical manifests as
+            # well as their canonical bytes: newly installed v3 defaults are
+            # not retroactively fields in a v1/v2 document.
+            payload.pop("scratch_policy", None)
+            payload.pop("bridge_policy", None)
+        return payload
+
     @model_validator(mode="after")
     def _production_routes_are_concrete(self):
         if self.schema_version == 1:
@@ -262,7 +476,42 @@ class RunManifest(BaseModel):
             if self.budget_policy or self.stop_policy or self.memory_policy:
                 raise ValueError("v1 manifest cannot carry v2 process policies")
         elif self.workload_profile is None:
-            raise ValueError("v2 manifest requires workload_profile")
+            raise ValueError("v2/v3 manifest requires workload_profile")
+        if self.schema_version < 3:
+            if self.scratch_policy is not None or self.bridge_policy is not None:
+                raise ValueError("v1/v2 manifests cannot carry v3 scratch or bridge policy")
+        else:
+            if self.scratch_policy is None or self.bridge_policy is None:
+                raise ValueError("v3 manifest requires scratch_policy and bridge_policy")
+            bridge = self.bridge_policy
+            if bridge.mode == "grounded_two_stage":
+                required = {
+                    "ledger": bridge.ledger_role,
+                    "composer": bridge.composer_role,
+                }
+                if bridge.grounding_review:
+                    required["reviewer"] = bridge.reviewer_role
+                for task, role in required.items():
+                    routes = self.roles.get(role, ())
+                    if not routes:
+                        raise ValueError(
+                            f"BRIDGE_{task.upper()}_ROUTE_REQUIRED: "
+                            f"grounded bridge requires frozen role {role!r}"
+                        )
+                if bridge.grounding_review:
+                    reviewer_routes = self.roles.get(bridge.reviewer_role, ())
+                    if len(reviewer_routes) < bridge.reviewer_seats:
+                        raise ValueError(
+                            "BRIDGE_REVIEWER_SEATS_MISMATCH: frozen reviewer route "
+                            "count is smaller than reviewer_seats"
+                        )
+            unknown_roles = set(self.roles) - set(V3_CANONICAL_ROLES)
+            if unknown_roles:
+                raise ValueError(
+                    "v3 manifest contains non-canonical roles: "
+                    + ", ".join(sorted(unknown_roles))
+                )
+            _validate_v3_engine_policy_consistency(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -295,6 +544,11 @@ class RunManifest(BaseModel):
                 "memory_policy",
             ):
                 payload.pop(field, None)
+        if self.schema_version < 3:
+            # V3 fields are absent, rather than serialized as null defaults,
+            # under both historical byte contracts.
+            payload.pop("scratch_policy", None)
+            payload.pop("bridge_policy", None)
         return _canonical_json(payload)
 
     @property
@@ -316,9 +570,31 @@ def _source_config_data(config) -> dict[str, Any]:
     return json.loads(json.dumps(config))
 
 
-def source_config_hash(config) -> str:
-    """Hash the complete effective source configuration, including roles."""
-    return hashlib.sha256(_canonical_json(_source_config_data(config))).hexdigest()
+def _versioned_source_config_data(
+    config, schema_version: Literal[1, 2, 3]
+) -> dict[str, Any]:
+    """Normalize newly added defaults out of historical source contracts.
+
+    ``Config.model_dump`` necessarily gains the typed scratch and bridge
+    defaults in this tranche.  Those keys did not exist when v1/v2 source
+    hashes and ``engine_config_json`` were defined, so retaining them would
+    make the same old profile acquire a different identity after an upgrade.
+    """
+
+    data = _source_config_data(config)
+    if schema_version < 3:
+        data.pop("scratchpad", None)
+        data.pop("bridge", None)
+    return data
+
+
+def source_config_hash(
+    config, *, schema_version: Literal[1, 2, 3] = SCHEMA_VERSION
+) -> str:
+    """Hash the effective source configuration under one schema contract."""
+
+    data = _versioned_source_config_data(config, schema_version)
+    return hashlib.sha256(_canonical_json(data)).hexdigest()
 
 
 def infer_model_family(model_id: str, provider: str) -> str:
@@ -424,12 +700,12 @@ def _configured_seats(config_data: dict[str, Any]):
 
 
 def _select_single_model_seed(
-    config_data: dict[str, Any], model_id: str
+    config_data: dict[str, Any], model_id: str, *, allowed_roles=CANONICAL_ROLES
 ) -> dict[str, Any]:
     seats = list(_configured_seats(config_data))
     exact = [
         entry for entry in seats
-        if entry[0] in CANONICAL_ROLES and entry[2].get("model") == model_id
+        if entry[0] in allowed_roles and entry[2].get("model") == model_id
     ]
     if exact:
         # Distinct creative caps/temperatures on roles do not name different
@@ -496,6 +772,166 @@ def _select_second_judge_spec(
     return matches[0]
 
 
+def _source_feature_policies(data: dict[str, Any]):
+    """Validate nested source policy even for direct mapping callers."""
+
+    from deepreason.config import BridgeConfig, ScratchpadConfig
+
+    return (
+        ScratchpadConfig.model_validate(data.get("scratchpad") or {}),
+        BridgeConfig.model_validate(data.get("bridge") or {}),
+    )
+
+
+def _compile_scratch_policy(source, *, model_profile: str, data: dict[str, Any]):
+    max_blocks = source.max_blocks_per_pack
+    max_guides = source.max_guides_per_pack
+    similarity_top_k = source.similarity_top_k
+    guide_open_threads = source.guide_max_open_threads
+    guide_entry_points = source.guide_max_entry_points
+    if model_profile == "compact":
+        max_blocks = min(max_blocks, 12)
+        max_guides = min(max_guides, 2)
+        similarity_top_k = min(similarity_top_k, 12)
+        guide_open_threads = min(guide_open_threads, 8)
+        guide_entry_points = min(guide_entry_points, 8)
+
+    semantic_active = source.enabled and source.semantic_retrieval
+    configured_embedder = data.get("EMBEDDER_MODEL")
+    failure_policy = str(data.get("EMBEDDER_FAILURE_POLICY") or "fallback")
+    if failure_policy not in {"fallback", "error"}:
+        raise RunManifestError(
+            "SCRATCH_EMBEDDER_FAILURE_POLICY_INVALID",
+            "EMBEDDER_FAILURE_POLICY must be fallback or error",
+            "/EMBEDDER_FAILURE_POLICY",
+        )
+    if semantic_active and configured_embedder:
+        embedder_backend = "neural"
+        embedder_model = str(configured_embedder)
+        if embedder_model in _UNRESOLVED_MODELS or embedder_model == "unresolved":
+            raise RunManifestError(
+                "SCRATCH_EMBEDDER_MODEL_UNRESOLVED",
+                "semantic retrieval requires an exact embedder model or deterministic hashing",
+                "/EMBEDDER_MODEL",
+            )
+    elif semantic_active:
+        embedder_backend = "deterministic_hashing"
+        embedder_model = None
+    else:
+        embedder_backend = "disabled"
+        embedder_model = None
+
+    per_channel = {channel: max_blocks for channel in _ATTENTION_CHANNELS}
+    per_channel["semantic"] = max(1, min(max_blocks, similarity_top_k))
+    per_channel["coverage"] = 1
+    values = source.model_dump(mode="json")
+    values.update(
+        max_blocks_per_pack=max_blocks,
+        max_guides_per_pack=max_guides,
+        similarity_top_k=similarity_top_k,
+        guide_max_open_threads=guide_open_threads,
+        guide_max_entry_points=guide_entry_points,
+        channel_priority=_ATTENTION_CHANNELS,
+        per_channel_limits=per_channel,
+        embedder_backend=embedder_backend,
+        embedder_model=embedder_model,
+        embedder_failure_policy=failure_policy,
+    )
+    return ScratchPolicy(**values)
+
+
+def _compile_bridge_policy(source, *, model_profile: str):
+    output_section_limit = source.output_section_limit
+    if model_profile == "compact":
+        output_section_limit = min(output_section_limit, 12)
+    values = source.model_dump(mode="json")
+    values["output_section_limit"] = output_section_limit
+    values["grounding_repair_role"] = source.reviewer_role
+    return BridgePolicy(**values)
+
+
+def _effective_source_policy(policy: ScratchPolicy | BridgePolicy) -> dict[str, Any]:
+    """Return only keys understood by the typed source Config models."""
+
+    if isinstance(policy, ScratchPolicy):
+        excluded = {
+            "channel_priority",
+            "per_channel_limits",
+            "embedder_backend",
+            "embedder_model",
+            "embedder_failure_policy",
+            "fallback_embedder",
+        }
+    else:
+        # reviewer_seats is a source field; reviewer_seat is the derived,
+        # fixed seat index for this tranche.
+        excluded = {
+            "max_ledger_amendments",
+            "reviewer_seat",
+            "grounding_repair_role",
+        }
+    return policy.model_dump(mode="json", exclude=excluded)
+
+
+def _validate_v3_engine_policy_consistency(manifest: RunManifest) -> None:
+    """Reject a second or inconsistent v3 policy authority on load.
+
+    ``engine_config_json`` predates typed v3 feature policy. Scratch and bridge
+    keys are deliberately absent there and are injected from the immutable
+    policies during reconstruction. Recompiling those injected source fields
+    also binds shared embedder configuration and compact-profile clamping to
+    the exact top-level policy recorded in the manifest.
+    """
+
+    try:
+        engine_data = json.loads(manifest.engine_config_json)
+    except json.JSONDecodeError as error:
+        raise ValueError("V3_ENGINE_CONFIG_INVALID: engine config is not JSON") from error
+    if not isinstance(engine_data, dict):
+        raise ValueError("V3_ENGINE_CONFIG_INVALID: engine config must be an object")
+    if engine_data.get("roles") != {}:
+        raise ValueError(
+            "V3_ENGINE_ROLES_FORBIDDEN: routes must exist only in the typed role matrix"
+        )
+    duplicates = sorted({"scratchpad", "bridge"}.intersection(engine_data))
+    if duplicates:
+        raise ValueError(
+            "V3_ENGINE_POLICY_DUPLICATE: typed policy cannot also appear in "
+            "engine_config_json: " + ", ".join(duplicates)
+        )
+
+    scratch_policy = manifest.scratch_policy
+    bridge_policy = manifest.bridge_policy
+    if scratch_policy is None or bridge_policy is None:  # guarded by caller
+        raise ValueError("V3_POLICY_REQUIRED: missing scratch or bridge policy")
+    reconstructed = dict(engine_data)
+    reconstructed["scratchpad"] = _effective_source_policy(scratch_policy)
+    reconstructed["bridge"] = _effective_source_policy(bridge_policy)
+
+    from deepreason.config import Config
+
+    try:
+        config = Config.model_validate(reconstructed)
+    except ValueError as error:
+        raise ValueError(
+            "V3_ENGINE_CONFIG_INVALID: engine config cannot reconstruct Config"
+        ) from error
+    normalized = config.model_dump(mode="json")
+    expected_scratch = _compile_scratch_policy(
+        config.scratchpad,
+        model_profile=manifest.model_profile,
+        data=normalized,
+    )
+    expected_bridge = _compile_bridge_policy(
+        config.bridge,
+        model_profile=manifest.model_profile,
+    )
+    if expected_scratch != scratch_policy or expected_bridge != bridge_policy:
+        raise ValueError(
+            "V3_ENGINE_POLICY_MISMATCH: engine configuration and typed policy differ"
+        )
+
+
 def compile_run_manifest(
     config,
     *,
@@ -507,7 +943,7 @@ def compile_run_manifest(
     concurrency: int | None = None,
     compiled_at: str | None = None,
     capability_cache=None,
-    schema_version: Literal[1, 2] = SCHEMA_VERSION,
+    schema_version: Literal[1, 2, 3] = SCHEMA_VERSION,
     workload_profile: Literal["text", "code", "formal", "website"] | None = None,
     pack_profile: str | None = None,
     output_profile: str | None = None,
@@ -527,10 +963,23 @@ def compile_run_manifest(
         else "model_profile" in config
     )
     data = _source_config_data(config)
-    if schema_version == 2 and workload_profile is None:
+    scratch_source, bridge_source = _source_feature_policies(data)
+    if schema_version < 3 and scratch_source.enabled:
+        raise RunManifestError(
+            "SCRATCH_MANIFEST_V3_REQUIRED",
+            "scratchpad.enabled requires RunManifest schema v3",
+            "/scratchpad/enabled",
+        )
+    if schema_version < 3 and bridge_source.mode == "grounded_two_stage":
+        raise RunManifestError(
+            "GROUNDED_BRIDGE_MANIFEST_V3_REQUIRED",
+            "grounded_two_stage requires RunManifest schema v3",
+            "/bridge/mode",
+        )
+    if schema_version >= 2 and workload_profile is None:
         raise RunManifestError(
             "WORKLOAD_PROFILE_REQUIRED",
-            "schema v2 requires a text, code, formal, or website workload profile",
+            "schema v2/v3 requires a text, code, formal, or website workload profile",
             "/workload_profile",
         )
     # This must precede route resolution: a rejected authority policy cannot
@@ -545,11 +994,23 @@ def compile_run_manifest(
         if capability_cache is not None and not explicit_config_profile:
             try:
                 seed = (
-                    _select_single_model_seed(data, single_model)
+                    _select_single_model_seed(
+                        data,
+                        single_model,
+                        allowed_roles=(
+                            V3_CANONICAL_ROLES
+                            if schema_version == 3
+                            else LEGACY_CANONICAL_ROLES
+                        ),
+                    )
                     if single_model
                     else next(
                         spec for role, _index, spec in _configured_seats(data)
-                        if role in CANONICAL_ROLES
+                        if role in (
+                            V3_CANONICAL_ROLES
+                            if schema_version == 3
+                            else LEGACY_CANONICAL_ROLES
+                        )
                     )
                 )
             except (RunManifestError, StopIteration):
@@ -567,19 +1028,38 @@ def compile_run_manifest(
                         from deepreason.llm.profiles import select_profile
 
                         model_profile = select_profile(capabilities).name.value
+    role_names = (
+        V3_CANONICAL_ROLES if schema_version == 3 else LEGACY_CANONICAL_ROLES
+    )
     configured_roles = {
         role for role, _index, _spec in _configured_seats(data)
-        if role in CANONICAL_ROLES
+        if role in role_names
     }
-    role_names = CANONICAL_ROLES
     roles: dict[str, tuple[Route, ...]] = {role: () for role in role_names}
+
+    if schema_version == 3 and bridge_source.mode == "grounded_two_stage":
+        required_roles = {
+            "ledger": bridge_source.ledger_role,
+            "composer": bridge_source.composer_role,
+        }
+        if bridge_source.grounding_review:
+            required_roles["reviewer"] = bridge_source.reviewer_role
+        for task, role in required_roles.items():
+            if role not in configured_roles:
+                raise RunManifestError(
+                    f"BRIDGE_{task.upper()}_ROUTE_REQUIRED",
+                    f"grounded bridge requires an explicit {role!r} route",
+                    f"/roles/{role}",
+                )
 
     if single_model:
         if single_model in _UNRESOLVED_MODELS:
             raise RunManifestError(
                 "SINGLE_MODEL_MUST_BE_CONCRETE", "--single-model cannot be auto or auto-alt"
             )
-        seed = _select_single_model_seed(data, single_model)
+        seed = _select_single_model_seed(
+            data, single_model, allowed_roles=role_names
+        )
         exact = _route_from_spec(
             seed, forced_model=single_model, capability_cache=capability_cache
         )
@@ -597,7 +1077,7 @@ def compile_run_manifest(
     else:
         grouped: dict[str, list[Route]] = {role: [] for role in role_names}
         for role, _index, spec in _configured_seats(data):
-            if role not in CANONICAL_ROLES:
+            if role not in role_names:
                 continue
             grouped.setdefault(role, []).append(
                 _route_from_spec(spec, capability_cache=capability_cache)
@@ -626,8 +1106,24 @@ def compile_run_manifest(
     if concurrency < 1:
         raise RunManifestError("INVALID_CONCURRENCY", "concurrency must be at least 1")
 
-    engine_config = dict(data)
+    scratch_policy = (
+        _compile_scratch_policy(scratch_source, model_profile=model_profile, data=data)
+        if schema_version == 3
+        else None
+    )
+    bridge_policy = (
+        _compile_bridge_policy(bridge_source, model_profile=model_profile)
+        if schema_version == 3
+        else None
+    )
+
+    engine_config = _versioned_source_config_data(data, schema_version)
     engine_config["roles"] = {}
+    if schema_version == 3:
+        # Typed v3 policy is canonical and must not be duplicated inside the
+        # legacy engine-config envelope.
+        engine_config.pop("scratchpad", None)
+        engine_config.pop("bridge", None)
     stamp = compiled_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     default_pack_profiles = {
         "text": "reasoning.text.v1",
@@ -649,13 +1145,19 @@ def compile_run_manifest(
         ),
         output_profile=(
             output_profile
-            or ("compact.v2" if schema_version == 2 and model_profile == "compact" else model_profile)
+            or (
+                "compact.v2"
+                if schema_version >= 2 and model_profile == "compact"
+                else model_profile
+            )
         ),
         toolchains=toolchains,
         budget_policy=budget_policy or {},
         stop_policy=stop_policy or {},
         memory_policy=memory_policy or {},
-        source_config_hash=source_config_hash(data),
+        scratch_policy=scratch_policy,
+        bridge_policy=bridge_policy,
+        source_config_hash=source_config_hash(data, schema_version=schema_version),
         compiled_at=stamp,
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),
     )
@@ -830,6 +1332,16 @@ def config_from_run_manifest(manifest: RunManifest):
         data = json.loads(manifest.engine_config_json)
     except json.JSONDecodeError as error:
         raise RunManifestError("INVALID_ENGINE_CONFIG", str(error)) from error
+    if manifest.schema_version == 3:
+        # V3 feature policy has exactly one authority. The model validator has
+        # already checked its consistency with shared engine settings (for
+        # example the embedder identity); reconstruction injects it here.
+        if manifest.scratch_policy is None or manifest.bridge_policy is None:
+            raise RunManifestError(
+                "V3_POLICY_REQUIRED", "v3 manifest is missing typed policy"
+            )
+        data["scratchpad"] = _effective_source_policy(manifest.scratch_policy)
+        data["bridge"] = _effective_source_policy(manifest.bridge_policy)
     data["roles"] = {
         role: (
             [route.endpoint_spec() for route in routes]
@@ -905,7 +1417,7 @@ def _preflight_text_authority(
 ) -> None:
     """Fail closed before any endpoint exists for text status authority."""
 
-    if schema_version != 2 or workload_profile != "text":
+    if schema_version not in {2, 3} or workload_profile != "text":
         return
     from deepreason.authority import text_status_authority_issues
 
@@ -946,7 +1458,7 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
         manifest.schema_version,
         manifest.workload_profile,
     )
-    if manifest.schema_version == 2 and manifest.workload_profile == "text":
+    if manifest.schema_version in {2, 3} and manifest.workload_profile == "text":
         # The policy that authorizes a status-changing text judgement is part
         # of the frozen manifest, not a knob a caller may replace between
         # manifest compilation and adapter construction. Reconstruct through

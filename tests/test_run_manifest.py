@@ -53,6 +53,40 @@ def _config():
     )
 
 
+@pytest.mark.parametrize(
+    "schema_version,workload_profile,expected_manifest_hash",
+    [
+        (
+            1,
+            None,
+            "0db633fcd924f213c4e00f0a2f1a16077100aef569a1b283dba8bdc0f58d3ac9",
+        ),
+        (
+            2,
+            "formal",
+            "3448c0c2b8127dfcc86678476ebecb309949508f934693e00b6c482f6144a23a",
+        ),
+    ],
+)
+def test_legacy_manifest_hashes_are_stable_after_v3_install(
+    schema_version, workload_profile, expected_manifest_hash
+):
+    manifest = compile_run_manifest(
+        _config(),
+        single_model="gemma4:31b",
+        model_profile="compact",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        schema_version=schema_version,
+        workload_profile=workload_profile,
+    )
+
+    assert manifest.sha256 == expected_manifest_hash
+    assert manifest.source_config_hash == (
+        "9ba01ebe9d81353776348348a8b850a7a76330f0099299b5f6c321b22677b7ae"
+    )
+
+
 def test_single_model_compiles_one_exact_route_for_every_active_role(monkeypatch):
     # Concrete single-model compilation must never perform discovery.
     monkeypatch.setattr(

@@ -70,7 +70,7 @@ def prepare_continuation(
     if claimed_stop_digest not in (None, stop_digest):
         raise ValueError("CONTINUE_STOP_DIGEST_MISMATCH")
     checkpoint = root_path / "checkpoint.json"
-    if manifest.schema_version == 2 and not checkpoint.exists():
+    if manifest.schema_version in {2, 3} and not checkpoint.exists():
         raise ValueError("CONTINUE_CHECKPOINT_REQUIRED")
     if checkpoint.exists():
         try:

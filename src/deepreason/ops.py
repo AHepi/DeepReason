@@ -364,7 +364,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         controller = Controller(harness, adapter)
     if (
         stop_controller is None
-        and getattr(run_manifest, "schema_version", 1) == 2
+        and getattr(run_manifest, "schema_version", 1) in {2, 3}
     ):
         from deepreason.runtime.stop import StopController, StopPolicy
 
@@ -381,7 +381,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     # Set after construction to preserve the long-standing duck-typed
     # Scheduler seam used by integrations and tests.  The real scheduler
     # consumes this before its first Conj call.
-    # V2 manifests carry an explicit workload.  V1/legacy website pipelines
+    # V2/V3 manifests carry an explicit workload. V1/legacy website pipelines
     # do not; leaving None preserves their established website-specific Conj
     # and domain paths instead of silently relabelling them as text.
     scheduler.workload_profile = getattr(run_manifest, "workload_profile", None)

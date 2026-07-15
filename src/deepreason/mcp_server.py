@@ -777,8 +777,10 @@ def _start_run(
             "problem": {"description": str(problem["description"]).strip()},
         }
     require_full_engine(manifest, workload="text reasoning")
-    if manifest.schema_version != 2 or manifest.workload_profile != "text":
-        raise ValueError("RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires v2 text manifest")
+    if manifest.schema_version not in {2, 3} or manifest.workload_profile != "text":
+        raise ValueError(
+            "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v2/v3 text manifest"
+        )
     preflight_payload(manifest, {"problem": request["problem"], "commitments": []})
     missing_credentials = _missing_manifest_credentials(manifest)
     if missing_credentials:
