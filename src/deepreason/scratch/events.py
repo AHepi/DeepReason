@@ -23,6 +23,7 @@ class ScratchAction(str, Enum):
     CLUSTER_GUIDE_WRITTEN = "cluster_guide_written"
     SIMILARITY_RECORDED = "similarity_recorded"
     ATTENTION_PACK_RENDERED = "attention_pack_rendered"
+    ADVISORY_CONTEXT_CREATED = "advisory_context_created"
     COVERAGE_CYCLE_STARTED = "coverage_cycle_started"
     COVERAGE_BLOCK_RENDERED = "coverage_block_rendered"
     COVERAGE_CYCLE_COMPLETED = "coverage_cycle_completed"
@@ -86,6 +87,7 @@ class ScratchEventPayloadV1(ScratchRecord):
             ScratchAction.CLUSTER_GUIDE_WRITTEN: 1,
             ScratchAction.SIMILARITY_RECORDED: 0,
             ScratchAction.ATTENTION_PACK_RENDERED: 0,
+            ScratchAction.ADVISORY_CONTEXT_CREATED: 1,
             ScratchAction.COVERAGE_CYCLE_STARTED: 0,
             ScratchAction.COVERAGE_BLOCK_RENDERED: 2,
             ScratchAction.COVERAGE_CYCLE_COMPLETED: 1,
@@ -100,6 +102,15 @@ class ScratchEventPayloadV1(ScratchRecord):
                 raise ValueError(
                     "attention rendering must output and reference exactly one receipt"
                 )
+        elif self.action == ScratchAction.ADVISORY_CONTEXT_CREATED:
+            if self.actor != ScratchActor.HARNESS:
+                raise ValueError("only the harness can bind an advisory context")
+            if len(self.outputs) != 1:
+                raise ValueError("advisory context creation requires exactly one output")
+            if self.retrieval_receipt_ref != self.inputs[0]:
+                raise ValueError(
+                    "advisory context must name its input attention receipt"
+                )
         elif self.action == ScratchAction.COVERAGE_BLOCK_RENDERED:
             if self.retrieval_receipt_ref is None:
                 raise ValueError(
@@ -107,6 +118,7 @@ class ScratchEventPayloadV1(ScratchRecord):
                 )
         elif self.retrieval_receipt_ref is not None:
             raise ValueError(
-                "retrieval_receipt_ref is only valid for attention or coverage events"
+                "retrieval_receipt_ref is only valid for attention, advisory-context, "
+                "or coverage events"
             )
         return self

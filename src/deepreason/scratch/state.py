@@ -15,6 +15,7 @@ from collections import Counter
 from deepreason.ontology.event import Event
 from deepreason.scratch.events import ScratchAction
 from deepreason.scratch.models import (
+    AdvisoryContextV1,
     AttentionReceiptV1,
     ClusterGuideV1,
     ClusterMembershipV1,
@@ -78,6 +79,7 @@ class ScratchState:
         default_factory=dict
     )
     attention_receipts: dict[str, AttentionReceiptV1] = field(default_factory=dict)
+    advisory_contexts: dict[str, AdvisoryContextV1] = field(default_factory=dict)
     visibility: dict[str, VisibilityRecordV1] = field(default_factory=dict)
     coverage_cycles: dict[str, CoverageProgress] = field(default_factory=dict)
 
@@ -256,10 +258,32 @@ class ScratchState:
                 if any(not progress.completed for progress in self.coverage_cycles.values()):
                     raise ValueError("a coverage cycle is already active")
                 self.coverage_cycles[obj.cycle_id] = CoverageProgress.from_cycle(obj)
-            elif schema in {"scratch-visibility", "scratch-advisory-context"}:
-                # Visibility is normally derived from attention events and an
-                # advisory context is immutable output provenance. Neither
-                # changes the navigation indexes here.
+            elif schema == "scratch-advisory-context":
+                if obj.instance.seq != event.seq:
+                    raise ValueError(
+                        "advisory context instance does not match event sequence"
+                    )
+                if obj.retrieval_receipt not in self.attention_receipts:
+                    raise ValueError(
+                        "advisory context references an unknown attention receipt"
+                    )
+                if any(self.blocks.get(block.id) != block for block in obj.blocks):
+                    raise ValueError("advisory context contains a non-canonical block")
+                if any(self.links.get(link.id) != link for link in obj.links or ()):
+                    raise ValueError("advisory context contains a non-canonical link")
+                known_guides = {
+                    guide.id: guide
+                    for guides in self.guides_by_cluster.values()
+                    for guide in guides
+                }
+                if any(
+                    known_guides.get(guide.id) != guide for guide in obj.guides or ()
+                ):
+                    raise ValueError("advisory context contains a non-canonical guide")
+                self.advisory_contexts[obj.id] = obj
+            elif schema == "scratch-visibility":
+                # Visibility is derived from attention events and does not
+                # change navigation indexes when read as an immutable object.
                 continue
             else:
                 raise ValueError(f"scratch event names non-scratch output schema {schema}")
@@ -281,6 +305,7 @@ class ScratchState:
             ],
             ScratchAction.SIMILARITY_RECORDED: ["scratch-similarity"],
             ScratchAction.ATTENTION_PACK_RENDERED: ["scratch-attention-receipt"],
+            ScratchAction.ADVISORY_CONTEXT_CREATED: ["scratch-advisory-context"],
             ScratchAction.COVERAGE_CYCLE_STARTED: ["scratch-coverage-cycle"],
             ScratchAction.COVERAGE_BLOCK_RENDERED: [],
             ScratchAction.COVERAGE_CYCLE_COMPLETED: [],
@@ -319,6 +344,32 @@ class ScratchState:
                 raise ValueError("scratch membership action does not match event action")
             if [record.cluster_id, record.block_id] != list(payload.inputs):
                 raise ValueError("scratch membership inputs do not match record")
+        if payload.action == ScratchAction.ADVISORY_CONTEXT_CREATED:
+            context = objects.get(
+                event.outputs[0], schema="scratch-advisory-context"
+            )[1]
+            if context.retrieval_receipt != payload.inputs[0]:
+                raise ValueError(
+                    "advisory context input does not match its retrieval receipt"
+                )
+            receipt = self.attention_receipts.get(context.retrieval_receipt)
+            if receipt is None or [block.id for block in context.blocks] != list(
+                receipt.final_order
+            ):
+                raise ValueError(
+                    "advisory context blocks do not match its attention receipt"
+                )
+            selected = set(receipt.final_order)
+            for link in context.links or ():
+                if (
+                    link.body.from_ not in selected
+                    or link.body.to not in selected
+                ):
+                    raise ValueError(
+                        "advisory context links must connect selected blocks"
+                    )
+                if self.link_status.get(link.id) == LinkState.RETIRED:
+                    raise ValueError("advisory context cannot include a retired link")
         self._load_outputs(event, objects)
         action = payload.action
         if action == ScratchAction.LINK_USED:

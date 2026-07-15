@@ -11,6 +11,8 @@ from collections.abc import Iterable
 from datetime import datetime, timezone
 from pathlib import Path
 
+from pydantic import BaseModel
+
 from deepreason.adjudication.edges import (
     DependenceCycleError,
     build_att,
@@ -19,7 +21,8 @@ from deepreason.adjudication.edges import (
 )
 from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
-from deepreason.bridge.events import BridgeEventPayloadV1
+from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
+from deepreason.bridge.state import BridgeState
 from deepreason.log.event_log import EventLog
 from deepreason.ontology import (
     Artifact,
@@ -36,9 +39,10 @@ from deepreason.ontology import (
 )
 from deepreason.ontology.problem import POPPER_BATTERY
 from deepreason.scratch.events import ScratchEventPayloadV1
+from deepreason.scratch.models import ScratchActor
 from deepreason.scratch.state import ScratchState
 from deepreason.storage.blobs import BlobStore
-from deepreason.storage.objects import ObjectStore
+from deepreason.storage.objects import SCHEMAS, ObjectStore
 from deepreason.unification.isolation import conn_map
 
 
@@ -88,6 +92,10 @@ class Harness:
         # formal ontology.  No ScratchState field participates in att, dep,
         # warrant carriage, commitments, or adjudication.
         self.scratch_state = ScratchState()
+        # Grounded final-view records are likewise process-only.  This index
+        # is reconstructed from Bridge events and has no path into formal
+        # graph materialization or adjudication.
+        self.bridge_state = BridgeState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
@@ -359,6 +367,113 @@ class Harness:
             scratch=payload,
         )
 
+    def record_bridge_event(
+        self,
+        action: BridgeAction | str,
+        *,
+        actor: ScratchActor | str = ScratchActor.HARNESS,
+        inputs: Iterable[str] = (),
+        outputs: Iterable[str] | None = None,
+        records: Iterable[tuple[str, BaseModel]] = (),
+        llm: LLMCall | None = None,
+        finding_ref: str | None = None,
+        error_code: str | None = None,
+    ) -> Event:
+        """Persist canonical bridge records and append one typed process event.
+
+        This is the sole public bridge persistence seam.  Every supplied
+        record is revalidated against the shared object-store schema and its
+        computed canonical identity before any write.  Explicit output IDs,
+        when supplied, must exactly match those records in order; callers
+        cannot author a different ID into the append-only log.
+        """
+
+        self._ensure_writable()
+
+        def bounded(values, label: str, maximum: int = 2_048):
+            if isinstance(values, (str, bytes)):
+                raise TypeError(f"{label} must be an iterable of values, not a string")
+            result = []
+            for value in values:
+                if len(result) >= maximum:
+                    raise ValueError(f"{label} exceeds the bounded limit of {maximum}")
+                result.append(value)
+            return result
+
+        normalized_records: list[tuple[str, str, BaseModel]] = []
+        for item in bounded(records, "records"):
+            if not isinstance(item, (tuple, list)) or len(item) != 2:
+                raise TypeError("each bridge record must be a (schema, object) pair")
+            schema, obj = item
+            if not isinstance(schema, str) or not schema.startswith("bridge-"):
+                raise ValueError("record_bridge_event accepts only bridge object schemas")
+            if not isinstance(obj, BaseModel):
+                raise TypeError("bridge records must be validated Pydantic models")
+            canonical = ObjectStore._record(schema, obj)
+            normalized = SCHEMAS[schema].model_validate(canonical["data"])
+            normalized_records.append((schema, canonical["id"], normalized))
+
+        record_ids = [oid for _schema, oid, _obj in normalized_records]
+        input_ids = bounded(inputs, "inputs")
+        output_ids = record_ids if outputs is None else bounded(outputs, "outputs")
+        if normalized_records and output_ids != record_ids:
+            raise ValueError("explicit bridge outputs must exactly match canonical record IDs")
+        if len(output_ids) != len(set(output_ids)):
+            raise ValueError("bridge outputs must not contain duplicate object IDs")
+
+        if normalized_records:
+            resolved_records = normalized_records
+        else:
+            resolved_records = []
+            for oid in output_ids:
+                schema, obj = self.objects.get(oid)
+                resolved_records.append((schema, oid, obj))
+
+        payload_values = {
+            "action": action,
+            "actor": actor,
+            "inputs": input_ids,
+            "outputs": output_ids,
+            "finding_ref": finding_ref,
+            "error_code": error_code,
+        }
+        payload = BridgeEventPayloadV1.model_validate(payload_values)
+        self.bridge_state.validate(payload, resolved_records)
+
+        if llm is not None:
+            if not llm.prompt_ref:
+                raise ValueError("bridge LLM call requires a prompt blob reference")
+            self.blobs.get(llm.prompt_ref)
+            empty_raw_allowed = bool(
+                llm.attempt_trace and llm.attempt_trace[-1].usage_unknown
+            )
+            if llm.raw_ref:
+                self.blobs.get(llm.raw_ref)
+            elif not empty_raw_allowed:
+                raise ValueError("bridge LLM call requires a raw-output blob reference")
+
+        for schema, _oid, obj in normalized_records:
+            self.objects.put(schema, obj)
+        return self._commit(
+            Rule.BRIDGE,
+            inputs=input_ids,
+            outputs=output_ids,
+            llm=llm,
+            bridge=payload,
+        )
+
+    def build_bridge(self, problem_id: str, target: str, policy, **kwargs):
+        """Build one fixed-fence grounded final view through canonical services.
+
+        Adapters and the manifest digest are explicit keyword inputs until the
+        RunManifest-v3 compiler binds them.  The implementation lives outside
+        this already-large materializer so formal replay remains focused.
+        """
+
+        from deepreason.bridge.harness import build_grounded_bridge
+
+        return build_grounded_bridge(self, problem_id, target, policy, **kwargs)
+
     def recent_events(self, window: int) -> list[Event]:
         """The last ``window`` events. Served from the bounded in-memory tail
         (populated by every _apply_event, live and replay) — capture detection
@@ -520,12 +635,10 @@ class Harness:
         if event.scratch is not None:
             self.scratch_state.apply(event, self.objects)
         if event.bridge is not None:
-            for oid in event.outputs:
-                schema, _ = self.objects.get(oid)
-                if not schema.startswith("bridge-"):
-                    raise WellFormednessError(
-                        f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
-                    )
+            try:
+                self.bridge_state.apply(event, self.objects)
+            except ValueError as error:
+                raise WellFormednessError(str(error)) from error
         if event.rule == Rule.REVEAL:
             # Reveal (§10.5): move sealed bytes from the holdout namespace
             # into the blob store — idempotent, so replay reproduces it.

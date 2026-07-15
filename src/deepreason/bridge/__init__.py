@@ -49,11 +49,28 @@ _REPAIR_EXPORTS = {
     "GroundingRepairService",
     "RepairDisposition",
 }
+_STATE_EXPORTS = {"BridgeState", "rebuild_bridge_state"}
+_EVIDENCE_EXPORTS = {
+    "EvidencePackV1",
+    "assemble_evidence_pack",
+    "build_claim_ledger_catalog",
+}
+_WORKFLOW_EXPORTS = {
+    "BridgePersistenceBatch",
+    "BridgeWorkflow",
+    "BridgeWorkflowPolicy",
+    "BridgeWorkflowResultV1",
+}
+_HARNESS_EXPORTS = {"BridgeTerminalResultV1", "build_grounded_bridge"}
 _MODULE_EXPORTS = {
     "deepreason.bridge.ledger": _LEDGER_EXPORTS,
     "deepreason.bridge.compose": _COMPOSE_EXPORTS,
     "deepreason.bridge.review": _REVIEW_EXPORTS,
     "deepreason.bridge.repair": _REPAIR_EXPORTS,
+    "deepreason.bridge.state": _STATE_EXPORTS,
+    "deepreason.bridge.evidence_pack": _EVIDENCE_EXPORTS,
+    "deepreason.bridge.workflow": _WORKFLOW_EXPORTS,
+    "deepreason.bridge.harness": _HARNESS_EXPORTS,
 }
 __all__ = sorted(
     _EVENT_EXPORTS
@@ -62,6 +79,10 @@ __all__ = sorted(
     | _COMPOSE_EXPORTS
     | _REVIEW_EXPORTS
     | _REPAIR_EXPORTS
+    | _STATE_EXPORTS
+    | _EVIDENCE_EXPORTS
+    | _WORKFLOW_EXPORTS
+    | _HARNESS_EXPORTS
 )
 
 

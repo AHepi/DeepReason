@@ -23,6 +23,8 @@ from deepreason.scratch.errors import (
 )
 from deepreason.scratch.events import ScratchAction, ScratchEventPayloadV1
 from deepreason.scratch.models import (
+    AdvisoryContextV1,
+    AttentionReceiptV1,
     ClusterGuideV1,
     ClusterMembershipV1,
     ClusterSnapshotV1,
@@ -36,7 +38,6 @@ from deepreason.scratch.models import (
     ScratchLinkV1,
     ScratchProvenanceV1,
     SimilarityHitV1,
-    AttentionReceiptV1,
     domain_hash,
 )
 from deepreason.scratch.search import literal_search
@@ -94,6 +95,7 @@ class ScratchService:
             self.state.memberships.values(),
             self.state.similarity_hits.values(),
             self.state.attention_receipts.values(),
+            self.state.advisory_contexts.values(),
         )
         for records in collections:
             for record in records:
@@ -526,6 +528,72 @@ class ScratchService:
             retrieval_receipt_ref=receipt.id,
         )
         return receipt
+
+    def create_advisory_context(
+        self,
+        pack,
+        *,
+        warning: str = (
+            "Scratch material is non-authoritative. It may be incomplete, "
+            "contradictory, mistaken, duplicated, stale, or abandoned."
+        ),
+    ) -> AdvisoryContextV1:
+        """Bind one already-rendered bounded attention pack for advisory use.
+
+        The context is immutable provenance, not a promotion operation.  It
+        contains only records selected by the committed attention receipt and
+        can be reconstructed from the shared object store and scratch log.
+        """
+
+        self._ensure_writable()
+        from deepreason.scratch.attention import AttentionPackV1
+
+        pack = AttentionPackV1.model_validate(pack)
+        receipt = AttentionReceiptV1.model_validate(pack.selection_receipt)
+        recorded = self.state.attention_receipts.get(receipt.id)
+        if recorded != receipt:
+            raise ValueError(
+                "/selection_receipt: commit the exact attention receipt first"
+            )
+        block_ids = list(receipt.final_order)
+        if [block.id for block in pack.blocks] != block_ids:
+            raise ValueError("/blocks: attention pack does not match its receipt")
+        blocks = [self.state.blocks[block_id] for block_id in block_ids]
+        selected = set(block_ids)
+        links = [
+            link
+            for link in sorted(
+                self.state.links.values(),
+                key=lambda item: (item.instance.seq, item.id),
+            )
+            if self.state.link_status.get(link.id) != LinkState.RETIRED
+            and link.body.from_ in selected
+            and link.body.to in selected
+        ][:1_000]
+        guides = []
+        for selection in pack.cluster_guides:
+            guide = selection.guide
+            known = self.state.guides_by_cluster.get(guide.cluster_id, [])
+            if guide not in known:
+                raise ValueError("/cluster_guides: attention pack contains unknown guide")
+            guides.append(guide)
+        context = AdvisoryContextV1.create(
+            warning=warning,
+            blocks=blocks,
+            links=links or None,
+            guides=guides or None,
+            retrieval_receipt=receipt.id,
+            instance=self._instance(),
+        )
+        self.harness.objects.put("scratch-advisory-context", context)
+        self._record(
+            ScratchAction.ADVISORY_CONTEXT_CREATED,
+            actor="harness",
+            inputs=[receipt.id],
+            outputs=[context.id],
+            retrieval_receipt_ref=receipt.id,
+        )
+        return context
 
     def active_coverage_cycle(self):
         active = [

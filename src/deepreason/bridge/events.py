@@ -12,9 +12,12 @@ from deepreason.scratch.models import HashRef, OpaqueRef, ScratchActor
 class BridgeAction(str, Enum):
     LEDGER_CREATED = "ledger_created"
     LEDGER_VALIDATED = "ledger_validated"
+    LEDGER_AMENDMENT_REQUESTED = "ledger_amendment_requested"
+    LEDGER_AMENDMENT_ATTEMPTED = "ledger_amendment_attempted"
     LEDGER_AMENDED = "ledger_amended"
     OUTPUT_COMPOSED = "output_composed"
     OUTPUT_VALIDATED = "output_validated"
+    GROUNDED_REVIEW_ATTEMPTED = "grounded_review_attempted"
     GROUNDED_REVIEWED = "grounded_reviewed"
     REPAIR_ATTEMPTED = "repair_attempted"
     COMPLETED = "completed"
@@ -38,4 +41,3 @@ class BridgeEventPayloadV1(FrozenRecord):
     @classmethod
     def _freeze_sequences(cls, value):
         return FrozenList(value)
-

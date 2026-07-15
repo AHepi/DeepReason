@@ -57,8 +57,9 @@ _MATERIAL_REQUIRED_CLASSES = frozenset(
 class GroundingReviewError(RuntimeError):
     """The deterministic preconditions for grounded review were not met."""
 
-    def __init__(self, code: str, message: str) -> None:
+    def __init__(self, code: str, message: str, *, calls=()) -> None:
         self.code = code
+        self.calls = tuple(calls)
         super().__init__(f"{code}: {message}")
 
 
@@ -262,8 +263,7 @@ class GroundingReviewService:
             )
 
         by_id = {entry.id: entry for entry in ledger.entries}
-        findings: list[GroundingFindingV1] = []
-        calls: list[LLMCall] = []
+        prepared = []
         for section in output.sections:
             entries = [by_id[entry_id] for entry_id in section.ledger_entry_ids]
             premise_ids = list(
@@ -280,13 +280,26 @@ class GroundingReviewService:
                 premises=premises,
                 materials=materials,
             )
-            verdict, call = self.adapter.call(
-                self.role,
-                pack,
-                GroundingVerdictWireV1,
-                template_role="bridge_review",
-                wire_contract=DirectWireContract(GroundingVerdictWireV1),
+            prepared.append(
+                (section, entries, premises, pack, checked_refs, missing_refs)
             )
+
+        findings: list[GroundingFindingV1] = []
+        calls: list[LLMCall] = []
+        for section, entries, premises, pack, checked_refs, missing_refs in prepared:
+            try:
+                verdict, call = self.adapter.call(
+                    self.role,
+                    pack,
+                    GroundingVerdictWireV1,
+                    template_role="bridge_review",
+                    wire_contract=DirectWireContract(GroundingVerdictWireV1),
+                )
+            except Exception as error:
+                spend = getattr(error, "spend", None)
+                recorded = [*calls, *([spend] if spend is not None else [])]
+                error.calls = tuple(recorded)
+                raise
             calls.append(call)
             requires_material = any(
                 entry.claim_class in _MATERIAL_REQUIRED_CLASSES
