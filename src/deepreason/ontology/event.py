@@ -9,9 +9,11 @@ replay-deterministic.
 from enum import Enum
 from typing import Mapping
 
-from pydantic import ConfigDict, Field, field_validator
+from pydantic import ConfigDict, Field, field_validator, model_validator
 
+from deepreason.bridge.events import BridgeEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
+from deepreason.scratch.events import ScratchEventPayloadV1
 
 
 class Rule(str, Enum):
@@ -25,6 +27,8 @@ class Rule(str, Enum):
     MEASURE = "Measure"
     REVEAL = "Reveal"
     RESEED = "Reseed"
+    SCRATCH = "Scratch"
+    BRIDGE = "Bridge"
 
 
 class LLMAttempt(FrozenRecord):
@@ -150,8 +154,37 @@ class Event(FrozenRecord):
     outputs: list[str] = Field(default_factory=FrozenList)
     llm: LLMCall | None = None
     state_diff: StateDiff = Field(default_factory=StateDiff)
+    # ``exclude_if`` preserves the exact legacy JSON shape for formal events.
+    scratch: ScratchEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    bridge: BridgeEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
     def _freeze_sequences(cls, value):
         return FrozenList(value)
+
+    @model_validator(mode="after")
+    def _process_payload_contract(self):
+        if (self.rule == Rule.SCRATCH) != (self.scratch is not None):
+            raise ValueError("Scratch rule and typed scratch payload must appear together")
+        if (self.rule == Rule.BRIDGE) != (self.bridge is not None):
+            raise ValueError("Bridge rule and typed bridge payload must appear together")
+        if self.scratch is not None:
+            if list(self.inputs) != list(self.scratch.inputs):
+                raise ValueError("scratch payload inputs must match Event.inputs")
+            if list(self.outputs) != list(self.scratch.outputs):
+                raise ValueError("scratch payload outputs must match Event.outputs")
+        if self.bridge is not None:
+            if list(self.inputs) != list(self.bridge.inputs):
+                raise ValueError("bridge payload inputs must match Event.inputs")
+            if list(self.outputs) != list(self.bridge.outputs):
+                raise ValueError("bridge payload outputs must match Event.outputs")
+        if self.scratch is not None or self.bridge is not None:
+            formal = self.state_diff.model_dump(mode="json", by_alias=True)
+            if any(formal.values()):
+                raise ValueError("scratch and bridge events cannot mutate formal StateDiff")
+        return self

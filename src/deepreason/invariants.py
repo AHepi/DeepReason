@@ -34,8 +34,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     # 1. Replay determinism: two independent materializations agree.
     try:
         h = Harness(root)
-        if Harness(root).state.model_dump_json() != h.state.model_dump_json():
+        second = Harness(root)
+        if second.state.model_dump_json() != h.state.model_dump_json():
             fail("replay", "two replays of the same log produced different state")
+        if second.scratch_state != h.scratch_state:
+            fail("scratch-replay", "two replays produced different advisory scratch state")
     except Exception as e:  # noqa: BLE001 - an unopenable root is the finding
         return {"violations": [{"check": "open", "detail": repr(e)[:400]}], "stats": {}}
 
@@ -444,6 +447,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         "interventions": sum(1 for e in events for i in e.inputs
                              if i.startswith("intervention:")),
         "reseeds": sum(1 for e in events if e.rule.value == "Reseed"),
+        "scratch_events": sum(1 for e in events if e.scratch is not None),
         "max_problem_desc_len": max(
             (len(p.description) for p in h.state.problems.values()), default=0),
     }

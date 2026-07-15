@@ -19,6 +19,7 @@ from deepreason.adjudication.edges import (
 )
 from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
+from deepreason.bridge.events import BridgeEventPayloadV1
 from deepreason.log.event_log import EventLog
 from deepreason.ontology import (
     Artifact,
@@ -34,6 +35,8 @@ from deepreason.ontology import (
     Warrant,
 )
 from deepreason.ontology.problem import POPPER_BATTERY
+from deepreason.scratch.events import ScratchEventPayloadV1
+from deepreason.scratch.state import ScratchState
 from deepreason.storage.blobs import BlobStore
 from deepreason.storage.objects import ObjectStore
 from deepreason.unification.isolation import conn_map
@@ -81,6 +84,10 @@ class Harness:
 
     def _reset(self) -> None:
         self.state = EpistemicState()
+        # Advisory scratch material is replayed beside, never inside, the
+        # formal ontology.  No ScratchState field participates in att, dep,
+        # warrant carriage, commitments, or adjudication.
+        self.scratch_state = ScratchState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
@@ -330,6 +337,28 @@ class Harness:
             addr_add=addr or [],
         )
 
+    def record_scratch_event(
+        self,
+        payload: ScratchEventPayloadV1,
+        *,
+        llm: LLMCall | None = None,
+    ) -> Event:
+        """Append one already-validated advisory scratch mutation.
+
+        This is the narrow harness-owned persistence seam used by the scratch
+        service and replay tests.  Callers must persist every named immutable
+        output first; the shared apply path resolves and type-checks those
+        records before the event becomes durable.  LLM accounting remains on
+        the enclosing Event and is therefore counted exactly once.
+        """
+        return self._commit(
+            Rule.SCRATCH,
+            inputs=list(payload.inputs),
+            outputs=list(payload.outputs),
+            llm=llm,
+            scratch=payload,
+        )
+
     def recent_events(self, window: int) -> list[Event]:
         """The last ``window`` events. Served from the bounded in-memory tail
         (populated by every _apply_event, live and replay) — capture detection
@@ -444,6 +473,8 @@ class Harness:
         reach_set: dict[str, float] | None = None,
         addr_add: list[tuple[str, str]] | None = None,
         carry_add: list[tuple[str, str]] | None = None,
+        scratch: ScratchEventPayloadV1 | None = None,
+        bridge: BridgeEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -455,11 +486,13 @@ class Harness:
             llm=llm,
             state_diff=StateDiff(hv_set=hv_set or {}, reach_set=reach_set or {},
                                  addr_add=addr_add or [], carry_add=carry_add or []),
+            scratch=scratch,
+            bridge=bridge,
         )
-        state_diff = self._apply_event(event)
-        event = event.model_copy(update={"state_diff": state_diff})
-        self._tail[-1] = event  # _apply_event saw the provisional immutable event
         try:
+            state_diff = self._apply_event(event)
+            event = event.model_copy(update={"state_diff": state_diff})
+            self._tail[-1] = event  # _apply_event saw the provisional immutable event
             self.log.append(event)
         except Exception:
             # Object/blob writes are content-addressed and may remain orphaned,
@@ -480,6 +513,19 @@ class Harness:
         pre_status = dict(self.state.status)
         a_add: list[str] = []
         pi_add: list[str] = []
+        # Validate and materialize process-only outputs before the formal
+        # object loop. A corrupt/malicious process event therefore cannot
+        # transiently register a formal artifact and rely on model_copy to
+        # bypass Event's StateDiff validator.
+        if event.scratch is not None:
+            self.scratch_state.apply(event, self.objects)
+        if event.bridge is not None:
+            for oid in event.outputs:
+                schema, _ = self.objects.get(oid)
+                if not schema.startswith("bridge-"):
+                    raise WellFormednessError(
+                        f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
+                    )
         if event.rule == Rule.REVEAL:
             # Reveal (§10.5): move sealed bytes from the holdout namespace
             # into the blob store — idempotent, so replay reproduces it.
