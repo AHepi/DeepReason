@@ -56,6 +56,64 @@ def test_stage_a_failure_is_canonical_and_replay_backed(tmp_path):
     assert Harness(root).bridge_state == harness.bridge_state
 
 
+def test_stage_a_bounded_repair_exhaustion_is_a_typed_terminal_failure(tmp_path):
+    root = tmp_path / "stage-a-repair-exhausted"
+    harness = Harness(root)
+    harness.register_problem(
+        Problem(
+            id="problem-stage-a-repair-exhausted",
+            description="What answer is supported?",
+            provenance=ProblemProvenance(trigger="seed", **{"from": []}),
+        )
+    )
+    invalid = "model output that never satisfies the claim-ledger contract"
+    summarizer = MockEndpoint([invalid, invalid, invalid], name="invalid-summarizer")
+    thesis = MockEndpoint([], name="unused-thesis")
+    adapter = LLMAdapter(
+        {"summarizer": summarizer, "thesis": thesis},
+        harness.blobs,
+        retry_max=2,
+    )
+
+    terminal = harness.build_bridge(
+        "problem-stage-a-repair-exhausted",
+        "answer",
+        {"grounding_review": False, "max_grounding_repair_attempts": 0},
+        run_manifest_digest="d" * 64,
+        stage_a_adapter=adapter,
+    )
+
+    assert terminal.process_status == "failure"
+    assert terminal.error_code == "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
+    assert terminal.claim_ledger_id in harness.bridge_state.ledgers
+    assert terminal.validation_report_id in harness.bridge_state.validation_reports
+    assert terminal.bridge_output_id is None
+    ledger = harness.bridge_state.ledgers[terminal.claim_ledger_id]
+    assert [entry.claim_class.value for entry in ledger.entries] == ["unknown"]
+    failure = harness.bridge_state.failures[terminal.failure_id]
+    assert failure.phase == "stage_a"
+    assert failure.claim_ledger_id == terminal.claim_ledger_id
+    assert failure.validation_report_id == terminal.validation_report_id
+    assert failure.diagnostics[0].code == "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
+    events = list(harness.log.read())
+    ledger_event = next(
+        event
+        for event in events
+        if event.bridge is not None
+        and event.bridge.action == BridgeAction.LEDGER_CREATED
+    )
+    assert ledger_event.llm.attempts == 3
+    assert [attempt.valid for attempt in ledger_event.llm.attempt_trace] == [
+        False,
+        False,
+        False,
+    ]
+    assert events[-1].bridge.action == BridgeAction.FAILED
+    assert len([event for event in events if event.llm is not None]) == 1
+    assert thesis.last_transport_attempts == 0
+    assert Harness(root).bridge_state == harness.bridge_state
+
+
 def test_late_failure_preserves_exact_partial_objects_and_replays(tmp_path):
     root = tmp_path / "late-run"
     harness = Harness(root)

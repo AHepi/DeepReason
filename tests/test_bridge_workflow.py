@@ -230,6 +230,69 @@ def test_stage_b_new_inference_uses_one_explicit_additions_only_amendment(tmp_pa
     assert len([event for event in harness.log.read() if event.llm is not None]) == 4
 
 
+def test_exhausted_ledger_amendment_is_terminal_and_retains_prior_ledger(tmp_path):
+    harness = Harness(tmp_path / "run")
+    initial = json.dumps(
+        {
+            "entries": [
+                {
+                    "entry_key": "K1",
+                    "claim_class": "source_fact",
+                    "claim": "The recorded value is seven.",
+                    "source_handles": ["S1"],
+                }
+            ]
+        }
+    )
+    invalid = "not a valid additions-only claim-ledger amendment"
+    adapter = _adapter(
+        harness,
+        summarizer=[initial, invalid, invalid, invalid],
+        thesis=[
+            json.dumps(
+                {
+                    "sections": [],
+                    "resolution": "underdetermined",
+                    "resolution_reason": "An inference would require amendment.",
+                    "ledger_amendment_request": {
+                        "requested_class": "supported_inference",
+                        "proposed_claim": "The answer is therefore seven.",
+                        "reason": "The conclusion must name its premise.",
+                    },
+                }
+            )
+        ],
+        retry_max=2,
+    )
+
+    result = BridgeWorkflow(
+        adapter,
+        adapter,
+        policy={"grounding_review": False, "max_grounding_repair_attempts": 0},
+        sink=_HarnessSink(harness),
+    ).run(_catalog(_source_item()), _request())
+
+    assert result.process_status == "failure"
+    assert result.phase == "ledger_amendment"
+    assert result.error_code == "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
+    assert result.amendment_count == 1
+    assert result.bridge_output is None
+    assert result.claim_ledger is not None
+    assert len(result.claim_ledger.entries) == 1
+    assert result.validation_report is not None and result.validation_report.valid
+    assert result.model_call_count == 3
+    actions = _actions(harness)
+    assert actions[-2:] == [
+        BridgeAction.LEDGER_AMENDMENT_ATTEMPTED,
+        BridgeAction.FAILED,
+    ]
+    amendment_event = list(harness.log.read())[-2]
+    assert amendment_event.llm.attempts == 3
+    assert not any(attempt.valid for attempt in amendment_event.llm.attempt_trace)
+    assert BridgeAction.OUTPUT_COMPOSED not in actions
+    assert Harness(harness.root).bridge_state == harness.bridge_state
+
+
 def test_failed_fact_review_is_removed_and_returns_safe_unresolved_success(tmp_path):
     harness = Harness(tmp_path / "run")
     adapter = _adapter(

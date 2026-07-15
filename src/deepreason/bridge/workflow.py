@@ -194,6 +194,14 @@ def _error_calls(error: Exception) -> list[LLMCall]:
     return calls
 
 
+def _stage_a_failure_error(failure) -> RuntimeError:
+    """Convert the typed Stage A diagnostic into a stable terminal error."""
+
+    error = RuntimeError(failure.message)
+    error.code = failure.code  # type: ignore[attr-defined]
+    return error
+
+
 class BridgeWorkflow:
     """Run Stage A then Stage B, with optional review and bounded repair."""
 
@@ -410,6 +418,18 @@ class BridgeWorkflow:
                 finding_ref=stage_a.validation_report.id,
             )
         )
+        if stage_a.failure is not None:
+            return self._failure(
+                _stage_a_failure_error(stage_a.failure),
+                default_code=stage_a.failure.code,
+                formal_seq=formal_seq,
+                phase="stage_a",
+                ledger=ledger,
+                report=stage_a.validation_report,
+                inputs=(ledger.id, stage_a.validation_report.id),
+                calls=[],
+                diagnostics=(stage_a.failure,),
+            )
 
         while True:
             try:
@@ -496,6 +516,26 @@ class BridgeWorkflow:
                 ledger = amended.ledger
                 amendment_count += 1
                 self._record_call(amended.receipt.llm_call)
+                if amended.failure is not None:
+                    self._persist(
+                        BridgePersistenceBatch(
+                            action=BridgeAction.LEDGER_AMENDMENT_ATTEMPTED,
+                            inputs=(prior.id,),
+                            llm=amended.receipt.llm_call,
+                        )
+                    )
+                    return self._failure(
+                        _stage_a_failure_error(amended.failure),
+                        default_code=amended.failure.code,
+                        formal_seq=formal_seq,
+                        phase="ledger_amendment",
+                        ledger=ledger,
+                        report=amended.validation_report,
+                        amendment_count=amendment_count,
+                        inputs=(ledger.id, amended.validation_report.id),
+                        calls=[],
+                        diagnostics=(amended.failure,),
+                    )
                 if not amended.amended:
                     self._persist(
                         BridgePersistenceBatch(
