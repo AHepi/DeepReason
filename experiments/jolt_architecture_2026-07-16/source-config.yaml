@@ -1,0 +1,147 @@
+engine_profile: full
+model_profile: standard
+
+N_SCHOOLS: 4
+VS_K: 3
+ARG_CRIT_PER_CYCLE: 12
+CRIT_BATCH_K: 3
+RETRY_MAX: 2
+RESEARCH_BACKEND: agent
+RESEARCH_ATTENDED: false
+ARGUMENTATIVE_AUTHORITY: observe_only
+TEXT_RUBRIC_AUTHORITY: observe_only
+PAIRWISE_AUTHORITY: observe_only
+INFRASTRUCTURE_REVIEW_AUTHORITY: observe_only
+ADVISORY_TRIALS_PER_CYCLE: 0
+CONTROLLER: false
+
+EMBEDDER_MODEL: nomic-ai/nomic-embed-text-v1.5
+EMBEDDER_FAILURE_POLICY: fallback
+
+scratchpad:
+  enabled: true
+  semantic_retrieval: true
+  keyword_retrieval: true
+  coverage_enabled: true
+  coverage_slot_every_n_packs: 2
+  max_blocks_per_pack: 24
+  max_guides_per_pack: 4
+  exploratory_fraction: 0.10
+  underexposed_fraction: 0.20
+  block_role: conjecturer
+  link_role: synthesizer
+  guide_role: summarizer
+
+bridge:
+  mode: grounded_two_stage
+  allow_partial: true
+  allow_abstention: true
+  require_claim_ledger: true
+  require_claim_uses: true
+  grounding_review: true
+  max_schema_repair_attempts: 2
+  max_grounding_repair_attempts: 4
+  reviewer_seats: 1
+  output_section_limit: 32
+  target_profile: plain
+  ledger_role: summarizer
+  composer_role: thesis
+  reviewer_role: judge
+
+roles:
+  conjecturer:
+    endpoint: https://ollama.com/v1
+    model: glm-5.2
+    provider: ollama
+    family: glm
+    temperature: 0.9
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 6500
+    timeout_s: 600
+    json_mode: true
+
+  variator:
+    endpoint: https://ollama.com/v1
+    model: deepseek-v4-pro
+    provider: ollama
+    family: deepseek
+    temperature: 0.8
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 6500
+    timeout_s: 600
+    json_mode: true
+
+  argumentative_critic:
+    endpoint: https://ollama.com/v1
+    model: deepseek-v4-pro
+    provider: ollama
+    family: deepseek
+    temperature: 0.4
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 4000
+    timeout_s: 600
+    json_mode: true
+
+  defender:
+    endpoint: https://ollama.com/v1
+    model: deepseek-v4-pro
+    provider: ollama
+    family: deepseek
+    temperature: 0.4
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 3000
+    timeout_s: 600
+    json_mode: true
+
+  synthesizer:
+    endpoint: https://ollama.com/v1
+    model: qwen3.5:397b
+    provider: ollama
+    family: qwen
+    temperature: 0.8
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 6500
+    timeout_s: 600
+    json_mode: true
+
+  summarizer:
+    endpoint: https://ollama.com/v1
+    model: qwen3.5:397b
+    provider: ollama
+    family: qwen
+    temperature: 0.2
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 8000
+    timeout_s: 600
+    json_mode: true
+
+  thesis:
+    endpoint: https://ollama.com/v1
+    model: kimi-k2.6
+    provider: ollama
+    family: kimi
+    temperature: 0.3
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 8000
+    timeout_s: 600
+    json_mode: true
+
+  judge:
+    endpoint: https://ollama.com/v1
+    model: kimi-k2.6
+    provider: ollama
+    family: kimi
+    temperature: 0.0
+    api_key_env: OLLAMA_API_KEY
+    reasoning: none
+    max_tokens: 5000
+    timeout_s: 600
+    json_mode: true
+

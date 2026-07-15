@@ -1,0 +1,197 @@
+{
+  "entries": [
+    {
+      "entry_key": "claim_001",
+      "claim_class": "supported_inference",
+      "claim": "The actual present failure in the Jolt architecture is an incomplete orthogonal-axes architecture where the scheduler iterates schools as prompt/provenance conditioning without binding each school to a distinct configured route, creating a prompt-delegation gap.",
+      "premise_keys": [
+        "obs_001",
+        "obs_002"
+      ],
+      "scratch_handles": [
+        "A1"
+      ]
+    },
+    {
+      "entry_key": "obs_001",
+      "claim_class": "recorded_observation",
+      "claim": "Formal sequence 215 accepts the position that the harness enforces C1/C5 at the route-lease layer but the scheduler (scheduler.py:410-520) fails to bind schools to distinct routes, allowing school identity to be coupled by convention rather than manifest freeze.",
+      "formal_observation_handles": [
+        "O1"
+      ],
+      "evidence_handles": [
+        "E9"
+      ],
+      "source_handles": [
+        "S6"
+      ]
+    },
+    {
+      "entry_key": "obs_002",
+      "claim_class": "recorded_observation",
+      "claim": "Formal sequence 215 accepts the position that the systemic conflation of school identity with route configuration violates C4 (one bounded model responsibility per call) and C5 (prose cannot alter routes), as school stances are injected as prose into shared model calls.",
+      "formal_observation_handles": [
+        "O2"
+      ],
+      "evidence_handles": [
+        "E9"
+      ],
+      "source_handles": [
+        "S6"
+      ]
+    },
+    {
+      "entry_key": "claim_002",
+      "claim_class": "supported_inference",
+      "claim": "The correctly harness-owned behaviors include manifest route freeze, append-only event commit, formal/scratch/bridge state separation, and budget reservation enforcement, as implemented in run_manifest.py, harness.py, and budget.py.",
+      "premise_keys": [
+        "obs_003",
+        "obs_004",
+        "obs_005",
+        "obs_006"
+      ],
+      "scratch_handles": [
+        "A1",
+        "A2"
+      ]
+    },
+    {
+      "entry_key": "obs_003",
+      "claim_class": "recorded_observation",
+      "claim": "The immutable manifest (run_manifest.py:412-500) freezes role routes and v3 scratch/bridge policies but lacks explicit school-to-route binding.",
+      "evidence_handles": [
+        "E5"
+      ],
+      "source_handles": [
+        "S3"
+      ]
+    },
+    {
+      "entry_key": "obs_004",
+      "claim_class": "recorded_observation",
+      "claim": "The harness (harness.py:69-116) replays formal, scratch, and bridge states into separate materialized structures, ensuring only formal state enters adjudication.",
+      "evidence_handles": [
+        "E3"
+      ],
+      "source_handles": [
+        "S2"
+      ]
+    },
+    {
+      "entry_key": "obs_005",
+      "claim_class": "recorded_observation",
+      "claim": "Registration (harness.py:180-280) validates canonical interfaces, persists objects, and commits append-only events through the shared live/replay path.",
+      "evidence_handles": [
+        "E4"
+      ],
+      "source_handles": [
+        "S2"
+      ]
+    },
+    {
+      "entry_key": "obs_006",
+      "claim_class": "recorded_observation",
+      "claim": "Token reservations (budget.py:79-158) are enforced before dispatch against a hard shared ceiling, failing closed if bounds are missing.",
+      "evidence_handles": [
+        "E8"
+      ],
+      "source_handles": [
+        "S5"
+      ]
+    },
+    {
+      "entry_key": "claim_003",
+      "claim_class": "surviving_conjecture",
+      "claim": "The strongest deterministic control architecture treats the harness as a two-pass compiler: the first pass resolves and freezes all control-flow bindings into an immutable execution manifest, and the second pass executes model calls strictly within those frozen bindings as pure content functions.",
+      "formal_artifact_handles": [
+        "A1",
+        "A2"
+      ]
+    },
+    {
+      "entry_key": "claim_004",
+      "claim_class": "surviving_conjecture",
+      "claim": "The Jolt architecture is best understood as a 'Stochastic Compiler Pipeline' where the Harness is the build driver, Schools are code generators, the Adapter is the strict parser, and the Bridge is the linker resolving dependencies only after successful compilation.",
+      "formal_artifact_handles": [
+        "A3"
+      ]
+    },
+    {
+      "entry_key": "claim_005",
+      "claim_class": "supported_inference",
+      "claim": "A missing integration-boundary contract between the deterministic harness and CLI/MCP/chat surfaces causes operator-experience degradation by delegating progress visibility and interruption to prose-implicit UX conventions instead of explicit typed interface contracts.",
+      "premise_keys": [
+        "obs_007"
+      ],
+      "scratch_handles": [
+        "A4"
+      ]
+    },
+    {
+      "entry_key": "obs_007",
+      "claim_class": "recorded_observation",
+      "claim": "Formal sequence 215 accepts the position that the harness correctly owns replay-determinism and school-conditioned routing but lacks canonical interfaces for streaming scratch-block progress or operator-initiated interruption across client surfaces.",
+      "formal_observation_handles": [
+        "O4"
+      ],
+      "evidence_handles": [
+        "E14",
+        "E15"
+      ],
+      "source_handles": [
+        "S11",
+        "S12"
+      ]
+    },
+    {
+      "entry_key": "fact_001",
+      "claim_class": "source_fact",
+      "claim": "The normative amendment (docs/harness-spec-v1.4-amendment.md) assigns flow, storage, replay, routing, validation, scheduling, repair bounds, and adjudication to the deterministic harness, while model calls are bounded content functions.",
+      "source_handles": [
+        "S1"
+      ],
+      "evidence_handles": [
+        "E1"
+      ]
+    },
+    {
+      "entry_key": "fact_002",
+      "claim_class": "source_fact",
+      "claim": "The amendment defines scratch as separate and non-authoritative, requiring a two-stage ledger-before-composition bridge, and mandates that MCP must not expose shell access, arbitrary files, or route mutation.",
+      "source_handles": [
+        "S1"
+      ],
+      "evidence_handles": [
+        "E2"
+      ]
+    }
+  ],
+  "source_conflicts": [],
+  "uncovered_requirements": [
+    {
+      "requirement": "Explicit typed interface contracts for progress visibility, interruption, and attention redirection across CLI/MCP/chat surfaces (C13).",
+      "reason": "The record identifies a missing integration-boundary contract causing operator-experience degradation, with no implemented evidence provided for these specific interface contracts.",
+      "related_entry_keys": [
+        "claim_005",
+        "obs_007"
+      ],
+      "scratch_handles": [
+        "A4"
+      ]
+    },
+    {
+      "requirement": "Binding of each school to a distinct configured route in the immutable manifest to enforce school identity structurally.",
+      "reason": "The record identifies the lack of school-to-route binding in run_manifest.py as the actual present failure, implying this requirement is currently uncovered in the implementation.",
+      "related_entry_keys": [
+        "claim_001",
+        "obs_001",
+        "obs_002",
+        "obs_003"
+      ],
+      "scratch_handles": [
+        "A1",
+        "A2"
+      ]
+    }
+  ]
+}

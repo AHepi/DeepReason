@@ -1,0 +1,1 @@
+{"contract":"reasoningconjecturer.direct.v1","path":"","error":"extra field at /candidates/0/counterconditions/0/case","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"candidates":[{"claim":"x","mechanism":"x","counterconditions":["x"],"typicality":0.0}]}}

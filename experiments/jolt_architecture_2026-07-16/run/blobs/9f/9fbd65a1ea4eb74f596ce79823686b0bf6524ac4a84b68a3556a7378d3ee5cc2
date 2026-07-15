@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target": "a264e14f6c454b1a594847d51f2de2509f5b8a6ee62284498b5277439bd979ca",
+      "attack": true,
+      "case": "The target's proposed 'SchoolBindingPolicy' creates a fatal rigidity that violates C10 (conjectural freedom) and C12 (MiniReason primitive reuse). By freezing school-to-route bindings in the immutable manifest (Pass 1), the architecture assumes schools are static configuration entities rather than dynamic, context-dependent reasoning strategies. In a true open-ended system, the optimal 'school' (e.g., 'adversarial', 'constructive', 'formal') should be selected dynamically based on the specific failure mode detected in the previous turn's formal state, not pre-determined by a frozen manifest. Forcing a static binding means the harness cannot adapt its reasoning lens to the problem at hand without a full manifest regeneration (migration), effectively removing the model's freedom to choose the most appropriate epistemic stance for the current context. This conflates 'school identity' with 'deployment configuration,' turning a semantic reasoning choice into a hard infrastructure constraint, which contradicts the goal of preserving open-ended model reasoning.",
+      "counterexample": null
+    },
+    {
+      "target": "355be2bd977cd8dc70e2a6eb6936e7cd665eeae13c1d40df23e6f3ee1dd4df73",
+      "attack": true,
+      "case": "The target's proposal to make 'school' a first-class route selector and dispatch separate model calls per school fundamentally violates C2 (consequential transitions logged) and C3 (canonical replay) by fracturing the atomicity of the reasoning step. Currently, a 'critique phase' is a single logical transition where multiple schools contribute to a unified adjudication. Splitting this into N separate model calls (one per school) creates N distinct consequential transitions for what is logically one reasoning event. This introduces non-determinism in replay: if the budget runs out after school 3 of 5, the canonical history becomes incomplete and unreplayable as a coherent thought process. Furthermore, it violates C4 (one bounded model responsibility) by redefining the 'responsibility' from 'produce a critique' to 'produce a school-specific fragment,' forcing the harness to synthesize these fragments later. This synthesis step becomes a new, unverified hidden controller behavior that merges disparate outputs, risking the loss of inter-school conflict data which is often the most valuable evidence. The fix incorrectly optimizes for prompt isolation at the expense of transactional integrity and replay fidelity.",
+      "counterexample": null
+    }
+  ]
+}

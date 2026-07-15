@@ -1,0 +1,1 @@
+{"contract":"bridge.claim-ledger.compact.v1","path":"/entries/0/scratch_handles/0","error":"BRIDGE_WIRE_REFERENCE_INVALID","received":null,"allowed":"one supplied call-local handle","repair_scope":"/entries/0/scratch_handles/0","skeleton":null}

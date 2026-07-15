@@ -1,0 +1,7 @@
+Repair only the JSON value at /entries/0/scratch_handles/0 for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+"A1"
+
+DIAGNOSTIC:
+{"allowed": "one supplied call-local handle", "contract": "bridge.claim-ledger.compact.v1", "error": "BRIDGE_WIRE_REFERENCE_INVALID", "path": "/entries/0/scratch_handles/0", "repair_scope": "/entries/0/scratch_handles/0"}

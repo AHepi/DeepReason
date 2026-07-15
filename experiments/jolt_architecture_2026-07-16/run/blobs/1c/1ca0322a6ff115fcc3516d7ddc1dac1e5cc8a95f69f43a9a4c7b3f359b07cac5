@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "c3d5e78ea6199c5e7ccf4d74399d40286f3fd4c2be9f5a94f1f0b5abab3afdc5",
+      "attack": true,
+      "case": "The proposal to bind school-to-route mappings in the immutable manifest creates a fatal rigidity that violates C10 (conjectural freedom) and C14 (historical intelligibility). By hard-coding routing topology at manifest freeze, the architecture precludes dynamic school instantiation or re-configuration during a long-running session, effectively treating 'schools' as static infrastructure rather than dynamic reasoning contexts. This forces the harness to either reject valid runtime school creations or violate the manifest immutability it claims to enforce. Furthermore, conflating 'school' (a semantic conditioning context) with 'route' (a physical execution lease) violates the separation of concerns required by C4; the model should be free to invoke different reasoning modes within a single school without requiring a pre-defined 1:1 mapping to a specific budget/scratch policy route, which artificially constrains the reasoning envelope.",
+      "counterexample": null
+    },
+    {
+      "target": "75314a490b234c71bbc1c023c77cb85921c07cb3c360f78d6a192f343a0005a8",
+      "attack": true,
+      "case": "Inserting a deterministic 'state fence' for attention planning prior to conjecture dispatch fundamentally breaks the feedback loop required for effective iterative reasoning, violating the spirit of C10. The proposal assumes attention selection can be decoupled from the reasoning content generation, but in complex problem solving, the relevance of scratch context is often discovered *during* the reasoning process, not before. By freezing the attention pack deterministically, the harness prevents the model from dynamically pivoting to newly relevant scratch blocks that were not anticipated by the pre-dispatch planner. This turns the 'open-ended reasoning' into a constrained lookup operation, where the model is blinded to context it hasn't been explicitly fed, likely causing failure modes where the model hallucinates missing context rather than retrieving it, as the retrieval mechanism is now gated by a rigid, pre-computed plan.",
+      "counterexample": null
+    },
+    {
+      "target": "030a39028f8223f0d94194d7d27f7443aaf8e55ad3cf699ebfb472209120d5e5",
+      "attack": true,
+      "case": "The argument that 'observe-only prose criticism' poses an architectural boundary leak is a category error that misunderstands the nature of formal state transitions. The proposal demands a typed interface to prevent prose from having 'StatusEffect', but this is already guaranteed by the event log semantics: unless the harness explicitly adjudicates and commits a state change based on the prose, the prose itself has no power. Enforcing a 'freeze-assert-unchanged' pattern at every model call site (as suggested by generalizing the bridge pattern) introduces massive computational overhead and latency without adding security, because the security boundary is the *adjudicator*, not the *caller*. If the type system prevents the model output from directly mutating state (which it must), then wrapping every call in a state-diff assertion is redundant engineering that obscures the actual control flow and violates the principle of minimal sufficient constraint.",
+      "counterexample": null
+    }
+  ]
+}

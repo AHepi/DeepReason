@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "analogy": {
+        "adopted_commitment_refs": [
+          "bf597433295f50d98c674f9244734bc0c9b3a89d3f1fd49f4a5d697f8a02977e",
+          "1cdae5bab0a0e9aff9ddcb947f09d42f52af4900703c845b4bc3d26ebb938662"
+        ],
+        "disanalogies": [
+          "Compilers do not typically require a 'bridge' to separate syntax trees from execution logs; here the bridge is a mandatory security boundary for non-authoritative data.",
+          "Traditional compilers optimize for speed via caching; this architecture optimizes for auditability via redundant, append-only event logging.",
+          "In standard compilation, the source code is static; here, the 'source' (school output) is stochastic and requires probabilistic validation before type-checking."
+        ],
+        "overturn_conditions": [
+          "If the harness cannot deterministically reconstruct the exact state of a run from the event log alone (violating C3).",
+          "If the manifest allows dynamic route binding that changes the interpretation of past events (violating C1/C14).",
+          "If the 'compiler' (harness) accepts input that bypasses the strict wire contract defined in the adapter (violating C4)."
+        ],
+        "shared_structure": [
+          "Source Code (School Output) -> Lexer/Parser (Adapter/Schema Validation) -> AST (Formal State) -> Linker (Bridge/Harness Composition).",
+          "Build Manifest (Run Manifest) defines the allowed transformations and routes.",
+          "Build Logs (Append-only Events) provide the trace for reproducibility.",
+          "Temporary Files (Scratch) are isolated from the final binary (Formal State)."
+        ],
+        "source_memory_refs": [
+          "implemented src/deepreason/harness.py:69-116",
+          "implemented src/deepreason/llm/adapter.py:300-430",
+          "implemented src/deepreason/bridge/harness.py:286-457"
+        ],
+        "transfer_claims": [
+          "The Harness acts as the 'Compiler Driver', orchestrating the pass from raw token streams to typed state objects.",
+          "The Adapter performs 'Lexical Analysis', rejecting any token stream that does not conform to the strict JSON schema of the route.",
+          "The Bridge functions as the 'Linker', resolving references between scratch artifacts and formal state only after type safety is proven.",
+          "The Manifest is the 'Makefile', locking down dependencies and build rules to prevent drift."
+        ]
+      },
+      "claim": "The Jolt architecture is best understood as a 'Stochastic Compiler Pipeline' where the Harness is the build driver, Schools are code generators producing unverified source, the Adapter is the strict parser enforcing type contracts, and the Bridge is the linker that resolves dependencies only after successful compilation, ensuring no untyped data enters the final binary (formal state).",
+      "counterconditions": [
+        {
+          "case": "If a school produces output that is semantically valid but structurally malformed (e.g., valid JSON but wrong schema), and the Adapter fails to reject it before the Bridge attempts linking.",
+          "eval": "observation"
+        },
+        {
+          "case": "If the replay mechanism discovers that the 'compiled' state differs from the original run due to non-deterministic environment variables not captured in the event log.",
+          "eval": "observation"
+        },
+        {
+          "case": "If the 'linker' (Bridge) implicitly relies on the order of school execution which is not explicitly encoded in the manifest, breaking replay determinism.",
+          "eval": "observation"
+        }
+      ],
+      "mechanism": "Treat `harness.py` as the main build loop: it loads the `run_manifest.py` (Makefile) to determine valid targets (routes). It invokes `school` modules as external generators. Their output is passed to `llm/adapter.py` which acts as the parser/lexer, strictly validating against the route's JSON schema; any parse error halts the 'build' for that unit. Validated units are temporary ASTs. The `bridge/harness.py` then acts as the linker: it takes these ASTs and the `scratch` artifacts (temporary files), verifies their cross-references (attention/coverage receipts), and emits the final executable (formal state transition) as an append-only event. This enforces C1 by making the 'compilation' rules immutable in the manifest, C4 by bounding each school to a single 'function generation' task, and C3 by ensuring the 'binary' is fully reproducible from the 'source' and 'Makefile'.",
+      "optional_refs": [
+        "implemented src/deepreason/run_manifest.py:1328-1406",
+        "implemented src/deepreason/scratch/attention.py:405-469"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "src/deepreason/rules/conj.py",
+          "src/deepreason/runtime/stop.py"
+        ],
+        "search_signal": "productive"
+      },
+      "typicality": 0.85
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"max_chars":64000},"steps":10000,"time_ms":2000},"eval":"program:reasoning-envelope-wf","id":"reasoning-envelope-wf","observation_valued":false},"id":"reasoning-envelope-wf","schema":"commitment"}

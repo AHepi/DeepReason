@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target": "a264e14f6c454b1a594847d51f2de2509f5b8a6ee62284498b5277439bd979ca",
+      "attack": true,
+      "case": "The claim identifies a genuine architectural gap but fails to establish it as a present failure under the Jolt architecture problem's own criteria. The problem requires showing 'the actual present failure' against C1–C15, yet the claim's central assertion—that school-to-route binding is unenforced—is explicitly flagged as an uncertainty by the claim's own overturn_conditions: 'If the system architecture intends school and route to be orthogonal axes, the observed independence is correct-by-design rather than a gap.' The claim provides no evidence that the architecture intends coupling, no test demonstrating a route lease was acquired inconsistent with school conditioning, and no falsifying test that actually fails against the current codebase. The 'failure' is a design-philosophy disagreement about whether orthogonal axes are desirable, not a demonstrable violation of any C1–C15 commitment. The claim's strongest falsifying tests are all forward-looking ('assert every model call site acquires its route lease through a SchoolBindingPolicy-validated path')—they test a proposed future architecture, not the present one. This is a proposal for architectural evolution masquerading as a failure diagnosis. The harness currently passes all machine-evaluated commitments; the claim concedes no C1/C5 violation exists at the route-lease layer. Without a concrete counterexample of a route lease acquired inconsistent with school conditioning, the 'gap' is a conjecture about what the harness does not enforce that the problem never required it to enforce.",
+      "counterexample": null
+    },
+    {
+      "target": "14ff1f61e9ab33eb992c6c8f7e4be1e38e772904dba2411457a18e2f2e183da5",
+      "attack": true,
+      "case": "The claim asserts a 'missing integration-boundary contract' for CLI/MCP/chat surfaces (C13) but fails to demonstrate any actual failure against the Jolt architecture problem's criteria. The problem requires showing 'the actual present failure,' yet the claim's own counterconditions list four specific conditions that would refute it—and the claim provides no evidence that any of them are false. The claim concedes the harness correctly owns replay-determinism (C3) and school-conditioned routing (C4), then pivots to a UX-layer concern (progress visibility, interruption, attention redirection) that the Jolt architecture problem explicitly delegates to the model's scratch/links layer (C8: 'scratch non-authoritative'). The problem's C13 requires 'shared CLI/MCP/chat application services,' not a typed surface-contract schema governing UX events. The claim's demand for a canonical operator-session event stream conflates C14 (historical intelligibility of replay) with a separate UX-session concern that the architecture intentionally leaves to the non-authoritative scratch layer. The claim identifies no concrete failure mode—no replay divergence, no cross-surface inconsistency, no operator action lost—only a design preference for stronger typing at a boundary the architecture treats as advisory. This is a scope-expansion argument, not a failure diagnosis within the existing C1–C15 commitments.",
+      "counterexample": null
+    }
+  ]
+}

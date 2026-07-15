@@ -1,0 +1,119 @@
+{
+  "entries": [
+    {
+      "entry_key": "E001",
+      "claim_class": "source_fact",
+      "claim": "The normative amendment assigns flow, storage, replay, routing, validation, scheduling, repair bounds and adjudication to the deterministic harness; model calls are bounded content functions.",
+      "source_handles": ["S1"],
+      "evidence_handles": ["E1"]
+    },
+    {
+      "entry_key": "E002",
+      "claim_class": "source_fact",
+      "claim": "Formal, scratch and bridge states are replayed into separate materialized structures; only formal state enters adjudication.",
+      "source_handles": ["S2"],
+      "evidence_handles": ["E3"]
+    },
+    {
+      "entry_key": "E003",
+      "claim_class": "source_fact",
+      "claim": "The immutable manifest freezes role routes and v3 scratch/bridge policies but has no school-to-route binding.",
+      "source_handles": ["S3"],
+      "evidence_handles": ["E5"]
+    },
+    {
+      "entry_key": "E004",
+      "claim_class": "source_fact",
+      "claim": "The scheduler iterates schools as prompt/provenance conditioning but does not bind each school to a distinct configured route.",
+      "source_handles": ["S6"],
+      "evidence_handles": ["E9"]
+    },
+    {
+      "entry_key": "E005",
+      "claim_class": "recorded_observation",
+      "claim": "The actual present failure is an incomplete orthogonal-axes architecture where the harness enforces C1/C5 at the route-lease layer, but the scheduler creates a prompt-delegation gap by not binding schools to distinct routes.",
+      "formal_observation_handles": ["O1"],
+      "event_handles": ["O5"]
+    },
+    {
+      "entry_key": "E006",
+      "claim_class": "recorded_observation",
+      "claim": "The Jolt architecture's present failure is a systemic conflation of 'school identity' with 'route configuration' in the scheduler, violating C4 and C5 because school stances are injected as prose into shared model calls without route isolation.",
+      "formal_observation_handles": ["O2"],
+      "event_handles": ["O5"]
+    },
+    {
+      "entry_key": "E007",
+      "claim_class": "recorded_observation",
+      "claim": "The Jolt architecture is best understood as a 'Stochastic Compiler Pipeline' where the Harness is the build driver, Schools are code generators, the Adapter is the strict parser, and the Bridge is the linker.",
+      "formal_observation_handles": ["O3"],
+      "event_handles": ["O5"]
+    },
+    {
+      "entry_key": "E008",
+      "claim_class": "recorded_observation",
+      "claim": "The actual present failure includes a missing integration-boundary contract between the deterministic harness and CLI/MCP/chat surfaces, delegating explicit typed interface contracts to prose-implicit UX conventions.",
+      "formal_observation_handles": ["O4"],
+      "event_handles": ["O5"]
+    },
+    {
+      "entry_key": "E009",
+      "claim_class": "supported_inference",
+      "claim": "The incorrectly prompt-delegated behaviour is the assumption that school identity and route identity are coupled by convention rather than enforced by manifest freeze.",
+      "premise_keys": ["E003", "E004", "E005"]
+    },
+    {
+      "entry_key": "E010",
+      "claim_class": "supported_inference",
+      "claim": "A hidden controller behaviour emerges where a school's prose instructions can leak into or be overridden by the shared route's system prompt, and a school cannot independently specify its own model, budget, or tool access.",
+      "premise_keys": ["E004", "E006"]
+    },
+    {
+      "entry_key": "E011",
+      "claim_class": "surviving_conjecture",
+      "claim": "The strongest deterministic control architecture treats the harness as a two-pass compiler: the first pass resolves and freezes all control-flow bindings into an immutable execution manifest; the second pass executes model calls strictly within those frozen bindings.",
+      "formal_artifact_handles": ["A1"]
+    },
+    {
+      "entry_key": "E012",
+      "claim_class": "surviving_conjecture",
+      "claim": "The strongest deterministic control architecture is to make 'school' a first-class route selector: each school is bound to a distinct route lease in the immutable manifest, and the scheduler dispatches each school's conjecture/critique as a separate, route-isolated model call.",
+      "formal_artifact_handles": ["A2"]
+    },
+    {
+      "entry_key": "E013",
+      "claim_class": "assumption",
+      "claim": "Code should own permissions, route selection, budgets, state transitions, event emission, repair ceilings and stop eligibility, while models should propose semantic content within typed task envelopes.",
+      "scratch_handles": ["B4"]
+    },
+    {
+      "entry_key": "E014",
+      "claim_class": "unknown",
+      "claim": "The degree of primitive reuse for MiniReason remains incomplete regarding forward-compatible advisory scratch/bridge record handling.",
+      "evidence_handles": ["E18"],
+      "qualification": "Evidence states forward compatibility exists but primitive reuse degree is incomplete."
+    },
+    {
+      "entry_key": "E015",
+      "claim_class": "unknown",
+      "claim": "How much attention allocation can be deterministic without freezing the semantic search remains an unresolved question.",
+      "scratch_handles": ["B1"],
+      "qualification": "Candidate scoring may encode brittle hidden heuristics; requires testing against repository evidence."
+    }
+  ],
+  "source_conflicts": [],
+  "uncovered_requirements": [
+    {
+      "requirement": "Explicit typed interface contracts for progress visibility, interruption, and attention redirection across CLI/MCP/chat surfaces (C13).",
+      "reason": "Current implementation delegates these to prose-implicit UX conventions causing operator-experience degradation.",
+      "related_entry_keys": ["E008"],
+      "scratch_handles": ["B4"]
+    },
+    {
+      "requirement": "Binding of each school to a distinct configured route in the immutable manifest to prevent prompt-delegation gaps.",
+      "reason": "Current scheduler iterates schools as prompt conditioning without distinct route binding, violating C4 and C5.",
+      "related_entry_keys": ["E003", "E004", "E006"],
+      "scratch_handles": ["B5"]
+    }
+  ]
+}

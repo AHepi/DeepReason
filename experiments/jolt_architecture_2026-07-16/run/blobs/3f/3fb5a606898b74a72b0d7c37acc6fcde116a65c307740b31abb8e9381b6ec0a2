@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "c3d5e78ea6199c5e7ccf4d74399d40286f3fd4c2be9f5a94f1f0b5abab3afdc5",
+      "attack": true,
+      "case": "The claim identifies a manifest-policy gap but fails to establish it as a present failure rather than a design choice. The target's own counterconditions acknowledge that if schools are documented as prompt-provenance-only conditioning with no route implication, the binding is unnecessary. The target provides no evidence that the current implementation actually attempts to express school-specific orchestration through model conditioning rather than deterministic route assignment—it merely asserts an 'ambiguity.' Without demonstrating that the harness currently fails to route correctly or that the model is being asked to self-select routes, the claim is a speculative architecture preference, not a fault. The strongest counter: the scheduler already deterministically iterates schools and dispatches calls; if each school's call already reaches the correct route via existing configuration, adding manifest-level school-to-route binding is redundant ceremony that adds no new control—it merely relocates existing configuration. The target's own 'strongest likely failure mode' (binding all schools to the same route silently) would be a regression introduced by the proposed change, not a fix for an existing bug.",
+      "counterexample": null
+    },
+    {
+      "target": "75314a490b234c71bbc1c023c77cb85921c07cb3c360f78d6a192f343a0005a8",
+      "attack": true,
+      "case": "The claim asserts that conjecture dispatch lacks deterministic attention selection, but the target provides no evidence that the model is actually being asked to self-select scratch context in the current implementation. The target's own counterconditions acknowledge that if scratch is always empty at conjecture time, the attention pack is vacuous—yet the target does not establish that scratch exists at conjecture time. More fatally, the target proposes inserting a state fence where the harness deterministically plans attention and injects it into the conjecture call, but this removes model freedom that C10 (conjectural freedom) is supposed to preserve: if the model cannot select which scratch to attend to, its reasoning is bounded by the harness's attention plan, which may be wrong. The target's own 'strongest likely failure mode'—the attention planner selecting empty or irrelevant scratch, degrading conjecture quality without model recourse—is a self-defeating admission. The architecture would create a single point of failure in the attention planner with no model-side correction mechanism, violating the spirit of C10 by making the model a passive consumer of potentially bad context rather than an active reasoner that can identify and request relevant scratch.",
+      "counterexample": null
+    },
+    {
+      "target": "030a39028f8223f0d94194d7d27f7443aaf8e55ad3cf699ebfb472209120d5e5",
+      "attack": true,
+      "case": "The claim identifies a hypothetical future boundary leak—'future prose could inadvertently alter status if the boundary is not enforced by the type system'—but this is not a present failure. The target explicitly states that 'observe-only prose criticism (crit.py:31-69) is recorded as scrutiny without warrant or formal status effect, which is correct.' The target then argues for a typed wrapper to prevent a future problem that does not currently exist. This is a prophylactic architecture proposal, not a fault. The target's own counterconditions acknowledge that if the type system cannot enforce the absence of StatusEffect in model output, the boundary is conventional not structural—and the target provides no evidence that the current type system can enforce this. Furthermore, the target's proposal to apply the bridge's freeze-assemble-call-assert-unchanged-commit pattern to all model-call sites ignores the bridge's specific two-stage evidence-grounding workflow, which the target's own disanalogies acknowledge may not generalize. The target's 'strongest likely failure mode'—a future model-call site bypassing the typed wrapper—is a failure of the proposed wrapper architecture, not of the current system. The claim is a solution in search of a problem.",
+      "counterexample": null
+    }
+  ]
+}
