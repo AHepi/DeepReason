@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import threading
 from dataclasses import replace
 from types import SimpleNamespace
 
@@ -21,6 +22,7 @@ from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
+from deepreason.locking import ProcessLockBusy, operator_locks
 from deepreason.ontology import Problem, ProblemProvenance
 from deepreason.run_manifest import (
     bind_run_manifest,
@@ -178,6 +180,75 @@ def _safe_removal_adapter(harness: Harness) -> LLMAdapter:
         harness.blobs,
         retry_max=0,
     )
+
+
+def test_missing_build_root_fails_without_creating_lock_files(tmp_path, capsys):
+    root = tmp_path / "missing"
+
+    assert _run(root, "build", "problem") == 1
+
+    assert "BRIDGE_RUN_NOT_FOUND" in capsys.readouterr().err
+    assert not root.exists()
+
+
+def test_bridge_build_holds_operator_locks_through_model_calls(
+    bridge_run, monkeypatch
+):
+    entered = threading.Event()
+    release = threading.Event()
+
+    def blocking_ledger(_prompt):
+        entered.set()
+        assert release.wait(timeout=5)
+        return json.dumps(
+            {
+                "entries": [
+                    {
+                        "entry_key": "K1",
+                        "claim_class": "unknown",
+                        "claim": "The requested conclusion is not established.",
+                    }
+                ]
+            }
+        )
+
+    def adapter(harness):
+        base = _scripted_adapter(harness)
+        return LLMAdapter(
+            {
+                **base.endpoints,
+                "summarizer": MockEndpoint(
+                    blocking_ledger, name="blocking-summarizer"
+                ),
+            },
+            harness.blobs,
+            retry_max=0,
+        )
+
+    monkeypatch.setattr(
+        bridge_cli,
+        "_build_bridge_adapter",
+        lambda _manifest, harness: adapter(harness),
+    )
+    result: list[int] = []
+    worker = threading.Thread(
+        target=lambda: result.append(
+            _run(bridge_run.root, "build", bridge_run.problem_id)
+        )
+    )
+    worker.start()
+    assert entered.wait(timeout=5)
+    try:
+        with pytest.raises(ProcessLockBusy):
+            operator_locks(bridge_run.root, owner="contender", blocking=False)
+    finally:
+        release.set()
+        worker.join(timeout=5)
+
+    assert not worker.is_alive()
+    assert result == [0]
+    probe = operator_locks(bridge_run.root, owner="after-build", blocking=False)
+    probe.release()
 
 
 @pytest.fixture()

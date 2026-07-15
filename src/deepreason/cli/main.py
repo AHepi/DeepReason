@@ -431,6 +431,7 @@ def _main(argv: list[str] | None = None) -> int:
     if args.command == "make":
         from deepreason.config import load as load_config
         from deepreason.llm.capabilities import CapabilityCache
+        from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
         from deepreason.ops import require_full_engine
         from deepreason.run_manifest import (
             MANIFEST_NAME,
@@ -448,6 +449,7 @@ def _main(argv: list[str] | None = None) -> int:
             if args.root != ".deepreason"
             else easy._fresh(Path("runs") / easy._slug(args.description))
         )
+        operator_lock = None
         try:
             bound_path = run_root / MANIFEST_NAME
             if bound_path.exists():
@@ -475,23 +477,37 @@ def _main(argv: list[str] | None = None) -> int:
                 manifest, {"problem": {"description": args.description}, "commitments": []}
             )
             if not args.dry_run:
+                try:
+                    operator_lock = operator_locks(
+                        run_root, owner="make", blocking=False
+                    )
+                except ProcessLockBusy as error:
+                    raise ValueError(
+                        "MAKE_ALREADY_RUNNING: another operator owns this run root"
+                    ) from error
                 bind_run_manifest(manifest, run_root)
-        except ValueError as error:
+        except (ProcessLockError, ValueError) as error:
+            if operator_lock is not None:
+                operator_lock.release()
             print(str(error), file=sys.stderr)
             return 1
         if args.dry_run:
             print(render_role_matrix(manifest))
             print(f"sha256={manifest.sha256}")
             return 0
-        compiled_config = materialize_run_config(manifest, run_root)
-        # easy.make remains the deterministic website workflow. It sees only
-        # the generated concrete role table, never source/decoy YAML. Passing
-        # the chosen root prevents a second hidden freshness decision.
-        easy.make(
-            args.description, out=args.out, cycles=args.cycles,
-            token_budget=args.token_budget or None,
-            config=str(compiled_config), root=str(run_root),
-        )
+        try:
+            compiled_config = materialize_run_config(manifest, run_root)
+            # easy.make remains the deterministic website workflow. It sees only
+            # the generated concrete role table, never source/decoy YAML. Passing
+            # the chosen root prevents a second hidden freshness decision.
+            easy.make(
+                args.description, out=args.out, cycles=args.cycles,
+                token_budget=args.token_budget or None,
+                config=str(compiled_config), root=str(run_root),
+            )
+        finally:
+            assert operator_lock is not None
+            operator_lock.release()
         return 0
 
     if args.command == "frontier":
@@ -1082,7 +1098,8 @@ def _text_manifest_schema_version(configured) -> int:
 def _cmd_reason(args) -> int:
     from deepreason.config import load as load_config
     from deepreason.llm.capabilities import CapabilityCache
-    from deepreason.ops import require_full_engine, run_scheduler
+    from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
+    from deepreason.ops import require_full_engine
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         RunManifestError,
@@ -1092,12 +1109,8 @@ def _cmd_reason(args) -> int:
         load_run_manifest,
         render_role_matrix,
     )
-    from deepreason.runtime.progress import ProgressSink, _atomic_json
-    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
-    from deepreason.status_display import display_status_counts
     from deepreason.workloads.text import (
         ReasoningWorkloadSpec,
-        seed_reasoning_workload,
         spec_from_text,
     )
 
@@ -1120,6 +1133,7 @@ def _cmd_reason(args) -> int:
         spec = spec_from_text(args.text)
 
     root = Path(args.root)
+    operator_lock = None
     try:
         bound = root / MANIFEST_NAME
         if bound.exists():
@@ -1156,14 +1170,39 @@ def _cmd_reason(args) -> int:
             )
         config = config_from_run_manifest(manifest)
         if not args.dry_run:
+            try:
+                operator_lock = operator_locks(
+                    root, owner="reason", blocking=False
+                )
+            except ProcessLockBusy as error:
+                raise ValueError(
+                    "RUN_ALREADY_RUNNING: another operator owns this run root"
+                ) from error
             bind_run_manifest(manifest, root)
-    except ValueError as error:
+    except (ProcessLockError, ValueError) as error:
+        if operator_lock is not None:
+            operator_lock.release()
         print(str(error), file=sys.stderr)
         return 1
     if args.dry_run:
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")
         return 0
+    try:
+        return _execute_reason(args, spec, manifest, config, root, token_budget)
+    finally:
+        assert operator_lock is not None
+        operator_lock.release()
+
+
+def _execute_reason(args, spec, manifest, config, root: Path, token_budget) -> int:
+    """Execute a preflighted text workload while its caller holds root locks."""
+
+    from deepreason.ops import run_scheduler
+    from deepreason.runtime.progress import ProgressSink, _atomic_json
+    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+    from deepreason.status_display import display_status_counts
+    from deepreason.workloads.text import seed_reasoning_workload
 
     _atomic_json(
         root / "run-request.json",
@@ -1657,7 +1696,8 @@ def _cmd_simulate(args) -> int:
 def _cmd_run(args) -> int:
     from deepreason.config import load as load_config
     from deepreason.llm.capabilities import CapabilityCache
-    from deepreason.ops import require_full_engine, run_scheduler
+    from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
+    from deepreason.ops import require_full_engine
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         RunManifestError,
@@ -1672,6 +1712,7 @@ def _cmd_run(args) -> int:
 
     cycles = int(args.budget.split("=", 1)[1]) if "=" in args.budget else int(args.budget)
     run_root = Path(args.root)
+    operator_lock = None
     try:
         bound_path = run_root / MANIFEST_NAME
         if bound_path.exists():
@@ -1705,14 +1746,37 @@ def _cmd_run(args) -> int:
         if args.problem:
             preflight_payload(manifest, _read_problem_file(Path(args.problem)))
         if not args.dry_run:
+            try:
+                operator_lock = operator_locks(
+                    run_root, owner="run", blocking=False
+                )
+            except ProcessLockBusy as error:
+                raise ValueError(
+                    "RUN_ALREADY_RUNNING: another operator owns this run root"
+                ) from error
             bind_run_manifest(manifest, run_root)
-    except ValueError as error:
+    except (ProcessLockError, ValueError) as error:
+        if operator_lock is not None:
+            operator_lock.release()
         print(str(error), file=sys.stderr)
         return 1
     if args.dry_run:
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")
         return 0
+    try:
+        return _execute_bound_run(args, manifest, config, run_root, cycles)
+    finally:
+        assert operator_lock is not None
+        operator_lock.release()
+
+
+def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> int:
+    """Execute a preflighted run while its caller retains operator locks."""
+
+    from deepreason.ops import run_scheduler
+    from deepreason.run_manifest import preflight_payload
+
     harness = Harness(run_root)
     if args.problem:
         _load_problem_file(harness, Path(args.problem))

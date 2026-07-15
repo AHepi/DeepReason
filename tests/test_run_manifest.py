@@ -5,6 +5,7 @@ import pytest
 
 from deepreason.config import Config, EndpointSpec
 from deepreason.harness import Harness
+from deepreason.locking import operator_locks
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
 from deepreason.run_manifest import (
     Route,
@@ -19,6 +20,7 @@ from deepreason.run_manifest import (
     preflight_harness,
     preflight_payload,
     role_matrix,
+    write_run_manifest,
 )
 
 
@@ -441,6 +443,39 @@ def test_load_rejects_conflicting_digest_even_when_first_sidecar_matches(tmp_pat
     assert raised.value.pointer == "/run-manifest.sha256"
 
 
+@pytest.mark.parametrize("unsafe_part", ["manifest", "json-sidecar", "fixed-sidecar"])
+def test_manifest_load_rejects_symlinked_control_files_without_leaking_target(
+    tmp_path, unsafe_part
+):
+    manifest = compile_run_manifest(
+        _config(), single_model="gemma4:31b", rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    path, json_digest = write_run_manifest(manifest, tmp_path / "input.json")
+    fixed_digest = tmp_path / "run-manifest.sha256"
+    secret = "credential-like-secret-must-not-leak"
+    target = tmp_path / "sensitive.txt"
+    target.write_text(secret, encoding="utf-8")
+    unsafe = {
+        "manifest": path,
+        "json-sidecar": json_digest,
+        "fixed-sidecar": fixed_digest,
+    }[unsafe_part]
+    if unsafe.exists():
+        unsafe.unlink()
+    try:
+        unsafe.symlink_to(target)
+    except OSError as error:  # pragma: no cover - restricted Windows policy
+        pytest.skip(f"symlinks unavailable: {error}")
+
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(path)
+
+    assert raised.value.code == "MANIFEST_FILE_UNSAFE"
+    assert secret not in str(raised.value)
+    assert target.read_text(encoding="utf-8") == secret
+
+
 def test_same_inputs_and_timestamp_compile_to_same_bytes_and_source_hash():
     first = compile_run_manifest(
         _config(), single_model="gemma4:31b", rubric_policy="forbid",
@@ -650,6 +685,63 @@ def test_cli_run_resume_uses_bound_manifest_and_rejects_replacement(
     ) == 1
     assert "RUN_MANIFEST_CONFLICT" in capsys.readouterr().err
     assert load_run_manifest(run_root / "run-manifest.json") == bound
+
+
+def test_direct_cli_make_run_and_reason_respect_operator_contention(
+    tmp_path, monkeypatch, capsys
+):
+    from deepreason.cli.main import main
+
+    root = tmp_path / "full-run"
+    manifest = compile_run_manifest(
+        _config(),
+        single_model="gemma4:31b",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    bind_run_manifest(manifest, root)
+    monkeypatch.setattr(
+        "deepreason.easy.make",
+        lambda *_args, **_kwargs: pytest.fail("contended make executed"),
+    )
+    locks = operator_locks(root, owner="test-holder", blocking=False)
+    try:
+        assert main(["--root", str(root), "make", "locked site"]) == 1
+        assert "MAKE_ALREADY_RUNNING" in capsys.readouterr().err
+        assert main(["--root", str(root), "run", "--budget", "1"]) == 1
+        assert "RUN_ALREADY_RUNNING" in capsys.readouterr().err
+    finally:
+        locks.release()
+
+    text_root = tmp_path / "text-run"
+    text_manifest = compile_run_manifest(
+        _config(),
+        single_model="gemma4:31b",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        schema_version=2,
+        workload_profile="text",
+    )
+    bind_run_manifest(text_manifest, text_root)
+    locks = operator_locks(text_root, owner="test-holder", blocking=False)
+    try:
+        assert (
+            main(
+                [
+                    "--root",
+                    str(text_root),
+                    "reason",
+                    "--text",
+                    "What follows?",
+                    "--cycles",
+                    "1",
+                ]
+            )
+            == 1
+        )
+        assert "RUN_ALREADY_RUNNING" in capsys.readouterr().err
+    finally:
+        locks.release()
 
 
 def test_doctor_dry_run_resolves_configured_endpoint_alias(tmp_path, capsys):

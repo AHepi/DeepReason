@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+import stat
 import sys
 import unicodedata
 from dataclasses import dataclass
@@ -26,6 +27,7 @@ from deepreason.bridge.harness import (
 )
 from deepreason.bridge.events import BridgeAction
 from deepreason.bridge.models import BridgeResolution, RenderingMode
+from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
 
 
 _MAX_CONTROL_FILE_BYTES = 4 * 1024 * 1024
@@ -278,14 +280,18 @@ def _load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
         MANIFEST_NAME,
         RunManifestError,
         bind_run_manifest,
-        load_run_manifest,
     )
 
     bound_path = root / MANIFEST_NAME
+    if bound_path.is_symlink():
+        raise ValueError("BRIDGE_MANIFEST_INVALID")
     if bound_path.is_file():
-        manifest = load_run_manifest(bound_path)
+        _validate_manifest_files(bound_path)
+        manifest = _load_manifest_without_echo(bound_path)
         if supplied is not None:
-            requested = load_run_manifest(supplied)
+            supplied_path = Path(supplied)
+            _validate_manifest_files(supplied_path)
+            requested = _load_manifest_without_echo(supplied_path)
             if requested.canonical_bytes() != manifest.canonical_bytes():
                 raise RunManifestError(
                     "RUN_MANIFEST_CONFLICT",
@@ -293,7 +299,9 @@ def _load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
                     f"/{MANIFEST_NAME}",
                 )
     elif supplied is not None:
-        manifest = load_run_manifest(supplied)
+        supplied_path = Path(supplied)
+        _validate_manifest_files(supplied_path)
+        manifest = _load_manifest_without_echo(supplied_path)
     else:
         raise ValueError(
             "BRIDGE_MANIFEST_REQUIRED: pass --run-manifest for an unbound run"
@@ -311,6 +319,52 @@ def _load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
     if bind and not bound_path.is_file():
         bind_run_manifest(manifest, root)
     return manifest
+
+
+def _validate_manifest_files(path: Path) -> None:
+    """Reject unsafe manifest/sidecar paths before any parser reads them."""
+
+    from deepreason.run_manifest import MANIFEST_HASH_NAME
+
+    try:
+        observed = path.lstat()
+    except OSError as error:
+        raise ValueError("BRIDGE_MANIFEST_INVALID") from error
+    if (
+        not stat.S_ISREG(observed.st_mode)
+        or path.is_symlink()
+        or not 2 <= observed.st_size <= _MAX_CONTROL_FILE_BYTES
+    ):
+        raise ValueError("BRIDGE_MANIFEST_INVALID")
+    for sidecar in (
+        path.with_suffix(path.suffix + ".sha256"),
+        path.parent / MANIFEST_HASH_NAME,
+    ):
+        try:
+            sidecar_stat = sidecar.lstat()
+        except FileNotFoundError:
+            continue
+        except OSError as error:
+            raise ValueError("BRIDGE_MANIFEST_INVALID") from error
+        if (
+            not stat.S_ISREG(sidecar_stat.st_mode)
+            or sidecar.is_symlink()
+            or not 1 <= sidecar_stat.st_size <= 1_024
+        ):
+            raise ValueError("BRIDGE_MANIFEST_INVALID")
+
+
+def _load_manifest_without_echo(path: Path):
+    from deepreason.run_manifest import RunManifestError, load_run_manifest
+
+    try:
+        return load_run_manifest(path)
+    except RunManifestError as error:
+        raise RunManifestError(
+            error.code,
+            "manifest validation or integrity check failed",
+            error.pointer,
+        ) from error
 
 
 def _build_bridge_adapter(manifest, harness):
@@ -419,32 +473,41 @@ def _build(args) -> tuple[_BridgeSnapshot, int]:
     resolved_blocks, resolved_clusters = _preflight_focus(
         preflight, manifest, block_refs, cluster_refs
     )
-    bind_run_manifest(manifest, root)
-    harness = Harness(root)
-    # Adapter/route construction must succeed before an attention receipt says
-    # that scratch material was rendered to a model.
-    adapter = _build_bridge_adapter(manifest, harness)
-    pack = _attention_pack(harness, manifest, resolved_blocks, resolved_clusters)
-    policy = manifest.bridge_policy
-    terminal = harness.build_bridge(
-        problem_id,
-        args.target,
-        policy.workflow_policy(),
-        run_manifest_digest=manifest.sha256,
-        stage_a_adapter=adapter,
-        composition_adapter=adapter,
-        review_adapter=(adapter if policy.grounding_review else None),
-        repair_adapter=(
-            adapter
-            if policy.grounding_review and policy.max_grounding_repair_attempts
-            else None
-        ),
-        attention_pack=pack,
-        maximum_sections=policy.output_section_limit,
-        formatting_profile=policy.target_profile,
-    )
-    snapshot = _load_snapshot(root, terminal=terminal)
-    return snapshot, 0 if terminal.process_status == "success" else 1
+    try:
+        locks = operator_locks(root, owner="bridge", blocking=False)
+    except ProcessLockBusy as error:
+        raise ValueError(
+            "BRIDGE_ALREADY_RUNNING: another operator owns this run root"
+        ) from error
+    try:
+        bind_run_manifest(manifest, root)
+        harness = Harness(root)
+        # Adapter/route construction must succeed before an attention receipt says
+        # that scratch material was rendered to a model.
+        adapter = _build_bridge_adapter(manifest, harness)
+        pack = _attention_pack(harness, manifest, resolved_blocks, resolved_clusters)
+        policy = manifest.bridge_policy
+        terminal = harness.build_bridge(
+            problem_id,
+            args.target,
+            policy.workflow_policy(),
+            run_manifest_digest=manifest.sha256,
+            stage_a_adapter=adapter,
+            composition_adapter=adapter,
+            review_adapter=(adapter if policy.grounding_review else None),
+            repair_adapter=(
+                adapter
+                if policy.grounding_review and policy.max_grounding_repair_attempts
+                else None
+            ),
+            attention_pack=pack,
+            maximum_sections=policy.output_section_limit,
+            formatting_profile=policy.target_profile,
+        )
+        snapshot = _load_snapshot(root, terminal=terminal)
+        return snapshot, 0 if terminal.process_status == "success" else 1
+    finally:
+        locks.release()
 
 
 def _load_terminal(root: Path) -> BridgeTerminalResultV1:
@@ -461,33 +524,13 @@ def _load_terminal(root: Path) -> BridgeTerminalResultV1:
 def _load_result_manifest(root: Path):
     """Load the exact bound manifest without following fixed-name symlinks."""
 
-    from deepreason.run_manifest import (
-        MANIFEST_HASH_NAME,
-        MANIFEST_NAME,
-        load_run_manifest,
-    )
+    from deepreason.run_manifest import MANIFEST_NAME
 
     manifest_path = root / MANIFEST_NAME
-    sidecars = (
-        root / MANIFEST_HASH_NAME,
-        manifest_path.with_suffix(manifest_path.suffix + ".sha256"),
-    )
-    if manifest_path.is_symlink() or not manifest_path.is_file():
-        raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID")
     try:
-        if not 2 <= manifest_path.stat().st_size <= _MAX_CONTROL_FILE_BYTES:
-            raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID")
-        for sidecar in sidecars:
-            if sidecar.is_symlink():
-                raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID")
-            if sidecar.exists() and (
-                not sidecar.is_file() or sidecar.stat().st_size > 1_024
-            ):
-                raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID")
-        return load_run_manifest(manifest_path)
+        _validate_manifest_files(manifest_path)
+        return _load_manifest_without_echo(manifest_path)
     except (OSError, RuntimeError, ValueError) as error:
-        if str(error) == "BRIDGE_RESULT_MANIFEST_INVALID":
-            raise
         raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID") from error
 
 
@@ -1212,11 +1255,28 @@ def _validate_payload(
 
 
 def _status_payload(root: Path) -> dict[str, Any]:
+    from deepreason.bridge.operations import read_failure, read_status
+
+    operation = read_status(root)
+    status_path = root / BRIDGE_STATUS_NAME
+    if not status_path.exists():
+        if operation is not None:
+            if operation.state == "failed":
+                read_failure(root)
+            return operation.model_dump(
+                mode="json", by_alias=True, exclude_none=True
+            )
+        raise ValueError(f"BRIDGE_RECORD_UNAVAILABLE: {BRIDGE_STATUS_NAME}")
     try:
         status = BridgeCLIStatusV1.model_validate(
-            _read_bounded_json(root / BRIDGE_STATUS_NAME)
+            _read_bounded_json(status_path)
         )
     except ValueError as error:
+        if operation is not None and operation.state == "failed":
+            read_failure(root)
+            return operation.model_dump(
+                mode="json", by_alias=True, exclude_none=True
+            )
         if str(error).startswith("BRIDGE_RECORD_"):
             raise
         raise ValueError("BRIDGE_STATUS_INVALID") from error
@@ -1224,8 +1284,21 @@ def _status_payload(root: Path) -> dict[str, Any]:
     result_path = root / BRIDGE_RESULT_NAME
     if status.state in {"completed", "failed"}:
         if not result_path.is_file() or result_path.is_symlink():
+            if operation is not None and operation.state == "failed":
+                read_failure(root)
+                return operation.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
             raise ValueError("BRIDGE_STATUS_INVALID: terminal result is absent")
-        snapshot = _load_snapshot(root)
+        try:
+            snapshot = _load_snapshot(root)
+        except ValueError:
+            if operation is not None and operation.state == "failed":
+                read_failure(root)
+                return operation.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
+            raise
         terminal = snapshot.terminal
         if terminal.terminal_event_seq != status.terminal_event_seq:
             raise ValueError("BRIDGE_STATUS_INVALID: status/result sequence mismatch")
@@ -1245,6 +1318,9 @@ def _status_payload(root: Path) -> dict[str, Any]:
             "review_id": terminal.review_id,
             "failure_id": terminal.failure_id,
         }
+    elif operation is not None and operation.state == "failed":
+        read_failure(root)
+        return operation.model_dump(mode="json", by_alias=True, exclude_none=True)
     return payload
 
 
@@ -1289,8 +1365,34 @@ def handle_bridge_command(args) -> int:
                 if payload.get("error_code"):
                     output += f"\nError: {payload['error_code']}"
         else:
-            snapshot = _load_snapshot(root)
-            if command == "result":
+            operation_failure = None
+            try:
+                snapshot = _load_snapshot(root)
+            except ValueError:
+                if command != "result":
+                    raise
+                from deepreason.bridge.operations import read_failure
+
+                operation_failure = read_failure(root)
+                if operation_failure is None:
+                    raise
+                snapshot = None
+            if operation_failure is not None:
+                payload = operation_failure.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
+                output = (
+                    json.dumps(payload, indent=2, sort_keys=True)
+                    if args.json
+                    else (
+                        "Bridge worker failed (operational, non-epistemic)\n"
+                        f"Error: {operation_failure.error_code}\n"
+                        f"Type: {operation_failure.error_type}"
+                    )
+                )
+                exit_code = 1
+            elif command == "result":
+                assert snapshot is not None
                 payload = _result_payload(
                     snapshot, limit=page_limit, offset=page_offset
                 )
@@ -1303,6 +1405,7 @@ def handle_bridge_command(args) -> int:
                 )
                 exit_code = 0 if snapshot.terminal.process_status == "success" else 1
             elif command == "inspect":
+                assert snapshot is not None
                 payload = _inspect_payload(
                     snapshot, limit=page_limit, offset=page_offset
                 )
@@ -1313,6 +1416,7 @@ def handle_bridge_command(args) -> int:
                 )
                 exit_code = 0 if snapshot.terminal.process_status == "success" else 1
             elif command == "claims":
+                assert snapshot is not None
                 payload = _claims_payload(
                     snapshot, limit=page_limit, offset=page_offset
                 )
@@ -1325,6 +1429,7 @@ def handle_bridge_command(args) -> int:
                 )
                 exit_code = 0
             elif command == "validate":
+                assert snapshot is not None
                 payload, valid = _validate_payload(
                     snapshot, limit=page_limit, offset=page_offset
                 )
@@ -1342,7 +1447,7 @@ def handle_bridge_command(args) -> int:
                 raise ValueError(f"unknown bridge command: {command}")
         print(output)
         return exit_code
-    except (KeyError, OSError, ValueError) as error:
+    except (KeyError, ProcessLockError, OSError, ValueError) as error:
         print(_safe_human(error, maximum=2_048), file=sys.stderr)
         return 1
 

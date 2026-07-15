@@ -44,15 +44,22 @@ def test_initialize_and_tools_list():
         assert tool["description"] and tool["inputSchema"]["type"] == "object"
 
 
-def test_default_surface_is_only_harness_owned_run_and_make_tools(monkeypatch):
+def test_default_surface_is_only_harness_owned_run_make_scratch_and_bridge_tools(
+    monkeypatch,
+):
     monkeypatch.delenv("DEEPREASON_ENABLE_LEGACY_MCP", raising=False)
     tools = mcp_server.handle(
         {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
     )
     names = {tool["name"] for tool in tools["result"]["tools"]}
+    assert len(tools["result"]["tools"]) == 17
+    assert len(names) == 17
     assert names == {
         "start_run", "run_status", "run_result", "continue_run", "cancel_run",
         "start_make", "make_status", "make_result",
+        "scratch_map", "scratch_search", "scratch_open", "scratch_related",
+        "scratch_attention", "start_bridge", "bridge_status", "bridge_result",
+        "bridge_claims",
     }
 
     hidden = _call("run_cycles", {"cycles": 1})
@@ -103,6 +110,52 @@ def test_unknown_tool_and_method():
     err = mcp_server.handle({"jsonrpc": "2.0", "id": 9, "method": "no/such"})
     assert err["error"]["code"] == -32601
     assert mcp_server.handle({"jsonrpc": "2.0", "method": "no/such/notification"}) is None
+
+
+def test_runtime_enforces_closed_bounded_tool_schemas(monkeypatch):
+    monkeypatch.delenv("DEEPREASON_ENABLE_LEGACY_MCP", raising=False)
+
+    unknown = _call("run_status", {"route": "attacker-selected"})
+    assert unknown["isError"] is True
+    assert "MCP_INPUT_INVALID" in unknown["content"][0]["text"]
+    assert "attacker-selected" not in unknown["content"][0]["text"]
+
+    oversized = _call("scratch_map", {"root": "x" * 4_097})
+    assert oversized["isError"] is True
+    assert "MCP_INPUT_INVALID" in oversized["content"][0]["text"]
+
+    non_object = mcp_server.handle(
+        {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "tools/call",
+            "params": {"name": "bridge_status", "arguments": []},
+        }
+    )["result"]
+    assert non_object["isError"] is True
+    assert "arguments must be an object" in non_object["content"][0]["text"]
+
+    hostile_name = "x" * 10_000
+    invalid_name = _call(hostile_name, {})
+    assert invalid_name["isError"] is True
+    text = invalid_name["content"][0]["text"]
+    assert "MCP_TOOL_NOT_EXPOSED" in text
+    assert hostile_name not in text
+
+    oversized_token = mcp_server.handle(
+        {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "tools/call",
+            "params": {
+                "name": "bridge_status",
+                "arguments": {},
+                "_meta": {"progressToken": "p" * 257},
+            },
+        }
+    )["result"]
+    assert oversized_token["isError"] is True
+    assert "progressToken is invalid" in oversized_token["content"][0]["text"]
 
 
 def test_make_status_and_result_are_fixed_root_reads(tmp_path):

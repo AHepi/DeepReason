@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import fcntl
 import hashlib
 import json
 import os
@@ -10,6 +9,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, ConfigDict
 
+from deepreason.locking import ProcessLockBusy, operator_locks
 from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
 from deepreason.runtime.budget import Limit, parse_limit
 from deepreason.runtime.progress import ProgressSink
@@ -29,21 +29,11 @@ def _digest(value: dict) -> str:
 
 
 def _assert_no_live_lock(root: Path) -> None:
-    for name in (".run-operator.lock", ".make-operator.lock"):
-        path = root / name
-        stream = path.open("a+b")
-        try:
-            try:
-                fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError as error:
-                raise ValueError("CONTINUE_RUN_ACTIVE: operator lock is live") from error
-            finally:
-                try:
-                    fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
-                except OSError:
-                    pass
-        finally:
-            stream.close()
+    try:
+        locks = operator_locks(root, owner="continue-check", blocking=False)
+    except ProcessLockBusy as error:
+        raise ValueError("CONTINUE_RUN_ACTIVE: operator lock is live") from error
+    locks.release()
 
 
 def prepare_continuation(

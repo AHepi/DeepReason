@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tempfile
 from contextlib import contextmanager
 from datetime import datetime, timezone
@@ -29,6 +30,7 @@ from pydantic import (
     model_validator,
 )
 
+from deepreason.locking import ProcessLock, RUN_MANIFEST_LOCK_NAME
 from deepreason.llm.endpoints import DEFAULT_TIMEOUT_S, resolve_model
 from deepreason.llm.providers import infer_provider
 
@@ -37,6 +39,8 @@ SCHEMA_VERSION = 1
 LATEST_SCHEMA_VERSION = 3
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
+_MAX_MANIFEST_BYTES = 4 * 1024 * 1024
+_MAX_MANIFEST_HASH_BYTES = 1_024
 _UNRESOLVED_MODELS = {"auto", "auto-alt"}
 
 # Configured endpoint roles. Auxiliary prompt templates such as
@@ -1193,28 +1197,132 @@ def _atomic_write(target: Path, payload: bytes) -> None:
         os.replace(temporary, target)
         # Persist the directory entry as well as the file contents so a
         # reported successful bind survives a host crash.
-        directory_fd = os.open(target.parent, os.O_RDONLY | os.O_DIRECTORY)
-        try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+        directory_flag = getattr(os, "O_DIRECTORY", None)
+        if os.name != "nt" and directory_flag is not None:
+            directory_fd = os.open(target.parent, os.O_RDONLY | directory_flag)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     finally:
         if temporary.exists():
             temporary.unlink()
 
 
+def _read_bounded_regular(
+    path: Path,
+    *,
+    maximum_bytes: int,
+    required: bool,
+) -> bytes | None:
+    """Read one manifest control file without following links or echoing data."""
+
+    try:
+        observed = path.lstat()
+    except FileNotFoundError:
+        if required:
+            raise RunManifestError(
+                "MANIFEST_FILE_UNAVAILABLE",
+                "required manifest file is absent",
+                f"/{path.name}",
+            )
+        return None
+    except OSError as error:
+        raise RunManifestError(
+            "MANIFEST_FILE_UNAVAILABLE",
+            "manifest control file cannot be inspected safely",
+            f"/{path.name}",
+        ) from error
+    if (
+        not stat.S_ISREG(observed.st_mode)
+        or path.is_symlink()
+        or not 1 <= observed.st_size <= maximum_bytes
+    ):
+        raise RunManifestError(
+            "MANIFEST_FILE_UNSAFE",
+            "manifest control file must be a bounded regular non-symlink file",
+            f"/{path.name}",
+        )
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+        with os.fdopen(descriptor, "rb") as stream:
+            opened = os.fstat(stream.fileno())
+            if (
+                not stat.S_ISREG(opened.st_mode)
+                or opened.st_size != observed.st_size
+                or opened.st_size > maximum_bytes
+            ):
+                raise RunManifestError(
+                    "MANIFEST_FILE_UNSAFE",
+                    "manifest control file changed while it was opened",
+                    f"/{path.name}",
+                )
+            payload = stream.read(maximum_bytes + 1)
+        current = path.lstat()
+    except RunManifestError:
+        raise
+    except OSError as error:
+        raise RunManifestError(
+            "MANIFEST_FILE_UNAVAILABLE",
+            "manifest control file cannot be read safely",
+            f"/{path.name}",
+        ) from error
+    if (
+        len(payload) != opened.st_size
+        or len(payload) > maximum_bytes
+        or not stat.S_ISREG(current.st_mode)
+        or current.st_size != opened.st_size
+        or (
+            opened.st_ino
+            and current.st_ino
+            and (opened.st_dev, opened.st_ino) != (current.st_dev, current.st_ino)
+        )
+    ):
+        raise RunManifestError(
+            "MANIFEST_FILE_UNSAFE",
+            "manifest control file changed while it was read",
+            f"/{path.name}",
+        )
+    return payload
+
+
+def _manifest_sidecar_digest(path: Path) -> str | None:
+    payload = _read_bounded_regular(
+        path,
+        maximum_bytes=_MAX_MANIFEST_HASH_BYTES,
+        required=False,
+    )
+    if payload is None:
+        return None
+    try:
+        words = payload.decode("utf-8").strip().split()
+    except UnicodeDecodeError as error:
+        raise RunManifestError(
+            "MANIFEST_HASH_INVALID",
+            "manifest digest sidecar is not valid UTF-8",
+            f"/{path.name}",
+        ) from error
+    digest = words[0] if words else ""
+    if re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+        raise RunManifestError(
+            "MANIFEST_HASH_INVALID",
+            "manifest digest sidecar is not one lowercase SHA-256 digest",
+            f"/{path.name}",
+        )
+    return digest
+
+
 @contextmanager
 def _run_manifest_lock(root: Path):
     """Serialize bind/check across processes sharing a run root."""
-    import fcntl
 
-    lock_path = root / ".run-manifest.lock"
-    with lock_path.open("a+b") as stream:
-        fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+    with ProcessLock(
+        root / RUN_MANIFEST_LOCK_NAME,
+        owner="run-manifest",
+        blocking=True,
+    ):
+        yield
 
 
 def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Path]:
@@ -1235,7 +1343,12 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
 
     with _run_manifest_lock(root_path):
         if target.exists():
-            existing = target.read_bytes()
+            existing = _read_bounded_regular(
+                target,
+                maximum_bytes=_MAX_MANIFEST_BYTES,
+                required=True,
+            )
+            assert existing is not None
             if existing != payload:
                 existing_hash = hashlib.sha256(existing).hexdigest()
                 raise RunManifestError(
@@ -1252,14 +1365,14 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
                 fixed_hash,
             )
             for sidecar in sidecars:
-                if not sidecar.exists():
+                expected = _manifest_sidecar_digest(sidecar)
+                if expected is None:
                     continue
-                words = sidecar.read_text(encoding="utf-8").strip().split()
-                expected = words[0] if words else ""
                 if expected != manifest.sha256:
                     raise RunManifestError(
                         "MANIFEST_HASH_MISMATCH",
-                        f"expected {expected or '<empty>'}, computed {manifest.sha256}",
+                        "manifest digest sidecar does not match canonical bytes",
+                        f"/{sidecar.name}",
                     )
             if not fixed_hash.exists():
                 _atomic_write(fixed_hash, digest_payload)
@@ -1272,15 +1385,13 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
             target.with_suffix(target.suffix + ".sha256"),
             fixed_hash,
         ):
-            if not sidecar.exists():
+            expected = _manifest_sidecar_digest(sidecar)
+            if expected is None:
                 continue
-            words = sidecar.read_text(encoding="utf-8").strip().split()
-            expected = words[0] if words else ""
             if expected != manifest.sha256:
                 raise RunManifestError(
                     "RUN_MANIFEST_CONFLICT",
-                    "run root already records a different manifest digest "
-                    f"({expected or '<empty>'} != {manifest.sha256})",
+                    "run root already records a different manifest digest",
                     f"/{sidecar.name}",
                 )
         _atomic_write(target, payload)
@@ -1296,11 +1407,19 @@ def persist_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path,
 
 def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManifest:
     target = Path(path)
-    raw = target.read_bytes()
+    raw = _read_bounded_regular(
+        target,
+        maximum_bytes=_MAX_MANIFEST_BYTES,
+        required=True,
+    )
+    assert raw is not None
     try:
         manifest = RunManifest.model_validate_json(raw)
     except ValueError as error:
-        raise RunManifestError("INVALID_RUN_MANIFEST", str(error)) from error
+        raise RunManifestError(
+            "INVALID_RUN_MANIFEST",
+            "manifest JSON does not satisfy the selected schema",
+        ) from error
     if verify_hash:
         candidates = [
             target.with_suffix(target.suffix + ".sha256"),
@@ -1310,14 +1429,13 @@ def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManif
         # first match would let a stale/conflicting second record hide behind
         # candidate ordering and make verification depend on filename choice.
         for sidecar in candidates:
-            if not sidecar.exists():
+            expected = _manifest_sidecar_digest(sidecar)
+            if expected is None:
                 continue
-            words = sidecar.read_text(encoding="utf-8").strip().split()
-            expected = words[0] if words else ""
             if expected != manifest.sha256:
                 raise RunManifestError(
                     "MANIFEST_HASH_MISMATCH",
-                    f"expected {expected or '<empty>'}, computed {manifest.sha256}",
+                    "manifest digest sidecar does not match canonical bytes",
                     f"/{sidecar.name}",
                 )
     return manifest

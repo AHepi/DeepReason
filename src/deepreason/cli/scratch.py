@@ -16,7 +16,8 @@ from pathlib import Path
 from typing import Any, TextIO
 
 from deepreason.harness import Harness
-from deepreason.scratch.errors import ScratchServiceError
+from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
+from deepreason.scratch.errors import ScratchRootBusy, ScratchServiceError
 from deepreason.scratch.models import (
     AttentionReceiptV1,
     RetrievalChannel,
@@ -836,8 +837,50 @@ def dispatch_scratch(
         "coverage": lambda: _coverage(args),
     }
     try:
-        result, human = handlers[args.scratch_command]()
-    except (ScratchServiceError, ScratchCliInputError, FileNotFoundError, OSError, ValueError) as error:
+        locks = None
+        mutates = args.scratch_command in {
+            "add",
+            "revise",
+            "link",
+            "retire-link",
+            "cluster",
+        } or (
+            args.scratch_command == "show"
+            and getattr(args, "at_seq", None) is None
+        )
+        try:
+            live_show_missing_root = (
+                args.scratch_command == "show"
+                and getattr(args, "at_seq", None) is None
+                and not Path(args.root).is_dir()
+            )
+            if live_show_missing_root:
+                raise FileNotFoundError(
+                    f"read-only harness root does not exist: {Path(args.root)}"
+                )
+            if mutates:
+                try:
+                    locks = operator_locks(
+                        Path(args.root),
+                        owner=f"scratch-{args.scratch_command}",
+                        blocking=False,
+                    )
+                except ProcessLockBusy as error:
+                    raise ScratchRootBusy(
+                        "another operator owns this run root"
+                    ) from error
+            result, human = handlers[args.scratch_command]()
+        finally:
+            if locks is not None:
+                locks.release()
+    except (
+        ScratchServiceError,
+        ScratchCliInputError,
+        ProcessLockError,
+        FileNotFoundError,
+        OSError,
+        ValueError,
+    ) as error:
         return _emit_error(args, error, stderr)
     return _emit(args, result, human, stdout)
 

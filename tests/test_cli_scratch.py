@@ -18,6 +18,7 @@ from deepreason.cli.scratch import (
     register_scratch_parser,
 )
 from deepreason.harness import Harness
+from deepreason.locking import operator_locks
 from deepreason.scratch.errors import ScratchLinkPrefixAmbiguous
 from deepreason.scratch.models import SimilarityHitV1
 from deepreason.scratch.service import ScratchService
@@ -366,6 +367,14 @@ def test_read_errors_do_not_create_roots_and_json_errors_are_typed(tmp_path):
     assert error["error"]["code"] == "SCRATCH_RUN_NOT_FOUND"
     assert not missing.exists()
 
+    current_show = tmp_path / "missing-show"
+    status, stdout, stderr = _invoke(
+        current_show, "show", "deadbeef", "--json"
+    )
+    assert status == 1 and not stdout
+    assert json.loads(stderr)["error"]["code"] == "SCRATCH_RUN_NOT_FOUND"
+    assert not current_show.exists()
+
     root = tmp_path / "run"
     _create(root, "one")
     status, _stdout, stderr = _invoke(
@@ -378,6 +387,30 @@ def test_read_errors_do_not_create_roots_and_json_errors_are_typed(tmp_path):
     )
     assert status == 1
     assert json.loads(stderr)["error"]["location"] == "/at_seq"
+
+
+def test_mutations_and_live_show_contend_while_historical_show_stays_pure(tmp_path):
+    root = tmp_path / "run"
+    block = _create(root, "locked block")
+    log_before = (root / "log.jsonl").read_bytes()
+    locks = operator_locks(root, owner="test-holder", blocking=False)
+    try:
+        for command in (
+            ("add", "--content", "must not be added"),
+            ("show", block.id[7:15]),
+        ):
+            status, stdout, stderr = _invoke(root, *command, "--json")
+            assert status == 1 and not stdout
+            assert json.loads(stderr)["error"]["code"] == "SCRATCH_ROOT_BUSY"
+        historical = _json(
+            root, "show", block.id[7:15], "--at-seq", "0"
+        )["result"]
+        assert historical["retrieval_receipt_id"] is None
+    finally:
+        locks.release()
+
+    assert (root / "log.jsonl").read_bytes() == log_before
+    assert ScratchService(root).state.visibility == {}
 
 
 def test_content_sources_reject_directories_non_utf8_and_oversized_payloads(tmp_path):

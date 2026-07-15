@@ -73,6 +73,10 @@ class ScratchReadOnly(ScratchServiceError):
     code = "SCRATCH_READ_ONLY"
 
 
+class ScratchRootBusy(ScratchServiceError):
+    code = "SCRATCH_ROOT_BUSY"
+
+
 class ScratchLimitInvalid(ScratchServiceError):
     code = "SCRATCH_LIMIT_INVALID"
 
@@ -89,5 +93,6 @@ __all__ = [
     "ScratchLinkRetired",
     "ScratchNotMember",
     "ScratchReadOnly",
+    "ScratchRootBusy",
     "ScratchServiceError",
 ]

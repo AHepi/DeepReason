@@ -10,6 +10,7 @@ from typing import Iterator
 
 from deepreason.brain.models import BrainEvent
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.locking import ProcessLock
 
 _DERIVED_EVENT_TYPES = frozenset({"Index", "Card"})
 _EMPTY_ROOT = sha256_hex(b"deepreason-brain-v1")
@@ -76,23 +77,8 @@ def append_lines(path: Path, events: list[BrainEvent]) -> None:
 def brain_lock(path: Path) -> Iterator[None]:
     """Advisory process lock; the brain stays append-only under concurrency."""
 
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a+b") as stream:
-        try:
-            import fcntl
-
-            fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
-        except ImportError:  # pragma: no cover - Windows is not a supported runner today
-            pass
-        try:
-            yield
-        finally:
-            try:
-                import fcntl
-
-                fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
-            except ImportError:  # pragma: no cover
-                pass
+    with ProcessLock(path, owner="brain", blocking=True):
+        yield
 
 
 def last_json_line(path: Path) -> dict | None:

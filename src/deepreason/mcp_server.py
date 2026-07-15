@@ -6,24 +6,48 @@ The historical research/operator verbs remain quarantined behind
 ``DEEPREASON_ENABLE_LEGACY_MCP=1`` for explicit migration work.
 """
 
-import fcntl
 import json
 import os
+import re
 import sys
 import threading
 from pathlib import Path
 
+from deepreason.locking import (
+    MAKE_OPERATOR_LOCK_NAME,
+    RUN_OPERATOR_LOCK_NAME,
+    ProcessLockBusy,
+    operator_locks,
+)
+
 _PROTOCOL = "2024-11-05"
-_ROOT = {"root": {"type": "string", "description": "harness state directory", "default": ".deepreason"}}
+_MAX_MCP_PATH_CHARS = 4_096
+_MAX_MCP_TEXT_CHARS = 65_536
+_MAX_MCP_INPUT_BYTES = 1_048_576
+_MAX_MCP_TOOL_NAME_CHARS = 128
+_MCP_TOOL_NAME = re.compile(r"^[a-z][a-z0-9_]{0,127}$")
+_ROOT = {
+    "root": {
+        "type": "string",
+        "description": "harness state directory",
+        "default": ".deepreason",
+        "minLength": 1,
+        "maxLength": _MAX_MCP_PATH_CHARS,
+        "pattern": "^[^\\x00]+$",
+    }
+}
 _CONFIG = {
     "config": {
         "type": "string",
         "description": "partial YAML profile path (default: built-in typed defaults)",
+        "minLength": 1,
+        "maxLength": _MAX_MCP_PATH_CHARS,
+        "pattern": "^[^\\x00]+$",
     }
 }
 _MAKE_STATUS_NAME = "make-status.json"
-_MAKE_OPERATOR_LOCK_NAME = ".make-operator.lock"
-_RUN_OPERATOR_LOCK_NAME = ".run-operator.lock"
+_MAKE_OPERATOR_LOCK_NAME = MAKE_OPERATOR_LOCK_NAME
+_RUN_OPERATOR_LOCK_NAME = RUN_OPERATOR_LOCK_NAME
 _MAKE_THREADS: dict[str, threading.Thread] = {}
 _MAKE_LOCK = threading.Lock()
 _RUN_THREADS: dict[str, threading.Thread] = {}
@@ -66,12 +90,22 @@ def _run_tools() -> list[dict]:
                     "problem": {
                         "type": "object",
                         "properties": {
-                            "description": {"type": "string", "minLength": 1},
+                            "description": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": _MAX_MCP_TEXT_CHARS,
+                                "pattern": "^[^\\x00]+$",
+                            },
                         },
                         "required": ["description"],
                         "additionalProperties": False,
                     },
-                    "run_manifest_ref": {"type": "string", "minLength": 1},
+                    "run_manifest_ref": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": _MAX_MCP_PATH_CHARS,
+                        "pattern": "^[^\\x00]+$",
+                    },
                     "budget": budget,
                 },
                 "required": ["workload", "problem", "run_manifest_ref", "budget"],
@@ -112,7 +146,12 @@ def _run_tools() -> list[dict]:
                 "properties": {
                     **_ROOT,
                     "budget": budget,
-                    "expected_manifest_digest": {"type": "string", "minLength": 64},
+                    "expected_manifest_digest": {
+                        "type": "string",
+                        "minLength": 64,
+                        "maxLength": 64,
+                        "pattern": "^[0-9a-f]{64}$",
+                    },
                 },
                 "required": ["budget"],
                 "additionalProperties": False,
@@ -150,12 +189,22 @@ def _legacy_tools() -> list[dict]:
                     "problem": {
                         "type": "object",
                         "properties": {
-                            "description": {"type": "string", "minLength": 1},
+                            "description": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": _MAX_MCP_TEXT_CHARS,
+                                "pattern": "^[^\\x00]+$",
+                            },
                         },
                         "required": ["description"],
                         "additionalProperties": False,
                     },
-                    "run_manifest_ref": {"type": "string", "minLength": 1},
+                    "run_manifest_ref": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": _MAX_MCP_PATH_CHARS,
+                        "pattern": "^[^\\x00]+$",
+                    },
                     "budget": {
                         "type": "object",
                         "properties": {
@@ -380,15 +429,168 @@ _NARROW_TOOL_NAMES = frozenset(
     {
         "start_run", "run_status", "run_result", "continue_run", "cancel_run",
         "start_make", "make_status", "make_result",
+        "scratch_map", "scratch_search", "scratch_open", "scratch_related",
+        "scratch_attention", "start_bridge", "bridge_status", "bridge_result",
+        "bridge_claims",
     }
 )
 
 
 def _tools() -> list[dict]:
-    tools = _legacy_tools()
+    from deepreason.mcp_scratch_bridge import tool_definitions
+
+    tools = [*_legacy_tools(), *tool_definitions()]
     if os.environ.get("DEEPREASON_ENABLE_LEGACY_MCP") == "1":
         return tools
     return [tool for tool in tools if tool["name"] in _NARROW_TOOL_NAMES]
+
+
+class _MCPInputSchemaError(ValueError):
+    """An untrusted MCP argument violates its advertised closed schema."""
+
+
+def _schema_ref(root_schema: dict, reference: str) -> dict:
+    if not reference.startswith("#/"):
+        raise _MCPInputSchemaError("unsupported external schema reference")
+    value: object = root_schema
+    for component in reference[2:].split("/"):
+        if not isinstance(value, dict) or component not in value:
+            raise _MCPInputSchemaError("invalid local schema reference")
+        value = value[component]
+    if not isinstance(value, dict):
+        raise _MCPInputSchemaError("invalid local schema reference")
+    return value
+
+
+def _validate_mcp_input(
+    value: object,
+    schema: dict,
+    *,
+    root_schema: dict,
+    path: str = "",
+) -> None:
+    """Validate the small JSON-Schema subset used by the MCP contracts.
+
+    Keeping this local avoids a new mandatory dependency while ensuring the
+    runtime enforces the same closed fields and finite bounds advertised by
+    ``tools/list``. Error text names only trusted schema paths, never caller
+    values, credentials, prompts, or model-authored text.
+    """
+
+    if "$ref" in schema:
+        _validate_mcp_input(
+            value,
+            _schema_ref(root_schema, schema["$ref"]),
+            root_schema=root_schema,
+            path=path,
+        )
+        return
+    alternatives = schema.get("anyOf")
+    if isinstance(alternatives, list):
+        for alternative in alternatives:
+            try:
+                _validate_mcp_input(
+                    value,
+                    alternative,
+                    root_schema=root_schema,
+                    path=path,
+                )
+            except _MCPInputSchemaError:
+                continue
+            return
+        raise _MCPInputSchemaError(f"{path or '/'} does not match an allowed shape")
+
+    if "enum" in schema and value not in schema["enum"]:
+        raise _MCPInputSchemaError(f"{path or '/'} is outside its allowed values")
+    expected = schema.get("type")
+    if expected == "object":
+        if not isinstance(value, dict):
+            raise _MCPInputSchemaError(f"{path or '/'} must be an object")
+        properties = schema.get("properties") or {}
+        required = schema.get("required") or []
+        missing = [name for name in required if name not in value]
+        if missing:
+            raise _MCPInputSchemaError(
+                f"{path or '/'} is missing required schema fields"
+            )
+        extras = [name for name in value if name not in properties]
+        additional = schema.get("additionalProperties", True)
+        if extras and additional is False:
+            raise _MCPInputSchemaError(
+                f"{path or '/'} contains fields outside the closed schema"
+            )
+        for name, item in value.items():
+            child = f"{path}/{name}" if path else f"/{name}"
+            if name in properties:
+                _validate_mcp_input(
+                    item,
+                    properties[name],
+                    root_schema=root_schema,
+                    path=child,
+                )
+            elif isinstance(additional, dict):
+                _validate_mcp_input(
+                    item,
+                    additional,
+                    root_schema=root_schema,
+                    path=child,
+                )
+        return
+    if expected == "array":
+        if not isinstance(value, list):
+            raise _MCPInputSchemaError(f"{path or '/'} must be an array")
+        if len(value) < int(schema.get("minItems", 0)):
+            raise _MCPInputSchemaError(f"{path or '/'} has too few items")
+        maximum = schema.get("maxItems")
+        if maximum is not None and len(value) > int(maximum):
+            raise _MCPInputSchemaError(f"{path or '/'} has too many items")
+        if schema.get("uniqueItems"):
+            encoded = [
+                json.dumps(item, sort_keys=True, separators=(",", ":"))
+                for item in value
+            ]
+            if len(encoded) != len(set(encoded)):
+                raise _MCPInputSchemaError(f"{path or '/'} contains duplicate items")
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                _validate_mcp_input(
+                    item,
+                    item_schema,
+                    root_schema=root_schema,
+                    path=f"{path}/{index}" if path else f"/{index}",
+                )
+        return
+    if expected == "string":
+        if not isinstance(value, str):
+            raise _MCPInputSchemaError(f"{path or '/'} must be a string")
+        if len(value) < int(schema.get("minLength", 0)):
+            raise _MCPInputSchemaError(f"{path or '/'} is too short")
+        maximum = schema.get("maxLength")
+        if maximum is not None and len(value) > int(maximum):
+            raise _MCPInputSchemaError(f"{path or '/'} is too long")
+        pattern = schema.get("pattern")
+        if pattern is not None and re.search(pattern, value) is None:
+            raise _MCPInputSchemaError(f"{path or '/'} has an invalid format")
+        return
+    if expected == "integer":
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise _MCPInputSchemaError(f"{path or '/'} must be an integer")
+        minimum = schema.get("minimum")
+        maximum = schema.get("maximum")
+        if minimum is not None and value < minimum:
+            raise _MCPInputSchemaError(f"{path or '/'} is below its minimum")
+        if maximum is not None and value > maximum:
+            raise _MCPInputSchemaError(f"{path or '/'} is above its maximum")
+        return
+    if expected == "number":
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise _MCPInputSchemaError(f"{path or '/'} must be a number")
+        return
+    if expected == "boolean" and not isinstance(value, bool):
+        raise _MCPInputSchemaError(f"{path or '/'} must be a boolean")
+    if expected == "null" and value is not None:
+        raise _MCPInputSchemaError(f"{path or '/'} must be null")
 
 
 def _harness(arguments: dict):
@@ -429,19 +631,12 @@ def _read_make_status(root: Path) -> dict:
 
 def _acquire_operator_locks(root: Path, *, owner: str):
     """Claim both legacy lock names so run and make cannot share one root."""
-    root.mkdir(parents=True, exist_ok=True)
-    streams = []
     try:
-        for name in sorted({_MAKE_OPERATOR_LOCK_NAME, _RUN_OPERATOR_LOCK_NAME}):
-            stream = open(root / name, "a+b")
-            streams.append(stream)
-            fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError as error:
-        _release_operator_locks(streams)
+        return operator_locks(root, owner=owner, blocking=False)
+    except ProcessLockBusy as error:
         raise ValueError(
             f"{owner.upper()}_ALREADY_RUNNING: another operator owns this run root"
         ) from error
-    return tuple(streams)
 
 
 def _acquire_make_operator_lock(root: Path):
@@ -452,12 +647,8 @@ def _acquire_run_operator_lock(root: Path):
     return _acquire_operator_locks(root, owner="run")
 
 
-def _release_operator_locks(streams) -> None:
-    for stream in reversed(streams):
-        try:
-            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
-        finally:
-            stream.close()
+def _release_operator_locks(locks) -> None:
+    locks.release()
 
 
 def _release_make_operator_lock(streams) -> None:
@@ -1103,10 +1294,45 @@ _REQUIRED_ARGS = {
 
 def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
     """Execute one tool; returns the text payload (raises on error)."""
-    exposed = {tool["name"] for tool in _tools()}
+    if (
+        not isinstance(name, str)
+        or len(name) > _MAX_MCP_TOOL_NAME_CHARS
+        or _MCP_TOOL_NAME.fullmatch(name) is None
+    ):
+        raise ValueError("MCP_TOOL_NOT_EXPOSED: invalid tool name")
+    if not isinstance(arguments, dict):
+        raise ValueError("MCP_INPUT_INVALID: arguments must be an object")
+    try:
+        encoded_arguments = json.dumps(
+            arguments,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    except (TypeError, ValueError) as error:
+        raise ValueError("MCP_INPUT_INVALID: arguments must contain JSON values") from error
+    if len(encoded_arguments) > _MAX_MCP_INPUT_BYTES:
+        raise ValueError("MCP_INPUT_INVALID: arguments exceed the fixed request bound")
+    exposed = {tool["name"]: tool for tool in _tools()}
     if name not in exposed:
-        raise ValueError(
-            f"MCP_TOOL_NOT_EXPOSED: {name!r} is outside the active operator surface"
+        raise ValueError("MCP_TOOL_NOT_EXPOSED: requested tool is outside the active surface")
+    try:
+        _validate_mcp_input(
+            arguments,
+            exposed[name]["inputSchema"],
+            root_schema=exposed[name]["inputSchema"],
+        )
+    except _MCPInputSchemaError as error:
+        raise ValueError(f"MCP_INPUT_INVALID: {name}: {error}") from error
+    from deepreason.mcp_scratch_bridge import TOOL_NAMES as scratch_bridge_tools
+
+    if name in scratch_bridge_tools:
+        from deepreason.mcp_scratch_bridge import call_tool_text
+
+        return call_tool_text(
+            name,
+            arguments,
+            progress_callback=progress_callback,
         )
     from deepreason.ontology import Status
     from deepreason.ops import require_full_engine, resolve_prefix as _resolve
@@ -1395,10 +1621,47 @@ def handle(message: dict, *, notification_sink=None) -> dict | None:
     if method == "tools/list":
         return {"jsonrpc": "2.0", "id": msg_id, "result": {"tools": _tools()}}
     if method == "tools/call":
-        params = message.get("params") or {}
+        params = message["params"] if "params" in message else {}
         try:
-            meta = params.get("_meta") or {}
+            if not isinstance(params, dict):
+                raise ValueError("MCP_INPUT_INVALID: tools/call params must be an object")
+            if set(params) - {"name", "arguments", "_meta"}:
+                raise ValueError(
+                    "MCP_INPUT_INVALID: tools/call params contain unknown fields"
+                )
+            try:
+                params_size = len(
+                    json.dumps(
+                        params,
+                        ensure_ascii=False,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ).encode("utf-8")
+                )
+            except (TypeError, ValueError) as error:
+                raise ValueError(
+                    "MCP_INPUT_INVALID: tools/call params must contain JSON values"
+                ) from error
+            if params_size > _MAX_MCP_INPUT_BYTES:
+                raise ValueError(
+                    "MCP_INPUT_INVALID: tools/call params exceed the fixed request bound"
+                )
+            meta = params["_meta"] if "_meta" in params else {}
+            if not isinstance(meta, dict):
+                raise ValueError("MCP_INPUT_INVALID: _meta must be an object")
+            if set(meta) - {"progressToken"}:
+                raise ValueError("MCP_INPUT_INVALID: _meta contains unknown fields")
             progress_token = meta.get("progressToken")
+            if progress_token is not None and (
+                isinstance(progress_token, bool)
+                or not isinstance(progress_token, (str, int))
+                or (isinstance(progress_token, str) and len(progress_token) > 256)
+                or (
+                    isinstance(progress_token, int)
+                    and not -(2**63) <= progress_token <= 2**63 - 1
+                )
+            ):
+                raise ValueError("MCP_INPUT_INVALID: progressToken is invalid")
 
             def progress_callback(event: dict) -> None:
                 if notification_sink is None or progress_token is None:
@@ -1417,7 +1680,7 @@ def handle(message: dict, *, notification_sink=None) -> dict | None:
 
             text = call_tool(
                 params.get("name", ""),
-                params.get("arguments") or {},
+                params["arguments"] if "arguments" in params else {},
                 progress_callback=progress_callback,
             )
             result = {"content": [{"type": "text", "text": text}], "isError": False}
