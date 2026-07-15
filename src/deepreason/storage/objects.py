@@ -17,13 +17,70 @@ from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
 from deepreason.ontology.warrant import Warrant
+from deepreason.scratch.models import (
+    AdvisoryContextV1,
+    AttentionReceiptV1,
+    ClusterGuideV1,
+    ClusterMembershipV1,
+    ClusterSnapshotV1,
+    CoverageCycleV1,
+    ScratchBlockV1,
+    ScratchClusterV1,
+    ScratchLinkV1,
+    SimilarityHitV1,
+    VisibilityRecordV1,
+)
 
 SCHEMAS: dict[str, type[BaseModel]] = {
     "artifact": Artifact,
     "commitment": Commitment,
     "warrant": Warrant,
     "problem": Problem,
+    "scratch-block": ScratchBlockV1,
+    "scratch-link": ScratchLinkV1,
+    "scratch-cluster": ScratchClusterV1,
+    "scratch-membership": ClusterMembershipV1,
+    "scratch-cluster-snapshot": ClusterSnapshotV1,
+    "scratch-guide": ClusterGuideV1,
+    "scratch-similarity": SimilarityHitV1,
+    "scratch-attention-receipt": AttentionReceiptV1,
+    "scratch-visibility": VisibilityRecordV1,
+    "scratch-coverage-cycle": CoverageCycleV1,
+    "scratch-advisory-context": AdvisoryContextV1,
 }
+
+# Most canonical records expose ``id``. A few scratch records retain the
+# domain-specific identity names from the scratch ontology. The outer object
+# record still uses one globally unique ``id`` field, so legacy readers and
+# cross-schema collision checks remain unchanged.
+_SCHEMA_ID_FIELDS: dict[str, str] = {
+    "scratch-cluster-snapshot": "snapshot_hash",
+    "scratch-attention-receipt": "receipt_hash",
+    "scratch-coverage-cycle": "cycle_id",
+}
+
+
+def _object_id(schema: str, obj: BaseModel) -> str:
+    field = _SCHEMA_ID_FIELDS.get(schema, "id")
+    try:
+        oid = getattr(obj, field)
+    except AttributeError as error:
+        raise ValueError(f"object schema {schema!r} has no identity field {field!r}") from error
+    if not isinstance(oid, str) or not oid:
+        raise ValueError(f"object schema {schema!r} has an invalid identity field {field!r}")
+    return oid
+
+
+def _object_data(schema: str, obj: BaseModel) -> dict:
+    """Serialize canonical data without changing historical formal bytes."""
+
+    return obj.model_dump(
+        mode="json",
+        by_alias=True,
+        # Scratch canonical encoding omits absent optional fields. Formal
+        # schemas retain their exact established byte representation.
+        exclude_none=schema.startswith("scratch-"),
+    )
 
 
 class ObjectConflictError(ValueError):
@@ -57,8 +114,8 @@ class ObjectStore:
         normalized = SCHEMAS[schema].model_validate(obj.model_dump(mode="json", by_alias=True))
         return {
             "schema": schema,
-            "id": normalized.id,
-            "data": normalized.model_dump(mode="json", by_alias=True),
+            "id": _object_id(schema, normalized),
+            "data": _object_data(schema, normalized),
         }
 
     @staticmethod
@@ -71,12 +128,12 @@ class ObjectStore:
             obj = model.model_validate(record["data"])
         except (KeyError, TypeError, ValueError, OSError) as e:
             raise ValueError(f"corrupt object record: {path}") from e
-        if obj.id != oid or (expected_id is not None and oid != expected_id):
+        if _object_id(schema, obj) != oid or (expected_id is not None and oid != expected_id):
             raise ValueError(f"object id mismatch in {path}")
         canonical = {
             "schema": schema,
             "id": oid,
-            "data": obj.model_dump(mode="json", by_alias=True),
+            "data": _object_data(schema, obj),
         }
         return schema, obj, canonical
 
@@ -148,18 +205,40 @@ class ObjectStore:
                 )
             return found_schema, obj
 
-        found: list[tuple[str, BaseModel]] = []
+        found: list[tuple[str, BaseModel, dict]] = []
         for name in SCHEMAS:
             path = self._schema_path(name, oid)
             if path.exists():
-                found_schema, obj, _ = self._read_record(path, expected_id=oid)
-                found.append((found_schema, obj))
+                found.append(self._read_record(path, expected_id=oid))
         if len(found) > 1:
             raise ObjectConflictError(f"object id {oid!r} exists in multiple schemas")
-        if found:
-            return found[0]
+
         legacy = self._path(oid)
         if legacy.exists():
-            found_schema, obj, _ = self._read_record(legacy, expected_id=oid)
-            return found_schema, obj
+            try:
+                legacy_schema, legacy_obj, legacy_record = self._read_record(
+                    legacy, expected_id=oid
+                )
+            except ValueError:
+                # Preserve the established torn-legacy healing behavior: once
+                # a valid namespaced record exists, an older corrupt flat slot
+                # is non-authoritative and remains untouched.
+                if found:
+                    found_schema, found_obj, _ = found[0]
+                    return found_schema, found_obj
+                raise
+            if found:
+                found_schema, found_obj, found_record = found[0]
+                if (
+                    legacy_schema != found_schema
+                    or canonical_json(legacy_record) != canonical_json(found_record)
+                ):
+                    raise ObjectConflictError(
+                        f"object id {oid!r} conflicts with legacy {legacy_schema} record"
+                    )
+                return found_schema, found_obj
+            return legacy_schema, legacy_obj
+        if found:
+            found_schema, found_obj, _ = found[0]
+            return found_schema, found_obj
         raise KeyError(f"object not found: {oid}")
