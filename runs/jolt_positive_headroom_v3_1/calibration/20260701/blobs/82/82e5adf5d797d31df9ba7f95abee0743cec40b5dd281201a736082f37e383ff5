@@ -1,0 +1,1 @@
+{"contract":"conjecturer.compact.v1","path":"","error":"extra field at /0/content","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"candidates":[{"content":"x","typicality":0.0}]}}

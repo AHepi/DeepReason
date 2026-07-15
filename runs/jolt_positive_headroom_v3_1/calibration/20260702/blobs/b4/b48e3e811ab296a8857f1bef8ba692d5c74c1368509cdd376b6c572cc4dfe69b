@@ -1,0 +1,1 @@
+{"contract":"conjecturer.direct.v1","path":"/candidates","error":"List should have at least 1 item after validation, not 0","received":[],"allowed":"type='array'","repair_scope":"/candidates","skeleton":[null]}

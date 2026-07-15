@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+{"candidates": [{"content": "{\"tour\":[\"0\",\"5\",\"10\",\"12\",\"9\",\"11\",\"7\",\"4\",\"1\",\"3\",\"2\",\"13\",\"8\",\"6\"],\"rationale\":\"Best known 440 tour; clusters far-east cities then left-bottom and upper-left spine.\"}", "typicality": 0.95, "neighbours": ["0,6,8,13,2,3,1,4,7,11,5,10,12,9", "0,2,13,8,6,3,1,4,7,11,5,10,12,9"]}, {"content": "{\"tour\":[\"0\",\"6\",\"8\",\"13\",\"2\",\"3\",\"1\",\"4\",\"7\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Reverse-direction 440 tour; same edges, opposite orientation.\"}", "typicality": 0.7, "neighbours": ["0,5,10,12,9,11,7,4,1,3,2,13,8,6", "0,2,13,8,6,3,1,4,7,11,5,10,12,9"]}, {"content": "{\"tour\":[\"0\",\"7\",\"4\",\"1\",\"3\",\"13\",\"2\",\"8\",\"6\",\"5\",\"10\",\"12\",\"9\",\"11\"],\"rationale\":\"Atypical 2-opt-like perturbation swapping 11 into far-east tail and inserting 13 before 2; criticizable non-reversal.\"}", "typicality": 0.25, "neighbours": ["0,5,10,12,9,11,7,4,1,3,2,13,8,6", "0,6,8,13,2,3,1,4,7,11,5,10,12,9"]}]}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.compact.v1", "error": "unknown local alias '0,6,8,13,2,3,1,4,7,11,5,10,12,9'", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "x", "typicality": 0.0}]}}

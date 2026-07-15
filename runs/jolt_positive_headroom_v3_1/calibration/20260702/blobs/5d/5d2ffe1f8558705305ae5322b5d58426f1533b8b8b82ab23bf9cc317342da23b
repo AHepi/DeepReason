@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+{"candidates": [{"content": "{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\",\"8\",\"12\"],\"rationale\":\"Known 356-distance optimum: clusters left/centre/right then closes\"}", "typicality": 0.75, "neighbours": ["0,1,3,10,9,2,5,4,6,7,11,13,12,8", "0,1,3,10,9,2,5,4,6,7,11,13,12,8", "0,1,3,10,9,2,5,4,6,7,11,8,13,12"]}, {"content": "{\"tour\":[\"0\",\"12\",\"8\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\"],\"rationale\":\"Reversed-optimal layout from 0 via right cluster first; length 410\"}", "typicality": 0.3, "neighbours": ["0,12,8,13,1,3,10,9,2,5,4,6,7,11", "0,12,8,1,3,10,9,2,5,4,6,7,11,13", "0,12,8,1,3,10,9,2,5,4,6,7,11,13"]}, {"content": "{\"tour\":[\"0\",\"12\",\"8\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"11\",\"7\",\"6\",\"13\"],\"rationale\":\"Atypical 6/7/11 reorder swapping cluster endpoints to probe local minima\"}", "typicality": 0.08, "neighbours": ["0,12,8,1,3,10,9,2,5,4,7,6,11,13", "0,12,8,1,3,10,9,2,5,4,6,7,11,13", "0,12,8,1,3,10,9,2,5,4,11,6,7,13"]}]}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.compact.v1", "error": "unknown local alias '0,1,3,10,9,2,5,4,6,7,11,13,12,8'", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "x", "typicality": 0.0}]}}

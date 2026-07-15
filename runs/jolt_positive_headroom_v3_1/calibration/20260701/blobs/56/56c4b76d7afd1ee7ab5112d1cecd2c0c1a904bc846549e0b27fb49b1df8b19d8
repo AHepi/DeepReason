@@ -1,0 +1,7 @@
+Repair only the JSON value at / for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+{"candidates": [{"content": "{\"tour\":[\"0\",\"6\",\"2\",\"3\",\"8\",\"13\",\"7\",\"4\",\"1\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Greedy nearest-neighbor heuristic starting from city 0; clusters left-side cities first then right-side.\"}", "neighbours": ["0->6->2->3->8->13->7->4->1->11->5->10->12->9", "0->2->6->8->13->3->7->4->1->9->11->5->10->12"], "typicality": 0.7}, {"content": "{\"tour\":[\"0\",\"13\",\"8\",\"2\",\"6\",\"3\",\"7\",\"4\",\"1\",\"11\",\"10\",\"5\",\"12\",\"9\"],\"rationale\":\"Sweep heuristic ordering cities by angle around centroid; improves locality over pure greedy.\"}", "neighbours": ["0->13->8->2->6->3->7->4->1->11->10->5->12->9", "0->8->13->2->6->3->7->4->1->11->5->10->12->9"], "typicality": 0.5}, {"content": "{\"tour\":[\"0\",\"3\",\"2\",\"13\",\"8\",\"6\",\"7\",\"4\",\"1\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Deliberately prioritizes north/left cities aggressively; atypical high-perimeter-first ordering to test verifier sensitivity.\"}", "neighbours": ["0->3->2->13->8->6->7->4->1->11->5->10->12->9", "0->2->3->13->8->6->7->4->1->11->5->10->12->9"], "typicality": 0.2}]}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.compact.v1", "error": "unknown local alias '0->6->2->3->8->13->7->4->1->11->5->10->12->9'", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "x", "typicality": 0.0}]}}

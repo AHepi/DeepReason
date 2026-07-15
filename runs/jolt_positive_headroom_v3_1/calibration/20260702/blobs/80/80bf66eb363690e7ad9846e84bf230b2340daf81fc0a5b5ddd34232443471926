@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\",\"8\",\"12\"],\"rationale\":\"Sweep from the start cluster through lower-left, lower-mid, upper-mid, and far-right, returning to 0; recent verifier score 356.\"}",
+      "typicality": 0.8,
+      "neighbours": [
+        "{\"tour\":[\"0\",\"1\",\"8\",\"12\",\"13\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Mirror of modal sweep\"}",
+        "{\"tour\":[\"0\",\"12\",\"8\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\"],\"rationale\":\"Reversed modal sweep\"}"
+      ]
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"8\",\"12\",\"13\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\",\"1\"],\"rationale\":\"Visit right/middle before dense left cluster; criticizable for crossing back over x~64 after city 0.\"}",
+      "typicality": 0.25,
+      "neighbours": [
+        "{\"tour\":[\"0\",\"8\",\"12\",\"13\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"10\",\"9\",\"3\",\"1\"],\"rationale\":\"Swap 10/9 vs 3/1 ordering\"}",
+        "{\"tour\":[\"0\",\"8\",\"13\",\"12\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\",\"1\"],\"rationale\":\"Swap 12/13 pair\"}"
+      ]
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"12\",\"8\",\"13\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Interleave near-right and far-right before the long left block; criticizable for breaking the 8-12 adjacency.\"}",
+      "typicality": 0.15,
+      "neighbours": [
+        "{\"tour\":[\"0\",\"1\",\"12\",\"13\",\"8\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Reorder right cluster\"}",
+        "{\"tour\":[\"0\",\"1\",\"12\",\"8\",\"11\",\"13\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Move 11 earlier\"}"
+      ]
+    }
+  ]
+}

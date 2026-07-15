@@ -1,0 +1,3 @@
+The issue is the presence of an extra field "allowed" in the JSON object. I need to remove this field to repair the JSON according to the diagnostic information.</think>```json
+{"contract": "conjecturer.direct.v1", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "", "typicality": 0.0}]}}
+```

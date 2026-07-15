@@ -1,0 +1,3 @@
+```json
+{"candidates":[{"content":"{\"tour\":[\"0\",\"2\",\"3\",\"8\",\"6\",\"13\",\"1\",\"7\",\"4\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Cluster sweep by coordinate proximity\"}","typicality":0.82,"neighbours":["coordinate-sweep","greedy-NN-cluster"]},{"content":"{\"tour\":[\"0\",\"6\",\"13\",\"8\",\"2\",\"3\",\"1\",\"7\",\"4\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Serpentine vertical bands\"}","typicality":0.51,"neighbours":["banded-serpentine","vertical-sweep"]},{"content":"{\"tour\":[\"0\",\"2\",\"8\",\"13\",\"6\",\"3\",\"1\",\"7\",\"4\",\"9\",\"12\",\"10\",\"5\",\"11\"],\"rationale\":\"Perturbed greedy with one long cross edge for critique\"}","typicality":0.18,"neighbours":["deliberate-cross-edge","anti-greedy-perturbation"]}]}
+```

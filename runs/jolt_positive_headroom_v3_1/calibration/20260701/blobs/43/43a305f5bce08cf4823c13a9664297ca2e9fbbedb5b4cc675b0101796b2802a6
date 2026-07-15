@@ -1,0 +1,16 @@
+{
+"candidates": [
+{
+"content": "{\"tour\":[\"0\",\"2\",\"13\",\"3\",\"8\",\"6\",\"1\",\"4\",\"7\",\"11\",\"9\",\"12\",\"10\",\"5\"],\"rationale\":\"Single-branch reorder: move city 1 next to 6 to tighten the 6-1-4-7 local chain, keeping the known short west-then-east split.\"}",
+"typicality": 0.8
+},
+{
+"content": "{\"tour\":[\"0\",\"6\",\"13\",\"2\",\"3\",\"8\",\"7\",\"4\",\"1\",\"11\",\"9\",\"12\",\"10\",\"5\"],\"rationale\":\"Atypical: cross between 6-13-2 and 3-8-7 to test whether breaking the 13-8 adjacency still yields a valid sub-500 tour.\"}",
+"typicality": 0.28
+},
+{
+"content": "{\"tour\":[\"0\",\"6\",\"8\",\"13\",\"2\",\"3\",\"1\",\"4\",\"7\",\"11\",\"9\",\"12\",\"10\",\"5\"],\"rationale\":\"Repair from call-09-candidate-00 by moving 1 before 4 to reduce the 3-1-4-7 segment, retaining the strong 0-6-8-13 opening.\"}",
+"typicality": 0.45
+}
+]
+}

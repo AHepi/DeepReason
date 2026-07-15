@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\",\"8\",\"12\"],\"rationale\":\"Cluster sweep: cover left-lower cities, run up to 6-7-11, then 13-8-12 before closing to 0.\"}",
+      "neighbours": [
+        "0,12,8,1,3,10,9,2,5,4,6,7,11,13",
+        "0,12,8,1,3,10,9,2,5,4,6,7,11,13"
+      ],
+      "typicality": 0.9
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"12\",\"8\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\"],\"rationale\":\"Start near 12, traverse down-left to the 9-2-5-4 spine, then climb to 6-7-11 and close via 13.\"}",
+      "neighbours": [
+        "0,1,3,10,9,2,5,4,6,7,11,13,8,12",
+        "0,1,3,10,9,2,5,4,6,7,11,13,8,12"
+      ],
+      "typicality": 0.7
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"8\",\"13\",\"12\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Right-upper-first: take a long diagonal to 8-13-12-11, then descend and sweep leftward before returning.\"}",
+      "neighbours": [
+        "0,1,3,10,9,2,5,4,6,7,11,13,8,12",
+        "0,1,3,10,9,2,5,4,6,7,11,13,8,12"
+      ],
+      "typicality": 0.25
+    }
+  ]
+}

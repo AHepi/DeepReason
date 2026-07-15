@@ -1,0 +1,84 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM tsp14-manhattan-20260702
+FINITE 14-CITY MANHATTAN TSP. Cities: 0=(91,16), 1=(86,15), 2=(12,37), 3=(26,15), 4=(39,40), 5=(24,38), 6=(22,71), 7=(21,72), 8=(64,28), 9=(9,33), 10=(5,26), 11=(50,73), 12=(85,37), 13=(71,46). Produce a Hamiltonian cycle beginning at city "0"; return to 0 is implicit. Minimise total Manhattan distance. Candidate content MUST be one JSON object exactly in this useful shape: {"tour":["0",...,"13"],"rationale":"short text"}. The tour must contain every city ID exactly once and must not repeat 0 at the end.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- tsp14-valid-tour-20260702: program:tsp14_tour_wf
+
+## experimental-generation-context
+GENERATION CONTEXT (attention only; truth, admission, and verifier standards are unchanged):
+VERIFIER SCORE FEEDBACK (same rendering in every arm; lower is better):
+- valid[000] admission=call-00-candidate-00 total_distance=362
+- valid[001] admission=call-00-candidate-01 total_distance=452
+- valid[002] admission=call-00-candidate-02 total_distance=358
+- valid[003] admission=call-01-candidate-00 total_distance=424
+- valid[004] admission=call-01-candidate-01 total_distance=380
+- valid[005] admission=call-01-candidate-02 total_distance=372
+- valid[006] admission=call-02-candidate-00 total_distance=358
+- valid[007] admission=call-02-candidate-01 total_distance=424
+- valid[008] admission=call-02-candidate-02 total_distance=358
+- valid[009] admission=call-03-candidate-00 total_distance=362
+- valid[010] admission=call-03-candidate-01 total_distance=368
+- valid[011] admission=call-03-candidate-02 total_distance=358
+- valid[012] admission=call-04-candidate-00 total_distance=358
+- valid[013] admission=call-04-candidate-01 total_distance=362
+- valid[014] admission=call-04-candidate-02 total_distance=358
+- valid[015] admission=call-07-candidate-00 total_distance=358
+- valid[016] admission=call-07-candidate-01 total_distance=420
+- valid[017] admission=call-07-candidate-02 total_distance=368
+- valid[018] admission=call-09-candidate-00 total_distance=358
+- valid[019] admission=call-09-candidate-01 total_distance=368
+- valid[020] admission=call-09-candidate-02 total_distance=410
+- valid[021] admission=call-10-candidate-00 total_distance=358
+- valid[022] admission=call-10-candidate-01 total_distance=410
+- valid[023] admission=call-10-candidate-02 total_distance=356
+- valid[024] admission=call-12-candidate-00 total_distance=358
+- valid[025] admission=call-12-candidate-01 total_distance=356
+- valid[026] admission=call-12-candidate-02 total_distance=410
+- valid[027] admission=call-13-candidate-00 total_distance=368
+- valid[028] admission=call-13-candidate-01 total_distance=356
+- valid[029] admission=call-13-candidate-02 total_distance=368
+- valid[030] admission=call-20-candidate-00 total_distance=356
+- valid[031] admission=call-20-candidate-01 total_distance=410
+- valid[032] admission=call-20-candidate-02 total_distance=356
+- valid[033] admission=call-21-candidate-00 total_distance=356
+- valid[034] admission=call-21-candidate-01 total_distance=410
+- valid[035] admission=call-21-candidate-02 total_distance=368
+- valid[036] admission=call-22-candidate-00 total_distance=356
+- valid[037] admission=call-22-candidate-01 total_distance=410
+- valid[038] admission=call-22-candidate-02 total_distance=386
+- valid[039] admission=call-23-candidate-00 total_distance=356
+- valid[040] admission=call-23-candidate-01 total_distance=410
+- valid[041] admission=call-23-candidate-02 total_distance=368
+- valid[042] admission=call-29-candidate-00 total_distance=356
+- valid[043] admission=call-29-candidate-01 total_distance=366
+- valid[044] admission=call-29-candidate-02 total_distance=358
+- valid[045] admission=call-30-candidate-00 total_distance=356
+- valid[046] admission=call-30-candidate-01 total_distance=410
+- valid[047] admission=call-30-candidate-02 total_distance=368
+
+RECENT VALID TOUR HISTORY (ordinary sequence representation):
+- admission=call-23-candidate-01 tour=0,12,8,1,3,10,9,2,5,4,6,7,11,13
+- admission=call-23-candidate-02 tour=0,1,8,12,13,11,7,6,4,5,2,9,10,3
+- admission=call-29-candidate-00 tour=0,1,3,10,9,2,5,4,6,7,11,13,8,12
+- admission=call-29-candidate-01 tour=0,1,3,10,9,2,5,4,6,7,11,13,12,8
+- admission=call-29-candidate-02 tour=0,1,12,8,13,11,7,6,4,5,2,9,10,3
+- admission=call-30-candidate-00 tour=0,1,3,10,9,2,5,4,6,7,11,13,8,12
+- admission=call-30-candidate-01 tour=0,12,8,1,3,10,9,2,5,4,6,7,11,13
+- admission=call-30-candidate-02 tour=0,1,8,12,13,11,7,6,4,5,2,9,10,3
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.
