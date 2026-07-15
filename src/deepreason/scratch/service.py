@@ -26,6 +26,7 @@ from deepreason.scratch.models import (
     ClusterGuideV1,
     ClusterMembershipV1,
     ClusterSnapshotV1,
+    CoverageCycleV1,
     InstanceRef,
     MembershipAction,
     ScratchBlockBodyV1,
@@ -35,6 +36,7 @@ from deepreason.scratch.models import (
     ScratchLinkV1,
     ScratchProvenanceV1,
     SimilarityHitV1,
+    AttentionReceiptV1,
     domain_hash,
 )
 from deepreason.scratch.search import literal_search
@@ -219,6 +221,7 @@ class ScratchService:
         outputs: list[str] | None = None,
         reason_ref: str | None = None,
         context_ref: str | None = None,
+        retrieval_receipt_ref: str | None = None,
         llm: LLMCall | None = None,
     ):
         payload = ScratchEventPayloadV1(
@@ -228,6 +231,7 @@ class ScratchService:
             outputs=outputs or [],
             reason_ref=reason_ref,
             context_ref=context_ref,
+            retrieval_receipt_ref=retrieval_receipt_ref,
         )
         try:
             return self.harness.record_scratch_event(payload, llm=llm)
@@ -456,6 +460,98 @@ class ScratchService:
             llm=llm,
         )
         return hit
+
+    def record_attention_receipt(
+        self,
+        receipt: AttentionReceiptV1,
+        *,
+        context_ref: str | None = None,
+    ) -> AttentionReceiptV1:
+        """Commit an actually rendered pack and its immutable selection receipt."""
+
+        self._ensure_writable()
+        receipt = AttentionReceiptV1.model_validate(receipt)
+        if receipt.instance != self._instance():
+            raise ValueError("/instance: attention receipt must use the next event sequence")
+        expected_state_seq = self.harness._next_seq - 1
+        if receipt.state_seq != expected_state_seq:
+            raise ValueError("/state_seq: attention plan is stale")
+        for channel, block_ids in receipt.selected_by_channel.items():
+            for index, block_id in enumerate(block_ids):
+                self._block_id(block_id, f"/selected_by_channel/{channel.value}/{index}")
+        for index, block_id in enumerate(receipt.final_order):
+            self._block_id(block_id, f"/final_order/{index}")
+        if receipt.coverage_cycle_id is not None:
+            progress = self.state.coverage_cycles.get(receipt.coverage_cycle_id)
+            if progress is None or progress.completed:
+                raise ValueError("/coverage_cycle_id: coverage cycle is not active")
+        self.harness.objects.put("scratch-attention-receipt", receipt)
+        self._record(
+            ScratchAction.ATTENTION_PACK_RENDERED,
+            actor="harness",
+            outputs=[receipt.id],
+            context_ref=context_ref,
+            retrieval_receipt_ref=receipt.id,
+        )
+        return receipt
+
+    def active_coverage_cycle(self):
+        active = [
+            progress
+            for progress in self.state.coverage_cycles.values()
+            if not progress.completed
+        ]
+        if len(active) > 1:
+            raise ValueError("scratch history contains multiple active coverage cycles")
+        return active[0] if active else None
+
+    def start_coverage_cycle(self) -> CoverageCycleV1:
+        self._ensure_writable()
+        if self.active_coverage_cycle() is not None:
+            raise ValueError("a coverage cycle is already active")
+        live_ids = sorted(self.state.blocks)
+        if not live_ids:
+            raise ValueError("cannot start a coverage cycle without live blocks")
+        cycle = CoverageCycleV1.create(live_ids, self._instance())
+        self.harness.objects.put("scratch-coverage-cycle", cycle)
+        self._record(
+            ScratchAction.COVERAGE_CYCLE_STARTED,
+            actor="harness",
+            outputs=[cycle.id],
+        )
+        return cycle
+
+    def record_coverage_render(
+        self, cycle_id: str, block_id: str, receipt_ref: str
+    ) -> None:
+        self._ensure_writable()
+        progress = self.state.coverage_cycles.get(cycle_id)
+        if progress is None or progress.completed:
+            raise ValueError("/cycle_id: coverage cycle is not active")
+        block_id = self._block_id(block_id)
+        if block_id not in progress.pending_block_ids:
+            raise ValueError("/block_id: block is not pending in the coverage cycle")
+        if receipt_ref not in self.state.attention_receipts:
+            raise ValueError("/receipt_ref: attention receipt is unknown")
+        self._record(
+            ScratchAction.COVERAGE_BLOCK_RENDERED,
+            actor="harness",
+            inputs=[cycle_id, block_id],
+            retrieval_receipt_ref=receipt_ref,
+        )
+
+    def complete_coverage_cycle(self, cycle_id: str) -> None:
+        self._ensure_writable()
+        progress = self.state.coverage_cycles.get(cycle_id)
+        if progress is None or progress.completed:
+            raise ValueError("/cycle_id: coverage cycle is not active")
+        if progress.pending_block_ids:
+            raise ValueError("/cycle_id: coverage cycle still has pending blocks")
+        self._record(
+            ScratchAction.COVERAGE_CYCLE_COMPLETED,
+            actor="harness",
+            inputs=[cycle_id],
+        )
 
     def get_block(self, block_id_or_unique_prefix: str) -> ScratchBlockV1:
         return self.state.blocks[self._block_id(block_id_or_unique_prefix)]

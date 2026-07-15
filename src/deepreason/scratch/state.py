@@ -21,6 +21,7 @@ from deepreason.scratch.models import (
     ClusterSnapshotV1,
     CoverageCycleV1,
     InstanceRef,
+    RetrievalChannel,
     ScratchBlockV1,
     ScratchClusterV1,
     ScratchLinkV1,
@@ -164,11 +165,39 @@ class ScratchState:
             values.append(hit.id)
 
     def _render_attention(self, receipt: AttentionReceiptV1, event_seq: int) -> None:
+        if receipt.instance.seq != event_seq:
+            raise ValueError("attention receipt instance does not match event sequence")
+        if receipt.state_seq != event_seq - 1:
+            raise ValueError("attention receipt does not name the preceding state fence")
+        selected: set[str] = set()
+        for channel, block_ids in receipt.selected_by_channel.items():
+            if len(block_ids) != len(set(block_ids)):
+                raise ValueError(f"attention channel {channel.value} contains duplicates")
+            selected.update(block_ids)
+        if len(receipt.final_order) != len(set(receipt.final_order)):
+            raise ValueError("attention final order contains duplicate blocks")
+        if not set(receipt.final_order).issubset(selected):
+            raise ValueError("attention final order contains an unselected block")
+        referenced = set(receipt.final_order) | selected | set(
+            receipt.excluded_by_global_limit
+        )
+        for block_ids in receipt.excluded_by_channel.values():
+            referenced.update(block_ids)
+        unknown = sorted(referenced - self.blocks.keys())
+        if unknown:
+            raise ValueError(f"attention receipt references unknown block {unknown[0]}")
+        if set(receipt.final_order) & set(receipt.excluded_by_global_limit):
+            raise ValueError("globally excluded attention blocks cannot be rendered")
+        if (
+            receipt.selected_by_channel.get(RetrievalChannel.COVERAGE)
+            and receipt.coverage_cycle_id is None
+        ):
+            raise ValueError("coverage attention requires a coverage cycle")
         self.attention_receipts[receipt.receipt_hash] = receipt
         rendered = set(receipt.final_order)
         for block_id in receipt.final_order:
             block = self.blocks.get(block_id)
-            if block is None:
+            if block is None:  # guarded above; retain a defensive replay fence
                 raise ValueError(f"attention receipt references unknown block {block_id}")
             channels = sorted(
                 channel.value
@@ -224,6 +253,8 @@ class ScratchState:
             elif schema == "scratch-attention-receipt":
                 self.attention_receipts[obj.receipt_hash] = obj
             elif schema == "scratch-coverage-cycle":
+                if any(not progress.completed for progress in self.coverage_cycles.values()):
+                    raise ValueError("a coverage cycle is already active")
                 self.coverage_cycles[obj.cycle_id] = CoverageProgress.from_cycle(obj)
             elif schema in {"scratch-visibility", "scratch-advisory-context"}:
                 # Visibility is normally derived from attention events and an
@@ -308,6 +339,16 @@ class ScratchState:
             progress = self.coverage_cycles.get(cycle_id)
             if progress is None:
                 raise ValueError(f"unknown coverage cycle {cycle_id}")
+            if progress.completed:
+                raise ValueError(f"coverage cycle {cycle_id} is already completed")
+            receipt = self.attention_receipts.get(payload.retrieval_receipt_ref)
+            if receipt is None:
+                raise ValueError("coverage progress references an unknown attention receipt")
+            coverage_ids = receipt.selected_by_channel.get(RetrievalChannel.COVERAGE, [])
+            if receipt.coverage_cycle_id != cycle_id:
+                raise ValueError("coverage receipt names a different coverage cycle")
+            if block_id not in coverage_ids or block_id not in receipt.final_order:
+                raise ValueError("coverage receipt did not render the pending block")
             if block_id not in progress.pending_block_ids:
                 raise ValueError(f"coverage block {block_id} is not pending")
             progress.pending_block_ids.remove(block_id)
@@ -317,6 +358,8 @@ class ScratchState:
             progress = self.coverage_cycles.get(payload.inputs[0])
             if progress is None:
                 raise ValueError(f"unknown coverage cycle {payload.inputs[0]}")
+            if progress.completed:
+                raise ValueError("coverage cycle is already completed")
             if progress.pending_block_ids:
                 raise ValueError("coverage cycle cannot complete with pending blocks")
             progress.completed = True

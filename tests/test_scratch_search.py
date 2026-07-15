@@ -92,7 +92,7 @@ def test_bounded_navigation_queries_are_deterministic(tmp_path):
     assert set(sample_one) == {old.id, seen.id, linked.id}
 
     receipt = AttentionReceiptV1.create(
-        state_seq=service.harness._next_seq,
+        state_seq=service.harness._next_seq - 1,
         request_hash=domain_hash("test.request", {"one": 1}),
         selected_by_channel={"direct_open": [seen.id]},
         final_order=[seen.id],

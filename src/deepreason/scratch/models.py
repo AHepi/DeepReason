@@ -17,7 +17,7 @@ from typing import Annotated, Literal, Mapping
 from pydantic import ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
+from deepreason.frozen import FrozenDict, FrozenList, FrozenRecord
 
 
 HashRef = Annotated[str, Field(pattern=r"^sha256:[0-9a-f]{64}$")]

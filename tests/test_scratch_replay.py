@@ -284,7 +284,7 @@ def test_cluster_membership_guide_staleness_similarity_visibility_and_coverage(t
         _payload("coverage_cycle_started", actor="harness", outputs=[coverage.cycle_id])
     )
     receipt = AttentionReceiptV1.create(
-        state_seq=harness._next_seq,
+        state_seq=harness._next_seq - 1,
         request_hash=domain_hash("scratch.attention.request.v1", {"coverage": True}),
         selected_by_channel={"coverage": [neglected.id]},
         final_order=[neglected.id],
@@ -313,6 +313,27 @@ def test_cluster_membership_guide_staleness_similarity_visibility_and_coverage(t
             "coverage_block_rendered",
             actor="harness",
             inputs=[coverage.cycle_id, neglected.id],
+            retrieval_receipt_ref=receipt.receipt_hash,
+        )
+    )
+    second_receipt = AttentionReceiptV1.create(
+        state_seq=harness._next_seq - 1,
+        request_hash=domain_hash("scratch.attention.request.v1", {"coverage": "second"}),
+        selected_by_channel={"coverage": [first.id]},
+        final_order=[first.id],
+        excluded_by_global_limit=[],
+        excluded_by_channel={},
+        deterministic_seed=18,
+        coverage_cycle_id=coverage.cycle_id,
+        instance=_instance(harness),
+    )
+    harness.objects.put("scratch-attention-receipt", second_receipt)
+    harness.record_scratch_event(
+        _payload(
+            "attention_pack_rendered",
+            actor="harness",
+            outputs=[second_receipt.receipt_hash],
+            retrieval_receipt_ref=second_receipt.receipt_hash,
         )
     )
     harness.record_scratch_event(
@@ -320,6 +341,7 @@ def test_cluster_membership_guide_staleness_similarity_visibility_and_coverage(t
             "coverage_block_rendered",
             actor="harness",
             inputs=[coverage.cycle_id, first.id],
+            retrieval_receipt_ref=second_receipt.receipt_hash,
         )
     )
     harness.record_scratch_event(

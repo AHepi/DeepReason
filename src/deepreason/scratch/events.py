@@ -100,4 +100,13 @@ class ScratchEventPayloadV1(ScratchRecord):
                 raise ValueError(
                     "attention rendering must output and reference exactly one receipt"
                 )
+        elif self.action == ScratchAction.COVERAGE_BLOCK_RENDERED:
+            if self.retrieval_receipt_ref is None:
+                raise ValueError(
+                    "coverage progress requires the preceding attention receipt"
+                )
+        elif self.retrieval_receipt_ref is not None:
+            raise ValueError(
+                "retrieval_receipt_ref is only valid for attention or coverage events"
+            )
         return self
