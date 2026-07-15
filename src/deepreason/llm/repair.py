@@ -261,15 +261,23 @@ def diagnostic_from_error(
             repair_scope=pointer,
             skeleton=None,
         )
-    if getattr(error, "code", "") == "SCRATCH_WIRE_REFERENCE_INVALID":
+    reference_code = getattr(error, "code", "")
+    if reference_code in {
+        "SCRATCH_WIRE_REFERENCE_INVALID",
+        "BRIDGE_WIRE_REFERENCE_INVALID",
+    }:
         pointer = str(getattr(error, "pointer", ""))
         child_schema = schema_at_pointer(schema, pointer) if pointer else schema
         return RepairDiagnostic(
             contract=contract,
             path=pointer,
-            error="SCRATCH_WIRE_REFERENCE_INVALID",
+            error=reference_code,
             received=None,
-            allowed="one supplied call-local handle or rendered-list index",
+            allowed=(
+                "one supplied call-local handle or rendered-list index"
+                if reference_code == "SCRATCH_WIRE_REFERENCE_INVALID"
+                else "one supplied call-local handle"
+            ),
             repair_scope=pointer,
             skeleton=minimal_skeleton(child_schema, schema),
         )

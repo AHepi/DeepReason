@@ -24,7 +24,45 @@ _MODEL_EXPORTS = {
     "UncoveredRequirementV1",
     "UnresolvedItemV1",
 }
-__all__ = sorted(_EVENT_EXPORTS | _MODEL_EXPORTS)
+_LEDGER_EXPORTS = {
+    "ClaimLedgerAmendmentRequestV1",
+    "ClaimLedgerCatalogItemV1",
+    "ClaimLedgerInputCatalogV1",
+    "ClaimLedgerStageAResultV1",
+    "amend_claim_ledger_stage_a",
+    "build_claim_ledger_stage_a",
+}
+_COMPOSE_EXPORTS = {
+    "BridgeComposer",
+    "CompositionRequestV1",
+    "CompositionResultV1",
+    "CompositionStatus",
+}
+_REVIEW_EXPORTS = {
+    "GroundingReviewError",
+    "GroundingReviewResult",
+    "GroundingReviewService",
+}
+_REPAIR_EXPORTS = {
+    "BridgeRepairResult",
+    "GroundingRepairError",
+    "GroundingRepairService",
+    "RepairDisposition",
+}
+_MODULE_EXPORTS = {
+    "deepreason.bridge.ledger": _LEDGER_EXPORTS,
+    "deepreason.bridge.compose": _COMPOSE_EXPORTS,
+    "deepreason.bridge.review": _REVIEW_EXPORTS,
+    "deepreason.bridge.repair": _REPAIR_EXPORTS,
+}
+__all__ = sorted(
+    _EVENT_EXPORTS
+    | _MODEL_EXPORTS
+    | _LEDGER_EXPORTS
+    | _COMPOSE_EXPORTS
+    | _REVIEW_EXPORTS
+    | _REPAIR_EXPORTS
+)
 
 
 def __getattr__(name: str):
@@ -45,4 +83,9 @@ def __getattr__(name: str):
         from importlib import import_module
 
         return getattr(import_module("deepreason.bridge.models"), name)
+    for module_name, exports in _MODULE_EXPORTS.items():
+        if name in exports:
+            from importlib import import_module
+
+            return getattr(import_module(module_name), name)
     raise AttributeError(name)

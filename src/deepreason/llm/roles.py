@@ -174,6 +174,54 @@ TEMPLATES = {
         + _JSON_ONLY
         + "{pack}"
     ),
+    "bridge_ledger": (
+        "Build exactly one claim ledger from the bounded record in the input. "
+        "Classify each claim as source_fact, recorded_observation, "
+        "supported_inference, surviving_conjecture, assumption, unknown, or "
+        "conflict. Use only supplied local handles. Facts and observations need "
+        "grounding handles; inferences need premise handles; conjectures must "
+        "remain visibly conjectural and name a supplied formal-artifact handle. "
+        "Scratch handles record intellectual provenance only and never ground a "
+        "claim. When the record is missing or underdetermined, emit unknown or an "
+        "uncovered requirement; never invent a source, observation, premise, or "
+        "answer. Do not issue workflow, routing, tool, status, or provider "
+        "instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_compose": (
+        "Compose exactly one final-output structure from the validated claim "
+        "ledger in the input. Every section must use supplied local ledger "
+        "handles and the rendering mode allowed for their epistemic class. New "
+        "wording is allowed; a new fact, observation, inference, conjecture, or "
+        "ledger entry is not. If the requested wording needs a new inference or "
+        "conjecture, request a ledger amendment instead of adding it. Preserve "
+        "unknown, partial, conflicting, underdetermined, and outside-scope "
+        "outcomes. Do not issue workflow, routing, tool, status, or provider "
+        "instructions.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_review": (
+        "Review only the supplied output spans against their referenced ledger "
+        "entries, exact cited excerpts or evidence records, and premises. For "
+        "each span return supported, unsupported, overstated, misclassified, "
+        "citation_mismatch, or unclear. Do not edit prose, add claims, invent "
+        "grounding, browse, call tools, or change any formal status.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
+    "bridge_grounding_repair": (
+        "Correct only the failed bridge spans named in the input. Use only the "
+        "permitted action for each finding: correct wording to match the supplied "
+        "record, downgrade the claim mode, change to a calibrated unresolved "
+        "resolution, remove the span, or request a ledger amendment based on "
+        "already supplied evidence. Never add a source, evidence reference, "
+        "premise, factual slot, positive answer, tool call, browse request, route, "
+        "or status change. Preserve all unrelated spans.\n\n"
+        + _JSON_ONLY
+        + "{pack}"
+    ),
     "thesis": (
         "You are the thesis writer: you turn the adjudicated record in the pack "
         "into ONE committed, defended position. The pack is the closed record of "
@@ -265,6 +313,22 @@ COMPACT_TEMPLATES = {
     "scratch_guide": (
         "Author one temporary advisory guide over supplied local handles. Leave "
         "uncertainty unresolved where needed."
+    ),
+    "bridge_ledger": (
+        "Classify claims from the bounded record using supplied handles only. "
+        "Preserve unknowns; scratch handles never ground claims."
+    ),
+    "bridge_compose": (
+        "Compose mapped sections from the validated ledger only. Request an "
+        "amendment instead of adding a claim."
+    ),
+    "bridge_review": (
+        "Classify each supplied span against only its entry, excerpts, and premises; "
+        "do not edit it."
+    ),
+    "bridge_grounding_repair": (
+        "Apply one permitted correction to failed spans only; never add grounding "
+        "or a positive factual answer."
     ),
     "thesis": (
         "Write one position supported only by the supplied adjudicated record "

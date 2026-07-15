@@ -12,6 +12,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from deepreason.bridge.ledger import ClaimLedgerInputCatalogV1
 from deepreason.bridge.models import (
     BridgeOutputV1,
     BridgeValidationFindingV1,
@@ -71,6 +72,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "bridge-validation-report": BridgeValidationReportV1,
     "bridge-grounding-finding": GroundingFindingV1,
     "bridge-grounding-review": GroundingReviewV1,
+    "bridge-ledger-input-catalog": ClaimLedgerInputCatalogV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
