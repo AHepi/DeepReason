@@ -826,9 +826,9 @@ def _fixture_specs() -> tuple[FixtureSpec, ...]:
             name="scratch-note-containing-mistaken-fact",
             catalog=_catalog(blue, scratch),
             materials={"source-blue": "The capsule is blue."},
-            stage_a=tuple(
+            stage_a=(
                 (
-                    stage,
+                    DiagnosticStage.CLAIM_LEDGER,
                     _response(
                         entries=[
                             {
@@ -839,12 +839,19 @@ def _fixture_specs() -> tuple[FixtureSpec, ...]:
                             }
                         ]
                     ),
-                )
-                for stage in (
-                    DiagnosticStage.CLAIM_LEDGER,
+                ),
+                (
                     DiagnosticStage.SCHEMA_REPAIR,
-                    DiagnosticStage.SCHEMA_REPAIR,
-                )
+                    _response(
+                        entries=[
+                            {
+                                "entry_key": "K1",
+                                "claim_class": "unknown",
+                                "claim": "The requested weight remains unknown.",
+                            }
+                        ]
+                    ),
+                ),
             ),
             composition=(
                 (
@@ -1122,9 +1129,9 @@ def test_scripted_failure_mode_fixtures_are_epistemically_safe(tmp_path, spec):
         assert outcome.trace.first_appearance[_MISTAKEN_WEIGHT] == (
             DiagnosticStage.SCRATCH_BLOCK
         )
-        assert all(
-            not attempt.valid for attempt in result.model_calls[0].attempt_trace
-        )
+        assert [
+            attempt.valid for attempt in result.model_calls[0].attempt_trace
+        ] == [False, True]
         assert [entry.claim_class for entry in result.claim_ledger.entries] == [
             ClaimClass.UNKNOWN
         ]

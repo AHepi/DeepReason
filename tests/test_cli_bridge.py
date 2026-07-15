@@ -97,26 +97,26 @@ def _run(root, *argv: str) -> int:
 
 
 def _scripted_adapter(harness: Harness) -> LLMAdapter:
+    entry = {
+        "entry_key": "K1",
+        "claim_class": "unknown",
+        "claim": "The requested conclusion is not established.",
+    }
+    requirement = {
+        "requirement": "Evidence establishing the conclusion.",
+        "reason": "The bounded record does not ground an answer.",
+    }
+    if harness.scratch_state.blocks:
+        entry["scratch_handles"] = ["B1"]
+        requirement["scratch_handles"] = ["B1"]
+        requirement["reason"] = "Scratch provenance cannot ground an answer."
     endpoints = {
         "summarizer": MockEndpoint(
             [
                 json.dumps(
                     {
-                        "entries": [
-                            {
-                                "entry_key": "K1",
-                                "claim_class": "unknown",
-                                "claim": "The requested conclusion is not established.",
-                                "scratch_handles": ["B1"],
-                            }
-                        ],
-                        "uncovered_requirements": [
-                            {
-                                "requirement": "Evidence establishing the conclusion.",
-                                "reason": "Scratch provenance cannot ground an answer.",
-                                "scratch_handles": ["B1"],
-                            }
-                        ],
+                        "entries": [entry],
+                        "uncovered_requirements": [requirement],
                     }
                 )
             ],
