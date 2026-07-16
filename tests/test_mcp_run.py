@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import threading
 
+from deepreason.application import OperatorCancellationIntentV1
 from deepreason import mcp_server
 from deepreason.cli.main import main as cli_main
 from deepreason.config import Config
@@ -139,6 +140,14 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
     assert cycle_started.wait(timeout=2)
     cancel = _payload(_call("cancel_run", {"root": str(root)}))
     assert cancel["safe_boundary"] == "completed-cycle"
+    cancellation_intents = [
+        OperatorCancellationIntentV1.model_validate_json(line)
+        for line in (root / "operator-intents.jsonl").read_text().splitlines()
+    ]
+    assert len(cancellation_intents) == 1
+    assert cancellation_intents[0].manifest_digest == manifest.sha256
+    assert cancellation_intents[0].sequence == 0
+    assert (root / "cancel.requested").exists()
     assert _payload(_call("run_status", {"root": str(root)}))["state"] == "running"
     release_cycle.set()
     mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)

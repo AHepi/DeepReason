@@ -170,6 +170,9 @@ def build_parser() -> argparse.ArgumentParser:
     watch_cmd = sub.add_parser("watch", help="watch read-only structured run progress")
     watch_cmd.add_argument("--once", action="store_true", help="render one snapshot and exit")
     watch_cmd.add_argument("--interval", type=float, default=0.25)
+    sub.add_parser(
+        "cancel", help="request cancellation at the next completed-cycle boundary"
+    )
     for command_name in ("prove", "check-proof"):
         proof_cmd = sub.add_parser(
             command_name,
@@ -426,14 +429,25 @@ def _main(argv: list[str] | None = None) -> int:
         return _cmd_continue(args)
 
     if args.command == "watch":
-        from deepreason.ui.terminal import watch_run
+        from deepreason.application import TEXT_RUN_SERVICE, WatchTextRunIntentV1
+        from deepreason.ui.terminal import render_terminal_status
 
         try:
-            watch_run(Path(args.root), interval=args.interval, once=args.once)
+            for pulse, snapshot in enumerate(
+                TEXT_RUN_SERVICE.watch(
+                    WatchTextRunIntentV1(
+                        root=str(args.root), interval=args.interval, once=args.once
+                    )
+                )
+            ):
+                print(render_terminal_status(snapshot.presentation_payload(), pulse=pulse))
         except ValueError as error:
             print(str(error), file=sys.stderr)
             return 1
         return 0
+
+    if args.command == "cancel":
+        return _cmd_cancel(args)
 
     if args.command in {"prove", "check-proof"}:
         return _cmd_check_proof(args)
@@ -1114,14 +1128,11 @@ def _text_manifest_schema_version(configured) -> int:
 def _cmd_reason(args) -> int:
     from deepreason.config import load as load_config
     from deepreason.llm.capabilities import CapabilityCache
-    from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
     from deepreason.ops import require_full_engine
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         RunManifestError,
-        bind_run_manifest,
         compile_run_manifest,
-        config_from_run_manifest,
         load_run_manifest,
         render_role_matrix,
     )
@@ -1149,7 +1160,6 @@ def _cmd_reason(args) -> int:
         spec = spec_from_text(args.text)
 
     root = Path(args.root)
-    operator_lock = None
     try:
         bound = root / MANIFEST_NAME
         if bound.exists():
@@ -1184,158 +1194,49 @@ def _cmd_reason(args) -> int:
                 f"reason requires text, got {manifest.workload_profile}",
                 "/workload_profile",
             )
-        config = config_from_run_manifest(manifest)
-        if not args.dry_run:
-            try:
-                operator_lock = operator_locks(
-                    root, owner="reason", blocking=False
-                )
-            except ProcessLockBusy as error:
-                raise ValueError(
-                    "RUN_ALREADY_RUNNING: another operator owns this run root"
-                ) from error
-            bind_run_manifest(manifest, root)
-    except (ProcessLockError, ValueError) as error:
-        if operator_lock is not None:
-            operator_lock.release()
+    except ValueError as error:
         print(str(error), file=sys.stderr)
         return 1
     if args.dry_run:
         print(render_role_matrix(manifest))
         print(f"sha256={manifest.sha256}")
         return 0
+    return _execute_reason(args, spec, manifest, root, token_budget)
+
+
+def _execute_reason(args, spec, manifest, root: Path, token_budget) -> int:
+    """Submit one typed text-run intent and render its terminal result."""
+
+    from deepreason.application import (
+        InspectTextRunIntentV1,
+        TEXT_RUN_SERVICE,
+        start_text_run_intent,
+    )
+
     try:
-        return _execute_reason(args, spec, manifest, config, root, token_budget)
-    finally:
-        assert operator_lock is not None
-        operator_lock.release()
-
-
-def _execute_reason(args, spec, manifest, config, root: Path, token_budget) -> int:
-    """Execute a preflighted text workload while its caller holds root locks."""
-
-    from deepreason.ops import run_scheduler
-    from deepreason.runtime.progress import ProgressSink, _atomic_json
-    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
-    from deepreason.status_display import display_status_counts
-    from deepreason.workloads.text import seed_reasoning_workload
-
-    _atomic_json(
-        root / "run-request.json",
-        {
-            "schema": "deepreason-run-request-v1",
-            "workload": "text",
-            "problem": {
-                "id": spec.problem.id,
-                "description": spec.problem.description,
-            },
-        },
-    )
-    harness = Harness(root)
-    problem = seed_reasoning_workload(harness, spec)
-    progress = ProgressSink(root, run_id=manifest.sha256, workload="text")
-    progress.emit(state="starting", phase="workload", activity="loaded", problem_id=problem.id)
-
-    completed_cycles = 0
-
-    def on_cycle(scheduler):
-        nonlocal completed_cycles
-        completed_cycles = scheduler._cycles
-        status = scheduler.harness.state.status
-        display_counts = display_status_counts(scheduler.harness, manifest)
-        counts = {name: 0 for name in ("accepted", "refuted", "suspended")}
-        for label in status.values():
-            if label.value in counts:
-                counts[label.value] += 1
-        progress.emit(
-            state="running",
-            phase="reasoning",
-            activity="cycle complete",
-            cycle=scheduler._cycles,
-            problem_id=problem.id,
-            accepted=counts["accepted"],
-            refuted=counts["refuted"],
-            suspended=counts["suspended"],
-            display_status_counts=display_counts,
-            token_limit=token_budget,
-            determinate=False,
+        accepted = TEXT_RUN_SERVICE.start(
+            start_text_run_intent(
+                root=str(root),
+                workload=spec,
+                run_manifest_ref=str(args.run_manifest or "<compiled-manifest>"),
+                cycles=args.cycles,
+                token_budget=(
+                    "unlimited" if token_budget is None else token_budget
+                ),
+            ),
+            manifest_override=manifest,
         )
-        return progress.cancellation_requested()
-
-    result, meter, accounting = run_scheduler(
-        harness,
-        config,
-        args.cycles,
-        token_budget,
-        on_cycle=on_cycle,
-        run_manifest=manifest,
-        progress_sink=progress,
-    )
-    cancelled = progress.cancellation_requested()
-    scheduler_reason = result.get("stop_reason")
-    reason = (
-        "operator_cancelled"
-        if cancelled
-        else scheduler_reason or "budget_exhausted"
-    )
-    if scheduler_reason and not cancelled:
-        stop = json.loads((root / "run-stop.json").read_text())
-    else:
-        policy = StopPolicy()
-        metrics = StopMetrics(cycle=completed_cycles)
-        harness.record_measure(
-            inputs=[
-                "run-stop",
-                policy.digest,
-                json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
-                reason,
-                str(harness._next_seq),
-            ]
-        )
-        stop = write_stop_record(
-            root,
-            reason=reason,
-            policy=policy,
-            metrics=metrics,
-            event_seq=max(0, harness._next_seq - 1),
-        )
-    _atomic_json(
-        root / "checkpoint.json",
-        {
-            "schema": "deepreason-checkpoint-v1",
-            "manifest_digest": manifest.sha256,
-            "stop_digest": stop["digest"],
-            "event_seq": harness._next_seq,
-        },
-    )
-    payload = {
-        "schema": "deepreason-run-result-v1",
-        "workload": "text",
-        "problem_id": problem.id,
-        "frontier": result["frontier"],
-        "survivors": result["survivors"],
-        "display": {
-            "status_counts": display_status_counts(harness, manifest),
-        },
-        "accounting": accounting,
-        "stop": stop,
-    }
-    _atomic_json(root / "run-result.json", payload)
-    progress.emit(
-        state="cancelled" if cancelled else "completed",
-        phase="stop",
-        activity=reason,
-        cycle=completed_cycles,
-        problem_id=problem.id,
-        display_status_counts=display_status_counts(harness, manifest),
-        token_spend=meter.total if meter is not None else 0,
-        token_limit=token_budget,
-        determinate=False,
-        stop_reason=reason,
-    )
+        TEXT_RUN_SERVICE.wait(accepted.root)
+        payload = TEXT_RUN_SERVICE.result(
+            InspectTextRunIntentV1(root=accepted.root)
+        ).presentation_payload()
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    # The synchronous CLI historically omitted MCP's lifecycle field.
+    payload.pop("state", None)
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
-
 
 def _cmd_skills(args) -> int:
     """Snapshot explicit capsules and emit a replayable retrieval receipt."""
@@ -1478,31 +1379,45 @@ def _cmd_brain(args) -> int:
 
 
 def _cmd_continue(args) -> int:
-    from deepreason import mcp_server
+    from deepreason.application import (
+        InspectTextRunIntentV1,
+        TEXT_RUN_SERVICE,
+        continue_text_run_intent,
+    )
 
-    raw_cycles = str(args.budget).strip()
-    if raw_cycles.startswith("cycles="):
-        raw_cycles = raw_cycles.partition("=")[2]
     try:
-        result = mcp_server._start_run(
-            {
-                "root": args.root,
-                "budget": {
-                    "cycles": raw_cycles,
-                    "token_budget": args.token_budget,
-                },
-                "expected_manifest_digest": args.expected_manifest_digest,
-            },
-            continuation=True,
+        raw_cycles = str(args.budget).strip()
+        if raw_cycles.startswith("cycles="):
+            raw_cycles = raw_cycles.partition("=")[2]
+        accepted = TEXT_RUN_SERVICE.continue_run(
+            continue_text_run_intent(
+                root=str(args.root),
+                cycles=raw_cycles,
+                token_budget=args.token_budget,
+                expected_manifest_digest=args.expected_manifest_digest,
+            )
         )
+        TEXT_RUN_SERVICE.wait(accepted.root)
+        payload = TEXT_RUN_SERVICE.result(
+            InspectTextRunIntentV1(root=accepted.root)
+        ).presentation_payload()
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 1
-    key = str(Path(result["root"]).resolve())
-    thread = mcp_server._RUN_THREADS[key]
-    thread.join()
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
+def _cmd_cancel(args) -> int:
+    from deepreason.application import (
+        CancelTextRunIntentV1,
+        TEXT_RUN_SERVICE,
+    )
+
     try:
-        payload = mcp_server._read_run_result(Path(result["root"]))
+        payload = TEXT_RUN_SERVICE.cancel(
+            CancelTextRunIntentV1(root=str(args.root))
+        ).presentation_payload()
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 1
