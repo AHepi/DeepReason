@@ -23,6 +23,7 @@ from deepreason.workflow.models import (
     WorkOrderEnvelopeV1,
     WorkflowLifecycleDecisionV1,
     WorkflowLifecycleSnapshotV1,
+    WorkflowResumeDecisionV1,
     repair_attempt_trigger_ref,
 )
 from deepreason.workflow.state import (
@@ -41,6 +42,7 @@ _SCHEMA_MODELS = {
     "workflow-stop-metrics-observation": StopMetricsObservationV1,
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
+    "workflow-resume-decision": WorkflowResumeDecisionV1,
 }
 _PROVIDER_TRANSITIONS = {
     TransitionKind.PROPOSAL_RECEIVED,
@@ -160,7 +162,12 @@ class WorkflowReplayState:
     lifecycle_decisions: dict[str, WorkflowLifecycleDecisionV1] = field(
         default_factory=dict
     )
+    resume_decisions: dict[str, WorkflowResumeDecisionV1] = field(
+        default_factory=dict
+    )
     terminal_decision_id: str | None = None
+    current_resume_decision_id: str | None = None
+    resume_decision_event_seq: dict[str, int] = field(default_factory=dict)
     branches: dict[str, WorkflowBranchState] = field(default_factory=dict)
     work_to_branch: dict[str, str] = field(default_factory=dict)
     decision_event_seq: dict[str, int] = field(default_factory=dict)
@@ -1028,6 +1035,102 @@ class WorkflowReplayState:
         self.lifecycle_snapshots[snapshot.id] = snapshot
         self.lifecycle_decisions[decision.id] = decision
         self.terminal_decision_id = decision.id
+        self.current_resume_decision_id = None
+        self.event_seqs.append(seq)
+
+    def _apply_resume(
+        self,
+        event: Any,
+        payload: ControlEventPayloadV1,
+        resolved_records: Iterable[tuple[str, str, BaseModel]],
+    ) -> None:
+        """Validate and enact one RESUMED authority transition."""
+
+        from deepreason.workflow.lifecycle import (
+            RESUMABLE_STOP_REASONS,
+            outstanding_work_snapshot,
+        )
+
+        records = _record_map(resolved_records)
+        if tuple(records) != tuple(payload.outputs):
+            raise ValueError("resolved resume records differ from control outputs")
+        if [schema for schema, _record in records.values()] != [
+            "workflow-lifecycle-snapshot",
+            "workflow-resume-decision",
+        ]:
+            raise ValueError("resume Control outputs have the wrong record shape")
+        snapshot = next(
+            record
+            for schema, record in records.values()
+            if schema == "workflow-lifecycle-snapshot"
+        )
+        decision = next(
+            record
+            for schema, record in records.values()
+            if schema == "workflow-resume-decision"
+        )
+        assert isinstance(snapshot, WorkflowLifecycleSnapshotV1)
+        assert isinstance(decision, WorkflowResumeDecisionV1)
+        terminal = self.terminal_lifecycle_decision
+        terminal_snapshot = self.terminal_lifecycle_snapshot
+        terminal_observation = self.terminal_stop_observation
+        if terminal is None or terminal_snapshot is None or terminal_observation is None:
+            raise ValueError("RESUMED requires one active typed STOPPED decision")
+        seq = int(getattr(event, "seq"))
+        if payload.decision_ref != decision.id or tuple(payload.inputs) != (
+            terminal.id,
+            snapshot.id,
+        ):
+            raise ValueError("resume Control references differ from its decision")
+        if (
+            decision.resume_snapshot_ref != snapshot.id
+            or decision.resume_event_seq != seq
+            or snapshot.event_fence_seq != seq - 1
+            or decision.continuation_seq != len(self.resume_decisions)
+        ):
+            raise ValueError("resume decision differs from its event fence")
+        if (
+            decision.prior_terminal_decision_ref != terminal.id
+            or decision.prior_metrics_observation_ref != terminal_observation.id
+            or decision.prior_checkpoint_ref != terminal_snapshot.id
+            or decision.prior_stop_digest != terminal.stop_record_digest
+            or decision.prior_process_digest != terminal.next_process_digest
+            or decision.controller_state
+            != terminal_observation.controller_state_after
+        ):
+            raise ValueError("resume decision differs from its terminal authority")
+        if terminal.deterministic_decision.reason not in RESUMABLE_STOP_REASONS:
+            raise ValueError("terminal stop reason does not authorize RESUMED")
+        if (
+            decision.manifest_digest != terminal.manifest_digest
+            or decision.controller_version != terminal.controller_version
+            or decision.workflow_profile != terminal.workflow_profile
+            or snapshot.manifest_digest != terminal.manifest_digest
+            or snapshot.controller_version != terminal.controller_version
+        ):
+            raise ValueError("resume records belong to another controller authority")
+        process_digest = self.digest
+        if (
+            decision.previous_process_digest != process_digest
+            or decision.next_process_digest != process_digest
+            or snapshot.process_digest != process_digest
+        ):
+            raise ValueError("resume records differ from replayed process state")
+        expected_snapshot = outstanding_work_snapshot(
+            self,
+            manifest_digest=decision.manifest_digest,
+            controller_version=decision.controller_version,
+            event_fence_seq=seq - 1,
+        )
+        if expected_snapshot != snapshot:
+            raise ValueError("resume outstanding-work snapshot does not replay")
+        if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+            raise ValueError("RESUMED cannot forget unfinished workflow authority")
+        self.lifecycle_snapshots[snapshot.id] = snapshot
+        self.resume_decisions[decision.id] = decision
+        self.resume_decision_event_seq[decision.id] = seq
+        self.current_resume_decision_id = decision.id
+        self.terminal_decision_id = None
         self.event_seqs.append(seq)
 
     def apply(
@@ -1051,6 +1154,9 @@ class WorkflowReplayState:
         )
         if decision_entry is not None and decision_entry[0] == "workflow-lifecycle-decision":
             self._apply_lifecycle(event, payload, resolved_records)
+            return
+        if decision_entry is not None and decision_entry[0] == "workflow-resume-decision":
+            self._apply_resume(event, payload, resolved_records)
             return
         if self.terminal_decision_id is not None:
             raise ValueError("workflow transition follows terminal lifecycle state")
@@ -1144,6 +1250,29 @@ class WorkflowReplayState:
     def terminal_stop_digest(self) -> str | None:
         decision = self.terminal_lifecycle_decision
         return decision.stop_record_digest if decision is not None else None
+
+    @property
+    def current_resume_decision(self) -> WorkflowResumeDecisionV1 | None:
+        if self.current_resume_decision_id is None:
+            return None
+        return self.resume_decisions[self.current_resume_decision_id]
+
+    @property
+    def current_resume_event_seq(self) -> int | None:
+        decision = self.current_resume_decision
+        return (
+            self.resume_decision_event_seq[decision.id]
+            if decision is not None
+            else None
+        )
+
+    @property
+    def post_resume_work_started(self) -> bool:
+        resume_seq = self.current_resume_event_seq
+        return bool(
+            resume_seq is not None
+            and any(seq > resume_seq for seq in self.decision_event_seq.values())
+        )
 
     def recovery_status(self, work_order_id: str) -> WorkflowRecoveryStatus:
         branch_id = self.work_to_branch[work_order_id]

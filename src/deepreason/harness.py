@@ -26,7 +26,7 @@ from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
 from deepreason.bridge.state import BridgeState
-from deepreason.canonical import canonical_json
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.control_events import ControlEventPayloadV1
 from deepreason.conjecture_turn import (
     ConjectureAbstentionV1,
@@ -163,12 +163,12 @@ class Harness:
     def _workflow_checkpoint_path(self) -> Path:
         return self.root / "workflow-checkpoint.json"
 
-    def write_workflow_checkpoint(self) -> None:
+    def write_workflow_checkpoint(self) -> str | None:
         """Seal the latest complete authority prefix for tail-loss detection."""
 
         self._ensure_writable()
         if not self.workflow_state.event_seqs:
-            return
+            return None
         payload = {
             "schema": "workflow.checkpoint.v1",
             "process_digest": self.workflow_state.digest,
@@ -185,6 +185,22 @@ class Harness:
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, target)
+        return sha256_hex(data)
+
+    def workflow_checkpoint_digest(self) -> str | None:
+        """Return the canonical generic workflow-checkpoint file digest."""
+
+        path = self._workflow_checkpoint_path
+        if not path.exists():
+            return None
+        try:
+            data = path.read_bytes()
+            payload = json.loads(data)
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("workflow checkpoint is corrupt") from error
+        if canonical_json(payload) != data:
+            raise ValueError("workflow checkpoint is not canonical JSON")
+        return sha256_hex(data)
 
     def _verify_workflow_checkpoint(self) -> None:
         path = self._workflow_checkpoint_path
@@ -824,6 +840,73 @@ class Harness:
         for schema, record in records:
             self.objects.put(schema, record)
         inputs = [observation.id, snapshot.id]
+        outputs = [record.id for _schema, record in records]
+        payload = ControlEventPayloadV1(
+            decision_ref=decision.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
+    def record_resume_transition(self, snapshot, decision) -> Event:
+        """Persist one v4 RESUMED decision before post-terminal work."""
+
+        from deepreason.workflow.models import (
+            WorkflowLifecycleSnapshotV1,
+            WorkflowResumeDecisionV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        snapshot = canonical(WorkflowLifecycleSnapshotV1, snapshot)
+        decision = canonical(WorkflowResumeDecisionV1, decision)
+        terminal = self.workflow_state.terminal_lifecycle_decision
+        if terminal is None:
+            raise ValueError("resume requires one active typed terminal decision")
+        if (
+            decision.prior_terminal_decision_ref != terminal.id
+            or decision.resume_snapshot_ref != snapshot.id
+        ):
+            raise ValueError("resume decision differs from its bound records")
+        workflow_checkpoint_digest = self.workflow_checkpoint_digest()
+        if workflow_checkpoint_digest != decision.workflow_checkpoint_digest:
+            raise ValueError("resume decision differs from workflow-checkpoint bytes")
+        run_checkpoint_path = self.root / "checkpoint.json"
+        try:
+            run_checkpoint_bytes = run_checkpoint_path.read_bytes()
+            run_checkpoint = json.loads(run_checkpoint_bytes)
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError("resume requires one valid generic checkpoint") from error
+        encoded_checkpoint = canonical_json(run_checkpoint)
+        if run_checkpoint_bytes not in {
+            encoded_checkpoint,
+            encoded_checkpoint + b"\n",
+        }:
+            raise ValueError("generic checkpoint bytes are not canonical")
+        if (
+            sha256_hex(run_checkpoint_bytes) != decision.run_checkpoint_digest
+            or run_checkpoint.get("schema") != "deepreason-checkpoint-v1"
+            or run_checkpoint.get("manifest_digest") != decision.manifest_digest
+            or run_checkpoint.get("stop_digest") != decision.prior_stop_digest
+            or run_checkpoint.get("event_seq") != decision.resume_event_seq
+        ):
+            raise ValueError("resume decision differs from generic checkpoint bytes")
+        records = (
+            ("workflow-lifecycle-snapshot", snapshot),
+            ("workflow-resume-decision", decision),
+        )
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [terminal.id, snapshot.id]
         outputs = [record.id for _schema, record in records]
         payload = ControlEventPayloadV1(
             decision_ref=decision.id,

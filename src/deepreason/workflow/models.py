@@ -22,6 +22,7 @@ from pydantic import (
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.frozen import FrozenDict, FrozenList
+from deepreason.runtime.budget import Limit
 from deepreason.runtime.stop import (
     StopControllerStateV1,
     StopDecision,
@@ -784,6 +785,51 @@ class WorkflowLifecycleDecisionV1(IdentifiedWorkflowRecord):
         return self
 
 
+class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
+    """One controller-authorized return from a typed terminal checkpoint."""
+
+    _identity_domain = "workflow.resume-decision.v1"
+
+    schema_: Literal["workflow.resume-decision.v1"] = Field(
+        "workflow.resume-decision.v1", alias="schema"
+    )
+    transition_kind: Literal[LifecycleTransitionKind.RESUMED] = (
+        LifecycleTransitionKind.RESUMED
+    )
+    manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
+    controller_version: Literal["workflow.controller.v1"] = (
+        "workflow.controller.v1"
+    )
+    workflow_profile: Literal[
+        "conjecture.shadow.v1", "conjecture.active.v1"
+    ]
+    prior_terminal_decision_ref: str = Field(pattern=_ID_PATTERN)
+    prior_metrics_observation_ref: str = Field(pattern=_ID_PATTERN)
+    prior_process_digest: str = Field(pattern=_ID_PATTERN)
+    prior_stop_digest: str = Field(pattern=_DIGEST_PATTERN)
+    prior_checkpoint_ref: str = Field(pattern=_ID_PATTERN)
+    workflow_checkpoint_digest: str = Field(pattern=_DIGEST_PATTERN)
+    run_checkpoint_digest: str = Field(pattern=_DIGEST_PATTERN)
+    resume_snapshot_ref: str = Field(pattern=_ID_PATTERN)
+    controller_state: StopControllerStateV1
+    continuation_seq: int = Field(ge=0)
+    requested_cycles: Limit
+    requested_tokens: Limit
+    previous_process_digest: str = Field(pattern=_ID_PATTERN)
+    resume_event_seq: int = Field(ge=0)
+    next_process_digest: str = Field(pattern=_ID_PATTERN)
+
+    @model_validator(mode="after")
+    def _resume_shape(self):
+        if not (
+            self.prior_process_digest
+            == self.previous_process_digest
+            == self.next_process_digest
+        ):
+            raise ValueError("resuming cannot rewrite terminal workflow process state")
+        return self
+
+
 __all__ = [
     "BudgetDeltaV1",
     "CapabilityGrantV1",
@@ -806,6 +852,7 @@ __all__ = [
     "StopMetricsObservationV1",
     "WorkflowLifecycleDecisionV1",
     "WorkflowLifecycleSnapshotV1",
+    "WorkflowResumeDecisionV1",
     "WorkflowRecord",
     "WorkflowStopDecisionV1",
     "WorkflowTaskKind",

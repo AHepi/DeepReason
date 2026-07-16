@@ -222,22 +222,26 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 lifecycle = h.workflow_state.lifecycle_decisions.get(
                     event.control.decision_ref
                 )
+                resume = h.workflow_state.resume_decisions.get(
+                    event.control.decision_ref
+                )
                 if decision is None:
-                    if lifecycle is None:
+                    process_decision = lifecycle or resume
+                    if process_decision is None:
                         fail(
                             "workflow-decision",
                             f"event seq={event.seq}: decision is absent after replay",
                         )
                         continue
                     if (
-                        lifecycle.manifest_digest != manifest.sha256
-                        or lifecycle.workflow_profile != control.workflow_profile
-                        or lifecycle.controller_version
+                        process_decision.manifest_digest != manifest.sha256
+                        or process_decision.workflow_profile != control.workflow_profile
+                        or process_decision.controller_version
                         != control.controller_version
                     ):
                         fail(
                             "workflow-manifest",
-                            f"event seq={event.seq}: lifecycle differs from manifest authority",
+                            f"event seq={event.seq}: lifecycle decision differs from manifest authority",
                         )
                     continue
                 if (

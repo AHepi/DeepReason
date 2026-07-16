@@ -26,6 +26,7 @@ from deepreason.workflow.models import (
     WorkflowStopDecisionV1,
     WorkflowLifecycleDecisionV1,
     WorkflowLifecycleSnapshotV1,
+    WorkflowResumeDecisionV1,
     WorkflowTaskKind,
     WorkOrderEnvelopeV1,
 )
@@ -109,6 +110,7 @@ __all__ = [
     "WorkflowStopDecisionV1",
     "WorkflowLifecycleDecisionV1",
     "WorkflowLifecycleSnapshotV1",
+    "WorkflowResumeDecisionV1",
     "WorkflowTaskKind",
     "WorkOrderEnvelopeV1",
     "apply_decision",

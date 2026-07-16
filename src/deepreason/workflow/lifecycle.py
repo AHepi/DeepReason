@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
+from deepreason.runtime.budget import Limit
 from deepreason.runtime.stop import (
     StopController,
     StopControllerStateV1,
@@ -17,7 +18,11 @@ from deepreason.workflow.models import (
     StopMetricsObservationV1,
     WorkflowLifecycleDecisionV1,
     WorkflowLifecycleSnapshotV1,
+    WorkflowResumeDecisionV1,
 )
+
+
+RESUMABLE_STOP_REASONS = frozenset({"converged"})
 
 
 def outstanding_work_snapshot(
@@ -165,4 +170,81 @@ def build_stopped_lifecycle(
     return observation, snapshot, decision
 
 
-__all__ = ["build_stopped_lifecycle", "outstanding_work_snapshot"]
+def build_resumed_lifecycle(
+    workflow_state: Any,
+    *,
+    manifest_digest: str,
+    controller_version: Literal["workflow.controller.v1"],
+    workflow_profile: Literal[
+        "conjecture.shadow.v1", "conjecture.active.v1"
+    ],
+    workflow_checkpoint_digest: str,
+    run_checkpoint_digest: str,
+    continuation_seq: int,
+    requested_cycles: Limit,
+    requested_tokens: Limit,
+    resume_event_seq: int,
+) -> tuple[WorkflowLifecycleSnapshotV1, WorkflowResumeDecisionV1]:
+    """Authorize one real RESUMED transition from a quiescent typed stop."""
+
+    terminal = workflow_state.terminal_lifecycle_decision
+    terminal_snapshot = workflow_state.terminal_lifecycle_snapshot
+    terminal_observation = workflow_state.terminal_stop_observation
+    if terminal is None or terminal_snapshot is None or terminal_observation is None:
+        raise ValueError("continuation requires one active typed STOPPED decision")
+    if terminal.deterministic_decision.reason not in RESUMABLE_STOP_REASONS:
+        raise ValueError("terminal stop reason does not authorize continuation")
+    if (
+        terminal.manifest_digest != manifest_digest
+        or terminal.controller_version != controller_version
+        or terminal.workflow_profile != workflow_profile
+    ):
+        raise ValueError("terminal lifecycle belongs to another controller authority")
+    if (
+        terminal_snapshot.process_digest != workflow_state.digest
+        or terminal.next_process_digest != workflow_state.digest
+    ):
+        raise ValueError("terminal process digest differs from current replay")
+    if terminal_snapshot.outstanding_work or terminal_snapshot.unconsumed_bound_call_seqs:
+        raise ValueError("terminal checkpoint contains unfinished provider work")
+    if continuation_seq != len(workflow_state.resume_decisions):
+        raise ValueError("continuation sequence differs from replayed resume history")
+    requested_cycles = Limit.model_validate(requested_cycles)
+    requested_tokens = Limit.model_validate(requested_tokens)
+    snapshot = outstanding_work_snapshot(
+        workflow_state,
+        manifest_digest=manifest_digest,
+        controller_version=controller_version,
+        event_fence_seq=resume_event_seq - 1,
+    )
+    if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+        raise ValueError("RESUMED refuses unfinished workflow authority")
+    decision = WorkflowResumeDecisionV1.create(
+        manifest_digest=manifest_digest,
+        controller_version=controller_version,
+        workflow_profile=workflow_profile,
+        prior_terminal_decision_ref=terminal.id,
+        prior_metrics_observation_ref=terminal_observation.id,
+        prior_process_digest=terminal.next_process_digest,
+        prior_stop_digest=terminal.stop_record_digest,
+        prior_checkpoint_ref=terminal_snapshot.id,
+        workflow_checkpoint_digest=workflow_checkpoint_digest,
+        run_checkpoint_digest=run_checkpoint_digest,
+        resume_snapshot_ref=snapshot.id,
+        controller_state=terminal_observation.controller_state_after,
+        continuation_seq=continuation_seq,
+        requested_cycles=requested_cycles,
+        requested_tokens=requested_tokens,
+        previous_process_digest=workflow_state.digest,
+        resume_event_seq=resume_event_seq,
+        next_process_digest=workflow_state.digest,
+    )
+    return snapshot, decision
+
+
+__all__ = [
+    "RESUMABLE_STOP_REASONS",
+    "build_resumed_lifecycle",
+    "build_stopped_lifecycle",
+    "outstanding_work_snapshot",
+]

@@ -56,6 +56,7 @@ from deepreason.workflow.models import (
     WorkOrderEnvelopeV1,
     WorkflowLifecycleDecisionV1,
     WorkflowLifecycleSnapshotV1,
+    WorkflowResumeDecisionV1,
 )
 
 SCHEMAS: dict[str, type[BaseModel]] = {
@@ -97,6 +98,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "workflow-stop-metrics-observation": StopMetricsObservationV1,
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
+    "workflow-resume-decision": WorkflowResumeDecisionV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the

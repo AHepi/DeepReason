@@ -243,6 +243,8 @@ class Scheduler:
             )
         self.last_stop_decision = None
         self._last_stop_model_signal_refs: tuple[str, ...] = ()
+        self._stop_resume_rehydrated = False
+        self._stop_cycle_offset = 0
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
@@ -394,6 +396,43 @@ class Scheduler:
             and manifest.control_plane_policy is not None
             and manifest.control_plane_policy.mode == "active_conjecture"
         )
+
+    def _rehydrate_resumed_stop_controller(self) -> None:
+        """Restore the exact deterministic stop window authorized by RESUMED."""
+
+        if self._stop_resume_rehydrated:
+            return
+        resume = self.harness.workflow_state.current_resume_decision
+        if resume is None:
+            self._stop_resume_rehydrated = True
+            return
+        if self.stop_controller is None:
+            raise WorkflowAuthorizationError(
+                "resumed workflow requires its bound deterministic stop controller"
+            )
+        manifest = self.run_manifest
+        control = (
+            manifest.control_plane_policy
+            if manifest is not None and manifest.schema_version == 4
+            else None
+        )
+        if (
+            control is None
+            or resume.manifest_digest != manifest.sha256
+            or resume.controller_version != control.controller_version
+            or resume.workflow_profile != control.workflow_profile
+        ):
+            raise WorkflowAuthorizationError(
+                "resumed stop-controller state belongs to another manifest"
+            )
+        try:
+            self.stop_controller.restore(resume.controller_state)
+        except ValueError as error:
+            raise WorkflowAuthorizationError(
+                "resumed stop-controller state differs from frozen stop policy"
+            ) from error
+        self._stop_cycle_offset = resume.controller_state.last_cycle or 0
+        self._stop_resume_rehydrated = True
 
     def _workflow_conjecturer_contract_id(self, problem) -> str:
         """Predict the exact wire contract selected by the unchanged call."""
@@ -1776,7 +1815,7 @@ class Scheduler:
             self.harness, self.config.CAPTURE_W
         )["criticism_debt"]
         metrics = StopMetrics(
-            cycle=self._cycles,
+            cycle=self._stop_cycle_offset + self._cycles,
             frontier_delta=len(before["frontier"] ^ after["frontier"]),
             status_churn=status_churn,
             new_problems=len(after["problems"] - before["problems"]),
@@ -1909,6 +1948,7 @@ class Scheduler:
         on its first survivor without rebuilding the Scheduler, which would
         wipe the attention caches)."""
         self._recover_workflow_prefixes()
+        self._rehydrate_resumed_stop_controller()
         stop_snapshot = (
             self._stop_snapshot() if self.stop_controller is not None else None
         )
