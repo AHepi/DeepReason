@@ -112,6 +112,14 @@ SIGNALS: dict[str, str] = {
                                         "nothing",
     "batch-crit": "batched critic call over the listed targets registered "
                   "nothing that committed an event",
+    "foreign-criticism-coverage.v1": "durable v4 process receipt that one "
+                                      "school-owned target was exposed to an "
+                                      "exact routed argumentative-critic call "
+                                      "from a distinct foreign school (inputs: "
+                                      "[signal, target id, owner:<school>, "
+                                      "critic:<school>, source:<event seq>, "
+                                      "route:<sha256>]); coverage only, never "
+                                      "a verdict, warrant, attack, or status",
     "scrutiny": "observe-only criticism authority (RC1): the critic's case "
                 "registered as scrutiny evidence with NO warrant (inputs: "
                 "[signal, target id, critic artifact id]); status unchanged",
