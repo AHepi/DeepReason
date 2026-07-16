@@ -88,6 +88,48 @@ See the [ordinary-user guide](docs/SCRATCHPAD_GROUNDED_BRIDGE.md) and the
 [v1.4 normative amendment](docs/harness-spec-v1.4-amendment.md). The guide also
 shows the explicit, non-mutating `--derived-output` flow for v1/v2 run fences.
 
+### Opt-in v4 control boundary
+
+RunManifest v4 makes the conjecture authority boundary explicit. A complete
+control-plane policy chooses `legacy`, `shadow`, or `active_conjecture`, states
+whether schools are conditioning lineages or are bound to exact route seats,
+and freezes bounded context, repair, workflow-retry, and wire-contract policy.
+V4 is never inferred from an older run:
+
+```bash
+deepreason --config config/my-provider.yaml config compile \
+  --schema-version 4 --workload-profile text --profile compact \
+  --rubric-policy forbid \
+  --control-plane-policy control-plane-policy.json \
+  --out run-manifest-v4.json
+
+deepreason config inspect --run-manifest run-manifest-v4.json
+deepreason --root runs/my-v4-question reason --text "Why might X happen?" \
+  --run-manifest run-manifest-v4.json
+```
+
+`conditioning_only` means schools remain distinct stance/lineage histories and
+may intentionally share one model route. `route_bound` requires explicit
+school-to-seat bindings; actual use is proven by the manifest, endpoint lease,
+and durable call receipt, not by the number of school names. In
+`active_conjecture`, a model may also request bounded additional advisory
+context or abstain without fabricating a candidate. The harness decides
+whether a request is granted and issues a fresh work order for any follow-up.
+
+The conjecture boundary and typed stop/resume lifecycle are actively migrated.
+Scratch remains advisory, criticism prose cannot set status, and local schema
+repair is distinct from a fresh whole-bridge workflow retry. A typed resume is
+limited to a deterministic converged stop with an exact checkpoint and no
+outstanding work; `PAUSED` is not implemented. Versions 1–3 retain their
+historical semantics and canonical manifest bytes. See the
+[v1.5 normative amendment](docs/harness-spec-v1.5-amendment.md) and
+[migration guide](docs/JOLT_CONTROL_PLANE_MIGRATION.md).
+
+The v4 work so far establishes stricter authority, replay, and failure
+boundaries in offline tests. It does **not** establish that active control is
+better for novelty, answer quality, or cost; that requires separately
+authorized matched provider runs.
+
 Pinned code, simulation, and Lean operations are available through
 `deepreason code`, `deepreason simulate`, `deepreason prove`, and
 `deepreason check-proof`. They evaluate only workload-declared commands,
@@ -206,7 +248,11 @@ anti-relapse guard, warrant plumbing, storage, route firewall, model profiles,
 wire contracts, and bounded repair kernel so it cannot drift into a second
 protocol. A v3 Mini run also uses `minireason.advisory.MiniAdvisorySession` to
 reuse the exact parent scratch, attention, and two-stage bridge implementation;
-it does not define a reduced advisory ontology. See
+it does not define a reduced advisory ontology. Historical Mini roots are not
+silently upgraded to v4. An explicit v4 `shadow` Mini run reuses the parent
+work-order, proposal, guard, and transition envelope for its generate boundary,
+but the reduced loop is not the active v4 turn/context-expansion controller.
+See
 [`mini/README.md`](mini/README.md).
 
 ---
@@ -329,7 +375,8 @@ pytest                      # full suite (parent + mini)
 Source is `src/deepreason/` (the full harness) and `mini/minireason/` (the
 compact build). The normative baseline is
 [`docs/harness-spec-v1.3.md`](docs/harness-spec-v1.3.md), amended explicitly by
-[`docs/harness-spec-v1.4-amendment.md`](docs/harness-spec-v1.4-amendment.md).
+[`docs/harness-spec-v1.4-amendment.md`](docs/harness-spec-v1.4-amendment.md) and
+[`docs/harness-spec-v1.5-amendment.md`](docs/harness-spec-v1.5-amendment.md).
 The module-by-module map and operator contract live there and in
 [`docs/AGENT.md`](docs/AGENT.md).
 

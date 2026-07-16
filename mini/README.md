@@ -84,6 +84,33 @@ Similarity and attention remain retrieval-only, and an unknown or partial
 bridge resolution is a valid success. See
 [`../docs/SCRATCHPAD_GROUNDED_BRIDGE.md`](../docs/SCRATCHPAD_GROUNDED_BRIDGE.md).
 
+## RunManifest v4 status
+
+RunManifest v4 separates semantic model output from process authority in the
+full harness. It defines `legacy`, `shadow`, and `active_conjecture` profiles,
+explicit `conditioning_only` or `route_bound` school execution, bounded model
+context requests, work-order-bound local repair, foreign-school criticism
+routing, bridge workflow retry, and typed terminal stop evidence.
+
+That control-plane breadth is not silently added to MiniReason. The default
+Mini manifest and all existing Mini roots retain their historical behavior and
+canonical data. Opening a Mini root never synthesizes v4 fields or control
+events. With an explicit v4 `shadow` manifest, the reduced loop reuses the
+parent conjecture application boundary and exact `WorkOrderEnvelopeV1`,
+`ProposalReceiptV1`, route lease, guard, and transition records for the
+overlapping generate boundary. It does not create smaller duplicate records.
+
+Mini still owns generate/check/rotate and does not claim
+`conjecture.active.v1` turn/context-expansion coverage. Canonical-envelope
+reuse does not import full-engine trials, research, website stages, or the full
+scheduler.
+
+For the exact implemented boundary and known gaps, see the
+[`v1.5 normative amendment`](../docs/harness-spec-v1.5-amendment.md) and
+[`v4 migration guide`](../docs/JOLT_CONTROL_PLANE_MIGRATION.md). Offline
+control/replay tests are not evidence that active v4 improves novelty, answer
+quality, or cost on live providers.
+
 ## Graduation (mini -> full)
 
 The log is the contract: a MiniReason root is a valid DeepReason root.

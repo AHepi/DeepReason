@@ -81,14 +81,69 @@ a frozen second judge family; otherwise compilation fails with
 `SECOND_JUDGE_FAMILY_REQUIRED`. `--rubric-policy forbid` is valid only for
 program/predicate workloads and rejects rubric-bearing input at preflight.
 
-Scratchpad and grounded-output operation is opt-in and requires
-`--schema-version 3`. Source configuration still passes through the same typed,
-unknown-key-rejecting boundary. V3 freezes the eleven attention channels,
+Scratchpad and grounded-output operation is opt-in. It was introduced by
+`--schema-version 3` and is also available to a compatible v4 policy. Source
+configuration still passes through the same typed, unknown-key-rejecting
+boundary. V3 freezes the eleven attention channels,
 coverage cadence, embedding/fallback identity, bounded pack sizes, bridge
 roles, ledger-amendment bound, schema/grounding repair limits, and output
 policy. Versions 1 and 2 retain their original bytes and hashes and are never
 migrated on open. See
 [`SCRATCHPAD_GROUNDED_BRIDGE.md`](SCRATCHPAD_GROUNDED_BRIDGE.md).
+
+## Opt-in RunManifest v4 authority
+
+V4 adds a complete, strict `ControlPlanePolicyV1`. Compile it explicitly; the
+runtime never upgrades a v1–v3 root or guesses a missing control policy:
+
+```bash
+deepreason --config config/my-provider.yaml config compile \
+  --schema-version 4 --workload-profile text --profile compact \
+  --rubric-policy forbid \
+  --control-plane-policy control-plane-policy.json \
+  --out run-manifest-v4.json
+deepreason config inspect --run-manifest run-manifest-v4.json
+```
+
+The policy selects one complete repository-owned profile:
+
+- `legacy` preserves historical scheduler and wire behavior;
+- `shadow` records and compares conjecture control decisions while legacy
+  actuation remains authoritative; and
+- `active_conjecture` requires a durable work order before conjecturer
+  dispatch and records provider, guard, context, repair, and terminal work
+  transitions before their semantic effects.
+
+Schools are conditioning lineages, not model identities. In
+`conditioning_only`, several schools may intentionally share the conjecturer
+route. In `route_bound`, each school has an exact role seat and endpoint
+binding. Only the bound manifest plus the call's lease and route receipt prove
+which model route ran; school count alone proves nothing about route diversity.
+
+The active v4 turn may return candidates, a bounded semantic context request,
+or an abstention. A request cannot contain paths, commands, tools, routes,
+budgets, phases, or status changes. The harness grants or denies it under the
+frozen policy and creates a fresh work order for a granted follow-up. Scratch
+remains advisory, and an abstention creates no formal artifact.
+
+Local schema repair stays within the rejected object or authorized subtree and
+the original route, contract, and state fence. A whole-bridge workflow retry is
+a separate manifest authority: it starts a fresh workflow under the same
+sealed catalog, prompt policy, contract, and route. Typed failed calls remain
+valid process traces when their route, attempts, usage knowledge, and spend are
+honestly recorded; they are not successful semantic results.
+
+V4 types terminal stop evidence around the existing deterministic
+`StopController`. A typed `RESUMED` continuation is available only from a
+typed deterministic converged `STOPPED` decision: it rechecks the immutable
+manifest and controller, prior process and stop records, exact canonical
+checkpoint bytes, event fence, and an empty outstanding-work snapshot before
+new work may start. Completed, stuck, exhausted, budget, cancelled, and
+untyped historical stops are not resumable through that transition. `PAUSED`
+is not implemented. The implementation also does not establish that active
+control improves semantic quality or cost. See
+[`harness-spec-v1.5-amendment.md`](harness-spec-v1.5-amendment.md) and
+[`JOLT_CONTROL_PLANE_MIGRATION.md`](JOLT_CONTROL_PLANE_MIGRATION.md).
 
 ## MCP tool surface
 
@@ -113,6 +168,13 @@ precompiled immutable manifest reference. The server does not infer routes or
 read source YAML. Its one shared process-lock abstraction works on Windows,
 macOS, and Linux; a busy root returns a typed busy result rather than racing a
 second writer. Status and result tools never create a missing root.
+
+`cancel_run` writes a run-bound operational request; it does not set status or
+interrupt a provider call mid-transition. The scheduler observes it at the
+next completed-cycle boundary. `continue_run` requires the same bound manifest
+and verifies the prior stop, checkpoint, event fence, and operator lock before
+appending. These operations must not be described as model-authored workflow
+commands.
 
 The historical spec §13 research/operator surface is quarantined. It is
 available only when a human explicitly starts the server with
@@ -170,6 +232,21 @@ All scratch text, source excerpts, relation phrases, IDs, handles, and bridge
 text are untrusted data. They cannot influence routing. Requests reject path
 traversal, unsafe manifest/control-file links, oversized payloads, unknown
 fields, and mismatched canonical IDs without echoing rejected secrets.
+
+CLI and MCP text runs translate their inputs into the same strict application
+intents and use `TextRunApplicationService` for start, continue,
+progress/watch, cancellation, and terminal result handling. Scratch queries
+and grounded-bridge operations likewise pass through their shared application
+services; direct scratch open is the one explicitly mutating query and owns
+its process lock and visibility receipt. The services own dispatch, locking,
+and durable lifecycle behavior, so the transport facades do not implement
+competing loops. MiniReason's explicit v4 `shadow` path separately reuses the
+parent conjecture application boundary and exact work-order, proposal, guard,
+and transition records while retaining Mini's reduced generate/check/rotate
+semantics. Its default historical path remains unchanged, and this does not
+claim `active_conjecture` controller breadth. No client may append raw control
+events, choose hidden routes, mutate manifests, set status, bypass a guard, or
+implement an alternative scheduler loop.
 
 ## Rules for the explicitly enabled legacy client
 

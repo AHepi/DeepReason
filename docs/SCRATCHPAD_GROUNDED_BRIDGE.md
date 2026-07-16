@@ -91,6 +91,29 @@ cycle and eventually renders every member; blocks created during that cycle
 wait for the next one. The entire workspace can be browsed in bounded pages,
 but it is not dumped into each model call.
 
+### Ordinary conjecture and bounded context requests
+
+RunManifest v4 can make this attention pack a first-class input to ordinary
+conjecture work. Planning is bound to the current formal and scratch event
+fence. The selection and render receipts become durable only when the exact
+context is rendered to the call; a stale plan is rebuilt. The prompt labels the
+pack advisory and tells the model it may be wrong, stale, contradictory,
+abandoned, or irrelevant.
+
+With `conjecture_context.mode: harness_plus_model_request`, the v4 turn may
+return a bounded semantic `ContextRequest`. It may use query text, already
+visible aliases, permitted retrieval channels, and an optional purpose. It
+cannot request a path, tool, command, provider, route, budget, phase, or status.
+The request is a proposal to the deterministic harness, not retrieval
+authority.
+
+A grant creates another bounded attention plan and a **fresh one-call work
+order** with a decremented expansion allowance. The expanded receipt links the
+prior selection and expansion decision. A denial or exhausted allowance is
+typed and replayable. A request-only turn or abstention creates no formal
+artifact, and a candidate still passes the ordinary anti-relapse and formal
+registration path. Scratch never promotes itself.
+
 ## Why the final bridge has two stages
 
 Stage A creates a claim ledger and checks the epistemic requirements of every
@@ -105,6 +128,26 @@ conjecture takes the one bounded ledger-amendment route and is validated before
 composition continues. Repair cannot invent citations, sources, evidence,
 premises, or an answer to fill a schema; it must remove, downgrade, or leave
 unsupported material unresolved.
+
+### Repair and whole-workflow retry are separate
+
+Schema or grounding repair operates inside one bridge workflow. It corrects a
+rejected payload under the same evidence and bounded policy; it cannot invent a
+source, citation, premise, route, or answer.
+
+For a bound v4 manifest, a separate `WorkflowRetryPolicyV1` may authorize a
+fresh complete bridge workflow after a typed retryable failure. The fresh
+attempt uses a new workflow and sink but the same sealed catalog/materials,
+composition request, formal fence, manifest, prompt-policy digest, wire
+contract, role, seat, endpoint, and route. Failed ledger content is not carried
+into the next attempt. Authorization is persisted before dispatch and includes
+the prior failure, cumulative prior tokens, retry lineage, and deterministic
+next-attempt identity.
+
+Zero retries is the default. The policy can allow at most two retries—three
+total attempts—and only for listed typed error codes. The final failure at the
+ceiling remains a valid terminal process record. V1–v3 retain the historical
+single-workflow path and ledger contract v1.
 
 ## RunManifest v3 and migration
 
@@ -143,6 +186,13 @@ MiniReason follows the same rule. `MiniAdvisorySession` opens an already-bound
 ScratchService, AttentionPlanner, and bridge. Older MiniReason roots keep their
 legacy format and are opened without mutation.
 
+RunManifest v4 extends, rather than rewrites, this contract. A complete v4
+control policy may select the conjecture turn v4 wire contract and bridge ledger
+contract v2. It does not change scratch's epistemic status. Opening a v3 run
+does not add those contracts, context capabilities, control events, or workflow
+retries. Use a separately compiled and bound v4 root for the active boundary;
+see [`JOLT_CONTROL_PLANE_MIGRATION.md`](JOLT_CONTROL_PLANE_MIGRATION.md).
+
 ## Security and process safety
 
 Treat every scratch phrase, guide, source excerpt, model result, handle, and ID
@@ -156,6 +206,12 @@ content cannot choose roles, providers, models, routes, concurrency, commands,
 guards, statuses, or workflow transitions. The shared process lock works on
 Windows, macOS, and Linux and serializes writers without making historical
 reads mutate the root.
+
+On an active v4 conjecture path, a local repair additionally requires a durable
+`RepairWorkOrderV1` binding the rejected raw result, diagnostic and JSON
+pointer, authorized subtree, remaining attempts, original contract and route,
+and immutable state fence. This local authorization is not permission to start
+a bridge workflow retry or to change evidence.
 
 The default MCP server exposes only the exact 17 tools listed in
 [`AGENT.md`](AGENT.md). Its five scratch operations are read-only attention and

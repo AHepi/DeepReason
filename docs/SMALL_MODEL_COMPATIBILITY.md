@@ -31,6 +31,40 @@ parent `Harness`, `ScratchService`, `AttentionPlanner`, and grounded bridge. It
 requires an already-bound `engine_profile: mini` RunManifest v3 and does not
 define a second ontology, validator, storage layout, or bridge protocol.
 
+## RunManifest v4 boundary
+
+V4 is an explicit full-engine control profile, not a new default for compact
+models or MiniReason. The compact presentation profile remains usable with
+`legacy`, `shadow`, or `active_conjecture`; presentation size and workflow
+authority are independent choices.
+
+Under `active_conjecture`, the same compact model still authors open claims,
+mechanisms, counterconditions, optional analogy, uncertainty, bounded context
+requests, and abstentions. It does not author work orders, routes, budgets,
+guards, repair scope, context grants, or status. A granted context request
+creates a fresh one-call authorization. Local repair is limited to the rejected
+object or authorized subtree under the same contract and route. A typed failed
+call is a valid accounted trace, while a successful call still requires a valid
+final attempt.
+
+Schools remain conditioning lineages. `conditioning_only` may intentionally
+send several schools through one compact-model route. `route_bound` uses exact
+manifest seats, but distinct schools are not reported as distinct models unless
+the route receipts prove that stronger claim.
+
+Historical Mini roots and the default Mini manifest path remain unchanged and
+are not upgraded on open. With an explicit v4 `shadow` manifest, Mini now
+reuses the parent's conjecture application boundary and exact canonical work
+order, proposal, guard, and transition records for its generate boundary.
+Mini retains its reduced generate/check/rotate semantics and does not import
+the active v4 turn/context-expansion controller, full-engine trials, research,
+or website stages. Do not describe it as controlled by
+`conjecture.active.v1`.
+
+The normative boundary and migration status are documented in
+[`harness-spec-v1.5-amendment.md`](harness-spec-v1.5-amendment.md) and
+[`JOLT_CONTROL_PLANE_MIGRATION.md`](JOLT_CONTROL_PLANE_MIGRATION.md).
+
 The production MCP surface contains the exact 17 harness-owned run, website,
 read-only scratch, and grounded-bridge tools listed in
 [`AGENT.md`](AGENT.md). Endpoint models receive a rendered role pack and one
@@ -79,3 +113,9 @@ No provider credential was available during local verification, so this
 implementation does not claim the Gemma schema-rate, three-round website, or
 frontier regression thresholds have been empirically met. That is an explicit
 evidence gap, not an inferred failure or a substituted mock result.
+
+The same evidentiary limit applies to v4 active control. Offline differential,
+replay, semantic-freedom, and verifier-backed fixtures can establish boundary
+correctness; they do not establish live novelty, quality, latency, or cost
+superiority. Any such claim requires separately authorized matched provider
+runs under frozen routes and budgets.
