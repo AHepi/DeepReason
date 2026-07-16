@@ -619,13 +619,12 @@ def test_harness_composer_cannot_launder_conjecture_into_fact(tmp_path):
                     "sections": [
                         {
                             "span_id": "S1",
-                            "text": "The idea remains a conjecture.",
+                            "text": "The idea is established fact.",
                             "rendering_mode": "conjecture",
                             "ledger_entry_handles": ["E1"],
                         }
                     ],
-                    "resolution": "partially_answered",
-                    "resolution_reason": "No factual grounding is present.",
+                    "resolution": "answered",
                 }
             ),
         ],

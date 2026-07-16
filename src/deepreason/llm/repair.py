@@ -416,6 +416,21 @@ def diagnostic_from_error(
             repair_scope=pointer,
             skeleton=None,
         )
+    if getattr(error, "code", "") == "BRIDGE_COMPOSITION_INVALID":
+        pointer = str(getattr(error, "pointer", ""))
+        repair_scope = str(getattr(error, "repair_scope", pointer))
+        child_schema = (
+            schema_at_pointer(schema, repair_scope) if repair_scope else schema
+        )
+        return RepairDiagnostic(
+            contract=contract,
+            path=pointer,
+            error=str(error)[:300],
+            received=None,
+            allowed="valid bridge rendering for the bound claim class",
+            repair_scope=repair_scope,
+            skeleton=minimal_skeleton(child_schema, schema),
+        )
     reference_code = getattr(error, "code", "")
     if reference_code in {
         "SCRATCH_WIRE_REFERENCE_INVALID",

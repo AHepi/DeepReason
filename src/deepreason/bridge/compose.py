@@ -39,6 +39,23 @@ _HANDLE_SENTINEL = "NO_LEDGER_ENTRIES"
 _COMPOSER_ROLES = frozenset({"summarizer", "thesis"})
 
 
+class CompositionContractError(ValueError):
+    """A compiled composition violated one exact bridge-output constraint.
+
+    The structured-output repair boundary reads ``pointer`` and
+    ``repair_scope`` only as inert validation metadata.  Giving it the exact
+    wire field prevents a parseable repair from reopening the surrounding
+    section, resolution, evidence handles, or any other semantic content.
+    """
+
+    code = "BRIDGE_COMPOSITION_INVALID"
+
+    def __init__(self, *, pointer: str, message: str) -> None:
+        self.pointer = pointer
+        self.repair_scope = pointer
+        super().__init__(message)
+
+
 class CompositionStatus(str, Enum):
     COMPOSED = "composed"
     LEDGER_AMENDMENT_NEEDED = "ledger_amendment_needed"
@@ -350,8 +367,24 @@ class BridgeCompositionWireContract(WireContract[CompositionDraftV1]):
         report = validate_bridge_output(self.ledger, output)
         if not report.valid:
             first = report.findings[0]
-            location = first.pointer or first.span_id or "/"
-            raise ValueError(f"{first.code} at {location}: {first.message}")
+            pointer = first.pointer
+            if pointer is None and first.span_id is not None:
+                section_index = next(
+                    (
+                        index
+                        for index, section in enumerate(wire.sections)
+                        if section.span_id == first.span_id
+                    ),
+                    None,
+                )
+                if section_index is not None:
+                    pointer = f"/sections/{section_index}/rendering_mode"
+            pointer = pointer or ""
+            location = pointer or first.span_id or "/"
+            raise CompositionContractError(
+                pointer=pointer,
+                message=f"{first.code} at {location}: {first.message}",
+            )
         return CompositionDraftV1(output=output)
 
 
