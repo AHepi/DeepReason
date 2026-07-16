@@ -452,6 +452,8 @@ class Harness:
             "error_code": error_code,
         }
         payload = BridgeEventPayloadV1.model_validate(payload_values)
+        if payload.action == BridgeAction.WORKFLOW_RETRY_STARTED and llm is not None:
+            raise ValueError("workflow retry authorization cannot contain an LLM call")
         self.bridge_state.validate(payload, resolved_records)
 
         if llm is not None:

@@ -65,6 +65,14 @@ _WORKFLOW_EXPORTS = {
     "BridgeWorkflowPolicy",
     "BridgeWorkflowResultV1",
 }
+_RETRY_EXPORTS = {
+    "BridgeWorkflowAttemptFenceV1",
+    "BridgeWorkflowRetryV1",
+    "WorkflowRetryBoundaryError",
+    "WorkflowRetryPolicyV1",
+    "authorize_workflow_retry",
+    "run_bridge_workflow_with_retries",
+}
 _HARNESS_EXPORTS = {"BridgeTerminalResultV1", "build_grounded_bridge"}
 _DERIVED_EXPORTS = {
     "DerivedBridgeError",
@@ -82,6 +90,7 @@ _MODULE_EXPORTS = {
     "deepreason.bridge.state": _STATE_EXPORTS,
     "deepreason.bridge.evidence_pack": _EVIDENCE_EXPORTS,
     "deepreason.bridge.workflow": _WORKFLOW_EXPORTS,
+    "deepreason.bridge.retry": _RETRY_EXPORTS,
     "deepreason.bridge.harness": _HARNESS_EXPORTS,
     "deepreason.bridge.derived": _DERIVED_EXPORTS,
 }
@@ -95,6 +104,7 @@ __all__ = sorted(
     | _STATE_EXPORTS
     | _EVIDENCE_EXPORTS
     | _WORKFLOW_EXPORTS
+    | _RETRY_EXPORTS
     | _HARNESS_EXPORTS
     | _DERIVED_EXPORTS
 )

@@ -41,6 +41,7 @@ _REVIEW_SCHEMAS = frozenset(
 _FAILURE_SCHEMAS = frozenset(
     {"bridge-evidence-pack", "bridge-ledger-input-catalog", "bridge-failure"}
 )
+_RETRY_SCHEMAS = frozenset({"bridge-workflow-retry"})
 
 _ALLOWED_OUTPUT_SCHEMAS: dict[BridgeAction, frozenset[str]] = {
     BridgeAction.LEDGER_CREATED: _LEDGER_SCHEMAS,
@@ -55,6 +56,7 @@ _ALLOWED_OUTPUT_SCHEMAS: dict[BridgeAction, frozenset[str]] = {
     BridgeAction.REPAIR_ATTEMPTED: _OUTPUT_SCHEMAS,
     BridgeAction.COMPLETED: frozenset(),
     BridgeAction.FAILED: _FAILURE_SCHEMAS,
+    BridgeAction.WORKFLOW_RETRY_STARTED: _RETRY_SCHEMAS,
 }
 
 _PRIMARY_SCHEMA: dict[BridgeAction, str | None] = {
@@ -70,6 +72,7 @@ _PRIMARY_SCHEMA: dict[BridgeAction, str | None] = {
     BridgeAction.REPAIR_ATTEMPTED: "bridge-output",
     BridgeAction.COMPLETED: None,
     BridgeAction.FAILED: None,
+    BridgeAction.WORKFLOW_RETRY_STARTED: "bridge-workflow-retry",
 }
 
 
@@ -95,6 +98,7 @@ class BridgeState:
     grounding_findings: dict[str, BaseModel] = field(default_factory=dict)
     grounding_reviews: dict[str, BaseModel] = field(default_factory=dict)
     failures: dict[str, BaseModel] = field(default_factory=dict)
+    workflow_retries: dict[str, BaseModel] = field(default_factory=dict)
     object_schemas: dict[str, str] = field(default_factory=dict)
     object_event_seq: dict[str, int] = field(default_factory=dict)
     event_seqs: list[int] = field(default_factory=list)
@@ -294,6 +298,25 @@ class BridgeState:
                 and not self._repair_lineage(output.id, review)
             ):
                 raise ValueError("bridge failure review lacks repaired-output lineage")
+
+        if action == BridgeAction.WORKFLOW_RETRY_STARTED:
+            _retry_id, retry = self._one(records, "bridge-workflow-retry")
+            if list(payload.inputs) != [retry.prior_failure_id]:
+                raise ValueError("workflow retry must name exactly its prior failure")
+            failure = self.failures.get(retry.prior_failure_id)
+            if failure is None:
+                raise ValueError("workflow retry names an unknown prior failure")
+            if any(
+                prior.prior_failure_id == retry.prior_failure_id
+                for prior in self.workflow_retries.values()
+            ):
+                raise ValueError("prior bridge failure already has a retry attempt")
+            if (
+                retry.reason_code != failure.error_code
+                or retry.attempt_fence.formal_seq != failure.formal_seq
+                or retry.attempt_fence.catalog_id != failure.catalog_id
+            ):
+                raise ValueError("workflow retry differs from its prior failure fence")
 
         if action in {BridgeAction.LEDGER_CREATED, BridgeAction.LEDGER_AMENDED}:
             _ledger_id, ledger = self._one(records, "bridge-claim-ledger")
@@ -537,6 +560,7 @@ class BridgeState:
             "bridge-grounding-finding": self.grounding_findings,
             "bridge-grounding-review": self.grounding_reviews,
             "bridge-failure": self.failures,
+            "bridge-workflow-retry": self.workflow_retries,
         }
         indexes[schema][oid] = obj
 

@@ -22,6 +22,7 @@ class BridgeAction(str, Enum):
     REPAIR_ATTEMPTED = "repair_attempted"
     COMPLETED = "completed"
     FAILED = "failed"
+    WORKFLOW_RETRY_STARTED = "workflow_retry_started"
 
 
 class BridgeEventPayloadV1(FrozenRecord):

@@ -28,6 +28,7 @@ from deepreason.bridge.models import (
     UncoveredRequirementV1,
     UnresolvedItemV1,
 )
+from deepreason.bridge.retry import BridgeWorkflowRetryV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
@@ -77,6 +78,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "bridge-ledger-input-catalog": ClaimLedgerInputCatalogV1,
     "bridge-evidence-pack": EvidencePackV1,
     "bridge-failure": BridgeFailureV1,
+    "bridge-workflow-retry": BridgeWorkflowRetryV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
