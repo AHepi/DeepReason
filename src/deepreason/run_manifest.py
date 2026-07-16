@@ -30,13 +30,14 @@ from pydantic import (
     model_validator,
 )
 
+from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.locking import ProcessLock, RUN_MANIFEST_LOCK_NAME
 from deepreason.llm.endpoints import DEFAULT_TIMEOUT_S, resolve_model
 from deepreason.llm.providers import infer_provider
 
 
 SCHEMA_VERSION = 1
-LATEST_SCHEMA_VERSION = 3
+LATEST_SCHEMA_VERSION = 4
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
 _MAX_MANIFEST_BYTES = 4 * 1024 * 1024
@@ -409,6 +410,199 @@ class BridgePolicy(BaseModel):
         )
 
 
+class SchoolRoleBindingV1(BaseModel):
+    """One manifest-owned school-to-seat assignment for v4 execution."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    school_id: str = Field(
+        min_length=8,
+        max_length=64,
+        pattern=r"^school-(0|[1-9][0-9]*)$",
+    )
+    role: str = Field(
+        min_length=1,
+        max_length=64,
+        pattern=r"^[a-z][a-z0-9_]*$",
+    )
+    seat: int = Field(ge=0, le=1_023)
+    endpoint_id: str = Field(min_length=1, max_length=256)
+
+
+class SchoolExecutionPolicyV1(BaseModel):
+    """Closed route-topology policy; school semantics remain open text."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    mode: Literal["conditioning_only", "route_bound"]
+    bindings: tuple[SchoolRoleBindingV1, ...]
+    allow_shared: bool
+    require_distinct_models: bool
+    require_distinct_families: bool
+
+    @field_validator("bindings", mode="after")
+    @classmethod
+    def _canonical_bindings(cls, value: tuple[SchoolRoleBindingV1, ...]):
+        keys = tuple(
+            (binding.school_id, binding.role, binding.seat, binding.endpoint_id)
+            for binding in value
+        )
+        if keys != tuple(sorted(keys)) or len(set(keys)) != len(keys):
+            raise ValueError("school bindings must be sorted and contain no duplicates")
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _mode_is_consistent(self):
+        if self.mode == "conditioning_only":
+            if self.bindings:
+                raise ValueError("conditioning_only cannot carry route bindings")
+            if not self.allow_shared:
+                raise ValueError("conditioning_only must explicitly allow shared routes")
+            if self.require_distinct_models or self.require_distinct_families:
+                raise ValueError(
+                    "conditioning_only cannot claim model or family route diversity"
+                )
+        return self
+
+
+class ConjectureContextPolicyV1(BaseModel):
+    """Bounded advisory-context capability for one conjecture work item."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    mode: Literal["disabled", "harness_only", "harness_plus_model_request"]
+    initial_max_blocks: int = Field(ge=0, le=1_000)
+    initial_max_guides: int = Field(ge=0, le=100)
+    max_context_expansion_requests: int = Field(ge=0, le=8)
+    max_extra_blocks: int = Field(ge=0, le=1_000)
+    permitted_retrieval_channels: tuple[str, ...]
+    coverage_slot_mandatory: bool
+    exploration_slot_mandatory: bool
+
+    @field_validator("permitted_retrieval_channels", mode="after")
+    @classmethod
+    def _canonical_channels(cls, value: tuple[str, ...]):
+        unknown = set(value) - set(_ATTENTION_CHANNELS)
+        if unknown:
+            raise ValueError(
+                "unknown conjecture retrieval channels: "
+                + ", ".join(sorted(unknown))
+            )
+        canonical = tuple(channel for channel in _ATTENTION_CHANNELS if channel in value)
+        if value != canonical:
+            raise ValueError(
+                "permitted retrieval channels must be unique and in canonical order"
+            )
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _mode_is_consistent(self):
+        if self.coverage_slot_mandatory and "coverage" not in self.permitted_retrieval_channels:
+            raise ValueError("mandatory coverage requires the coverage retrieval channel")
+        if (
+            self.exploration_slot_mandatory
+            and "exploratory" not in self.permitted_retrieval_channels
+        ):
+            raise ValueError(
+                "mandatory exploration requires the exploratory retrieval channel"
+            )
+        if self.mode == "disabled":
+            if any(
+                (
+                    self.initial_max_blocks,
+                    self.initial_max_guides,
+                    self.max_context_expansion_requests,
+                    self.max_extra_blocks,
+                )
+            ) or self.permitted_retrieval_channels:
+                raise ValueError("disabled conjecture context must have zero limits")
+            if self.coverage_slot_mandatory or self.exploration_slot_mandatory:
+                raise ValueError("disabled conjecture context cannot require reserved slots")
+        elif self.mode == "harness_only":
+            if self.max_context_expansion_requests or self.max_extra_blocks:
+                raise ValueError("harness_only cannot authorize model context expansion")
+        elif not self.max_context_expansion_requests or not self.max_extra_blocks:
+            raise ValueError(
+                "harness_plus_model_request requires a non-zero expansion allowance"
+            )
+        return self
+
+
+class ContractVersionPolicyV1(BaseModel):
+    """Repository-owned wire versions selected by a v4 manifest."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    bridge_ledger_wire_contract: Literal["bridge.ledger.v1", "bridge.ledger.v2"]
+    conjecturer_turn_contract: Literal[
+        "conjecturer.legacy.v1", "conjecturer.turn.v4"
+    ]
+    control_event_schema: Literal["none", "control.event.v1"]
+
+
+class ControlPlanePolicyV1(BaseModel):
+    """Complete opt-in v4 authority boundary with no user-authored program."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    controller_version: Literal["legacy.scheduler.v1", "workflow.controller.v1"]
+    mode: Literal["legacy", "shadow", "active_conjecture"]
+    workflow_profile: Literal[
+        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1"
+    ]
+    school_execution: SchoolExecutionPolicyV1
+    conjecture_context: ConjectureContextPolicyV1
+    workflow_retry: WorkflowRetryPolicyV1
+    contract_versions: ContractVersionPolicyV1
+    capability_profile: Literal["legacy.v1", "conjecture-control.v1"]
+
+    @model_validator(mode="after")
+    def _owned_profile_is_consistent(self):
+        if self.mode == "legacy":
+            if (
+                self.controller_version != "legacy.scheduler.v1"
+                or self.workflow_profile != "legacy.scheduler.v1"
+                or self.capability_profile != "legacy.v1"
+            ):
+                raise ValueError("legacy mode requires the complete legacy profile")
+            if self.school_execution.mode != "conditioning_only":
+                raise ValueError("legacy mode requires conditioning_only school execution")
+            if self.conjecture_context.mode != "disabled":
+                raise ValueError("legacy mode cannot authorize conjecture context control")
+            if self.workflow_retry.max_workflow_retries:
+                raise ValueError("legacy mode cannot authorize workflow retries")
+            if self.contract_versions != ContractVersionPolicyV1(
+                bridge_ledger_wire_contract="bridge.ledger.v1",
+                conjecturer_turn_contract="conjecturer.legacy.v1",
+                control_event_schema="none",
+            ):
+                raise ValueError("legacy mode requires the historical contract versions")
+        elif self.mode == "shadow":
+            if (
+                self.controller_version != "workflow.controller.v1"
+                or self.workflow_profile != "conjecture.shadow.v1"
+                or self.capability_profile != "conjecture-control.v1"
+                or self.contract_versions.bridge_ledger_wire_contract
+                != "bridge.ledger.v1"
+                or self.contract_versions.conjecturer_turn_contract
+                != "conjecturer.legacy.v1"
+                or self.contract_versions.control_event_schema != "control.event.v1"
+            ):
+                raise ValueError("shadow mode requires the complete shadow profile")
+        elif (
+            self.controller_version != "workflow.controller.v1"
+            or self.workflow_profile != "conjecture.active.v1"
+            or self.capability_profile != "conjecture-control.v1"
+            or self.contract_versions.bridge_ledger_wire_contract != "bridge.ledger.v2"
+            or self.contract_versions.conjecturer_turn_contract != "conjecturer.turn.v4"
+            or self.contract_versions.control_event_schema != "control.event.v1"
+        ):
+            raise ValueError(
+                "active_conjecture requires the v1 controller and new wire contracts"
+            )
+        return self
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
@@ -416,7 +610,7 @@ class RunManifest(BaseModel):
         extra="forbid", frozen=True, hide_input_in_errors=True
     )
 
-    schema_version: Literal[1, 2, 3] = SCHEMA_VERSION
+    schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
     workload_profile: Literal["text", "code", "formal", "website"] | None = None
@@ -432,6 +626,7 @@ class RunManifest(BaseModel):
     memory_policy: dict[str, Any] = Field(default_factory=dict)
     scratch_policy: ScratchPolicy | None = None
     bridge_policy: BridgePolicy | None = None
+    control_plane_policy: ControlPlanePolicyV1 | None = None
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
     # Canonical engine configuration without a role table. Runtime
@@ -470,23 +665,34 @@ class RunManifest(BaseModel):
             # not retroactively fields in a v1/v2 document.
             payload.pop("scratch_policy", None)
             payload.pop("bridge_policy", None)
+        if self.schema_version < 4:
+            # The v4 control boundary is absent, rather than null, in every
+            # historical public dump and canonical document.
+            payload.pop("control_plane_policy", None)
         return payload
 
     @model_validator(mode="after")
     def _production_routes_are_concrete(self):
+        if (
+            self.schema_version < 4
+            and "control_plane_policy" in self.model_fields_set
+        ):
+            raise ValueError("v1-v3 manifests cannot carry v4 control policy")
         if self.schema_version == 1:
             if self.workload_profile is not None or self.toolchains:
                 raise ValueError("v1 manifest cannot carry v2 workload/toolchain fields")
             if self.budget_policy or self.stop_policy or self.memory_policy:
                 raise ValueError("v1 manifest cannot carry v2 process policies")
         elif self.workload_profile is None:
-            raise ValueError("v2/v3 manifest requires workload_profile")
+            raise ValueError("v2+ manifest requires workload_profile")
         if self.schema_version < 3:
             if self.scratch_policy is not None or self.bridge_policy is not None:
                 raise ValueError("v1/v2 manifests cannot carry v3 scratch or bridge policy")
         else:
             if self.scratch_policy is None or self.bridge_policy is None:
-                raise ValueError("v3 manifest requires scratch_policy and bridge_policy")
+                raise ValueError(
+                    "v3/v4 manifest requires scratch_policy and bridge_policy"
+                )
             bridge = self.bridge_policy
             if bridge.mode == "grounded_two_stage":
                 required = {
@@ -512,10 +718,14 @@ class RunManifest(BaseModel):
             unknown_roles = set(self.roles) - set(V3_CANONICAL_ROLES)
             if unknown_roles:
                 raise ValueError(
-                    "v3 manifest contains non-canonical roles: "
+                    "v3/v4 manifest contains non-canonical roles: "
                     + ", ".join(sorted(unknown_roles))
                 )
             _validate_v3_engine_policy_consistency(self)
+        if self.schema_version == 4:
+            if self.control_plane_policy is None:
+                raise ValueError("v4 manifest requires complete control_plane_policy")
+            _validate_v4_control_plane_policy(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -536,7 +746,10 @@ class RunManifest(BaseModel):
         return self
 
     def canonical_bytes(self) -> bytes:
-        payload = self.model_dump(mode="json")
+        # Alias-aware output keeps nested canonical records on their wire
+        # names (for example workflow retry's ``schema`` field). Historical
+        # manifest models have no aliases, so their byte contracts are intact.
+        payload = self.model_dump(mode="json", by_alias=True)
         if self.schema_version == 1:
             # Preserve the exact canonical v1 byte and hash contract.  The v2
             # fields did not exist and must not appear as serialized defaults.
@@ -553,6 +766,8 @@ class RunManifest(BaseModel):
             # under both historical byte contracts.
             payload.pop("scratch_policy", None)
             payload.pop("bridge_policy", None)
+        if self.schema_version < 4:
+            payload.pop("control_plane_policy", None)
         return _canonical_json(payload)
 
     @property
@@ -575,7 +790,7 @@ def _source_config_data(config) -> dict[str, Any]:
 
 
 def _versioned_source_config_data(
-    config, schema_version: Literal[1, 2, 3]
+    config, schema_version: Literal[1, 2, 3, 4]
 ) -> dict[str, Any]:
     """Normalize newly added defaults out of historical source contracts.
 
@@ -593,7 +808,7 @@ def _versioned_source_config_data(
 
 
 def source_config_hash(
-    config, *, schema_version: Literal[1, 2, 3] = SCHEMA_VERSION
+    config, *, schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION
 ) -> str:
     """Hash the effective source configuration under one schema contract."""
 
@@ -936,6 +1151,101 @@ def _validate_v3_engine_policy_consistency(manifest: RunManifest) -> None:
         )
 
 
+def _normalized_model_identity(route: Route) -> tuple[str, str, str]:
+    return (
+        route.provider.strip().casefold(),
+        route.model_id.strip().casefold(),
+        (route.model_revision or "").strip().casefold(),
+    )
+
+
+def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
+    """Bind every route-bound school assignment to the frozen role matrix."""
+
+    policy = manifest.control_plane_policy
+    if policy is None:  # guarded by the caller; keeps this helper total.
+        raise ValueError("V4_CONTROL_POLICY_REQUIRED")
+    school_policy = policy.school_execution
+    if school_policy.mode == "conditioning_only":
+        return
+
+    try:
+        engine_data = json.loads(manifest.engine_config_json)
+    except json.JSONDecodeError as error:  # also checked by the v3 policy layer
+        raise ValueError("V4_ENGINE_CONFIG_INVALID") from error
+    school_count = engine_data.get("N_SCHOOLS")
+    if isinstance(school_count, bool) or not isinstance(school_count, int):
+        raise ValueError("V4_SCHOOL_COUNT_INVALID: N_SCHOOLS must be an integer")
+    if school_count < 0:
+        raise ValueError("V4_SCHOOL_COUNT_INVALID: N_SCHOOLS cannot be negative")
+    expected_schools = {f"school-{index}" for index in range(school_count)}
+
+    by_school_role: dict[tuple[str, str], SchoolRoleBindingV1] = {}
+    resolved: list[tuple[SchoolRoleBindingV1, Route]] = []
+    for binding in school_policy.bindings:
+        key = (binding.school_id, binding.role)
+        if key in by_school_role:
+            raise ValueError(
+                "V4_SCHOOL_BINDING_DUPLICATE: one school-role pair has multiple bindings"
+            )
+        by_school_role[key] = binding
+        if binding.school_id not in expected_schools:
+            raise ValueError(
+                f"V4_SCHOOL_UNKNOWN: no configured school {binding.school_id!r}"
+            )
+        if binding.role not in manifest.roles:
+            raise ValueError(
+                f"V4_SCHOOL_ROLE_UNKNOWN: no frozen role {binding.role!r}"
+            )
+        if binding.role != "conjecturer":
+            raise ValueError(
+                "V4_SCHOOL_ROLE_UNSUPPORTED: v4 initially binds conjecturer only"
+            )
+        routes = manifest.roles[binding.role]
+        if binding.seat >= len(routes):
+            raise ValueError(
+                "V4_SCHOOL_SEAT_OUT_OF_RANGE: binding does not name a frozen route"
+            )
+        route = routes[binding.seat]
+        if binding.endpoint_id != route.endpoint_id:
+            raise ValueError(
+                "V4_SCHOOL_ENDPOINT_MISMATCH: endpoint_id does not match the frozen seat"
+            )
+        resolved.append((binding, route))
+
+    expected_bindings = {(school, "conjecturer") for school in expected_schools}
+    actual_bindings = set(by_school_role)
+    if actual_bindings != expected_bindings:
+        missing = sorted(expected_bindings - actual_bindings)
+        extra = sorted(actual_bindings - expected_bindings)
+        detail = []
+        if missing:
+            detail.append("missing " + ", ".join(f"{school}/{role}" for school, role in missing))
+        if extra:
+            detail.append("extra " + ", ".join(f"{school}/{role}" for school, role in extra))
+        raise ValueError(
+            "V4_SCHOOL_BINDING_INCOMPLETE: " + "; ".join(detail)
+        )
+
+    assigned_seats = [(binding.role, binding.seat) for binding, _route in resolved]
+    if not school_policy.allow_shared and len(set(assigned_seats)) != len(assigned_seats):
+        raise ValueError(
+            "V4_SCHOOL_SHARED_SEAT_FORBIDDEN: allow_shared is false"
+        )
+    if school_policy.require_distinct_models:
+        models = {_normalized_model_identity(route) for _binding, route in resolved}
+        if len(models) != len(resolved):
+            raise ValueError(
+                "V4_SCHOOL_DISTINCT_MODEL_REQUIRED: bound schools share a model"
+            )
+    if school_policy.require_distinct_families:
+        families = {route.family.strip().casefold() for _binding, route in resolved}
+        if len(families) != len(resolved):
+            raise ValueError(
+                "V4_SCHOOL_DISTINCT_FAMILY_REQUIRED: bound schools share a family"
+            )
+
+
 def compile_run_manifest(
     config,
     *,
@@ -947,7 +1257,7 @@ def compile_run_manifest(
     concurrency: int | None = None,
     compiled_at: str | None = None,
     capability_cache=None,
-    schema_version: Literal[1, 2, 3] = SCHEMA_VERSION,
+    schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION,
     workload_profile: Literal["text", "code", "formal", "website"] | None = None,
     pack_profile: str | None = None,
     output_profile: str | None = None,
@@ -955,6 +1265,7 @@ def compile_run_manifest(
     budget_policy: dict[str, Any] | None = None,
     stop_policy: dict[str, Any] | None = None,
     memory_policy: dict[str, Any] | None = None,
+    control_plane_policy: ControlPlanePolicyV1 | None = None,
 ) -> RunManifest:
     """Resolve and freeze the role matrix before any role-model call.
 
@@ -968,6 +1279,23 @@ def compile_run_manifest(
     )
     data = _source_config_data(config)
     scratch_source, bridge_source = _source_feature_policies(data)
+    if schema_version < 4 and control_plane_policy is not None:
+        raise RunManifestError(
+            "CONTROL_PLANE_MANIFEST_V4_REQUIRED",
+            "control_plane_policy requires RunManifest schema v4",
+            "/control_plane_policy",
+        )
+    if schema_version == 4 and control_plane_policy is None:
+        raise RunManifestError(
+            "CONTROL_PLANE_POLICY_REQUIRED",
+            "schema v4 requires a complete control_plane_policy",
+            "/control_plane_policy",
+        )
+    resolved_control_policy = (
+        ControlPlanePolicyV1.model_validate(control_plane_policy)
+        if control_plane_policy is not None
+        else None
+    )
     if schema_version < 3 and scratch_source.enabled:
         raise RunManifestError(
             "SCRATCH_MANIFEST_V3_REQUIRED",
@@ -983,7 +1311,7 @@ def compile_run_manifest(
     if schema_version >= 2 and workload_profile is None:
         raise RunManifestError(
             "WORKLOAD_PROFILE_REQUIRED",
-            "schema v2/v3 requires a text, code, formal, or website workload profile",
+            "schema v2+ requires a text, code, formal, or website workload profile",
             "/workload_profile",
         )
     # This must precede route resolution: a rejected authority policy cannot
@@ -1003,7 +1331,7 @@ def compile_run_manifest(
                         single_model,
                         allowed_roles=(
                             V3_CANONICAL_ROLES
-                            if schema_version == 3
+                            if schema_version >= 3
                             else LEGACY_CANONICAL_ROLES
                         ),
                     )
@@ -1012,7 +1340,7 @@ def compile_run_manifest(
                         spec for role, _index, spec in _configured_seats(data)
                         if role in (
                             V3_CANONICAL_ROLES
-                            if schema_version == 3
+                            if schema_version >= 3
                             else LEGACY_CANONICAL_ROLES
                         )
                     )
@@ -1033,7 +1361,7 @@ def compile_run_manifest(
 
                         model_profile = select_profile(capabilities).name.value
     role_names = (
-        V3_CANONICAL_ROLES if schema_version == 3 else LEGACY_CANONICAL_ROLES
+        V3_CANONICAL_ROLES if schema_version >= 3 else LEGACY_CANONICAL_ROLES
     )
     configured_roles = {
         role for role, _index, _spec in _configured_seats(data)
@@ -1041,7 +1369,7 @@ def compile_run_manifest(
     }
     roles: dict[str, tuple[Route, ...]] = {role: () for role in role_names}
 
-    if schema_version == 3 and bridge_source.mode == "grounded_two_stage":
+    if schema_version >= 3 and bridge_source.mode == "grounded_two_stage":
         required_roles = {
             "ledger": bridge_source.ledger_role,
             "composer": bridge_source.composer_role,
@@ -1112,18 +1440,18 @@ def compile_run_manifest(
 
     scratch_policy = (
         _compile_scratch_policy(scratch_source, model_profile=model_profile, data=data)
-        if schema_version == 3
+        if schema_version >= 3
         else None
     )
     bridge_policy = (
         _compile_bridge_policy(bridge_source, model_profile=model_profile)
-        if schema_version == 3
+        if schema_version >= 3
         else None
     )
 
     engine_config = _versioned_source_config_data(data, schema_version)
     engine_config["roles"] = {}
-    if schema_version == 3:
+    if schema_version >= 3:
         # Typed v3 policy is canonical and must not be duplicated inside the
         # legacy engine-config envelope.
         engine_config.pop("scratchpad", None)
@@ -1135,6 +1463,9 @@ def compile_run_manifest(
         "formal": "reasoning.formal.v1",
         "website": "website.v1",
     }
+    manifest_values: dict[str, Any] = {}
+    if schema_version == 4:
+        manifest_values["control_plane_policy"] = resolved_control_policy
     return RunManifest(
         schema_version=schema_version,
         engine_profile=engine_profile,
@@ -1164,6 +1495,7 @@ def compile_run_manifest(
         source_config_hash=source_config_hash(data, schema_version=schema_version),
         compiled_at=stamp,
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),
+        **manifest_values,
     )
 
 
@@ -1450,13 +1782,13 @@ def config_from_run_manifest(manifest: RunManifest):
         data = json.loads(manifest.engine_config_json)
     except json.JSONDecodeError as error:
         raise RunManifestError("INVALID_ENGINE_CONFIG", str(error)) from error
-    if manifest.schema_version == 3:
-        # V3 feature policy has exactly one authority. The model validator has
+    if manifest.schema_version >= 3:
+        # V3+ feature policy has exactly one authority. The model validator has
         # already checked its consistency with shared engine settings (for
         # example the embedder identity); reconstruction injects it here.
         if manifest.scratch_policy is None or manifest.bridge_policy is None:
             raise RunManifestError(
-                "V3_POLICY_REQUIRED", "v3 manifest is missing typed policy"
+                "V3_POLICY_REQUIRED", "v3/v4 manifest is missing typed policy"
             )
         data["scratchpad"] = _effective_source_policy(manifest.scratch_policy)
         data["bridge"] = _effective_source_policy(manifest.bridge_policy)
@@ -1535,7 +1867,7 @@ def _preflight_text_authority(
 ) -> None:
     """Fail closed before any endpoint exists for text status authority."""
 
-    if schema_version not in {2, 3} or workload_profile != "text":
+    if schema_version not in {2, 3, 4} or workload_profile != "text":
         return
     from deepreason.authority import text_status_authority_issues
 
@@ -1576,7 +1908,7 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
         manifest.schema_version,
         manifest.workload_profile,
     )
-    if manifest.schema_version in {2, 3} and manifest.workload_profile == "text":
+    if manifest.schema_version in {2, 3, 4} and manifest.workload_profile == "text":
         # The policy that authorizes a status-changing text judgement is part
         # of the frozen manifest, not a knob a caller may replace between
         # manifest compilation and adapter construction. Reconstruct through

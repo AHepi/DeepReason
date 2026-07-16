@@ -55,12 +55,17 @@ def build_parser() -> argparse.ArgumentParser:
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
     compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
-    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3), type=int, default=1)
+    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3, 4), type=int, default=1)
     compile_cmd.add_argument(
         "--workload-profile", choices=("text", "code", "formal", "website"), default=None
     )
     compile_cmd.add_argument("--pack-profile", default=None)
     compile_cmd.add_argument("--output-profile", default=None)
+    compile_cmd.add_argument(
+        "--control-plane-policy",
+        default=None,
+        help="v4 ControlPlanePolicyV1 JSON file (required with --schema-version 4)",
+    )
     compile_cmd.add_argument(
         "--rubric-policy", choices=("forbid", "require_cross_family"),
         default="require_cross_family",
@@ -346,6 +351,7 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.config import load as load_config
         from deepreason.llm.capabilities import CapabilityCache
         from deepreason.run_manifest import (
+            ControlPlanePolicyV1,
             RunManifestError,
             compile_run_manifest,
             render_role_matrix,
@@ -353,6 +359,15 @@ def _main(argv: list[str] | None = None) -> int:
         )
 
         configured = load_config(Path(args.config) if args.config else None)
+        control_plane_policy = None
+        if args.control_plane_policy:
+            try:
+                control_plane_policy = ControlPlanePolicyV1.model_validate_json(
+                    Path(args.control_plane_policy).read_bytes()
+                )
+            except (OSError, ValueError) as error:
+                print(f"invalid control-plane policy: {error}", file=sys.stderr)
+                return 1
         try:
             manifest = compile_run_manifest(
                 configured,
@@ -367,6 +382,7 @@ def _main(argv: list[str] | None = None) -> int:
                 workload_profile=args.workload_profile,
                 pack_profile=args.pack_profile,
                 output_profile=args.output_profile,
+                control_plane_policy=control_plane_policy,
             )
         except RunManifestError as error:
             print(str(error), file=sys.stderr)
