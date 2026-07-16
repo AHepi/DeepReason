@@ -38,22 +38,6 @@ from deepreason.workloads.text import (
 
 CanonicalOutput = TypeVar("CanonicalOutput", bound=BaseModel)
 
-FORBIDDEN_CONTROL_FIELDS = frozenset(
-    {
-        "model",
-        "endpoint",
-        "provider",
-        "tool",
-        "command",
-        "delegate",
-        "guard_policy",
-        "acceptance",
-        "status",
-        "route",
-    }
-)
-
-
 class UnknownAliasError(ValueError):
     pass
 
@@ -149,20 +133,11 @@ def _strict_schema(node: Any, root: dict | None = None) -> Any:
 
 
 def _reject_control_fields(value: Any, path: str = "") -> None:
-    if isinstance(value, dict):
-        for key, child in value.items():
-            here = f"{path}/{key}"
-            if key in FORBIDDEN_CONTROL_FIELDS:
-                raise ValueError(
-                    f"control field {key!r} is not part of this role contract at {here}"
-                )
-            # A counterexample is opaque application input; e.g. an app may
-            # legitimately accept a data object whose domain key is status.
-            if key != "counterexample":
-                _reject_control_fields(child, here)
-    elif isinstance(value, list):
-        for index, child in enumerate(value):
-            _reject_control_fields(child, f"{path}/{index}")
+    # Lazy import avoids making run-manifest initialization part of this
+    # module's import graph while retaining the one canonical typed firewall.
+    from deepreason.llm.firewall import reject_model_control_fields
+
+    reject_model_control_fields(value, pointer=path)
 
 
 def _reject_unknown_fields(value: Any, schema: dict, root: dict, path: str = "") -> None:
@@ -213,10 +188,15 @@ class WireContract(Generic[CanonicalOutput]):
     def model_json_schema(self) -> dict:
         return _strict_schema(self.wire_model.model_json_schema())
 
-    def validate_value(self, value: Any) -> BaseModel:
+    def _preflight_value(self, value: Any) -> None:
+        """Apply transport firewalls before contract-specific validation."""
+
         _reject_control_fields(value)
         schema = self.model_json_schema()
         _reject_unknown_fields(value, schema, schema)
+
+    def validate_value(self, value: Any) -> BaseModel:
+        self._preflight_value(value)
         return self.wire_model.model_validate(value)
 
     def validate_json(self, raw: str) -> BaseModel:

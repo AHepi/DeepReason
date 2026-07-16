@@ -31,6 +31,8 @@ _LEDGER_EXPORTS = {
     "ClaimLedgerCatalogItemV1",
     "ClaimLedgerInputCatalogV1",
     "ClaimLedgerStageAResultV1",
+    "ClaimLedgerWireContractV2",
+    "ClaimLedgerWireV2",
     "amend_claim_ledger_stage_a",
     "build_claim_ledger_stage_a",
 }

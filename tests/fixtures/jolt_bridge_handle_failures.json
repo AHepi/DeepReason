@@ -1,0 +1,33 @@
+{
+  "source_root": "experiments/jolt_architecture_2026-07-16",
+  "cases": [
+    {
+      "event_seq": 212,
+      "initial_raw_ref": "771cc72deb1dfc04e60593798cc00b613c9fa6f88916556ea6b498ff3d271674",
+      "final_raw_ref": "d2353064a3bd0885c67608cf678eb779a0585973e43510a411781c635476badf",
+      "final_repair_value": "claim-ledger.compact.v1::on_claim",
+      "pointer": "/entries/4/event_handles/0",
+      "v2_entry": {
+        "entry_key": "CLM_5",
+        "claim_class": "recorded_observation",
+        "claim": "The bounded formal record contains the observation.",
+        "formal_observation_handles": ["OBS_1"],
+        "event_handles": ["claim-ledger.compact.v1::on_claim"]
+      }
+    },
+    {
+      "event_seq": 219,
+      "initial_raw_ref": "452fa8941fcaa8b41915b8bd5ec20b6eff21a4d9a17fc3f94c096dec08cf94e9",
+      "final_raw_ref": "961ea6171fe18f8c510fc30a17ba90b2dc0cca62fd36a1b8749aad14fe357483",
+      "final_repair_value": "A1",
+      "pointer": "/entries/0/scratch_handles/0",
+      "v2_entry": {
+        "entry_key": "CLM_1",
+        "claim_class": "surviving_conjecture",
+        "claim": "A surviving formal proposal remains conjectural.",
+        "formal_artifact_handles": ["ART_1"],
+        "scratch_handles": ["ART_1"]
+      }
+    }
+  ]
+}

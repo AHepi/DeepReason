@@ -49,6 +49,12 @@ class RepairDiagnostic(BaseModel):
     allowed: str = ""
     repair_scope: str
     skeleton: Any = None
+    rejected_handle: str | None = None
+    observed_handle_kind: str | None = None
+    required_handle_kinds: tuple[str, ...] | None = None
+    legal_handles: tuple[str, ...] | None = None
+    omission_or_unknown_legal: bool | None = None
+    instruction: str | None = None
 
 
 @dataclass(frozen=True)
@@ -185,18 +191,63 @@ def merge_subtree(value: Any, pointer: str, replacement: Any) -> Any:
     return merged
 
 
+def _resolve_schema_node(node: Any, root: dict, *, array: bool) -> dict:
+    """Resolve refs and nullable unions for one pointer traversal step."""
+
+    current = node
+    seen: set[str] = set()
+    while isinstance(current, dict) and "$ref" in current:
+        ref = str(current["$ref"])
+        if ref in seen:
+            return {}
+        seen.add(ref)
+        resolved: Any = root
+        for part in ref.lstrip("#/").split("/"):
+            resolved = resolved.get(part, {}) if isinstance(resolved, dict) else {}
+        current = resolved
+    if not isinstance(current, dict):
+        return {}
+    choices = current.get("anyOf") or current.get("oneOf") or ()
+    if choices:
+        if array:
+            current = next(
+                (
+                    choice
+                    for choice in choices
+                    if isinstance(choice, dict)
+                    and (choice.get("type") == "array" or "items" in choice)
+                ),
+                current,
+            )
+        else:
+            current = next(
+                (
+                    choice
+                    for choice in choices
+                    if isinstance(choice, dict)
+                    and (
+                        choice.get("type") == "object"
+                        or "properties" in choice
+                        or "$ref" in choice
+                    )
+                ),
+                current,
+            )
+        if current is not node:
+            return _resolve_schema_node(current, root, array=array)
+    return current
+
+
 def _schema_at(schema: dict, loc: tuple[Any, ...]) -> dict:
     current: Any = schema
     for part in loc:
-        if not isinstance(current, dict):
-            return {}
         if isinstance(part, int):
+            current = _resolve_schema_node(current, schema, array=True)
             current = current.get("items", {})
         else:
+            current = _resolve_schema_node(current, schema, array=False)
             current = current.get("properties", {}).get(str(part), {})
-        if isinstance(current, dict) and "$ref" in current:
-            name = current["$ref"].rsplit("/", 1)[-1]
-            current = schema.get("$defs", {}).get(name, current)
+    current = _resolve_schema_node(current, schema, array=False)
     return current if isinstance(current, dict) else {}
 
 
@@ -267,19 +318,56 @@ def diagnostic_from_error(
         "BRIDGE_WIRE_REFERENCE_INVALID",
     }:
         pointer = str(getattr(error, "pointer", ""))
-        child_schema = schema_at_pointer(schema, pointer) if pointer else schema
+        repair_scope = str(getattr(error, "repair_scope", pointer))
+        child_schema = (
+            schema_at_pointer(schema, repair_scope) if repair_scope else schema
+        )
+        rejected_handle = getattr(error, "rejected_handle", None)
+        is_bridge_reference = reference_code == "BRIDGE_WIRE_REFERENCE_INVALID"
+        required_kinds = (
+            tuple(getattr(error, "required_kinds", ()))
+            if is_bridge_reference
+            else None
+        )
+        legal_handles = (
+            tuple(getattr(error, "legal_handles", ()))
+            if is_bridge_reference
+            else None
+        )
+        omission_allowed = (
+            bool(getattr(error, "omission_allowed", False))
+            if is_bridge_reference
+            else None
+        )
+        if reference_code == "BRIDGE_WIRE_REFERENCE_INVALID":
+            allowed = (
+                f"one of {list(legal_handles)!r}"
+                if legal_handles
+                else "no supplied handle is legal for this field"
+            )
+            instruction = "Use only a listed handle for this field."
+            if omission_allowed:
+                instruction += (
+                    " Omission, unknown, or an uncovered requirement is legal; "
+                    "do not invent evidence."
+                )
+        else:
+            allowed = "one supplied call-local handle or rendered-list index"
+            instruction = None
         return RepairDiagnostic(
             contract=contract,
             path=pointer,
             error=reference_code,
-            received=None,
-            allowed=(
-                "one supplied call-local handle or rendered-list index"
-                if reference_code == "SCRATCH_WIRE_REFERENCE_INVALID"
-                else "one supplied call-local handle"
-            ),
-            repair_scope=pointer,
+            received=rejected_handle,
+            allowed=allowed,
+            repair_scope=repair_scope,
             skeleton=minimal_skeleton(child_schema, schema),
+            rejected_handle=rejected_handle,
+            observed_handle_kind=getattr(error, "observed_kind", None),
+            required_handle_kinds=required_kinds,
+            legal_handles=legal_handles,
+            omission_or_unknown_legal=omission_allowed,
+            instruction=instruction,
         )
     if isinstance(error, ValidationError) and error.errors():
         detail = error.errors(include_url=False)[0]

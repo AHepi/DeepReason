@@ -52,6 +52,7 @@ class BridgeWorkflowPolicy(FrozenRecord):
     max_ledger_amendments: Literal[0, 1] = 1
     max_grounding_repair_attempts: int = Field(default=4, ge=0, le=8)
     ledger_role: Literal["summarizer"] = "summarizer"
+    ledger_contract_version: Literal["v1", "v2"] = "v1"
     composer_role: Literal["thesis", "summarizer"] = "thesis"
     reviewer_role: Literal["judge", "grounding_reviewer"] = "judge"
 
@@ -393,6 +394,7 @@ class BridgeWorkflow:
                 self.stage_a_adapter,
                 catalog,
                 role=self.policy.ledger_role,
+                contract_version=self.policy.ledger_contract_version,
             )
         except Exception as error:
             return self._failure(
@@ -500,6 +502,7 @@ class BridgeWorkflow:
                         stage_a,
                         request=composition.amendment_needed,
                         role=self.policy.ledger_role,
+                        contract_version=self.policy.ledger_contract_version,
                     )
                 except Exception as error:
                     return self._failure(
