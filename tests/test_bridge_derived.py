@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 import deepreason.bridge.derived as derived_bridge
+from deepreason.application import bridge as bridge_application
 from deepreason.bridge.derived import (
     DerivedBridgeError,
     open_derived_source,
@@ -229,7 +230,7 @@ def test_cli_derived_bridge_uses_independent_log_and_preserves_source(
     manifest_path, _ = write_run_manifest(_v3_manifest(), tmp_path / "bridge-v3.json")
     before = _tree_snapshot(source_root)
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -635,7 +636,7 @@ def test_derived_cli_requires_paired_flags_manifest_and_no_focus(
     source_root, problem_id, fence = _old_source(tmp_path)
     destination = tmp_path / "derived"
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("invalid preflight reached adapter construction"),
     )

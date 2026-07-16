@@ -11,6 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from deepreason.application import bridge as bridge_application
 from deepreason.cli import bridge as bridge_cli
 from deepreason.bridge.models import (
     BridgeOutputV1,
@@ -226,7 +227,7 @@ def test_bridge_build_holds_operator_locks_through_model_calls(
         )
 
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: adapter(harness),
     )
@@ -277,7 +278,7 @@ def bridge_run(tmp_path):
 @pytest.fixture()
 def built_bridge(bridge_run, monkeypatch, capsys):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -380,7 +381,7 @@ def test_manifest_schema_repair_cap_controls_adapter_without_policy_mutation(
     monkeypatch.setattr("deepreason.llm.adapter.build_adapter", fake_build)
     before = bridge_run.manifest.canonical_bytes()
 
-    adapter = bridge_cli._build_bridge_adapter(
+    adapter = bridge_application._build_bridge_adapter(
         bridge_run.manifest, Harness(bridge_run.root)
     )
 
@@ -396,7 +397,7 @@ def test_bound_manifest_conflict_fails_before_any_adapter_call(
     conflicting = _manifest(output_section_limit=31)
     manifest_path, _ = write_run_manifest(conflicting, tmp_path / "different.json")
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("manifest conflict reached adapter construction"),
     )
@@ -427,7 +428,7 @@ def test_v3_bound_manifest_is_required_before_build(tmp_path, monkeypatch, capsy
     )
     bind_run_manifest(legacy, root)
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("v2 bridge reached adapter construction"),
     )
@@ -440,7 +441,7 @@ def test_problem_prefix_must_be_exact_or_unique(bridge_run, monkeypatch, capsys)
     harness = Harness(bridge_run.root)
     harness.register_problem(_problem("problem-grounded-alternative"))
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("ambiguous problem reached adapter construction"),
     )
@@ -542,7 +543,9 @@ def test_focus_inputs_are_bounded_and_reject_non_ids(bridge_run, capsys):
         )
         == 1
     )
-    assert "BRIDGE_INPUT_INVALID" in capsys.readouterr().err
+    assert capsys.readouterr().err.strip() == (
+        "BRIDGE_INPUT_INVALID: focus-block must be an ID or hex prefix"
+    )
 
     values = [value for index in range(65) for value in ("--focus-block", f"{index:02x}")]
     assert _run(bridge_run.root, "build", bridge_run.problem_id, *values) == 1
@@ -579,7 +582,7 @@ def test_adapter_preflight_failure_does_not_commit_attention_receipt(
 ):
     before_seq = Harness(bridge_run.root)._next_seq
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: (_ for _ in ()).throw(ValueError("BRIDGE_ROUTE_UNAVAILABLE")),
     )
@@ -614,7 +617,7 @@ def test_failed_stage_a_terminal_remains_readable_without_bridge_objects(
             retry_max=0,
         )
 
-    monkeypatch.setattr(bridge_cli, "_build_bridge_adapter", lambda _m, h: exhausted(h))
+    monkeypatch.setattr(bridge_application, "_build_bridge_adapter", lambda _m, h: exhausted(h))
 
     assert _run(bridge_run.root, "build", bridge_run.problem_id) == 1
     assert "Bridge failed" in capsys.readouterr().out
@@ -761,7 +764,7 @@ def test_successful_review_must_match_output_and_pass(
     harness.register_problem(_problem("problem-reviewed"))
     bind_run_manifest(_manifest(grounding_review=True), root)
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, current: _reviewed_adapter(current),
     )
@@ -802,7 +805,7 @@ def test_failed_review_on_prior_output_accepts_only_replayed_safe_removal(
         root,
     )
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, current: _safe_removal_adapter(current),
     )
@@ -825,7 +828,7 @@ def test_failure_sidecar_fields_reconcile_to_replay_record(
     bridge_run, monkeypatch, capsys
 ):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: LLMAdapter(
             {
@@ -922,7 +925,7 @@ def test_invalid_page_bounds_fail_before_bridge_construction(
     bridge_run, monkeypatch, capsys
 ):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("invalid page reached bridge construction"),
     )

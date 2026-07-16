@@ -10,8 +10,6 @@ from __future__ import annotations
 import json
 import re
 import stat
-import threading
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
@@ -24,6 +22,14 @@ from pydantic import (
     field_validator,
 )
 
+from deepreason.application.bridge import (
+    GROUNDED_BRIDGE_SERVICE,
+    GROUNDED_BRIDGE_WORKERS,
+    GroundedBridgeBuildIntentV1,
+    GroundedBridgeClaimsIntentV1,
+    GroundedBridgeResultIntentV1,
+    GroundedBridgeStatusIntentV1,
+)
 from deepreason.application.scratch import (
     SCRATCH_QUERY_SERVICE,
     ScratchAttentionPreviewQueryV1,
@@ -216,7 +222,7 @@ _DESCRIPTIONS = {
     "scratch_open": "Open one immutable scratch block and bounded relationships without recording attention.",
     "scratch_related": "Read bounded explicit, cluster, and retrieval-only similarity neighbours.",
     "scratch_attention": "Preview a deterministic bounded attention plan without committing a receipt or visibility.",
-    "start_bridge": "Start the harness-owned two-stage grounded bridge from a precompiled v3 RunManifest.",
+    "start_bridge": "Start the harness-owned two-stage grounded bridge from a precompiled v3/v4 RunManifest.",
     "bridge_status": "Read fixed bridge operational status and replay-validate terminal state.",
     "bridge_result": "Read a bounded replay-validated grounded bridge result.",
     "bridge_claims": "Read a bounded replay-validated claim ledger.",
@@ -349,46 +355,8 @@ def _scratch_attention(value: ScratchAttentionInput) -> dict[str, Any]:
     return _bounded_scratch_payload(result.presentation_payload())
 
 
-@dataclass(frozen=True)
-class _PreparedBridge:
-    root: Path
-    manifest: Any
-    harness: Any
-    problem_id: str
-    target: str
-    adapter: Any
-    attention_pack: Any
-    locks: Any
-    token_budget: int | None
-
-
-_BRIDGE_THREADS: dict[str, threading.Thread] = {}
-_BRIDGE_THREAD_LOCK = threading.Lock()
-
-
-def _start_payload(
-    state: Literal["running", "busy", "completed", "failed"],
-    root: Path,
-    *,
-    manifest_sha256: str | None = None,
-    terminal=None,
-) -> dict[str, Any]:
-    payload: dict[str, Any] = {
-        "schema": "deepreason-mcp-bridge-start-v1",
-        "state": state,
-        "root": str(root),
-        "status_operation": "bridge_status",
-        "result_operation": "bridge_result",
-    }
-    if manifest_sha256 is not None:
-        payload["manifest_sha256"] = manifest_sha256
-    if terminal is not None:
-        payload["process_status"] = terminal.process_status
-        payload["resolution"] = (
-            terminal.resolution.value if terminal.resolution is not None else None
-        )
-        payload["terminal_event_seq"] = terminal.terminal_event_seq
-    return payload
+_BRIDGE_THREADS = GROUNDED_BRIDGE_WORKERS.threads
+_BRIDGE_THREAD_LOCK = GROUNDED_BRIDGE_WORKERS.lock
 
 
 def _safe_manifest_ref(value: str) -> Path:
@@ -413,256 +381,63 @@ def _safe_root(value: str, *, code: str) -> Path:
     return raw.resolve()
 
 
-def _notify(progress_callback, event: dict[str, Any]) -> None:
-    if progress_callback is None:
-        return
-    try:
-        progress_callback(event)
-    except (Exception, SystemExit):
-        # Presentation/transport callbacks never own workflow state.
-        return
-
-
-def _existing_terminal(root: Path):
-    from deepreason.bridge.harness import BRIDGE_RESULT_NAME
-    from deepreason.cli.bridge import _load_snapshot
-
-    result = root / BRIDGE_RESULT_NAME
-    if not result.exists():
-        return None
-    return _load_snapshot(root).terminal
-
-
-def _prepare_bridge(value: StartBridgeInput, locks) -> _PreparedBridge:
-    from deepreason.cli.bridge import (
-        _attention_pack,
-        _bounded_focus,
-        _build_bridge_adapter,
-        _load_bound_manifest,
-        _preflight_focus,
-        _resolve_problem,
-    )
-    from deepreason.harness import Harness
-    from deepreason.llm.budget import TokenMeter
-    from deepreason.run_manifest import bind_run_manifest
-
+def _bridge_intent(value: StartBridgeInput) -> GroundedBridgeBuildIntentV1:
     root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
     manifest_ref = (
         _safe_manifest_ref(value.run_manifest_ref)
         if value.run_manifest_ref is not None
         else None
     )
-    manifest = _load_bound_manifest(
-        root, str(manifest_ref) if manifest_ref is not None else None, bind=False
-    )
-    preflight = Harness(root, read_only=True)
-    problem_id = _resolve_problem(preflight, value.problem)
-    blocks = _bounded_focus(value.focus_blocks, "focus-block")
-    clusters = _bounded_focus(value.focus_clusters, "focus-cluster")
-    resolved_blocks, resolved_clusters = _preflight_focus(
-        preflight, manifest, blocks, clusters
-    )
-    bind_run_manifest(manifest, root)
-    harness = Harness(root)
-    adapter = _build_bridge_adapter(manifest, harness)
-    token_budget = value.budget.token_budget if value.budget is not None else None
-    if token_budget is not None:
-        adapter.meter = TokenMeter(token_budget)
-    attention = _attention_pack(
-        harness, manifest, resolved_blocks, resolved_clusters
-    )
-    return _PreparedBridge(
-        root=root,
-        manifest=manifest,
-        harness=harness,
-        problem_id=problem_id,
+    return GroundedBridgeBuildIntentV1(
+        root=str(root),
+        problem=value.problem,
         target=value.target,
-        adapter=adapter,
-        attention_pack=attention,
-        locks=locks,
-        token_budget=token_budget,
-    )
-
-
-def _execute_bridge(prepared: _PreparedBridge):
-    from deepreason.cli.bridge import _load_snapshot
-
-    policy = prepared.manifest.bridge_policy
-    terminal = prepared.harness.build_bridge(
-        prepared.problem_id,
-        prepared.target,
-        policy.workflow_policy(),
-        run_manifest_digest=prepared.manifest.sha256,
-        stage_a_adapter=prepared.adapter,
-        composition_adapter=prepared.adapter,
-        review_adapter=(prepared.adapter if policy.grounding_review else None),
-        repair_adapter=(
-            prepared.adapter
-            if policy.grounding_review and policy.max_grounding_repair_attempts
-            else None
+        run_manifest_ref=(str(manifest_ref) if manifest_ref is not None else None),
+        focus_blocks=tuple(value.focus_blocks),
+        focus_clusters=tuple(value.focus_clusters),
+        token_budget=(
+            value.budget.token_budget if value.budget is not None else None
         ),
-        attention_pack=prepared.attention_pack,
-        maximum_sections=policy.output_section_limit,
-        formatting_profile=policy.target_profile,
     )
-    _load_snapshot(prepared.root, terminal=terminal)
-    return terminal
 
 
 def _start_bridge(
     value: StartBridgeInput, *, progress_callback=None
 ) -> dict[str, Any]:
-    from deepreason.cli.bridge import _load_bound_manifest, _preflight_focus, _resolve_problem
-    from deepreason.harness import Harness
-    from deepreason.locking import ProcessLockBusy, operator_locks
-
-    root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
-    manifest_ref = (
-        _safe_manifest_ref(value.run_manifest_ref)
-        if value.run_manifest_ref is not None
-        else None
+    result = GROUNDED_BRIDGE_SERVICE.start(
+        _bridge_intent(value),
+        progress_callback=progress_callback,
     )
-    # Invalid requests must not create lock files, bind manifests, or publish status.
-    manifest = _load_bound_manifest(
-        root, str(manifest_ref) if manifest_ref is not None else None, bind=False
-    )
-    preflight = Harness(root, read_only=True)
-    _resolve_problem(preflight, value.problem)
-    _preflight_focus(
-        preflight, manifest, list(value.focus_blocks), list(value.focus_clusters)
-    )
-    key = str(root)
-    with _BRIDGE_THREAD_LOCK:
-        active = _BRIDGE_THREADS.get(key)
-        if active is not None and active.is_alive():
-            return _start_payload("busy", root, manifest_sha256=manifest.sha256)
-        existing = _existing_terminal(root)
-        if existing is not None:
-            state = "completed" if existing.process_status == "success" else "failed"
-            return _start_payload(
-                state,
-                root,
-                manifest_sha256=manifest.sha256,
-                terminal=existing,
-            )
-        try:
-            locks = operator_locks(root, owner="bridge", blocking=False)
-        except ProcessLockBusy:
-            return _start_payload("busy", root, manifest_sha256=manifest.sha256)
-        existing = _existing_terminal(root)
-        if existing is not None:
-            locks.release()
-            state = "completed" if existing.process_status == "success" else "failed"
-            return _start_payload(
-                state,
-                root,
-                manifest_sha256=manifest.sha256,
-                terminal=existing,
-            )
-        try:
-            prepared = _prepare_bridge(value, locks)
-            from deepreason.bridge.operations import write_running
-
-            write_running(root, manifest.sha256)
-        except BaseException:
-            locks.release()
-            raise
-
-        launch_gate = threading.Event()
-
-        def worker() -> None:
-            launch_gate.wait()
-            try:
-                _execute_bridge(prepared)
-            except (Exception, SystemExit) as error:
-                # Pre-terminal operational failures are not epistemic results.
-                from deepreason.bridge.operations import write_failure
-
-                write_failure(root, manifest.sha256, type(error).__name__)
-            else:
-                # Cleanup is presentation/operation housekeeping after a
-                # replay-validated terminal. It can never relabel that result.
-                from deepreason.bridge.operations import clear
-
-                try:
-                    clear(root)
-                except (OSError, ValueError):
-                    pass
-                _notify(
-                    progress_callback,
-                    {"seq": 1, "activity": "bridge_completed"},
-                )
-            finally:
-                prepared.locks.release()
-
-        thread = threading.Thread(
-            target=worker,
-            name=f"deepreason-bridge-{manifest.sha256[:8]}",
-            daemon=True,
-        )
-        _BRIDGE_THREADS[key] = thread
-        try:
-            thread.start()
-        except BaseException as error:
-            _BRIDGE_THREADS.pop(key, None)
-            try:
-                from deepreason.bridge.operations import write_failure
-
-                write_failure(root, manifest.sha256, type(error).__name__)
-            finally:
-                prepared.locks.release()
-            return _start_payload(
-                "failed", root, manifest_sha256=manifest.sha256
-            )
-        try:
-            _notify(progress_callback, {"seq": 0, "activity": "bridge_started"})
-        finally:
-            # No presentation callback, including a BaseException, may leave
-            # the worker waiting while it owns the process locks.
-            launch_gate.set()
-    return _start_payload("running", root, manifest_sha256=manifest.sha256)
+    return result.presentation_payload()
 
 
 def _bridge_status(value: BridgeStatusInput) -> dict[str, Any]:
-    from deepreason.cli.bridge import _status_payload
-
     root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
-    try:
-        return _status_payload(root)
-    except ValueError as error:
-        if str(error).startswith("BRIDGE_RECORD_UNAVAILABLE"):
-            return {
-                "schema": "deepreason-mcp-bridge-status-v1",
-                "state": "not_started",
-            }
-        raise
+    return GROUNDED_BRIDGE_SERVICE.status(
+        GroundedBridgeStatusIntentV1(root=str(root))
+    ).presentation_payload()
 
 
 def _bridge_result(value: BridgeResultInput) -> dict[str, Any]:
-    from deepreason.cli.bridge import _load_snapshot, _result_payload
-
     root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
-    from deepreason.bridge.operations import read_failure
-
-    try:
-        snapshot = _load_snapshot(root)
-    except ValueError:
-        operation = read_failure(root)
-        if operation is None:
-            raise
-        return operation.model_dump(mode="json", by_alias=True, exclude_none=True)
-    return _result_payload(snapshot, limit=value.limit, offset=value.offset)
+    return GROUNDED_BRIDGE_SERVICE.result(
+        GroundedBridgeResultIntentV1(
+            root=str(root),
+            limit=value.limit,
+            offset=value.offset,
+        )
+    ).presentation_payload()
 
 
 def _bridge_claims(value: BridgeClaimsInput) -> dict[str, Any]:
-    from deepreason.cli.bridge import _claims_payload, _load_snapshot
-
     root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
-    return _claims_payload(
-        _load_snapshot(root),
-        limit=value.limit,
-        offset=value.offset,
-    )
+    return GROUNDED_BRIDGE_SERVICE.claims(
+        GroundedBridgeClaimsIntentV1(
+            root=str(root),
+            limit=value.limit,
+            offset=value.offset,
+        )
+    ).presentation_payload()
 
 
 _HANDLERS = {

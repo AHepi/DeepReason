@@ -11,7 +11,7 @@ import pytest
 
 from deepreason import mcp_scratch_bridge as mcp
 from deepreason import mcp_server
-from deepreason.cli import bridge as bridge_cli
+from deepreason.application import bridge as bridge_application
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
@@ -504,7 +504,7 @@ def test_bridge_start_poll_result_claims_and_unresolved_success(
     mcp_run, monkeypatch
 ):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -564,7 +564,7 @@ def test_duplicate_start_returns_typed_busy_without_launching_second_worker(
 ):
     run = _create_run(tmp_path / "busy-run")
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -575,7 +575,7 @@ def test_duplicate_start_returns_typed_busy_without_launching_second_worker(
         entered.set()
         assert release.wait(timeout=5)
 
-    monkeypatch.setattr(mcp, "_execute_bridge", blocked)
+    monkeypatch.setattr(bridge_application, "_execute_bridge", blocked)
     arguments = {
         "root": str(run.root),
         "problem": "problem-mcp-grounded",
@@ -630,12 +630,12 @@ def test_worker_failure_is_persisted_and_visible_after_thread_registry_loss(
 ):
     run = _create_run(tmp_path / "failed-worker")
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
     monkeypatch.setattr(
-        mcp,
+        bridge_application,
         "_execute_bridge",
         lambda _prepared: (_ for _ in ()).throw(RuntimeError("worker exploded")),
     )
@@ -679,7 +679,7 @@ def test_thread_start_failure_persists_both_operation_records_and_releases_lock(
 ):
     run = _create_run(tmp_path / "thread-start-failure")
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -709,7 +709,7 @@ def test_thread_start_failure_persists_both_operation_records_and_releases_lock(
 
 def test_progress_callback_failure_cannot_relabel_success(mcp_run, monkeypatch):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
@@ -738,7 +738,7 @@ def test_system_exit_progress_callback_cannot_strand_worker_locks(
     mcp_run, monkeypatch
 ):
     monkeypatch.setattr(
-        bridge_cli,
+        bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness: _scripted_adapter(harness),
     )
