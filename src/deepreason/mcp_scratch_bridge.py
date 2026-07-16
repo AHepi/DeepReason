@@ -13,7 +13,6 @@ import stat
 import threading
 from dataclasses import dataclass
 from pathlib import Path
-from types import SimpleNamespace
 from typing import Annotated, Any, Literal
 
 from pydantic import (
@@ -23,6 +22,15 @@ from pydantic import (
     StringConstraints,
     ValidationError,
     field_validator,
+)
+
+from deepreason.application.scratch import (
+    SCRATCH_QUERY_SERVICE,
+    ScratchAttentionPreviewQueryV1,
+    ScratchMapQueryV1,
+    ScratchOpenPreviewQueryV1,
+    ScratchRelatedQueryV1,
+    ScratchSearchQueryV1,
 )
 
 
@@ -228,32 +236,6 @@ def tool_definitions() -> list[dict[str, Any]]:
     ]
 
 
-def _read_service(value: _Input):
-    from deepreason.harness import Harness
-    from deepreason.scratch.service import ScratchService
-
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
-    harness = (
-        Harness.at(root, value.at_seq)
-        if getattr(value, "at_seq", None) is not None
-        else Harness(root, read_only=True)
-    )
-    return ScratchService(harness)
-
-
-def _scratch_args(value: _HistoricalPage) -> SimpleNamespace:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
-    return SimpleNamespace(
-        root=str(root),
-        at_seq=value.at_seq,
-        limit=value.limit,
-        ordering=getattr(value, "ordering", "created"),
-        query=getattr(value, "query", None),
-        block=getattr(value, "block", None),
-        include_retired=getattr(value, "include_retired", False),
-    )
-
-
 def _bounded_scratch_payload(payload: dict[str, Any]) -> dict[str, Any]:
     """Clip model-authored text with explicit pointers; IDs remain untouched."""
 
@@ -298,84 +280,73 @@ def _bounded_scratch_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def _scratch_map(value: ScratchMapInput) -> dict[str, Any]:
-    from deepreason.cli.scratch import _map
-
-    payload, _human = _map(_scratch_args(value))
-    return _bounded_scratch_payload(payload)
+    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchMapQueryV1(
+            root=str(root),
+            at_seq=value.at_seq,
+            limit=value.limit,
+            ordering=value.ordering,
+        )
+    )
+    return _bounded_scratch_payload(result.presentation_payload())
 
 
 def _scratch_search(value: ScratchSearchInput) -> dict[str, Any]:
-    from deepreason.cli.scratch import _search
-
-    payload, _human = _search(_scratch_args(value))
-    return _bounded_scratch_payload(payload)
+    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchSearchQueryV1(
+            root=str(root),
+            at_seq=value.at_seq,
+            limit=value.limit,
+            query=value.query,
+        )
+    )
+    return _bounded_scratch_payload(result.presentation_payload())
 
 
 def _scratch_open(value: ScratchOpenInput) -> dict[str, Any]:
-    from deepreason.cli.scratch import _block_summary, _canonical, _link_summary
-
-    service = _read_service(value)
-    block = service.get_block(value.block)
-    revisions = service.revisions(block.id)
-    links = service.links_for(block.id, include_retired=value.include_retired)
-    clusters = sorted(service.state.clusters_by_block.get(block.id, set()))
-    visibility = service.state.visibility.get(block.id)
-    payload = {
-        "block": _canonical(block),
-        "revisions": [
-            _block_summary(service, item) for item in revisions[: value.limit]
-        ],
-        "revision_count": len(revisions),
-        "links": [_link_summary(service, item) for item in links[: value.limit]],
-        "link_count": len(links),
-        "cluster_ids": clusters[: value.limit],
-        "cluster_count": len(clusters),
-        "visibility": _canonical(visibility) if visibility is not None else None,
-        "retrieval_receipt_id": None,
-        "committed": False,
-    }
-    return _bounded_scratch_payload(payload)
+    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchOpenPreviewQueryV1(
+            root=str(root),
+            at_seq=value.at_seq,
+            limit=value.limit,
+            block=value.block,
+            include_retired=value.include_retired,
+        )
+    )
+    return _bounded_scratch_payload(result.presentation_payload(include_committed=True))
 
 
 def _scratch_related(value: ScratchRelatedInput) -> dict[str, Any]:
-    from deepreason.cli.scratch import _related
-
-    payload, _human = _related(_scratch_args(value))
-    return _bounded_scratch_payload(payload)
+    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchRelatedQueryV1(
+            root=str(root),
+            at_seq=value.at_seq,
+            limit=value.limit,
+            block=value.block,
+            include_retired=value.include_retired,
+        )
+    )
+    return _bounded_scratch_payload(result.presentation_payload())
 
 
 def _scratch_attention(value: ScratchAttentionInput) -> dict[str, Any]:
-    from deepreason.cli.bridge import _load_result_manifest
-    from deepreason.scratch.attention import AttentionPlanner, AttentionRequestV1
-
-    service = _read_service(value)
     root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
-    manifest = _load_result_manifest(root)
-    policy = manifest.scratch_policy
-    if manifest.schema_version != 3 or policy is None or not policy.enabled:
-        raise ValueError("SCRATCH_MANIFEST_V3_REQUIRED")
-    block_ids = [service.get_block(item).id for item in value.focus_blocks]
-    cluster_ids = [service.get_cluster(item).id for item in value.focus_clusters]
-    request = AttentionRequestV1(
-        focus_blocks=block_ids or None,
-        focus_clusters=cluster_ids or None,
-        maximum_blocks=value.maximum_blocks,
-        maximum_cluster_guides=value.maximum_cluster_guides,
-        deterministic_seed=value.deterministic_seed,
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchAttentionPreviewQueryV1(
+            root=str(root),
+            at_seq=value.at_seq,
+            focus_blocks=tuple(value.focus_blocks),
+            focus_clusters=tuple(value.focus_clusters),
+            maximum_blocks=value.maximum_blocks,
+            maximum_cluster_guides=value.maximum_cluster_guides,
+            deterministic_seed=value.deterministic_seed,
+        )
     )
-    pack = AttentionPlanner(service, policy.attention_policy()).plan(request)
-    payload = pack.model_dump(mode="json", by_alias=True, exclude_none=True)
-    payload["selection_receipt"]["id"] = pack.selection_receipt.id
-    payload.update(
-        {
-            "committed": False,
-            "advisory_warning": (
-                "This is a retrieval-only preview. It changes no visibility, "
-                "coverage, formal state, identity, truth, support, or attack."
-            ),
-        }
-    )
-    return _bounded_scratch_payload(payload)
+    return _bounded_scratch_payload(result.presentation_payload())
 
 
 @dataclass(frozen=True)

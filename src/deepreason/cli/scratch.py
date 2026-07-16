@@ -15,15 +15,18 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, TextIO
 
+from deepreason.application.scratch import (
+    SCRATCH_QUERY_SERVICE,
+    ScratchMapQueryV1,
+    ScratchOpenPreviewQueryV1,
+    ScratchRecordDirectOpenQueryV1,
+    ScratchRelatedQueryV1,
+    ScratchSearchQueryV1,
+)
 from deepreason.harness import Harness
 from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
 from deepreason.scratch.errors import ScratchRootBusy, ScratchServiceError
-from deepreason.scratch.models import (
-    AttentionReceiptV1,
-    RetrievalChannel,
-    ScratchProvenanceV1,
-    domain_hash,
-)
+from deepreason.scratch.models import ScratchProvenanceV1
 from deepreason.scratch.service import ScratchService
 
 
@@ -234,6 +237,16 @@ def _label(service: ScratchService, kind: str, value: str) -> str:
     return f"{kind} {_short_id(value, candidates)}"
 
 
+def _query_label(result, kind: str, value: str) -> str:
+    candidates = {
+        "block": result.identities.block_ids,
+        "link": result.identities.link_ids,
+        "cluster": result.identities.cluster_ids,
+        "coverage": result.identities.coverage_ids,
+    }[kind]
+    return f"{kind} {_short_id(value, candidates)}"
+
+
 def _bounded_limit(value: int) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or not 1 <= value <= MAX_RESULTS:
         raise ScratchCliInputError(
@@ -330,6 +343,15 @@ def _read_service(args) -> ScratchService:
     root = Path(args.root)
     harness = Harness.at(root, sequence) if sequence is not None else Harness(root, read_only=True)
     return ScratchService(harness)
+
+
+def _query_sequence(args) -> int | None:
+    sequence = getattr(args, "at_seq", None)
+    if sequence is not None and sequence < 0:
+        raise ScratchCliInputError(
+            "historical sequence must be non-negative", location="/at_seq"
+        )
+    return sequence
 
 
 def _block_summary(service: ScratchService, block) -> dict[str, Any]:
@@ -504,50 +526,33 @@ def _cluster(args) -> tuple[dict[str, Any], str]:
 
 
 def _show(args) -> tuple[dict[str, Any], str]:
-    if args.at_seq is None:
-        root = Path(args.root)
-        if not root.exists():
-            raise FileNotFoundError(f"read-only harness root does not exist: {root}")
-        service = ScratchService(Harness(root))
-    else:
-        service = _read_service(args)
     limit = _bounded_limit(args.limit)
-    block = service.get_block(args.block)
-    receipt = None
-    if args.at_seq is None:
-        state_seq = service.harness._next_seq - 1
-        receipt = AttentionReceiptV1.create(
-            state_seq=state_seq,
-            request_hash=domain_hash(
-                "scratch.cli.direct-open.request.v1",
-                {"block_id": block.id, "state_seq": state_seq},
-            ),
-            selected_by_channel={RetrievalChannel.DIRECT_OPEN: [block.id]},
-            final_order=[block.id],
-            excluded_by_global_limit=[],
-            excluded_by_channel={},
-            deterministic_seed=0,
-            instance=service._instance(),
+    sequence = _query_sequence(args)
+    if sequence is None:
+        result = SCRATCH_QUERY_SERVICE.execute(
+            ScratchRecordDirectOpenQueryV1(
+                root=str(args.root),
+                block=args.block,
+                include_retired=args.include_retired,
+                limit=limit,
+            )
         )
-        service.record_attention_receipt(
-            receipt, context_ref="cli:scratch-show"
+    else:
+        result = SCRATCH_QUERY_SERVICE.execute(
+            ScratchOpenPreviewQueryV1(
+                root=str(args.root),
+                at_seq=sequence,
+                block=args.block,
+                include_retired=args.include_retired,
+                limit=limit,
+            )
         )
-    revisions = service.revisions(block.id)
-    links = service.links_for(block.id, include_retired=args.include_retired)
-    cluster_ids = sorted(service.state.clusters_by_block.get(block.id, set()))
-    visibility = service.state.visibility.get(block.id)
-    result = {
-        "block": _canonical(block),
-        "revisions": [_block_summary(service, item) for item in revisions[:limit]],
-        "revision_count": len(revisions),
-        "links": [_link_summary(service, item) for item in links[:limit]],
-        "link_count": len(links),
-        "cluster_ids": cluster_ids[:limit],
-        "cluster_count": len(cluster_ids),
-        "visibility": _canonical(visibility) if visibility is not None else None,
-        "retrieval_receipt_id": receipt.id if receipt is not None else None,
-    }
-    lines = [_label(service, "block", block.id), "", _terminal_safe(block.body.content)]
+    block = result.block
+    lines = [
+        _query_label(result, "block", block.id),
+        "",
+        _terminal_safe(block.body.content),
+    ]
     for title, value in (
         ("why keep this", block.body.why_keep_this),
         ("unfinished", block.body.unfinished),
@@ -556,143 +561,78 @@ def _show(args) -> tuple[dict[str, Any], str]:
         if value is not None:
             lines.extend(("", f"{title}: {_terminal_safe(value)}"))
     lines.append(
-        f"\nlinks: {len(links)} · clusters: {len(cluster_ids)} · revisions: {len(revisions)}"
+        f"\nlinks: {result.link_count} · clusters: {result.cluster_count} · "
+        f"revisions: {result.revision_count}"
     )
-    return result, "\n".join(lines)
+    return result.presentation_payload(include_committed=False), "\n".join(lines)
 
 
 def _search(args) -> tuple[dict[str, Any], str]:
-    service = _read_service(args)
     query = _bounded_text(args.query, location="/query", maximum=16_384)
-    blocks = service.search_phrase(query, _bounded_limit(args.limit))
-    summaries = [_block_summary(service, block) for block in blocks]
-    result = {"query": query, "blocks": summaries, "count": len(summaries)}
-    lines = [f"literal matches ({len(blocks)}):"]
-    lines.extend(
-        f"  {_label(service, 'block', block.id)}  {_preview(block.body.content)}"
-        for block in blocks
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchSearchQueryV1(
+            root=str(args.root),
+            at_seq=_query_sequence(args),
+            limit=_bounded_limit(args.limit),
+            query=query,
+        )
     )
-    if not blocks:
+    lines = [f"literal matches ({result.count}):"]
+    lines.extend(
+        f"  {_query_label(result, 'block', block.block_id)}  {block.content_preview}"
+        for block in result.blocks
+    )
+    if not result.blocks:
         lines.append("  (none)")
-    return result, "\n".join(lines)
+    return result.presentation_payload(), "\n".join(lines)
 
 
 def _related(args) -> tuple[dict[str, Any], str]:
-    service = _read_service(args)
-    limit = _bounded_limit(args.limit)
-    focus = service.get_block(args.block)
-    neighbours: dict[str, list[str]] = {}
-    link_records = service.links_for(focus.id, include_retired=args.include_retired)
-    link_summaries: list[dict[str, Any]] = []
-    for link in link_records[:limit]:
-        other = link.body.to if link.body.from_ == focus.id else link.body.from_
-        neighbours.setdefault(other, []).append("link")
-        link_summaries.append(_link_summary(service, link))
-
-    cluster_summaries: list[dict[str, Any]] = []
-    for cluster_id in sorted(service.state.clusters_by_block.get(focus.id, set()))[:limit]:
-        members = service.cluster_members(cluster_id)
-        for block in members[: limit + 1]:
-            if block.id != focus.id:
-                neighbours.setdefault(block.id, []).append("cluster")
-        cluster = service.get_cluster(cluster_id)
-        cluster_summaries.append(
-            {
-                "cluster_id": cluster.id,
-                "focus_preview": _preview(cluster.seed_focus),
-                "member_count": len(members),
-            }
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchRelatedQueryV1(
+            root=str(args.root),
+            at_seq=_query_sequence(args),
+            limit=_bounded_limit(args.limit),
+            block=args.block,
+            include_retired=args.include_retired,
         )
-
-    similarity: list[tuple[float, str, str, Any]] = []
-    for hit_id in service.state.similarity_by_block.get(focus.id, []):
-        hit = service.state.similarity_hits[hit_id]
-        other = hit.block_b if hit.block_a == focus.id else hit.block_a
-        similarity.append((-hit.score, other, hit.id, hit))
-    similarity.sort(key=lambda item: (item[0], item[1], item[2]))
-    similarity_summaries: list[dict[str, Any]] = []
-    for _negative_score, other, _hit_id, hit in similarity[:limit]:
-        neighbours.setdefault(other, []).append("semantic_similarity")
-        similarity_summaries.append(
-            {
-                "similarity_id": hit.id,
-                "block_id": other,
-                "score": hit.score,
-                "threshold_used": hit.threshold_used,
-                "embedder": hit.embedder,
-                "embedder_version": hit.embedder_version,
-            }
-        )
-
-    ordered_ids = list(neighbours)[:limit]
-    blocks = [service.get_block(block_id) for block_id in ordered_ids]
-    block_results = []
-    for block in blocks:
-        summary = _block_summary(service, block)
-        summary["channels"] = list(dict.fromkeys(neighbours[block.id]))
-        block_results.append(summary)
-    result = {
-        "focus_block_id": focus.id,
-        "blocks": block_results,
-        "links": link_summaries,
-        "clusters": cluster_summaries,
-        "similarity_observations": similarity_summaries,
-        "count": len(block_results),
-        "advisory_warning": (
-            "Similarity is retrieval-only and does not establish identity, truth, "
-            "support, attack, duplication, or deletion."
-        ),
-    }
-    lines = [f"related to {_label(service, 'block', focus.id)} ({len(blocks)}):"]
-    for block in blocks:
-        channels = ", ".join(dict.fromkeys(neighbours[block.id]))
+    )
+    lines = [
+        f"related to {_query_label(result, 'block', result.focus_block_id)} ({result.count}):"
+    ]
+    for block in result.blocks:
+        channels = ", ".join(block.channels)
         lines.append(
-            f"  {_label(service, 'block', block.id)} [{channels}]  "
-            f"{_preview(block.body.content)}"
+            f"  {_query_label(result, 'block', block.block_id)} [{channels}]  "
+            f"{block.content_preview}"
         )
-    if not blocks:
+    if not result.blocks:
         lines.append("  (none)")
-    lines.append("similarity is retrieval-only; blocks remain separate immutable instances")
-    return result, "\n".join(lines)
+    lines.append(
+        "similarity is retrieval-only; blocks remain separate immutable instances"
+    )
+    return result.presentation_payload(), "\n".join(lines)
 
 
 def _map(args) -> tuple[dict[str, Any], str]:
-    service = _read_service(args)
-    limit = _bounded_limit(args.limit)
-    clusters = service.cluster_map(limit, ordering=args.ordering)
-    results = []
-    lines = [f"scratch cluster map ({len(clusters)}):"]
-    for cluster in clusters:
-        members = service.cluster_members(cluster.id)
-        guides = service.state.guides_by_cluster.get(cluster.id, [])
-        guide = max(guides, key=lambda item: (item.instance.seq, item.id)) if guides else None
-        guide_state = service.state.guide_state(guide) if guide is not None else None
-        results.append(
-            {
-                "cluster_id": cluster.id,
-                "focus_preview": _preview(cluster.seed_focus),
-                "member_count": len(members),
-                "member_ids": [block.id for block in members[:limit]],
-                "members_truncated": len(members) > limit,
-                "guide_id": guide.id if guide is not None else None,
-                "guide_state": guide_state,
-            }
+    result = SCRATCH_QUERY_SERVICE.execute(
+        ScratchMapQueryV1(
+            root=str(args.root),
+            at_seq=_query_sequence(args),
+            limit=_bounded_limit(args.limit),
+            ordering=args.ordering,
         )
-        guide_label = f" · guide {guide_state}" if guide_state else ""
+    )
+    lines = [f"scratch cluster map ({result.count}):"]
+    for cluster in result.clusters:
+        guide_label = f" · guide {cluster.guide_state}" if cluster.guide_state else ""
         lines.append(
-            f"  {_label(service, 'cluster', cluster.id)} · {len(members)} blocks"
-            f"{guide_label}  {_preview(cluster.seed_focus)}"
+            f"  {_query_label(result, 'cluster', cluster.cluster_id)} · "
+            f"{cluster.member_count} blocks{guide_label}  {cluster.focus_preview}"
         )
-    if not clusters:
+    if not result.clusters:
         lines.append("  (none)")
-    clustered = set().union(*service.state.current_memberships.values()) if service.state.current_memberships else set()
-    result = {
-        "clusters": results,
-        "count": len(results),
-        "ordering": args.ordering,
-        "unclustered_block_count": len(set(service.state.blocks) - clustered),
-    }
-    return result, "\n".join(lines)
+    return result.presentation_payload(), "\n".join(lines)
 
 
 def _dormant_threshold(args) -> int:
@@ -844,20 +784,8 @@ def dispatch_scratch(
             "link",
             "retire-link",
             "cluster",
-        } or (
-            args.scratch_command == "show"
-            and getattr(args, "at_seq", None) is None
-        )
+        }
         try:
-            live_show_missing_root = (
-                args.scratch_command == "show"
-                and getattr(args, "at_seq", None) is None
-                and not Path(args.root).is_dir()
-            )
-            if live_show_missing_root:
-                raise FileNotFoundError(
-                    f"read-only harness root does not exist: {Path(args.root)}"
-                )
             if mutates:
                 try:
                     locks = operator_locks(
