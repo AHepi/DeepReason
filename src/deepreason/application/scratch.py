@@ -650,7 +650,7 @@ class ScratchQueryApplicationService:
         except (OSError, RuntimeError, ValueError) as error:
             raise ValueError("BRIDGE_RESULT_MANIFEST_INVALID") from error
         policy = manifest.scratch_policy
-        if manifest.schema_version != 3 or policy is None or not policy.enabled:
+        if manifest.schema_version < 3 or policy is None or not policy.enabled:
             raise ValueError("SCRATCH_MANIFEST_V3_REQUIRED")
         block_ids = [service.get_block(item).id for item in query.focus_blocks]
         cluster_ids = [service.get_cluster(item).id for item in query.focus_clusters]

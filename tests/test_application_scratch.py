@@ -22,9 +22,12 @@ from deepreason.application.scratch import (
 )
 from deepreason.cli import scratch as cli_scratch
 from deepreason.cli.scratch import dispatch_scratch, register_scratch_parser
+from deepreason.config import Config
 from deepreason.harness import Harness
+from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.scratch.service import ScratchService
 from tests.test_mcp_scratch_bridge import _create_run
+from tests.test_run_manifest_v4 import _control_policy
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -58,6 +61,49 @@ def _mcp_payload(name: str, arguments: dict) -> dict:
     truncation = payload.pop("truncation")
     assert truncation == {"truncated": False, "fields": []}
     return payload
+
+
+def _create_active_v4_scratch_run(root: Path):
+    route = {
+        "endpoint_id": "scratch-v4-route",
+        "endpoint": "https://models.invalid/v1",
+        "model": "fixture-31b",
+        "provider": "fixture",
+        "family": "fixture",
+        "api_key_env": "FIXTURE_API_KEY",
+    }
+    manifest = compile_run_manifest(
+        Config(
+            scratchpad={"enabled": True, "max_blocks_per_pack": 24},
+            roles={"conjecturer": route},
+        ),
+        schema_version=4,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at="2026-07-16T00:00:00Z",
+        control_plane_policy=_control_policy(),
+    )
+    harness = Harness(root)
+    bind_run_manifest(manifest, root)
+    scratch = ScratchService(harness)
+    blocks = tuple(
+        scratch.create_block(
+            {"content": f"active v4 attention thought {index}"},
+            {"actor": "user", "origin": "application-v4-test"},
+        )
+        for index in range(3)
+    )
+    cluster = scratch.create_cluster(
+        "active v4 attention",
+        {"actor": "user", "origin": "application-v4-test"},
+    )
+    scratch.add_cluster_member(
+        cluster.id,
+        blocks[0].id,
+        None,
+        {"actor": "user", "origin": "application-v4-test"},
+    )
+    return manifest, blocks, cluster
 
 
 def test_query_union_is_closed_and_direct_open_is_not_a_preview_mode(tmp_path):
@@ -196,6 +242,42 @@ def test_attention_preview_matches_mcp_and_remains_uncommitted(tmp_path):
     assert result.committed is False
     assert result.pack.selection_receipt.id not in ScratchService(run.root).state.attention_receipts
     assert _tree_digest(run.root) == before
+
+
+def test_active_v4_attention_preview_is_deterministic_across_service_and_mcp(tmp_path):
+    root = tmp_path / "run-v4"
+    manifest, blocks, cluster = _create_active_v4_scratch_run(root)
+    assert manifest.schema_version == 4
+    assert manifest.scratch_policy is not None
+    assert manifest.control_plane_policy is not None
+    assert manifest.control_plane_policy.mode == "active_conjecture"
+
+    before = _tree_digest(root)
+    arguments = {
+        "root": str(root),
+        "focus_blocks": [blocks[0].id[7:19]],
+        "focus_clusters": [cluster.id[7:19]],
+        "maximum_blocks": 2,
+        "maximum_cluster_guides": 1,
+        "deterministic_seed": 17,
+    }
+    query = ScratchAttentionPreviewQueryV1(
+        root=arguments["root"],
+        focus_blocks=tuple(arguments["focus_blocks"]),
+        focus_clusters=tuple(arguments["focus_clusters"]),
+        maximum_blocks=arguments["maximum_blocks"],
+        maximum_cluster_guides=arguments["maximum_cluster_guides"],
+        deterministic_seed=arguments["deterministic_seed"],
+    )
+    first = SCRATCH_QUERY_SERVICE.execute(query)
+    second = SCRATCH_QUERY_SERVICE.execute(query)
+    mcp_payload = _mcp_payload("scratch_attention", arguments)
+
+    assert first == second
+    assert first.presentation_payload() == mcp_payload
+    assert first.committed is False
+    assert first.pack.selection_receipt.id not in ScratchService(root).state.attention_receipts
+    assert _tree_digest(root) == before
 
 
 def test_cli_and_mcp_handlers_are_thin_application_adapters():
