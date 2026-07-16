@@ -47,6 +47,29 @@ def freeze_workflow_json(value: Any) -> Any:
     raise TypeError("task payload values must be canonical JSON values")
 
 
+def repair_attempt_trigger_ref(attempt: int, diagnostic_ref: str) -> str:
+    """Bind one repair authorization to a diagnostic occurrence.
+
+    Content-addressed diagnostics can repeat byte-for-byte across attempts.
+    The attempt index keeps each bounded authorization distinct while the
+    original immutable diagnostic pointer remains visible when it fits.
+    """
+
+    if type(attempt) is not int or attempt < 0:
+        raise ValueError("repair attempt index must be a nonnegative integer")
+    if not isinstance(diagnostic_ref, str) or not diagnostic_ref:
+        raise ValueError("repair attempt requires an immutable diagnostic reference")
+    direct = f"repair-attempt:{attempt}:{diagnostic_ref}"
+    if len(direct) <= 512:
+        return direct
+    return "repair-attempt:sha256:" + sha256_hex(
+        b"workflow.repair-attempt.v1\x00"
+        + canonical_json(
+            {"attempt": attempt, "diagnostic_ref": diagnostic_ref}
+        )
+    )
+
+
 class WorkflowRecord(BaseModel):
     """Strict immutable base for process records, including nested helpers."""
 
@@ -145,6 +168,7 @@ class TransitionKind(str, Enum):
     CONTEXT_GRANTED = "context_granted"
     CONTEXT_DENIED = "context_denied"
     WORK_FINISHED = "work_finished"
+    WORK_ABANDONED = "work_abandoned"
 
 
 class TriggerKind(str, Enum):
@@ -154,6 +178,7 @@ class TriggerKind(str, Enum):
     GUARD_RESULT = "guard_result"
     CONTEXT_DECISION = "context_decision"
     REPAIR_DECISION = "repair_decision"
+    WORKFLOW_TERMINATION = "workflow_termination"
 
 
 class RouteLeaseRefV1(WorkflowRecord):
@@ -462,6 +487,23 @@ class TransitionDecisionV1(IdentifiedWorkflowRecord):
 
     @model_validator(mode="after")
     def _guard_authorizes_admission(self):
+        expected_trigger = {
+            TransitionKind.WORK_ENABLED: TriggerKind.PROBLEM_SELECTED,
+            TransitionKind.WORK_ISSUED: TriggerKind.CONTEXT_PREPARED,
+            TransitionKind.PROPOSAL_RECEIVED: TriggerKind.PROVIDER_RESULT,
+            TransitionKind.PROPOSAL_ADMITTED: TriggerKind.GUARD_RESULT,
+            TransitionKind.PROPOSAL_REJECTED: TriggerKind.GUARD_RESULT,
+            TransitionKind.PROPOSAL_DEDUPLICATED: TriggerKind.GUARD_RESULT,
+            TransitionKind.REPAIR_REQUESTED: TriggerKind.REPAIR_DECISION,
+            TransitionKind.REPAIR_EXHAUSTED: TriggerKind.PROVIDER_RESULT,
+            TransitionKind.CONTEXT_REQUESTED: TriggerKind.PROVIDER_RESULT,
+            TransitionKind.CONTEXT_GRANTED: TriggerKind.CONTEXT_DECISION,
+            TransitionKind.CONTEXT_DENIED: TriggerKind.CONTEXT_DECISION,
+            TransitionKind.WORK_FINISHED: TriggerKind.PROVIDER_RESULT,
+            TransitionKind.WORK_ABANDONED: TriggerKind.WORKFLOW_TERMINATION,
+        }[self.transition_kind]
+        if self.trigger_kind != expected_trigger:
+            raise ValueError("transition kind requires its canonical trigger kind")
         guarded = self.transition_kind in {
             TransitionKind.PROPOSAL_ADMITTED,
             TransitionKind.PROPOSAL_REJECTED,
@@ -486,6 +528,9 @@ class TransitionDecisionV1(IdentifiedWorkflowRecord):
             raise ValueError(
                 "context-granted transitions consume exactly one expansion"
             )
+        carries_outputs = provider_result or guarded
+        if self.output_refs and not carries_outputs:
+            raise ValueError("only provider and guard transitions carry outputs")
         return self
 
 
@@ -525,4 +570,5 @@ __all__ = [
     "WorkflowTaskKind",
     "WorkOrderEnvelopeV1",
     "freeze_workflow_json",
+    "repair_attempt_trigger_ref",
 ]

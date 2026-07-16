@@ -19,7 +19,12 @@ merge unions another session into the current one.
 
 from pathlib import Path
 
+from deepreason.log.event_log import EventLog
 from deepreason.ontology import Rule
+
+
+class ControlEventMergeError(ValueError):
+    """A source authority trace cannot be truthfully rewritten as Merge."""
 
 
 def _known(harness, oid: str) -> bool:
@@ -59,6 +64,31 @@ def merge(harness, source_root: Path) -> dict:
     from deepreason.harness import Harness
 
     harness._ensure_writable()
+    source_root = Path(source_root)
+
+    # A Merge event deliberately rewrites the source rule while preserving a
+    # formal set contribution.  That is sound for ontology history, but not
+    # for authority transitions: rewriting Control as Merge would discard its
+    # typed payload and make the destination claim a process history it never
+    # replayed.  Scan the complete source log before opening object/blob copy
+    # loops so rejection cannot partially mutate the destination.
+    source_events = tuple(
+        EventLog(source_root / "log.jsonl", read_only=True).read()
+    )
+    if any(event.rule == Rule.CONTROL for event in source_events):
+        raise ControlEventMergeError(
+            "cannot merge a source containing Control events; "
+            "workflow authority must retain its original process branch"
+        )
+    if any(
+        event.llm is not None and event.llm.work_order_id is not None
+        for event in source_events
+    ):
+        raise ControlEventMergeError(
+            "cannot merge a source containing a work-bound provider call; "
+            "workflow authority must retain its original process branch"
+        )
+
     source = Harness(source_root, read_only=True)
     # Blob union: content-addressed files, so copy-if-absent is the union.
     blobs_copied = 0
@@ -78,7 +108,7 @@ def merge(harness, source_root: Path) -> dict:
 
     merged_events = 0
     merged_objects = 0
-    for event in source.log.read():
+    for event in source_events:
         sig = _signature(event)
         if sig in seen:
             continue  # already present (re-merge / shared prefix)
@@ -111,3 +141,6 @@ def merge(harness, source_root: Path) -> dict:
         "merged_objects": merged_objects,
         "blobs_copied": blobs_copied,
     }
+
+
+__all__ = ["ControlEventMergeError", "merge"]

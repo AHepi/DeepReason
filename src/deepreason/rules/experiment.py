@@ -247,16 +247,19 @@ def promoted_properties(harness, base_commitment_id: str, config) -> set[str]:
     Promotion remains TRUST, never finality (N1): ordinary criticism can
     refute a promoted property and the source-artifact closure (edges.py)
     still collapses every verdict it ever minted. Deterministic: age is
-    event-seq distance, attack survival is graph structure, the witness
+    semantic-event distance, attack survival is graph structure, the witness
     check runs frozen content in the sandbox; 0 disables promotion."""
     if config.PROP_PROBATION_EVENTS <= 0:
         return set()
-    now = harness._next_seq
+    now = harness.semantic_event_clock()
     base = harness.commitments.get(base_commitment_id)
     attacked = {target for _, target in harness.state.att}
     out: set[str] = set()
     for aid, _claim, source in active_properties(harness, base_commitment_id):
-        age = now - harness.state.artifacts[aid].provenance.event_seq
+        registered = harness.semantic_event_clock(
+            harness.state.artifacts[aid].provenance.event_seq
+        )
+        age = now - registered
         if age < config.PROP_PROBATION_EVENTS:
             continue
         survived_attack = aid in attacked  # active => any attacker was defeated

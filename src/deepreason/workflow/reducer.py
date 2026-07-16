@@ -26,6 +26,7 @@ from deepreason.workflow.models import (
 from deepreason.workflow.profiles import ConjectureWorkflowProfileV1
 from deepreason.workflow.state import (
     ReductionV1,
+    WorkItemStatus,
     WorkflowProcessStateV1,
     state_after_transition,
 )
@@ -125,6 +126,11 @@ def _decide(
     output_refs: tuple[str, ...] = (),
 ) -> tuple[WorkflowProcessStateV1, TransitionDecisionV1]:
     _validate_boundary(state, work_order)
+    if (
+        transition_kind == TransitionKind.WORK_ENABLED
+        and trigger_ref != work_order.problem_ref
+    ):
+        raise ValueError("work-enabled trigger differs from its selected problem")
     budget_delta = budget_delta or BudgetDeltaV1()
     next_state = state_after_transition(
         state,
@@ -304,6 +310,10 @@ def reduce_conjecture(
             TriggerKind.PROVIDER_RESULT,
             TransitionKind.WORK_FINISHED,
         ),
+        WorkflowSignalKind.WORK_ABANDONED: (
+            TriggerKind.WORKFLOW_TERMINATION,
+            TransitionKind.WORK_ABANDONED,
+        ),
     }
     guard_result_ref = None
     output_refs: tuple[str, ...] = ()
@@ -357,10 +367,18 @@ def reduce_conjecture(
             raise ValueError("proposal exceeds its abstention capability")
         proposal_receipts = (receipt,)
         output_refs = receipt.candidate_payload_refs
+        requested_repairs = receipt.attempt_count - 1
+        if requested_repairs > work_order.capability_grant.max_local_repairs:
+            raise ValueError("proposal exceeds its local-repair capability")
+        repaired = receipt.attempt_count > 1
+        if repaired != (current.status == WorkItemStatus.REPAIR_PENDING):
+            raise ValueError(
+                "proposal attempt count differs from durable repair authority"
+            )
         # Receipt tokens are measured by the harness.  Cover any unreserved
         # amount locally and release only this work item's unused reservation.
         provider_call_delta = 1
-        local_repair_delta = receipt.attempt_count - 1
+        local_repair_delta = requested_repairs
         grant = work_order.capability_grant
         if current.provider_calls_used + provider_call_delta > grant.max_provider_calls:
             raise ValueError("proposal exceeds its provider-call capability")
@@ -393,7 +411,10 @@ def reduce_conjecture(
             > work_order.capability_grant.remaining_context_expansions
         ):
             raise ValueError("work order has exhausted context-expansion authority")
-    if signal.kind == WorkflowSignalKind.WORK_FINISHED:
+    if signal.kind in {
+        WorkflowSignalKind.WORK_FINISHED,
+        WorkflowSignalKind.WORK_ABANDONED,
+    }:
         budget_delta = BudgetDeltaV1(released_tokens=current.reserved_tokens)
 
     next_state, decision = _decide(

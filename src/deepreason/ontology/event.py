@@ -14,6 +14,7 @@ from pydantic import ConfigDict, Field, field_validator, model_validator
 
 from deepreason.bridge.events import BridgeEventPayloadV1
 from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
+from deepreason.control_events import ControlEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
 
@@ -32,6 +33,7 @@ class Rule(str, Enum):
     SCRATCH = "Scratch"
     BRIDGE = "Bridge"
     CONJECTURE_TURN = "ConjectureTurn"
+    CONTROL = "Control"
 
 
 class LLMAttempt(FrozenRecord):
@@ -233,6 +235,13 @@ class LLMCall(FrozenRecord):
     conjecture_context: ConjectureContextCallReceiptV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    # A C1 workflow call binds its provider receipt to exactly one work order.
+    # Omission preserves historical event bytes.
+    work_order_id: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
 
     @field_validator("attempt_trace", mode="after")
     @classmethod
@@ -241,6 +250,8 @@ class LLMCall(FrozenRecord):
 
     @model_validator(mode="after")
     def _school_route_matches_attempts(self):
+        if self.work_order_id is not None and self.role != "conjecturer":
+            raise ValueError("only conjecturer calls may name a workflow work order")
         receipt = self.school_route
         if receipt is not None:
             if receipt.role != self.role:
@@ -318,6 +329,42 @@ class Event(FrozenRecord):
     conjecture_turn: ConjectureTurnEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    control: ControlEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @field_validator("llm", mode="before")
+    @classmethod
+    def _deeply_revalidate_llm_call(cls, value):
+        """Reject forged nested instances before they reach the JSONL log.
+
+        Pydantic otherwise trusts a preconstructed ``LLMCall`` instance, so
+        ``model_copy(update=...)`` could bypass the newly added work-order
+        identifier validator on the live append path while failing on reopen.
+        """
+
+        if isinstance(value, LLMCall):
+            return LLMCall.model_validate(
+                value.model_dump(mode="python", by_alias=True)
+            )
+        return value
+
+    @field_validator("control", mode="before")
+    @classmethod
+    def _deeply_revalidate_control_payload(cls, value):
+        """Reject copied Control payloads that skipped nested validation.
+
+        As with ``LLMCall``, Pydantic otherwise trusts an already-built model
+        instance.  Reparse the complete payload so a forged literal or a
+        mutable copied sequence cannot be appended successfully and then fail
+        (or disappear as a torn tail) when the JSONL log is reopened.
+        """
+
+        if isinstance(value, ControlEventPayloadV1):
+            return ControlEventPayloadV1.model_validate(
+                value.model_dump(mode="python", by_alias=True)
+            )
+        return value
 
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
@@ -336,6 +383,8 @@ class Event(FrozenRecord):
             raise ValueError(
                 "ConjectureTurn rule and typed turn payload must appear together"
             )
+        if (self.rule == Rule.CONTROL) != (self.control is not None):
+            raise ValueError("Control rule and typed control payload must appear together")
         if self.scratch is not None:
             if list(self.inputs) != list(self.scratch.inputs):
                 raise ValueError("scratch payload inputs must match Event.inputs")
@@ -359,10 +408,18 @@ class Event(FrozenRecord):
                 raise ValueError(
                     "conjecture turn decisions reference an earlier model call"
                 )
+        if self.control is not None:
+            if list(self.inputs) != list(self.control.inputs):
+                raise ValueError("control payload inputs must match Event.inputs")
+            if list(self.outputs) != list(self.control.outputs):
+                raise ValueError("control payload outputs must match Event.outputs")
+            if self.llm is not None:
+                raise ValueError("control decisions cannot contain an LLM call")
         if (
             self.scratch is not None
             or self.bridge is not None
             or self.conjecture_turn is not None
+            or self.control is not None
         ):
             formal = self.state_diff.model_dump(mode="json", by_alias=True)
             if any(formal.values()):

@@ -11,10 +11,11 @@ import json
 import os
 import re
 import time
+from collections.abc import Callable
 
 from pydantic import BaseModel
 
-from deepreason.llm.budget import TokenBudgetExceeded
+from deepreason.llm.budget import TokenBudgetExceeded, conservative_prompt_bound
 from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint, resolve_model
 from deepreason.llm.firewall import (
     EndpointLease,
@@ -312,6 +313,9 @@ class LLMAdapter:
         endpoint_lease: EndpointLease | None = None,
         school_id: str | None = None,
         conjecture_context: ConjectureContextCallReceiptV1 | None = None,
+        work_order_id: str | None = None,
+        workflow_dispatch_observer: Callable[[int], str | None] | None = None,
+        workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
@@ -323,6 +327,25 @@ class LLMAdapter:
         honestly reconstructs the exchange (§0)."""
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
+        if work_order_id is not None and (
+            role != "conjecturer"
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", work_order_id) is None
+        ):
+            raise ValueError(
+                "work_order_id requires a canonical conjecturer work order"
+            )
+        if workflow_dispatch_observer is not None and (
+            role != "conjecturer" or work_order_id is not None
+        ):
+            raise ValueError(
+                "workflow dispatch observation requires an unbound conjecturer call"
+            )
+        if workflow_repair_observer is not None and (
+            role != "conjecturer" or workflow_dispatch_observer is None
+        ):
+            raise ValueError(
+                "workflow repair observation requires conjecture dispatch observation"
+            )
         if school_id is not None and endpoint_lease is None:
             raise ValueError("school-routed calls require an explicit endpoint lease")
         if conjecture_context is not None:
@@ -457,6 +480,7 @@ class LLMAdapter:
             initial_request=prompt,
             retry_max=self.retry_max,
         )
+        effective_work_order_id = work_order_id
 
         def _spend(attempts: int) -> LLMCall | None:
             if not tokens_used and not attempt_trace:
@@ -475,6 +499,7 @@ class LLMAdapter:
                 attempt_trace=attempt_trace,
                 school_route=school_route,
                 conjecture_context=conjecture_context,
+                work_order_id=effective_work_order_id,
             )
 
         for attempt in range(repair.attempt_count):
@@ -500,9 +525,11 @@ class LLMAdapter:
             except RouteFirewallError as e:
                 e.spend = _spend(attempt)
                 raise
-            # Log only an actual provider request. A generated-but-unsent
-            # repair prompt must not masquerade as a wire exchange.
-            prompt_ref = (
+            # Prepare the next prompt reference without advancing the
+            # top-level call pointer yet.  If reservation fails, ``_spend``
+            # must continue to name the last request that actually reached
+            # the provider, not this generated-but-unsent repair prompt.
+            request_prompt_ref = (
                 prompt_ref if attempt == 0 else self.blobs.put(request.encode())
             )
             # Snapshot the effective process-health limits at the wire
@@ -523,6 +550,9 @@ class LLMAdapter:
             # unboundable call fails closed; concurrent dispatchers can
             # never jointly push the logged total past the ceiling.
             reservation = None
+            reservation_bound = conservative_prompt_bound(request) + int(
+                transport_limits["max_tokens"] or 0
+            )
             if self.meter is not None:
                 try:
                     reservation = self.meter.reserve(
@@ -532,6 +562,27 @@ class LLMAdapter:
                 except TokenBudgetExceeded as e:
                     e.spend = _spend(attempt)
                     raise
+            if attempt == 0 and workflow_dispatch_observer is not None:
+                # Observation happens after the real reserve is booked and
+                # immediately before provider dispatch.  A shadow observer
+                # failure cannot suppress the legacy call.
+                try:
+                    observed_work_order_id = workflow_dispatch_observer(
+                        reservation.amount
+                        if reservation is not None
+                        else reservation_bound
+                    )
+                except Exception:  # noqa: BLE001 - shadow is non-authoritative
+                    observed_work_order_id = None
+                if (
+                    isinstance(observed_work_order_id, str)
+                    and re.fullmatch(
+                        r"sha256:[0-9a-f]{64}", observed_work_order_id
+                    )
+                    is not None
+                ):
+                    effective_work_order_id = observed_work_order_id
+            prompt_ref = request_prompt_ref
             try:
                 kwargs = {}
                 if images:
@@ -647,6 +698,18 @@ class LLMAdapter:
                         getattr(endpoint, "last_transport_diagnostics", ())
                     ),
                 ))
+                if (
+                    workflow_repair_observer is not None
+                    and attempt + 1 < repair.attempt_count
+                ):
+                    # The rejected attempt and its diagnostic are immutable at
+                    # this point. Persist repair authority before the next
+                    # reservation or provider dispatch; observer failure stays
+                    # contained on the C1 shadow path.
+                    try:
+                        workflow_repair_observer(attempt_trace[-1])
+                    except Exception:  # noqa: BLE001 - shadow is non-authoritative
+                        pass
                 continue
             attempt_trace.append(LLMAttempt(
                 prompt_ref=prompt_ref,
@@ -681,6 +744,7 @@ class LLMAdapter:
                 attempt_trace=attempt_trace,
                 school_route=school_route,
                 conjecture_context=conjecture_context,
+                work_order_id=effective_work_order_id,
             )
             return data, call
         error = SchemaRepairError(

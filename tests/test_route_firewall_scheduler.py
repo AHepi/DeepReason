@@ -28,6 +28,15 @@ def test_scheduler_logs_prior_spend_before_route_firewall_stop(tmp_path, monkeyp
     )
     error = RouteFirewallError("ROUTE_LEASE_MISMATCH")
     error.spend = spend
+
+    class _ControlTrace:
+        abandoned_with = None
+
+        def abandon(self, trigger_ref):
+            self.abandoned_with = trigger_ref
+
+    control_trace = _ControlTrace()
+    error.workflow_control_trace = control_trace
     scheduler = Scheduler(harness, _Adapter(), Config(N_SCHOOLS=0))
 
     def fail_closed():
@@ -42,3 +51,4 @@ def test_scheduler_logs_prior_spend_before_route_firewall_stop(tmp_path, monkeyp
     assert len(events) == 1
     assert events[0].llm == spend
     assert list(events[0].inputs[:2]) == ["dropped-call", "ROUTE_LEASE_MISMATCH"]
+    assert control_trace.abandoned_with == "runtime:route_firewall_error"

@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -13,11 +14,13 @@ import pytest
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.config import Config
 from deepreason.harness import Harness
+from deepreason.invariants import verify_root
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
-from deepreason.llm.firewall import leases_from_manifest
+from deepreason.llm.firewall import leases_from_manifest, route_fingerprint
 from deepreason.ontology import Problem, ProblemProvenance
+from deepreason.ontology import Rule
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV1,
@@ -28,21 +31,38 @@ from deepreason.run_manifest import (
     compile_run_manifest,
 )
 from deepreason.scheduler.scheduler import Scheduler
-from deepreason.workflow.profiles import route_lease_reference
-from deepreason.workflow.models import TransitionKind
+from deepreason.workflow.models import (
+    CapabilityGrantV1,
+    RouteLeaseRefV1,
+    TransitionDecisionV1,
+    TransitionKind,
+    TriggerKind,
+    WorkOrderEnvelopeV1,
+)
+from deepreason.workflow.profiles import (
+    compile_workflow_profile,
+    route_lease_reference,
+)
+from deepreason.workflow.reducer import plan_conjecture_work
 from deepreason.workflow.shadow import (
     ConjectureShadowObserver,
     ShadowMismatchCode,
     ShadowTerminationKind,
 )
+from deepreason.workflow.state import WorkflowProcessStateV1, state_after_transition
 
 
 STAMP = "2026-07-16T00:00:00Z"
 
 
-def _config(*, vs_k: int = 1, retry_max: int = 0) -> Config:
+def _config(
+    *,
+    vs_k: int = 1,
+    retry_max: int = 0,
+    schools: int = 0,
+) -> Config:
     return Config(
-        N_SCHOOLS=0,
+        N_SCHOOLS=schools,
         VS_K=vs_k,
         FLOOR=0,
         SPEC_INJECTION=False,
@@ -132,14 +152,64 @@ def _candidate() -> str:
 
 
 def _normalized_events(harness: Harness) -> list[dict]:
+    events = list(harness.log.read())
+    call_refs = {
+        int(value.removeprefix("conjecture-call:"))
+        for event in events
+        for value in event.inputs
+        if value.startswith("conjecture-call:")
+    }
+    split_calls = {
+        event.seq: event.llm
+        for event in events
+        if event.llm is not None
+        and event.inputs
+        and event.inputs[0] == "workflow-conjecture-call"
+    }
     records = []
-    for event in harness.log.read():
+    for event in events:
+        if event.rule == Rule.CONTROL:
+            continue
         record = event.model_dump(mode="json", by_alias=True)
         record.pop("ts")
+        if event.seq in split_calls and event.seq in call_refs:
+            # C1 persists the provider completion before admission. Collapse
+            # the split pair back to the legacy semantic event for the
+            # noninterference differential.
+            continue
+        if event.seq in split_calls and event.seq not in call_refs:
+            record["inputs"] = [
+                "conj-noregister",
+                *(
+                    value
+                    for value in record["inputs"]
+                    if value.startswith("school:")
+                ),
+            ]
+        conjecture_refs = [
+            value
+            for value in record["inputs"]
+            if value.startswith("conjecture-call:")
+        ]
+        if conjecture_refs:
+            source_seq = int(conjecture_refs[0].removeprefix("conjecture-call:"))
+            record["inputs"] = [
+                value
+                for value in record["inputs"]
+                if not value.startswith("conjecture-call:")
+            ]
+            record["llm"] = split_calls[source_seq].model_dump(
+                mode="json", by_alias=True
+            )
+        record["seq"] = len(records)
         # Wall-clock latency is observational and naturally differs by a
         # millisecond across two otherwise identical in-process mock runs.
         if record["llm"] is not None:
             record["llm"].pop("ms")
+            # C1 adds a process-only work-order correlation pointer in shadow
+            # mode.  It has no semantic, formal, scratch, bridge, or accounting
+            # effect and is compared through replayable control tests instead.
+            record["llm"].pop("work_order_id", None)
             for attempt in record["llm"]["attempt_trace"]:
                 attempt.pop("ms")
         records.append(record)
@@ -152,7 +222,13 @@ def _tree_payloads(root: Path) -> dict[str, str]:
     payloads = {}
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
         relative = path.relative_to(root).as_posix()
-        if relative.startswith("run-manifest") or relative == "log.jsonl":
+        if (
+            relative.startswith("run-manifest")
+            or relative == "log.jsonl"
+            or relative == "workflow-checkpoint.json"
+            or relative.startswith("objects/workflow-")
+            or relative.startswith("objects/artifact/")
+        ):
             continue
         payloads[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
     return payloads
@@ -248,9 +324,27 @@ def _assert_authoritative_surfaces_equal(
     assert shadow.scheduler._cycles == legacy.scheduler._cycles
     assert shadow.scheduler._problem_worked == legacy.scheduler._problem_worked
     assert _normalized_events(shadow.harness) == _normalized_events(legacy.harness)
-    assert shadow.harness.state.model_dump(mode="json") == (
-        legacy.harness.state.model_dump(mode="json")
-    )
+    def normalized_state(harness):
+        value = harness.state.model_dump(mode="json")
+        semantic_seq = {
+            event.seq: index
+            for index, event in enumerate(
+                event
+                for event in harness.log.read()
+                if event.rule != Rule.CONTROL
+                and not (
+                    event.inputs
+                    and event.inputs[0] == "workflow-conjecture-call"
+                )
+            )
+        }
+        for artifact in value["artifacts"].values():
+            artifact["provenance"]["event_seq"] = semantic_seq[
+                artifact["provenance"]["event_seq"]
+            ]
+        return value
+
+    assert normalized_state(shadow.harness) == normalized_state(legacy.harness)
     assert shadow.harness.scratch_state == legacy.harness.scratch_state
     assert shadow.harness.bridge_state == legacy.harness.bridge_state
     assert shadow.harness.commitments == legacy.harness.commitments
@@ -258,7 +352,7 @@ def _assert_authoritative_surfaces_equal(
     assert _tree_payloads(shadow.harness.root) == _tree_payloads(legacy.harness.root)
 
 
-def test_shadow_cycle_is_durably_identical_to_legacy_scheduler(tmp_path):
+def test_shadow_cycle_persists_control_without_changing_legacy_actuation(tmp_path):
     legacy = _run(tmp_path / "legacy", "legacy")
     shadow = _run(tmp_path / "shadow", "shadow")
 
@@ -270,13 +364,357 @@ def test_shadow_cycle_is_durably_identical_to_legacy_scheduler(tmp_path):
     # remain those of the authoritative legacy scheduler.
     _assert_authoritative_surfaces_equal(legacy, shadow)
 
-    # Observations live outside the formal log and all replayed materialized
-    # states; C1, not C0, owns durable control events.
-    assert not any(event.rule.value == "Control" for event in shadow.harness.log.read())
+    control_events = [
+        event for event in shadow.harness.log.read() if event.rule == Rule.CONTROL
+    ]
+    assert control_events
+    assert shadow.harness.workflow_state.outstanding_work_order_ids == ()
     reopened = Harness(shadow.harness.root)
     assert reopened.state == shadow.harness.state
     assert reopened.scratch_state == shadow.harness.scratch_state
     assert reopened.bridge_state == shadow.harness.bridge_state
+    assert reopened.workflow_state.digest == shadow.harness.workflow_state.digest
+    assert verify_root(
+        shadow.harness.root,
+        meter_total=shadow.meter.total,
+    )["violations"] == []
+
+
+def _record_enabled_work(root: Path, work: WorkOrderEnvelopeV1) -> None:
+    initial = WorkflowProcessStateV1.initial(
+        manifest_digest=work.manifest_digest,
+        workflow_profile=work.workflow_profile,
+        formal_fence_seq=work.formal_fence_seq,
+        scratch_fence_seq=work.scratch_fence_seq,
+    )
+    next_state = state_after_transition(
+        initial,
+        transition_kind=TransitionKind.WORK_ENABLED,
+        work_order_id=work.id,
+        trigger_ref=work.problem_ref,
+    )
+    decision = TransitionDecisionV1.create(
+        manifest_digest=work.manifest_digest,
+        workflow_profile=work.workflow_profile,
+        previous_process_digest=initial.digest,
+        trigger_kind=TriggerKind.PROBLEM_SELECTED,
+        trigger_ref=work.problem_ref,
+        transition_kind=TransitionKind.WORK_ENABLED,
+        work_order_id=work.id,
+        route_lease=work.route_lease,
+        next_process_digest=next_state.digest,
+    )
+    Harness(root).record_control_transition(decision, work_order=work)
+
+
+@pytest.mark.parametrize(
+    ("forgery", "expected_detail"),
+    (
+        ("contract", "contract_id"),
+        ("route", "route_lease"),
+        ("capability", "capability_grant"),
+        ("repair", "repair_policy_ref"),
+    ),
+)
+def test_verify_root_rejects_work_outside_manifest_authority(
+    tmp_path,
+    forgery: str,
+    expected_detail: str,
+):
+    root = tmp_path / forgery
+    manifest = _manifest(_config(), "shadow")
+    bind_run_manifest(manifest, root)
+    profile = compile_workflow_profile(manifest)
+    route = manifest.roles["conjecturer"][0]
+    valid_work = plan_conjecture_work(
+        profile,
+        problem_ref="problem:manifest-authority",
+        school_id=None,
+        route_lease=RouteLeaseRefV1(
+            seat=0,
+            endpoint_id=route.endpoint_id,
+            route_sha256=route_fingerprint(route),
+        ),
+        contract_id="conjecturer.direct.v1",
+        formal_fence_seq=0,
+        scratch_fence_seq=0,
+        task_payload_schema_id="conjecture.semantic-ref.v1",
+        task_payload_ref="problem:manifest-authority",
+        input_refs=("problem:manifest-authority",),
+    )
+    values = valid_work.model_dump(
+        mode="python",
+        by_alias=True,
+        exclude={"id"},
+    )
+    if forgery == "contract":
+        values["contract_id"] = "forged.contract.v99"
+    elif forgery == "route":
+        values["route_lease"] = RouteLeaseRefV1(
+            seat=0,
+            endpoint_id="forged-endpoint",
+            route_sha256="f" * 64,
+        )
+    elif forgery == "capability":
+        grant_values = valid_work.capability_grant.model_dump(
+            mode="python",
+            by_alias=True,
+            exclude={"id"},
+        )
+        grant_values["max_candidates"] += 1
+        values["capability_grant"] = CapabilityGrantV1.create(**grant_values)
+    elif forgery == "repair":
+        values["repair_policy_ref"] = "sha256:" + "9" * 64
+    forged_work = WorkOrderEnvelopeV1.create(**values)
+    _record_enabled_work(root, forged_work)
+
+    violations = verify_root(root)["violations"]
+
+    assert any(
+        item["check"] == "workflow-work-order-authority"
+        and expected_detail in item["detail"]
+        for item in violations
+    )
+
+
+def test_verify_root_accepts_conditioning_only_school_on_default_route(tmp_path):
+    root = tmp_path / "conditioning-only-school"
+    manifest = _manifest(_config(schools=1), "shadow")
+    bind_run_manifest(manifest, root)
+    profile = compile_workflow_profile(manifest)
+    route = manifest.roles["conjecturer"][0]
+    work = plan_conjecture_work(
+        profile,
+        problem_ref="problem:conditioning-only-school",
+        school_id="school-0",
+        route_lease=RouteLeaseRefV1(
+            seat=0,
+            endpoint_id=route.endpoint_id,
+            route_sha256=route_fingerprint(route),
+        ),
+        contract_id="conjecturer.direct.v1",
+        formal_fence_seq=0,
+        scratch_fence_seq=0,
+        task_payload_schema_id="conjecture.semantic-ref.v1",
+        task_payload_ref="problem:conditioning-only-school",
+        input_refs=("problem:conditioning-only-school",),
+    )
+    _record_enabled_work(root, work)
+
+    assert verify_root(root)["violations"] == []
+
+
+def test_c1_shadow_trace_temporally_brackets_provider_and_admission(tmp_path):
+    """Authority must surround, not merely summarize, matched Conj work.
+
+    The legacy path currently combines the provider receipt and semantic Conj
+    admission in one event.  C1's safe order intentionally requires those
+    boundaries to be split so the proposal transition is durable before the
+    semantic artifact is admitted.
+    """
+
+    run = _run(tmp_path / "shadow-temporal-order", "shadow")
+    comparison = run.scheduler.workflow_shadow_observations[0]
+    assert comparison.matched
+    work_order_id = comparison.work_order_id
+    assert work_order_id is not None
+
+    events = list(run.harness.log.read())
+    controls = {}
+    for event in events:
+        if event.control is None:
+            continue
+        _schema, decision = run.harness.objects.get(
+            event.control.decision_ref,
+            schema="workflow-transition-decision",
+        )
+        if decision.work_order_id == work_order_id:
+            assert decision.transition_kind not in controls
+            controls[decision.transition_kind] = event
+
+    provider_events = [
+        event
+        for event in events
+        if event.llm is not None and event.llm.work_order_id == work_order_id
+    ]
+    admission_events = [
+        event
+        for event in events
+        if event.rule == Rule.CONJ
+        and set(event.outputs).intersection(comparison.admitted_refs)
+    ]
+    assert len(provider_events) == 1
+    assert len(admission_events) == 1
+    assert {
+        TransitionKind.WORK_ENABLED,
+        TransitionKind.WORK_ISSUED,
+        TransitionKind.PROPOSAL_RECEIVED,
+        TransitionKind.PROPOSAL_ADMITTED,
+    }.issubset(controls)
+
+    reopened = Harness(run.harness.root)
+    assert reopened.workflow_state.digest == run.harness.workflow_state.digest
+    assert reopened.workflow_state.outstanding_work_order_ids == ()
+    assert (
+        reopened.workflow_state.recovery_status(work_order_id).value
+        == "finished"
+    )
+
+    enabled_seq = controls[TransitionKind.WORK_ENABLED].seq
+    issued_seq = controls[TransitionKind.WORK_ISSUED].seq
+    provider_seq = provider_events[0].seq
+    proposal_seq = controls[TransitionKind.PROPOSAL_RECEIVED].seq
+    admission_seq = admission_events[0].seq
+    guard_seq = controls[TransitionKind.PROPOSAL_ADMITTED].seq
+    _schema, issued_decision = run.harness.objects.get(
+        controls[TransitionKind.WORK_ISSUED].control.decision_ref,
+        schema="workflow-transition-decision",
+    )
+    _schema, proposal_decision = run.harness.objects.get(
+        controls[TransitionKind.PROPOSAL_RECEIVED].control.decision_ref,
+        schema="workflow-transition-decision",
+    )
+    assert issued_decision.budget_delta.reserved_tokens >= (
+        provider_events[0].llm.tokens
+    )
+    assert proposal_decision.budget_delta.reserved_tokens == 0
+    violations = []
+    if not enabled_seq < issued_seq < provider_seq:
+        violations.append(
+            "WORK_ENABLED < WORK_ISSUED < bound provider event"
+        )
+    if not provider_seq < proposal_seq:
+        violations.append("bound provider event < PROPOSAL_RECEIVED")
+    if not proposal_seq < guard_seq < admission_seq:
+        violations.append(
+            "PROPOSAL_RECEIVED < guarded disposition < semantic Conj admission"
+        )
+    assert not violations, (
+        f"unsafe C1 event order {violations}: enabled={enabled_seq}, "
+        f"issued={issued_seq}, provider={provider_seq}, proposal={proposal_seq}, "
+        f"admission={admission_seq}, guard={guard_seq}"
+    )
+
+
+def test_restart_abandons_every_durable_shadow_crash_prefix(tmp_path):
+    complete = _run(tmp_path / "complete", "shadow")
+    manifest = complete.scheduler.run_manifest
+    assert manifest.schema_version == 4
+    old_work_order_ids = tuple(complete.harness.workflow_state.work_orders)
+    assert len(old_work_order_ids) == 1
+    assert complete.harness.workflow_state.outstanding_work_order_ids == ()
+
+    cut_seqs = {}
+    for event in complete.harness.log.read():
+        if event.control is not None:
+            _schema, decision = complete.harness.objects.get(
+                event.control.decision_ref,
+                schema="workflow-transition-decision",
+            )
+            labels = {
+                TransitionKind.WORK_ENABLED: "enabled",
+                TransitionKind.WORK_ISSUED: "issued",
+                TransitionKind.PROPOSAL_RECEIVED: "proposal-received",
+            }
+            if decision.transition_kind in labels:
+                cut_seqs[labels[decision.transition_kind]] = event.seq
+        if (
+            event.llm is not None
+            and event.llm.work_order_id in old_work_order_ids
+        ):
+            cut_seqs["provider-call"] = event.seq
+    assert set(cut_seqs) == {
+        "enabled",
+        "issued",
+        "provider-call",
+        "proposal-received",
+    }
+
+    complete_lines = (complete.harness.root / "log.jsonl").read_bytes().splitlines(
+        keepends=True
+    )
+    for label, cut_seq in cut_seqs.items():
+        crash_root = tmp_path / f"crash-{label}"
+        shutil.copytree(complete.harness.root, crash_root)
+        (crash_root / "log.jsonl").write_bytes(
+            b"".join(complete_lines[: cut_seq + 1])
+        )
+        (crash_root / "workflow-checkpoint.json").unlink()
+        bind_run_manifest(manifest, crash_root)
+
+        resumed = Harness(crash_root)
+        assert tuple(resumed.workflow_state.work_orders) == old_work_order_ids
+        assert resumed.workflow_state.outstanding_work_order_ids == old_work_order_ids
+
+        endpoint = MockEndpoint(
+            lambda _prompt: _candidates("A distinct post-restart candidate."),
+            name=manifest.roles["conjecturer"][0].base_url,
+            model=manifest.roles["conjecturer"][0].model_id,
+            max_tokens=256,
+        )
+        adapter = LLMAdapter(
+            {"conjecturer": endpoint},
+            resumed.blobs,
+            meter=TokenMeter(budget=100_000),
+            retry_max=0,
+            model_profile=manifest.model_profile,
+            leases=leases_from_manifest(manifest),
+        )
+        scheduler = Scheduler(
+            resumed,
+            adapter,
+            _config(),
+            workload_profile="text",
+            run_manifest=manifest,
+        )
+
+        scheduler.run(1)
+
+        assert scheduler._cycles == 1
+        assert resumed.workflow_state.outstanding_work_order_ids == ()
+        assert all(
+            resumed.workflow_state.recovery_status(work_order_id).value
+            == "abandoned"
+            for work_order_id in old_work_order_ids
+        )
+        durable = Harness(crash_root)
+        assert durable.workflow_state.outstanding_work_order_ids == ()
+        assert all(
+            durable.workflow_state.recovery_status(work_order_id).value
+            == "abandoned"
+            for work_order_id in old_work_order_ids
+        )
+
+
+def test_semantic_clock_collapses_split_conjecture_call_carrier(tmp_path):
+    legacy = _run(tmp_path / "legacy-semantic-clock", "legacy")
+    shadow = _run(tmp_path / "shadow-semantic-clock", "shadow")
+    events = list(shadow.harness.log.read())
+    carrier = next(
+        event
+        for event in events
+        if event.llm is not None
+        and event.inputs
+        and event.inputs[0] == "workflow-conjecture-call"
+    )
+    admission = next(
+        event
+        for event in events
+        if f"conjecture-call:{carrier.seq}" in event.inputs
+    )
+
+    before_carrier = shadow.harness.semantic_event_clock(carrier.seq)
+    assert shadow.harness.semantic_event_clock(carrier.seq + 1) == before_carrier
+    assert shadow.harness.semantic_event_clock(admission.seq + 1) == (
+        before_carrier + 1
+    )
+    assert shadow.harness._next_seq > legacy.harness._next_seq
+    assert shadow.harness.semantic_event_clock() == (
+        legacy.harness.semantic_event_clock()
+    )
+    assert Harness(shadow.harness.root).semantic_event_clock() == (
+        shadow.harness.semantic_event_clock()
+    )
 
 
 def test_shadow_explains_legacy_no_register_as_deduplication(tmp_path):
@@ -525,7 +963,6 @@ def test_observer_failure_is_non_authoritative(
         for observation in observations
     )
     _assert_authoritative_surfaces_equal(legacy, shadow)
-    assert not any(event.rule.value == "Control" for event in shadow.harness.log.read())
 
 
 def test_candidate_sink_setup_failure_is_non_authoritative(tmp_path, monkeypatch):
@@ -550,7 +987,6 @@ def test_candidate_sink_setup_failure_is_non_authoritative(tmp_path, monkeypatch
         observation.error_type == "RuntimeError" for observation in observations
     )
     _assert_authoritative_surfaces_equal(legacy, shadow)
-    assert not any(event.rule.value == "Control" for event in shadow.harness.log.read())
 
 
 def test_schema_repair_drop_is_observed_without_shadow_side_effects(tmp_path):
@@ -581,7 +1017,7 @@ def test_schema_repair_drop_is_observed_without_shadow_side_effects(tmp_path):
         for event in shadow.harness.log.read()
     )
     _assert_authoritative_surfaces_equal(legacy, shadow)
-    assert not any(event.rule.value == "Control" for event in shadow.harness.log.read())
+    assert any(event.rule == Rule.CONTROL for event in shadow.harness.log.read())
 
 
 def test_unrepresentable_legacy_problem_ref_cannot_escape_observer(tmp_path):
@@ -636,4 +1072,31 @@ def test_mid_retry_budget_stop_is_not_reported_as_repair_exhaustion(tmp_path):
     assert TransitionKind.REPAIR_EXHAUSTED not in comparison.expected_transition_kinds
     assert comparison.proposal_receipt_id is None
     assert any("token budget" in item["stopped"] for item in shadow.scheduler.diagnostics)
+    work_order_id = comparison.work_order_id
+    assert work_order_id is not None
+    assert shadow.harness.workflow_state.recovery_status(
+        work_order_id
+    ).value == "abandoned"
+    assert shadow.harness.workflow_state.outstanding_work_order_ids == ()
+    transition_kinds = []
+    for event in shadow.harness.log.read():
+        if event.control is None:
+            continue
+        _schema, decision = shadow.harness.objects.get(
+            event.control.decision_ref,
+            schema="workflow-transition-decision",
+        )
+        if decision.work_order_id == work_order_id:
+            transition_kinds.append(decision.transition_kind)
+    assert TransitionKind.WORK_ABANDONED in transition_kinds
+    assert TransitionKind.REPAIR_EXHAUSTED not in transition_kinds
+    assert (shadow.harness.root / "workflow-checkpoint.json").exists()
+    reopened = Harness(shadow.harness.root)
+    assert reopened.workflow_state.outstanding_work_order_ids == ()
+    assert reopened.workflow_state.recovery_status(work_order_id).value == "abandoned"
+    violations = verify_root(
+        shadow.harness.root,
+        meter_total=shadow.meter.total,
+    )["violations"]
+    assert not [item for item in violations if item["check"] == "repair-metadata"]
     _assert_authoritative_surfaces_equal(legacy, shadow)

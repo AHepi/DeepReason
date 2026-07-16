@@ -35,6 +35,7 @@ class WorkflowSignalKind(str, Enum):
     CONTEXT_GRANTED = "context_granted"
     CONTEXT_DENIED = "context_denied"
     WORK_FINISHED = "work_finished"
+    WORK_ABANDONED = "work_abandoned"
 
 
 class ConjectureWorkAssignmentV1(WorkflowRecord):

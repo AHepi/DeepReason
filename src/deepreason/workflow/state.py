@@ -229,7 +229,11 @@ _LEGAL_STATUS: dict[TransitionKind, tuple[set[WorkItemStatus | None], WorkItemSt
         WorkItemStatus.PROPOSAL_RECEIVED,
     ),
     TransitionKind.REPAIR_REQUESTED: (
-        {WorkItemStatus.ISSUED, WorkItemStatus.PROPOSAL_RECEIVED},
+        {
+            WorkItemStatus.ISSUED,
+            WorkItemStatus.PROPOSAL_RECEIVED,
+            WorkItemStatus.REPAIR_PENDING,
+        },
         WorkItemStatus.REPAIR_PENDING,
     ),
     TransitionKind.REPAIR_EXHAUSTED: (
@@ -263,6 +267,16 @@ _LEGAL_STATUS: dict[TransitionKind, tuple[set[WorkItemStatus | None], WorkItemSt
     TransitionKind.WORK_FINISHED: (
         {WorkItemStatus.PROPOSAL_RECEIVED, WorkItemStatus.CONTEXT_PENDING},
         WorkItemStatus.FINISHED,
+    ),
+    TransitionKind.WORK_ABANDONED: (
+        {
+            WorkItemStatus.ENABLED,
+            WorkItemStatus.ISSUED,
+            WorkItemStatus.PROPOSAL_RECEIVED,
+            WorkItemStatus.REPAIR_PENDING,
+            WorkItemStatus.CONTEXT_PENDING,
+        },
+        WorkItemStatus.ABANDONED,
     ),
 }
 
@@ -358,6 +372,8 @@ def state_after_transition(
         TransitionKind.WORK_FINISHED,
     }:
         outcome = WorkOutcome.NO_PROPOSAL
+    elif transition_kind == TransitionKind.WORK_ABANDONED:
+        outcome = WorkOutcome.ABANDONED
 
     updated = ConjectureWorkStateV1(
         work_order_id=work_order_id,

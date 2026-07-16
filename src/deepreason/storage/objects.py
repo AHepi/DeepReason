@@ -47,6 +47,12 @@ from deepreason.scratch.models import (
     SimilarityHitV1,
     VisibilityRecordV1,
 )
+from deepreason.workflow.models import (
+    GuardResultV1,
+    ProposalReceiptV1,
+    TransitionDecisionV1,
+    WorkOrderEnvelopeV1,
+)
 
 SCHEMAS: dict[str, type[BaseModel]] = {
     "artifact": Artifact,
@@ -79,6 +85,10 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "bridge-evidence-pack": EvidencePackV1,
     "bridge-failure": BridgeFailureV1,
     "bridge-workflow-retry": BridgeWorkflowRetryV1,
+    "workflow-work-order": WorkOrderEnvelopeV1,
+    "workflow-proposal-receipt": ProposalReceiptV1,
+    "workflow-guard-result": GuardResultV1,
+    "workflow-transition-decision": TransitionDecisionV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
@@ -111,7 +121,7 @@ def _object_data(schema: str, obj: BaseModel) -> dict:
         by_alias=True,
         # Advisory canonical encodings omit absent optional fields. Formal
         # schemas retain their exact established byte representation.
-        exclude_none=schema.startswith(("scratch-", "bridge-")),
+        exclude_none=schema.startswith(("scratch-", "bridge-", "workflow-")),
     )
 
 

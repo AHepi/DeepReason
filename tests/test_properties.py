@@ -337,6 +337,90 @@ def test_promoted_property_kills_without_population_support(harness):
     assert harness.state.status[trap.id] == Status.REFUTED
 
 
+def test_control_receipts_do_not_advance_property_probation(harness):
+    from deepreason.run_manifest import ConjectureContextPolicyV1
+    from deepreason.workflow.events import ConjectureWorkAssignmentV1
+    from deepreason.workflow.models import LocalRepairPolicyV1, RouteLeaseRefV1
+    from deepreason.workflow.profiles import ConjectureWorkflowProfileV1
+    from deepreason.workflow.reducer import plan_conjecture_batch
+    from deepreason.workflow.state import WorkflowProcessStateV1
+
+    base = _base()
+    harness.register_commitment(base)
+    problem = _problem(harness, base)
+    _candidate(harness, base, TRAP)
+    prop = _activated_property(harness, base, problem)
+    _corroborate_by_surviving_attack(harness, prop.id)
+
+    from deepreason.rules.experiment import promoted_properties
+
+    semantic_age = harness.semantic_event_clock() - harness.semantic_event_clock(
+        prop.provenance.event_seq
+    )
+    probation = Config(PROP_PROBATION_EVENTS=semantic_age + 1)
+    assert prop.id not in promoted_properties(harness, base.id, probation)
+    formal_before = harness.state.model_copy(deep=True)
+    physical_before = harness._next_seq
+    semantic_before = harness.semantic_event_clock()
+
+    context = ConjectureContextPolicyV1(
+        mode="disabled",
+        initial_max_blocks=0,
+        initial_max_guides=0,
+        max_context_expansion_requests=0,
+        max_extra_blocks=0,
+        permitted_retrieval_channels=(),
+        coverage_slot_mandatory=False,
+        exploration_slot_mandatory=False,
+    )
+    profile = ConjectureWorkflowProfileV1(
+        manifest_digest="f" * 64,
+        mode="shadow",
+        workflow_profile="conjecture.shadow.v1",
+        conjecturer_contract_id="conjecturer.legacy.v1",
+        model_profile="standard",
+        workload_profile="code",
+        max_candidates=1,
+        context_policy=context,
+        repair_policy=LocalRepairPolicyV1.create(
+            max_schema_repairs=0,
+            scopes=(),
+        ),
+    )
+    initial = WorkflowProcessStateV1.initial(
+        manifest_digest=profile.manifest_digest,
+        workflow_profile=profile.workflow_profile,
+        formal_fence_seq=physical_before - 1,
+        scratch_fence_seq=physical_before - 1,
+    )
+    planned = plan_conjecture_batch(
+        profile,
+        state=initial,
+        problem_ref=problem.id,
+        assignments=(
+            ConjectureWorkAssignmentV1(
+                route_lease=RouteLeaseRefV1(
+                    seat=0,
+                    endpoint_id="probation-clock-conjecturer",
+                    route_sha256="a" * 64,
+                ),
+                contract_id=profile.conjecturer_contract_id,
+                task_payload_schema_id="conjecture.semantic-ref.v1",
+                task_payload_ref=problem.id,
+            ),
+        ),
+        canonical_problem_refs=(problem.id,),
+    )
+    work = planned.work_orders[0]
+    harness.record_control_transition(planned.decisions[0], work_order=work)
+    harness.record_control_transition(planned.decisions[1])
+
+    assert harness._next_seq == physical_before + 2
+    assert harness.semantic_event_clock() == semantic_before
+    assert harness.state == formal_before
+    assert prop.id not in promoted_properties(harness, base.id, probation)
+
+
 def test_promotion_is_trust_not_finality(harness):
     # N1 survives the ratchet: refuting a PROMOTED property still collapses
     # its verdicts via the source-artifact closure.

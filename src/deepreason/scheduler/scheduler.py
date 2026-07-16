@@ -221,6 +221,7 @@ class Scheduler:
         # transitions; until then the legacy scheduler remains authoritative.
         self.workflow_shadow_observations = []
         self.workflow_shadow_observer = None
+        self._workflow_recovery_done = False
         try:
             from deepreason.workflow.shadow import ConjectureShadowObserver
 
@@ -263,6 +264,56 @@ class Scheduler:
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
         self._embedder_stamped = False  # geometry identity, logged once per run
+
+    def _recover_workflow_prefixes(self) -> None:
+        """Close crash-interrupted work before authorizing a new scheduler cycle."""
+
+        if self._workflow_recovery_done:
+            return
+        outstanding = self.harness.workflow_state.outstanding_work_order_ids
+        if not outstanding:
+            self._workflow_recovery_done = True
+            return
+        manifest = self.run_manifest
+        if (
+            manifest is None
+            or manifest.schema_version != 4
+            or manifest.control_plane_policy is None
+            or manifest.control_plane_policy.mode
+            not in {"shadow", "active_conjecture"}
+        ):
+            raise RuntimeError(
+                "unfinished workflow authority requires its original v4 manifest"
+            )
+
+        from deepreason.workflow.events import WorkflowSignalKind, WorkflowSignalV1
+        from deepreason.workflow.reducer import reduce_conjecture
+
+        for work_id in tuple(outstanding):
+            work = self.harness.workflow_state.work_orders[work_id]
+            if (
+                work.manifest_digest != manifest.sha256
+                or work.workflow_profile
+                != manifest.control_plane_policy.workflow_profile
+            ):
+                raise RuntimeError(
+                    "unfinished workflow authority belongs to another manifest"
+                )
+            branch_id = self.harness.workflow_state.work_to_branch[work_id]
+            durable_state = self.harness.workflow_state.branches[
+                branch_id
+            ].process_state
+            recovered = reduce_conjecture(
+                durable_state,
+                WorkflowSignalV1(
+                    kind=WorkflowSignalKind.WORK_ABANDONED,
+                    work_order=work,
+                    trigger_ref=f"recovery:startup:{self.harness._next_seq}",
+                ),
+            )
+            self.harness.record_control_transition(recovered.decisions[0])
+        self.harness.write_workflow_checkpoint()
+        self._workflow_recovery_done = True
 
     def _embedder_fingerprint(self) -> dict:
         """fingerprint() when the embedder provides it; a minimal identity
@@ -469,16 +520,45 @@ class Scheduler:
                 if reason.startswith("hash:")
                 else GuardFindingCode.INTERFACE_INVALID
             )
-            findings.append(
-                GuardFindingV1(
+            finding = GuardFindingV1(
                     candidate_ref=disposition_ref,
                     outcome=disposition,
                     code=code,
                     related_refs=(candidate_ref,),
                 )
-            )
+            findings.append(finding)
+            return finding
 
         return findings, observe
+
+    def _workflow_control_trace(self, ticket):
+        """Create the contained C1 persistence seam for one shadow ticket."""
+
+        if ticket is None:
+            return None
+        try:
+            from deepreason.workflow.trace import ConjectureControlTrace
+
+            return ConjectureControlTrace(
+                self.harness,
+                ticket,
+                error_sink=lambda error: self._record_workflow_shadow_error(
+                    problem_ref=ticket.work_order.problem_ref,
+                    school_id=ticket.work_order.school_id,
+                    event_start_seq=ticket.event_start_seq,
+                    error=error,
+                    work_order_id=ticket.work_order.id,
+                ),
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+            self._record_workflow_shadow_error(
+                problem_ref=ticket.work_order.problem_ref,
+                school_id=ticket.work_order.school_id,
+                event_start_seq=ticket.event_start_seq,
+                error=error,
+                work_order_id=ticket.work_order.id,
+            )
+            return None
 
     def _finish_workflow_shadow(
         self,
@@ -488,12 +568,18 @@ class Scheduler:
         actual_problem_ref: str | None,
         candidate_dispositions=(),
         terminal_error: Exception | None = None,
+        control_trace=None,
     ) -> None:
         """Compare an already-completed legacy call without mutating it."""
 
         observer = self.workflow_shadow_observer
         if observer is None or ticket is None:
             return
+        comparison_ticket = (
+            control_trace.ticket
+            if control_trace is not None and control_trace.dispatch_authorized
+            else ticket
+        )
         try:
             termination_kind = None
             if isinstance(terminal_error, TokenBudgetExceeded):
@@ -501,7 +587,7 @@ class Scheduler:
 
                 termination_kind = ShadowTerminationKind.TOKEN_BUDGET_EXCEEDED
             comparison = observer.finish_conjecture(
-                ticket,
+                comparison_ticket,
                 actual_problem_ref=actual_problem_ref,
                 events=tuple(self.harness._events_since(ticket.event_start_seq)),
                 admitted_refs=tuple(artifact.id for artifact in admitted),
@@ -517,8 +603,12 @@ class Scheduler:
                 error=error,
                 work_order_id=ticket.work_order.id,
             )
+            if control_trace is not None:
+                control_trace.seal()
             return
         self.workflow_shadow_observations.append(comparison)
+        if control_trace is not None:
+            control_trace.finalize(comparison)
 
     def _disc_paused(self, problem) -> bool:
         """Futility backoff for discrimination problems (§14 attention only):
@@ -901,12 +991,15 @@ class Scheduler:
         for school_id in assigned:
             school = self._school_dict(school_id) if school_id else None
             shadow_ticket = None
+            workflow_control_trace = None
             shadow_dispositions = []
             candidate_observer = None
+            workflow_trace_ready = False
             try:
                 shadow_dispositions, candidate_observer = (
                     self._workflow_shadow_candidate_sink()
                 )
+                workflow_trace_ready = candidate_observer is not None
             except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
                 self._record_workflow_shadow_error(
                     problem_ref=problem.id,
@@ -954,6 +1047,10 @@ class Scheduler:
                         school_id if school_id in school_leases else None,
                         context_plan,
                     )
+                    if workflow_trace_ready:
+                        workflow_control_trace = self._workflow_control_trace(
+                            shadow_ticket
+                        )
                     for context_attempt in range(2):
                         try:
                             admitted = conj(
@@ -984,6 +1081,7 @@ class Scheduler:
                                 ),
                                 conjecture_context_plan=context_plan,
                                 candidate_observer=candidate_observer,
+                                workflow_control_trace=workflow_control_trace,
                                 run_manifest=(
                                     self.run_manifest
                                     if self.run_manifest is not None
@@ -1001,13 +1099,35 @@ class Scheduler:
                             context_plan = self._plan_conjecture_context(
                                 problem, school_id
                             )
+                            shadow_ticket = self._begin_workflow_shadow(
+                                problem,
+                                (
+                                    school_id
+                                    if school_id in school_leases
+                                    else None
+                                ),
+                                context_plan,
+                            )
+                            workflow_control_trace = (
+                                self._workflow_control_trace(shadow_ticket)
+                                if workflow_trace_ready
+                                else None
+                            )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
+                spend = getattr(e, "spend", None)
+                if workflow_control_trace is not None and spend is not None:
+                    workflow_control_trace.record_provider_result(
+                        source_call_seq=self.harness._next_seq - 1,
+                        llm_call=spend,
+                        candidate_refs=(),
+                    )
                 self._finish_workflow_shadow(
                     shadow_ticket,
                     (),
                     actual_problem_ref=problem.id,
                     candidate_dispositions=shadow_dispositions,
+                    control_trace=workflow_control_trace,
                 )
                 continue
             except (RouteFirewallError, TokenBudgetExceeded) as error:
@@ -1019,12 +1139,14 @@ class Scheduler:
                 error.workflow_shadow_candidate_dispositions = tuple(
                     shadow_dispositions
                 )
+                error.workflow_control_trace = workflow_control_trace
                 raise
             self._finish_workflow_shadow(
                 shadow_ticket,
                 admitted,
                 actual_problem_ref=problem.id,
                 candidate_dispositions=shadow_dispositions,
+                control_trace=workflow_control_trace,
             )
             for artifact in admitted:
                 self._criticize(artifact)
@@ -1520,6 +1642,7 @@ class Scheduler:
         A truthy return stops the run early (staged pipelines stop a stage
         on its first survivor without rebuilding the Scheduler, which would
         wipe the attention caches)."""
+        self._recover_workflow_prefixes()
         stop_snapshot = (
             self._stop_snapshot() if self.stop_controller is not None else None
         )
@@ -1554,6 +1677,9 @@ class Scheduler:
                 # the append-only process record, then stop the run loudly so
                 # the scheduler cannot continue against the mutated endpoint.
                 self._drop(e)
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon("runtime:route_firewall_error")
                 self._finish_workflow_shadow(
                     getattr(e, "workflow_shadow_ticket", None),
                     (),
@@ -1563,6 +1689,7 @@ class Scheduler:
                     candidate_dispositions=getattr(
                         e, "workflow_shadow_candidate_dispositions", ()
                     ),
+                    control_trace=control_trace,
                 )
                 raise
             except TokenBudgetExceeded as e:
@@ -1576,6 +1703,9 @@ class Scheduler:
                 else:
                     self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon("runtime:token_budget_exceeded")
                 self._finish_workflow_shadow(
                     getattr(e, "workflow_shadow_ticket", None),
                     (),
@@ -1586,6 +1716,7 @@ class Scheduler:
                         e, "workflow_shadow_candidate_dispositions", ()
                     ),
                     terminal_error=e,
+                    control_trace=control_trace,
                 )
                 break
         report = self.report()

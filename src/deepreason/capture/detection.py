@@ -76,7 +76,7 @@ def generator_metrics(harness, embedder, window: int) -> dict:
     # this catches contraction the embedding metrics can miss.
     surprisals = [
         e.llm.mean_surprisal
-        for e in harness.recent_events(window)
+        for e in harness.recent_semantic_events(window)
         if e.llm is not None
         and e.llm.role in ("conjecturer", "synthesizer")
         and e.llm.mean_surprisal is not None
@@ -145,7 +145,7 @@ def most_distant_school(harness, embedder, window: int, of: str) -> str | None:
 
 
 def adjudicator_metrics(harness, window: int) -> dict:
-    events = harness.recent_events(window)
+    events = harness.recent_semantic_events(window)
     # Attack-target entropy: probing new commitments or re-litigating?
     targets = [t for e in events for _, t in e.state_diff.att_add]
     entropy = None
@@ -201,7 +201,7 @@ def adjudicator_metrics(harness, window: int) -> dict:
 def grounding_lambda(harness, window: int) -> float:
     """Windowed fraction of verdicts from program/observation evals vs
     rubric. No verdicts in window => 1.0 (nothing rode on a rubric)."""
-    events = harness.recent_events(window)
+    events = harness.recent_semantic_events(window)
     recent_warrants = [
         harness.warrants[oid]
         for e in events
@@ -263,7 +263,7 @@ def gate_block_count(harness, window: int) -> int:
     arms — scale-free, free, and already on the log."""
     return sum(
         1
-        for e in harness.recent_events(window)
+        for e in harness.recent_semantic_events(window)
         for i in e.inputs
         if isinstance(i, str) and i.startswith("gate:")
     )
@@ -276,7 +276,7 @@ def orbit_attractor_school(harness, window: int) -> str | None:
     import re
 
     counts: dict[str, int] = {}
-    for e in harness.recent_events(window):
+    for e in harness.recent_semantic_events(window):
         for i in e.inputs:
             if not (isinstance(i, str) and i.startswith("gate:")):
                 continue

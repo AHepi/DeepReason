@@ -85,6 +85,8 @@ def conj(
     run_manifest=None,
     _context_expansion_index: int = 0,
     candidate_observer=None,
+    workflow_work_order_id: str | None = None,
+    workflow_control_trace=None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -100,6 +102,10 @@ def conj(
             )
         if endpoint_lease.role != "conjecturer":
             raise ValueError("Conj endpoint lease must belong to the conjecturer role")
+    if workflow_work_order_id is not None and workflow_control_trace is not None:
+        raise ValueError("Conj accepts only one workflow binding seam")
+
+    workflow_guard_findings = []
 
     def observe_candidate(candidate_ref: str, outcome: str, reason: str) -> None:
         """Report code-derived disposition without granting callback authority."""
@@ -107,7 +113,17 @@ def conj(
         if candidate_observer is None:
             return
         try:
-            candidate_observer(candidate_ref, outcome, reason)
+            finding = candidate_observer(candidate_ref, outcome, reason)
+            if finding is not None:
+                from deepreason.workflow.models import GuardFindingV1
+
+                workflow_guard_findings.append(
+                    GuardFindingV1.model_validate(
+                        finding.model_dump(mode="python", by_alias=True)
+                        if isinstance(finding, GuardFindingV1)
+                        else finding
+                    )
+                )
         except Exception:  # noqa: BLE001 - observation cannot alter Conj
             return
     if conjecture_context_plan is not None:
@@ -243,9 +259,21 @@ def conj(
         endpoint_lease=endpoint_lease,
         school_id=execution_school_id,
         conjecture_context=context_receipt,
+        work_order_id=workflow_work_order_id,
+        workflow_dispatch_observer=(
+            workflow_control_trace.authorize_dispatch
+            if workflow_control_trace is not None
+            else None
+        ),
+        workflow_repair_observer=(
+            workflow_control_trace.record_repair_request
+            if workflow_control_trace is not None
+            else None
+        ),
     )
+    bound_work_order_id = llm_call.work_order_id
     source_call_seq = None
-    if active_v4:
+    if active_v4 or bound_work_order_id is not None:
         extra = (
             (f"school:{execution_school_id}",)
             if execution_school_id is not None
@@ -253,9 +281,17 @@ def conj(
         )
         harness.record_llm_calls(
             [llm_call],
-            "conjecture-turn-call",
+            (
+                "conjecture-turn-call"
+                if active_v4
+                else "workflow-conjecture-call"
+            ),
             problem_id,
-            f"manifest:{run_manifest.sha256}",
+            *(
+                (f"manifest:{run_manifest.sha256}",)
+                if active_v4
+                else ()
+            ),
             *extra,
         )
         source_call_seq = harness._next_seq - 1
@@ -319,9 +355,11 @@ def conj(
             for candidate in proposals[: config.VS_K]
         ]
 
-    batch: list[tuple[Artifact, list[Warrant]]] = []
-    candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
-    seen: set[str] = set()
+    # Compile semantic candidates first, without running a guard or touching
+    # the registry.  C1 can then record the provider receipt at the real
+    # response boundary, before any admission decision is enacted.
+    prepared_rows = []
+    occurrences: dict[str, int] = {}
     family = root_problem_family(harness.state, problem.id)
     for candidate, draft_pool, search_signal in candidate_rows:
         base = mandatory_interface or MandatoryInterface()
@@ -343,7 +381,6 @@ def conj(
             optional_refs=((ref.target, ref.role) for ref in candidate.refs),
             draft_commitments=draft_pool,
         )
-        overlay = {**harness.commitments, **{item.id: item for item in draft}}
         content_ref = f"inline:{candidate.content}"
         artifact = Artifact(
             id=Artifact.compute_id(content_ref, "utf8", interface),
@@ -356,6 +393,47 @@ def conj(
                 event_seq=harness._next_seq,
             ),
         )
+        occurrences[artifact.id] = occurrences.get(artifact.id, 0) + 1
+        occurrence = occurrences[artifact.id]
+        disposition_ref = (
+            artifact.id
+            if occurrence == 1
+            else f"{artifact.id}#occurrence-{occurrence}"
+        )
+        prepared_rows.append(
+            (
+                disposition_ref,
+                artifact,
+                tuple(draft),
+                candidate_mandatory,
+                candidate,
+                search_signal,
+            )
+        )
+
+    if (
+        workflow_control_trace is not None
+        and source_call_seq is not None
+        and bound_work_order_id is not None
+    ):
+        workflow_control_trace.record_provider_result(
+            source_call_seq=source_call_seq,
+            llm_call=llm_call,
+            candidate_refs=tuple(row[0] for row in prepared_rows),
+        )
+
+    batch: list[tuple[Artifact, list[Warrant]]] = []
+    candidate_domains: dict[str, anti_relapse.RelapseDomain] = {}
+    admitted_drafts = {}
+    seen: set[str] = set()
+    for (
+        _disposition_ref,
+        artifact,
+        draft,
+        candidate_mandatory,
+        candidate,
+        search_signal,
+    ) in prepared_rows:
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
         effective_workload = "text" if reasoning else workload_profile
         effective_contract = (
@@ -365,6 +443,11 @@ def conj(
             if reasoning
             else contract_id
         )
+        overlay = {
+            **harness.commitments,
+            **admitted_drafts,
+            **{item.id: item for item in draft},
+        }
         domain = (
             anti_relapse.relapse_domain(
                 artifact,
@@ -419,15 +502,39 @@ def conj(
                 "content-duplicate",
             )
             continue  # attention-level dedupe of a registered twin — never a block (§0)
-        # Commit after admission (RC5): only now do draft commitments reach
-        # the registry (idempotent for ids an earlier candidate registered).
+        # Keep drafts process-local until the code-authored C1 guard receipt
+        # is durable; this prevents formal admission from preceding authority.
         for commitment in draft:
-            harness.register_commitment(commitment)
+            admitted_drafts[commitment.id] = commitment
         seen.add(artifact.id)
         batch.append((artifact, []))
         observe_candidate(artifact.id, "admit", "passed")
         if domain is not None:
             candidate_domains[artifact.id] = domain
+
+    # Persist the code-authored disposition before any commitment or artifact
+    # becomes formal.  A crash can therefore never leave a semantic admission
+    # whose authority trace is still only process-local.
+    if workflow_control_trace is not None and workflow_guard_findings:
+        workflow_control_trace.record_guard(workflow_guard_findings)
+
+    # Formal semantics remain the existing RC5 path after the durable guard.
+    for commitment in admitted_drafts.values():
+        harness.register_commitment(commitment)
+    if batch:
+        batch = [
+            (
+                artifact.model_copy(
+                    update={
+                        "provenance": artifact.provenance.model_copy(
+                            update={"event_seq": harness._next_seq}
+                        )
+                    }
+                ),
+                warrants,
+            )
+            for artifact, warrants in batch
+        ]
     for artifact, _warrants in batch:
         if artifact.id in candidate_domains:
             anti_relapse.record_domain(harness, artifact.id, candidate_domains[artifact.id])
@@ -435,10 +542,10 @@ def conj(
         batch,
         problem_id=problem_id,
         rule=Rule.CONJ,
-        llm=None if active_v4 else llm_call,
+        llm=None if source_call_seq is not None else llm_call,
         process_inputs=(
             (f"conjecture-call:{source_call_seq}",)
-            if active_v4 and source_call_seq is not None
+            if source_call_seq is not None
             else ()
         ),
     )
@@ -450,7 +557,7 @@ def conj(
             if execution_school_id is not None
             else ()
         )
-        if not active_v4:
+        if source_call_seq is None:
             harness.record_llm_calls([llm_call], "conj-noregister", *extra)
     if not active_v4:
         return registered
@@ -642,5 +749,7 @@ def conj(
         run_manifest=run_manifest,
         _context_expansion_index=expansion_number,
         candidate_observer=candidate_observer,
+        workflow_work_order_id=workflow_work_order_id,
+        workflow_control_trace=workflow_control_trace,
     )
     return [*registered, *follow_up]

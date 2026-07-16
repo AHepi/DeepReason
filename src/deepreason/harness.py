@@ -8,7 +8,10 @@ every registration; its only inputs are att and dep (§0).
 """
 
 from collections.abc import Iterable
+from bisect import bisect_left
 from datetime import datetime, timezone
+import json
+import os
 from pathlib import Path
 
 from pydantic import BaseModel
@@ -24,6 +27,7 @@ from deepreason.adjudication.support import final_labels
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
 from deepreason.bridge.state import BridgeState
 from deepreason.canonical import canonical_json
+from deepreason.control_events import ControlEventPayloadV1
 from deepreason.conjecture_turn import (
     ConjectureAbstentionV1,
     ContextRequestV1,
@@ -96,6 +100,8 @@ class Harness:
                 revealed_artifact_ids.update(event.inputs)
             self._apply_event(event, adjudicate=False)
         self._adjudicate()
+        if upto_seq is None:
+            self._verify_workflow_checkpoint()
         if self._read_only:
             self.blobs = FencedBlobStore(
                 self.blobs,
@@ -116,6 +122,12 @@ class Harness:
         # is reconstructed from Bridge events and has no path into formal
         # graph materialization or adjudication.
         self.bridge_state = BridgeState()
+        # Authority-only workflow state is reconstructed exclusively from
+        # typed Control events and immutable workflow records.  It never
+        # participates in formal graph adjudication.
+        from deepreason.workflow.replay import WorkflowReplayState
+
+        self.workflow_state = WorkflowReplayState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
@@ -129,6 +141,9 @@ class Harness:
         self._trans_out: list[tuple[int, str, str | None, str]] = []
         self._embed_cache: dict[tuple[str, str], list[float]] = {}
         self._verdict_cache: dict[tuple[str, str], str] = {}
+        self._semantic_excluded_event_seqs: set[int] = set()
+        self._semantic_excluded_order: tuple[int, ...] | None = ()
+        self._semantic_split_call_candidates: set[int] = set()
         # Live-only availability state: a sandbox resource abort is not an
         # epistemic event and is never replayed/cached, but generator/property
         # activation must fail closed until a later deterministic retry.
@@ -143,6 +158,87 @@ class Harness:
     def _ensure_writable(self) -> None:
         if self._read_only:
             raise ReadOnlyHarnessError("time-travel harness is read-only")
+
+    @property
+    def _workflow_checkpoint_path(self) -> Path:
+        return self.root / "workflow-checkpoint.json"
+
+    def write_workflow_checkpoint(self) -> None:
+        """Seal the latest complete authority prefix for tail-loss detection."""
+
+        self._ensure_writable()
+        if not self.workflow_state.event_seqs:
+            return
+        payload = {
+            "schema": "workflow.checkpoint.v1",
+            "process_digest": self.workflow_state.digest,
+            "last_control_seq": max(self.workflow_state.event_seqs),
+            "outstanding_work_order_ids": list(
+                self.workflow_state.outstanding_work_order_ids
+            ),
+        }
+        target = self._workflow_checkpoint_path
+        temporary = target.with_suffix(f".tmp.{os.getpid()}")
+        data = canonical_json(payload)
+        with open(temporary, "wb") as stream:
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, target)
+
+    def _verify_workflow_checkpoint(self) -> None:
+        path = self._workflow_checkpoint_path
+        if not path.exists():
+            return
+        try:
+            payload = json.loads(path.read_bytes())
+            if set(payload) != {
+                "schema",
+                "process_digest",
+                "last_control_seq",
+                "outstanding_work_order_ids",
+            } or payload["schema"] != "workflow.checkpoint.v1":
+                raise ValueError("workflow checkpoint has an invalid schema")
+            checkpoint_seq = payload["last_control_seq"]
+            if type(checkpoint_seq) is not int or checkpoint_seq < 0:
+                raise ValueError("workflow checkpoint sequence is invalid")
+            process_digest = payload["process_digest"]
+            outstanding = payload["outstanding_work_order_ids"]
+            if (
+                not isinstance(process_digest, str)
+                or not process_digest.startswith("sha256:")
+                or len(process_digest) != 71
+                or not isinstance(outstanding, list)
+                or any(not isinstance(item, str) for item in outstanding)
+                or outstanding != sorted(set(outstanding))
+            ):
+                raise ValueError("workflow checkpoint authority fields are invalid")
+            current_seq = (
+                max(self.workflow_state.event_seqs)
+                if self.workflow_state.event_seqs
+                else -1
+            )
+            if current_seq < checkpoint_seq:
+                raise ValueError("workflow authority log lost its checkpointed tail")
+            # Verify the sealed authority prefix even when newer Control
+            # events exist.  Comparing only the latest state would let an
+            # attacker replace a checkpointed transition and append an
+            # unrelated later transition to bypass the equality check.
+            from deepreason.workflow.replay import replay_workflow
+
+            checkpoint_state = replay_workflow(
+                self.log.read(upto_seq=checkpoint_seq),
+                self.objects,
+            )
+            if (
+                checkpoint_seq not in checkpoint_state.event_seqs
+                or process_digest != checkpoint_state.digest
+                or tuple(outstanding)
+                != checkpoint_state.outstanding_work_order_ids
+            ):
+                raise ValueError("workflow checkpoint differs from replayed authority")
+        except (KeyError, TypeError, json.JSONDecodeError) as error:
+            raise ValueError("workflow checkpoint is corrupt") from error
 
     # ------------------------------------------------------------------ #
     # Registration (live path: validate -> persist -> commit event)      #
@@ -590,6 +686,86 @@ class Harness:
             bridge=payload,
         )
 
+    def record_control_transition(
+        self,
+        decision,
+        *,
+        work_order=None,
+        proposal_receipt=None,
+        guard_result=None,
+    ) -> Event:
+        """Persist one canonical authority transition and its required record.
+
+        Callers supply validated records, never event references.  This seam
+        derives the exact input/output shape and the replay materializer
+        checks pairing, route, capability, budget, and state-digest authority
+        before the append becomes durable.
+        """
+
+        from deepreason.workflow.models import (
+            GuardResultV1,
+            ProposalReceiptV1,
+            TransitionDecisionV1,
+            TransitionKind,
+            WorkOrderEnvelopeV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            if value is None:
+                return None
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        decision = canonical(TransitionDecisionV1, decision)
+        work_order = canonical(WorkOrderEnvelopeV1, work_order)
+        proposal_receipt = canonical(ProposalReceiptV1, proposal_receipt)
+        guard_result = canonical(GuardResultV1, guard_result)
+        provider = decision.transition_kind in {
+            TransitionKind.PROPOSAL_RECEIVED,
+            TransitionKind.REPAIR_EXHAUSTED,
+        }
+        guarded = decision.transition_kind in {
+            TransitionKind.PROPOSAL_ADMITTED,
+            TransitionKind.PROPOSAL_REJECTED,
+            TransitionKind.PROPOSAL_DEDUPLICATED,
+        }
+        if (decision.transition_kind == TransitionKind.WORK_ENABLED) != (
+            work_order is not None
+        ):
+            raise ValueError("work_enabled requires exactly one work-order record")
+        if provider != (proposal_receipt is not None):
+            raise ValueError(
+                "provider-result transition requires exactly one proposal receipt"
+            )
+        if guarded != (guard_result is not None):
+            raise ValueError("guarded transition requires exactly one guard result")
+
+        records: list[tuple[str, BaseModel]] = []
+        if work_order is not None:
+            records.append(("workflow-work-order", work_order))
+        if proposal_receipt is not None:
+            records.append(("workflow-proposal-receipt", proposal_receipt))
+        if guard_result is not None:
+            records.append(("workflow-guard-result", guard_result))
+        records.append(("workflow-transition-decision", decision))
+        for schema, record in records:
+            self.objects.put(schema, record)
+        outputs = [record.id for _schema, record in records]
+        inputs = [decision.work_order_id, decision.trigger_ref]
+        payload = ControlEventPayloadV1(
+            decision_ref=decision.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
     def build_bridge(self, problem_id: str, target: str, policy, **kwargs):
         """Build one fixed-fence grounded final view through canonical services.
 
@@ -611,6 +787,130 @@ class Harness:
         if window <= len(self._tail) or self._next_seq <= len(self._tail):
             return self._tail[-window:]
         return list(self.log.read())[-window:]
+
+    @staticmethod
+    def _is_split_conjecture_call_carrier(event: Event) -> bool:
+        return bool(
+            event.llm is not None
+            and event.inputs
+            and event.inputs[0]
+            in {"workflow-conjecture-call", "conjecture-turn-call"}
+        )
+
+    @classmethod
+    def _split_conjecture_call_carriers(
+        cls,
+        values: Iterable[Event],
+    ) -> set[int]:
+        """Return provider carriers replaced by their referencing Conj action."""
+
+        events = tuple(values)
+        referenced_calls = {
+            int(value.removeprefix("conjecture-call:"))
+            for event in events
+            for value in event.inputs
+            if value.startswith("conjecture-call:")
+            and value.removeprefix("conjecture-call:").isdigit()
+        }
+        return {
+            event.seq
+            for event in events
+            if event.seq in referenced_calls
+            and cls._is_split_conjecture_call_carrier(event)
+        }
+
+    def _advance_semantic_event_clock(self, event: Event) -> None:
+        """Extend the derived clock with one replayed physical event."""
+
+        changed = False
+        if event.rule == Rule.CONTROL:
+            self._semantic_excluded_event_seqs.add(event.seq)
+            changed = True
+        if self._is_split_conjecture_call_carrier(event):
+            self._semantic_split_call_candidates.add(event.seq)
+        for value in event.inputs:
+            if not value.startswith("conjecture-call:"):
+                continue
+            suffix = value.removeprefix("conjecture-call:")
+            if not suffix.isdigit():
+                continue
+            carrier_seq = int(suffix)
+            if (
+                carrier_seq in self._semantic_split_call_candidates
+                and carrier_seq not in self._semantic_excluded_event_seqs
+            ):
+                self._semantic_excluded_event_seqs.add(carrier_seq)
+                changed = True
+        if changed:
+            self._semantic_excluded_order = None
+
+    def semantic_event_clock(self, event_seq: int | None = None) -> int:
+        """Count behavior-visible actions before one physical event boundary.
+
+        Control receipts do not advance semantic age. A split conjecturer-call
+        Measure that is referenced by a later Conj event is the process carrier
+        for that one semantic action, so it is replaced by (not counted beside)
+        the Conj event. Unreferenced calls remain actions in their own right.
+
+        ``event_seq`` is an exclusive physical boundary and defaults to the
+        current append position. This keeps historical artifact provenance
+        usable without letting C1 instrumentation accelerate semantic policy.
+        """
+
+        boundary = self._next_seq if event_seq is None else event_seq
+        if type(boundary) is not int or not 0 <= boundary <= self._next_seq:
+            raise ValueError("semantic event boundary is outside the replayed log")
+        if self._semantic_excluded_order is None:
+            self._semantic_excluded_order = tuple(
+                sorted(self._semantic_excluded_event_seqs)
+            )
+        return boundary - bisect_left(self._semantic_excluded_order, boundary)
+
+    def recent_semantic_events(self, window: int) -> list[Event]:
+        """Return the last ``window`` semantic actions and their call carriers.
+
+        C1 authority receipts are deliberately process-only.  Legacy capture
+        metrics must therefore take their window *after* excluding them;
+        filtering a normal recent-event window would let Control receipts or
+        a split provider-call carrier displace the semantic observations that
+        previously drove scheduling.  A carrier referenced by a chosen Conj
+        event is included without consuming its own window slot.
+        """
+
+        if window <= 0:
+            return []
+
+        def select(values: list[Event]) -> tuple[list[Event], int, bool]:
+            carriers = self._split_conjecture_call_carriers(values)
+            core = [
+                event
+                for event in values
+                if event.rule != Rule.CONTROL and event.seq not in carriers
+            ]
+            chosen = core[-window:]
+            needed = {
+                int(value.removeprefix("conjecture-call:"))
+                for event in chosen
+                for value in event.inputs
+                if value.startswith("conjecture-call:")
+                and value.removeprefix("conjecture-call:").isdigit()
+            }
+            chosen_seqs = {event.seq for event in chosen} | needed
+            present = {event.seq for event in values}
+            return (
+                [event for event in values if event.seq in chosen_seqs],
+                len(core),
+                not needed.issubset(present),
+            )
+
+        tail = list(self._tail)
+        selected, core_count, missing_carrier = select(tail)
+        if (
+            not missing_carrier
+            and (core_count >= window or self._next_seq <= len(tail))
+        ):
+            return selected
+        return select(list(self.log.read()))[0]
 
     def embed_artifact(self, embedder, aid: str) -> list[float]:
         """Embed an artifact's content, cached: artifacts are immutable and
@@ -719,6 +1019,7 @@ class Harness:
         scratch: ScratchEventPayloadV1 | None = None,
         bridge: BridgeEventPayloadV1 | None = None,
         conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
+        control: ControlEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -733,6 +1034,7 @@ class Harness:
             scratch=scratch,
             bridge=bridge,
             conjecture_turn=conjecture_turn,
+            control=control,
         )
         try:
             state_diff = self._apply_event(event)
@@ -762,6 +1064,16 @@ class Harness:
         # object loop. A corrupt/malicious process event therefore cannot
         # transiently register a formal artifact and rely on model_copy to
         # bypass Event's StateDiff validator.
+        try:
+            self.workflow_state.observe_event(event)
+            if event.control is not None:
+                resolved_workflow = []
+                for object_id in event.outputs:
+                    schema, value = self.objects.get(object_id)
+                    resolved_workflow.append((schema, object_id, value))
+                self.workflow_state.apply(event, resolved_workflow)
+        except ValueError as error:
+            raise WellFormednessError(str(error)) from error
         if event.scratch is not None:
             self.scratch_state.apply(event, self.objects)
         if event.bridge is not None:
@@ -816,6 +1128,7 @@ class Harness:
             ):
                 self.state.carries.append((carrier, wid))
         self._next_seq = event.seq + 1
+        self._advance_semantic_event_clock(event)
         self._tail.append(event)
         if len(self._tail) > self._TAIL_CAP:
             del self._tail[: -self._TAIL_CAP]

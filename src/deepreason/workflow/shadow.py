@@ -25,9 +25,11 @@ from deepreason.workflow.models import (
     ProposalReceiptV1,
     ProposalValidationOutcome,
     RouteLeaseRefV1,
+    TransitionDecisionV1,
     TransitionKind,
     WorkOrderEnvelopeV1,
     WorkflowRecord,
+    repair_attempt_trigger_ref,
 )
 from deepreason.workflow.profiles import (
     ConjectureWorkflowProfileV1,
@@ -37,7 +39,7 @@ from deepreason.workflow.reducer import (
     plan_conjecture_batch,
     reduce_conjecture,
 )
-from deepreason.workflow.state import WorkflowProcessStateV1
+from deepreason.workflow.state import WorkflowProcessStateV1, apply_decision
 
 
 class ShadowMismatchCode(str, Enum):
@@ -111,11 +113,30 @@ class ShadowTicketV1(IdentifiedWorkflowRecord):
         "workflow.shadow-ticket.v1", alias="schema"
     )
     work_order: WorkOrderEnvelopeV1
+    initial_process_state: WorkflowProcessStateV1
     process_state: WorkflowProcessStateV1
+    planning_decisions: tuple[TransitionDecisionV1, ...]
     expected_decision_refs: tuple[str, ...]
     expected_transition_kinds: tuple[TransitionKind, ...]
     event_start_seq: int = Field(ge=0)
     meter_before: MeterSnapshotV1 | None = None
+
+    @model_validator(mode="after")
+    def _planning_trace_matches_summary(self):
+        if tuple(item.id for item in self.planning_decisions) != (
+            self.expected_decision_refs
+        ):
+            raise ValueError("shadow planning decisions differ from their references")
+        if tuple(item.transition_kind for item in self.planning_decisions) != (
+            self.expected_transition_kinds
+        ):
+            raise ValueError("shadow planning transitions differ from their summary")
+        replayed = self.initial_process_state
+        for decision in self.planning_decisions:
+            replayed = apply_decision(replayed, decision)
+        if replayed != self.process_state:
+            raise ValueError("shadow planning decisions do not reconstruct process state")
+        return self
 
 
 class ShadowComparisonV1(IdentifiedWorkflowRecord):
@@ -141,6 +162,7 @@ class ShadowComparisonV1(IdentifiedWorkflowRecord):
     source_call_seq: int | None = Field(default=None, ge=0)
     expected_decision_refs: tuple[str, ...] = ()
     expected_transition_kinds: tuple[TransitionKind, ...] = ()
+    transition_decisions: tuple[TransitionDecisionV1, ...] = ()
     actual_event_seqs: tuple[int, ...] = ()
     admitted_refs: tuple[str, ...] = ()
     proposal_candidate_refs: tuple[str, ...] = ()
@@ -152,6 +174,8 @@ class ShadowComparisonV1(IdentifiedWorkflowRecord):
     guard_result_id: str | None = Field(
         default=None, pattern=r"^sha256:[0-9a-f]{64}$"
     )
+    proposal_receipt: ProposalReceiptV1 | None = None
+    guard_result: GuardResultV1 | None = None
     meter_token_delta: int | None = Field(default=None, ge=0)
     call_tokens: int | None = Field(default=None, ge=0)
     matched: bool
@@ -181,6 +205,20 @@ class ShadowComparisonV1(IdentifiedWorkflowRecord):
             ShadowMismatchCode.BUDGET not in self.mismatch_codes
         ):
             raise ValueError("scheduler termination requires a budget mismatch")
+        if tuple(item.id for item in self.transition_decisions) != (
+            self.expected_decision_refs
+        ):
+            raise ValueError("shadow decisions differ from their references")
+        if tuple(item.transition_kind for item in self.transition_decisions) != (
+            self.expected_transition_kinds
+        ):
+            raise ValueError("shadow decisions differ from their transition summary")
+        if (self.proposal_receipt.id if self.proposal_receipt else None) != (
+            self.proposal_receipt_id
+        ):
+            raise ValueError("shadow proposal receipt differs from its reference")
+        if (self.guard_result.id if self.guard_result else None) != self.guard_result_id:
+            raise ValueError("shadow guard result differs from its reference")
         return self
 
     @classmethod
@@ -334,7 +372,9 @@ class ConjectureShadowObserver:
             raise ValueError("one conjecture assignment must produce one work order")
         return ShadowTicketV1.create(
             work_order=reduction.work_orders[0],
+            initial_process_state=state,
             process_state=reduction.state,
+            planning_decisions=reduction.decisions,
             expected_decision_refs=tuple(item.id for item in reduction.decisions),
             expected_transition_kinds=tuple(
                 item.transition_kind for item in reduction.decisions
@@ -489,6 +529,7 @@ class ConjectureShadowObserver:
         guard = None
         decision_refs = list(ticket.expected_decision_refs)
         transition_kinds = list(ticket.expected_transition_kinds)
+        decisions = list(ticket.planning_decisions)
         state = ticket.process_state
         if call is not None and trace and termination_kind is None:
             final_valid = bool(trace[-1].valid)
@@ -597,6 +638,39 @@ class ConjectureShadowObserver:
             ):
                 mismatches.add(ShadowMismatchCode.PROPOSAL)
             if reducible:
+                # Each rejected schema attempt authorizes exactly one bounded
+                # repair before the next provider dispatch.  Derive the same
+                # transitions as the live adapter callback so shadow
+                # comparison covers crash-visible repair prefixes.
+                for rejected in trace[:-1]:
+                    if (
+                        rejected.valid
+                        or rejected.usage_unknown
+                        or not rejected.diagnostic_ref
+                    ):
+                        mismatches.add(ShadowMismatchCode.PROPOSAL)
+                        reducible = False
+                        break
+                    repaired = reduce_conjecture(
+                        state,
+                        WorkflowSignalV1(
+                            kind=WorkflowSignalKind.REPAIR_REQUESTED,
+                            work_order=ticket.work_order,
+                            trigger_ref=repair_attempt_trigger_ref(
+                                rejected.attempt,
+                                rejected.diagnostic_ref,
+                            ),
+                        ),
+                    )
+                    state = repaired.state
+                    decision_refs.extend(
+                        item.id for item in repaired.decisions
+                    )
+                    transition_kinds.extend(
+                        item.transition_kind for item in repaired.decisions
+                    )
+                    decisions.extend(repaired.decisions)
+            if reducible:
                 if final_valid:
                     signal = WorkflowSignalV1.proposal(
                         ticket.work_order,
@@ -613,6 +687,7 @@ class ConjectureShadowObserver:
                 transition_kinds.extend(
                     item.transition_kind for item in reduced.decisions
                 )
+                decisions.extend(reduced.decisions)
             if final_valid and findings:
                 admitted_findings = tuple(
                     finding.candidate_ref
@@ -646,6 +721,7 @@ class ConjectureShadowObserver:
                     transition_kinds.extend(
                         item.transition_kind for item in reduced.decisions
                     )
+                    decisions.extend(reduced.decisions)
             elif final_valid and reducible:
                 reduced = reduce_conjecture(
                     state,
@@ -659,6 +735,7 @@ class ConjectureShadowObserver:
                 transition_kinds.extend(
                     item.transition_kind for item in reduced.decisions
                 )
+                decisions.extend(reduced.decisions)
 
         ordered_mismatches = tuple(
             code for code in ShadowMismatchCode if code in mismatches
@@ -687,6 +764,7 @@ class ConjectureShadowObserver:
             source_call_seq=(call_event.seq if call_event is not None else None),
             expected_decision_refs=tuple(decision_refs),
             expected_transition_kinds=tuple(transition_kinds),
+            transition_decisions=tuple(decisions),
             actual_event_seqs=tuple(getattr(event, "seq") for event in events),
             admitted_refs=admitted,
             proposal_candidate_refs=(
@@ -698,6 +776,8 @@ class ConjectureShadowObserver:
             ),
             proposal_receipt_id=proposal.id if proposal is not None else None,
             guard_result_id=guard.id if guard is not None else None,
+            proposal_receipt=proposal,
+            guard_result=guard,
             meter_token_delta=meter_delta,
             call_tokens=call.tokens if call is not None else None,
             matched=not ordered_mismatches,

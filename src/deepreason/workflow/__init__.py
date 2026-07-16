@@ -36,11 +36,19 @@ from deepreason.workflow.reducer import (
     plan_conjecture_work,
     reduce_conjecture,
 )
+from deepreason.workflow.replay import (
+    WorkflowBranchState,
+    WorkflowRecoveryStatus,
+    WorkflowReplayState,
+    WorkflowReplayStateV1,
+    replay_workflow,
+)
 from deepreason.workflow.shadow import (
     ConjectureShadowObserver,
     MeterSnapshotV1,
     ShadowComparisonV1,
     ShadowMismatchCode,
+    ShadowTerminationKind,
     ShadowTicketV1,
 )
 from deepreason.workflow.state import (
@@ -52,12 +60,14 @@ from deepreason.workflow.state import (
     apply_decision,
     state_after_transition,
 )
+from deepreason.workflow.trace import ConjectureControlTrace
 
 __all__ = [
     "BudgetDeltaV1",
     "CapabilityGrantV1",
     "CapabilityOutcome",
     "ConjectureShadowObserver",
+    "ConjectureControlTrace",
     "ConjectureWorkAssignmentV1",
     "ConjectureWorkStateV1",
     "ConjectureWorkflowProfileV1",
@@ -73,6 +83,7 @@ __all__ = [
     "RouteLeaseRefV1",
     "ShadowComparisonV1",
     "ShadowMismatchCode",
+    "ShadowTerminationKind",
     "ShadowTicketV1",
     "TransitionDecisionV1",
     "TransitionKind",
@@ -81,6 +92,10 @@ __all__ = [
     "WorkOutcome",
     "WorkflowProcessStateV1",
     "WorkflowProfileError",
+    "WorkflowBranchState",
+    "WorkflowRecoveryStatus",
+    "WorkflowReplayState",
+    "WorkflowReplayStateV1",
     "WorkflowSignalKind",
     "WorkflowSignalV1",
     "WorkflowStopDecisionV1",
@@ -91,6 +106,7 @@ __all__ = [
     "plan_conjecture_batch",
     "plan_conjecture_work",
     "reduce_conjecture",
+    "replay_workflow",
     "resolve_conjecture_route",
     "route_lease_reference",
     "state_after_transition",

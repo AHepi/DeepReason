@@ -139,6 +139,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             fail("scratch-replay", "two replays produced different advisory scratch state")
         if second.bridge_state != h.bridge_state:
             fail("bridge-replay", "two replays produced different advisory bridge state")
+        if second.workflow_state.digest != h.workflow_state.digest:
+            fail("workflow-replay", "two replays produced different authority state")
     except Exception as e:  # noqa: BLE001 - an unopenable root is the finding
         return {"violations": [{"check": "open", "detail": repr(e)[:400]}], "stats": {}}
 
@@ -183,6 +185,187 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 )
         except Exception as e:  # noqa: BLE001 - invalid metadata is the finding
             fail("run-manifest", repr(e))
+
+    control_events = [event for event in events if event.control is not None]
+    if control_events:
+        control = (
+            manifest.control_plane_policy
+            if manifest is not None and manifest.schema_version == 4
+            else None
+        )
+        if (
+            control is None
+            or control.controller_version != "workflow.controller.v1"
+            or control.mode not in {"shadow", "active_conjecture"}
+            or control.contract_versions.control_event_schema != "control.event.v1"
+        ):
+            fail(
+                "workflow-manifest",
+                "Control events require an opt-in v4 workflow controller profile",
+            )
+        else:
+            from deepreason.workflow.profiles import compile_workflow_profile
+
+            try:
+                workflow_profile = compile_workflow_profile(manifest)
+            except Exception as e:  # noqa: BLE001 - invalid authority is a finding
+                workflow_profile = None
+                fail(
+                    "workflow-manifest",
+                    f"cannot compile workflow authority: {e!r}",
+                )
+
+            for event in control_events:
+                decision = h.workflow_state.decisions.get(
+                    event.control.decision_ref
+                )
+                if decision is None:
+                    fail(
+                        "workflow-decision",
+                        f"event seq={event.seq}: decision is absent after replay",
+                    )
+                    continue
+                if (
+                    decision.manifest_digest != manifest.sha256
+                    or decision.workflow_profile != control.workflow_profile
+                ):
+                    fail(
+                        "workflow-manifest",
+                        f"event seq={event.seq}: decision differs from manifest authority",
+                    )
+            if workflow_profile is not None:
+                if (
+                    workflow_profile.conjecturer_contract_id
+                    == "conjecturer.turn.v4"
+                ):
+                    authorized_contract_ids = {"conjecturer.turn.v4"}
+                else:
+                    from deepreason.llm.contracts import ConjecturerOutput
+                    from deepreason.llm.wire import (
+                        AliasTable,
+                        wire_contract_for,
+                    )
+                    from deepreason.workloads.text import (
+                        ReasoningConjecturerOutput,
+                    )
+
+                    transport_profiles = {manifest.model_profile}
+                    if manifest.model_profile in {"standard", "frontier"}:
+                        # A logged direct-contract exhaustion can arm compact
+                        # transport for a later call without changing the
+                        # manifest's frozen model identity.
+                        transport_profiles.add("compact")
+                    authorized_contract_ids = {
+                        wire_contract_for(
+                            "conjecturer",
+                            output_model,
+                            transport_profile,
+                            AliasTable(),
+                        ).contract_id
+                        for output_model in (
+                            ConjecturerOutput,
+                            ReasoningConjecturerOutput,
+                        )
+                        for transport_profile in transport_profiles
+                    }
+                    # The reducer-owned semantic profile remains a valid
+                    # authority label for work planned before a concrete
+                    # provider transport is selected.
+                    authorized_contract_ids.add(
+                        workflow_profile.conjecturer_contract_id
+                    )
+                context_limit = (
+                    workflow_profile.context_policy.max_context_expansion_requests
+                )
+                authorized_grants = tuple(
+                    workflow_profile.capability_grant(
+                        completed_context_expansions=completed
+                    )
+                    for completed in range(context_limit + 1)
+                )
+                try:
+                    engine_config = json.loads(manifest.engine_config_json)
+                    school_count = engine_config.get("N_SCHOOLS")
+                except (TypeError, json.JSONDecodeError):
+                    school_count = None
+
+                for work in h.workflow_state.work_orders.values():
+                    differences: list[str] = []
+                    if work.manifest_digest != manifest.sha256:
+                        differences.append("manifest_digest")
+                    if work.workflow_profile != control.workflow_profile:
+                        differences.append("workflow_profile")
+                    if work.contract_id not in authorized_contract_ids:
+                        differences.append("contract_id")
+                    if work.repair_policy_ref != workflow_profile.repair_policy.id:
+                        differences.append("repair_policy_ref")
+                    if work.capability_grant not in authorized_grants:
+                        differences.append("capability_grant")
+
+                    expected_seat = 0
+                    school_policy = control.school_execution
+                    if work.school_id is not None:
+                        if (
+                            isinstance(school_count, bool)
+                            or not isinstance(school_count, int)
+                            or school_count < 0
+                            or work.school_id
+                            not in {
+                                f"school-{index}"
+                                for index in range(school_count)
+                            }
+                        ):
+                            differences.append("school_id")
+                        if school_policy.mode == "route_bound":
+                            bindings = tuple(
+                                binding
+                                for binding in school_policy.bindings
+                                if binding.school_id == work.school_id
+                                and binding.role == "conjecturer"
+                            )
+                            if len(bindings) != 1:
+                                differences.append("school_route_binding")
+                            else:
+                                expected_seat = bindings[0].seat
+
+                    routes = manifest.roles.get("conjecturer", ())
+                    expected_route = (
+                        routes[expected_seat]
+                        if 0 <= expected_seat < len(routes)
+                        else None
+                    )
+                    if expected_route is None:
+                        differences.append("route_lease_seat")
+                    elif (
+                        work.route_lease.role != "conjecturer"
+                        or work.route_lease.seat != expected_seat
+                        or work.route_lease.endpoint_id
+                        != expected_route.endpoint_id
+                        or work.route_lease.route_sha256
+                        != route_fingerprint(expected_route)
+                    ):
+                        differences.append("route_lease")
+
+                    if differences:
+                        fail(
+                            "workflow-work-order-authority",
+                            f"work order {work.id} differs from manifest authority: "
+                            + ", ".join(differences),
+                        )
+    for event in events:
+        work_order_id = (
+            event.llm.work_order_id
+            if event.llm is not None
+            else None
+        )
+        if (
+            work_order_id is not None
+            and work_order_id not in h.workflow_state.work_orders
+        ):
+            fail(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: provider call names an unknown work order",
+            )
 
     # 2. Incremental transitions == from-scratch walk.
     try:
@@ -232,16 +415,26 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     (candidate for candidate in events if candidate.seq == source_seq),
                     None,
                 )
+                active_source = (
+                    source is not None
+                    and len(source.inputs) >= 3
+                    and source.inputs[0] == "conjecture-turn-call"
+                    and manifest is not None
+                    and source.inputs[2] == f"manifest:{manifest.sha256}"
+                )
+                shadow_source = (
+                    source is not None
+                    and len(source.inputs) >= 2
+                    and source.inputs[0] == "workflow-conjecture-call"
+                    and getattr(source.llm, "work_order_id", None) is not None
+                )
                 if (
                     source is not None
                     and source.seq < event.seq
                     and source.llm is not None
-                    and len(source.inputs) >= 3
-                    and source.inputs[0] == "conjecture-turn-call"
                     and event.inputs
                     and source.inputs[1] == event.inputs[0]
-                    and manifest is not None
-                    and source.inputs[2] == f"manifest:{manifest.sha256}"
+                    and (active_source or shadow_source)
                 ):
                     call = source.llm
                     receipt = source.llm.school_route
@@ -382,7 +575,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             control = manifest.control_plane_policy
             if (
                 control is None
-                or control.mode != "active_conjecture"
+                or control.mode not in {"shadow", "active_conjecture"}
                 or control.conjecture_context.mode == "disabled"
             ):
                 fail(
@@ -1225,6 +1418,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         "conjecture_turn_events": sum(
             1 for e in events if e.conjecture_turn is not None
         ),
+        "control_events": len(control_events),
+        "workflow_branches": len(h.workflow_state.branches),
+        "outstanding_work_orders": list(
+            h.workflow_state.outstanding_work_order_ids
+        ),
+        "workflow_process_digest": h.workflow_state.digest,
         "max_problem_desc_len": max(
             (len(p.description) for p in h.state.problems.values()), default=0),
     }
