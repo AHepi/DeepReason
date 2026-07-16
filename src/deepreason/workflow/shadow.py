@@ -1,4 +1,4 @@
-"""Non-authoritative conjecture observer for v4 shadow runs."""
+"""Owned conjecture planning plus non-authoritative shadow comparison."""
 
 from __future__ import annotations
 
@@ -309,12 +309,15 @@ def _synthetic_candidate_ref(call) -> str:
 
 
 class ConjectureShadowObserver:
-    """Pure comparison service. It has no Harness, stores, meter, or adapter."""
+    """Pure owned planner/comparator with no Harness, store, meter, or adapter.
+
+    Shadow mode uses both planning and post-hoc comparison.  Active mode uses
+    the same repository-owned planner to issue durable authority before the
+    provider boundary; the scheduler makes setup failures fatal there.
+    """
 
     def __init__(self, profile: ConjectureWorkflowProfileV1) -> None:
         self.profile = ConjectureWorkflowProfileV1.model_validate(profile)
-        if not self.profile.shadow:
-            raise ValueError("C0 observer accepts only the shadow workflow profile")
 
     @classmethod
     def from_manifest(
@@ -325,7 +328,8 @@ class ConjectureShadowObserver:
             manifest is None
             or manifest.schema_version != 4
             or manifest.control_plane_policy is None
-            or manifest.control_plane_policy.mode != "shadow"
+            or manifest.control_plane_policy.mode
+            not in {"shadow", "active_conjecture"}
         ):
             return None
         return cls(compile_workflow_profile(manifest))
@@ -345,7 +349,12 @@ class ConjectureShadowObserver:
         advisory_context_ref: str | None = None,
     ) -> ShadowTicketV1:
         if problem_ref not in set(canonical_problem_refs):
-            raise ValueError("shadow observer problem is not canonical at its fence")
+            raise ValueError("workflow problem is not canonical at its fence")
+        if (
+            not self.profile.shadow
+            and contract_id != self.profile.conjecturer_contract_id
+        ):
+            raise ValueError("active work must use the owned conjecturer contract")
         state = WorkflowProcessStateV1.initial(
             manifest_digest=self.profile.manifest_digest,
             workflow_profile=self.profile.workflow_profile,

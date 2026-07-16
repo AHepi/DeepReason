@@ -59,6 +59,112 @@ def root_problem_family(state, problem_id: str) -> str:
     return problem_family_key(state, problem_id)
 
 
+def _active_control_trace(
+    harness,
+    adapter,
+    manifest,
+    problem,
+    *,
+    school_id: str | None,
+    context_plan,
+    endpoint_lease: EndpointLease | None,
+):
+    """Bootstrap authoritative Conj control when the scheduler has no observer."""
+
+    from deepreason.workflow.events import ConjectureWorkAssignmentV1
+    from deepreason.workflow.profiles import (
+        compile_workflow_profile,
+        resolve_conjecture_route,
+    )
+    from deepreason.workflow.reducer import plan_conjecture_batch
+    from deepreason.workflow.shadow import ShadowTicketV1
+    from deepreason.workflow.state import WorkflowProcessStateV1
+    from deepreason.workflow.trace import ConjectureControlTrace
+
+    profile = compile_workflow_profile(manifest)
+    lease, route = resolve_conjecture_route(
+        manifest,
+        adapter.leases,
+        school_id=school_id,
+    )
+    if endpoint_lease is not None and endpoint_lease != lease:
+        raise ValueError("active Conj endpoint lease differs from workflow authority")
+    default_fence = max(0, harness._next_seq - 1)
+    formal_fence = getattr(context_plan, "formal_fence_seq", default_fence)
+    scratch_fence = getattr(context_plan, "scratch_fence_seq", default_fence)
+    state = WorkflowProcessStateV1.initial(
+        manifest_digest=profile.manifest_digest,
+        workflow_profile=profile.workflow_profile,
+        formal_fence_seq=formal_fence,
+        scratch_fence_seq=scratch_fence,
+    )
+    assignment = ConjectureWorkAssignmentV1(
+        school_id=school_id,
+        route_lease=route,
+        contract_id=profile.conjecturer_contract_id,
+        task_payload_schema_id="conjecture.semantic-ref.v1",
+        task_payload_ref=problem.id,
+        input_refs=(problem.id,),
+        advisory_context_ref=getattr(
+            getattr(context_plan, "advisory_context", None), "id", None
+        ),
+    )
+    reduction = plan_conjecture_batch(
+        profile,
+        state=state,
+        problem_ref=problem.id,
+        assignments=(assignment,),
+        canonical_problem_refs=tuple(sorted(harness.state.problems)),
+    )
+    work, = reduction.work_orders
+    ticket = ShadowTicketV1.create(
+        work_order=work,
+        initial_process_state=state,
+        process_state=reduction.state,
+        planning_decisions=reduction.decisions,
+        expected_decision_refs=tuple(item.id for item in reduction.decisions),
+        expected_transition_kinds=tuple(
+            item.transition_kind for item in reduction.decisions
+        ),
+        event_start_seq=harness._next_seq,
+        meter_before=(
+            adapter.meter.snapshot()
+            if getattr(adapter, "meter", None) is not None
+            else None
+        ),
+    )
+    return ConjectureControlTrace(harness, ticket, authoritative=True)
+
+
+def _guard_finding(candidate_ref: str, outcome: str, reason: str):
+    """Derive the same code-authored guard receipt without a scheduler callback."""
+
+    from deepreason.workflow.models import (
+        GuardFindingCode,
+        GuardFindingOutcome,
+        GuardFindingV1,
+    )
+
+    disposition = GuardFindingOutcome(outcome)
+    code = (
+        GuardFindingCode.PASSED
+        if disposition == GuardFindingOutcome.ADMIT
+        else GuardFindingCode.CONTENT_DUPLICATE
+        if disposition == GuardFindingOutcome.DEDUPLICATE
+        else GuardFindingCode.BATTERY_EQUIVALENT
+        if "battery-equivalent" in reason
+        else GuardFindingCode.REFUTED_EQUIVALENT
+        if reason.startswith("hash:")
+        else GuardFindingCode.INTERFACE_INVALID
+    )
+    return GuardFindingV1(
+        candidate_ref=candidate_ref,
+        outcome=disposition,
+        code=code,
+        related_refs=(candidate_ref,),
+    )
+
+
 def conj(
     harness,
     problem_id: str,
@@ -106,14 +212,15 @@ def conj(
         raise ValueError("Conj accepts only one workflow binding seam")
 
     workflow_guard_findings = []
+    workflow_guard_occurrences: dict[str, int] = {}
 
     def observe_candidate(candidate_ref: str, outcome: str, reason: str) -> None:
         """Report code-derived disposition without granting callback authority."""
 
-        if candidate_observer is None:
-            return
+        finding = None
         try:
-            finding = candidate_observer(candidate_ref, outcome, reason)
+            if candidate_observer is not None:
+                finding = candidate_observer(candidate_ref, outcome, reason)
             if finding is not None:
                 from deepreason.workflow.models import GuardFindingV1
 
@@ -124,8 +231,23 @@ def conj(
                         else finding
                     )
                 )
-        except Exception:  # noqa: BLE001 - observation cannot alter Conj
-            return
+                return
+        except Exception:
+            if not active_v4:
+                return
+        if active_v4 and workflow_control_trace is not None:
+            workflow_guard_occurrences[candidate_ref] = (
+                workflow_guard_occurrences.get(candidate_ref, 0) + 1
+            )
+            occurrence = workflow_guard_occurrences[candidate_ref]
+            disposition_ref = (
+                candidate_ref
+                if occurrence == 1
+                else f"{candidate_ref}#occurrence-{occurrence}"
+            )
+            workflow_guard_findings.append(
+                _guard_finding(disposition_ref, outcome, reason)
+            )
     if conjecture_context_plan is not None:
         from deepreason.scratch.conjecture import PlannedConjectureContextV1
 
@@ -172,6 +294,27 @@ def conj(
                 "active v4 Conj requires typed context; raw generation_context "
                 "is not permitted"
             )
+        if workflow_control_trace is None:
+            workflow_control_trace = _active_control_trace(
+                harness,
+                adapter,
+                run_manifest,
+                problem,
+                school_id=execution_school_id,
+                context_plan=conjecture_context_plan,
+                endpoint_lease=endpoint_lease,
+            )
+        workflow_control_trace.require_authority()
+        if endpoint_lease is not None:
+            from deepreason.workflow.profiles import route_lease_reference
+
+            if (
+                workflow_control_trace.ticket.work_order.route_lease
+                != route_lease_reference(endpoint_lease)
+            ):
+                raise ValueError(
+                    "active Conj endpoint lease differs from workflow work order"
+                )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -270,6 +413,7 @@ def conj(
             if workflow_control_trace is not None
             else None
         ),
+        workflow_dispatch_required=active_v4,
     )
     bound_work_order_id = llm_call.work_order_id
     source_call_seq = None
@@ -295,6 +439,22 @@ def conj(
             *extra,
         )
         source_call_seq = harness._next_seq - 1
+    request = output.context_request if active_v4 else None
+    abstention = output.abstention if active_v4 else None
+    request_ref = (
+        harness.blobs.put(
+            canonical_json(request.model_dump(mode="json", exclude_none=True))
+        )
+        if request is not None
+        else None
+    )
+    abstention_ref = (
+        harness.blobs.put(
+            canonical_json(abstention.model_dump(mode="json", exclude_none=True))
+        )
+        if abstention is not None
+        else None
+    )
     # Level-2 transmission diagnostic (attention/reporting only, §0): did
     # candidate k actually realize spec k? Logged as a replayable Measure.
     if specs and embedder is not None:
@@ -420,6 +580,113 @@ def conj(
             source_call_seq=source_call_seq,
             llm_call=llm_call,
             candidate_refs=tuple(row[0] for row in prepared_rows),
+            context_request_hash=(
+                request.request_hash if request is not None else None
+            ),
+            context_request_ref=request_ref,
+            abstention_hash=(
+                abstention.abstention_hash if abstention is not None else None
+            ),
+            abstention_ref=abstention_ref,
+        )
+
+    context_turn_payload = None
+    context_granted = False
+    context_common = None
+    prior_selection = (
+        context_receipt.selection_receipt_ref
+        if context_receipt is not None
+        else None
+    )
+    if active_v4 and request is not None:
+        assert request_ref is not None
+        workflow_control_trace.record_context_request()
+        context_common = {
+            "manifest_digest": run_manifest.sha256,
+            "problem_id": problem_id,
+            "school_id": execution_school_id,
+            "source_call_seq": source_call_seq,
+            "maximum_expansions": context_policy.max_context_expansion_requests,
+            "request_hash": request.request_hash,
+            "request_ref": request_ref,
+            "prior_selection_receipt_ref": prior_selection,
+        }
+        desired = {channel.value for channel in request.desired_retrieval_channels}
+        permitted = set(context_policy.permitted_retrieval_channels)
+        denial = None
+        denial_action = ConjectureTurnAction.CONTEXT_DENIED
+        if desired - permitted:
+            denial = "channel_not_permitted"
+        elif context_policy.mode != "harness_plus_model_request":
+            denial = "capability_not_granted"
+        elif _context_expansion_index >= context_policy.max_context_expansion_requests:
+            denial = "request_limit_reached"
+            denial_action = ConjectureTurnAction.CONTEXT_EXHAUSTED
+
+        if denial is None:
+            from deepreason.scratch.conjecture import plan_conjecture_context_expansion
+            from deepreason.scratch.service import ScratchService
+
+            expansion_number = _context_expansion_index + 1
+            proposed = ConjectureTurnEventPayloadV1.create(
+                action=ConjectureTurnAction.CONTEXT_GRANTED,
+                expansion_index=expansion_number,
+                reason_code="granted",
+                **context_common,
+            )
+            fence = harness._next_seq - 1
+            dry_plan = plan_conjecture_context_expansion(
+                ScratchService(harness),
+                problem=problem,
+                school_id=execution_school_id,
+                manifest_digest=run_manifest.sha256,
+                scratch_policy=scratch_policy,
+                context_policy=context_policy,
+                request=request,
+                prior_plan=conjecture_context_plan,
+                expansion_decision_ref=proposed.decision_id,
+                expansion_index=expansion_number,
+                formal_fence_seq=fence,
+                scratch_fence_seq=fence,
+            )
+            if dry_plan is None:
+                prior_count = (
+                    len(conjecture_context_plan.attention_pack.blocks)
+                    if conjecture_context_plan is not None
+                    else 0
+                )
+                root_count = (
+                    len(
+                        conjecture_context_plan.root_block_ids
+                        if conjecture_context_plan.root_block_ids is not None
+                        else conjecture_context_plan.attention_pack.selection_receipt.final_order
+                    )
+                    if conjecture_context_plan is not None
+                    else 0
+                )
+                total_cap = min(
+                    scratch_policy.attention_policy().max_blocks_per_pack,
+                    root_count + context_policy.max_extra_blocks,
+                )
+                denial = (
+                    "no_context_capacity"
+                    if total_cap <= prior_count
+                    else "no_additional_context"
+                )
+            else:
+                context_turn_payload = proposed
+                context_granted = True
+
+        if context_turn_payload is None:
+            context_turn_payload = ConjectureTurnEventPayloadV1.create(
+                action=denial_action,
+                expansion_index=_context_expansion_index,
+                reason_code=denial,
+                **context_common,
+            )
+        workflow_control_trace.record_context_decision(
+            granted=context_granted,
+            trigger_ref=context_turn_payload.decision_id,
         )
 
     batch: list[tuple[Artifact, list[Warrant]]] = []
@@ -517,6 +784,11 @@ def conj(
     # whose authority trace is still only process-local.
     if workflow_control_trace is not None and workflow_guard_findings:
         workflow_control_trace.record_guard(workflow_guard_findings)
+    if active_v4:
+        # A request-only, abstention, exhausted, or otherwise candidate-free
+        # turn still closes its one-call work. Guarded candidate work is
+        # already terminal, so this is an idempotent no-op in that case.
+        workflow_control_trace.finish()
 
     # Formal semantics remain the existing RC5 path after the durable guard.
     for commitment in admitted_drafts.values():
@@ -563,18 +835,8 @@ def conj(
         return registered
 
     assert source_call_seq is not None
-    prior_selection = (
-        context_receipt.selection_receipt_ref
-        if context_receipt is not None
-        else None
-    )
-    abstention = output.abstention
     if abstention is not None:
-        abstention_ref = harness.blobs.put(
-            canonical_json(
-                abstention.model_dump(mode="json", exclude_none=True)
-            )
-        )
+        assert abstention_ref is not None
         harness.record_conjecture_turn_event(
             ConjectureTurnEventPayloadV1.create(
                 action=ConjectureTurnAction.ABSTAINED,
@@ -592,119 +854,18 @@ def conj(
             abstention=abstention,
         )
 
-    request = output.context_request
     if request is None:
+        workflow_control_trace.seal()
         return registered
-    request_ref = harness.blobs.put(
-        canonical_json(request.model_dump(mode="json", exclude_none=True))
-    )
-    common = {
-        "manifest_digest": run_manifest.sha256,
-        "problem_id": problem_id,
-        "school_id": execution_school_id,
-        "source_call_seq": source_call_seq,
-        "maximum_expansions": context_policy.max_context_expansion_requests,
-        "request_hash": request.request_hash,
-        "request_ref": request_ref,
-        "prior_selection_receipt_ref": prior_selection,
-    }
-    desired = {channel.value for channel in request.desired_retrieval_channels}
-    permitted = set(context_policy.permitted_retrieval_channels)
-    if desired - permitted:
-        harness.record_conjecture_turn_event(
-            ConjectureTurnEventPayloadV1.create(
-                action=ConjectureTurnAction.CONTEXT_DENIED,
-                expansion_index=_context_expansion_index,
-                reason_code="channel_not_permitted",
-                **common,
-            ),
-            request=request,
-        )
-        return registered
-    if context_policy.mode != "harness_plus_model_request":
-        harness.record_conjecture_turn_event(
-            ConjectureTurnEventPayloadV1.create(
-                action=ConjectureTurnAction.CONTEXT_DENIED,
-                expansion_index=_context_expansion_index,
-                reason_code="capability_not_granted",
-                **common,
-            ),
-            request=request,
-        )
-        return registered
-    if _context_expansion_index >= context_policy.max_context_expansion_requests:
-        harness.record_conjecture_turn_event(
-            ConjectureTurnEventPayloadV1.create(
-                action=ConjectureTurnAction.CONTEXT_EXHAUSTED,
-                expansion_index=_context_expansion_index,
-                reason_code="request_limit_reached",
-                **common,
-            ),
-            request=request,
-        )
+    assert context_turn_payload is not None
+    harness.record_conjecture_turn_event(context_turn_payload, request=request)
+    if not context_granted:
+        workflow_control_trace.seal()
         return registered
 
     from deepreason.scratch.conjecture import plan_conjecture_context_expansion
     from deepreason.scratch.service import ScratchService
 
-    expansion_number = _context_expansion_index + 1
-    proposed = ConjectureTurnEventPayloadV1.create(
-        action=ConjectureTurnAction.CONTEXT_GRANTED,
-        expansion_index=expansion_number,
-        reason_code="granted",
-        **common,
-    )
-    fence = harness._next_seq - 1
-    dry_plan = plan_conjecture_context_expansion(
-        ScratchService(harness),
-        problem=problem,
-        school_id=execution_school_id,
-        manifest_digest=run_manifest.sha256,
-        scratch_policy=scratch_policy,
-        context_policy=context_policy,
-        request=request,
-        prior_plan=conjecture_context_plan,
-        expansion_decision_ref=proposed.decision_id,
-        expansion_index=expansion_number,
-        formal_fence_seq=fence,
-        scratch_fence_seq=fence,
-    )
-    if dry_plan is None:
-        prior_count = (
-            len(conjecture_context_plan.attention_pack.blocks)
-            if conjecture_context_plan is not None
-            else 0
-        )
-        root_count = (
-            len(
-                conjecture_context_plan.root_block_ids
-                if conjecture_context_plan.root_block_ids is not None
-                else conjecture_context_plan.attention_pack.selection_receipt.final_order
-            )
-            if conjecture_context_plan is not None
-            else 0
-        )
-        total_cap = min(
-            scratch_policy.attention_policy().max_blocks_per_pack,
-            root_count + context_policy.max_extra_blocks,
-        )
-        reason = (
-            "no_context_capacity"
-            if total_cap <= prior_count
-            else "no_additional_context"
-        )
-        harness.record_conjecture_turn_event(
-            ConjectureTurnEventPayloadV1.create(
-                action=ConjectureTurnAction.CONTEXT_DENIED,
-                expansion_index=_context_expansion_index,
-                reason_code=reason,
-                **common,
-            ),
-            request=request,
-        )
-        return registered
-
-    harness.record_conjecture_turn_event(proposed, request=request)
     fence = harness._next_seq - 1
     expanded_plan = plan_conjecture_context_expansion(
         ScratchService(harness),
@@ -715,8 +876,8 @@ def conj(
         context_policy=context_policy,
         request=request,
         prior_plan=conjecture_context_plan,
-        expansion_decision_ref=proposed.decision_id,
-        expansion_index=expansion_number,
+        expansion_decision_ref=context_turn_payload.decision_id,
+        expansion_index=_context_expansion_index + 1,
         formal_fence_seq=fence,
         scratch_fence_seq=fence,
     )
@@ -724,6 +885,11 @@ def conj(
         raise RuntimeError(
             "granted conjecture context expansion became unavailable after its decision"
         )
+    follow_up_trace = workflow_control_trace.follow_up(
+        advisory_context_ref=expanded_plan.advisory_context.id,
+        formal_fence_seq=expanded_plan.formal_fence_seq,
+        scratch_fence_seq=expanded_plan.scratch_fence_seq,
+    )
     follow_up = conj(
         harness,
         problem_id,
@@ -747,9 +913,9 @@ def conj(
         execution_school_id=execution_school_id,
         conjecture_context_plan=expanded_plan,
         run_manifest=run_manifest,
-        _context_expansion_index=expansion_number,
+        _context_expansion_index=_context_expansion_index + 1,
         candidate_observer=candidate_observer,
-        workflow_work_order_id=workflow_work_order_id,
-        workflow_control_trace=workflow_control_trace,
+        workflow_work_order_id=None,
+        workflow_control_trace=follow_up_trace,
     )
     return [*registered, *follow_up]

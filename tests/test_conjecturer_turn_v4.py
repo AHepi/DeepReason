@@ -859,7 +859,14 @@ def test_grant_source_and_child_bind_problem_manifest_context_and_school(tmp_pat
         forge_child,
     )
     violations = verify_root(harness.root)["violations"]
-    assert any(item["check"] == "conjecture-turn" for item in violations)
+    assert any(
+        item["check"] in {"conjecture-turn", "open"}
+        and any(
+            token in item["detail"].casefold()
+            for token in ("school", "problem", "authority")
+        )
+        for item in violations
+    )
 
 
 def test_active_v4_rejects_raw_generation_context_before_provider_spend(tmp_path):

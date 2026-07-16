@@ -15,7 +15,7 @@ import json
 from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
-from deepreason.llm.adapter import SchemaRepairError
+from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import RouteFirewallError, resolve_school_role_lease
@@ -215,10 +215,9 @@ class Scheduler:
         self.generation_context = generation_context
         self.suppressed_exemplars = tuple(suppressed_exemplars)
         self.run_manifest = run_manifest
-        # C0 control-plane observations are process-local diagnostics only.
-        # They deliberately have no harness/store handle and cannot append an
-        # event or alter any materialized state.  C1 owns durable authority
-        # transitions; until then the legacy scheduler remains authoritative.
+        # The pure owned planner has no harness/store handle. Shadow mode uses
+        # it diagnostically; active_conjecture uses its ticket to create the
+        # durable control trace that must authorize provider dispatch.
         self.workflow_shadow_observations = []
         self.workflow_shadow_observer = None
         self._workflow_recovery_done = False
@@ -230,6 +229,8 @@ class Scheduler:
             )
         except Exception as error:  # noqa: BLE001 - shadow cannot block startup
             self.workflow_shadow_observer = None
+            if self._active_conjecture_mode():
+                raise
             self._record_workflow_shadow_error(
                 problem_ref="workflow-shadow-initialization",
                 school_id=None,
@@ -380,8 +381,25 @@ class Scheduler:
         snapshot = getattr(meter, "snapshot", None)
         return snapshot() if callable(snapshot) else None
 
+    def _active_conjecture_mode(self) -> bool:
+        manifest = self.run_manifest
+        return bool(
+            manifest is not None
+            and manifest.schema_version == 4
+            and manifest.control_plane_policy is not None
+            and manifest.control_plane_policy.mode == "active_conjecture"
+        )
+
     def _workflow_conjecturer_contract_id(self, problem) -> str:
         """Predict the exact wire contract selected by the unchanged call."""
+
+        if self._active_conjecture_mode():
+            planner = self.workflow_shadow_observer
+            if planner is None or planner.profile.shadow:
+                raise WorkflowAuthorizationError(
+                    "active conjecture has no owned workflow profile"
+                )
+            return planner.profile.conjecturer_contract_id
 
         from deepreason.llm.contracts import ConjecturerOutput
         from deepreason.llm.wire import (
@@ -440,7 +458,7 @@ class Scheduler:
             return
 
     def _begin_workflow_shadow(self, problem, school_id, context_plan):
-        """Derive a C0 work order immediately before legacy dispatch."""
+        """Derive one owned work order immediately before dispatch."""
 
         observer = self.workflow_shadow_observer
         if observer is None:
@@ -474,6 +492,8 @@ class Scheduler:
                 ),
             )
         except Exception as error:  # noqa: BLE001 - shadow cannot block actuation
+            if self._active_conjecture_mode():
+                raise
             self._record_workflow_shadow_error(
                 problem_ref=problem.id,
                 school_id=school_id,
@@ -532,7 +552,7 @@ class Scheduler:
         return findings, observe
 
     def _workflow_control_trace(self, ticket):
-        """Create the contained C1 persistence seam for one shadow ticket."""
+        """Create the C1 persistence seam for one owned workflow ticket."""
 
         if ticket is None:
             return None
@@ -542,6 +562,7 @@ class Scheduler:
             return ConjectureControlTrace(
                 self.harness,
                 ticket,
+                authoritative=self._active_conjecture_mode(),
                 error_sink=lambda error: self._record_workflow_shadow_error(
                     problem_ref=ticket.work_order.problem_ref,
                     school_id=ticket.work_order.school_id,
@@ -551,6 +572,8 @@ class Scheduler:
                 ),
             )
         except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+            if self._active_conjecture_mode():
+                raise
             self._record_workflow_shadow_error(
                 problem_ref=ticket.work_order.problem_ref,
                 school_id=ticket.work_order.school_id,
@@ -1001,6 +1024,8 @@ class Scheduler:
                 )
                 workflow_trace_ready = candidate_observer is not None
             except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+                if self._active_conjecture_mode():
+                    raise
                 self._record_workflow_shadow_error(
                     problem_ref=problem.id,
                     school_id=(
@@ -1050,6 +1075,12 @@ class Scheduler:
                     if workflow_trace_ready:
                         workflow_control_trace = self._workflow_control_trace(
                             shadow_ticket
+                        )
+                    if self._active_conjecture_mode() and (
+                        shadow_ticket is None or workflow_control_trace is None
+                    ):
+                        raise WorkflowAuthorizationError(
+                            "active conjecture control trace is unavailable"
                         )
                     for context_attempt in range(2):
                         try:
@@ -1130,7 +1161,11 @@ class Scheduler:
                     control_trace=workflow_control_trace,
                 )
                 continue
-            except (RouteFirewallError, TokenBudgetExceeded) as error:
+            except (
+                RouteFirewallError,
+                TokenBudgetExceeded,
+                WorkflowAuthorizationError,
+            ) as error:
                 # These remain fail-closed scheduler exits.  Carry only the
                 # in-memory ticket upward so run() can log any attached spend
                 # first and let the observer compare the completed event span.
@@ -1670,6 +1705,28 @@ class Scheduler:
                     if decision.stop:
                         self._record_stop(decision, metrics)
                         break
+            except WorkflowAuthorizationError as e:
+                # Active control-plane failures are terminal. Preserve any
+                # provider attempt attached by the adapter, close a durable
+                # issuance prefix, and never resume through the legacy path.
+                self._drop(e)
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon(
+                        "runtime:workflow_authorization_error"
+                    )
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(
+                        e, "workflow_shadow_problem_ref", None
+                    ),
+                    candidate_dispositions=getattr(
+                        e, "workflow_shadow_candidate_dispositions", ()
+                    ),
+                    control_trace=control_trace,
+                )
+                raise
             except RouteFirewallError as e:
                 # A leased route changing during a run is a fail-closed
                 # security/configuration error, not an ordinary model or

@@ -258,15 +258,19 @@ class CapabilityGrantV1(IdentifiedWorkflowRecord):
     @model_validator(mode="after")
     def _context_allowance_is_consistent(self):
         permits_request = CapabilityOutcome.CONTEXT_REQUEST in self.allowed_outcomes
-        if permits_request != bool(self.remaining_context_expansions):
+        if self.remaining_context_expansions and not permits_request:
             raise ValueError(
-                "context_request capability requires a positive remaining allowance"
+                "context expansions require the context_request capability"
             )
         if not permits_request and (
             self.max_extra_context_blocks or self.permitted_retrieval_channels
         ):
             raise ValueError("context limits require the context_request capability")
-        if permits_request and not self.max_extra_context_blocks:
+        if (
+            permits_request
+            and self.remaining_context_expansions
+            and not self.max_extra_context_blocks
+        ):
             raise ValueError("context requests require a positive extra-block limit")
         return self
 

@@ -55,6 +55,14 @@ from deepreason.ontology.event import (
 from deepreason.run_manifest import infer_model_family
 
 
+class WorkflowAuthorizationError(RuntimeError):
+    """Active workflow authority could not be persisted before dispatch."""
+
+    def __init__(self, message: str, *, spend: LLMCall | None = None) -> None:
+        super().__init__(message)
+        self.spend = spend
+
+
 def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
     """Normalize a provider usage block to prompt/completion token counts.
 
@@ -316,6 +324,7 @@ class LLMAdapter:
         work_order_id: str | None = None,
         workflow_dispatch_observer: Callable[[int], str | None] | None = None,
         workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
+        workflow_dispatch_required: bool = False,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
@@ -345,6 +354,10 @@ class LLMAdapter:
         ):
             raise ValueError(
                 "workflow repair observation requires conjecture dispatch observation"
+            )
+        if workflow_dispatch_required and workflow_dispatch_observer is None:
+            raise ValueError(
+                "required workflow dispatch needs an authorization callback"
             )
         if school_id is not None and endpoint_lease is None:
             raise ValueError("school-routed calls require an explicit endpoint lease")
@@ -566,14 +579,16 @@ class LLMAdapter:
                 # Observation happens after the real reserve is booked and
                 # immediately before provider dispatch.  A shadow observer
                 # failure cannot suppress the legacy call.
+                authorization_error = None
                 try:
                     observed_work_order_id = workflow_dispatch_observer(
                         reservation.amount
                         if reservation is not None
                         else reservation_bound
                     )
-                except Exception:  # noqa: BLE001 - shadow is non-authoritative
+                except Exception as error:  # noqa: BLE001 - mode checked below
                     observed_work_order_id = None
+                    authorization_error = error
                 if (
                     isinstance(observed_work_order_id, str)
                     and re.fullmatch(
@@ -582,6 +597,12 @@ class LLMAdapter:
                     is not None
                 ):
                     effective_work_order_id = observed_work_order_id
+                elif workflow_dispatch_required:
+                    if reservation is not None:
+                        reservation.release()
+                    raise WorkflowAuthorizationError(
+                        "active workflow dispatch was not durably authorized"
+                    ) from authorization_error
             prompt_ref = request_prompt_ref
             try:
                 kwargs = {}
@@ -708,8 +729,12 @@ class LLMAdapter:
                     # contained on the C1 shadow path.
                     try:
                         workflow_repair_observer(attempt_trace[-1])
-                    except Exception:  # noqa: BLE001 - shadow is non-authoritative
-                        pass
+                    except Exception as error:  # noqa: BLE001 - mode checked below
+                        if workflow_dispatch_required:
+                            raise WorkflowAuthorizationError(
+                                "active workflow repair was not durably authorized",
+                                spend=_spend(attempt + 1),
+                            ) from error
                 continue
             attempt_trace.append(LLMAttempt(
                 prompt_ref=prompt_ref,

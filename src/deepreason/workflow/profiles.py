@@ -76,11 +76,7 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         )
         outcomes = [CapabilityOutcome.CANDIDATE_PROPOSAL]
         if self.conjecturer_contract_id == "conjecturer.turn.v4":
-            if (
-                self.context_policy.mode == "harness_plus_model_request"
-                and remaining
-            ):
-                outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
+            outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
             outcomes.append(CapabilityOutcome.ABSTENTION)
         return CapabilityGrantV1.create(
             allowed_outcomes=tuple(outcomes),

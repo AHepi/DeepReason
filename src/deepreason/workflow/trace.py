@@ -12,10 +12,12 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from deepreason.llm.adapter import WorkflowAuthorizationError
 from deepreason.ontology import LLMAttempt, LLMCall
 from deepreason.workflow.events import WorkflowSignalKind, WorkflowSignalV1
 from deepreason.workflow.models import (
     BudgetDeltaV1,
+    CapabilityGrantV1,
     GuardFindingOutcome,
     GuardFindingV1,
     GuardResultV1,
@@ -24,6 +26,8 @@ from deepreason.workflow.models import (
     RouteLeaseRefV1,
     TransitionDecisionV1,
     TransitionKind,
+    TriggerKind,
+    WorkOrderEnvelopeV1,
     repair_attempt_trigger_ref,
 )
 from deepreason.workflow.reducer import reduce_conjecture
@@ -42,6 +46,7 @@ class ConjectureControlTrace:
     harness: Any
     ticket: ShadowTicketV1
     error_sink: Callable[[Exception], None] | None = None
+    authoritative: bool = False
     process_state: WorkflowProcessStateV1 = field(init=False)
     proposal_receipt: ProposalReceiptV1 | None = field(default=None, init=False)
     decision_ids: list[str] = field(default_factory=list, init=False)
@@ -56,12 +61,24 @@ class ConjectureControlTrace:
 
     def _report(self, error: Exception) -> None:
         self.failed = True
-        if self.error_sink is None:
-            return
-        try:
-            self.error_sink(error)
-        except Exception:  # noqa: BLE001 - diagnostics never affect actuation
-            return
+        if self.error_sink is not None:
+            try:
+                self.error_sink(error)
+            except Exception:  # noqa: BLE001 - diagnostics never affect actuation
+                pass
+        if self.authoritative:
+            if isinstance(error, WorkflowAuthorizationError):
+                raise error
+            raise WorkflowAuthorizationError(
+                "active conjecture transition was not durably authorized"
+            ) from error
+
+    def require_authority(self) -> None:
+        """Make subsequent persistence failures fail closed."""
+
+        self.authoritative = True
+        if self.failed:
+            self._report(RuntimeError("authoritative workflow trace already failed"))
 
     def authorize_dispatch(self, reserved_tokens: int = 0) -> str | None:
         """Persist enable/issue immediately before the provider boundary."""
@@ -69,6 +86,10 @@ class ConjectureControlTrace:
         if self.dispatch_authorized:
             return self.ticket.work_order.id
         if self.failed:
+            if self.authoritative:
+                self._report(
+                    RuntimeError("dispatch authorization follows a failed trace")
+                )
             return None
         try:
             if type(reserved_tokens) is not int or reserved_tokens < 0:
@@ -147,10 +168,20 @@ class ConjectureControlTrace:
         source_call_seq: int,
         llm_call: LLMCall,
         candidate_refs: Sequence[str],
+        context_request_hash: str | None = None,
+        context_request_ref: str | None = None,
+        abstention_hash: str | None = None,
+        abstention_ref: str | None = None,
     ) -> None:
         """Persist the provider receipt before any candidate guard executes."""
 
         if not self.dispatch_authorized or self.failed:
+            if self.authoritative:
+                self._report(
+                    RuntimeError(
+                        "provider result requires successful dispatch authorization"
+                    )
+                )
             return
         try:
             call = LLMCall.model_validate(
@@ -193,6 +224,10 @@ class ConjectureControlTrace:
                 validation_outcome=validation,
                 attempt_count=len(attempts),
                 candidate_payload_refs=refs if final_valid else (),
+                context_request_hash=(context_request_hash if final_valid else None),
+                context_request_ref=(context_request_ref if final_valid else None),
+                abstention_hash=(abstention_hash if final_valid else None),
+                abstention_ref=(abstention_ref if final_valid else None),
                 tokens=call.tokens,
             )
             signal = (
@@ -211,10 +246,218 @@ class ConjectureControlTrace:
         except Exception as error:  # noqa: BLE001 - shadow is non-authoritative
             self._report(error)
 
+    def record_context_request(self) -> None:
+        """Persist the model's bounded request before its semantic decision."""
+
+        if self.proposal_receipt is None or self.failed:
+            if self.authoritative:
+                self._report(
+                    RuntimeError("context request has no durable proposal receipt")
+                )
+            return
+        try:
+            request_hash = self.proposal_receipt.context_request_hash
+            if request_hash is None or self.proposal_receipt.context_request_ref is None:
+                raise ValueError("proposal receipt has no context request")
+            reduced = reduce_conjecture(
+                self.process_state,
+                WorkflowSignalV1(
+                    kind=WorkflowSignalKind.CONTEXT_REQUESTED,
+                    work_order=self.ticket.work_order,
+                    trigger_ref=request_hash,
+                ),
+            )
+            decision = reduced.decisions[0]
+            self.harness.record_control_transition(decision)
+            self.process_state = reduced.state
+            self.decision_ids.append(decision.id)
+        except Exception as error:  # noqa: BLE001 - shadow remains contained
+            self._report(error)
+
+    def record_context_decision(self, *, granted: bool, trigger_ref: str) -> None:
+        """Persist a code-authored grant or denial before its turn event."""
+
+        if self.failed:
+            if self.authoritative:
+                self._report(RuntimeError("context decision follows a failed trace"))
+            return
+        try:
+            reduced = reduce_conjecture(
+                self.process_state,
+                WorkflowSignalV1(
+                    kind=(
+                        WorkflowSignalKind.CONTEXT_GRANTED
+                        if granted
+                        else WorkflowSignalKind.CONTEXT_DENIED
+                    ),
+                    work_order=self.ticket.work_order,
+                    trigger_ref=trigger_ref,
+                ),
+            )
+            decision = reduced.decisions[0]
+            self.harness.record_control_transition(decision)
+            self.process_state = reduced.state
+            self.decision_ids.append(decision.id)
+        except Exception as error:  # noqa: BLE001 - shadow remains contained
+            self._report(error)
+
+    def finish(self, trigger_ref: str | None = None) -> None:
+        """Close a no-candidate or superseded work order exactly once."""
+
+        if self.failed:
+            if self.authoritative:
+                self._report(RuntimeError("work completion follows a failed trace"))
+            return
+        try:
+            from deepreason.workflow.state import WorkItemStatus
+
+            item = self.process_state.work_item(self.ticket.work_order.id)
+            if item is None:
+                raise ValueError("workflow completion has no work item")
+            if item.status in {WorkItemStatus.FINISHED, WorkItemStatus.ABANDONED}:
+                return
+            receipt = self.proposal_receipt
+            reduced = reduce_conjecture(
+                self.process_state,
+                WorkflowSignalV1(
+                    kind=WorkflowSignalKind.WORK_FINISHED,
+                    work_order=self.ticket.work_order,
+                    trigger_ref=(
+                        trigger_ref
+                        or (receipt.id if receipt is not None else self.ticket.work_order.id)
+                    ),
+                ),
+            )
+            decision = reduced.decisions[0]
+            self.harness.record_control_transition(decision)
+            self.process_state = reduced.state
+            self.decision_ids.append(decision.id)
+        except Exception as error:  # noqa: BLE001 - shadow remains contained
+            self._report(error)
+
+    def follow_up(
+        self,
+        *,
+        advisory_context_ref: str,
+        formal_fence_seq: int,
+        scratch_fence_seq: int,
+    ) -> "ConjectureControlTrace":
+        """Create fresh one-call authority for a granted context expansion."""
+
+        try:
+            parent = self.ticket.work_order
+            parent_grant = parent.capability_grant
+            remaining = parent_grant.remaining_context_expansions - 1
+            if remaining < 0:
+                raise ValueError("context follow-up exceeds expansion authority")
+            allowed = tuple(
+                outcome
+                for outcome in parent_grant.allowed_outcomes
+            )
+            grant = CapabilityGrantV1.create(
+                allowed_outcomes=allowed,
+                max_candidates=parent_grant.max_candidates,
+                max_local_repairs=parent_grant.max_local_repairs,
+                remaining_context_expansions=remaining,
+                max_extra_context_blocks=parent_grant.max_extra_context_blocks,
+                permitted_retrieval_channels=parent_grant.permitted_retrieval_channels,
+            )
+            inputs = tuple(dict.fromkeys((*parent.input_refs, parent.id)))
+            values = parent.model_dump(
+                mode="python",
+                by_alias=True,
+                exclude={
+                    "id",
+                    "formal_fence_seq",
+                    "scratch_fence_seq",
+                    "input_refs",
+                    "advisory_context_ref",
+                    "capability_grant",
+                },
+            )
+            work = WorkOrderEnvelopeV1.create(
+                **values,
+                formal_fence_seq=formal_fence_seq,
+                scratch_fence_seq=scratch_fence_seq,
+                input_refs=inputs,
+                advisory_context_ref=advisory_context_ref,
+                capability_grant=grant,
+            )
+            if work.id == parent.id:
+                raise ValueError("context follow-up must use a fresh work order")
+            initial = WorkflowProcessStateV1.initial(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                formal_fence_seq=formal_fence_seq,
+                scratch_fence_seq=scratch_fence_seq,
+            )
+            enabled_state = state_after_transition(
+                initial,
+                transition_kind=TransitionKind.WORK_ENABLED,
+                work_order_id=work.id,
+                trigger_ref=work.problem_ref,
+            )
+            enabled = TransitionDecisionV1.create(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                previous_process_digest=initial.digest,
+                trigger_kind=TriggerKind.PROBLEM_SELECTED,
+                trigger_ref=work.problem_ref,
+                transition_kind=TransitionKind.WORK_ENABLED,
+                work_order_id=work.id,
+                route_lease=work.route_lease,
+                next_process_digest=enabled_state.digest,
+            )
+            issued_state = state_after_transition(
+                enabled_state,
+                transition_kind=TransitionKind.WORK_ISSUED,
+                work_order_id=work.id,
+                trigger_ref=advisory_context_ref,
+            )
+            issued = TransitionDecisionV1.create(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                previous_process_digest=enabled_state.digest,
+                trigger_kind=TriggerKind.CONTEXT_PREPARED,
+                trigger_ref=advisory_context_ref,
+                transition_kind=TransitionKind.WORK_ISSUED,
+                work_order_id=work.id,
+                route_lease=work.route_lease,
+                next_process_digest=issued_state.digest,
+            )
+            planning = (enabled, issued)
+            ticket = ShadowTicketV1.create(
+                work_order=work,
+                initial_process_state=initial,
+                process_state=issued_state,
+                planning_decisions=planning,
+                expected_decision_refs=tuple(item.id for item in planning),
+                expected_transition_kinds=tuple(
+                    item.transition_kind for item in planning
+                ),
+                event_start_seq=self.harness._next_seq,
+                meter_before=None,
+            )
+            return ConjectureControlTrace(
+                self.harness,
+                ticket,
+                error_sink=self.error_sink,
+                authoritative=self.authoritative,
+            )
+        except Exception as error:
+            self._report(error)
+            raise AssertionError("unreachable") from error
+
     def record_repair_request(self, rejected_attempt: LLMAttempt) -> None:
         """Persist bounded schema-repair authority before the next dispatch."""
 
         if not self.dispatch_authorized or self.failed:
+            if self.authoritative:
+                self._report(
+                    RuntimeError(
+                        "repair request requires successful dispatch authorization"
+                    )
+                )
             return
         try:
             attempt = LLMAttempt.model_validate(
@@ -258,6 +501,8 @@ class ConjectureControlTrace:
         """Persist the code-authored disposition before semantic admission."""
 
         if self.proposal_receipt is None or self.failed:
+            if self.authoritative:
+                self._report(RuntimeError("guard requires a durable proposal receipt"))
             return
         try:
             canonical = tuple(

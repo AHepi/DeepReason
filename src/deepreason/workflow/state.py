@@ -246,7 +246,7 @@ _LEGAL_STATUS: dict[TransitionKind, tuple[set[WorkItemStatus | None], WorkItemSt
     ),
     TransitionKind.CONTEXT_GRANTED: (
         {WorkItemStatus.CONTEXT_PENDING},
-        WorkItemStatus.ISSUED,
+        WorkItemStatus.PROPOSAL_RECEIVED,
     ),
     TransitionKind.CONTEXT_DENIED: (
         {WorkItemStatus.CONTEXT_PENDING},

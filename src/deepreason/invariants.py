@@ -358,6 +358,20 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             if event.llm is not None
             else None
         )
+        active_conjecture_call = bool(
+            event.llm is not None
+            and event.inputs
+            and event.inputs[0] == "conjecture-turn-call"
+            and manifest is not None
+            and manifest.schema_version == 4
+            and manifest.control_plane_policy is not None
+            and manifest.control_plane_policy.mode == "active_conjecture"
+        )
+        if active_conjecture_call and work_order_id is None:
+            fail(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: active conjecture call is not bound to work",
+            )
         if (
             work_order_id is not None
             and work_order_id not in h.workflow_state.work_orders
@@ -829,6 +843,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "conjecture-turn",
                     f"{prefix}: source call used another wire contract",
                 )
+            if source_call.work_order_id is None:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: source call is not bound to an active work order",
+                )
             route_school = (
                 source_call.school_route.school_id
                 if source_call.school_route is not None
@@ -903,6 +922,155 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "conjecture-turn",
                     f"{prefix}: invalid abstention evidence: {error!r}",
                 )
+
+        # The typed turn is semantic evidence emitted after the code-authored
+        # authority transition.  Correlate both surfaces so deleting,
+        # reordering, or retargeting either side cannot leave a plausible but
+        # unauthorized context decision behind.
+        work_order_id = (
+            source_call.work_order_id if source_call is not None else None
+        )
+        if work_order_id is not None:
+            from deepreason.workflow.models import TransitionKind
+
+            work_decisions = [
+                decision
+                for decision in h.workflow_state.decisions.values()
+                if decision.work_order_id == work_order_id
+            ]
+            decision_seq = {
+                control_event.control.decision_ref: control_event.seq
+                for control_event in control_events
+                if control_event.control is not None
+            }
+            proposals = [
+                receipt
+                for receipt in h.workflow_state.proposal_receipts.values()
+                if receipt.work_order_id == work_order_id
+                and receipt.source_call_seq == payload.source_call_seq
+            ]
+            if len(proposals) != 1:
+                fail(
+                    "conjecture-turn-control",
+                    f"{prefix}: turn must have one durable proposal receipt",
+                )
+            else:
+                proposal = proposals[0]
+                if (
+                    proposal.context_request_hash != payload.request_hash
+                    or proposal.context_request_ref != payload.request_ref
+                    or proposal.abstention_hash != payload.abstention_hash
+                    or proposal.abstention_ref != payload.abstention_ref
+                ):
+                    fail(
+                        "conjecture-turn-control",
+                        f"{prefix}: turn evidence differs from its proposal receipt",
+                    )
+
+            proposal_decisions = [
+                decision
+                for decision in work_decisions
+                if decision.transition_kind == TransitionKind.PROPOSAL_RECEIVED
+            ]
+            if len(proposal_decisions) != 1:
+                fail(
+                    "conjecture-turn-control",
+                    f"{prefix}: turn must follow one proposal transition",
+                )
+            terminal_kinds = {
+                TransitionKind.PROPOSAL_ADMITTED,
+                TransitionKind.PROPOSAL_REJECTED,
+                TransitionKind.PROPOSAL_DEDUPLICATED,
+                TransitionKind.WORK_FINISHED,
+            }
+            terminal_decisions = [
+                decision
+                for decision in work_decisions
+                if decision.transition_kind in terminal_kinds
+            ]
+            if len(terminal_decisions) != 1:
+                fail(
+                    "conjecture-turn-control",
+                    f"{prefix}: turn must follow one terminal work transition",
+                )
+
+            if payload.request_ref is not None:
+                request_decisions = [
+                    decision
+                    for decision in work_decisions
+                    if decision.transition_kind == TransitionKind.CONTEXT_REQUESTED
+                ]
+                expected_kind = (
+                    TransitionKind.CONTEXT_GRANTED
+                    if payload.action.value == "context_granted"
+                    else TransitionKind.CONTEXT_DENIED
+                )
+                context_decisions = [
+                    decision
+                    for decision in work_decisions
+                    if decision.transition_kind == expected_kind
+                ]
+                if (
+                    len(request_decisions) != 1
+                    or request_decisions[0].trigger_ref != payload.request_hash
+                ):
+                    fail(
+                        "conjecture-turn-control",
+                        f"{prefix}: request lacks its exact authority transition",
+                    )
+                if (
+                    len(context_decisions) != 1
+                    or context_decisions[0].trigger_ref != payload.decision_id
+                ):
+                    fail(
+                        "conjecture-turn-control",
+                        f"{prefix}: context outcome lacks its exact authority transition",
+                    )
+                ordered = [
+                    payload.source_call_seq,
+                    *(
+                        [decision_seq.get(proposal_decisions[0].id, -1)]
+                        if len(proposal_decisions) == 1
+                        else []
+                    ),
+                    *(
+                        [decision_seq.get(request_decisions[0].id, -1)]
+                        if len(request_decisions) == 1
+                        else []
+                    ),
+                    *(
+                        [decision_seq.get(context_decisions[0].id, -1)]
+                        if len(context_decisions) == 1
+                        else []
+                    ),
+                    *(
+                        [decision_seq.get(terminal_decisions[0].id, -1)]
+                        if len(terminal_decisions) == 1
+                        else []
+                    ),
+                    event.seq,
+                ]
+                if len(ordered) != 6 or any(
+                    left >= right for left, right in zip(ordered, ordered[1:])
+                ):
+                    fail(
+                        "conjecture-turn-control",
+                        f"{prefix}: authority transitions do not precede semantic evidence",
+                    )
+            elif len(proposal_decisions) == 1 and len(terminal_decisions) == 1:
+                ordered = (
+                    payload.source_call_seq,
+                    decision_seq.get(proposal_decisions[0].id, -1),
+                    decision_seq.get(terminal_decisions[0].id, -1),
+                    event.seq,
+                )
+                if any(
+                    left >= right for left, right in zip(ordered, ordered[1:])
+                ):
+                    fail(
+                        "conjecture-turn-control",
+                        f"{prefix}: authority transitions do not precede semantic evidence",
+                    )
 
         action = payload.action.value
         desired = (

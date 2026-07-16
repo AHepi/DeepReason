@@ -538,7 +538,7 @@ def test_recovery_reconstructs_context_requested_and_granted(tmp_path):
     resumed = Harness.at(root, 5)
     assert resumed.workflow_state.recovery_status(
         work.id
-    ) == WorkflowRecoveryStatus.ISSUED
+    ) == WorkflowRecoveryStatus.PROVIDER_RESULT_RECEIVED
     item = resumed.workflow_state.branches[work.id].process_state.work_item(work.id)
     assert item.context_expansions_used == 1
     assert resumed.workflow_state.outstanding_work_order_ids == (work.id,)

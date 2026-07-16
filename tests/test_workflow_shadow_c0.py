@@ -15,7 +15,7 @@ from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
-from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest, route_fingerprint
@@ -98,14 +98,19 @@ def _disabled_context() -> ConjectureContextPolicyV1:
 
 
 def _manifest(config: Config, mode: str) -> RunManifest:
-    controlled = mode == "shadow"
+    controlled = mode in {"shadow", "active_conjecture"}
+    active = mode == "active_conjecture"
     control = ControlPlanePolicyV1(
         controller_version=(
             "workflow.controller.v1" if controlled else "legacy.scheduler.v1"
         ),
         mode=mode,
         workflow_profile=(
-            "conjecture.shadow.v1" if controlled else "legacy.scheduler.v1"
+            "conjecture.active.v1"
+            if active
+            else "conjecture.shadow.v1"
+            if controlled
+            else "legacy.scheduler.v1"
         ),
         school_execution=SchoolExecutionPolicyV1(
             mode="conditioning_only",
@@ -117,8 +122,14 @@ def _manifest(config: Config, mode: str) -> RunManifest:
         conjecture_context=_disabled_context(),
         workflow_retry=WorkflowRetryPolicyV1(),
         contract_versions=ContractVersionPolicyV1(
-            bridge_ledger_wire_contract="bridge.ledger.v1",
-            conjecturer_turn_contract="conjecturer.legacy.v1",
+            bridge_ledger_wire_contract=(
+                "bridge.ledger.v2" if active else "bridge.ledger.v1"
+            ),
+            conjecturer_turn_contract=(
+                "conjecturer.turn.v4"
+                if active
+                else "conjecturer.legacy.v1"
+            ),
             control_event_schema="control.event.v1" if controlled else "none",
         ),
         capability_profile="conjecture-control.v1" if controlled else "legacy.v1",
@@ -378,6 +389,141 @@ def test_shadow_cycle_persists_control_without_changing_legacy_actuation(tmp_pat
         shadow.harness.root,
         meter_total=shadow.meter.total,
     )["violations"] == []
+
+
+def test_active_basic_conjecture_is_bound_ordered_and_semantically_compatible(
+    tmp_path,
+):
+    legacy = _run(tmp_path / "legacy", "legacy")
+    shadow = _run(tmp_path / "shadow", "shadow")
+    active = _run(tmp_path / "active", "active_conjecture")
+
+    _assert_authoritative_surfaces_equal(legacy, shadow)
+    assert active.harness.state == shadow.harness.state
+    assert active.harness.scratch_state == shadow.harness.scratch_state
+    assert active.harness.bridge_state == shadow.harness.bridge_state
+    assert active.report == shadow.report == legacy.report
+
+    (work_order_id,) = tuple(active.harness.workflow_state.work_orders)
+    work = active.harness.workflow_state.work_orders[work_order_id]
+    assert work.workflow_profile == "conjecture.active.v1"
+    assert work.contract_id == "conjecturer.turn.v4"
+
+    events = tuple(active.harness.log.read())
+    controls = {}
+    for event in events:
+        if event.control is None:
+            continue
+        _schema, decision = active.harness.objects.get(
+            event.control.decision_ref,
+            schema="workflow-transition-decision",
+        )
+        if decision.work_order_id == work_order_id:
+            controls[decision.transition_kind] = event.seq
+    (provider_event,) = tuple(
+        event
+        for event in events
+        if event.llm is not None and event.llm.role == "conjecturer"
+    )
+    (admission_event,) = tuple(
+        event
+        for event in events
+        if event.rule == Rule.CONJ and event.outputs
+    )
+
+    assert provider_event.llm.work_order_id == work_order_id
+    assert provider_event.llm.conjecture_context is None
+    assert {
+        attempt.contract_id for attempt in provider_event.llm.attempt_trace
+    } == {"conjecturer.turn.v4"}
+    assert (
+        controls[TransitionKind.WORK_ENABLED]
+        < controls[TransitionKind.WORK_ISSUED]
+        < provider_event.seq
+        < controls[TransitionKind.PROPOSAL_RECEIVED]
+        < controls[TransitionKind.PROPOSAL_ADMITTED]
+        < admission_event.seq
+    )
+    assert active.harness.workflow_state.outstanding_work_order_ids == ()
+    assert active.harness.workflow_state.recovery_status(
+        work_order_id
+    ).value == "finished"
+    assert active.scheduler.workflow_shadow_observations
+    assert all(
+        observation.matched
+        for observation in active.scheduler.workflow_shadow_observations
+    )
+    assert verify_root(
+        active.harness.root,
+        meter_total=active.meter.total,
+    )["violations"] == []
+
+
+def test_active_planning_failure_stops_before_unbound_dispatch(
+    tmp_path,
+    monkeypatch,
+):
+    def fail_planning(*_args, **_kwargs):
+        raise RuntimeError("injected active planning failure")
+
+    monkeypatch.setattr(
+        ConjectureShadowObserver,
+        "begin_conjecture",
+        fail_planning,
+    )
+    shadow = _run(tmp_path / "shadow-planner-failure", "shadow")
+    assert shadow.harness.state.artifacts
+
+    active_root = tmp_path / "active-planner-failure"
+    with pytest.raises(RuntimeError, match="injected active planning failure"):
+        _run(active_root, "active_conjecture")
+
+    failed = Harness(active_root)
+    assert failed.state.artifacts == {}
+    assert failed.workflow_state.work_orders == {}
+    assert not any(
+        event.llm is not None and event.llm.role == "conjecturer"
+        for event in failed.log.read()
+    )
+
+
+def test_active_trace_failure_is_terminal_while_shadow_remains_advisory(
+    tmp_path,
+    monkeypatch,
+):
+    original = Harness.record_control_transition
+
+    def fail_enable(self, decision, **kwargs):
+        if decision.transition_kind == TransitionKind.WORK_ENABLED:
+            raise RuntimeError("injected durable enable failure")
+        return original(self, decision, **kwargs)
+
+    monkeypatch.setattr(Harness, "record_control_transition", fail_enable)
+
+    shadow = _run(tmp_path / "shadow-trace-failure", "shadow")
+    assert shadow.harness.state.artifacts
+    assert len(shadow.prompts) == 1
+
+    active_root = tmp_path / "active-trace-failure"
+    with pytest.raises(
+        WorkflowAuthorizationError,
+        match="not durably authorized",
+    ):
+        _run(active_root, "active_conjecture")
+
+    failed = Harness(active_root)
+    assert failed.state.artifacts == {}
+    assert failed.workflow_state.work_orders == {}
+    assert not any(
+        event.llm is not None and event.llm.role == "conjecturer"
+        for event in failed.log.read()
+    )
+    assert any(
+        event.rule == Rule.MEASURE
+        and event.inputs
+        and event.inputs[0] == "dropped-call"
+        for event in failed.log.read()
+    )
 
 
 def _record_enabled_work(root: Path, work: WorkOrderEnvelopeV1) -> None:

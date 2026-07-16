@@ -394,17 +394,18 @@ def reduce_conjecture(
     ):
         raise ValueError("work order has exhausted local-repair authority")
     if signal.kind == WorkflowSignalKind.CONTEXT_REQUESTED:
+        permits_context = (
+            CapabilityOutcome.CONTEXT_REQUEST
+            in work_order.capability_grant.allowed_outcomes
+        )
+        if not permits_context:
+            raise ValueError("work order does not grant context-request authority")
+    if signal.kind == WorkflowSignalKind.CONTEXT_GRANTED:
         if (
             CapabilityOutcome.CONTEXT_REQUEST
             not in work_order.capability_grant.allowed_outcomes
         ):
-            raise ValueError("work order does not grant context-request authority")
-        if (
-            current.context_expansions_used
-            >= work_order.capability_grant.remaining_context_expansions
-        ):
-            raise ValueError("work order has exhausted context-expansion authority")
-    if signal.kind == WorkflowSignalKind.CONTEXT_GRANTED:
+            raise ValueError("work order does not grant context-expansion authority")
         context_expansion_delta = 1
         if (
             current.context_expansions_used + context_expansion_delta

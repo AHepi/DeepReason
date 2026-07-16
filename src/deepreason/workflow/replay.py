@@ -269,6 +269,11 @@ class WorkflowReplayState:
         ):
             raise ValueError("work order does not grant context-request authority")
         if (
+            decision.transition_kind == TransitionKind.CONTEXT_GRANTED
+            and CapabilityOutcome.CONTEXT_REQUEST not in grant.allowed_outcomes
+        ):
+            raise ValueError("work order does not grant context-expansion authority")
+        if (
             decision.transition_kind == TransitionKind.REPAIR_REQUESTED
             and (
                 current is None
@@ -561,6 +566,82 @@ class WorkflowReplayState:
                 "context-request trigger differs from its stored proposal receipt"
             )
 
+    def _validate_context_decision(
+        self,
+        work: WorkOrderEnvelopeV1,
+        decision: TransitionDecisionV1,
+        state: WorkflowProcessStateV1,
+    ) -> None:
+        if decision.transition_kind not in {
+            TransitionKind.CONTEXT_GRANTED,
+            TransitionKind.CONTEXT_DENIED,
+        }:
+            return
+        current = state.work_item(work.id)
+        proposal = (
+            self.proposal_receipts.get(current.proposal_receipt_id)
+            if current is not None and current.proposal_receipt_id is not None
+            else None
+        )
+        if (
+            current is None
+            or current.status != WorkItemStatus.CONTEXT_PENDING
+            or proposal is None
+            or proposal.context_request_hash is None
+            or proposal.context_request_ref is None
+        ):
+            raise ValueError("context decision has no pending stored request")
+        if not (
+            decision.trigger_ref.startswith("sha256:")
+            and len(decision.trigger_ref) == 71
+        ):
+            raise ValueError("context decision requires a canonical decision reference")
+
+    def _validate_follow_up_work(self, work: WorkOrderEnvelopeV1) -> None:
+        parent_ref = work.input_refs[-1] if work.input_refs else None
+        parent = self.work_orders.get(parent_ref) if parent_ref is not None else None
+        if parent is None:
+            return
+        parent_branch = self.branches[self.work_to_branch[parent.id]]
+        parent_item = parent_branch.process_state.work_item(parent.id)
+        if parent_item is None or parent_item.status != WorkItemStatus.FINISHED:
+            raise ValueError("context follow-up predates closure of its parent work")
+        grants = [
+            prior
+            for prior in self.decisions.values()
+            if prior.work_order_id == parent.id
+            and prior.transition_kind == TransitionKind.CONTEXT_GRANTED
+        ]
+        if len(grants) != 1:
+            raise ValueError("context follow-up requires one parent grant")
+        parent_grant = parent.capability_grant
+        expected_remaining = parent_grant.remaining_context_expansions - 1
+        child_grant = work.capability_grant
+        if expected_remaining < 0 or (
+            child_grant.remaining_context_expansions != expected_remaining
+            or child_grant.max_candidates != parent_grant.max_candidates
+            or child_grant.max_local_repairs != parent_grant.max_local_repairs
+        ):
+            raise ValueError("context follow-up does not reduce parent capability")
+        expected_inputs = tuple(dict.fromkeys((*parent.input_refs, parent.id)))
+        if (
+            work.id == parent.id
+            or work.input_refs != expected_inputs
+            or work.advisory_context_ref is None
+            or work.advisory_context_ref == parent.advisory_context_ref
+            or work.problem_ref != parent.problem_ref
+            or work.school_id != parent.school_id
+            or work.route_lease != parent.route_lease
+            or work.contract_id != parent.contract_id
+            or work.manifest_digest != parent.manifest_digest
+            or work.workflow_profile != parent.workflow_profile
+            or work.repair_policy_ref != parent.repair_policy_ref
+            or work.task_payload_schema_id != parent.task_payload_schema_id
+            or work.task_payload_ref != parent.task_payload_ref
+            or work.task_payload_value != parent.task_payload_value
+        ):
+            raise ValueError("context follow-up differs from its parent authority")
+
     def _plan(
         self,
         payload: ControlEventPayloadV1,
@@ -598,6 +679,11 @@ class WorkflowReplayState:
             raise ValueError("transition decision names an unknown work order")
         if supplied_work is not None and supplied_work.id != decision.work_order_id:
             raise ValueError("control event supplies another work order")
+        if (
+            supplied_work is not None
+            and decision.transition_kind == TransitionKind.WORK_ENABLED
+        ):
+            self._validate_follow_up_work(supplied_work)
 
         expected_schemas = ["workflow-transition-decision"]
         if decision.transition_kind == TransitionKind.WORK_ENABLED:
@@ -655,6 +741,7 @@ class WorkflowReplayState:
             )
         self._validate_work_decision(work, decision, state)
         self._validate_context_request(work, decision, state)
+        self._validate_context_decision(work, decision, state)
         self._validate_observed_call_capability(
             work,
             decision,
