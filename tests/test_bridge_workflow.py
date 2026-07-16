@@ -287,8 +287,10 @@ def test_exhausted_ledger_amendment_is_terminal_and_retains_prior_ledger(tmp_pat
         BridgeAction.FAILED,
     ]
     amendment_event = list(harness.log.read())[-2]
-    assert amendment_event.llm.attempts == 3
-    assert not any(attempt.valid for attempt in amendment_event.llm.attempt_trace)
+    failed_event = list(harness.log.read())[-1]
+    assert amendment_event.llm is None
+    assert failed_event.llm.attempts == 3
+    assert not any(attempt.valid for attempt in failed_event.llm.attempt_trace)
     assert BridgeAction.OUTPUT_COMPOSED not in actions
     assert Harness(harness.root).bridge_state == harness.bridge_state
 

@@ -9,9 +9,11 @@ bug candidate.
 """
 
 import json
+from enum import Enum
 from pathlib import Path
 
 from deepreason.adjudication.edges import DependenceCycleError, build_dep, toposort
+from deepreason.bridge.events import BridgeAction
 from deepreason.controller import ENVELOPES, GENERATOR_LEDGER
 from deepreason.harness import Harness
 from deepreason.llm.firewall import route_fingerprint
@@ -21,6 +23,102 @@ from deepreason.run_manifest import (
     MANIFEST_NAME,
     load_run_manifest,
 )
+
+
+class ExpectedCallOutcome(str, Enum):
+    """Attempt-validity shape authorized by one typed process event."""
+
+    SUCCESS_REQUIRED = "success_required"
+    FAILURE_REQUIRED = "failure_required"
+    LEGACY_DROPPED = "legacy_dropped"
+
+
+def _is_typed_bridge_failure(event) -> bool:
+    payload = event.bridge
+    return bool(
+        event.rule.value == "Bridge"
+        and payload is not None
+        and payload.action == BridgeAction.FAILED
+        and payload.error_code
+        and event.llm is not None
+    )
+
+
+def _legacy_bridge_failure_call_seqs(events, bridge_state) -> set[int]:
+    """Correlate only the historical Stage-A three-event failure shape.
+
+    Older bridge workflows put exhausted Stage-A spend on LEDGER_CREATED,
+    followed immediately by LEDGER_VALIDATED and a typed FAILED event.  This
+    resolver recognizes that exact canonical chain; near misses remain normal
+    successful-call candidates and therefore fail attempt validity.
+    """
+
+    correlated: set[int] = set()
+    for index in range(len(events) - 2):
+        created, validated, failed = events[index : index + 3]
+        if not (
+            created.rule.value == validated.rule.value == failed.rule.value == "Bridge"
+            and created.bridge is not None
+            and created.bridge.action == BridgeAction.LEDGER_CREATED
+            and created.llm is not None
+            and validated.bridge is not None
+            and validated.bridge.action == BridgeAction.LEDGER_VALIDATED
+            and validated.llm is None
+            and failed.bridge is not None
+            and failed.bridge.action == BridgeAction.FAILED
+            and failed.llm is None
+            and failed.bridge.error_code == "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
+        ):
+            continue
+        failures = [
+            bridge_state.failures[output]
+            for output in failed.outputs
+            if output in bridge_state.failures
+        ]
+        if len(failures) != 1:
+            continue
+        failure = failures[0]
+        ledger_id = failure.claim_ledger_id
+        report_id = failure.validation_report_id
+        if not (
+            failure.phase == "stage_a"
+            and failure.error_code == failed.bridge.error_code
+            and ledger_id is not None
+            and report_id is not None
+            and any(
+                diagnostic.code == "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
+                for diagnostic in failure.diagnostics
+            )
+            and {
+                failure.evidence_pack_id,
+                failure.catalog_id,
+                ledger_id,
+            }.issubset(set(created.outputs))
+            and list(validated.inputs) == [ledger_id]
+            and validated.bridge.finding_ref == report_id
+            and report_id in validated.outputs
+            and list(failed.inputs) == [ledger_id, report_id]
+            and list(failure.terminal_inputs) == [ledger_id, report_id]
+        ):
+            continue
+        correlated.add(created.seq)
+    return correlated
+
+
+def _expected_call_outcome(
+    event,
+    legacy_failure_call_seqs: set[int],
+) -> ExpectedCallOutcome:
+    if event.seq in legacy_failure_call_seqs or _is_typed_bridge_failure(event):
+        return ExpectedCallOutcome.FAILURE_REQUIRED
+    if any(
+        value == "dropped-call"
+        or value.endswith("-dropped")
+        or value in {"budget-exhausted", "terminal-route-firewall"}
+        for value in event.inputs
+    ):
+        return ExpectedCallOutcome.LEGACY_DROPPED
+    return ExpectedCallOutcome.SUCCESS_REQUIRED
 
 
 def verify_root(root: Path, meter_total: int | None = None) -> dict:
@@ -45,6 +143,9 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         return {"violations": [{"check": "open", "detail": repr(e)[:400]}], "stats": {}}
 
     events = list(h.log.read())
+    legacy_failure_call_seqs = _legacy_bridge_failure_call_seqs(
+        events, h.bridge_state
+    )
 
     # Process metadata is replay/audit input only.  Its checks never inspect
     # or alter att, dep, status, warrants, guards, or acceptance.
@@ -150,12 +251,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         repair_attempts += max(0, e.llm.attempts - 1)
         logged += e.llm.tokens
         trace = list(e.llm.attempt_trace)
-        dropped = any(
-            value == "dropped-call"
-            or value.endswith("-dropped")
-            or value in {"budget-exhausted", "terminal-route-firewall"}
-            for value in e.inputs
-        )
+        expected_outcome = _expected_call_outcome(e, legacy_failure_call_seqs)
         if trace:
             traced_calls += 1
             first_pass_valid += int(trace[0].valid)
@@ -188,17 +284,37 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             valid_indexes = [
                 index for index, attempt in enumerate(trace) if attempt.valid
             ]
-            if dropped and valid_indexes:
+            if (
+                expected_outcome == ExpectedCallOutcome.LEGACY_DROPPED
+                and valid_indexes
+            ):
                 fail(
                     "attempt-validity",
                     f"event seq={e.seq}: dropped call contains a valid attempt",
                 )
-            if not dropped and valid_indexes != [len(trace) - 1]:
+            elif (
+                expected_outcome == ExpectedCallOutcome.FAILURE_REQUIRED
+                and valid_indexes
+            ):
+                fail(
+                    "attempt-validity",
+                    f"event seq={e.seq}: failed call must contain no valid "
+                    f"attempt, got {valid_indexes}",
+                )
+            elif (
+                expected_outcome == ExpectedCallOutcome.SUCCESS_REQUIRED
+                and valid_indexes != [len(trace) - 1]
+            ):
                 fail(
                     "attempt-validity",
                     f"event seq={e.seq}: successful call must have one final valid "
                     f"attempt, got {valid_indexes}",
                 )
+        elif expected_outcome == ExpectedCallOutcome.FAILURE_REQUIRED:
+            fail(
+                "attempt-trace",
+                f"event seq={e.seq}: typed failed LLM call has no attempt trace",
+            )
         elif manifest is not None:
             # Historical records remain readable because attempt_trace has a
             # default, but a manifest-bound run without total attempt evidence
@@ -223,23 +339,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             except KeyError:
                 fail("blobs", f"event seq={e.seq}: {kind} blob {ref[:12]} missing")
 
-        if manifest is not None:
-            routes = manifest.roles.get(e.llm.role, ())
-            if not routes:
-                fail(
-                    "frozen-route",
-                    f"event seq={e.seq}: role {e.llm.role!r} has no active manifest route",
-                )
-            elif not any(
-                route.model_id == e.llm.model and route.base_url == e.llm.endpoint
-                for route in routes
-            ):
-                fail(
-                    "frozen-route",
-                    f"event seq={e.seq}: {e.llm.role} used "
-                    f"endpoint={e.llm.endpoint!r} model={e.llm.model!r} outside manifest",
-                )
-
+        inspect_attempts = (
+            manifest is not None
+            or expected_outcome == ExpectedCallOutcome.FAILURE_REQUIRED
+        )
+        if inspect_attempts:
             for index, attempt in enumerate(trace):
                 prefix = f"event seq={e.seq} attempt={index}"
                 if attempt.attempt != index:
@@ -268,9 +372,28 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             "attempt-blobs",
                             f"{prefix}: {kind} blob {ref[:12]} missing",
                         )
-
                 if not attempt.contract_id:
                     fail("attempt-contract", f"{prefix}: contract_id is empty")
+
+        if manifest is not None:
+            routes = manifest.roles.get(e.llm.role, ())
+            if not routes:
+                fail(
+                    "frozen-route",
+                    f"event seq={e.seq}: role {e.llm.role!r} has no active manifest route",
+                )
+            elif not any(
+                route.model_id == e.llm.model and route.base_url == e.llm.endpoint
+                for route in routes
+            ):
+                fail(
+                    "frozen-route",
+                    f"event seq={e.seq}: {e.llm.role} used "
+                    f"endpoint={e.llm.endpoint!r} model={e.llm.model!r} outside manifest",
+                )
+
+            for index, attempt in enumerate(trace):
+                prefix = f"event seq={e.seq} attempt={index}"
                 if attempt.model_profile != manifest.model_profile:
                     fail(
                         "attempt-profile",

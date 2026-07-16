@@ -6,6 +6,7 @@ import json
 
 from deepreason.bridge.events import BridgeAction
 from deepreason.harness import Harness
+from deepreason.invariants import verify_root
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.ontology import Problem, ProblemProvenance
@@ -102,14 +103,24 @@ def test_stage_a_bounded_repair_exhaustion_is_a_typed_terminal_failure(tmp_path)
         if event.bridge is not None
         and event.bridge.action == BridgeAction.LEDGER_CREATED
     )
-    assert ledger_event.llm.attempts == 3
-    assert [attempt.valid for attempt in ledger_event.llm.attempt_trace] == [
+    assert ledger_event.llm is None
+    failed_event = events[-1]
+    assert failed_event.llm.attempts == 3
+    assert [attempt.valid for attempt in failed_event.llm.attempt_trace] == [
         False,
         False,
         False,
     ]
-    assert events[-1].bridge.action == BridgeAction.FAILED
+    assert failed_event.bridge.action == BridgeAction.FAILED
     assert len([event for event in events if event.llm is not None]) == 1
+    report = verify_root(root)
+    assert report["violations"] == []
+    assert (
+        report["stats"]["process"]["profile_totals"]["unprofiled"][
+            "schema_exhausted"
+        ]
+        == 1
+    )
     assert thesis.last_transport_attempts == 0
     assert Harness(root).bridge_state == harness.bridge_state
 

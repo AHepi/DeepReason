@@ -404,12 +404,14 @@ class BridgeWorkflow:
                 phase="stage_a",
             )
         ledger = stage_a.ledger
-        self._record_call(stage_a.receipt.llm_call)
+        stage_a_call = stage_a.receipt.llm_call
+        if stage_a.failure is None:
+            self._record_call(stage_a_call)
         self._persist(
             BridgePersistenceBatch(
                 action=BridgeAction.LEDGER_CREATED,
                 records=_ledger_records(stage_a, include_catalog=True),
-                llm=stage_a.receipt.llm_call,
+                llm=stage_a_call if stage_a.failure is None else None,
             )
         )
         self._persist(
@@ -429,7 +431,7 @@ class BridgeWorkflow:
                 ledger=ledger,
                 report=stage_a.validation_report,
                 inputs=(ledger.id, stage_a.validation_report.id),
-                calls=[],
+                calls=[stage_a_call] if stage_a_call is not None else [],
                 diagnostics=(stage_a.failure,),
             )
 
@@ -518,13 +520,12 @@ class BridgeWorkflow:
                 stage_a = amended
                 ledger = amended.ledger
                 amendment_count += 1
-                self._record_call(amended.receipt.llm_call)
+                amendment_call = amended.receipt.llm_call
                 if amended.failure is not None:
                     self._persist(
                         BridgePersistenceBatch(
                             action=BridgeAction.LEDGER_AMENDMENT_ATTEMPTED,
                             inputs=(prior.id,),
-                            llm=amended.receipt.llm_call,
                         )
                     )
                     return self._failure(
@@ -536,15 +537,20 @@ class BridgeWorkflow:
                         report=amended.validation_report,
                         amendment_count=amendment_count,
                         inputs=(ledger.id, amended.validation_report.id),
-                        calls=[],
+                        calls=(
+                            [amendment_call]
+                            if amendment_call is not None
+                            else []
+                        ),
                         diagnostics=(amended.failure,),
                     )
+                self._record_call(amendment_call)
                 if not amended.amended:
                     self._persist(
                         BridgePersistenceBatch(
                             action=BridgeAction.LEDGER_AMENDMENT_ATTEMPTED,
                             inputs=(prior.id,),
-                            llm=amended.receipt.llm_call,
+                            llm=amendment_call,
                         )
                     )
                     continue
@@ -553,7 +559,7 @@ class BridgeWorkflow:
                         action=BridgeAction.LEDGER_AMENDED,
                         inputs=(prior.id,),
                         records=_ledger_records(amended, include_catalog=False),
-                        llm=amended.receipt.llm_call,
+                        llm=amendment_call,
                     )
                 )
                 self._persist(
