@@ -372,13 +372,6 @@ class TextRunApplicationService:
                 ],
             },
         )
-        missing = credential_checker(manifest)
-        if missing:
-            raise ValueError(
-                "RUN_CREDENTIAL_MISSING: required environment variable(s) are unset: "
-                + ", ".join(missing)
-            )
-
         def notify(event) -> None:
             if progress_callback is None:
                 return
@@ -397,6 +390,12 @@ class TextRunApplicationService:
                     "RUN_ALREADY_RUNNING: another operator owns this run root"
                 ) from error
             try:
+                missing = credential_checker(manifest)
+                if missing:
+                    raise ValueError(
+                        "RUN_CREDENTIAL_MISSING: required environment variable(s) "
+                        "are unset: " + ", ".join(missing)
+                    )
                 if continuation:
                     continuation_record = prepare_continuation(
                         root,
