@@ -13,7 +13,12 @@ from deepreason.canonical import canonical_json
 from deepreason.frozen import FrozenDict
 from deepreason.scratch.attention import AttentionPackV1
 from deepreason.scratch.contracts import SCRATCH_CONTRACT_INSTRUCTIONS
-from deepreason.scratch.models import HashRef, ScratchRecord, domain_hash
+from deepreason.scratch.models import (
+    AdvisoryContextV1,
+    HashRef,
+    ScratchRecord,
+    domain_hash,
+)
 from deepreason.scratch.service import ScratchService
 from deepreason.scratch.state import LinkState
 
@@ -307,6 +312,25 @@ class ScratchRenderer:
         return RenderedScratchPackV1(
             text=text, receipt=receipt, truncated_fields=len(truncated)
         )
+
+    def render_advisory_context(
+        self,
+        pack: AttentionPackV1,
+        context: AdvisoryContextV1,
+    ) -> RenderedScratchPackV1:
+        """Render only the exact repository-authored advisory context."""
+
+        context = AdvisoryContextV1.model_validate(context)
+        expected = self.service.prepare_advisory_context(
+            pack,
+            warning=SCRATCH_CONTRACT_INSTRUCTIONS,
+        )
+        if context != expected:
+            raise ScratchRenderError(
+                "SCRATCH_CONTEXT_FORGED",
+                "advisory context does not match the planned attention pack",
+            )
+        return self.render_attention_pack(pack)
 
     def persist_receipt(self, receipt: ScratchRenderReceiptV1) -> str:
         """Explicitly persist handle provenance; pure rendering never writes."""

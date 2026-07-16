@@ -45,7 +45,12 @@ from deepreason.llm.wire import (
     minimal_example,
     wire_contract_for,
 )
-from deepreason.ontology.event import LLMAttempt, LLMCall, SchoolRouteReceiptV1
+from deepreason.ontology.event import (
+    ConjectureContextCallReceiptV1,
+    LLMAttempt,
+    LLMCall,
+    SchoolRouteReceiptV1,
+)
 from deepreason.run_manifest import infer_model_family
 
 
@@ -306,6 +311,7 @@ class LLMAdapter:
         output_mechanism: str | OutputMechanism | None = None,
         endpoint_lease: EndpointLease | None = None,
         school_id: str | None = None,
+        conjecture_context: ConjectureContextCallReceiptV1 | None = None,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
@@ -319,6 +325,14 @@ class LLMAdapter:
             raise KeyError(f"no endpoint configured for role {role!r}")
         if school_id is not None and endpoint_lease is None:
             raise ValueError("school-routed calls require an explicit endpoint lease")
+        if conjecture_context is not None:
+            conjecture_context = ConjectureContextCallReceiptV1.model_validate(
+                conjecture_context
+            )
+            if role != "conjecturer":
+                raise ValueError("only conjecturer calls accept advisory context")
+            if school_id != conjecture_context.school_id:
+                raise ValueError("school route and advisory context must name one school")
         endpoint = self._resolve(role, endpoint_index)
         lease = endpoint_lease or select_lease(self.leases, role, endpoint_index)
         if lease.role != role or lease.seat != endpoint_index:
@@ -349,7 +363,22 @@ class LLMAdapter:
             wire_contract.variant.startswith("compact")
             and wire_contract.aliases.aliases
         ):
-            rendered_pack = wire_contract.aliases.render_pack(rendered_pack)
+            if conjecture_context is None:
+                rendered_pack = wire_contract.aliases.render_pack(rendered_pack)
+            else:
+                protected = self.blobs.get(
+                    conjecture_context.rendered_context_ref
+                ).decode("utf-8")
+                if rendered_pack.count(protected) != 1:
+                    raise ValueError(
+                        "advisory context bytes are absent or duplicated before aliasing"
+                    )
+                before, separator, after = rendered_pack.partition(protected)
+                rendered_pack = (
+                    wire_contract.aliases.render_pack(before)
+                    + separator
+                    + wire_contract.aliases.render_pack(after)
+                )
         if profile is not None and not pack_is_allocated:
             # Alias before clipping: otherwise a long canonical identifier can
             # be cut in half, evade replacement, or expand beyond the profile
@@ -445,6 +474,7 @@ class LLMAdapter:
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
                 attempt_trace=attempt_trace,
                 school_route=school_route,
+                conjecture_context=conjecture_context,
             )
 
         for attempt in range(repair.attempt_count):
@@ -650,6 +680,7 @@ class LLMAdapter:
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
                 attempt_trace=attempt_trace,
                 school_route=school_route,
+                conjecture_context=conjecture_context,
             )
             return data, call
         error = SchemaRepairError(

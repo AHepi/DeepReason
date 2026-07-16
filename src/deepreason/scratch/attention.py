@@ -98,6 +98,13 @@ class AttentionRequestV1(ScratchRecord):
     )
     focus_blocks: list[HashRef] | None = Field(default=None, max_length=1_000)
     focus_clusters: list[HashRef] | None = Field(default=None, max_length=1_000)
+    # Absent on historical requests (and omitted from their canonical hash).
+    # Ordinary v4 Conj uses this to enforce the manifest capability exactly.
+    permitted_channels: list[RetrievalChannel] | None = Field(
+        default=None,
+        max_length=len(_ATTENTION_CHANNELS),
+        exclude_if=lambda value: value is None,
+    )
     maximum_blocks: int = Field(gt=0, le=1_000)
     maximum_cluster_guides: int = Field(ge=0, le=100)
     include_nearby: bool = True
@@ -114,6 +121,18 @@ class AttentionRequestV1(ScratchRecord):
         if value is not None and len(value) != len(set(value)):
             raise ValueError("focus references must not contain duplicates")
         return None if value is None else FrozenList(value)
+
+    @field_validator("permitted_channels", mode="after")
+    @classmethod
+    def _canonical_permitted_channels(cls, value):
+        if value is None:
+            return None
+        canonical = [channel for channel in _ATTENTION_CHANNELS if channel in value]
+        if list(value) != canonical:
+            raise ValueError(
+                "permitted_channels must be unique and in canonical attention order"
+            )
+        return FrozenList(value)
 
     @property
     def request_hash(self) -> str:
@@ -328,6 +347,14 @@ class AttentionPlanner:
         if active is not None and coverage.coverage_due(pack_count):
             pending = coverage.next_pending()
             channels[RetrievalChannel.COVERAGE] = [pending] if pending else []
+        if request.permitted_channels is not None:
+            allowed = set(request.permitted_channels)
+            channels = {
+                channel: values if channel in allowed else []
+                for channel, values in channels.items()
+            }
+            if RetrievalChannel.COVERAGE not in allowed:
+                cycle_id = None
         return channels, relevant_clusters, cycle_id
 
     def _apply_channel_limits(

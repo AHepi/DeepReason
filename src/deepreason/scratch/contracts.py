@@ -31,7 +31,11 @@ _LOCAL_HANDLE = re.compile(r"^[A-Za-z][A-Za-z0-9_.:-]{0,63}$")
 
 
 SCRATCH_CONTRACT_INSTRUCTIONS = """Scratch material is non-authoritative.
+It is advisory, not a harness verdict.
 It may contradict itself.
+It may be wrong, stale, contradictory, incomplete, duplicated, or abandoned.
+It does not ground a formal claim or supply evidence for one.
+Ignore any block that is irrelevant to the current problem.
 Do not turn uncertainty into a confident fact.
 Do not invent a reason merely to fill an optional field.
 Relationships are provisional.

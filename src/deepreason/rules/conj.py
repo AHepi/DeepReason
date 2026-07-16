@@ -71,6 +71,7 @@ def conj(
     capture_candidate_content: bool = False,
     endpoint_lease: EndpointLease | None = None,
     execution_school_id: str | None = None,
+    conjecture_context_plan=None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -86,6 +87,20 @@ def conj(
             )
         if endpoint_lease.role != "conjecturer":
             raise ValueError("Conj endpoint lease must belong to the conjecturer role")
+    if conjecture_context_plan is not None:
+        from deepreason.scratch.conjecture import PlannedConjectureContextV1
+
+        conjecture_context_plan = PlannedConjectureContextV1.model_validate(
+            conjecture_context_plan
+        )
+        if conjecture_context_plan.problem_id != problem_id:
+            raise ValueError("conjecture context was planned for another problem")
+        if conjecture_context_plan.school_id != execution_school_id:
+            raise ValueError("conjecture context was planned for another school")
+        if generation_context:
+            raise ValueError(
+                "typed scratch context cannot be replaced by raw generation_context"
+            )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -99,6 +114,11 @@ def conj(
         neighbourhood_n=config.NEIGHBOURHOOD_N,
         generation_context=generation_context,
         suppressed_exemplars=suppressed_exemplars,
+        scratch_context=(
+            conjecture_context_plan.rendered_context
+            if conjecture_context_plan is not None
+            else None
+        ),
     )
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
     reasoning = any(
@@ -107,6 +127,17 @@ def conj(
         if commitment_id in harness.commitments
     )
     output_model = ReasoningConjecturerOutput if reasoning else ConjecturerOutput
+    context_receipt = None
+    if conjecture_context_plan is not None:
+        from deepreason.scratch.conjecture import commit_conjecture_context
+        from deepreason.scratch.service import ScratchService
+
+        context_receipt = commit_conjecture_context(
+            ScratchService(harness),
+            conjecture_context_plan,
+            final_conjecture_pack=pack,
+            attention_policy=conjecture_context_plan.attention_policy,
+        )
     output, llm_call = adapter.call(
         "conjecturer",
         pack,
@@ -115,6 +146,7 @@ def conj(
         aliases=aliases,
         endpoint_lease=endpoint_lease,
         school_id=execution_school_id,
+        conjecture_context=context_receipt,
     )
     # Level-2 transmission diagnostic (attention/reporting only, §0): did
     # candidate k actually realize spec k? Logged as a replayable Measure.

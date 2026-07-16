@@ -289,6 +289,7 @@ def render_conj_pack(
     neighbourhood_n: int = NEIGHBOURHOOD_N,
     generation_context: str | None = None,
     suppressed_exemplars: tuple[str, ...] = (),
+    scratch_context=None,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -385,6 +386,19 @@ def render_conj_pack(
                 "GENERATION CONTEXT (attention only; truth, admission, and "
                 "verifier standards are unchanged):\n" + generation_context,
                 6,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    if scratch_context is not None:
+        from deepreason.scratch.render import RenderedScratchPackV1
+
+        scratch_context = RenderedScratchPackV1.model_validate(scratch_context)
+        sections.append(
+            _pack_section(
+                "scratch-advisory-context",
+                scratch_context.text,
+                7,
                 droppable=False,
                 compressible=False,
             )

@@ -380,6 +380,35 @@ class Scheduler:
             "crossover": schools.crossover_exemplars(self.harness, school_id),
         }
 
+    def _plan_conjecture_context(self, problem, school_id: str | None):
+        manifest = self.run_manifest
+        if manifest is None or manifest.schema_version != 4:
+            return None
+        control = manifest.control_plane_policy
+        scratch = manifest.scratch_policy
+        if (
+            control is None
+            or control.mode != "active_conjecture"
+            or control.conjecture_context.mode == "disabled"
+            or scratch is None
+            or not scratch.enabled
+        ):
+            return None
+        from deepreason.scratch.conjecture import plan_conjecture_context
+        from deepreason.scratch.service import ScratchService
+
+        fence = self.harness._next_seq - 1
+        return plan_conjecture_context(
+            ScratchService(self.harness),
+            problem=problem,
+            school_id=school_id,
+            manifest_digest=manifest.sha256,
+            scratch_policy=scratch,
+            context_policy=control.conjecture_context,
+            formal_fence_seq=fence,
+            scratch_fence_seq=fence,
+        )
+
     def _criticize(self, artifact) -> None:
         harness, config = self.harness, self.config
         crit_program(harness, artifact.id)
@@ -682,27 +711,46 @@ class Scheduler:
                         if self.workload_profile == "formal"
                         else None
                     )
-                    admitted = conj(
-                        harness, problem.id, self.adapter, config, self.diagnostics,
-                        school=school, tail_weighted=self.tail_weighted,
-                        complement=self.complement, specs=specs,
-                        embedder=self.embedder,
-                        mandatory_interface=mandatory,
-                        workload_profile=self.workload_profile,
-                        contract_id=(
-                            f"scheduler.conjecturer.{self.workload_profile}.v1"
-                            if self.workload_profile is not None
-                            else "conjecturer.direct.v1"
-                        ),
-                        component_spec=component_spec,
-                        theorem_interface=theorem_interface,
-                        generation_context=self.generation_context,
-                        suppressed_exemplars=self.suppressed_exemplars,
-                        endpoint_lease=school_leases.get(school_id),
-                        execution_school_id=(
-                            school_id if school_id in school_leases else None
-                        ),
-                    )
+                    from deepreason.scratch.conjecture import ConjectureContextStale
+
+                    context_plan = self._plan_conjecture_context(problem, school_id)
+                    for context_attempt in range(2):
+                        try:
+                            admitted = conj(
+                                harness,
+                                problem.id,
+                                self.adapter,
+                                config,
+                                self.diagnostics,
+                                school=school,
+                                tail_weighted=self.tail_weighted,
+                                complement=self.complement,
+                                specs=specs,
+                                embedder=self.embedder,
+                                mandatory_interface=mandatory,
+                                workload_profile=self.workload_profile,
+                                contract_id=(
+                                    f"scheduler.conjecturer.{self.workload_profile}.v1"
+                                    if self.workload_profile is not None
+                                    else "conjecturer.direct.v1"
+                                ),
+                                component_spec=component_spec,
+                                theorem_interface=theorem_interface,
+                                generation_context=self.generation_context,
+                                suppressed_exemplars=self.suppressed_exemplars,
+                                endpoint_lease=school_leases.get(school_id),
+                                execution_school_id=(
+                                    school_id if school_id in school_leases else None
+                                ),
+                                conjecture_context_plan=context_plan,
+                            )
+                            break
+                        except ConjectureContextStale:
+                            if context_attempt:
+                                raise
+                            context_plan = self._plan_conjecture_context(
+                                problem, school_id
+                            )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
                 continue

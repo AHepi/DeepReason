@@ -100,6 +100,37 @@ class SchoolRouteReceiptV1(FrozenRecord):
     contract_id: str = Field(min_length=1)
 
 
+class ConjectureContextCallReceiptV1(FrozenRecord):
+    """Durable proof of the exact advisory scratch shown to Conj."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True
+    )
+
+    schema_: Literal["conjecture-context-call-receipt.v1"] = Field(
+        "conjecture-context-call-receipt.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    problem_id: str = Field(min_length=1, max_length=512)
+    school_id: str | None = Field(
+        default=None, pattern=r"^school-(0|[1-9][0-9]*)$"
+    )
+    formal_fence_seq: int = Field(ge=0)
+    scratch_fence_seq: int = Field(ge=0)
+    selection_receipt_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    advisory_context_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    render_receipt_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
+    rendered_context_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def _one_state_prefix(self):
+        if self.formal_fence_seq != self.scratch_fence_seq:
+            raise ValueError(
+                "conjecture context formal and scratch fences must name one prefix"
+            )
+        return self
+
+
 class LLMCall(FrozenRecord):
     role: str
     model: str
@@ -126,6 +157,9 @@ class LLMCall(FrozenRecord):
     school_route: SchoolRouteReceiptV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    conjecture_context: ConjectureContextCallReceiptV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("attempt_trace", mode="after")
     @classmethod
@@ -135,20 +169,25 @@ class LLMCall(FrozenRecord):
     @model_validator(mode="after")
     def _school_route_matches_attempts(self):
         receipt = self.school_route
-        if receipt is None:
-            return self
-        if receipt.role != self.role:
-            raise ValueError("school route role must match LLMCall.role")
-        if not self.attempt_trace:
-            raise ValueError("school route receipt requires an attempt trace")
-        for attempt in self.attempt_trace:
-            if (
-                attempt.seat != receipt.seat
-                or attempt.endpoint_id != receipt.endpoint_id
-                or attempt.route_sha256 != receipt.route_sha256
-                or attempt.contract_id != receipt.contract_id
-            ):
-                raise ValueError("school route receipt must match every LLM attempt")
+        if receipt is not None:
+            if receipt.role != self.role:
+                raise ValueError("school route role must match LLMCall.role")
+            if not self.attempt_trace:
+                raise ValueError("school route receipt requires an attempt trace")
+            for attempt in self.attempt_trace:
+                if (
+                    attempt.seat != receipt.seat
+                    or attempt.endpoint_id != receipt.endpoint_id
+                    or attempt.route_sha256 != receipt.route_sha256
+                    or attempt.contract_id != receipt.contract_id
+                ):
+                    raise ValueError("school route receipt must match every LLM attempt")
+        context = self.conjecture_context
+        if context is not None:
+            if self.role != "conjecturer":
+                raise ValueError("only conjecturer calls may carry advisory context")
+            if receipt is not None and context.school_id != receipt.school_id:
+                raise ValueError("school route and conjecture context must name one school")
         return self
 
 

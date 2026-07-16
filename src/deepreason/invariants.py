@@ -335,8 +335,185 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"event seq={event.seq}: receipt route hash differs from manifest route",
             )
 
+    def validate_conjecture_context(event) -> None:
+        """Prove the exact advisory bytes and their append-only provenance."""
+
+        call = event.llm
+        receipt = (
+            getattr(call, "conjecture_context", None) if call is not None else None
+        )
+        if receipt is None:
+            return
+        prefix = f"event seq={event.seq}"
+        if manifest is None or manifest.schema_version != 4:
+            fail(
+                "conjecture-context",
+                f"{prefix}: advisory context receipt requires a v4 manifest",
+            )
+        else:
+            control = manifest.control_plane_policy
+            if (
+                control is None
+                or control.mode != "active_conjecture"
+                or control.conjecture_context.mode == "disabled"
+            ):
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: manifest does not authorize conjecture context",
+                )
+            if receipt.manifest_digest != manifest.sha256:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: receipt manifest digest does not match the run",
+                )
+
+        if receipt.formal_fence_seq >= event.seq:
+            fail(
+                "conjecture-context",
+                f"{prefix}: context fence does not precede the call event",
+            )
+        route_receipt = getattr(call, "school_route", None)
+        if receipt.school_id is not None and route_receipt is None:
+            fail(
+                "conjecture-context",
+                f"{prefix}: school context has no matching route receipt",
+            )
+        try:
+            fenced = Harness.at(root, receipt.formal_fence_seq)
+            if receipt.problem_id not in fenced.state.problems:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: problem was absent at the formal fence",
+                )
+        except Exception as error:  # noqa: BLE001 - malformed evidence is a finding
+            fail(
+                "conjecture-context",
+                f"{prefix}: cannot reconstruct formal fence: {error!r}",
+            )
+
+        selection = h.scratch_state.attention_receipts.get(
+            receipt.selection_receipt_ref
+        )
+        context = h.scratch_state.advisory_contexts.get(
+            receipt.advisory_context_ref
+        )
+        if selection is None:
+            fail(
+                "conjecture-context",
+                f"{prefix}: selection receipt is absent from scratch replay",
+            )
+        elif selection.state_seq != receipt.scratch_fence_seq:
+            fail(
+                "conjecture-context",
+                f"{prefix}: selection receipt names another scratch fence",
+            )
+        if context is None:
+            fail(
+                "conjecture-context",
+                f"{prefix}: advisory context is absent from scratch replay",
+            )
+        elif context.retrieval_receipt != receipt.selection_receipt_ref:
+            fail(
+                "conjecture-context",
+                f"{prefix}: advisory context names another selection receipt",
+            )
+        elif selection is not None and [block.id for block in context.blocks] != list(
+            selection.final_order
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: advisory blocks differ from the selected order",
+            )
+
+        selection_events = [
+            candidate
+            for candidate in events
+            if candidate.scratch is not None
+            and receipt.selection_receipt_ref in candidate.outputs
+        ]
+        context_events = [
+            candidate
+            for candidate in events
+            if candidate.scratch is not None
+            and receipt.advisory_context_ref in candidate.outputs
+        ]
+        if len(selection_events) != 1 or selection_events[0].seq >= event.seq:
+            fail(
+                "conjecture-context",
+                f"{prefix}: selection must have one preceding scratch event",
+            )
+        elif selection_events[0].scratch.context_ref != receipt.render_receipt_ref:
+            fail(
+                "conjecture-context",
+                f"{prefix}: selection event does not bind the render receipt blob",
+            )
+        if len(context_events) != 1 or context_events[0].seq >= event.seq:
+            fail(
+                "conjecture-context",
+                f"{prefix}: advisory context must have one preceding scratch event",
+            )
+
+        try:
+            from deepreason.scratch.render import ScratchRenderReceiptV1
+
+            render = ScratchRenderReceiptV1.model_validate_json(
+                h.blobs.get(receipt.render_receipt_ref)
+            )
+            if render.state_seq != receipt.scratch_fence_seq:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: render receipt names another scratch fence",
+                )
+            if render.attention_receipt != receipt.selection_receipt_ref:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: render receipt names another selection",
+                )
+            if selection is not None and list(render.block_handles.values()) != list(
+                selection.final_order
+            ):
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: render handles differ from the selected blocks",
+                )
+        except (KeyError, TypeError, ValueError) as error:
+            fail(
+                "conjecture-context",
+                f"{prefix}: invalid render receipt blob: {error!r}",
+            )
+
+        try:
+            rendered = h.blobs.get(receipt.rendered_context_ref)
+            initial_prompt = h.blobs.get(call.attempt_trace[0].prompt_ref)
+            if initial_prompt.count(rendered) != 1:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: initial prompt does not contain exact context once",
+                )
+            marker, separator, payload_bytes = rendered.partition(b"\n")
+            payload = json.loads(payload_bytes) if separator else None
+            from deepreason.scratch.contracts import SCRATCH_CONTRACT_INSTRUCTIONS
+
+            if (
+                marker != b"SCRATCH_ADVISORY_CONTEXT_V1"
+                or not isinstance(payload, dict)
+                or payload.get("warning") != SCRATCH_CONTRACT_INSTRUCTIONS
+                or context is None
+                or context.warning != SCRATCH_CONTRACT_INSTRUCTIONS
+            ):
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: rendered advisory warning or envelope differs",
+                )
+        except (IndexError, KeyError, TypeError, UnicodeError, ValueError) as error:
+            fail(
+                "conjecture-context",
+                f"{prefix}: rendered context evidence is incomplete: {error!r}",
+            )
+
     for e in events:
         validate_school_route(e)
+        validate_conjecture_context(e)
         # Controller policies are harness-authored, attackable artifacts. A
         # value is transport-authorized only after its policy is appended;
         # later refutation may cause a revert but cannot erase that historical
