@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from types import MappingProxyType
 
+from deepreason.application.conjecture import ConjectureApplicationBoundary
 from deepreason.harness import Harness
 from deepreason.log.event_log import (
     ConcurrentWriterError,
@@ -254,6 +255,8 @@ class Session:
         entries: list[tuple[Artifact, list[Warrant]]],
         problem_id: str,
         spend: Call | None,
+        *,
+        source_call_seq: int | None = None,
     ) -> list[str]:
         """Register the exact canonical Artifacts that passed admission."""
         canonical_entries: list[tuple[Artifact, list[Warrant]]] = []
@@ -279,6 +282,11 @@ class Session:
             problem_id=problem_id,
             rule=Rule.CONJ,
             llm=spend,
+            process_inputs=(
+                (f"conjecture-call:{source_call_seq}",)
+                if source_call_seq is not None
+                else ()
+            ),
         )
         # Record each artifact's relapse domain so it can serve as a scoped
         # prior in later admission checks (priors without a recorded domain
@@ -361,6 +369,149 @@ def _prompt(description: str, stance_directive: str, neighbourhood: str, vs_k: i
     )
 
 
+def _mini_guard_finding(
+    candidate_ref: str,
+    artifact_ref: str,
+    outcome: str,
+    reason: str,
+):
+    """Project Mini's existing code-authored disposition into shared types."""
+
+    from deepreason.workflow.models import (
+        GuardFindingCode,
+        GuardFindingOutcome,
+        GuardFindingV1,
+    )
+
+    disposition = GuardFindingOutcome(outcome)
+    code = (
+        GuardFindingCode.PASSED
+        if disposition == GuardFindingOutcome.ADMIT
+        else GuardFindingCode.CONTENT_DUPLICATE
+        if disposition == GuardFindingOutcome.DEDUPLICATE
+        else GuardFindingCode.SCHEMA_INVALID
+        if reason == RUBRIC_POLICY_ERROR
+        else GuardFindingCode.BATTERY_EQUIVALENT
+        if "battery-equivalent" in reason
+        else GuardFindingCode.REFUTED_EQUIVALENT
+        if reason.startswith("hash:")
+        else GuardFindingCode.INTERFACE_INVALID
+    )
+    return GuardFindingV1(
+        candidate_ref=candidate_ref,
+        outcome=disposition,
+        code=code,
+        related_refs=(artifact_ref,),
+    )
+
+
+def _prepare_controlled_candidates(session, output, vs_k: int, stance: str):
+    """Compile semantic values without guarding or mutating canonical state."""
+
+    prepared = []
+    occurrences: dict[str, int] = {}
+    for candidate in output.candidates[:vs_k]:
+        content = candidate.content
+        commitment_values = checks.compile_checks(content)
+        blocked = session._rubric_commitments(commitment_values)
+        candidate_commitments = tuple(
+            Commitment.model_validate(record) for record in commitment_values
+        )
+        artifact = session.build_candidate(
+            content,
+            [commitment.id for commitment in candidate_commitments],
+            stance,
+        )
+        occurrences[artifact.id] = occurrences.get(artifact.id, 0) + 1
+        occurrence = occurrences[artifact.id]
+        disposition_ref = (
+            artifact.id
+            if occurrence == 1
+            else f"{artifact.id}#occurrence-{occurrence}"
+        )
+        prepared.append(
+            (
+                disposition_ref,
+                artifact,
+                commitment_values,
+                candidate_commitments,
+                blocked,
+            )
+        )
+    return prepared
+
+
+def _admit_controlled_candidates(
+    session,
+    prepared,
+    *,
+    near_dup_eps: float | None,
+):
+    """Run Mini's unchanged guards and return their complete shared receipt."""
+
+    admitted = []
+    findings = []
+    seen: set[str] = set()
+    for (
+        disposition_ref,
+        artifact,
+        commitment_values,
+        candidate_commitments,
+        blocked,
+    ) in prepared:
+        if blocked:
+            session._policy_drop(blocked)
+            findings.append(
+                _mini_guard_finding(
+                    disposition_ref,
+                    artifact.id,
+                    "reject",
+                    RUBRIC_POLICY_ERROR,
+                )
+            )
+            continue
+        ok, reason = session.admit_candidate(
+            artifact,
+            [],
+            candidate_commitments=list(candidate_commitments),
+            near_dup_eps=near_dup_eps,
+        )
+        if not ok:
+            session.measure([f"gate:{reason}"])
+            findings.append(
+                _mini_guard_finding(
+                    disposition_ref,
+                    artifact.id,
+                    "reject",
+                    reason,
+                )
+            )
+            continue
+        if artifact.id in session.state.artifacts or artifact.id in seen:
+            findings.append(
+                _mini_guard_finding(
+                    disposition_ref,
+                    artifact.id,
+                    "deduplicate",
+                    "content-duplicate",
+                )
+            )
+            continue
+        seen.add(artifact.id)
+        admitted.append(
+            (artifact, commitment_values, candidate_commitments)
+        )
+        findings.append(
+            _mini_guard_finding(
+                disposition_ref,
+                artifact.id,
+                "admit",
+                "passed",
+            )
+        )
+    return admitted, findings
+
+
 def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str,
         vs_k: int | None = None, neighbourhood: int = 8,
         stance_decay: int = rotate.STANCE_DECAY, turnover_k: int = rotate.TURNOVER_K,
@@ -391,68 +542,176 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
             cycles += 1
             prompt = _prompt(description, rotation.directive,
                              _neighbourhood(session, pid, neighbourhood), vs_k)
+            workflow = ConjectureApplicationBoundary.begin(
+                session.harness,
+                kernel.manifest,
+                problem_ref=pid,
+                route_lease=kernel.lease,
+                contract_id=kernel.wire_contract.contract_id,
+                meter_before=meter.snapshot(),
+            )
             try:
                 out, spend = llm.call(endpoint, prompt, ConjOut, meter,
                                       session.blobs, retry_max, role="conjecturer",
                                       model_profile=kernel.profile,
                                       wire_contract=kernel.wire_contract,
-                                      endpoint_lease=kernel.lease)
+                                      endpoint_lease=kernel.lease,
+                                      workflow_dispatch_observer=(
+                                          workflow.authorize_dispatch
+                                          if workflow is not None
+                                          else None
+                                      ),
+                                      workflow_repair_observer=(
+                                          workflow.authorize_repair
+                                          if workflow is not None
+                                          else None
+                                      ))
             except llm.BudgetExceeded as e:
                 if e.spend:  # exhaustion mid-retry still carries spend (G1)
-                    session.measure(["budget-exhausted"], e.spend)
+                    # No complete provider result exists to settle a proposal
+                    # receipt. Keep the spend honest but unbound, then close
+                    # the issued shadow work explicitly.
+                    partial = e.spend.model_copy(update={"work_order_id": None})
+                    session.measure(["budget-exhausted"], partial)
+                if workflow is not None:
+                    workflow.abandon("mini:budget-exhausted")
                 stop = "budget"
                 queue = []
                 break
             except llm.SchemaError as e:
-                session.measure(["dropped-call"], e.spend)
+                if (
+                    workflow is not None
+                    and e.spend is not None
+                    and e.spend.work_order_id == workflow.work_order_id
+                ):
+                    source = session.measure(
+                        ["workflow-conjecture-call", pid], e.spend
+                    )
+                    workflow.record_provider_result(
+                        source_call_seq=source.seq,
+                        llm_call=e.spend,
+                        candidate_refs=(),
+                    )
+                    session.measure(["dropped-call"])
+                    workflow.complete(
+                        admitted_refs=(), meter_after=meter.snapshot()
+                    )
+                else:
+                    session.measure(["dropped-call"], e.spend)
                 rotation.tick()
                 turnover.draw(0)
                 continue
             except llm.EndpointError as e:
                 if e.spend:
-                    session.measure(["dropped-call"], e.spend)
+                    if (
+                        workflow is not None
+                        and e.spend.work_order_id == workflow.work_order_id
+                    ):
+                        source = session.measure(
+                            ["workflow-conjecture-call", pid], e.spend
+                        )
+                        workflow.record_provider_result(
+                            source_call_seq=source.seq,
+                            llm_call=e.spend,
+                            candidate_refs=(),
+                        )
+                        session.measure(["dropped-call"])
+                        workflow.complete(
+                            admitted_refs=(), meter_after=meter.snapshot()
+                        )
+                    else:
+                        session.measure(["dropped-call"], e.spend)
+                elif workflow is not None:
+                    workflow.abandon("mini:endpoint-error")
                 stop = "endpoint-error"
                 queue = []
                 break
             admitted: list[tuple[Artifact, list[dict]]] = []
-            seen: set[str] = set()
-            for candidate in out.candidates[:vs_k]:
-                content = candidate.content
-                cks = checks.compile_checks(content)
-                blocked = session._rubric_commitments(cks)
-                if blocked:
-                    session._policy_drop(blocked)
-                    continue
-                candidate_commitments = [
-                    Commitment.model_validate(record) for record in cks
-                ]
-                commitment_ids = [
-                    commitment.id for commitment in candidate_commitments
-                ]
-                artifact = session.build_candidate(
-                    content, commitment_ids, rotation.stance
+            controlled = bool(
+                workflow is not None
+                and spend.work_order_id == workflow.work_order_id
+            )
+            source_call_seq = None
+            if controlled:
+                prepared = _prepare_controlled_candidates(
+                    session, out, vs_k, rotation.stance
                 )
-                ok, reason = session.admit_candidate(
-                    artifact,
-                    [],
-                    candidate_commitments=candidate_commitments,
+                source = session.measure(
+                    ["workflow-conjecture-call", pid], spend
+                )
+                source_call_seq = source.seq
+                workflow.record_provider_result(
+                    source_call_seq=source.seq,
+                    llm_call=spend,
+                    candidate_refs=tuple(row[0] for row in prepared),
+                )
+                admitted_rows, findings = _admit_controlled_candidates(
+                    session,
+                    prepared,
                     near_dup_eps=near_dup_eps,
                 )
-                if not ok:
-                    session.measure([f"gate:{reason}"])
-                    continue
-                if artifact.id in session.state.artifacts or artifact.id in seen:
-                    continue  # dedupe of live content: skipped, never gated
-                # Only the exact candidate that survived the mandatory guard
-                # may make its model-derived commitments canonical.
-                registered = session.register_commitments(cks)
-                if registered != commitment_ids:
-                    continue
-                seen.add(artifact.id)
-                admitted.append((artifact, cks))
+                workflow.record_guard(findings)
+                for artifact, cks, candidate_commitments in admitted_rows:
+                    commitment_ids = [
+                        commitment.id for commitment in candidate_commitments
+                    ]
+                    registered = session.register_commitments(cks)
+                    if registered != commitment_ids:
+                        continue
+                    admitted.append(
+                        (
+                            artifact.model_copy(
+                                update={
+                                    "provenance": artifact.provenance.model_copy(
+                                        update={"event_seq": session.harness._next_seq}
+                                    )
+                                }
+                            ),
+                            cks,
+                        )
+                    )
+            else:
+                seen: set[str] = set()
+                for candidate in out.candidates[:vs_k]:
+                    content = candidate.content
+                    cks = checks.compile_checks(content)
+                    blocked = session._rubric_commitments(cks)
+                    if blocked:
+                        session._policy_drop(blocked)
+                        continue
+                    candidate_commitments = [
+                        Commitment.model_validate(record) for record in cks
+                    ]
+                    commitment_ids = [
+                        commitment.id for commitment in candidate_commitments
+                    ]
+                    artifact = session.build_candidate(
+                        content, commitment_ids, rotation.stance
+                    )
+                    ok, reason = session.admit_candidate(
+                        artifact,
+                        [],
+                        candidate_commitments=candidate_commitments,
+                        near_dup_eps=near_dup_eps,
+                    )
+                    if not ok:
+                        session.measure([f"gate:{reason}"])
+                        continue
+                    if artifact.id in session.state.artifacts or artifact.id in seen:
+                        continue  # dedupe of live content: skipped, never gated
+                    # Only the exact candidate that survived the mandatory guard
+                    # may make its model-derived commitments canonical.
+                    registered = session.register_commitments(cks)
+                    if registered != commitment_ids:
+                        continue
+                    seen.add(artifact.id)
+                    admitted.append((artifact, cks))
             if admitted:
                 session.register_candidates(
-                    [(artifact, []) for artifact, _ in admitted], pid, spend
+                    [(artifact, []) for artifact, _ in admitted],
+                    pid,
+                    None if controlled else spend,
+                    source_call_seq=source_call_seq,
                 )
                 for artifact, cks in admitted:
                     content = artifact.content_ref[len("inline:"):]
@@ -460,7 +719,15 @@ def run(problems: list[tuple[str, str]], endpoint, budget: int, root: Path | str
                     if failures:
                         session.refute(artifact.id, failures)
             else:
-                session.measure(["all-blocked"], spend)  # spend lands exactly once
+                session.measure(
+                    ["all-blocked"],
+                    None if controlled else spend,
+                )  # spend lands exactly once
+            if controlled:
+                workflow.complete(
+                    admitted_refs=tuple(artifact.id for artifact, _ in admitted),
+                    meter_after=meter.snapshot(),
+                )
             new_survivors = sum(
                 1 for artifact, _ in admitted if artifact.id not in session.state.refuted
             )

@@ -10,9 +10,11 @@ crosses the ceiling completes (documented overshoot, not pretended away).
 """
 
 import json
+import re
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Callable
 
 from pydantic import BaseModel
 
@@ -24,6 +26,7 @@ from deepreason.llm.firewall import (
     route_fingerprint,
 )
 from deepreason.llm.profiles import ModelProfile, ProfileSpec, clip_pack, get_profile
+from deepreason.llm.budget import conservative_prompt_bound
 from deepreason.llm.providers import infer_provider
 from deepreason.llm.repair import (
     BoundedRepairSession,
@@ -279,6 +282,8 @@ def call(
     model_profile: str | ModelProfile | ProfileSpec = ModelProfile.COMPACT,
     wire_contract: WireContract | None = None,
     endpoint_lease: EndpointLease | None = None,
+    workflow_dispatch_observer: Callable[[int], str | None] | None = None,
+    workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
 ) -> tuple[BaseModel, Call]:
     """Run one leased, profile-rendered call through shared wire and repair.
 
@@ -300,6 +305,12 @@ def call(
             f"endpoint lease {lease.role}[{lease.seat}] cannot serve {role}[0]"
         )
     lease.verify(endpoint)
+    if workflow_dispatch_observer is not None and role != "conjecturer":
+        raise ValueError("workflow dispatch observation requires a conjecturer call")
+    if workflow_repair_observer is not None and workflow_dispatch_observer is None:
+        raise ValueError(
+            "workflow repair observation requires conjecture dispatch observation"
+        )
 
     schema_value = contract.model_json_schema()
     schema_json = json.dumps(schema_value, sort_keys=True)
@@ -327,6 +338,7 @@ def call(
         initial_request=base,
         retry_max=retry_max,
     )
+    effective_work_order_id: str | None = None
 
     def _spend(attempts: int) -> Call | None:
         if not tokens_used and not attempt_trace:
@@ -336,7 +348,8 @@ def call(
                     raw_ref=raw_ref, tokens=tokens_used,
                     ms=int((time.monotonic() - started) * 1000),
                     attempts=max(attempts, len(attempt_trace)),
-                    truncated=truncated_any, attempt_trace=attempt_trace)
+                    truncated=truncated_any, attempt_trace=attempt_trace,
+                    work_order_id=effective_work_order_id)
 
     # RETRY_MAX is a ceiling, never an escape hatch: W4 permits at most an
     # initial generation, one whole-object correction, and one local subtree.
@@ -357,6 +370,22 @@ def call(
         except RouteFirewallError as e:
             e.spend = _spend(attempt)
             raise
+        if attempt == 0 and workflow_dispatch_observer is not None:
+            # Mini retains its historical compatibility meter.  The shared
+            # shadow envelope records the same conservative request bound
+            # immediately before dispatch without changing that meter.
+            try:
+                observed = workflow_dispatch_observer(
+                    conservative_prompt_bound(request)
+                    + int(lease.route.max_tokens or 0)
+                )
+            except Exception:  # noqa: BLE001 - shadow cannot alter Mini actuation
+                observed = None
+            if (
+                isinstance(observed, str)
+                and re.fullmatch(r"sha256:[0-9a-f]{64}", observed) is not None
+            ):
+                effective_work_order_id = observed
         # Log only an ACTUAL provider request. A generated-but-unsent repair
         # prompt must not masquerade as a wire exchange.
         prompt_ref = prompt_ref if attempt == 0 else blobs.put(request.encode())
@@ -435,6 +464,11 @@ def call(
                     getattr(endpoint, "last_transport_diagnostics", ())
                 ),
             ))
+            if attempt + 1 < repair.attempt_count and workflow_repair_observer:
+                try:
+                    workflow_repair_observer(attempt_trace[-1])
+                except Exception:  # noqa: BLE001 - shadow cannot alter Mini actuation
+                    pass
             continue
         attempt_trace.append(LLMAttempt(
             prompt_ref=prompt_ref,

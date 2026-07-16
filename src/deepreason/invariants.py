@@ -108,8 +108,13 @@ def _legacy_bridge_failure_call_seqs(events, bridge_state) -> set[int]:
 def _expected_call_outcome(
     event,
     legacy_failure_call_seqs: set[int],
+    workflow_failure_call_seqs: set[int],
 ) -> ExpectedCallOutcome:
-    if event.seq in legacy_failure_call_seqs or _is_typed_bridge_failure(event):
+    if (
+        event.seq in legacy_failure_call_seqs
+        or event.seq in workflow_failure_call_seqs
+        or _is_typed_bridge_failure(event)
+    ):
         return ExpectedCallOutcome.FAILURE_REQUIRED
     if any(
         value == "dropped-call"
@@ -148,6 +153,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     legacy_failure_call_seqs = _legacy_bridge_failure_call_seqs(
         events, h.bridge_state
     )
+    workflow_failure_call_seqs = {
+        receipt.source_call_seq
+        for receipt in h.workflow_state.proposal_receipts.values()
+        if receipt.validation_outcome.value
+        in {"repair_exhausted", "transport_failed"}
+    }
 
     # Process metadata is replay/audit input only.  Its checks never inspect
     # or alter att, dep, status, warrants, guards, or acceptance.
@@ -293,6 +304,22 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     authorized_contract_ids.add(
                         workflow_profile.conjecturer_contract_id
                     )
+                    if (
+                        manifest.engine_profile == "mini"
+                        and manifest.model_profile == "compact"
+                    ):
+                        # Mini's compact conjecturer intentionally omits
+                        # references instead of exposing an unusable empty
+                        # alias table. It is still the parent's canonical
+                        # wire contract and is frozen by the Mini engine/profile
+                        # tuple rather than a client-selected route.
+                        from deepreason.llm.wire import (
+                            ReferenceFreeConjecturerWireContract,
+                        )
+
+                        authorized_contract_ids.add(
+                            ReferenceFreeConjecturerWireContract().contract_id
+                        )
                 context_limit = (
                     workflow_profile.context_policy.max_context_expansion_requests
                 )
@@ -493,7 +520,24 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         )
         expected_school = output_schools | tagged_schools
 
-        if manifest is not None and manifest.schema_version == 4 and expected_school:
+        mini_semantic_lineage = bool(
+            manifest is not None
+            and manifest.engine_profile == "mini"
+            and expected_school
+            and all(
+                not (
+                    value.startswith("school-")
+                    and value.removeprefix("school-").isdigit()
+                )
+                for value in expected_school
+            )
+        )
+        if (
+            manifest is not None
+            and manifest.schema_version == 4
+            and expected_school
+            and not mini_semantic_lineage
+        ):
             if len(expected_school) != 1:
                 fail(
                     "school-route",
@@ -1414,7 +1458,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "conjecture-turn-contract",
                     f"event seq={e.seq}: active turn escaped its bound v4 work item",
                 )
-        expected_outcome = _expected_call_outcome(e, legacy_failure_call_seqs)
+        expected_outcome = _expected_call_outcome(
+            e,
+            legacy_failure_call_seqs,
+            workflow_failure_call_seqs,
+        )
         if trace:
             traced_calls += 1
             first_pass_valid += int(trace[0].valid)
