@@ -70,6 +70,25 @@ def repair_attempt_trigger_ref(attempt: int, diagnostic_ref: str) -> str:
     )
 
 
+def _validate_json_pointer(value: str) -> str:
+    """Validate the RFC 6901 spelling used at the repair boundary."""
+
+    if value == "":
+        return value
+    if not value.startswith("/"):
+        raise ValueError("repair paths must be canonical JSON pointers")
+    for token in value[1:].split("/"):
+        index = 0
+        while index < len(token):
+            if token[index] != "~":
+                index += 1
+                continue
+            if index + 1 >= len(token) or token[index + 1] not in {"0", "1"}:
+                raise ValueError("repair paths contain an invalid JSON pointer escape")
+            index += 2
+    return value
+
+
 class WorkflowRecord(BaseModel):
     """Strict immutable base for process records, including nested helpers."""
 
@@ -328,6 +347,49 @@ class WorkOrderEnvelopeV1(IdentifiedWorkflowRecord):
         return self
 
 
+class RepairWorkOrderV1(IdentifiedWorkflowRecord):
+    """One immutable authorization for the next local schema-repair attempt.
+
+    A repair remains subordinate to its parent conjecture work order.  It may
+    replace only ``authorized_subtree_pointer`` and cannot change the frozen
+    contract, route, state fence, or local-repair policy.
+    """
+
+    _identity_domain = "workflow.repair-work-order.v1"
+
+    schema_: Literal["workflow.repair-work-order.v1"] = Field(
+        "workflow.repair-work-order.v1", alias="schema"
+    )
+    parent_work_order_id: str = Field(pattern=_ID_PATTERN)
+    # Provider attempt zero is the original request.  Repair attempts are
+    # therefore numbered one and two, matching the attempt they authorize.
+    attempt: int = Field(ge=1, le=2)
+    rejected_prompt_ref: str = Field(min_length=1, max_length=512)
+    rejected_raw_ref: str = Field(min_length=1, max_length=512)
+    rejected_diagnostic_ref: str = Field(min_length=1, max_length=512)
+    validation_pointer: str = Field(default="", max_length=2_048)
+    authorized_subtree_pointer: str = Field(default="", max_length=2_048)
+    # Includes this authorized dispatch.  The value is captured before the
+    # repair result consumes an allowance at provider settlement.
+    remaining_local_attempts: int = Field(ge=1, le=2)
+    contract_id: str = Field(min_length=1, max_length=512)
+    route_lease: RouteLeaseRefV1
+    formal_fence_seq: int = Field(ge=0)
+    scratch_fence_seq: int = Field(ge=0)
+    repair_policy_ref: str = Field(pattern=_ID_PATTERN)
+
+    @field_validator("validation_pointer", "authorized_subtree_pointer")
+    @classmethod
+    def _canonical_pointer(cls, value: str) -> str:
+        return _validate_json_pointer(value)
+
+    @model_validator(mode="after")
+    def _one_state_fence(self):
+        if self.formal_fence_seq != self.scratch_fence_seq:
+            raise ValueError("repair work requires one immutable state fence")
+        return self
+
+
 class ProposalReceiptV1(IdentifiedWorkflowRecord):
     _identity_domain = "workflow.proposal-receipt.v1"
 
@@ -565,6 +627,7 @@ __all__ = [
     "LocalRepairPolicyV1",
     "ProposalReceiptV1",
     "ProposalValidationOutcome",
+    "RepairWorkOrderV1",
     "RouteLeaseRefV1",
     "TransitionDecisionV1",
     "TransitionKind",

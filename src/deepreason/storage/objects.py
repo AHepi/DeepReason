@@ -50,6 +50,7 @@ from deepreason.scratch.models import (
 from deepreason.workflow.models import (
     GuardResultV1,
     ProposalReceiptV1,
+    RepairWorkOrderV1,
     TransitionDecisionV1,
     WorkOrderEnvelopeV1,
 )
@@ -86,6 +87,7 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "bridge-failure": BridgeFailureV1,
     "bridge-workflow-retry": BridgeWorkflowRetryV1,
     "workflow-work-order": WorkOrderEnvelopeV1,
+    "workflow-repair-work-order": RepairWorkOrderV1,
     "workflow-proposal-receipt": ProposalReceiptV1,
     "workflow-guard-result": GuardResultV1,
     "workflow-transition-decision": TransitionDecisionV1,

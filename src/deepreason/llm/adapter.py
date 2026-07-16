@@ -719,22 +719,26 @@ class LLMAdapter:
                         getattr(endpoint, "last_transport_diagnostics", ())
                     ),
                 ))
-                if (
-                    workflow_repair_observer is not None
-                    and attempt + 1 < repair.attempt_count
-                ):
+                if attempt + 1 < repair.attempt_count:
                     # The rejected attempt and its diagnostic are immutable at
                     # this point. Persist repair authority before the next
                     # reservation or provider dispatch; observer failure stays
                     # contained on the C1 shadow path.
-                    try:
-                        workflow_repair_observer(attempt_trace[-1])
-                    except Exception as error:  # noqa: BLE001 - mode checked below
+                    if workflow_repair_observer is None:
                         if workflow_dispatch_required:
                             raise WorkflowAuthorizationError(
                                 "active workflow repair was not durably authorized",
                                 spend=_spend(attempt + 1),
-                            ) from error
+                            )
+                    else:
+                        try:
+                            workflow_repair_observer(attempt_trace[-1])
+                        except Exception as error:  # noqa: BLE001 - mode checked below
+                            if workflow_dispatch_required:
+                                raise WorkflowAuthorizationError(
+                                    "active workflow repair was not durably authorized",
+                                    spend=_spend(attempt + 1),
+                                ) from error
                 continue
             attempt_trace.append(LLMAttempt(
                 prompt_ref=prompt_ref,

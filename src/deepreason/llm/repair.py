@@ -30,6 +30,21 @@ class SchemaRepairError(RuntimeError):
         self.spend = spend
 
 
+class RepairScopeViolation(ValueError):
+    """A parseable repair changed JSON outside its authorized subtree."""
+
+    code = "REPAIR_SCOPE_VIOLATION"
+
+    def __init__(self, pointer: str, repair_scope: str) -> None:
+        self.pointer = pointer
+        self.repair_scope = repair_scope
+        scope = repair_scope or "/"
+        super().__init__(
+            f"repair changed JSON outside authorized subtree {scope}: "
+            f"{pointer or '/'}"
+        )
+
+
 def select_output_mechanism(capabilities) -> OutputMechanism:
     """Choose once in priority order; the caller freezes the result."""
     if bool(getattr(capabilities, "native_json_schema", False)):
@@ -191,6 +206,80 @@ def merge_subtree(value: Any, pointer: str, replacement: Any) -> Any:
     return merged
 
 
+_MISSING = object()
+
+
+def _json_differences(
+    baseline: Any,
+    candidate: Any,
+    loc: tuple[Any, ...] = (),
+) -> list[str]:
+    """Return deterministic, type-sensitive JSON pointers that changed."""
+
+    if baseline is _MISSING or candidate is _MISSING:
+        return [json_pointer(loc)]
+    if type(baseline) is not type(candidate):
+        return [json_pointer(loc)]
+    if isinstance(baseline, dict):
+        changed: list[str] = []
+        for key in sorted(set(baseline) | set(candidate)):
+            changed.extend(
+                _json_differences(
+                    baseline.get(key, _MISSING),
+                    candidate.get(key, _MISSING),
+                    (*loc, key),
+                )
+            )
+        return changed
+    if isinstance(baseline, list):
+        changed = []
+        for index in range(max(len(baseline), len(candidate))):
+            changed.extend(
+                _json_differences(
+                    baseline[index] if index < len(baseline) else _MISSING,
+                    candidate[index] if index < len(candidate) else _MISSING,
+                    (*loc, index),
+                )
+            )
+        return changed
+    return [] if baseline == candidate else [json_pointer(loc)]
+
+
+def enforce_repair_subtree(
+    baseline: Any,
+    candidate: Any,
+    authorized_subtree_pointer: str,
+) -> None:
+    """Reject any parseable repair diff outside its authorized JSON pointer.
+
+    Root replacement is intentionally not treated as broad semantic authority:
+    callers invoke this only when a parseable baseline exists, so a root-scoped
+    repair may preserve that baseline but may not rewrite it.  Syntax recovery
+    from an unparseable response bypasses this check because there is no
+    narrower value against which a deterministic diff can be computed.
+    """
+
+    differences = _json_differences(baseline, candidate)
+    if not differences:
+        return
+    scope = authorized_subtree_pointer
+    if scope:
+        allowed_prefix = scope + "/"
+        outside = next(
+            (
+                pointer
+                for pointer in differences
+                if pointer != scope and not pointer.startswith(allowed_prefix)
+            ),
+            None,
+        )
+        if outside is None:
+            return
+    else:
+        outside = differences[0]
+    raise RepairScopeViolation(outside, scope)
+
+
 def _resolve_schema_node(node: Any, root: dict, *, array: bool) -> dict:
     """Resolve refs and nullable unions for one pointer traversal step."""
 
@@ -301,6 +390,21 @@ def diagnostic_from_error(
     error: Exception,
     schema: dict,
 ) -> RepairDiagnostic:
+    if getattr(error, "code", "") == "REPAIR_SCOPE_VIOLATION":
+        pointer = str(getattr(error, "pointer", ""))
+        repair_scope = str(getattr(error, "repair_scope", ""))
+        child_schema = (
+            schema_at_pointer(schema, repair_scope) if repair_scope else schema
+        )
+        return RepairDiagnostic(
+            contract=contract,
+            path=pointer,
+            error="repair changed JSON outside its authorized subtree",
+            received=None,
+            allowed=f"changes only at {repair_scope or '/'}",
+            repair_scope=repair_scope,
+            skeleton=minimal_skeleton(child_schema, schema),
+        )
     if getattr(error, "code", "") == "MODEL_CONTROL_FIELD_FORBIDDEN":
         pointer = str(getattr(error, "pointer", ""))
         return RepairDiagnostic(
@@ -460,6 +564,7 @@ class BoundedRepairSession:
         self.diagnostic: RepairDiagnostic | None = None
         self.invalid_text = ""
         self.invalid_value: Any = None
+        self.invalid_value_parseable = False
         self.last_error: Exception | None = None
 
     @property
@@ -532,13 +637,36 @@ class BoundedRepairSession:
         """Parse ``raw`` and deterministically apply a subtree replacement."""
 
         parsed = parse_one_json_value(raw)
-        if turn.attempt < 2:
+        if turn.attempt == 0:
             # Keep the normalized text solely for the next model-facing
             # repair request; the caller separately stores the exact raw.
             self.invalid_text = parsed.text
             self.invalid_value = parsed.value
+            self.invalid_value_parseable = True
             return parsed.value
-        return merge_subtree(self.invalid_value, turn.repair_scope, parsed.value)
+        if turn.attempt == 1:
+            if self.invalid_value_parseable:
+                enforce_repair_subtree(
+                    self.invalid_value,
+                    parsed.value,
+                    turn.repair_scope,
+                )
+            self.invalid_text = parsed.text
+            self.invalid_value = parsed.value
+            self.invalid_value_parseable = True
+            return parsed.value
+        candidate = merge_subtree(
+            self.invalid_value,
+            turn.repair_scope,
+            parsed.value,
+        )
+        if self.invalid_value_parseable:
+            enforce_repair_subtree(
+                self.invalid_value,
+                candidate,
+                turn.repair_scope,
+            )
+        return candidate
 
     def note_invalid(
         self,
@@ -552,7 +680,7 @@ class BoundedRepairSession:
 
         self.last_error = error
         diagnostic = diagnostic_from_error(self.contract, error, self.schema)
-        if turn.attempt < 2:
+        if turn.attempt < 2 and not isinstance(error, RepairScopeViolation):
             # ``candidate_from_raw`` normally captured this.  Reparse here so
             # normalization failures still retain their exact text for the
             # whole-object repair while never inventing a JSON value.
@@ -560,6 +688,7 @@ class BoundedRepairSession:
                 parsed = parse_one_json_value(raw)
                 self.invalid_text = parsed.text
                 self.invalid_value = parsed.value
+                self.invalid_value_parseable = True
             except ValueError:
                 self.invalid_text = raw
         if truncated:
@@ -591,6 +720,7 @@ class BoundedRepairSession:
             self.schema,
         )
         self.invalid_value = copy.deepcopy(sanitized_value)
+        self.invalid_value_parseable = True
         self.invalid_text = json.dumps(
             sanitized_value,
             sort_keys=True,

@@ -691,6 +691,7 @@ class Harness:
         decision,
         *,
         work_order=None,
+        repair_work_order=None,
         proposal_receipt=None,
         guard_result=None,
     ) -> Event:
@@ -705,6 +706,7 @@ class Harness:
         from deepreason.workflow.models import (
             GuardResultV1,
             ProposalReceiptV1,
+            RepairWorkOrderV1,
             TransitionDecisionV1,
             TransitionKind,
             WorkOrderEnvelopeV1,
@@ -720,6 +722,7 @@ class Harness:
 
         decision = canonical(TransitionDecisionV1, decision)
         work_order = canonical(WorkOrderEnvelopeV1, work_order)
+        repair_work_order = canonical(RepairWorkOrderV1, repair_work_order)
         proposal_receipt = canonical(ProposalReceiptV1, proposal_receipt)
         guard_result = canonical(GuardResultV1, guard_result)
         provider = decision.transition_kind in {
@@ -735,6 +738,21 @@ class Harness:
             work_order is not None
         ):
             raise ValueError("work_enabled requires exactly one work-order record")
+        repair_requested = (
+            decision.transition_kind == TransitionKind.REPAIR_REQUESTED
+        )
+        if repair_work_order is not None and not repair_requested:
+            raise ValueError(
+                "only repair_requested may carry a repair-work-order record"
+            )
+        if (
+            repair_requested
+            and decision.workflow_profile == "conjecture.active.v1"
+            and repair_work_order is None
+        ):
+            raise ValueError(
+                "active repair_requested requires one repair-work-order record"
+            )
         if provider != (proposal_receipt is not None):
             raise ValueError(
                 "provider-result transition requires exactly one proposal receipt"
@@ -745,6 +763,8 @@ class Harness:
         records: list[tuple[str, BaseModel]] = []
         if work_order is not None:
             records.append(("workflow-work-order", work_order))
+        if repair_work_order is not None:
+            records.append(("workflow-repair-work-order", repair_work_order))
         if proposal_receipt is not None:
             records.append(("workflow-proposal-receipt", proposal_receipt))
         if guard_result is not None:

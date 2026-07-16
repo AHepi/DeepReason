@@ -16,6 +16,7 @@ from deepreason.workflow.models import (
     GuardResultV1,
     ProposalReceiptV1,
     ProposalValidationOutcome,
+    RepairWorkOrderV1,
     TransitionDecisionV1,
     TransitionKind,
     WorkOrderEnvelopeV1,
@@ -30,6 +31,7 @@ from deepreason.workflow.state import (
 
 _SCHEMA_MODELS = {
     "workflow-work-order": WorkOrderEnvelopeV1,
+    "workflow-repair-work-order": RepairWorkOrderV1,
     "workflow-proposal-receipt": ProposalReceiptV1,
     "workflow-guard-result": GuardResultV1,
     "workflow-transition-decision": TransitionDecisionV1,
@@ -76,6 +78,7 @@ class WorkflowBranchState:
 class _PlannedApply:
     decision: TransitionDecisionV1
     work_order: WorkOrderEnvelopeV1
+    repair_work_order: RepairWorkOrderV1 | None
     proposal: ProposalReceiptV1 | None
     guard: GuardResultV1 | None
     branch_id: str
@@ -138,6 +141,7 @@ class WorkflowReplayState:
     """Deterministic process-only index reconstructed from ``Control`` events."""
 
     work_orders: dict[str, WorkOrderEnvelopeV1] = field(default_factory=dict)
+    repair_work_orders: dict[str, RepairWorkOrderV1] = field(default_factory=dict)
     proposal_receipts: dict[str, ProposalReceiptV1] = field(default_factory=dict)
     guard_results: dict[str, GuardResultV1] = field(default_factory=dict)
     decisions: dict[str, TransitionDecisionV1] = field(default_factory=dict)
@@ -317,6 +321,35 @@ class WorkflowReplayState:
         if bound_count > work.capability_grant.max_provider_calls:
             raise ValueError("preceding calls exceed provider-call capability")
 
+    @staticmethod
+    def _validate_repair_work_order(
+        work: WorkOrderEnvelopeV1,
+        decision: TransitionDecisionV1,
+        repair: RepairWorkOrderV1,
+        prior_repair_requests: int,
+    ) -> None:
+        """Validate one repair authorization against its immutable parent."""
+
+        expected_attempt = prior_repair_requests + 1
+        if (
+            repair.parent_work_order_id != work.id
+            or repair.attempt != expected_attempt
+            or repair.remaining_local_attempts
+            != work.capability_grant.max_local_repairs - expected_attempt + 1
+            or repair.contract_id != work.contract_id
+            or repair.route_lease != work.route_lease
+            or repair.formal_fence_seq != work.formal_fence_seq
+            or repair.scratch_fence_seq != work.scratch_fence_seq
+            or repair.repair_policy_ref != work.repair_policy_ref
+        ):
+            raise ValueError("repair work order differs from its parent authority")
+        expected_trigger = repair_attempt_trigger_ref(
+            repair.attempt - 1,
+            repair.rejected_diagnostic_ref,
+        )
+        if decision.trigger_ref != expected_trigger:
+            raise ValueError("repair work order differs from its rejected diagnostic")
+
     def _validate_proposal(
         self,
         work: WorkOrderEnvelopeV1,
@@ -362,6 +395,15 @@ class WorkflowReplayState:
         ):
             raise ValueError(
                 "proposal validation outcome differs from its provider transition"
+            )
+        if (
+            work.workflow_profile == "conjecture.active.v1"
+            and outcome == ProposalValidationOutcome.REPAIR_EXHAUSTED
+            and proposal.attempt_count
+            != work.capability_grant.max_local_repairs + 1
+        ):
+            raise ValueError(
+                "repair exhaustion predates the authorized local-repair ceiling"
             )
         expected_repair_delta = proposal.attempt_count - 1
         if decision.local_repair_delta != expected_repair_delta:
@@ -450,6 +492,45 @@ class WorkflowReplayState:
             raise ValueError(
                 "repair requests differ from provider attempt diagnostics"
             )
+        repair_orders = tuple(
+            sorted(
+                (
+                    order
+                    for order in self.repair_work_orders.values()
+                    if order.parent_work_order_id == work.id
+                ),
+                key=lambda order: order.attempt,
+            )
+        )
+        if work.workflow_profile == "conjecture.active.v1":
+            if len(repair_orders) != len(trace) - 1:
+                raise ValueError(
+                    "repair work orders differ from provider attempt lineage"
+                )
+            for repair_order, rejected_attempt in zip(
+                repair_orders,
+                trace[:-1],
+                strict=True,
+            ):
+                expected_attempt = int(getattr(rejected_attempt, "attempt", -1)) + 1
+                if (
+                    repair_order.attempt != expected_attempt
+                    or repair_order.rejected_prompt_ref
+                    != getattr(rejected_attempt, "prompt_ref", "")
+                    or repair_order.rejected_raw_ref
+                    != getattr(rejected_attempt, "raw_ref", "")
+                    or repair_order.rejected_diagnostic_ref
+                    != getattr(rejected_attempt, "diagnostic_ref", "")
+                    or repair_order.validation_pointer
+                    != getattr(rejected_attempt, "validation_path", "")
+                    or repair_order.authorized_subtree_pointer
+                    != getattr(rejected_attempt, "repair_scope", "")
+                    or repair_order.remaining_local_attempts
+                    != work.capability_grant.max_local_repairs - expected_attempt + 1
+                ):
+                    raise ValueError(
+                        "repair work order differs from rejected provider attempt"
+                    )
         school_receipt = getattr(call, "school_route", None)
         if work.school_id is None:
             if school_receipt is not None:
@@ -688,6 +769,34 @@ class WorkflowReplayState:
         expected_schemas = ["workflow-transition-decision"]
         if decision.transition_kind == TransitionKind.WORK_ENABLED:
             expected_schemas.insert(0, "workflow-work-order")
+        repair_work_order = next(
+            (
+                value
+                for schema, value in records.values()
+                if schema == "workflow-repair-work-order"
+            ),
+            None,
+        )
+        if repair_work_order is not None and not isinstance(
+            repair_work_order, RepairWorkOrderV1
+        ):
+            raise TypeError("workflow repair-work-order record has the wrong model")
+        if (
+            repair_work_order is not None
+            and repair_work_order.id in self.repair_work_orders
+        ):
+            raise ValueError("duplicate repair work order")
+        if decision.transition_kind == TransitionKind.REPAIR_REQUESTED:
+            if decision.workflow_profile == "conjecture.active.v1":
+                expected_schemas.insert(0, "workflow-repair-work-order")
+                if not isinstance(repair_work_order, RepairWorkOrderV1):
+                    raise ValueError(
+                        "active repair request requires one repair work order"
+                    )
+            elif repair_work_order is not None:
+                expected_schemas.insert(0, "workflow-repair-work-order")
+        elif repair_work_order is not None:
+            raise ValueError("only a repair request may carry repair work authority")
         proposal = next(
             (
                 value
@@ -732,6 +841,19 @@ class WorkflowReplayState:
                 for prior in self.decisions.values()
             ):
                 raise ValueError("repair diagnostic was already consumed")
+            if repair_work_order is not None:
+                self._validate_repair_work_order(
+                    work,
+                    decision,
+                    repair_work_order,
+                    prior_repair_requests,
+                )
+        if decision.transition_kind == TransitionKind.REPAIR_EXHAUSTED and any(
+            prior.work_order_id == work.id
+            and prior.transition_kind == TransitionKind.REPAIR_EXHAUSTED
+            for prior in self.decisions.values()
+        ):
+            raise ValueError("work order already emitted repair exhaustion")
         if (
             proposal is not None
             and proposal.attempt_count - 1 != prior_repair_requests
@@ -763,6 +885,7 @@ class WorkflowReplayState:
         return _PlannedApply(
             decision=decision,
             work_order=work,
+            repair_work_order=repair_work_order,
             proposal=proposal,
             guard=guard,
             branch_id=branch_id,
@@ -819,6 +942,9 @@ class WorkflowReplayState:
         self.work_to_branch[work.id] = planned.branch_id
         self.decisions[decision.id] = decision
         self.decision_event_seq[decision.id] = seq
+        if planned.repair_work_order is not None:
+            repair = planned.repair_work_order
+            self.repair_work_orders[repair.id] = repair
         if planned.proposal is not None:
             self.proposal_receipts[planned.proposal.id] = planned.proposal
         if planned.guard is not None:
@@ -866,7 +992,8 @@ class WorkflowReplayState:
                     "event_seqs": list(self.branches[branch_id].event_seqs),
                 }
                 for branch_id in sorted(self.branches)
-            ]
+            ],
+            "repair_work_order_ids": sorted(self.repair_work_orders),
         }
         return "sha256:" + sha256_hex(
             b"workflow.replay-state.v1\x00" + canonical_json(payload)

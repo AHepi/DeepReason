@@ -23,6 +23,7 @@ from deepreason.workflow.models import (
     GuardResultV1,
     ProposalReceiptV1,
     ProposalValidationOutcome,
+    RepairWorkOrderV1,
     RouteLeaseRefV1,
     TransitionDecisionV1,
     TransitionKind,
@@ -479,6 +480,40 @@ class ConjectureControlTrace:
                 self.ticket.work_order.capability_grant.max_local_repairs
             ):
                 raise ValueError("workflow local-repair authority is exhausted")
+            work = self.ticket.work_order
+            if (
+                attempt.contract_id != work.contract_id
+                or attempt.seat != work.route_lease.seat
+                or attempt.endpoint_id != work.route_lease.endpoint_id
+                or attempt.route_sha256 != work.route_lease.route_sha256
+            ):
+                raise ValueError("workflow repair changed frozen route authority")
+            if not attempt.raw_ref:
+                raise ValueError("workflow schema repair requires rejected raw output")
+            repair_attempt = attempt.attempt + 1
+            repair_work_order = (
+                RepairWorkOrderV1.create(
+                    parent_work_order_id=work.id,
+                    attempt=repair_attempt,
+                    rejected_prompt_ref=attempt.prompt_ref,
+                    rejected_raw_ref=attempt.raw_ref,
+                    rejected_diagnostic_ref=attempt.diagnostic_ref,
+                    validation_pointer=attempt.validation_path,
+                    authorized_subtree_pointer=attempt.repair_scope,
+                    remaining_local_attempts=(
+                        work.capability_grant.max_local_repairs
+                        - repair_attempt
+                        + 1
+                    ),
+                    contract_id=work.contract_id,
+                    route_lease=work.route_lease,
+                    formal_fence_seq=work.formal_fence_seq,
+                    scratch_fence_seq=work.scratch_fence_seq,
+                    repair_policy_ref=work.repair_policy_ref,
+                )
+                if self.authoritative
+                else None
+            )
             reduced = reduce_conjecture(
                 self.process_state,
                 WorkflowSignalV1(
@@ -491,7 +526,10 @@ class ConjectureControlTrace:
                 ),
             )
             decision = reduced.decisions[0]
-            self.harness.record_control_transition(decision)
+            self.harness.record_control_transition(
+                decision,
+                repair_work_order=repair_work_order,
+            )
             self.process_state = reduced.state
             self.decision_ids.append(decision.id)
         except Exception as error:  # noqa: BLE001 - shadow is non-authoritative
