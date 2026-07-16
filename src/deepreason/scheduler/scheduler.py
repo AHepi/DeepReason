@@ -16,6 +16,7 @@ from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authori
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
+from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import RouteFirewallError, resolve_school_role_lease
 from deepreason.llm.embedder import HashingEmbedder
@@ -214,6 +215,26 @@ class Scheduler:
         self.generation_context = generation_context
         self.suppressed_exemplars = tuple(suppressed_exemplars)
         self.run_manifest = run_manifest
+        # C0 control-plane observations are process-local diagnostics only.
+        # They deliberately have no harness/store handle and cannot append an
+        # event or alter any materialized state.  C1 owns durable authority
+        # transitions; until then the legacy scheduler remains authoritative.
+        self.workflow_shadow_observations = []
+        self.workflow_shadow_observer = None
+        try:
+            from deepreason.workflow.shadow import ConjectureShadowObserver
+
+            self.workflow_shadow_observer = (
+                ConjectureShadowObserver.from_manifest(run_manifest)
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block startup
+            self.workflow_shadow_observer = None
+            self._record_workflow_shadow_error(
+                problem_ref="workflow-shadow-initialization",
+                school_id=None,
+                event_start_seq=max(0, self.harness._next_seq),
+                error=error,
+            )
         self.last_stop_decision = None
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
@@ -300,6 +321,204 @@ class Scheduler:
             # record for a log-follower.
             self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
         self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+
+    def _workflow_meter_snapshot(self):
+        """Read accounting for a shadow comparison without owning the meter."""
+
+        meter = getattr(self.adapter, "meter", None)
+        snapshot = getattr(meter, "snapshot", None)
+        return snapshot() if callable(snapshot) else None
+
+    def _workflow_conjecturer_contract_id(self, problem) -> str:
+        """Predict the exact wire contract selected by the unchanged call."""
+
+        from deepreason.llm.contracts import ConjecturerOutput
+        from deepreason.llm.wire import (
+            AliasTable,
+            DirectWireContract,
+            wire_contract_for,
+        )
+        from deepreason.workloads.text import ReasoningConjecturerOutput
+
+        reasoning = any(
+            self.harness.commitments[commitment_id].eval
+            == "program:reasoning-envelope-wf"
+            for commitment_id in problem.criteria
+            if commitment_id in self.harness.commitments
+        )
+        output_model = (
+            ReasoningConjecturerOutput if reasoning else ConjecturerOutput
+        )
+        profile = self.adapter.profile_for("conjecturer")
+        contract = (
+            DirectWireContract(output_model)
+            if profile is None
+            else wire_contract_for(
+                "conjecturer",
+                output_model,
+                profile,
+                AliasTable(),
+            )
+        )
+        return contract.contract_id
+
+    def _record_workflow_shadow_error(
+        self,
+        *,
+        problem_ref: str,
+        school_id: str | None,
+        event_start_seq: int,
+        error: Exception,
+        work_order_id: str | None = None,
+    ) -> None:
+        """Contain observer failures on the non-authoritative side channel."""
+
+        try:
+            from deepreason.workflow.shadow import ShadowComparisonV1
+
+            comparison = ShadowComparisonV1.observer_error(
+                problem_ref=problem_ref,
+                school_id=school_id,
+                event_start_seq=event_start_seq,
+                event_end_seq=self.harness._next_seq - 1,
+                error=error,
+                work_order_id=work_order_id,
+            )
+            self.workflow_shadow_observations.append(comparison)
+        except Exception:  # noqa: BLE001 - diagnostics must never block actuation
+            return
+
+    def _begin_workflow_shadow(self, problem, school_id, context_plan):
+        """Derive a C0 work order immediately before legacy dispatch."""
+
+        observer = self.workflow_shadow_observer
+        if observer is None:
+            return None
+        event_start_seq = self.harness._next_seq
+        try:
+            from deepreason.workflow.profiles import resolve_conjecture_route
+
+            _, route = resolve_conjecture_route(
+                self.run_manifest,
+                self.adapter.leases,
+                school_id=school_id,
+            )
+            default_fence = max(0, event_start_seq - 1)
+            return observer.begin_conjecture(
+                problem_ref=problem.id,
+                canonical_problem_refs=tuple(sorted(self.harness.state.problems)),
+                school_id=school_id,
+                route_lease=route,
+                contract_id=self._workflow_conjecturer_contract_id(problem),
+                formal_fence_seq=getattr(
+                    context_plan, "formal_fence_seq", default_fence
+                ),
+                scratch_fence_seq=getattr(
+                    context_plan, "scratch_fence_seq", default_fence
+                ),
+                event_start_seq=event_start_seq,
+                meter_before=self._workflow_meter_snapshot(),
+                advisory_context_ref=getattr(
+                    getattr(context_plan, "advisory_context", None), "id", None
+                ),
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block actuation
+            self._record_workflow_shadow_error(
+                problem_ref=problem.id,
+                school_id=school_id,
+                event_start_seq=event_start_seq,
+                error=error,
+            )
+            return None
+
+    def _workflow_shadow_candidate_sink(self):
+        """Collect exact code-authored Conj dispositions outside durable state."""
+
+        if self.workflow_shadow_observer is None:
+            return [], None
+        from deepreason.workflow.models import (
+            GuardFindingCode,
+            GuardFindingOutcome,
+            GuardFindingV1,
+        )
+
+        findings = []
+        occurrences: dict[str, int] = {}
+
+        def observe(candidate_ref: str, outcome: str, reason: str) -> None:
+            occurrences[candidate_ref] = occurrences.get(candidate_ref, 0) + 1
+            occurrence = occurrences[candidate_ref]
+            # Proposal payloads may repeat semantically identical candidates.
+            # Preserve the artifact ref for the first occurrence (so admitted
+            # output correlation stays exact) and name later occurrences
+            # independently so GuardResultV1 can explain each one once.
+            disposition_ref = (
+                candidate_ref
+                if occurrence == 1
+                else f"{candidate_ref}#occurrence-{occurrence}"
+            )
+            disposition = GuardFindingOutcome(outcome)
+            code = (
+                GuardFindingCode.PASSED
+                if disposition == GuardFindingOutcome.ADMIT
+                else GuardFindingCode.CONTENT_DUPLICATE
+                if disposition == GuardFindingOutcome.DEDUPLICATE
+                else GuardFindingCode.BATTERY_EQUIVALENT
+                if "battery-equivalent" in reason
+                else GuardFindingCode.REFUTED_EQUIVALENT
+                if reason.startswith("hash:")
+                else GuardFindingCode.INTERFACE_INVALID
+            )
+            findings.append(
+                GuardFindingV1(
+                    candidate_ref=disposition_ref,
+                    outcome=disposition,
+                    code=code,
+                    related_refs=(candidate_ref,),
+                )
+            )
+
+        return findings, observe
+
+    def _finish_workflow_shadow(
+        self,
+        ticket,
+        admitted,
+        *,
+        actual_problem_ref: str | None,
+        candidate_dispositions=(),
+        terminal_error: Exception | None = None,
+    ) -> None:
+        """Compare an already-completed legacy call without mutating it."""
+
+        observer = self.workflow_shadow_observer
+        if observer is None or ticket is None:
+            return
+        try:
+            termination_kind = None
+            if isinstance(terminal_error, TokenBudgetExceeded):
+                from deepreason.workflow.shadow import ShadowTerminationKind
+
+                termination_kind = ShadowTerminationKind.TOKEN_BUDGET_EXCEEDED
+            comparison = observer.finish_conjecture(
+                ticket,
+                actual_problem_ref=actual_problem_ref,
+                events=tuple(self.harness._events_since(ticket.event_start_seq)),
+                admitted_refs=tuple(artifact.id for artifact in admitted),
+                candidate_dispositions=tuple(candidate_dispositions),
+                meter_after=self._workflow_meter_snapshot(),
+                termination_kind=termination_kind,
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block actuation
+            self._record_workflow_shadow_error(
+                problem_ref=ticket.work_order.problem_ref,
+                school_id=ticket.work_order.school_id,
+                event_start_seq=ticket.event_start_seq,
+                error=error,
+                work_order_id=ticket.work_order.id,
+            )
+            return
+        self.workflow_shadow_observations.append(comparison)
 
     def _disc_paused(self, problem) -> bool:
         """Futility backoff for discrimination problems (§14 attention only):
@@ -681,6 +900,22 @@ class Scheduler:
 
         for school_id in assigned:
             school = self._school_dict(school_id) if school_id else None
+            shadow_ticket = None
+            shadow_dispositions = []
+            candidate_observer = None
+            try:
+                shadow_dispositions, candidate_observer = (
+                    self._workflow_shadow_candidate_sink()
+                )
+            except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+                self._record_workflow_shadow_error(
+                    problem_ref=problem.id,
+                    school_id=(
+                        school_id if school_id in school_leases else None
+                    ),
+                    event_start_seq=self.harness._next_seq,
+                    error=error,
+                )
             try:
                 if (
                     problem.provenance.trigger in _INTEGRATION_TRIGGERS
@@ -714,6 +949,11 @@ class Scheduler:
                     from deepreason.scratch.conjecture import ConjectureContextStale
 
                     context_plan = self._plan_conjecture_context(problem, school_id)
+                    shadow_ticket = self._begin_workflow_shadow(
+                        problem,
+                        school_id if school_id in school_leases else None,
+                        context_plan,
+                    )
                     for context_attempt in range(2):
                         try:
                             admitted = conj(
@@ -743,6 +983,7 @@ class Scheduler:
                                     school_id if school_id in school_leases else None
                                 ),
                                 conjecture_context_plan=context_plan,
+                                candidate_observer=candidate_observer,
                                 run_manifest=(
                                     self.run_manifest
                                     if self.run_manifest is not None
@@ -762,7 +1003,29 @@ class Scheduler:
                             )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
+                self._finish_workflow_shadow(
+                    shadow_ticket,
+                    (),
+                    actual_problem_ref=problem.id,
+                    candidate_dispositions=shadow_dispositions,
+                )
                 continue
+            except (RouteFirewallError, TokenBudgetExceeded) as error:
+                # These remain fail-closed scheduler exits.  Carry only the
+                # in-memory ticket upward so run() can log any attached spend
+                # first and let the observer compare the completed event span.
+                error.workflow_shadow_ticket = shadow_ticket
+                error.workflow_shadow_problem_ref = problem.id
+                error.workflow_shadow_candidate_dispositions = tuple(
+                    shadow_dispositions
+                )
+                raise
+            self._finish_workflow_shadow(
+                shadow_ticket,
+                admitted,
+                actual_problem_ref=problem.id,
+                candidate_dispositions=shadow_dispositions,
+            )
             for artifact in admitted:
                 self._criticize(artifact)
             # Argumentative criticism runs after the cheap per-target passes
@@ -1257,8 +1520,6 @@ class Scheduler:
         A truthy return stops the run early (staged pipelines stop a stage
         on its first survivor without rebuilding the Scheduler, which would
         wipe the attention caches)."""
-        from deepreason.llm.budget import TokenBudgetExceeded
-
         stop_snapshot = (
             self._stop_snapshot() if self.stop_controller is not None else None
         )
@@ -1293,6 +1554,16 @@ class Scheduler:
                 # the append-only process record, then stop the run loudly so
                 # the scheduler cannot continue against the mutated endpoint.
                 self._drop(e)
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(
+                        e, "workflow_shadow_problem_ref", None
+                    ),
+                    candidate_dispositions=getattr(
+                        e, "workflow_shadow_candidate_dispositions", ()
+                    ),
+                )
                 raise
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
@@ -1305,6 +1576,17 @@ class Scheduler:
                 else:
                     self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(
+                        e, "workflow_shadow_problem_ref", None
+                    ),
+                    candidate_dispositions=getattr(
+                        e, "workflow_shadow_candidate_dispositions", ()
+                    ),
+                    terminal_error=e,
+                )
                 break
         report = self.report()
         if self.last_stop_decision is not None and self.last_stop_decision.stop:

@@ -84,6 +84,7 @@ def conj(
     conjecture_context_plan=None,
     run_manifest=None,
     _context_expansion_index: int = 0,
+    candidate_observer=None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -99,6 +100,16 @@ def conj(
             )
         if endpoint_lease.role != "conjecturer":
             raise ValueError("Conj endpoint lease must belong to the conjecturer role")
+
+    def observe_candidate(candidate_ref: str, outcome: str, reason: str) -> None:
+        """Report code-derived disposition without granting callback authority."""
+
+        if candidate_observer is None:
+            return
+        try:
+            candidate_observer(candidate_ref, outcome, reason)
+        except Exception:  # noqa: BLE001 - observation cannot alter Conj
+            return
     if conjecture_context_plan is not None:
         from deepreason.scratch.conjecture import PlannedConjectureContextV1
 
@@ -391,6 +402,7 @@ def conj(
                 diagnostic["candidate_content"] = candidate.content
             diagnostics.append(diagnostic)
         if not admitted:
+            observe_candidate(artifact.id, "reject", reason)
             # Persist the block (stress campaign T7 finding): gate decisions
             # were in-memory only, so a finished run could not be audited for
             # block counts — violating log-as-source-of-truth. A Measure is
@@ -401,6 +413,11 @@ def conj(
             harness.record_measure(inputs=[f"gate:{reason}", artifact.id, problem_id])
             continue
         if artifact.id in seen or artifact.id in harness.state.artifacts:
+            observe_candidate(
+                artifact.id,
+                "deduplicate",
+                "content-duplicate",
+            )
             continue  # attention-level dedupe of a registered twin — never a block (§0)
         # Commit after admission (RC5): only now do draft commitments reach
         # the registry (idempotent for ids an earlier candidate registered).
@@ -408,6 +425,7 @@ def conj(
             harness.register_commitment(commitment)
         seen.add(artifact.id)
         batch.append((artifact, []))
+        observe_candidate(artifact.id, "admit", "passed")
         if domain is not None:
             candidate_domains[artifact.id] = domain
     for artifact, _warrants in batch:
@@ -623,5 +641,6 @@ def conj(
         conjecture_context_plan=expanded_plan,
         run_manifest=run_manifest,
         _context_expansion_index=expansion_number,
+        candidate_observer=candidate_observer,
     )
     return [*registered, *follow_up]
