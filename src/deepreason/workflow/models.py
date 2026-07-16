@@ -8,6 +8,7 @@ authors a :class:`TransitionDecisionV1` or :class:`GuardResultV1`.
 from __future__ import annotations
 
 from enum import Enum
+import re
 from typing import Any, ClassVar, Literal
 
 from pydantic import (
@@ -21,7 +22,12 @@ from pydantic import (
 
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.frozen import FrozenDict, FrozenList
-from deepreason.runtime.stop import StopDecision
+from deepreason.runtime.stop import (
+    StopControllerStateV1,
+    StopDecision,
+    StopMetrics,
+    StopPolicy,
+)
 from deepreason.scratch.models import RetrievalChannel
 
 
@@ -615,6 +621,169 @@ class WorkflowStopDecisionV1(IdentifiedWorkflowRecord):
     next_process_digest: str = Field(pattern=_ID_PATTERN)
 
 
+class LifecycleTransitionKind(str, Enum):
+    """Lifecycle transitions with implemented controller authority.
+
+    ``PAUSED`` is intentionally absent: the scheduler has no real pause state
+    yet, so recording one would manufacture authority.  ``RESUMED`` is kept as
+    the reserved continuation transition for the follow-up continuation seam.
+    """
+
+    STOPPED = "stopped"
+    RESUMED = "resumed"
+
+
+class OutstandingWorkItemV1(WorkflowRecord):
+    """Canonical recovery shape of one unfinished work order at a checkpoint."""
+
+    work_order_id: str = Field(pattern=_ID_PATTERN)
+    recovery_status: Literal[
+        "enabled",
+        "issued",
+        "provider_result_received",
+        "repair_pending",
+        "context_pending",
+    ]
+    bound_call_seqs: tuple[int, ...] = ()
+    unconsumed_bound_call_seqs: tuple[int, ...] = ()
+
+    @model_validator(mode="after")
+    def _canonical_call_sequences(self):
+        for label, values in (
+            ("bound", self.bound_call_seqs),
+            ("unconsumed", self.unconsumed_bound_call_seqs),
+        ):
+            if tuple(values) != tuple(sorted(set(values))) or any(
+                type(value) is not int or value < 0 for value in values
+            ):
+                raise ValueError(f"{label} provider call sequences must be canonical")
+        if not set(self.unconsumed_bound_call_seqs).issubset(
+            self.bound_call_seqs
+        ):
+            raise ValueError("unconsumed calls must belong to their work order")
+        return self
+
+
+class WorkflowLifecycleSnapshotV1(IdentifiedWorkflowRecord):
+    """Content-addressed process checkpoint bound by a lifecycle decision."""
+
+    _identity_domain = "workflow.lifecycle-snapshot.v1"
+
+    schema_: Literal["workflow.lifecycle-snapshot.v1"] = Field(
+        "workflow.lifecycle-snapshot.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
+    controller_version: Literal[
+        "legacy.scheduler.v1", "workflow.controller.v1"
+    ]
+    process_digest: str = Field(pattern=_ID_PATTERN)
+    event_fence_seq: int = Field(ge=-1)
+    last_control_seq: int = Field(ge=-1)
+    outstanding_work: tuple[OutstandingWorkItemV1, ...] = ()
+
+    @field_validator("outstanding_work")
+    @classmethod
+    def _canonical_outstanding_work(cls, value):
+        ids = tuple(item.work_order_id for item in value)
+        if ids != tuple(sorted(set(ids))):
+            raise ValueError("outstanding work must be unique and sorted by ID")
+        return tuple(value)
+
+    @property
+    def outstanding_work_order_ids(self) -> tuple[str, ...]:
+        return tuple(item.work_order_id for item in self.outstanding_work)
+
+    @property
+    def unconsumed_bound_call_seqs(self) -> tuple[int, ...]:
+        return tuple(
+            sorted(
+                sequence
+                for item in self.outstanding_work
+                for sequence in item.unconsumed_bound_call_seqs
+            )
+        )
+
+
+class StopMetricsObservationV1(IdentifiedWorkflowRecord):
+    """Strict record of the software-owned inputs to one stop evaluation."""
+
+    _identity_domain = "workflow.stop-metrics-observation.v1"
+
+    schema_: Literal["workflow.stop-metrics-observation.v1"] = Field(
+        "workflow.stop-metrics-observation.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
+    controller_version: Literal[
+        "legacy.scheduler.v1", "workflow.controller.v1"
+    ]
+    process_digest: str = Field(pattern=_ID_PATTERN)
+    stop_policy: StopPolicy
+    metrics: StopMetrics
+    model_signal_blob_refs: tuple[str, ...] = ()
+    controller_state_before: StopControllerStateV1
+    controller_state_after: StopControllerStateV1
+
+    @field_validator("model_signal_blob_refs")
+    @classmethod
+    def _canonical_signal_refs(cls, value):
+        if tuple(value) != tuple(sorted(set(value))) or any(
+            re.fullmatch(r"[0-9a-f]{64}", item) is None for item in value
+        ):
+            raise ValueError("model signal blob references must be canonical")
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _controller_state_matches_policy(self):
+        digest = self.stop_policy.digest
+        if (
+            self.controller_state_before.policy_digest != digest
+            or self.controller_state_after.policy_digest != digest
+        ):
+            raise ValueError("stop controller state belongs to another policy")
+        if self.metrics.stuck_signal and not self.model_signal_blob_refs:
+            raise ValueError("stuck model signal requires recorded provider input")
+        return self
+
+
+class WorkflowLifecycleDecisionV1(IdentifiedWorkflowRecord):
+    """Code-authored terminal decision; semantic text has no transition field."""
+
+    _identity_domain = "workflow.lifecycle-decision.v1"
+
+    schema_: Literal["workflow.lifecycle-decision.v1"] = Field(
+        "workflow.lifecycle-decision.v1", alias="schema"
+    )
+    transition_kind: Literal[LifecycleTransitionKind.STOPPED] = (
+        LifecycleTransitionKind.STOPPED
+    )
+    manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
+    controller_version: Literal[
+        "legacy.scheduler.v1", "workflow.controller.v1"
+    ]
+    workflow_profile: Literal[
+        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1"
+    ]
+    previous_process_digest: str = Field(pattern=_ID_PATTERN)
+    metrics_observation_ref: str = Field(pattern=_ID_PATTERN)
+    checkpoint_ref: str = Field(pattern=_ID_PATTERN)
+    deterministic_decision: StopDecision
+    stop_record_digest: str = Field(pattern=_DIGEST_PATTERN)
+    stop_event_seq: int = Field(ge=0)
+    next_process_digest: str = Field(pattern=_ID_PATTERN)
+
+    @model_validator(mode="after")
+    def _terminal_shape(self):
+        if (
+            not self.deterministic_decision.stop
+            or self.deterministic_decision.reason is None
+            or self.deterministic_decision.escape_action is not None
+        ):
+            raise ValueError("stopped lifecycle requires one terminal stop decision")
+        if self.previous_process_digest != self.next_process_digest:
+            raise ValueError("stopping cannot mutate conjecture process state")
+        return self
+
+
 __all__ = [
     "BudgetDeltaV1",
     "CapabilityGrantV1",
@@ -624,7 +793,9 @@ __all__ = [
     "GuardFindingV1",
     "GuardResultV1",
     "IdentifiedWorkflowRecord",
+    "LifecycleTransitionKind",
     "LocalRepairPolicyV1",
+    "OutstandingWorkItemV1",
     "ProposalReceiptV1",
     "ProposalValidationOutcome",
     "RepairWorkOrderV1",
@@ -632,6 +803,9 @@ __all__ = [
     "TransitionDecisionV1",
     "TransitionKind",
     "TriggerKind",
+    "StopMetricsObservationV1",
+    "WorkflowLifecycleDecisionV1",
+    "WorkflowLifecycleSnapshotV1",
     "WorkflowRecord",
     "WorkflowStopDecisionV1",
     "WorkflowTaskKind",

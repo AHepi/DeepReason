@@ -786,6 +786,57 @@ class Harness:
             control=payload,
         )
 
+    def record_lifecycle_transition(
+        self,
+        observation,
+        snapshot,
+        decision,
+    ) -> Event:
+        """Persist one v4 lifecycle decision through the Control event seam."""
+
+        from deepreason.workflow.models import (
+            StopMetricsObservationV1,
+            WorkflowLifecycleDecisionV1,
+            WorkflowLifecycleSnapshotV1,
+        )
+
+        self._ensure_writable()
+
+        def canonical(model_type, value):
+            payload = value.model_dump(mode="python", by_alias=True)
+            return model_type.model_validate(payload)
+
+        observation = canonical(StopMetricsObservationV1, observation)
+        snapshot = canonical(WorkflowLifecycleSnapshotV1, snapshot)
+        decision = canonical(WorkflowLifecycleDecisionV1, decision)
+        if (
+            decision.metrics_observation_ref != observation.id
+            or decision.checkpoint_ref != snapshot.id
+        ):
+            raise ValueError("lifecycle decision differs from its bound records")
+        for ref in observation.model_signal_blob_refs:
+            self.blobs.get(ref)
+        records = (
+            ("workflow-stop-metrics-observation", observation),
+            ("workflow-lifecycle-snapshot", snapshot),
+            ("workflow-lifecycle-decision", decision),
+        )
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [observation.id, snapshot.id]
+        outputs = [record.id for _schema, record in records]
+        payload = ControlEventPayloadV1(
+            decision_ref=decision.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+
     def build_bridge(self, problem_id: str, target: str, policy, **kwargs):
         """Build one fixed-fence grounded final view through canonical services.
 
@@ -1090,6 +1141,9 @@ class Harness:
                 resolved_workflow = []
                 for object_id in event.outputs:
                     schema, value = self.objects.get(object_id)
+                    if schema == "workflow-stop-metrics-observation":
+                        for ref in value.model_signal_blob_refs:
+                            self.blobs.get(ref)
                     resolved_workflow.append((schema, object_id, value))
                 self.workflow_state.apply(event, resolved_workflow)
         except ValueError as error:

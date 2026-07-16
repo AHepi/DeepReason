@@ -52,7 +52,7 @@ class ControlEventPayloadV1(FrozenRecord):
                 "control inputs must name exactly one work order and trigger"
             )
         if _WORKFLOW_ID.fullmatch(self.inputs[0]) is None:
-            raise ValueError("control input zero must name a canonical work order")
+            raise ValueError("control input zero must name a canonical workflow record")
         if not self.inputs[1] or len(self.inputs[1]) > 512:
             raise ValueError("control trigger reference must be nonempty and bounded")
         if any(_WORKFLOW_ID.fullmatch(item) is None for item in self.outputs):

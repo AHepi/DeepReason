@@ -17,9 +17,12 @@ from deepreason.workflow.models import (
     ProposalReceiptV1,
     ProposalValidationOutcome,
     RepairWorkOrderV1,
+    StopMetricsObservationV1,
     TransitionDecisionV1,
     TransitionKind,
     WorkOrderEnvelopeV1,
+    WorkflowLifecycleDecisionV1,
+    WorkflowLifecycleSnapshotV1,
     repair_attempt_trigger_ref,
 )
 from deepreason.workflow.state import (
@@ -35,6 +38,9 @@ _SCHEMA_MODELS = {
     "workflow-proposal-receipt": ProposalReceiptV1,
     "workflow-guard-result": GuardResultV1,
     "workflow-transition-decision": TransitionDecisionV1,
+    "workflow-stop-metrics-observation": StopMetricsObservationV1,
+    "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
+    "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
 }
 _PROVIDER_TRANSITIONS = {
     TransitionKind.PROPOSAL_RECEIVED,
@@ -145,6 +151,16 @@ class WorkflowReplayState:
     proposal_receipts: dict[str, ProposalReceiptV1] = field(default_factory=dict)
     guard_results: dict[str, GuardResultV1] = field(default_factory=dict)
     decisions: dict[str, TransitionDecisionV1] = field(default_factory=dict)
+    stop_observations: dict[str, StopMetricsObservationV1] = field(
+        default_factory=dict
+    )
+    lifecycle_snapshots: dict[str, WorkflowLifecycleSnapshotV1] = field(
+        default_factory=dict
+    )
+    lifecycle_decisions: dict[str, WorkflowLifecycleDecisionV1] = field(
+        default_factory=dict
+    )
+    terminal_decision_id: str | None = None
     branches: dict[str, WorkflowBranchState] = field(default_factory=dict)
     work_to_branch: dict[str, str] = field(default_factory=dict)
     decision_event_seq: dict[str, int] = field(default_factory=dict)
@@ -158,6 +174,8 @@ class WorkflowReplayState:
         seq = getattr(event, "seq", None)
         if call is None or seq is None or getattr(call, "work_order_id", None) is None:
             return
+        if self.terminal_decision_id is not None:
+            raise ValueError("work-bound provider call follows terminal lifecycle state")
         seq = int(seq)
         if seq in self.calls_by_seq:
             raise ValueError("workflow provider-call sequence appears more than once")
@@ -908,6 +926,110 @@ class WorkflowReplayState:
             event_seq=event_seq,
         )
 
+    def _apply_lifecycle(
+        self,
+        event: Any,
+        payload: ControlEventPayloadV1,
+        resolved_records: Iterable[tuple[str, str, BaseModel]],
+    ) -> None:
+        """Validate and index one terminal lifecycle event without re-planning work."""
+
+        from deepreason.runtime.stop import StopController, build_stop_record
+        from deepreason.workflow.lifecycle import outstanding_work_snapshot
+
+        records = _record_map(resolved_records)
+        if tuple(records) != tuple(payload.outputs):
+            raise ValueError("resolved lifecycle records differ from control outputs")
+        expected_schemas = [
+            "workflow-stop-metrics-observation",
+            "workflow-lifecycle-snapshot",
+            "workflow-lifecycle-decision",
+        ]
+        if [schema for schema, _record in records.values()] != expected_schemas:
+            raise ValueError("lifecycle control outputs have the wrong record shape")
+        observation = next(
+            record
+            for schema, record in records.values()
+            if schema == "workflow-stop-metrics-observation"
+        )
+        snapshot = next(
+            record
+            for schema, record in records.values()
+            if schema == "workflow-lifecycle-snapshot"
+        )
+        decision = next(
+            record
+            for schema, record in records.values()
+            if schema == "workflow-lifecycle-decision"
+        )
+        assert isinstance(observation, StopMetricsObservationV1)
+        assert isinstance(snapshot, WorkflowLifecycleSnapshotV1)
+        assert isinstance(decision, WorkflowLifecycleDecisionV1)
+        seq = int(getattr(event, "seq"))
+        if self.terminal_decision_id is not None:
+            raise ValueError("workflow already has a terminal lifecycle decision")
+        if payload.decision_ref != decision.id or tuple(payload.inputs) != (
+            observation.id,
+            snapshot.id,
+        ):
+            raise ValueError("lifecycle Control references differ from its decision")
+        if (
+            decision.metrics_observation_ref != observation.id
+            or decision.checkpoint_ref != snapshot.id
+            or decision.stop_event_seq != seq
+            or snapshot.event_fence_seq != seq - 1
+        ):
+            raise ValueError("lifecycle decision differs from its checkpoint fence")
+        process_digest = self.digest
+        if not (
+            observation.manifest_digest
+            == snapshot.manifest_digest
+            == decision.manifest_digest
+        ) or not (
+            observation.controller_version
+            == snapshot.controller_version
+            == decision.controller_version
+        ):
+            raise ValueError("lifecycle records belong to different authority")
+        if (
+            observation.process_digest != process_digest
+            or snapshot.process_digest != process_digest
+            or decision.previous_process_digest != process_digest
+            or decision.next_process_digest != process_digest
+        ):
+            raise ValueError("lifecycle records differ from replayed process state")
+        expected_snapshot = outstanding_work_snapshot(
+            self,
+            manifest_digest=decision.manifest_digest,
+            controller_version=decision.controller_version,
+            event_fence_seq=seq - 1,
+        )
+        if expected_snapshot != snapshot:
+            raise ValueError("lifecycle outstanding-work snapshot does not replay")
+        if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
+            raise ValueError("STOPPED cannot forget unfinished workflow authority")
+        verifier = StopController(
+            observation.stop_policy,
+            state=observation.controller_state_before,
+        )
+        if verifier.evaluate(observation.metrics) != decision.deterministic_decision:
+            raise ValueError("lifecycle decision differs from deterministic stop policy")
+        if verifier.snapshot() != observation.controller_state_after:
+            raise ValueError("lifecycle controller state does not replay")
+        stop_record = build_stop_record(
+            reason=decision.deterministic_decision.reason,
+            policy=observation.stop_policy,
+            metrics=observation.metrics,
+            event_seq=seq,
+        )
+        if stop_record["digest"] != decision.stop_record_digest:
+            raise ValueError("lifecycle run-stop digest does not replay")
+        self.stop_observations[observation.id] = observation
+        self.lifecycle_snapshots[snapshot.id] = snapshot
+        self.lifecycle_decisions[decision.id] = decision
+        self.terminal_decision_id = decision.id
+        self.event_seqs.append(seq)
+
     def apply(
         self,
         event: Any,
@@ -918,6 +1040,20 @@ class WorkflowReplayState:
         payload = getattr(event, "control", None)
         if payload is None:
             raise ValueError("workflow replay accepts only typed control events")
+        resolved_records = tuple(resolved_records)
+        decision_entry = next(
+            (
+                (schema, value)
+                for schema, object_id, value in resolved_records
+                if object_id == payload.decision_ref
+            ),
+            None,
+        )
+        if decision_entry is not None and decision_entry[0] == "workflow-lifecycle-decision":
+            self._apply_lifecycle(event, payload, resolved_records)
+            return
+        if self.terminal_decision_id is not None:
+            raise ValueError("workflow transition follows terminal lifecycle state")
         seq = int(getattr(event, "seq"))
         planned = self._plan(
             payload,
@@ -962,6 +1098,52 @@ class WorkflowReplayState:
             }:
                 outstanding.append(work_id)
         return tuple(sorted(outstanding))
+
+    @property
+    def terminal_lifecycle_decision(self) -> WorkflowLifecycleDecisionV1 | None:
+        """Latest typed STOPPED authority, if this prefix is terminal."""
+
+        if self.terminal_decision_id is None:
+            return None
+        return self.lifecycle_decisions[self.terminal_decision_id]
+
+    @property
+    def terminal_lifecycle_snapshot(self) -> WorkflowLifecycleSnapshotV1 | None:
+        decision = self.terminal_lifecycle_decision
+        return (
+            self.lifecycle_snapshots[decision.checkpoint_ref]
+            if decision is not None
+            else None
+        )
+
+    @property
+    def terminal_stop_observation(self) -> StopMetricsObservationV1 | None:
+        decision = self.terminal_lifecycle_decision
+        return (
+            self.stop_observations[decision.metrics_observation_ref]
+            if decision is not None
+            else None
+        )
+
+    @property
+    def terminal_controller_version(self) -> str | None:
+        decision = self.terminal_lifecycle_decision
+        return decision.controller_version if decision is not None else None
+
+    @property
+    def terminal_checkpoint_digest(self) -> str | None:
+        decision = self.terminal_lifecycle_decision
+        return decision.checkpoint_ref if decision is not None else None
+
+    @property
+    def terminal_process_digest(self) -> str | None:
+        snapshot = self.terminal_lifecycle_snapshot
+        return snapshot.process_digest if snapshot is not None else None
+
+    @property
+    def terminal_stop_digest(self) -> str | None:
+        decision = self.terminal_lifecycle_decision
+        return decision.stop_record_digest if decision is not None else None
 
     def recovery_status(self, work_order_id: str) -> WorkflowRecoveryStatus:
         branch_id = self.work_to_branch[work_order_id]

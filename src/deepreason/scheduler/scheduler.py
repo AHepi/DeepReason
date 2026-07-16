@@ -242,6 +242,7 @@ class Scheduler:
                 error=error,
             )
         self.last_stop_decision = None
+        self._last_stop_model_signal_refs: tuple[str, ...] = ()
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
             schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
@@ -1726,6 +1727,7 @@ class Scheduler:
             "statuses": dict(state.status),
             "problems": frozenset(state.problems),
             "admissions": frozenset(accepted),
+            "event_seq": self.harness._next_seq,
         }
 
     def _stop_metrics(self, before: dict, diagnostic_start: int):
@@ -1753,6 +1755,22 @@ class Scheduler:
             "schema" in str(item.get("dropped", "")).casefold()
             or "repair" in str(item.get("dropped", "")).casefold()
             for item in recent_diagnostics
+        )
+        self._last_stop_model_signal_refs = (
+            tuple(
+                sorted(
+                    {
+                        event.llm.raw_ref
+                        for event in self.harness._events_since(
+                            before["event_seq"]
+                        )
+                        if event.llm is not None
+                        and len(event.llm.raw_ref) == 64
+                    }
+                )
+            )
+            if stuck_signal
+            else ()
         )
         debt = detection.adjudicator_metrics(
             self.harness, self.config.CAPTURE_W
@@ -1814,8 +1832,12 @@ class Scheduler:
             stop_reason=decision.reason if stopped else None,
         )
 
-    def _record_stop(self, decision, metrics) -> None:
-        from deepreason.runtime.stop import write_stop_record
+    def _record_stop(self, decision, metrics, controller_state_before=None) -> None:
+        from deepreason.runtime.stop import (
+            build_stop_record,
+            persist_stop_record,
+            write_stop_record,
+        )
 
         self.harness.record_measure(
             inputs=[
@@ -1824,13 +1846,61 @@ class Scheduler:
                 self.stop_controller.policy.digest,
             ]
         )
-        write_stop_record(
-            self.harness.root,
+        manifest = self.run_manifest
+        control = (
+            getattr(manifest, "control_plane_policy", None)
+            if manifest is not None
+            and getattr(manifest, "schema_version", 1) == 4
+            else None
+        )
+        if (
+            control is None
+            or control.controller_version != "workflow.controller.v1"
+            or control.mode not in {"shadow", "active_conjecture"}
+        ):
+            write_stop_record(
+                self.harness.root,
+                reason=decision.reason,
+                policy=self.stop_controller.policy,
+                metrics=metrics,
+                event_seq=max(0, self.harness._next_seq - 1),
+            )
+            return
+
+        from deepreason.workflow.lifecycle import build_stopped_lifecycle
+
+        stop_event_seq = self.harness._next_seq
+        stop_record = build_stop_record(
             reason=decision.reason,
             policy=self.stop_controller.policy,
             metrics=metrics,
-            event_seq=max(0, self.harness._next_seq - 1),
+            event_seq=stop_event_seq,
         )
+        if controller_state_before is None:
+            raise ValueError("v4 lifecycle requires pre-evaluation controller state")
+        observation, snapshot, lifecycle = build_stopped_lifecycle(
+            self.harness.workflow_state,
+            manifest_digest=manifest.sha256,
+            controller_version=control.controller_version,
+            workflow_profile=control.workflow_profile,
+            policy=self.stop_controller.policy,
+            metrics=metrics,
+            deterministic_decision=decision,
+            controller_state_before=controller_state_before,
+            controller_state_after=self.stop_controller.snapshot(),
+            stop_event_seq=stop_event_seq,
+            stop_record_digest=stop_record["digest"],
+            model_signal_blob_refs=self._last_stop_model_signal_refs,
+        )
+        event = self.harness.record_lifecycle_transition(
+            observation,
+            snapshot,
+            lifecycle,
+        )
+        if event.seq != stop_event_seq:
+            raise RuntimeError("lifecycle Control event crossed its stop fence")
+        persist_stop_record(self.harness.root, stop_record)
+        self.harness.write_workflow_checkpoint()
 
     def run(self, cycles: int, on_cycle=None) -> dict:
         """on_cycle(self) fires after every completed cycle — a read-only
@@ -1852,6 +1922,7 @@ class Scheduler:
                     metrics, stop_snapshot = self._stop_metrics(
                         stop_snapshot, diagnostic_start
                     )
+                    controller_state_before = self.stop_controller.snapshot()
                     decision = self.stop_controller.evaluate(metrics)
                     self.last_stop_decision = decision
                     if decision.escape_action:
@@ -1864,7 +1935,11 @@ class Scheduler:
                         )
                     self._emit_progress(metrics, decision)
                     if decision.stop:
-                        self._record_stop(decision, metrics)
+                        self._record_stop(
+                            decision,
+                            metrics,
+                            controller_state_before,
+                        )
                         break
             except WorkflowAuthorizationError as e:
                 # Active control-plane failures are terminal. Preserve any
