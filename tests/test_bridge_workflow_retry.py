@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -16,11 +17,14 @@ from deepreason.bridge.retry import (
     authorize_workflow_retry,
     run_bridge_workflow_with_retries,
 )
+from deepreason.bridge.workflow import BridgeWorkflowPolicy
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
+from deepreason.llm.firewall import EndpointLease
 from deepreason.ontology import Problem, ProblemProvenance
 from deepreason.ontology.event import LLMAttempt, LLMCall
+from deepreason.run_manifest import Route
 
 
 def _hash(character: str) -> str:
@@ -96,7 +100,7 @@ class _Workflow:
         return self.result
 
 
-def _run(outcomes, policy, fence, catalog=None):
+def _run(outcomes, policy, fence, catalog=None, **bindings):
     catalog = catalog or _catalog()
     calls = []
     receipts = []
@@ -113,6 +117,7 @@ def _run(outcomes, policy, fence, catalog=None):
         attempt_fence=fence,
         failure_id_for_result=lambda item: item.failure_id,
         persist_retry=receipts.append,
+        **bindings,
     )
     return result, calls, receipts
 
@@ -199,6 +204,23 @@ def test_retry_fails_closed_on_catalog_contract_route_or_formal_fence_change():
     with pytest.raises(WorkflowRetryBoundaryError, match="FORMAL_FENCE_CHANGED"):
         _run([wrong_formal], policy, fence, catalog)
 
+    with pytest.raises(WorkflowRetryBoundaryError, match="MANIFEST_CHANGED"):
+        _run(
+            [_result(fence, "failure", 1)],
+            policy,
+            fence,
+            catalog,
+            manifest_digest="f" * 64,
+        )
+    with pytest.raises(WorkflowRetryBoundaryError, match="PROMPT_POLICY_CHANGED"):
+        _run(
+            [_result(fence, "failure", 1)],
+            policy,
+            fence,
+            catalog,
+            prompt_policy_digest="f" * 64,
+        )
+
 
 def test_policy_is_frozen_bounded_and_canonical():
     with pytest.raises(ValidationError, match="listed error code"):
@@ -282,3 +304,209 @@ def test_retry_authorization_is_a_canonical_replayable_bridge_event(tmp_path):
     reopened = Harness(harness.root)
     assert reopened.bridge_state.workflow_retries[retry.id] == retry
     assert reopened.bridge_state == harness.bridge_state
+
+
+def test_production_coordinator_uses_v2_and_persists_before_fresh_attempt(
+    tmp_path, monkeypatch
+):
+    """Exercise the v4 harness branch without constructing a live endpoint."""
+
+    from deepreason.bridge import harness as bridge_harness
+
+    harness = Harness(tmp_path / "run")
+    harness.register_problem(
+        Problem(
+            id="problem-retry",
+            description="What is supported?",
+            provenance=ProblemProvenance(trigger="seed", **{"from": []}),
+        )
+    )
+    route = Route(
+        endpoint_id="mock:bridge-v4",
+        base_url="https://models.invalid/v1",
+        model_id="offline-v4",
+        provider="fixture",
+        family="fixture",
+        max_tokens=512,
+    )
+    retry_policy = WorkflowRetryPolicyV1(
+        max_workflow_retries=2,
+        retryable_error_codes=("BRIDGE_LEDGER_REPAIR_EXHAUSTED",),
+    )
+    effective = BridgeWorkflowPolicy(
+        grounding_review=False,
+        max_grounding_repair_attempts=0,
+        ledger_contract_version="v2",
+    )
+    monkeypatch.setattr(
+        bridge_harness,
+        "_bound_bridge_execution",
+        lambda *_args: (
+            effective,
+            retry_policy,
+            EndpointLease("summarizer", 0, route),
+        ),
+    )
+    summarizer = MockEndpoint(
+        [
+            "not-json",
+            json.dumps(
+                {
+                    "entries": [
+                        {
+                            "entry_key": "CLM_1",
+                            "claim_class": "source_fact",
+                            "claim": "Unsupported.",
+                            "source_handles": ["SRC_99"],
+                        }
+                    ]
+                }
+            ),
+            '{"entries":[]}',
+        ],
+        name=route.base_url,
+        model=route.model_id,
+    )
+    thesis = MockEndpoint(
+        [
+            json.dumps(
+                {
+                    "sections": [],
+                    "unresolved_items": [
+                        {
+                            "description": "The answer remains unsupported.",
+                            "ledger_entry_handles": ["E1"],
+                        }
+                    ],
+                    "resolution": "insufficient_evidence",
+                    "resolution_reason": "The sealed catalog is insufficient.",
+                }
+            )
+        ],
+        name=route.base_url,
+        model=route.model_id,
+    )
+    adapter = LLMAdapter(
+        {"summarizer": summarizer, "thesis": thesis},
+        harness.blobs,
+        retry_max=0,
+        model_profile="compact",
+        leases={
+            "summarizer": (EndpointLease("summarizer", 0, route),),
+            "thesis": (EndpointLease("thesis", 0, route),),
+        },
+    )
+
+    terminal = harness.build_bridge(
+        "problem-retry",
+        "answer",
+        BridgeWorkflowPolicy(
+            grounding_review=False, max_grounding_repair_attempts=0
+        ),
+        run_manifest_digest="a" * 64,
+        stage_a_adapter=adapter,
+        composition_adapter=adapter,
+    )
+
+    assert terminal.process_status == "success"
+    retries = list(harness.bridge_state.workflow_retries.values())
+    assert len(retries) == 2
+    first_retry, second_retry = sorted(retries, key=lambda item: item.attempt_number)
+    assert first_retry.attempt_number == 2
+    assert second_retry.attempt_number == 3
+    assert second_retry.prior_retry_id == first_retry.id
+    assert second_retry.prior_token_count > first_retry.prior_token_count
+    assert first_retry.attempt_fence.contract_id == "bridge.claim-ledger.compact.v2"
+    assert all(
+        retry.next_attempt_id in harness.bridge_state.retry_attempt_ids
+        for retry in retries
+    )
+    actions = [event.bridge.action for event in harness.log.read() if event.bridge]
+    failed_index = actions.index(BridgeAction.FAILED)
+    retry_index = actions.index(BridgeAction.WORKFLOW_RETRY_STARTED)
+    next_ledger_index = actions.index(BridgeAction.LEDGER_CREATED, retry_index + 1)
+    assert failed_index < retry_index < next_ledger_index
+    calls = [event.llm for event in harness.log.read() if event.llm]
+    ledger_attempts = [
+        attempt
+        for call in calls
+        if call.role == "summarizer"
+        for attempt in call.attempt_trace
+    ]
+    assert len(ledger_attempts) == 3
+    assert {attempt.contract_id for attempt in ledger_attempts} == {
+        "bridge.claim-ledger.compact.v2"
+    }
+    assert Harness(harness.root).bridge_state == harness.bridge_state
+
+
+def test_v4_bridge_route_mismatch_fails_before_provider_dispatch(tmp_path, monkeypatch):
+    from deepreason.bridge import harness as bridge_harness
+
+    harness = Harness(tmp_path / "run")
+    harness.register_problem(
+        Problem(
+            id="problem-retry",
+            description="What is supported?",
+            provenance=ProblemProvenance(trigger="seed", **{"from": []}),
+        )
+    )
+    frozen_route = Route(
+        endpoint_id="manifest-seat",
+        base_url="https://manifest.invalid/v1",
+        model_id="manifest-model",
+        provider="fixture",
+        family="fixture",
+        max_tokens=512,
+    )
+    effective = BridgeWorkflowPolicy(
+        grounding_review=False,
+        max_grounding_repair_attempts=0,
+        ledger_contract_version="v2",
+    )
+    monkeypatch.setattr(
+        bridge_harness,
+        "_bound_bridge_execution",
+        lambda *_args: (
+            effective,
+            WorkflowRetryPolicyV1(),
+            EndpointLease("summarizer", 0, frozen_route),
+        ),
+    )
+    calls = 0
+
+    def response(_prompt):
+        nonlocal calls
+        calls += 1
+        return '{"entries":[]}'
+
+    runtime_route = frozen_route.model_copy(
+        update={"endpoint_id": "substituted-seat"}
+    )
+    endpoint = MockEndpoint(
+        response,
+        name=runtime_route.base_url,
+        model=runtime_route.model_id,
+    )
+    adapter = LLMAdapter(
+        {"summarizer": endpoint},
+        harness.blobs,
+        retry_max=0,
+        leases={
+            "summarizer": (EndpointLease("summarizer", 0, runtime_route),),
+        },
+    )
+
+    with pytest.raises(WorkflowRetryBoundaryError, match="ROUTE_CHANGED"):
+        harness.build_bridge(
+            "problem-retry",
+            "answer",
+            BridgeWorkflowPolicy(
+                grounding_review=False, max_grounding_repair_attempts=0
+            ),
+            run_manifest_digest="a" * 64,
+            stage_a_adapter=adapter,
+        )
+
+    assert calls == 0
+    assert not harness.bridge_state.event_seqs

@@ -280,6 +280,12 @@ def test_v4_round_trips_canonically_and_freezes_complete_policy():
     assert payload["control_plane_policy"]["workflow_retry"]["schema"] == (
         "bridge.workflow-retry-policy.v1"
     )
+    assert (
+        manifest.bridge_policy.workflow_policy(
+            ledger_contract_version="v2"
+        ).ledger_contract_version
+        == "v2"
+    )
 
 
 def test_school_binding_and_workflow_profile_changes_change_manifest_digest():

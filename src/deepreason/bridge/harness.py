@@ -20,6 +20,12 @@ from deepreason.bridge.models import (
     BridgeFailureV1,
     BridgeResolution,
 )
+from deepreason.bridge.retry import (
+    BridgeWorkflowAttemptFenceV1,
+    WorkflowRetryPolicyV1,
+    bridge_prompt_policy_digest,
+    run_bridge_workflow_with_retries,
+)
 from deepreason.bridge.workflow import (
     BridgePersistenceBatch,
     BridgeWorkflow,
@@ -231,9 +237,80 @@ def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
     if manifest.sha256 != manifest_digest:
         raise ValueError("BRIDGE_MANIFEST_MISMATCH")
     scratch = manifest.scratch_policy
-    if manifest.schema_version != 3 or scratch is None or not scratch.enabled:
+    if manifest.schema_version not in {3, 4} or scratch is None or not scratch.enabled:
         raise ValueError("BRIDGE_SCRATCH_MANIFEST_V3_REQUIRED")
     return scratch.attention_policy()
+
+
+def _bound_bridge_execution(root, manifest_digest: str, supplied_policy):
+    """Resolve the sole v4 contract/retry authority from the bound manifest.
+
+    A missing or historical manifest preserves the original low-level fixture
+    path exactly.  For v4, callers may supply only the bridge-policy projection;
+    the control plane owns the wire contract and whole-workflow retry ceiling.
+    """
+
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+    supplied = BridgeWorkflowPolicy.model_validate(supplied_policy)
+    path = root / MANIFEST_NAME
+    if path.is_symlink():
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    if not path.is_file():
+        return supplied, WorkflowRetryPolicyV1(), None
+    manifest = load_run_manifest(path)
+    if manifest.sha256 != manifest_digest:
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    if manifest.schema_version < 4:
+        return supplied, WorkflowRetryPolicyV1(), None
+
+    control = manifest.control_plane_policy
+    bridge = manifest.bridge_policy
+    if control is None or bridge is None:
+        raise ValueError("BRIDGE_CONTROL_POLICY_V4_REQUIRED")
+    historical_projection = bridge.workflow_policy(ledger_contract_version="v1")
+    if supplied != historical_projection:
+        raise ValueError("BRIDGE_WORKFLOW_POLICY_MISMATCH")
+    contract_version = {
+        "bridge.ledger.v1": "v1",
+        "bridge.ledger.v2": "v2",
+    }[control.contract_versions.bridge_ledger_wire_contract]
+    effective = bridge.workflow_policy(ledger_contract_version=contract_version)
+    routes = manifest.roles.get(effective.ledger_role, ())
+    if not routes:
+        raise ValueError("BRIDGE_LEDGER_ROUTE_REQUIRED")
+    from deepreason.llm.firewall import EndpointLease
+
+    seat, route = next(iter(enumerate(routes)))
+    return (
+        effective,
+        control.workflow_retry,
+        EndpointLease(role=effective.ledger_role, seat=seat, route=route),
+    )
+
+
+def _assert_adapter_matches_retry_lease(adapter, expected) -> None:
+    """Fail before dispatch if runtime wiring differs from manifest authority."""
+
+    from deepreason.bridge.retry import WorkflowRetryBoundaryError
+    from deepreason.llm.firewall import RouteFirewallError, select_lease
+
+    try:
+        actual = select_lease(adapter.leases, expected.role, expected.seat)
+        configured = adapter.endpoints[expected.role]
+        endpoints = (
+            tuple(configured)
+            if isinstance(configured, (list, tuple))
+            else (configured,)
+        )
+        endpoint = endpoints[expected.seat]
+        expected.verify(endpoint)
+    except (AttributeError, IndexError, KeyError, RouteFirewallError) as error:
+        raise WorkflowRetryBoundaryError(
+            "BRIDGE_WORKFLOW_RETRY_ROUTE_CHANGED"
+        ) from error
+    if actual != expected:
+        raise WorkflowRetryBoundaryError("BRIDGE_WORKFLOW_RETRY_ROUTE_CHANGED")
 
 
 def _terminal_record(
@@ -351,7 +428,9 @@ def build_grounded_bridge(
     attention_policy = _bound_scratch_attention_policy(
         harness.root, manifest_digest, attention_pack
     )
-    workflow_policy = BridgeWorkflowPolicy.model_validate(policy)
+    workflow_policy, retry_policy, retry_lease = _bound_bridge_execution(
+        harness.root, manifest_digest, policy
+    )
 
     scratch_service = None
     context = None
@@ -409,22 +488,6 @@ def build_grounded_bridge(
     materials = {
         item.ref: item.excerpt for item in catalog.items if item.kind != "scratch"
     }
-    sink = _HarnessBridgeSink(
-        harness,
-        evidence_pack,
-        catalog,
-        manifest_digest=manifest_digest,
-        problem_id=problem_id,
-        target=target,
-    )
-    workflow = BridgeWorkflow(
-        stage_a_adapter,
-        composition_adapter or stage_a_adapter,
-        review_adapter=review_adapter,
-        repair_adapter=repair_adapter,
-        policy=workflow_policy,
-        sink=sink,
-    )
     composition_request = CompositionRequestV1(
         output_target=target,
         formatting_profile=formatting_profile,
@@ -441,7 +504,84 @@ def build_grounded_bridge(
         )
         if committed != context:
             raise RuntimeError("committed advisory context differs from prepared context")
-    result = workflow.run(catalog, composition_request, materials=materials)
+    sinks: list[_HarnessBridgeSink] = []
+
+    def workflow_factory(_attempt_number: int):
+        sink = _HarnessBridgeSink(
+            harness,
+            evidence_pack,
+            catalog,
+            manifest_digest=manifest_digest,
+            problem_id=problem_id,
+            target=target,
+        )
+        sinks.append(sink)
+        return BridgeWorkflow(
+            stage_a_adapter,
+            composition_adapter or stage_a_adapter,
+            review_adapter=review_adapter,
+            repair_adapter=repair_adapter,
+            policy=workflow_policy,
+            sink=sink,
+        )
+
+    if retry_lease is None:
+        result = workflow_factory(1).run(
+            catalog, composition_request, materials=materials
+        )
+    else:
+        from deepreason.llm.firewall import route_fingerprint
+
+        _assert_adapter_matches_retry_lease(stage_a_adapter, retry_lease)
+        retry_route = retry_lease.route
+
+        contract_id = (
+            "bridge.claim-ledger.compact.v2"
+            if workflow_policy.ledger_contract_version == "v2"
+            else "bridge.claim-ledger.compact.v1"
+        )
+        prompt_policy_digest = bridge_prompt_policy_digest(
+            workflow_policy, composition_request
+        )
+        attempt_fence = BridgeWorkflowAttemptFenceV1(
+            manifest_digest=manifest_digest,
+            formal_seq=formal_seq,
+            catalog_id=catalog.id,
+            contract_id=contract_id,
+            prompt_policy_digest=prompt_policy_digest,
+            role=retry_lease.role,
+            seat=retry_lease.seat,
+            endpoint_id=retry_route.endpoint_id,
+            route_sha256=route_fingerprint(retry_route),
+        )
+
+        def failure_id_for_result(_result):
+            failure = sinks[-1].failure
+            if failure is None:
+                raise RuntimeError("retryable bridge result lacks a persisted failure")
+            return failure.id
+
+        def persist_retry(receipt):
+            harness.record_bridge_event(
+                BridgeAction.WORKFLOW_RETRY_STARTED,
+                inputs=[receipt.prior_failure_id],
+                records=[("bridge-workflow-retry", receipt)],
+            )
+
+        result = run_bridge_workflow_with_retries(
+            workflow_factory,
+            catalog,
+            composition_request,
+            retry_policy=retry_policy,
+            attempt_fence=attempt_fence,
+            failure_id_for_result=failure_id_for_result,
+            persist_retry=persist_retry,
+            materials=materials,
+            manifest_digest=manifest_digest,
+            prompt_policy_digest=prompt_policy_digest,
+            contract_id=contract_id,
+        )
+    sink = sinks[-1]
 
     if (
         source.state.model_dump_json() != source_formal_before

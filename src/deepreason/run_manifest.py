@@ -395,7 +395,7 @@ class BridgePolicy(BaseModel):
             )
         return self
 
-    def workflow_policy(self):
+    def workflow_policy(self, *, ledger_contract_version: Literal["v1", "v2"] = "v1"):
         """Compile the manifest policy into C8's exact orchestration contract."""
 
         from deepreason.bridge.workflow import BridgeWorkflowPolicy
@@ -405,6 +405,7 @@ class BridgePolicy(BaseModel):
             max_ledger_amendments=self.max_ledger_amendments,
             max_grounding_repair_attempts=self.max_grounding_repair_attempts,
             ledger_role=self.ledger_role,
+            ledger_contract_version=ledger_contract_version,
             composer_role=self.composer_role,
             reviewer_role=self.reviewer_role,
         )

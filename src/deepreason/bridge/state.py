@@ -99,6 +99,11 @@ class BridgeState:
     grounding_reviews: dict[str, BaseModel] = field(default_factory=dict)
     failures: dict[str, BaseModel] = field(default_factory=dict)
     workflow_retries: dict[str, BaseModel] = field(default_factory=dict)
+    retry_attempt_ids: dict[str, str] = field(default_factory=dict)
+    attempt_number_by_failure: dict[str, int] = field(default_factory=dict)
+    retry_id_by_failure: dict[str, str] = field(default_factory=dict)
+    cumulative_tokens_by_failure: dict[str, int] = field(default_factory=dict)
+    calls_by_failure: dict[str, list[BaseModel]] = field(default_factory=dict)
     object_schemas: dict[str, str] = field(default_factory=dict)
     object_event_seq: dict[str, int] = field(default_factory=dict)
     event_seqs: list[int] = field(default_factory=list)
@@ -108,6 +113,10 @@ class BridgeState:
     completed_events: list[int] = field(default_factory=list)
     failed_events: list[int] = field(default_factory=list)
     error_codes_by_event: dict[int, str] = field(default_factory=dict)
+    _pending_retry: BaseModel | None = field(default=None, repr=False)
+    _awaiting_retry_attempt_start: bool = field(default=False, repr=False)
+    _attempt_tokens: int = field(default=0, repr=False)
+    _attempt_calls: list[BaseModel] = field(default_factory=list, repr=False)
 
     def _repair_lineage(self, output_id: str, review) -> bool:
         return any(
@@ -315,8 +324,47 @@ class BridgeState:
                 retry.reason_code != failure.error_code
                 or retry.attempt_fence.formal_seq != failure.formal_seq
                 or retry.attempt_fence.catalog_id != failure.catalog_id
+                or retry.attempt_fence.manifest_digest
+                != failure.run_manifest_digest
             ):
                 raise ValueError("workflow retry differs from its prior failure fence")
+            prior_attempt = self.attempt_number_by_failure.get(failure.id, 1)
+            if retry.attempt_number != prior_attempt + 1:
+                raise ValueError("workflow retry attempt number is not replay-derived")
+            prior_retry_id = self.retry_id_by_failure.get(failure.id)
+            if retry.prior_retry_id != prior_retry_id:
+                raise ValueError("workflow retry chain does not name its prior authorization")
+            prior_tokens = self.cumulative_tokens_by_failure.get(failure.id)
+            if prior_tokens is not None and retry.prior_token_count != prior_tokens:
+                raise ValueError("workflow retry token accounting differs from replay")
+            if self._pending_retry is not None:
+                raise ValueError("workflow retry cannot start while another attempt is open")
+            if retry.next_attempt_id is not None:
+                if retry.next_attempt_id in self.retry_attempt_ids:
+                    raise ValueError("workflow retry attempt identity is already in use")
+            if prior_retry_id is not None:
+                prior = self.workflow_retries[prior_retry_id]
+                if (
+                    retry.maximum_attempts != prior.maximum_attempts
+                    or retry.attempt_fence != prior.attempt_fence
+                ):
+                    raise ValueError("workflow retry changed its frozen retry fence")
+            calls = self.calls_by_failure.get(failure.id, [])
+            if not calls:
+                raise ValueError("workflow retry requires a replayed failed model call")
+            call = calls[-1]
+            fence = retry.attempt_fence
+            if call.role != fence.role or not call.attempt_trace:
+                raise ValueError("workflow retry role differs from the failed call")
+            for attempt in call.attempt_trace:
+                if attempt.contract_id != fence.contract_id:
+                    raise ValueError("workflow retry contract differs from the failed call")
+                if (
+                    attempt.seat != fence.seat
+                    or attempt.endpoint_id != fence.endpoint_id
+                    or attempt.route_sha256 != fence.route_sha256
+                ):
+                    raise ValueError("workflow retry route differs from the failed call")
 
         if action in {BridgeAction.LEDGER_CREATED, BridgeAction.LEDGER_AMENDED}:
             _ledger_id, ledger = self._one(records, "bridge-claim-ledger")
@@ -576,6 +624,33 @@ class BridgeState:
                     f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
                 )
             records.append((schema, oid, obj))
+        if self._pending_retry is not None and event.bridge.action != BridgeAction.WORKFLOW_RETRY_STARTED:
+            if self._awaiting_retry_attempt_start:
+                if event.bridge.action not in {
+                    BridgeAction.LEDGER_CREATED,
+                    BridgeAction.FAILED,
+                }:
+                    raise ValueError(
+                        "authorized workflow retry is not linked to a fresh attempt"
+                    )
+                if event.bridge.action == BridgeAction.LEDGER_CREATED:
+                    fence = self._pending_retry.attempt_fence
+                    if not any(
+                        schema == "bridge-ledger-input-catalog" and oid == fence.catalog_id
+                        for schema, oid, _obj in records
+                    ):
+                        raise ValueError("workflow retry did not reuse its sealed catalog")
+                    if event.llm is not None:
+                        if event.llm.role != fence.role or any(
+                            attempt.contract_id != fence.contract_id
+                            or attempt.seat != fence.seat
+                            or attempt.endpoint_id != fence.endpoint_id
+                            or attempt.route_sha256 != fence.route_sha256
+                            for attempt in event.llm.attempt_trace
+                        ):
+                            raise ValueError(
+                                "workflow retry start changed contract or route"
+                            )
         self.validate(payload, records)
         for schema, oid, obj in records:
             self._register(schema, oid, obj, event.seq)
@@ -583,11 +658,57 @@ class BridgeState:
         self.events_by_action.setdefault(payload.action, []).append(event.seq)
         self.inputs_by_event[event.seq] = list(event.inputs)
         self.outputs_by_event[event.seq] = list(event.outputs)
+        if event.llm is not None:
+            self._attempt_tokens += event.llm.tokens
+            self._attempt_calls.append(event.llm)
+        if payload.action == BridgeAction.WORKFLOW_RETRY_STARTED:
+            retry = records[-1][2]
+            self._pending_retry = retry
+            self._awaiting_retry_attempt_start = True
+            if retry.next_attempt_id is not None:
+                self.retry_attempt_ids[retry.next_attempt_id] = retry.id
+            self._attempt_tokens = 0
+            self._attempt_calls = []
+        elif self._pending_retry is not None:
+            self._awaiting_retry_attempt_start = False
         if payload.action == BridgeAction.COMPLETED:
             self.completed_events.append(event.seq)
+            self._pending_retry = None
+            self._awaiting_retry_attempt_start = False
+            self._attempt_tokens = 0
+            self._attempt_calls = []
         elif payload.action == BridgeAction.FAILED:
             self.failed_events.append(event.seq)
             self.error_codes_by_event[event.seq] = payload.error_code
+            failure = next(
+                (
+                    obj
+                    for schema, _oid, obj in records
+                    if schema == "bridge-failure"
+                ),
+                None,
+            )
+            if failure is None:
+                self._pending_retry = None
+                self._awaiting_retry_attempt_start = False
+                self._attempt_tokens = 0
+                self._attempt_calls = []
+                return
+            pending = self._pending_retry
+            self.attempt_number_by_failure[failure.id] = (
+                pending.attempt_number if pending is not None else 1
+            )
+            prior_tokens = pending.prior_token_count if pending is not None else 0
+            self.cumulative_tokens_by_failure[failure.id] = (
+                prior_tokens + self._attempt_tokens
+            )
+            if pending is not None:
+                self.retry_id_by_failure[failure.id] = pending.id
+            self.calls_by_failure[failure.id] = list(self._attempt_calls)
+            self._pending_retry = None
+            self._awaiting_retry_attempt_start = False
+            self._attempt_tokens = 0
+            self._attempt_calls = []
 
 
 def rebuild_bridge_state(objects: ObjectStore, events: Iterable[Event]) -> BridgeState:
