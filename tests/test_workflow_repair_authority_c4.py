@@ -31,7 +31,12 @@ def test_whole_object_repair_cannot_change_an_unrelated_field(tmp_path):
         {"conjecturer": endpoint},
         harness.blobs,
         retry_max=2,
-    ).call("conjecturer", "PACK", ConjecturerOutput)
+    ).call(
+        "conjecturer",
+        "PACK",
+        ConjecturerOutput,
+        repair_scope_required=True,
+    )
 
     assert output.candidates[0].content == "keep"
     assert output.candidates[0].typicality == 0.4
@@ -64,7 +69,12 @@ def test_root_repair_is_only_open_when_no_parseable_baseline_exists(tmp_path):
         {"conjecturer": syntax_endpoint},
         Harness(tmp_path / "syntax").blobs,
         retry_max=1,
-    ).call("conjecturer", "PACK", _RootCheckedOutput)
+    ).call(
+        "conjecturer",
+        "PACK",
+        _RootCheckedOutput,
+        repair_scope_required=True,
+    )
     assert fixed.left == fixed.right == 1
     assert [attempt.valid for attempt in syntax_call.attempt_trace] == [False, True]
 
@@ -77,7 +87,12 @@ def test_root_repair_is_only_open_when_no_parseable_baseline_exists(tmp_path):
             {"conjecturer": parseable_endpoint},
             harness.blobs,
             retry_max=1,
-        ).call("conjecturer", "PACK", _RootCheckedOutput)
+        ).call(
+            "conjecturer",
+            "PACK",
+            _RootCheckedOutput,
+            repair_scope_required=True,
+        )
     final = raised.value.spend.attempt_trace[-1]
     diagnostic = json.loads(harness.blobs.get(final.diagnostic_ref))
     assert diagnostic["repair_scope"] == ""

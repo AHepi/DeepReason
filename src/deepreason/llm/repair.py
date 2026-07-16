@@ -569,6 +569,7 @@ class BoundedRepairSession:
         schema: dict[str, Any],
         initial_request: str,
         retry_max: int = 2,
+        enforce_scope: bool = False,
     ) -> None:
         self.contract = contract
         self.schema = schema
@@ -576,6 +577,11 @@ class BoundedRepairSession:
         # RETRY_MAX is a ceiling.  The normative transport exposes exactly
         # two repair forms and never opens a fourth provider call.
         self.max_attempt = min(max(0, int(retry_max)), 2)
+        # Historical v1-v3 transports keep their original whole-object
+        # correction behavior. The migrated active/v2 boundaries opt into
+        # immutable subtree enforcement when their authority contract can
+        # durably account for it.
+        self.enforce_scope = bool(enforce_scope)
         self.diagnostic: RepairDiagnostic | None = None
         self.invalid_text = ""
         self.invalid_value: Any = None
@@ -660,7 +666,7 @@ class BoundedRepairSession:
             self.invalid_value_parseable = True
             return parsed.value
         if turn.attempt == 1:
-            if self.invalid_value_parseable:
+            if self.enforce_scope and self.invalid_value_parseable:
                 enforce_repair_subtree(
                     self.invalid_value,
                     parsed.value,
@@ -675,7 +681,7 @@ class BoundedRepairSession:
             turn.repair_scope,
             parsed.value,
         )
-        if self.invalid_value_parseable:
+        if self.enforce_scope and self.invalid_value_parseable:
             enforce_repair_subtree(
                 self.invalid_value,
                 candidate,

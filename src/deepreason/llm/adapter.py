@@ -325,6 +325,7 @@ class LLMAdapter:
         workflow_dispatch_observer: Callable[[int], str | None] | None = None,
         workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
         workflow_dispatch_required: bool = False,
+        repair_scope_required: bool = False,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
@@ -492,6 +493,12 @@ class LLMAdapter:
             schema=schema_value,
             initial_request=prompt,
             retry_max=self.retry_max,
+            enforce_scope=(
+                workflow_dispatch_required
+                or repair_scope_required
+                or wire_contract.contract_id
+                == "bridge.claim-ledger.compact.v2"
+            ),
         )
         effective_work_order_id = work_order_id
 
