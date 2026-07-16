@@ -348,10 +348,11 @@ def resolve_school_role_lease(
 ) -> EndpointLease:
     """Resolve one school call without consulting semantic/model content.
 
-    Historical manifests and v4 ``conditioning_only`` preserve the existing
-    role-default seat. ``route_bound`` uses only the validated manifest
-    binding. In all cases the runtime lease is rechecked against the exact
-    manifest route before provider dispatch.
+    Historical manifests and v4 conjecturer ``conditioning_only`` preserve
+    the existing role-default seat. Conjecturer ``route_bound`` and optional
+    v4 foreign criticism use only their validated manifest bindings. In all
+    cases the runtime lease is rechecked against the exact manifest route
+    before provider dispatch.
     """
 
     if not school_id:
@@ -359,6 +360,7 @@ def resolve_school_role_lease(
             "SCHOOL_ROUTE_SCHOOL_REQUIRED", "school_id cannot be empty"
         )
     policy = None
+    criticism_policy = None
     if manifest.schema_version == 4:
         control = manifest.control_plane_policy
         if control is None:
@@ -366,7 +368,20 @@ def resolve_school_role_lease(
                 "SCHOOL_ROUTE_POLICY_MISSING",
                 "v4 manifest has no control-plane school policy",
             )
-        policy = control.school_execution
+        if role == "conjecturer":
+            policy = control.school_execution
+        elif role == "argumentative_critic":
+            criticism_policy = manifest.criticism_policy
+            if criticism_policy is None:
+                raise SchoolRouteResolutionError(
+                    "SCHOOL_ROUTE_CRITICISM_POLICY_MISSING",
+                    "school-routed argumentative criticism requires a v4 criticism policy",
+                )
+        else:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_ROLE_UNSUPPORTED",
+                f"school routing does not support role {role!r}",
+            )
         try:
             engine_data = json.loads(manifest.engine_config_json)
         except (TypeError, json.JSONDecodeError) as error:
@@ -388,7 +403,25 @@ def resolve_school_role_lease(
 
     seat = default_seat
     binding = None
-    if policy is not None and policy.mode == "route_bound":
+    if criticism_policy is not None:
+        matches = tuple(
+            item
+            for item in criticism_policy.bindings
+            if item.school_id == school_id and item.role == role
+        )
+        if not matches:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_BINDING_MISSING",
+                f"no binding for {school_id}/{role}",
+            )
+        if len(matches) != 1:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_BINDING_AMBIGUOUS",
+                f"multiple bindings for {school_id}/{role}",
+            )
+        binding = matches[0]
+        seat = binding.seat
+    elif policy is not None and policy.mode == "route_bound":
         matches = tuple(
             item
             for item in policy.bindings

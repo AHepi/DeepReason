@@ -18,11 +18,15 @@ from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
 from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
-from deepreason.llm.firewall import RouteFirewallError, resolve_school_role_lease
+from deepreason.llm.firewall import (
+    RouteFirewallError,
+    resolve_school_role_lease,
+    route_fingerprint,
+)
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
-from deepreason.ontology import SpawnTrigger, Status
+from deepreason.ontology import Rule, SpawnTrigger, Status
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
 from deepreason.rules.spawn import scan_spawns
@@ -831,7 +835,20 @@ class Scheduler:
         infrastructure never enters the pool (RC6: ops.review_infrastructure
         is the only route by which it can be attacked)."""
         harness, config = self.harness, self.config
+        criticism_policy = (
+            self.run_manifest.criticism_policy
+            if self.run_manifest is not None
+            and self.run_manifest.schema_version == 4
+            else None
+        )
         if not self.adapter.has_role("argumentative_critic"):
+            if criticism_policy is not None:
+                raise RuntimeError(
+                    "manifest foreign criticism has no runtime critic role"
+                )
+            return
+        if criticism_policy is not None:
+            self._foreign_arg_crit()
             return
         eligible: list[str] = []
         for aid in admitted_ids:
@@ -875,6 +892,150 @@ class Scheduler:
                 )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
+
+    def _foreign_criticism_coverage(self) -> dict[str, set[str]]:
+        """Reconstruct completed foreign-school exposure from durable receipts."""
+
+        coverage: dict[str, set[str]] = {}
+        for event in self.harness.log.read():
+            if (
+                event.rule != Rule.MEASURE
+                or len(event.inputs) != 6
+                or event.inputs[0] != "foreign-criticism-coverage.v1"
+                or not event.inputs[3].startswith("critic:")
+            ):
+                continue
+            target_id = event.inputs[1]
+            critic_school_id = event.inputs[3].removeprefix("critic:")
+            coverage.setdefault(target_id, set()).add(critic_school_id)
+        return coverage
+
+    def _foreign_arg_crit(self) -> None:
+        """Enact one complete manifest-owned foreign criticism plan.
+
+        Every route is resolved before the first provider boundary. Coverage
+        is counted by foreign school identity, while each durable receipt also
+        names the exact source call and route so shared models remain visible.
+        """
+
+        manifest = self.run_manifest
+        assert manifest is not None and manifest.criticism_policy is not None
+        policy = manifest.criticism_policy
+        from deepreason.workflow.criticism import (
+            ForeignCriticismTargetV1,
+            plan_foreign_criticism,
+        )
+
+        completed = self._foreign_criticism_coverage()
+        targets = []
+        owner_by_target: dict[str, str] = {}
+        for target_id, artifact in sorted(self.harness.state.artifacts.items()):
+            provenance = artifact.provenance
+            owner_school_id = provenance.school if provenance is not None else None
+            role = provenance.role if provenance is not None else None
+            if (
+                self.harness.state.status.get(target_id) != Status.ACCEPTED
+                or owner_school_id is None
+                or role not in {"conjecturer", "synthesizer"}
+            ):
+                continue
+            owner_by_target[target_id] = owner_school_id
+            targets.append(
+                ForeignCriticismTargetV1(
+                    target_id=target_id,
+                    owner_school_id=owner_school_id,
+                    completed_critic_school_ids=tuple(
+                        sorted(completed.get(target_id, set()))
+                    ),
+                )
+            )
+        plan = plan_foreign_criticism(manifest, tuple(targets))
+
+        # Resolve the whole batch first. One bad binding therefore leaves no
+        # partial provider spend or misleading coverage receipt.
+        resolved_batches = []
+        for batch in plan.batches:
+            lease = resolve_school_role_lease(
+                manifest,
+                self.adapter.leases,
+                school_id=batch.critic_school_id,
+                role="argumentative_critic",
+            )
+            if (
+                lease.seat != batch.seat
+                or lease.route.endpoint_id != batch.endpoint_id
+                or route_fingerprint(lease.route) != batch.route_sha256
+            ):
+                raise RouteFirewallError(
+                    "foreign criticism plan differs from its resolved route lease"
+                )
+            resolved_batches.append((batch, lease))
+
+        for batch, lease in resolved_batches:
+            expected = set(batch.target_ids)
+            observed: set[str] = set()
+
+            def record_coverage(target_id: str, source_call_seq: int) -> None:
+                if target_id not in expected or target_id in observed:
+                    raise RuntimeError(
+                        "foreign criticism reported non-canonical target coverage"
+                    )
+                source = next(
+                    (
+                        event
+                        for event in self.harness.log.read()
+                        if event.seq == source_call_seq
+                    ),
+                    None,
+                )
+                call = source.llm if source is not None else None
+                receipt = call.school_route if call is not None else None
+                if (
+                    source is None
+                    or source.seq >= self.harness._next_seq
+                    or call is None
+                    or call.role != "argumentative_critic"
+                    or receipt is None
+                    or receipt.school_id != batch.critic_school_id
+                    or receipt.route_sha256 != batch.route_sha256
+                ):
+                    raise RuntimeError(
+                        "foreign criticism coverage has no exact routed source call"
+                    )
+                self.harness.record_measure(
+                    inputs=[
+                        "foreign-criticism-coverage.v1",
+                        target_id,
+                        f"owner:{owner_by_target[target_id]}",
+                        f"critic:{batch.critic_school_id}",
+                        f"source:{source_call_seq}",
+                        f"route:{batch.route_sha256}",
+                    ]
+                )
+                observed.add(target_id)
+
+            try:
+                crit_argumentative_batch(
+                    self.harness,
+                    batch.target_ids,
+                    self.adapter,
+                    self.config,
+                    endpoint_lease=lease,
+                    critic_school_id=batch.critic_school_id,
+                    critic_school_context=self._school_dict(
+                        batch.critic_school_id
+                    ),
+                    argumentative_authority=policy.authority,
+                    coverage_observer=record_coverage,
+                )
+            except (SchemaRepairError, EndpointError) as error:
+                self._drop(error)
+                raise
+            if observed != expected:
+                raise RuntimeError(
+                    "foreign criticism call did not durably cover every assigned target"
+                )
+            self._arg_crit_this_cycle += len(expected)
 
     def step(self) -> None:
         harness, config = self.harness, self.config

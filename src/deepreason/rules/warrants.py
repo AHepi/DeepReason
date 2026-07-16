@@ -70,6 +70,7 @@ def register_fail_warrant(
     warrant_id: str | None = None,
     llm=None,
     skip_if_on_record: bool = False,
+    critic_school_id: str | None = None,
 ) -> Artifact | None:
     """Register ν + DEMONSTRATIVE fail warrant + critic; returns the critic
     (None when skip_if_on_record and the verdict is already on the graph)."""
@@ -78,7 +79,7 @@ def register_fail_warrant(
     nu = harness.create_artifact(
         nu_content,
         interface=nu_interface,
-        provenance=Provenance(role="critic"),
+        provenance=Provenance(role="critic", school=critic_school_id),
     )
     warrant = Warrant(
         id=warrant_id or f"w:{commitment_id}:{target_id}",
@@ -91,7 +92,7 @@ def register_fail_warrant(
     )
     return harness.create_artifact(
         critic_content,
-        provenance=Provenance(role="critic"),
+        provenance=Provenance(role="critic", school=critic_school_id),
         warrants=[warrant],
         rule=Rule.CRIT,
         llm=llm,

@@ -465,6 +465,36 @@ class SchoolExecutionPolicyV1(BaseModel):
         return self
 
 
+class CriticismPolicyV1(BaseModel):
+    """Closed v4 policy for manifest-owned foreign-school criticism.
+
+    The policy describes routing and authority only.  Criticism content stays
+    open text and is never interpreted here as a status decision.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    minimum_foreign_school_coverage: int = Field(ge=1, le=1_023)
+    bindings: tuple[SchoolRoleBindingV1, ...]
+    max_batch_size: int = Field(ge=1, le=256)
+    target_eligibility: Literal["accepted_school_artifacts"]
+    authority: Literal["observe_only", "defended_trial"]
+    allow_shared: bool
+
+    @field_validator("bindings", mode="after")
+    @classmethod
+    def _canonical_bindings(cls, value: tuple[SchoolRoleBindingV1, ...]):
+        keys = tuple(
+            (binding.school_id, binding.role, binding.seat, binding.endpoint_id)
+            for binding in value
+        )
+        if keys != tuple(sorted(keys)) or len(set(keys)) != len(keys):
+            raise ValueError(
+                "criticism bindings must be sorted and contain no duplicates"
+            )
+        return tuple(value)
+
+
 class ConjectureContextPolicyV1(BaseModel):
     """Bounded advisory-context capability for one conjecture work item."""
 
@@ -627,6 +657,7 @@ class RunManifest(BaseModel):
     scratch_policy: ScratchPolicy | None = None
     bridge_policy: BridgePolicy | None = None
     control_plane_policy: ControlPlanePolicyV1 | None = None
+    criticism_policy: CriticismPolicyV1 | None = None
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
     # Canonical engine configuration without a role table. Runtime
@@ -669,6 +700,10 @@ class RunManifest(BaseModel):
             # The v4 control boundary is absent, rather than null, in every
             # historical public dump and canonical document.
             payload.pop("control_plane_policy", None)
+        # Criticism is an optional C3 extension.  Absence must preserve the
+        # canonical bytes of every pre-C3 manifest, including schema v4.
+        if self.criticism_policy is None:
+            payload.pop("criticism_policy", None)
         return payload
 
     @model_validator(mode="after")
@@ -678,6 +713,8 @@ class RunManifest(BaseModel):
             and "control_plane_policy" in self.model_fields_set
         ):
             raise ValueError("v1-v3 manifests cannot carry v4 control policy")
+        if self.schema_version < 4 and "criticism_policy" in self.model_fields_set:
+            raise ValueError("v1-v3 manifests cannot carry v4 criticism policy")
         if self.schema_version == 1:
             if self.workload_profile is not None or self.toolchains:
                 raise ValueError("v1 manifest cannot carry v2 workload/toolchain fields")
@@ -726,6 +763,7 @@ class RunManifest(BaseModel):
             if self.control_plane_policy is None:
                 raise ValueError("v4 manifest requires complete control_plane_policy")
             _validate_v4_control_plane_policy(self)
+            _validate_v4_criticism_policy(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -768,6 +806,8 @@ class RunManifest(BaseModel):
             payload.pop("bridge_policy", None)
         if self.schema_version < 4:
             payload.pop("control_plane_policy", None)
+        if self.criticism_policy is None:
+            payload.pop("criticism_policy", None)
         return _canonical_json(payload)
 
     @property
@@ -1246,6 +1286,99 @@ def _validate_v4_control_plane_policy(manifest: RunManifest) -> None:
             )
 
 
+def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
+    """Bind foreign critics to the frozen role matrix and trial topology."""
+
+    policy = manifest.criticism_policy
+    if policy is None:
+        return
+    control = manifest.control_plane_policy
+    if control is None or control.mode != "active_conjecture":
+        raise ValueError(
+            "V4_CRITICISM_ACTIVE_REQUIRED: criticism policy requires active_conjecture"
+        )
+
+    try:
+        engine_data = json.loads(manifest.engine_config_json)
+    except json.JSONDecodeError as error:
+        raise ValueError("V4_ENGINE_CONFIG_INVALID") from error
+    school_count = engine_data.get("N_SCHOOLS")
+    if isinstance(school_count, bool) or not isinstance(school_count, int):
+        raise ValueError("V4_SCHOOL_COUNT_INVALID: N_SCHOOLS must be an integer")
+    if school_count < 0:
+        raise ValueError("V4_SCHOOL_COUNT_INVALID: N_SCHOOLS cannot be negative")
+    if policy.minimum_foreign_school_coverage > max(0, school_count - 1):
+        raise ValueError(
+            "V4_CRITICISM_FOREIGN_COVERAGE_IMPOSSIBLE: minimum coverage exceeds "
+            "the number of foreign schools"
+        )
+
+    expected_schools = {f"school-{index}" for index in range(school_count)}
+    by_school: dict[str, SchoolRoleBindingV1] = {}
+    resolved: list[tuple[SchoolRoleBindingV1, Route]] = []
+    critic_routes = manifest.roles.get("argumentative_critic", ())
+    for binding in policy.bindings:
+        if binding.school_id in by_school:
+            raise ValueError(
+                "V4_CRITICISM_BINDING_DUPLICATE: one school has multiple critic bindings"
+            )
+        by_school[binding.school_id] = binding
+        if binding.school_id not in expected_schools:
+            raise ValueError(
+                f"V4_CRITICISM_SCHOOL_UNKNOWN: no configured school {binding.school_id!r}"
+            )
+        if binding.role != "argumentative_critic":
+            raise ValueError(
+                "V4_CRITICISM_ROLE_UNSUPPORTED: bindings must name argumentative_critic"
+            )
+        if binding.seat >= len(critic_routes):
+            raise ValueError(
+                "V4_CRITICISM_SEAT_OUT_OF_RANGE: binding does not name a frozen route"
+            )
+        route = critic_routes[binding.seat]
+        if binding.endpoint_id != route.endpoint_id:
+            raise ValueError(
+                "V4_CRITICISM_ENDPOINT_MISMATCH: endpoint_id does not match the frozen seat"
+            )
+        resolved.append((binding, route))
+
+    actual_schools = set(by_school)
+    if actual_schools != expected_schools:
+        missing = sorted(expected_schools - actual_schools)
+        extra = sorted(actual_schools - expected_schools)
+        detail = []
+        if missing:
+            detail.append("missing " + ", ".join(missing))
+        if extra:
+            detail.append("extra " + ", ".join(extra))
+        raise ValueError(
+            "V4_CRITICISM_BINDING_INCOMPLETE: " + "; ".join(detail)
+        )
+
+    assigned_seats = [(binding.role, binding.seat) for binding, _route in resolved]
+    if not policy.allow_shared and len(set(assigned_seats)) != len(assigned_seats):
+        raise ValueError(
+            "V4_CRITICISM_SHARED_SEAT_FORBIDDEN: allow_shared is false"
+        )
+
+    if policy.authority == "defended_trial":
+        if not manifest.roles.get("defender"):
+            raise ValueError(
+                "V4_CRITICISM_DEFENDER_REQUIRED: defended_trial requires a defender route"
+            )
+        judge_routes = manifest.roles.get("judge", ())
+        judge_families = {
+            route.family.strip().casefold()
+            for route in judge_routes
+            if route.family.strip()
+        }
+        if len(judge_routes) < 2 or len(judge_families) < 2:
+            raise ValueError(
+                "V4_CRITICISM_CROSS_FAMILY_JUDGES_REQUIRED: defended_trial requires "
+                "two frozen judge seats from distinct families"
+            )
+
+
 def compile_run_manifest(
     config,
     *,
@@ -1266,6 +1399,7 @@ def compile_run_manifest(
     stop_policy: dict[str, Any] | None = None,
     memory_policy: dict[str, Any] | None = None,
     control_plane_policy: ControlPlanePolicyV1 | None = None,
+    criticism_policy: CriticismPolicyV1 | None = None,
 ) -> RunManifest:
     """Resolve and freeze the role matrix before any role-model call.
 
@@ -1285,6 +1419,12 @@ def compile_run_manifest(
             "control_plane_policy requires RunManifest schema v4",
             "/control_plane_policy",
         )
+    if schema_version < 4 and criticism_policy is not None:
+        raise RunManifestError(
+            "CRITICISM_MANIFEST_V4_REQUIRED",
+            "criticism_policy requires RunManifest schema v4",
+            "/criticism_policy",
+        )
     if schema_version == 4 and control_plane_policy is None:
         raise RunManifestError(
             "CONTROL_PLANE_POLICY_REQUIRED",
@@ -1296,6 +1436,21 @@ def compile_run_manifest(
         if control_plane_policy is not None
         else None
     )
+    resolved_criticism_policy = (
+        CriticismPolicyV1.model_validate(criticism_policy)
+        if criticism_policy is not None
+        else None
+    )
+    if (
+        resolved_criticism_policy is not None
+        and resolved_control_policy is not None
+        and resolved_control_policy.mode != "active_conjecture"
+    ):
+        raise RunManifestError(
+            "CRITICISM_ACTIVE_CONJECTURE_REQUIRED",
+            "criticism_policy requires active_conjecture control mode",
+            "/criticism_policy",
+        )
     if schema_version < 3 and scratch_source.enabled:
         raise RunManifestError(
             "SCRATCH_MANIFEST_V3_REQUIRED",
@@ -1466,6 +1621,8 @@ def compile_run_manifest(
     manifest_values: dict[str, Any] = {}
     if schema_version == 4:
         manifest_values["control_plane_policy"] = resolved_control_policy
+        if resolved_criticism_policy is not None:
+            manifest_values["criticism_policy"] = resolved_criticism_policy
     return RunManifest(
         schema_version=schema_version,
         engine_profile=engine_profile,

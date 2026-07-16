@@ -88,7 +88,7 @@ class LLMAttempt(FrozenRecord):
 
 
 class SchoolRouteReceiptV1(FrozenRecord):
-    """Exact v4 school assignment used for one conjecturer model call."""
+    """Exact v4 school assignment used for one routed model call."""
 
     model_config = ConfigDict(
         extra="forbid", frozen=True, populate_by_name=True

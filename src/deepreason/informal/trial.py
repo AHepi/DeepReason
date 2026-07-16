@@ -550,6 +550,7 @@ def run_argument_trial_from_case(
     harness, adapter, config, target_id: str, case_text: str, llm_call=None,
     diagnostics: list | None = None, *,
     authority: TrialAuthority | str = TrialAuthority.OBSERVE_ONLY,
+    critic_school_id: str | None = None,
 ):
     """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
 
@@ -568,13 +569,26 @@ def run_argument_trial_from_case(
     if authority == TrialAuthority.OBSERVE_ONLY:
         from deepreason.rules.crit import _observe_case
 
-        return _observe_case(harness, target_id, case_text, llm_call)
+        return _observe_case(
+            harness,
+            target_id,
+            case_text,
+            llm_call,
+            critic_school_id=critic_school_id,
+        )
     calls: list = []
     if llm_call is not None:
         calls.append(llm_call)
     try:
         return _argument_trial_steps(
-            harness, adapter, config, target_id, case_text, diagnostics, calls
+            harness,
+            adapter,
+            config,
+            target_id,
+            case_text,
+            diagnostics,
+            calls,
+            critic_school_id=critic_school_id,
         )
     finally:
         harness.record_llm_calls(calls, "trial-llm")
@@ -582,7 +596,7 @@ def run_argument_trial_from_case(
 
 def _argument_trial_steps(
     harness, adapter, config, target_id: str, case_text: str, diagnostics,
-    calls: list,
+    calls: list, *, critic_school_id: str | None = None,
 ):
     for role in ("defender", "judge"):
         if not adapter.has_role(role):
@@ -654,7 +668,7 @@ def _argument_trial_steps(
     nu = harness.create_artifact(
         f"nu: the defended trial sustaining case {case_hash} against "
         f"{target_id} is sound",
-        provenance=Provenance(role="critic"),
+        provenance=Provenance(role="critic", school=critic_school_id),
     )
     warrant = Warrant(
         id=f"w:argtrial:{case_hash}:{target_id}",
@@ -667,7 +681,7 @@ def _argument_trial_steps(
     before = set(harness.state.artifacts)
     critic = harness.create_artifact(
         case_text,
-        provenance=Provenance(role="critic"),
+        provenance=Provenance(role="critic", school=critic_school_id),
         warrants=[warrant],
         rule=Rule.CRIT,
         llm=judge_llm,

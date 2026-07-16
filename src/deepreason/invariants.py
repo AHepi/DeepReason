@@ -410,6 +410,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     usage_unknown_attempts = 0
     provider_transport_attempts = 0
     authorized_controller_limits: dict[str, set[int]] = {}
+    foreign_criticism_coverage: dict[str, set[str]] = {}
 
     def validate_school_route(event) -> None:
         call = event.llm
@@ -515,20 +516,26 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"event seq={event.seq}: receipt school is outside manifest roster",
             )
             return
-        if receipt.role != "conjecturer":
+        if receipt.role not in {"conjecturer", "argumentative_critic"}:
             fail(
                 "school-route",
                 f"event seq={event.seq}: unsupported school role {receipt.role!r}",
             )
             return
         routes = manifest.roles.get(receipt.role, ())
-        school_policy = control.school_execution
         expected_seat = 0
         expected_endpoint = None
-        if school_policy.mode == "route_bound":
+        if receipt.role == "argumentative_critic":
+            criticism_policy = manifest.criticism_policy
+            if criticism_policy is None:
+                fail(
+                    "school-route",
+                    f"event seq={event.seq}: critic route has no criticism policy",
+                )
+                return
             matches = [
                 binding
-                for binding in school_policy.bindings
+                for binding in criticism_policy.bindings
                 if binding.school_id == receipt.school_id
                 and binding.role == receipt.role
             ]
@@ -540,6 +547,23 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 return
             expected_seat = matches[0].seat
             expected_endpoint = matches[0].endpoint_id
+        else:
+            school_policy = control.school_execution
+            if school_policy.mode == "route_bound":
+                matches = [
+                    binding
+                    for binding in school_policy.bindings
+                    if binding.school_id == receipt.school_id
+                    and binding.role == receipt.role
+                ]
+                if len(matches) != 1:
+                    fail(
+                        "school-route",
+                        f"event seq={event.seq}: receipt has no unique manifest binding",
+                    )
+                    return
+                expected_seat = matches[0].seat
+                expected_endpoint = matches[0].endpoint_id
         if receipt.seat != expected_seat:
             fail(
                 "school-route",
@@ -1194,10 +1218,121 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"{prefix}: a non-grant decision authorized expanded context",
             )
 
+    def validate_foreign_criticism_coverage(event) -> None:
+        if (
+            event.rule.value != "Measure"
+            or not event.inputs
+            or event.inputs[0] != "foreign-criticism-coverage.v1"
+        ):
+            return
+        prefix = f"event seq={event.seq}"
+        if len(event.inputs) != 6:
+            fail(
+                "foreign-criticism",
+                f"{prefix}: coverage receipt has a non-canonical shape",
+            )
+            return
+        target_id = event.inputs[1]
+        owner_value, critic_value, source_value, route_value = event.inputs[2:]
+        if not (
+            owner_value.startswith("owner:")
+            and critic_value.startswith("critic:")
+            and source_value.startswith("source:")
+            and route_value.startswith("route:")
+        ):
+            fail(
+                "foreign-criticism",
+                f"{prefix}: coverage receipt fields are not canonical",
+            )
+            return
+        owner_school_id = owner_value.removeprefix("owner:")
+        critic_school_id = critic_value.removeprefix("critic:")
+        route_sha256 = route_value.removeprefix("route:")
+        try:
+            source_seq = int(source_value.removeprefix("source:"))
+        except ValueError:
+            fail(
+                "foreign-criticism",
+                f"{prefix}: source call sequence is not an integer",
+            )
+            return
+
+        policy = (
+            manifest.criticism_policy
+            if manifest is not None and manifest.schema_version == 4
+            else None
+        )
+        if policy is None:
+            fail(
+                "foreign-criticism",
+                f"{prefix}: coverage receipt has no active v4 criticism policy",
+            )
+            return
+        target = h.state.artifacts.get(target_id)
+        provenance = target.provenance if target is not None else None
+        if (
+            target is None
+            or provenance is None
+            or provenance.school != owner_school_id
+            or provenance.role not in {"conjecturer", "synthesizer"}
+        ):
+            fail(
+                "foreign-criticism",
+                f"{prefix}: target owner differs from canonical artifact provenance",
+            )
+        if critic_school_id == owner_school_id:
+            fail(
+                "foreign-criticism",
+                f"{prefix}: self-criticism cannot satisfy foreign coverage",
+            )
+
+        source = next((item for item in events if item.seq == source_seq), None)
+        call = source.llm if source is not None else None
+        receipt = call.school_route if call is not None else None
+        if (
+            source is None
+            or source.seq >= event.seq
+            or call is None
+            or call.role != "argumentative_critic"
+            or receipt is None
+            or receipt.school_id != critic_school_id
+            or receipt.route_sha256 != route_sha256
+        ):
+            fail(
+                "foreign-criticism",
+                f"{prefix}: coverage does not reference one preceding routed critic call",
+            )
+            return
+        matches = [
+            binding
+            for binding in policy.bindings
+            if binding.school_id == critic_school_id
+            and binding.role == "argumentative_critic"
+        ]
+        if (
+            len(matches) != 1
+            or matches[0].seat != receipt.seat
+            or matches[0].endpoint_id != receipt.endpoint_id
+        ):
+            fail(
+                "foreign-criticism",
+                f"{prefix}: critic school differs from its manifest binding",
+            )
+            return
+        covered = foreign_criticism_coverage.setdefault(target_id, set())
+        if critic_school_id in covered:
+            fail(
+                "foreign-criticism",
+                f"{prefix}: duplicate school does not add foreign coverage",
+            )
+            return
+        covered.add(critic_school_id)
+
     for e in events:
         validate_school_route(e)
         validate_conjecture_context(e)
         validate_conjecture_turn(e)
+        validate_foreign_criticism_coverage(e)
         # Controller policies are harness-authored, attackable artifacts. A
         # value is transport-authorized only after its policy is appended;
         # later refutation may cause a revert but cannot erase that historical
@@ -1497,6 +1632,29 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         "repair-metadata",
                         f"event seq={e.seq}: final repair prompt does not match attempts",
                     )
+
+    criticism_policy = (
+        manifest.criticism_policy
+        if manifest is not None and manifest.schema_version == 4
+        else None
+    )
+    if criticism_policy is not None:
+        for target_id, artifact in h.state.artifacts.items():
+            provenance = artifact.provenance
+            if (
+                h.state.status.get(target_id) != Status.ACCEPTED
+                or provenance is None
+                or provenance.school is None
+                or provenance.role not in {"conjecturer", "synthesizer"}
+            ):
+                continue
+            covered = foreign_criticism_coverage.get(target_id, set())
+            if len(covered) < criticism_policy.minimum_foreign_school_coverage:
+                fail(
+                    "foreign-criticism",
+                    f"target {target_id} has {len(covered)} foreign schools; "
+                    f"policy requires {criticism_policy.minimum_foreign_school_coverage}",
+                )
     if meter_total is not None and logged != meter_total:
         fail("accounting",
              f"meter says {meter_total} tokens, log accounts for {logged} "

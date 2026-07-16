@@ -13,10 +13,17 @@
   of the trial guard (P5).
 """
 
+from __future__ import annotations
+
+from collections.abc import Callable, Mapping
+from enum import Enum
+import math
+
 from deepreason import programs
 from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
+from deepreason.llm.firewall import EndpointLease
 from deepreason.llm.packs import (
     aliases_for_pack,
     render_batch_crit_pack,
@@ -33,8 +40,13 @@ from deepreason.rules.warrants import (
 )
 
 
-def _register_nu(harness, content: str) -> Artifact:
-    return harness.create_artifact(content, provenance=Provenance(role="critic"))
+def _register_nu(
+    harness, content: str, *, critic_school_id: str | None = None
+) -> Artifact:
+    return harness.create_artifact(
+        content,
+        provenance=Provenance(role="critic", school=critic_school_id),
+    )
 
 
 def _authority(config) -> str:
@@ -47,7 +59,155 @@ def _authority(config) -> str:
     return argumentative_authority_mode(config)
 
 
-def _observe_case(harness, target_id: str, case_text: str, llm_call):
+_POLICY_AUTHORITIES = frozenset({"observe_only", "defended_trial"})
+
+
+def _authority_value(value: object) -> str:
+    if isinstance(value, Enum):
+        value = value.value
+    return str(value)
+
+
+def _resolve_authority(
+    config,
+    explicit_authority: object | None,
+    *,
+    policy_call: bool,
+) -> str:
+    """Resolve prose authority before provider dispatch.
+
+    Legacy direct helpers retain their Config-based compatibility behavior.
+    A manifest-owned criticism call, however, must carry the already-frozen
+    policy value explicitly.  It can never discover authority by rereading a
+    mutable Config object, and the historical ``legacy_direct`` escape hatch
+    is deliberately not a v4 policy value.
+    """
+
+    if explicit_authority is None:
+        if policy_call:
+            raise ValueError(
+                "manifest-bound criticism requires explicit argumentative authority"
+            )
+        return _authority(config)
+    authority = _authority_value(explicit_authority)
+    if authority not in _POLICY_AUTHORITIES:
+        raise ValueError(
+            "manifest-bound criticism authority must be observe_only or "
+            "defended_trial"
+        )
+    return "trial_required" if authority == "defended_trial" else authority
+
+
+def _critic_execution(
+    *,
+    endpoint_lease: EndpointLease | None,
+    critic_school_id: str | None,
+    critic_school_context: Mapping[str, object] | None,
+) -> tuple[dict, str]:
+    """Validate and render one code-authored school execution envelope.
+
+    The returned kwargs are the exact route inputs for ``LLMAdapter.call``;
+    the rendered prefix is semantic conditioning only.  No field from the
+    conditioning record is interpreted as routing or authority.
+    """
+
+    supplied = (
+        endpoint_lease is not None,
+        critic_school_id is not None,
+        critic_school_context is not None,
+    )
+    if any(supplied) and not all(supplied):
+        raise ValueError(
+            "school-routed criticism requires endpoint_lease, critic_school_id, "
+            "and critic_school_context"
+        )
+    if endpoint_lease is None:
+        return {}, ""
+    if endpoint_lease.role != "argumentative_critic":
+        raise ValueError(
+            "criticism endpoint lease must belong to argumentative_critic"
+        )
+    assert critic_school_id is not None
+    assert critic_school_context is not None
+    if critic_school_context.get("id") != critic_school_id:
+        raise ValueError(
+            "critic execution school must match its semantic conditioning record"
+        )
+    stance = critic_school_context.get("stance_text")
+    if not isinstance(stance, str) or not stance.strip():
+        raise ValueError("critic school conditioning requires non-blank stance_text")
+    # Keep an unreasonable setup value from crowding the target out of a
+    # bounded pack. This is semantic prompt material, not an authority field.
+    stance = stance.strip()[:2_000]
+    prefix = "\n".join(
+        [
+            "CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no "
+            "routing or status authority):",
+            f"school: {critic_school_id}",
+            f"stance: {stance}",
+        ]
+    )
+    return (
+        {
+            "endpoint_index": endpoint_lease.seat,
+            "endpoint_lease": endpoint_lease,
+            "school_id": critic_school_id,
+        },
+        prefix,
+    )
+
+
+def _conditioned_budget(token_budget: int, prefix: str) -> int:
+    """Reserve prompt budget for the school prefix before pack rendering."""
+
+    if not prefix:
+        return token_budget
+    remaining = token_budget - math.ceil((len(prefix) + 2) / 4)
+    if remaining < 256:
+        raise ValueError(
+            "critic school conditioning leaves insufficient bounded pack budget"
+        )
+    return remaining
+
+
+def _condition_pack(pack: str, prefix: str) -> str:
+    return f"{prefix}\n\n{pack}" if prefix else pack
+
+
+def _llm_event_seq(harness, llm_call) -> int | None:
+    """Return the durable event carrying one exact in-memory call receipt."""
+
+    for event in reversed(list(harness.log.read())):
+        if event.llm == llm_call:
+            return event.seq
+    return None
+
+
+def _observe_coverage(
+    harness,
+    target_ids: tuple[str, ...],
+    llm_call,
+    observer: Callable[[str, int], None] | None,
+) -> None:
+    """Report primary exposure only after its LLMCall is append-only state."""
+
+    if observer is None:
+        return
+    event_seq = _llm_event_seq(harness, llm_call)
+    if event_seq is None:
+        return
+    for target_id in target_ids:
+        observer(target_id, event_seq)
+
+
+def _observe_case(
+    harness,
+    target_id: str,
+    case_text: str,
+    llm_call,
+    *,
+    critic_school_id: str | None = None,
+):
     """observe_only semantics: the case is scrutiny evidence, never a status
     change. Registers the case as a critic-role artifact with NO warrants and
     records a ["scrutiny", target, critic] Measure. A non-None llm_call is
@@ -57,7 +217,7 @@ def _observe_case(harness, target_id: str, case_text: str, llm_call):
     before = set(harness.state.artifacts)
     critic = harness.create_artifact(
         case_text,
-        provenance=Provenance(role="critic"),
+        provenance=Provenance(role="critic", school=critic_school_id),
         rule=Rule.CRIT,
         llm=llm_call,
     )
@@ -86,7 +246,13 @@ def _has_property_oracle(harness, target_id: str) -> bool:
 
 
 def try_counterexample(
-    harness, target_id: str, args, *, case: str, llm=None
+    harness,
+    target_id: str,
+    args,
+    *,
+    case: str,
+    llm=None,
+    critic_school_id: str | None = None,
 ) -> tuple[Artifact | None, str]:
     """The critic's grounded recourse (§3 execution supremacy): the critic
     proposed a concrete INPUT; run the target on it and check the declared
@@ -154,6 +320,7 @@ def try_counterexample(
             ),
             trace_ref=harness.blobs.put(canonical_json(trace)),
             llm=llm,
+            critic_school_id=critic_school_id,
         ), ""
     if not saw_property_oracle:
         return None, "target carries no property oracle: counterexamples do not apply"
@@ -442,15 +609,47 @@ def _crit_proposed_properties(
     return None
 
 
-def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | None:
-    """One argumentative-critic call; registers a critic iff it attacks."""
+def crit_argumentative(
+    harness,
+    target_id: str,
+    adapter,
+    config,
+    *,
+    endpoint_lease: EndpointLease | None = None,
+    critic_school_id: str | None = None,
+    critic_school_context: Mapping[str, object] | None = None,
+    argumentative_authority: object | None = None,
+    coverage_observer: Callable[[str, int], None] | None = None,
+) -> Artifact | None:
+    """One argumentative-critic call; registers a critic iff it attacks.
+
+    The optional keyword-only envelope is the v4 path: code supplies one
+    exact route lease, its critic-school lineage and semantic stance, and the
+    already-frozen prose authority. Historical callers omit the envelope and
+    retain the original Config-driven behavior.
+    """
+
+    call_kwargs, school_prefix = _critic_execution(
+        endpoint_lease=endpoint_lease,
+        critic_school_id=critic_school_id,
+        critic_school_context=critic_school_context,
+    )
+    policy_call = (
+        bool(call_kwargs)
+        or argumentative_authority is not None
+        or coverage_observer is not None
+    )
+    authority = _resolve_authority(
+        config, argumentative_authority, policy_call=policy_call
+    )
     pack = render_crit_pack(
         target_id,
         harness.state,
         harness.commitments,
         harness.blobs,
-        token_budget=config.PACK_TOKEN_BUDGET,
+        token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
     )
+    pack = _condition_pack(pack, school_prefix)
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
     wire_contract = wire_contract_for(
         "argumentative_critic",
@@ -465,125 +664,199 @@ def crit_argumentative(harness, target_id: str, adapter, config) -> Artifact | N
         ArgumentativeCriticOutput,
         aliases=aliases,
         wire_contract=wire_contract,
+        **call_kwargs,
     )
-    if not output.attack or not output.case.strip():
-        # No fault found: the call still spent tokens and must be logged once.
-        harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
-        return None
-    before = set(harness.state.artifacts)
-    grounded, reason = try_counterexample(
-        harness, target_id, output.counterexample, case=output.case, llm=llm_call
-    )
-    if grounded is not None:
-        # The critic refuted by EXECUTION (counterexample violated the
-        # property) — strictly stronger than the argument it came with.
-        if grounded.id in before:
+    primary_llm_call = llm_call
+    try:
+        if not output.attack or not output.case.strip():
+            # No fault found: the call still spent tokens and must be logged once.
             harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
-        return grounded
-    if execution_backed(harness, target_id):
-        # Execution supremacy (§3): a verdict from reality stands and a purely
-        # argumentative case cannot override it. Before giving up, echo the
-        # gate/oracle's DETERMINISTIC rejection reason back to the critic (§3
-        # counterexample retry): the one-shot caller otherwise never learns
-        # why its input refuted nothing.
-        cx = output.counterexample
-        retries = config.CX_RETRY_MAX if _has_property_oracle(harness, target_id) else 0
-        for _ in range(max(0, retries)):
-            harness.record_measure(inputs=["arg-crit-cx-rejected", target_id], llm=llm_call)
-            retry_pack = render_cx_retry_pack(
-                [{"target": target_id, "counterexample": cx, "reason": reason}],
-                harness.state,
-                harness.commitments,
-                harness.blobs,
-                token_budget=config.PACK_TOKEN_BUDGET,
+            return None
+        before = set(harness.state.artifacts)
+        grounded, reason = try_counterexample(
+            harness,
+            target_id,
+            output.counterexample,
+            case=output.case,
+            llm=llm_call,
+            critic_school_id=critic_school_id,
+        )
+        if grounded is not None:
+            # The critic refuted by EXECUTION (counterexample violated the
+            # property) — strictly stronger than the argument it came with.
+            if grounded.id in before:
+                harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+            return grounded
+        if execution_backed(harness, target_id):
+            # Execution supremacy (§3): a verdict from reality stands and a purely
+            # argumentative case cannot override it. Before giving up, echo the
+            # gate/oracle's DETERMINISTIC rejection reason back to the critic (§3
+            # counterexample retry): the one-shot caller otherwise never learns
+            # why its input refuted nothing.
+            cx = output.counterexample
+            retries = (
+                config.CX_RETRY_MAX
+                if _has_property_oracle(harness, target_id)
+                else 0
             )
-            retry_aliases = aliases_for_pack(
-                retry_pack, harness.state.artifacts, prefix="A"
+            for _ in range(max(0, retries)):
+                harness.record_measure(
+                    inputs=["arg-crit-cx-rejected", target_id], llm=llm_call
+                )
+                retry_pack = render_cx_retry_pack(
+                    [{"target": target_id, "counterexample": cx, "reason": reason}],
+                    harness.state,
+                    harness.commitments,
+                    harness.blobs,
+                    token_budget=_conditioned_budget(
+                        config.PACK_TOKEN_BUDGET, school_prefix
+                    ),
+                )
+                retry_pack = _condition_pack(retry_pack, school_prefix)
+                retry_aliases = aliases_for_pack(
+                    retry_pack, harness.state.artifacts, prefix="A"
+                )
+                retry_contract = wire_contract_for(
+                    "argumentative_critic",
+                    ArgumentativeCriticOutput,
+                    adapter.profile_for("argumentative_critic"),
+                    retry_aliases,
+                    expected_target=target_id,
+                )
+                retry, llm_call = adapter.call(
+                    "argumentative_critic",
+                    retry_pack,
+                    ArgumentativeCriticOutput,
+                    aliases=retry_aliases,
+                    wire_contract=retry_contract,
+                    **call_kwargs,
+                )
+                if not retry.attack:
+                    break  # the critic withdrew: nothing further to ground
+                before = set(harness.state.artifacts)
+                grounded, reason = try_counterexample(
+                    harness,
+                    target_id,
+                    retry.counterexample,
+                    case=retry.case.strip() or output.case,
+                    llm=llm_call,
+                    critic_school_id=critic_school_id,
+                )
+                if grounded is not None:
+                    if grounded.id in before:
+                        harness.record_measure(
+                            inputs=["arg-crit", target_id], llm=llm_call
+                        )
+                    return grounded
+                cx = retry.counterexample
+            harness.record_measure(
+                inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
             )
-            retry_contract = wire_contract_for(
-                "argumentative_critic",
-                ArgumentativeCriticOutput,
-                adapter.profile_for("argumentative_critic"),
-                retry_aliases,
-                expected_target=target_id,
-            )
-            retry, llm_call = adapter.call(
-                "argumentative_critic",
-                retry_pack,
-                ArgumentativeCriticOutput,
-                aliases=retry_aliases,
-                wire_contract=retry_contract,
-            )
-            if not retry.attack:
-                break  # the critic withdrew: nothing further to ground
-            before = set(harness.state.artifacts)
-            grounded, reason = try_counterexample(
+            return None
+        # Authority gate (RC1): only the historical legacy path lets a prose
+        # case mint its own warrant. Manifest policy permits observation or a
+        # defended trial; demonstrative execution above remains authoritative.
+        if authority == "observe_only":
+            return _observe_case(
                 harness,
                 target_id,
-                retry.counterexample,
-                case=retry.case.strip() or output.case,
-                llm=llm_call,
+                output.case,
+                llm_call,
+                critic_school_id=critic_school_id,
             )
-            if grounded is not None:
-                if grounded.id in before:
-                    harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
-                return grounded
-            cx = retry.counterexample
-        harness.record_measure(
-            inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
+        if authority == "trial_required":
+            from deepreason.informal.trial import run_argument_trial_from_case
+
+            return run_argument_trial_from_case(
+                harness,
+                adapter,
+                config,
+                target_id,
+                output.case,
+                llm_call,
+                authority="status",
+                critic_school_id=critic_school_id,
+            )
+        case_hash = sha256_hex(output.case.encode())[:16]
+        nu = _register_nu(
+            harness,
+            f"nu: argumentative case {case_hash} against {target_id} is sound",
+            critic_school_id=critic_school_id,
         )
-        return None
-    # Authority gate (RC1): only legacy_direct lets a prose case mint its own
-    # status-changing warrant against a non-execution-backed target. The
-    # try_counterexample / execution-supremacy paths above are unaffected;
-    # demonstrative outcomes stay status-changing under every mode.
-    authority = _authority(config)
-    if authority == "observe_only":
-        return _observe_case(harness, target_id, output.case, llm_call)
-    if authority == "trial_required":
-        from deepreason.informal.trial import run_argument_trial_from_case
-
-        return run_argument_trial_from_case(
-            harness, adapter, config, target_id, output.case, llm_call,
-            authority="status",
+        warrant = Warrant(
+            id=f"w:arg:{case_hash}:{target_id}",
+            target=target_id,
+            type=WarrantType.ARGUMENTATIVE,
+            validity_node=nu.id,
         )
-    case_hash = sha256_hex(output.case.encode())[:16]
-    nu = _register_nu(
-        harness, f"nu: argumentative case {case_hash} against {target_id} is sound"
-    )
-    warrant = Warrant(
-        id=f"w:arg:{case_hash}:{target_id}",
-        target=target_id,
-        type=WarrantType.ARGUMENTATIVE,
-        validity_node=nu.id,
-    )
-    before = set(harness.state.artifacts)
-    critic = harness.create_artifact(
-        output.case,
-        provenance=Provenance(role="critic"),
-        warrants=[warrant],
-        rule=Rule.CRIT,
-        llm=llm_call,
-    )
-    if critic.id in before:
-        # The critic content deduped to an existing artifact, so no event
-        # carried llm_call — log it so token accounting sees the call once.
-        harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
-    return critic
+        before = set(harness.state.artifacts)
+        critic = harness.create_artifact(
+            output.case,
+            provenance=Provenance(role="critic", school=critic_school_id),
+            warrants=[warrant],
+            rule=Rule.CRIT,
+            llm=llm_call,
+        )
+        if critic.id in before:
+            # The critic content deduped to an existing artifact, so no event
+            # carried llm_call — log it so token accounting sees the call once.
+            harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
+        return critic
+    finally:
+        _observe_coverage(
+            harness,
+            (target_id,),
+            primary_llm_call,
+            coverage_observer,
+        )
 
 
-def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artifact]:
+def crit_argumentative_batch(
+    harness,
+    target_ids,
+    adapter,
+    config,
+    *,
+    endpoint_lease: EndpointLease | None = None,
+    critic_school_id: str | None = None,
+    critic_school_context: Mapping[str, object] | None = None,
+    argumentative_authority: object | None = None,
+    coverage_observer: Callable[[str, int], None] | None = None,
+) -> list[Artifact]:
     """One argumentative-critic call over K targets (§14 batching — the call
     structure is not the epistemology; the warrant structure is). Every
     attacking case registers exactly as in the single path: per-target
     argumentative warrant with its own attackable nu. A case naming an id
     outside the batch is dropped — no verdict without exposure. A single
     target delegates to the single-target contract unchanged."""
+    call_kwargs, school_prefix = _critic_execution(
+        endpoint_lease=endpoint_lease,
+        critic_school_id=critic_school_id,
+        critic_school_context=critic_school_context,
+    )
+    policy_call = (
+        bool(call_kwargs)
+        or argumentative_authority is not None
+        or coverage_observer is not None
+    )
+    authority = _resolve_authority(
+        config, argumentative_authority, policy_call=policy_call
+    )
     target_ids = list(dict.fromkeys(target_ids))
     if not target_ids:
         return []
     if len(target_ids) == 1:
-        critic = crit_argumentative(harness, target_ids[0], adapter, config)
+        critic = crit_argumentative(
+            harness,
+            target_ids[0],
+            adapter,
+            config,
+            endpoint_lease=endpoint_lease,
+            critic_school_id=critic_school_id,
+            critic_school_context=critic_school_context,
+            argumentative_authority=argumentative_authority,
+            coverage_observer=coverage_observer,
+        )
         return [critic] if critic else []
     if (
         get_profile(adapter.profile_for("argumentative_critic")).name
@@ -594,7 +867,17 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         # single-target path rather than exposing BatchCriticOutput.
         critics = []
         for target_id in target_ids:
-            critic = crit_argumentative(harness, target_id, adapter, config)
+            critic = crit_argumentative(
+                harness,
+                target_id,
+                adapter,
+                config,
+                endpoint_lease=endpoint_lease,
+                critic_school_id=critic_school_id,
+                critic_school_context=critic_school_context,
+                argumentative_authority=argumentative_authority,
+                coverage_observer=coverage_observer,
+            )
             if critic is not None:
                 critics.append(critic)
         return critics
@@ -603,11 +886,53 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         harness.state,
         harness.commitments,
         harness.blobs,
-        token_budget=config.PACK_TOKEN_BUDGET,
+        token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
     )
+    pack = _condition_pack(pack, school_prefix)
     output, llm_call = adapter.call(
-        "argumentative_critic", pack, BatchCriticOutput, template_role="batch_critic"
+        "argumentative_critic",
+        pack,
+        BatchCriticOutput,
+        template_role="batch_critic",
+        **call_kwargs,
     )
+    try:
+        return _crit_argumentative_batch_result(
+            harness,
+            target_ids,
+            adapter,
+            config,
+            output,
+            llm_call,
+            authority=authority,
+            call_kwargs=call_kwargs,
+            school_prefix=school_prefix,
+            critic_school_id=critic_school_id,
+        )
+    finally:
+        _observe_coverage(
+            harness,
+            tuple(target_ids),
+            llm_call,
+            coverage_observer,
+        )
+
+
+def _crit_argumentative_batch_result(
+    harness,
+    target_ids: list[str],
+    adapter,
+    config,
+    output: BatchCriticOutput,
+    llm_call,
+    *,
+    authority: str,
+    call_kwargs: dict,
+    school_prefix: str,
+    critic_school_id: str | None,
+) -> list[Artifact]:
+    """Process one already-returned batch without changing its route policy."""
+
     critics: list[Artifact] = []
     ruled: set[str] = set()
     rejected: list[dict] = []  # execution-backed targets queued for cx retry
@@ -623,7 +948,12 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             continue  # no fault found for this target: registers nothing
         before = set(harness.state.artifacts)
         grounded, reason = try_counterexample(
-            harness, case.target, case.counterexample, case=case.case, llm=llm_pending
+            harness,
+            case.target,
+            case.counterexample,
+            case=case.case,
+            llm=llm_pending,
+            critic_school_id=critic_school_id,
         )
         if grounded is not None:
             critics.append(grounded)
@@ -639,15 +969,24 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             )
             if _has_property_oracle(harness, case.target):
                 rejected.append(
-                    {"target": case.target, "counterexample": case.counterexample,
-                     "reason": reason, "case": case.case}
+                    {
+                        "target": case.target,
+                        "counterexample": case.counterexample,
+                        "reason": reason,
+                        "case": case.case,
+                    }
                 )
             continue
         # Authority gate (RC1), per target; the shared call stays accounted
         # exactly once (observe/trial consume llm_pending when passed).
-        authority = _authority(config)
         if authority == "observe_only":
-            critic = _observe_case(harness, case.target, case.case, llm_pending)
+            critic = _observe_case(
+                harness,
+                case.target,
+                case.case,
+                llm_pending,
+                critic_school_id=critic_school_id,
+            )
             llm_pending = None  # accounted inside _observe_case
             critics.append(critic)
             continue
@@ -655,8 +994,14 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             from deepreason.informal.trial import run_argument_trial_from_case
 
             trial_critic = run_argument_trial_from_case(
-                harness, adapter, config, case.target, case.case, llm_pending,
+                harness,
+                adapter,
+                config,
+                case.target,
+                case.case,
+                llm_pending,
                 authority="status",
+                critic_school_id=critic_school_id,
             )
             if llm_pending is not None:
                 llm_pending = None  # accounted inside the trial (trial-llm)
@@ -665,7 +1010,9 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             continue
         case_hash = sha256_hex(case.case.encode())[:16]
         nu = _register_nu(
-            harness, f"nu: argumentative case {case_hash} against {case.target} is sound"
+            harness,
+            f"nu: argumentative case {case_hash} against {case.target} is sound",
+            critic_school_id=critic_school_id,
         )
         warrant = Warrant(
             id=f"w:arg:{case_hash}:{case.target}",
@@ -676,7 +1023,7 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
         before = set(harness.state.artifacts)
         critic = harness.create_artifact(
             case.case,
-            provenance=Provenance(role="critic"),
+            provenance=Provenance(role="critic", school=critic_school_id),
             warrants=[warrant],
             rule=Rule.CRIT,
             llm=llm_pending,
@@ -695,10 +1042,17 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
             harness.state,
             harness.commitments,
             harness.blobs,
-            token_budget=config.PACK_TOKEN_BUDGET,
+            token_budget=_conditioned_budget(
+                config.PACK_TOKEN_BUDGET, school_prefix
+            ),
         )
+        retry_pack = _condition_pack(retry_pack, school_prefix)
         retry_out, retry_llm = adapter.call(
-            "argumentative_critic", retry_pack, BatchCriticOutput, template_role="batch_critic"
+            "argumentative_critic",
+            retry_pack,
+            BatchCriticOutput,
+            template_role="batch_critic",
+            **call_kwargs,
         )
         allowed = {item["target"]: item for item in rejected}
         retry_pending: object | None = retry_llm
@@ -717,6 +1071,7 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
                 case.counterexample,
                 case=case.case.strip() or allowed[case.target].get("case", ""),
                 llm=retry_pending,
+                critic_school_id=critic_school_id,
             )
             if grounded is not None:
                 critics.append(grounded)
@@ -724,8 +1079,12 @@ def crit_argumentative_batch(harness, target_ids, adapter, config) -> list[Artif
                     retry_pending = None
                 continue
             next_rejected.append(
-                {"target": case.target, "counterexample": case.counterexample,
-                 "reason": reason, "case": case.case}
+                {
+                    "target": case.target,
+                    "counterexample": case.counterexample,
+                    "reason": reason,
+                    "case": case.case,
+                }
             )
         if retry_pending is not None:
             harness.record_measure(
