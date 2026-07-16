@@ -281,7 +281,7 @@ def conj(
         if (
             run_manifest.schema_version not in {4, 5}
             or control is None
-            or control.mode != "active_conjecture"
+            or control.mode not in {"active_conjecture", "active_inquiry"}
             or control.contract_versions.conjecturer_turn_contract
             != (
                 "conjecturer.turn.v5"
@@ -330,9 +330,56 @@ def conj(
                 )
     frozen_evidence_context = None
     if active_v5:
-        from deepreason.capabilities.evidence import render_frozen_evidence
+        from deepreason.evidence import (
+            commit_dossier_pack_receipt,
+            dossier_exposure_counts,
+            load_evidence_dossier,
+            load_run_input,
+            pack_dossier,
+            render_dossier_pack,
+        )
 
-        frozen_evidence_context = render_frozen_evidence(run_manifest)
+        evidence_policy = run_manifest.inquiry_capability_policy.attached_evidence
+        if evidence_policy.enabled:
+            bound_input = load_run_input(harness.root)
+            dossier = load_evidence_dossier(harness.root)
+            if bound_input.run_input_digest != run_manifest.run_input_digest:
+                raise ValueError("conjecture evidence belongs to another run input")
+            if dossier.problem_ref == problem.id:
+                maximum_total = min(
+                    evidence_policy.maximum_total_bytes,
+                    evidence_policy.maximum_sources_per_pack
+                    * evidence_policy.maximum_excerpt_bytes_per_source,
+                    4 * 1024 * 1024,
+                )
+                dossier_receipt = pack_dossier(
+                    root=harness.root,
+                    run_input=bound_input,
+                    dossier=dossier,
+                    work_order_ref=(
+                        workflow_control_trace.ticket.work_order.id
+                    ),
+                    query=problem.description,
+                    state_fence=(
+                        "formal:"
+                        f"{workflow_control_trace.ticket.work_order.formal_fence_seq};"
+                        "scratch:"
+                        f"{workflow_control_trace.ticket.work_order.scratch_fence_seq};"
+                        f"workflow:{harness.workflow_state.digest}"
+                    ),
+                    maximum_sources=evidence_policy.maximum_sources_per_pack,
+                    maximum_excerpt_bytes_per_source=(
+                        evidence_policy.maximum_excerpt_bytes_per_source
+                    ),
+                    maximum_total_excerpt_bytes=maximum_total,
+                    exposure_counts=dossier_exposure_counts(harness),
+                )
+                commit_dossier_pack_receipt(harness, dossier_receipt)
+                frozen_evidence_context = render_dossier_pack(
+                    blobs=harness.blobs,
+                    dossier=dossier,
+                    receipt=dossier_receipt,
+                )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -419,9 +466,9 @@ def conj(
             **(
                 {
                     "maximum_simulation_proposals": (
-                        run_manifest.simulation_capability_policy.maximum_proposals_per_turn
-                        if run_manifest.simulation_capability_policy.enabled
-                        else 32
+                        run_manifest.inquiry_capability_policy.simulation.maximum_proposals_per_turn
+                        if run_manifest.inquiry_capability_policy.simulation.enabled
+                        else 0
                     )
                 }
                 if active_v5
@@ -896,7 +943,6 @@ def conj(
             abstention=abstention,
         )
 
-    simulation_follow_up_artifacts: list[Artifact] = []
     if active_v5 and simulation_drafts:
         from deepreason.capabilities.simulation import (
             SimulationCapabilityController,
@@ -905,7 +951,7 @@ def conj(
         controller = SimulationCapabilityController(harness, run_manifest)
         parent_work = workflow_control_trace.ticket.work_order
         for proposal_index, draft in enumerate(simulation_drafts):
-            package = controller.execute(
+            controller.propose(
                 draft,
                 proposal_index=proposal_index,
                 work_order=parent_work,
@@ -913,72 +959,15 @@ def conj(
                 formal_fence_seq=parent_work.formal_fence_seq,
                 scratch_fence_seq=parent_work.scratch_fence_seq,
             )
-            if package is None:
-                continue
-            if (
-                harness.capability_state.consumption_count
-                >= run_manifest.simulation_capability_policy.maximum_follow_up_reasoning_turns
-            ):
-                continue
-            fence = harness._next_seq - 1
-            follow_up_trace = workflow_control_trace.capability_follow_up(
-                result_package_ref=package.id,
-                result_context_ref=package.result_context_ref,
-                formal_fence_seq=fence,
-                scratch_fence_seq=fence,
-            )
-            # The capability consumption is durable before the next provider
-            # boundary and its referenced fresh work is already resolvable.
-            harness.objects.put(
-                "workflow-work-order", follow_up_trace.ticket.work_order
-            )
-            controller.consume(
-                package,
-                follow_up_work_order_ref=follow_up_trace.ticket.work_order.id,
-                formal_fence_seq=parent_work.formal_fence_seq,
-                scratch_fence_seq=parent_work.scratch_fence_seq,
-            )
-            simulation_follow_up_artifacts.extend(
-                conj(
-                    harness,
-                    problem_id,
-                    adapter,
-                    config,
-                    diagnostics,
-                    school=school,
-                    tail_weighted=tail_weighted,
-                    complement=complement,
-                    specs=specs,
-                    embedder=embedder,
-                    mandatory_interface=mandatory_interface,
-                    workload_profile=workload_profile,
-                    contract_id=contract_id,
-                    component_spec=component_spec,
-                    theorem_interface=theorem_interface,
-                    generation_context=generation_context,
-                    suppressed_exemplars=suppressed_exemplars,
-                    capture_candidate_content=capture_candidate_content,
-                    endpoint_lease=endpoint_lease,
-                    execution_school_id=execution_school_id,
-                    conjecture_context_plan=conjecture_context_plan,
-                    run_manifest=run_manifest,
-                    _context_expansion_index=_context_expansion_index,
-                    candidate_observer=candidate_observer,
-                    workflow_work_order_id=None,
-                    workflow_control_trace=follow_up_trace,
-                    _capability_result_context=controller.result_context(package),
-                    _simulation_follow_up_index=_simulation_follow_up_index + 1,
-                )
-            )
 
     if request is None:
         workflow_control_trace.seal()
-        return [*registered, *simulation_follow_up_artifacts]
+        return registered
     assert context_turn_payload is not None
     harness.record_conjecture_turn_event(context_turn_payload, request=request)
     if not context_granted:
         workflow_control_trace.seal()
-        return [*registered, *simulation_follow_up_artifacts]
+        return registered
 
     from deepreason.scratch.conjecture import plan_conjecture_context_expansion
     from deepreason.scratch.service import ScratchService
@@ -1037,4 +1026,4 @@ def conj(
         _capability_result_context=_capability_result_context,
         _simulation_follow_up_index=_simulation_follow_up_index,
     )
-    return [*registered, *simulation_follow_up_artifacts, *follow_up]
+    return [*registered, *follow_up]

@@ -15,7 +15,7 @@ from pydantic import ConfigDict, Field, field_validator, model_validator
 from deepreason.bridge.events import BridgeEventPayloadV1
 from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
-from deepreason.control_events import ControlEventPayloadV1
+from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
 
@@ -331,7 +331,7 @@ class Event(FrozenRecord):
     conjecture_turn: ConjectureTurnEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
-    control: ControlEventPayloadV1 | None = Field(
+    control: ControlEventPayloadV1 | ControlEventPayloadV2 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
     capability: CapabilityEventPayloadV1 | None = Field(
@@ -365,8 +365,8 @@ class Event(FrozenRecord):
         (or disappear as a torn tail) when the JSONL log is reopened.
         """
 
-        if isinstance(value, ControlEventPayloadV1):
-            return ControlEventPayloadV1.model_validate(
+        if isinstance(value, (ControlEventPayloadV1, ControlEventPayloadV2)):
+            return type(value).model_validate(
                 value.model_dump(mode="python", by_alias=True)
             )
         return value

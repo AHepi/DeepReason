@@ -16,6 +16,7 @@ venv/
 
 # Runtime state (event logs / blob stores are per-run, git-native saves are explicit)
 runs/
+.deepreason/
 *.local.yaml
 
 # Editors
@@ -26,4 +27,3 @@ runs/
 
 # Transient validation-study checkpoint (durable output is validation_report.json)
 experiments/results/validation_checkpoint*.json
-

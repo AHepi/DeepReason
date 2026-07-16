@@ -69,6 +69,7 @@ def plan_conjecture_work(
     profile = _canonical_revalidate(ConjectureWorkflowProfileV1, profile)
     return WorkOrderEnvelopeV1.create(
         manifest_digest=profile.manifest_digest,
+        controller_version=profile.controller_version,
         workflow_profile=profile.workflow_profile,
         formal_fence_seq=formal_fence_seq,
         scratch_fence_seq=scratch_fence_seq,
@@ -87,6 +88,7 @@ def plan_conjecture_work(
         task_payload_schema_id=task_payload_schema_id,
         task_payload_ref=task_payload_ref,
         task_payload_value=task_payload_value,
+        run_input_digest=profile.run_input_digest,
     )
 
 
@@ -148,6 +150,7 @@ def _decide(
     )
     decision = TransitionDecisionV1.create(
         manifest_digest=state.manifest_digest,
+        controller_version=work_order.controller_version,
         workflow_profile=state.workflow_profile,
         previous_process_digest=state.digest,
         trigger_kind=trigger_kind,

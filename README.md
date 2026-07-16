@@ -134,10 +134,17 @@ authorized matched provider runs.
 
 RunManifest v5 extends active conjecture work with semantic simulation
 proposals, deterministic manifest-owned authorization and execution, immutable
-receipts, and fresh result-reasoning work orders. Simulation and frozen
-evidence both default to disabled. Successful execution remains a scoped
+receipts, and fresh result-reasoning work orders. V5 requires an immutable
+run-input dossier bound before the manifest, `workflow.controller.v2`, and one
+complete `InquiryCapabilityPolicyV1`; simulation and attached evidence remain
+disabled unless explicitly frozen. The local runner executes only
+harness-generated `declarative_numeric_v1` programs. Model-authored
+`sandboxed_python_v1` has no host fallback and remains unavailable until a
+certified container adapter is implemented. Successful execution is a scoped
 recorded observation, while denial and operational failure remain replayable
-lineage. See the [Tranche A operator and acceptance guide](docs/TRANCHE_A_AUTONOMOUS_SIMULATION.md).
+lineage. See the [Tranche A guide](docs/TRANCHE_A_AUTONOMOUS_SIMULATION.md),
+[v1.6 amendment](docs/harness-spec-v1.6-amendment.md), and
+[migration guide](docs/AUTONOMOUS_SIMULATION_MIGRATION.md).
 
 Pinned code, simulation, and Lean operations are available through
 `deepreason code`, `deepreason simulate`, `deepreason prove`, and

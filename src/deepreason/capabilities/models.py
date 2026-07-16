@@ -122,6 +122,9 @@ class SimulationProposalDraftV1(_FrozenModel):
         default=(), max_length=256
     )
     requested_seed_set: tuple[int, ...] = Field(default=(), max_length=256)
+    simulation_mode: Literal[
+        "declarative_numeric_v1", "sandboxed_python_v1"
+    ] = "declarative_numeric_v1"
     model_source: str = Field(min_length=1, max_length=262_144)
     requested_observables: tuple[str, ...] = Field(min_length=1, max_length=128)
     interpretation_conditions: tuple[str, ...] = Field(min_length=1, max_length=64)
@@ -154,6 +157,18 @@ class SimulationProposalDraftV1(_FrozenModel):
             raise ValueError("simulation observables must be plain identifiers")
         return tuple(value)
 
+    @field_validator("requested_seed_set")
+    @classmethod
+    def _bounded_seeds(cls, value):
+        if any(
+            isinstance(seed, bool)
+            or not isinstance(seed, int)
+            or not -(2**63) <= seed < 2**63
+            for seed in value
+        ):
+            raise ValueError("simulation seeds must be signed 64-bit integers")
+        return tuple(value)
+
 
 class SimulationProposalV1(SimulationProposalDraftV1, _IdentifiedCapabilityRecord):
     """Semantic experiment proposal; this record conveys no execution authority."""
@@ -167,6 +182,45 @@ class SimulationProposalV1(SimulationProposalDraftV1, _IdentifiedCapabilityRecor
     source_call_seq: int = Field(ge=0)
     proposal_index: int = Field(ge=0, le=31)
     problem_ref: str = Field(min_length=1, max_length=512)
+    run_input_digest: str = Field(pattern=_DIGEST)
+
+
+class CapabilityBudgetDeltaV1(_FrozenModel):
+    requests: int = Field(default=0, ge=0, le=1)
+    executions: int = Field(default=0, ge=0, le=1)
+    result_follow_ups: int = Field(default=0, ge=0, le=1)
+
+    @model_validator(mode="after")
+    def _at_most_one_counter(self):
+        if sum((self.requests, self.executions, self.result_follow_ups)) > 1:
+            raise ValueError("one capability transition may consume one budget class")
+        return self
+
+
+def capability_next_process_digest(
+    *,
+    previous_process_digest: str,
+    request_ref: str,
+    request_digest: str,
+    lifecycle: CapabilityLifecycle,
+    previous_transition_ref: str | None,
+    phase_record_ref: str | None,
+    trigger_ref: str,
+    budget_delta: CapabilityBudgetDeltaV1,
+) -> str:
+    payload = {
+        "previous_process_digest": previous_process_digest,
+        "request_ref": request_ref,
+        "request_digest": request_digest,
+        "lifecycle": lifecycle.value,
+        "previous_transition_ref": previous_transition_ref,
+        "phase_record_ref": phase_record_ref,
+        "trigger_ref": trigger_ref,
+        "budget_delta": budget_delta.model_dump(mode="json"),
+    }
+    return "sha256:" + sha256_hex(
+        b"capability.process-step.v1\x00" + canonical_json(payload)
+    )
 
 
 class CapabilityTransitionV1(_IdentifiedCapabilityRecord):
@@ -176,6 +230,7 @@ class CapabilityTransitionV1(_IdentifiedCapabilityRecord):
         "capability.transition.v1", alias="schema"
     )
     manifest_digest: str = Field(pattern=_DIGEST)
+    run_input_digest: str = Field(pattern=_DIGEST)
     capability_policy_digest: str = Field(pattern=_DIGEST)
     request_ref: str = Field(pattern=_WORKFLOW_ID)
     request_digest: str = Field(pattern=_WORKFLOW_ID)
@@ -186,6 +241,12 @@ class CapabilityTransitionV1(_IdentifiedCapabilityRecord):
     lifecycle: CapabilityLifecycle
     previous_transition_ref: str | None = Field(default=None, pattern=_WORKFLOW_ID)
     phase_record_ref: str | None = Field(default=None, pattern=_WORKFLOW_ID)
+    trigger_ref: str = Field(min_length=1, max_length=512)
+    budget_delta: CapabilityBudgetDeltaV1 = Field(
+        default_factory=CapabilityBudgetDeltaV1
+    )
+    previous_process_digest: str = Field(pattern=_WORKFLOW_ID)
+    next_process_digest: str = Field(pattern=_WORKFLOW_ID)
     reason_code: str = Field(min_length=1, max_length=128)
 
     @model_validator(mode="after")
@@ -202,12 +263,32 @@ class CapabilityTransitionV1(_IdentifiedCapabilityRecord):
         elif self.lifecycle in {
             CapabilityLifecycle.GRANTED,
             CapabilityLifecycle.COMPILED,
+            CapabilityLifecycle.DISPATCHED,
             CapabilityLifecycle.SUCCEEDED,
             CapabilityLifecycle.FAILED,
             CapabilityLifecycle.RESULT_PACKAGED,
             CapabilityLifecycle.CONSUMED,
         } and self.phase_record_ref is None:
             raise ValueError("this capability transition requires a phase record")
+        expected_budget = {
+            CapabilityLifecycle.PROPOSED: CapabilityBudgetDeltaV1(requests=1),
+            CapabilityLifecycle.DISPATCHED: CapabilityBudgetDeltaV1(executions=1),
+            CapabilityLifecycle.CONSUMED: CapabilityBudgetDeltaV1(result_follow_ups=1),
+        }.get(self.lifecycle, CapabilityBudgetDeltaV1())
+        if self.budget_delta != expected_budget:
+            raise ValueError("capability transition has the wrong budget delta")
+        expected_process = capability_next_process_digest(
+            previous_process_digest=self.previous_process_digest,
+            request_ref=self.request_ref,
+            request_digest=self.request_digest,
+            lifecycle=self.lifecycle,
+            previous_transition_ref=self.previous_transition_ref,
+            phase_record_ref=self.phase_record_ref,
+            trigger_ref=self.trigger_ref,
+            budget_delta=self.budget_delta,
+        )
+        if self.next_process_digest != expected_process:
+            raise ValueError("capability transition process digest is not canonical")
         return self
 
 
@@ -219,6 +300,7 @@ class SimulationGrantV1(_IdentifiedCapabilityRecord):
     )
     proposal_ref: str = Field(pattern=_WORKFLOW_ID)
     manifest_digest: str = Field(pattern=_DIGEST)
+    run_input_digest: str = Field(pattern=_DIGEST)
     policy_digest: str = Field(pattern=_DIGEST)
     template_identity: str = Field(min_length=1, max_length=128)
     backend_identity: str = Field(min_length=1, max_length=128)
@@ -265,6 +347,37 @@ class CompiledSimulationV1(_IdentifiedCapabilityRecord):
     maximum_output_bytes: int = Field(ge=1)
 
 
+class SimulationWorkOrderV1(_IdentifiedCapabilityRecord):
+    """Durable operational authority compiled entirely by the harness."""
+
+    _identity_domain = "capability.simulation-work-order.v1"
+
+    schema_: Literal["capability.simulation-work-order.v1"] = Field(
+        "capability.simulation-work-order.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    grant_ref: str = Field(pattern=_WORKFLOW_ID)
+    compiled_simulation_ref: str = Field(pattern=_WORKFLOW_ID)
+    manifest_digest: str = Field(pattern=_DIGEST)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    policy_digest: str = Field(pattern=_DIGEST)
+    runner_profile: Literal[
+        "simulation.declarative.v1", "simulation.container.v1"
+    ]
+    template_identity: str = Field(min_length=1, max_length=128)
+    backend_identity: str = Field(min_length=1, max_length=128)
+    toolchain_identity: str = Field(min_length=1, max_length=128)
+    maximum_wall_ms: int = Field(ge=1, le=300_000)
+    maximum_memory_bytes: int = Field(ge=1, le=4 * 1024 * 1024 * 1024)
+    maximum_output_bytes: int = Field(ge=1)
+    deterministic_step_limit: int = Field(ge=1)
+    sample_limit: int = Field(ge=1)
+    network: Literal[False] = False
+    filesystem_policy: Literal["isolated_no_filesystem"] = (
+        "isolated_no_filesystem"
+    )
+
+
 class SimulationAttemptV1(_FrozenModel):
     attempt: int = Field(ge=0, le=8)
     backend_verdict: Literal["pass", "fail", "overrun"]
@@ -291,9 +404,14 @@ class SimulationExecutionReceiptV1(_IdentifiedCapabilityRecord):
         "capability.simulation-execution-receipt.v1", alias="schema"
     )
     proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    simulation_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
     compiled_specification_ref: str = Field(pattern=_WORKFLOW_ID)
     started_at: str = Field(min_length=1, max_length=64)
     completed_at: str = Field(min_length=1, max_length=64)
+    execution_disposition: Literal[
+        "runner_completed", "dispatch_interrupted"
+    ] = "runner_completed"
     operational_status: Literal["succeeded", "failed"]
     attempts: tuple[SimulationAttemptV1, ...] = Field(min_length=1, max_length=9)
     final_backend_verdict: Literal["pass", "fail", "overrun"]
@@ -322,6 +440,14 @@ class SimulationExecutionReceiptV1(_IdentifiedCapabilityRecord):
             self.final_backend_verdict != "pass" or self.output_truncated
         ):
             raise ValueError("receipt operational status differs from execution outcome")
+        if (
+            self.execution_disposition == "dispatch_interrupted"
+            and (
+                self.operational_status != "failed"
+                or self.final_backend_verdict != "overrun"
+            )
+        ):
+            raise ValueError("an interrupted dispatch must remain an unknown failure")
         return self
 
 
@@ -332,6 +458,7 @@ class SimulationResultPackageV1(_IdentifiedCapabilityRecord):
         "capability.simulation-result-package.v1", alias="schema"
     )
     proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
     receipt_ref: str = Field(pattern=_WORKFLOW_ID)
     structured_result_ref: str = Field(pattern=_DIGEST)
     result_context_ref: str = Field(pattern=_DIGEST)
@@ -349,12 +476,14 @@ class SimulationConsumptionV1(_IdentifiedCapabilityRecord):
         "capability.simulation-consumption.v1", alias="schema"
     )
     proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
     result_package_ref: str = Field(pattern=_WORKFLOW_ID)
     follow_up_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
     delivery: Literal["fresh_reasoning_work_order"] = "fresh_reasoning_work_order"
 
 
 __all__ = [
+    "CapabilityBudgetDeltaV1",
     "CapabilityLifecycle",
     "CapabilityTransitionV1",
     "CompiledSimulationV1",
@@ -367,4 +496,6 @@ __all__ = [
     "SimulationProposalDraftV1",
     "SimulationProposalV1",
     "SimulationResultPackageV1",
+    "SimulationWorkOrderV1",
+    "capability_next_process_digest",
 ]

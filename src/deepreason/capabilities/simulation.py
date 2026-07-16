@@ -11,6 +11,7 @@ from typing import Any
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.enums import CapabilityLifecycle
 from deepreason.capabilities.models import (
+    CapabilityBudgetDeltaV1,
     CapabilityTransitionV1,
     CompiledSimulationSpecV1,
     CompiledSimulationV1,
@@ -21,6 +22,8 @@ from deepreason.capabilities.models import (
     SimulationProposalDraftV1,
     SimulationProposalV1,
     SimulationResultPackageV1,
+    SimulationWorkOrderV1,
+    capability_next_process_digest,
 )
 
 TRUSTED_CHECKER_SOURCE_V1 = """def check(input_item, seed, output):
@@ -42,7 +45,8 @@ class SimulationCapabilityController:
     def __init__(self, harness, manifest) -> None:
         self.harness = harness
         self.manifest = manifest
-        self.policy = manifest.simulation_capability_policy
+        topology = manifest.inquiry_capability_policy
+        self.policy = topology.simulation if topology is not None else None
         if manifest.schema_version != 5 or self.policy is None:
             raise ValueError("simulation controller requires one v5 run manifest")
 
@@ -57,8 +61,33 @@ class SimulationCapabilityController:
         formal_fence_seq: int,
         scratch_fence_seq: int,
     ) -> CapabilityTransitionV1:
+        trigger_ref = (
+            f"provider-call:{proposal.source_call_seq}"
+            if previous is None
+            else previous.id
+        )
+        budget_delta = {
+            CapabilityLifecycle.PROPOSED: CapabilityBudgetDeltaV1(requests=1),
+            CapabilityLifecycle.DISPATCHED: CapabilityBudgetDeltaV1(executions=1),
+            CapabilityLifecycle.CONSUMED: CapabilityBudgetDeltaV1(
+                result_follow_ups=1
+            ),
+        }.get(lifecycle, CapabilityBudgetDeltaV1())
+        previous_process_digest = self.harness.capability_state.process_digest
+        phase_record_ref = getattr(phase_record, "id", None)
+        next_process_digest = capability_next_process_digest(
+            previous_process_digest=previous_process_digest,
+            request_ref=proposal.id,
+            request_digest=proposal.id,
+            lifecycle=lifecycle,
+            previous_transition_ref=previous.id if previous is not None else None,
+            phase_record_ref=phase_record_ref,
+            trigger_ref=trigger_ref,
+            budget_delta=budget_delta,
+        )
         transition = CapabilityTransitionV1.create(
             manifest_digest=self.manifest.sha256,
+            run_input_digest=self.manifest.run_input_digest,
             capability_policy_digest=self.policy.digest,
             request_ref=proposal.id,
             request_digest=proposal.id,
@@ -68,7 +97,11 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
             lifecycle=lifecycle,
             previous_transition_ref=previous.id if previous is not None else None,
-            phase_record_ref=getattr(phase_record, "id", None),
+            phase_record_ref=phase_record_ref,
+            trigger_ref=trigger_ref,
+            budget_delta=budget_delta,
+            previous_process_digest=previous_process_digest,
+            next_process_digest=next_process_digest,
             reason_code=reason_code,
         )
         self.harness.record_capability_transition(
@@ -95,7 +128,7 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
 
-    def _toolchain_available(self) -> bool:
+    def _toolchain_available(self, proposal: SimulationProposalV1) -> bool:
         matches = tuple(
             item
             for item in self.manifest.toolchains
@@ -105,8 +138,15 @@ class SimulationCapabilityController:
             return False
         toolchain = matches[0]
         version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        # Model-authored Python is never sent to the local subprocess backend.
+        # A future certified container adapter must provide a distinct trusted
+        # implementation before this branch may return True.
+        if proposal.simulation_mode == "sandboxed_python_v1":
+            return False
         return (
-            toolchain.runner == "local"
+            proposal.simulation_mode == "declarative_numeric_v1"
+            and self.policy.runner_profile == "simulation.declarative.v1"
+            and toolchain.runner == "local"
             and toolchain.network is False
             and Path(toolchain.executable).resolve() == Path(sys.executable).resolve()
             and toolchain.version_output_sha256 == sha256_hex(version.encode("utf-8"))
@@ -139,7 +179,7 @@ class SimulationCapabilityController:
             return b"", "input_bytes_exceeded"
         return encoded, None
 
-    def execute(
+    def propose(
         self,
         draft: SimulationProposalDraftV1,
         *,
@@ -148,8 +188,18 @@ class SimulationCapabilityController:
         source_call_seq: int,
         formal_fence_seq: int,
         scratch_fence_seq: int,
-    ) -> SimulationResultPackageV1 | None:
-        """Record, authorize, execute, and package one semantic proposal."""
+    ) -> SimulationProposalV1:
+        """Record semantic intent only; no validation grant or execution occurs."""
+
+        from deepreason.workflow.models import CapabilityOutcome
+
+        if (
+            CapabilityOutcome.SIMULATION_REQUEST
+            not in work_order.capability_grant.allowed_outcomes
+        ):
+            raise ValueError(
+                "originating work order does not permit a simulation proposal"
+            )
 
         proposal_values = draft.model_dump(mode="python")
         proposal = SimulationProposalV1.create(
@@ -158,8 +208,9 @@ class SimulationCapabilityController:
             originating_work_order_ref=work_order.id,
             source_call_seq=source_call_seq,
             problem_ref=work_order.problem_ref,
+            run_input_digest=self.manifest.run_input_digest,
         )
-        current = self._transition(
+        self._transition(
             proposal,
             CapabilityLifecycle.PROPOSED,
             previous=None,
@@ -168,6 +219,59 @@ class SimulationCapabilityController:
             formal_fence_seq=formal_fence_seq,
             scratch_fence_seq=scratch_fence_seq,
         )
+        return proposal
+
+    def execute(
+        self,
+        draft: SimulationProposalDraftV1 | SimulationProposalV1,
+        *,
+        proposal_index: int | None = None,
+        work_order=None,
+        source_call_seq: int | None = None,
+        formal_fence_seq: int | None = None,
+        scratch_fence_seq: int | None = None,
+    ) -> SimulationResultPackageV1 | None:
+        """Authorize and execute one already-recorded proposal.
+
+        The draft form remains an internal compatibility seam for offline unit
+        tests. Production conjecture turns call :meth:`propose`; only the
+        scheduler capability phase calls this method with a canonical proposal.
+        """
+
+        if isinstance(draft, SimulationProposalV1):
+            proposal = SimulationProposalV1.model_validate(
+                draft.model_dump(mode="python", by_alias=True)
+            )
+            transition_ref = self.harness.capability_state.current_transition_by_request.get(
+                proposal.id
+            )
+            if transition_ref is None:
+                raise ValueError("simulation proposal has no durable PROPOSED transition")
+            current = self.harness.capability_state.transitions[transition_ref]
+            if current.lifecycle != CapabilityLifecycle.PROPOSED:
+                raise ValueError("simulation proposal was already processed")
+            formal_fence_seq = current.formal_fence_seq
+            scratch_fence_seq = current.scratch_fence_seq
+        else:
+            if None in {
+                proposal_index,
+                source_call_seq,
+                formal_fence_seq,
+                scratch_fence_seq,
+            } or work_order is None:
+                raise ValueError("draft execution requires complete originating authority")
+            proposal = self.propose(
+                draft,
+                proposal_index=proposal_index,
+                work_order=work_order,
+                source_call_seq=source_call_seq,
+                formal_fence_seq=formal_fence_seq,
+                scratch_fence_seq=scratch_fence_seq,
+            )
+            current = self.harness.capability_state.transitions[
+                self.harness.capability_state.current_transition_by_request[proposal.id]
+            ]
+        assert formal_fence_seq is not None and scratch_fence_seq is not None
         current = self._transition(
             proposal,
             CapabilityLifecycle.VALIDATED,
@@ -177,17 +281,55 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
 
+        from deepreason.simulation.compiler import (
+            DeclarativeSimulationError,
+            compile_declarative_numeric,
+            validate_sandboxed_python_source,
+        )
+
         reason = None
+        source_bytes = b""
         if not self.policy.enabled:
             reason = "capability_disabled"
-        elif self.harness.capability_state.request_count > self.policy.maximum_simulation_requests:
-            reason = "request_budget_exhausted"
-        elif self.harness.capability_state.execution_count >= self.policy.maximum_simulation_executions:
+        else:
+            ordered_requests = sorted(
+                self.harness.capability_state.proposals.values(),
+                key=lambda item: (
+                    item.source_call_seq,
+                    item.proposal_index,
+                    item.id,
+                ),
+            )
+            request_ordinal = ordered_requests.index(proposal) + 1
+            if request_ordinal > self.policy.maximum_simulation_requests:
+                reason = "request_budget_exhausted"
+        if reason is None and self.harness.capability_state.execution_count >= self.policy.maximum_simulation_executions:
             reason = "execution_budget_exhausted"
-        elif not self._toolchain_available():
-            reason = "runner_unavailable"
-        elif len(proposal.model_source.encode("utf-8")) > self.policy.maximum_generated_code_bytes:
+        if reason is None and len(proposal.model_source.encode("utf-8")) > self.policy.maximum_generated_code_bytes:
             reason = "generated_code_bytes_exceeded"
+
+        expected_profile = (
+            "simulation.declarative.v1"
+            if proposal.simulation_mode == "declarative_numeric_v1"
+            else "simulation.container.v1"
+        )
+        if self.policy.runner_profile != expected_profile:
+            reason = reason or "runner_profile_mismatch"
+        if reason is None:
+            try:
+                if proposal.simulation_mode == "declarative_numeric_v1":
+                    source_bytes = compile_declarative_numeric(
+                        proposal.model_source,
+                        proposal.requested_observables,
+                    )
+                else:
+                    validate_sandboxed_python_source(proposal.model_source)
+            except (DeclarativeSimulationError, ValueError):
+                reason = "invalid_model_program"
+        if source_bytes and len(source_bytes) > self.policy.maximum_generated_code_bytes:
+            reason = reason or "generated_code_bytes_exceeded"
+        if reason is None and not self._toolchain_available(proposal):
+            reason = "runner_unavailable"
 
         if self.policy.deterministic_seed_policy == "fixed_manifest":
             seeds = self.policy.fixed_seed_set
@@ -215,6 +357,7 @@ class SimulationCapabilityController:
         grant = SimulationGrantV1.create(
             proposal_ref=proposal.id,
             manifest_digest=self.manifest.sha256,
+            run_input_digest=self.manifest.run_input_digest,
             policy_digest=self.policy.digest,
             template_identity=self.policy.runner_template_identity,
             backend_identity=self.policy.backend_identity,
@@ -234,7 +377,6 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
 
-        source_bytes = proposal.model_source.encode("utf-8")
         checker_bytes = TRUSTED_CHECKER_SOURCE_V1.encode("utf-8")
         source_ref = self.harness.blobs.put(source_bytes)
         input_ref = self.harness.blobs.put(input_bytes)
@@ -273,10 +415,30 @@ class SimulationCapabilityController:
             formal_fence_seq=formal_fence_seq,
             scratch_fence_seq=scratch_fence_seq,
         )
+        work_order = SimulationWorkOrderV1.create(
+            proposal_ref=proposal.id,
+            grant_ref=grant.id,
+            compiled_simulation_ref=compiled.id,
+            manifest_digest=self.manifest.sha256,
+            run_input_digest=self.manifest.run_input_digest,
+            policy_digest=self.policy.digest,
+            runner_profile=self.policy.runner_profile,
+            template_identity=self.policy.runner_template_identity,
+            backend_identity=self.policy.backend_identity,
+            toolchain_identity=self.policy.python_toolchain_identity,
+            maximum_wall_ms=self.policy.maximum_wall_ms,
+            maximum_memory_bytes=self.policy.maximum_memory_bytes,
+            maximum_output_bytes=self.policy.maximum_output_bytes,
+            deterministic_step_limit=self.policy.maximum_steps,
+            sample_limit=self.policy.maximum_samples,
+            network=False,
+            filesystem_policy=self.policy.filesystem_policy,
+        )
         current = self._transition(
             proposal,
             CapabilityLifecycle.DISPATCHED,
             previous=current,
+            phase_record=work_order,
             reason_code="trusted_runner_dispatched",
             formal_fence_seq=formal_fence_seq,
             scratch_fence_seq=scratch_fence_seq,
@@ -288,7 +450,11 @@ class SimulationCapabilityController:
         )
         from deepreason.workloads.code import SimulationSpec
 
-        backend = SimulationBackend(toolchain_id=self.policy.python_toolchain_identity)
+        backend = SimulationBackend(
+            toolchain_id=self.policy.python_toolchain_identity,
+            maximum_wall_ms=self.policy.maximum_wall_ms,
+            maximum_memory_bytes=self.policy.maximum_memory_bytes,
+        )
         backend_request = SimulationRequest(
             source_ref=source_ref,
             spec=SimulationSpec.model_validate(
@@ -300,7 +466,10 @@ class SimulationCapabilityController:
         attempts: list[SimulationAttemptV1] = []
         final = None
         for attempt_index in range(self.policy.retry_ceiling + 1):
-            final = backend.verify(backend_request, self.harness.blobs)
+            try:
+                final = backend.verify(backend_request, self.harness.blobs)
+            except Exception:  # noqa: BLE001 - preserve trusted-runner failure
+                return self.recover_interrupted(proposal)
             attempts.append(
                 SimulationAttemptV1(
                     attempt=attempt_index,
@@ -326,6 +495,8 @@ class SimulationCapabilityController:
         )
         receipt = SimulationExecutionReceiptV1.create(
             proposal_ref=proposal.id,
+            run_input_digest=self.manifest.run_input_digest,
+            simulation_work_order_ref=work_order.id,
             compiled_specification_ref=compiled.id,
             started_at=started_at,
             completed_at=completed_at,
@@ -340,6 +511,8 @@ class SimulationCapabilityController:
             output_truncated=output_truncated,
             resource_limits={
                 **backend.resource_limits(),
+                "manifest_maximum_wall_ms": self.policy.maximum_wall_ms,
+                "manifest_maximum_memory_bytes": self.policy.maximum_memory_bytes,
                 "deterministic_step_limit": self.policy.maximum_steps,
                 "sample_limit": self.policy.maximum_samples,
                 "maximum_output_bytes": self.policy.maximum_output_bytes,
@@ -411,6 +584,7 @@ class SimulationCapabilityController:
         context_ref = self.harness.blobs.put(canonical_json(context_payload))
         package = SimulationResultPackageV1.create(
             proposal_ref=proposal.id,
+            run_input_digest=self.manifest.run_input_digest,
             receipt_ref=receipt.id,
             structured_result_ref=structured_ref,
             result_context_ref=context_ref,
@@ -432,6 +606,156 @@ class SimulationCapabilityController:
             raise CapabilityTerminalError("terminal simulation failure policy was reached")
         return package
 
+    def recover_interrupted(
+        self,
+        proposal: SimulationProposalV1,
+    ) -> SimulationResultPackageV1:
+        """Close a durable DISPATCHED prefix without inventing an execution.
+
+        A process can stop after the simulation work order is committed but
+        before a runner receipt is durable. Replay cannot know whether the
+        external subprocess began or completed. The safe recovery is therefore
+        an explicit unknown operational failure, never a silent rerun.
+        """
+
+        state = self.harness.capability_state
+        proposal = state.proposals.get(proposal.id, proposal)
+        transition_ref = state.current_transition_by_request.get(proposal.id)
+        if transition_ref is None:
+            raise ValueError("interrupted simulation has no durable transition")
+        current = state.transitions[transition_ref]
+        if current.lifecycle != CapabilityLifecycle.DISPATCHED:
+            raise ValueError("only a dispatched simulation can be recovered")
+        work_orders = [
+            item
+            for item in state.work_orders.values()
+            if item.proposal_ref == proposal.id
+        ]
+        if len(work_orders) != 1:
+            raise ValueError("interrupted simulation has no unique work order")
+        work_order = work_orders[0]
+        compiled = state.compiled[work_order.compiled_simulation_ref]
+        output = b"[]"
+        output_ref = self.harness.blobs.put(output)
+        diagnostics = canonical_json(
+            {
+                "error": (
+                    "durable dispatch has no execution receipt; whether the "
+                    "runner began or completed is unknown"
+                ),
+                "execution_observed": False,
+            }
+        )
+        diagnostics_ref = self.harness.blobs.put(diagnostics)
+        empty_ref = self.harness.blobs.put(b"")
+        attempt = SimulationAttemptV1(
+            attempt=0,
+            backend_verdict="overrun",
+            fingerprint={
+                "backend": work_order.backend_identity,
+                "toolchain_id": work_order.toolchain_identity,
+                "execution_observed": False,
+            },
+            diagnostics_ref=diagnostics_ref,
+            output_ref=output_ref,
+            stdout_ref=empty_ref,
+            stderr_ref=empty_ref,
+            sample_count=0,
+        )
+        recovered_at = _utc_now()
+        receipt = SimulationExecutionReceiptV1.create(
+            proposal_ref=proposal.id,
+            run_input_digest=self.manifest.run_input_digest,
+            simulation_work_order_ref=work_order.id,
+            compiled_specification_ref=compiled.id,
+            started_at=recovered_at,
+            completed_at=recovered_at,
+            execution_disposition="dispatch_interrupted",
+            operational_status="failed",
+            attempts=(attempt,),
+            final_backend_verdict="overrun",
+            source_sha256=compiled.source_sha256,
+            inputs_sha256=compiled.input_sha256,
+            checker_sha256=compiled.checker_sha256,
+            specification_sha256=sha256_hex(
+                canonical_json(
+                    compiled.specification.model_dump(mode="json", by_alias=True)
+                )
+            ),
+            output_bytes=len(output),
+            output_truncated=False,
+            resource_limits={
+                "memory_bytes": work_order.maximum_memory_bytes,
+                "wall_ms": work_order.maximum_wall_ms,
+                "deterministic_step_limit": work_order.deterministic_step_limit,
+                "sample_limit": work_order.sample_limit,
+                "maximum_output_bytes": work_order.maximum_output_bytes,
+                "filesystem": work_order.filesystem_policy,
+                "network": False,
+                "execution_observed": False,
+            },
+            diagnostic=(
+                "dispatch was durable but no execution receipt was; outcome unknown"
+            ),
+        )
+        current = self._transition(
+            proposal,
+            CapabilityLifecycle.FAILED,
+            previous=current,
+            phase_record=receipt,
+            reason_code="dispatch_interrupted",
+            formal_fence_seq=current.formal_fence_seq,
+            scratch_fence_seq=current.scratch_fence_seq,
+        )
+        limitations = (
+            "No runner completion was observed; the execution outcome is unknown.",
+            "The interrupted dispatch does not refute the motivating hypothesis.",
+            "The harness did not silently rerun the work order during recovery.",
+        )
+        structured_ref = output_ref
+        context_payload = {
+            "schema": "simulation-result-context.v1",
+            "proposal_ref": proposal.id,
+            "hypothesis": proposal.hypothesis,
+            "rival_predictions": list(proposal.rival_predictions),
+            "discriminating_purpose": proposal.discriminating_purpose,
+            "declared_assumptions": list(proposal.declared_assumptions),
+            "interpretation_conditions": list(proposal.interpretation_conditions),
+            "receipt_ref": receipt.id,
+            "operational_status": "failed",
+            "backend_verdict": "overrun",
+            "structured_result_ref": structured_ref,
+            "structured_result": [],
+            "execution_limitations": list(limitations),
+            "epistemic_status": "recorded_observation",
+        }
+        context_ref = self.harness.blobs.put(canonical_json(context_payload))
+        package = SimulationResultPackageV1.create(
+            proposal_ref=proposal.id,
+            run_input_digest=self.manifest.run_input_digest,
+            receipt_ref=receipt.id,
+            structured_result_ref=structured_ref,
+            result_context_ref=context_ref,
+            assumptions=proposal.declared_assumptions,
+            execution_limitations=limitations,
+            original_hypothesis=proposal.hypothesis,
+            rival_predictions=proposal.rival_predictions,
+        )
+        self._transition(
+            proposal,
+            CapabilityLifecycle.RESULT_PACKAGED,
+            previous=current,
+            phase_record=package,
+            reason_code="interrupted_result_packaged",
+            formal_fence_seq=current.formal_fence_seq,
+            scratch_fence_seq=current.scratch_fence_seq,
+        )
+        if self.policy.failure_policy == "terminal":
+            raise CapabilityTerminalError(
+                "terminal interrupted-simulation failure policy was reached"
+            )
+        return package
+
     def consume(
         self,
         package: SimulationResultPackageV1,
@@ -450,6 +774,7 @@ class SimulationCapabilityController:
         ]
         consumption = SimulationConsumptionV1.create(
             proposal_ref=proposal.id,
+            run_input_digest=self.manifest.run_input_digest,
             result_package_ref=package.id,
             follow_up_work_order_ref=follow_up_work_order_ref,
         )

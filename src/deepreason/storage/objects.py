@@ -20,6 +20,7 @@ from deepreason.capabilities.models import (
     SimulationGrantV1,
     SimulationProposalV1,
     SimulationResultPackageV1,
+    SimulationWorkOrderV1,
 )
 from deepreason.bridge.evidence_pack import EvidencePackV1
 from deepreason.bridge.ledger import ClaimLedgerInputCatalogV1
@@ -39,6 +40,7 @@ from deepreason.bridge.models import (
 )
 from deepreason.bridge.retry import BridgeWorkflowRetryV1
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.evidence.models import DossierPackReceiptV1
 from deepreason.ontology.artifact import Artifact
 from deepreason.ontology.commitment import Commitment
 from deepreason.ontology.problem import Problem
@@ -112,9 +114,11 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "capability-transition": CapabilityTransitionV1,
     "capability-simulation-grant": SimulationGrantV1,
     "capability-compiled-simulation": CompiledSimulationV1,
+    "capability-simulation-work-order": SimulationWorkOrderV1,
     "capability-simulation-receipt": SimulationExecutionReceiptV1,
     "capability-simulation-result-package": SimulationResultPackageV1,
     "capability-simulation-consumption": SimulationConsumptionV1,
+    "dossier-pack-receipt": DossierPackReceiptV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
@@ -125,6 +129,7 @@ _SCHEMA_ID_FIELDS: dict[str, str] = {
     "scratch-cluster-snapshot": "snapshot_hash",
     "scratch-attention-receipt": "receipt_hash",
     "scratch-coverage-cycle": "cycle_id",
+    "dossier-pack-receipt": "receipt_digest",
 }
 
 

@@ -19,6 +19,7 @@ from typing import BinaryIO, Iterable
 MAKE_OPERATOR_LOCK_NAME = ".make-operator.lock"
 RUN_OPERATOR_LOCK_NAME = ".run-operator.lock"
 RUN_MANIFEST_LOCK_NAME = ".run-manifest.lock"
+RUN_INPUT_LOCK_NAME = ".run-input.lock"
 OPERATOR_LOCK_NAMES = tuple(
     sorted({MAKE_OPERATOR_LOCK_NAME, RUN_OPERATOR_LOCK_NAME})
 )
@@ -354,6 +355,7 @@ __all__ = [
     "ProcessLockSet",
     "ProcessLockUnavailable",
     "RUN_MANIFEST_LOCK_NAME",
+    "RUN_INPUT_LOCK_NAME",
     "RUN_OPERATOR_LOCK_NAME",
     "operator_locks",
 ]

@@ -555,6 +555,9 @@ class SimulationProposalWireV1(StrictWireModel):
         default_factory=list, max_length=256
     )
     requested_seed_set: list[int] = Field(default_factory=list, max_length=256)
+    simulation_mode: Literal[
+        "declarative_numeric_v1", "sandboxed_python_v1"
+    ]
     model_source: str = Field(min_length=1, max_length=262_144)
     requested_observables: list[str] = Field(min_length=1, max_length=128)
     interpretation_conditions: list[str] = Field(min_length=1, max_length=64)
@@ -664,6 +667,7 @@ class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
                     for parameters in item.parameter_definitions
                 ),
                 requested_seed_set=tuple(item.requested_seed_set),
+                simulation_mode=item.simulation_mode,
                 model_source=item.model_source,
                 requested_observables=tuple(item.requested_observables),
                 interpretation_conditions=tuple(item.interpretation_conditions),

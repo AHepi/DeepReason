@@ -207,11 +207,23 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             if manifest is not None and manifest.schema_version in {4, 5}
             else None
         )
+        expected_control = (
+            ("workflow.controller.v2", "active_inquiry", "control.event.v2")
+            if manifest is not None and manifest.schema_version == 5
+            else ("workflow.controller.v1", None, "control.event.v1")
+        )
         if (
             control is None
-            or control.controller_version != "workflow.controller.v1"
-            or control.mode not in {"shadow", "active_conjecture"}
-            or control.contract_versions.control_event_schema != "control.event.v1"
+            or control.controller_version != expected_control[0]
+            or (
+                expected_control[1] is not None
+                and control.mode != expected_control[1]
+            )
+            or (
+                expected_control[1] is None
+                and control.mode not in {"shadow", "active_conjecture"}
+            )
+            or control.contract_versions.control_event_schema != expected_control[2]
         ):
             fail(
                 "workflow-manifest",
@@ -407,8 +419,10 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     capability_events = [event for event in events if event.capability is not None]
     if capability_events:
         policy = (
-            manifest.simulation_capability_policy
-            if manifest is not None and manifest.schema_version == 5
+            manifest.inquiry_capability_policy.simulation
+            if manifest is not None
+            and manifest.schema_version == 5
+            and manifest.inquiry_capability_policy is not None
             else None
         )
         if policy is None:
@@ -435,6 +449,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     continue
                 if (
                     transition.manifest_digest != manifest.sha256
+                    or transition.run_input_digest != manifest.run_input_digest
                     or transition.capability_policy_digest != policy.digest
                 ):
                     fail(
@@ -447,6 +462,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"event seq={event.seq}: model call authored an authority transition",
                     )
             for proposal in state.proposals.values():
+                from deepreason.workflow.models import CapabilityOutcome
+
                 work = h.workflow_state.work_orders.get(
                     proposal.originating_work_order_ref
                 )
@@ -457,14 +474,38 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 if (
                     work is None
                     or work.problem_ref != proposal.problem_ref
+                    or proposal.run_input_digest != manifest.run_input_digest
+                    or work.run_input_digest != manifest.run_input_digest
+                    or CapabilityOutcome.SIMULATION_REQUEST
+                    not in work.capability_grant.allowed_outcomes
                     or source is None
                     or source.llm is None
                     or source.llm.work_order_id != work.id
+                    or work.contract_id != "conjecturer.turn.v5"
+                    or any(
+                        attempt.contract_id != work.contract_id
+                        for attempt in source.llm.attempt_trace
+                    )
+                    or proposal.proposal_index
+                    >= policy.maximum_proposals_per_turn
                 ):
                     fail(
                         "capability-origin",
                         f"proposal {proposal.id} does not resolve to its provider work order",
                     )
+            proposals_by_call: dict[int, int] = {}
+            for proposal in state.proposals.values():
+                proposals_by_call[proposal.source_call_seq] = (
+                    proposals_by_call.get(proposal.source_call_seq, 0) + 1
+                )
+            if any(
+                count > policy.maximum_proposals_per_turn
+                for count in proposals_by_call.values()
+            ):
+                fail(
+                    "capability-origin",
+                    "one provider call exceeds its frozen proposal-count authority",
+                )
             for grant in state.grants.values():
                 proposal = state.proposals.get(grant.proposal_ref)
                 expected_seeds = (
@@ -475,6 +516,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 if (
                     proposal is None
                     or grant.manifest_digest != manifest.sha256
+                    or grant.run_input_digest != manifest.run_input_digest
                     or grant.policy_digest != policy.digest
                     or grant.template_identity != policy.runner_template_identity
                     or grant.backend_identity != policy.backend_identity
@@ -542,6 +584,18 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
 
                     expected_checker = TRUSTED_CHECKER_SOURCE_V1.encode("utf-8")
+                    from deepreason.simulation.compiler import (
+                        compile_declarative_numeric,
+                    )
+
+                    expected_source = (
+                        compile_declarative_numeric(
+                            proposal.model_source,
+                            proposal.requested_observables,
+                        )
+                        if proposal.simulation_mode == "declarative_numeric_v1"
+                        else None
+                    )
                     try:
                         source_payload = h.blobs.get(compiled.source_ref)
                         input_payload = h.blobs.get(compiled.input_ref)
@@ -550,7 +604,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         pass
                     else:
                         if (
-                            source_payload != proposal.model_source.encode("utf-8")
+                            expected_source is None
+                            or source_payload != expected_source
                             or input_payload != expected_inputs
                             or checker_payload != expected_checker
                             or compiled.specification.observables
@@ -584,8 +639,40 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             "capability-artifact",
                             f"compiled simulation {compiled.id} has missing blob: {error!r}",
                         )
+            for work_order in state.work_orders.values():
+                grant = state.grants.get(work_order.grant_ref)
+                compiled = state.compiled.get(work_order.compiled_simulation_ref)
+                if (
+                    grant is None
+                    or compiled is None
+                    or grant.id != compiled.grant_ref
+                    or work_order.proposal_ref != compiled.proposal_ref
+                    or work_order.manifest_digest != manifest.sha256
+                    or work_order.run_input_digest != manifest.run_input_digest
+                    or work_order.policy_digest != policy.digest
+                    or work_order.runner_profile != policy.runner_profile
+                    or work_order.template_identity != policy.runner_template_identity
+                    or work_order.backend_identity != policy.backend_identity
+                    or work_order.toolchain_identity
+                    != policy.python_toolchain_identity
+                    or work_order.maximum_wall_ms != policy.maximum_wall_ms
+                    or work_order.maximum_memory_bytes
+                    != policy.maximum_memory_bytes
+                    or work_order.maximum_output_bytes
+                    != policy.maximum_output_bytes
+                    or work_order.deterministic_step_limit != policy.maximum_steps
+                    or work_order.sample_limit != policy.maximum_samples
+                    or work_order.network is not False
+                ):
+                    fail(
+                        "capability-work-order",
+                        f"simulation work order {work_order.id} differs from frozen authority",
+                    )
             for receipt in state.receipts.values():
                 compiled = state.compiled.get(receipt.compiled_specification_ref)
+                work_order = state.work_orders.get(
+                    receipt.simulation_work_order_ref
+                )
                 if compiled is None:
                     fail(
                         "capability-receipt",
@@ -593,6 +680,9 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
                 elif (
                     receipt.proposal_ref != compiled.proposal_ref
+                    or work_order is None
+                    or work_order.compiled_simulation_ref != compiled.id
+                    or receipt.run_input_digest != manifest.run_input_digest
                     or receipt.source_sha256 != compiled.source_sha256
                     or receipt.inputs_sha256 != compiled.input_sha256
                     or receipt.checker_sha256 != compiled.checker_sha256
@@ -654,6 +744,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
                 elif (
                     package.proposal_ref != receipt.proposal_ref
+                    or package.run_input_digest != manifest.run_input_digest
                     or package.epistemic_status != "recorded_observation"
                 ):
                     fail(
@@ -676,6 +767,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 if (
                     work is None
                     or package is None
+                    or consumption.run_input_digest != manifest.run_input_digest
+                    or work.run_input_digest != manifest.run_input_digest
                     or package.proposal_ref != consumption.proposal_ref
                     or consumption.result_package_ref not in work.input_refs
                     or work.task_payload_schema_id != "simulation-result-context.v1"
@@ -690,13 +783,38 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
 
     if manifest is not None and manifest.schema_version == 5:
-        evidence = manifest.frozen_evidence_policy
-        if evidence is not None and evidence.enabled:
+        try:
+            from deepreason.evidence.state import (
+                load_evidence_dossier,
+                load_run_input,
+                verify_run_input,
+            )
+
+            input_verification = verify_run_input(root)
+            run_input = load_run_input(root)
+            dossier = load_evidence_dossier(root)
+        except Exception as error:  # noqa: BLE001 - complete root diagnostic
+            fail("run-input", f"bound run input is invalid: {error!r}")
+            run_input = None
+            dossier = None
+        else:
+            if (
+                input_verification["run_input_digest"] != manifest.run_input_digest
+                or run_input.run_input_digest != manifest.run_input_digest
+            ):
+                fail("run-input", "manifest and bound run-input digests differ")
+            evidence = manifest.inquiry_capability_policy.attached_evidence
+            if (
+                len(dossier.sources) > evidence.maximum_sources
+                or dossier.total_byte_count > evidence.maximum_total_bytes
+            ):
+                fail("run-input", "bound dossier exceeds frozen evidence authority")
+
             first_llm_seq = min(
                 (event.seq for event in events if event.llm is not None),
                 default=len(events) + 1,
             )
-            found: dict[str, list[int]] = {}
+            source_records: dict[str, tuple[int, str]] = {}
             for event in events:
                 for output in event.outputs:
                     artifact = h.state.artifacts.get(output)
@@ -708,33 +826,110 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         )
                     except (TypeError, json.JSONDecodeError):
                         continue
-                    if attached.get("schema") != "frozen-attached-source.v1":
+                    if attached.get("schema") != "attached-source-record.v1":
                         continue
-                    found.setdefault(str(attached.get("alias")), []).append(event.seq)
-                    item = next(
-                        (
-                            candidate
-                            for candidate in evidence.items
-                            if candidate.alias == attached.get("alias")
-                        ),
+                    source = attached.get("source") or {}
+                    source_id = str(source.get("id") or "")
+                    expected = next(
+                        (item for item in dossier.sources if item.id == source_id),
                         None,
                     )
                     if (
-                        item is None
-                        or attached.get("content_sha256") != item.content_sha256
-                        or attached.get("excerpt") != item.content
+                        expected is None
+                        or attached.get("run_input_digest") != run_input.run_input_digest
+                        or attached.get("dossier_digest") != dossier.dossier_digest
+                        or source != expected.model_dump(
+                            mode="json", by_alias=True, exclude_none=True
+                        )
                         or event.seq >= first_llm_seq
+                        or source_id in source_records
                     ):
                         fail(
-                            "frozen-evidence",
-                            f"event seq={event.seq}: attached evidence differs from manifest or arrived late",
+                            "attached-evidence",
+                            f"event seq={event.seq}: attached source differs from its bound dossier or arrived late",
                         )
-            for item in evidence.items:
-                if len(found.get(item.alias, ())) != 1:
+                    source_records[source_id] = (event.seq, artifact.id)
+            for source in dossier.sources:
+                record = source_records.get(source.id)
+                if record is None:
                     fail(
-                        "frozen-evidence",
-                        f"manifest evidence {item.alias} was not attached exactly once",
+                        "attached-evidence",
+                        f"bound source {source.id} has no unique source record",
                     )
+                    continue
+                record_ref = record[1]
+                candidates = [
+                    artifact
+                    for artifact in h.state.artifacts.values()
+                    if any(
+                        ref.target == record_ref and ref.role == "mention"
+                        for ref in artifact.interface.refs
+                    )
+                ]
+                if len(candidates) != 1 or not any(
+                    ref.role == "dependence"
+                    for ref in candidates[0].interface.refs
+                ):
+                    fail(
+                        "attached-evidence",
+                        f"bound source {source.id} lacks one reliability-dependent candidate evidence artifact",
+                    )
+
+            for event in events:
+                if not event.inputs or event.inputs[0] != "dossier-pack-receipt.v1":
+                    continue
+                if len(event.inputs) < 2:
+                    fail("dossier-pack", f"event seq={event.seq}: missing receipt reference")
+                    continue
+                try:
+                    _schema, receipt = h.objects.get(
+                        event.inputs[1], schema="dossier-pack-receipt"
+                    )
+                except Exception as error:  # noqa: BLE001
+                    fail("dossier-pack", f"event seq={event.seq}: {error!r}")
+                    continue
+                source_ids = {source.id for source in dossier.sources}
+                pack_work = h.workflow_state.work_orders.get(
+                    receipt.work_order_ref
+                )
+                if (
+                    receipt.run_input_digest != run_input.run_input_digest
+                    or pack_work is None
+                    or pack_work.run_input_digest != run_input.run_input_digest
+                    or pack_work.problem_ref != dossier.problem_ref
+                    or not receipt.state_fence.startswith(
+                        f"formal:{pack_work.formal_fence_seq};scratch:{pack_work.scratch_fence_seq};"
+                    )
+                    or set(receipt.candidate_source_ids) != source_ids
+                    or len(receipt.selected_source_ids)
+                    > evidence.maximum_sources_per_pack
+                    or sum(excerpt.byte_count for excerpt in receipt.excerpts)
+                    > evidence.maximum_total_bytes
+                    or any(
+                        excerpt.source_id not in source_ids
+                        or excerpt.byte_count
+                        > evidence.maximum_excerpt_bytes_per_source
+                        for excerpt in receipt.excerpts
+                    )
+                ):
+                    fail(
+                        "dossier-pack",
+                        f"event seq={event.seq}: receipt exceeds bound dossier authority",
+                    )
+                for excerpt in receipt.excerpts:
+                    try:
+                        payload = h.blobs.get(excerpt.excerpt_ref)
+                    except Exception as error:  # noqa: BLE001
+                        fail("dossier-pack", f"event seq={event.seq}: {error!r}")
+                    else:
+                        if (
+                            len(payload) != excerpt.byte_count
+                            or sha256_hex(payload) != excerpt.excerpt_sha256
+                        ):
+                            fail(
+                                "dossier-pack",
+                                f"event seq={event.seq}: excerpt identity differs",
+                            )
     for event in events:
         work_order_id = (
             event.llm.work_order_id
@@ -748,7 +943,9 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             and manifest is not None
             and manifest.schema_version in {4, 5}
             and manifest.control_plane_policy is not None
-            and manifest.control_plane_policy.mode == "active_conjecture"
+            and manifest.control_plane_policy.mode in {
+                "active_conjecture", "active_inquiry"
+            }
         )
         if active_conjecture_call and work_order_id is None:
             fail(
@@ -1013,7 +1210,9 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             control = manifest.control_plane_policy
             if (
                 control is None
-                or control.mode not in {"shadow", "active_conjecture"}
+                or control.mode not in {
+                    "shadow", "active_conjecture", "active_inquiry"
+                }
                 or control.conjecture_context.mode == "disabled"
             ):
                 fail(
@@ -1212,7 +1411,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             control = manifest.control_plane_policy
             if (
                 control is None
-                or control.mode != "active_conjecture"
+                or control.mode not in {"active_conjecture", "active_inquiry"}
                 or control.contract_versions.conjecturer_turn_contract
                 not in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
             ):
@@ -1778,7 +1977,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         )
         if (
             control_policy is not None
-            and control_policy.mode == "active_conjecture"
+            and control_policy.mode in {"active_conjecture", "active_inquiry"}
             and e.inputs
             and e.inputs[0] == "conjecture-turn-call"
         ):

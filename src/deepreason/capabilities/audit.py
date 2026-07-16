@@ -87,6 +87,7 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     ]
     for receipt in state.receipts.values():
         compiled = state.compiled[receipt.compiled_specification_ref]
+        work_order = state.work_orders[receipt.simulation_work_order_ref]
         package = next(
             (
                 item
@@ -100,8 +101,10 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                 f"## Receipt {receipt.id}",
                 "",
                 f"Compiled specification: `{compiled.id}`  ",
+                f"Simulation work order: `{work_order.id}`  ",
                 f"Template: `{compiled.template_identity}`  ",
                 f"Operational status: `{receipt.operational_status}`  ",
+                f"Execution disposition: `{receipt.execution_disposition}`  ",
                 f"Backend verdict: `{receipt.final_backend_verdict}`  ",
                 f"Attempts: `{len(receipt.attempts)}`  ",
                 f"Samples in final attempt: `{receipt.attempts[-1].sample_count}`  ",
@@ -211,36 +214,47 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     _write_markdown(target, "Theory-to-Test Lineage", lineage_lines)
     written[target.name] = str(target)
 
-    evidence = manifest.frozen_evidence_policy
+    from deepreason.evidence.state import load_evidence_dossier, load_run_input
+
+    evidence = manifest.inquiry_capability_policy.attached_evidence
+    run_input = load_run_input(root)
+    dossier = load_evidence_dossier(root)
     source_lines = [
         "Tranche A performs no open-web retrieval after manifest freeze.",
         "",
+        f"Run-input digest: `{run_input.run_input_digest}`",
+        f"Evidence dossier digest: `{dossier.dossier_digest}`",
+        f"Evidence policy digest: `{evidence.digest}`",
+        "",
     ]
-    if evidence is not None:
-        source_lines.append(f"Evidence policy digest: `{evidence.digest}`")
-        source_lines.append("")
-        for item in evidence.items:
-            attached = []
-            for artifact in harness.state.artifacts.values():
-                if not artifact.content_ref.startswith("inline:"):
-                    continue
-                try:
-                    value = json.loads(artifact.content_ref.removeprefix("inline:"))
-                except json.JSONDecodeError:
-                    continue
-                if value.get("schema") == "frozen-attached-source.v1" and value.get("alias") == item.alias:
-                    attached.append(artifact.id)
-            source_lines.extend(
-                (
-                    f"## {item.alias}: {item.title}",
-                    "",
-                    f"Class: `{item.source_class}`  ",
-                    f"Locator: `{item.source_locator}`  ",
-                    f"Content SHA-256: `{item.content_sha256}`  ",
-                    f"Attached artifacts: {', '.join(f'`{ref}`' for ref in attached) or 'none'}",
-                    "",
-                )
+    for item in dossier.sources:
+        attached = []
+        for artifact in harness.state.artifacts.values():
+            if not artifact.content_ref.startswith("inline:"):
+                continue
+            try:
+                value = json.loads(artifact.content_ref.removeprefix("inline:"))
+            except json.JSONDecodeError:
+                continue
+            source = value.get("source") if isinstance(value, dict) else None
+            if (
+                value.get("schema") == "attached-source-record.v1"
+                and isinstance(source, dict)
+                and source.get("id") == item.id
+            ):
+                attached.append(artifact.id)
+        source_lines.extend(
+            (
+                f"## {item.id}: {item.title}",
+                "",
+                f"Class: `{item.source_class}`  ",
+                f"Locator: `{item.source_locator}`  ",
+                f"Content SHA-256: `{item.content_sha256}`  ",
+                f"Attached source-record artifacts: {', '.join(f'`{ref}`' for ref in attached) or 'none'}",
+                "Epistemic status: candidate source; attachment does not establish reliability or truth.",
+                "",
             )
+        )
     target = root / "RESEARCH_SOURCE_AUDIT.md"
     _write_markdown(target, "Research Source Audit", source_lines)
     written[target.name] = str(target)

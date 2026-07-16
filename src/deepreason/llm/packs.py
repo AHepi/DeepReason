@@ -421,7 +421,10 @@ def render_conj_pack(
         sections.append(
             _pack_section(
                 "capability-result-context",
-                "SIMULATION RESULT RECEIPT (fresh work; recorded observation only):\n"
+                "RECORDED SIMULATION OBSERVATION (fresh work):\n"
+                "This is the output of the named program under the named inputs and "
+                "execution conditions. It is not a universal fact and does not "
+                "automatically establish the requesting hypothesis.\n"
                 + capability_result_context,
                 3,
                 droppable=False,

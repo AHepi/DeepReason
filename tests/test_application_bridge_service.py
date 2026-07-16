@@ -21,6 +21,14 @@ from deepreason.bridge.events import BridgeAction
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.cli import bridge as bridge_cli
 from deepreason.config import Config
+from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
+from deepreason.evidence import (
+    AttachedSourceProvenanceV1,
+    EvidenceDossierV1,
+    RunInputManifestV1,
+    RunInputProblemV1,
+    bind_run_input,
+)
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
@@ -30,7 +38,9 @@ from deepreason.ontology import Problem, ProblemProvenance
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV1,
+    ContractVersionPolicyV2,
     ControlPlanePolicyV1,
+    ControlPlanePolicyV2,
     SchoolExecutionPolicyV1,
     bind_run_manifest,
     compile_run_manifest,
@@ -50,11 +60,8 @@ def _route() -> dict:
     }
 
 
-def _control_policy(*, schema_version: int = 4) -> ControlPlanePolicyV1:
-    return ControlPlanePolicyV1(
-        controller_version="workflow.controller.v1",
-        mode="active_conjecture",
-        workflow_profile="conjecture.active.v1",
+def _control_policy(*, schema_version: int = 4):
+    common = dict(
         school_execution=SchoolExecutionPolicyV1(
             mode="conditioning_only",
             bindings=(),
@@ -73,20 +80,27 @@ def _control_policy(*, schema_version: int = 4) -> ControlPlanePolicyV1:
             exploration_slot_mandatory=True,
         ),
         workflow_retry=WorkflowRetryPolicyV1(),
+    )
+    if schema_version == 5:
+        return ControlPlanePolicyV2(
+            **common,
+            contract_versions=ContractVersionPolicyV2(),
+        )
+    return ControlPlanePolicyV1(
+        controller_version="workflow.controller.v1",
+        mode="active_conjecture",
+        workflow_profile="conjecture.active.v1",
+        **common,
         contract_versions=ContractVersionPolicyV1(
             bridge_ledger_wire_contract="bridge.ledger.v2",
-            conjecturer_turn_contract=(
-                "conjecturer.turn.v5"
-                if schema_version == 5
-                else "conjecturer.turn.v4"
-            ),
+            conjecturer_turn_contract="conjecturer.turn.v4",
             control_event_schema="control.event.v1",
         ),
         capability_profile="conjecture-control.v1",
     )
 
 
-def _manifest(*, schema_version: int = 3):
+def _manifest(*, schema_version: int = 3, run_input_digest: str | None = None):
     return compile_run_manifest(
         Config(
             scratchpad={"enabled": True},
@@ -111,10 +125,41 @@ def _manifest(*, schema_version: int = 3):
             if schema_version in {4, 5}
             else None
         ),
+        inquiry_capability_policy=(
+            InquiryCapabilityPolicyV1() if schema_version == 5 else None
+        ),
+        run_input_digest=(run_input_digest if schema_version == 5 else None),
     )
 
 
 def _run_root(root, *, schema_version: int = 3):
+    run_input = None
+    if schema_version == 5:
+        provenance = AttachedSourceProvenanceV1(
+            supplied_by="offline bridge fixture",
+            acquisition_method="pre-freeze construction",
+        )
+        dossier = EvidenceDossierV1.create(
+            problem_ref="problem-application-boundary",
+            sources=(),
+            total_byte_count=0,
+            creation_provenance=provenance,
+        )
+        run_input = RunInputManifestV1.create(
+            problem=RunInputProblemV1(
+                id="problem-application-boundary",
+                description="What does the bounded record establish?",
+            ),
+            evidence_dossier_digest=dossier.dossier_digest,
+        )
+        bind_run_input(run_input, dossier, root)
+    bind_run_manifest(
+        _manifest(
+            schema_version=schema_version,
+            run_input_digest=(run_input.run_input_digest if run_input else None),
+        ),
+        root,
+    )
     harness = Harness(root)
     harness.register_problem(
         Problem(
@@ -123,7 +168,6 @@ def _run_root(root, *, schema_version: int = 3):
             provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
         )
     )
-    bind_run_manifest(_manifest(schema_version=schema_version), root)
     return root
 
 

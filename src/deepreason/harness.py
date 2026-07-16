@@ -29,7 +29,7 @@ from deepreason.bridge.state import BridgeState
 from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.capabilities.state import CapabilityReplayState
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.control_events import ControlEventPayloadV1
+from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
 from deepreason.conjecture_turn import (
     ConjectureAbstentionV1,
     ContextRequestV1,
@@ -486,6 +486,26 @@ class Harness:
             addr_add=addr or [],
         )
 
+    def record_dossier_pack_receipt(self, receipt) -> Event:
+        """Persist and expose one advisory evidence-packing receipt."""
+
+        from deepreason.evidence.models import DossierPackReceiptV1
+
+        self._ensure_writable()
+        receipt = DossierPackReceiptV1.model_validate(
+            receipt.model_dump(mode="python", by_alias=True)
+        )
+        self.objects.put("dossier-pack-receipt", receipt)
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[
+                "dossier-pack-receipt.v1",
+                receipt.receipt_digest,
+                *receipt.selected_source_ids,
+            ],
+            outputs=[receipt.receipt_digest],
+        )
+
     def record_scratch_event(
         self,
         payload: ScratchEventPayloadV1,
@@ -771,7 +791,8 @@ class Harness:
             )
         if (
             repair_requested
-            and decision.workflow_profile == "conjecture.active.v1"
+            and decision.workflow_profile
+            in {"conjecture.active.v1", "inquiry.active.v1"}
             and repair_work_order is None
         ):
             raise ValueError(
@@ -798,7 +819,12 @@ class Harness:
             self.objects.put(schema, record)
         outputs = [record.id for _schema, record in records]
         inputs = [decision.work_order_id, decision.trigger_ref]
-        payload = ControlEventPayloadV1(
+        payload_type = (
+            ControlEventPayloadV2
+            if decision.controller_version == "workflow.controller.v2"
+            else ControlEventPayloadV1
+        )
+        payload = payload_type(
             decision_ref=decision.id,
             inputs=inputs,
             outputs=outputs,
@@ -827,6 +853,7 @@ class Harness:
             SimulationGrantV1,
             SimulationProposalV1,
             SimulationResultPackageV1,
+            SimulationWorkOrderV1,
         )
 
         self._ensure_writable()
@@ -845,6 +872,10 @@ class Harness:
             CapabilityLifecycle.COMPILED: (
                 "capability-compiled-simulation",
                 CompiledSimulationV1,
+            ),
+            CapabilityLifecycle.DISPATCHED: (
+                "capability-simulation-work-order",
+                SimulationWorkOrderV1,
             ),
             CapabilityLifecycle.SUCCEEDED: (
                 "capability-simulation-receipt",
@@ -935,7 +966,12 @@ class Harness:
             self.objects.put(schema, record)
         inputs = [observation.id, snapshot.id]
         outputs = [record.id for _schema, record in records]
-        payload = ControlEventPayloadV1(
+        payload_type = (
+            ControlEventPayloadV2
+            if decision.controller_version == "workflow.controller.v2"
+            else ControlEventPayloadV1
+        )
+        payload = payload_type(
             decision_ref=decision.id,
             inputs=inputs,
             outputs=outputs,
@@ -1002,7 +1038,12 @@ class Harness:
             self.objects.put(schema, record)
         inputs = [terminal.id, snapshot.id]
         outputs = [record.id for _schema, record in records]
-        payload = ControlEventPayloadV1(
+        payload_type = (
+            ControlEventPayloadV2
+            if decision.controller_version == "workflow.controller.v2"
+            else ControlEventPayloadV1
+        )
+        payload = payload_type(
             decision_ref=decision.id,
             inputs=inputs,
             outputs=outputs,
@@ -1267,7 +1308,7 @@ class Harness:
         scratch: ScratchEventPayloadV1 | None = None,
         bridge: BridgeEventPayloadV1 | None = None,
         conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
-        control: ControlEventPayloadV1 | None = None,
+        control: ControlEventPayloadV1 | ControlEventPayloadV2 | None = None,
         capability: CapabilityEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()

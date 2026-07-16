@@ -64,6 +64,9 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
     )
     enabled: bool = False
     backend_identity: Literal["simulation-python"] = "simulation-python"
+    runner_profile: Literal[
+        "simulation.declarative.v1", "simulation.container.v1"
+    ] = "simulation.declarative.v1"
     runner_template_identity: Literal[
         "python-numerical-simulation-v1",
         "python-deterministic-sensitivity-v1",
@@ -77,6 +80,8 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
     maximum_generated_code_bytes: int = Field(default=0, ge=0, le=262_144)
     maximum_input_bytes: int = Field(default=0, ge=0, le=8 * 1024 * 1024)
     maximum_output_bytes: int = Field(default=0, ge=0, le=8 * 1024 * 1024)
+    maximum_wall_ms: int = Field(default=0, ge=0, le=300_000)
+    maximum_memory_bytes: int = Field(default=0, ge=0, le=4 * 1024 * 1024 * 1024)
     maximum_steps: int = Field(default=0, ge=0, le=100_000_000)
     maximum_samples: int = Field(default=0, ge=0, le=1_000_000)
     deterministic_seed_policy: Literal[
@@ -96,7 +101,16 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
     @field_validator("fixed_seed_set")
     @classmethod
     def _unique_seeds(cls, value):
-        if len(value) != len(set(value)) or len(value) > 256:
+        if (
+            len(value) != len(set(value))
+            or len(value) > 256
+            or any(
+                isinstance(seed, bool)
+                or not isinstance(seed, int)
+                or not -(2**63) <= seed < 2**63
+                for seed in value
+            )
+        ):
             raise ValueError("fixed simulation seeds must be unique and bounded")
         return tuple(value)
 
@@ -117,6 +131,8 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
             self.maximum_generated_code_bytes,
             self.maximum_input_bytes,
             self.maximum_output_bytes,
+            self.maximum_wall_ms,
+            self.maximum_memory_bytes,
             self.maximum_steps,
             self.maximum_samples,
             self.maximum_follow_up_reasoning_turns,
@@ -223,9 +239,117 @@ class FrozenEvidencePolicyV1(_PolicyModel):
         return hashlib.sha256(canonical_json(payload)).hexdigest()
 
 
+class AttachedEvidencePolicyV1(_PolicyModel):
+    """Finite packing authority for content held by a bound run input."""
+
+    schema_: Literal["attached-evidence-policy.v1"] = Field(
+        "attached-evidence-policy.v1", alias="schema"
+    )
+    enabled: bool = False
+    maximum_sources: int = Field(default=0, ge=0, le=1_000)
+    maximum_total_bytes: int = Field(default=0, ge=0, le=64 * 1024 * 1024)
+    maximum_excerpt_bytes_per_source: int = Field(default=0, ge=0, le=262_144)
+    maximum_sources_per_pack: int = Field(default=0, ge=0, le=1_000)
+
+    @model_validator(mode="after")
+    def _finite_shape(self):
+        bounds = (
+            self.maximum_sources,
+            self.maximum_total_bytes,
+            self.maximum_excerpt_bytes_per_source,
+            self.maximum_sources_per_pack,
+        )
+        if self.enabled:
+            if not all(bounds):
+                raise ValueError("enabled attached evidence requires finite positive bounds")
+            if self.maximum_sources_per_pack > self.maximum_sources:
+                raise ValueError("evidence pack source bound exceeds dossier source bound")
+        elif any(bounds):
+            raise ValueError("disabled attached evidence must have zero bounds")
+        return self
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(
+            canonical_json(self.model_dump(mode="json", by_alias=True))
+        ).hexdigest()
+
+
+class FormalizationCapabilityPolicyV1(_PolicyModel):
+    schema_: Literal["formalization-capability-policy.v1"] = Field(
+        "formalization-capability-policy.v1", alias="schema"
+    )
+    enabled: bool = False
+    lean_toolchain_identity: str = Field(default="disabled", min_length=1, max_length=128)
+    maximum_executions: int = Field(default=0, ge=0, le=1_000)
+
+    @model_validator(mode="after")
+    def _finite_shape(self):
+        if self.enabled:
+            if self.lean_toolchain_identity == "disabled" or not self.maximum_executions:
+                raise ValueError("enabled formalization requires a toolchain and finite budget")
+        elif self.lean_toolchain_identity != "disabled" or self.maximum_executions:
+            raise ValueError("disabled formalization cannot bind authority")
+        return self
+
+
+class ResearchCapabilityPolicyV1(_PolicyModel):
+    schema_: Literal["research-capability-policy.v1"] = Field(
+        "research-capability-policy.v1", alias="schema"
+    )
+    enabled: bool = False
+    backend_identity: str = Field(default="disabled", min_length=1, max_length=128)
+    maximum_requests: int = Field(default=0, ge=0, le=10_000)
+    maximum_sources: int = Field(default=0, ge=0, le=10_000)
+
+    @model_validator(mode="after")
+    def _finite_shape(self):
+        if self.enabled:
+            if self.backend_identity == "disabled" or not all(
+                (self.maximum_requests, self.maximum_sources)
+            ):
+                raise ValueError("enabled research requires a backend and finite bounds")
+        elif self.backend_identity != "disabled" or any(
+            (self.maximum_requests, self.maximum_sources)
+        ):
+            raise ValueError("disabled research cannot bind authority")
+        return self
+
+
+class InquiryCapabilityPolicyV1(_PolicyModel):
+    """The complete, opt-in A-tranche capability topology."""
+
+    schema_: Literal["inquiry-capability-policy.v1"] = Field(
+        "inquiry-capability-policy.v1", alias="schema"
+    )
+    capability_profile: Literal["inquiry-capabilities.v1"] = "inquiry-capabilities.v1"
+    attached_evidence: AttachedEvidencePolicyV1 = Field(
+        default_factory=AttachedEvidencePolicyV1
+    )
+    simulation: SimulationCapabilityPolicyV1 = Field(
+        default_factory=SimulationCapabilityPolicyV1
+    )
+    formalization: FormalizationCapabilityPolicyV1 = Field(
+        default_factory=FormalizationCapabilityPolicyV1
+    )
+    research: ResearchCapabilityPolicyV1 = Field(
+        default_factory=ResearchCapabilityPolicyV1
+    )
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(
+            canonical_json(self.model_dump(mode="json", by_alias=True))
+        ).hexdigest()
+
+
 __all__ = [
+    "AttachedEvidencePolicyV1",
+    "FormalizationCapabilityPolicyV1",
     "FrozenEvidenceItemV1",
     "FrozenEvidencePolicyV1",
+    "InquiryCapabilityPolicyV1",
+    "ResearchCapabilityPolicyV1",
     "SimulationCapabilityPolicyV1",
     "SimulationInputBindingV1",
 ]

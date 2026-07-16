@@ -303,7 +303,19 @@ def _kill(process: subprocess.Popen[bytes]) -> None:
         pass
 
 
-def _run_worker(payload: dict[str, Any]) -> tuple[Literal["pass", "fail", "overrun"], dict, bytes]:
+def _run_worker(
+    payload: dict[str, Any],
+    *,
+    maximum_wall_ms: int = (_CPU_SECONDS + _WALL_GRACE_SECONDS) * 1_000,
+    maximum_memory_bytes: int = _MEMORY_LIMIT,
+) -> tuple[Literal["pass", "fail", "overrun"], dict, bytes]:
+    payload = {
+        **payload,
+        "_resource_limits": {
+            "maximum_wall_ms": maximum_wall_ms,
+            "maximum_memory_bytes": maximum_memory_bytes,
+        },
+    }
     request = canonical_json(payload)
     if len(request) > _IPC_LIMIT:
         return "overrun", {"sandbox_abort": "request exceeds IPC limit"}, b"[]"
@@ -317,7 +329,10 @@ def _run_worker(payload: dict[str, Any]) -> tuple[Literal["pass", "fail", "overr
         start_new_session=(os.name == "posix"),
     )
     try:
-        stdout, stderr = process.communicate(request, timeout=_CPU_SECONDS + _WALL_GRACE_SECONDS)
+        stdout, stderr = process.communicate(
+            request,
+            timeout=maximum_wall_ms / 1_000,
+        )
     except subprocess.TimeoutExpired:
         _kill(process)
         process.communicate()
@@ -349,12 +364,12 @@ def _run_worker(payload: dict[str, Any]) -> tuple[Literal["pass", "fail", "overr
     return verdict, trace, output
 
 
-def _apply_worker_limits() -> None:
+def _apply_worker_limits(*, memory_bytes: int, cpu_seconds: int) -> None:
     try:
         import resource
 
-        resource.setrlimit(resource.RLIMIT_AS, (_MEMORY_LIMIT, _MEMORY_LIMIT))
-        resource.setrlimit(resource.RLIMIT_CPU, (_CPU_SECONDS, _CPU_SECONDS + 1))
+        resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds + 1))
     except (ImportError, OSError, ValueError):
         pass
 
@@ -368,9 +383,24 @@ def _worker_main() -> int:
             "output": [],
         }))
         return 0
-    _apply_worker_limits()
     try:
         payload = json.loads(raw)
+        limits = payload.pop("_resource_limits")
+        wall_ms = limits["maximum_wall_ms"]
+        memory_bytes = limits["maximum_memory_bytes"]
+        if (
+            isinstance(wall_ms, bool)
+            or not isinstance(wall_ms, int)
+            or not 1 <= wall_ms <= 300_000
+            or isinstance(memory_bytes, bool)
+            or not isinstance(memory_bytes, int)
+            or not 1 <= memory_bytes <= 4 * 1024 * 1024 * 1024
+        ):
+            raise ValueError("invalid trusted worker resource limits")
+        _apply_worker_limits(
+            memory_bytes=memory_bytes,
+            cpu_seconds=max(1, math.ceil(wall_ms / 1_000)),
+        )
         result = _local_run(**payload)
     except (MemoryError, _StepExceeded):
         result = {
@@ -392,10 +422,22 @@ def _worker_main() -> int:
 class SimulationBackend:
     name = "simulation-python"
 
-    def __init__(self, toolchain_id: str | None = None) -> None:
+    def __init__(
+        self,
+        toolchain_id: str | None = None,
+        *,
+        maximum_wall_ms: int = (_CPU_SECONDS + _WALL_GRACE_SECONDS) * 1_000,
+        maximum_memory_bytes: int = _MEMORY_LIMIT,
+    ) -> None:
         self.toolchain_id = toolchain_id or (
             f"python@{sys.version_info.major}.{sys.version_info.minor}"
         )
+        if not 1 <= maximum_wall_ms <= 300_000:
+            raise ValueError("simulation wall limit must be finite and positive")
+        if not 1 <= maximum_memory_bytes <= 4 * 1024 * 1024 * 1024:
+            raise ValueError("simulation memory limit must be finite and positive")
+        self.maximum_wall_ms = maximum_wall_ms
+        self.maximum_memory_bytes = maximum_memory_bytes
 
     def fingerprint(self) -> dict[str, Any]:
         version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
@@ -413,9 +455,9 @@ class SimulationBackend:
 
         return {
             "ipc_bytes": _IPC_LIMIT,
-            "memory_bytes": _MEMORY_LIMIT,
-            "cpu_seconds": _CPU_SECONDS,
-            "wall_grace_seconds": _WALL_GRACE_SECONDS,
+            "memory_bytes": self.maximum_memory_bytes,
+            "cpu_seconds": max(1, math.ceil(self.maximum_wall_ms / 1_000)),
+            "wall_ms": self.maximum_wall_ms,
             "filesystem": "no candidate file builtins",
             "network": False,
         }
@@ -496,7 +538,11 @@ class SimulationBackend:
             "step_limit": request.spec.deterministic_step_limit,
             "sample_limit": request.spec.sample_limit,
         }
-        verdict, trace, output = _run_worker(payload)
+        verdict, trace, output = _run_worker(
+            payload,
+            maximum_wall_ms=self.maximum_wall_ms,
+            maximum_memory_bytes=self.maximum_memory_bytes,
+        )
         try:
             sample_count = len(json.loads(output))
         except (TypeError, json.JSONDecodeError):

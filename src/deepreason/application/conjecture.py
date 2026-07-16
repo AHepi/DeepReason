@@ -84,10 +84,10 @@ class ConjectureApplicationBoundary:
                 advisory_context_ref=advisory_context_ref,
             )
         except Exception:
-            if observer.profile.mode == "active_conjecture":
+            if observer.profile.mode in {"active_conjecture", "active_inquiry"}:
                 raise
             return None
-        authoritative = observer.profile.mode == "active_conjecture"
+        authoritative = observer.profile.mode in {"active_conjecture", "active_inquiry"}
         trace = ConjectureControlTrace(
             harness,
             ticket,

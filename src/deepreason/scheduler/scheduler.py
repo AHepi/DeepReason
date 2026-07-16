@@ -288,7 +288,7 @@ class Scheduler:
             or manifest.schema_version not in {4, 5}
             or manifest.control_plane_policy is None
             or manifest.control_plane_policy.mode
-            not in {"shadow", "active_conjecture"}
+            not in {"shadow", "active_conjecture", "active_inquiry"}
         ):
             raise RuntimeError(
                 "unfinished workflow authority requires its original v4 manifest"
@@ -394,7 +394,8 @@ class Scheduler:
             manifest is not None
             and manifest.schema_version in {4, 5}
             and manifest.control_plane_policy is not None
-            and manifest.control_plane_policy.mode == "active_conjecture"
+            and manifest.control_plane_policy.mode
+            in {"active_conjecture", "active_inquiry"}
         )
 
     def _rehydrate_resumed_stop_controller(self) -> None:
@@ -764,7 +765,7 @@ class Scheduler:
         scratch = manifest.scratch_policy
         if (
             control is None
-            or control.mode != "active_conjecture"
+            or control.mode not in {"active_conjecture", "active_inquiry"}
             or control.conjecture_context.mode == "disabled"
             or scratch is None
             or not scratch.enabled
@@ -1077,6 +1078,187 @@ class Scheduler:
                 )
             self._arg_crit_this_cycle += len(expected)
 
+    def _simulation_capability_step(self) -> bool:
+        """Execute or consume at most one replay-derived capability item."""
+
+        manifest = self.run_manifest
+        if (
+            manifest is None
+            or manifest.schema_version != 5
+            or manifest.control_plane_policy is None
+            or manifest.control_plane_policy.mode != "active_inquiry"
+            or manifest.inquiry_capability_policy is None
+        ):
+            return False
+
+        from deepreason.capabilities.enums import CapabilityLifecycle
+        from deepreason.capabilities.simulation import SimulationCapabilityController
+
+        controller = SimulationCapabilityController(self.harness, manifest)
+        state = self.harness.capability_state
+        consumed_packages = {
+            item.result_package_ref for item in state.consumptions.values()
+        }
+        available_packages = [
+            package
+            for package in state.result_packages.values()
+            if package.id not in consumed_packages
+            and state.transitions[
+                state.current_transition_by_request[package.proposal_ref]
+            ].lifecycle
+            == CapabilityLifecycle.RESULT_PACKAGED
+        ]
+        if available_packages:
+            package = min(
+                available_packages,
+                key=lambda item: (
+                    state.proposals[item.proposal_ref].source_call_seq,
+                    state.proposals[item.proposal_ref].proposal_index,
+                    item.id,
+                ),
+            )
+            proposal = state.proposals[package.proposal_ref]
+            parent = self.harness.workflow_state.work_orders.get(
+                proposal.originating_work_order_ref
+            )
+            if parent is None:
+                raise WorkflowAuthorizationError(
+                    "simulation result has no durable originating work order"
+                )
+            if parent.run_input_digest != manifest.run_input_digest:
+                raise WorkflowAuthorizationError(
+                    "simulation result parent belongs to another run input"
+                )
+            from deepreason.llm.firewall import (
+                resolve_school_role_lease,
+                route_fingerprint,
+                select_lease,
+            )
+
+            lease = (
+                resolve_school_role_lease(
+                    manifest,
+                    self.adapter.leases,
+                    school_id=parent.school_id,
+                    role="conjecturer",
+                )
+                if parent.school_id is not None
+                else select_lease(
+                    self.adapter.leases, "conjecturer", parent.route_lease.seat
+                )
+            )
+            if (
+                lease.route.endpoint_id != parent.route_lease.endpoint_id
+                or route_fingerprint(lease.route) != parent.route_lease.route_sha256
+            ):
+                raise WorkflowAuthorizationError(
+                    "simulation result follow-up route differs from parent work"
+                )
+            from deepreason.workflow.trace import build_capability_follow_up_trace
+
+            fence = max(0, self.harness._next_seq - 1)
+            trace = build_capability_follow_up_trace(
+                self.harness,
+                parent,
+                result_package_ref=package.id,
+                result_context_ref=package.result_context_ref,
+                formal_fence_seq=fence,
+                scratch_fence_seq=fence,
+                authoritative=True,
+                error_sink=lambda error: self._record_workflow_shadow_error(
+                    problem_ref=parent.problem_ref,
+                    school_id=parent.school_id,
+                    event_start_seq=self.harness._next_seq,
+                    error=error,
+                    work_order_id=parent.id,
+                ),
+            )
+            self.harness.record_measure(
+                inputs=["cycle", str(self._cycles), f"simulation-result:{package.id}"]
+            )
+            try:
+                conj(
+                    self.harness,
+                    parent.problem_ref,
+                    self.adapter,
+                    self.config,
+                    self.diagnostics,
+                    school=(
+                        self._school_dict(parent.school_id)
+                        if parent.school_id is not None
+                        else None
+                    ),
+                    embedder=self.embedder,
+                    workload_profile=self.workload_profile,
+                    endpoint_lease=lease if parent.school_id is not None else None,
+                    execution_school_id=parent.school_id,
+                    run_manifest=manifest,
+                    workflow_control_trace=trace,
+                    _capability_result_context=controller.result_context(package),
+                    _simulation_follow_up_index=1,
+                )
+            except (SchemaRepairError, EndpointError) as error:
+                self._drop(error)
+                trace.abandon(f"simulation-result-provider-failure:{package.id}")
+            if trace.dispatch_authorized:
+                proposal_transition = state.transitions[
+                    state.current_transition_by_request[proposal.id]
+                ]
+                controller.consume(
+                    package,
+                    follow_up_work_order_ref=trace.ticket.work_order.id,
+                    formal_fence_seq=proposal_transition.formal_fence_seq,
+                    scratch_fence_seq=proposal_transition.scratch_fence_seq,
+                )
+            return True
+
+        interrupted = [
+            proposal
+            for proposal in state.proposals.values()
+            if state.transitions[
+                state.current_transition_by_request[proposal.id]
+            ].lifecycle
+            == CapabilityLifecycle.DISPATCHED
+        ]
+        if interrupted:
+            proposal = min(
+                interrupted,
+                key=lambda item: (
+                    item.source_call_seq,
+                    item.proposal_index,
+                    item.id,
+                ),
+            )
+            self.harness.record_measure(
+                inputs=[
+                    "cycle",
+                    str(self._cycles),
+                    f"simulation-interrupted:{proposal.id}",
+                ]
+            )
+            controller.recover_interrupted(proposal)
+            return True
+
+        pending = [
+            proposal
+            for proposal in state.proposals.values()
+            if state.transitions[
+                state.current_transition_by_request[proposal.id]
+            ].lifecycle
+            == CapabilityLifecycle.PROPOSED
+        ]
+        if not pending:
+            return False
+        proposal = min(
+            pending,
+            key=lambda item: (item.source_call_seq, item.proposal_index, item.id),
+        )
+        self.harness.record_measure(
+            inputs=["cycle", str(self._cycles), f"simulation-request:{proposal.id}"]
+        )
+        controller.execute(proposal)
+        return True
+
     def step(self) -> None:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
@@ -1095,6 +1277,9 @@ class Scheduler:
             )
         if self.controller is not None:
             self.controller.step()  # calibrate generator knobs from process signals
+        if self._simulation_capability_step():
+            self._cycles += 1
+            return
         scan_spawns(harness, config)
         problem = self._select_problem()
         # Heartbeat: every event that follows (by seq) until the next
@@ -1320,7 +1505,7 @@ class Scheduler:
                                     and self.run_manifest.schema_version in {4, 5}
                                     and self.run_manifest.control_plane_policy is not None
                                     and self.run_manifest.control_plane_policy.mode
-                                    == "active_conjecture"
+                                    in {"active_conjecture", "active_inquiry"}
                                     else None
                                 ),
                             )
@@ -1894,8 +2079,9 @@ class Scheduler:
         )
         if (
             control is None
-            or control.controller_version != "workflow.controller.v1"
-            or control.mode not in {"shadow", "active_conjecture"}
+            or control.controller_version
+            not in {"workflow.controller.v1", "workflow.controller.v2"}
+            or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
         ):
             write_stop_record(
                 self.harness.root,

@@ -1,0 +1,8 @@
+{
+  "schema": "autonomous-preflight-expected-failure.v1",
+  "code": "AUTONOMOUS_CAPABILITY_TOPOLOGY_UNAVAILABLE",
+  "manifest_frozen": false,
+  "run_root_created": false,
+  "provider_calls": 0,
+  "permitted_missing_capabilities": ["simulation", "research", "formalization", "code"]
+}

@@ -8,18 +8,27 @@ import threading
 from deepreason.application import OperatorCancellationIntentV1
 from deepreason import mcp_server
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
+from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
 from deepreason.cli.main import main as cli_main
 from deepreason.config import Config
+from deepreason.evidence import (
+    AttachedSourceProvenanceV1,
+    EvidenceDossierV1,
+    RunInputManifestV1,
+    RunInputProblemV1,
+    bind_run_input,
+)
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
-    ContractVersionPolicyV1,
-    ControlPlanePolicyV1,
+    ContractVersionPolicyV2,
+    ControlPlanePolicyV2,
     SchoolExecutionPolicyV1,
     ToolchainEntry,
     compile_run_manifest,
     write_run_manifest,
 )
 from deepreason.verification.models import VerificationResult
+from deepreason.workloads.text import spec_from_text
 
 
 def _manifest(tmp_path):
@@ -41,7 +50,7 @@ def _manifest(tmp_path):
     return manifest, path
 
 
-def _manifest_v5(tmp_path):
+def _manifest_v5(tmp_path, run_root, *, problem_id: str, problem_text: str):
     route = {
         "endpoint_id": "v5-offline-fixture",
         "endpoint": "https://example.invalid/v1",
@@ -49,10 +58,22 @@ def _manifest_v5(tmp_path):
         "provider": "ollama",
         "family": "gemma",
     }
-    control = ControlPlanePolicyV1(
-        controller_version="workflow.controller.v1",
-        mode="active_conjecture",
-        workflow_profile="conjecture.active.v1",
+    provenance = AttachedSourceProvenanceV1(
+        supplied_by="offline MCP fixture",
+        acquisition_method="pre-freeze construction",
+    )
+    dossier = EvidenceDossierV1.create(
+        problem_ref=problem_id,
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=provenance,
+    )
+    run_input = RunInputManifestV1.create(
+        problem=RunInputProblemV1(id=problem_id, description=problem_text),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, run_root)
+    control = ControlPlanePolicyV2(
         school_execution=SchoolExecutionPolicyV1(
             mode="conditioning_only",
             bindings=(),
@@ -71,12 +92,7 @@ def _manifest_v5(tmp_path):
             exploration_slot_mandatory=False,
         ),
         workflow_retry=WorkflowRetryPolicyV1(),
-        contract_versions=ContractVersionPolicyV1(
-            bridge_ledger_wire_contract="bridge.ledger.v2",
-            conjecturer_turn_contract="conjecturer.turn.v5",
-            control_event_schema="control.event.v1",
-        ),
-        capability_profile="conjecture-control.v1",
+        contract_versions=ContractVersionPolicyV2(),
     )
     manifest = compile_run_manifest(
         Config(roles={"conjecturer": route}),
@@ -85,6 +101,8 @@ def _manifest_v5(tmp_path):
         schema_version=5,
         workload_profile="text",
         control_plane_policy=control,
+        inquiry_capability_policy=InquiryCapabilityPolicyV1(),
+        run_input_digest=run_input.run_input_digest,
     )
     path, _ = write_run_manifest(manifest, tmp_path / "manifest-v5.json")
     return manifest, path
@@ -163,7 +181,15 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
 
 
 def test_v5_text_run_writes_canonical_capability_audits(tmp_path, monkeypatch):
-    manifest, manifest_path = _manifest_v5(tmp_path)
+    root = tmp_path / "run-v5"
+    problem_text = "When is a simulation discriminating?"
+    problem_id = spec_from_text(problem_text).problem.id
+    manifest, manifest_path = _manifest_v5(
+        tmp_path,
+        root,
+        problem_id=problem_id,
+        problem_text=problem_text,
+    )
 
     def fake_run(
         harness, _config, _cycles, token_budget, on_cycle, run_manifest,
@@ -178,14 +204,13 @@ def test_v5_text_run_writes_canonical_capability_audits(tmp_path, monkeypatch):
         )
 
     monkeypatch.setattr("deepreason.ops.run_scheduler", fake_run)
-    root = tmp_path / "run-v5"
     _payload(
         _call(
             "start_run",
             {
                 "root": str(root),
                 "workload": "text",
-                "problem": {"description": "When is a simulation discriminating?"},
+                "problem": {"description": problem_text},
                 "run_manifest_ref": str(manifest_path),
                 "budget": {"cycles": 1, "token_budget": "unlimited"},
             },

@@ -64,17 +64,17 @@ def build_parser() -> argparse.ArgumentParser:
     compile_cmd.add_argument(
         "--control-plane-policy",
         default=None,
-        help="ControlPlanePolicyV1 JSON file (required with --schema-version 4 or 5)",
+        help="ControlPlanePolicyV1 (v4) or ControlPlanePolicyV2 (v5) JSON file",
     )
     compile_cmd.add_argument(
-        "--simulation-capability-policy",
+        "--inquiry-capability-policy",
         default=None,
-        help="v5 SimulationCapabilityPolicyV1 JSON file",
+        help="v5 InquiryCapabilityPolicyV1 JSON file",
     )
     compile_cmd.add_argument(
-        "--frozen-evidence-policy",
+        "--run-input-digest",
         default=None,
-        help="v5 FrozenEvidencePolicyV1 JSON file",
+        help="exact RunInputManifestV1 digest required by schema v5",
     )
     compile_cmd.add_argument(
         "--simulation-toolchain",
@@ -370,37 +370,38 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.llm.capabilities import CapabilityCache
         from deepreason.run_manifest import (
             ControlPlanePolicyV1,
+            ControlPlanePolicyV2,
             RunManifestError,
             ToolchainEntry,
             compile_run_manifest,
             render_role_matrix,
             write_run_manifest,
         )
-        from deepreason.capabilities.policy import (
-            FrozenEvidencePolicyV1,
-            SimulationCapabilityPolicyV1,
-        )
+        from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
 
         configured = load_config(Path(args.config) if args.config else None)
         control_plane_policy = None
         if args.control_plane_policy:
             try:
-                control_plane_policy = ControlPlanePolicyV1.model_validate_json(
+                control_model = (
+                    ControlPlanePolicyV2
+                    if args.schema_version == 5
+                    else ControlPlanePolicyV1
+                )
+                control_plane_policy = control_model.model_validate_json(
                     Path(args.control_plane_policy).read_bytes()
                 )
             except (OSError, ValueError) as error:
                 print(f"invalid control-plane policy: {error}", file=sys.stderr)
                 return 1
-        simulation_capability_policy = None
-        frozen_evidence_policy = None
+        inquiry_capability_policy = None
         toolchains = ()
         typed_files = (
             (
-                "simulation-capability",
-                args.simulation_capability_policy,
-                SimulationCapabilityPolicyV1,
+                "inquiry-capability",
+                args.inquiry_capability_policy,
+                InquiryCapabilityPolicyV1,
             ),
-            ("frozen-evidence", args.frozen_evidence_policy, FrozenEvidencePolicyV1),
             ("simulation-toolchain", args.simulation_toolchain, ToolchainEntry),
         )
         parsed = {}
@@ -412,8 +413,7 @@ def _main(argv: list[str] | None = None) -> int:
             except (OSError, ValueError) as error:
                 print(f"invalid {label} policy: {error}", file=sys.stderr)
                 return 1
-        simulation_capability_policy = parsed.get("simulation-capability")
-        frozen_evidence_policy = parsed.get("frozen-evidence")
+        inquiry_capability_policy = parsed.get("inquiry-capability")
         if parsed.get("simulation-toolchain") is not None:
             toolchains = (parsed["simulation-toolchain"],)
         try:
@@ -432,8 +432,8 @@ def _main(argv: list[str] | None = None) -> int:
                 output_profile=args.output_profile,
                 toolchains=toolchains,
                 control_plane_policy=control_plane_policy,
-                simulation_capability_policy=simulation_capability_policy,
-                frozen_evidence_policy=frozen_evidence_policy,
+                inquiry_capability_policy=inquiry_capability_policy,
+                run_input_digest=args.run_input_digest,
             )
         except (RunManifestError, ValueError) as error:
             print(str(error), file=sys.stderr)

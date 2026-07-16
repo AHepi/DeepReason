@@ -119,6 +119,7 @@ class ConjectureControlTrace:
             )
             issued = TransitionDecisionV1.create(
                 manifest_digest=original_issued.manifest_digest,
+                controller_version=original_issued.controller_version,
                 workflow_profile=original_issued.workflow_profile,
                 previous_process_digest=enabled_state.digest,
                 trigger_kind=original_issued.trigger_kind,
@@ -356,6 +357,7 @@ class ConjectureControlTrace:
                 for outcome in parent_grant.allowed_outcomes
             )
             grant = CapabilityGrantV1.create(
+                profile_id=parent_grant.profile_id,
                 allowed_outcomes=allowed,
                 max_candidates=parent_grant.max_candidates,
                 max_local_repairs=parent_grant.max_local_repairs,
@@ -400,6 +402,7 @@ class ConjectureControlTrace:
             )
             enabled = TransitionDecisionV1.create(
                 manifest_digest=work.manifest_digest,
+                controller_version=work.controller_version,
                 workflow_profile=work.workflow_profile,
                 previous_process_digest=initial.digest,
                 trigger_kind=TriggerKind.PROBLEM_SELECTED,
@@ -417,6 +420,7 @@ class ConjectureControlTrace:
             )
             issued = TransitionDecisionV1.create(
                 manifest_digest=work.manifest_digest,
+                controller_version=work.controller_version,
                 workflow_profile=work.workflow_profile,
                 previous_process_digest=enabled_state.digest,
                 trigger_kind=TriggerKind.CONTEXT_PREPARED,
@@ -507,6 +511,7 @@ class ConjectureControlTrace:
             )
             enabled = TransitionDecisionV1.create(
                 manifest_digest=work.manifest_digest,
+                controller_version=work.controller_version,
                 workflow_profile=work.workflow_profile,
                 previous_process_digest=initial.digest,
                 trigger_kind=TriggerKind.PROBLEM_SELECTED,
@@ -524,6 +529,7 @@ class ConjectureControlTrace:
             )
             issued = TransitionDecisionV1.create(
                 manifest_digest=work.manifest_digest,
+                controller_version=work.controller_version,
                 workflow_profile=work.workflow_profile,
                 previous_process_digest=enabled_state.digest,
                 trigger_kind=TriggerKind.CONTEXT_PREPARED,
@@ -768,4 +774,111 @@ class ConjectureControlTrace:
             self._report(error)
 
 
-__all__ = ["ConjectureControlTrace"]
+def build_capability_follow_up_trace(
+    harness,
+    parent: WorkOrderEnvelopeV1,
+    *,
+    result_package_ref: str,
+    result_context_ref: str,
+    formal_fence_seq: int,
+    scratch_fence_seq: int,
+    authoritative: bool,
+    error_sink=None,
+) -> ConjectureControlTrace:
+    """Reconstruct fresh result-consumption authority from durable parent work."""
+
+    parent = WorkOrderEnvelopeV1.model_validate(
+        parent.model_dump(mode="python", by_alias=True)
+    )
+    inputs = tuple(dict.fromkeys((*parent.input_refs, parent.id, result_package_ref)))
+    values = parent.model_dump(
+        mode="python",
+        by_alias=True,
+        exclude={
+            "id",
+            "formal_fence_seq",
+            "scratch_fence_seq",
+            "input_refs",
+            "advisory_context_ref",
+            "task_payload_schema_id",
+            "task_payload_ref",
+            "task_payload_value",
+        },
+    )
+    work = WorkOrderEnvelopeV1.create(
+        **values,
+        formal_fence_seq=formal_fence_seq,
+        scratch_fence_seq=scratch_fence_seq,
+        input_refs=inputs,
+        advisory_context_ref=None,
+        task_payload_schema_id="simulation-result-context.v1",
+        task_payload_value={
+            "parent_work_order_ref": parent.id,
+            "result_package_ref": result_package_ref,
+            "result_context_ref": result_context_ref,
+        },
+    )
+    if work.id == parent.id:
+        raise ValueError("capability result follow-up must use fresh work")
+    initial = WorkflowProcessStateV1.initial(
+        manifest_digest=work.manifest_digest,
+        workflow_profile=work.workflow_profile,
+        formal_fence_seq=formal_fence_seq,
+        scratch_fence_seq=scratch_fence_seq,
+    )
+    enabled_state = state_after_transition(
+        initial,
+        transition_kind=TransitionKind.WORK_ENABLED,
+        work_order_id=work.id,
+        trigger_ref=work.problem_ref,
+    )
+    enabled = TransitionDecisionV1.create(
+        manifest_digest=work.manifest_digest,
+        controller_version=work.controller_version,
+        workflow_profile=work.workflow_profile,
+        previous_process_digest=initial.digest,
+        trigger_kind=TriggerKind.PROBLEM_SELECTED,
+        trigger_ref=work.problem_ref,
+        transition_kind=TransitionKind.WORK_ENABLED,
+        work_order_id=work.id,
+        route_lease=work.route_lease,
+        next_process_digest=enabled_state.digest,
+    )
+    issued_state = state_after_transition(
+        enabled_state,
+        transition_kind=TransitionKind.WORK_ISSUED,
+        work_order_id=work.id,
+        trigger_ref=work.id,
+    )
+    issued = TransitionDecisionV1.create(
+        manifest_digest=work.manifest_digest,
+        controller_version=work.controller_version,
+        workflow_profile=work.workflow_profile,
+        previous_process_digest=enabled_state.digest,
+        trigger_kind=TriggerKind.CONTEXT_PREPARED,
+        trigger_ref=work.id,
+        transition_kind=TransitionKind.WORK_ISSUED,
+        work_order_id=work.id,
+        route_lease=work.route_lease,
+        next_process_digest=issued_state.digest,
+    )
+    planning = (enabled, issued)
+    ticket = ShadowTicketV1.create(
+        work_order=work,
+        initial_process_state=initial,
+        process_state=issued_state,
+        planning_decisions=planning,
+        expected_decision_refs=tuple(item.id for item in planning),
+        expected_transition_kinds=tuple(item.transition_kind for item in planning),
+        event_start_seq=harness._next_seq,
+        meter_before=None,
+    )
+    return ConjectureControlTrace(
+        harness,
+        ticket,
+        error_sink=error_sink,
+        authoritative=authoritative,
+    )
+
+
+__all__ = ["ConjectureControlTrace", "build_capability_follow_up_trace"]

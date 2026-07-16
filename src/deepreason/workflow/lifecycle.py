@@ -30,7 +30,7 @@ def outstanding_work_snapshot(
     *,
     manifest_digest: str,
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1"
+        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
     ],
     event_fence_seq: int,
 ) -> WorkflowLifecycleSnapshotV1:
@@ -91,10 +91,10 @@ def build_stopped_lifecycle(
     *,
     manifest_digest: str,
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1"
+        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
     ],
     workflow_profile: Literal[
-        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1"
+        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
     ],
     policy: StopPolicy,
     metrics: StopMetrics,
@@ -174,9 +174,9 @@ def build_resumed_lifecycle(
     workflow_state: Any,
     *,
     manifest_digest: str,
-    controller_version: Literal["workflow.controller.v1"],
+    controller_version: Literal["workflow.controller.v1", "workflow.controller.v2"],
     workflow_profile: Literal[
-        "conjecture.shadow.v1", "conjecture.active.v1"
+        "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
     ],
     workflow_checkpoint_digest: str,
     run_checkpoint_digest: str,

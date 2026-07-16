@@ -113,7 +113,9 @@ class WorkflowProcessStateV1(WorkflowRecord):
         "workflow.process-state.v1", alias="schema"
     )
     manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
-    workflow_profile: Literal["conjecture.shadow.v1", "conjecture.active.v1"]
+    workflow_profile: Literal[
+        "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+    ]
     phase: Literal["conjecture"] = "conjecture"
     selected_problem_ref: str | None = Field(default=None, max_length=512)
     formal_fence_seq: int = Field(ge=0)
@@ -153,7 +155,7 @@ class WorkflowProcessStateV1(WorkflowRecord):
         *,
         manifest_digest: str,
         workflow_profile: Literal[
-            "conjecture.shadow.v1", "conjecture.active.v1"
+            "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
         ],
         formal_fence_seq: int,
         scratch_fence_seq: int,

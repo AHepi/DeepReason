@@ -37,9 +37,15 @@ def _owned_v4_control(manifest):
     )
     if (
         control is None
-        or control.controller_version != "workflow.controller.v1"
-        or control.mode not in {"shadow", "active_conjecture"}
-        or control.contract_versions.control_event_schema != "control.event.v1"
+        or control.controller_version
+        not in {"workflow.controller.v1", "workflow.controller.v2"}
+        or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
+        or control.contract_versions.control_event_schema
+        != (
+            "control.event.v2"
+            if manifest.schema_version == 5
+            else "control.event.v1"
+        )
     ):
         return None
     return control

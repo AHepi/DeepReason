@@ -32,6 +32,7 @@ from pydantic import (
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.capabilities.policy import (
+    InquiryCapabilityPolicyV1,
     FrozenEvidencePolicyV1,
     SimulationCapabilityPolicyV1,
 )
@@ -570,9 +571,25 @@ class ContractVersionPolicyV1(BaseModel):
 
     bridge_ledger_wire_contract: Literal["bridge.ledger.v1", "bridge.ledger.v2"]
     conjecturer_turn_contract: Literal[
-        "conjecturer.legacy.v1", "conjecturer.turn.v4", "conjecturer.turn.v5"
+        "conjecturer.legacy.v1", "conjecturer.turn.v4"
     ]
     control_event_schema: Literal["none", "control.event.v1"]
+
+
+class ContractVersionPolicyV2(BaseModel):
+    """Exact wire contracts selected by an active-inquiry v5 manifest."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    bridge_ledger_wire_contract: Literal["bridge.ledger.v2"] = "bridge.ledger.v2"
+    conjecturer_turn_contract: Literal["conjecturer.turn.v5"] = "conjecturer.turn.v5"
+    control_event_schema: Literal["control.event.v2"] = "control.event.v2"
+    simulation_request_contract: Literal["simulation.request.v1"] = (
+        "simulation.request.v1"
+    )
+    simulation_result_contract: Literal["simulation.result.v1"] = (
+        "simulation.result.v1"
+    )
 
 
 class ControlPlanePolicyV1(BaseModel):
@@ -629,14 +646,28 @@ class ControlPlanePolicyV1(BaseModel):
             or self.workflow_profile != "conjecture.active.v1"
             or self.capability_profile != "conjecture-control.v1"
             or self.contract_versions.bridge_ledger_wire_contract != "bridge.ledger.v2"
-            or self.contract_versions.conjecturer_turn_contract
-            not in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
+            or self.contract_versions.conjecturer_turn_contract != "conjecturer.turn.v4"
             or self.contract_versions.control_event_schema != "control.event.v1"
         ):
             raise ValueError(
                 "active_conjecture requires the v1 controller and new wire contracts"
             )
         return self
+
+
+class ControlPlanePolicyV2(BaseModel):
+    """Manifest-owned authority profile for autonomous inquiry capabilities."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    controller_version: Literal["workflow.controller.v2"] = "workflow.controller.v2"
+    mode: Literal["active_inquiry"] = "active_inquiry"
+    workflow_profile: Literal["inquiry.active.v1"] = "inquiry.active.v1"
+    school_execution: SchoolExecutionPolicyV1
+    conjecture_context: ConjectureContextPolicyV1
+    workflow_retry: WorkflowRetryPolicyV1
+    contract_versions: ContractVersionPolicyV2
+    capability_profile: Literal["inquiry-capabilities.v1"] = "inquiry-capabilities.v1"
 
 
 class RunManifest(BaseModel):
@@ -662,10 +693,12 @@ class RunManifest(BaseModel):
     memory_policy: dict[str, Any] = Field(default_factory=dict)
     scratch_policy: ScratchPolicy | None = None
     bridge_policy: BridgePolicy | None = None
-    control_plane_policy: ControlPlanePolicyV1 | None = None
+    control_plane_policy: ControlPlanePolicyV1 | ControlPlanePolicyV2 | None = None
     criticism_policy: CriticismPolicyV1 | None = None
     simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None
     frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None
+    inquiry_capability_policy: InquiryCapabilityPolicyV1 | None = None
+    run_input_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
     # Canonical engine configuration without a role table. Runtime
@@ -711,6 +744,16 @@ class RunManifest(BaseModel):
         if self.schema_version < 5:
             payload.pop("simulation_capability_policy", None)
             payload.pop("frozen_evidence_policy", None)
+            payload.pop("inquiry_capability_policy", None)
+            payload.pop("run_input_digest", None)
+        else:
+            # The abandoned pre-v5 prototype fields remain parse-visible only
+            # so its stopped failure roots can be audited. New v5 manifests
+            # use the complete inquiry capability policy exclusively.
+            if self.simulation_capability_policy is None:
+                payload.pop("simulation_capability_policy", None)
+            if self.frozen_evidence_policy is None:
+                payload.pop("frozen_evidence_policy", None)
         # Criticism is an optional C3 extension.  Absence must preserve the
         # canonical bytes of every pre-C3 manifest, including schema v4.
         if self.criticism_policy is None:
@@ -729,6 +772,8 @@ class RunManifest(BaseModel):
         if self.schema_version < 5 and (
             "simulation_capability_policy" in self.model_fields_set
             or "frozen_evidence_policy" in self.model_fields_set
+            or "inquiry_capability_policy" in self.model_fields_set
+            or "run_input_digest" in self.model_fields_set
         ):
             raise ValueError("v1-v4 manifests cannot carry v5 capability policy")
         if self.schema_version == 1:
@@ -782,6 +827,8 @@ class RunManifest(BaseModel):
             _validate_v4_criticism_policy(self)
         if self.schema_version == 4:
             if (
+                not isinstance(self.control_plane_policy, ControlPlanePolicyV1)
+                or
                 self.control_plane_policy.mode == "active_conjecture"
                 and
                 self.control_plane_policy.contract_versions.conjecturer_turn_contract
@@ -790,18 +837,18 @@ class RunManifest(BaseModel):
                 raise ValueError("v4 manifest requires conjecturer.turn.v4")
         if self.schema_version == 5:
             if (
-                self.control_plane_policy.mode != "active_conjecture"
-                or
-                self.control_plane_policy.contract_versions.conjecturer_turn_contract
-                != "conjecturer.turn.v5"
+                not isinstance(self.control_plane_policy, ControlPlanePolicyV2)
+                or self.control_plane_policy.mode != "active_inquiry"
             ):
                 raise ValueError(
-                    "v5 manifest requires active_conjecture and conjecturer.turn.v5"
+                    "v5 manifest requires the workflow.controller.v2 active-inquiry profile"
                 )
-            if self.simulation_capability_policy is None:
-                raise ValueError("v5 manifest requires frozen simulation capability policy")
-            if self.frozen_evidence_policy is None:
-                raise ValueError("v5 manifest requires frozen evidence policy")
+            if self.inquiry_capability_policy is None:
+                raise ValueError("v5 manifest requires inquiry capability policy")
+            if self.run_input_digest is None:
+                raise ValueError("v5 manifest requires a bound run-input digest")
+            if self.simulation_capability_policy is not None or self.frozen_evidence_policy is not None:
+                raise ValueError("v5 manifest cannot use prototype split capability fields")
             _validate_v5_capability_policy(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
@@ -848,6 +895,13 @@ class RunManifest(BaseModel):
         if self.schema_version < 5:
             payload.pop("simulation_capability_policy", None)
             payload.pop("frozen_evidence_policy", None)
+            payload.pop("inquiry_capability_policy", None)
+            payload.pop("run_input_digest", None)
+        else:
+            if self.simulation_capability_policy is None:
+                payload.pop("simulation_capability_policy", None)
+            if self.frozen_evidence_policy is None:
+                payload.pop("frozen_evidence_policy", None)
         if self.criticism_policy is None:
             payload.pop("criticism_policy", None)
         return _canonical_json(payload)
@@ -1335,7 +1389,7 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
     if policy is None:
         return
     control = manifest.control_plane_policy
-    if control is None or control.mode != "active_conjecture":
+    if control is None or control.mode not in {"active_conjecture", "active_inquiry"}:
         raise ValueError(
             "V4_CRITICISM_ACTIVE_REQUIRED: criticism policy requires active_conjecture"
         )
@@ -1421,18 +1475,23 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
 
 
 def _validate_v5_capability_policy(manifest: RunManifest) -> None:
-    """Bind enabled simulation authority to one exact frozen toolchain."""
+    """Validate the complete, finite Tranche-A capability topology."""
 
-    policy = manifest.simulation_capability_policy
-    evidence = manifest.frozen_evidence_policy
-    if policy is None or evidence is None:
+    capabilities = manifest.inquiry_capability_policy
+    if capabilities is None:
         raise ValueError("V5_CAPABILITY_POLICY_REQUIRED")
     control = manifest.control_plane_policy
-    if control is None or control.mode != "active_conjecture":
-        if policy.enabled:
-            raise ValueError(
-                "V5_SIMULATION_ACTIVE_REQUIRED: simulation requires active_conjecture"
-            )
+    if not isinstance(control, ControlPlanePolicyV2):
+        raise ValueError("V5_ACTIVE_INQUIRY_REQUIRED")
+    if capabilities.capability_profile != control.capability_profile:
+        raise ValueError("V5_CAPABILITY_PROFILE_MISMATCH")
+    if capabilities.formalization.enabled:
+        raise ValueError(
+            "V5_FORMALIZATION_UNAVAILABLE: Tranche A cannot enable formalization"
+        )
+    if capabilities.research.enabled:
+        raise ValueError("V5_RESEARCH_UNAVAILABLE: Tranche A cannot enable research")
+    policy = capabilities.simulation
     if not policy.enabled:
         return
     matches = tuple(
@@ -1445,9 +1504,12 @@ def _validate_v5_capability_policy(manifest: RunManifest) -> None:
             "V5_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain"
         )
     toolchain = matches[0]
-    if toolchain.runner != "local" or toolchain.network is not False:
+    required_runner = (
+        "container" if policy.runner_profile == "simulation.container.v1" else "local"
+    )
+    if toolchain.runner != required_runner or toolchain.network is not False:
         raise ValueError(
-            "V5_SIMULATION_TOOLCHAIN_UNSAFE: local network-denied toolchain required"
+            "V5_SIMULATION_TOOLCHAIN_UNSAFE: runner profile and frozen toolchain differ"
         )
 
 
@@ -1470,8 +1532,12 @@ def compile_run_manifest(
     budget_policy: dict[str, Any] | None = None,
     stop_policy: dict[str, Any] | None = None,
     memory_policy: dict[str, Any] | None = None,
-    control_plane_policy: ControlPlanePolicyV1 | None = None,
+    control_plane_policy: ControlPlanePolicyV1 | ControlPlanePolicyV2 | None = None,
     criticism_policy: CriticismPolicyV1 | None = None,
+    inquiry_capability_policy: InquiryCapabilityPolicyV1 | None = None,
+    run_input_digest: str | None = None,
+    # Prototype-only arguments are retained as explicit rejections so callers
+    # receive a stable migration error rather than silently losing authority.
     simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None,
     frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None,
 ) -> RunManifest:
@@ -1505,42 +1571,51 @@ def compile_run_manifest(
             "schema v4+ requires a complete control_plane_policy",
             "/control_plane_policy",
         )
-    resolved_control_policy = (
-        ControlPlanePolicyV1.model_validate(control_plane_policy)
-        if control_plane_policy is not None
-        else None
-    )
+    resolved_control_policy = None
+    if control_plane_policy is not None:
+        control_model = ControlPlanePolicyV2 if schema_version == 5 else ControlPlanePolicyV1
+        resolved_control_policy = control_model.model_validate(control_plane_policy)
     resolved_criticism_policy = (
         CriticismPolicyV1.model_validate(criticism_policy)
         if criticism_policy is not None
         else None
     )
     if schema_version < 5 and (
-        simulation_capability_policy is not None or frozen_evidence_policy is not None
+        simulation_capability_policy is not None
+        or frozen_evidence_policy is not None
+        or inquiry_capability_policy is not None
+        or run_input_digest is not None
     ):
         raise RunManifestError(
             "CAPABILITY_MANIFEST_V5_REQUIRED",
             "simulation and frozen evidence policies require RunManifest schema v5",
             "/simulation_capability_policy",
         )
-    resolved_simulation_policy = (
-        SimulationCapabilityPolicyV1.model_validate(simulation_capability_policy)
-        if simulation_capability_policy is not None
-        else SimulationCapabilityPolicyV1()
+    if schema_version == 5 and (
+        simulation_capability_policy is not None or frozen_evidence_policy is not None
+    ):
+        raise RunManifestError(
+            "V5_PROTOTYPE_CAPABILITY_POLICY_FORBIDDEN",
+            "use one InquiryCapabilityPolicyV1 instead of split prototype policies",
+            "/inquiry_capability_policy",
+        )
+    resolved_inquiry_policy = (
+        InquiryCapabilityPolicyV1.model_validate(inquiry_capability_policy)
+        if inquiry_capability_policy is not None
+        else InquiryCapabilityPolicyV1()
         if schema_version == 5
         else None
     )
-    resolved_evidence_policy = (
-        FrozenEvidencePolicyV1.model_validate(frozen_evidence_policy)
-        if frozen_evidence_policy is not None
-        else FrozenEvidencePolicyV1()
-        if schema_version == 5
-        else None
-    )
+    if schema_version == 5 and run_input_digest is None:
+        raise RunManifestError(
+            "RUN_INPUT_DIGEST_REQUIRED",
+            "schema v5 requires the exact pre-bound RunInputManifestV1 digest",
+            "/run_input_digest",
+        )
     if (
         resolved_criticism_policy is not None
         and resolved_control_policy is not None
-        and resolved_control_policy.mode != "active_conjecture"
+        and resolved_control_policy.mode not in {"active_conjecture", "active_inquiry"}
     ):
         raise RunManifestError(
             "CRITICISM_ACTIVE_CONJECTURE_REQUIRED",
@@ -1720,8 +1795,8 @@ def compile_run_manifest(
         if resolved_criticism_policy is not None:
             manifest_values["criticism_policy"] = resolved_criticism_policy
     if schema_version == 5:
-        manifest_values["simulation_capability_policy"] = resolved_simulation_policy
-        manifest_values["frozen_evidence_policy"] = resolved_evidence_policy
+        manifest_values["inquiry_capability_policy"] = resolved_inquiry_policy
+        manifest_values["run_input_digest"] = run_input_digest
     return RunManifest(
         schema_version=schema_version,
         engine_profile=engine_profile,
@@ -1924,6 +1999,38 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
     """
     root_path = Path(root)
     root_path.mkdir(parents=True, exist_ok=True)
+    if manifest.schema_version == 5:
+        # A v5 manifest names one exact run input. Refuse to create any
+        # manifest binding until the dossier and every source blob have
+        # already passed their independent first-writer verification.
+        from deepreason.evidence.state import RunInputError, verify_run_input
+
+        try:
+            verified_input = verify_run_input(root_path)
+        except RunInputError as error:
+            raise RunManifestError(
+                "RUN_INPUT_REQUIRED",
+                "v5 manifest binding requires a verified pre-bound run input",
+                "/run-input.json",
+            ) from error
+        if verified_input["run_input_digest"] != manifest.run_input_digest:
+            raise RunManifestError(
+                "RUN_INPUT_MANIFEST_MISMATCH",
+                "bound run input does not match the manifest digest",
+                "/run_input_digest",
+            )
+        capability = manifest.inquiry_capability_policy
+        assert capability is not None
+        evidence = capability.attached_evidence
+        if evidence.enabled and (
+            verified_input["source_count"] > evidence.maximum_sources
+            or verified_input["source_bytes"] > evidence.maximum_total_bytes
+        ):
+            raise RunManifestError(
+                "RUN_INPUT_EVIDENCE_BUDGET_EXCEEDED",
+                "bound evidence dossier exceeds manifest authority",
+                "/inquiry_capability_policy/attached_evidence",
+            )
     target = root_path / MANIFEST_NAME
     fixed_hash = root_path / MANIFEST_HASH_NAME
     payload = manifest.canonical_bytes()

@@ -1,0 +1,3 @@
+python --version
+deepreason --help
+pytest -q tests/test_autonomous_capability_preflight.py

@@ -28,12 +28,17 @@ from deepreason.workflow.models import (
 )
 
 
-WorkflowProfileId = Literal["conjecture.shadow.v1", "conjecture.active.v1"]
+WorkflowProfileId = Literal[
+    "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+]
 
 
-_OWNED_PROFILE_MODES: dict[str, Literal["shadow", "active_conjecture"]] = {
+_OWNED_PROFILE_MODES: dict[
+    str, Literal["shadow", "active_conjecture", "active_inquiry"]
+] = {
     "conjecture.shadow.v1": "shadow",
     "conjecture.active.v1": "active_conjecture",
+    "inquiry.active.v1": "active_inquiry",
 }
 
 
@@ -50,14 +55,24 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         "workflow.conjecture-profile.v1", alias="schema"
     )
     manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
-    controller_version: Literal["workflow.controller.v1"] = "workflow.controller.v1"
-    mode: Literal["shadow", "active_conjecture"]
+    controller_version: Literal[
+        "workflow.controller.v1", "workflow.controller.v2"
+    ] = "workflow.controller.v1"
+    mode: Literal["shadow", "active_conjecture", "active_inquiry"]
     workflow_profile: WorkflowProfileId
-    capability_profile: Literal["conjecture-control.v1"] = "conjecture-control.v1"
+    capability_profile: Literal["conjecture-control.v1", "inquiry-capabilities.v1"] = (
+        "conjecture-control.v1"
+    )
     conjecturer_contract_id: Literal[
         "conjecturer.legacy.v1", "conjecturer.turn.v4", "conjecturer.turn.v5"
     ]
-    control_event_schema: Literal["control.event.v1"] = "control.event.v1"
+    control_event_schema: Literal["control.event.v1", "control.event.v2"] = (
+        "control.event.v1"
+    )
+    run_input_digest: str | None = Field(
+        default=None, pattern=r"^[0-9a-f]{64}$"
+    )
+    simulation_enabled: bool = False
     model_profile: Literal["compact", "standard", "frontier"]
     workload_profile: Literal["text", "code", "formal", "website"]
     max_candidates: StrictInt = Field(gt=0, le=256)
@@ -83,7 +98,11 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         }:
             outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
             outcomes.append(CapabilityOutcome.ABSTENTION)
+        if self.mode == "active_inquiry" and self.simulation_enabled:
+            outcomes.append(CapabilityOutcome.SIMULATION_REQUEST)
+        outcomes = [item for item in CapabilityOutcome if item in outcomes]
         return CapabilityGrantV1.create(
+            profile_id=self.capability_profile,
             allowed_outcomes=tuple(outcomes),
             max_candidates=self.max_candidates,
             max_local_repairs=self.repair_policy.max_schema_repairs,
@@ -120,6 +139,17 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             "conjecturer.turn.v5",
         }:
             raise ValueError("active conjecture profile requires a controlled turn contract")
+        inquiry = self.mode == "active_inquiry"
+        if inquiry != (self.controller_version == "workflow.controller.v2"):
+            raise ValueError("profile controller version differs from inquiry mode")
+        if inquiry != (self.workflow_profile == "inquiry.active.v1"):
+            raise ValueError("profile ID differs from inquiry mode")
+        if inquiry != (self.capability_profile == "inquiry-capabilities.v1"):
+            raise ValueError("capability profile differs from inquiry mode")
+        if inquiry != (self.control_event_schema == "control.event.v2"):
+            raise ValueError("control event schema differs from inquiry mode")
+        if inquiry != (self.run_input_digest is not None):
+            raise ValueError("active inquiry profile must bind one run input")
         return self
 
 
@@ -130,9 +160,11 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
     if manifest.schema_version not in {4, 5} or manifest.control_plane_policy is None:
         raise WorkflowProfileError("WORKFLOW_MANIFEST_V4_PLUS_REQUIRED")
     control = manifest.control_plane_policy
-    if control.controller_version != "workflow.controller.v1":
+    if control.controller_version not in {
+        "workflow.controller.v1", "workflow.controller.v2"
+    }:
         raise WorkflowProfileError("WORKFLOW_CONTROLLER_VERSION_UNSUPPORTED")
-    if control.mode not in {"shadow", "active_conjecture"}:
+    if control.mode not in {"shadow", "active_conjecture", "active_inquiry"}:
         raise WorkflowProfileError("WORKFLOW_MODE_UNSUPPORTED")
     try:
         expected_mode = _OWNED_PROFILE_MODES[control.workflow_profile]
@@ -140,9 +172,13 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
         raise WorkflowProfileError("WORKFLOW_PROFILE_UNSUPPORTED") from error
     if control.mode != expected_mode:
         raise WorkflowProfileError("WORKFLOW_PROFILE_MODE_MISMATCH")
-    if control.capability_profile != "conjecture-control.v1":
+    if control.capability_profile not in {
+        "conjecture-control.v1", "inquiry-capabilities.v1"
+    }:
         raise WorkflowProfileError("WORKFLOW_CAPABILITY_PROFILE_UNSUPPORTED")
-    if control.contract_versions.control_event_schema != "control.event.v1":
+    if control.contract_versions.control_event_schema not in {
+        "control.event.v1", "control.event.v2"
+    }:
         raise WorkflowProfileError("WORKFLOW_CONTROL_EVENT_SCHEMA_UNSUPPORTED")
 
     config = config_from_run_manifest(manifest)
@@ -153,9 +189,17 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
     )
     return ConjectureWorkflowProfileV1(
         manifest_digest=manifest.sha256,
+        controller_version=control.controller_version,
         mode=control.mode,
         workflow_profile=control.workflow_profile,
+        capability_profile=control.capability_profile,
         conjecturer_contract_id=control.contract_versions.conjecturer_turn_contract,
+        control_event_schema=control.contract_versions.control_event_schema,
+        run_input_digest=manifest.run_input_digest,
+        simulation_enabled=bool(
+            manifest.inquiry_capability_policy is not None
+            and manifest.inquiry_capability_policy.simulation.enabled
+        ),
         model_profile=manifest.model_profile,
         workload_profile=manifest.workload_profile,
         max_candidates=config.VS_K,

@@ -329,7 +329,7 @@ class ConjectureShadowObserver:
             or manifest.schema_version not in {4, 5}
             or manifest.control_plane_policy is None
             or manifest.control_plane_policy.mode
-            not in {"shadow", "active_conjecture"}
+            not in {"shadow", "active_conjecture", "active_inquiry"}
         ):
             return None
         return cls(compile_workflow_profile(manifest))

@@ -15,6 +15,11 @@ their payload, not their inputs.
 """
 
 SIGNALS: dict[str, str] = {
+    "dossier-pack-receipt.v1": "deterministic bounded selection receipt for "
+                                 "one immutable run-input evidence dossier "
+                                 "(inputs: [signal, receipt digest, selected "
+                                 "source ids...]); attention and provenance "
+                                 "only, never evidence admission or truth",
     "proposal-envelope-invalid": "a wire-valid conjecture proposal failed "
                                  "envelope compilation and was skipped "
                                  "(inputs: [signal, exception type]); the "

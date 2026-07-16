@@ -9,7 +9,7 @@ from typing import Any, Iterable, Mapping
 from pydantic import BaseModel
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.control_events import ControlEventPayloadV1
+from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
 from deepreason.workflow.models import (
     CapabilityOutcome,
     GuardFindingOutcome,
@@ -31,6 +31,9 @@ from deepreason.workflow.state import (
     WorkflowProcessStateV1,
     apply_decision,
 )
+
+
+ControlEventPayload = ControlEventPayloadV1 | ControlEventPayloadV2
 
 
 _SCHEMA_MODELS = {
@@ -422,7 +425,7 @@ class WorkflowReplayState:
                 "proposal validation outcome differs from its provider transition"
             )
         if (
-            work.workflow_profile == "conjecture.active.v1"
+            work.workflow_profile in {"conjecture.active.v1", "inquiry.active.v1"}
             and outcome == ProposalValidationOutcome.REPAIR_EXHAUSTED
             and proposal.attempt_count
             != work.capability_grant.max_local_repairs + 1
@@ -527,7 +530,7 @@ class WorkflowReplayState:
                 key=lambda order: order.attempt,
             )
         )
-        if work.workflow_profile == "conjecture.active.v1":
+        if work.workflow_profile in {"conjecture.active.v1", "inquiry.active.v1"}:
             if len(repair_orders) != len(trace) - 1:
                 raise ValueError(
                     "repair work orders differ from provider attempt lineage"
@@ -750,13 +753,13 @@ class WorkflowReplayState:
 
     def _plan(
         self,
-        payload: ControlEventPayloadV1,
+        payload: ControlEventPayload,
         resolved_records: Iterable[tuple[str, str, BaseModel]],
         *,
         prior_calls: Any = None,
         event_seq: int | None = None,
     ) -> _PlannedApply:
-        payload = _canonical(ControlEventPayloadV1, payload)
+        payload = _canonical(type(payload), payload)
         records = _record_map(resolved_records)
         if tuple(records) != tuple(payload.outputs):
             raise ValueError("resolved workflow records differ from control outputs")
@@ -812,7 +815,7 @@ class WorkflowReplayState:
         ):
             raise ValueError("duplicate repair work order")
         if decision.transition_kind == TransitionKind.REPAIR_REQUESTED:
-            if decision.workflow_profile == "conjecture.active.v1":
+            if decision.workflow_profile in {"conjecture.active.v1", "inquiry.active.v1"}:
                 expected_schemas.insert(0, "workflow-repair-work-order")
                 if not isinstance(repair_work_order, RepairWorkOrderV1):
                     raise ValueError(
@@ -920,7 +923,7 @@ class WorkflowReplayState:
 
     def validate(
         self,
-        payload: ControlEventPayloadV1,
+        payload: ControlEventPayload,
         resolved_records: Iterable[tuple[str, str, BaseModel]],
         *,
         prior_calls: Any = None,
@@ -936,7 +939,7 @@ class WorkflowReplayState:
     def _apply_lifecycle(
         self,
         event: Any,
-        payload: ControlEventPayloadV1,
+        payload: ControlEventPayload,
         resolved_records: Iterable[tuple[str, str, BaseModel]],
     ) -> None:
         """Validate and index one terminal lifecycle event without re-planning work."""
@@ -1041,7 +1044,7 @@ class WorkflowReplayState:
     def _apply_resume(
         self,
         event: Any,
-        payload: ControlEventPayloadV1,
+        payload: ControlEventPayload,
         resolved_records: Iterable[tuple[str, str, BaseModel]],
     ) -> None:
         """Validate and enact one RESUMED authority transition."""

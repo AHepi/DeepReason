@@ -363,6 +363,29 @@ class TextRunApplicationService:
                 "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v2+ text manifest"
             )
         spec = spec_override or _spec_from_request(request)
+        if manifest.schema_version == 5:
+            from deepreason.evidence.state import (
+                load_evidence_dossier,
+                load_run_input,
+                verify_run_input,
+            )
+
+            verified_input = verify_run_input(root)
+            run_input = load_run_input(root)
+            dossier = load_evidence_dossier(root)
+            if (
+                verified_input["run_input_digest"] != manifest.run_input_digest
+                or run_input.run_input_digest != manifest.run_input_digest
+                or run_input.problem.id != spec.problem.id
+                or run_input.problem.description != spec.problem.description
+                or run_input.problem.criteria
+                != tuple(item.id for item in spec.criteria)
+                or dossier.problem_ref != spec.problem.id
+            ):
+                raise ValueError(
+                    "RUN_INPUT_MISMATCH: text request differs from the frozen v5 run input"
+                )
+            request = {**request, "run_input_digest": run_input.run_input_digest}
         preflight_payload(
             manifest,
             {
@@ -488,7 +511,6 @@ class TextRunApplicationService:
         from deepreason.status_display import display_status_counts
         from deepreason.workloads.text import seed_reasoning_workload
         from deepreason.capabilities.audit import write_tranche_a_audits
-        from deepreason.capabilities.evidence import attach_frozen_evidence
         from deepreason.capabilities.simulation import SimulationCapabilityController
 
         harness = None
@@ -509,11 +531,19 @@ class TextRunApplicationService:
                 )
             else:
                 seed_reasoning_workload(harness, spec)
-                attach_frozen_evidence(
-                    harness,
-                    manifest,
-                    problem_id=spec.problem.id,
-                )
+                if manifest.schema_version == 5:
+                    from deepreason.evidence.render import attach_bound_evidence
+                    from deepreason.evidence.state import (
+                        load_evidence_dossier,
+                        load_run_input,
+                    )
+
+                    attach_bound_evidence(
+                        harness,
+                        run_input=load_run_input(root),
+                        dossier=load_evidence_dossier(root),
+                        problem_id=spec.problem.id,
+                    )
             prior = progress.read_since(-1)
             base_cycle = max((event.cycle for event in prior), default=0)
             base_token_spend = sum(
