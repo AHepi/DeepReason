@@ -217,6 +217,34 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     def validate_school_route(event) -> None:
         call = event.llm
         receipt = getattr(call, "school_route", None) if call is not None else None
+        if receipt is None and event.rule.value == "Conj":
+            source_refs = [
+                value
+                for value in event.inputs
+                if value.startswith("conjecture-call:")
+            ]
+            if len(source_refs) == 1:
+                try:
+                    source_seq = int(source_refs[0].removeprefix("conjecture-call:"))
+                except ValueError:
+                    source_seq = -1
+                source = next(
+                    (candidate for candidate in events if candidate.seq == source_seq),
+                    None,
+                )
+                if (
+                    source is not None
+                    and source.seq < event.seq
+                    and source.llm is not None
+                    and len(source.inputs) >= 3
+                    and source.inputs[0] == "conjecture-turn-call"
+                    and event.inputs
+                    and source.inputs[1] == event.inputs[0]
+                    and manifest is not None
+                    and source.inputs[2] == f"manifest:{manifest.sha256}"
+                ):
+                    call = source.llm
+                    receipt = source.llm.school_route
         output_schools = (
             {
                 artifact.provenance.school
@@ -378,6 +406,32 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 "conjecture-context",
                 f"{prefix}: school context has no matching route receipt",
             )
+        if receipt.expansion_decision_ref is not None:
+            decisions = [
+                candidate
+                for candidate in events
+                if candidate.conjecture_turn is not None
+                and candidate.conjecture_turn.decision_id
+                == receipt.expansion_decision_ref
+            ]
+            if len(decisions) != 1 or decisions[0].seq >= event.seq:
+                fail(
+                    "conjecture-context",
+                    f"{prefix}: expanded context has no unique preceding decision",
+                )
+            else:
+                decision = decisions[0].conjecture_turn
+                if (
+                    decision.action.value != "context_granted"
+                    or decision.request_hash != receipt.expansion_request_hash
+                    or decision.expansion_index != receipt.expansion_index
+                    or decision.prior_selection_receipt_ref
+                    != receipt.prior_selection_receipt_ref
+                ):
+                    fail(
+                        "conjecture-context",
+                        f"{prefix}: expansion lineage differs from its grant",
+                    )
         try:
             fenced = Harness.at(root, receipt.formal_fence_seq)
             if receipt.problem_id not in fenced.state.problems:
@@ -511,9 +565,278 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"{prefix}: rendered context evidence is incomplete: {error!r}",
             )
 
+    def validate_conjecture_turn(event) -> None:
+        payload = event.conjecture_turn
+        if payload is None:
+            return
+        prefix = f"event seq={event.seq}"
+        control = None
+        context_policy = None
+        if manifest is None or manifest.schema_version != 4:
+            fail(
+                "conjecture-turn",
+                f"{prefix}: typed turn evidence requires a v4 manifest",
+            )
+        else:
+            control = manifest.control_plane_policy
+            if (
+                control is None
+                or control.mode != "active_conjecture"
+                or control.contract_versions.conjecturer_turn_contract
+                != "conjecturer.turn.v4"
+            ):
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: manifest does not authorize v4 conjecture turns",
+                )
+            else:
+                context_policy = control.conjecture_context
+            if payload.manifest_digest != manifest.sha256:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: payload manifest digest differs from the run",
+                )
+
+        source = next(
+            (candidate for candidate in events if candidate.seq == payload.source_call_seq),
+            None,
+        )
+        source_call = source.llm if source is not None else None
+        source_context = (
+            source_call.conjecture_context if source_call is not None else None
+        )
+        if (
+            source is None
+            or source.seq >= event.seq
+            or source_call is None
+            or source_call.role != "conjecturer"
+        ):
+            fail(
+                "conjecture-turn",
+                f"{prefix}: source does not name one preceding conjecturer call",
+            )
+        else:
+            expected_inputs = [
+                "conjecture-turn-call",
+                payload.problem_id,
+                f"manifest:{payload.manifest_digest}",
+            ]
+            if payload.school_id is not None:
+                expected_inputs.append(f"school:{payload.school_id}")
+            if list(source.inputs) != expected_inputs:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: source call names another work item or manifest",
+                )
+            if any(
+                attempt.contract_id != "conjecturer.turn.v4"
+                for attempt in source_call.attempt_trace
+            ):
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: source call used another wire contract",
+                )
+            route_school = (
+                source_call.school_route.school_id
+                if source_call.school_route is not None
+                else None
+            )
+            if route_school != payload.school_id:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: turn school differs from its source route",
+                )
+            source_selection = (
+                source_context.selection_receipt_ref
+                if source_context is not None
+                else None
+            )
+            if source_selection != payload.prior_selection_receipt_ref:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: turn prior selection differs from its source context",
+                )
+            if source_context is not None and (
+                source_context.manifest_digest != payload.manifest_digest
+                or source_context.problem_id != payload.problem_id
+                or source_context.school_id != payload.school_id
+            ):
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: source context belongs to another work item",
+                )
+
+        if context_policy is not None and (
+            payload.maximum_expansions
+            != context_policy.max_context_expansion_requests
+        ):
+            fail(
+                "conjecture-turn",
+                f"{prefix}: expansion ceiling differs from the manifest",
+            )
+
+        request = None
+        if payload.request_ref is not None:
+            try:
+                from deepreason.conjecture_turn import ContextRequestV1
+
+                request = ContextRequestV1.model_validate_json(
+                    h.blobs.get(payload.request_ref)
+                )
+                if request.request_hash != payload.request_hash:
+                    fail(
+                        "conjecture-turn",
+                        f"{prefix}: request hash differs from its blob",
+                    )
+            except (KeyError, TypeError, ValueError) as error:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: invalid request evidence: {error!r}",
+                )
+        if payload.abstention_ref is not None:
+            try:
+                from deepreason.conjecture_turn import ConjectureAbstentionV1
+
+                abstention = ConjectureAbstentionV1.model_validate_json(
+                    h.blobs.get(payload.abstention_ref)
+                )
+                if abstention.abstention_hash != payload.abstention_hash:
+                    fail(
+                        "conjecture-turn",
+                        f"{prefix}: abstention hash differs from its blob",
+                    )
+            except (KeyError, TypeError, ValueError) as error:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: invalid abstention evidence: {error!r}",
+                )
+
+        action = payload.action.value
+        desired = (
+            {channel.value for channel in request.desired_retrieval_channels}
+            if request is not None
+            else set()
+        )
+        permitted = (
+            set(context_policy.permitted_retrieval_channels)
+            if context_policy is not None
+            else set()
+        )
+        if action == "context_granted":
+            if (
+                context_policy is None
+                or context_policy.mode != "harness_plus_model_request"
+                or desired - permitted
+                or not 1 <= payload.expansion_index <= payload.maximum_expansions
+            ):
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: context grant exceeds its frozen capability",
+                )
+            children = [
+                candidate
+                for candidate in events
+                if candidate.seq > event.seq
+                and candidate.llm is not None
+                and candidate.llm.conjecture_context is not None
+                and candidate.llm.conjecture_context.expansion_decision_ref
+                == payload.decision_id
+            ]
+            if len(children) != 1:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: grant must have one expanded follow-up call",
+                )
+            else:
+                child_call = children[0].llm
+                child = child_call.conjecture_context
+                if (
+                    child.expansion_request_hash != payload.request_hash
+                    or child.expansion_index != payload.expansion_index
+                    or child.prior_selection_receipt_ref
+                    != payload.prior_selection_receipt_ref
+                    or child.manifest_digest != payload.manifest_digest
+                    or child.problem_id != payload.problem_id
+                    or child.school_id != payload.school_id
+                ):
+                    fail(
+                        "conjecture-turn",
+                        f"{prefix}: follow-up receipt differs from the grant",
+                    )
+                if child_call.school_route != source_call.school_route:
+                    fail(
+                        "conjecture-turn",
+                        f"{prefix}: follow-up call changed the frozen route lease",
+                    )
+                selection = h.scratch_state.attention_receipts.get(
+                    child.selection_receipt_ref
+                )
+                prior = (
+                    h.scratch_state.attention_receipts.get(
+                        child.prior_selection_receipt_ref
+                    )
+                    if child.prior_selection_receipt_ref is not None
+                    else None
+                )
+                prior_order = list(prior.final_order) if prior is not None else []
+                if selection is not None:
+                    order = list(selection.final_order)
+                    added = [item for item in order if item not in set(prior_order)]
+                    root_order = list(child.root_block_refs or ())
+                    expected_root = (
+                        list(source_context.root_block_refs)
+                        if source_context is not None
+                        and source_context.root_block_refs is not None
+                        else prior_order
+                    )
+                    cumulative_added = [
+                        item for item in order if item not in set(root_order)
+                    ]
+                    if (
+                        order[: len(prior_order)] != prior_order
+                        or added != list(child.added_block_refs or ())
+                        or child.root_block_refs is None
+                        or root_order != expected_root
+                        or order[: len(root_order)] != root_order
+                        or (
+                            context_policy is not None
+                            and len(cumulative_added)
+                            > context_policy.max_extra_blocks
+                        )
+                    ):
+                        fail(
+                            "conjecture-turn",
+                            f"{prefix}: expanded selection exceeds or loses context",
+                        )
+        elif action == "context_exhausted":
+            if payload.expansion_index != payload.maximum_expansions:
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: exhausted request is below its frozen ceiling",
+                )
+        elif action == "context_denied" and payload.reason_code == "channel_not_permitted":
+            if not (desired - permitted):
+                fail(
+                    "conjecture-turn",
+                    f"{prefix}: channel denial has no forbidden channel",
+                )
+        if action != "context_granted" and any(
+            candidate.seq > event.seq
+            and candidate.llm is not None
+            and candidate.llm.conjecture_context is not None
+            and candidate.llm.conjecture_context.expansion_decision_ref
+            == payload.decision_id
+            for candidate in events
+        ):
+            fail(
+                "conjecture-turn",
+                f"{prefix}: a non-grant decision authorized expanded context",
+            )
+
     for e in events:
         validate_school_route(e)
         validate_conjecture_context(e)
+        validate_conjecture_turn(e)
         # Controller policies are harness-authored, attackable artifacts. A
         # value is transport-authorized only after its policy is appended;
         # later refutation may cause a revert but cannot erase that historical
@@ -551,6 +874,31 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         repair_attempts += max(0, e.llm.attempts - 1)
         logged += e.llm.tokens
         trace = list(e.llm.attempt_trace)
+        control_policy = (
+            manifest.control_plane_policy
+            if manifest is not None and manifest.schema_version == 4
+            else None
+        )
+        if (
+            control_policy is not None
+            and control_policy.mode == "active_conjecture"
+            and e.inputs
+            and e.inputs[0] == "conjecture-turn-call"
+        ):
+            if (
+                e.llm.role != "conjecturer"
+                or len(e.inputs) < 3
+                or e.inputs[1] not in h.state.problems
+                or e.inputs[2] != f"manifest:{manifest.sha256}"
+                or any(
+                    attempt.contract_id != "conjecturer.turn.v4"
+                    for attempt in trace
+                )
+            ):
+                fail(
+                    "conjecture-turn-contract",
+                    f"event seq={e.seq}: active turn escaped its bound v4 work item",
+                )
         expected_outcome = _expected_call_outcome(e, legacy_failure_call_seqs)
         if trace:
             traced_calls += 1
@@ -874,6 +1222,9 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         "reseeds": sum(1 for e in events if e.rule.value == "Reseed"),
         "scratch_events": sum(1 for e in events if e.scratch is not None),
         "bridge_events": sum(1 for e in events if e.bridge is not None),
+        "conjecture_turn_events": sum(
+            1 for e in events if e.conjecture_turn is not None
+        ),
         "max_problem_desc_len": max(
             (len(p.description) for p in h.state.problems.values()), default=0),
     }

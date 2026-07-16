@@ -290,6 +290,7 @@ def render_conj_pack(
     generation_context: str | None = None,
     suppressed_exemplars: tuple[str, ...] = (),
     scratch_context=None,
+    allow_no_candidate_outcome: bool = False,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
     the neighbourhood prefers the school's own accepted descendants; the
@@ -466,8 +467,17 @@ def render_conj_pack(
     sections.append(
         _pack_section(
             "output-contract",
-            f"DIRECTIVE: return exactly {vs_k} diverse candidates with typicality "
-            "estimates. Include atypical candidates, not just the modal answer.",
+            (
+                f"DIRECTIVE: return up to {vs_k} diverse candidates with typicality "
+                "estimates. You may instead or additionally request bounded context, "
+                "or abstain when no responsible proposal is available. Return at "
+                "least one meaningful outcome; never invent a candidate to fill a "
+                "quota. Include atypical candidates when proposing candidates."
+                if allow_no_candidate_outcome
+                else f"DIRECTIVE: return exactly {vs_k} diverse candidates with "
+                "typicality estimates. Include atypical candidates, not just the "
+                "modal answer."
+            ),
             12,
             droppable=False,
             compressible=False,

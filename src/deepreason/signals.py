@@ -238,6 +238,10 @@ SIGNALS: dict[str, str] = {
                                 "property follows from the problem statement",
     "hv-nomeasure": "variator call for an HV estimate that produced no measure",
     "conj-noregister": "conjecturer call whose candidates all failed admission",
+    "conjecture-turn-call": "one active v4 conjecturer turn completed; the exact "
+                            "prompt, raw output, route, contract, spend, and "
+                            "optional advisory context are bound to this "
+                            "process-only event",
     "trial-llm": "a trial-protocol call (critic/defender/judge/paraphrase)",
     "audit-llm": "an audit-protocol call",
     "dropped-call": "an LLM call was dropped (schema/endpoint failure); extra "

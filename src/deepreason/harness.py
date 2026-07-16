@@ -23,10 +23,16 @@ from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
 from deepreason.bridge.state import BridgeState
+from deepreason.canonical import canonical_json
+from deepreason.conjecture_turn import (
+    ConjectureAbstentionV1,
+    ContextRequestV1,
+)
 from deepreason.log.event_log import EventLog
 from deepreason.ontology import (
     Artifact,
     Commitment,
+    ConjectureTurnEventPayloadV1,
     EpistemicState,
     Event,
     Interface,
@@ -231,6 +237,7 @@ class Harness:
         problem_id: str | None = None,
         rule: Rule = Rule.REGISTER,
         llm: LLMCall | None = None,
+        process_inputs: Iterable[str] = (),
     ) -> list[Artifact]:
         """Register artifacts and explicit warrant-carriage relations.
 
@@ -315,9 +322,12 @@ class Harness:
         # same call is not counted twice; a newly registered artifact keeps the
         # original attachment behavior.
         event_llm = llm if accepted_entries else None
+        extra_inputs = tuple(process_inputs)
+        if any(not isinstance(value, str) or not value for value in extra_inputs):
+            raise ValueError("register_batch process inputs must be nonempty strings")
         self._commit(
             rule,
-            inputs=[problem_id] if problem_id else [],
+            inputs=[*([problem_id] if problem_id else []), *extra_inputs],
             outputs=outputs,
             llm=event_llm,
             carry_add=carry_add,
@@ -379,6 +389,108 @@ class Harness:
             outputs=list(payload.outputs),
             llm=llm,
             scratch=payload,
+        )
+
+    def record_conjecture_turn_event(
+        self,
+        payload: ConjectureTurnEventPayloadV1,
+        *,
+        request: ContextRequestV1 | None = None,
+        abstention: ConjectureAbstentionV1 | None = None,
+    ) -> Event:
+        """Validate and append one harness-authored conjecture-turn result."""
+
+        self._ensure_writable()
+        payload = ConjectureTurnEventPayloadV1.model_validate(payload)
+        source = next(
+            (
+                event
+                for event in self._events_since(payload.source_call_seq)
+                if event.seq == payload.source_call_seq
+            ),
+            None,
+        )
+        call = source.llm if source is not None else None
+        expected_inputs = [
+            "conjecture-turn-call",
+            payload.problem_id,
+            f"manifest:{payload.manifest_digest}",
+        ]
+        if payload.school_id is not None:
+            expected_inputs.append(f"school:{payload.school_id}")
+        if (
+            source is None
+            or source.seq >= self._next_seq
+            or list(source.inputs) != expected_inputs
+            or call is None
+            or call.role != "conjecturer"
+            or not call.attempt_trace
+            or any(
+                attempt.contract_id != "conjecturer.turn.v4"
+                for attempt in call.attempt_trace
+            )
+        ):
+            raise ValueError(
+                "conjecture turn source must be one preceding manifest-bound v4 call"
+            )
+        route_school = (
+            call.school_route.school_id if call.school_route is not None else None
+        )
+        if route_school != payload.school_id:
+            raise ValueError("conjecture turn school differs from its source call")
+        context = call.conjecture_context
+        source_selection = (
+            context.selection_receipt_ref if context is not None else None
+        )
+        if source_selection != payload.prior_selection_receipt_ref:
+            raise ValueError(
+                "conjecture turn prior selection differs from its source context"
+            )
+        if context is not None and (
+            context.manifest_digest != payload.manifest_digest
+            or context.problem_id != payload.problem_id
+            or context.school_id != payload.school_id
+        ):
+            raise ValueError(
+                "conjecture turn source context belongs to another work item"
+            )
+
+        evidence = None
+        evidence_hash = None
+        evidence_ref = None
+        if payload.request_ref is not None:
+            if request is None or abstention is not None:
+                raise ValueError("context decisions require their canonical request")
+            evidence = ContextRequestV1.model_validate(request)
+            evidence_hash = evidence.request_hash
+            evidence_ref = payload.request_ref
+        elif payload.abstention_ref is not None:
+            if abstention is None or request is not None:
+                raise ValueError("abstention decisions require their canonical evidence")
+            evidence = ConjectureAbstentionV1.model_validate(abstention)
+            evidence_hash = evidence.abstention_hash
+            evidence_ref = payload.abstention_ref
+        if evidence is None or evidence_hash != (
+            payload.request_hash or payload.abstention_hash
+        ):
+            raise ValueError("conjecture turn evidence hash differs from its payload")
+        try:
+            stored = self.blobs.get(evidence_ref)
+        except KeyError as error:
+            raise ValueError("conjecture turn evidence blob is missing") from error
+        expected = canonical_json(
+            evidence.model_dump(mode="json", exclude_none=True)
+        )
+        if stored != expected:
+            raise ValueError("conjecture turn evidence blob is not canonical")
+
+        reference = payload.request_hash or payload.abstention_hash
+        assert reference is not None  # enforced by the typed payload
+        return self._commit(
+            Rule.CONJECTURE_TURN,
+            inputs=[payload.problem_id, reference],
+            outputs=[],
+            conjecture_turn=payload,
         )
 
     def record_bridge_event(
@@ -606,6 +718,7 @@ class Harness:
         carry_add: list[tuple[str, str]] | None = None,
         scratch: ScratchEventPayloadV1 | None = None,
         bridge: BridgeEventPayloadV1 | None = None,
+        conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -619,6 +732,7 @@ class Harness:
                                  addr_add=addr_add or [], carry_add=carry_add or []),
             scratch=scratch,
             bridge=bridge,
+            conjecture_turn=conjecture_turn,
         )
         try:
             state_diff = self._apply_event(event)

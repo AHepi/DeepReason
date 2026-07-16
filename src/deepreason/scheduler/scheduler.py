@@ -743,6 +743,15 @@ class Scheduler:
                                     school_id if school_id in school_leases else None
                                 ),
                                 conjecture_context_plan=context_plan,
+                                run_manifest=(
+                                    self.run_manifest
+                                    if self.run_manifest is not None
+                                    and self.run_manifest.schema_version == 4
+                                    and self.run_manifest.control_plane_policy is not None
+                                    and self.run_manifest.control_plane_policy.mode
+                                    == "active_conjecture"
+                                    else None
+                                ),
                             )
                             break
                         except ConjectureContextStale:

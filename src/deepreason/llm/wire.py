@@ -13,8 +13,21 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Generic, Literal, Mapping, TypeVar
 
-from pydantic import BaseModel, ConfigDict, Field, create_model, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    create_model,
+    field_validator,
+    model_validator,
+)
 
+from deepreason.conjecture_turn import (
+    ConjectureAbstentionV1,
+    ConjecturerTurnV4,
+    ContextRequestV1,
+    ReasoningConjecturerTurnV4,
+)
 from deepreason.llm.contracts import (
     ArgumentativeCriticOutput,
     CandidateRef,
@@ -30,6 +43,7 @@ from deepreason.llm.contracts import (
 from deepreason.llm.profiles import ModelProfile, get_profile
 from deepreason.llm.repair import parse_one_json_value
 from deepreason.workloads.text import (
+    AnalogyClaim,
     OperationalSidecar,
     ReasoningCandidateProposal,
     ReasoningConjecturerOutput,
@@ -326,6 +340,194 @@ class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput])
             )
         return ReasoningConjecturerOutput(candidates=tuple(candidates))
 
+
+class ContextRequestWireV1(StrictWireModel):
+    """Only call-local aliases and bounded semantic search material."""
+
+    query: str | None = Field(default=None, min_length=1, max_length=8_192)
+    requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
+    desired_retrieval_channels: list[str] = Field(
+        default_factory=list, max_length=16
+    )
+    purpose: str | None = Field(default=None, min_length=1, max_length=4_096)
+
+    @model_validator(mode="after")
+    def _has_semantic_selector(self):
+        if not (
+            self.query
+            or self.requested_visible_aliases
+            or self.desired_retrieval_channels
+        ):
+            raise ValueError(
+                "context request requires a query, visible alias, or channel"
+            )
+        return self
+
+    @field_validator("requested_visible_aliases", "desired_retrieval_channels")
+    @classmethod
+    def _unique_values(cls, value):
+        if len(value) != len(set(value)):
+            raise ValueError("context request values must not contain duplicates")
+        return value
+
+    @field_validator("requested_visible_aliases")
+    @classmethod
+    def _visible_alias_syntax(cls, value):
+        for alias in value:
+            if re.fullmatch(r"[ABCLG][1-9][0-9]{0,4}", alias) is None:
+                raise ValueError(
+                    "requested context must use a visible A*, B*, C*, L*, or G* alias"
+                )
+        return value
+
+
+class ConjecturerTurnWireV4(StrictWireModel):
+    candidates: list[CompactConjectureCandidate] = Field(
+        default_factory=list, max_length=256
+    )
+    context_request: ContextRequestWireV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (self.candidates or self.context_request or self.abstention):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and self.candidates:
+            raise ValueError("abstention cannot accompany candidate proposals")
+        return self
+
+
+class ReasoningConjecturerTurnWireV4(StrictWireModel):
+    candidates: list[ReasoningCandidateProposal] = Field(
+        default_factory=list, max_length=256
+    )
+    context_request: ContextRequestWireV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (self.candidates or self.context_request or self.abstention):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and self.candidates:
+            raise ValueError("abstention cannot accompany candidate proposals")
+        return self
+
+
+class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
+    """Call-local v4 turn compiler shared by direct and compact profiles."""
+
+    def __init__(
+        self,
+        *,
+        reasoning: bool,
+        aliases: AliasTable,
+        scratch_aliases: Mapping[str, str] | None = None,
+        permitted_retrieval_channels: tuple[str, ...] = (),
+    ) -> None:
+        self.reasoning = reasoning
+        self.scratch_aliases = MappingProxyType(dict(scratch_aliases or {}))
+        if set(self.scratch_aliases) & set(aliases.aliases):
+            raise ValueError("formal and scratch alias namespaces must not overlap")
+        self.permitted_retrieval_channels = tuple(permitted_retrieval_channels)
+        super().__init__(
+            "conjecturer.turn.v4",
+            ReasoningConjecturerTurnWireV4 if reasoning else ConjecturerTurnWireV4,
+            ReasoningConjecturerTurnV4 if reasoning else ConjecturerTurnV4,
+            aliases=aliases,
+            variant="compact.v4",
+        )
+
+    def _resolve_context_alias(self, alias: str) -> str:
+        if alias in self.scratch_aliases:
+            return self.scratch_aliases[alias]
+        return self.aliases.resolve(alias)
+
+    def _compile_request(
+        self, request: ContextRequestWireV1 | None
+    ) -> ContextRequestV1 | None:
+        if request is None:
+            return None
+        desired = tuple(request.desired_retrieval_channels)
+        return ContextRequestV1(
+            query=request.query,
+            requested_refs=tuple(
+                self._resolve_context_alias(alias)
+                for alias in request.requested_visible_aliases
+            ),
+            desired_retrieval_channels=desired,
+            purpose=request.purpose,
+        )
+
+    def compile(self, wire: BaseModel) -> BaseModel:
+        request = self._compile_request(wire.context_request)
+        if not self.reasoning:
+            return ConjecturerTurnV4(
+                candidates=tuple(
+                    ConjectureCandidate(
+                        content=item.content,
+                        typicality=item.typicality,
+                        refs=[
+                            CandidateRef(target=self.aliases.resolve(alias))
+                            for alias in item.neighbours
+                        ],
+                    )
+                    for item in wire.candidates
+                ),
+                context_request=request,
+                abstention=wire.abstention,
+            )
+
+        candidates = []
+        sidecar_refs: list[str] = []
+        for candidate in wire.candidates:
+            optional_refs = tuple(
+                self.aliases.resolve(alias) for alias in candidate.optional_refs
+            )
+            requested = tuple(
+                self._resolve_context_alias(alias)
+                for alias in candidate.sidecar.requested_context_aliases
+            )
+            sidecar_refs.extend(requested)
+            candidates.append(
+                ReasoningCandidateProposal(
+                    claim=candidate.claim,
+                    mechanism=candidate.mechanism,
+                    counterconditions=candidate.counterconditions,
+                    typicality=candidate.typicality,
+                    optional_refs=optional_refs,
+                    analogy=AnalogyClaim.model_validate(candidate.analogy)
+                    if candidate.analogy is not None
+                    else None,
+                    sidecar=OperationalSidecar(
+                        search_signal=candidate.sidecar.search_signal,
+                        requested_context_aliases=requested,
+                    ),
+                )
+            )
+        if sidecar_refs:
+            combined_refs = tuple(
+                dict.fromkeys(
+                    [
+                        *(request.requested_refs if request is not None else ()),
+                        *sidecar_refs,
+                    ]
+                )
+            )
+            if request is None:
+                request = ContextRequestV1(requested_refs=combined_refs)
+            else:
+                request = ContextRequestV1(
+                    query=request.query,
+                    requested_refs=combined_refs,
+                    desired_retrieval_channels=request.desired_retrieval_channels,
+                    purpose=request.purpose,
+                )
+        return ReasoningConjecturerTurnV4(
+            candidates=tuple(candidates),
+            context_request=request,
+            abstention=wire.abstention,
+        )
+
 class CompactCritic(StrictWireModel):
     attack: bool
     target_alias: str
@@ -572,4 +774,6 @@ def minimal_example(contract: WireContract) -> str:
     """Exactly one syntax-only example suitable for compact prompts."""
     from deepreason.llm.repair import minimal_skeleton
 
+    if contract.contract_id == "conjecturer.turn.v4":
+        return '{"abstention":{"search_signal":"stuck"}}'
     return json.dumps(minimal_skeleton(contract.model_json_schema()), separators=(",", ":"))

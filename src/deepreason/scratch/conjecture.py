@@ -7,6 +7,7 @@ import hashlib
 from pydantic import Field, model_validator
 
 from deepreason.canonical import canonical_json
+from deepreason.conjecture_turn import ContextRequestV1
 from deepreason.ontology.event import ConjectureContextCallReceiptV1
 from deepreason.ontology.problem import Problem
 from deepreason.run_manifest import ConjectureContextPolicyV1, ScratchPolicy
@@ -52,6 +53,35 @@ class PlannedConjectureContextV1(ScratchRecord):
     attention_pack: AttentionPackV1
     advisory_context: AdvisoryContextV1
     rendered_context: RenderedScratchPackV1
+    expansion_decision_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    prior_selection_receipt_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    root_block_ids: tuple[str, ...] | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    expansion_request_hash: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    expansion_index: int | None = Field(
+        default=None,
+        ge=1,
+        le=8,
+        exclude_if=lambda value: value is None,
+    )
+    added_block_refs: tuple[str, ...] | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
     @model_validator(mode="after")
     def _parts_share_one_fence_and_selection(self):
@@ -69,6 +99,33 @@ class PlannedConjectureContextV1(ScratchRecord):
         )
         if self.attention_policy_hash != expected_policy:
             raise ValueError("attention policy hash does not match the planned policy")
+        if (
+            self.prior_selection_receipt_ref is not None
+            and self.expansion_decision_ref is None
+        ):
+            raise ValueError(
+                "a prior selection requires its expansion decision"
+            )
+        if self.root_block_ids is not None:
+            if len(self.root_block_ids) != len(set(self.root_block_ids)):
+                raise ValueError("root context blocks must not contain duplicates")
+            if not set(self.root_block_ids).issubset(
+                self.attention_pack.selection_receipt.final_order
+            ):
+                raise ValueError("expanded context must retain every root block")
+        lineage = (
+            self.expansion_request_hash,
+            self.expansion_index,
+            self.added_block_refs,
+        )
+        if self.expansion_decision_ref is None and any(
+            value is not None for value in lineage
+        ):
+            raise ValueError("expansion lineage requires a decision")
+        if self.expansion_decision_ref is not None and any(
+            value is None for value in lineage
+        ):
+            raise ValueError("expanded plans require complete lineage")
         return self
 
 
@@ -100,6 +157,32 @@ def _bounded_attention_policy(
             base.exploratory_fraction,
             1 / maximum_blocks,
         )
+    return AttentionPolicyV1.model_validate(values)
+
+
+def _expanded_attention_policy(
+    scratch_policy: ScratchPolicy,
+    context_policy: ConjectureContextPolicyV1,
+    *,
+    maximum_blocks: int,
+) -> AttentionPolicyV1:
+    base = scratch_policy.attention_policy()
+    values = base.model_dump(mode="json", by_alias=True)
+    values["max_blocks_per_pack"] = maximum_blocks
+    values["max_guides_per_pack"] = min(
+        base.max_guides_per_pack,
+        context_policy.initial_max_guides,
+    )
+    limits = dict(values["per_channel_limits"])
+    limits[RetrievalChannel.FOCUS.value] = max(
+        maximum_blocks,
+        limits[RetrievalChannel.FOCUS.value],
+    )
+    values["per_channel_limits"] = limits
+    permitted = set(context_policy.permitted_retrieval_channels)
+    values["coverage_enabled"] = bool(
+        base.coverage_enabled and "coverage" in permitted
+    )
     return AttentionPolicyV1.model_validate(values)
 
 
@@ -146,6 +229,25 @@ def _seed(
             "school_id": school_id,
             "formal_fence_seq": formal_fence_seq,
             "scratch_fence_seq": scratch_fence_seq,
+        }
+    )
+    return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big")
+
+
+def _expansion_seed(
+    manifest_digest: str,
+    problem_id: str,
+    school_id: str | None,
+    decision_ref: str,
+    request_hash: str,
+) -> int:
+    payload = canonical_json(
+        {
+            "manifest_digest": manifest_digest,
+            "problem_id": problem_id,
+            "school_id": school_id,
+            "decision_ref": decision_ref,
+            "request_hash": request_hash,
         }
     )
     return int.from_bytes(hashlib.sha256(payload).digest()[:8], "big")
@@ -314,6 +416,233 @@ def commit_conjecture_context(
         advisory_context_ref=committed.id,
         render_receipt_ref=render_receipt_ref,
         rendered_context_ref=rendered_context_ref,
+        expansion_decision_ref=plan.expansion_decision_ref,
+        prior_selection_receipt_ref=plan.prior_selection_receipt_ref,
+        root_block_refs=(
+            list(plan.root_block_ids)
+            if plan.root_block_ids is not None
+            else None
+        ),
+        expansion_request_hash=plan.expansion_request_hash,
+        expansion_index=plan.expansion_index,
+        added_block_refs=(
+            list(plan.added_block_refs)
+            if plan.added_block_refs is not None
+            else None
+        ),
+    )
+
+
+def plan_conjecture_context_expansion(
+    service: ScratchService,
+    *,
+    problem: Problem,
+    school_id: str | None,
+    manifest_digest: str,
+    scratch_policy: ScratchPolicy,
+    context_policy: ConjectureContextPolicyV1,
+    request: ContextRequestV1,
+    prior_plan: PlannedConjectureContextV1 | None,
+    expansion_decision_ref: str,
+    expansion_index: int,
+    formal_fence_seq: int,
+    scratch_fence_seq: int,
+) -> PlannedConjectureContextV1 | None:
+    """Prepare one cumulative follow-up view within the frozen total cap."""
+
+    if service.read_only:
+        raise ScratchReadOnly(
+            "historical scratch views cannot plan future Conj expansion"
+        )
+    problem = Problem.model_validate(problem)
+    scratch_policy = ScratchPolicy.model_validate(scratch_policy)
+    context_policy = ConjectureContextPolicyV1.model_validate(context_policy)
+    request = ContextRequestV1.model_validate(request)
+    if isinstance(expansion_index, bool) or not 1 <= expansion_index <= 8:
+        raise ValueError("expansion_index must be from 1 through 8")
+    prior = (
+        PlannedConjectureContextV1.model_validate(prior_plan)
+        if prior_plan is not None
+        else None
+    )
+    current = service.harness._next_seq - 1
+    if formal_fence_seq != current or scratch_fence_seq != current:
+        raise ConjectureContextStale()
+    if service.harness.state.problems.get(problem.id) != problem:
+        raise ValueError("problem is not canonical at the supplied formal fence")
+    if context_policy.mode != "harness_plus_model_request":
+        return None
+    if prior is not None and (
+        prior.problem_id != problem.id
+        or prior.school_id != school_id
+        or prior.manifest_digest != manifest_digest
+    ):
+        raise ValueError("prior context belongs to another conjecture work item")
+
+    base = scratch_policy.attention_policy()
+    prior_ids = (
+        list(prior.attention_pack.selection_receipt.final_order) if prior else []
+    )
+    root_ids = (
+        list(
+            prior.root_block_ids
+            if prior.root_block_ids is not None
+            else prior_ids
+        )
+        if prior is not None
+        else []
+    )
+    total_cap = min(
+        base.max_blocks_per_pack,
+        len(root_ids) + context_policy.max_extra_blocks,
+    )
+    if total_cap <= len(prior_ids) or not service.state.blocks:
+        return None
+
+    permitted_values = tuple(context_policy.permitted_retrieval_channels)
+    desired_values = tuple(
+        channel.value for channel in request.desired_retrieval_channels
+    )
+    if set(desired_values) - set(permitted_values):
+        raise ValueError("context request uses a retrieval channel outside policy")
+    selected = set(desired_values or permitted_values)
+    if RetrievalChannel.FOCUS.value in permitted_values:
+        selected.add(RetrievalChannel.FOCUS.value)
+    selected_values = tuple(
+        value for value in permitted_values if value in selected
+    )
+    allowed = {RetrievalChannel(value) for value in selected_values}
+
+    focus: list[str] = list(prior_ids)
+    for reference in request.requested_refs:
+        if reference in service.state.blocks:
+            focus.append(reference)
+            continue
+        if reference in service.state.clusters:
+            focus.extend(
+                block.id for block in service.cluster_members(reference)
+            )
+            continue
+        if reference in service.state.links:
+            link = service.state.links[reference]
+            focus.extend((link.body.from_, link.body.to))
+            continue
+        guide = next(
+            (
+                item
+                for guides in service.state.guides_by_cluster.values()
+                for item in guides
+                if item.id == reference
+            ),
+            None,
+        )
+        if guide is not None:
+            if guide.entry_points:
+                focus.extend(guide.entry_points)
+            else:
+                focus.extend(
+                    block.id for block in service.cluster_members(guide.cluster_id)
+                )
+            continue
+        focus.extend(
+            block.id
+            for block in service.state.blocks.values()
+            if reference in block.provenance.formal_artifact_refs
+        )
+    if request.query and RetrievalChannel.KEYWORD in allowed:
+        focus.extend(
+            block.id
+            for block in service.search_phrase(
+                request.query,
+                max(1, context_policy.max_extra_blocks * 4),
+            )
+        )
+    focus = list(dict.fromkeys(focus))[:total_cap]
+    if focus and RetrievalChannel.FOCUS not in {
+        RetrievalChannel(value) for value in permitted_values
+    }:
+        # A visible-alias request cannot silently acquire an ungranted channel.
+        if any(reference in service.state.blocks for reference in request.requested_refs):
+            return None
+        focus = []
+
+    attention_policy = _expanded_attention_policy(
+        scratch_policy,
+        context_policy,
+        maximum_blocks=total_cap,
+    )
+    permitted = tuple(RetrievalChannel(value) for value in selected_values)
+    clusters = (
+        sorted(
+            {
+                cluster_id
+                for block_id in focus
+                for cluster_id in service.state.clusters_by_block.get(block_id, set())
+            }
+        )
+        if RetrievalChannel.CLUSTER in allowed
+        else []
+    )
+    attention_request = AttentionRequestV1(
+        focus_blocks=focus or None,
+        focus_clusters=clusters or None,
+        permitted_channels=list(permitted),
+        maximum_blocks=total_cap,
+        maximum_cluster_guides=attention_policy.max_guides_per_pack,
+        include_nearby=bool(
+            allowed
+            & {
+                RetrievalChannel.LINK,
+                RetrievalChannel.CLUSTER,
+                RetrievalChannel.KEYWORD,
+                RetrievalChannel.SEMANTIC,
+            }
+        ),
+        include_recent=RetrievalChannel.RECENT in allowed,
+        include_loose=RetrievalChannel.LOOSE in allowed,
+        include_dormant=RetrievalChannel.DORMANT in allowed,
+        include_underexposed=RetrievalChannel.UNDEREXPOSED in allowed,
+        include_exploratory=RetrievalChannel.EXPLORATORY in allowed,
+        deterministic_seed=_expansion_seed(
+            manifest_digest,
+            problem.id,
+            school_id,
+            expansion_decision_ref,
+            request.request_hash,
+        ),
+    )
+    pack = AttentionPlanner(service, attention_policy).plan(attention_request)
+    final_ids = list(pack.selection_receipt.final_order)
+    if not set(prior_ids).issubset(final_ids) or not (set(final_ids) - set(prior_ids)):
+        return None
+    context = service.prepare_advisory_context(
+        pack,
+        warning=SCRATCH_CONTRACT_INSTRUCTIONS,
+    )
+    rendered = ScratchRenderer(service).render_advisory_context(pack, context)
+    return PlannedConjectureContextV1(
+        formal_fence_seq=formal_fence_seq,
+        scratch_fence_seq=scratch_fence_seq,
+        problem_id=problem.id,
+        school_id=school_id,
+        manifest_digest=manifest_digest,
+        attention_policy_hash=domain_hash(
+            "conjecture.attention.policy.v1", attention_policy
+        ),
+        attention_policy=attention_policy,
+        attention_pack=pack,
+        advisory_context=context,
+        rendered_context=rendered,
+        expansion_decision_ref=expansion_decision_ref,
+        prior_selection_receipt_ref=(
+            prior.attention_pack.selection_receipt.id if prior else None
+        ),
+        root_block_ids=tuple(root_ids),
+        expansion_request_hash=request.request_hash,
+        expansion_index=expansion_index,
+        added_block_refs=tuple(
+            block_id for block_id in final_ids if block_id not in set(prior_ids)
+        ),
     )
 
 
@@ -327,4 +656,5 @@ __all__ = [
     "PlannedConjectureContextV1",
     "commit_conjecture_context",
     "plan_conjecture_context",
+    "plan_conjecture_context_expansion",
 ]

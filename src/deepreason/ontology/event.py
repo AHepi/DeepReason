@@ -7,11 +7,13 @@ replay-deterministic.
 """
 
 from enum import Enum
+import re
 from typing import Literal, Mapping
 
 from pydantic import ConfigDict, Field, field_validator, model_validator
 
 from deepreason.bridge.events import BridgeEventPayloadV1
+from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
 
@@ -29,6 +31,7 @@ class Rule(str, Enum):
     RESEED = "Reseed"
     SCRATCH = "Scratch"
     BRIDGE = "Bridge"
+    CONJECTURE_TURN = "ConjectureTurn"
 
 
 class LLMAttempt(FrozenRecord):
@@ -121,6 +124,48 @@ class ConjectureContextCallReceiptV1(FrozenRecord):
     advisory_context_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     render_receipt_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
     rendered_context_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
+    expansion_decision_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    prior_selection_receipt_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    root_block_refs: list[str] | None = Field(
+        default=None,
+        max_length=1_000,
+        exclude_if=lambda value: value is None,
+    )
+    expansion_request_hash: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    expansion_index: int | None = Field(
+        default=None,
+        ge=1,
+        le=8,
+        exclude_if=lambda value: value is None,
+    )
+    added_block_refs: list[str] | None = Field(
+        default=None,
+        max_length=1_000,
+        exclude_if=lambda value: value is None,
+    )
+
+    @field_validator("root_block_refs", "added_block_refs", mode="after")
+    @classmethod
+    def _freeze_lineage_blocks(cls, value):
+        if value is None:
+            return None
+        if len(value) != len(set(value)) or any(
+            re.fullmatch(r"sha256:[0-9a-f]{64}", item) is None for item in value
+        ):
+            raise ValueError("scratch lineage blocks must be unique canonical hashes")
+        return FrozenList(value)
 
     @model_validator(mode="after")
     def _one_state_prefix(self):
@@ -128,6 +173,34 @@ class ConjectureContextCallReceiptV1(FrozenRecord):
             raise ValueError(
                 "conjecture context formal and scratch fences must name one prefix"
             )
+        if (
+            self.prior_selection_receipt_ref is not None
+            and self.expansion_decision_ref is None
+        ):
+            raise ValueError(
+                "a prior selection requires its expansion decision"
+            )
+        expansion_fields = (
+            self.expansion_request_hash,
+            self.expansion_index,
+            self.added_block_refs,
+        )
+        if self.expansion_decision_ref is None and self.root_block_refs is not None:
+            raise ValueError("root scratch lineage requires an expansion decision")
+        if self.expansion_decision_ref is None and any(
+            value is not None for value in expansion_fields
+        ):
+            raise ValueError("expansion evidence requires a decision reference")
+        if self.expansion_decision_ref is not None and any(
+            value is None for value in expansion_fields
+        ):
+            raise ValueError("expanded context requires complete lineage evidence")
+        if self.added_block_refs is not None and not self.added_block_refs:
+            raise ValueError("expanded context must add at least one block")
+        if self.root_block_refs is not None and set(self.root_block_refs) & set(
+            self.added_block_refs or ()
+        ):
+            raise ValueError("root and added scratch blocks must be disjoint")
         return self
 
 
@@ -242,6 +315,9 @@ class Event(FrozenRecord):
     bridge: BridgeEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    conjecture_turn: ConjectureTurnEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
@@ -254,6 +330,12 @@ class Event(FrozenRecord):
             raise ValueError("Scratch rule and typed scratch payload must appear together")
         if (self.rule == Rule.BRIDGE) != (self.bridge is not None):
             raise ValueError("Bridge rule and typed bridge payload must appear together")
+        if (self.rule == Rule.CONJECTURE_TURN) != (
+            self.conjecture_turn is not None
+        ):
+            raise ValueError(
+                "ConjectureTurn rule and typed turn payload must appear together"
+            )
         if self.scratch is not None:
             if list(self.inputs) != list(self.scratch.inputs):
                 raise ValueError("scratch payload inputs must match Event.inputs")
@@ -264,8 +346,25 @@ class Event(FrozenRecord):
                 raise ValueError("bridge payload inputs must match Event.inputs")
             if list(self.outputs) != list(self.bridge.outputs):
                 raise ValueError("bridge payload outputs must match Event.outputs")
-        if self.scratch is not None or self.bridge is not None:
+        if self.conjecture_turn is not None:
+            reference = (
+                self.conjecture_turn.request_hash
+                or self.conjecture_turn.abstention_hash
+            )
+            if list(self.inputs) != [self.conjecture_turn.problem_id, reference]:
+                raise ValueError(
+                    "conjecture turn inputs must name its problem and proposal"
+                )
+            if self.outputs or self.llm is not None:
+                raise ValueError(
+                    "conjecture turn decisions reference an earlier model call"
+                )
+        if (
+            self.scratch is not None
+            or self.bridge is not None
+            or self.conjecture_turn is not None
+        ):
             formal = self.state_diff.model_dump(mode="json", by_alias=True)
             if any(formal.values()):
-                raise ValueError("scratch and bridge events cannot mutate formal StateDiff")
+                raise ValueError("process events cannot mutate formal StateDiff")
         return self
