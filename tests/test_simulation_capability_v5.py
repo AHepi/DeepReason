@@ -29,7 +29,7 @@ from deepreason.evidence import (
 )
 from deepreason.harness import Harness, WellFormednessError
 from deepreason.invariants import verify_root
-from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import ModelControlFieldError, leases_from_manifest
 from deepreason.llm.wire import AliasTable, ConjecturerTurnWireContractV5
@@ -45,6 +45,9 @@ from deepreason.run_manifest import (
     compile_run_manifest,
 )
 from deepreason.scheduler.scheduler import Scheduler
+from deepreason.workflow.models import TransitionKind
+from deepreason.workflow.shadow import ConjectureShadowObserver
+from deepreason.workflow.trace import ConjectureControlTrace
 
 
 STAMP = "2026-07-16T00:00:00Z"
@@ -113,6 +116,7 @@ def _simulation_policy(**updates) -> SimulationCapabilityPolicyV1:
 
 def _config() -> Config:
     return Config(
+        CONTROLLER=False,
         RETRY_MAX=0,
         N_SCHOOLS=0,
         roles={
@@ -230,6 +234,31 @@ def _adapter(manifest, harness, responses, prompts):
     return adapter, pending
 
 
+def _patch_production_adapter(monkeypatch, manifest, complete):
+    def build_adapter(_config, blobs, *, meter=None, **_kwargs):
+        return LLMAdapter(
+            {
+                "conjecturer": MockEndpoint(
+                    complete,
+                    name=manifest.roles["conjecturer"][0].base_url,
+                    model=manifest.roles["conjecturer"][0].model_id,
+                    max_tokens=1_024,
+                )
+            },
+            blobs,
+            meter=meter,
+            retry_max=0,
+            model_profile=manifest.model_profile,
+            leases=leases_from_manifest(manifest),
+        )
+
+    monkeypatch.setattr("deepreason.llm.adapter.build_adapter", build_adapter)
+    monkeypatch.setattr("deepreason.ops.make_embedder", lambda *_args: None)
+    monkeypatch.setattr(
+        "deepreason.ops.make_research_service", lambda *_args: None
+    )
+
+
 def _numeric_source(expression=None, *, observable="x") -> str:
     expression = expression or {
         "op": "div",
@@ -278,6 +307,142 @@ def _initial_conjecture(harness, manifest, config, adapter):
         workload_profile="text",
         run_manifest=manifest,
     )
+
+
+def test_run_scheduler_initializes_v5_authority_before_provider_dispatch(
+    tmp_path, monkeypatch
+):
+    """The production constructor seam must bind authority before cycle zero."""
+
+    config, manifest, harness = _prepare_run(tmp_path / "production-authority")
+    observed = {}
+    original_authorize = ConjectureControlTrace.authorize_dispatch
+
+    def observe_authorize(trace, reserved_tokens=0):
+        observed["trace"] = trace
+        result = original_authorize(trace, reserved_tokens)
+        observed["authorized_before_provider"] = (
+            trace.authoritative and trace.dispatch_authorized
+        )
+        return result
+
+    monkeypatch.setattr(
+        ConjectureControlTrace, "authorize_dispatch", observe_authorize
+    )
+
+    def complete(_prompt):
+        # This callback is the provider boundary.  Both durable planning
+        # transitions and the authoritative in-memory trace must predate it.
+        assert observed["authorized_before_provider"] is True
+        work_ids = tuple(harness.workflow_state.work_orders)
+        assert len(work_ids) == 1
+        work_id = work_ids[0]
+        transition_kinds = set()
+        for event in harness.log.read():
+            if event.control is None:
+                continue
+            _schema, decision = harness.objects.get(
+                event.control.decision_ref,
+                schema="workflow-transition-decision",
+            )
+            if decision.work_order_id == work_id:
+                transition_kinds.add(decision.transition_kind)
+        assert {
+            TransitionKind.WORK_ENABLED,
+            TransitionKind.WORK_ISSUED,
+        }.issubset(transition_kinds)
+        observed["work_order_id"] = work_id
+        return json.dumps(
+            {
+                "candidates": [
+                    {
+                        "content": "A production-path v5 authority candidate.",
+                        "typicality": 0.4,
+                        "neighbours": [],
+                    }
+                ]
+            }
+        )
+
+    _patch_production_adapter(monkeypatch, manifest, complete)
+
+    from deepreason.ops import run_scheduler
+
+    run_scheduler(
+        harness,
+        config,
+        cycles=1,
+        token_budget=100_000,
+        run_manifest=manifest,
+    )
+
+    work_id = observed["work_order_id"]
+    work = harness.workflow_state.work_orders[work_id]
+    assert work.workflow_profile == "inquiry.active.v1"
+    assert work.contract_id == "conjecturer.turn.v5"
+    assert observed["trace"].authoritative is True
+
+    events = tuple(harness.log.read())
+    controls = []
+    for event in events:
+        if event.control is None:
+            continue
+        _schema, decision = harness.objects.get(
+            event.control.decision_ref,
+            schema="workflow-transition-decision",
+        )
+        if decision.work_order_id == work_id:
+            controls.append(decision.transition_kind)
+    assert TransitionKind.WORK_ENABLED in controls
+    assert TransitionKind.WORK_ISSUED in controls
+    (provider_event,) = tuple(
+        event
+        for event in events
+        if event.llm is not None and event.llm.role == "conjecturer"
+    )
+    assert provider_event.llm.work_order_id == work_id
+    assert provider_event.llm.attempt_trace[-1].contract_id == work.contract_id
+    assert any(event.rule == Rule.CONTROL for event in events)
+
+    replayed = Harness(harness.root)
+    assert replayed.workflow_state.digest == harness.workflow_state.digest
+    assert replayed.workflow_state.outstanding_work_order_ids == ()
+    assert verify_root(harness.root)["violations"] == []
+
+
+def test_run_scheduler_fails_closed_when_v5_authority_is_genuinely_absent(
+    tmp_path, monkeypatch
+):
+    config, manifest, harness = _prepare_run(tmp_path / "authority-absent")
+    provider_calls = []
+
+    def complete(_prompt):
+        provider_calls.append("called")
+        return json.dumps({"abstention": {"search_signal": "stuck"}})
+
+    _patch_production_adapter(monkeypatch, manifest, complete)
+    monkeypatch.setattr(
+        ConjectureShadowObserver,
+        "from_manifest",
+        classmethod(lambda _cls, _manifest: None),
+    )
+
+    from deepreason.ops import run_scheduler
+
+    with pytest.raises(
+        WorkflowAuthorizationError,
+        match="active conjecture control trace is unavailable",
+    ):
+        run_scheduler(
+            harness,
+            config,
+            cycles=1,
+            token_budget=100_000,
+            run_manifest=manifest,
+        )
+
+    assert provider_calls == []
+    assert not any(event.llm is not None for event in harness.log.read())
 
 
 def test_v5_wire_allows_simulation_only_and_rejects_authority_fields():

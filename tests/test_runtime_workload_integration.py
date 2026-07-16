@@ -323,8 +323,6 @@ def test_ops_forwards_manifest_workload_profile(monkeypatch, tmp_path):
             captured.update(kwargs)
 
         def run(self, cycles, on_cycle=None):
-            captured["workload_profile"] = self.workload_profile
-            captured["stop_controller"] = self.stop_controller
             return {"cycles": cycles}
 
     monkeypatch.setattr("deepreason.llm.adapter.build_adapter", lambda *_a, **_k: adapter)

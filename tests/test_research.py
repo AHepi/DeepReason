@@ -257,7 +257,9 @@ def test_agent_mode_is_the_default_and_wired_by_ops(tmp_path, monkeypatch):
     class _FakeScheduler:
         def __init__(self, harness, adapter, config, embedder=None,
                      browser_backend=None, controller=None,
-                     research_backend=None):
+                     research_backend=None, workload_profile=None,
+                     run_manifest=None, stop_controller=None,
+                     progress_sink=None):
             seen["research"] = research_backend
 
         def run(self, cycles, on_cycle=None):

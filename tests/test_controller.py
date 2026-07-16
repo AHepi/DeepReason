@@ -394,7 +394,9 @@ def test_run_scheduler_wires_controller_by_default(tmp_path, monkeypatch):
     class _FakeScheduler:
         def __init__(self, harness, adapter, config, embedder=None,
                      browser_backend=None, controller=None,
-                     research_backend=None):
+                     research_backend=None, workload_profile=None,
+                     run_manifest=None, stop_controller=None,
+                     progress_sink=None):
             seen["controller"] = controller
 
         def run(self, cycles, on_cycle=None):
