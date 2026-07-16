@@ -20,12 +20,17 @@ from deepreason.conjecture_events import (
 )
 from deepreason.conjecture_turn import (
     ConjecturerTurnV4,
+    ConjecturerTurnV5,
     ReasoningConjecturerTurnV4,
+    ReasoningConjecturerTurnV5,
 )
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
 from deepreason.llm.firewall import EndpointLease
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
-from deepreason.llm.wire import ConjecturerTurnWireContractV4
+from deepreason.llm.wire import (
+    ConjecturerTurnWireContractV4,
+    ConjecturerTurnWireContractV5,
+)
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
 from deepreason.workloads.models import MandatoryInterface, compile_interface_draft
@@ -193,6 +198,8 @@ def conj(
     candidate_observer=None,
     workflow_work_order_id: str | None = None,
     workflow_control_trace=None,
+    _capability_result_context: str | None = None,
+    _simulation_follow_up_index: int = 0,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
@@ -263,6 +270,7 @@ def conj(
                 "typed scratch context cannot be replaced by raw generation_context"
             )
     active_v4 = run_manifest is not None
+    active_v5 = False
     context_policy = None
     scratch_policy = None
     if active_v4:
@@ -271,15 +279,20 @@ def conj(
         run_manifest = RunManifest.model_validate(run_manifest)
         control = run_manifest.control_plane_policy
         if (
-            run_manifest.schema_version != 4
+            run_manifest.schema_version not in {4, 5}
             or control is None
             or control.mode != "active_conjecture"
             or control.contract_versions.conjecturer_turn_contract
-            != "conjecturer.turn.v4"
+            != (
+                "conjecturer.turn.v5"
+                if run_manifest.schema_version == 5
+                else "conjecturer.turn.v4"
+            )
         ):
             raise ValueError(
-                "v4 conjecture turns require an active_conjecture manifest"
+                "controlled conjecture turns require their exact active manifest contract"
             )
+        active_v5 = run_manifest.schema_version == 5
         context_policy = control.conjecture_context
         scratch_policy = run_manifest.scratch_policy
         if scratch_policy is None:
@@ -315,6 +328,11 @@ def conj(
                 raise ValueError(
                     "active Conj endpoint lease differs from workflow work order"
                 )
+    frozen_evidence_context = None
+    if active_v5:
+        from deepreason.capabilities.evidence import render_frozen_evidence
+
+        frozen_evidence_context = render_frozen_evidence(run_manifest)
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -333,6 +351,8 @@ def conj(
             if conjecture_context_plan is not None
             else None
         ),
+        frozen_evidence_context=frozen_evidence_context,
+        capability_result_context=_capability_result_context,
         allow_no_candidate_outcome=active_v4,
     )
     aliases = aliases_for_pack(pack, harness.state.artifacts, prefix="A")
@@ -342,7 +362,11 @@ def conj(
         if commitment_id in harness.commitments
     )
     output_model = (
-        ReasoningConjecturerTurnV4
+        ReasoningConjecturerTurnV5
+        if active_v5 and reasoning
+        else ConjecturerTurnV5
+        if active_v5
+        else ReasoningConjecturerTurnV4
         if active_v4 and reasoning
         else ConjecturerTurnV4
         if active_v4
@@ -362,7 +386,11 @@ def conj(
             attention_policy=conjecture_context_plan.attention_policy,
         )
     turn_contract = (
-        ConjecturerTurnWireContractV4(
+        (
+            ConjecturerTurnWireContractV5
+            if active_v5
+            else ConjecturerTurnWireContractV4
+        )(
             reasoning=reasoning,
             aliases=aliases,
             scratch_aliases=(
@@ -387,6 +415,17 @@ def conj(
                 context_policy.permitted_retrieval_channels
                 if context_policy is not None
                 else ()
+            ),
+            **(
+                {
+                    "maximum_simulation_proposals": (
+                        run_manifest.simulation_capability_policy.maximum_proposals_per_turn
+                        if run_manifest.simulation_capability_policy.enabled
+                        else 32
+                    )
+                }
+                if active_v5
+                else {}
             ),
         )
         if active_v4
@@ -441,6 +480,7 @@ def conj(
         source_call_seq = harness._next_seq - 1
     request = output.context_request if active_v4 else None
     abstention = output.abstention if active_v4 else None
+    simulation_drafts = output.simulation_proposals if active_v5 else ()
     request_ref = (
         harness.blobs.put(
             canonical_json(request.model_dump(mode="json", exclude_none=True))
@@ -704,7 +744,9 @@ def conj(
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
         effective_workload = "text" if reasoning else workload_profile
         effective_contract = (
-            "conjecturer.turn.v4"
+            (
+                "conjecturer.turn.v5" if active_v5 else "conjecturer.turn.v4"
+            )
             if active_v4
             else "reasoning.conjecturer.compact.v2"
             if reasoning
@@ -854,14 +896,89 @@ def conj(
             abstention=abstention,
         )
 
+    simulation_follow_up_artifacts: list[Artifact] = []
+    if active_v5 and simulation_drafts:
+        from deepreason.capabilities.simulation import (
+            SimulationCapabilityController,
+        )
+
+        controller = SimulationCapabilityController(harness, run_manifest)
+        parent_work = workflow_control_trace.ticket.work_order
+        for proposal_index, draft in enumerate(simulation_drafts):
+            package = controller.execute(
+                draft,
+                proposal_index=proposal_index,
+                work_order=parent_work,
+                source_call_seq=source_call_seq,
+                formal_fence_seq=parent_work.formal_fence_seq,
+                scratch_fence_seq=parent_work.scratch_fence_seq,
+            )
+            if package is None:
+                continue
+            if (
+                harness.capability_state.consumption_count
+                >= run_manifest.simulation_capability_policy.maximum_follow_up_reasoning_turns
+            ):
+                continue
+            fence = harness._next_seq - 1
+            follow_up_trace = workflow_control_trace.capability_follow_up(
+                result_package_ref=package.id,
+                result_context_ref=package.result_context_ref,
+                formal_fence_seq=fence,
+                scratch_fence_seq=fence,
+            )
+            # The capability consumption is durable before the next provider
+            # boundary and its referenced fresh work is already resolvable.
+            harness.objects.put(
+                "workflow-work-order", follow_up_trace.ticket.work_order
+            )
+            controller.consume(
+                package,
+                follow_up_work_order_ref=follow_up_trace.ticket.work_order.id,
+                formal_fence_seq=parent_work.formal_fence_seq,
+                scratch_fence_seq=parent_work.scratch_fence_seq,
+            )
+            simulation_follow_up_artifacts.extend(
+                conj(
+                    harness,
+                    problem_id,
+                    adapter,
+                    config,
+                    diagnostics,
+                    school=school,
+                    tail_weighted=tail_weighted,
+                    complement=complement,
+                    specs=specs,
+                    embedder=embedder,
+                    mandatory_interface=mandatory_interface,
+                    workload_profile=workload_profile,
+                    contract_id=contract_id,
+                    component_spec=component_spec,
+                    theorem_interface=theorem_interface,
+                    generation_context=generation_context,
+                    suppressed_exemplars=suppressed_exemplars,
+                    capture_candidate_content=capture_candidate_content,
+                    endpoint_lease=endpoint_lease,
+                    execution_school_id=execution_school_id,
+                    conjecture_context_plan=conjecture_context_plan,
+                    run_manifest=run_manifest,
+                    _context_expansion_index=_context_expansion_index,
+                    candidate_observer=candidate_observer,
+                    workflow_work_order_id=None,
+                    workflow_control_trace=follow_up_trace,
+                    _capability_result_context=controller.result_context(package),
+                    _simulation_follow_up_index=_simulation_follow_up_index + 1,
+                )
+            )
+
     if request is None:
         workflow_control_trace.seal()
-        return registered
+        return [*registered, *simulation_follow_up_artifacts]
     assert context_turn_payload is not None
     harness.record_conjecture_turn_event(context_turn_payload, request=request)
     if not context_granted:
         workflow_control_trace.seal()
-        return registered
+        return [*registered, *simulation_follow_up_artifacts]
 
     from deepreason.scratch.conjecture import plan_conjecture_context_expansion
     from deepreason.scratch.service import ScratchService
@@ -917,5 +1034,7 @@ def conj(
         candidate_observer=candidate_observer,
         workflow_work_order_id=None,
         workflow_control_trace=follow_up_trace,
+        _capability_result_context=_capability_result_context,
+        _simulation_follow_up_index=_simulation_follow_up_index,
     )
-    return [*registered, *follow_up]
+    return [*registered, *simulation_follow_up_artifacts, *follow_up]

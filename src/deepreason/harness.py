@@ -26,6 +26,8 @@ from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
 from deepreason.bridge.state import BridgeState
+from deepreason.capabilities.events import CapabilityEventPayloadV1
+from deepreason.capabilities.state import CapabilityReplayState
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.control_events import ControlEventPayloadV1
 from deepreason.conjecture_turn import (
@@ -128,6 +130,9 @@ class Harness:
         from deepreason.workflow.replay import WorkflowReplayState
 
         self.workflow_state = WorkflowReplayState()
+        # Autonomous capability authority is replayed independently from the
+        # conjecture-provider controller and never enters formal adjudication.
+        self.capability_state = CapabilityReplayState()
         self.commitments: dict[str, Commitment] = {}
         self.warrants: dict[str, Warrant] = {}
         self._next_seq = 0
@@ -538,12 +543,15 @@ class Harness:
             or call.role != "conjecturer"
             or not call.attempt_trace
             or any(
-                attempt.contract_id != "conjecturer.turn.v4"
+                attempt.contract_id not in {
+                    "conjecturer.turn.v4",
+                    "conjecturer.turn.v5",
+                }
                 for attempt in call.attempt_trace
             )
         ):
             raise ValueError(
-                "conjecture turn source must be one preceding manifest-bound v4 call"
+                "conjecture turn source must be one preceding manifest-bound controlled call"
             )
         route_school = (
             call.school_route.school_id if call.school_route is not None else None
@@ -800,6 +808,92 @@ class Harness:
             inputs=inputs,
             outputs=outputs,
             control=payload,
+        )
+
+    def record_capability_transition(
+        self,
+        transition,
+        *,
+        phase_record=None,
+    ) -> Event:
+        """Persist one simulation lifecycle transition and its exact record."""
+
+        from deepreason.capabilities.models import (
+            CapabilityLifecycle,
+            CapabilityTransitionV1,
+            CompiledSimulationV1,
+            SimulationConsumptionV1,
+            SimulationExecutionReceiptV1,
+            SimulationGrantV1,
+            SimulationProposalV1,
+            SimulationResultPackageV1,
+        )
+
+        self._ensure_writable()
+        transition = CapabilityTransitionV1.model_validate(
+            transition.model_dump(mode="python", by_alias=True)
+        )
+        expected = {
+            CapabilityLifecycle.PROPOSED: (
+                "capability-simulation-proposal",
+                SimulationProposalV1,
+            ),
+            CapabilityLifecycle.GRANTED: (
+                "capability-simulation-grant",
+                SimulationGrantV1,
+            ),
+            CapabilityLifecycle.COMPILED: (
+                "capability-compiled-simulation",
+                CompiledSimulationV1,
+            ),
+            CapabilityLifecycle.SUCCEEDED: (
+                "capability-simulation-receipt",
+                SimulationExecutionReceiptV1,
+            ),
+            CapabilityLifecycle.FAILED: (
+                "capability-simulation-receipt",
+                SimulationExecutionReceiptV1,
+            ),
+            CapabilityLifecycle.RESULT_PACKAGED: (
+                "capability-simulation-result-package",
+                SimulationResultPackageV1,
+            ),
+            CapabilityLifecycle.CONSUMED: (
+                "capability-simulation-consumption",
+                SimulationConsumptionV1,
+            ),
+        }.get(transition.lifecycle)
+        if expected is None:
+            if phase_record is not None or transition.phase_record_ref is not None:
+                raise ValueError("this capability transition cannot carry a phase record")
+            records = []
+        else:
+            if phase_record is None:
+                raise ValueError("capability transition requires its phase record")
+            schema, model = expected
+            phase_record = model.model_validate(
+                phase_record.model_dump(mode="python", by_alias=True)
+            )
+            if transition.phase_record_ref != phase_record.id:
+                raise ValueError("capability transition differs from its phase record")
+            records = [(schema, phase_record)]
+        records.append(("capability-transition", transition))
+        for schema, record in records:
+            self.objects.put(schema, record)
+        inputs = [transition.originating_work_order_ref, transition.request_ref]
+        outputs = [record.id for _schema, record in records]
+        payload = CapabilityEventPayloadV1(
+            lifecycle=transition.lifecycle,
+            request_ref=transition.request_ref,
+            transition_ref=transition.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CAPABILITY,
+            inputs=inputs,
+            outputs=outputs,
+            capability=payload,
         )
 
     def record_lifecycle_transition(
@@ -1174,6 +1268,7 @@ class Harness:
         bridge: BridgeEventPayloadV1 | None = None,
         conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
         control: ControlEventPayloadV1 | None = None,
+        capability: CapabilityEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
         event = Event(
@@ -1189,6 +1284,7 @@ class Harness:
             bridge=bridge,
             conjecture_turn=conjecture_turn,
             control=control,
+            capability=capability,
         )
         try:
             state_diff = self._apply_event(event)
@@ -1229,6 +1325,12 @@ class Harness:
                             self.blobs.get(ref)
                     resolved_workflow.append((schema, object_id, value))
                 self.workflow_state.apply(event, resolved_workflow)
+            if event.capability is not None:
+                resolved_capability = []
+                for object_id in event.outputs:
+                    schema, value = self.objects.get(object_id)
+                    resolved_capability.append((schema, object_id, value))
+                self.capability_state.apply(event, resolved_capability)
         except ValueError as error:
             raise WellFormednessError(str(error)) from error
         if event.scratch is not None:

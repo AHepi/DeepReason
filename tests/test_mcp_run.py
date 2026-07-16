@@ -7,9 +7,18 @@ import threading
 
 from deepreason.application import OperatorCancellationIntentV1
 from deepreason import mcp_server
+from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.cli.main import main as cli_main
 from deepreason.config import Config
-from deepreason.run_manifest import ToolchainEntry, compile_run_manifest, write_run_manifest
+from deepreason.run_manifest import (
+    ConjectureContextPolicyV1,
+    ContractVersionPolicyV1,
+    ControlPlanePolicyV1,
+    SchoolExecutionPolicyV1,
+    ToolchainEntry,
+    compile_run_manifest,
+    write_run_manifest,
+)
 from deepreason.verification.models import VerificationResult
 
 
@@ -29,6 +38,55 @@ def _manifest(tmp_path):
         workload_profile="text",
     )
     path, _ = write_run_manifest(manifest, tmp_path / "manifest.json")
+    return manifest, path
+
+
+def _manifest_v5(tmp_path):
+    route = {
+        "endpoint_id": "v5-offline-fixture",
+        "endpoint": "https://example.invalid/v1",
+        "model": "gemma4:31b",
+        "provider": "ollama",
+        "family": "gemma",
+    }
+    control = ControlPlanePolicyV1(
+        controller_version="workflow.controller.v1",
+        mode="active_conjecture",
+        workflow_profile="conjecture.active.v1",
+        school_execution=SchoolExecutionPolicyV1(
+            mode="conditioning_only",
+            bindings=(),
+            allow_shared=True,
+            require_distinct_models=False,
+            require_distinct_families=False,
+        ),
+        conjecture_context=ConjectureContextPolicyV1(
+            mode="disabled",
+            initial_max_blocks=0,
+            initial_max_guides=0,
+            max_context_expansion_requests=0,
+            max_extra_blocks=0,
+            permitted_retrieval_channels=(),
+            coverage_slot_mandatory=False,
+            exploration_slot_mandatory=False,
+        ),
+        workflow_retry=WorkflowRetryPolicyV1(),
+        contract_versions=ContractVersionPolicyV1(
+            bridge_ledger_wire_contract="bridge.ledger.v2",
+            conjecturer_turn_contract="conjecturer.turn.v5",
+            control_event_schema="control.event.v1",
+        ),
+        capability_profile="conjecture-control.v1",
+    )
+    manifest = compile_run_manifest(
+        Config(roles={"conjecturer": route}),
+        rubric_policy="forbid",
+        compiled_at="2026-07-16T00:00:00Z",
+        schema_version=5,
+        workload_profile="text",
+        control_plane_policy=control,
+    )
+    path, _ = write_run_manifest(manifest, tmp_path / "manifest-v5.json")
     return manifest, path
 
 
@@ -102,6 +160,50 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
     assert result["stop"]["reason"] == "budget_exhausted"
     assert notifications
     assert {item["params"]["progressToken"] for item in notifications} == {"progress-1"}
+
+
+def test_v5_text_run_writes_canonical_capability_audits(tmp_path, monkeypatch):
+    manifest, manifest_path = _manifest_v5(tmp_path)
+
+    def fake_run(
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
+    ):
+        assert run_manifest == manifest
+        on_cycle(_SchedulerView(harness, 1))
+        return (
+            {"frontier": [], "survivors": [], "problems": [], "diagnostics": []},
+            None,
+            {"metered_tokens": None, "logged_tokens_this_run": 0, "delta": None},
+        )
+
+    monkeypatch.setattr("deepreason.ops.run_scheduler", fake_run)
+    root = tmp_path / "run-v5"
+    _payload(
+        _call(
+            "start_run",
+            {
+                "root": str(root),
+                "workload": "text",
+                "problem": {"description": "When is a simulation discriminating?"},
+                "run_manifest_ref": str(manifest_path),
+                "budget": {"cycles": 1, "token_budget": "unlimited"},
+            },
+        )
+    )
+    mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
+
+    result = _payload(_call("run_result", {"root": str(root)}))
+    assert result["state"] == "completed"
+    assert set(result["capability_audits"]) == {
+        "CAPABILITY_REQUEST_AUDIT.md",
+        "REPLAY_VALIDATION.json",
+        "RESEARCH_SOURCE_AUDIT.md",
+        "SIMULATION_RESULTS.md",
+        "THEORY_TEST_LINEAGE.md",
+        "TOKEN_ACCOUNTING.json",
+    }
+    assert json.loads((root / "REPLAY_VALIDATION.json").read_text())["valid"] is True
 
 
 def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypatch):

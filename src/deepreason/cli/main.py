@@ -55,7 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
     compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
-    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3, 4), type=int, default=1)
+    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3, 4, 5), type=int, default=1)
     compile_cmd.add_argument(
         "--workload-profile", choices=("text", "code", "formal", "website"), default=None
     )
@@ -64,7 +64,22 @@ def build_parser() -> argparse.ArgumentParser:
     compile_cmd.add_argument(
         "--control-plane-policy",
         default=None,
-        help="v4 ControlPlanePolicyV1 JSON file (required with --schema-version 4)",
+        help="ControlPlanePolicyV1 JSON file (required with --schema-version 4 or 5)",
+    )
+    compile_cmd.add_argument(
+        "--simulation-capability-policy",
+        default=None,
+        help="v5 SimulationCapabilityPolicyV1 JSON file",
+    )
+    compile_cmd.add_argument(
+        "--frozen-evidence-policy",
+        default=None,
+        help="v5 FrozenEvidencePolicyV1 JSON file",
+    )
+    compile_cmd.add_argument(
+        "--simulation-toolchain",
+        default=None,
+        help="exact ToolchainEntry JSON file for the v5 simulation runner",
     )
     compile_cmd.add_argument(
         "--rubric-policy", choices=("forbid", "require_cross_family"),
@@ -356,9 +371,14 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.run_manifest import (
             ControlPlanePolicyV1,
             RunManifestError,
+            ToolchainEntry,
             compile_run_manifest,
             render_role_matrix,
             write_run_manifest,
+        )
+        from deepreason.capabilities.policy import (
+            FrozenEvidencePolicyV1,
+            SimulationCapabilityPolicyV1,
         )
 
         configured = load_config(Path(args.config) if args.config else None)
@@ -371,6 +391,31 @@ def _main(argv: list[str] | None = None) -> int:
             except (OSError, ValueError) as error:
                 print(f"invalid control-plane policy: {error}", file=sys.stderr)
                 return 1
+        simulation_capability_policy = None
+        frozen_evidence_policy = None
+        toolchains = ()
+        typed_files = (
+            (
+                "simulation-capability",
+                args.simulation_capability_policy,
+                SimulationCapabilityPolicyV1,
+            ),
+            ("frozen-evidence", args.frozen_evidence_policy, FrozenEvidencePolicyV1),
+            ("simulation-toolchain", args.simulation_toolchain, ToolchainEntry),
+        )
+        parsed = {}
+        for label, filename, model in typed_files:
+            if not filename:
+                continue
+            try:
+                parsed[label] = model.model_validate_json(Path(filename).read_bytes())
+            except (OSError, ValueError) as error:
+                print(f"invalid {label} policy: {error}", file=sys.stderr)
+                return 1
+        simulation_capability_policy = parsed.get("simulation-capability")
+        frozen_evidence_policy = parsed.get("frozen-evidence")
+        if parsed.get("simulation-toolchain") is not None:
+            toolchains = (parsed["simulation-toolchain"],)
         try:
             manifest = compile_run_manifest(
                 configured,
@@ -385,9 +430,12 @@ def _main(argv: list[str] | None = None) -> int:
                 workload_profile=args.workload_profile,
                 pack_profile=args.pack_profile,
                 output_profile=args.output_profile,
+                toolchains=toolchains,
                 control_plane_policy=control_plane_policy,
+                simulation_capability_policy=simulation_capability_policy,
+                frozen_evidence_policy=frozen_evidence_policy,
             )
-        except RunManifestError as error:
+        except (RunManifestError, ValueError) as error:
             print(str(error), file=sys.stderr)
             return 1
         print(render_role_matrix(manifest))
@@ -1188,7 +1236,7 @@ def _cmd_reason(args) -> int:
                 capability_cache=CapabilityCache(root / "capabilities.json"),
             )
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version in {2, 3, 4} and manifest.workload_profile != "text":
+        if manifest.schema_version in {2, 3, 4, 5} and manifest.workload_profile != "text":
             raise RunManifestError(
                 "WORKLOAD_PROFILE_MISMATCH",
                 f"reason requires text, got {manifest.workload_profile}",
@@ -1453,7 +1501,7 @@ def _cmd_check_proof(args) -> int:
             manifest = load_run_manifest(args.run_manifest)
         else:
             raise ValueError("PROOF_MANIFEST_REQUIRED: pass --run-manifest or use a bound root")
-        if manifest.schema_version not in {2, 3, 4} or manifest.workload_profile != "formal":
+        if manifest.schema_version not in {2, 3, 4, 5} or manifest.workload_profile != "formal":
             raise ValueError(
                 "PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2+ formal manifest"
             )
@@ -1524,7 +1572,7 @@ def _bind_cli_manifest(root: Path, requested_path: str, *, workload: str):
             )
     else:
         manifest = requested
-    if manifest.schema_version not in {2, 3, 4} or manifest.workload_profile != workload:
+    if manifest.schema_version not in {2, 3, 4, 5} or manifest.workload_profile != workload:
         raise ValueError(
             f"{workload.upper()}_MANIFEST_WORKLOAD_MISMATCH: "
             f"expected v2+ {workload} manifest"

@@ -54,7 +54,9 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
     mode: Literal["shadow", "active_conjecture"]
     workflow_profile: WorkflowProfileId
     capability_profile: Literal["conjecture-control.v1"] = "conjecture-control.v1"
-    conjecturer_contract_id: Literal["conjecturer.legacy.v1", "conjecturer.turn.v4"]
+    conjecturer_contract_id: Literal[
+        "conjecturer.legacy.v1", "conjecturer.turn.v4", "conjecturer.turn.v5"
+    ]
     control_event_schema: Literal["control.event.v1"] = "control.event.v1"
     model_profile: Literal["compact", "standard", "frontier"]
     workload_profile: Literal["text", "code", "formal", "website"]
@@ -75,7 +77,10 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             - completed_context_expansions,
         )
         outcomes = [CapabilityOutcome.CANDIDATE_PROPOSAL]
-        if self.conjecturer_contract_id == "conjecturer.turn.v4":
+        if self.conjecturer_contract_id in {
+            "conjecturer.turn.v4",
+            "conjecturer.turn.v5",
+        }:
             outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
             outcomes.append(CapabilityOutcome.ABSTENTION)
         return CapabilityGrantV1.create(
@@ -110,8 +115,11 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
                 raise ValueError("shadow profile must preserve the legacy conjecturer contract")
             if self.context_policy.mode != "disabled":
                 raise ValueError("shadow profile must not actuate conjecture context")
-        elif self.conjecturer_contract_id != "conjecturer.turn.v4":
-            raise ValueError("active conjecture profile requires the v4 turn contract")
+        elif self.conjecturer_contract_id not in {
+            "conjecturer.turn.v4",
+            "conjecturer.turn.v5",
+        }:
+            raise ValueError("active conjecture profile requires a controlled turn contract")
         return self
 
 
@@ -119,8 +127,8 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
     """Compile one exact built-in profile without interpreting user workflow code."""
 
     manifest = RunManifest.model_validate(manifest)
-    if manifest.schema_version != 4 or manifest.control_plane_policy is None:
-        raise WorkflowProfileError("WORKFLOW_MANIFEST_V4_REQUIRED")
+    if manifest.schema_version not in {4, 5} or manifest.control_plane_policy is None:
+        raise WorkflowProfileError("WORKFLOW_MANIFEST_V4_PLUS_REQUIRED")
     control = manifest.control_plane_policy
     if control.controller_version != "workflow.controller.v1":
         raise WorkflowProfileError("WORKFLOW_CONTROLLER_VERSION_UNSUPPORTED")

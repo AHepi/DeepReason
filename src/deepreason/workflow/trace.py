@@ -449,6 +449,113 @@ class ConjectureControlTrace:
             self._report(error)
             raise AssertionError("unreachable") from error
 
+    def capability_follow_up(
+        self,
+        *,
+        result_package_ref: str,
+        result_context_ref: str,
+        formal_fence_seq: int,
+        scratch_fence_seq: int,
+    ) -> "ConjectureControlTrace":
+        """Create fresh provider authority for one packaged capability result."""
+
+        try:
+            parent = self.ticket.work_order
+            inputs = tuple(
+                dict.fromkeys((*parent.input_refs, parent.id, result_package_ref))
+            )
+            values = parent.model_dump(
+                mode="python",
+                by_alias=True,
+                exclude={
+                    "id",
+                    "formal_fence_seq",
+                    "scratch_fence_seq",
+                    "input_refs",
+                    "advisory_context_ref",
+                    "task_payload_schema_id",
+                    "task_payload_ref",
+                    "task_payload_value",
+                },
+            )
+            work = WorkOrderEnvelopeV1.create(
+                **values,
+                formal_fence_seq=formal_fence_seq,
+                scratch_fence_seq=scratch_fence_seq,
+                input_refs=inputs,
+                advisory_context_ref=None,
+                task_payload_schema_id="simulation-result-context.v1",
+                task_payload_value={
+                    "parent_work_order_ref": parent.id,
+                    "result_package_ref": result_package_ref,
+                    "result_context_ref": result_context_ref,
+                },
+            )
+            if work.id == parent.id:
+                raise ValueError("capability result follow-up must use fresh work")
+            initial = WorkflowProcessStateV1.initial(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                formal_fence_seq=formal_fence_seq,
+                scratch_fence_seq=scratch_fence_seq,
+            )
+            enabled_state = state_after_transition(
+                initial,
+                transition_kind=TransitionKind.WORK_ENABLED,
+                work_order_id=work.id,
+                trigger_ref=work.problem_ref,
+            )
+            enabled = TransitionDecisionV1.create(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                previous_process_digest=initial.digest,
+                trigger_kind=TriggerKind.PROBLEM_SELECTED,
+                trigger_ref=work.problem_ref,
+                transition_kind=TransitionKind.WORK_ENABLED,
+                work_order_id=work.id,
+                route_lease=work.route_lease,
+                next_process_digest=enabled_state.digest,
+            )
+            issued_state = state_after_transition(
+                enabled_state,
+                transition_kind=TransitionKind.WORK_ISSUED,
+                work_order_id=work.id,
+                trigger_ref=work.id,
+            )
+            issued = TransitionDecisionV1.create(
+                manifest_digest=work.manifest_digest,
+                workflow_profile=work.workflow_profile,
+                previous_process_digest=enabled_state.digest,
+                trigger_kind=TriggerKind.CONTEXT_PREPARED,
+                trigger_ref=work.id,
+                transition_kind=TransitionKind.WORK_ISSUED,
+                work_order_id=work.id,
+                route_lease=work.route_lease,
+                next_process_digest=issued_state.digest,
+            )
+            planning = (enabled, issued)
+            ticket = ShadowTicketV1.create(
+                work_order=work,
+                initial_process_state=initial,
+                process_state=issued_state,
+                planning_decisions=planning,
+                expected_decision_refs=tuple(item.id for item in planning),
+                expected_transition_kinds=tuple(
+                    item.transition_kind for item in planning
+                ),
+                event_start_seq=self.harness._next_seq,
+                meter_before=None,
+            )
+            return ConjectureControlTrace(
+                self.harness,
+                ticket,
+                error_sink=self.error_sink,
+                authoritative=self.authoritative,
+            )
+        except Exception as error:
+            self._report(error)
+            raise AssertionError("unreachable") from error
+
     def record_repair_request(self, rejected_attempt: LLMAttempt) -> None:
         """Persist bounded schema-repair authority before the next dispatch."""
 

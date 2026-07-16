@@ -290,6 +290,8 @@ def render_conj_pack(
     generation_context: str | None = None,
     suppressed_exemplars: tuple[str, ...] = (),
     scratch_context=None,
+    frozen_evidence_context: str | None = None,
+    capability_result_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
 ) -> str:
     """school = {"id", "stance_text", "weight"} — lineage inheritance (§11.1):
@@ -400,6 +402,28 @@ def render_conj_pack(
                 "scratch-advisory-context",
                 scratch_context.text,
                 7,
+                droppable=False,
+                compressible=False,
+            )
+        )
+    if frozen_evidence_context:
+        sections.append(
+            _pack_section(
+                "frozen-evidence-context",
+                frozen_evidence_context,
+                4,
+                droppable=True,
+                compressible=True,
+                min_tokens=64,
+            )
+        )
+    if capability_result_context:
+        sections.append(
+            _pack_section(
+                "capability-result-context",
+                "SIMULATION RESULT RECEIPT (fresh work; recorded observation only):\n"
+                + capability_result_context,
+                3,
                 droppable=False,
                 compressible=False,
             )

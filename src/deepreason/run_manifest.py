@@ -31,13 +31,17 @@ from pydantic import (
 )
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
+from deepreason.capabilities.policy import (
+    FrozenEvidencePolicyV1,
+    SimulationCapabilityPolicyV1,
+)
 from deepreason.locking import ProcessLock, RUN_MANIFEST_LOCK_NAME
 from deepreason.llm.endpoints import DEFAULT_TIMEOUT_S, resolve_model
 from deepreason.llm.providers import infer_provider
 
 
 SCHEMA_VERSION = 1
-LATEST_SCHEMA_VERSION = 4
+LATEST_SCHEMA_VERSION = 5
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
 _MAX_MANIFEST_BYTES = 4 * 1024 * 1024
@@ -566,7 +570,7 @@ class ContractVersionPolicyV1(BaseModel):
 
     bridge_ledger_wire_contract: Literal["bridge.ledger.v1", "bridge.ledger.v2"]
     conjecturer_turn_contract: Literal[
-        "conjecturer.legacy.v1", "conjecturer.turn.v4"
+        "conjecturer.legacy.v1", "conjecturer.turn.v4", "conjecturer.turn.v5"
     ]
     control_event_schema: Literal["none", "control.event.v1"]
 
@@ -625,7 +629,8 @@ class ControlPlanePolicyV1(BaseModel):
             or self.workflow_profile != "conjecture.active.v1"
             or self.capability_profile != "conjecture-control.v1"
             or self.contract_versions.bridge_ledger_wire_contract != "bridge.ledger.v2"
-            or self.contract_versions.conjecturer_turn_contract != "conjecturer.turn.v4"
+            or self.contract_versions.conjecturer_turn_contract
+            not in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
             or self.contract_versions.control_event_schema != "control.event.v1"
         ):
             raise ValueError(
@@ -641,7 +646,7 @@ class RunManifest(BaseModel):
         extra="forbid", frozen=True, hide_input_in_errors=True
     )
 
-    schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION
+    schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
     workload_profile: Literal["text", "code", "formal", "website"] | None = None
@@ -659,6 +664,8 @@ class RunManifest(BaseModel):
     bridge_policy: BridgePolicy | None = None
     control_plane_policy: ControlPlanePolicyV1 | None = None
     criticism_policy: CriticismPolicyV1 | None = None
+    simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None
+    frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
     # Canonical engine configuration without a role table. Runtime
@@ -701,6 +708,9 @@ class RunManifest(BaseModel):
             # The v4 control boundary is absent, rather than null, in every
             # historical public dump and canonical document.
             payload.pop("control_plane_policy", None)
+        if self.schema_version < 5:
+            payload.pop("simulation_capability_policy", None)
+            payload.pop("frozen_evidence_policy", None)
         # Criticism is an optional C3 extension.  Absence must preserve the
         # canonical bytes of every pre-C3 manifest, including schema v4.
         if self.criticism_policy is None:
@@ -716,6 +726,11 @@ class RunManifest(BaseModel):
             raise ValueError("v1-v3 manifests cannot carry v4 control policy")
         if self.schema_version < 4 and "criticism_policy" in self.model_fields_set:
             raise ValueError("v1-v3 manifests cannot carry v4 criticism policy")
+        if self.schema_version < 5 and (
+            "simulation_capability_policy" in self.model_fields_set
+            or "frozen_evidence_policy" in self.model_fields_set
+        ):
+            raise ValueError("v1-v4 manifests cannot carry v5 capability policy")
         if self.schema_version == 1:
             if self.workload_profile is not None or self.toolchains:
                 raise ValueError("v1 manifest cannot carry v2 workload/toolchain fields")
@@ -729,7 +744,7 @@ class RunManifest(BaseModel):
         else:
             if self.scratch_policy is None or self.bridge_policy is None:
                 raise ValueError(
-                    "v3/v4 manifest requires scratch_policy and bridge_policy"
+                    "v3+ manifest requires scratch_policy and bridge_policy"
                 )
             bridge = self.bridge_policy
             if bridge.mode == "grounded_two_stage":
@@ -756,15 +771,38 @@ class RunManifest(BaseModel):
             unknown_roles = set(self.roles) - set(V3_CANONICAL_ROLES)
             if unknown_roles:
                 raise ValueError(
-                    "v3/v4 manifest contains non-canonical roles: "
+                    "v3+ manifest contains non-canonical roles: "
                     + ", ".join(sorted(unknown_roles))
                 )
             _validate_v3_engine_policy_consistency(self)
-        if self.schema_version == 4:
+        if self.schema_version >= 4:
             if self.control_plane_policy is None:
-                raise ValueError("v4 manifest requires complete control_plane_policy")
+                raise ValueError("v4+ manifest requires complete control_plane_policy")
             _validate_v4_control_plane_policy(self)
             _validate_v4_criticism_policy(self)
+        if self.schema_version == 4:
+            if (
+                self.control_plane_policy.mode == "active_conjecture"
+                and
+                self.control_plane_policy.contract_versions.conjecturer_turn_contract
+                != "conjecturer.turn.v4"
+            ):
+                raise ValueError("v4 manifest requires conjecturer.turn.v4")
+        if self.schema_version == 5:
+            if (
+                self.control_plane_policy.mode != "active_conjecture"
+                or
+                self.control_plane_policy.contract_versions.conjecturer_turn_contract
+                != "conjecturer.turn.v5"
+            ):
+                raise ValueError(
+                    "v5 manifest requires active_conjecture and conjecturer.turn.v5"
+                )
+            if self.simulation_capability_policy is None:
+                raise ValueError("v5 manifest requires frozen simulation capability policy")
+            if self.frozen_evidence_policy is None:
+                raise ValueError("v5 manifest requires frozen evidence policy")
+            _validate_v5_capability_policy(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -807,6 +845,9 @@ class RunManifest(BaseModel):
             payload.pop("bridge_policy", None)
         if self.schema_version < 4:
             payload.pop("control_plane_policy", None)
+        if self.schema_version < 5:
+            payload.pop("simulation_capability_policy", None)
+            payload.pop("frozen_evidence_policy", None)
         if self.criticism_policy is None:
             payload.pop("criticism_policy", None)
         return _canonical_json(payload)
@@ -831,7 +872,7 @@ def _source_config_data(config) -> dict[str, Any]:
 
 
 def _versioned_source_config_data(
-    config, schema_version: Literal[1, 2, 3, 4]
+    config, schema_version: Literal[1, 2, 3, 4, 5]
 ) -> dict[str, Any]:
     """Normalize newly added defaults out of historical source contracts.
 
@@ -849,7 +890,7 @@ def _versioned_source_config_data(
 
 
 def source_config_hash(
-    config, *, schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION
+    config, *, schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION
 ) -> str:
     """Hash the effective source configuration under one schema contract."""
 
@@ -1298,7 +1339,6 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
         raise ValueError(
             "V4_CRITICISM_ACTIVE_REQUIRED: criticism policy requires active_conjecture"
         )
-
     try:
         engine_data = json.loads(manifest.engine_config_json)
     except json.JSONDecodeError as error:
@@ -1380,6 +1420,37 @@ def _validate_v4_criticism_policy(manifest: RunManifest) -> None:
             )
 
 
+def _validate_v5_capability_policy(manifest: RunManifest) -> None:
+    """Bind enabled simulation authority to one exact frozen toolchain."""
+
+    policy = manifest.simulation_capability_policy
+    evidence = manifest.frozen_evidence_policy
+    if policy is None or evidence is None:
+        raise ValueError("V5_CAPABILITY_POLICY_REQUIRED")
+    control = manifest.control_plane_policy
+    if control is None or control.mode != "active_conjecture":
+        if policy.enabled:
+            raise ValueError(
+                "V5_SIMULATION_ACTIVE_REQUIRED: simulation requires active_conjecture"
+            )
+    if not policy.enabled:
+        return
+    matches = tuple(
+        toolchain
+        for toolchain in manifest.toolchains
+        if toolchain.id == policy.python_toolchain_identity
+    )
+    if len(matches) != 1:
+        raise ValueError(
+            "V5_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain"
+        )
+    toolchain = matches[0]
+    if toolchain.runner != "local" or toolchain.network is not False:
+        raise ValueError(
+            "V5_SIMULATION_TOOLCHAIN_UNSAFE: local network-denied toolchain required"
+        )
+
+
 def compile_run_manifest(
     config,
     *,
@@ -1391,7 +1462,7 @@ def compile_run_manifest(
     concurrency: int | None = None,
     compiled_at: str | None = None,
     capability_cache=None,
-    schema_version: Literal[1, 2, 3, 4] = SCHEMA_VERSION,
+    schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION,
     workload_profile: Literal["text", "code", "formal", "website"] | None = None,
     pack_profile: str | None = None,
     output_profile: str | None = None,
@@ -1401,6 +1472,8 @@ def compile_run_manifest(
     memory_policy: dict[str, Any] | None = None,
     control_plane_policy: ControlPlanePolicyV1 | None = None,
     criticism_policy: CriticismPolicyV1 | None = None,
+    simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None,
+    frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None,
 ) -> RunManifest:
     """Resolve and freeze the role matrix before any role-model call.
 
@@ -1417,7 +1490,7 @@ def compile_run_manifest(
     if schema_version < 4 and control_plane_policy is not None:
         raise RunManifestError(
             "CONTROL_PLANE_MANIFEST_V4_REQUIRED",
-            "control_plane_policy requires RunManifest schema v4",
+            "control_plane_policy requires RunManifest schema v4+",
             "/control_plane_policy",
         )
     if schema_version < 4 and criticism_policy is not None:
@@ -1426,10 +1499,10 @@ def compile_run_manifest(
             "criticism_policy requires RunManifest schema v4",
             "/criticism_policy",
         )
-    if schema_version == 4 and control_plane_policy is None:
+    if schema_version >= 4 and control_plane_policy is None:
         raise RunManifestError(
             "CONTROL_PLANE_POLICY_REQUIRED",
-            "schema v4 requires a complete control_plane_policy",
+            "schema v4+ requires a complete control_plane_policy",
             "/control_plane_policy",
         )
     resolved_control_policy = (
@@ -1440,6 +1513,28 @@ def compile_run_manifest(
     resolved_criticism_policy = (
         CriticismPolicyV1.model_validate(criticism_policy)
         if criticism_policy is not None
+        else None
+    )
+    if schema_version < 5 and (
+        simulation_capability_policy is not None or frozen_evidence_policy is not None
+    ):
+        raise RunManifestError(
+            "CAPABILITY_MANIFEST_V5_REQUIRED",
+            "simulation and frozen evidence policies require RunManifest schema v5",
+            "/simulation_capability_policy",
+        )
+    resolved_simulation_policy = (
+        SimulationCapabilityPolicyV1.model_validate(simulation_capability_policy)
+        if simulation_capability_policy is not None
+        else SimulationCapabilityPolicyV1()
+        if schema_version == 5
+        else None
+    )
+    resolved_evidence_policy = (
+        FrozenEvidencePolicyV1.model_validate(frozen_evidence_policy)
+        if frozen_evidence_policy is not None
+        else FrozenEvidencePolicyV1()
+        if schema_version == 5
         else None
     )
     if (
@@ -1620,10 +1715,13 @@ def compile_run_manifest(
         "website": "website.v1",
     }
     manifest_values: dict[str, Any] = {}
-    if schema_version == 4:
+    if schema_version >= 4:
         manifest_values["control_plane_policy"] = resolved_control_policy
         if resolved_criticism_policy is not None:
             manifest_values["criticism_policy"] = resolved_criticism_policy
+    if schema_version == 5:
+        manifest_values["simulation_capability_policy"] = resolved_simulation_policy
+        manifest_values["frozen_evidence_policy"] = resolved_evidence_policy
     return RunManifest(
         schema_version=schema_version,
         engine_profile=engine_profile,
@@ -2025,7 +2123,7 @@ def _preflight_text_authority(
 ) -> None:
     """Fail closed before any endpoint exists for text status authority."""
 
-    if schema_version not in {2, 3, 4} or workload_profile != "text":
+    if schema_version not in {2, 3, 4, 5} or workload_profile != "text":
         return
     from deepreason.authority import text_status_authority_issues
 
@@ -2066,7 +2164,7 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
         manifest.schema_version,
         manifest.workload_profile,
     )
-    if manifest.schema_version in {2, 3, 4} and manifest.workload_profile == "text":
+    if manifest.schema_version in {2, 3, 4, 5} and manifest.workload_profile == "text":
         # The policy that authorizes a status-changing text judgement is part
         # of the frozen manifest, not a knob a caller may replace between
         # manifest compilation and adapter construction. Reconstruct through

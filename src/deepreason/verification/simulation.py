@@ -57,6 +57,9 @@ class SimulationRequest(BaseModel):
 
     source_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
     spec: SimulationSpec
+    maximum_output_bytes: int | None = Field(
+        default=None, ge=1, le=_IPC_LIMIT
+    )
 
 
 class SimulationVerificationResult(VerificationResult):
@@ -405,6 +408,18 @@ class SimulationBackend:
             "version_output_sha256": sha256_hex(version.encode()),
         }
 
+    def resource_limits(self) -> dict[str, Any]:
+        """Expose the trusted containment envelope for immutable receipts."""
+
+        return {
+            "ipc_bytes": _IPC_LIMIT,
+            "memory_bytes": _MEMORY_LIMIT,
+            "cpu_seconds": _CPU_SECONDS,
+            "wall_grace_seconds": _WALL_GRACE_SECONDS,
+            "filesystem": "no candidate file builtins",
+            "network": False,
+        }
+
     def verify(self, request: SimulationRequest, blobs=None) -> SimulationVerificationResult:
         if blobs is None:
             raise ValueError("simulation verification requires a content-addressed blob store")
@@ -482,6 +497,25 @@ class SimulationBackend:
             "sample_limit": request.spec.sample_limit,
         }
         verdict, trace, output = _run_worker(payload)
+        try:
+            sample_count = len(json.loads(output))
+        except (TypeError, json.JSONDecodeError):
+            sample_count = 0
+        if (
+            request.maximum_output_bytes is not None
+            and len(output) > request.maximum_output_bytes
+        ):
+            generated_bytes = len(output)
+            generated_sha256 = sha256_hex(output)
+            output = output[: request.maximum_output_bytes]
+            trace = {
+                **trace,
+                "output_truncated": True,
+                "generated_output_bytes": generated_bytes,
+                "generated_output_sha256": generated_sha256,
+                "retained_output_bytes": len(output),
+            }
+            verdict = "overrun"
         diagnostics = canonical_json(trace)
         return SimulationVerificationResult(
             fingerprint=self.fingerprint(),
@@ -495,7 +529,7 @@ class SimulationBackend:
             spec_sha256=sha256_hex(canonical_json(request.spec.model_dump(mode="json"))),
             stdout_ref=blobs.put(b""),
             stderr_ref=blobs.put(b""),
-            sample_count=len(json.loads(output)),
+            sample_count=sample_count,
         )
 
 

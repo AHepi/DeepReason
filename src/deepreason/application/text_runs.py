@@ -358,7 +358,7 @@ class TextRunApplicationService:
 
         cycles, tokens, token_budget, scheduler_cycles = _budget_values(budget)
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version not in {2, 3, 4} or manifest.workload_profile != "text":
+        if manifest.schema_version not in {2, 3, 4, 5} or manifest.workload_profile != "text":
             raise ValueError(
                 "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v2+ text manifest"
             )
@@ -487,6 +487,9 @@ class TextRunApplicationService:
         from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
         from deepreason.status_display import display_status_counts
         from deepreason.workloads.text import seed_reasoning_workload
+        from deepreason.capabilities.audit import write_tranche_a_audits
+        from deepreason.capabilities.evidence import attach_frozen_evidence
+        from deepreason.capabilities.simulation import SimulationCapabilityController
 
         harness = None
         latest_cycle = 0
@@ -506,6 +509,11 @@ class TextRunApplicationService:
                 )
             else:
                 seed_reasoning_workload(harness, spec)
+                attach_frozen_evidence(
+                    harness,
+                    manifest,
+                    problem_id=spec.problem.id,
+                )
             prior = progress.read_since(-1)
             base_cycle = max((event.cycle for event in prior), default=0)
             base_token_spend = sum(
@@ -606,6 +614,11 @@ class TextRunApplicationService:
                     "event_seq": harness._next_seq,
                 },
             )
+            capability_audits = (
+                write_tranche_a_audits(root)
+                if manifest.schema_version == 5
+                else {}
+            )
             payload = {
                 "schema": "deepreason-run-result-v1",
                 "state": "cancelled" if cancelled else "completed",
@@ -617,6 +630,12 @@ class TextRunApplicationService:
                     "status_counts": display_status_counts(harness, manifest),
                 },
                 "accounting": accounting,
+                "capability_accounting": (
+                    SimulationCapabilityController(harness, manifest).accounting()
+                    if manifest.schema_version == 5
+                    else None
+                ),
+                "capability_audits": capability_audits,
                 "stop": stop,
             }
             _atomic_json(root / "run-result.json", payload)

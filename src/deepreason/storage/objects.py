@@ -12,6 +12,15 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from deepreason.capabilities.models import (
+    CapabilityTransitionV1,
+    CompiledSimulationV1,
+    SimulationConsumptionV1,
+    SimulationExecutionReceiptV1,
+    SimulationGrantV1,
+    SimulationProposalV1,
+    SimulationResultPackageV1,
+)
 from deepreason.bridge.evidence_pack import EvidencePackV1
 from deepreason.bridge.ledger import ClaimLedgerInputCatalogV1
 from deepreason.bridge.models import (
@@ -99,6 +108,13 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
     "workflow-resume-decision": WorkflowResumeDecisionV1,
+    "capability-simulation-proposal": SimulationProposalV1,
+    "capability-transition": CapabilityTransitionV1,
+    "capability-simulation-grant": SimulationGrantV1,
+    "capability-compiled-simulation": CompiledSimulationV1,
+    "capability-simulation-receipt": SimulationExecutionReceiptV1,
+    "capability-simulation-result-package": SimulationResultPackageV1,
+    "capability-simulation-consumption": SimulationConsumptionV1,
 }
 
 # Most canonical records expose ``id``. A few scratch records retain the
@@ -131,7 +147,9 @@ def _object_data(schema: str, obj: BaseModel) -> dict:
         by_alias=True,
         # Advisory canonical encodings omit absent optional fields. Formal
         # schemas retain their exact established byte representation.
-        exclude_none=schema.startswith(("scratch-", "bridge-", "workflow-")),
+        exclude_none=schema.startswith(
+            ("scratch-", "bridge-", "workflow-", "capability-")
+        ),
     )
 
 

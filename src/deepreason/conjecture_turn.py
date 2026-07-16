@@ -7,6 +7,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.capabilities.models import SimulationProposalDraftV1
 from deepreason.llm.contracts import ConjectureCandidate
 from deepreason.run_manifest import ConjectureContextPolicyV1, ScratchPolicy
 from deepreason.scratch.models import RetrievalChannel
@@ -112,6 +113,58 @@ class ReasoningConjecturerTurnV4(_TurnRecord):
         return self
 
 
+class ConjecturerTurnV5(_TurnRecord):
+    """Tranche-A turn: ordinary outcomes plus semantic simulation proposals."""
+
+    candidates: tuple[ConjectureCandidate, ...] = Field(default=(), max_length=256)
+    context_request: ContextRequestV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+    simulation_proposals: tuple[SimulationProposalDraftV1, ...] = Field(
+        default=(), max_length=32
+    )
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+class ReasoningConjecturerTurnV5(_TurnRecord):
+    candidates: tuple[ReasoningCandidateProposal, ...] = Field(
+        default=(), max_length=256
+    )
+    context_request: ContextRequestV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+    simulation_proposals: tuple[SimulationProposalDraftV1, ...] = Field(
+        default=(), max_length=32
+    )
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
 class ConjectureTurnAuthorityV1(_TurnRecord):
     """Manifest-derived capability passed to Conj; contains no route choice."""
 
@@ -128,6 +181,8 @@ __all__ = [
     "ConjectureTurnAuthorityV1",
     "ConjectureNoProposalV1",
     "ConjecturerTurnV4",
+    "ConjecturerTurnV5",
     "ContextRequestV1",
     "ReasoningConjecturerTurnV4",
+    "ReasoningConjecturerTurnV5",
 ]

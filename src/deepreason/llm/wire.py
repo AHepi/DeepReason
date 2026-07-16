@@ -27,6 +27,12 @@ from deepreason.conjecture_turn import (
     ConjecturerTurnV4,
     ContextRequestV1,
     ReasoningConjecturerTurnV4,
+    ConjecturerTurnV5,
+    ReasoningConjecturerTurnV5,
+)
+from deepreason.capabilities.models import (
+    SimulationParameterSetV1,
+    SimulationProposalDraftV1,
 )
 from deepreason.llm.contracts import (
     ArgumentativeCriticOutput,
@@ -390,10 +396,11 @@ class ConjecturerTurnWireV4(StrictWireModel):
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
-        if not (self.candidates or self.context_request or self.abstention):
+        simulations = getattr(self, "simulation_proposals", ())
+        if not (self.candidates or self.context_request or self.abstention or simulations):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
-        if self.abstention is not None and self.candidates:
-            raise ValueError("abstention cannot accompany candidate proposals")
+        if self.abstention is not None and (self.candidates or simulations):
+            raise ValueError("abstention cannot accompany semantic proposals")
         return self
 
 
@@ -406,10 +413,11 @@ class ReasoningConjecturerTurnWireV4(StrictWireModel):
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
-        if not (self.candidates or self.context_request or self.abstention):
+        simulations = getattr(self, "simulation_proposals", ())
+        if not (self.candidates or self.context_request or self.abstention or simulations):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
-        if self.abstention is not None and self.candidates:
-            raise ValueError("abstention cannot accompany candidate proposals")
+        if self.abstention is not None and (self.candidates or simulations):
+            raise ValueError("abstention cannot accompany semantic proposals")
         return self
 
 
@@ -527,6 +535,144 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
             context_request=request,
             abstention=wire.abstention,
         )
+
+
+class SimulationParameterSetWireV1(StrictWireModel):
+    name: str = Field(min_length=1, max_length=128)
+    # Canonical JSON text keeps arbitrary finite numerical arrays inside one
+    # bounded semantic field without turning object keys into a shadow schema.
+    values_json: str = Field(min_length=2, max_length=262_144)
+
+
+class SimulationProposalWireV1(StrictWireModel):
+    request_identifier: str = Field(min_length=1, max_length=128)
+    hypothesis: str = Field(min_length=1, max_length=16_384)
+    rival_predictions: list[str] = Field(min_length=1, max_length=32)
+    discriminating_purpose: str = Field(min_length=1, max_length=8_192)
+    declared_assumptions: list[str] = Field(default_factory=list, max_length=64)
+    input_aliases: list[str] = Field(default_factory=list, max_length=64)
+    parameter_definitions: list[SimulationParameterSetWireV1] = Field(
+        default_factory=list, max_length=256
+    )
+    requested_seed_set: list[int] = Field(default_factory=list, max_length=256)
+    model_source: str = Field(min_length=1, max_length=262_144)
+    requested_observables: list[str] = Field(min_length=1, max_length=128)
+    interpretation_conditions: list[str] = Field(min_length=1, max_length=64)
+
+
+class ConjecturerTurnWireV5(ConjecturerTurnWireV4):
+    simulation_proposals: list[SimulationProposalWireV1] = Field(
+        default_factory=list, max_length=32
+    )
+
+    @model_validator(mode="after")
+    def _meaningful_v5_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
+    simulation_proposals: list[SimulationProposalWireV1] = Field(
+        default_factory=list, max_length=32
+    )
+
+    @model_validator(mode="after")
+    def _meaningful_v5_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
+    """Tranche-A compiler; simulation values remain semantic drafts."""
+
+    def __init__(
+        self,
+        *,
+        reasoning: bool,
+        aliases: AliasTable,
+        scratch_aliases: Mapping[str, str] | None = None,
+        permitted_retrieval_channels: tuple[str, ...] = (),
+        maximum_simulation_proposals: int = 0,
+    ) -> None:
+        self.maximum_simulation_proposals = maximum_simulation_proposals
+        ConjecturerTurnWireContractV4.__init__(
+            self,
+            reasoning=reasoning,
+            aliases=aliases,
+            scratch_aliases=scratch_aliases,
+            permitted_retrieval_channels=permitted_retrieval_channels,
+        )
+        self.contract_id = "conjecturer.turn.v5"
+        self.wire_model = (
+            ReasoningConjecturerTurnWireV5
+            if reasoning
+            else ConjecturerTurnWireV5
+        )
+        self.canonical_model = (
+            ReasoningConjecturerTurnV5 if reasoning else ConjecturerTurnV5
+        )
+        self.variant = "compact.v5"
+
+    def compile(self, wire: BaseModel) -> BaseModel:
+        if len(wire.simulation_proposals) > self.maximum_simulation_proposals:
+            raise ValueError("simulation proposal count exceeds frozen per-turn authority")
+        if wire.candidates or wire.context_request or wire.abstention:
+            base = ConjecturerTurnWireContractV4.compile(self, wire)
+            values = base.model_dump(mode="python")
+        else:
+            # V4 intentionally rejects an empty ordinary outcome.  A
+            # simulation-only v5 response is valid and binds no hidden
+            # candidate merely to satisfy that older schema.
+            values = {
+                "candidates": (),
+                "context_request": None,
+                "abstention": None,
+            }
+        simulations = tuple(
+            SimulationProposalDraftV1(
+                request_identifier=item.request_identifier,
+                hypothesis=item.hypothesis,
+                rival_predictions=tuple(item.rival_predictions),
+                discriminating_purpose=item.discriminating_purpose,
+                declared_assumptions=tuple(item.declared_assumptions),
+                input_aliases=tuple(item.input_aliases),
+                parameter_definitions=tuple(
+                    SimulationParameterSetV1(
+                        name=parameters.name,
+                        values=json.loads(parameters.values_json),
+                    )
+                    for parameters in item.parameter_definitions
+                ),
+                requested_seed_set=tuple(item.requested_seed_set),
+                model_source=item.model_source,
+                requested_observables=tuple(item.requested_observables),
+                interpretation_conditions=tuple(item.interpretation_conditions),
+            )
+            for item in wire.simulation_proposals
+        )
+        values["simulation_proposals"] = simulations
+        model = ReasoningConjecturerTurnV5 if self.reasoning else ConjecturerTurnV5
+        return model.model_validate(values)
 
 class CompactCritic(StrictWireModel):
     attack: bool
@@ -774,6 +920,6 @@ def minimal_example(contract: WireContract) -> str:
     """Exactly one syntax-only example suitable for compact prompts."""
     from deepreason.llm.repair import minimal_skeleton
 
-    if contract.contract_id == "conjecturer.turn.v4":
+    if contract.contract_id in {"conjecturer.turn.v4", "conjecturer.turn.v5"}:
         return '{"abstention":{"search_signal":"stuck"}}'
     return json.dumps(minimal_skeleton(contract.model_json_schema()), separators=(",", ":"))

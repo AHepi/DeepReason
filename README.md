@@ -130,6 +130,15 @@ boundaries in offline tests. It does **not** establish that active control is
 better for novelty, answer quality, or cost; that requires separately
 authorized matched provider runs.
 
+### Opt-in v5 autonomous simulation boundary
+
+RunManifest v5 extends active conjecture work with semantic simulation
+proposals, deterministic manifest-owned authorization and execution, immutable
+receipts, and fresh result-reasoning work orders. Simulation and frozen
+evidence both default to disabled. Successful execution remains a scoped
+recorded observation, while denial and operational failure remain replayable
+lineage. See the [Tranche A operator and acceptance guide](docs/TRANCHE_A_AUTONOMOUS_SIMULATION.md).
+
 Pinned code, simulation, and Lean operations are available through
 `deepreason code`, `deepreason simulate`, `deepreason prove`, and
 `deepreason check-proof`. They evaluate only workload-declared commands,

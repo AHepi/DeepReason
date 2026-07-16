@@ -14,6 +14,7 @@ from pathlib import Path
 
 from deepreason.adjudication.edges import DependenceCycleError, build_dep, toposort
 from deepreason.bridge.events import BridgeAction
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.controller import ENVELOPES, GENERATOR_LEDGER
 from deepreason.harness import Harness
 from deepreason.llm.firewall import route_fingerprint
@@ -146,6 +147,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             fail("bridge-replay", "two replays produced different advisory bridge state")
         if second.workflow_state.digest != h.workflow_state.digest:
             fail("workflow-replay", "two replays produced different authority state")
+        if second.capability_state.digest != h.capability_state.digest:
+            fail("capability-replay", "two replays produced different capability state")
     except Exception as e:  # noqa: BLE001 - an unopenable root is the finding
         return {"violations": [{"check": "open", "detail": repr(e)[:400]}], "stats": {}}
 
@@ -201,7 +204,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     if control_events:
         control = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version == 4
+            if manifest is not None and manifest.schema_version in {4, 5}
             else None
         )
         if (
@@ -266,9 +269,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             if workflow_profile is not None:
                 if (
                     workflow_profile.conjecturer_contract_id
-                    == "conjecturer.turn.v4"
+                    in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
                 ):
-                    authorized_contract_ids = {"conjecturer.turn.v4"}
+                    authorized_contract_ids = {
+                        workflow_profile.conjecturer_contract_id
+                    }
                 else:
                     from deepreason.llm.contracts import ConjecturerOutput
                     from deepreason.llm.wire import (
@@ -398,6 +403,338 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             f"work order {work.id} differs from manifest authority: "
                             + ", ".join(differences),
                         )
+
+    capability_events = [event for event in events if event.capability is not None]
+    if capability_events:
+        policy = (
+            manifest.simulation_capability_policy
+            if manifest is not None and manifest.schema_version == 5
+            else None
+        )
+        if policy is None:
+            fail(
+                "capability-manifest",
+                "Capability events require one manifest-bound v5 simulation policy",
+            )
+        else:
+            state = h.capability_state
+            grants = len(state.grants)
+            if grants > policy.maximum_simulation_requests:
+                fail("capability-budget", "simulation grant count exceeds request policy")
+            if state.execution_count > policy.maximum_simulation_executions:
+                fail("capability-budget", "simulation execution count exceeds policy")
+            if state.consumption_count > policy.maximum_follow_up_reasoning_turns:
+                fail("capability-budget", "simulation follow-up count exceeds policy")
+            for event in capability_events:
+                transition = state.transitions.get(event.capability.transition_ref)
+                if transition is None:
+                    fail(
+                        "capability-transition",
+                        f"event seq={event.seq}: transition is absent after replay",
+                    )
+                    continue
+                if (
+                    transition.manifest_digest != manifest.sha256
+                    or transition.capability_policy_digest != policy.digest
+                ):
+                    fail(
+                        "capability-authority",
+                        f"event seq={event.seq}: transition differs from frozen policy",
+                    )
+                if event.llm is not None:
+                    fail(
+                        "capability-authority",
+                        f"event seq={event.seq}: model call authored an authority transition",
+                    )
+            for proposal in state.proposals.values():
+                work = h.workflow_state.work_orders.get(
+                    proposal.originating_work_order_ref
+                )
+                source = next(
+                    (item for item in events if item.seq == proposal.source_call_seq),
+                    None,
+                )
+                if (
+                    work is None
+                    or work.problem_ref != proposal.problem_ref
+                    or source is None
+                    or source.llm is None
+                    or source.llm.work_order_id != work.id
+                ):
+                    fail(
+                        "capability-origin",
+                        f"proposal {proposal.id} does not resolve to its provider work order",
+                    )
+            for grant in state.grants.values():
+                proposal = state.proposals.get(grant.proposal_ref)
+                expected_seeds = (
+                    policy.fixed_seed_set
+                    if policy.deterministic_seed_policy == "fixed_manifest"
+                    else (proposal.requested_seed_set if proposal is not None else ())
+                )
+                if (
+                    proposal is None
+                    or grant.manifest_digest != manifest.sha256
+                    or grant.policy_digest != policy.digest
+                    or grant.template_identity != policy.runner_template_identity
+                    or grant.backend_identity != policy.backend_identity
+                    or grant.toolchain_identity != policy.python_toolchain_identity
+                    or grant.seed_set != expected_seeds
+                    or grant.deterministic_step_limit != policy.maximum_steps
+                    or grant.sample_limit != policy.maximum_samples
+                    or grant.maximum_output_bytes != policy.maximum_output_bytes
+                ):
+                    fail(
+                        "capability-grant",
+                        f"grant {grant.id} differs from its proposal or frozen policy",
+                    )
+            for compiled in state.compiled.values():
+                grant = state.grants.get(compiled.grant_ref)
+                proposal = state.proposals.get(compiled.proposal_ref)
+                if (
+                    grant is None
+                    or proposal is None
+                    or grant.proposal_ref != compiled.proposal_ref
+                    or compiled.template_identity != grant.template_identity
+                    or compiled.maximum_output_bytes != grant.maximum_output_bytes
+                    or compiled.specification.seed_set != grant.seed_set
+                    or compiled.specification.toolchain_id != grant.toolchain_identity
+                    or compiled.specification.deterministic_step_limit
+                    != grant.deterministic_step_limit
+                    or compiled.specification.sample_limit != grant.sample_limit
+                    or compiled.specification.inputs_ref != compiled.input_ref
+                    or compiled.specification.checker_ref != compiled.checker_ref
+                ):
+                    fail(
+                        "capability-compiled-authority",
+                        f"compiled simulation {compiled.id} differs from its grant",
+                    )
+                if proposal is not None:
+                    catalog = {
+                        item.alias: item.value for item in policy.input_catalog
+                    }
+                    sealed = {
+                        alias: catalog[alias]
+                        for alias in proposal.input_aliases
+                        if alias in catalog
+                    }
+                    parameters = proposal.parameter_definitions or ()
+                    expected_inputs = canonical_json(
+                        [
+                            {
+                                "parameter_set": item.name,
+                                "parameters": item.values,
+                                "sealed_inputs": sealed,
+                            }
+                            for item in parameters
+                        ]
+                        if parameters
+                        else [
+                            {
+                                "parameter_set": "default",
+                                "parameters": {},
+                                "sealed_inputs": sealed,
+                            }
+                        ]
+                    )
+                    from deepreason.capabilities.simulation import (
+                        TRUSTED_CHECKER_SOURCE_V1,
+                    )
+
+                    expected_checker = TRUSTED_CHECKER_SOURCE_V1.encode("utf-8")
+                    try:
+                        source_payload = h.blobs.get(compiled.source_ref)
+                        input_payload = h.blobs.get(compiled.input_ref)
+                        checker_payload = h.blobs.get(compiled.checker_ref)
+                    except KeyError:
+                        pass
+                    else:
+                        if (
+                            source_payload != proposal.model_source.encode("utf-8")
+                            or input_payload != expected_inputs
+                            or checker_payload != expected_checker
+                            or compiled.specification.observables
+                            != proposal.requested_observables
+                            or compiled.generated_code_bytes != len(source_payload)
+                            or compiled.input_bytes != len(input_payload)
+                        ):
+                            fail(
+                                "capability-compiled-authority",
+                                f"compiled simulation {compiled.id} differs from trusted template inputs",
+                            )
+                for ref in (
+                    compiled.source_ref,
+                    compiled.input_ref,
+                    compiled.checker_ref,
+                ):
+                    try:
+                        payload = h.blobs.get(ref)
+                        expected_digest = {
+                            compiled.source_ref: compiled.source_sha256,
+                            compiled.input_ref: compiled.input_sha256,
+                            compiled.checker_ref: compiled.checker_sha256,
+                        }[ref]
+                        if sha256_hex(payload) != expected_digest:
+                            fail(
+                                "capability-artifact",
+                                f"compiled simulation {compiled.id} blob digest differs",
+                            )
+                    except Exception as error:  # noqa: BLE001
+                        fail(
+                            "capability-artifact",
+                            f"compiled simulation {compiled.id} has missing blob: {error!r}",
+                        )
+            for receipt in state.receipts.values():
+                compiled = state.compiled.get(receipt.compiled_specification_ref)
+                if compiled is None:
+                    fail(
+                        "capability-receipt",
+                        f"receipt {receipt.id} has no compiled specification",
+                    )
+                elif (
+                    receipt.proposal_ref != compiled.proposal_ref
+                    or receipt.source_sha256 != compiled.source_sha256
+                    or receipt.inputs_sha256 != compiled.input_sha256
+                    or receipt.checker_sha256 != compiled.checker_sha256
+                    or receipt.specification_sha256
+                    != sha256_hex(
+                        canonical_json(
+                            compiled.specification.model_dump(
+                                mode="json", by_alias=True
+                            )
+                        )
+                    )
+                    or receipt.resource_limits.get("network") is not False
+                ):
+                    fail(
+                        "capability-receipt",
+                        f"receipt {receipt.id} differs from compiled execution authority",
+                    )
+                for attempt in receipt.attempts:
+                    if (
+                        attempt.fingerprint.get("backend") != policy.backend_identity
+                        or attempt.fingerprint.get("toolchain_id")
+                        != policy.python_toolchain_identity
+                    ):
+                        fail(
+                            "capability-receipt",
+                            f"receipt {receipt.id} used a non-manifest runner identity",
+                        )
+                    for ref in (
+                        attempt.diagnostics_ref,
+                        attempt.output_ref,
+                        attempt.stdout_ref,
+                        attempt.stderr_ref,
+                    ):
+                        if ref is None:
+                            continue
+                        try:
+                            h.blobs.get(ref)
+                        except Exception as error:  # noqa: BLE001
+                            fail(
+                                "capability-receipt",
+                                f"receipt {receipt.id} has missing trace blob: {error!r}",
+                            )
+                final_output_ref = receipt.attempts[-1].output_ref
+                if final_output_ref is not None:
+                    try:
+                        if len(h.blobs.get(final_output_ref)) != receipt.output_bytes:
+                            fail(
+                                "capability-receipt",
+                                f"receipt {receipt.id} output byte count differs from trace",
+                            )
+                    except KeyError:
+                        pass
+            for package in state.result_packages.values():
+                receipt = state.receipts.get(package.receipt_ref)
+                if receipt is None:
+                    fail(
+                        "capability-result-package",
+                        f"package {package.id} has no execution receipt",
+                    )
+                elif (
+                    package.proposal_ref != receipt.proposal_ref
+                    or package.epistemic_status != "recorded_observation"
+                ):
+                    fail(
+                        "capability-result-package",
+                        f"package {package.id} differs from its execution receipt",
+                    )
+                for ref in (package.structured_result_ref, package.result_context_ref):
+                    try:
+                        h.blobs.get(ref)
+                    except Exception as error:  # noqa: BLE001
+                        fail(
+                            "capability-result-package",
+                            f"package {package.id} has missing bounded result: {error!r}",
+                        )
+            for consumption in state.consumptions.values():
+                work = h.workflow_state.work_orders.get(
+                    consumption.follow_up_work_order_ref
+                )
+                package = state.result_packages.get(consumption.result_package_ref)
+                if (
+                    work is None
+                    or package is None
+                    or package.proposal_ref != consumption.proposal_ref
+                    or consumption.result_package_ref not in work.input_refs
+                    or work.task_payload_schema_id != "simulation-result-context.v1"
+                    or work.task_payload_value.get("result_package_ref")
+                    != consumption.result_package_ref
+                    or work.task_payload_value.get("result_context_ref")
+                    != package.result_context_ref
+                ):
+                    fail(
+                        "capability-consumption",
+                        f"consumption {consumption.id} has no matching fresh work order",
+                    )
+
+    if manifest is not None and manifest.schema_version == 5:
+        evidence = manifest.frozen_evidence_policy
+        if evidence is not None and evidence.enabled:
+            first_llm_seq = min(
+                (event.seq for event in events if event.llm is not None),
+                default=len(events) + 1,
+            )
+            found: dict[str, list[int]] = {}
+            for event in events:
+                for output in event.outputs:
+                    artifact = h.state.artifacts.get(output)
+                    if artifact is None or not artifact.content_ref.startswith("inline:"):
+                        continue
+                    try:
+                        attached = json.loads(
+                            artifact.content_ref.removeprefix("inline:")
+                        )
+                    except (TypeError, json.JSONDecodeError):
+                        continue
+                    if attached.get("schema") != "frozen-attached-source.v1":
+                        continue
+                    found.setdefault(str(attached.get("alias")), []).append(event.seq)
+                    item = next(
+                        (
+                            candidate
+                            for candidate in evidence.items
+                            if candidate.alias == attached.get("alias")
+                        ),
+                        None,
+                    )
+                    if (
+                        item is None
+                        or attached.get("content_sha256") != item.content_sha256
+                        or attached.get("excerpt") != item.content
+                        or event.seq >= first_llm_seq
+                    ):
+                        fail(
+                            "frozen-evidence",
+                            f"event seq={event.seq}: attached evidence differs from manifest or arrived late",
+                        )
+            for item in evidence.items:
+                if len(found.get(item.alias, ())) != 1:
+                    fail(
+                        "frozen-evidence",
+                        f"manifest evidence {item.alias} was not attached exactly once",
+                    )
     for event in events:
         work_order_id = (
             event.llm.work_order_id
@@ -409,7 +746,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             and event.inputs
             and event.inputs[0] == "conjecture-turn-call"
             and manifest is not None
-            and manifest.schema_version == 4
+            and manifest.schema_version in {4, 5}
             and manifest.control_plane_policy is not None
             and manifest.control_plane_policy.mode == "active_conjecture"
         )
@@ -534,7 +871,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         )
         if (
             manifest is not None
-            and manifest.schema_version == 4
+            and manifest.schema_version in {4, 5}
             and expected_school
             and not mini_semantic_lineage
         ):
@@ -558,7 +895,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
         if receipt is None:
             return
-        if manifest is None or manifest.schema_version != 4:
+        if manifest is None or manifest.schema_version not in {4, 5}:
             fail(
                 "school-route",
                 f"event seq={event.seq}: school route receipt requires a v4 manifest",
@@ -667,7 +1004,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         if receipt is None:
             return
         prefix = f"event seq={event.seq}"
-        if manifest is None or manifest.schema_version != 4:
+        if manifest is None or manifest.schema_version not in {4, 5}:
             fail(
                 "conjecture-context",
                 f"{prefix}: advisory context receipt requires a v4 manifest",
@@ -866,7 +1203,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         prefix = f"event seq={event.seq}"
         control = None
         context_policy = None
-        if manifest is None or manifest.schema_version != 4:
+        if manifest is None or manifest.schema_version not in {4, 5}:
             fail(
                 "conjecture-turn",
                 f"{prefix}: typed turn evidence requires a v4 manifest",
@@ -877,7 +1214,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 control is None
                 or control.mode != "active_conjecture"
                 or control.contract_versions.conjecturer_turn_contract
-                != "conjecturer.turn.v4"
+                not in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
             ):
                 fail(
                     "conjecture-turn",
@@ -923,7 +1260,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     f"{prefix}: source call names another work item or manifest",
                 )
             if any(
-                attempt.contract_id != "conjecturer.turn.v4"
+                attempt.contract_id
+                != control.contract_versions.conjecturer_turn_contract
                 for attempt in source_call.attempt_trace
             ):
                 fail(
@@ -1322,7 +1660,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
         policy = (
             manifest.criticism_policy
-            if manifest is not None and manifest.schema_version == 4
+            if manifest is not None and manifest.schema_version in {4, 5}
             else None
         )
         if policy is None:
@@ -1435,7 +1773,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         trace = list(e.llm.attempt_trace)
         control_policy = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version == 4
+            if manifest is not None and manifest.schema_version in {4, 5}
             else None
         )
         if (
@@ -1450,7 +1788,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 or e.inputs[1] not in h.state.problems
                 or e.inputs[2] != f"manifest:{manifest.sha256}"
                 or any(
-                    attempt.contract_id != "conjecturer.turn.v4"
+                    attempt.contract_id
+                    != control_policy.contract_versions.conjecturer_turn_contract
                     for attempt in trace
                 )
             ):
@@ -1702,7 +2041,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
     criticism_policy = (
         manifest.criticism_policy
-        if manifest is not None and manifest.schema_version == 4
+        if manifest is not None and manifest.schema_version in {4, 5}
         else None
     )
     if criticism_policy is not None:
@@ -1817,6 +2156,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             h.workflow_state.outstanding_work_order_ids
         ),
         "workflow_process_digest": h.workflow_state.digest,
+        "capability_events": len(capability_events),
+        "capability_requests": h.capability_state.request_count,
+        "capability_executions": h.capability_state.execution_count,
+        "capability_consumptions": h.capability_state.consumption_count,
+        "capability_process_digest": h.capability_state.digest,
         "max_problem_desc_len": max(
             (len(p.description) for p in h.state.problems.values()), default=0),
     }

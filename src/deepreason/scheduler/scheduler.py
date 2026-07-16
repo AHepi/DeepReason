@@ -285,7 +285,7 @@ class Scheduler:
         manifest = self.run_manifest
         if (
             manifest is None
-            or manifest.schema_version != 4
+            or manifest.schema_version not in {4, 5}
             or manifest.control_plane_policy is None
             or manifest.control_plane_policy.mode
             not in {"shadow", "active_conjecture"}
@@ -392,7 +392,7 @@ class Scheduler:
         manifest = self.run_manifest
         return bool(
             manifest is not None
-            and manifest.schema_version == 4
+            and manifest.schema_version in {4, 5}
             and manifest.control_plane_policy is not None
             and manifest.control_plane_policy.mode == "active_conjecture"
         )
@@ -413,7 +413,7 @@ class Scheduler:
         manifest = self.run_manifest
         control = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version == 4
+            if manifest is not None and manifest.schema_version in {4, 5}
             else None
         )
         if (
@@ -758,7 +758,7 @@ class Scheduler:
 
     def _plan_conjecture_context(self, problem, school_id: str | None):
         manifest = self.run_manifest
-        if manifest is None or manifest.schema_version != 4:
+        if manifest is None or manifest.schema_version not in {4, 5}:
             return None
         control = manifest.control_plane_policy
         scratch = manifest.scratch_policy
@@ -878,7 +878,7 @@ class Scheduler:
         criticism_policy = (
             self.run_manifest.criticism_policy
             if self.run_manifest is not None
-            and self.run_manifest.schema_version == 4
+            and self.run_manifest.schema_version in {4, 5}
             else None
         )
         if not self.adapter.has_role("argumentative_critic"):
@@ -1183,7 +1183,7 @@ class Scheduler:
         if (
             uses_conjecturer
             and self.run_manifest is not None
-            and self.run_manifest.schema_version == 4
+            and self.run_manifest.schema_version in {4, 5}
         ):
             # Resolve the entire school batch before shared spec generation,
             # reservation, or provider dispatch. One bad assignment therefore
@@ -1317,7 +1317,7 @@ class Scheduler:
                                 run_manifest=(
                                     self.run_manifest
                                     if self.run_manifest is not None
-                                    and self.run_manifest.schema_version == 4
+                                    and self.run_manifest.schema_version in {4, 5}
                                     and self.run_manifest.control_plane_policy is not None
                                     and self.run_manifest.control_plane_policy.mode
                                     == "active_conjecture"
@@ -1889,7 +1889,7 @@ class Scheduler:
         control = (
             getattr(manifest, "control_plane_policy", None)
             if manifest is not None
-            and getattr(manifest, "schema_version", 1) == 4
+            and getattr(manifest, "schema_version", 1) in {4, 5}
             else None
         )
         if (

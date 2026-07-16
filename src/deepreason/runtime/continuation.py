@@ -32,7 +32,7 @@ def _digest(value: dict) -> str:
 def _owned_v4_control(manifest):
     control = (
         manifest.control_plane_policy
-        if manifest.schema_version == 4
+        if manifest.schema_version in {4, 5}
         else None
     )
     if (
@@ -306,7 +306,7 @@ def prepare_continuation(
         if canonical_stop != stop:
             raise ValueError("CONTINUE_STOP_INVALID")
     checkpoint = root_path / "checkpoint.json"
-    if manifest.schema_version in {2, 3, 4} and not checkpoint.exists():
+    if manifest.schema_version in {2, 3, 4, 5} and not checkpoint.exists():
         raise ValueError("CONTINUE_CHECKPOINT_REQUIRED")
     if checkpoint.exists():
         try:

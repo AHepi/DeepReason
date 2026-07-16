@@ -50,7 +50,7 @@ def _route() -> dict:
     }
 
 
-def _control_policy() -> ControlPlanePolicyV1:
+def _control_policy(*, schema_version: int = 4) -> ControlPlanePolicyV1:
     return ControlPlanePolicyV1(
         controller_version="workflow.controller.v1",
         mode="active_conjecture",
@@ -75,7 +75,11 @@ def _control_policy() -> ControlPlanePolicyV1:
         workflow_retry=WorkflowRetryPolicyV1(),
         contract_versions=ContractVersionPolicyV1(
             bridge_ledger_wire_contract="bridge.ledger.v2",
-            conjecturer_turn_contract="conjecturer.turn.v4",
+            conjecturer_turn_contract=(
+                "conjecturer.turn.v5"
+                if schema_version == 5
+                else "conjecturer.turn.v4"
+            ),
             control_event_schema="control.event.v1",
         ),
         capability_profile="conjecture-control.v1",
@@ -102,7 +106,11 @@ def _manifest(*, schema_version: int = 3):
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
-        control_plane_policy=(_control_policy() if schema_version == 4 else None),
+        control_plane_policy=(
+            _control_policy(schema_version=schema_version)
+            if schema_version in {4, 5}
+            else None
+        ),
     )
 
 
@@ -220,10 +228,11 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     )
 
 
-def test_shared_bridge_service_accepts_bound_v4_and_enacts_ledger_v2(
-    tmp_path, monkeypatch
+@pytest.mark.parametrize("schema_version", [4, 5])
+def test_shared_bridge_service_accepts_bound_controlled_manifest_and_enacts_ledger_v2(
+    tmp_path, monkeypatch, schema_version
 ):
-    root = _run_root(tmp_path / "v4", schema_version=4)
+    root = _run_root(tmp_path / f"v{schema_version}", schema_version=schema_version)
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",

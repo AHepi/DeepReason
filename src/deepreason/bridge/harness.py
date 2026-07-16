@@ -237,7 +237,7 @@ def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
     if manifest.sha256 != manifest_digest:
         raise ValueError("BRIDGE_MANIFEST_MISMATCH")
     scratch = manifest.scratch_policy
-    if manifest.schema_version not in {3, 4} or scratch is None or not scratch.enabled:
+    if manifest.schema_version not in {3, 4, 5} or scratch is None or not scratch.enabled:
         raise ValueError("BRIDGE_SCRATCH_MANIFEST_V3_REQUIRED")
     return scratch.attention_policy()
 

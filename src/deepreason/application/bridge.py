@@ -440,9 +440,9 @@ def load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
     else:
         raise ValueError("BRIDGE_MANIFEST_REQUIRED: pass --run-manifest for an unbound run")
 
-    if manifest.schema_version not in {3, 4}:
+    if manifest.schema_version not in {3, 4, 5}:
         raise ValueError(
-            "BRIDGE_MANIFEST_V3_REQUIRED: grounded bridge requires schema v3 or v4"
+            "BRIDGE_MANIFEST_V3_REQUIRED: grounded bridge requires schema v3, v4, or v5"
         )
     if manifest.workload_profile != "text":
         raise ValueError("BRIDGE_MANIFEST_WORKLOAD_MISMATCH: expected a v3 text manifest")
@@ -773,13 +773,13 @@ def load_snapshot(
     if terminal.run_manifest_digest != manifest.sha256:
         raise ValueError("BRIDGE_RESULT_INVALID: manifest digest differs from binding")
     if (
-        manifest.schema_version not in {3, 4}
+        manifest.schema_version not in {3, 4, 5}
         or manifest.workload_profile != "text"
         or manifest.bridge_policy is None
         or manifest.bridge_policy.mode != "grounded_two_stage"
     ):
         raise ValueError(
-            "BRIDGE_RESULT_INVALID: grounded result requires manifest v3 or v4"
+            "BRIDGE_RESULT_INVALID: grounded result requires manifest v3, v4, or v5"
         )
     harness = Harness.at(root, terminal.terminal_event_seq)
     state = harness.bridge_state

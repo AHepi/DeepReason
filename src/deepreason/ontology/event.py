@@ -13,6 +13,7 @@ from typing import Literal, Mapping
 from pydantic import ConfigDict, Field, field_validator, model_validator
 
 from deepreason.bridge.events import BridgeEventPayloadV1
+from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
 from deepreason.control_events import ControlEventPayloadV1
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
@@ -34,6 +35,7 @@ class Rule(str, Enum):
     BRIDGE = "Bridge"
     CONJECTURE_TURN = "ConjectureTurn"
     CONTROL = "Control"
+    CAPABILITY = "Capability"
 
 
 class LLMAttempt(FrozenRecord):
@@ -332,6 +334,9 @@ class Event(FrozenRecord):
     control: ControlEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    capability: CapabilityEventPayloadV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("llm", mode="before")
     @classmethod
@@ -366,6 +371,15 @@ class Event(FrozenRecord):
             )
         return value
 
+    @field_validator("capability", mode="before")
+    @classmethod
+    def _deeply_revalidate_capability_payload(cls, value):
+        if isinstance(value, CapabilityEventPayloadV1):
+            return CapabilityEventPayloadV1.model_validate(
+                value.model_dump(mode="python", by_alias=True)
+            )
+        return value
+
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
     def _freeze_sequences(cls, value):
@@ -385,6 +399,10 @@ class Event(FrozenRecord):
             )
         if (self.rule == Rule.CONTROL) != (self.control is not None):
             raise ValueError("Control rule and typed control payload must appear together")
+        if (self.rule == Rule.CAPABILITY) != (self.capability is not None):
+            raise ValueError(
+                "Capability rule and typed capability payload must appear together"
+            )
         if self.scratch is not None:
             if list(self.inputs) != list(self.scratch.inputs):
                 raise ValueError("scratch payload inputs must match Event.inputs")
@@ -408,6 +426,13 @@ class Event(FrozenRecord):
                 raise ValueError(
                     "conjecture turn decisions reference an earlier model call"
                 )
+        if self.capability is not None:
+            if list(self.inputs) != list(self.capability.inputs):
+                raise ValueError("capability payload inputs must match Event.inputs")
+            if list(self.outputs) != list(self.capability.outputs):
+                raise ValueError("capability payload outputs must match Event.outputs")
+            if self.llm is not None:
+                raise ValueError("capability transitions cannot contain provider calls")
         if self.control is not None:
             if list(self.inputs) != list(self.control.inputs):
                 raise ValueError("control payload inputs must match Event.inputs")
@@ -420,6 +445,7 @@ class Event(FrozenRecord):
             or self.bridge is not None
             or self.conjecture_turn is not None
             or self.control is not None
+            or self.capability is not None
         ):
             formal = self.state_diff.model_dump(mode="json", by_alias=True)
             if any(formal.values()):

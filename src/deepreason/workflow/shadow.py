@@ -326,7 +326,7 @@ class ConjectureShadowObserver:
     ) -> "ConjectureShadowObserver | None":
         if (
             manifest is None
-            or manifest.schema_version != 4
+            or manifest.schema_version not in {4, 5}
             or manifest.control_plane_policy is None
             or manifest.control_plane_policy.mode
             not in {"shadow", "active_conjecture"}

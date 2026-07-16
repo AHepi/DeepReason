@@ -364,7 +364,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         controller = Controller(harness, adapter)
     if (
         stop_controller is None
-        and getattr(run_manifest, "schema_version", 1) in {2, 3, 4}
+        and getattr(run_manifest, "schema_version", 1) in {2, 3, 4, 5}
     ):
         from deepreason.runtime.stop import StopController, StopPolicy
 
