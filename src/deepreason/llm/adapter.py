@@ -45,7 +45,7 @@ from deepreason.llm.wire import (
     minimal_example,
     wire_contract_for,
 )
-from deepreason.ontology.event import LLMAttempt, LLMCall
+from deepreason.ontology.event import LLMAttempt, LLMCall, SchoolRouteReceiptV1
 from deepreason.run_manifest import infer_model_family
 
 
@@ -305,6 +305,7 @@ class LLMAdapter:
         aliases: AliasTable | None = None,
         output_mechanism: str | OutputMechanism | None = None,
         endpoint_lease: EndpointLease | None = None,
+        school_id: str | None = None,
     ) -> tuple[BaseModel, LLMCall]:
         """endpoint_index selects within a role's ensemble (§9: the judge
         MUST run on >=2 endpoints from different families). template_role
@@ -316,6 +317,8 @@ class LLMAdapter:
         honestly reconstructs the exchange (§0)."""
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
+        if school_id is not None and endpoint_lease is None:
+            raise ValueError("school-routed calls require an explicit endpoint lease")
         endpoint = self._resolve(role, endpoint_index)
         lease = endpoint_lease or select_lease(self.leases, role, endpoint_index)
         if lease.role != role or lease.seat != endpoint_index:
@@ -407,6 +410,18 @@ class LLMAdapter:
                 getattr(profile, "value", profile) or ""
             ),
         }
+        school_route = (
+            SchoolRouteReceiptV1(
+                school_id=school_id,
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=trace_identity["route_sha256"],
+                contract_id=wire_contract.contract_id,
+            )
+            if school_id is not None
+            else None
+        )
         repair = BoundedRepairSession(
             contract=wire_contract.contract_id,
             schema=schema_value,
@@ -429,6 +444,7 @@ class LLMAdapter:
                 truncated=truncated_any,
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
                 attempt_trace=attempt_trace,
+                school_route=school_route,
             )
 
         for attempt in range(repair.attempt_count):
@@ -633,6 +649,7 @@ class LLMAdapter:
                 truncated=truncated_any,
                 mean_surprisal=getattr(endpoint, "last_mean_surprisal", None),
                 attempt_trace=attempt_trace,
+                school_route=school_route,
             )
             return data, call
         error = SchemaRepairError(

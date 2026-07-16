@@ -14,6 +14,7 @@ marks atypical (§11.6).
 from pydantic import ValidationError
 
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
+from deepreason.llm.firewall import EndpointLease
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant
 from deepreason.rules.guards import anti_relapse
@@ -68,10 +69,23 @@ def conj(
     generation_context: str | None = None,
     suppressed_exemplars: tuple[str, ...] = (),
     capture_candidate_content: bool = False,
+    endpoint_lease: EndpointLease | None = None,
+    execution_school_id: str | None = None,
 ) -> list[Artifact]:
     problem = harness.state.problems.get(problem_id)
     if problem is None:
         raise KeyError(f"Conj is gated on a registered problem; unknown: {problem_id}")
+    if (endpoint_lease is None) != (execution_school_id is None):
+        raise ValueError(
+            "school-routed Conj requires both endpoint_lease and execution_school_id"
+        )
+    if execution_school_id is not None:
+        if school is None or school.get("id") != execution_school_id:
+            raise ValueError(
+                "execution school must match the semantic school conditioning record"
+            )
+        if endpoint_lease.role != "conjecturer":
+            raise ValueError("Conj endpoint lease must belong to the conjecturer role")
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -93,7 +107,15 @@ def conj(
         if commitment_id in harness.commitments
     )
     output_model = ReasoningConjecturerOutput if reasoning else ConjecturerOutput
-    output, llm_call = adapter.call("conjecturer", pack, output_model, aliases=aliases)
+    output, llm_call = adapter.call(
+        "conjecturer",
+        pack,
+        output_model,
+        endpoint_index=endpoint_lease.seat if endpoint_lease is not None else 0,
+        aliases=aliases,
+        endpoint_lease=endpoint_lease,
+        school_id=execution_school_id,
+    )
     # Level-2 transmission diagnostic (attention/reporting only, §0): did
     # candidate k actually realize spec k? Logged as a replayable Measure.
     if specs and embedder is not None:
@@ -261,5 +283,10 @@ def conj(
     if not registered:
         # All candidates gate-blocked or deduped => no Conj event committed;
         # the gamma call still spent tokens and must reach the log once (§0).
-        harness.record_llm_calls([llm_call], "conj-noregister")
+        extra = (
+            (f"school:{execution_school_id}",)
+            if execution_school_id is not None
+            else ()
+        )
+        harness.record_llm_calls([llm_call], "conj-noregister", *extra)
     return registered

@@ -364,7 +364,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         controller = Controller(harness, adapter)
     if (
         stop_controller is None
-        and getattr(run_manifest, "schema_version", 1) in {2, 3}
+        and getattr(run_manifest, "schema_version", 1) in {2, 3, 4}
     ):
         from deepreason.runtime.stop import StopController, StopPolicy
 
@@ -385,6 +385,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     # do not; leaving None preserves their established website-specific Conj
     # and domain paths instead of silently relabelling them as text.
     scheduler.workload_profile = getattr(run_manifest, "workload_profile", None)
+    scheduler.run_manifest = run_manifest
     scheduler.stop_controller = stop_controller
     scheduler.progress_sink = progress_sink
     result = scheduler.run(int(cycles), on_cycle=on_cycle)

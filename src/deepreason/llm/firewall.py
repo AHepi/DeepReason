@@ -55,6 +55,14 @@ class RouteFirewallError(RuntimeError):
     """A runtime endpoint no longer matches its compiled lease."""
 
 
+class SchoolRouteResolutionError(RouteFirewallError):
+    """A v4 school assignment cannot resolve to its manifest-owned seat."""
+
+    def __init__(self, code: str, message: str) -> None:
+        self.code = code
+        super().__init__(f"{code}: {message}")
+
+
 class JudgeEnsemblePolicyError(RuntimeError):
     """A rubric trial has no valid frozen cross-family judge ensemble."""
 
@@ -326,5 +334,95 @@ def select_lease(
         raise RouteFirewallError(
             f"lease identity mismatch: requested {role}[{seat}], got "
             f"{lease.role}[{lease.seat}]"
+        )
+    return lease
+
+
+def resolve_school_role_lease(
+    manifest: RunManifest,
+    leases: Mapping[str, tuple[EndpointLease, ...]],
+    *,
+    school_id: str,
+    role: str,
+    default_seat: int = 0,
+) -> EndpointLease:
+    """Resolve one school call without consulting semantic/model content.
+
+    Historical manifests and v4 ``conditioning_only`` preserve the existing
+    role-default seat. ``route_bound`` uses only the validated manifest
+    binding. In all cases the runtime lease is rechecked against the exact
+    manifest route before provider dispatch.
+    """
+
+    if not school_id:
+        raise SchoolRouteResolutionError(
+            "SCHOOL_ROUTE_SCHOOL_REQUIRED", "school_id cannot be empty"
+        )
+    policy = None
+    if manifest.schema_version == 4:
+        control = manifest.control_plane_policy
+        if control is None:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_POLICY_MISSING",
+                "v4 manifest has no control-plane school policy",
+            )
+        policy = control.school_execution
+        try:
+            engine_data = json.loads(manifest.engine_config_json)
+        except (TypeError, json.JSONDecodeError) as error:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_ENGINE_CONFIG_INVALID",
+                "manifest engine configuration is not canonical JSON",
+            ) from error
+        school_count = engine_data.get("N_SCHOOLS")
+        if isinstance(school_count, bool) or not isinstance(school_count, int):
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_SCHOOL_COUNT_INVALID",
+                "manifest N_SCHOOLS is not an integer",
+            )
+        if school_id not in {f"school-{index}" for index in range(school_count)}:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_SCHOOL_UNKNOWN",
+                f"school {school_id!r} is outside the manifest roster",
+            )
+
+    seat = default_seat
+    binding = None
+    if policy is not None and policy.mode == "route_bound":
+        matches = tuple(
+            item
+            for item in policy.bindings
+            if item.school_id == school_id and item.role == role
+        )
+        if not matches:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_BINDING_MISSING",
+                f"no binding for {school_id}/{role}",
+            )
+        if len(matches) != 1:
+            raise SchoolRouteResolutionError(
+                "SCHOOL_ROUTE_BINDING_AMBIGUOUS",
+                f"multiple bindings for {school_id}/{role}",
+            )
+        binding = matches[0]
+        seat = binding.seat
+
+    try:
+        lease = select_lease(leases, role, seat)
+        manifest_route = manifest.roles[role][seat]
+    except (KeyError, IndexError) as error:
+        raise SchoolRouteResolutionError(
+            "SCHOOL_ROUTE_SEAT_UNAVAILABLE",
+            f"no frozen runtime lease for {role}[{seat}]",
+        ) from error
+    if lease.route != manifest_route:
+        raise SchoolRouteResolutionError(
+            "SCHOOL_ROUTE_LEASE_MISMATCH",
+            f"runtime lease for {role}[{seat}] differs from the manifest route",
+        )
+    if binding is not None and binding.endpoint_id != lease.route.endpoint_id:
+        raise SchoolRouteResolutionError(
+            "SCHOOL_ROUTE_ENDPOINT_MISMATCH",
+            "binding endpoint identity differs from the selected lease",
         )
     return lease

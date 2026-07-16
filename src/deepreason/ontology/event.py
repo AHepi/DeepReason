@@ -7,7 +7,7 @@ replay-deterministic.
 """
 
 from enum import Enum
-from typing import Mapping
+from typing import Literal, Mapping
 
 from pydantic import ConfigDict, Field, field_validator, model_validator
 
@@ -82,6 +82,24 @@ class LLMAttempt(FrozenRecord):
         return FrozenList(value)
 
 
+class SchoolRouteReceiptV1(FrozenRecord):
+    """Exact v4 school assignment used for one conjecturer model call."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True
+    )
+
+    schema_: Literal["school-route-receipt.v1"] = Field(
+        "school-route-receipt.v1", alias="schema"
+    )
+    school_id: str = Field(pattern=r"^school-(0|[1-9][0-9]*)$")
+    role: str = Field(min_length=1)
+    seat: int = Field(ge=0)
+    endpoint_id: str = Field(min_length=1)
+    route_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    contract_id: str = Field(min_length=1)
+
+
 class LLMCall(FrozenRecord):
     role: str
     model: str
@@ -103,11 +121,35 @@ class LLMCall(FrozenRecord):
     # Defaults empty for byte-compatible replay of historical roots. New
     # calls contain exactly one entry per completed/failed schema attempt.
     attempt_trace: list[LLMAttempt] = Field(default_factory=FrozenList)
+    # Present only for v4 school-routed conjecture work. ``exclude_if`` keeps
+    # every historical event shape byte-compatible.
+    school_route: SchoolRouteReceiptV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @field_validator("attempt_trace", mode="after")
     @classmethod
     def _freeze_attempt_trace(cls, value):
         return FrozenList(value)
+
+    @model_validator(mode="after")
+    def _school_route_matches_attempts(self):
+        receipt = self.school_route
+        if receipt is None:
+            return self
+        if receipt.role != self.role:
+            raise ValueError("school route role must match LLMCall.role")
+        if not self.attempt_trace:
+            raise ValueError("school route receipt requires an attempt trace")
+        for attempt in self.attempt_trace:
+            if (
+                attempt.seat != receipt.seat
+                or attempt.endpoint_id != receipt.endpoint_id
+                or attempt.route_sha256 != receipt.route_sha256
+                or attempt.contract_id != receipt.contract_id
+            ):
+                raise ValueError("school route receipt must match every LLM attempt")
+        return self
 
 
 class StateDiff(FrozenRecord):

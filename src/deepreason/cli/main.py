@@ -179,7 +179,7 @@ def build_parser() -> argparse.ArgumentParser:
         proof_cmd.add_argument(
             "--run-manifest",
             default=None,
-            help="formal v2/v3 manifest (default: the manifest already bound to root)",
+            help="formal v2+ manifest (default: the manifest already bound to root)",
         )
         proof_cmd.add_argument(
             "--theorem", action="append", required=True,
@@ -193,7 +193,7 @@ def build_parser() -> argparse.ArgumentParser:
     code_cmd.add_argument("--workload", required=True, help="code workload YAML/JSON")
     code_cmd.add_argument("--patch", required=True, help="compiled localized patch YAML/JSON")
     code_cmd.add_argument(
-        "--run-manifest", required=True, help="precompiled v2/v3 code manifest"
+        "--run-manifest", required=True, help="precompiled v2+ code manifest"
     )
     simulate_cmd = sub.add_parser(
         "simulate", help="run a pinned deterministic simulation and checker"
@@ -204,7 +204,7 @@ def build_parser() -> argparse.ArgumentParser:
     simulate_cmd.add_argument("--checker", required=True, help="pinned checker source")
     simulate_cmd.add_argument("--simulation-index", type=int, default=0)
     simulate_cmd.add_argument(
-        "--run-manifest", required=True, help="precompiled v2/v3 code manifest"
+        "--run-manifest", required=True, help="precompiled v2+ code manifest"
     )
     sub.add_parser("frontier", help="show the problem frontier")
     sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
@@ -1178,7 +1178,7 @@ def _cmd_reason(args) -> int:
                 capability_cache=CapabilityCache(root / "capabilities.json"),
             )
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version in {2, 3} and manifest.workload_profile != "text":
+        if manifest.schema_version in {2, 3, 4} and manifest.workload_profile != "text":
             raise RunManifestError(
                 "WORKLOAD_PROFILE_MISMATCH",
                 f"reason requires text, got {manifest.workload_profile}",
@@ -1538,9 +1538,9 @@ def _cmd_check_proof(args) -> int:
             manifest = load_run_manifest(args.run_manifest)
         else:
             raise ValueError("PROOF_MANIFEST_REQUIRED: pass --run-manifest or use a bound root")
-        if manifest.schema_version not in {2, 3} or manifest.workload_profile != "formal":
+        if manifest.schema_version not in {2, 3, 4} or manifest.workload_profile != "formal":
             raise ValueError(
-                "PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2/v3 formal manifest"
+                "PROOF_MANIFEST_WORKLOAD_MISMATCH: expected v2+ formal manifest"
             )
         candidates = [
             item
@@ -1609,10 +1609,10 @@ def _bind_cli_manifest(root: Path, requested_path: str, *, workload: str):
             )
     else:
         manifest = requested
-    if manifest.schema_version not in {2, 3} or manifest.workload_profile != workload:
+    if manifest.schema_version not in {2, 3, 4} or manifest.workload_profile != workload:
         raise ValueError(
             f"{workload.upper()}_MANIFEST_WORKLOAD_MISMATCH: "
-            f"expected v2/v3 {workload} manifest"
+            f"expected v2+ {workload} manifest"
         )
     bind_run_manifest(manifest, root)
     return manifest

@@ -17,7 +17,7 @@ from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
 from deepreason.llm.adapter import SchemaRepairError
 from deepreason.llm.endpoints import EndpointError
-from deepreason.llm.firewall import RouteFirewallError
+from deepreason.llm.firewall import RouteFirewallError, resolve_school_role_lease
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
@@ -170,7 +170,8 @@ class Scheduler:
                  workload_profile: str | None = None, stop_controller=None,
                  progress_sink=None, capture_responses: bool = True,
                  generation_context: str | None = None,
-                 suppressed_exemplars: tuple[str, ...] = ()) -> None:
+                 suppressed_exemplars: tuple[str, ...] = (),
+                 run_manifest=None) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
@@ -212,6 +213,7 @@ class Scheduler:
         self.capture_responses = capture_responses
         self.generation_context = generation_context
         self.suppressed_exemplars = tuple(suppressed_exemplars)
+        self.run_manifest = run_manifest
         self.last_stop_decision = None
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
         self.schools = (
@@ -611,6 +613,30 @@ class Scheduler:
         if not assigned:
             assigned = [None]
 
+        uses_conjecturer = not (
+            problem.provenance.trigger in _INTEGRATION_TRIGGERS
+            and self.adapter.has_role("synthesizer")
+        )
+        school_leases = {}
+        if (
+            uses_conjecturer
+            and self.run_manifest is not None
+            and self.run_manifest.schema_version == 4
+        ):
+            # Resolve the entire school batch before shared spec generation,
+            # reservation, or provider dispatch. One bad assignment therefore
+            # cannot leave partial spend from an otherwise valid school.
+            school_leases = {
+                school_id: resolve_school_role_lease(
+                    self.run_manifest,
+                    self.adapter.leases,
+                    school_id=school_id,
+                    role="conjecturer",
+                )
+                for school_id in assigned
+                if school_id is not None
+            }
+
         # Level-2 diversity injection: one spec call per step, shared across
         # schools (inter-school diversity comes from stances; specs fight
         # intra-call stem collapse). Logged so tokens and replay both see it.
@@ -672,6 +698,10 @@ class Scheduler:
                         theorem_interface=theorem_interface,
                         generation_context=self.generation_context,
                         suppressed_exemplars=self.suppressed_exemplars,
+                        endpoint_lease=school_leases.get(school_id),
+                        execution_school_id=(
+                            school_id if school_id in school_leases else None
+                        ),
                     )
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)

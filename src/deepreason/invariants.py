@@ -213,7 +213,130 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     usage_unknown_attempts = 0
     provider_transport_attempts = 0
     authorized_controller_limits: dict[str, set[int]] = {}
+
+    def validate_school_route(event) -> None:
+        call = event.llm
+        receipt = getattr(call, "school_route", None) if call is not None else None
+        output_schools = (
+            {
+                artifact.provenance.school
+                for output in event.outputs
+                if (artifact := h.state.artifacts.get(output)) is not None
+                and artifact.provenance.school is not None
+            }
+            if event.rule.value == "Conj"
+            else set()
+        )
+        tagged_schools = (
+            {
+                value.removeprefix("school:")
+                for value in event.inputs
+                if value.startswith("school:")
+            }
+            if event.inputs and event.inputs[0] == "conj-noregister"
+            else set()
+        )
+        expected_school = output_schools | tagged_schools
+
+        if manifest is not None and manifest.schema_version == 4 and expected_school:
+            if len(expected_school) != 1:
+                fail(
+                    "school-route",
+                    f"event seq={event.seq}: one call records multiple schools "
+                    f"{sorted(expected_school)!r}",
+                )
+            if receipt is None:
+                fail(
+                    "school-route",
+                    f"event seq={event.seq}: school-conditioned call has no route receipt",
+                )
+            elif receipt.school_id not in expected_school:
+                fail(
+                    "school-route",
+                    f"event seq={event.seq}: receipt school={receipt.school_id!r}, "
+                    f"event schools={sorted(expected_school)!r}",
+                )
+
+        if receipt is None:
+            return
+        if manifest is None or manifest.schema_version != 4:
+            fail(
+                "school-route",
+                f"event seq={event.seq}: school route receipt requires a v4 manifest",
+            )
+            return
+        control = manifest.control_plane_policy
+        if control is None:
+            fail("school-route", f"event seq={event.seq}: v4 control policy is missing")
+            return
+        engine_data = json.loads(manifest.engine_config_json)
+        roster = {
+            f"school-{index}"
+            for index in range(int(engine_data.get("N_SCHOOLS", 0)))
+        }
+        if receipt.school_id not in roster:
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt school is outside manifest roster",
+            )
+            return
+        if receipt.role != "conjecturer":
+            fail(
+                "school-route",
+                f"event seq={event.seq}: unsupported school role {receipt.role!r}",
+            )
+            return
+        routes = manifest.roles.get(receipt.role, ())
+        school_policy = control.school_execution
+        expected_seat = 0
+        expected_endpoint = None
+        if school_policy.mode == "route_bound":
+            matches = [
+                binding
+                for binding in school_policy.bindings
+                if binding.school_id == receipt.school_id
+                and binding.role == receipt.role
+            ]
+            if len(matches) != 1:
+                fail(
+                    "school-route",
+                    f"event seq={event.seq}: receipt has no unique manifest binding",
+                )
+                return
+            expected_seat = matches[0].seat
+            expected_endpoint = matches[0].endpoint_id
+        if receipt.seat != expected_seat:
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt seat={receipt.seat}, "
+                f"policy seat={expected_seat}",
+            )
+            return
+        if receipt.seat >= len(routes):
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt seat is outside manifest routes",
+            )
+            return
+        route = routes[receipt.seat]
+        if expected_endpoint is not None and receipt.endpoint_id != expected_endpoint:
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt endpoint differs from binding",
+            )
+        if receipt.endpoint_id != route.endpoint_id:
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt endpoint differs from manifest route",
+            )
+        if receipt.route_sha256 != route_fingerprint(route):
+            fail(
+                "school-route",
+                f"event seq={event.seq}: receipt route hash differs from manifest route",
+            )
+
     for e in events:
+        validate_school_route(e)
         # Controller policies are harness-authored, attackable artifacts. A
         # value is transport-authorized only after its policy is appended;
         # later refutation may cause a revert but cannot erase that historical
