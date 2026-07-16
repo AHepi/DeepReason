@@ -321,6 +321,11 @@ def test_route_bound_scheduler_dispatches_each_school_to_its_exact_seat(tmp_path
         "school-0": (1, "route-b"),
         "school-1": (0, "route-a"),
     }
+    assert {
+        artifact.content_ref.removeprefix("inline:")
+        for artifact in harness.state.artifacts.values()
+        if artifact.provenance.role == "conjecturer"
+    } == {"seat 0 candidate 1", "seat 1 candidate 1"}
 
 
 def test_route_bound_shared_seat_is_enacted_when_manifest_allows_it(tmp_path):

@@ -5,6 +5,7 @@ from __future__ import annotations
 import inspect
 import json
 
+from deepreason import programs
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.config import Config
 from deepreason.harness import Harness
@@ -214,3 +215,127 @@ def test_mini_client_does_not_implement_workflow_records_or_transitions():
         "record_control_transition",
     ):
         assert forbidden not in source
+
+
+def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_path):
+    families = ("mini-family-alpha", "mini-family-beta")
+    bodies = [
+        json.dumps(
+            {
+                "claim": f"A compact explanation from {family}.",
+                "mechanism": f"A bounded feedback path preserves {family}.",
+                "forbidden": [
+                    {
+                        "case": "the candidate must remain valid JSON",
+                        "eval": "program:json-wf",
+                    }
+                ],
+            },
+            sort_keys=True,
+        )
+        for family in families
+    ]
+    response = json.dumps(
+        {
+            "candidates": [
+                {"content": body, "typicality": 0.21 + index / 10}
+                for index, body in enumerate(bodies)
+            ]
+        }
+    )
+    prompts = {"legacy": [], "shadow": []}
+
+    def endpoint(mode):
+        def complete(prompt):
+            prompts[mode].append(prompt)
+            return response
+
+        return MockEndpoint(
+            complete,
+            name="mock://mini-d2-semantic",
+            model="mini-d2-semantic-model",
+        )
+
+    legacy_endpoint = endpoint("legacy")
+    shadow_endpoint = endpoint("shadow")
+    legacy_root = tmp_path / "legacy"
+    shadow_root = tmp_path / "shadow"
+    _bind_shadow_manifest(shadow_endpoint, shadow_root)
+
+    summaries = {
+        "legacy": run(
+            [("pi-mini-d2", "Compare two compact mechanisms.")],
+            legacy_endpoint,
+            budget=100_000,
+            root=legacy_root,
+            vs_k=2,
+            max_cycles=1,
+        ),
+        "shadow": run(
+            [("pi-mini-d2", "Compare two compact mechanisms.")],
+            shadow_endpoint,
+            budget=100_000,
+            root=shadow_root,
+            vs_k=2,
+            max_cycles=1,
+        ),
+    }
+    harnesses = {
+        "legacy": Harness(legacy_root),
+        "shadow": Harness(shadow_root),
+    }
+
+    def semantic_projection(harness):
+        artifacts = tuple(
+            sorted(
+                (
+                    artifact.id,
+                    programs.content_text(artifact, harness.blobs),
+                    harness.state.status[artifact.id].value,
+                )
+                for artifact in harness.state.artifacts.values()
+                if artifact.provenance.role == "conjecturer"
+            )
+        )
+        verdicts = tuple(
+            sorted(
+                (
+                    artifact.id,
+                    tuple(
+                        programs.evaluate(
+                            harness.commitments[commitment_id],
+                            artifact,
+                            harness.blobs,
+                        )[0]
+                        for commitment_id in artifact.interface.commitments
+                    ),
+                )
+                for artifact in harness.state.artifacts.values()
+                if artifact.provenance.role == "conjecturer"
+            )
+        )
+        return artifacts, verdicts
+
+    legacy_projection = semantic_projection(harnesses["legacy"])
+    shadow_projection = semantic_projection(harnesses["shadow"])
+    assert prompts["shadow"] == prompts["legacy"]
+    assert shadow_projection == legacy_projection
+    artifacts, verdicts = shadow_projection
+    assert len(artifacts) == 2
+    assert len({content for _id, content, _status in artifacts}) == 2
+    assert all(
+        any(family in content for _id, content, _status in artifacts)
+        for family in families
+    )
+    assert {artifact_id for artifact_id, _candidate_verdicts in verdicts} == {
+        artifact_id for artifact_id, _content, _status in artifacts
+    }
+    # Every Mini skeleton has its canonical well-formedness check plus the
+    # fixture's explicit json-wf check.  Both must remain executable and pass.
+    assert all(
+        candidate_verdicts == (programs.PASS, programs.PASS)
+        for _artifact_id, candidate_verdicts in verdicts
+    )
+    assert summaries["shadow"]["tokens"] == summaries["legacy"]["tokens"]
+    assert summaries["shadow"]["problems"] == summaries["legacy"]["problems"]
+    assert verify_root(shadow_root)["violations"] == []

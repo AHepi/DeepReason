@@ -97,7 +97,12 @@ def _disabled_context() -> ConjectureContextPolicyV1:
     )
 
 
-def _manifest(config: Config, mode: str) -> RunManifest:
+def _manifest(
+    config: Config,
+    mode: str,
+    *,
+    workload_profile: str = "text",
+) -> RunManifest:
     controlled = mode in {"shadow", "active_conjecture"}
     active = mode == "active_conjecture"
     control = ControlPlanePolicyV1(
@@ -137,7 +142,7 @@ def _manifest(config: Config, mode: str) -> RunManifest:
     return compile_run_manifest(
         config,
         schema_version=4,
-        workload_profile="text",
+        workload_profile=workload_profile,
         rubric_policy="forbid",
         compiled_at=STAMP,
         control_plane_policy=control,
@@ -273,22 +278,41 @@ def _run(
     problem_id: str = "pi-workflow-shadow-c0",
     retry_max: int = 0,
     meter_budget: int = 100_000,
+    workload_profile: str = "text",
+    reasoning: bool = False,
 ) -> _RunCapture:
     if response is not None and responses is not None:
         raise ValueError("provide one fixed response or one response sequence")
     config = _config(vs_k=vs_k, retry_max=retry_max)
-    manifest = _manifest(config, mode)
+    manifest = _manifest(config, mode, workload_profile=workload_profile)
     bind_run_manifest(manifest, root)
     harness = Harness(root)
-    harness.register_problem(
-        Problem(
-            id=problem_id,
-            description="Exercise one deterministic legacy conjecture cycle.",
-            provenance=ProblemProvenance.model_validate(
-                {"trigger": "seed", "from": []}
+    if reasoning:
+        from deepreason.workloads.text import (
+            ReasoningWorkloadSpec,
+            WorkloadProblem,
+            seed_reasoning_workload,
+        )
+
+        seed_reasoning_workload(
+            harness,
+            ReasoningWorkloadSpec(
+                problem=WorkloadProblem(
+                    id=problem_id,
+                    description="Exercise one deterministic reasoning cycle.",
+                )
             ),
         )
-    )
+    else:
+        harness.register_problem(
+            Problem(
+                id=problem_id,
+                description="Exercise one deterministic legacy conjecture cycle.",
+                provenance=ProblemProvenance.model_validate(
+                    {"trigger": "seed", "from": []}
+                ),
+            )
+        )
     prompts: list[str] = []
     scripted = iter(responses) if responses is not None else None
 
@@ -318,7 +342,7 @@ def _run(
         harness,
         adapter,
         config,
-        workload_profile="text",
+        workload_profile=workload_profile,
         run_manifest=manifest,
     )
     report = scheduler.run(cycles)
