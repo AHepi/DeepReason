@@ -45,6 +45,7 @@ from deepreason.run_manifest import (
     bind_run_manifest,
     compile_run_manifest,
 )
+from deepreason.runtime.launch_policy import V6_LAUNCH_DISABLE_ENV
 
 
 STAMP = "2026-07-16T00:00:00Z"
@@ -225,6 +226,13 @@ def _bridge_events(root) -> list[dict]:
     ]
 
 
+def _forbid(label: str):
+    def blocked(*_args, **_kwargs):
+        pytest.fail(f"{label} must not run after a disabled v6 launch")
+
+    return blocked
+
+
 def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     tmp_path, monkeypatch, capsys
 ):
@@ -345,6 +353,94 @@ def test_existing_failed_terminal_start_preserves_explicit_null_resolution():
     assert result.presentation_payload()["resolution"] is None
 
 
+@pytest.mark.parametrize("state", ["failed", "cancelled"])
+def test_canonical_bridge_rejects_noncompleted_reasoning_before_adapter(
+    tmp_path, monkeypatch, state
+):
+    root = _run_root(tmp_path / state)
+    (root / "run-result.json").write_text(
+        json.dumps(
+            {
+                "schema": "deepreason-run-result-v1",
+                "state": state,
+                "workload": "text",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        lambda *_args: pytest.fail("terminal gate must precede adapter construction"),
+    )
+
+    with pytest.raises(ValueError, match="BRIDGE_REASONING_NOT_COMPLETED"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(
+                root=str(root), problem="problem-application-boundary"
+            )
+        )
+
+    assert _bridge_events(root) == []
+
+
+def test_v6_canonical_bridge_requires_run_result_but_legacy_missing_is_allowed(
+    tmp_path,
+):
+    bridge_application.preflight_canonical_bridge(
+        tmp_path, SimpleNamespace(schema_version=5)
+    )
+    with pytest.raises(ValueError, match="BRIDGE_RUN_RESULT_REQUIRED"):
+        bridge_application.preflight_canonical_bridge(
+            tmp_path, SimpleNamespace(schema_version=6)
+        )
+
+
+def test_run_result_v2_can_deny_canonical_bridge(tmp_path):
+    (tmp_path / "run-result.json").write_text(
+        json.dumps(
+            {
+                "schema": "deepreason-run-result-v2",
+                "state": "completed",
+                "workload": "text",
+                "verification": {
+                    "schema": "verification.summary.v2",
+                    "valid": False,
+                    "integrity_valid": False,
+                    "security_valid": True,
+                    "completion_satisfied": True,
+                    "epistemic_checks_passed": True,
+                    "operational_checks_passed": True,
+                    "finding_counts": {
+                        "integrity": 1,
+                        "security": 0,
+                        "completion": 0,
+                        "epistemic": 0,
+                        "operational": 0,
+                    },
+                },
+                "completion_status": "satisfied",
+                "canonical_bridge_eligible": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="BRIDGE_RUN_NOT_ELIGIBLE"):
+        bridge_application.preflight_canonical_bridge(
+            tmp_path, SimpleNamespace(schema_version=6)
+        )
+
+
+def test_diagnostic_after_failure_requires_separate_derived_output():
+    with pytest.raises(ValidationError, match="BRIDGE_DIAGNOSTIC_DERIVED_REQUIRED"):
+        GroundedBridgeBuildIntentV1(
+            root="/run",
+            problem="problem-id",
+            diagnostic_after_failure=True,
+        )
+
+
 def test_async_terminal_race_error_releases_acquired_operator_lock(
     tmp_path, monkeypatch
 ):
@@ -391,3 +487,234 @@ def test_bridge_clients_do_not_own_workflow_or_persistence(path):
         "execute_bridge",
     ):
         assert forbidden not in source
+def _eligible_v6_run_result() -> dict:
+    return {
+        "schema": "deepreason-run-result-v2",
+        "state": "completed",
+        "workload": "text",
+        "verification": {
+            "schema": "verification.summary.v2",
+            "valid": True,
+            "integrity_valid": True,
+            "security_valid": True,
+            "completion_satisfied": True,
+            "epistemic_checks_passed": True,
+            "operational_checks_passed": True,
+            "finding_counts": {
+                "integrity": 0,
+                "security": 0,
+                "completion": 0,
+                "epistemic": 0,
+                "operational": 0,
+            },
+        },
+        "completion_status": "satisfied",
+        "canonical_bridge_eligible": True,
+    }
+
+
+def test_v6_canonical_bridge_rejects_legacy_result_before_adapter(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "v6-legacy-result"
+    root.mkdir()
+    (root / "run-result.json").write_text(
+        json.dumps(
+            {
+                "schema": "deepreason-run-result-v1",
+                "state": "completed",
+                "workload": "text",
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "load_bound_manifest",
+        lambda *_args, **_kwargs: SimpleNamespace(schema_version=6),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        lambda *_args: pytest.fail("result-version gate must precede adapter construction"),
+    )
+
+    with pytest.raises(ValueError, match="BRIDGE_RUN_RESULT_V2_REQUIRED"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(root=str(root), problem="problem-v6")
+        )
+
+
+def test_v6_live_verification_rejects_post_terminal_corruption_before_adapter(
+    tmp_path, monkeypatch
+):
+    from deepreason import invariants
+    from deepreason.verification import report as verification_report
+
+    root = tmp_path / "v6-post-terminal-corruption"
+    root.mkdir()
+    (root / "run-result.json").write_text(
+        json.dumps(_eligible_v6_run_result()),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "load_bound_manifest",
+        lambda *_args, **_kwargs: SimpleNamespace(schema_version=6),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        lambda *_args: pytest.fail("live authority gate must precede adapter construction"),
+    )
+    monkeypatch.setattr(
+        invariants,
+        "verify_root",
+        lambda *_args, **_kwargs: {
+            "violations": [
+                {
+                    "check": "event-log",
+                    "detail": "post-terminal event history no longer matches authority",
+                }
+            ],
+            "stats": {},
+        },
+    )
+    monkeypatch.setattr(
+        verification_report,
+        "_manifest_schema_version",
+        lambda _root: 6,
+    )
+
+    with pytest.raises(ValueError, match="BRIDGE_ROOT_AUTHORITY_INVALID"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(root=str(root), problem="problem-v6")
+        )
+
+
+def test_disabled_v6_canonical_bridge_stops_before_preflight_or_mutation(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "disabled-v6-canonical"
+    root.mkdir()
+    manifest = SimpleNamespace(schema_version=6)
+    monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "1")
+    monkeypatch.setattr(
+        bridge_application,
+        "load_bound_manifest",
+        lambda *_args, **_kwargs: manifest,
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "preflight_canonical_bridge",
+        _forbid("canonical preflight"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "operator_locks",
+        _forbid("canonical operator lock"),
+    )
+    monkeypatch.setattr(
+        "deepreason.run_manifest.bind_run_manifest",
+        _forbid("canonical manifest binding"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        _forbid("canonical adapter construction"),
+    )
+
+    with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(root=str(root), problem="problem-v6")
+        )
+
+    assert list(root.iterdir()) == []
+
+
+def test_disabled_v6_async_bridge_stops_before_worker_or_mutation(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "disabled-v6-async"
+    root.mkdir()
+    manifest = SimpleNamespace(schema_version=6)
+    service = bridge_application.GroundedBridgeApplicationService(
+        registry=bridge_application.GroundedBridgeWorkerRegistry()
+    )
+    monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "1")
+    monkeypatch.setattr(
+        bridge_application,
+        "load_bound_manifest",
+        lambda *_args, **_kwargs: manifest,
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "preflight_canonical_bridge",
+        _forbid("asynchronous preflight"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "operator_locks",
+        _forbid("asynchronous operator lock"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_prepare_bridge",
+        _forbid("asynchronous preparation"),
+    )
+
+    with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
+        service.start(
+            GroundedBridgeBuildIntentV1(root=str(root), problem="problem-v6")
+        )
+
+    assert service.registry.threads == {}
+    assert list(root.iterdir()) == []
+
+
+def test_disabled_v6_derived_bridge_stops_before_destination_reservation(
+    tmp_path, monkeypatch
+):
+    import deepreason.bridge.derived as derived_bridge
+
+    source = _run_root(tmp_path / "disabled-v6-derived-source")
+    destination = tmp_path / "disabled-v6-derived-destination"
+    manifest = SimpleNamespace(schema_version=6)
+    monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "1")
+    monkeypatch.setattr(
+        bridge_application,
+        "load_bound_manifest",
+        lambda *_args, **_kwargs: manifest,
+    )
+    monkeypatch.setattr(
+        derived_bridge,
+        "reserve_derived_destination",
+        _forbid("derived destination reservation"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "operator_locks",
+        _forbid("derived operator lock"),
+    )
+    monkeypatch.setattr(
+        "deepreason.run_manifest.bind_run_manifest",
+        _forbid("derived manifest binding"),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        _forbid("derived adapter construction"),
+    )
+
+    with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(
+                root=str(source),
+                problem="problem-application-boundary",
+                run_manifest_ref=str(tmp_path / "v6-manifest.json"),
+                derived_output=str(destination),
+                at_seq=0,
+            )
+        )
+
+    assert not destination.exists()

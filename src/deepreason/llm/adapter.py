@@ -8,6 +8,7 @@ then SchemaRepairError (caller drops the cycle, logged).
 """
 
 import json
+import hashlib
 import os
 import re
 import time
@@ -152,6 +153,7 @@ class LLMAdapter:
         model_profile: str | None = None,
         output_mechanism: str | OutputMechanism | None = None,
         leases: dict[str, tuple[EndpointLease, ...]] | None = None,
+        transaction_authority_required: bool = False,
     ) -> None:
         self.endpoints = endpoints
         self.blobs = blob_store
@@ -166,6 +168,7 @@ class LLMAdapter:
             OutputMechanism(output_mechanism) if output_mechanism else None
         )
         self.leases = leases if leases is not None else leases_from_endpoints(endpoints)
+        self.transaction_authority_required = bool(transaction_authority_required)
         self._compact_recovery_roles: set[str] = set()
 
     def rehydrate_compact_recovery(self, process_events) -> frozenset[str]:
@@ -306,70 +309,64 @@ class LLMAdapter:
             raise KeyError(f"role {role!r} has no ensemble endpoint {index}")
         return entry
 
-    def call(
+    def preview_request(
         self,
         role: str,
         pack: str,
         output_model: type[BaseModel],
+        *,
         endpoint_index: int = 0,
         template_role: str | None = None,
-        images: list[bytes] | None = None,
         wire_contract: WireContract | None = None,
         model_profile: str | None = None,
         aliases: AliasTable | None = None,
-        output_mechanism: str | OutputMechanism | None = None,
         endpoint_lease: EndpointLease | None = None,
-        school_id: str | None = None,
         conjecture_context: ConjectureContextCallReceiptV1 | None = None,
-        work_order_id: str | None = None,
-        workflow_dispatch_observer: Callable[[int], str | None] | None = None,
-        workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
-        workflow_dispatch_required: bool = False,
-        repair_scope_required: bool = False,
-    ) -> tuple[BaseModel, LLMCall]:
-        """endpoint_index selects within a role's ensemble (§9: the judge
-        MUST run on >=2 endpoints from different families). template_role
-        lets an auxiliary contract (e.g. spec generation) reuse a configured
-        endpoint with a different prompt template. ``images`` (PNG bytes)
-        makes the request multimodal (vision roles): image bytes are NOT
-        duplicated into the log — callers pass content-addressed evidence
-        artifacts and the pack text names their ids, so prompt_ref still
-        honestly reconstructs the exchange (§0)."""
+        pre_rendered_request: str | None = None,
+    ) -> tuple[str, WireContract, EndpointLease, int]:
+        """Render the exact first provider request without dispatching it.
+
+        Transactional callers use this pure boundary to bind the prompt digest
+        and conservative completion ceiling before WORK_ISSUED. call renders
+        through the same helper and verifies the resulting digest, so preview
+        and dispatch cannot silently drift.
+        """
+
+        prompt, contract, lease, endpoint, _profile = self._render_request(
+            role,
+            pack,
+            output_model,
+            endpoint_index=endpoint_index,
+            template_role=template_role,
+            wire_contract=wire_contract,
+            model_profile=model_profile,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            conjecture_context=conjecture_context,
+            pre_rendered_request=pre_rendered_request,
+        )
+        maximum = getattr(endpoint, "max_tokens", lease.route.max_tokens)
+        return prompt, contract, lease, int(maximum or 0)
+
+    def _render_request(
+        self,
+        role: str,
+        pack: str,
+        output_model: type[BaseModel],
+        *,
+        endpoint_index: int,
+        template_role: str | None,
+        wire_contract: WireContract | None,
+        model_profile: str | None,
+        aliases: AliasTable | None,
+        endpoint_lease: EndpointLease | None,
+        conjecture_context: ConjectureContextCallReceiptV1 | None,
+        pre_rendered_request: str | None,
+    ):
+        """Resolve route, contract, presentation profile, and exact prompt."""
+
         if role not in self.endpoints:
             raise KeyError(f"no endpoint configured for role {role!r}")
-        if work_order_id is not None and (
-            role != "conjecturer"
-            or re.fullmatch(r"sha256:[0-9a-f]{64}", work_order_id) is None
-        ):
-            raise ValueError(
-                "work_order_id requires a canonical conjecturer work order"
-            )
-        if workflow_dispatch_observer is not None and (
-            role != "conjecturer" or work_order_id is not None
-        ):
-            raise ValueError(
-                "workflow dispatch observation requires an unbound conjecturer call"
-            )
-        if workflow_repair_observer is not None and (
-            role != "conjecturer" or workflow_dispatch_observer is None
-        ):
-            raise ValueError(
-                "workflow repair observation requires conjecture dispatch observation"
-            )
-        if workflow_dispatch_required and workflow_dispatch_observer is None:
-            raise ValueError(
-                "required workflow dispatch needs an authorization callback"
-            )
-        if school_id is not None and endpoint_lease is None:
-            raise ValueError("school-routed calls require an explicit endpoint lease")
-        if conjecture_context is not None:
-            conjecture_context = ConjectureContextCallReceiptV1.model_validate(
-                conjecture_context
-            )
-            if role != "conjecturer":
-                raise ValueError("only conjecturer calls accept advisory context")
-            if school_id != conjecture_context.school_id:
-                raise ValueError("school route and advisory context must name one school")
         endpoint = self._resolve(role, endpoint_index)
         lease = endpoint_lease or select_lease(self.leases, role, endpoint_index)
         if lease.role != role or lease.seat != endpoint_index:
@@ -417,9 +414,6 @@ class LLMAdapter:
                     + wire_contract.aliases.render_pack(after)
                 )
         if profile is not None and not pack_is_allocated:
-            # Alias before clipping: otherwise a long canonical identifier can
-            # be cut in half, evade replacement, or expand beyond the profile
-            # budget after the clip has already been applied.
             rendered_pack = apply_model_profile(rendered_pack, profile)
         alias_labels = "\n".join(
             alias
@@ -429,14 +423,142 @@ class LLMAdapter:
                 rendered_pack,
             )
         )
-        prompt = render_role_prompt(
-            template_role or role,
-            schema=schema,
-            pack=rendered_pack,
-            profile=profile,
-            example=minimal_example(wire_contract),
-            aliases=alias_labels,
+        if pre_rendered_request is not None:
+            if not isinstance(pre_rendered_request, str) or not pre_rendered_request:
+                raise ValueError("pre-rendered provider request must be nonempty text")
+            prompt = pre_rendered_request
+        else:
+            prompt = render_role_prompt(
+                template_role or role,
+                schema=schema,
+                pack=rendered_pack,
+                profile=profile,
+                example=minimal_example(wire_contract),
+                aliases=alias_labels,
+            )
+        return prompt, wire_contract, lease, endpoint, profile
+
+    def call(
+        self,
+        role: str,
+        pack: str,
+        output_model: type[BaseModel],
+        endpoint_index: int = 0,
+        template_role: str | None = None,
+        images: list[bytes] | None = None,
+        wire_contract: WireContract | None = None,
+        model_profile: str | None = None,
+        aliases: AliasTable | None = None,
+        output_mechanism: str | OutputMechanism | None = None,
+        endpoint_lease: EndpointLease | None = None,
+        school_id: str | None = None,
+        conjecture_context: ConjectureContextCallReceiptV1 | None = None,
+        work_order_id: str | None = None,
+        workflow_dispatch_observer: Callable[[int], str | None] | None = None,
+        workflow_repair_observer: Callable[[LLMAttempt], None] | None = None,
+        workflow_dispatch_required: bool = False,
+        repair_scope_required: bool = False,
+        dispatch_authorization=None,
+        pre_rendered_request: str | None = None,
+    ) -> tuple[BaseModel, LLMCall]:
+        """endpoint_index selects within a role's ensemble (§9: the judge
+        MUST run on >=2 endpoints from different families). template_role
+        lets an auxiliary contract (e.g. spec generation) reuse a configured
+        endpoint with a different prompt template. ``images`` (PNG bytes)
+        makes the request multimodal (vision roles): image bytes are NOT
+        duplicated into the log — callers pass content-addressed evidence
+        artifacts and the pack text names their ids, so prompt_ref still
+        honestly reconstructs the exchange (§0)."""
+        if self.transaction_authority_required and dispatch_authorization is None:
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 provider dispatch requires a bound transaction"
+            )
+        if role not in self.endpoints:
+            raise KeyError(f"no endpoint configured for role {role!r}")
+        if dispatch_authorization is not None:
+            from deepreason.workflow.transaction import AuthorizedDispatch
+
+            if not isinstance(dispatch_authorization, AuthorizedDispatch):
+                raise TypeError("dispatch_authorization must be an AuthorizedDispatch")
+            if work_order_id is not None or workflow_dispatch_observer is not None:
+                raise ValueError(
+                    "transactional authorization replaces legacy work callbacks"
+                )
+            work_order_id = dispatch_authorization.bundle.work_id
+        elif pre_rendered_request is not None:
+            raise ValueError(
+                "pre-rendered requests require transactional dispatch authorization"
+            )
+        if work_order_id is not None and (
+            (
+                dispatch_authorization is None
+                and role != "conjecturer"
+            )
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", work_order_id) is None
+        ):
+            raise ValueError(
+                "work_order_id requires canonical provider-work authority"
+            )
+        if workflow_dispatch_observer is not None and (
+            role != "conjecturer" or work_order_id is not None
+        ):
+            raise ValueError(
+                "workflow dispatch observation requires an unbound conjecturer call"
+            )
+        if workflow_repair_observer is not None and (
+            role != "conjecturer" or workflow_dispatch_observer is None
+        ):
+            raise ValueError(
+                "workflow repair observation requires conjecture dispatch observation"
+            )
+        if workflow_dispatch_required and workflow_dispatch_observer is None:
+            raise ValueError(
+                "required workflow dispatch needs an authorization callback"
+            )
+        if school_id is not None and endpoint_lease is None:
+            raise ValueError("school-routed calls require an explicit endpoint lease")
+        if conjecture_context is not None:
+            conjecture_context = ConjectureContextCallReceiptV1.model_validate(
+                conjecture_context
+            )
+            if role != "conjecturer":
+                raise ValueError("only conjecturer calls accept advisory context")
+            if school_id != conjecture_context.school_id:
+                raise ValueError("school route and advisory context must name one school")
+        prompt, wire_contract, lease, endpoint, profile = self._render_request(
+            role,
+            pack,
+            output_model,
+            endpoint_index=endpoint_index,
+            template_role=template_role,
+            wire_contract=wire_contract,
+            model_profile=model_profile,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            conjecture_context=conjecture_context,
+            pre_rendered_request=pre_rendered_request,
         )
+        schema_value = wire_contract.model_json_schema()
+        if dispatch_authorization is not None:
+            from deepreason.workflow.models import RouteLeaseRefV1
+
+            prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+            route_ref = RouteLeaseRefV1(
+                role=role,
+                seat=endpoint_index,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=route_fingerprint(lease.route),
+            )
+            dispatch_authorization.bundle.verify_dispatch(
+                work_id=dispatch_authorization.preparation.id,
+                attempt_index=dispatch_authorization.preparation.attempt_index,
+                contract_id=wire_contract.contract_id,
+                route_lease=route_ref,
+                prompt_sha256=prompt_sha256,
+                reservation_ref=dispatch_authorization.reservation_record.id,
+            )
+            if not dispatch_authorization.reservation.is_open:
+                raise ValueError("transactional token reservation is no longer open")
         fixed_mechanism = OutputMechanism(lease.route.output_mechanism)
         requested_mechanism = (
             OutputMechanism(output_mechanism)
@@ -451,6 +573,8 @@ class LLMAdapter:
         mechanism = fixed_mechanism
         started = time.monotonic()
         tokens_used = 0
+        exact_prompt_tokens = 0
+        exact_completion_tokens = 0
         truncated_any = False
         raw_ref = ""
         prompt_ref = self.blobs.put(prompt.encode())
@@ -492,7 +616,10 @@ class LLMAdapter:
             contract=wire_contract.contract_id,
             schema=schema_value,
             initial_request=prompt,
-            retry_max=self.retry_max,
+            # Each v6 patch attempt is separately prepared, reserved, issued,
+            # and dispatched.  One authorization bundle can never silently
+            # cover an internally generated repair request.
+            retry_max=(0 if dispatch_authorization is not None else self.retry_max),
             enforce_scope=(
                 workflow_dispatch_required
                 or repair_scope_required
@@ -501,6 +628,11 @@ class LLMAdapter:
             ),
         )
         effective_work_order_id = work_order_id
+        dispatch_authorization_ref = (
+            dispatch_authorization.bundle.id
+            if dispatch_authorization is not None
+            else None
+        )
 
         def _spend(attempts: int) -> LLMCall | None:
             if not tokens_used and not attempt_trace:
@@ -520,11 +652,18 @@ class LLMAdapter:
                 school_route=school_route,
                 conjecture_context=conjecture_context,
                 work_order_id=effective_work_order_id,
+                dispatch_authorization_ref=dispatch_authorization_ref,
+                prompt_tokens=(
+                    exact_prompt_tokens if dispatch_authorization is not None else None
+                ),
+                completion_tokens=(
+                    exact_completion_tokens if dispatch_authorization is not None else None
+                ),
             )
 
         for attempt in range(repair.attempt_count):
             attempt_started = time.monotonic()
-            if self.meter is not None:
+            if self.meter is not None and dispatch_authorization is None:
                 try:
                     self.meter.check()  # hard stop BEFORE spending (llm/budget.py)
                 except TokenBudgetExceeded as e:
@@ -573,7 +712,18 @@ class LLMAdapter:
             reservation_bound = conservative_prompt_bound(request) + int(
                 transport_limits["max_tokens"] or 0
             )
-            if self.meter is not None:
+            if dispatch_authorization is not None:
+                if attempt != 0:
+                    raise WorkflowAuthorizationError(
+                        "transactional repair requires a new authorization bundle",
+                        spend=_spend(attempt),
+                    )
+                reservation = dispatch_authorization.reservation
+                if reservation.amount != reservation_bound:
+                    raise WorkflowAuthorizationError(
+                        "transactional reservation bound differs from rendered request"
+                    )
+            elif self.meter is not None:
                 try:
                     reservation = self.meter.reserve(
                         prompt_text=request,
@@ -673,6 +823,8 @@ class LLMAdapter:
             usage = _usage_tokens(getattr(endpoint, "last_usage", None), request, raw)
             attempt_tokens = usage["prompt_tokens"] + usage["completion_tokens"]
             tokens_used += attempt_tokens
+            exact_prompt_tokens += usage["prompt_tokens"]
+            exact_completion_tokens += usage["completion_tokens"]
             if reservation is not None:
                 # Settle the reservation to provider-reported usage; the
                 # bound shrinks to reality under the meter lock.
@@ -781,6 +933,13 @@ class LLMAdapter:
                 school_route=school_route,
                 conjecture_context=conjecture_context,
                 work_order_id=effective_work_order_id,
+                dispatch_authorization_ref=dispatch_authorization_ref,
+                prompt_tokens=(
+                    exact_prompt_tokens if dispatch_authorization is not None else None
+                ),
+                completion_tokens=(
+                    exact_completion_tokens if dispatch_authorization is not None else None
+                ),
             )
             return data, call
         error = SchemaRepairError(
@@ -882,6 +1041,9 @@ def build_adapter(
             else getattr(config, "model_profile", None)
         ),
         leases=leases,
+        transaction_authority_required=(
+            run_manifest is not None and run_manifest.schema_version == 6
+        ),
     )
     if process_events is not None:
         adapter.rehydrate_compact_recovery(process_events)

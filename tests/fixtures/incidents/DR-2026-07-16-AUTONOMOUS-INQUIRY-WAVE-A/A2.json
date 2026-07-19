@@ -1,0 +1,63 @@
+{
+  "expected": {
+    "completion_checks": [],
+    "completion_satisfied": true,
+    "epistemic_checks": [
+      "run-result-verification"
+    ],
+    "integrity_checks": [
+      "dossier-pack",
+      "run-result-verification"
+    ],
+    "integrity_valid": false,
+    "operational_checks": [],
+    "operational_checks_passed": true,
+    "security_checks": [],
+    "security_valid": true,
+    "valid": false
+  },
+  "fixture_id": "A2",
+  "fixture_kind": "minimized-derived-reproduction",
+  "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
+  "manifest_schema_version": 5,
+  "original_root_bytes_included": false,
+  "problem": {
+    "description": "Minimized A2 near-budget orphan-exposure prefix.",
+    "id": "incident-wave-a-A2"
+  },
+  "provenance_limitation": "Archived bridge records are unavailable. The epistemic conclusion is an explicitly derived audit assertion, not a reconstruction of original bridge bytes.",
+  "repository_commit": "056af85e4c6018bcdf44e73c2ada78fabccb4a81",
+  "reproductions": {
+    "derived_audit_terminal": {
+      "canonical_bridge_eligible": false,
+      "completion_status": "satisfied",
+      "fixture_note": "Derived minimized A2 audit; not an original terminal or bridge record.",
+      "schema": "deepreason-run-result-v2",
+      "state": "completed",
+      "verification": {
+        "completion_satisfied": true,
+        "epistemic_checks_passed": false,
+        "finding_counts": {
+          "completion": 0,
+          "epistemic": 1,
+          "integrity": 1,
+          "operational": 0,
+          "security": 0
+        },
+        "integrity_valid": false,
+        "operational_checks_passed": true,
+        "schema": "verification.summary.v2",
+        "security_valid": true,
+        "valid": false
+      },
+      "workload": "text"
+    },
+    "orphan_exposure": {
+      "query": "next conjecture after near-budget preparation",
+      "state_fence": "formal:0;scratch:0;incident:minimized-a2",
+      "work_order_ref": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "schema": "deepreason.incident-derived-fixture.v1",
+  "source_review_sha256": "2f086397643e439dd711d656611f943a3edbb3327672faf81f16ea40d6ebf282"
+}

@@ -26,7 +26,7 @@ def _literal_head(node) -> str | None:
 def _emitted_signals() -> set[str]:
     found: set[str] = set()
     for path in SRC.rglob("*.py"):
-        tree = ast.parse(path.read_text())
+        tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if not isinstance(node, ast.Call):
                 continue

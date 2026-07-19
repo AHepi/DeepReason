@@ -32,20 +32,25 @@ def _digest(value: dict) -> str:
 def _owned_v4_control(manifest):
     control = (
         manifest.control_plane_policy
-        if manifest.schema_version in {4, 5}
+        if manifest.schema_version in {4, 5, 6}
         else None
     )
+    expected_event_schema = {
+        4: "control.event.v1",
+        5: "control.event.v2",
+        6: "control.event.v3",
+    }.get(manifest.schema_version)
     if (
         control is None
         or control.controller_version
-        not in {"workflow.controller.v1", "workflow.controller.v2"}
+        not in {
+            "workflow.controller.v1",
+            "workflow.controller.v2",
+            "workflow.controller.v3",
+        }
         or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
         or control.contract_versions.control_event_schema
-        != (
-            "control.event.v2"
-            if manifest.schema_version == 5
-            else "control.event.v1"
-        )
+        != expected_event_schema
     ):
         return None
     return control
@@ -58,7 +63,11 @@ def _canonical_file(path: Path, *, error_code: str) -> tuple[dict, str]:
     except (OSError, json.JSONDecodeError) as error:
         raise ValueError(error_code) from error
     encoded = canonical_json(payload) if isinstance(payload, dict) else b""
-    if not isinstance(payload, dict) or data not in {encoded, encoded + b"\n"}:
+    if not isinstance(payload, dict) or data not in {
+        encoded,
+        encoded + b"\n",
+        encoded + b"\r\n",
+    }:
         raise ValueError(error_code)
     return payload, sha256_hex(data)
 
@@ -312,7 +321,7 @@ def prepare_continuation(
         if canonical_stop != stop:
             raise ValueError("CONTINUE_STOP_INVALID")
     checkpoint = root_path / "checkpoint.json"
-    if manifest.schema_version in {2, 3, 4, 5} and not checkpoint.exists():
+    if manifest.schema_version in {2, 3, 4, 5, 6} and not checkpoint.exists():
         raise ValueError("CONTINUE_CHECKPOINT_REQUIRED")
     if checkpoint.exists():
         try:

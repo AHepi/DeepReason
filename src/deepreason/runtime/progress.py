@@ -12,6 +12,23 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
+def _io_path(path: Path) -> Path:
+    """Return a Win32 extended path only when the ordinary path is long."""
+
+    path = Path(path)
+    if os.name != "nt":
+        return path
+    value = str(path)
+    if not os.path.isabs(value):
+        value = os.path.abspath(value)
+    if len(value) < 240 or value.startswith("\\\\?\\"):
+        return Path(value)
+    if value.startswith("\\\\"):
+        return Path("\\\\?\\UNC\\" + value.lstrip("\\"))
+    return Path("\\\\?\\" + value)
+
+
+
 class ProgressEvent(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -43,9 +60,13 @@ class ProgressEvent(BaseModel):
 
 
 def _atomic_json(path: Path, value: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path = Path(path)
+    io_path = _io_path(path)
+    io_path.parent.mkdir(parents=True, exist_ok=True)
     descriptor, temporary_name = tempfile.mkstemp(
-        dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
+        dir=io_path.parent,
+        prefix=".atomic.",
+        suffix=".tmp",
     )
     temporary = Path(temporary_name)
     try:
@@ -54,7 +75,7 @@ def _atomic_json(path: Path, value: dict) -> None:
             stream.write("\n")
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(temporary, path)
+        os.replace(temporary, io_path)
     finally:
         if temporary.exists():
             temporary.unlink()

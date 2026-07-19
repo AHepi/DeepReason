@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import ClassVar, Literal
 
 from pydantic import ConfigDict, Field, StrictInt, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.frozen import FrozenRecord
+from deepreason.frozen import FrozenDict, FrozenRecord
+from deepreason.ontology.commitment import Budget, Commitment
 
 
 _DIGEST = r"^[0-9a-f]{64}$"
@@ -197,6 +199,119 @@ class RunInputManifestV1(_InputRecord):
         return self
 
 
+class RunInputBudgetV1(_InputRecord):
+    """Version-frozen snapshot of every field in a Commitment budget."""
+
+    steps: StrictInt | None = 100_000
+    time_ms: StrictInt | None = 2_000
+    extra: Mapping[str, StrictInt | str] = Field(default_factory=FrozenDict)
+
+    @field_validator("extra", mode="after")
+    @classmethod
+    def _freeze_extra(cls, value):
+        return FrozenDict(dict(value))
+
+    @classmethod
+    def from_budget(cls, budget: Budget) -> "RunInputBudgetV1":
+        return cls.model_validate(budget.model_dump(mode="json"))
+
+
+class RunInputCommitmentV1(_InputRecord):
+    """Complete immutable Commitment definition embedded by run-input v2."""
+
+    schema_: Literal["run-input-commitment.v1"] = Field(
+        "run-input-commitment.v1", alias="schema"
+    )
+    id: str
+    eval: str
+    budget: RunInputBudgetV1 = Field(default_factory=RunInputBudgetV1)
+    observation_valued: bool = False
+
+    @classmethod
+    def from_commitment(cls, commitment: Commitment) -> "RunInputCommitmentV1":
+        return cls(
+            id=commitment.id,
+            eval=commitment.eval,
+            budget=RunInputBudgetV1.from_budget(commitment.budget),
+            observation_valued=commitment.observation_valued,
+        )
+
+
+
+class RunInputProblemV2(_InputRecord):
+    id: str = Field(min_length=1, max_length=512)
+    description: str = Field(min_length=1, max_length=262_144)
+    criteria: tuple[RunInputCommitmentV1, ...] = Field(
+        default=(), max_length=4_096
+    )
+
+    @field_validator("criteria")
+    @classmethod
+    def _unique_criteria(cls, value):
+        ids = tuple(item.id for item in value)
+        if len(ids) != len(set(ids)):
+            raise ValueError("run-input commitment IDs must be unique")
+        return tuple(value)
+
+    @classmethod
+    def from_commitments(
+        cls,
+        *,
+        id: str,
+        description: str,
+        criteria: tuple[Commitment, ...],
+    ) -> "RunInputProblemV2":
+        return cls(
+            id=id,
+            description=description,
+            criteria=tuple(
+                RunInputCommitmentV1.from_commitment(item) for item in criteria
+            ),
+        )
+
+
+class RunInputManifestV2(_InputRecord):
+    """V6-only input authority binding complete Commitment definitions."""
+
+    schema_: Literal["run-input-manifest.v2"] = Field(
+        "run-input-manifest.v2", alias="schema"
+    )
+    input_schema_version: Literal[2] = 2
+    run_input_digest: str = Field(pattern=_DIGEST)
+    problem: RunInputProblemV2
+    evidence_dossier_digest: str = Field(pattern=_DIGEST)
+    brain_snapshot_digest: str | None = Field(default=None, pattern=_DIGEST)
+
+    IDENTITY_DOMAIN: ClassVar[str] = "run-input-manifest.v2"
+
+    @classmethod
+    def create(cls, **values) -> "RunInputManifestV2":
+        provisional = cls.model_construct(run_input_digest="0" * 64, **values)
+        payload = provisional.model_dump(
+            mode="json", by_alias=True, exclude={"run_input_digest"}
+        )
+        return cls(
+            run_input_digest=_canonical_digest(cls.IDENTITY_DOMAIN, payload),
+            **values,
+        )
+
+    def identity_payload(self) -> dict:
+        return self.model_dump(
+            mode="json", by_alias=True, exclude={"run_input_digest"}
+        )
+
+    @model_validator(mode="after")
+    def _identity_matches(self):
+        expected = _canonical_digest(self.IDENTITY_DOMAIN, self.identity_payload())
+        if self.run_input_digest != expected:
+            raise ValueError("run-input digest does not match its canonical payload")
+        return self
+
+
+RunInputManifest = RunInputManifestV1 | RunInputManifestV2
+
+
+
 class DossierExcerptV1(_InputRecord):
     source_id: str = Field(pattern=_SOURCE_ID)
     excerpt_ref: str = Field(pattern=_DIGEST)
@@ -268,6 +383,11 @@ __all__ = [
     "DossierExcerptV1",
     "DossierPackReceiptV1",
     "EvidenceDossierV1",
+    "RunInputBudgetV1",
+    "RunInputCommitmentV1",
+    "RunInputManifest",
     "RunInputManifestV1",
+    "RunInputManifestV2",
     "RunInputProblemV1",
+    "RunInputProblemV2",
 ]

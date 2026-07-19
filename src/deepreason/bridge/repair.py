@@ -319,6 +319,7 @@ class GroundingRepairService:
         *,
         role: str = "judge",
         max_attempts: int = 4,
+        allow_conservative_mixed_modes: bool = False,
     ) -> None:
         if role not in _REPAIR_ROLES:
             raise ValueError("grounding repair role must be judge or grounding_reviewer")
@@ -333,6 +334,7 @@ class GroundingRepairService:
                 f"1..{_MAX_SEMANTIC_REPAIR_CALLS}"
             )
         self.max_attempts = max_attempts
+        self.allow_conservative_mixed_modes = allow_conservative_mixed_modes
 
     def repair(
         self,
@@ -348,7 +350,11 @@ class GroundingRepairService:
                 "BRIDGE_REPAIR_REVIEW_MISMATCH",
                 "grounding review does not name this ledger and output",
             )
-        if not validate_bridge_output(ledger, output).valid:
+        if not validate_bridge_output(
+            ledger,
+            output,
+            allow_conservative_mixed_modes=self.allow_conservative_mixed_modes,
+        ).valid:
             raise GroundingRepairError(
                 "BRIDGE_REPAIR_INPUT_INVALID",
                 "deterministic bridge validation must pass before grounding repair",
@@ -479,7 +485,13 @@ class GroundingRepairService:
                         )
                     )
                 assert_safe_repair_diff(before, current)
-                report = validate_bridge_output(ledger, current)
+                report = validate_bridge_output(
+                    ledger,
+                    current,
+                    allow_conservative_mixed_modes=(
+                        self.allow_conservative_mixed_modes
+                    ),
+                )
                 if not report.valid:
                     raise GroundingRepairError(
                         "BRIDGE_REPAIR_OUTPUT_INVALID",

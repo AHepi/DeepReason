@@ -9,7 +9,7 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 (§11.4). The frontier persists across sessions because the log does.
 """
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 import json
 
 from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
@@ -27,10 +27,12 @@ from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
 from deepreason.ontology import Rule, SpawnTrigger, Status
+from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
 from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
+from deepreason.workflow.transaction import WorkBudgetDenied
 from deepreason.workloads.models import MandatoryInterface, MandatoryRef
 
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
@@ -40,8 +42,10 @@ _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
 # meta-economy ate ~40/48 artifacts because debt problems were budgeted as
 # ordinary work and their successors escaped entirely).
 _REFLEXIVE_TRIGGERS = (
-    SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION,
-    SpawnTrigger.EXPLANATION_DEBT, SpawnTrigger.REMOVE_ARBITRARINESS,
+    SpawnTrigger.CONNECTION,
+    SpawnTrigger.INTEGRATION,
+    SpawnTrigger.EXPLANATION_DEBT,
+    SpawnTrigger.REMOVE_ARBITRARINESS,
 )
 
 
@@ -51,8 +55,7 @@ def reflexive_problems(state) -> set[str]:
     so a successor of a debt problem keeps drawing from the reflexive
     budget instead of laundering itself into ordinary work. Lineage returns
     to independence only through an independently originating problem."""
-    out = {p.id for p in state.problems.values()
-           if p.provenance.trigger in _REFLEXIVE_TRIGGERS}
+    out = {p.id for p in state.problems.values() if p.provenance.trigger in _REFLEXIVE_TRIGGERS}
     addressed: dict[str, set[str]] = {}
     for aid, pid in state.addr:
         addressed.setdefault(aid, set()).add(pid)
@@ -147,9 +150,7 @@ def lineage_endpoints(problem, commitments, state) -> tuple[str, ...]:
         commitment = commitments.get(commitment_id)
         if commitment is None or commitment.eval != "program:lineage_ref":
             continue
-        for endpoint in str(
-            commitment.budget.extra.get("endpoints", "")
-        ).split(","):
+        for endpoint in str(commitment.budget.extra.get("endpoints", "")).split(","):
             if endpoint in state.artifacts and endpoint not in endpoints:
                 endpoints.append(endpoint)
     return tuple(endpoints)
@@ -170,16 +171,34 @@ def stable_component_spec(problem, endpoints: tuple[str, ...]) -> str:
 
 
 class Scheduler:
-    def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
-                 controller=None, browser_backend=None,
-                 workload_profile: str | None = None, stop_controller=None,
-                 progress_sink=None, capture_responses: bool = True,
-                 generation_context: str | None = None,
-                 suppressed_exemplars: tuple[str, ...] = (),
-                 run_manifest=None) -> None:
+    def __init__(
+        self,
+        harness,
+        adapter,
+        config,
+        embedder=None,
+        research_backend=None,
+        controller=None,
+        browser_backend=None,
+        workload_profile: str | None = None,
+        stop_controller=None,
+        progress_sink=None,
+        capture_responses: bool = True,
+        generation_context: str | None = None,
+        suppressed_exemplars: tuple[str, ...] = (),
+        run_manifest=None,
+    ) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
+        if (
+            run_manifest is not None
+            and run_manifest.schema_version == 6
+            and not getattr(adapter, "transaction_authority_required", False)
+        ):
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 scheduler requires the global transaction dispatch guard"
+            )
         self.embedder = embedder or HashingEmbedder()
         # Research service (§12; research/backends.py). Accepts a
         # ResearchService, a bare duck-typed backend (legacy tests: wrapped
@@ -229,7 +248,9 @@ class Scheduler:
             from deepreason.workflow.shadow import ConjectureShadowObserver
 
             self.workflow_shadow_observer = (
-                ConjectureShadowObserver.from_manifest(run_manifest)
+                None
+                if run_manifest is not None and run_manifest.schema_version == 6
+                else ConjectureShadowObserver.from_manifest(run_manifest)
             )
         except Exception as error:  # noqa: BLE001 - shadow cannot block startup
             self.workflow_shadow_observer = None
@@ -246,9 +267,7 @@ class Scheduler:
         self._stop_resume_rehydrated = False
         self._stop_cycle_offset = 0
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
-        self.schools = (
-            schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
-        )
+        self.schools = schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
         self.diagnostics: list[dict] = []
         # Ladder state (§11.4) — attention only. An intervention is active for a
         # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
@@ -283,6 +302,50 @@ class Scheduler:
             self._workflow_recovery_done = True
             return
         manifest = self.run_manifest
+        if manifest is not None and manifest.schema_version == 6:
+            from deepreason.workflow.transaction_service import (
+                InquiryTransactionService,
+            )
+
+            meter = getattr(self.adapter, "meter", None)
+            if meter is None:
+                raise RuntimeError("transaction recovery requires the original provider meter")
+            transaction_service = InquiryTransactionService(
+                self.harness,
+                manifest,
+                meter,
+            )
+            pending_admission = transaction_service.recover_incomplete()
+            for provider_attempt in pending_admission:
+                item = self.harness.workflow_state.transaction_work[provider_attempt.work_id]
+                if item.preparation.task_kind == WorkflowTaskKind.CONJECTURE:
+                    from deepreason.workflow.conjecture_recovery import (
+                        recover_conjecture_admission,
+                    )
+
+                    recover_conjecture_admission(
+                        self.harness,
+                        manifest,
+                        meter,
+                        provider_attempt,
+                        embedder=self.embedder,
+                    )
+                else:
+                    from deepreason.workflow.nonconjecture_recovery import (
+                        recover_nonconjecture_admission,
+                    )
+
+                    recover_nonconjecture_admission(
+                        self.harness,
+                        manifest,
+                        meter,
+                        provider_attempt,
+                    )
+            if self.harness.workflow_state.outstanding_work_order_ids:
+                raise RuntimeError("transaction recovery left unfinished authority")
+            self.harness.write_workflow_checkpoint()
+            self._workflow_recovery_done = True
+            return
         if (
             manifest is None
             or manifest.schema_version not in {4, 5}
@@ -290,9 +353,7 @@ class Scheduler:
             or manifest.control_plane_policy.mode
             not in {"shadow", "active_conjecture", "active_inquiry"}
         ):
-            raise RuntimeError(
-                "unfinished workflow authority requires its original v4 manifest"
-            )
+            raise RuntimeError("unfinished workflow authority requires its original v4 manifest")
 
         from deepreason.workflow.events import WorkflowSignalKind, WorkflowSignalV1
         from deepreason.workflow.reducer import reduce_conjecture
@@ -301,16 +362,11 @@ class Scheduler:
             work = self.harness.workflow_state.work_orders[work_id]
             if (
                 work.manifest_digest != manifest.sha256
-                or work.workflow_profile
-                != manifest.control_plane_policy.workflow_profile
+                or work.workflow_profile != manifest.control_plane_policy.workflow_profile
             ):
-                raise RuntimeError(
-                    "unfinished workflow authority belongs to another manifest"
-                )
+                raise RuntimeError("unfinished workflow authority belongs to another manifest")
             branch_id = self.harness.workflow_state.work_to_branch[work_id]
-            durable_state = self.harness.workflow_state.branches[
-                branch_id
-            ].process_state
+            durable_state = self.harness.workflow_state.branches[branch_id].process_state
             recovered = reduce_conjecture(
                 durable_state,
                 WorkflowSignalV1(
@@ -329,8 +385,11 @@ class Scheduler:
         fp = getattr(self.embedder, "fingerprint", None)
         if callable(fp):
             return fp()
-        return {"model": getattr(self.embedder, "model", type(self.embedder).__name__),
-                "version": getattr(self.embedder, "version", "?"), "sentinel": "-"}
+        return {
+            "model": getattr(self.embedder, "model", type(self.embedder).__name__),
+            "version": getattr(self.embedder, "version", "?"),
+            "sentinel": "-",
+        }
 
     # -------------------------------------------------------------- #
     # Response-ladder interventions (§11.4): derived, time-bounded flags.     #
@@ -394,9 +453,66 @@ class Scheduler:
             manifest is not None
             and manifest.schema_version in {4, 5}
             and manifest.control_plane_policy is not None
-            and manifest.control_plane_policy.mode
-            in {"active_conjecture", "active_inquiry"}
+            and manifest.control_plane_policy.mode in {"active_conjecture", "active_inquiry"}
         )
+
+    def _defer_untransactional_v6_phase(
+        self,
+        phase: str,
+        role: str,
+        target_ref: str | None = None,
+        obligation_ref: str | None = None,
+    ) -> bool:
+        """Defer a legacy model phase that has no v6 transaction contract.
+
+        RunManifest v6 makes the adapter fail closed on every unbound provider
+        dispatch. Optional legacy scheduler phases must therefore become
+        visible completion debt instead of tripping that global guard and
+        failing the whole root. The marker is append-only and deduplicated by
+        its complete authority/obligation tuple, including across resume.
+
+        Return True only for v6, so historical schedulers retain their
+        byte-for-byte call paths and behavior.
+        """
+
+        manifest = self.run_manifest
+        if manifest is None or manifest.schema_version != 6:
+            return False
+
+        bounded = tuple(
+            (str(value)[:160] if value is not None and str(value) else "-")
+            for value in (phase, role, target_ref, obligation_ref)
+        )
+        marker = "v6-model-phase-deferred.v1"
+        seen = getattr(self, "_v6_deferred_model_phases", None)
+        if seen is None:
+            seen = {
+                tuple(event.inputs[1:5])
+                for event in self.harness.log.read()
+                if event.inputs
+                and event.inputs[0] == marker
+                and len(event.inputs) == 6
+            }
+            self._v6_deferred_model_phases = seen
+        if bounded not in seen:
+            self.harness.record_measure(
+                inputs=[
+                    marker,
+                    *bounded,
+                    "transaction-contract-unavailable",
+                ]
+            )
+            seen.add(bounded)
+            self.diagnostics.append(
+                {
+                    "cycle": self._cycles,
+                    "deferred_model_phase": bounded[0],
+                    "role": bounded[1],
+                    "target_ref": bounded[2],
+                    "obligation_ref": bounded[3],
+                }
+            )
+        return True
 
     def _rehydrate_resumed_stop_controller(self) -> None:
         """Restore the exact deterministic stop window authorized by RESUMED."""
@@ -414,7 +530,7 @@ class Scheduler:
         manifest = self.run_manifest
         control = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version in {4, 5}
+            if manifest is not None and manifest.schema_version in {4, 5, 6}
             else None
         )
         if (
@@ -441,9 +557,7 @@ class Scheduler:
         if self._active_conjecture_mode():
             planner = self.workflow_shadow_observer
             if planner is None or planner.profile.shadow:
-                raise WorkflowAuthorizationError(
-                    "active conjecture has no owned workflow profile"
-                )
+                raise WorkflowAuthorizationError("active conjecture has no owned workflow profile")
             return planner.profile.conjecturer_contract_id
 
         from deepreason.llm.contracts import ConjecturerOutput
@@ -455,14 +569,11 @@ class Scheduler:
         from deepreason.workloads.text import ReasoningConjecturerOutput
 
         reasoning = any(
-            self.harness.commitments[commitment_id].eval
-            == "program:reasoning-envelope-wf"
+            self.harness.commitments[commitment_id].eval == "program:reasoning-envelope-wf"
             for commitment_id in problem.criteria
             if commitment_id in self.harness.commitments
         )
-        output_model = (
-            ReasoningConjecturerOutput if reasoning else ConjecturerOutput
-        )
+        output_model = ReasoningConjecturerOutput if reasoning else ConjecturerOutput
         profile = self.adapter.profile_for("conjecturer")
         contract = (
             DirectWireContract(output_model)
@@ -524,12 +635,8 @@ class Scheduler:
                 school_id=school_id,
                 route_lease=route,
                 contract_id=self._workflow_conjecturer_contract_id(problem),
-                formal_fence_seq=getattr(
-                    context_plan, "formal_fence_seq", default_fence
-                ),
-                scratch_fence_seq=getattr(
-                    context_plan, "scratch_fence_seq", default_fence
-                ),
+                formal_fence_seq=getattr(context_plan, "formal_fence_seq", default_fence),
+                scratch_fence_seq=getattr(context_plan, "scratch_fence_seq", default_fence),
                 event_start_seq=event_start_seq,
                 meter_before=self._workflow_meter_snapshot(),
                 advisory_context_ref=getattr(
@@ -569,9 +676,7 @@ class Scheduler:
             # output correlation stays exact) and name later occurrences
             # independently so GuardResultV1 can explain each one once.
             disposition_ref = (
-                candidate_ref
-                if occurrence == 1
-                else f"{candidate_ref}#occurrence-{occurrence}"
+                candidate_ref if occurrence == 1 else f"{candidate_ref}#occurrence-{occurrence}"
             )
             disposition = GuardFindingOutcome(outcome)
             code = (
@@ -586,11 +691,11 @@ class Scheduler:
                 else GuardFindingCode.INTERFACE_INVALID
             )
             finding = GuardFindingV1(
-                    candidate_ref=disposition_ref,
-                    outcome=disposition,
-                    code=code,
-                    related_refs=(candidate_ref,),
-                )
+                candidate_ref=disposition_ref,
+                outcome=disposition,
+                code=code,
+                related_refs=(candidate_ref,),
+            )
             findings.append(finding)
             return finding
 
@@ -689,10 +794,7 @@ class Scheduler:
         if problem.provenance.trigger != SpawnTrigger.DISCRIMINATION:
             return False
         attempts = self._disc_attempts.get(problem.id, 0)
-        if (
-            self.config.DISC_ATTEMPTS_MAX is not None
-            and attempts >= self.config.DISC_ATTEMPTS_MAX
-        ):
+        if self.config.DISC_ATTEMPTS_MAX is not None and attempts >= self.config.DISC_ATTEMPTS_MAX:
             return True
         last = self._disc_last.get(problem.id)
         return last is not None and self._cycles - last < self.config.DISC_COOLDOWN
@@ -759,7 +861,7 @@ class Scheduler:
 
     def _plan_conjecture_context(self, problem, school_id: str | None):
         manifest = self.run_manifest
-        if manifest is None or manifest.schema_version not in {4, 5}:
+        if manifest is None or manifest.schema_version not in {4, 5, 6}:
             return None
         control = manifest.control_plane_policy
         scratch = manifest.scratch_policy
@@ -800,8 +902,23 @@ class Scheduler:
             if kappa is None:
                 continue
             if is_hv_floor(kappa):
-                run_hv_floor(harness, self.adapter, artifact.id, kappa, self.embedder)
-            elif kappa.eval.startswith("rubric:") and self.adapter.has_role("judge"):
+                if not self._defer_untransactional_v6_phase(
+                    "hv-floor",
+                    "variator",
+                    artifact.id,
+                    kappa.id,
+                ):
+                    run_hv_floor(harness, self.adapter, artifact.id, kappa, self.embedder)
+            elif kappa.eval.startswith("rubric:"):
+                if self._defer_untransactional_v6_phase(
+                    "rubric-trial",
+                    "judge",
+                    artifact.id,
+                    kappa.id,
+                ):
+                    continue
+                if not self.adapter.has_role("judge"):
+                    continue
                 from deepreason.informal.trial import run_trial
 
                 if harness.state.status.get(artifact.id) != Status.ACCEPTED:
@@ -822,11 +939,18 @@ class Scheduler:
                     self._advisory_trials_this_cycle += 1
                 try:
                     run_trial(
-                        harness, artifact.id, kappa, self.adapter, self.config,
-                        self.diagnostics, embedder=self.embedder, authority=authority,
+                        harness,
+                        artifact.id,
+                        kappa,
+                        self.adapter,
+                        self.config,
+                        self.diagnostics,
+                        embedder=self.embedder,
+                        authority=authority,
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
+
     def _standing_recrit_pool(self) -> list[str]:
         """Standing survivors eligible for re-criticism (§14 attention only):
         ACCEPTED candidate-role artifacts with NO warrant on record against
@@ -854,8 +978,7 @@ class Scheduler:
             # criticism ever visited it — accepted-by-neglect on the criteria
             # side). Candidates by role; properties by codec.
             role = artifact.provenance.role if artifact.provenance else ""
-            if role not in ("conjecturer", "synthesizer") \
-                    and artifact.codec != "code:python-prop":
+            if role not in ("conjecturer", "synthesizer") and artifact.codec != "code:python-prop":
                 continue
             carries = any(
                 (kappa := harness.commitments.get(cid)) is not None
@@ -878,15 +1001,12 @@ class Scheduler:
         harness, config = self.harness, self.config
         criticism_policy = (
             self.run_manifest.criticism_policy
-            if self.run_manifest is not None
-            and self.run_manifest.schema_version in {4, 5}
+            if self.run_manifest is not None and self.run_manifest.schema_version in {4, 5, 6}
             else None
         )
         if not self.adapter.has_role("argumentative_critic"):
             if criticism_policy is not None:
-                raise RuntimeError(
-                    "manifest foreign criticism has no runtime critic role"
-                )
+                raise RuntimeError("manifest foreign criticism has no runtime critic role")
             return
         if criticism_policy is not None:
             self._foreign_arg_crit()
@@ -927,10 +1047,20 @@ class Scheduler:
                     self._arg_crit_this_cycle += 1
         size = config.CRIT_BATCH_K or 1
         for i in range(0, len(eligible), size):
+            batch = eligible[i : i + size]
+            if (
+                self.run_manifest is not None
+                and self.run_manifest.schema_version == 6
+            ):
+                for target_id in batch:
+                    self._defer_untransactional_v6_phase(
+                        "argumentative-criticism",
+                        "argumentative_critic",
+                        target_id,
+                    )
+                continue
             try:
-                crit_argumentative_batch(
-                    harness, eligible[i : i + size], self.adapter, config
-                )
+                crit_argumentative_batch(harness, batch, self.adapter, config)
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
 
@@ -939,6 +1069,17 @@ class Scheduler:
 
         coverage: dict[str, set[str]] = {}
         for event in self.harness.log.read():
+            for object_id in event.outputs:
+                try:
+                    schema, record = self.harness.objects.get(object_id)
+                except (FileNotFoundError, ValueError):
+                    continue
+                if (
+                    schema == "criticism-attempt-v1"
+                    and record.outcome == "completed"
+                    and record.coverage_completed
+                ):
+                    coverage.setdefault(record.target_id, set()).add(record.critic_school_id)
             if (
                 event.rule != Rule.MEASURE
                 or len(event.inputs) != 6
@@ -963,7 +1104,10 @@ class Scheduler:
         assert manifest is not None and manifest.criticism_policy is not None
         policy = manifest.criticism_policy
         from deepreason.workflow.criticism import (
+            CoverageDebtV1,
+            CriticismAttemptV1,
             ForeignCriticismTargetV1,
+            compile_criticism_assignments,
             plan_foreign_criticism,
         )
 
@@ -985,12 +1129,24 @@ class Scheduler:
                 ForeignCriticismTargetV1(
                     target_id=target_id,
                     owner_school_id=owner_school_id,
-                    completed_critic_school_ids=tuple(
-                        sorted(completed.get(target_id, set()))
-                    ),
+                    completed_critic_school_ids=tuple(sorted(completed.get(target_id, set()))),
                 )
             )
         plan = plan_foreign_criticism(manifest, tuple(targets))
+        transactional_v6 = manifest.schema_version == 6
+        assignments = compile_criticism_assignments(manifest, plan) if transactional_v6 else ()
+        assignment_by_target_school = {
+            (assignment.target_id, assignment.critic_school_id): assignment
+            for assignment in assignments
+        }
+        attempt_refs_by_target: dict[str, list[str]] = {}
+        budget_stopped_targets: set[str] = set()
+        if transactional_v6:
+            for assignment in assignments:
+                try:
+                    self.harness.objects.get(assignment.id)
+                except KeyError:
+                    self.harness.record_criticism_obligation(assignment)
 
         # Resolve the whole batch first. One bad binding therefore leaves no
         # partial provider spend or misleading coverage receipt.
@@ -1015,18 +1171,13 @@ class Scheduler:
         for batch, lease in resolved_batches:
             expected = set(batch.target_ids)
             observed: set[str] = set()
+            attempt_index = 0
 
             def record_coverage(target_id: str, source_call_seq: int) -> None:
                 if target_id not in expected or target_id in observed:
-                    raise RuntimeError(
-                        "foreign criticism reported non-canonical target coverage"
-                    )
+                    raise RuntimeError("foreign criticism reported non-canonical target coverage")
                 source = next(
-                    (
-                        event
-                        for event in self.harness.log.read()
-                        if event.seq == source_call_seq
-                    ),
+                    (event for event in self.harness.log.read() if event.seq == source_call_seq),
                     None,
                 )
                 call = source.llm if source is not None else None
@@ -1040,9 +1191,7 @@ class Scheduler:
                     or receipt.school_id != batch.critic_school_id
                     or receipt.route_sha256 != batch.route_sha256
                 ):
-                    raise RuntimeError(
-                        "foreign criticism coverage has no exact routed source call"
-                    )
+                    raise RuntimeError("foreign criticism coverage has no exact routed source call")
                 self.harness.record_measure(
                     inputs=[
                         "foreign-criticism-coverage.v1",
@@ -1053,30 +1202,243 @@ class Scheduler:
                         f"route:{batch.route_sha256}",
                     ]
                 )
+                if transactional_v6:
+                    assignment = assignment_by_target_school[(target_id, batch.critic_school_id)]
+                    attempt_record = CriticismAttemptV1.create(
+                        assignment_ref=assignment.id,
+                        target_id=target_id,
+                        critic_school_id=batch.critic_school_id,
+                        attempt_index=attempt_index,
+                        outcome="completed",
+                        coverage_completed=True,
+                        source_call_seq=source_call_seq,
+                    )
+                    self.harness.record_criticism_obligation(attempt_record)
+                    attempt_refs_by_target.setdefault(target_id, []).append(attempt_record.id)
                 observed.add(target_id)
 
-            try:
-                crit_argumentative_batch(
-                    self.harness,
-                    batch.target_ids,
-                    self.adapter,
-                    self.config,
-                    endpoint_lease=lease,
-                    critic_school_id=batch.critic_school_id,
-                    critic_school_context=self._school_dict(
-                        batch.critic_school_id
+            maximum_attempts = (
+                max(
+                    assignment_by_target_school[
+                        (target_id, batch.critic_school_id)
+                    ].maximum_attempts
+                    for target_id in expected
+                )
+                if transactional_v6
+                else 1
+            )
+            for attempt_index in range(maximum_attempts):
+                remaining = tuple(sorted(expected - observed))
+                if not remaining:
+                    break
+                try:
+                    crit_argumentative_batch(
+                        self.harness,
+                        remaining,
+                        self.adapter,
+                        self.config,
+                        endpoint_lease=lease,
+                        critic_school_id=batch.critic_school_id,
+                        critic_school_context=self._school_dict(batch.critic_school_id),
+                        argumentative_authority=policy.authority,
+                        coverage_observer=record_coverage,
+                        run_manifest=(manifest if transactional_v6 else None),
+                        transaction_attempt_index=attempt_index,
+                        transaction_assignment_refs=(
+                            tuple(
+                                assignment_by_target_school[(target_id, batch.critic_school_id)].id
+                                for target_id in remaining
+                            )
+                            if transactional_v6
+                            else ()
+                        ),
+                        transaction_trigger_ref=(
+                            f"foreign-criticism:{batch.critic_school_id}:{batch.route_sha256}"
+                        ),
+                    )
+                except (
+                    SchemaRepairError,
+                    EndpointError,
+                    TokenBudgetExceeded,
+                    WorkBudgetDenied,
+                ) as error:
+                    if getattr(error, "transaction_terminalized", False):
+                        self.diagnostics.append({"dropped": str(error)})
+                    else:
+                        self._drop(error)
+                    if not transactional_v6:
+                        raise
+                    outcome = (
+                        "budget_denied"
+                        if isinstance(error, (TokenBudgetExceeded, WorkBudgetDenied))
+                        else "transport_failure"
+                        if isinstance(error, EndpointError)
+                        else "schema_failure"
+                    )
+                    diagnostic_ref = self.harness.blobs.put(
+                        json.dumps(
+                            {
+                                "outcome": outcome,
+                                "error_type": type(error).__name__,
+                                "message": str(error)[:500],
+                            },
+                            sort_keys=True,
+                        ).encode("utf-8")
+                    )
+                    for target_id in sorted(expected - observed):
+                        assignment = assignment_by_target_school[
+                            (target_id, batch.critic_school_id)
+                        ]
+                        attempt_record = CriticismAttemptV1.create(
+                            assignment_ref=assignment.id,
+                            target_id=target_id,
+                            critic_school_id=batch.critic_school_id,
+                            attempt_index=attempt_index,
+                            outcome=outcome,
+                            coverage_completed=False,
+                            diagnostic_ref=diagnostic_ref,
+                        )
+                        self.harness.record_criticism_obligation(attempt_record)
+                        attempt_refs_by_target.setdefault(target_id, []).append(attempt_record.id)
+                        if outcome == "budget_denied":
+                            budget_stopped_targets.add(target_id)
+                    if outcome == "budget_denied":
+                        break
+                    continue
+                if observed != expected:
+                    # A provider success that cannot produce exact target
+                    # receipts is an integrity failure, not ordinary debt.
+                    raise RuntimeError(
+                        "foreign criticism call did not durably cover every assigned target"
+                    )
+            self._arg_crit_this_cycle += len(observed)
+
+        if transactional_v6:
+            completed_now = self._foreign_criticism_coverage()
+            for target in plan.targets:
+                completed_schools = tuple(sorted(completed_now.get(target.target_id, set())))
+                assigned_schools = {
+                    assignment.critic_school_id for assignment in target.assignments
+                }
+                outstanding = tuple(sorted(assigned_schools - set(completed_schools)))
+                complete = len(completed_schools) >= policy.minimum_foreign_school_coverage
+                debt = CoverageDebtV1.create(
+                    target_id=target.target_id,
+                    owner_school_id=target.owner_school_id,
+                    required_school_coverage=policy.minimum_foreign_school_coverage,
+                    completed_school_ids=completed_schools,
+                    outstanding_school_ids=(() if complete else outstanding),
+                    attempt_refs=tuple(attempt_refs_by_target.get(target.target_id, ())),
+                    termination_reason=(
+                        "coverage_complete"
+                        if complete
+                        else "budget_exhausted"
+                        if target.target_id in budget_stopped_targets
+                        else "attempts_exhausted"
                     ),
-                    argumentative_authority=policy.authority,
-                    coverage_observer=record_coverage,
                 )
-            except (SchemaRepairError, EndpointError) as error:
-                self._drop(error)
-                raise
-            if observed != expected:
-                raise RuntimeError(
-                    "foreign criticism call did not durably cover every assigned target"
-                )
-            self._arg_crit_this_cycle += len(expected)
+                self.harness.record_criticism_obligation(debt)
+
+    def _v6_simulation_result_follow_up(
+        self,
+        controller,
+        package,
+        proposal,
+    ) -> bool:
+        """Expose one result through fresh controller-v3 work, then consume it."""
+
+        manifest = self.run_manifest
+        assert manifest is not None and manifest.schema_version == 6
+        origin = controller.require_transactional_origin(proposal)
+        preparation = origin.preparation
+        payload = preparation.task_payload_value
+        if not isinstance(payload, Mapping):
+            raise WorkflowAuthorizationError(
+                "v6 simulation origin has no immutable semantic payload"
+            )
+        problem_ref = payload.get("problem_ref")
+        school_id = payload.get("school_id")
+        if not isinstance(problem_ref, str) or (
+            school_id is not None and not isinstance(school_id, str)
+        ):
+            raise WorkflowAuthorizationError(
+                "v6 simulation origin has malformed problem or school authority"
+            )
+
+        from deepreason.llm.firewall import select_lease
+
+        lease = (
+            resolve_school_role_lease(
+                manifest,
+                self.adapter.leases,
+                school_id=school_id,
+                role="conjecturer",
+            )
+            if school_id is not None
+            else select_lease(
+                self.adapter.leases,
+                "conjecturer",
+                preparation.route_lease.seat,
+            )
+        )
+        if (
+            lease.route.endpoint_id != preparation.route_lease.endpoint_id
+            or lease.seat != preparation.route_lease.seat
+            or route_fingerprint(lease.route) != preparation.route_lease.route_sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "simulation result follow-up route differs from transaction origin"
+            )
+
+        before_work = set(self.harness.workflow_state.transaction_work)
+        self.harness.record_measure(
+            inputs=["cycle", str(self._cycles), f"simulation-result:{package.id}"]
+        )
+        try:
+            conj(
+                self.harness,
+                problem_ref,
+                self.adapter,
+                self.config,
+                self.diagnostics,
+                school=(self._school_dict(school_id) if school_id is not None else None),
+                embedder=self.embedder,
+                workload_profile=self.workload_profile,
+                endpoint_lease=lease if school_id is not None else None,
+                execution_school_id=school_id,
+                run_manifest=manifest,
+                _capability_result_context=controller.result_context(package),
+                _capability_result_package_ref=package.id,
+                _capability_result_context_ref=package.result_context_ref,
+                _simulation_follow_up_index=1,
+            )
+        except (SchemaRepairError, EndpointError, WorkBudgetDenied) as error:
+            self._drop(error)
+            return True
+
+        new_work_ids = set(self.harness.workflow_state.transaction_work) - before_work
+        matching = []
+        for work_id in new_work_ids:
+            item = self.harness.workflow_state.transaction_work[work_id]
+            work_payload = item.preparation.task_payload_value
+            if (
+                isinstance(work_payload, Mapping)
+                and work_payload.get("capability_result_package_ref") == package.id
+                and work_payload.get("capability_result_context_ref") == package.result_context_ref
+            ):
+                matching.append(item)
+        if len(matching) != 1:
+            raise WorkflowAuthorizationError(
+                "simulation result did not create exactly one fresh bound transaction"
+            )
+        follow_up = matching[0]
+        if follow_up.terminal is None or follow_up.terminal.status != "completed":
+            return True
+        controller.consume_transactional(
+            package,
+            follow_up_work_ref=follow_up.preparation.id,
+        )
+        return True
 
     def _simulation_capability_step(self) -> bool:
         """Execute or consume at most one replay-derived capability item."""
@@ -1084,7 +1446,7 @@ class Scheduler:
         manifest = self.run_manifest
         if (
             manifest is None
-            or manifest.schema_version != 5
+            or manifest.schema_version not in {5, 6}
             or manifest.control_plane_policy is None
             or manifest.control_plane_policy.mode != "active_inquiry"
             or manifest.inquiry_capability_policy is None
@@ -1096,9 +1458,7 @@ class Scheduler:
 
         controller = SimulationCapabilityController(self.harness, manifest)
         state = self.harness.capability_state
-        consumed_packages = {
-            item.result_package_ref for item in state.consumptions.values()
-        }
+        consumed_packages = {item.result_package_ref for item in state.consumptions.values()}
         available_packages = [
             package
             for package in state.result_packages.values()
@@ -1118,6 +1478,8 @@ class Scheduler:
                 ),
             )
             proposal = state.proposals[package.proposal_ref]
+            if manifest.schema_version == 6:
+                return self._v6_simulation_result_follow_up(controller, package, proposal)
             parent = self.harness.workflow_state.work_orders.get(
                 proposal.originating_work_order_ref
             )
@@ -1143,9 +1505,7 @@ class Scheduler:
                     role="conjecturer",
                 )
                 if parent.school_id is not None
-                else select_lease(
-                    self.adapter.leases, "conjecturer", parent.route_lease.seat
-                )
+                else select_lease(self.adapter.leases, "conjecturer", parent.route_lease.seat)
             )
             if (
                 lease.route.endpoint_id != parent.route_lease.endpoint_id
@@ -1215,9 +1575,7 @@ class Scheduler:
         interrupted = [
             proposal
             for proposal in state.proposals.values()
-            if state.transitions[
-                state.current_transition_by_request[proposal.id]
-            ].lifecycle
+            if state.transitions[state.current_transition_by_request[proposal.id]].lifecycle
             == CapabilityLifecycle.DISPATCHED
         ]
         if interrupted:
@@ -1229,6 +1587,8 @@ class Scheduler:
                     item.id,
                 ),
             )
+            if manifest.schema_version == 6:
+                controller.require_transactional_origin(proposal)
             self.harness.record_measure(
                 inputs=[
                     "cycle",
@@ -1242,9 +1602,7 @@ class Scheduler:
         pending = [
             proposal
             for proposal in state.proposals.values()
-            if state.transitions[
-                state.current_transition_by_request[proposal.id]
-            ].lifecycle
+            if state.transitions[state.current_transition_by_request[proposal.id]].lifecycle
             == CapabilityLifecycle.PROPOSED
         ]
         if not pending:
@@ -1253,6 +1611,8 @@ class Scheduler:
             pending,
             key=lambda item: (item.source_call_seq, item.proposal_index, item.id),
         )
+        if manifest.schema_version == 6:
+            controller.require_transactional_origin(proposal)
         self.harness.record_measure(
             inputs=["cycle", str(self._cycles), f"simulation-request:{proposal.id}"]
         )
@@ -1272,9 +1632,7 @@ class Scheduler:
             # the first heartbeat: a pre-run provenance record, like Register.
             self._embedder_stamped = True
             fp = self._embedder_fingerprint()
-            harness.record_measure(
-                inputs=["embedder", fp["model"], fp["version"], fp["sentinel"]]
-            )
+            harness.record_measure(inputs=["embedder", fp["model"], fp["version"], fp["sentinel"]])
         if self.controller is not None:
             self.controller.step()  # calibrate generator knobs from process signals
         if self._simulation_capability_step():
@@ -1285,9 +1643,7 @@ class Scheduler:
         # Heartbeat: every event that follows (by seq) until the next
         # heartbeat belongs to this cycle — the log segments itself, live
         # progress is tail-able, and stalls become diagnosable post hoc.
-        harness.record_measure(
-            inputs=["cycle", str(self._cycles), problem.id if problem else "-"]
-        )
+        harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
         if problem is None:
             self._cycles += 1
             return
@@ -1296,9 +1652,8 @@ class Scheduler:
 
         # Discrimination in informal mode resolves comparatively (§10.2):
         # a pairwise ruling, not more conjectures.
-        if (
-            problem.provenance.trigger == SpawnTrigger.DISCRIMINATION
-            and self.adapter.has_role("judge")
+        if problem.provenance.trigger == SpawnTrigger.DISCRIMINATION and self.adapter.has_role(
+            "judge"
         ):
             from deepreason.informal.trial import pairwise_discriminate
 
@@ -1312,7 +1667,8 @@ class Scheduler:
             self._disc_last[problem.id] = self._cycles
             transport_deferred = False
             rivals = [
-                i for i in problem.provenance.from_
+                i
+                for i in problem.provenance.from_
                 if harness.state.status.get(i) == Status.ACCEPTED
             ][:2]
             if len(rivals) == 2:
@@ -1323,32 +1679,38 @@ class Scheduler:
                     run_pairwise = authority != TrialAuthority.OBSERVE_ONLY
                     if (
                         authority == TrialAuthority.OBSERVE_ONLY
-                        and self._advisory_trials_this_cycle
-                        < config.ADVISORY_TRIALS_PER_CYCLE
+                        and self._advisory_trials_this_cycle < config.ADVISORY_TRIALS_PER_CYCLE
                     ):
                         self._advisory_trials_this_cycle += 1
                         run_pairwise = True
+                    if run_pairwise and self._defer_untransactional_v6_phase(
+                        "pairwise-discrimination",
+                        "judge",
+                        problem.id,
+                        f"{rivals[0]}|{rivals[1]}",
+                    ):
+                        run_pairwise = False
                     if run_pairwise:
                         pairwise_discriminate(
-                            harness, problem, rivals[0], rivals[1],
-                            self.adapter, config, self.diagnostics, authority=authority,
+                            harness,
+                            problem,
+                            rivals[0],
+                            rivals[1],
+                            self.adapter,
+                            config,
+                            self.diagnostics,
+                            authority=authority,
                         )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
                     if isinstance(e, EndpointError):
                         transport_deferred = True
-                        harness.record_measure(
-                            inputs=["disc-transport-deferred", problem.id]
-                        )
+                        harness.record_measure(inputs=["disc-transport-deferred", problem.id])
             if not transport_deferred:
-                self._disc_attempts[problem.id] = (
-                    self._disc_attempts.get(problem.id, 0) + 1
-                )
+                self._disc_attempts[problem.id] = self._disc_attempts.get(problem.id, 0) + 1
                 if self._disc_attempts[problem.id] == self.config.DISC_ATTEMPTS_MAX:
                     # Observability: from here on, selection skips this problem.
-                    harness.record_measure(
-                        inputs=["disc-attempts-exhausted", problem.id]
-                    )
+                    harness.record_measure(inputs=["disc-attempts-exhausted", problem.id])
             reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)
             self._capture_step()
             self._cycles += 1
@@ -1363,12 +1725,13 @@ class Scheduler:
         uses_conjecturer = not (
             problem.provenance.trigger in _INTEGRATION_TRIGGERS
             and self.adapter.has_role("synthesizer")
+            and not (self.run_manifest is not None and self.run_manifest.schema_version == 6)
         )
         school_leases = {}
         if (
             uses_conjecturer
             and self.run_manifest is not None
-            and self.run_manifest.schema_version in {4, 5}
+            and self.run_manifest.schema_version in {4, 5, 6}
         ):
             # Resolve the entire school batch before shared spec generation,
             # reservation, or provider dispatch. One bad assignment therefore
@@ -1388,7 +1751,11 @@ class Scheduler:
         # schools (inter-school diversity comes from stances; specs fight
         # intra-call stem collapse). Logged so tokens and replay both see it.
         specs = None
-        if self.spec_injection and problem.provenance.trigger not in _INTEGRATION_TRIGGERS:
+        if (
+            self.spec_injection
+            and problem.provenance.trigger not in _INTEGRATION_TRIGGERS
+            and not (self.run_manifest is not None and self.run_manifest.schema_version == 6)
+        ):
             from deepreason.llm.specs import generate_specs
 
             try:
@@ -1405,18 +1772,14 @@ class Scheduler:
             candidate_observer = None
             workflow_trace_ready = False
             try:
-                shadow_dispositions, candidate_observer = (
-                    self._workflow_shadow_candidate_sink()
-                )
+                shadow_dispositions, candidate_observer = self._workflow_shadow_candidate_sink()
                 workflow_trace_ready = candidate_observer is not None
             except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
                 if self._active_conjecture_mode():
                     raise
                 self._record_workflow_shadow_error(
                     problem_ref=problem.id,
-                    school_id=(
-                        school_id if school_id in school_leases else None
-                    ),
+                    school_id=(school_id if school_id in school_leases else None),
                     event_start_seq=self.harness._next_seq,
                     error=error,
                 )
@@ -1424,21 +1787,28 @@ class Scheduler:
                 if (
                     problem.provenance.trigger in _INTEGRATION_TRIGGERS
                     and self.adapter.has_role("synthesizer")
+                    and not (
+                        self.run_manifest is not None and self.run_manifest.schema_version == 6
+                    )
                 ):
                     relation = synthesize(
-                        harness, problem, self.adapter, config,
-                        school_id=school_id, embedder=self.embedder,
+                        harness,
+                        problem,
+                        self.adapter,
+                        config,
+                        school_id=school_id,
+                        embedder=self.embedder,
                     )
                     admitted = [relation] if relation else []
                 else:
-                    endpoints = lineage_endpoints(
-                        problem, harness.commitments, harness.state
-                    )
+                    endpoints = lineage_endpoints(problem, harness.commitments, harness.state)
                     mandatory = MandatoryInterface(
                         refs=tuple(
                             MandatoryRef(target=endpoint, role="dependence")
                             for endpoint in endpoints
-                        ) if self.workload_profile is not None else ()
+                        )
+                        if self.workload_profile is not None
+                        else ()
                     )
                     component_spec = (
                         stable_component_spec(problem, endpoints)
@@ -1453,15 +1823,17 @@ class Scheduler:
                     from deepreason.scratch.conjecture import ConjectureContextStale
 
                     context_plan = self._plan_conjecture_context(problem, school_id)
+                    if self.run_manifest is not None and self.run_manifest.schema_version == 6:
+                        # Controller-v3 persists preparation before its pure
+                        # planners; Conj owns that ordered transaction.
+                        context_plan = None
                     shadow_ticket = self._begin_workflow_shadow(
                         problem,
                         school_id if school_id in school_leases else None,
                         context_plan,
                     )
                     if workflow_trace_ready:
-                        workflow_control_trace = self._workflow_control_trace(
-                            shadow_ticket
-                        )
+                        workflow_control_trace = self._workflow_control_trace(shadow_ticket)
                     if self._active_conjecture_mode() and (
                         shadow_ticket is None or workflow_control_trace is None
                     ):
@@ -1502,7 +1874,7 @@ class Scheduler:
                                 run_manifest=(
                                     self.run_manifest
                                     if self.run_manifest is not None
-                                    and self.run_manifest.schema_version in {4, 5}
+                                    and self.run_manifest.schema_version in {4, 5, 6}
                                     and self.run_manifest.control_plane_policy is not None
                                     and self.run_manifest.control_plane_policy.mode
                                     in {"active_conjecture", "active_inquiry"}
@@ -1513,16 +1885,10 @@ class Scheduler:
                         except ConjectureContextStale:
                             if context_attempt:
                                 raise
-                            context_plan = self._plan_conjecture_context(
-                                problem, school_id
-                            )
+                            context_plan = self._plan_conjecture_context(problem, school_id)
                             shadow_ticket = self._begin_workflow_shadow(
                                 problem,
-                                (
-                                    school_id
-                                    if school_id in school_leases
-                                    else None
-                                ),
+                                (school_id if school_id in school_leases else None),
                                 context_plan,
                             )
                             workflow_control_trace = (
@@ -1530,8 +1896,26 @@ class Scheduler:
                                 if workflow_trace_ready
                                 else None
                             )
+            except WorkBudgetDenied as error:
+                self.diagnostics.append(
+                    {
+                        "cycle": self._cycles,
+                        "budget_denied": error.terminal.work_id,
+                    }
+                )
+                self._finish_workflow_shadow(
+                    shadow_ticket,
+                    (),
+                    actual_problem_ref=problem.id,
+                    candidate_dispositions=shadow_dispositions,
+                    control_trace=workflow_control_trace,
+                )
+                continue
             except (SchemaRepairError, EndpointError) as e:
-                self._drop(e)
+                if getattr(e, "transaction_terminalized", False):
+                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                else:
+                    self._drop(e)
                 spend = getattr(e, "spend", None)
                 if workflow_control_trace is not None and spend is not None:
                     workflow_control_trace.record_provider_result(
@@ -1557,9 +1941,7 @@ class Scheduler:
                 # first and let the observer compare the completed event span.
                 error.workflow_shadow_ticket = shadow_ticket
                 error.workflow_shadow_problem_ref = problem.id
-                error.workflow_shadow_candidate_dispositions = tuple(
-                    shadow_dispositions
-                )
+                error.workflow_shadow_candidate_dispositions = tuple(shadow_dispositions)
                 error.workflow_control_trace = workflow_control_trace
                 raise
             self._finish_workflow_shadow(
@@ -1576,7 +1958,9 @@ class Scheduler:
             # can share one (CRIT_BATCH_K).
             self._arg_crit([a.id for a in admitted])
 
-        reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)  # hits recorded; debt spawns next scan
+        reach_sweep(
+            harness, coverage_min=config.REACH_COVERAGE_MIN
+        )  # hits recorded; debt spawns next scan
         self._lazy_hv()
         self._experiment_step()
         self._property_step()
@@ -1596,6 +1980,17 @@ class Scheduler:
             or not self.adapter.has_role("judge")
             or not self.adapter.has_role("variator")
         ):
+            return
+        if self._defer_untransactional_v6_phase(
+            "paraphrase-audit-variation",
+            "variator",
+            "run",
+        ):
+            self._defer_untransactional_v6_phase(
+                "paraphrase-audit-judgment",
+                "judge",
+                "run",
+            )
             return
         from deepreason.informal.audits import paraphrase_invariance_audit
 
@@ -1626,12 +2021,13 @@ class Scheduler:
             if harness.state.status.get(aid) != Status.ACCEPTED:
                 continue
             if (artifact.provenance.role if artifact.provenance else "") not in (
-                "conjecturer", "synthesizer", "seed"
+                "conjecturer",
+                "synthesizer",
+                "seed",
             ):
                 continue
             if not any(
-                (kappa := harness.commitments.get(cid)) is not None
-                and kappa.eval == property_eval
+                (kappa := harness.commitments.get(cid)) is not None and kappa.eval == property_eval
                 for cid in artifact.interface.commitments
             ):
                 continue
@@ -1670,10 +2066,15 @@ class Scheduler:
                     continue
                 if len(accepted_generators(self.harness, cid)) >= config.GEN_MAX:
                     continue
+                if self._defer_untransactional_v6_phase(
+                    "experiment-generator-authoring",
+                    "conjecturer",
+                    problem.id,
+                    cid,
+                ):
+                    return
                 try:
-                    survivors = propose_generators(
-                        self.harness, base, self.adapter, config
-                    )
+                    survivors = propose_generators(self.harness, base, self.adapter, config)
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
                     return
@@ -1707,6 +2108,19 @@ class Scheduler:
                     continue
                 if len(active_properties(self.harness, cid)) >= config.PROP_MAX:
                     continue
+                if self._defer_untransactional_v6_phase(
+                    "property-design",
+                    "property_designer",
+                    problem.id,
+                    cid,
+                ):
+                    self._defer_untransactional_v6_phase(
+                        "property-relevance-trial",
+                        "judge",
+                        problem.id,
+                        cid,
+                    )
+                    return
                 try:
                     activated = propose_properties(
                         self.harness, base, problem, self.adapter, config
@@ -1738,7 +2152,9 @@ class Scheduler:
             if harness.state.status.get(aid) != Status.ACCEPTED:
                 continue
             if (artifact.provenance.role if artifact.provenance else "") not in (
-                "conjecturer", "synthesizer", "seed"
+                "conjecturer",
+                "synthesizer",
+                "seed",
             ):
                 continue
             if not needs_browser_run(harness, aid):
@@ -1757,10 +2173,7 @@ class Scheduler:
         Attention-only cache — screenshots are recorded once per candidate,
         so one look is complete coverage."""
         config = self.config
-        if (
-            config.VISION_CRIT_PER_CYCLE <= 0
-            or not self.adapter.has_role("vision_critic")
-        ):
+        if config.VISION_CRIT_PER_CYCLE <= 0 or not self.adapter.has_role("vision_critic"):
             return
         from deepreason.rules.act import browser_evidence
         from deepreason.rules.vision import crit_vision
@@ -1776,10 +2189,15 @@ class Scheduler:
                 continue
             if not browser_evidence(harness, aid):
                 continue
-            try:
-                crit_vision(harness, aid, self.adapter, config)
-            except (SchemaRepairError, EndpointError) as e:
-                self._drop(e)
+            if not self._defer_untransactional_v6_phase(
+                "vision-criticism",
+                "vision_critic",
+                aid,
+            ):
+                try:
+                    crit_vision(harness, aid, self.adapter, config)
+                except (SchemaRepairError, EndpointError) as e:
+                    self._drop(e)
             self._vision_done.add(aid)
             calls += 1
 
@@ -1820,9 +2238,7 @@ class Scheduler:
             # the agent may submit at any time. Silence is NOT evidence of
             # absence — without a heartbeat protocol the harness cannot
             # distinguish absent, delayed, or mid-search. Never research-off.
-            self._research_signal(
-                "research-awaiting-agent", *[p.id for p in open_problems[:8]]
-            )
+            self._research_signal("research-awaiting-agent", *[p.id for p in open_problems[:8]])
             return
         self._research_signal(None)
 
@@ -1857,10 +2273,16 @@ class Scheduler:
         and the exhaustion transition is logged exactly once."""
         from deepreason.ops import _research_events
 
-        self.harness.record_measure(inputs=[
-            "research-fetch-failed", pid, str(self._cycles),
-            self.research.mode, category, reason[:200],
-        ])
+        self.harness.record_measure(
+            inputs=[
+                "research-fetch-failed",
+                pid,
+                str(self._cycles),
+                self.research.mode,
+                category,
+                reason[:200],
+            ]
+        )
         state = _research_events(self.harness).get(pid, {"attempts": 0})
         if state["attempts"] == self.config.RESEARCH_ATTEMPTS_MAX:
             # Attention only: internal fetching pauses; the problem stays
@@ -1893,14 +2315,17 @@ class Scheduler:
                 text = content_text(self.harness.state.artifacts[aid], self.harness.blobs)
                 if len(text) > limit:
                     self._hv_skipped.add(aid)
-                    self.harness.record_measure(
-                        inputs=["hv-skip-oversize", aid, str(len(text))]
-                    )
+                    self.harness.record_measure(inputs=["hv-skip-oversize", aid, str(len(text))])
                     continue  # keep scanning: the cycle's slot is not spent
+            if self._defer_untransactional_v6_phase(
+                "hv-spot-check",
+                "variator",
+                aid,
+            ):
+                self._hv_skipped.add(aid)
+                continue
             try:
-                hv_spot_check(
-                    self.harness, self.adapter, aid, self.config.HV_K, self.embedder
-                )
+                hv_spot_check(self.harness, self.adapter, aid, self.config.HV_K, self.embedder)
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
             return
@@ -1912,10 +2337,7 @@ class Scheduler:
         active: dict[str, bool] = {}
         for flag, is_raised in raw.items():
             self._flag_streak[flag] = self._flag_streak.get(flag, 0) + 1 if is_raised else 0
-            if (
-                self._flag_streak[flag] >= 2
-                and self._cycles >= self._cooldown.get(flag, 0)
-            ):
+            if self._flag_streak[flag] >= 2 and self._cycles >= self._cooldown.get(flag, 0):
                 active[flag] = True
         if active:
             if not self.capture_responses:
@@ -1962,15 +2384,11 @@ class Scheduler:
         after = self._stop_snapshot()
         status_ids = set(before["statuses"]) | set(after["statuses"])
         status_churn = sum(
-            before["statuses"].get(artifact_id)
-            != after["statuses"].get(artifact_id)
+            before["statuses"].get(artifact_id) != after["statuses"].get(artifact_id)
             for artifact_id in status_ids
         )
         recent_diagnostics = self.diagnostics[diagnostic_start:]
-        stuck_signal = any(
-            item.get("search_signal") == "stuck"
-            for item in recent_diagnostics
-        )
+        stuck_signal = any(item.get("search_signal") == "stuck" for item in recent_diagnostics)
         gate_orbit = any(
             str(item.get("gate", "")).startswith(("battery-equivalent", "hash:"))
             for item in recent_diagnostics
@@ -1985,20 +2403,15 @@ class Scheduler:
                 sorted(
                     {
                         event.llm.raw_ref
-                        for event in self.harness._events_since(
-                            before["event_seq"]
-                        )
-                        if event.llm is not None
-                        and len(event.llm.raw_ref) == 64
+                        for event in self.harness._events_since(before["event_seq"])
+                        if event.llm is not None and len(event.llm.raw_ref) == 64
                     }
                 )
             )
             if stuck_signal
             else ()
         )
-        debt = detection.adjudicator_metrics(
-            self.harness, self.config.CAPTURE_W
-        )["criticism_debt"]
+        debt = detection.adjudicator_metrics(self.harness, self.config.CAPTURE_W)["criticism_debt"]
         metrics = StopMetrics(
             cycle=self._stop_cycle_offset + self._cycles,
             frontier_delta=len(before["frontier"] ^ after["frontier"]),
@@ -2073,14 +2486,17 @@ class Scheduler:
         manifest = self.run_manifest
         control = (
             getattr(manifest, "control_plane_policy", None)
-            if manifest is not None
-            and getattr(manifest, "schema_version", 1) in {4, 5}
+            if manifest is not None and getattr(manifest, "schema_version", 1) in {4, 5, 6}
             else None
         )
         if (
             control is None
             or control.controller_version
-            not in {"workflow.controller.v1", "workflow.controller.v2"}
+            not in {
+                "workflow.controller.v1",
+                "workflow.controller.v2",
+                "workflow.controller.v3",
+            }
             or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
         ):
             write_stop_record(
@@ -2135,9 +2551,7 @@ class Scheduler:
         wipe the attention caches)."""
         self._recover_workflow_prefixes()
         self._rehydrate_resumed_stop_controller()
-        stop_snapshot = (
-            self._stop_snapshot() if self.stop_controller is not None else None
-        )
+        stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None
         for _ in range(cycles):
             try:
                 diagnostic_start = len(self.diagnostics)
@@ -2145,9 +2559,7 @@ class Scheduler:
                 if on_cycle is not None and on_cycle(self):
                     break
                 if self.stop_controller is not None and stop_snapshot is not None:
-                    metrics, stop_snapshot = self._stop_metrics(
-                        stop_snapshot, diagnostic_start
-                    )
+                    metrics, stop_snapshot = self._stop_metrics(stop_snapshot, diagnostic_start)
                     controller_state_before = self.stop_controller.snapshot()
                     decision = self.stop_controller.evaluate(metrics)
                     self.last_stop_decision = decision
@@ -2174,18 +2586,12 @@ class Scheduler:
                 self._drop(e)
                 control_trace = getattr(e, "workflow_control_trace", None)
                 if control_trace is not None:
-                    control_trace.abandon(
-                        "runtime:workflow_authorization_error"
-                    )
+                    control_trace.abandon("runtime:workflow_authorization_error")
                 self._finish_workflow_shadow(
                     getattr(e, "workflow_shadow_ticket", None),
                     (),
-                    actual_problem_ref=getattr(
-                        e, "workflow_shadow_problem_ref", None
-                    ),
-                    candidate_dispositions=getattr(
-                        e, "workflow_shadow_candidate_dispositions", ()
-                    ),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
                     control_trace=control_trace,
                 )
                 raise
@@ -2202,12 +2608,8 @@ class Scheduler:
                 self._finish_workflow_shadow(
                     getattr(e, "workflow_shadow_ticket", None),
                     (),
-                    actual_problem_ref=getattr(
-                        e, "workflow_shadow_problem_ref", None
-                    ),
-                    candidate_dispositions=getattr(
-                        e, "workflow_shadow_candidate_dispositions", ()
-                    ),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
                     control_trace=control_trace,
                 )
                 raise
@@ -2228,12 +2630,8 @@ class Scheduler:
                 self._finish_workflow_shadow(
                     getattr(e, "workflow_shadow_ticket", None),
                     (),
-                    actual_problem_ref=getattr(
-                        e, "workflow_shadow_problem_ref", None
-                    ),
-                    candidate_dispositions=getattr(
-                        e, "workflow_shadow_candidate_dispositions", ()
-                    ),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
                     terminal_error=e,
                     control_trace=control_trace,
                 )
@@ -2255,9 +2653,9 @@ class Scheduler:
         scored = []
         for aid in survivors:
             commitments = [
-                c for c in state.artifacts[aid].interface.commitments
-                if c in self.harness.commitments
-                and programs.evaluable(self.harness.commitments[c])
+                c
+                for c in state.artifacts[aid].interface.commitments
+                if c in self.harness.commitments and programs.evaluable(self.harness.commitments[c])
             ]
             coverage = (
                 sum(
@@ -2265,7 +2663,8 @@ class Scheduler:
                     for c in commitments
                     if programs.evaluate(
                         self.harness.commitments[c], state.artifacts[aid], self.harness.blobs
-                    )[0] == programs.PASS
+                    )[0]
+                    == programs.PASS
                 )
                 / len(commitments)
                 if commitments

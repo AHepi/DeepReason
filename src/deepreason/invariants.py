@@ -204,11 +204,13 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     if control_events:
         control = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version in {4, 5}
+            if manifest is not None and manifest.schema_version in {4, 5, 6}
             else None
         )
         expected_control = (
-            ("workflow.controller.v2", "active_inquiry", "control.event.v2")
+            ("workflow.controller.v3", "active_inquiry", "control.event.v3")
+            if manifest is not None and manifest.schema_version == 6
+            else ("workflow.controller.v2", "active_inquiry", "control.event.v2")
             if manifest is not None and manifest.schema_version == 5
             else ("workflow.controller.v1", None, "control.event.v1")
         )
@@ -281,7 +283,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             if workflow_profile is not None:
                 if (
                     workflow_profile.conjecturer_contract_id
-                    in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
+                    in {"conjecturer.turn.v4", "conjecturer.turn.v5", "conjecturer.turn.v6"}
                 ):
                     authorized_contract_ids = {
                         workflow_profile.conjecturer_contract_id
@@ -421,14 +423,14 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         policy = (
             manifest.inquiry_capability_policy.simulation
             if manifest is not None
-            and manifest.schema_version == 5
+            and manifest.schema_version >= 5
             and manifest.inquiry_capability_policy is not None
             else None
         )
         if policy is None:
             fail(
                 "capability-manifest",
-                "Capability events require one manifest-bound v5 simulation policy",
+                "Capability events require one manifest-bound v5+ simulation policy",
             )
         else:
             state = h.capability_state
@@ -464,6 +466,22 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             for proposal in state.proposals.values():
                 from deepreason.workflow.models import CapabilityOutcome
 
+                if manifest.schema_version == 6:
+                    from deepreason.capabilities.simulation import (
+                        SimulationCapabilityController,
+                    )
+
+                    try:
+                        SimulationCapabilityController(
+                            h, manifest
+                        ).require_transactional_origin(proposal)
+                    except Exception as error:  # noqa: BLE001 - root diagnostic
+                        fail(
+                            "capability-origin",
+                            f"proposal {proposal.id} has no completed transaction origin: {error!r}",
+                        )
+                    continue
+
                 work = h.workflow_state.work_orders.get(
                     proposal.originating_work_order_ref
                 )
@@ -472,7 +490,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     None,
                 )
                 if (
-                    work is None
+                    proposal.originating_provider_attempt_ref is not None
+                    or work is None
                     or work.problem_ref != proposal.problem_ref
                     or proposal.run_input_digest != manifest.run_input_digest
                     or work.run_input_digest != manifest.run_input_digest
@@ -481,7 +500,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     or source is None
                     or source.llm is None
                     or source.llm.work_order_id != work.id
-                    or work.contract_id != "conjecturer.turn.v5"
+                    or work.contract_id
+                    != manifest.control_plane_policy.contract_versions.conjecturer_turn_contract
                     or any(
                         attempt.contract_id != work.contract_id
                         for attempt in source.llm.attempt_trace
@@ -760,6 +780,79 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             f"package {package.id} has missing bounded result: {error!r}",
                         )
             for consumption in state.consumptions.values():
+                if manifest.schema_version == 6:
+                    item = h.workflow_state.transaction_work.get(
+                        consumption.follow_up_work_order_ref
+                    )
+                    package = state.result_packages.get(
+                        consumption.result_package_ref
+                    )
+                    terminal = item.terminal if item is not None else None
+                    admission = (
+                        item.admissions.get(terminal.attempt_index)
+                        if item is not None and terminal is not None
+                        else None
+                    )
+                    payload = (
+                        item.preparation.task_payload_value
+                        if item is not None
+                        else None
+                    )
+                    result_plans = (
+                        tuple(
+                            plan
+                            for plan in item.plans.values()
+                            if plan.plan_kind == "simulation_result"
+                        )
+                        if item is not None
+                        else ()
+                    )
+                    result_item = (
+                        result_plans[0].items[0]
+                        if len(result_plans) == 1
+                        and len(result_plans[0].items) == 1
+                        else None
+                    )
+                    simulation_authority = (
+                        payload.get("simulation_authority")
+                        if hasattr(payload, "get")
+                        else None
+                    )
+                    sealed_aliases = (
+                        tuple(simulation_authority.get("input_aliases") or ())
+                        if hasattr(simulation_authority, "get")
+                        else ()
+                    )
+                    if (
+                        item is None
+                        or package is None
+                        or terminal is None
+                        or terminal.status != "completed"
+                        or admission is None
+                        or admission.outcome != "admitted"
+                        or consumption.follow_up_semantic_admission_ref
+                        != admission.id
+                        or terminal.semantic_admission_ref != admission.id
+                        or consumption.follow_up_work_order_ref
+                        in h.workflow_state.work_orders
+                        or consumption.run_input_digest != manifest.run_input_digest
+                        or package.proposal_ref != consumption.proposal_ref
+                        or package.id not in item.preparation.input_refs
+                        or package.result_context_ref not in item.preparation.input_refs
+                        or payload.get("capability_result_package_ref") != package.id
+                        or payload.get("capability_result_context_ref")
+                        != package.result_context_ref
+                        or result_item is None
+                        or result_item.object_ref != package.id
+                        or result_item.content_sha256 != package.result_context_ref
+                        or result_item.alias in sealed_aliases
+                    ):
+                        fail(
+                            "capability-consumption",
+                            f"consumption {consumption.id} has no matching fresh transaction",
+                        )
+                    continue
+
                 work = h.workflow_state.work_orders.get(
                     consumption.follow_up_work_order_ref
                 )
@@ -782,7 +875,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"consumption {consumption.id} has no matching fresh work order",
                     )
 
-    if manifest is not None and manifest.schema_version == 5:
+    if manifest is not None and manifest.schema_version >= 5:
         try:
             from deepreason.evidence.state import (
                 load_evidence_dossier,
@@ -941,7 +1034,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             and event.inputs
             and event.inputs[0] == "conjecture-turn-call"
             and manifest is not None
-            and manifest.schema_version in {4, 5}
+            and manifest.schema_version in {4, 5, 6}
             and manifest.control_plane_policy is not None
             and manifest.control_plane_policy.mode in {
                 "active_conjecture", "active_inquiry"
@@ -1068,7 +1161,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         )
         if (
             manifest is not None
-            and manifest.schema_version in {4, 5}
+            and manifest.schema_version in {4, 5, 6}
             and expected_school
             and not mini_semantic_lineage
         ):
@@ -1092,7 +1185,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
         if receipt is None:
             return
-        if manifest is None or manifest.schema_version not in {4, 5}:
+        if manifest is None or manifest.schema_version not in {4, 5, 6}:
             fail(
                 "school-route",
                 f"event seq={event.seq}: school route receipt requires a v4 manifest",
@@ -1201,7 +1294,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         if receipt is None:
             return
         prefix = f"event seq={event.seq}"
-        if manifest is None or manifest.schema_version not in {4, 5}:
+        if manifest is None or manifest.schema_version not in {4, 5, 6}:
             fail(
                 "conjecture-context",
                 f"{prefix}: advisory context receipt requires a v4 manifest",
@@ -1402,7 +1495,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         prefix = f"event seq={event.seq}"
         control = None
         context_policy = None
-        if manifest is None or manifest.schema_version not in {4, 5}:
+        if manifest is None or manifest.schema_version not in {4, 5, 6}:
             fail(
                 "conjecture-turn",
                 f"{prefix}: typed turn evidence requires a v4 manifest",
@@ -1413,7 +1506,11 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 control is None
                 or control.mode not in {"active_conjecture", "active_inquiry"}
                 or control.contract_versions.conjecturer_turn_contract
-                not in {"conjecturer.turn.v4", "conjecturer.turn.v5"}
+                not in {
+                    "conjecturer.turn.v4",
+                    "conjecturer.turn.v5",
+                    "conjecturer.turn.v6",
+                }
             ):
                 fail(
                     "conjecture-turn",
@@ -1859,7 +1956,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
         policy = (
             manifest.criticism_policy
-            if manifest is not None and manifest.schema_version in {4, 5}
+            if manifest is not None and manifest.schema_version in {4, 5, 6}
             else None
         )
         if policy is None:
@@ -1972,7 +2069,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         trace = list(e.llm.attempt_trace)
         control_policy = (
             manifest.control_plane_policy
-            if manifest is not None and manifest.schema_version in {4, 5}
+            if manifest is not None and manifest.schema_version in {4, 5, 6}
             else None
         )
         if (
@@ -2240,7 +2337,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
     criticism_policy = (
         manifest.criticism_policy
-        if manifest is not None and manifest.schema_version in {4, 5}
+        if manifest is not None and manifest.schema_version in {4, 5, 6}
         else None
     )
     if criticism_policy is not None:
@@ -2364,3 +2461,15 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             (len(p.description) for p in h.state.problems.values()), default=0),
     }
     return {"violations": violations, "stats": stats}
+
+
+def verify_root_report(root: Path, meter_total: int | None = None):
+    """Return the dimensioned v2 report while preserving ``verify_root``.
+
+    The import is intentionally local: the v2 adapter calls the legacy
+    verifier and must not introduce an import cycle during harness startup.
+    """
+
+    from deepreason.verification.report import verify_root_report as _report
+
+    return _report(root, meter_total=meter_total)

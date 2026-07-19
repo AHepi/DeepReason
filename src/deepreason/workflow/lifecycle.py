@@ -30,7 +30,10 @@ def outstanding_work_snapshot(
     *,
     manifest_digest: str,
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
+        "legacy.scheduler.v1",
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ],
     event_fence_seq: int,
 ) -> WorkflowLifecycleSnapshotV1:
@@ -42,24 +45,58 @@ def outstanding_work_snapshot(
     }
     outstanding = []
     for work_id in workflow_state.outstanding_work_order_ids:
-        work = workflow_state.work_orders[work_id]
-        if work.manifest_digest != manifest_digest:
+        work = workflow_state.work_orders.get(work_id)
+        if work is not None:
+            if work.manifest_digest != manifest_digest:
+                raise ValueError("outstanding work belongs to another manifest")
+            bound = tuple(
+                sorted(
+                    seq
+                    for seq, call in workflow_state.calls_by_seq.items()
+                    if call.work_order_id == work_id
+                )
+            )
+            outstanding.append(
+                OutstandingWorkItemV1(
+                    work_order_id=work_id,
+                    recovery_status=workflow_state.recovery_status(work_id).value,
+                    bound_call_seqs=bound,
+                    unconsumed_bound_call_seqs=tuple(
+                        seq for seq in bound if seq not in consumed_calls
+                    ),
+                )
+            )
+            continue
+
+        transaction = workflow_state.transaction_work.get(work_id)
+        if transaction is None:
+            raise ValueError("outstanding work has no replayed authority")
+        if transaction.preparation.manifest_digest != manifest_digest:
             raise ValueError("outstanding work belongs to another manifest")
         bound = tuple(
             sorted(
                 seq
-                for seq, call in workflow_state.calls_by_seq.items()
+                for seq, call in workflow_state.transaction_calls_by_seq.items()
                 if call.work_order_id == work_id
             )
         )
+        if not transaction.issued:
+            recovery_status = "prepared"
+        elif not transaction.provider_attempts:
+            recovery_status = "issued"
+        elif not transaction.admissions:
+            recovery_status = "provider_result_received"
+        else:
+            recovery_status = "semantic_admission_received"
         outstanding.append(
             OutstandingWorkItemV1(
                 work_order_id=work_id,
-                recovery_status=workflow_state.recovery_status(work_id).value,
+                recovery_status=recovery_status,
                 bound_call_seqs=bound,
-                unconsumed_bound_call_seqs=tuple(
-                    seq for seq in bound if seq not in consumed_calls
-                ),
+                # A transactional provider call and ProviderAttemptV1 share
+                # one atomic Control append.  Such a call is already consumed
+                # by replay even when semantic admission is still pending.
+                unconsumed_bound_call_seqs=(),
             )
         )
     orphaned_calls = tuple(
@@ -91,10 +128,17 @@ def build_stopped_lifecycle(
     *,
     manifest_digest: str,
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
+        "legacy.scheduler.v1",
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ],
     workflow_profile: Literal[
-        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+        "legacy.scheduler.v1",
+        "conjecture.shadow.v1",
+        "conjecture.active.v1",
+        "inquiry.active.v1",
+        "inquiry.active.v2",
     ],
     policy: StopPolicy,
     metrics: StopMetrics,
@@ -174,9 +218,16 @@ def build_resumed_lifecycle(
     workflow_state: Any,
     *,
     manifest_digest: str,
-    controller_version: Literal["workflow.controller.v1", "workflow.controller.v2"],
+    controller_version: Literal[
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
+    ],
     workflow_profile: Literal[
-        "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+        "conjecture.shadow.v1",
+        "conjecture.active.v1",
+        "inquiry.active.v1",
+        "inquiry.active.v2",
     ],
     workflow_checkpoint_digest: str,
     run_checkpoint_digest: str,

@@ -38,6 +38,7 @@ from deepreason.bridge.models import (
     ClaimLedgerEntryV1,
     ClaimLedgerV1,
     SourceConflictV1,
+    ProcessObservationV1,
     UncoveredRequirementV1,
 )
 from deepreason.bridge.validate import validate_claim_ledger
@@ -76,6 +77,7 @@ class LedgerCatalogKind(str, Enum):
     TRACE = "trace"
     FORMAL_OBSERVATION = "formal_observation"
     FORMAL_ARTIFACT = "formal_artifact"
+    PROCESS_OBSERVATION = "process_observation"
     SCRATCH = "scratch"
 
 
@@ -86,6 +88,7 @@ _V2_KIND_PREFIX = {
     LedgerCatalogKind.TRACE: "TRC",
     LedgerCatalogKind.FORMAL_OBSERVATION: "OBS",
     LedgerCatalogKind.FORMAL_ARTIFACT: "ART",
+    LedgerCatalogKind.PROCESS_OBSERVATION: "PRC",
     LedgerCatalogKind.SCRATCH: "SCR",
 }
 _V2_PREFIX_KIND = {prefix: kind for kind, prefix in _V2_KIND_PREFIX.items()}
@@ -114,6 +117,7 @@ CatalogKindValue = Literal[
     "trace",
     "formal_observation",
     "formal_artifact",
+    "process_observation",
     "scratch",
 ]
 ClaimClassValue = Literal[
@@ -266,7 +270,10 @@ class ClaimLedgerCatalogItemV1(LedgerFrozenRecord):
 class ClaimLedgerInputCatalogV1(LedgerFrozenRecord):
     """Closed, content-addressed Stage A input boundary."""
 
-    schema_: Literal["bridge.claim-ledger.input-catalog.v1"] = Field(
+    schema_: Literal[
+        "bridge.claim-ledger.input-catalog.v1",
+        "bridge.catalog.v3",
+    ] = Field(
         "bridge.claim-ledger.input-catalog.v1", alias="schema"
     )
     id: HashRef
@@ -277,6 +284,11 @@ class ClaimLedgerInputCatalogV1(LedgerFrozenRecord):
     items: list[ClaimLedgerCatalogItemV1] = Field(max_length=MAX_CATALOG_ITEMS)
     advisory_context_ref: HashRef | None = None
     retrieval_receipt_ref: HashRef | None = None
+    process_observations: list[ProcessObservationV1] | None = Field(
+        default=None,
+        max_length=MAX_CATALOG_ITEMS,
+        exclude_if=lambda value: value is None,
+    )
 
     @classmethod
     def create(
@@ -328,17 +340,131 @@ class ClaimLedgerInputCatalogV1(LedgerFrozenRecord):
             raise ValueError("catalog item handles must be unique")
         return FrozenList(value)
 
+    @field_validator("process_observations", mode="after")
+    @classmethod
+    def _freeze_process_observations(cls, value):
+        if value is None:
+            return None
+        ids = [record.id for record in value]
+        if len(ids) != len(set(ids)):
+            raise ValueError("process observations must have unique identities")
+        return FrozenList(value)
+
     @model_validator(mode="after")
-    def _identity_matches(self):
-        expected = domain_hash(
-            "bridge.claim-ledger.input-catalog.v1", self.identity_payload()
+    def _catalog_identity_and_scope_match(self):
+        domain = (
+            "bridge.catalog.v3"
+            if self.schema_ == "bridge.catalog.v3"
+            else "bridge.claim-ledger.input-catalog.v1"
         )
+        expected = domain_hash(domain, self.identity_payload())
         if self.id != expected:
             raise ValueError("id does not match canonical Stage A input catalog")
+        if self.schema_ != "bridge.catalog.v3":
+            if self.process_observations is not None:
+                raise ValueError("process observations require bridge.catalog.v3")
+            return self
+
+        kinds_by_ref: dict[str, set[str]] = {}
+        for item in self.items:
+            kinds_by_ref.setdefault(item.ref, set()).add(item.kind)
+        if any(len(kinds) > 1 for kinds in kinds_by_ref.values()):
+            raise ValueError(
+                "one canonical reference cannot occupy incompatible catalog kinds"
+            )
+
+        process_items = {
+            item.ref: item
+            for item in self.items
+            if item.kind == LedgerCatalogKind.PROCESS_OBSERVATION.value
+        }
+        process_records = {
+            record.id: record for record in self.process_observations or ()
+        }
+        if set(process_items) != set(process_records):
+            raise ValueError(
+                "process catalog items must exactly match structured process records"
+            )
+        for record_id, record in process_records.items():
+            item = process_items[record_id]
+            if record.formal_seq != self.formal_seq:
+                raise ValueError("process observation formal sequence must match catalog")
+            if item.excerpt != record.statement:
+                raise ValueError(
+                    "process catalog excerpt must equal its deterministic statement"
+                )
         return self
 
     def item_map(self) -> dict[str, ClaimLedgerCatalogItemV1]:
         return {item.handle: item for item in self.items}
+
+
+class ClaimLedgerInputCatalogV3(ClaimLedgerInputCatalogV1):
+    """Epistemically disjoint RunManifest-v6 Stage A catalog."""
+
+    schema_: Literal["bridge.catalog.v3"] = Field(
+        "bridge.catalog.v3", alias="schema"
+    )
+
+    @classmethod
+    def create(
+        cls,
+        *,
+        problem_ref: str,
+        formal_seq: int,
+        problem_text: str,
+        output_target: str,
+        items: Sequence[ClaimLedgerCatalogItemV1 | Mapping],
+        process_observations: Sequence[ProcessObservationV1 | Mapping] = (),
+        advisory_context_ref: str | None = None,
+        retrieval_receipt_ref: str | None = None,
+    ) -> "ClaimLedgerInputCatalogV3":
+        normalized = [ClaimLedgerCatalogItemV1.model_validate(item) for item in items]
+        normalized_process = [
+            ProcessObservationV1.model_validate(item)
+            for item in process_observations
+        ]
+        payload = {
+            "problem_ref": problem_ref,
+            "formal_seq": formal_seq,
+            "problem_text": problem_text,
+            "output_target": output_target,
+            "items": normalized,
+        }
+        if normalized_process:
+            payload["process_observations"] = normalized_process
+        if advisory_context_ref is not None:
+            payload["advisory_context_ref"] = advisory_context_ref
+        if retrieval_receipt_ref is not None:
+            payload["retrieval_receipt_ref"] = retrieval_receipt_ref
+        return cls(id=domain_hash("bridge.catalog.v3", payload), **payload)
+
+    @model_validator(mode="after")
+    def _identity_matches(self):
+        expected = domain_hash("bridge.catalog.v3", self.identity_payload())
+        if self.id != expected:
+            raise ValueError("id does not match canonical bridge.catalog.v3")
+        kinds_by_ref: dict[str, set[str]] = {}
+        for item in self.items:
+            kinds_by_ref.setdefault(item.ref, set()).add(item.kind)
+        if any(len(kinds) > 1 for kinds in kinds_by_ref.values()):
+            raise ValueError(
+                "one canonical reference cannot occupy incompatible catalog kinds"
+            )
+        return self
+
+
+ClaimLedgerCatalog = ClaimLedgerInputCatalogV1 | ClaimLedgerInputCatalogV3
+
+
+def _coerce_catalog(value) -> ClaimLedgerCatalog:
+    if isinstance(value, ClaimLedgerInputCatalogV3):
+        return value
+    if isinstance(value, ClaimLedgerInputCatalogV1):
+        return value
+    if isinstance(value, Mapping) and value.get("schema") == "bridge.catalog.v3":
+        return ClaimLedgerInputCatalogV3.model_validate(value)
+    return ClaimLedgerInputCatalogV1.model_validate(value)
 
 
 class LedgerWireModel(FrozenRecord):
@@ -657,13 +783,13 @@ class ClaimLedgerWireContract(WireContract[ClaimLedgerV1]):
 
     def __init__(
         self,
-        catalog: ClaimLedgerInputCatalogV1,
+        catalog: ClaimLedgerCatalog,
         *,
         prior_ledger: ClaimLedgerV1 | None = None,
         exposed_prior_entry_ids: Sequence[str] | None = None,
         amendment_request: ClaimLedgerAmendmentRequestV1 | Mapping | None = None,
     ) -> None:
-        self.catalog = ClaimLedgerInputCatalogV1.model_validate(catalog)
+        self.catalog = _coerce_catalog(catalog)
         self.prior_ledger = (
             None if prior_ledger is None else ClaimLedgerV1.model_validate(prior_ledger)
         )
@@ -809,7 +935,10 @@ class ClaimLedgerWireContract(WireContract[ClaimLedgerV1]):
     ) -> tuple[list[SourceConflictV1], dict[str, str]]:
         conflicts = list(self.prior_ledger.source_conflicts or ()) if self.prior_ledger else []
         keys = dict(self.prior_conflict_keys)
-        non_scratch = frozenset(set(LedgerCatalogKind) - {LedgerCatalogKind.SCRATCH})
+        non_scratch = frozenset(
+            set(LedgerCatalogKind)
+            - {LedgerCatalogKind.SCRATCH, LedgerCatalogKind.PROCESS_OBSERVATION}
+        )
         for index, draft in enumerate(wire.source_conflicts):
             if draft.conflict_key in keys:
                 raise ClaimLedgerWireReferenceError(
@@ -845,7 +974,8 @@ class ClaimLedgerWireContract(WireContract[ClaimLedgerV1]):
         entries = list(self.prior_ledger.entries) if self.prior_ledger else []
         keys = dict(self.prior_entry_keys)
         external_conflict_kinds = frozenset(
-            set(LedgerCatalogKind) - {LedgerCatalogKind.SCRATCH}
+            set(LedgerCatalogKind)
+            - {LedgerCatalogKind.SCRATCH, LedgerCatalogKind.PROCESS_OBSERVATION}
         )
         channel_kinds = {
             "source_handles": frozenset({LedgerCatalogKind.SOURCE}),
@@ -1026,7 +1156,7 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
 
     def __init__(
         self,
-        catalog: ClaimLedgerInputCatalogV1,
+        catalog: ClaimLedgerCatalog,
         *,
         prior_ledger: ClaimLedgerV1 | None = None,
         exposed_prior_entry_ids: Sequence[str] | None = None,
@@ -1085,7 +1215,13 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
             ),
             "formal_artifact_handles": (LedgerCatalogKind.FORMAL_ARTIFACT,),
             "conflict_handles": tuple(
-                kind for kind in LedgerCatalogKind if kind != LedgerCatalogKind.SCRATCH
+                kind
+                for kind in LedgerCatalogKind
+                if kind
+                not in {
+                    LedgerCatalogKind.SCRATCH,
+                    LedgerCatalogKind.PROCESS_OBSERVATION,
+                }
             ),
             "scratch_handles": (LedgerCatalogKind.SCRATCH,),
         }
@@ -1149,7 +1285,13 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
                         f"/entries/{index}/{field}",
                     )
             non_scratch = tuple(
-                kind for kind in LedgerCatalogKind if kind != LedgerCatalogKind.SCRATCH
+                kind
+                for kind in LedgerCatalogKind
+                if kind
+                not in {
+                    LedgerCatalogKind.SCRATCH,
+                    LedgerCatalogKind.PROCESS_OBSERVATION,
+                }
             )
             for index, conflict in enumerate(value.get("source_conflicts", ())):
                 if not isinstance(conflict, Mapping):
@@ -1192,7 +1334,15 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
             _bind_schema_enum(
                 conflicts["conflicting_handles"],
                 self.handles_for(
-                    *(kind for kind in LedgerCatalogKind if kind != LedgerCatalogKind.SCRATCH)
+                    *(
+                        kind
+                        for kind in LedgerCatalogKind
+                        if kind
+                        not in {
+                            LedgerCatalogKind.SCRATCH,
+                            LedgerCatalogKind.PROCESS_OBSERVATION,
+                        }
+                    )
                 ),
             )
         if "scratch_handles" in conflicts:
@@ -1218,6 +1368,7 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
             "allowed_trace_handles": [],
             "allowed_formal_observation_handles": [],
             "allowed_formal_artifact_handles": [],
+            "prebuilt_process_observations": [],
             "allowed_scratch_handles": [],
         }
         group_for_kind = {
@@ -1229,6 +1380,7 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
                 "allowed_formal_observation_handles"
             ),
             LedgerCatalogKind.FORMAL_ARTIFACT: "allowed_formal_artifact_handles",
+            LedgerCatalogKind.PROCESS_OBSERVATION: "prebuilt_process_observations",
             LedgerCatalogKind.SCRATCH: "allowed_scratch_handles",
         }
         for handle, item in self._wire_items.items():
@@ -1284,6 +1436,88 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
         return resolved
 
 
+class ClaimLedgerWireContractV3(ClaimLedgerWireContractV2):
+    """v6 ledger contract with deterministic, status-only process entries.
+
+    Process observations are visible for transparency but have no model-authored
+    reference channel.  The compiler admits their exact harness-owned statement
+    as a prebuilt ``recorded_observation`` entry, so Stage A cannot paraphrase a
+    workflow status into support for the underlying formal claim.
+    """
+
+    def __init__(
+        self,
+        catalog: ClaimLedgerInputCatalogV3,
+        *,
+        prior_ledger: ClaimLedgerV1 | None = None,
+        exposed_prior_entry_ids: Sequence[str] | None = None,
+        amendment_request: ClaimLedgerAmendmentRequestV1 | Mapping | None = None,
+    ) -> None:
+        catalog = _coerce_catalog(catalog)
+        if not isinstance(catalog, ClaimLedgerInputCatalogV3):
+            raise ValueError("bridge.ledger.v3 requires bridge.catalog.v3")
+        super().__init__(
+            catalog,
+            prior_ledger=prior_ledger,
+            exposed_prior_entry_ids=exposed_prior_entry_ids,
+            amendment_request=amendment_request,
+        )
+        self.contract_id = "bridge.ledger.v3"
+
+    def _prebuilt_process_entries(self) -> list[ClaimLedgerEntryV1]:
+        return [
+            ClaimLedgerEntryV1.create(
+                claim_class=ClaimClass.RECORDED_OBSERVATION,
+                claim=record.statement,
+                process_observation_refs=[record.id],
+            )
+            for record in self.catalog.process_observations or ()
+        ]
+
+    def compile(self, wire: ClaimLedgerWireV2) -> ClaimLedgerV1:
+        ledger = super().compile(wire)
+        process_entries = self._prebuilt_process_entries()
+        if not process_entries:
+            return ledger
+
+        existing_process_refs = {
+            ref
+            for entry in ledger.entries
+            for ref in entry.process_observation_refs or ()
+        }
+        additions = [
+            entry
+            for entry in process_entries
+            if not set(entry.process_observation_refs or ()) <= existing_process_refs
+        ]
+        entries = list(ledger.entries)
+        uncovered = list(ledger.uncovered_requirements or ())
+        if self.prior_ledger is None and not wire.entries:
+            fallback_entry, fallback_requirement = self._unknown_fallback()
+            entries = [entry for entry in entries if entry.id != fallback_entry.id]
+            uncovered = [
+                item for item in uncovered if item.id != fallback_requirement.id
+            ]
+        if self.prior_ledger is None:
+            entries = additions + entries
+        else:
+            entries.extend(additions)
+        compiled = ClaimLedgerV1.create(
+            problem_ref=ledger.problem_ref,
+            formal_seq=ledger.formal_seq,
+            output_target=ledger.output_target,
+            entries=entries,
+            uncovered_requirements=uncovered or None,
+            source_conflicts=ledger.source_conflicts,
+            advisory_context_ref=ledger.advisory_context_ref,
+            retrieval_receipt_ref=ledger.retrieval_receipt_ref,
+        )
+        report = validate_claim_ledger(compiled)
+        if not report.valid:
+            raise ClaimLedgerDraftInvalid(report)
+        return compiled
+
+
 class ClaimLedgerStageAFailureV1(LedgerFrozenRecord):
     code: Literal["BRIDGE_LEDGER_REPAIR_EXHAUSTED"] = (
         "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
@@ -1323,6 +1557,7 @@ class ClaimLedgerCallReceiptV1(LedgerFrozenRecord):
     contract_id: Literal[
         "bridge.claim-ledger.compact.v1",
         "bridge.claim-ledger.compact.v2",
+        "bridge.ledger.v3",
     ] = "bridge.claim-ledger.compact.v1"
     catalog_id: HashRef
     llm_call: LLMCall | None = None
@@ -1332,7 +1567,7 @@ class ClaimLedgerCallReceiptV1(LedgerFrozenRecord):
 class ClaimLedgerStageAResultV1(LedgerFrozenRecord):
     """Pure Stage A return value, including every replay reference."""
 
-    catalog: ClaimLedgerInputCatalogV1
+    catalog: ClaimLedgerCatalog
     prior_ledger: ClaimLedgerV1 | None = None
     amendment_request: ClaimLedgerAmendmentRequestV1 | None = None
     ledger: ClaimLedgerV1
@@ -1437,7 +1672,7 @@ answer or a handle. Optional fields may remain absent."""
 
 
 def render_claim_ledger_stage_a_pack(
-    catalog: ClaimLedgerInputCatalogV1,
+    catalog: ClaimLedgerCatalog,
     *,
     contract: ClaimLedgerWireContract | None = None,
     prior_ledger: ClaimLedgerV1 | None = None,
@@ -1447,16 +1682,20 @@ def render_claim_ledger_stage_a_pack(
 ) -> str:
     """Render only bounded model-visible data; canonical refs remain hidden."""
 
-    catalog = ClaimLedgerInputCatalogV1.model_validate(catalog)
+    catalog = _coerce_catalog(catalog)
     if contract is not None and contract.catalog.id != catalog.id:
         raise ValueError("Stage A renderer contract/catalog mismatch")
     if contract is not None and contract.prior_ledger != prior_ledger:
         raise ValueError("Stage A renderer contract/prior-ledger mismatch")
-    rules = (
-        _STAGE_A_RULES.replace("ClaimLedgerWireV1", "ClaimLedgerWireV2")
-        if isinstance(contract, ClaimLedgerWireContractV2)
-        else _STAGE_A_RULES
-    )
+    rules = _STAGE_A_RULES
+    if isinstance(contract, ClaimLedgerWireContractV2):
+        rules = rules.replace("ClaimLedgerWireV1", "ClaimLedgerWireV2")
+    if isinstance(contract, ClaimLedgerWireContractV3):
+        rules += (
+            "\nProcess-observation rows are deterministic status-only entries. "
+            "They have no model-authored handle field and cannot support the "
+            "substantive truth of the artifact they mention."
+        )
     lines = [
         rules,
         "",
@@ -1548,9 +1787,19 @@ def render_claim_ledger_stage_a_pack(
     return AllocatedPack(pack) if isinstance(contract, ClaimLedgerWireContractV2) else pack
 
 
-def _fallback_ledger(catalog: ClaimLedgerInputCatalogV1) -> ClaimLedgerV1:
-    contract = ClaimLedgerWireContract(catalog)
-    return contract.compile(ClaimLedgerWireV1())
+def _fallback_ledger(
+    catalog: ClaimLedgerCatalog,
+    *,
+    contract_version: Literal["v1", "v2", "v3"] = "v1",
+) -> ClaimLedgerV1:
+    contract_type = {
+        "v1": ClaimLedgerWireContract,
+        "v2": ClaimLedgerWireContractV2,
+        "v3": ClaimLedgerWireContractV3,
+    }[contract_version]
+    contract = contract_type(catalog)
+    wire = ClaimLedgerWireV2() if contract_version in {"v2", "v3"} else ClaimLedgerWireV1()
+    return contract.compile(wire)
 
 
 def _failure_message(error: SchemaRepairError) -> str:
@@ -1560,23 +1809,24 @@ def _failure_message(error: SchemaRepairError) -> str:
 
 def build_claim_ledger_stage_a(
     adapter,
-    catalog: ClaimLedgerInputCatalogV1,
+    catalog: ClaimLedgerCatalog,
     *,
     role: str = "summarizer",
-    contract_version: Literal["v1", "v2"] = "v1",
+    contract_version: Literal["v1", "v2", "v3"] = "v1",
 ) -> ClaimLedgerStageAResultV1:
     """Run one adapter call (with its shared bounded repair kernel) for Stage A."""
 
     if role not in _LEDGER_ROLES:
         raise ValueError("claim-ledger extraction role must be summarizer")
-    if contract_version not in {"v1", "v2"}:
-        raise ValueError("claim-ledger contract_version must be v1 or v2")
-    catalog = ClaimLedgerInputCatalogV1.model_validate(catalog)
-    contract = (
-        ClaimLedgerWireContractV2(catalog)
-        if contract_version == "v2"
-        else ClaimLedgerWireContract(catalog)
-    )
+    if contract_version not in {"v1", "v2", "v3"}:
+        raise ValueError("claim-ledger contract_version must be v1, v2, or v3")
+    catalog = _coerce_catalog(catalog)
+    contract_type = {
+        "v1": ClaimLedgerWireContract,
+        "v2": ClaimLedgerWireContractV2,
+        "v3": ClaimLedgerWireContractV3,
+    }[contract_version]
+    contract = contract_type(catalog)
     pack = render_claim_ledger_stage_a_pack(catalog, contract=contract)
     failure = None
     exhausted = False
@@ -1589,12 +1839,12 @@ def build_claim_ledger_stage_a(
             wire_contract=contract,
         )
     except SchemaRepairError as error:
-        ledger = _fallback_ledger(catalog)
+        ledger = _fallback_ledger(catalog, contract_version=contract_version)
         call = error.spend
         exhausted = True
         failure = ClaimLedgerStageAFailureV1(message=_failure_message(error))
     report = validate_claim_ledger(ledger)
-    fallback = _fallback_ledger(catalog)
+    fallback = _fallback_ledger(catalog, contract_version=contract_version)
     return ClaimLedgerStageAResultV1(
         catalog=catalog,
         ledger=ledger,
@@ -1617,7 +1867,7 @@ def amend_claim_ledger_stage_a(
     request: ClaimLedgerAmendmentRequestV1 | Mapping,
     role: str = "summarizer",
     exposed_prior_entry_ids: Sequence[str] | None = None,
-    contract_version: Literal["v1", "v2"] | None = None,
+    contract_version: Literal["v1", "v2", "v3"] | None = None,
 ) -> ClaimLedgerStageAResultV1:
     """Propose additions against the exact prior Stage A catalog.
 
@@ -1634,18 +1884,18 @@ def amend_claim_ledger_stage_a(
     catalog = previous.catalog
     prior = previous.ledger
     if contract_version is None:
-        contract_version = (
-            "v2"
-            if previous.receipt.contract_id == "bridge.claim-ledger.compact.v2"
-            else "v1"
-        )
-    if contract_version not in {"v1", "v2"}:
-        raise ValueError("claim-ledger contract_version must be v1 or v2")
-    contract_type = (
-        ClaimLedgerWireContractV2
-        if contract_version == "v2"
-        else ClaimLedgerWireContract
-    )
+        contract_version = {
+            "bridge.claim-ledger.compact.v1": "v1",
+            "bridge.claim-ledger.compact.v2": "v2",
+            "bridge.ledger.v3": "v3",
+        }[previous.receipt.contract_id]
+    if contract_version not in {"v1", "v2", "v3"}:
+        raise ValueError("claim-ledger contract_version must be v1, v2, or v3")
+    contract_type = {
+        "v1": ClaimLedgerWireContract,
+        "v2": ClaimLedgerWireContractV2,
+        "v3": ClaimLedgerWireContractV3,
+    }[contract_version]
     contract = contract_type(
         catalog,
         prior_ledger=prior,
@@ -1698,11 +1948,14 @@ __all__ = [
     "ClaimLedgerCallReceiptV1",
     "ClaimLedgerCatalogItemV1",
     "ClaimLedgerDraftInvalid",
+    "ClaimLedgerCatalog",
     "ClaimLedgerEntryWireV1",
     "ClaimLedgerEntryWireV2",
+    "ClaimLedgerInputCatalogV3",
     "ClaimLedgerInputCatalogV1",
     "ClaimLedgerStageAFailureV1",
     "ClaimLedgerStageAResultV1",
+    "ClaimLedgerWireContractV3",
     "ClaimLedgerWireContract",
     "ClaimLedgerWireContractV2",
     "ClaimLedgerWireReferenceError",

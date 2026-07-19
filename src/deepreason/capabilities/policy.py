@@ -322,7 +322,12 @@ class InquiryCapabilityPolicyV1(_PolicyModel):
     schema_: Literal["inquiry-capability-policy.v1"] = Field(
         "inquiry-capability-policy.v1", alias="schema"
     )
-    capability_profile: Literal["inquiry-capabilities.v1"] = "inquiry-capabilities.v1"
+    # The policy record remains byte-compatible at schema v1.  RunManifest v6
+    # selects the v2 capability *profile* so controller-v3 work cannot be
+    # mistaken for controller-v2 authority during replay.
+    capability_profile: Literal[
+        "inquiry-capabilities.v1", "inquiry-capabilities.v2"
+    ] = "inquiry-capabilities.v1"
     attached_evidence: AttachedEvidencePolicyV1 = Field(
         default_factory=AttachedEvidencePolicyV1
     )

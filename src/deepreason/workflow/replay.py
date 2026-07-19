@@ -9,7 +9,11 @@ from typing import Any, Iterable, Mapping
 from pydantic import BaseModel
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
+from deepreason.control_events import (
+    ControlEventPayloadV1,
+    ControlEventPayloadV2,
+    ControlEventPayloadV3,
+)
 from deepreason.workflow.models import (
     CapabilityOutcome,
     GuardFindingOutcome,
@@ -31,9 +35,23 @@ from deepreason.workflow.state import (
     WorkflowProcessStateV1,
     apply_decision,
 )
+from deepreason.workflow.transaction import (
+    ContextExposureReceiptV2,
+    ContextPackPlanV1,
+    DispatchAuthorizationBundleV1,
+    ProviderAttemptV1,
+    SemanticAdmissionV1,
+    TokenReservationV2,
+    WorkLifecycleTransitionV1,
+    WorkPreparationV1,
+    WorkTerminalV1,
+    WorkTransitionKind,
+)
 
 
-ControlEventPayload = ControlEventPayloadV1 | ControlEventPayloadV2
+ControlEventPayload = (
+    ControlEventPayloadV1 | ControlEventPayloadV2 | ControlEventPayloadV3
+)
 
 
 _SCHEMA_MODELS = {
@@ -46,6 +64,15 @@ _SCHEMA_MODELS = {
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
     "workflow-resume-decision": WorkflowResumeDecisionV1,
+    "workflow-work-preparation-v1": WorkPreparationV1,
+    "workflow-context-pack-plan-v1": ContextPackPlanV1,
+    "workflow-token-reservation-v2": TokenReservationV2,
+    "workflow-context-exposure-v2": ContextExposureReceiptV2,
+    "workflow-dispatch-authorization-v1": DispatchAuthorizationBundleV1,
+    "workflow-provider-attempt-v1": ProviderAttemptV1,
+    "workflow-semantic-admission-v1": SemanticAdmissionV1,
+    "workflow-work-terminal-v1": WorkTerminalV1,
+    "workflow-work-lifecycle-transition-v1": WorkLifecycleTransitionV1,
 }
 _PROVIDER_TRANSITIONS = {
     TransitionKind.PROPOSAL_RECEIVED,
@@ -148,6 +175,30 @@ def _guard_transition(
 
 
 @dataclass
+class TransactionReplayItem:
+    """Replay-only materialization of one controller-v3 work transaction."""
+
+    preparation: WorkPreparationV1
+    plans: dict[str, ContextPackPlanV1] = field(default_factory=dict)
+    reservation: TokenReservationV2 | None = None
+    exposure: ContextExposureReceiptV2 | None = None
+    authorization: DispatchAuthorizationBundleV1 | None = None
+    provider_attempts: dict[int, ProviderAttemptV1] = field(default_factory=dict)
+    admissions: dict[int, SemanticAdmissionV1] = field(default_factory=dict)
+    terminal: WorkTerminalV1 | None = None
+    transitions: list[WorkLifecycleTransitionV1] = field(default_factory=list)
+    event_seqs: list[int] = field(default_factory=list)
+
+    @property
+    def issued(self) -> bool:
+        return self.authorization is not None
+
+    @property
+    def outstanding(self) -> bool:
+        return self.terminal is None
+
+
+@dataclass
 class WorkflowReplayState:
     """Deterministic process-only index reconstructed from ``Control`` events."""
 
@@ -175,6 +226,8 @@ class WorkflowReplayState:
     work_to_branch: dict[str, str] = field(default_factory=dict)
     decision_event_seq: dict[str, int] = field(default_factory=dict)
     calls_by_seq: dict[int, Any] = field(default_factory=dict)
+    transaction_work: dict[str, TransactionReplayItem] = field(default_factory=dict)
+    transaction_calls_by_seq: dict[int, Any] = field(default_factory=dict)
     event_seqs: list[int] = field(default_factory=list)
 
     def observe_event(self, event: Any) -> None:
@@ -190,6 +243,16 @@ class WorkflowReplayState:
         if seq in self.calls_by_seq:
             raise ValueError("workflow provider-call sequence appears more than once")
         work_id = call.work_order_id
+        transaction = self.transaction_work.get(work_id)
+        if transaction is not None:
+            if not transaction.issued or transaction.terminal is not None:
+                raise ValueError(
+                    "transactional provider call lacks live issued authority"
+                )
+            if seq in self.transaction_calls_by_seq:
+                raise ValueError("transactional provider call sequence is duplicated")
+            self.transaction_calls_by_seq[seq] = call
+            return
         work = self.work_orders.get(work_id)
         if work is None:
             raise ValueError("provider call names an unknown work order")
@@ -1136,6 +1199,220 @@ class WorkflowReplayState:
         self.terminal_decision_id = None
         self.event_seqs.append(seq)
 
+    def _apply_transaction(
+        self,
+        event: Any,
+        payload: ControlEventPayloadV3,
+        resolved_records: Iterable[tuple[str, str, BaseModel]],
+    ) -> None:
+        """Validate and materialize one controller-v3 transaction append."""
+
+        records = _record_map(resolved_records)
+        if tuple(records) != tuple(payload.outputs):
+            raise ValueError("resolved transaction records differ from control outputs")
+        transition_entry = records.get(payload.decision_ref)
+        if (
+            transition_entry is None
+            or transition_entry[0] != "workflow-work-lifecycle-transition-v1"
+        ):
+            raise ValueError("control.event.v3 decision_ref is not a lifecycle transition")
+        transition = transition_entry[1]
+        assert isinstance(transition, WorkLifecycleTransitionV1)
+        if tuple(payload.inputs) != (transition.work_id, transition.trigger_ref):
+            raise ValueError("transaction inputs differ from its transition")
+        if tuple(records)[-1] != transition.id:
+            raise ValueError("transaction transition must be the final output")
+        phase_records = [
+            (schema, record)
+            for object_id, (schema, record) in records.items()
+            if object_id != transition.id
+        ]
+        if any(
+            getattr(record, "work_id", None) != transition.work_id
+            or getattr(record, "attempt_index", None) != transition.attempt_index
+            for _schema, record in phase_records
+        ):
+            raise ValueError("transaction outputs belong to another work attempt")
+
+        kind = transition.transition_kind
+        expected_action = (
+            "provider_result"
+            if kind == WorkTransitionKind.PROVIDER_RESULT
+            else "work_transition"
+        )
+        if payload.action != expected_action:
+            raise ValueError("transaction control action differs from its transition")
+        seq = int(getattr(event, "seq"))
+        item = self.transaction_work.get(transition.work_id)
+        if kind == WorkTransitionKind.WORK_PREPARED:
+            if item is not None or [schema for schema, _record in phase_records] != [
+                "workflow-work-preparation-v1"
+            ]:
+                raise ValueError("work_prepared must introduce exactly one preparation")
+            preparation = phase_records[0][1]
+            assert isinstance(preparation, WorkPreparationV1)
+            if (
+                preparation.id != transition.work_id
+                or preparation.trigger_ref != transition.trigger_ref
+            ):
+                raise ValueError("preparation transition differs from prepared authority")
+            item = TransactionReplayItem(preparation=preparation)
+            self.transaction_work[preparation.id] = item
+        elif item is None:
+            raise ValueError("transaction must begin with durable work preparation")
+        elif item.terminal is not None:
+            raise ValueError("transaction transition follows typed termination")
+        elif kind == WorkTransitionKind.WORK_ISSUED:
+            if item.issued:
+                raise ValueError("transactional work was already issued")
+            plans = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-context-pack-plan-v1"
+            ]
+            reservations = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-token-reservation-v2"
+            ]
+            exposures = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-context-exposure-v2"
+            ]
+            bundles = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-dispatch-authorization-v1"
+            ]
+            actual_schemas = [schema for schema, _record in phase_records]
+            expected_schemas = [
+                *("workflow-context-pack-plan-v1" for _plan in plans),
+                "workflow-token-reservation-v2",
+                "workflow-context-exposure-v2",
+                "workflow-dispatch-authorization-v1",
+            ]
+            if (
+                actual_schemas != expected_schemas
+                or len(reservations) != 1
+                or len(exposures) != 1
+                or len(bundles) != 1
+            ):
+                raise ValueError("work_issued has a noncanonical record shape")
+            reservation = reservations[0]
+            exposure = exposures[0]
+            bundle = bundles[0]
+            assert isinstance(reservation, TokenReservationV2)
+            assert isinstance(exposure, ContextExposureReceiptV2)
+            assert isinstance(bundle, DispatchAuthorizationBundleV1)
+            if (
+                tuple(exposure.context_plan_refs) != tuple(plan.id for plan in plans)
+                or tuple(exposure.exposed_items)
+                != tuple(context for plan in plans for context in plan.items)
+                or exposure.prompt_sha256 != reservation.prompt_sha256
+                or bundle.prompt_sha256 != reservation.prompt_sha256
+                or bundle.reservation_ref != reservation.id
+                or bundle.exposure_receipt_ref != exposure.id
+                or bundle.issue_transition_ref != transition.id
+                or bundle.contract_id != item.preparation.contract_id
+                or bundle.route_lease != item.preparation.route_lease
+            ):
+                raise ValueError("issued authority records do not bind one request")
+            item.plans.update({plan.id: plan for plan in plans})
+            item.reservation = reservation
+            item.exposure = exposure
+            item.authorization = bundle
+        elif kind == WorkTransitionKind.BUDGET_DENIED:
+            if item.issued or [schema for schema, _record in phase_records] != [
+                "workflow-work-terminal-v1"
+            ]:
+                raise ValueError("budget denial cannot follow issuance")
+            terminal = phase_records[0][1]
+            assert isinstance(terminal, WorkTerminalV1)
+            if terminal.status != "budget_denied":
+                raise ValueError("budget_denied transition requires its typed terminal")
+            item.terminal = terminal
+        elif kind == WorkTransitionKind.PROVIDER_RESULT:
+            if not item.issued or [schema for schema, _record in phase_records] != [
+                "workflow-provider-attempt-v1"
+            ]:
+                raise ValueError("provider result requires issued authority")
+            attempt = phase_records[0][1]
+            assert isinstance(attempt, ProviderAttemptV1)
+            if attempt.attempt_index in item.provider_attempts:
+                raise ValueError("provider attempt is already durable")
+            call = getattr(event, "llm", None)
+            if call is None or call.work_order_id != transition.work_id:
+                raise ValueError("provider result requires its work-bound LLM call")
+            if (
+                item.authorization is None
+                or call.dispatch_authorization_ref != item.authorization.id
+                or attempt.authorization_bundle_ref != item.authorization.id
+                or attempt.contract_id != item.authorization.contract_id
+                or attempt.route_lease != item.authorization.route_lease
+                or attempt.prompt_sha256 != item.authorization.prompt_sha256
+                or attempt.raw_ref != (call.raw_ref or None)
+            ):
+                raise ValueError("provider result differs from issued authority")
+            if attempt.usage_status == "exact" and (
+                int(attempt.prompt_tokens or 0) + int(attempt.completion_tokens or 0)
+                != call.tokens
+            ):
+                raise ValueError("provider result usage differs from its LLM call")
+            item.provider_attempts[attempt.attempt_index] = attempt
+        elif kind == WorkTransitionKind.SEMANTIC_ADMISSION:
+            if [schema for schema, _record in phase_records] != [
+                "workflow-semantic-admission-v1"
+            ]:
+                raise ValueError("semantic admission has a noncanonical record shape")
+            admission = phase_records[0][1]
+            assert isinstance(admission, SemanticAdmissionV1)
+            attempt = item.provider_attempts.get(admission.attempt_index)
+            if (
+                attempt is None
+                or admission.provider_attempt_ref != attempt.id
+                or admission.attempt_index in item.admissions
+            ):
+                raise ValueError("semantic admission lacks one durable provider result")
+            item.admissions[admission.attempt_index] = admission
+        elif kind == WorkTransitionKind.WORK_TERMINATED:
+            if [schema for schema, _record in phase_records] != [
+                "workflow-work-terminal-v1"
+            ]:
+                raise ValueError("work termination has a noncanonical record shape")
+            terminal = phase_records[0][1]
+            assert isinstance(terminal, WorkTerminalV1)
+            attempt = item.provider_attempts.get(terminal.attempt_index)
+            admission = item.admissions.get(terminal.attempt_index)
+            if terminal.provider_attempt_ref != (attempt.id if attempt else None):
+                raise ValueError("terminal provider reference does not replay")
+            if terminal.semantic_admission_ref != (
+                admission.id if admission else None
+            ):
+                raise ValueError("terminal admission reference does not replay")
+            expected_status = {
+                "admitted": "completed",
+                "schema_exhausted": "schema_exhausted",
+                "rejected": "rejected",
+                "unrepairable": "rejected",
+            }.get(admission.outcome) if admission is not None else None
+            if terminal.status == "abandoned":
+                if attempt is not None:
+                    raise ValueError("abandoned recovery cannot hide a provider result")
+            elif terminal.status == "transport_failed":
+                if attempt is None or attempt.outcome != "transport_failure":
+                    raise ValueError("transport terminal lacks a failed provider attempt")
+            elif terminal.status != expected_status:
+                raise ValueError("work terminal differs from semantic admission")
+            item.terminal = terminal
+        else:  # pragma: no cover - enum validation keeps this fail-closed
+            raise ValueError("unknown controller-v3 transaction transition")
+
+        assert item is not None
+        item.transitions.append(transition)
+        item.event_seqs.append(seq)
+        self.event_seqs.append(seq)
+
     def apply(
         self,
         event: Any,
@@ -1147,6 +1424,12 @@ class WorkflowReplayState:
         if payload is None:
             raise ValueError("workflow replay accepts only typed control events")
         resolved_records = tuple(resolved_records)
+        if (
+            isinstance(payload, ControlEventPayloadV3)
+            and payload.action in {"work_transition", "provider_result"}
+        ):
+            self._apply_transaction(event, payload, resolved_records)
+            return
         decision_entry = next(
             (
                 (schema, value)
@@ -1156,11 +1439,23 @@ class WorkflowReplayState:
             None,
         )
         if decision_entry is not None and decision_entry[0] == "workflow-lifecycle-decision":
+            if (
+                isinstance(payload, ControlEventPayloadV3)
+                and payload.action != "lifecycle_stopped"
+            ):
+                raise ValueError("controller-v3 lifecycle action is not stopped")
             self._apply_lifecycle(event, payload, resolved_records)
             return
         if decision_entry is not None and decision_entry[0] == "workflow-resume-decision":
+            if (
+                isinstance(payload, ControlEventPayloadV3)
+                and payload.action != "lifecycle_resumed"
+            ):
+                raise ValueError("controller-v3 lifecycle action is not resumed")
             self._apply_resume(event, payload, resolved_records)
             return
+        if isinstance(payload, ControlEventPayloadV3):
+            raise ValueError("controller-v3 action differs from its decision record")
         if self.terminal_decision_id is not None:
             raise ValueError("workflow transition follows terminal lifecycle state")
         seq = int(getattr(event, "seq"))
@@ -1206,6 +1501,11 @@ class WorkflowReplayState:
                 WorkItemStatus.ABANDONED,
             }:
                 outstanding.append(work_id)
+        outstanding.extend(
+            work_id
+            for work_id, item in self.transaction_work.items()
+            if item.outstanding
+        )
         return tuple(sorted(outstanding))
 
     @property
@@ -1309,6 +1609,21 @@ class WorkflowReplayState:
             ],
             "repair_work_order_ids": sorted(self.repair_work_orders),
         }
+        # Preserve the exact v1/v2 replay digest for every historical root.
+        # Transaction state is absent, rather than an added empty default,
+        # until a controller-v3 event actually exists.
+        if self.transaction_work:
+            payload["transactions"] = [
+                {
+                    "work_id": work_id,
+                    "transition_ids": [
+                        transition.id for transition in item.transitions
+                    ],
+                    "event_seqs": list(item.event_seqs),
+                    "terminal_ref": item.terminal.id if item.terminal else None,
+                }
+                for work_id, item in sorted(self.transaction_work.items())
+            ]
         return "sha256:" + sha256_hex(
             b"workflow.replay-state.v1\x00" + canonical_json(payload)
         )

@@ -109,6 +109,20 @@ def _compile(run_input_digest, *, capabilities=None, toolchains=()):
         toolchains=toolchains,
     )
 
+def test_v5_canonical_bytes_match_incident_head_golden():
+    """V6 installation must not change the last active-inquiry wire bytes."""
+
+    manifest = _compile("a" * 64)
+    encoded = manifest.canonical_bytes()
+    # Independently reproduced from 056af85e4c6018bcdf44e73c2ada78fabccb4a81.
+    assert len(encoded) == 7322
+    assert hashlib.sha256(encoded).hexdigest() == (
+        "5ccad416d26dafcf18e4e56d56da6f4f906064218dcbe6d9db4bcb77a5c81811"
+    )
+    assert manifest.sha256 == hashlib.sha256(encoded).hexdigest()
+
+
+
 
 def test_contract_v1_cannot_select_v5_or_control_event_v2():
     with pytest.raises(ValidationError):

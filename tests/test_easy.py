@@ -24,7 +24,9 @@ def _home(tmp_path, monkeypatch):
 def test_save_and_load_credentials_roundtrip(monkeypatch):
     monkeypatch.delenv("FAKE_KEY_A", raising=False)
     path = easy.save_credential("FAKE_KEY_A", "secret-123")
-    assert stat.S_IMODE(path.stat().st_mode) == 0o600  # owner-only
+    if os.name != "nt":
+        # Windows does not represent its ACL through POSIX mode bits.
+        assert stat.S_IMODE(path.stat().st_mode) == 0o600  # owner-only
     assert easy.load_credentials() == 1
     assert os.environ["FAKE_KEY_A"] == "secret-123"
 

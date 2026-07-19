@@ -105,7 +105,16 @@ def _open_lock_file(path: Path) -> BinaryIO:
             os.fsync(stream.fileno())
         else:
             stream.seek(0)
-            if stream.read(1) != _LOCK_SENTINEL:
+            try:
+                sentinel = stream.read(1)
+            except PermissionError:
+                # A Windows contender cannot read the byte currently owned
+                # by another process's range lock. Let kernel acquisition
+                # classify it as busy, then validate after acquisition.
+                if os.name != "nt":
+                    raise
+                sentinel = None
+            if sentinel is not None and sentinel != _LOCK_SENTINEL:
                 raise ProcessLockError("existing lock file has an invalid sentinel")
         stream.seek(0)
         return stream
@@ -202,6 +211,9 @@ class ProcessLock:
         try:
             if self._platform == "windows":
                 _windows_acquire(stream, blocking=self.blocking)
+                stream.seek(0)
+                if stream.read(1) != _LOCK_SENTINEL:
+                    raise ProcessLockError("existing lock file has an invalid sentinel")
             else:
                 _posix_acquire(stream, blocking=self.blocking)
             self._write_metadata(stream)
@@ -258,7 +270,15 @@ class ProcessLock:
                 or opened.st_size > _MAX_METADATA_BYTES + 1
             ):
                 return None
-            payload = stream.read(_MAX_METADATA_BYTES + 2)
+            # The Windows byte-range lock deliberately owns byte zero. A
+            # second descriptor can still read the non-authoritative metadata
+            # from byte one without weakening the kernel lock. POSIX readers
+            # retain the sentinel check over the whole file.
+            if self._platform == "windows":
+                stream.seek(1)
+                payload = stream.read(_MAX_METADATA_BYTES + 1)
+            else:
+                payload = stream.read(_MAX_METADATA_BYTES + 2)
         try:
             current = self.path.lstat()
         except FileNotFoundError:
@@ -273,9 +293,12 @@ class ProcessLock:
             return None
         if len(payload) > _MAX_METADATA_BYTES + 1:
             return None
-        if not payload.startswith(_LOCK_SENTINEL):
-            return None
-        raw = payload[1:].strip() if payload.startswith(_LOCK_SENTINEL) else b""
+        if self._platform == "windows":
+            raw = payload.strip()
+        else:
+            if not payload.startswith(_LOCK_SENTINEL):
+                return None
+            raw = payload[1:].strip()
         if not raw:
             return None
         try:

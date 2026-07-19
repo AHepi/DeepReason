@@ -382,6 +382,21 @@ def test_ops_forwards_manifest_workload_profile(monkeypatch, tmp_path):
     assert isinstance(captured["stop_controller"], StopController)
     assert not captured["stop_controller"].policy.enabled
 
+    v6 = SimpleNamespace(
+        engine_profile="full",
+        workload_profile="text",
+        schema_version=6,
+        stop_policy={"enabled": False},
+    )
+    run_scheduler(
+        Harness(tmp_path / "v6-stop-policy"),
+        Config(CONTROLLER=False),
+        0,
+        run_manifest=v6,
+    )
+    assert isinstance(captured["stop_controller"], StopController)
+    assert not captured["stop_controller"].policy.enabled
+
 
 def test_scheduler_stop_controller_stops_only_after_sustained_convergence(tmp_path):
     harness = Harness(tmp_path / "converged")

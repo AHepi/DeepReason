@@ -119,6 +119,11 @@ def register_bridge_commands(subparsers) -> None:
         help="historical source event fence (requires --derived-output)",
     )
     build.add_argument(
+        "--diagnostic-after-failure",
+        action="store_true",
+        help="build a labelled noncanonical derived view of a failed source run",
+    )
+    build.add_argument(
         "--focus-block", action="append", default=[], help="scratch block ID or prefix"
     )
     build.add_argument(
@@ -195,6 +200,9 @@ def _build_intent(args) -> GroundedBridgeBuildIntentV1:
             focus_clusters=tuple(args.focus_cluster),
             derived_output=args.derived_output,
             at_seq=args.at_seq,
+            diagnostic_after_failure=getattr(
+                args, "diagnostic_after_failure", False
+            ),
         )
     except ValidationError as error:
         for detail in error.errors(include_url=False):

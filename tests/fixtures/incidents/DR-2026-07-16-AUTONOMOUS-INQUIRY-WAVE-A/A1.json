@@ -1,0 +1,44 @@
+{
+  "expected": {
+    "completion_checks": [
+      "foreign-criticism"
+    ],
+    "completion_satisfied": false,
+    "epistemic_checks": [],
+    "integrity_checks": [],
+    "integrity_valid": true,
+    "operational_checks": [
+      "run-terminal"
+    ],
+    "operational_checks_passed": false,
+    "security_checks": [],
+    "security_valid": true,
+    "valid": true
+  },
+  "fixture_id": "A1",
+  "fixture_kind": "minimized-derived-reproduction",
+  "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
+  "manifest_schema_version": 5,
+  "original_root_bytes_included": false,
+  "problem": {
+    "description": "Minimized A1 criticism-schema failure prefix.",
+    "id": "incident-wave-a-A1"
+  },
+  "repository_commit": "056af85e4c6018bcdf44e73c2ada78fabccb4a81",
+  "reproductions": {
+    "accepted_survivor": {
+      "claim": "A1 survivor requiring incomplete foreign criticism.",
+      "owner_school_id": "school-0"
+    },
+    "criticism_minimum_foreign_school_coverage": 2,
+    "terminal": {
+      "error": "argumentative critic exhausted schema repair",
+      "error_type": "SchemaRepairError",
+      "schema": "deepreason-run-result-v1",
+      "state": "failed",
+      "workload": "text"
+    }
+  },
+  "schema": "deepreason.incident-derived-fixture.v1",
+  "source_review_sha256": "2f086397643e439dd711d656611f943a3edbb3327672faf81f16ea40d6ebf282"
+}

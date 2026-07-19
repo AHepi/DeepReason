@@ -15,6 +15,11 @@ their payload, not their inputs.
 """
 
 SIGNALS: dict[str, str] = {
+    "experimental-v5-override.v1": "explicit diagnostic-only override of "
+                                    "the v5 active-inquiry containment gate "
+                                    "(inputs: [signal, manifest digest]); "
+                                    "authority/process only and prohibited "
+                                    "in qualification campaigns",
     "dossier-pack-receipt.v1": "deterministic bounded selection receipt for "
                                  "one immutable run-input evidence dossier "
                                  "(inputs: [signal, receipt digest, selected "

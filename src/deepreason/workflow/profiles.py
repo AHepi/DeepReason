@@ -29,7 +29,10 @@ from deepreason.workflow.models import (
 
 
 WorkflowProfileId = Literal[
-    "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+    "conjecture.shadow.v1",
+    "conjecture.active.v1",
+    "inquiry.active.v1",
+    "inquiry.active.v2",
 ]
 
 
@@ -39,6 +42,7 @@ _OWNED_PROFILE_MODES: dict[
     "conjecture.shadow.v1": "shadow",
     "conjecture.active.v1": "active_conjecture",
     "inquiry.active.v1": "active_inquiry",
+    "inquiry.active.v2": "active_inquiry",
 }
 
 
@@ -56,19 +60,28 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
     )
     manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
     controller_version: Literal[
-        "workflow.controller.v1", "workflow.controller.v2"
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ] = "workflow.controller.v1"
     mode: Literal["shadow", "active_conjecture", "active_inquiry"]
     workflow_profile: WorkflowProfileId
-    capability_profile: Literal["conjecture-control.v1", "inquiry-capabilities.v1"] = (
-        "conjecture-control.v1"
-    )
+    capability_profile: Literal[
+        "conjecture-control.v1",
+        "inquiry-capabilities.v1",
+        "inquiry-capabilities.v2",
+    ] = "conjecture-control.v1"
     conjecturer_contract_id: Literal[
-        "conjecturer.legacy.v1", "conjecturer.turn.v4", "conjecturer.turn.v5"
+        "conjecturer.legacy.v1",
+        "conjecturer.turn.v4",
+        "conjecturer.turn.v5",
+        "conjecturer.turn.v6",
     ]
-    control_event_schema: Literal["control.event.v1", "control.event.v2"] = (
-        "control.event.v1"
-    )
+    control_event_schema: Literal[
+        "control.event.v1",
+        "control.event.v2",
+        "control.event.v3",
+    ] = "control.event.v1"
     run_input_digest: str | None = Field(
         default=None, pattern=r"^[0-9a-f]{64}$"
     )
@@ -95,6 +108,7 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         if self.conjecturer_contract_id in {
             "conjecturer.turn.v4",
             "conjecturer.turn.v5",
+            "conjecturer.turn.v6",
         }:
             outcomes.append(CapabilityOutcome.CONTEXT_REQUEST)
             outcomes.append(CapabilityOutcome.ABSTENTION)
@@ -137,17 +151,44 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         elif self.conjecturer_contract_id not in {
             "conjecturer.turn.v4",
             "conjecturer.turn.v5",
+            "conjecturer.turn.v6",
         }:
             raise ValueError("active conjecture profile requires a controlled turn contract")
+        expected = {
+            "conjecture.shadow.v1": (
+                "workflow.controller.v1",
+                "conjecture-control.v1",
+                "conjecturer.legacy.v1",
+                "control.event.v1",
+            ),
+            "conjecture.active.v1": (
+                "workflow.controller.v1",
+                "conjecture-control.v1",
+                "conjecturer.turn.v4",
+                "control.event.v1",
+            ),
+            "inquiry.active.v1": (
+                "workflow.controller.v2",
+                "inquiry-capabilities.v1",
+                "conjecturer.turn.v5",
+                "control.event.v2",
+            ),
+            "inquiry.active.v2": (
+                "workflow.controller.v3",
+                "inquiry-capabilities.v2",
+                "conjecturer.turn.v6",
+                "control.event.v3",
+            ),
+        }[self.workflow_profile]
+        supplied = (
+            self.controller_version,
+            self.capability_profile,
+            self.conjecturer_contract_id,
+            self.control_event_schema,
+        )
+        if supplied != expected:
+            raise ValueError("workflow profile authority tuple is inconsistent")
         inquiry = self.mode == "active_inquiry"
-        if inquiry != (self.controller_version == "workflow.controller.v2"):
-            raise ValueError("profile controller version differs from inquiry mode")
-        if inquiry != (self.workflow_profile == "inquiry.active.v1"):
-            raise ValueError("profile ID differs from inquiry mode")
-        if inquiry != (self.capability_profile == "inquiry-capabilities.v1"):
-            raise ValueError("capability profile differs from inquiry mode")
-        if inquiry != (self.control_event_schema == "control.event.v2"):
-            raise ValueError("control event schema differs from inquiry mode")
         if inquiry != (self.run_input_digest is not None):
             raise ValueError("active inquiry profile must bind one run input")
         return self
@@ -157,11 +198,13 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
     """Compile one exact built-in profile without interpreting user workflow code."""
 
     manifest = RunManifest.model_validate(manifest)
-    if manifest.schema_version not in {4, 5} or manifest.control_plane_policy is None:
+    if manifest.schema_version not in {4, 5, 6} or manifest.control_plane_policy is None:
         raise WorkflowProfileError("WORKFLOW_MANIFEST_V4_PLUS_REQUIRED")
     control = manifest.control_plane_policy
     if control.controller_version not in {
-        "workflow.controller.v1", "workflow.controller.v2"
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     }:
         raise WorkflowProfileError("WORKFLOW_CONTROLLER_VERSION_UNSUPPORTED")
     if control.mode not in {"shadow", "active_conjecture", "active_inquiry"}:
@@ -173,11 +216,15 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
     if control.mode != expected_mode:
         raise WorkflowProfileError("WORKFLOW_PROFILE_MODE_MISMATCH")
     if control.capability_profile not in {
-        "conjecture-control.v1", "inquiry-capabilities.v1"
+        "conjecture-control.v1",
+        "inquiry-capabilities.v1",
+        "inquiry-capabilities.v2",
     }:
         raise WorkflowProfileError("WORKFLOW_CAPABILITY_PROFILE_UNSUPPORTED")
     if control.contract_versions.control_event_schema not in {
-        "control.event.v1", "control.event.v2"
+        "control.event.v1",
+        "control.event.v2",
+        "control.event.v3",
     }:
         raise WorkflowProfileError("WORKFLOW_CONTROL_EVENT_SCHEMA_UNSUPPORTED")
 

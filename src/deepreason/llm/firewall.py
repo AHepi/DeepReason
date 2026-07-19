@@ -361,7 +361,7 @@ def resolve_school_role_lease(
         )
     policy = None
     criticism_policy = None
-    if manifest.schema_version in {4, 5}:
+    if manifest.schema_version in {4, 5, 6}:
         control = manifest.control_plane_policy
         if control is None:
             raise SchoolRouteResolutionError(

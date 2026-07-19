@@ -42,7 +42,7 @@ from deepreason.llm.providers import infer_provider
 
 
 SCHEMA_VERSION = 1
-LATEST_SCHEMA_VERSION = 5
+LATEST_SCHEMA_VERSION = 6
 MANIFEST_NAME = "run-manifest.json"
 MANIFEST_HASH_NAME = "run-manifest.sha256"
 _MAX_MANIFEST_BYTES = 4 * 1024 * 1024
@@ -400,11 +400,20 @@ class BridgePolicy(BaseModel):
             )
         return self
 
-    def workflow_policy(self, *, ledger_contract_version: Literal["v1", "v2"] = "v1"):
+    def workflow_policy(
+        self,
+        *,
+        ledger_contract_version: Literal["v1", "v2", "v3"] = "v1",
+        composition_contract_version: Literal["v1", "v2"] | None = None,
+    ):
         """Compile the manifest policy into C8's exact orchestration contract."""
 
         from deepreason.bridge.workflow import BridgeWorkflowPolicy
 
+        if composition_contract_version is None:
+            composition_contract_version = (
+                "v2" if ledger_contract_version == "v3" else "v1"
+            )
         return BridgeWorkflowPolicy(
             grounding_review=self.grounding_review,
             max_ledger_amendments=self.max_ledger_amendments,
@@ -412,6 +421,7 @@ class BridgePolicy(BaseModel):
             ledger_role=self.ledger_role,
             ledger_contract_version=ledger_contract_version,
             composer_role=self.composer_role,
+            composition_contract_version=composition_contract_version,
             reviewer_role=self.reviewer_role,
         )
 
@@ -592,6 +602,68 @@ class ContractVersionPolicyV2(BaseModel):
     )
 
 
+class ContractVersionPolicyV3(BaseModel):
+    """Exact capability-specialized contracts selected by RunManifest v6."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    bridge_catalog_contract: Literal["bridge.catalog.v3"] = "bridge.catalog.v3"
+    bridge_ledger_wire_contract: Literal["bridge.ledger.v3"] = "bridge.ledger.v3"
+    bridge_composition_contract: Literal["bridge.composition.v2"] = (
+        "bridge.composition.v2"
+    )
+    conjecturer_turn_contract: Literal["conjecturer.turn.v6"] = "conjecturer.turn.v6"
+    batch_critic_contract: Literal["batch-critic.v2"] = "batch-critic.v2"
+    control_event_schema: Literal["control.event.v3"] = "control.event.v3"
+    simulation_request_contract: Literal["simulation.request.v1"] = (
+        "simulation.request.v1"
+    )
+    simulation_result_contract: Literal["simulation.result.v1"] = (
+        "simulation.result.v1"
+    )
+
+
+class ScratchAuthoringPolicyV1(BaseModel):
+    """Finite authority for optional model-proposed advisory scratch updates."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["scratch-authoring-policy.v1"] = Field(
+        "scratch-authoring-policy.v1", alias="schema"
+    )
+    purpose: Literal["imaginative_workshop"] = "imaginative_workshop"
+    epistemic_boundary: Literal["advisory_non_grounding"] = (
+        "advisory_non_grounding"
+    )
+    enabled: bool = False
+    maximum_new_blocks_per_turn: int = Field(default=0, ge=0, le=32)
+    maximum_revisions_per_turn: int = Field(default=0, ge=0, le=32)
+    maximum_links_per_turn: int = Field(default=0, ge=0, le=64)
+    maximum_unresolved_questions_per_turn: int = Field(default=0, ge=0, le=32)
+    maximum_cluster_suggestions_per_turn: int = Field(default=0, ge=0, le=32)
+    maximum_total_bytes: int = Field(default=0, ge=0, le=16 * 1024 * 1024)
+
+    @model_validator(mode="after")
+    def _finite_authority(self):
+        per_turn = (
+            self.maximum_new_blocks_per_turn,
+            self.maximum_revisions_per_turn,
+            self.maximum_links_per_turn,
+            self.maximum_unresolved_questions_per_turn,
+            self.maximum_cluster_suggestions_per_turn,
+        )
+        if self.enabled:
+            if not self.maximum_total_bytes or not any(per_turn):
+                raise ValueError(
+                    "enabled scratch authoring requires a byte budget and at least one allowance"
+                )
+        elif self.maximum_total_bytes or any(per_turn):
+            raise ValueError("disabled scratch authoring must have zero bounds")
+        return self
+
+
 class ControlPlanePolicyV1(BaseModel):
     """Complete opt-in v4 authority boundary with no user-authored program."""
 
@@ -670,6 +742,24 @@ class ControlPlanePolicyV2(BaseModel):
     capability_profile: Literal["inquiry-capabilities.v1"] = "inquiry-capabilities.v1"
 
 
+class ControlPlanePolicyV3(BaseModel):
+    """Transactional active-inquiry authority selected only by RunManifest v6."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    controller_version: Literal["workflow.controller.v3"] = "workflow.controller.v3"
+    mode: Literal["active_inquiry"] = "active_inquiry"
+    workflow_profile: Literal["inquiry.active.v2"] = "inquiry.active.v2"
+    school_execution: SchoolExecutionPolicyV1
+    conjecture_context: ConjectureContextPolicyV1
+    workflow_retry: WorkflowRetryPolicyV1
+    contract_versions: ContractVersionPolicyV3
+    capability_profile: Literal["inquiry-capabilities.v2"] = "inquiry-capabilities.v2"
+    scratch_authoring: ScratchAuthoringPolicyV1 = Field(
+        default_factory=ScratchAuthoringPolicyV1
+    )
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
@@ -677,7 +767,7 @@ class RunManifest(BaseModel):
         extra="forbid", frozen=True, hide_input_in_errors=True
     )
 
-    schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION
+    schema_version: Literal[1, 2, 3, 4, 5, 6] = SCHEMA_VERSION
     engine_profile: Literal["mini", "full"] = "full"
     model_profile: Literal["compact", "standard", "frontier"] = "standard"
     workload_profile: Literal["text", "code", "formal", "website"] | None = None
@@ -693,7 +783,9 @@ class RunManifest(BaseModel):
     memory_policy: dict[str, Any] = Field(default_factory=dict)
     scratch_policy: ScratchPolicy | None = None
     bridge_policy: BridgePolicy | None = None
-    control_plane_policy: ControlPlanePolicyV1 | ControlPlanePolicyV2 | None = None
+    control_plane_policy: (
+        ControlPlanePolicyV1 | ControlPlanePolicyV2 | ControlPlanePolicyV3 | None
+    ) = None
     criticism_policy: CriticismPolicyV1 | None = None
     simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None
     frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None
@@ -850,6 +942,24 @@ class RunManifest(BaseModel):
             if self.simulation_capability_policy is not None or self.frozen_evidence_policy is not None:
                 raise ValueError("v5 manifest cannot use prototype split capability fields")
             _validate_v5_capability_policy(self)
+        if self.schema_version == 6:
+            if (
+                not isinstance(self.control_plane_policy, ControlPlanePolicyV3)
+                or self.control_plane_policy.mode != "active_inquiry"
+            ):
+                raise ValueError(
+                    "v6 manifest requires the workflow.controller.v3 transactional profile"
+                )
+            if self.inquiry_capability_policy is None:
+                raise ValueError("v6 manifest requires inquiry capability policy")
+            if self.run_input_digest is None:
+                raise ValueError("v6 manifest requires a bound run-input digest")
+            if (
+                self.simulation_capability_policy is not None
+                or self.frozen_evidence_policy is not None
+            ):
+                raise ValueError("v6 manifest cannot use prototype split capability fields")
+            _validate_v6_capability_policy(self)
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -926,7 +1036,7 @@ def _source_config_data(config) -> dict[str, Any]:
 
 
 def _versioned_source_config_data(
-    config, schema_version: Literal[1, 2, 3, 4, 5]
+    config, schema_version: Literal[1, 2, 3, 4, 5, 6]
 ) -> dict[str, Any]:
     """Normalize newly added defaults out of historical source contracts.
 
@@ -944,7 +1054,7 @@ def _versioned_source_config_data(
 
 
 def source_config_hash(
-    config, *, schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION
+    config, *, schema_version: Literal[1, 2, 3, 4, 5, 6] = SCHEMA_VERSION
 ) -> str:
     """Hash the effective source configuration under one schema contract."""
 
@@ -1513,6 +1623,51 @@ def _validate_v5_capability_policy(manifest: RunManifest) -> None:
         )
 
 
+def _validate_v6_capability_policy(manifest: RunManifest) -> None:
+    """Validate v6 capability authority without weakening the v5 topology."""
+
+    capabilities = manifest.inquiry_capability_policy
+    if capabilities is None:
+        raise ValueError("V6_CAPABILITY_POLICY_REQUIRED")
+    control = manifest.control_plane_policy
+    if not isinstance(control, ControlPlanePolicyV3):
+        raise ValueError("V6_TRANSACTIONAL_INQUIRY_REQUIRED")
+    if capabilities.capability_profile != control.capability_profile:
+        raise ValueError("V6_CAPABILITY_PROFILE_MISMATCH")
+    if capabilities.formalization.enabled:
+        raise ValueError("V6_FORMALIZATION_UNAVAILABLE")
+    if capabilities.research.enabled:
+        raise ValueError("V6_RESEARCH_UNAVAILABLE")
+    if (
+        manifest.criticism_policy is not None
+        and manifest.criticism_policy.authority == "defended_trial"
+    ):
+        raise ValueError(
+            "V6_DEFENDED_TRIAL_TRANSACTION_CONTRACT_REQUIRED: "
+            "defender and judge calls are not yet transaction-authorized"
+        )
+    policy = capabilities.simulation
+    if not policy.enabled:
+        return
+    matches = tuple(
+        toolchain
+        for toolchain in manifest.toolchains
+        if toolchain.id == policy.python_toolchain_identity
+    )
+    if len(matches) != 1:
+        raise ValueError(
+            "V6_SIMULATION_TOOLCHAIN_REQUIRED: policy must bind one frozen toolchain"
+        )
+    toolchain = matches[0]
+    required_runner = (
+        "container" if policy.runner_profile == "simulation.container.v1" else "local"
+    )
+    if toolchain.runner != required_runner or toolchain.network is not False:
+        raise ValueError(
+            "V6_SIMULATION_TOOLCHAIN_UNSAFE: runner profile and frozen toolchain differ"
+        )
+
+
 def compile_run_manifest(
     config,
     *,
@@ -1524,7 +1679,7 @@ def compile_run_manifest(
     concurrency: int | None = None,
     compiled_at: str | None = None,
     capability_cache=None,
-    schema_version: Literal[1, 2, 3, 4, 5] = SCHEMA_VERSION,
+    schema_version: Literal[1, 2, 3, 4, 5, 6] = SCHEMA_VERSION,
     workload_profile: Literal["text", "code", "formal", "website"] | None = None,
     pack_profile: str | None = None,
     output_profile: str | None = None,
@@ -1532,7 +1687,9 @@ def compile_run_manifest(
     budget_policy: dict[str, Any] | None = None,
     stop_policy: dict[str, Any] | None = None,
     memory_policy: dict[str, Any] | None = None,
-    control_plane_policy: ControlPlanePolicyV1 | ControlPlanePolicyV2 | None = None,
+    control_plane_policy: (
+        ControlPlanePolicyV1 | ControlPlanePolicyV2 | ControlPlanePolicyV3 | None
+    ) = None,
     criticism_policy: CriticismPolicyV1 | None = None,
     inquiry_capability_policy: InquiryCapabilityPolicyV1 | None = None,
     run_input_digest: str | None = None,
@@ -1573,7 +1730,13 @@ def compile_run_manifest(
         )
     resolved_control_policy = None
     if control_plane_policy is not None:
-        control_model = ControlPlanePolicyV2 if schema_version == 5 else ControlPlanePolicyV1
+        control_model = (
+            ControlPlanePolicyV3
+            if schema_version == 6
+            else ControlPlanePolicyV2
+            if schema_version == 5
+            else ControlPlanePolicyV1
+        )
         resolved_control_policy = control_model.model_validate(control_plane_policy)
     resolved_criticism_policy = (
         CriticismPolicyV1.model_validate(criticism_policy)
@@ -1591,7 +1754,7 @@ def compile_run_manifest(
             "simulation and frozen evidence policies require RunManifest schema v5",
             "/simulation_capability_policy",
         )
-    if schema_version == 5 and (
+    if schema_version >= 5 and (
         simulation_capability_policy is not None or frozen_evidence_policy is not None
     ):
         raise RunManifestError(
@@ -1599,17 +1762,22 @@ def compile_run_manifest(
             "use one InquiryCapabilityPolicyV1 instead of split prototype policies",
             "/inquiry_capability_policy",
         )
-    resolved_inquiry_policy = (
-        InquiryCapabilityPolicyV1.model_validate(inquiry_capability_policy)
-        if inquiry_capability_policy is not None
-        else InquiryCapabilityPolicyV1()
-        if schema_version == 5
-        else None
-    )
-    if schema_version == 5 and run_input_digest is None:
+    if inquiry_capability_policy is not None:
+        resolved_inquiry_policy = InquiryCapabilityPolicyV1.model_validate(
+            inquiry_capability_policy
+        )
+    elif schema_version == 6:
+        resolved_inquiry_policy = InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2"
+        )
+    elif schema_version == 5:
+        resolved_inquiry_policy = InquiryCapabilityPolicyV1()
+    else:
+        resolved_inquiry_policy = None
+    if schema_version >= 5 and run_input_digest is None:
         raise RunManifestError(
             "RUN_INPUT_DIGEST_REQUIRED",
-            "schema v5 requires the exact pre-bound RunInputManifestV1 digest",
+            "schema v5+ requires an exact version-appropriate run-input digest",
             "/run_input_digest",
         )
     if (
@@ -1794,7 +1962,7 @@ def compile_run_manifest(
         manifest_values["control_plane_policy"] = resolved_control_policy
         if resolved_criticism_policy is not None:
             manifest_values["criticism_policy"] = resolved_criticism_policy
-    if schema_version == 5:
+    if schema_version >= 5:
         manifest_values["inquiry_capability_policy"] = resolved_inquiry_policy
         manifest_values["run_input_digest"] = run_input_digest
     return RunManifest(
@@ -1999,8 +2167,8 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
     """
     root_path = Path(root)
     root_path.mkdir(parents=True, exist_ok=True)
-    if manifest.schema_version == 5:
-        # A v5 manifest names one exact run input. Refuse to create any
+    if manifest.schema_version >= 5:
+        # A v5+ manifest names one exact run input. Refuse to create any
         # manifest binding until the dossier and every source blob have
         # already passed their independent first-writer verification.
         from deepreason.evidence.state import RunInputError, verify_run_input
@@ -2010,7 +2178,7 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
         except RunInputError as error:
             raise RunManifestError(
                 "RUN_INPUT_REQUIRED",
-                "v5 manifest binding requires a verified pre-bound run input",
+                "v5+ manifest binding requires a verified pre-bound run input",
                 "/run-input.json",
             ) from error
         if verified_input["run_input_digest"] != manifest.run_input_digest:
@@ -2019,6 +2187,18 @@ def bind_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path, Pa
                 "bound run input does not match the manifest digest",
                 "/run_input_digest",
             )
+        expected_input_version = 1 if manifest.schema_version == 5 else 2
+        observed_input_version = int(
+            verified_input.get("input_schema_version", 1)
+        )
+        if observed_input_version != expected_input_version:
+            raise RunManifestError(
+                "RUN_INPUT_SCHEMA_MISMATCH",
+                f"v{manifest.schema_version} requires run-input manifest "
+                f"v{expected_input_version}, not v{observed_input_version}",
+                "/run-input.json/schema",
+            )
+
         capability = manifest.inquiry_capability_policy
         assert capability is not None
         evidence = capability.attached_evidence
@@ -2230,7 +2410,7 @@ def _preflight_text_authority(
 ) -> None:
     """Fail closed before any endpoint exists for text status authority."""
 
-    if schema_version not in {2, 3, 4, 5} or workload_profile != "text":
+    if schema_version not in {2, 3, 4, 5, 6} or workload_profile != "text":
         return
     from deepreason.authority import text_status_authority_issues
 
@@ -2271,7 +2451,10 @@ def preflight_harness(manifest: RunManifest, harness, config) -> None:
         manifest.schema_version,
         manifest.workload_profile,
     )
-    if manifest.schema_version in {2, 3, 4, 5} and manifest.workload_profile == "text":
+    if (
+        manifest.schema_version in {2, 3, 4, 5, 6}
+        and manifest.workload_profile == "text"
+    ):
         # The policy that authorizes a status-changing text judgement is part
         # of the frozen manifest, not a knob a caller may replace between
         # manifest compilation and adapter construction. Reconstruct through

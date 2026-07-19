@@ -153,6 +153,71 @@ finite inputs, and exact toolchains. A Lean pass means kernel acceptance under
 the declared assumptions; it is not a proof that an informal or empirical
 claim is true.
 
+### Opt-in v6 transactional inquiry
+
+V6 freezes the problem identity and complete criterion definitions before manifest
+compilation. Write criteria as executable acceptance obligations, not as prose
+appended to the question:
+
+```yaml
+schema: deepreason-text-workload-v1
+problem:
+  id: safe-design
+  description: Design a solution that remains usable under partial failure.
+criteria:
+  - id: names-a-failure-mode
+    eval: "predicate:'failure mode' in content.lower()"
+    budget:
+      steps: 1000
+      time_ms: 100
+      extra: {}
+    observation_valued: false
+allow_rubric: false
+allow_formalization: true
+allow_simulation: true
+brain:
+  enabled: false
+  query: null
+```
+
+Freeze that exact file into the intended fresh run root:
+
+```bash
+deepreason --root runs/safe-design input freeze \
+  --problem safe-design.yaml --schema-version 6
+```
+
+The command prints `run_input_digest`. Compile a v6 manifest with that exact
+digest and the complete v6 control/capability policies, then run the same
+workload file:
+
+```bash
+deepreason --root runs/safe-design --config config/my-provider.yaml config compile \
+  --schema-version 6 --workload-profile text --rubric-policy forbid \
+  --control-plane-policy control-plane-v6.json \
+  --inquiry-capability-policy inquiry-capability-v6.json \
+  --run-input-digest <run_input_digest> --out run-manifest-v6.json
+
+deepreason --root runs/safe-design reason --problem safe-design.yaml \
+  --run-manifest run-manifest-v6.json
+```
+
+Every criterion ID, evaluator, deterministic budget, extra parameter, and
+`observation_valued` flag is embedded in `run-input-manifest.v2`; its digest is
+then embedded in RunManifest v6. Reusing the root with changed criterion bytes
+is rejected as a conflict. This is deliberate: a different workload is a new
+run, while ordinary runtime outcomes may be partial, negative, or
+underdetermined without weakening the frozen obligations.
+
+Criteria are not treated as beliefs or evidence. They are immutable tests a
+candidate must face. `predicate:` is suitable for bounded mechanical content
+conditions; `program:` names a registered deterministic evaluator; a
+`rubric:` criterion requires a separately registered immutable standard and
+the corresponding cross-family policy. None of these declarations establishes
+the substantive truth of a candidate. V6 scratch remains a clearly labelled
+imaginative workshop and can inspire later proposals, but can never satisfy a
+criterion or ground a formal claim by itself.
+
 ### Explicit skills and local memory
 
 Cross-run skills and the optional brain are advisory inputs only. They never

@@ -7,7 +7,7 @@ import json
 from deepreason.evidence.models import (
     DossierPackReceiptV1,
     EvidenceDossierV1,
-    RunInputManifestV1,
+    RunInputManifest,
 )
 from deepreason.ontology import Interface, Provenance, Ref, Rule
 
@@ -51,7 +51,7 @@ def render_dossier_pack(
 def attach_bound_evidence(
     harness,
     *,
-    run_input: RunInputManifestV1,
+    run_input: RunInputManifest,
     dossier: EvidenceDossierV1,
     problem_id: str,
 ) -> dict[str, dict[str, str]]:

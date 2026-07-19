@@ -19,6 +19,8 @@ __all__ = [
     "TrustedCheckRunner",
     "UnknownVerifier",
     "VerificationRequest",
+    "VerificationFindingV2",
+    "VerificationReportV2",
     "VerificationResult",
     "VerificationRunner",
     "VerifierBackend",
@@ -27,6 +29,7 @@ __all__ = [
     "VerifierRegistryError",
     "VerifierRunner",
     "verify_code_patch",
+    "verify_root_report",
 ]
 
 _EXPORTS = {
@@ -43,6 +46,14 @@ _EXPORTS = {
     "TrustedCheckRunner": ("deepreason.verification.runner", "TrustedCheckRunner"),
     "UnknownVerifier": ("deepreason.verification.registry", "UnknownVerifier"),
     "VerificationRequest": ("deepreason.verification.models", "VerificationRequest"),
+    "VerificationFindingV2": (
+        "deepreason.verification.report",
+        "VerificationFindingV2",
+    ),
+    "VerificationReportV2": (
+        "deepreason.verification.report",
+        "VerificationReportV2",
+    ),
     "VerificationResult": ("deepreason.verification.models", "VerificationResult"),
     "VerificationRunner": ("deepreason.verification.runner", "VerificationRunner"),
     "VerifierBackend": ("deepreason.verification.models", "VerifierBackend"),
@@ -57,6 +68,7 @@ _EXPORTS = {
     ),
     "VerifierRunner": ("deepreason.verification.runner", "VerifierRunner"),
     "verify_code_patch": ("deepreason.verification.code", "verify_code_patch"),
+    "verify_root_report": ("deepreason.verification.report", "verify_root_report"),
 }
 
 

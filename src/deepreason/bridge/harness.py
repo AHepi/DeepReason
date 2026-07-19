@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import json
 import re
+from collections.abc import Mapping
+from dataclasses import dataclass
 from pathlib import PurePosixPath
 from typing import Literal
 
@@ -15,6 +18,7 @@ from deepreason.bridge.evidence_pack import (
     build_claim_ledger_catalog,
 )
 from deepreason.bridge.events import BridgeAction
+from deepreason.bridge.ledger import ClaimLedgerInputCatalogV1, ClaimLedgerInputCatalogV3
 from deepreason.bridge.models import (
     BridgeFailureDiagnosticV1,
     BridgeFailureV1,
@@ -32,9 +36,11 @@ from deepreason.bridge.workflow import (
     BridgeWorkflowPolicy,
     BridgeWorkflowResultV1,
 )
+from deepreason.canonical import canonical_json
 from deepreason.ontology.frozen import FrozenList, FrozenRecord
 from deepreason.runtime.progress import _atomic_json
 from deepreason.scratch.service import ScratchService
+from deepreason.storage.objects import ObjectStore
 
 
 BRIDGE_RESULT_NAME = "bridge-result.json"
@@ -123,6 +129,283 @@ class BridgeTerminalResultV1(FrozenRecord):
         return self
 
 
+_BRIDGE_EXECUTION_SNAPSHOT_SCHEMA = "bridge.execution-snapshot.v1"
+_BRIDGE_TRANSACTION_SCHEMA_V2 = "bridge.transaction-task.v2"
+_BRIDGE_TASK_KINDS = {
+    "bridge_ledger",
+    "bridge_composition",
+    "bridge_review",
+    "repair",
+}
+
+
+@dataclass(frozen=True)
+class _BridgeExecutionSnapshot:
+    execution_id: str
+    snapshot_ref: str
+    manifest_digest: str
+    formal_seq: int
+    problem_id: str
+    target: str
+    source_run_digest: str | None
+    evidence_budget_chars: int
+    attention_pack_id: str | None
+    advisory_context_id: str | None
+    evidence_pack: EvidencePackV1
+    catalog: ClaimLedgerInputCatalogV1
+    composition_request: CompositionRequestV1
+    workflow_policy: BridgeWorkflowPolicy
+
+
+def _snapshot_model_value(value):
+    return value.model_dump(mode="json", by_alias=True, exclude_none=True)
+
+
+def _attention_pack_id(attention_pack) -> str | None:
+    value = getattr(attention_pack, "id", None)
+    return str(value) if value is not None else None
+
+
+def _snapshot_error(code: str) -> ValueError:
+    return ValueError(code)
+
+
+def _load_bridge_execution_snapshot(
+    harness,
+    snapshot_ref: str,
+    *,
+    manifest_digest: str,
+) -> _BridgeExecutionSnapshot:
+    try:
+        raw = harness.blobs.get(snapshot_ref)
+        payload = json.loads(raw.decode("utf-8"))
+    except (KeyError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_INVALID") from error
+    if not isinstance(payload, Mapping) or canonical_json(payload) != raw:
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_INVALID")
+    if (
+        payload.get("schema") != _BRIDGE_EXECUTION_SNAPSHOT_SCHEMA
+        or payload.get("manifest_digest") != manifest_digest
+    ):
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+    formal_seq = payload.get("formal_seq")
+    evidence_budget_chars = payload.get("evidence_budget_chars")
+    problem_id = payload.get("problem_id")
+    target = payload.get("target")
+    source_run_digest = payload.get("source_run_digest")
+    attention_pack_id = payload.get("attention_pack_id")
+    advisory_context_id = payload.get("advisory_context_id")
+    if (
+        type(formal_seq) is not int
+        or formal_seq < 0
+        or type(evidence_budget_chars) is not int
+        or evidence_budget_chars <= 0
+        or not isinstance(problem_id, str)
+        or not problem_id
+        or target not in {"thesis", "summary", "answer"}
+        or source_run_digest is not None
+        and not isinstance(source_run_digest, str)
+        or attention_pack_id is not None
+        and not isinstance(attention_pack_id, str)
+        or advisory_context_id is not None
+        and not isinstance(advisory_context_id, str)
+    ):
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_INVALID")
+    try:
+        evidence_pack = EvidencePackV1.model_validate(payload["evidence_pack"])
+        catalog_value = payload["catalog"]
+        if not isinstance(catalog_value, Mapping):
+            raise TypeError("catalog must be an object")
+        catalog_type = (
+            ClaimLedgerInputCatalogV3
+            if catalog_value.get("schema") == "bridge.catalog.v3"
+            else ClaimLedgerInputCatalogV1
+        )
+        catalog = catalog_type.model_validate(catalog_value)
+        composition_request = CompositionRequestV1.model_validate(
+            payload["composition_request"]
+        )
+        workflow_policy = BridgeWorkflowPolicy.model_validate(payload["workflow_policy"])
+    except (KeyError, TypeError, ValueError) as error:
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_INVALID") from error
+    if (
+        evidence_pack.formal_seq != formal_seq
+        or evidence_pack.problem_ref != problem_id
+        or evidence_pack.source_run_digest != source_run_digest
+        or catalog.formal_seq != formal_seq
+        or catalog.problem_ref != problem_id
+        or catalog.output_target != target
+        or composition_request.output_target != target
+    ):
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+    return _BridgeExecutionSnapshot(
+        execution_id=f"bridge-execution:{snapshot_ref}",
+        snapshot_ref=snapshot_ref,
+        manifest_digest=manifest_digest,
+        formal_seq=formal_seq,
+        problem_id=problem_id,
+        target=target,
+        source_run_digest=source_run_digest,
+        evidence_budget_chars=evidence_budget_chars,
+        attention_pack_id=attention_pack_id,
+        advisory_context_id=advisory_context_id,
+        evidence_pack=evidence_pack,
+        catalog=catalog,
+        composition_request=composition_request,
+        workflow_policy=workflow_policy,
+    )
+
+
+def _write_bridge_execution_snapshot(
+    harness,
+    *,
+    manifest_digest: str,
+    formal_seq: int,
+    problem_id: str,
+    target: str,
+    source_run_digest: str | None,
+    evidence_budget_chars: int,
+    attention_pack,
+    advisory_context,
+    evidence_pack: EvidencePackV1,
+    catalog: ClaimLedgerInputCatalogV1,
+    composition_request: CompositionRequestV1,
+    workflow_policy: BridgeWorkflowPolicy,
+) -> _BridgeExecutionSnapshot:
+    payload = {
+        "schema": _BRIDGE_EXECUTION_SNAPSHOT_SCHEMA,
+        "manifest_digest": manifest_digest,
+        "formal_seq": formal_seq,
+        "problem_id": problem_id,
+        "target": target,
+        "source_run_digest": source_run_digest,
+        "evidence_budget_chars": evidence_budget_chars,
+        "attention_pack_id": _attention_pack_id(attention_pack),
+        "advisory_context_id": (
+            str(advisory_context.id) if advisory_context is not None else None
+        ),
+        "evidence_pack": _snapshot_model_value(evidence_pack),
+        "catalog": _snapshot_model_value(catalog),
+        "composition_request": _snapshot_model_value(composition_request),
+        "workflow_policy": _snapshot_model_value(workflow_policy),
+    }
+    snapshot_ref = harness.blobs.put(canonical_json(payload))
+    return _load_bridge_execution_snapshot(
+        harness,
+        snapshot_ref,
+        manifest_digest=manifest_digest,
+    )
+
+
+def _find_bridge_execution_snapshot(harness, manifest_digest: str):
+    v2_items = []
+    for item in harness.workflow_state.transaction_work.values():
+        payload = item.preparation.task_payload_value
+        task_kind = getattr(item.preparation.task_kind, "value", item.preparation.task_kind)
+        if isinstance(payload, Mapping) and payload.get("schema") == _BRIDGE_TRANSACTION_SCHEMA_V2:
+            v2_items.append((item, payload))
+        elif item.terminal is None and task_kind in _BRIDGE_TASK_KINDS:
+            raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_MISSING")
+    if not v2_items:
+        return None
+    execution_ids = {payload.get("execution_id") for _item, payload in v2_items}
+    snapshot_refs = {
+        payload.get("execution_snapshot_ref") for _item, payload in v2_items
+    }
+    if (
+        len(execution_ids) != 1
+        or len(snapshot_refs) != 1
+        or not isinstance(next(iter(execution_ids)), str)
+        or not isinstance(next(iter(snapshot_refs)), str)
+    ):
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AMBIGUOUS")
+    execution_id = next(iter(execution_ids))
+    snapshot_ref = next(iter(snapshot_refs))
+    snapshot = _load_bridge_execution_snapshot(
+        harness,
+        snapshot_ref,
+        manifest_digest=manifest_digest,
+    )
+    if execution_id != snapshot.execution_id:
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+    for item, payload in v2_items:
+        if (
+            item.preparation.manifest_digest != manifest_digest
+            or item.preparation.formal_fence_seq != snapshot.formal_seq
+            or item.preparation.scratch_fence_seq != snapshot.formal_seq
+            or payload.get("execution_id") != snapshot.execution_id
+            or payload.get("execution_snapshot_ref") != snapshot.snapshot_ref
+        ):
+            raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+    return snapshot
+
+
+def _transactional_bridge_adapters(*adapters):
+    unique = []
+    seen = set()
+    for adapter in adapters:
+        if id(adapter) in seen:
+            continue
+        seen.add(id(adapter))
+        if callable(getattr(adapter, "bind_bridge_execution", None)):
+            unique.append(adapter)
+    return tuple(unique)
+
+
+def _assert_snapshot_matches_invocation(
+    snapshot: _BridgeExecutionSnapshot,
+    *,
+    problem_id: str,
+    target: str,
+    source_run_digest: str | None,
+    evidence_budget_chars: int,
+    attention_pack,
+    composition_request: CompositionRequestV1,
+    workflow_policy: BridgeWorkflowPolicy,
+) -> None:
+    if (
+        snapshot.problem_id != problem_id
+        or snapshot.target != target
+        or snapshot.source_run_digest != source_run_digest
+        or snapshot.evidence_budget_chars != evidence_budget_chars
+        or snapshot.attention_pack_id != _attention_pack_id(attention_pack)
+        or snapshot.composition_request != composition_request
+        or snapshot.workflow_policy != workflow_policy
+    ):
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+
+
+def _read_existing_bridge_terminal(
+    harness,
+    *,
+    manifest_digest: str,
+    problem_id: str,
+    target: str,
+    source_run_digest: str | None,
+) -> BridgeTerminalResultV1 | None:
+    path = harness.root / BRIDGE_RESULT_NAME
+    if path.is_symlink() or path.exists() and not path.is_file():
+        raise ValueError("BRIDGE_RESULT_INVALID")
+    if not path.is_file():
+        return None
+    try:
+        raw = path.read_bytes()
+        payload = json.loads(raw.decode("utf-8"))
+        encoded = canonical_json(payload)
+        if raw not in {encoded, encoded + b"\n", encoded + b"\r\n"}:
+            raise ValueError("noncanonical bridge result")
+        terminal = BridgeTerminalResultV1.model_validate(payload)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as error:
+        raise ValueError("BRIDGE_RESULT_INVALID") from error
+    if (
+        terminal.run_manifest_digest != manifest_digest
+        or terminal.problem_id != problem_id
+        or terminal.target != target
+        or terminal.source_run_digest != source_run_digest
+    ):
+        raise ValueError("BRIDGE_RESULT_AUTHORITY_MISMATCH")
+    return terminal
+
 class _HarnessBridgeSink:
     def __init__(
         self,
@@ -133,6 +416,8 @@ class _HarnessBridgeSink:
         manifest_digest: str,
         problem_id: str,
         target: str,
+        recovery: bool = False,
+        recovery_completion_assertion=None,
     ) -> None:
         self.harness = harness
         self.evidence_pack = evidence_pack
@@ -140,11 +425,60 @@ class _HarnessBridgeSink:
         self.manifest_digest = manifest_digest
         self.problem_id = problem_id
         self.target = target
+        self._recovery = recovery
         self._pack_written = False
+        self._recovery_completion_assertion = recovery_completion_assertion
         self.failure: BridgeFailureV1 | None = None
+
+    def _already_persisted(
+        self,
+        batch: BridgePersistenceBatch,
+        *,
+        inputs: tuple[str, ...],
+        records: list[tuple[str, object]],
+    ) -> bool:
+        if not getattr(self, "_recovery", False):
+            return False
+        log = getattr(self.harness, "log", None)
+        if log is None:
+            return False
+        output_ids = tuple(
+            ObjectStore._record(schema, record)["id"] for schema, record in records
+        )
+        actor = getattr(batch.actor, "value", batch.actor)
+        for event in log.read():
+            payload = event.bridge
+            if payload is None:
+                continue
+            if (
+                payload.action == batch.action
+                and payload.actor.value == actor
+                and tuple(event.inputs) == inputs
+                and tuple(event.outputs) == output_ids
+                and payload.finding_ref == batch.finding_ref
+                and payload.error_code == batch.error_code
+            ):
+                return True
+        return False
 
     def persist_bridge_batch(self, batch: BridgePersistenceBatch) -> None:
         records = list(batch.records)
+        if batch.action == BridgeAction.COMPLETED and getattr(self, "_recovery", False):
+            assertion = getattr(self, "_recovery_completion_assertion", None)
+            if assertion is not None:
+                assertion()
+        # Controller-v3 provider results already own the sole canonical LLM
+        # receipt.  Keep the call on BridgeWorkflowResultV1 for accounting,
+        # but never append the same authorized dispatch a second time through
+        # its semantic bridge event.  Legacy calls have no authorization ref.
+        persisted_llm = batch.llm
+        event_inputs = tuple(batch.inputs)
+        if getattr(persisted_llm, "dispatch_authorization_ref", None) is not None:
+            persisted_llm = None
+            if batch.action not in {BridgeAction.FAILED, BridgeAction.COMPLETED}:
+                work_id = batch.llm.work_order_id
+                if work_id not in event_inputs:
+                    event_inputs += (work_id,)
         first_material_event = batch.action in {
             BridgeAction.LEDGER_CREATED,
             BridgeAction.FAILED,
@@ -192,12 +526,14 @@ class _HarnessBridgeSink:
                 terminal_inputs=list(batch.inputs),
             )
             records.append(("bridge-failure", self.failure))
+        if self._already_persisted(batch, inputs=event_inputs, records=records):
+            return
         self.harness.record_bridge_event(
             batch.action,
             actor=batch.actor,
-            inputs=batch.inputs,
+            inputs=event_inputs,
             records=records,
-            llm=batch.llm,
+            llm=persisted_llm,
             finding_ref=batch.finding_ref,
             error_code=batch.error_code,
         )
@@ -237,7 +573,7 @@ def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
     if manifest.sha256 != manifest_digest:
         raise ValueError("BRIDGE_MANIFEST_MISMATCH")
     scratch = manifest.scratch_policy
-    if manifest.schema_version not in {3, 4, 5} or scratch is None or not scratch.enabled:
+    if manifest.schema_version not in {3, 4, 5, 6} or scratch is None or not scratch.enabled:
         raise ValueError("BRIDGE_SCRATCH_MANIFEST_V3_REQUIRED")
     return scratch.attention_policy()
 
@@ -274,6 +610,7 @@ def _bound_bridge_execution(root, manifest_digest: str, supplied_policy):
     contract_version = {
         "bridge.ledger.v1": "v1",
         "bridge.ledger.v2": "v2",
+        "bridge.ledger.v3": "v3",
     }[control.contract_versions.bridge_ledger_wire_contract]
     effective = bridge.workflow_policy(ledger_contract_version=contract_version)
     routes = manifest.roles.get(effective.ledger_role, ())
@@ -431,80 +768,169 @@ def build_grounded_bridge(
     workflow_policy, retry_policy, retry_lease = _bound_bridge_execution(
         harness.root, manifest_digest, policy
     )
-
-    scratch_service = None
-    context = None
-    if attention_pack is not None:
-        scratch_service = ScratchService(harness)
-        context = scratch_service.prepare_advisory_context(attention_pack)
-
-    formal_seq = source._next_seq - 1
-    frozen = (
-        _verified_source_view(source, sealed_refs=source_sealed_blob_refs)
-        if derived
-        else harness.at(harness.root, formal_seq)
-    )
-    source_formal_before = source.state.model_dump_json()
-    source_commitments_before = dict(source.commitments)
-    source_warrants_before = dict(source.warrants)
-    sink_formal_before = harness.state.model_dump_json()
-    sink_commitments_before = dict(harness.commitments)
-    sink_warrants_before = dict(harness.warrants)
-    if derived:
-        try:
-            evidence_pack = assemble_evidence_pack(
-                frozen,
-                problem_id,
-                budget_chars=evidence_budget_chars,
-                formal_seq=formal_seq,
-                source_run_digest=source_run_digest,
-            )
-        except _DerivedSourceIntegrityError as error:
-            raise ValueError(
-                "derived bridge source blob changed during assembly"
-            ) from error
-    else:
-        evidence_pack = assemble_evidence_pack(
-            frozen,
-            problem_id,
-            budget_chars=evidence_budget_chars,
-            formal_seq=formal_seq,
-            source_run_digest=source_run_digest,
-        )
-    if derived:
-        final_digest, final_sealed_refs = _source_snapshot(source)
-        if (
-            final_digest != source_run_digest
-            or final_sealed_refs != source_sealed_blob_refs
-        ):
-            raise ValueError("derived bridge source changed while assembling evidence")
-    catalog = build_claim_ledger_catalog(
-        evidence_pack,
-        target,
-        advisory_context=context,
-    )
-    # Review receives exact excerpts from this closed, harness-authored catalog.
-    # Scratch excerpts are deliberately omitted: provenance cannot ground a span.
-    materials = {
-        item.ref: item.excerpt for item in catalog.items if item.kind != "scratch"
-    }
     composition_request = CompositionRequestV1(
         output_target=target,
         formatting_profile=formatting_profile,
         desired_length_chars=desired_length_chars,
         maximum_sections=maximum_sections,
     )
-    if context is not None:
-        assert scratch_service is not None
-        committed = scratch_service.commit_prepared_advisory_context(
-            attention_pack,
-            context,
-            context_ref=evidence_pack.id,
-            coverage_policy=attention_policy,
+    active_adapters = tuple(
+        adapter
+        for adapter in (
+            stage_a_adapter,
+            composition_adapter or stage_a_adapter,
+            review_adapter if workflow_policy.grounding_review else None,
+            repair_adapter
+            if workflow_policy.grounding_review
+            and workflow_policy.max_grounding_repair_attempts
+            else None,
         )
-        if committed != context:
-            raise RuntimeError("committed advisory context differs from prepared context")
+        if adapter is not None
+    )
+    transactional_adapters = _transactional_bridge_adapters(*active_adapters)
+    if transactional_adapters:
+        terminal = _read_existing_bridge_terminal(
+            harness,
+            manifest_digest=manifest_digest,
+            problem_id=problem_id,
+            target=target,
+            source_run_digest=source_run_digest,
+        )
+        if terminal is not None:
+            return terminal
+        recovery_snapshot = _find_bridge_execution_snapshot(harness, manifest_digest)
+    else:
+        recovery_snapshot = None
+    recovery = recovery_snapshot is not None
+
+    scratch_service = None
+    context = None
+    if recovery:
+        if len(transactional_adapters) != len({id(adapter) for adapter in active_adapters}):
+            raise ValueError("BRIDGE_RECOVERY_ADAPTER_REQUIRED")
+        assert recovery_snapshot is not None
+        _assert_snapshot_matches_invocation(
+            recovery_snapshot,
+            problem_id=problem_id,
+            target=target,
+            source_run_digest=source_run_digest,
+            evidence_budget_chars=evidence_budget_chars,
+            attention_pack=attention_pack,
+            composition_request=composition_request,
+            workflow_policy=workflow_policy,
+        )
+        formal_seq = recovery_snapshot.formal_seq
+        evidence_pack = recovery_snapshot.evidence_pack
+        catalog = recovery_snapshot.catalog
+        composition_request = recovery_snapshot.composition_request
+    else:
+        if attention_pack is not None:
+            scratch_service = ScratchService(harness)
+            context = scratch_service.prepare_advisory_context(attention_pack)
+        formal_seq = source._next_seq - 1
+        frozen = (
+            _verified_source_view(source, sealed_refs=source_sealed_blob_refs)
+            if derived
+            else harness.at(harness.root, formal_seq)
+        )
+        if derived:
+            try:
+                evidence_pack = assemble_evidence_pack(
+                    frozen,
+                    problem_id,
+                    budget_chars=evidence_budget_chars,
+                    formal_seq=formal_seq,
+                    source_run_digest=source_run_digest,
+                    catalog_version=(
+                        "v3"
+                        if workflow_policy.ledger_contract_version == "v3"
+                        else "v1"
+                    ),
+                )
+            except _DerivedSourceIntegrityError as error:
+                raise ValueError(
+                    "derived bridge source blob changed during assembly"
+                ) from error
+        else:
+            evidence_pack = assemble_evidence_pack(
+                frozen,
+                problem_id,
+                budget_chars=evidence_budget_chars,
+                formal_seq=formal_seq,
+                source_run_digest=source_run_digest,
+                catalog_version=(
+                    "v3"
+                    if workflow_policy.ledger_contract_version == "v3"
+                    else "v1"
+                ),
+            )
+        if derived:
+            final_digest, final_sealed_refs = _source_snapshot(source)
+            if (
+                final_digest != source_run_digest
+                or final_sealed_refs != source_sealed_blob_refs
+            ):
+                raise ValueError("derived bridge source changed while assembling evidence")
+        catalog = build_claim_ledger_catalog(
+            evidence_pack,
+            target,
+            advisory_context=context,
+        )
+        if context is not None:
+            assert scratch_service is not None
+            committed = scratch_service.commit_prepared_advisory_context(
+                attention_pack,
+                context,
+                context_ref=evidence_pack.id,
+                coverage_policy=attention_policy,
+            )
+            if committed != context:
+                raise RuntimeError(
+                    "committed advisory context differs from prepared context"
+                )
+        if transactional_adapters:
+            recovery_snapshot = _write_bridge_execution_snapshot(
+                harness,
+                manifest_digest=manifest_digest,
+                formal_seq=formal_seq,
+                problem_id=problem_id,
+                target=target,
+                source_run_digest=source_run_digest,
+                evidence_budget_chars=evidence_budget_chars,
+                attention_pack=attention_pack,
+                advisory_context=context,
+                evidence_pack=evidence_pack,
+                catalog=catalog,
+                composition_request=composition_request,
+                workflow_policy=workflow_policy,
+            )
+
+    # Review receives exact excerpts from this closed, harness-authored catalog.
+    # Scratch excerpts are deliberately omitted: provenance cannot ground a span.
+    materials = {
+        item.ref: item.excerpt for item in catalog.items if item.kind != "scratch"
+    }
+    source_formal_before = source.state.model_dump_json()
+    source_commitments_before = dict(source.commitments)
+    source_warrants_before = dict(source.warrants)
+    sink_formal_before = harness.state.model_dump_json()
+    sink_commitments_before = dict(harness.commitments)
+    sink_warrants_before = dict(harness.warrants)
+    if recovery_snapshot is not None:
+        for adapter in transactional_adapters:
+            adapter.bind_bridge_execution(
+                execution_id=recovery_snapshot.execution_id,
+                execution_snapshot_ref=recovery_snapshot.snapshot_ref,
+                formal_fence_seq=recovery_snapshot.formal_seq,
+                recovery=recovery,
+            )
     sinks: list[_HarnessBridgeSink] = []
+
+    def assert_recovery_complete() -> None:
+        for adapter in transactional_adapters:
+            assertion = getattr(adapter, "assert_recovery_complete", None)
+            if callable(assertion):
+                assertion()
 
     def workflow_factory(_attempt_number: int):
         sink = _HarnessBridgeSink(
@@ -514,6 +940,10 @@ def build_grounded_bridge(
             manifest_digest=manifest_digest,
             problem_id=problem_id,
             target=target,
+            recovery=recovery,
+            recovery_completion_assertion=(
+                assert_recovery_complete if recovery else None
+            ),
         )
         sinks.append(sink)
         return BridgeWorkflow(
@@ -535,11 +965,11 @@ def build_grounded_bridge(
         _assert_adapter_matches_retry_lease(stage_a_adapter, retry_lease)
         retry_route = retry_lease.route
 
-        contract_id = (
-            "bridge.claim-ledger.compact.v2"
-            if workflow_policy.ledger_contract_version == "v2"
-            else "bridge.claim-ledger.compact.v1"
-        )
+        contract_id = {
+            "v1": "bridge.claim-ledger.compact.v1",
+            "v2": "bridge.claim-ledger.compact.v2",
+            "v3": "bridge.ledger.v3",
+        }[workflow_policy.ledger_contract_version]
         prompt_policy_digest = bridge_prompt_policy_digest(
             workflow_policy, composition_request
         )
@@ -562,10 +992,20 @@ def build_grounded_bridge(
             return failure.id
 
         def persist_retry(receipt):
+            records = [("bridge-workflow-retry", receipt)]
+            batch = BridgePersistenceBatch(
+                action=BridgeAction.WORKFLOW_RETRY_STARTED,
+                inputs=(receipt.prior_failure_id,),
+                records=tuple(records),
+            )
+            if sinks[-1]._already_persisted(
+                batch, inputs=batch.inputs, records=records
+            ):
+                return
             harness.record_bridge_event(
                 BridgeAction.WORKFLOW_RETRY_STARTED,
                 inputs=[receipt.prior_failure_id],
-                records=[("bridge-workflow-retry", receipt)],
+                records=records,
             )
 
         result = run_bridge_workflow_with_retries(

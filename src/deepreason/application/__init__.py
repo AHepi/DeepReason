@@ -26,10 +26,13 @@ from deepreason.application.models import (
     RunBudgetIntentV1,
     RunCancellationAcceptedV1,
     RunProgressResultV1,
+    RunResultV2,
     RunStartedV1,
+    RunVerificationSummaryV2,
     StartTextRunIntentV1,
     TextRunTerminalResultV1,
     WatchTextRunIntentV1,
+    run_result_exit_code,
 )
 from deepreason.application.intents import (
     budget_intent,
@@ -84,7 +87,9 @@ __all__ = [
     "RunBudgetIntentV1",
     "RunCancellationAcceptedV1",
     "RunProgressResultV1",
+    "RunResultV2",
     "RunStartedV1",
+    "RunVerificationSummaryV2",
     "SCRATCH_QUERY_SERVICE",
     "ScratchAttentionPreviewQueryV1",
     "ScratchAttentionPreviewResultV1",
@@ -109,5 +114,6 @@ __all__ = [
     "WatchTextRunIntentV1",
     "budget_intent",
     "continue_text_run_intent",
+    "run_result_exit_code",
     "start_text_run_intent",
 ]

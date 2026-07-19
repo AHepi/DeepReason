@@ -7,7 +7,11 @@ structure only: a warrant against a target contributes an attack edge; a
 
 from deepreason.ontology.artifact import Artifact, Interface, Provenance, Ref
 from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
-from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
+from deepreason.control_events import (
+    ControlEventPayloadV1,
+    ControlEventPayloadV2,
+    ControlEventPayloadV3,
+)
 from deepreason.ontology.commitment import Budget, Commitment
 from deepreason.ontology.event import (
     ConjectureContextCallReceiptV1,
@@ -30,6 +34,7 @@ __all__ = [
     "ConjectureTurnEventPayloadV1",
     "ControlEventPayloadV1",
     "ControlEventPayloadV2",
+    "ControlEventPayloadV3",
     "EpistemicState",
     "Event",
     "Interface",

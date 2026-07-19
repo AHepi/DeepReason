@@ -7,8 +7,12 @@ import ctypes
 import ctypes.util
 import errno
 import os
-import resource
 import sys
+
+try:  # POSIX-only; Windows callers must take the explicit unavailable path.
+    import resource
+except ModuleNotFoundError:  # pragma: no cover - platform-dependent import
+    resource = None
 
 _ABORT_PREFIX = "DEEPREASON_SANDBOX_ABORT:"
 _SCMP_ACT_ALLOW = 0x7FFF0000
@@ -16,7 +20,11 @@ _SCMP_ACT_ERRNO = 0x00050000
 
 
 def seccomp_available() -> bool:
-    return sys.platform.startswith("linux") and ctypes.util.find_library("seccomp") is not None
+    return (
+        resource is not None
+        and sys.platform.startswith("linux")
+        and ctypes.util.find_library("seccomp") is not None
+    )
 
 
 def _deny_network() -> None:
@@ -70,6 +78,8 @@ def _deny_network() -> None:
 
 
 def _limit(kind: int, value: int) -> None:
+    if resource is None:
+        raise RuntimeError("POSIX resource limits unavailable")
     _soft, hard = resource.getrlimit(kind)
     bounded = value if hard == resource.RLIM_INFINITY else min(value, hard)
     resource.setrlimit(kind, (bounded, bounded))
@@ -87,6 +97,8 @@ def main(argv: list[str] | None = None) -> int:
     if not command:
         return 126
     try:
+        if resource is None:
+            raise RuntimeError("POSIX resource limits unavailable")
         _limit(resource.RLIMIT_CPU, args.cpu_seconds)
         _limit(resource.RLIMIT_AS, args.memory_bytes)
         _deny_network()

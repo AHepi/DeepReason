@@ -70,6 +70,12 @@ class Reservation:
         self._close()
         self._meter._settle(self.amount, None)
 
+    @property
+    def is_open(self) -> bool:
+        """Whether this live reservation still authorizes one settlement."""
+
+        return self._open
+
     def _close(self) -> None:
         if not self._open:
             raise RuntimeError("reservation already settled or released")

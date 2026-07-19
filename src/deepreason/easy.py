@@ -843,6 +843,7 @@ def make(description: str, out: str | None = None, cycles: int = 10,
     from deepreason.harness import Harness
     from deepreason.llm.capabilities import CapabilityCache
     from deepreason.ontology import Status
+    from deepreason.ops import require_website_transaction_contracts
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         bind_run_manifest,
@@ -852,9 +853,9 @@ def make(description: str, out: str | None = None, cycles: int = 10,
         materialize_run_config,
         preflight_payload,
     )
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
     from deepreason.views.export import export_run
 
-    load_credentials()
     run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
     bound_path = run_root / MANIFEST_NAME
     if bound_path.exists():
@@ -883,6 +884,9 @@ def make(description: str, out: str | None = None, cycles: int = 10,
             capability_cache=CapabilityCache(run_root / "capabilities.json"),
         )
         cfg = config_from_run_manifest(manifest)
+    require_v6_launch_allowed(manifest, operation="website build")
+    require_website_transaction_contracts(manifest)
+    load_credentials()
     missing = sorted(
         name for name in role_api_key_envs(cfg) if not os.environ.get(name)
     )

@@ -9,6 +9,7 @@ import re
 import sqlite3
 import unicodedata
 from collections.abc import Iterable
+from contextlib import closing
 from pathlib import Path
 
 from deepreason.brain.cards import build_cards, load_card
@@ -137,7 +138,10 @@ def build_index(store: BrainStore, *, force: bool = False) -> Path:
         tmp = actual / f"index.tmp.{os.getpid()}.sqlite"
         if tmp.exists():
             tmp.unlink()
-        with _connect(tmp) as connection:
+        # sqlite3.Connection's context manager commits/rolls back but does not
+        # close the handle. Windows therefore refuses the atomic replace below
+        # unless ownership of the connection is closed explicitly.
+        with closing(_connect(tmp)) as connection:
             connection.executescript(
                 """
                 PRAGMA journal_mode=OFF;
@@ -273,7 +277,7 @@ def candidate_ids(
     query_vector = hashed_vector(query)
     buckets = vector_buckets(query_vector)
     bucket_placeholders = ",".join("?" for _ in buckets)
-    with _connect(database, read_only=True) as connection:
+    with closing(_connect(database, read_only=True)) as connection:
         lexical_rows = connection.execute(
             f"""SELECT id, COUNT(*) AS hits FROM lexical
                 WHERE token IN ({placeholders})
@@ -300,7 +304,7 @@ def graph_neighbors(
         return ()
     placeholders = ",".join("?" for _ in seeds)
     database = index_database(store, root_digest)
-    with _connect(database, read_only=True) as connection:
+    with closing(_connect(database, read_only=True)) as connection:
         rows = connection.execute(
             f"""SELECT target FROM graph WHERE source IN ({placeholders})
                 UNION SELECT source AS target FROM graph WHERE target IN ({placeholders})
@@ -316,7 +320,7 @@ def collections(store: BrainStore, root_digest: str, ids: Iterable[str]) -> dict
         return {}
     placeholders = ",".join("?" for _ in ids)
     database = index_database(store, root_digest)
-    with _connect(database, read_only=True) as connection:
+    with closing(_connect(database, read_only=True)) as connection:
         rows = connection.execute(
             f"SELECT id,name FROM collection WHERE id IN ({placeholders})", ids
         ).fetchall()
@@ -338,7 +342,7 @@ def indexed_activation_events(
     placeholders = ",".join("?" for _ in ids)
     database = index_database(store, root_digest)
     event_by_seq: dict[int, dict] = {}
-    with _connect(database, read_only=True) as connection:
+    with closing(_connect(database, read_only=True)) as connection:
         for row in connection.execute(
             f"""SELECT seq,type,day,logical_seq,payload FROM activation
                 WHERE record_id IN ({placeholders}) ORDER BY seq""",
@@ -388,7 +392,9 @@ def indexed_record_events(
         return None
     placeholders = ",".join("?" for _ in ids)
     result: dict[str, list[dict[str, object]]] = {record_id: [] for record_id in ids}
-    with _connect(index_database(store, root_digest), read_only=True) as connection:
+    with closing(
+        _connect(index_database(store, root_digest), read_only=True)
+    ) as connection:
         rows = connection.execute(
             f"""SELECT record_id,seq,digest FROM record_event
                 WHERE record_id IN ({placeholders}) ORDER BY seq""",

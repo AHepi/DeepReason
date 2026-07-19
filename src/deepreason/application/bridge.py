@@ -79,6 +79,7 @@ class GroundedBridgeBuildIntentV1(_StrictModel):
     focus_clusters: tuple[str, ...] = ()
     derived_output: str | None = Field(default=None, min_length=1, max_length=4_096)
     at_seq: StrictInt | None = Field(default=None, ge=0)
+    diagnostic_after_failure: bool = False
     token_budget: StrictInt | None = Field(default=None, ge=1, le=10_000_000)
 
     @field_validator("root", "run_manifest_ref", "derived_output")
@@ -127,6 +128,11 @@ class GroundedBridgeBuildIntentV1(_StrictModel):
             raise ValueError(
                 "BRIDGE_DERIVED_SCRATCH_CONTEXT_UNAVAILABLE: derived focus requires "
                 "canonical destination receipts"
+            )
+        if self.diagnostic_after_failure and self.derived_output is None:
+            raise ValueError(
+                "BRIDGE_DIAGNOSTIC_DERIVED_REQUIRED: --diagnostic-after-failure "
+                "requires --derived-output"
             )
         return self
 
@@ -440,9 +446,9 @@ def load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
     else:
         raise ValueError("BRIDGE_MANIFEST_REQUIRED: pass --run-manifest for an unbound run")
 
-    if manifest.schema_version not in {3, 4, 5}:
+    if manifest.schema_version not in {3, 4, 5, 6}:
         raise ValueError(
-            "BRIDGE_MANIFEST_V3_REQUIRED: grounded bridge requires schema v3, v4, or v5"
+            "BRIDGE_MANIFEST_V3_REQUIRED: grounded bridge requires schema v3, v4, v5, or v6"
         )
     if manifest.workload_profile != "text":
         raise ValueError("BRIDGE_MANIFEST_WORKLOAD_MISMATCH: expected a v3 text manifest")
@@ -454,6 +460,82 @@ def load_bound_manifest(root: Path, supplied: str | None, *, bind: bool):
     if bind and not bound_path.is_file():
         bind_run_manifest(manifest, root)
     return manifest
+
+
+def reasoning_run_state(root: Path, manifest=None) -> str | None:
+    """Read one canonical reasoning terminal without inferring success."""
+
+    target = root / "run-result.json"
+    if target.is_symlink():
+        raise ValueError("BRIDGE_RUN_RESULT_INVALID")
+    if not target.exists():
+        if manifest is not None and manifest.schema_version >= 6:
+            raise ValueError(
+                "BRIDGE_RUN_RESULT_REQUIRED: a v6 canonical bridge requires run-result.json"
+            )
+        return None
+    try:
+        payload = read_bounded_json(target)
+    except ValueError as error:
+        raise ValueError("BRIDGE_RUN_RESULT_INVALID") from error
+    result_schema = payload.get("schema")
+    if result_schema not in {
+        "deepreason-run-result-v1",
+        "deepreason-run-result-v2",
+    }:
+        raise ValueError("BRIDGE_RUN_RESULT_INVALID")
+    if (
+        manifest is not None
+        and manifest.schema_version == 6
+        and result_schema != "deepreason-run-result-v2"
+    ):
+        raise ValueError(
+            "BRIDGE_RUN_RESULT_V2_REQUIRED: a v6 canonical bridge requires "
+            "deepreason-run-result-v2"
+        )
+    if result_schema == "deepreason-run-result-v2":
+        from deepreason.application.models import RunResultV2
+
+        try:
+            RunResultV2.model_validate(payload)
+        except ValueError as error:
+            raise ValueError("BRIDGE_RUN_RESULT_INVALID") from error
+    state = payload.get("state")
+    if state not in {"completed", "cancelled", "failed"}:
+        raise ValueError("BRIDGE_RUN_RESULT_INVALID")
+    return str(state)
+
+
+def preflight_canonical_bridge(root: Path, manifest) -> None:
+    state = reasoning_run_state(root, manifest)
+    if state is not None and state != "completed":
+        raise ValueError(
+            f"BRIDGE_REASONING_NOT_COMPLETED: canonical run state is {state}"
+        )
+    if state == "completed":
+        payload = read_bounded_json(root / "run-result.json")
+        if (
+            payload.get("schema") == "deepreason-run-result-v2"
+            and payload.get("canonical_bridge_eligible") is not True
+        ):
+            raise ValueError(
+                "BRIDGE_RUN_NOT_ELIGIBLE: RunResult v2 denies canonical bridge construction"
+            )
+        if manifest.schema_version == 6:
+            from deepreason.verification.report import verify_root_report
+
+            try:
+                report = verify_root_report(root)
+            except Exception as error:  # noqa: BLE001 - authority checks fail closed
+                raise ValueError(
+                    "BRIDGE_ROOT_VERIFICATION_FAILED: the v6 root could not be "
+                    "verified before canonical bridge construction"
+                ) from error
+            if not report.integrity_valid or not report.security_valid:
+                raise ValueError(
+                    "BRIDGE_ROOT_AUTHORITY_INVALID: live v2 verification found an "
+                    "integrity or security failure"
+                )
 
 
 def _build_bridge_adapter(manifest, harness):
@@ -485,7 +567,25 @@ def _build_bridge_adapter(manifest, harness):
         raise ValueError(
             "BRIDGE_ROUTE_UNAVAILABLE: manifest route could not construct " + ", ".join(missing)
         )
+    if manifest.schema_version == 6:
+        from deepreason.bridge.transactional_adapter import (
+            TransactionalBridgeAdapter,
+        )
+
+        return TransactionalBridgeAdapter(adapter, harness, manifest)
     return adapter
+
+
+def _compiled_bridge_workflow_policy(manifest):
+    """Select the immutable bridge contract pair owned by this manifest."""
+
+    policy = manifest.bridge_policy
+    if manifest.schema_version == 6:
+        return policy.workflow_policy(
+            ledger_contract_version="v3",
+            composition_contract_version="v2",
+        )
+    return policy.workflow_policy()
 
 
 def preflight_focus(
@@ -569,6 +669,7 @@ def _prepare_bridge(
 
     root = Path(intent.root).resolve()
     manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
+    preflight_canonical_bridge(root, manifest)
     preflight = Harness(root, read_only=True)
     problem_id = resolve_problem(preflight, intent.problem)
     blocks = bounded_focus(intent.focus_blocks, "focus-block")
@@ -600,7 +701,7 @@ def _execute_bridge(prepared: _PreparedBridge) -> BridgeTerminalResultV1:
     terminal = prepared.harness.build_bridge(
         prepared.problem_id,
         prepared.target,
-        policy.workflow_policy(),
+        _compiled_bridge_workflow_policy(prepared.manifest),
         run_manifest_digest=prepared.manifest.sha256,
         stage_a_adapter=prepared.adapter,
         composition_adapter=prepared.adapter,
@@ -624,6 +725,7 @@ def _build_canonical(
     from deepreason.harness import Harness
     from deepreason.llm.budget import TokenMeter
     from deepreason.run_manifest import bind_run_manifest
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
 
     root = Path(intent.root)
     if not root.is_dir():
@@ -631,6 +733,8 @@ def _build_canonical(
     blocks = bounded_focus(intent.focus_blocks, "focus-block")
     clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
     manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
+    require_v6_launch_allowed(manifest, operation="grounded bridge")
+    preflight_canonical_bridge(root, manifest)
     preflight = Harness(root, read_only=True)
     problem_id = resolve_problem(preflight, intent.problem)
     resolved_blocks, resolved_clusters = preflight_focus(preflight, manifest, blocks, clusters)
@@ -649,7 +753,7 @@ def _build_canonical(
         terminal = harness.build_bridge(
             problem_id,
             intent.target,
-            policy.workflow_policy(),
+            _compiled_bridge_workflow_policy(manifest),
             run_manifest_digest=manifest.sha256,
             stage_a_adapter=adapter,
             composition_adapter=adapter,
@@ -683,6 +787,7 @@ def _build_derived(
     from deepreason.harness import Harness
     from deepreason.llm.budget import TokenMeter
     from deepreason.run_manifest import bind_run_manifest
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
 
     if intent.derived_output is None or intent.at_seq is None:
         raise ValueError(
@@ -695,10 +800,36 @@ def _build_derived(
             "BRIDGE_DERIVED_SCRATCH_CONTEXT_UNAVAILABLE: derived focus requires "
             "canonical destination receipts"
         )
+    source_state = reasoning_run_state(Path(intent.root))
+    if source_state in {"failed", "cancelled"} and not intent.diagnostic_after_failure:
+        raise ValueError(
+            "BRIDGE_REASONING_NOT_COMPLETED: use --diagnostic-after-failure with "
+            "a separate --derived-output"
+        )
+    if intent.diagnostic_after_failure and source_state not in {"failed", "cancelled"}:
+        raise ValueError(
+            "BRIDGE_DIAGNOSTIC_SOURCE_NOT_FAILED: diagnostic mode requires a "
+            "failed or cancelled source run"
+        )
     source = open_derived_source(intent.root, intent.derived_output, intent.at_seq)
     problem_id = resolve_problem(source.harness, intent.problem)
     manifest = load_bound_manifest(source.destination_root, intent.run_manifest_ref, bind=False)
+    require_v6_launch_allowed(manifest, operation="grounded bridge")
     reserve_derived_destination(source)
+    if intent.diagnostic_after_failure:
+        from deepreason.runtime.progress import _atomic_json
+
+        _atomic_json(
+            source.destination_root / "diagnostic-bridge.json",
+            {
+                "schema": "deepreason-diagnostic-bridge-v1",
+                "canonical": False,
+                "label": "noncanonical-after-failure",
+                "source_state": source_state,
+                "source_run_digest": source.source_run_digest,
+                "formal_seq": source.formal_seq,
+            },
+        )
     try:
         locks = operator_locks(source.destination_root, owner="bridge-derived", blocking=False)
     except ProcessLockBusy as error:
@@ -717,7 +848,7 @@ def _build_derived(
             destination,
             problem_id,
             intent.target,
-            policy.workflow_policy(),
+            _compiled_bridge_workflow_policy(manifest),
             run_manifest_digest=manifest.sha256,
             stage_a_adapter=adapter,
             composition_adapter=adapter,
@@ -773,7 +904,7 @@ def load_snapshot(
     if terminal.run_manifest_digest != manifest.sha256:
         raise ValueError("BRIDGE_RESULT_INVALID: manifest digest differs from binding")
     if (
-        manifest.schema_version not in {3, 4, 5}
+        manifest.schema_version not in {3, 4, 5, 6}
         or manifest.workload_profile != "text"
         or manifest.bridge_policy is None
         or manifest.bridge_policy.mode != "grounded_two_stage"
@@ -1421,6 +1552,7 @@ class GroundedBridgeApplicationService:
 
         from deepreason.bridge.operations import write_running
         from deepreason.harness import Harness
+        from deepreason.runtime.launch_policy import require_v6_launch_allowed
 
         intent = GroundedBridgeBuildIntentV1.model_validate(intent)
         if intent.derived_output is not None or intent.at_seq is not None:
@@ -1430,6 +1562,8 @@ class GroundedBridgeApplicationService:
             raise ValueError("BRIDGE_RUN_NOT_FOUND")
         root = root.resolve()
         manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
+        require_v6_launch_allowed(manifest, operation="grounded bridge")
+        preflight_canonical_bridge(root, manifest)
         preflight = Harness(root, read_only=True)
         resolve_problem(preflight, intent.problem)
         blocks = bounded_focus(intent.focus_blocks, "focus-block")
@@ -1659,7 +1793,9 @@ __all__ = [
     "load_terminal",
     "page_bounds",
     "preflight_focus",
+    "preflight_canonical_bridge",
     "read_bounded_json",
+    "reasoning_run_state",
     "resolve_problem",
     "result_payload",
     "status_payload",

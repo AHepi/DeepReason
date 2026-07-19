@@ -46,7 +46,7 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
 
     root = Path(root)
     manifest = load_run_manifest(root / MANIFEST_NAME)
-    if manifest.schema_version != 5:
+    if manifest.schema_version not in {5, 6}:
         return {}
     harness = Harness(root, read_only=True)
     state = harness.capability_state
@@ -130,6 +130,11 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     ]
     events = list(harness.log.read())
     for proposal in state.proposals.values():
+        origin_label = (
+            "transaction work"
+            if manifest.schema_version == 6
+            else "legacy work order"
+        )
         grants = [item for item in state.grants.values() if item.proposal_ref == proposal.id]
         compiled = [item for item in state.compiled.values() if item.proposal_ref == proposal.id]
         receipts = [item for item in state.receipts.values() if item.proposal_ref == proposal.id]
@@ -166,12 +171,42 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                     if item.originating_work_order_ref == work_ref
                     and item.source_call_seq == call_event.seq
                 ]
+                transaction_item = (
+                    harness.workflow_state.transaction_work.get(work_ref)
+                    if manifest.schema_version == 6
+                    else None
+                )
+                transaction_admission = (
+                    transaction_item.admissions.get(
+                        transaction_item.terminal.attempt_index
+                    )
+                    if transaction_item is not None
+                    and transaction_item.terminal is not None
+                    else None
+                )
+                transaction_artifact_refs = (
+                    [
+                        ref
+                        for ref in transaction_admission.admitted_refs
+                        if ref in harness.state.artifacts
+                    ]
+                    if transaction_admission is not None
+                    else []
+                )
                 if formal_events:
                     refs = [ref for event in formal_events for ref in event.outputs]
                     semantic_effects.append(
                         "provider call "
                         f"`{call_event.seq}` admitted formal candidate output(s) "
                         + ", ".join(f"`{ref}`" for ref in refs)
+                    )
+                if transaction_artifact_refs:
+                    semantic_effects.append(
+                        "provider call "
+                        f"`{call_event.seq}` transactionally admitted formal output(s) "
+                        + ", ".join(
+                            f"`{ref}`" for ref in transaction_artifact_refs
+                        )
                     )
                 if child_requests:
                     semantic_effects.append(
@@ -185,7 +220,12 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                     semantic_effects.append(
                         f"provider call `{call_event.seq}` recorded process outcome(s) {actions}"
                     )
-                if not formal_events and not child_requests and not turn_events:
+                if (
+                    not formal_events
+                    and not transaction_artifact_refs
+                    and not child_requests
+                    and not turn_events
+                ):
                     semantic_effects.append(
                         f"provider call `{call_event.seq}` produced no separately typed semantic change"
                     )
@@ -193,7 +233,10 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
             (
                 f"## {proposal.request_identifier}",
                 "",
-                f"Theory proposal `{proposal.id}` from work `{proposal.originating_work_order_ref}`.",
+                f"Theory proposal `{proposal.id}` from {origin_label} "
+                f"`{proposal.originating_work_order_ref}`.",
+                "Origin provider result: "
+                f"`{proposal.originating_provider_attempt_ref or 'legacy-v5'}`.",
                 f"Grant refs: {', '.join(f'`{item.id}`' for item in grants) or 'none'}.",
                 f"Compiled refs: {', '.join(f'`{item.id}`' for item in compiled) or 'none'}.",
                 f"Receipt refs: {', '.join(f'`{item.id}`' for item in receipts) or 'none'}.",

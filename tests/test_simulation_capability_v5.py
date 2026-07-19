@@ -230,6 +230,7 @@ def _adapter(manifest, harness, responses, prompts):
         retry_max=0,
         model_profile=manifest.model_profile,
         leases=leases_from_manifest(manifest),
+        transaction_authority_required=(manifest.schema_version == 6),
     )
     return adapter, pending
 
@@ -250,6 +251,7 @@ def _patch_production_adapter(monkeypatch, manifest, complete):
             retry_max=0,
             model_profile=manifest.model_profile,
             leases=leases_from_manifest(manifest),
+            transaction_authority_required=(manifest.schema_version == 6),
         )
 
     monkeypatch.setattr("deepreason.llm.adapter.build_adapter", build_adapter)

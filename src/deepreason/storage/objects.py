@@ -9,7 +9,6 @@ with different schema or bytes is corruption and is rejected immediately.
 import json
 import os
 from pathlib import Path
-
 from pydantic import BaseModel
 
 from deepreason.capabilities.models import (
@@ -69,6 +68,41 @@ from deepreason.workflow.models import (
     WorkflowLifecycleSnapshotV1,
     WorkflowResumeDecisionV1,
 )
+from deepreason.workflow.transaction import (
+    ContextExposureReceiptV2,
+    ContextPackPlanV1,
+    DispatchAuthorizationBundleV1,
+    ProviderAttemptV1,
+    SemanticAdmissionV1,
+    TokenReservationV2,
+    WorkLifecycleTransitionV1,
+    WorkPreparationV1,
+    WorkTerminalV1,
+)
+from deepreason.workflow.criticism import (
+    CoverageDebtV1,
+    CriticismAssignmentV1,
+    CriticismAttemptV1,
+)
+
+
+def _io_path(path: Path) -> Path:
+    """Use the Win32 extended namespace for long immutable-object paths."""
+
+    path = Path(path)
+    if os.name != "nt":
+        return path
+    value = str(path)
+    if not os.path.isabs(value):
+        value = os.path.abspath(value)
+    if len(value) < 240:
+        return Path(value)
+    if value.startswith("\\\\?\\"):
+        return path
+    if value.startswith("\\\\"):
+        return Path("\\\\?\\UNC\\" + value.lstrip("\\"))
+    return Path("\\\\?\\" + value)
+
 
 SCHEMAS: dict[str, type[BaseModel]] = {
     "artifact": Artifact,
@@ -110,6 +144,18 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
     "workflow-resume-decision": WorkflowResumeDecisionV1,
+    "workflow-work-preparation-v1": WorkPreparationV1,
+    "workflow-context-pack-plan-v1": ContextPackPlanV1,
+    "workflow-token-reservation-v2": TokenReservationV2,
+    "workflow-context-exposure-v2": ContextExposureReceiptV2,
+    "workflow-dispatch-authorization-v1": DispatchAuthorizationBundleV1,
+    "workflow-provider-attempt-v1": ProviderAttemptV1,
+    "workflow-semantic-admission-v1": SemanticAdmissionV1,
+    "workflow-work-terminal-v1": WorkTerminalV1,
+    "workflow-work-lifecycle-transition-v1": WorkLifecycleTransitionV1,
+    "criticism-assignment-v1": CriticismAssignmentV1,
+    "criticism-attempt-v1": CriticismAttemptV1,
+    "criticism-coverage-debt-v1": CoverageDebtV1,
     "capability-simulation-proposal": SimulationProposalV1,
     "capability-transition": CapabilityTransitionV1,
     "capability-simulation-grant": SimulationGrantV1,
@@ -171,7 +217,7 @@ class ObjectStore:
         self.root = Path(root)
         self.read_only = read_only
         if not read_only:
-            self.root.mkdir(parents=True, exist_ok=True)
+            _io_path(self.root).mkdir(parents=True, exist_ok=True)
 
     def _path(self, oid: str) -> Path:
         """Legacy flat path, retained for old roots and diagnostics."""
@@ -196,7 +242,10 @@ class ObjectStore:
     @staticmethod
     def _read_record(path: Path, *, expected_id: str | None = None) -> tuple[str, BaseModel, dict]:
         try:
-            record = json.loads(path.read_text())
+            # Canonical JSON is always UTF-8. Relying on the host locale here
+            # silently mojibakes valid non-ASCII content on Windows and can
+            # make one content-addressed artifact appear to change identity.
+            record = json.loads(_io_path(path).read_text(encoding="utf-8"))
             schema = record["schema"]
             oid = record["id"]
             model = SCHEMAS[schema]
@@ -225,7 +274,7 @@ class ObjectStore:
         candidates.append(self._path(oid))
         target_is_valid = False
         for path in candidates:
-            if not path.exists():
+            if not _io_path(path).exists():
                 continue
             try:
                 existing_schema, _existing_obj, existing = self._read_record(
@@ -245,16 +294,17 @@ class ObjectStore:
         if target_is_valid:
             return
 
-        target.parent.mkdir(parents=True, exist_ok=True)
-        tmp = target.with_suffix(f".tmp.{os.getpid()}")
+        io_target = _io_path(target)
+        io_target.parent.mkdir(parents=True, exist_ok=True)
+        tmp = io_target.with_suffix(f".tmp.{os.getpid()}")
         data = canonical_json(expected)
         with open(tmp, "wb") as stream:
             stream.write(data)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(tmp, target)
+        os.replace(tmp, io_target)
         try:
-            directory_fd = os.open(target.parent, os.O_RDONLY)
+            directory_fd = os.open(io_target.parent, os.O_RDONLY)
             try:
                 os.fsync(directory_fd)
             finally:
@@ -283,13 +333,13 @@ class ObjectStore:
         found: list[tuple[str, BaseModel, dict]] = []
         for name in SCHEMAS:
             path = self._schema_path(name, oid)
-            if path.exists():
+            if _io_path(path).exists():
                 found.append(self._read_record(path, expected_id=oid))
         if len(found) > 1:
             raise ObjectConflictError(f"object id {oid!r} exists in multiple schemas")
 
         legacy = self._path(oid)
-        if legacy.exists():
+        if _io_path(legacy).exists():
             try:
                 legacy_schema, legacy_obj, legacy_record = self._read_record(
                     legacy, expected_id=oid

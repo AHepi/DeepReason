@@ -43,6 +43,25 @@ def require_full_engine(subject, *, workload: str) -> None:
     raise EngineProfileError(code, profile, workload)
 
 
+def require_website_transaction_contracts(subject) -> None:
+    """Reject v6 website execution before root binding or model dispatch.
+
+    The website state machine still has model-facing compact outline,
+    component-contract, and critic calls that are not represented by a v6
+    workflow task contract. Letting the adapter's global guard discover that
+    midway through a run would turn strict authority into an operational
+    crash. This shared preflight keeps the unsupported surface explicit until
+    those contracts are deliberately designed and qualified.
+    """
+
+    if getattr(subject, "schema_version", None) == 6:
+        raise ValueError(
+            "V6_WEBSITE_TRANSACTION_CONTRACT_UNAVAILABLE: RunManifest v6 "
+            "does not yet authorize website outline, component-contract, "
+            "or website critic provider work"
+        )
+
+
 def resolve_prefix(harness, prefix: str) -> str:
     """Resolve an artifact-id prefix; unique match wins, ambiguity raises."""
     matches = [i for i in harness.state.artifacts if i.startswith(prefix)]
@@ -317,12 +336,33 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     invocation (the log may carry prior runs on a resumed root): silent
     spend was the pipeline's most-recurrent bug class, so the check ships
     in-band with every run rather than living in an operator's habits."""
-    require_full_engine(run_manifest or config, workload="full scheduler")
+    effective_manifest = run_manifest
+    if effective_manifest is None:
+        root = getattr(harness, "root", None)
+        if root is not None:
+            from pathlib import Path
 
-    if run_manifest is not None:
+            from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+            manifest_path = Path(root) / MANIFEST_NAME
+            try:
+                manifest_path.lstat()
+            except FileNotFoundError:
+                pass
+            else:
+                effective_manifest = load_run_manifest(manifest_path)
+
+    if effective_manifest is not None:
+        from deepreason.runtime.launch_policy import require_v6_launch_allowed
+
+        require_v6_launch_allowed(effective_manifest, operation="full scheduler")
+
+    require_full_engine(effective_manifest or config, workload="full scheduler")
+
+    if effective_manifest is not None:
         from deepreason.run_manifest import preflight_harness
 
-        preflight_harness(run_manifest, harness, config)
+        preflight_harness(effective_manifest, harness, config)
 
     from deepreason.llm.adapter import build_adapter
     from deepreason.llm.budget import TokenMeter
@@ -334,7 +374,7 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         config,
         harness.blobs,
         meter=meter,
-        run_manifest=run_manifest,
+        run_manifest=effective_manifest,
         # Later-call direct -> compact recovery is append-only process state.
         # Rehydrate it on every scheduler resume without reading model raws.
         process_events=harness.log.read(),
@@ -364,21 +404,21 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
         controller = Controller(harness, adapter)
     if (
         stop_controller is None
-        and getattr(run_manifest, "schema_version", 1) in {2, 3, 4, 5}
+        and getattr(effective_manifest, "schema_version", 1) in {2, 3, 4, 5, 6}
     ):
         from deepreason.runtime.stop import StopController, StopPolicy
 
         stop_controller = StopController(
             StopPolicy.model_validate(
-                getattr(run_manifest, "stop_policy", None) or {}
+                getattr(effective_manifest, "stop_policy", None) or {}
             )
         )
     scheduler = Scheduler(
         harness, adapter, config, embedder=make_embedder(harness, config),
         browser_backend=browser_backend, controller=controller,
         research_backend=make_research_service(harness, config),
-        workload_profile=getattr(run_manifest, "workload_profile", None),
-        run_manifest=run_manifest,
+        workload_profile=getattr(effective_manifest, "workload_profile", None),
+        run_manifest=effective_manifest,
         stop_controller=stop_controller,
         progress_sink=progress_sink,
     )

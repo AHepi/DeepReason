@@ -434,15 +434,17 @@ _NARROW_TOOL_NAMES = frozenset(
         "start_make", "make_status", "make_result",
         "scratch_map", "scratch_search", "scratch_open", "scratch_related",
         "scratch_attention", "start_bridge", "bridge_status", "bridge_result",
-        "bridge_claims",
+        "bridge_claims", "get_capabilities", "get_help_topic",
+        "get_request_requirements",
     }
 )
 
 
 def _tools() -> list[dict]:
+    from deepreason.mcp_help import tool_definitions as help_tool_definitions
     from deepreason.mcp_scratch_bridge import tool_definitions
 
-    tools = [*_legacy_tools(), *tool_definitions()]
+    tools = [*_legacy_tools(), *tool_definitions(), *help_tool_definitions()]
     if os.environ.get("DEEPREASON_ENABLE_LEGACY_MCP") == "1":
         return tools
     return [tool for tool in tools if tool["name"] in _NARROW_TOOL_NAMES]
@@ -504,7 +506,10 @@ def _validate_mcp_input(
         raise _MCPInputSchemaError(f"{path or '/'} does not match an allowed shape")
 
     if "enum" in schema and value not in schema["enum"]:
-        raise _MCPInputSchemaError(f"{path or '/'} is outside its allowed values")
+        allowed = ", ".join(repr(item) for item in schema["enum"])
+        raise _MCPInputSchemaError(
+            f"{path or '/'} must be one of: {allowed}"
+        )
     expected = schema.get("type")
     if expected == "object":
         if not isinstance(value, dict):
@@ -513,12 +518,22 @@ def _validate_mcp_input(
         required = schema.get("required") or []
         missing = [name for name in required if name not in value]
         if missing:
+            if len(missing) == 1:
+                child = f"{path}/{missing[0]}" if path else f"/{missing[0]}"
+                raise _MCPInputSchemaError(f"{child} is required")
             raise _MCPInputSchemaError(
                 f"{path or '/'} is missing required schema fields"
             )
         extras = [name for name in value if name not in properties]
         additional = schema.get("additionalProperties", True)
         if extras and additional is False:
+            if (
+                len(extras) == 1
+                and isinstance(extras[0], str)
+                and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", extras[0])
+            ):
+                child = f"{path}/{extras[0]}" if path else f"/{extras[0]}"
+                raise _MCPInputSchemaError(f"{child} is outside the closed schema")
             raise _MCPInputSchemaError(
                 f"{path or '/'} contains fields outside the closed schema"
             )
@@ -997,6 +1012,16 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
         )
     except _MCPInputSchemaError as error:
         raise ValueError(f"MCP_INPUT_INVALID: {name}: {error}") from error
+    from deepreason.mcp_help import TOOL_NAMES as help_tools
+
+    if name in help_tools:
+        from deepreason.mcp_help import call_tool as call_help_tool
+
+        return json.dumps(
+            call_help_tool(name, arguments, active_tool_names=set(exposed)),
+            indent=2,
+            sort_keys=True,
+        )
     from deepreason.mcp_scratch_bridge import TOOL_NAMES as scratch_bridge_tools
 
     if name in scratch_bridge_tools:

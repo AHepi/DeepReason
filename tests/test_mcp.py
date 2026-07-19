@@ -44,23 +44,85 @@ def test_initialize_and_tools_list():
         assert tool["description"] and tool["inputSchema"]["type"] == "object"
 
 
-def test_default_surface_is_only_harness_owned_run_make_scratch_and_bridge_tools(
+def test_default_surface_has_exact_core_and_help_tool_definitions(
     monkeypatch,
 ):
     monkeypatch.delenv("DEEPREASON_ENABLE_LEGACY_MCP", raising=False)
     tools = mcp_server.handle(
         {"jsonrpc": "2.0", "id": 1, "method": "tools/list"}
     )
-    names = {tool["name"] for tool in tools["result"]["tools"]}
-    assert len(tools["result"]["tools"]) == 17
-    assert len(names) == 17
+    listed_tools = tools["result"]["tools"]
+    names = {tool["name"] for tool in listed_tools}
+    assert len(listed_tools) == 20
+    assert len(names) == 20
     assert names == {
         "start_run", "run_status", "run_result", "continue_run", "cancel_run",
         "start_make", "make_status", "make_result",
         "scratch_map", "scratch_search", "scratch_open", "scratch_related",
         "scratch_attention", "start_bridge", "bridge_status", "bridge_result",
-        "bridge_claims",
+        "bridge_claims", "get_capabilities", "get_help_topic",
+        "get_request_requirements",
     }
+    help_names = (
+        "get_capabilities",
+        "get_help_topic",
+        "get_request_requirements",
+    )
+    for name in help_names:
+        assert [tool["name"] for tool in listed_tools].count(name) == 1
+
+    help_tools = {
+        tool["name"]: tool for tool in listed_tools if tool["name"] in help_names
+    }
+    assert {name: tool["inputSchema"] for name, tool in help_tools.items()} == {
+        "get_capabilities": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": False,
+        },
+        "get_help_topic": {
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "enum": [
+                        "overview",
+                        "examples",
+                        "creating_a_run",
+                        "epistemic_outcomes",
+                        "scratchpad",
+                        "grounded_bridge",
+                        "troubleshooting",
+                    ],
+                },
+            },
+            "required": ["topic"],
+            "additionalProperties": False,
+        },
+        "get_request_requirements": {
+            "type": "object",
+            "properties": {
+                "operation": {
+                    "type": "string",
+                    "enum": [
+                        "reasoning_run",
+                        "continue_run",
+                        "grounded_bridge",
+                    ],
+                },
+            },
+            "required": ["operation"],
+            "additionalProperties": False,
+        },
+    }
+    expected_annotations = {
+        "readOnlyHint": True,
+        "destructiveHint": False,
+        "idempotentHint": True,
+        "openWorldHint": False,
+    }
+    for tool in help_tools.values():
+        assert tool["annotations"] == expected_annotations
 
     hidden = _call("run_cycles", {"cycles": 1})
     assert hidden["isError"]

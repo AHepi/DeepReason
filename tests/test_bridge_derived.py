@@ -273,6 +273,70 @@ def test_cli_derived_bridge_uses_independent_log_and_preserves_source(
     )
 
 
+def test_failed_source_requires_explicit_labelled_diagnostic_derived_bridge(
+    tmp_path, monkeypatch, capsys
+):
+    source_root, problem_id, fence = _old_source(tmp_path, schema_version=2)
+    (source_root / "run-result.json").write_text(
+        json.dumps(
+            {
+                "schema": "deepreason-run-result-v1",
+                "state": "failed",
+                "workload": "text",
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest_path, _ = write_run_manifest(_v3_manifest(), tmp_path / "bridge-v3.json")
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        lambda _manifest, harness: _scripted_adapter(harness),
+    )
+
+    rejected = tmp_path / "rejected-view"
+    assert (
+        _run(
+            source_root,
+            "build",
+            problem_id,
+            "--derived-output",
+            str(rejected),
+            "--at-seq",
+            str(fence),
+            "--run-manifest",
+            str(manifest_path),
+        )
+        == 1
+    )
+    assert "BRIDGE_REASONING_NOT_COMPLETED" in capsys.readouterr().err
+    assert not rejected.exists()
+
+    destination = tmp_path / "diagnostic-view"
+    assert (
+        _run(
+            source_root,
+            "build",
+            problem_id,
+            "--derived-output",
+            str(destination),
+            "--at-seq",
+            str(fence),
+            "--run-manifest",
+            str(manifest_path),
+            "--diagnostic-after-failure",
+            "--json",
+        )
+        == 0
+    )
+    capsys.readouterr()
+    marker = json.loads((destination / "diagnostic-bridge.json").read_text())
+    assert marker["canonical"] is False
+    assert marker["label"] == "noncanonical-after-failure"
+    assert marker["source_state"] == "failed"
+    assert marker["formal_seq"] == fence
+
+
 def test_source_digest_is_path_independent_and_binds_canonical_records(tmp_path):
     source_root, _problem_id, fence = _old_source(tmp_path)
     copied_root = tmp_path / "copied-run"
@@ -620,7 +684,12 @@ def test_derived_root_and_fence_rejections(tmp_path, case, expected):
 def test_derived_rejects_source_and_destination_symlinks(tmp_path):
     source_root, _problem_id, fence = _old_source(tmp_path)
     source_link = tmp_path / "source-link"
-    source_link.symlink_to(source_root, target_is_directory=True)
+    try:
+        source_link.symlink_to(source_root, target_is_directory=True)
+    except OSError as exc:
+        if getattr(exc, "winerror", None) == 1314:
+            pytest.skip("Windows symlink privilege is unavailable")
+        raise
     with pytest.raises(DerivedBridgeError, match="BRIDGE_DERIVED_SYMLINK_REJECTED"):
         open_derived_source(source_link, tmp_path / "view-a", fence)
 

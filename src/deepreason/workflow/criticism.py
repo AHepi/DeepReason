@@ -12,9 +12,10 @@ import re
 from collections import defaultdict
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.run_manifest import Route, RunManifest
+from deepreason.workflow.models import IdentifiedWorkflowRecord
 
 
 class ForeignCriticismTargetV1(BaseModel):
@@ -110,6 +111,128 @@ class ForeignCriticismPlanV1(BaseModel):
 
     targets: tuple[ForeignCriticismTargetPlanV1, ...]
     batches: tuple[ForeignCriticismBatchV1, ...]
+
+
+class CriticismAssignmentV1(IdentifiedWorkflowRecord):
+    """One durable coverage obligation, persisted before provider work."""
+
+    _identity_domain = "criticism.assignment.v1"
+
+    schema_: Literal["criticism.assignment.v1"] = Field(
+        "criticism.assignment.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    target_id: str = Field(min_length=1, max_length=256)
+    owner_school_id: str = Field(pattern=r"^school-(0|[1-9][0-9]*)$")
+    critic_school_id: str = Field(pattern=r"^school-(0|[1-9][0-9]*)$")
+    eligible_school_order: tuple[str, ...]
+    order_index: int = Field(ge=0, le=1_023)
+    role: Literal["argumentative_critic"] = "argumentative_critic"
+    seat: int = Field(ge=0, le=1_023)
+    endpoint_id: str = Field(min_length=1, max_length=256)
+    route_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    maximum_attempts: int = Field(ge=1, le=16)
+
+    @field_validator("eligible_school_order")
+    @classmethod
+    def _eligible_order_is_closed(cls, value):
+        if not value or len(value) != len(set(value)):
+            raise ValueError("eligible critic school order must be nonempty and unique")
+        if any(re.fullmatch(r"school-(0|[1-9][0-9]*)", item) is None for item in value):
+            raise ValueError("eligible critic schools must use canonical IDs")
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _selected_school_is_eligible(self):
+        if self.owner_school_id in self.eligible_school_order:
+            raise ValueError("owner school cannot satisfy its own criticism obligation")
+        if (
+            self.order_index >= len(self.eligible_school_order)
+            or self.eligible_school_order[self.order_index] != self.critic_school_id
+        ):
+            raise ValueError("criticism assignment differs from eligible-school order")
+        return self
+
+
+class CriticismAttemptV1(IdentifiedWorkflowRecord):
+    """One completed or failed try; only completed tries reduce coverage debt."""
+
+    _identity_domain = "criticism.attempt.v1"
+
+    schema_: Literal["criticism.attempt.v1"] = Field(
+        "criticism.attempt.v1", alias="schema"
+    )
+    assignment_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    target_id: str = Field(min_length=1, max_length=256)
+    critic_school_id: str = Field(pattern=r"^school-(0|[1-9][0-9]*)$")
+    attempt_index: int = Field(ge=0, le=15)
+    outcome: Literal[
+        "completed",
+        "schema_failure",
+        "transport_failure",
+        "budget_denied",
+    ]
+    coverage_completed: bool = False
+    source_call_seq: int | None = Field(default=None, ge=0)
+    diagnostic_ref: str | None = Field(default=None, max_length=512)
+
+    @model_validator(mode="after")
+    def _attempt_shape(self):
+        if self.outcome == "completed":
+            if not self.coverage_completed or self.source_call_seq is None:
+                raise ValueError("completed criticism requires exact source-call coverage")
+        elif self.coverage_completed or self.diagnostic_ref is None:
+            raise ValueError("failed criticism must retain debt and a diagnostic")
+        return self
+
+
+class CoverageDebtV1(IdentifiedWorkflowRecord):
+    """Terminal dimensional record of completed and outstanding schools."""
+
+    _identity_domain = "criticism.coverage-debt.v1"
+
+    schema_: Literal["criticism.coverage-debt.v1"] = Field(
+        "criticism.coverage-debt.v1", alias="schema"
+    )
+    target_id: str = Field(min_length=1, max_length=256)
+    owner_school_id: str = Field(pattern=r"^school-(0|[1-9][0-9]*)$")
+    required_school_coverage: int = Field(ge=0, le=1_023)
+    completed_school_ids: tuple[str, ...] = ()
+    outstanding_school_ids: tuple[str, ...] = ()
+    attempt_refs: tuple[str, ...] = ()
+    termination_reason: Literal[
+        "coverage_complete",
+        "ordinary_stop",
+        "attempts_exhausted",
+        "budget_exhausted",
+    ]
+
+    @field_validator("completed_school_ids", "outstanding_school_ids")
+    @classmethod
+    def _canonical_schools(cls, value):
+        if tuple(value) != tuple(sorted(value)) or len(value) != len(set(value)):
+            raise ValueError("coverage schools must be sorted and unique")
+        return tuple(value)
+
+    @field_validator("attempt_refs")
+    @classmethod
+    def _unique_attempts(cls, value):
+        if len(value) != len(set(value)) or any(
+            re.fullmatch(r"sha256:[0-9a-f]{64}", item) is None for item in value
+        ):
+            raise ValueError("coverage debt attempts must be unique canonical records")
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _coverage_shape(self):
+        if set(self.completed_school_ids) & set(self.outstanding_school_ids):
+            raise ValueError("completed and outstanding criticism coverage must be disjoint")
+        complete = len(self.completed_school_ids) >= self.required_school_coverage
+        if complete != (self.termination_reason == "coverage_complete"):
+            raise ValueError("coverage completion reason differs from completed schools")
+        if complete and self.outstanding_school_ids:
+            raise ValueError("complete criticism coverage cannot retain debt")
+        return self
 
 
 def _route_hash(route: Route) -> str:
@@ -246,3 +369,60 @@ def plan_foreign_criticism(
             )
 
     return ForeignCriticismPlanV1(targets=tuple(target_plans), batches=tuple(batches))
+
+
+def compile_criticism_assignments(
+    manifest: RunManifest,
+    plan: ForeignCriticismPlanV1,
+) -> tuple[CriticismAssignmentV1, ...]:
+    """Compile the deterministic plan into durable obligation records."""
+
+    if manifest.schema_version != 6 or manifest.criticism_policy is None:
+        raise ValueError("criticism obligation records require RunManifest v6")
+    retry_ceiling = 1 + manifest.control_plane_policy.workflow_retry.max_workflow_retries
+    eligible_by_owner = {
+        target.owner_school_id: tuple(
+            sorted(
+                binding.school_id
+                for binding in manifest.criticism_policy.bindings
+                if binding.school_id != target.owner_school_id
+            )
+        )
+        for target in plan.targets
+    }
+    records = []
+    for target in plan.targets:
+        eligible = eligible_by_owner[target.owner_school_id]
+        for assignment in target.assignments:
+            records.append(
+                CriticismAssignmentV1.create(
+                    manifest_digest=manifest.sha256,
+                    target_id=assignment.target_id,
+                    owner_school_id=assignment.owner_school_id,
+                    critic_school_id=assignment.critic_school_id,
+                    eligible_school_order=eligible,
+                    order_index=eligible.index(assignment.critic_school_id),
+                    role=assignment.role,
+                    seat=assignment.seat,
+                    endpoint_id=assignment.endpoint_id,
+                    route_sha256=assignment.route_sha256,
+                    maximum_attempts=retry_ceiling,
+                )
+            )
+    return tuple(
+        sorted(records, key=lambda record: (record.target_id, record.order_index))
+    )
+
+
+__all__ = [
+    "CoverageDebtV1",
+    "CriticismAssignmentV1",
+    "CriticismAttemptV1",
+    "ForeignCriticAssignmentV1",
+    "ForeignCriticismBatchV1",
+    "ForeignCriticismPlanV1",
+    "ForeignCriticismTargetPlanV1",
+    "ForeignCriticismTargetV1",
+    "compile_criticism_assignments",
+    "plan_foreign_criticism",
+]

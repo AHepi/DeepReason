@@ -11,6 +11,7 @@ from deepreason.capabilities.models import SimulationProposalDraftV1
 from deepreason.llm.contracts import ConjectureCandidate
 from deepreason.run_manifest import ConjectureContextPolicyV1, ScratchPolicy
 from deepreason.scratch.models import RetrievalChannel
+from deepreason.scratch.proposals import ScratchProposalV1
 from deepreason.workloads.text import ReasoningCandidateProposal
 
 
@@ -165,6 +166,68 @@ class ReasoningConjecturerTurnV5(_TurnRecord):
         return self
 
 
+class ConjectureTurnV6(_TurnRecord):
+    """Transactional v6 outcome; optional capabilities are wire-specialized."""
+
+    candidates: tuple[ConjectureCandidate, ...] = Field(default=(), max_length=256)
+    context_request: ContextRequestV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+    simulation_proposals: tuple[SimulationProposalDraftV1, ...] = Field(
+        default=(), max_length=32
+    )
+    scratch_proposal: ScratchProposalV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+            or self.scratch_proposal
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals or self.scratch_proposal
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+class ReasoningConjecturerTurnV6(_TurnRecord):
+    candidates: tuple[ReasoningCandidateProposal, ...] = Field(
+        default=(), max_length=256
+    )
+    context_request: ContextRequestV1 | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+    simulation_proposals: tuple[SimulationProposalDraftV1, ...] = Field(
+        default=(), max_length=32
+    )
+    scratch_proposal: ScratchProposalV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+            or self.scratch_proposal
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals or self.scratch_proposal
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+# The manifest contract is named ``conjecturer.turn.v6`` while the canonical
+# record deliberately uses the shorter ConjectureTurnV6 spelling. Retain the
+# intuitive alias for call sites that follow the older class-name convention.
+ConjecturerTurnV6 = ConjectureTurnV6
+
+
 class ConjectureTurnAuthorityV1(_TurnRecord):
     """Manifest-derived capability passed to Conj; contains no route choice."""
 
@@ -182,7 +245,10 @@ __all__ = [
     "ConjectureNoProposalV1",
     "ConjecturerTurnV4",
     "ConjecturerTurnV5",
+    "ConjectureTurnV6",
+    "ConjecturerTurnV6",
     "ContextRequestV1",
     "ReasoningConjecturerTurnV4",
     "ReasoningConjecturerTurnV5",
+    "ReasoningConjecturerTurnV6",
 ]

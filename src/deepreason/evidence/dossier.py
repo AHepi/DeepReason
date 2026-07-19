@@ -11,7 +11,7 @@ from deepreason.evidence.models import (
     DossierExcerptV1,
     DossierPackReceiptV1,
     EvidenceDossierV1,
-    RunInputManifestV1,
+    RunInputManifest,
 )
 from deepreason.storage.blobs import BlobStore
 
@@ -42,7 +42,7 @@ def _bounded_prefix(body: bytes, maximum: int) -> bytes:
 def pack_dossier(
     *,
     root: Path | str,
-    run_input: RunInputManifestV1,
+    run_input: RunInputManifest,
     dossier: EvidenceDossierV1,
     work_order_ref: str,
     query: str,

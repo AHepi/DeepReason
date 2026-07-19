@@ -11,9 +11,18 @@ import json
 import re
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, ValidationError
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
+
+from deepreason.canonical import canonical_json, sha256_hex
 
 
 class OutputMechanism(StrEnum):
@@ -43,6 +52,138 @@ class RepairScopeViolation(ValueError):
             f"repair changed JSON outside authorized subtree {scope}: "
             f"{pointer or '/'}"
         )
+
+
+class UnrepairableDiagnosticError(ValueError):
+    """The validator did not identify a finite model-editable location."""
+
+    code = "REPAIR_DIAGNOSTIC_UNREPAIRABLE"
+
+
+class SchemaExhaustedError(SchemaRepairError):
+    """The v6 contract exhausted its finite local-repair authority."""
+
+    code = "schema_exhausted"
+
+    def __init__(self, message: str = "bounded schema repair was exhausted", spend=None):
+        super().__init__(message, spend=spend)
+
+
+class RepairPatchV1(BaseModel):
+    """One RFC-6902-shaped edit at one explicitly authorized JSON pointer.
+
+    This is intentionally not a general patch document: every provider turn
+    can propose exactly one operation, and ``value`` is absent for ``remove``
+    while remaining required (including an explicit JSON null) for the other
+    two operations.
+    """
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        strict=True,
+        populate_by_name=True,
+        serialize_by_alias=True,
+    )
+
+    schema_: Literal["repair.patch.v1"] = Field(
+        "repair.patch.v1", alias="schema"
+    )
+    op: Literal["add", "remove", "replace"]
+    path: str
+    value: Any = None
+
+    @field_validator("path")
+    @classmethod
+    def _non_root_canonical_pointer(cls, value: str) -> str:
+        _validate_json_pointer(value, allow_root=False)
+        return value
+
+    @model_validator(mode="after")
+    def _operation_has_exact_fields(self):
+        value_supplied = "value" in self.model_fields_set
+        if self.op == "remove" and value_supplied:
+            raise ValueError("remove patch must omit value")
+        if self.op != "remove" and not value_supplied:
+            raise ValueError(f"{self.op} patch requires value")
+        return self
+
+
+class RepairDiagnosticV2(BaseModel):
+    """One field-level contract failure in a v6 repair envelope."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    path: str
+    code: str = Field(min_length=1, max_length=128)
+    message: str = Field(min_length=1, max_length=500)
+    received: Any = None
+    allowed: str = Field(default="", max_length=2_048)
+
+    @field_validator("path")
+    @classmethod
+    def _canonical_pointer(cls, value: str) -> str:
+        _validate_json_pointer(value, allow_root=True)
+        return value
+
+
+class FrozenSubtreeHashV1(BaseModel):
+    """Digest of a maximal valid subtree that no authorized patch may edit."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    path: str
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @field_validator("path")
+    @classmethod
+    def _canonical_pointer(cls, value: str) -> str:
+        _validate_json_pointer(value, allow_root=True)
+        return value
+
+
+class RepairDiagnosticEnvelopeV2(BaseModel):
+    """Finite repair authority bound to one exact parseable baseline."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        strict=True,
+        populate_by_name=True,
+        serialize_by_alias=True,
+    )
+
+    schema_: Literal["repair.diagnostic-envelope.v2"] = Field(
+        "repair.diagnostic-envelope.v2", alias="schema"
+    )
+    contract: str = Field(min_length=1, max_length=256)
+    baseline_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    diagnostics: tuple[RepairDiagnosticV2, ...] = Field(
+        min_length=1, max_length=64
+    )
+    authorized_pointers: tuple[str, ...] = Field(min_length=1, max_length=64)
+    frozen_subtree_hashes: tuple[FrozenSubtreeHashV1, ...] = Field(
+        default=(), max_length=4_096
+    )
+
+    @field_validator("authorized_pointers")
+    @classmethod
+    def _finite_non_root_pointers(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        for pointer in value:
+            _validate_json_pointer(pointer, allow_root=False)
+        if tuple(sorted(set(value))) != value:
+            raise ValueError("authorized pointers must be sorted and unique")
+        return value
+
+    @field_validator("frozen_subtree_hashes")
+    @classmethod
+    def _ordered_frozen_hashes(
+        cls, value: tuple[FrozenSubtreeHashV1, ...]
+    ) -> tuple[FrozenSubtreeHashV1, ...]:
+        paths = tuple(item.path for item in value)
+        if tuple(sorted(set(paths))) != paths:
+            raise ValueError("frozen subtree hashes must be sorted and unique")
+        return value
 
 
 def select_output_mechanism(capabilities) -> OutputMechanism:
@@ -165,6 +306,24 @@ def pointer_parts(pointer: str) -> list[str]:
     return [_unescape_pointer_token(p) for p in pointer[1:].split("/")]
 
 
+def _validate_json_pointer(pointer: str, *, allow_root: bool) -> None:
+    if not isinstance(pointer, str):
+        raise ValueError("JSON Pointer must be text")
+    if pointer == "":
+        if allow_root:
+            return
+        raise ValueError("a patch may not replace the parseable root object")
+    if not pointer.startswith("/"):
+        raise ValueError(f"invalid JSON Pointer {pointer!r}")
+    for token in pointer[1:].split("/"):
+        for match in re.finditer(r"~", token):
+            following = token[match.start() + 1 : match.start() + 2]
+            if following not in {"0", "1"}:
+                raise ValueError(f"invalid JSON Pointer escape in {pointer!r}")
+    if json_pointer(pointer_parts(pointer)) != pointer:
+        raise ValueError(f"non-canonical JSON Pointer {pointer!r}")
+
+
 def pointer_get(value: Any, pointer: str) -> Any:
     current = value
     for part in pointer_parts(pointer):
@@ -178,6 +337,162 @@ def pointer_get(value: Any, pointer: str) -> Any:
         else:
             raise ValueError(f"unknown object path {pointer!r}")
     return current
+
+
+def _subtree_hash(value: Any) -> str:
+    return sha256_hex(canonical_json(value))
+
+
+def _frozen_subtree_hashes(
+    baseline: Any,
+    authorized_pointers: tuple[str, ...],
+) -> tuple[FrozenSubtreeHashV1, ...]:
+    """Hash maximal unaffected object subtrees for an auditable state fence.
+
+    List siblings are deliberately not addressed by index: an authorized
+    removal would shift their JSON Pointers even though their values were not
+    edited. Object siblings and fields of the selected list item remain
+    frozen, which is sufficient because the deterministic patch applicator
+    itself can perform only the one requested operation.
+    """
+
+    authorized_parts = tuple(tuple(pointer_parts(item)) for item in authorized_pointers)
+    frozen: list[FrozenSubtreeHashV1] = []
+
+    def related(prefix: tuple[str, ...], candidate: tuple[str, ...]) -> bool:
+        return candidate[: len(prefix)] == prefix
+
+    def visit(current: Any, parts: tuple[str, ...]) -> None:
+        if parts in authorized_parts:
+            return
+        relevant = tuple(item for item in authorized_parts if related(parts, item))
+        if not relevant:
+            frozen.append(
+                FrozenSubtreeHashV1(
+                    path=json_pointer(parts),
+                    sha256=_subtree_hash(current),
+                )
+            )
+            return
+        if isinstance(current, dict):
+            for key in sorted(current):
+                child_parts = (*parts, str(key))
+                if any(related(child_parts, item) for item in relevant):
+                    visit(current[key], child_parts)
+                else:
+                    frozen.append(
+                        FrozenSubtreeHashV1(
+                            path=json_pointer(child_parts),
+                            sha256=_subtree_hash(current[key]),
+                        )
+                    )
+        elif isinstance(current, list):
+            # Follow only authorized list elements. Hashing other indices
+            # would make a legitimate remove operation appear to rewrite them.
+            selected: set[int] = set()
+            for item in relevant:
+                if len(item) <= len(parts):
+                    continue
+                try:
+                    selected.add(int(item[len(parts)]))
+                except ValueError:
+                    continue
+            for index in sorted(selected):
+                if 0 <= index < len(current):
+                    visit(current[index], (*parts, str(index)))
+
+    visit(baseline, ())
+    return tuple(sorted(frozen, key=lambda item: item.path))
+
+
+def _verify_repair_envelope_baseline(
+    baseline: Any,
+    envelope: RepairDiagnosticEnvelopeV2,
+) -> None:
+    if _subtree_hash(baseline) != envelope.baseline_sha256:
+        raise RepairScopeViolation("", "stale-baseline")
+    for frozen in envelope.frozen_subtree_hashes:
+        try:
+            value = pointer_get(baseline, frozen.path)
+        except ValueError as exc:
+            raise RepairScopeViolation(frozen.path, "frozen-subtree") from exc
+        if _subtree_hash(value) != frozen.sha256:
+            raise RepairScopeViolation(frozen.path, "frozen-subtree")
+
+
+def _patch_parent(value: Any, pointer: str) -> tuple[Any, str]:
+    parts = pointer_parts(pointer)
+    if not parts:
+        raise ValueError("a patch may not replace the parseable root object")
+    return pointer_get(value, json_pointer(parts[:-1])), parts[-1]
+
+
+def apply_repair_patch(
+    baseline: Any,
+    patch: RepairPatchV1,
+    envelope: RepairDiagnosticEnvelopeV2,
+) -> Any:
+    """Apply exactly one authorized edit and verify every frozen subtree."""
+
+    _verify_repair_envelope_baseline(baseline, envelope)
+    if patch.path not in envelope.authorized_pointers:
+        raise RepairScopeViolation(patch.path, "|".join(envelope.authorized_pointers))
+
+    candidate = copy.deepcopy(baseline)
+    parent, final = _patch_parent(candidate, patch.path)
+    value_supplied = "value" in patch.model_fields_set
+    if isinstance(parent, dict):
+        exists = final in parent
+        if patch.op == "add":
+            if exists:
+                raise ValueError("add patch target already exists")
+            parent[final] = copy.deepcopy(patch.value)
+        elif patch.op == "replace":
+            if not exists:
+                raise ValueError("replace patch target does not exist")
+            parent[final] = copy.deepcopy(patch.value)
+        else:
+            if not exists:
+                raise ValueError("remove patch target does not exist")
+            del parent[final]
+    elif isinstance(parent, list):
+        if final == "-":
+            if patch.op != "add":
+                raise ValueError("only add may use the list append pointer")
+            parent.append(copy.deepcopy(patch.value))
+        else:
+            try:
+                index = int(final)
+            except ValueError as exc:
+                raise ValueError(f"non-integer list path {patch.path!r}") from exc
+            if index < 0:
+                raise ValueError(f"negative list path {patch.path!r}")
+            if patch.op == "add":
+                if index > len(parent):
+                    raise ValueError(f"unknown list path {patch.path!r}")
+                parent.insert(index, copy.deepcopy(patch.value))
+            elif index >= len(parent):
+                raise ValueError(f"unknown list path {patch.path!r}")
+            elif patch.op == "replace":
+                parent[index] = copy.deepcopy(patch.value)
+            else:
+                del parent[index]
+    else:
+        raise ValueError(f"path parent is not a container: {patch.path!r}")
+
+    # The model cannot smuggle a value into remove through a manually-created
+    # instance. Pydantic enforces this too; retaining the check here makes the
+    # applicator independently safe at its public boundary.
+    if patch.op == "remove" and value_supplied:
+        raise ValueError("remove patch must omit value")
+    for frozen in envelope.frozen_subtree_hashes:
+        try:
+            value = pointer_get(candidate, frozen.path)
+        except ValueError as exc:
+            raise RepairScopeViolation(frozen.path, patch.path) from exc
+        if _subtree_hash(value) != frozen.sha256:
+            raise RepairScopeViolation(frozen.path, patch.path)
+    return candidate
 
 
 def merge_subtree(value: Any, pointer: str, replacement: Any) -> Any:
@@ -520,6 +835,175 @@ def diagnostic_from_error(
     )
 
 
+def _received_for_diagnostic(value: Any) -> Any:
+    try:
+        canonical_json(value)
+    except (TypeError, ValueError):
+        return repr(value)[:300]
+    return value
+
+
+def _allowed_at_pointer(schema: dict[str, Any], pointer: str) -> str:
+    child = schema_at_pointer(schema, pointer) if pointer else schema
+    allowed_bits: list[str] = []
+    for key in (
+        "type",
+        "enum",
+        "const",
+        "pattern",
+        "minimum",
+        "maximum",
+        "minItems",
+        "maxItems",
+    ):
+        if key in child:
+            allowed_bits.append(f"{key}={child[key]!r}")
+    return ", ".join(allowed_bits)
+
+
+def diagnostic_envelope_from_error(
+    *,
+    contract: str,
+    error: Exception,
+    schema: dict[str, Any],
+    baseline: Any,
+    root_authorized_pointers: tuple[str, ...] = (),
+) -> RepairDiagnosticEnvelopeV2:
+    """Compile field failures into exact, finite v6 patch authority.
+
+    Pydantic locations become exact edit pointers. A model-level/root failure
+    is not silently widened: its validator or caller must supply an explicit
+    finite set of non-root pointers or the response is unrepairable.
+    """
+
+    explicit = tuple(sorted(set(root_authorized_pointers)))
+    for pointer in explicit:
+        _validate_json_pointer(pointer, allow_root=False)
+
+    diagnostics: list[RepairDiagnosticV2] = []
+    authorized: set[str] = set()
+    if isinstance(error, ValidationError) and error.errors():
+        for detail in error.errors(include_url=False):
+            loc = tuple(
+                part
+                for part in (detail.get("loc") or ())
+                if part not in {"__root__", "root"}
+            )
+            pointer = json_pointer(loc)
+            code = str(detail.get("type") or "validation_error")
+            if pointer:
+                pointers = (pointer,)
+            else:
+                pointers = explicit
+            if not pointers:
+                raise UnrepairableDiagnosticError(
+                    "object-wide validation error requires explicit authorized pointers"
+                )
+            authorized.update(pointers)
+            operation = (
+                "remove"
+                if code == "extra_forbidden"
+                else "add"
+                if code == "missing"
+                else "replace"
+            )
+            diagnostics.append(
+                RepairDiagnosticV2(
+                    path=pointer,
+                    code=code,
+                    message=str(detail.get("msg") or code)[:500],
+                    received=_received_for_diagnostic(detail.get("input")),
+                    allowed=(
+                        f"operation={operation}"
+                        + (
+                            "; " + _allowed_at_pointer(schema, pointer)
+                            if pointer and _allowed_at_pointer(schema, pointer)
+                            else ""
+                        )
+                    ),
+                )
+            )
+    else:
+        supplied = tuple(getattr(error, "authorized_pointers", ())) or explicit
+        pointer = str(
+            getattr(error, "pointer", "")
+            or getattr(error, "repair_scope", "")
+        )
+        pointers = tuple(sorted(set(supplied or ((pointer,) if pointer else ()))))
+        if not pointers:
+            raise UnrepairableDiagnosticError(
+                "object-wide validation error requires explicit authorized pointers"
+            )
+        for item in pointers:
+            _validate_json_pointer(item, allow_root=False)
+        authorized.update(pointers)
+        diagnostics.append(
+            RepairDiagnosticV2(
+                path=pointer,
+                code=str(getattr(error, "code", "validation_error"))[:128],
+                message=(str(error).strip() or "contract validation failed")[:500],
+                received=None,
+                allowed="; ".join(
+                    filter(None, (_allowed_at_pointer(schema, item) for item in pointers))
+                ),
+            )
+        )
+
+    ordered = tuple(sorted(authorized))
+    return RepairDiagnosticEnvelopeV2(
+        contract=contract,
+        baseline_sha256=_subtree_hash(baseline),
+        diagnostics=tuple(diagnostics),
+        authorized_pointers=ordered,
+        frozen_subtree_hashes=_frozen_subtree_hashes(baseline, ordered),
+    )
+
+
+def repair_patch_response_schema(
+    envelope: RepairDiagnosticEnvelopeV2,
+) -> dict[str, Any]:
+    """Closed provider schema for one patch at one envelope-authorized path."""
+
+    def branch(operation: Literal["add", "remove", "replace"]) -> dict[str, Any]:
+        properties: dict[str, Any] = {
+            "schema": {"const": "repair.patch.v1", "type": "string"},
+            "op": {"const": operation, "type": "string"},
+            "path": {
+                "enum": list(envelope.authorized_pointers),
+                "type": "string",
+            },
+        }
+        required = ["schema", "op", "path"]
+        if operation != "remove":
+            properties["value"] = {}
+            required.append("value")
+        return {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": properties,
+            "required": required,
+        }
+
+    return {"oneOf": [branch("add"), branch("remove"), branch("replace")]}
+
+
+def patch_repair_prompt(
+    baseline: Any,
+    envelope: RepairDiagnosticEnvelopeV2,
+) -> str:
+    """Render one v6 patch request without reopening valid subtrees."""
+
+    payload = envelope.model_dump(mode="json", by_alias=True, exclude_none=True)
+    return (
+        "Return exactly one repair.patch.v1 JSON object. Choose one authorized "
+        "path and one add, remove, or replace operation. Do not return the "
+        "surrounding object. Frozen subtree hashes are immutable.\n\n"
+        f"CURRENT JSON:\n{json.dumps(baseline, sort_keys=True, ensure_ascii=False)}\n\n"
+        "DIAGNOSTIC ENVELOPE:\n"
+        f"{json.dumps(payload, sort_keys=True, ensure_ascii=False)}"
+    )
+
+
 def whole_object_repair_prompt(
     invalid_json: str,
     diagnostic: RepairDiagnostic,
@@ -548,6 +1032,216 @@ def subtree_repair_prompt(
         f"CURRENT JSON:\n{json.dumps(invalid_value, ensure_ascii=False)}\n\n"
         f"DIAGNOSTIC:\n{json.dumps(payload, sort_keys=True, ensure_ascii=False)}"
     )
+
+
+@dataclass(frozen=True)
+class V6RepairTurn:
+    """One initial, syntax-retry, or patch-only v6 provider request."""
+
+    attempt: int
+    request: str
+    response_schema: dict[str, Any]
+    mode: Literal["initial", "whole_object_syntax", "patch"]
+    diagnostic_envelope: RepairDiagnosticEnvelopeV2 | None = None
+    authorized_pointers: tuple[str, ...] = ()
+    repair_scope: str = ""
+    validation_path: str = ""
+
+
+class V6PatchRepairSession:
+    """Initial call plus at most two independent, exact JSON patch repairs.
+
+    A parseable response is never regenerated wholesale. The sole complete
+    object retry is available only when no JSON baseline could be parsed; as
+    soon as a baseline exists, every remaining turn returns one
+    :class:`RepairPatchV1` and the harness applies it deterministically.
+    """
+
+    def __init__(
+        self,
+        *,
+        contract: str,
+        schema: dict[str, Any],
+        initial_request: str,
+        retry_max: int = 2,
+        root_authorized_pointers: tuple[str, ...] = (),
+    ) -> None:
+        self.contract = contract
+        self.schema = copy.deepcopy(schema)
+        self.initial_request = initial_request
+        self.max_attempt = min(max(0, int(retry_max)), 2)
+        self.root_authorized_pointers = tuple(
+            sorted(set(root_authorized_pointers))
+        )
+        for pointer in self.root_authorized_pointers:
+            _validate_json_pointer(pointer, allow_root=False)
+        self.invalid_text = ""
+        self.invalid_value: Any = None
+        self.invalid_value_parseable = False
+        self.diagnostic_envelope: RepairDiagnosticEnvelopeV2 | None = None
+        self.syntax_diagnostic: RepairDiagnostic | None = None
+        self.last_error: Exception | None = None
+        self.whole_object_retry_used = False
+        self._pending_candidate: Any = _MISSING
+
+    @property
+    def attempt_count(self) -> int:
+        return self.max_attempt + 1
+
+    def turn(self, attempt: int) -> V6RepairTurn:
+        if attempt < 0 or attempt > self.max_attempt:
+            raise IndexError(
+                f"repair attempt {attempt} outside bounded range 0..{self.max_attempt}"
+            )
+        if attempt == 0:
+            return V6RepairTurn(
+                attempt=attempt,
+                request=self.initial_request,
+                response_schema=self.schema,
+                mode="initial",
+            )
+        if self.invalid_value_parseable:
+            if self.diagnostic_envelope is None:
+                raise UnrepairableDiagnosticError(
+                    "parseable invalid response has no finite repair envelope"
+                )
+            envelope = self.diagnostic_envelope
+            first_path = envelope.diagnostics[0].path
+            return V6RepairTurn(
+                attempt=attempt,
+                request=patch_repair_prompt(self.invalid_value, envelope),
+                response_schema=repair_patch_response_schema(envelope),
+                mode="patch",
+                diagnostic_envelope=envelope,
+                authorized_pointers=envelope.authorized_pointers,
+                repair_scope=(
+                    envelope.authorized_pointers[0]
+                    if len(envelope.authorized_pointers) == 1
+                    else ""
+                ),
+                validation_path=first_path,
+            )
+        if self.whole_object_retry_used:
+            raise SchemaExhaustedError(
+                "schema_exhausted: syntax retry did not produce a parseable baseline"
+            )
+        if self.syntax_diagnostic is None:
+            raise RuntimeError("repair requested before a validation failure")
+        self.whole_object_retry_used = True
+        return V6RepairTurn(
+            attempt=attempt,
+            request=whole_object_repair_prompt(
+                self.invalid_text,
+                self.syntax_diagnostic,
+            ),
+            response_schema=self.schema,
+            mode="whole_object_syntax",
+            validation_path=self.syntax_diagnostic.path,
+        )
+
+    def candidate_from_raw(self, turn: V6RepairTurn, raw: str) -> Any:
+        """Parse a response and apply a patch without accepting it semantically."""
+
+        self._pending_candidate = _MISSING
+        if turn.mode in {"initial", "whole_object_syntax"}:
+            parsed = parse_one_json_value(raw)
+            self.invalid_text = parsed.text
+            self._pending_candidate = parsed.value
+            return parsed.value
+        if not self.invalid_value_parseable or turn.diagnostic_envelope is None:
+            raise UnrepairableDiagnosticError("patch turn has no parseable baseline")
+        patch_value = parse_one_json_value(raw).value
+        patch = RepairPatchV1.model_validate(patch_value)
+        candidate = apply_repair_patch(
+            self.invalid_value,
+            patch,
+            turn.diagnostic_envelope,
+        )
+        self._pending_candidate = candidate
+        return candidate
+
+    def note_invalid(
+        self,
+        turn: V6RepairTurn,
+        raw: str,
+        error: Exception,
+        *,
+        truncated: bool = False,
+    ) -> RepairDiagnosticEnvelopeV2 | RepairDiagnostic:
+        """Record rejection and compile the next finite repair authority."""
+
+        self.last_error = error
+        candidate_ready = self._pending_candidate is not _MISSING
+        if candidate_ready:
+            self.invalid_value = copy.deepcopy(self._pending_candidate)
+            self.invalid_value_parseable = True
+            self.invalid_text = json.dumps(
+                self.invalid_value,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+            )
+        elif turn.mode in {"initial", "whole_object_syntax"}:
+            try:
+                parsed = parse_one_json_value(raw)
+            except ValueError:
+                self.invalid_text = raw
+                self.invalid_value_parseable = False
+            else:
+                self.invalid_text = parsed.text
+                self.invalid_value = parsed.value
+                self.invalid_value_parseable = True
+                candidate_ready = True
+
+        if self.invalid_value_parseable and candidate_ready:
+            envelope = diagnostic_envelope_from_error(
+                contract=self.contract,
+                error=error,
+                schema=self.schema,
+                baseline=self.invalid_value,
+                root_authorized_pointers=self.root_authorized_pointers,
+            )
+            if truncated:
+                first = envelope.diagnostics[0]
+                shortened = first.model_copy(
+                    update={
+                        "message": (
+                            "output hit the length limit; make the authorized value "
+                            "more compact: " + first.message
+                        )[:500]
+                    }
+                )
+                envelope = envelope.model_copy(
+                    update={"diagnostics": (shortened, *envelope.diagnostics[1:])}
+                )
+            self.diagnostic_envelope = envelope
+            return envelope
+
+        if turn.mode == "patch" and self.diagnostic_envelope is not None:
+            # Invalid patch syntax/scope consumes the attempt but cannot widen
+            # or replace the already-bound baseline authority.
+            return self.diagnostic_envelope
+
+        diagnostic = diagnostic_from_error(self.contract, error, self.schema)
+        if truncated:
+            diagnostic = diagnostic.model_copy(
+                update={
+                    "error": (
+                        "output hit the length limit and did not contain one complete "
+                        "JSON value: " + diagnostic.error
+                    )[:500]
+                }
+            )
+        self.syntax_diagnostic = diagnostic
+        return diagnostic
+
+    def exhaustion_error(self, *, spend=None) -> SchemaExhaustedError:
+        message = str(self.last_error).strip() if self.last_error is not None else ""
+        return SchemaExhaustedError(
+            "schema_exhausted"
+            + (f": {message[:500]}" if message else ""),
+            spend=spend,
+        )
 
 
 class BoundedRepairSession:

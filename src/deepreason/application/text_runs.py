@@ -21,6 +21,7 @@ from deepreason.application.models import (
     RunBudgetIntentV1,
     RunCancellationAcceptedV1,
     RunProgressResultV1,
+    RunResultV2,
     RunStartedV1,
     StartTextRunIntentV1,
     TextRunTerminalResultV1,
@@ -54,6 +55,94 @@ class TextRunWorkerRegistry:
 
 
 TEXT_RUN_WORKERS = TextRunWorkerRegistry()
+
+
+def _is_contained_v5(manifest) -> bool:
+    policy = getattr(manifest, "control_plane_policy", None)
+    return bool(
+        manifest.schema_version == 5
+        and policy is not None
+        and getattr(policy, "mode", None) == "active_inquiry"
+    )
+
+
+def _check_experimental_v5(manifest, enabled: bool) -> None:
+    contained = _is_contained_v5(manifest)
+    if contained and not enabled:
+        raise ValueError(
+            "V5_ACTIVE_INQUIRY_CONTAINED: pass --experimental-v5 only for "
+            "diagnostic execution"
+        )
+    if enabled and not contained:
+        raise ValueError(
+            "EXPERIMENTAL_V5_OVERRIDE_NOT_APPLICABLE: the manifest is not v5 "
+            "active_inquiry"
+        )
+
+
+def _v6_run_result(root: Path, manifest, payload: dict[str, Any]) -> dict[str, Any]:
+    """Add the v2 terminal envelope only for opt-in v6 runs."""
+
+    if manifest.schema_version != 6:
+        return payload
+    from deepreason.verification.report import (
+        VerificationFindingV2,
+        verify_root_report,
+    )
+
+    try:
+        report = verify_root_report(root, allow_missing_terminal=True)
+    except Exception as error:  # noqa: BLE001 - terminalization must remain total
+        from deepreason.verification.report import VerificationReportV2
+
+        report = VerificationReportV2(
+            operational=(
+                VerificationFindingV2(
+                    channel="operational",
+                    check="terminal-verification",
+                    detail=f"terminal verification could not complete: {error!r}"[:2_000],
+                    source="derived",
+                ),
+            )
+        )
+    state = payload["state"]
+    updates: dict[str, tuple] = {}
+    if state in {"failed", "cancelled"} and not report.completion:
+        updates["completion"] = (
+            VerificationFindingV2(
+                channel="completion",
+                check="run-terminal",
+                detail=(
+                    "reasoning failed before ordinary completion"
+                    if state == "failed"
+                    else "reasoning was cancelled before ordinary completion"
+                ),
+                source="terminal",
+            ),
+        )
+    if state == "failed" and not report.operational:
+        updates["operational"] = (
+            VerificationFindingV2(
+                channel="operational",
+                check="run-terminal",
+                detail=str(payload.get("error") or "reasoning terminated as failed")[:2_000],
+                source="terminal",
+            ),
+        )
+    if updates:
+        report = report.model_copy(update=updates)
+    result = {
+        **payload,
+        "schema": "deepreason-run-result-v2",
+        "verification": report.summary_payload(),
+        "completion_status": (
+            "satisfied" if report.completion_satisfied else "incomplete"
+        ),
+        "canonical_bridge_eligible": state == "completed" and report.valid,
+    }
+    return RunResultV2.model_validate(result).model_dump(
+        mode="json", by_alias=True, exclude_none=True
+    )
 
 
 def missing_manifest_credentials(manifest) -> list[str]:
@@ -143,6 +232,40 @@ def _spec_from_request(request: dict[str, Any]):
     return spec
 
 
+def _run_input_matches_spec(run_input, spec, *, schema_version: int) -> bool:
+    """Compare the complete version-appropriate frozen workload authority."""
+
+    from deepreason.evidence.models import (
+        RunInputCommitmentV1,
+        RunInputManifestV1,
+        RunInputManifestV2,
+    )
+
+    common = (
+        run_input.problem.id == spec.problem.id
+        and run_input.problem.description == spec.problem.description
+    )
+    if schema_version == 5:
+        return (
+            isinstance(run_input, RunInputManifestV1)
+            and common
+            and run_input.problem.criteria
+            == tuple(item.id for item in spec.criteria)
+        )
+    if schema_version == 6:
+        return (
+            isinstance(run_input, RunInputManifestV2)
+            and common
+            and run_input.problem.criteria
+            == tuple(
+                RunInputCommitmentV1.from_commitment(item)
+                for item in spec.criteria
+            )
+        )
+    return False
+
+
+
 class TextRunApplicationService:
     """Own text lifecycle, scheduler dispatch, progress, result, and cancel."""
 
@@ -175,6 +298,7 @@ class TextRunApplicationService:
             expected_manifest_digest=None,
             progress_callback=progress_callback,
             credential_checker=credential_checker,
+            experimental_v5=intent.experimental_v5,
         )
 
     def continue_run(
@@ -204,6 +328,7 @@ class TextRunApplicationService:
             expected_manifest_digest=manifest.sha256,
             progress_callback=progress_callback,
             credential_checker=credential_checker,
+            experimental_v5=intent.experimental_v5,
         )
 
     def inspect(self, intent: InspectTextRunIntentV1) -> RunProgressResultV1:
@@ -234,6 +359,49 @@ class TextRunApplicationService:
         workflow = harness.workflow_state
         items = []
         for work_id in workflow.outstanding_work_order_ids:
+            transaction = workflow.transaction_work.get(work_id)
+            if transaction is not None:
+                preparation = transaction.preparation
+                lease = preparation.route_lease
+                if transaction.admissions:
+                    recovery = "semantic_admission_recorded"
+                elif transaction.provider_attempts:
+                    outcomes = {
+                        attempt.outcome
+                        for attempt in transaction.provider_attempts.values()
+                    }
+                    recovery = (
+                        "provider_result_received"
+                        if outcomes == {"provider_result"}
+                        else "transport_failure_received"
+                    )
+                elif transaction.issued:
+                    recovery = "issued"
+                else:
+                    recovery = "prepared"
+                items.append(
+                    OutstandingWorkItemProjectionV1(
+                        work_order_id=work_id,
+                        recovery=recovery,
+                        role=lease.role,
+                        seat=lease.seat,
+                        endpoint_id=lease.endpoint_id,
+                        route_digest=lease.route_sha256,
+                        contract_id=preparation.contract_id,
+                        reserved_tokens=(
+                            transaction.reservation.reserved_tokens
+                            if transaction.reservation is not None
+                            else 0
+                        ),
+                        provider_calls_used=len(transaction.provider_attempts),
+                        provider_calls_limit=1,
+                        local_repairs_used=0,
+                        local_repairs_limit=0,
+                        context_expansions_used=0,
+                        context_expansions_limit=0,
+                    )
+                )
+                continue
             work = workflow.work_orders[work_id]
             branch_id = workflow.work_to_branch[work_id]
             state = workflow.branches[branch_id].process_state.work_item(work_id)
@@ -274,10 +442,25 @@ class TextRunApplicationService:
         if not target.exists():
             lifecycle = self.inspect(intent).lifecycle
             raise ValueError(f"RUN_RESULT_NOT_READY: current state is {lifecycle}")
-        payload = json.loads(target.read_text(encoding="utf-8"))
-        if not isinstance(payload, dict) or payload.get("schema") != "deepreason-run-result-v1":
+        try:
+            if target.is_symlink() or not 2 <= target.stat().st_size <= 4 * 1024 * 1024:
+                raise ValueError("RUN_RESULT_INVALID")
+            payload = json.loads(target.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            raise ValueError("RUN_RESULT_INVALID") from error
+        if not isinstance(payload, dict) or payload.get("schema") not in {
+            "deepreason-run-result-v1",
+            "deepreason-run-result-v2",
+        }:
             raise ValueError("RUN_RESULT_INVALID")
-        lifecycle = str(payload.get("state") or "completed")
+        if payload.get("schema") == "deepreason-run-result-v2":
+            try:
+                payload = RunResultV2.model_validate(payload).model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
+            except ValueError as error:
+                raise ValueError("RUN_RESULT_INVALID") from error
+        lifecycle = str(payload.get("state") or "")
         if lifecycle not in {"completed", "cancelled", "failed"}:
             raise ValueError("RUN_RESULT_INVALID")
         return TextRunTerminalResultV1(lifecycle=lifecycle, payload=payload)
@@ -350,20 +533,24 @@ class TextRunApplicationService:
         expected_manifest_digest: str | None,
         progress_callback,
         credential_checker,
+        experimental_v5: bool,
     ) -> RunStartedV1:
         from deepreason.ops import require_full_engine
         from deepreason.run_manifest import bind_run_manifest, preflight_payload
         from deepreason.runtime.continuation import prepare_continuation
+        from deepreason.runtime.launch_policy import require_v6_launch_allowed
         from deepreason.runtime.progress import ProgressSink, _atomic_json
 
         cycles, tokens, token_budget, scheduler_cycles = _budget_values(budget)
+        require_v6_launch_allowed(manifest, operation="text reasoning")
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version not in {2, 3, 4, 5} or manifest.workload_profile != "text":
+        if manifest.schema_version not in {2, 3, 4, 5, 6} or manifest.workload_profile != "text":
             raise ValueError(
                 "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v2+ text manifest"
             )
+        _check_experimental_v5(manifest, experimental_v5)
         spec = spec_override or _spec_from_request(request)
-        if manifest.schema_version == 5:
+        if manifest.schema_version >= 5:
             from deepreason.evidence.state import (
                 load_evidence_dossier,
                 load_run_input,
@@ -376,14 +563,14 @@ class TextRunApplicationService:
             if (
                 verified_input["run_input_digest"] != manifest.run_input_digest
                 or run_input.run_input_digest != manifest.run_input_digest
-                or run_input.problem.id != spec.problem.id
-                or run_input.problem.description != spec.problem.description
-                or run_input.problem.criteria
-                != tuple(item.id for item in spec.criteria)
+                or not _run_input_matches_spec(
+                    run_input, spec, schema_version=manifest.schema_version
+                )
                 or dossier.problem_ref != spec.problem.id
             ):
                 raise ValueError(
-                    "RUN_INPUT_MISMATCH: text request differs from the frozen v5 run input"
+                    "RUN_INPUT_MISMATCH: text request differs from the frozen "
+                    f"v{manifest.schema_version} run input"
                 )
             request = {**request, "run_input_digest": run_input.run_input_digest}
         preflight_payload(
@@ -474,6 +661,7 @@ class TextRunApplicationService:
                     "progress": progress,
                     "notify": notify,
                     "locks": locks,
+                    "experimental_v5": experimental_v5,
                 },
                 name=f"deepreason-run-{manifest.sha256[:8]}",
                 daemon=True,
@@ -502,6 +690,7 @@ class TextRunApplicationService:
         progress,
         notify,
         locks,
+        experimental_v5,
     ) -> None:
         from deepreason.harness import Harness
         from deepreason.ops import run_scheduler
@@ -517,6 +706,10 @@ class TextRunApplicationService:
         latest_cycle = 0
         try:
             harness = Harness(root)
+            if experimental_v5:
+                harness.record_measure(
+                    inputs=["experimental-v5-override.v1", manifest.sha256]
+                )
             if continuation:
                 if spec.problem.id not in harness.state.problems:
                     raise ValueError(
@@ -531,7 +724,7 @@ class TextRunApplicationService:
                 )
             else:
                 seed_reasoning_workload(harness, spec)
-                if manifest.schema_version == 5:
+                if manifest.schema_version >= 5:
                     from deepreason.evidence.render import attach_bound_evidence
                     from deepreason.evidence.state import (
                         load_evidence_dossier,
@@ -646,10 +839,10 @@ class TextRunApplicationService:
             )
             capability_audits = (
                 write_tranche_a_audits(root)
-                if manifest.schema_version == 5
+                if manifest.schema_version >= 5
                 else {}
             )
-            payload = {
+            payload = _v6_run_result(root, manifest, {
                 "schema": "deepreason-run-result-v1",
                 "state": "cancelled" if cancelled else "completed",
                 "workload": "text",
@@ -662,12 +855,12 @@ class TextRunApplicationService:
                 "accounting": accounting,
                 "capability_accounting": (
                     SimulationCapabilityController(harness, manifest).accounting()
-                    if manifest.schema_version == 5
+                    if manifest.schema_version >= 5
                     else None
                 ),
                 "capability_audits": capability_audits,
                 "stop": stop,
-            }
+            })
             _atomic_json(root / "run-result.json", payload)
             terminal = progress.emit(
                 state=payload["state"],
@@ -689,13 +882,13 @@ class TextRunApplicationService:
                 try:
                     _atomic_json(
                         root / "run-result.json",
-                        {
+                        _v6_run_result(root, manifest, {
                             "schema": "deepreason-run-result-v1",
                             "state": "failed",
                             "workload": "text",
                             "error_type": type(error).__name__,
                             "error": str(error)[:2000],
-                        },
+                        }),
                     )
                     failed = progress.emit(
                         state="failed",
@@ -739,14 +932,14 @@ class TextRunApplicationService:
                         "event_seq": harness._next_seq,
                     },
                 )
-                payload = {
+                payload = _v6_run_result(root, manifest, {
                     "schema": "deepreason-run-result-v1",
                     "state": "failed",
                     "workload": "text",
                     "error_type": type(error).__name__,
                     "error": str(error)[:2000],
                     "stop": stop,
-                }
+                })
                 _atomic_json(root / "run-result.json", payload)
                 failed = progress.emit(
                     state="failed",
@@ -773,5 +966,7 @@ __all__ = [
     "TEXT_RUN_WORKERS",
     "TextRunApplicationService",
     "TextRunWorkerRegistry",
+    "_check_experimental_v5",
+    "_v6_run_result",
     "missing_manifest_credentials",
 ]

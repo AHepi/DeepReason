@@ -228,6 +228,7 @@ class GroundingReviewService:
         *,
         role: str = "judge",
         max_spans: int = 32,
+        allow_conservative_mixed_modes: bool = False,
     ) -> None:
         if role not in _REVIEW_ROLES:
             raise ValueError("grounded review role must be judge or grounding_reviewer")
@@ -236,6 +237,7 @@ class GroundingReviewService:
         if type(max_spans) is not int or not 1 <= max_spans <= _MAX_REVIEW_SPANS:
             raise ValueError(f"max_spans must be an integer in 1..{_MAX_REVIEW_SPANS}")
         self.max_spans = max_spans
+        self.allow_conservative_mixed_modes = allow_conservative_mixed_modes
 
     def review(
         self,
@@ -246,7 +248,11 @@ class GroundingReviewService:
     ) -> GroundingReviewResult:
         ledger = ClaimLedgerV1.model_validate(ledger)
         output = BridgeOutputV1.model_validate(output)
-        deterministic = validate_bridge_output(ledger, output)
+        deterministic = validate_bridge_output(
+            ledger,
+            output,
+            allow_conservative_mixed_modes=self.allow_conservative_mixed_modes,
+        )
         if not deterministic.valid:
             raise GroundingReviewError(
                 "BRIDGE_REVIEW_INPUT_INVALID",

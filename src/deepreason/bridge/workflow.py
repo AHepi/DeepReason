@@ -23,6 +23,7 @@ from deepreason.bridge.compose import (
 from deepreason.bridge.events import BridgeAction
 from deepreason.bridge.ledger import (
     ClaimLedgerInputCatalogV1,
+    ClaimLedgerInputCatalogV3,
     ClaimLedgerStageAResultV1,
     amend_claim_ledger_stage_a,
     build_claim_ledger_stage_a,
@@ -52,9 +53,20 @@ class BridgeWorkflowPolicy(FrozenRecord):
     max_ledger_amendments: Literal[0, 1] = 1
     max_grounding_repair_attempts: int = Field(default=4, ge=0, le=8)
     ledger_role: Literal["summarizer"] = "summarizer"
-    ledger_contract_version: Literal["v1", "v2"] = "v1"
+    ledger_contract_version: Literal["v1", "v2", "v3"] = "v1"
+    composition_contract_version: Literal["v1", "v2"] = "v1"
     composer_role: Literal["thesis", "summarizer"] = "thesis"
     reviewer_role: Literal["judge", "grounding_reviewer"] = "judge"
+
+    @model_validator(mode="after")
+    def _v6_contract_pair(self):
+        if (self.ledger_contract_version == "v3") != (
+            self.composition_contract_version == "v2"
+        ):
+            raise ValueError(
+                "bridge.ledger.v3 and bridge.composition.v2 must be selected together"
+            )
+        return self
 
 
 @dataclass(frozen=True)
@@ -346,6 +358,9 @@ class BridgeWorkflow:
             self.review_adapter,
             role=self.policy.reviewer_role,
             max_spans=max(1, min(128, len(output.sections) or 1)),
+            allow_conservative_mixed_modes=(
+                self.policy.composition_contract_version == "v2"
+            ),
         )
         result = service.review(ledger, output, materials=materials)
         attempt_inputs = (ledger.id, output.id)
@@ -370,7 +385,7 @@ class BridgeWorkflow:
 
     def run(
         self,
-        catalog: ClaimLedgerInputCatalogV1,
+        catalog: ClaimLedgerInputCatalogV1 | ClaimLedgerInputCatalogV3,
         composition_request: CompositionRequestV1,
         *,
         materials=None,
@@ -379,7 +394,15 @@ class BridgeWorkflow:
 
         if self._batches or self._calls:
             raise RuntimeError("a BridgeWorkflow instance can run only once")
-        catalog = ClaimLedgerInputCatalogV1.model_validate(catalog)
+        catalog = (
+            ClaimLedgerInputCatalogV3.model_validate(catalog)
+            if isinstance(catalog, ClaimLedgerInputCatalogV3)
+            or (
+                isinstance(catalog, dict)
+                and catalog.get("schema") == "bridge.catalog.v3"
+            )
+            else ClaimLedgerInputCatalogV1.model_validate(catalog)
+        )
         request = CompositionRequestV1.model_validate(composition_request)
         materials = {} if materials is None else materials
         formal_seq = catalog.formal_seq
@@ -440,6 +463,7 @@ class BridgeWorkflow:
                 composition = BridgeComposer(
                     self.composition_adapter,
                     role=self.policy.composer_role,
+                    contract_version=self.policy.composition_contract_version,
                 ).compose(ledger, request)
             except Exception as error:
                 return self._failure(
@@ -645,6 +669,9 @@ class BridgeWorkflow:
                         self.repair_adapter,
                         role=self.policy.reviewer_role,
                         max_attempts=remaining,
+                        allow_conservative_mixed_modes=(
+                            self.policy.composition_contract_version == "v2"
+                        ),
                     ).repair(ledger, output, review)
                 except Exception as error:
                     return self._failure(
@@ -680,7 +707,13 @@ class BridgeWorkflow:
                         finding_ref=review.id,
                     )
                 )
-                report = validate_bridge_output(ledger, output)
+                report = validate_bridge_output(
+                    ledger,
+                    output,
+                    allow_conservative_mixed_modes=(
+                        self.policy.composition_contract_version == "v2"
+                    ),
+                )
                 self._persist(
                     BridgePersistenceBatch(
                         action=BridgeAction.OUTPUT_VALIDATED,

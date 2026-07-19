@@ -1,5 +1,10 @@
 """Capability-typed control-plane foundations for conjecture workflows."""
 
+from deepreason.workflow.context_continuation import (
+    ConjectureContextContinuationV1,
+    ContextContinuationEligibility,
+)
+
 from deepreason.workflow.events import (
     ConjectureWorkAssignmentV1,
     WorkflowSignalKind,
@@ -67,6 +72,20 @@ from deepreason.workflow.state import (
     state_after_transition,
 )
 from deepreason.workflow.trace import ConjectureControlTrace
+from deepreason.workflow.transaction import (
+    AuthorizedDispatch,
+    ContextExposureReceiptV2,
+    ContextPackPlanV1,
+    DispatchAuthorizationBundleV1,
+    ProviderAttemptV1,
+    SemanticAdmissionV1,
+    TokenReservationV2,
+    VisibleContextItemV1,
+    WorkLifecycleTransitionV1,
+    WorkPreparationV1,
+    WorkTerminalV1,
+)
+from deepreason.workflow.transaction_service import InquiryTransactionService
 
 __all__ = [
     "BudgetDeltaV1",
@@ -74,6 +93,7 @@ __all__ = [
     "CapabilityOutcome",
     "ConjectureShadowObserver",
     "ConjectureControlTrace",
+    "ConjectureContextContinuationV1",
     "ConjectureWorkAssignmentV1",
     "ConjectureWorkStateV1",
     "ConjectureWorkflowProfileV1",
@@ -114,6 +134,19 @@ __all__ = [
     "WorkflowTaskKind",
     "WorkOrderEnvelopeV1",
     "apply_decision",
+    "AuthorizedDispatch",
+    "ContextExposureReceiptV2",
+    "ContextPackPlanV1",
+    "ContextContinuationEligibility",
+    "DispatchAuthorizationBundleV1",
+    "InquiryTransactionService",
+    "ProviderAttemptV1",
+    "SemanticAdmissionV1",
+    "TokenReservationV2",
+    "VisibleContextItemV1",
+    "WorkLifecycleTransitionV1",
+    "WorkPreparationV1",
+    "WorkTerminalV1",
     "compile_workflow_profile",
     "plan_conjecture_batch",
     "plan_conjecture_work",

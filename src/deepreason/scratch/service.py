@@ -367,6 +367,7 @@ class ScratchService:
         provenance: ScratchProvenanceV1 | Mapping,
         *,
         llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ScratchClusterV1:
         self._ensure_writable()
         provenance = self._provenance(provenance)
@@ -376,6 +377,7 @@ class ScratchService:
             ScratchAction.CLUSTER_CREATED,
             actor=provenance.actor,
             outputs=[cluster.id],
+            context_ref=context_ref,
             llm=llm,
         )
         return cluster
@@ -388,6 +390,7 @@ class ScratchService:
         reason: str | None,
         provenance: ScratchProvenanceV1 | Mapping,
         llm: LLMCall | None,
+        context_ref: str | None,
     ) -> ClusterMembershipV1:
         self._ensure_writable()
         cluster_id = self._cluster_id(cluster_id)
@@ -425,6 +428,7 @@ class ScratchService:
             outputs=[record.id],
             reason_ref=reason_ref,
             llm=llm,
+            context_ref=context_ref,
         )
         return record
 
@@ -436,9 +440,16 @@ class ScratchService:
         provenance: ScratchProvenanceV1 | Mapping,
         *,
         llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ClusterMembershipV1:
         return self._membership(
-            MembershipAction.ADD, cluster_id, block_id, reason, provenance, llm
+            MembershipAction.ADD,
+            cluster_id,
+            block_id,
+            reason,
+            provenance,
+            llm,
+            context_ref,
         )
 
     def remove_cluster_member(
@@ -449,9 +460,16 @@ class ScratchService:
         provenance: ScratchProvenanceV1 | Mapping,
         *,
         llm: LLMCall | None = None,
+        context_ref: str | None = None,
     ) -> ClusterMembershipV1:
         return self._membership(
-            MembershipAction.REMOVE, cluster_id, block_id, reason, provenance, llm
+            MembershipAction.REMOVE,
+            cluster_id,
+            block_id,
+            reason,
+            provenance,
+            llm,
+            context_ref,
         )
 
     def store_guide(

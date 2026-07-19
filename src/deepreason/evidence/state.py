@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import hashlib
+import json
 import os
 from pathlib import Path
 import re
@@ -14,7 +15,9 @@ from deepreason.evidence.models import (
     AttachedSourceProvenanceV1,
     AttachedSourceV1,
     EvidenceDossierV1,
+    RunInputManifest,
     RunInputManifestV1,
+    RunInputManifestV2,
 )
 from deepreason.canonical import canonical_json
 from deepreason.locking import ProcessLock, RUN_INPUT_LOCK_NAME
@@ -199,7 +202,7 @@ def _bind_record(target: Path, sidecar: Path, payload: bytes, digest: str) -> No
 
 
 def bind_run_input(
-    run_input: RunInputManifestV1,
+    run_input: RunInputManifest,
     dossier: EvidenceDossierV1,
     root: Path | str,
 ) -> tuple[Path, Path]:
@@ -245,13 +248,21 @@ def _resolve_record_path(path: Path | str, name: str) -> Path:
     return value / name if value.is_dir() else value
 
 
-def load_run_input(path: Path | str, *, verify_hash: bool = True) -> RunInputManifestV1:
+def load_run_input(path: Path | str, *, verify_hash: bool = True) -> RunInputManifest:
     target = _resolve_record_path(path, RUN_INPUT_NAME)
     payload = _read_regular(target, _MAX_RECORD_BYTES)
     assert payload is not None
     try:
-        value = RunInputManifestV1.model_validate_json(payload)
-    except ValueError as error:
+        decoded = json.loads(payload)
+        schema = decoded.get("schema") if isinstance(decoded, dict) else None
+        model = {
+            "run-input-manifest.v1": RunInputManifestV1,
+            "run-input-manifest.v2": RunInputManifestV2,
+        }.get(schema)
+        if model is None:
+            raise ValueError("unknown run-input schema")
+        value = model.model_validate_json(payload)
+    except (UnicodeError, json.JSONDecodeError, ValueError) as error:
         raise RunInputError("RUN_INPUT_INVALID", "run-input schema is invalid") from error
     if verify_hash:
         expected = _read_digest(target.parent / RUN_INPUT_HASH_NAME)
@@ -286,13 +297,16 @@ def verify_run_input(root: Path | str) -> dict:
     if run_input.problem.id != dossier.problem_ref:
         raise RunInputError("RUN_INPUT_PROBLEM_MISMATCH", "bound records disagree")
     _check_source_blobs(root_path, dossier)
-    return {
+    report = {
         "valid": True,
         "run_input_digest": run_input.run_input_digest,
         "evidence_dossier_digest": dossier.dossier_digest,
         "source_count": len(dossier.sources),
         "source_bytes": dossier.total_byte_count,
     }
+    if isinstance(run_input, RunInputManifestV2):
+        report["input_schema_version"] = 2
+    return report
 
 
 __all__ = [

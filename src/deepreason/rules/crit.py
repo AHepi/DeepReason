@@ -17,13 +17,15 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from enum import Enum
+import hashlib
 import math
 
 from deepreason import programs
 from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
-from deepreason.llm.firewall import EndpointLease
+from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import EndpointLease, route_fingerprint
 from deepreason.llm.packs import (
     aliases_for_pack,
     render_batch_crit_pack,
@@ -31,7 +33,12 @@ from deepreason.llm.packs import (
     render_cx_retry_pack,
 )
 from deepreason.llm.profiles import ModelProfile, get_profile
-from deepreason.llm.wire import wire_contract_for
+from deepreason.llm.repair import SchemaRepairError
+from deepreason.llm.wire import (
+    AliasTable,
+    BatchCriticWireContractV2,
+    wire_contract_for,
+)
 from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
 from deepreason.rules.warrants import (
     execution_backed,
@@ -40,9 +47,7 @@ from deepreason.rules.warrants import (
 )
 
 
-def _register_nu(
-    harness, content: str, *, critic_school_id: str | None = None
-) -> Artifact:
+def _register_nu(harness, content: str, *, critic_school_id: str | None = None) -> Artifact:
     return harness.create_artifact(
         content,
         provenance=Provenance(role="critic", school=critic_school_id),
@@ -85,15 +90,12 @@ def _resolve_authority(
 
     if explicit_authority is None:
         if policy_call:
-            raise ValueError(
-                "manifest-bound criticism requires explicit argumentative authority"
-            )
+            raise ValueError("manifest-bound criticism requires explicit argumentative authority")
         return _authority(config)
     authority = _authority_value(explicit_authority)
     if authority not in _POLICY_AUTHORITIES:
         raise ValueError(
-            "manifest-bound criticism authority must be observe_only or "
-            "defended_trial"
+            "manifest-bound criticism authority must be observe_only or defended_trial"
         )
     return "trial_required" if authority == "defended_trial" else authority
 
@@ -124,15 +126,11 @@ def _critic_execution(
     if endpoint_lease is None:
         return {}, ""
     if endpoint_lease.role != "argumentative_critic":
-        raise ValueError(
-            "criticism endpoint lease must belong to argumentative_critic"
-        )
+        raise ValueError("criticism endpoint lease must belong to argumentative_critic")
     assert critic_school_id is not None
     assert critic_school_context is not None
     if critic_school_context.get("id") != critic_school_id:
-        raise ValueError(
-            "critic execution school must match its semantic conditioning record"
-        )
+        raise ValueError("critic execution school must match its semantic conditioning record")
     stance = critic_school_context.get("stance_text")
     if not isinstance(stance, str) or not stance.strip():
         raise ValueError("critic school conditioning requires non-blank stance_text")
@@ -164,9 +162,7 @@ def _conditioned_budget(token_budget: int, prefix: str) -> int:
         return token_budget
     remaining = token_budget - math.ceil((len(prefix) + 2) / 4)
     if remaining < 256:
-        raise ValueError(
-            "critic school conditioning leaves insufficient bounded pack budget"
-        )
+        raise ValueError("critic school conditioning leaves insufficient bounded pack budget")
     return remaining
 
 
@@ -198,6 +194,266 @@ def _observe_coverage(
         return
     for target_id in target_ids:
         observer(target_id, event_seq)
+
+
+def _artifact_context_digest(harness, target_id: str) -> str:
+    """Digest the exact target bytes named by one call-local SRC alias."""
+
+    artifact = harness.state.artifacts[target_id]
+    content_ref = artifact.content_ref
+    if content_ref.startswith("inline:"):
+        content = content_ref.removeprefix("inline:").encode("utf-8")
+    else:
+        try:
+            content = harness.blobs.get(content_ref)
+        except (FileNotFoundError, KeyError, ValueError):
+            content = content_ref.encode("utf-8")
+    return hashlib.sha256(content).hexdigest()
+
+
+def _v6_transactional_batch_call(
+    harness,
+    adapter,
+    run_manifest,
+    *,
+    endpoint_lease: EndpointLease,
+    critic_school_id: str,
+    target_ids: tuple[str, ...],
+    assignment_refs: tuple[str, ...],
+    coverage_attempt_index: int,
+    phase: str,
+    caller_trigger_ref: str | None,
+    pack_factory: Callable[[], str],
+) -> tuple[BatchCriticOutput, object]:
+    """Authorize and terminalize one v6 critic provider boundary.
+
+    Preparation is durable before the pack is rendered.  The call-local
+    contract, context plan, reservation, exposure receipt, and dispatch
+    bundle then become reachable through one WORK_ISSUED append.  Every
+    counterexample retry invokes this helper again and therefore receives a
+    distinct authorization bundle.
+    """
+
+    from deepreason.run_manifest import RunManifest
+    from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
+    from deepreason.workflow.transaction import (
+        ContextNamespace,
+        VisibleContextItemV1,
+        WorkBudgetDenied,
+    )
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    manifest = RunManifest.model_validate(run_manifest)
+    control = manifest.control_plane_policy
+    if (
+        manifest.schema_version != 6
+        or control is None
+        or control.controller_version != "workflow.controller.v3"
+        or control.contract_versions.batch_critic_contract != "batch-critic.v2"
+    ):
+        raise ValueError("transactional criticism requires the exact v6 critic contract")
+    if endpoint_lease.role != "argumentative_critic":
+        raise ValueError("transactional criticism requires a critic route lease")
+    if not critic_school_id:
+        raise ValueError("transactional criticism requires a critic school")
+    targets = tuple(dict.fromkeys(target_ids))
+    if not targets or len(targets) != len(target_ids):
+        raise ValueError("transactional criticism targets must be nonempty and unique")
+    if len(assignment_refs) != len(set(assignment_refs)):
+        raise ValueError("transactional criticism assignment refs must be unique")
+    meter = getattr(adapter, "meter", None)
+    if meter is None:
+        raise ValueError("v6 criticism dispatch requires a provider token meter")
+
+    route_ref = RouteLeaseRefV1(
+        role="argumentative_critic",
+        seat=endpoint_lease.seat,
+        endpoint_id=endpoint_lease.route.endpoint_id,
+        route_sha256=route_fingerprint(endpoint_lease.route),
+    )
+    payload = {
+        "schema": "criticism.semantic-task.v1",
+        "critic_school_id": critic_school_id,
+        "target_ids": list(targets),
+        "assignment_refs": list(assignment_refs),
+        "coverage_attempt_index": coverage_attempt_index,
+        "phase": phase,
+        "caller_trigger_ref": caller_trigger_ref,
+    }
+    service = InquiryTransactionService(harness, manifest, meter)
+    fence = max(0, harness._next_seq - 1)
+    trigger_ref = "criticism:" + hashlib.sha256(canonical_json(payload)).hexdigest()
+    preparation = service.prepare(
+        task_kind=WorkflowTaskKind.CRITICISM,
+        attempt_index=coverage_attempt_index,
+        route_lease=route_ref,
+        contract_id="batch-critic.v2",
+        trigger_ref=trigger_ref,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+        target_refs=targets,
+        input_refs=assignment_refs,
+        task_payload_value=payload,
+    )
+    authorized = None
+
+    def abandon(*, issued: bool, reason_code: str) -> None:
+        if authorized is not None and authorized.reservation.is_open:
+            authorized.release()
+        service.terminate(
+            work_id=preparation.id,
+            attempt_index=preparation.attempt_index,
+            status="abandoned",
+            reason_code=reason_code,
+            usage_status=("unknown" if issued else "exact"),
+            prompt_tokens=(None if issued else 0),
+            completion_tokens=(None if issued else 0),
+        )
+
+    try:
+        aliases = AliasTable(
+            {f"SRC_{index:03d}": target_id for index, target_id in enumerate(targets, 1)}
+        )
+        contract = BatchCriticWireContractV2(
+            aliases,
+            expected_targets=targets,
+        )
+        pack = pack_factory()
+        rendered_bytes = len(pack.encode("utf-8"))
+        items = tuple(
+            VisibleContextItemV1(
+                namespace=ContextNamespace.SOURCE,
+                alias=alias,
+                object_ref=target_id,
+                content_sha256=_artifact_context_digest(harness, target_id),
+                planned_bytes=(rendered_bytes if index == 0 else 0),
+            )
+            for index, (alias, target_id) in enumerate(aliases.aliases.items())
+        )
+        plan = service.context_plan(
+            preparation,
+            plan_kind="dossier",
+            items=items,
+            maximum_bytes=rendered_bytes,
+            rendered_bytes=rendered_bytes,
+        )
+        prompt, preview_contract, preview_lease, maximum_tokens = adapter.preview_request(
+            "argumentative_critic",
+            pack,
+            BatchCriticOutput,
+            endpoint_index=endpoint_lease.seat,
+            template_role="batch_critic",
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+        )
+        if preview_contract is not contract or preview_lease != endpoint_lease:
+            raise ValueError("v6 critic preview changed frozen call authority")
+        authorized = service.issue(
+            preparation,
+            plans=(plan,),
+            prompt=prompt,
+            max_tokens=maximum_tokens,
+        )
+    except WorkBudgetDenied:
+        raise
+    except Exception:
+        abandon(issued=False, reason_code="critic_preissue_failure")
+        raise
+
+    provider = None
+    try:
+        output, llm_call = adapter.call(
+            "argumentative_critic",
+            pack,
+            BatchCriticOutput,
+            endpoint_index=endpoint_lease.seat,
+            template_role="batch_critic",
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            school_id=critic_school_id,
+            dispatch_authorization=authorized,
+        )
+    except EndpointError as error:
+        spend = getattr(error, "spend", None)
+        if spend is None:
+            abandon(issued=True, reason_code="critic_transport_result_unknown")
+        else:
+            diagnostic_ref = (
+                spend.attempt_trace[-1].diagnostic_ref
+                if spend.attempt_trace
+                else harness.blobs.put(str(error).encode("utf-8"))
+            )
+            provider = service.record_provider_attempt(
+                authorized,
+                call=spend,
+                outcome="transport_failure",
+                usage_status="unknown",
+                diagnostic_ref=diagnostic_ref,
+            )
+            service.terminate(
+                work_id=preparation.id,
+                attempt_index=preparation.attempt_index,
+                status="transport_failed",
+                reason_code="critic_transport_failure",
+                usage_status="unknown",
+                provider_attempt=provider,
+            )
+            error.spend = None
+        error.transaction_terminalized = True
+        raise
+    except SchemaRepairError as error:
+        repaired = service.repair_schema_failure(
+            adapter=adapter,
+            authorized=authorized,
+            error=error,
+            role="argumentative_critic",
+            pack=pack,
+            output_model=BatchCriticOutput,
+            wire_contract=contract,
+            endpoint_index=endpoint_lease.seat,
+            template_role="batch_critic",
+            endpoint_lease=endpoint_lease,
+            school_id=critic_school_id,
+            reason_prefix="critic",
+        )
+        output = repaired.output
+        llm_call = repaired.llm_call
+        preparation = repaired.preparation
+        authorized = repaired.authorized
+        provider = repaired.provider_attempt
+    except Exception:
+        abandon(issued=True, reason_code="critic_authority_failure")
+        raise
+
+    if provider is None:
+        provider = service.record_provider_attempt(
+            authorized,
+            call=llm_call,
+            outcome="provider_result",
+            usage_status="exact",
+        )
+    admitted_ref = harness.blobs.put(
+        canonical_json(output.model_dump(mode="json", exclude_none=True))
+    )
+    admission = service.record_semantic_admission(
+        provider,
+        outcome="admitted",
+        admitted_refs=(admitted_ref,),
+    )
+    service.terminate(
+        work_id=preparation.id,
+        attempt_index=preparation.attempt_index,
+        status="completed",
+        reason_code="critic_output_admitted",
+        usage_status="exact",
+        prompt_tokens=llm_call.prompt_tokens,
+        completion_tokens=llm_call.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+    return output, llm_call
 
 
 def _observe_case(
@@ -395,9 +651,7 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
         probes: list[tuple[str | None, str | None]] = [(None, None)]
         probes += [(gid, src) for gid, src in accepted_generators(harness, cid)]
         for gen_id, gen_source in probes:
-            violation, detail = fuzz_property(
-                source, base, config.FUZZ_N, generator=gen_source
-            )
+            violation, detail = fuzz_property(source, base, config.FUZZ_N, generator=gen_source)
             if violation is None:
                 if detail.get("sandbox_abort") or detail.get("oracle_overrun"):
                     QUARANTINE_TICK[0] += 1  # unavailable is pending, never clean
@@ -443,9 +697,7 @@ def crit_fuzz(harness, target_id: str, config) -> Artifact | None:
         # The trusted spec checker found nothing: probe with ACTIVE proposed
         # properties (conjectured ground truth — checker_wf'd, trial-passed,
         # wipeout-guarded, and collapsible via the source-artifact closure).
-        prop_critic = _crit_proposed_properties(
-            harness, target_id, base, source, probes, config
-        )
+        prop_critic = _crit_proposed_properties(harness, target_id, base, source, probes, config)
         if prop_critic is not None:
             return prop_critic
     return None
@@ -462,9 +714,12 @@ def _refute_crashing_property(harness, prop_id: str, detail: dict) -> None:
     if prop is None:
         return
     wf_id = next(
-        (cid for cid in prop.interface.commitments
-         if (kappa := harness.commitments.get(cid)) is not None
-         and kappa.eval == f"program:{CHECKER_PROGRAM}"),
+        (
+            cid
+            for cid in prop.interface.commitments
+            if (kappa := harness.commitments.get(cid)) is not None
+            and kappa.eval == f"program:{CHECKER_PROGRAM}"
+        ),
         None,
     )
     if wf_id is None:
@@ -540,7 +795,10 @@ def _crit_proposed_properties(
         if violation is None:
             for _, gen_source in probes:
                 found, _detail = fuzz_property(
-                    source, base, config.FUZZ_N, generator=gen_source,
+                    source,
+                    base,
+                    config.FUZZ_N,
+                    generator=gen_source,
                     checker=prop_source,
                 )
                 if _detail.get("sandbox_abort") or _detail.get("oracle_overrun"):
@@ -570,14 +828,10 @@ def _crit_proposed_properties(
             harness, base, prop_source, target_id
         ):
             QUARANTINE_TICK[0] += 1  # sweep must NOT mark this target clean
-            harness.record_measure(
-                inputs=["property-wipeout-quarantine", prop_id, target_id]
-            )
+            harness.record_measure(inputs=["property-wipeout-quarantine", prop_id, target_id])
             continue
         cx = property_violation_commitment(base, prop_id, prop_source, violation)
-        verdict, trace = programs.evaluate(
-            cx, harness.state.artifacts[target_id], harness.blobs
-        )
+        verdict, trace = programs.evaluate(cx, harness.state.artifacts[target_id], harness.blobs)
         if verdict != programs.FAIL:
             continue
         harness.register_commitment(cx)
@@ -635,13 +889,9 @@ def crit_argumentative(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs)
-        or argumentative_authority is not None
-        or coverage_observer is not None
+        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
     )
-    authority = _resolve_authority(
-        config, argumentative_authority, policy_call=policy_call
-    )
+    authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
     pack = render_crit_pack(
         target_id,
         harness.state,
@@ -694,28 +944,18 @@ def crit_argumentative(
             # counterexample retry): the one-shot caller otherwise never learns
             # why its input refuted nothing.
             cx = output.counterexample
-            retries = (
-                config.CX_RETRY_MAX
-                if _has_property_oracle(harness, target_id)
-                else 0
-            )
+            retries = config.CX_RETRY_MAX if _has_property_oracle(harness, target_id) else 0
             for _ in range(max(0, retries)):
-                harness.record_measure(
-                    inputs=["arg-crit-cx-rejected", target_id], llm=llm_call
-                )
+                harness.record_measure(inputs=["arg-crit-cx-rejected", target_id], llm=llm_call)
                 retry_pack = render_cx_retry_pack(
                     [{"target": target_id, "counterexample": cx, "reason": reason}],
                     harness.state,
                     harness.commitments,
                     harness.blobs,
-                    token_budget=_conditioned_budget(
-                        config.PACK_TOKEN_BUDGET, school_prefix
-                    ),
+                    token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
                 )
                 retry_pack = _condition_pack(retry_pack, school_prefix)
-                retry_aliases = aliases_for_pack(
-                    retry_pack, harness.state.artifacts, prefix="A"
-                )
+                retry_aliases = aliases_for_pack(retry_pack, harness.state.artifacts, prefix="A")
                 retry_contract = wire_contract_for(
                     "argumentative_critic",
                     ArgumentativeCriticOutput,
@@ -744,9 +984,7 @@ def crit_argumentative(
                 )
                 if grounded is not None:
                     if grounded.id in before:
-                        harness.record_measure(
-                            inputs=["arg-crit", target_id], llm=llm_call
-                        )
+                        harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
                     return grounded
                 cx = retry.counterexample
             harness.record_measure(
@@ -822,6 +1060,10 @@ def crit_argumentative_batch(
     critic_school_context: Mapping[str, object] | None = None,
     argumentative_authority: object | None = None,
     coverage_observer: Callable[[str, int], None] | None = None,
+    run_manifest=None,
+    transaction_attempt_index: int = 0,
+    transaction_assignment_refs: tuple[str, ...] = (),
+    transaction_trigger_ref: str | None = None,
 ) -> list[Artifact]:
     """One argumentative-critic call over K targets (§14 batching — the call
     structure is not the epistemology; the warrant structure is). Every
@@ -835,17 +1077,21 @@ def crit_argumentative_batch(
         critic_school_context=critic_school_context,
     )
     policy_call = (
-        bool(call_kwargs)
-        or argumentative_authority is not None
-        or coverage_observer is not None
+        bool(call_kwargs) or argumentative_authority is not None or coverage_observer is not None
     )
-    authority = _resolve_authority(
-        config, argumentative_authority, policy_call=policy_call
-    )
+    authority = _resolve_authority(config, argumentative_authority, policy_call=policy_call)
+    active_v6 = False
+    if run_manifest is not None:
+        from deepreason.run_manifest import RunManifest
+
+        run_manifest = RunManifest.model_validate(run_manifest)
+        active_v6 = run_manifest.schema_version == 6
+    if active_v6 and (endpoint_lease is None or critic_school_id is None):
+        raise ValueError("v6 criticism requires one manifest-bound school route")
     target_ids = list(dict.fromkeys(target_ids))
     if not target_ids:
         return []
-    if len(target_ids) == 1:
+    if len(target_ids) == 1 and not active_v6:
         critic = crit_argumentative(
             harness,
             target_ids[0],
@@ -859,8 +1105,8 @@ def crit_argumentative_batch(
         )
         return [critic] if critic else []
     if (
-        get_profile(adapter.profile_for("argumentative_critic")).name
-        == ModelProfile.COMPACT
+        not active_v6
+        and get_profile(adapter.profile_for("argumentative_critic")).name == ModelProfile.COMPACT
     ):
         # Compact is one semantic target per call. Preserve per-target warrant
         # construction and deterministic target order by using the ordinary
@@ -881,23 +1127,58 @@ def crit_argumentative_batch(
             if critic is not None:
                 critics.append(critic)
         return critics
-    pack = render_batch_crit_pack(
-        target_ids,
-        harness.state,
-        harness.commitments,
-        harness.blobs,
-        token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
-    )
-    pack = _condition_pack(pack, school_prefix)
-    output, llm_call = adapter.call(
-        "argumentative_critic",
-        pack,
-        BatchCriticOutput,
-        template_role="batch_critic",
-        **call_kwargs,
-    )
+
+    def primary_pack_factory() -> str:
+        pack = render_batch_crit_pack(
+            target_ids,
+            harness.state,
+            harness.commitments,
+            harness.blobs,
+            token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
+        )
+        return _condition_pack(pack, school_prefix)
+
+    transactional_call = None
+    if active_v6:
+        assert endpoint_lease is not None
+        assert critic_school_id is not None
+
+        def transactional_call(
+            selected_targets: tuple[str, ...],
+            pack_factory: Callable[[], str],
+            phase: str,
+        ):
+            return _v6_transactional_batch_call(
+                harness,
+                adapter,
+                run_manifest,
+                endpoint_lease=endpoint_lease,
+                critic_school_id=critic_school_id,
+                target_ids=selected_targets,
+                assignment_refs=transaction_assignment_refs,
+                coverage_attempt_index=transaction_attempt_index,
+                phase=phase,
+                caller_trigger_ref=transaction_trigger_ref,
+                pack_factory=pack_factory,
+            )
+
+        output, llm_call = transactional_call(
+            tuple(target_ids),
+            primary_pack_factory,
+            "primary",
+        )
+    else:
+        pack = primary_pack_factory()
+        output, llm_call = adapter.call(
+            "argumentative_critic",
+            pack,
+            BatchCriticOutput,
+            template_role="batch_critic",
+            **call_kwargs,
+        )
+    criticism_completed = False
     try:
-        return _crit_argumentative_batch_result(
+        result = _crit_argumentative_batch_result(
             harness,
             target_ids,
             adapter,
@@ -908,14 +1189,19 @@ def crit_argumentative_batch(
             call_kwargs=call_kwargs,
             school_prefix=school_prefix,
             critic_school_id=critic_school_id,
+            transactional_call=transactional_call,
+            llm_already_recorded=active_v6,
         )
+        criticism_completed = True
+        return result
     finally:
-        _observe_coverage(
-            harness,
-            tuple(target_ids),
-            llm_call,
-            coverage_observer,
-        )
+        if criticism_completed or not active_v6:
+            _observe_coverage(
+                harness,
+                tuple(target_ids),
+                llm_call,
+                coverage_observer,
+            )
 
 
 def _crit_argumentative_batch_result(
@@ -930,6 +1216,8 @@ def _crit_argumentative_batch_result(
     call_kwargs: dict,
     school_prefix: str,
     critic_school_id: str | None,
+    transactional_call=None,
+    llm_already_recorded: bool = False,
 ) -> list[Artifact]:
     """Process one already-returned batch without changing its route policy."""
 
@@ -939,7 +1227,7 @@ def _crit_argumentative_batch_result(
     # The shared call must be logged on exactly one committed event. Attach it
     # to the first registration that actually COMMITS (a deduped critic
     # commits no event), and fall back to a Measure if none do.
-    llm_pending: object | None = llm_call
+    llm_pending: object | None = None if llm_already_recorded else llm_call
     for case in output.cases:
         if case.target not in target_ids or case.target in ruled:
             continue
@@ -964,9 +1252,7 @@ def _crit_argumentative_batch_result(
             # Execution supremacy (§3): reality overrides the argument. Log the
             # override (llm=None — the shared call is accounted exactly once
             # elsewhere) and queue the target for the counterexample retry.
-            harness.record_measure(
-                inputs=["arg-crit-overridden-by-execution", case.target]
-            )
+            harness.record_measure(inputs=["arg-crit-overridden-by-execution", case.target])
             if _has_property_oracle(harness, case.target):
                 rejected.append(
                     {
@@ -1034,28 +1320,39 @@ def _crit_argumentative_batch_result(
     # Counterexample retry (§3): ONE shared follow-up call per round for every
     # overridden attack, echoing each gate/oracle rejection reason. Same
     # batching philosophy as above — the call is shared, warrants per-target.
-    for _ in range(max(0, config.CX_RETRY_MAX)):
+    for retry_index in range(max(0, config.CX_RETRY_MAX)):
         if not rejected:
             break
-        retry_pack = render_cx_retry_pack(
-            rejected,
-            harness.state,
-            harness.commitments,
-            harness.blobs,
-            token_budget=_conditioned_budget(
-                config.PACK_TOKEN_BUDGET, school_prefix
-            ),
-        )
-        retry_pack = _condition_pack(retry_pack, school_prefix)
-        retry_out, retry_llm = adapter.call(
-            "argumentative_critic",
-            retry_pack,
-            BatchCriticOutput,
-            template_role="batch_critic",
-            **call_kwargs,
-        )
-        allowed = {item["target"]: item for item in rejected}
-        retry_pending: object | None = retry_llm
+        retry_inputs = [dict(item) for item in rejected]
+        allowed = {item["target"]: item for item in retry_inputs}
+
+        def retry_pack_factory() -> str:
+            retry_pack = render_cx_retry_pack(
+                retry_inputs,
+                harness.state,
+                harness.commitments,
+                harness.blobs,
+                token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
+            )
+            return _condition_pack(retry_pack, school_prefix)
+
+        if transactional_call is not None:
+            retry_out, retry_llm = transactional_call(
+                tuple(sorted(allowed)),
+                retry_pack_factory,
+                f"counterexample_retry:{retry_index}",
+            )
+            retry_pending: object | None = None
+        else:
+            retry_pack = retry_pack_factory()
+            retry_out, retry_llm = adapter.call(
+                "argumentative_critic",
+                retry_pack,
+                BatchCriticOutput,
+                template_role="batch_critic",
+                **call_kwargs,
+            )
+            retry_pending = retry_llm
         seen_retry: set[str] = set()
         next_rejected: list[dict] = []
         for case in retry_out.cases:

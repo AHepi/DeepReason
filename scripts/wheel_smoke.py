@@ -20,15 +20,12 @@ import tempfile
 import venv
 
 
-NARROW_TOOLS = {
+CORE_MCP_TOOLS = {
     "start_run",
     "run_status",
     "run_result",
     "continue_run",
     "cancel_run",
-    "start_make",
-    "make_status",
-    "make_result",
     "scratch_map",
     "scratch_search",
     "scratch_open",
@@ -38,6 +35,9 @@ NARROW_TOOLS = {
     "bridge_status",
     "bridge_result",
     "bridge_claims",
+    "get_capabilities",
+    "get_help_topic",
+    "get_request_requirements",
 }
 
 
@@ -103,11 +103,13 @@ def _check_mcp(executable: Path, repo: Path) -> None:
         raise AssertionError("deepreason-mcp did not initialize as deepreason")
     tools = by_id[2]["result"]["tools"]
     names = {tool["name"] for tool in tools}
-    if len(tools) != len(NARROW_TOOLS) or names != NARROW_TOOLS:
+    missing = CORE_MCP_TOOLS - names
+    if missing:
         raise AssertionError(
-            "installed default MCP surface differs from the exact 17-tool contract: "
-            f"{sorted(names)}"
+            "installed default MCP surface omits supported core operations: "
+            f"{sorted(missing)}"
         )
+
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -147,6 +149,9 @@ def main(argv: list[str] | None = None) -> int:
         mcp = _venv_executable(environment, "deepreason-mcp")
         _run([str(python), "-m", "pip", "install", str(wheels[0])], cwd=repo)
 
+        if _venv_executable(environment, "deepreason-campaign").exists():
+            raise AssertionError("core wheel unexpectedly installed deepreason-campaign")
+
         _assert_help(deepreason, ["--help"], "scratch", repo)
         _assert_help(deepreason, ["scratch", "--help"], "coverage", repo)
         _assert_help(deepreason, ["bridge", "--help"], "claims", repo)
@@ -170,7 +175,7 @@ assert importlib.util.find_spec("fastembed") is None
 """
         _run([str(python), "-c", import_check], cwd=temp_root)
         print(
-            "wheel smoke passed: both entry points, exact narrow MCP surface, "
+            "wheel smoke passed: supported entry points, required core MCP operations, "
             "canonical scratch/bridge/locking, MiniReason advisory facade, and "
             "deterministic embedder fallback"
         )

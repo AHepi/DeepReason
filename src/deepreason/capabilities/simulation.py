@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -47,8 +48,8 @@ class SimulationCapabilityController:
         self.manifest = manifest
         topology = manifest.inquiry_capability_policy
         self.policy = topology.simulation if topology is not None else None
-        if manifest.schema_version != 5 or self.policy is None:
-            raise ValueError("simulation controller requires one v5 run manifest")
+        if manifest.schema_version not in {5, 6} or self.policy is None:
+            raise ValueError("simulation controller requires one v5+ run manifest")
 
     def _transition(
         self,
@@ -62,16 +63,12 @@ class SimulationCapabilityController:
         scratch_fence_seq: int,
     ) -> CapabilityTransitionV1:
         trigger_ref = (
-            f"provider-call:{proposal.source_call_seq}"
-            if previous is None
-            else previous.id
+            f"provider-call:{proposal.source_call_seq}" if previous is None else previous.id
         )
         budget_delta = {
             CapabilityLifecycle.PROPOSED: CapabilityBudgetDeltaV1(requests=1),
             CapabilityLifecycle.DISPATCHED: CapabilityBudgetDeltaV1(executions=1),
-            CapabilityLifecycle.CONSUMED: CapabilityBudgetDeltaV1(
-                result_follow_ups=1
-            ),
+            CapabilityLifecycle.CONSUMED: CapabilityBudgetDeltaV1(result_follow_ups=1),
         }.get(lifecycle, CapabilityBudgetDeltaV1())
         previous_process_digest = self.harness.capability_state.process_digest
         phase_record_ref = getattr(phase_record, "id", None)
@@ -153,14 +150,15 @@ class SimulationCapabilityController:
         )
 
     def _compile_inputs(self, proposal: SimulationProposalV1) -> tuple[bytes, str | None]:
-        catalog = {item.alias: item for item in self.policy.input_catalog}
+        catalog = (
+            {f"SIM_{index:03d}": item for index, item in enumerate(self.policy.input_catalog, 1)}
+            if self.manifest.schema_version == 6
+            else {item.alias: item for item in self.policy.input_catalog}
+        )
         unknown = sorted(set(proposal.input_aliases) - set(catalog))
         if unknown:
             return b"", "unknown_input_alias"
-        sealed = {
-            alias: catalog[alias].value
-            for alias in proposal.input_aliases
-        }
+        sealed = {alias: catalog[alias].value for alias in proposal.input_aliases}
         parameter_sets = proposal.parameter_definitions or ()
         inputs: list[dict[str, Any]] = []
         if parameter_sets:
@@ -193,13 +191,8 @@ class SimulationCapabilityController:
 
         from deepreason.workflow.models import CapabilityOutcome
 
-        if (
-            CapabilityOutcome.SIMULATION_REQUEST
-            not in work_order.capability_grant.allowed_outcomes
-        ):
-            raise ValueError(
-                "originating work order does not permit a simulation proposal"
-            )
+        if CapabilityOutcome.SIMULATION_REQUEST not in work_order.capability_grant.allowed_outcomes:
+            raise ValueError("originating work order does not permit a simulation proposal")
 
         proposal_values = draft.model_dump(mode="python")
         proposal = SimulationProposalV1.create(
@@ -220,6 +213,246 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
         return proposal
+
+    def _stage_transactional_proposal(
+        self,
+        draft: SimulationProposalDraftV1,
+        *,
+        proposal_index: int,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> SimulationProposalV1:
+        """Build and validate a v6 proposal without appending any event.
+
+        This seam never accepts a legacy WorkOrderEnvelope. The preparation
+        fixes the problem, run input, route, contract, and proposal authority;
+        the provider-result event proves which authorized result supplied the
+        semantic content. The returned immutable proposal is preparation data.
+        """
+
+        from deepreason.workflow.models import CapabilityOutcome, WorkflowTaskKind
+        from deepreason.workflow.transaction import (
+            ProviderAttemptV1,
+            WorkPreparationV1,
+        )
+
+        if self.manifest.schema_version != 6:
+            raise ValueError("transactional simulation proposals require RunManifest v6")
+        preparation = WorkPreparationV1.model_validate(
+            preparation.model_dump(mode="python", by_alias=True)
+        )
+        provider_attempt = ProviderAttemptV1.model_validate(
+            provider_attempt.model_dump(mode="python", by_alias=True)
+        )
+        item = self.harness.workflow_state.transaction_work.get(preparation.id)
+        if (
+            item is None
+            or item.preparation != preparation
+            or provider_attempt.work_id != preparation.id
+            or item.provider_attempts.get(provider_attempt.attempt_index) != provider_attempt
+            or preparation.task_kind != WorkflowTaskKind.CONJECTURE
+            or preparation.contract_id != "conjecturer.turn.v6"
+        ):
+            raise ValueError("simulation proposal lacks its durable v6 provider work")
+        payload = preparation.task_payload_value
+        if not isinstance(payload, Mapping):
+            raise ValueError("v6 conjecture preparation has no semantic task payload")
+        simulation_authority = payload.get("simulation_authority")
+        allowed_outcomes = payload.get("allowed_outcomes")
+        if (
+            not isinstance(simulation_authority, Mapping)
+            or simulation_authority.get("enabled") is not True
+            or simulation_authority.get("policy_digest") != self.policy.digest
+            or simulation_authority.get("maximum_proposals_per_turn")
+            != self.policy.maximum_proposals_per_turn
+            or not isinstance(allowed_outcomes, (tuple, list))
+            or CapabilityOutcome.SIMULATION_REQUEST.value not in allowed_outcomes
+            or proposal_index >= self.policy.maximum_proposals_per_turn
+        ):
+            raise ValueError("v6 preparation does not authorize this simulation proposal")
+        authorized_aliases = tuple(simulation_authority.get("input_aliases") or ())
+        expected_aliases = tuple(
+            f"SIM_{index:03d}" for index, _item in enumerate(self.policy.input_catalog, 1)
+        )
+        if tuple(sorted(authorized_aliases)) != expected_aliases or any(
+            alias not in expected_aliases for alias in draft.input_aliases
+        ):
+            raise ValueError("simulation proposal uses context outside sealed input authority")
+        source = next(
+            (
+                event
+                for event in self.harness._events_since(source_call_seq)
+                if event.seq == source_call_seq
+            ),
+            None,
+        )
+        if (
+            source is None
+            or source.llm is None
+            or source.llm.work_order_id != preparation.id
+            or source.llm.dispatch_authorization_ref != provider_attempt.authorization_bundle_ref
+            or provider_attempt.id not in source.outputs
+        ):
+            raise ValueError("simulation proposal source is not its provider-result event")
+        problem_ref = payload.get("problem_ref")
+        if not isinstance(problem_ref, str) or not problem_ref:
+            raise ValueError("v6 simulation authority has no problem reference")
+
+        proposal = SimulationProposalV1.create(
+            **draft.model_dump(mode="python"),
+            proposal_index=proposal_index,
+            originating_work_order_ref=preparation.id,
+            originating_provider_attempt_ref=provider_attempt.id,
+            source_call_seq=source_call_seq,
+            problem_ref=problem_ref,
+            run_input_digest=self.manifest.run_input_digest,
+        )
+        existing = self.harness.capability_state.proposals.get(proposal.id)
+        if existing is not None:
+            if existing != proposal:
+                raise ValueError("transactional simulation proposal identity conflict")
+            return existing
+        return proposal
+
+    def stage_transactional_proposals(
+        self,
+        drafts: tuple[SimulationProposalDraftV1, ...],
+        *,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> tuple[SimulationProposalV1, ...]:
+        """Purely validate a complete proposal batch before semantic mutation."""
+
+        if len(drafts) > self.policy.maximum_proposals_per_turn:
+            raise ValueError("simulation proposal batch exceeds frozen turn authority")
+        proposals = tuple(
+            self._stage_transactional_proposal(
+                draft,
+                proposal_index=index,
+                preparation=preparation,
+                provider_attempt=provider_attempt,
+                source_call_seq=source_call_seq,
+            )
+            for index, draft in enumerate(drafts)
+        )
+        if len({proposal.id for proposal in proposals}) != len(proposals):
+            raise ValueError("transactional simulation proposal batch contains duplicates")
+        return proposals
+
+    def propose_transactional(
+        self,
+        draft: SimulationProposalDraftV1,
+        *,
+        proposal_index: int,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> SimulationProposalV1:
+        """Bind one staged v6 proposal to its durable provider transaction."""
+
+        proposal = self._stage_transactional_proposal(
+            draft,
+            proposal_index=proposal_index,
+            preparation=preparation,
+            provider_attempt=provider_attempt,
+            source_call_seq=source_call_seq,
+        )
+        existing = self.harness.capability_state.proposals.get(proposal.id)
+        if existing is not None:
+            return existing
+        item = self.harness.workflow_state.transaction_work[proposal.originating_work_order_ref]
+        self._transition(
+            proposal,
+            CapabilityLifecycle.PROPOSED,
+            previous=None,
+            phase_record=proposal,
+            reason_code="transaction_semantic_proposal",
+            formal_fence_seq=item.preparation.formal_fence_seq,
+            scratch_fence_seq=item.preparation.scratch_fence_seq,
+        )
+        return proposal
+
+    def materialize_transactional_proposals(
+        self,
+        drafts: tuple[SimulationProposalDraftV1, ...],
+        *,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> tuple[str, ...]:
+        """Return deterministic proposal IDs, reusing replayed records on recovery."""
+
+        if len(drafts) > self.policy.maximum_proposals_per_turn:
+            raise ValueError("simulation proposal batch exceeds frozen turn authority")
+        return tuple(
+            self.propose_transactional(
+                draft,
+                proposal_index=index,
+                preparation=preparation,
+                provider_attempt=provider_attempt,
+                source_call_seq=source_call_seq,
+            ).id
+            for index, draft in enumerate(drafts)
+        )
+
+    def require_transactional_origin(self, proposal: SimulationProposalV1):
+        """Return the completed v6 origin or fail closed on any broken link."""
+
+        if self.manifest.schema_version != 6:
+            raise ValueError("transactional simulation origin requires v6")
+        item = self.harness.workflow_state.transaction_work.get(proposal.originating_work_order_ref)
+        if item is None or proposal.originating_work_order_ref in (
+            self.harness.workflow_state.work_orders
+        ):
+            raise ValueError("v6 simulation proposal names legacy or missing work")
+        provider_attempt = next(
+            (
+                attempt
+                for attempt in item.provider_attempts.values()
+                if attempt.id == proposal.originating_provider_attempt_ref
+            ),
+            None,
+        )
+        terminal = item.terminal
+        admission = item.admissions.get(terminal.attempt_index) if terminal is not None else None
+        payload = item.preparation.task_payload_value
+        source = next(
+            (
+                event
+                for event in self.harness._events_since(proposal.source_call_seq)
+                if event.seq == proposal.source_call_seq
+            ),
+            None,
+        )
+        simulation_authority = (
+            payload.get("simulation_authority") if isinstance(payload, Mapping) else None
+        )
+        if (
+            provider_attempt is None
+            or terminal is None
+            or terminal.status != "completed"
+            or admission is None
+            or admission.outcome != "admitted"
+            or proposal.id not in admission.admitted_refs
+            or terminal.semantic_admission_ref != admission.id
+            or item.preparation.contract_id != "conjecturer.turn.v6"
+            or not isinstance(payload, Mapping)
+            or payload.get("problem_ref") != proposal.problem_ref
+            or payload.get("run_input_digest") != proposal.run_input_digest
+            or not isinstance(simulation_authority, Mapping)
+            or simulation_authority.get("policy_digest") != self.policy.digest
+            or source is None
+            or source.llm is None
+            or source.llm.work_order_id != item.preparation.id
+            or source.llm.dispatch_authorization_ref != provider_attempt.authorization_bundle_ref
+            or provider_attempt.id not in source.outputs
+        ):
+            raise ValueError(
+                "v6 simulation proposal does not resolve to completed transaction authority"
+            )
+        return item
 
     def execute(
         self,
@@ -253,12 +486,16 @@ class SimulationCapabilityController:
             formal_fence_seq = current.formal_fence_seq
             scratch_fence_seq = current.scratch_fence_seq
         else:
-            if None in {
-                proposal_index,
-                source_call_seq,
-                formal_fence_seq,
-                scratch_fence_seq,
-            } or work_order is None:
+            if (
+                None
+                in {
+                    proposal_index,
+                    source_call_seq,
+                    formal_fence_seq,
+                    scratch_fence_seq,
+                }
+                or work_order is None
+            ):
                 raise ValueError("draft execution requires complete originating authority")
             proposal = self.propose(
                 draft,
@@ -303,9 +540,17 @@ class SimulationCapabilityController:
             request_ordinal = ordered_requests.index(proposal) + 1
             if request_ordinal > self.policy.maximum_simulation_requests:
                 reason = "request_budget_exhausted"
-        if reason is None and self.harness.capability_state.execution_count >= self.policy.maximum_simulation_executions:
+        if (
+            reason is None
+            and self.harness.capability_state.execution_count
+            >= self.policy.maximum_simulation_executions
+        ):
             reason = "execution_budget_exhausted"
-        if reason is None and len(proposal.model_source.encode("utf-8")) > self.policy.maximum_generated_code_bytes:
+        if (
+            reason is None
+            and len(proposal.model_source.encode("utf-8"))
+            > self.policy.maximum_generated_code_bytes
+        ):
             reason = "generated_code_bytes_exceeded"
 
         expected_profile = (
@@ -517,11 +762,7 @@ class SimulationCapabilityController:
                 "sample_limit": self.policy.maximum_samples,
                 "maximum_output_bytes": self.policy.maximum_output_bytes,
             },
-            diagnostic=(
-                "output exceeded the manifest bound"
-                if output_truncated
-                else None
-            ),
+            diagnostic=("output exceeded the manifest bound" if output_truncated else None),
         )
         lifecycle = (
             CapabilityLifecycle.SUCCEEDED
@@ -547,12 +788,8 @@ class SimulationCapabilityController:
                     "retained_output_ref": final.output_ref,
                     "retained_output_sha256": sha256_hex(full_output),
                     "retained_output_bytes": len(full_output),
-                    "generated_output_sha256": final.trace.get(
-                        "generated_output_sha256"
-                    ),
-                    "generated_output_bytes": final.trace.get(
-                        "generated_output_bytes"
-                    ),
+                    "generated_output_sha256": final.trace.get("generated_output_sha256"),
+                    "generated_output_bytes": final.trace.get("generated_output_bytes"),
                 }
             )
         else:
@@ -564,7 +801,9 @@ class SimulationCapabilityController:
             "Simulated hardware quantities are model outputs, not measurements of the reference machine.",
         ]
         if operational_status == "failed":
-            limitations.append("The execution failed operationally and does not refute the hypothesis.")
+            limitations.append(
+                "The execution failed operationally and does not refute the hypothesis."
+            )
         context_payload = {
             "schema": "simulation-result-context.v1",
             "proposal_ref": proposal.id,
@@ -627,9 +866,7 @@ class SimulationCapabilityController:
         if current.lifecycle != CapabilityLifecycle.DISPATCHED:
             raise ValueError("only a dispatched simulation can be recovered")
         work_orders = [
-            item
-            for item in state.work_orders.values()
-            if item.proposal_ref == proposal.id
+            item for item in state.work_orders.values() if item.proposal_ref == proposal.id
         ]
         if len(work_orders) != 1:
             raise ValueError("interrupted simulation has no unique work order")
@@ -678,9 +915,7 @@ class SimulationCapabilityController:
             inputs_sha256=compiled.input_sha256,
             checker_sha256=compiled.checker_sha256,
             specification_sha256=sha256_hex(
-                canonical_json(
-                    compiled.specification.model_dump(mode="json", by_alias=True)
-                )
+                canonical_json(compiled.specification.model_dump(mode="json", by_alias=True))
             ),
             output_bytes=len(output),
             output_truncated=False,
@@ -694,9 +929,7 @@ class SimulationCapabilityController:
                 "network": False,
                 "execution_observed": False,
             },
-            diagnostic=(
-                "dispatch was durable but no execution receipt was; outcome unknown"
-            ),
+            diagnostic=("dispatch was durable but no execution receipt was; outcome unknown"),
         )
         current = self._transition(
             proposal,
@@ -763,6 +996,7 @@ class SimulationCapabilityController:
         follow_up_work_order_ref: str,
         formal_fence_seq: int,
         scratch_fence_seq: int,
+        follow_up_semantic_admission_ref: str | None = None,
     ) -> SimulationConsumptionV1:
         if self.harness.capability_state.consumption_count >= (
             self.policy.maximum_follow_up_reasoning_turns
@@ -777,6 +1011,7 @@ class SimulationCapabilityController:
             run_input_digest=self.manifest.run_input_digest,
             result_package_ref=package.id,
             follow_up_work_order_ref=follow_up_work_order_ref,
+            follow_up_semantic_admission_ref=follow_up_semantic_admission_ref,
         )
         self._transition(
             proposal,
@@ -788,6 +1023,65 @@ class SimulationCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
         return consumption
+
+    def consume_transactional(
+        self,
+        package: SimulationResultPackageV1,
+        *,
+        follow_up_work_ref: str,
+    ) -> SimulationConsumptionV1:
+        """Consume a result only after one fresh completed v6 work item."""
+
+        if self.manifest.schema_version != 6:
+            raise ValueError("transactional simulation consumption requires v6")
+        item = self.harness.workflow_state.transaction_work.get(follow_up_work_ref)
+        proposal = self.harness.capability_state.proposals[package.proposal_ref]
+        if item is None or item.preparation.id == proposal.originating_work_order_ref:
+            raise ValueError("simulation result requires a fresh transaction work item")
+        payload = item.preparation.task_payload_value
+        terminal = item.terminal
+        admission = item.admissions.get(terminal.attempt_index) if terminal is not None else None
+        result_plans = tuple(
+            plan for plan in item.plans.values() if plan.plan_kind == "simulation_result"
+        )
+        simulation_authority = (
+            payload.get("simulation_authority") if isinstance(payload, Mapping) else None
+        )
+        sealed_input_aliases = (
+            tuple(simulation_authority.get("input_aliases") or ())
+            if isinstance(simulation_authority, Mapping)
+            else ()
+        )
+        if (
+            not isinstance(payload, Mapping)
+            or payload.get("capability_result_package_ref") != package.id
+            or payload.get("capability_result_context_ref") != package.result_context_ref
+            or package.id not in item.preparation.input_refs
+            or package.result_context_ref not in item.preparation.input_refs
+            or terminal is None
+            or terminal.status != "completed"
+            or admission is None
+            or admission.outcome != "admitted"
+            or terminal.semantic_admission_ref != admission.id
+            or len(result_plans) != 1
+            or len(result_plans[0].items) != 1
+            or result_plans[0].items[0].object_ref != package.id
+            or result_plans[0].items[0].content_sha256 != package.result_context_ref
+            or result_plans[0].items[0].alias in sealed_input_aliases
+        ):
+            raise ValueError(
+                "simulation result was not exposed and admitted by fresh completed work"
+            )
+        transition = self.harness.capability_state.transitions[
+            self.harness.capability_state.current_transition_by_request[proposal.id]
+        ]
+        return self.consume(
+            package,
+            follow_up_work_order_ref=item.preparation.id,
+            follow_up_semantic_admission_ref=admission.id,
+            formal_fence_seq=transition.formal_fence_seq,
+            scratch_fence_seq=transition.scratch_fence_seq,
+        )
 
     def result_context(self, package: SimulationResultPackageV1) -> str:
         return self.harness.blobs.get(package.result_context_ref).decode("utf-8")

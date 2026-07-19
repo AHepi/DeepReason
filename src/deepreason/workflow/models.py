@@ -151,6 +151,12 @@ class IdentifiedWorkflowRecord(WorkflowRecord):
 
 class WorkflowTaskKind(str, Enum):
     CONJECTURE = "conjecture"
+    CRITICISM = "criticism"
+    BRIDGE_LEDGER = "bridge_ledger"
+    BRIDGE_COMPOSITION = "bridge_composition"
+    BRIDGE_REVIEW = "bridge_review"
+    REPAIR = "repair"
+    SCRATCH_AUTHORING = "scratch_authoring"
 
 
 class CapabilityOutcome(str, Enum):
@@ -158,6 +164,7 @@ class CapabilityOutcome(str, Enum):
     CONTEXT_REQUEST = "context_request"
     SIMULATION_REQUEST = "simulation_request"
     ABSTENTION = "abstention"
+    SCRATCH_PROPOSAL = "scratch_proposal"
 
 
 class ProposalValidationOutcome(str, Enum):
@@ -209,7 +216,7 @@ class TriggerKind(str, Enum):
 
 
 class RouteLeaseRefV1(WorkflowRecord):
-    role: Literal["conjecturer"] = "conjecturer"
+    role: str = Field(default="conjecturer", pattern=r"^[a-z][a-z0-9_-]{0,63}$")
     seat: int = Field(ge=0)
     endpoint_id: str = Field(min_length=1, max_length=512)
     route_sha256: str = Field(pattern=_DIGEST_PATTERN)
@@ -254,9 +261,11 @@ class CapabilityGrantV1(IdentifiedWorkflowRecord):
     schema_: Literal["workflow.capability-grant.v1"] = Field(
         "workflow.capability-grant.v1", alias="schema"
     )
-    profile_id: Literal["conjecture-control.v1", "inquiry-capabilities.v1"] = (
-        "conjecture-control.v1"
-    )
+    profile_id: Literal[
+        "conjecture-control.v1",
+        "inquiry-capabilities.v1",
+        "inquiry-capabilities.v2",
+    ] = "conjecture-control.v1"
     task_kind: Literal[WorkflowTaskKind.CONJECTURE] = WorkflowTaskKind.CONJECTURE
     allowed_outcomes: tuple[CapabilityOutcome, ...]
     max_candidates: int = Field(ge=0, le=256)
@@ -638,7 +647,10 @@ class WorkflowStopDecisionV1(IdentifiedWorkflowRecord):
     )
     manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
     workflow_profile: Literal[
-        "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+        "conjecture.shadow.v1",
+        "conjecture.active.v1",
+        "inquiry.active.v1",
+        "inquiry.active.v2",
     ]
     deterministic_decision: StopDecision
     policy_digest: str = Field(pattern=_DIGEST_PATTERN)
@@ -667,6 +679,8 @@ class OutstandingWorkItemV1(WorkflowRecord):
         "enabled",
         "issued",
         "provider_result_received",
+        "semantic_admission_received",
+        "prepared",
         "repair_pending",
         "context_pending",
     ]
@@ -700,7 +714,10 @@ class WorkflowLifecycleSnapshotV1(IdentifiedWorkflowRecord):
     )
     manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
+        "legacy.scheduler.v1",
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ]
     process_digest: str = Field(pattern=_ID_PATTERN)
     event_fence_seq: int = Field(ge=-1)
@@ -740,7 +757,10 @@ class StopMetricsObservationV1(IdentifiedWorkflowRecord):
     )
     manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
+        "legacy.scheduler.v1",
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ]
     process_digest: str = Field(pattern=_ID_PATTERN)
     stop_policy: StopPolicy
@@ -784,10 +804,17 @@ class WorkflowLifecycleDecisionV1(IdentifiedWorkflowRecord):
     )
     manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
     controller_version: Literal[
-        "legacy.scheduler.v1", "workflow.controller.v1", "workflow.controller.v2"
+        "legacy.scheduler.v1",
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ]
     workflow_profile: Literal[
-        "legacy.scheduler.v1", "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+        "legacy.scheduler.v1",
+        "conjecture.shadow.v1",
+        "conjecture.active.v1",
+        "inquiry.active.v1",
+        "inquiry.active.v2",
     ]
     previous_process_digest: str = Field(pattern=_ID_PATTERN)
     metrics_observation_ref: str = Field(pattern=_ID_PATTERN)
@@ -823,10 +850,15 @@ class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
     )
     manifest_digest: str = Field(pattern=_DIGEST_PATTERN)
     controller_version: Literal[
-        "workflow.controller.v1", "workflow.controller.v2"
+        "workflow.controller.v1",
+        "workflow.controller.v2",
+        "workflow.controller.v3",
     ] = "workflow.controller.v1"
     workflow_profile: Literal[
-        "conjecture.shadow.v1", "conjecture.active.v1", "inquiry.active.v1"
+        "conjecture.shadow.v1",
+        "conjecture.active.v1",
+        "inquiry.active.v1",
+        "inquiry.active.v2",
     ]
     prior_terminal_decision_ref: str = Field(pattern=_ID_PATTERN)
     prior_metrics_observation_ref: str = Field(pattern=_ID_PATTERN)

@@ -55,7 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
                              default=None, help="model-facing presentation profile "
                              "(default: explicit config, then doctor recommendation)")
     compile_cmd.add_argument("--engine-profile", choices=("mini", "full"), default="full")
-    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3, 4, 5), type=int, default=1)
+    compile_cmd.add_argument("--schema-version", choices=(1, 2, 3, 4, 5, 6), type=int, default=1)
     compile_cmd.add_argument(
         "--workload-profile", choices=("text", "code", "formal", "website"), default=None
     )
@@ -64,7 +64,7 @@ def build_parser() -> argparse.ArgumentParser:
     compile_cmd.add_argument(
         "--control-plane-policy",
         default=None,
-        help="ControlPlanePolicyV1 (v4) or ControlPlanePolicyV2 (v5) JSON file",
+        help="ControlPlanePolicyV1 (v4), V2 (v5), or V3 (v6) JSON file",
     )
     compile_cmd.add_argument(
         "--inquiry-capability-policy",
@@ -74,7 +74,7 @@ def build_parser() -> argparse.ArgumentParser:
     compile_cmd.add_argument(
         "--run-input-digest",
         default=None,
-        help="exact RunInputManifestV1 digest required by schema v5",
+        help="exact versioned RunInputManifest digest required by schema v5/v6",
     )
     compile_cmd.add_argument(
         "--simulation-toolchain",
@@ -93,12 +93,30 @@ def build_parser() -> argparse.ArgumentParser:
         "inspect", help="verify and print a compiled RunManifest"
     )
     inspect_cmd.add_argument("--run-manifest", required=True)
+    input_cmd = sub.add_parser(
+        "input", help="freeze a typed problem and its criteria before manifest compilation"
+    )
+    input_sub = input_cmd.add_subparsers(dest="input_command", required=True)
+    freeze_cmd = input_sub.add_parser(
+        "freeze", help="bind an immutable v5/v6 run input to --root"
+    )
+    freeze_cmd.add_argument(
+        "--problem", required=True, help="deepreason-text-workload-v1 YAML/JSON"
+    )
+    freeze_cmd.add_argument(
+        "--schema-version", choices=(5, 6), type=int, default=6
+    )
+    freeze_cmd.add_argument(
+        "--dossier",
+        default=None,
+        help="optional canonical evidence-dossier.v1 JSON already staged under --root",
+    )
     doctor_cmd = sub.add_parser(
         "doctor", help="preflight one exact endpoint/model and run deterministic capability probes"
     )
-    doctor_cmd.add_argument("--endpoint", required=True,
+    doctor_cmd.add_argument("--endpoint", default=None,
                             help="endpoint URL, endpoint_id, or configured role name")
-    doctor_cmd.add_argument("--model", required=True, help="exact concrete model id")
+    doctor_cmd.add_argument("--model", default=None, help="exact concrete model id")
     doctor_cmd.add_argument("--provider", default=None)
     doctor_cmd.add_argument("--family", default=None)
     doctor_cmd.add_argument("--api-key-env", default=None)
@@ -106,6 +124,21 @@ def build_parser() -> argparse.ArgumentParser:
                             help="exact provider model revision when available")
     doctor_cmd.add_argument("--dry-run", action="store_true",
                             help="validate identity without contacting /models")
+    doctor_cmd.add_argument(
+        "--run-manifest",
+        default=None,
+        help="exact RunManifest v6 to qualify (requires --production-contracts)",
+    )
+    doctor_cmd.add_argument(
+        "--production-contracts",
+        action="store_true",
+        help="exercise every frozen v6 production route/contract pair",
+    )
+    doctor_cmd.add_argument(
+        "--out",
+        default=None,
+        help="deterministic production-contract qualification report path",
+    )
     make_cmd = sub.add_parser(
         "make", help='build a website from a description, e.g. '
                      'deepreason make "a recipe website" — plans it, designs '
@@ -131,6 +164,11 @@ def build_parser() -> argparse.ArgumentParser:
     reason_cmd.add_argument("--cycles", type=int, default=12)
     reason_cmd.add_argument("--token-budget", default="200000")
     reason_cmd.add_argument("--dry-run", action="store_true")
+    reason_cmd.add_argument(
+        "--experimental-v5",
+        action="store_true",
+        help="diagnostic-only override for contained v5 active_inquiry runs",
+    )
     skills_cmd = sub.add_parser(
         "skills", help="snapshot and retrieve from explicit advisory skill capsules"
     )
@@ -182,6 +220,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--token-budget", default="unlimited", help="positive integer or unlimited"
     )
     continue_cmd.add_argument("--expected-manifest-digest", default=None)
+    continue_cmd.add_argument(
+        "--experimental-v5",
+        action="store_true",
+        help="diagnostic-only override for contained v5 active_inquiry continuations",
+    )
     watch_cmd = sub.add_parser("watch", help="watch read-only structured run progress")
     watch_cmd.add_argument("--once", action="store_true", help="render one snapshot and exit")
     watch_cmd.add_argument("--interval", type=float, default=0.25)
@@ -238,6 +281,11 @@ def build_parser() -> argparse.ArgumentParser:
                      help="precompiled immutable role matrix")
     run.add_argument("--dry-run", action="store_true",
                      help="resolve and print the exact role matrix; make no model call")
+    run.add_argument(
+        "--experimental-v5",
+        action="store_true",
+        help="diagnostic-only override for contained v5 active_inquiry runs",
+    )
     sub.add_parser("mcp", help="serve the harness as MCP tools over stdio (install in any agent harness)")
     sub.add_parser("why", help="print the attack/defence chain justifying a status").add_argument("id")
     sub.add_parser(
@@ -371,6 +419,7 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.run_manifest import (
             ControlPlanePolicyV1,
             ControlPlanePolicyV2,
+            ControlPlanePolicyV3,
             RunManifestError,
             ToolchainEntry,
             compile_run_manifest,
@@ -384,7 +433,9 @@ def _main(argv: list[str] | None = None) -> int:
         if args.control_plane_policy:
             try:
                 control_model = (
-                    ControlPlanePolicyV2
+                    ControlPlanePolicyV3
+                    if args.schema_version == 6
+                    else ControlPlanePolicyV2
                     if args.schema_version == 5
                     else ControlPlanePolicyV1
                 )
@@ -458,6 +509,8 @@ def _main(argv: list[str] | None = None) -> int:
         print(json.dumps(manifest.model_dump(mode="json"), indent=2, sort_keys=True))
         return 0
 
+    if args.command == "input":
+        return _cmd_input(args)
     if args.command == "doctor":
         return _cmd_doctor(args)
 
@@ -510,7 +563,10 @@ def _main(argv: list[str] | None = None) -> int:
         from deepreason.config import load as load_config
         from deepreason.llm.capabilities import CapabilityCache
         from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
-        from deepreason.ops import require_full_engine
+        from deepreason.ops import (
+            require_full_engine,
+            require_website_transaction_contracts,
+        )
         from deepreason.run_manifest import (
             MANIFEST_NAME,
             RunManifestError,
@@ -521,6 +577,7 @@ def _main(argv: list[str] | None = None) -> int:
             preflight_payload,
             render_role_matrix,
         )
+        from deepreason.runtime.launch_policy import require_v6_launch_allowed
 
         run_root = (
             Path(args.root)
@@ -551,6 +608,9 @@ def _main(argv: list[str] | None = None) -> int:
                     capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
                 )
             require_full_engine(manifest, workload="website")
+            if not args.dry_run:
+                require_v6_launch_allowed(manifest, operation="website build")
+            require_website_transaction_contracts(manifest)
             preflight_payload(
                 manifest, {"problem": {"description": args.description}, "commitments": []}
             )
@@ -887,6 +947,92 @@ def _read_problem_file(path: Path) -> dict:
     return data
 
 
+def _cmd_input(args) -> int:
+    """Freeze one problem and its complete criteria before v5/v6 compilation."""
+
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV1,
+        RunInputManifestV2,
+        RunInputProblemV1,
+        RunInputProblemV2,
+        bind_run_input,
+    )
+    from deepreason.workloads.text import ReasoningWorkloadSpec
+
+    if args.input_command != "freeze":
+        return 2
+    try:
+        spec = ReasoningWorkloadSpec.model_validate(
+            _read_problem_file(Path(args.problem))
+        )
+        root = Path(args.root)
+        if args.dossier:
+            dossier = EvidenceDossierV1.model_validate(
+                _read_problem_file(Path(args.dossier))
+            )
+        else:
+            if spec.sources:
+                raise ValueError(
+                    "INPUT_DOSSIER_REQUIRED: workload sources require --dossier"
+                )
+            dossier = EvidenceDossierV1.create(
+                problem_ref=spec.problem.id,
+                sources=(),
+                total_byte_count=0,
+                creation_provenance=AttachedSourceProvenanceV1(
+                    supplied_by="operator workload",
+                    acquisition_method="deepreason input freeze",
+                ),
+            )
+        if dossier.problem_ref != spec.problem.id:
+            raise ValueError(
+                "RUN_INPUT_PROBLEM_MISMATCH: dossier and workload name different problems"
+            )
+        dossier_ids = tuple(source.id for source in dossier.sources)
+        if spec.sources and tuple(spec.sources) != dossier_ids:
+            raise ValueError(
+                "RUN_INPUT_SOURCE_MISMATCH: workload sources must exactly equal "
+                "the dossier's canonical source IDs"
+            )
+        if args.schema_version == 6:
+            run_input = RunInputManifestV2.create(
+                problem=RunInputProblemV2.from_commitments(
+                    id=spec.problem.id,
+                    description=spec.problem.description,
+                    criteria=spec.criteria,
+                ),
+                evidence_dossier_digest=dossier.dossier_digest,
+            )
+        else:
+            run_input = RunInputManifestV1.create(
+                problem=RunInputProblemV1(
+                    id=spec.problem.id,
+                    description=spec.problem.description,
+                    criteria=tuple(item.id for item in spec.criteria),
+                ),
+                evidence_dossier_digest=dossier.dossier_digest,
+            )
+        bind_run_input(run_input, dossier, root)
+    except (OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(
+        json.dumps(
+            {
+                "schema": "deepreason-input-freeze-result-v1",
+                "input_schema_version": run_input.input_schema_version,
+                "run_input_digest": run_input.run_input_digest,
+                "evidence_dossier_digest": dossier.dossier_digest,
+                "root": str(root.resolve()),
+            },
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def _doctor_role_seats(configured, role: str) -> dict:
     """Report one source role without resolving, probing, or exposing secrets."""
 
@@ -1016,6 +1162,59 @@ def _cmd_doctor(args) -> int:
     """Validate identity, inventory, then measure transport capabilities."""
     import os
     from dataclasses import asdict
+
+    production_mode = bool(
+        args.run_manifest or args.production_contracts or args.out
+    )
+    if production_mode:
+        if not (args.run_manifest and args.production_contracts and args.out):
+            print(
+                "DOCTOR_PRODUCTION_ARGUMENTS_REQUIRED: pass --run-manifest, "
+                "--production-contracts, and --out together",
+                file=sys.stderr,
+            )
+            return 1
+        legacy_values = (
+            args.endpoint,
+            args.model,
+            args.provider,
+            args.family,
+            args.api_key_env,
+            args.revision,
+        )
+        if any(value is not None for value in legacy_values) or args.dry_run:
+            print(
+                "DOCTOR_MODE_CONFLICT: production-contract qualification cannot "
+                "be combined with endpoint-doctor arguments",
+                file=sys.stderr,
+            )
+            return 1
+        from deepreason.cli.doctor import run_production_contract_doctor_cli
+
+        try:
+            report = run_production_contract_doctor_cli(
+                run_manifest=args.run_manifest,
+                output=args.out,
+            )
+        except (OSError, ValueError) as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        print(
+            json.dumps(
+                report.model_dump(mode="json", by_alias=True, exclude_none=True),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if report.summary.qualified else 1
+
+    if not args.endpoint or not args.model:
+        print(
+            "DOCTOR_ENDPOINT_MODEL_REQUIRED: pass --endpoint and --model, or use "
+            "--run-manifest with --production-contracts and --out",
+            file=sys.stderr,
+        )
+        return 1
 
     from deepreason.config import load as load_config
     from deepreason.llm.adapter import _endpoint_from_spec
@@ -1236,7 +1435,7 @@ def _cmd_reason(args) -> int:
                 capability_cache=CapabilityCache(root / "capabilities.json"),
             )
         require_full_engine(manifest, workload="text reasoning")
-        if manifest.schema_version in {2, 3, 4, 5} and manifest.workload_profile != "text":
+        if manifest.schema_version in {2, 3, 4, 5, 6} and manifest.workload_profile != "text":
             raise RunManifestError(
                 "WORKLOAD_PROFILE_MISMATCH",
                 f"reason requires text, got {manifest.workload_profile}",
@@ -1271,20 +1470,20 @@ def _execute_reason(args, spec, manifest, root: Path, token_budget) -> int:
                 token_budget=(
                     "unlimited" if token_budget is None else token_budget
                 ),
+                experimental_v5=args.experimental_v5,
             ),
             manifest_override=manifest,
         )
         TEXT_RUN_SERVICE.wait(accepted.root)
-        payload = TEXT_RUN_SERVICE.result(
+        terminal = TEXT_RUN_SERVICE.result(
             InspectTextRunIntentV1(root=accepted.root)
-        ).presentation_payload()
+        )
     except ValueError as error:
         print(str(error), file=sys.stderr)
-        return 1
-    # The synchronous CLI historically omitted MCP's lifecycle field.
-    payload.pop("state", None)
+        return 6 if str(error).startswith(("RUN_RESULT_INVALID", "RUN_RESULT_NOT_READY")) else 1
+    payload = terminal.presentation_payload()
     print(json.dumps(payload, indent=2, sort_keys=True))
-    return 0
+    return terminal.exit_code()
 
 def _cmd_skills(args) -> int:
     """Snapshot explicit capsules and emit a replayable retrieval receipt."""
@@ -1443,17 +1642,19 @@ def _cmd_continue(args) -> int:
                 cycles=raw_cycles,
                 token_budget=args.token_budget,
                 expected_manifest_digest=args.expected_manifest_digest,
+                experimental_v5=args.experimental_v5,
             )
         )
         TEXT_RUN_SERVICE.wait(accepted.root)
-        payload = TEXT_RUN_SERVICE.result(
+        terminal = TEXT_RUN_SERVICE.result(
             InspectTextRunIntentV1(root=accepted.root)
-        ).presentation_payload()
+        )
     except ValueError as error:
         print(str(error), file=sys.stderr)
-        return 1
+        return 6 if str(error).startswith(("RUN_RESULT_INVALID", "RUN_RESULT_NOT_READY")) else 1
+    payload = terminal.presentation_payload()
     print(json.dumps(payload, indent=2, sort_keys=True))
-    return 0
+    return terminal.exit_code()
 
 
 def _cmd_cancel(args) -> int:
@@ -1677,6 +1878,8 @@ def _cmd_run(args) -> int:
     from deepreason.llm.capabilities import CapabilityCache
     from deepreason.locking import ProcessLockBusy, ProcessLockError, operator_locks
     from deepreason.ops import require_full_engine
+    from deepreason.application.text_runs import _check_experimental_v5
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
     from deepreason.run_manifest import (
         MANIFEST_NAME,
         RunManifestError,
@@ -1721,7 +1924,11 @@ def _cmd_run(args) -> int:
                 capability_cache=CapabilityCache(Path(args.root) / "capabilities.json"),
             )
             config = config_from_run_manifest(manifest)
+        if not args.dry_run:
+            require_v6_launch_allowed(manifest, operation="full scheduler")
         require_full_engine(manifest, workload="full scheduler")
+        if not args.dry_run:
+            _check_experimental_v5(manifest, args.experimental_v5)
         if args.problem:
             preflight_payload(manifest, _read_problem_file(Path(args.problem)))
         if not args.dry_run:
@@ -1753,6 +1960,14 @@ def _cmd_run(args) -> int:
 def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> int:
     """Execute a preflighted run while its caller retains operator locks."""
 
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
+
+    try:
+        require_v6_launch_allowed(manifest, operation="full scheduler")
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+
     from deepreason.ops import run_scheduler
     from deepreason.run_manifest import preflight_payload
 
@@ -1776,6 +1991,10 @@ def _execute_bound_run(args, manifest, config, run_root: Path, cycles: int) -> i
     if not harness.state.problems:
         print("no problem on the frontier; pass --problem <file>", file=sys.stderr)
         return 1
+    if args.experimental_v5:
+        harness.record_measure(
+            inputs=["experimental-v5-override.v1", manifest.sha256]
+        )
     try:
         result, meter, accounting = run_scheduler(
             harness, config, cycles, args.token_budget, run_manifest=manifest

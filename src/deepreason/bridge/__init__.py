@@ -21,14 +21,18 @@ _MODEL_EXPORTS = {
     "GroundingFindingV1",
     "GroundingReviewV1",
     "GroundingStatus",
+    "ProcessObservationV1",
     "RenderingMode",
     "SourceConflictV1",
     "UncoveredRequirementV1",
     "UnresolvedItemV1",
 }
 _LEDGER_EXPORTS = {
+    "ClaimLedgerCatalog",
     "ClaimLedgerAmendmentRequestV1",
+    "ClaimLedgerInputCatalogV3",
     "ClaimLedgerCatalogItemV1",
+    "ClaimLedgerWireContractV3",
     "ClaimLedgerInputCatalogV1",
     "ClaimLedgerStageAResultV1",
     "ClaimLedgerWireContractV2",
@@ -38,6 +42,8 @@ _LEDGER_EXPORTS = {
 }
 _COMPOSE_EXPORTS = {
     "BridgeComposer",
+    "BridgeCompositionWireContractV2",
+    "BridgeCompositionWireV2",
     "CompositionRequestV1",
     "CompositionResultV1",
     "CompositionStatus",

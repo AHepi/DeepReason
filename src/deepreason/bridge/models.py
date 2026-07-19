@@ -232,6 +232,12 @@ class ClaimLedgerEntryV1(CanonicalBridgeRecord):
     formal_observation_refs: list[OpaqueRef] | None = Field(
         default=None, max_length=MAX_BRIDGE_REFS
     )
+    # RunManifest-v6 status/workflow observations have identities distinct
+    # from the formal artifact whose claim they discuss.  They can ground
+    # only exact process statements, never the embedded claim's truth.
+    process_observation_refs: list[HashRef] | None = Field(
+        default=None, max_length=MAX_BRIDGE_REFS
+    )
     premise_refs: list[HashRef] | None = Field(default=None, max_length=MAX_BRIDGE_REFS)
     formal_artifact_refs: list[OpaqueRef] | None = Field(
         default=None, max_length=MAX_BRIDGE_REFS
@@ -256,6 +262,7 @@ class ClaimLedgerEntryV1(CanonicalBridgeRecord):
         "event_refs",
         "trace_refs",
         "formal_observation_refs",
+        "process_observation_refs",
         "premise_refs",
         "formal_artifact_refs",
         "conflict_refs",
@@ -266,6 +273,107 @@ class ClaimLedgerEntryV1(CanonicalBridgeRecord):
     @classmethod
     def _freeze_refs(cls, value, info):
         return _freeze_unique(value, info.field_name)
+
+
+class ProcessObservationV1(CanonicalBridgeRecord):
+    """Deterministic status/workflow fact with no substantive truth force."""
+
+    schema_: Literal["bridge.process-observation.v1"] = Field(
+        "bridge.process-observation.v1", alias="schema"
+    )
+    ID_DOMAIN: ClassVar[str] = "bridge.process-observation.v1"
+
+    observation_kind: Literal["acceptance", "refutation", "ruling", "rivalry"]
+    formal_seq: StrictInt = Field(ge=0)
+    subject_ref: OpaqueRef
+    related_refs: list[OpaqueRef] = Field(default_factory=FrozenList, max_length=16)
+    statement: BridgeText
+
+    @field_validator("related_refs", mode="after")
+    @classmethod
+    def _freeze_related(cls, value, info):
+        return _freeze_unique(value, info.field_name)
+
+    @field_validator("statement")
+    @classmethod
+    def _bounded_statement(cls, value):
+        return _bounded_text(value, maximum=MAX_BRIDGE_SHORT_TEXT)
+
+    @staticmethod
+    def render_statement(
+        *,
+        observation_kind: str,
+        formal_seq: int,
+        subject_ref: str,
+        related_refs: list[str] | tuple[str, ...],
+    ) -> str:
+        """Render the only substantive scope authorized by this record."""
+
+        related = list(related_refs)
+        related_count = len(related)
+        if observation_kind not in {"acceptance", "refutation", "ruling", "rivalry"}:
+            raise ValueError("unknown process observation kind")
+        if observation_kind == "acceptance" and related_count:
+            raise ValueError("acceptance process observations have no related refs")
+        if observation_kind == "refutation" and related_count > 1:
+            raise ValueError("refutation process observations have at most one attacker")
+        if observation_kind == "ruling" and related_count != 2:
+            raise ValueError("ruling process observations require winner and loser refs")
+        if observation_kind == "rivalry" and related_count < 2:
+            raise ValueError("rivalry process observations require at least two positions")
+        if observation_kind == "acceptance":
+            return (
+                f"At formal sequence {formal_seq}, artifact {subject_ref} "
+                "had formal status accepted."
+            )
+        if observation_kind == "refutation":
+            return (
+                f"At formal sequence {formal_seq}, artifact {subject_ref} "
+                "had formal status refuted."
+            )
+        if observation_kind == "ruling":
+            return (
+                f"At formal sequence {formal_seq}, ruling {subject_ref} "
+                f"recorded winner {related[0]} and loser {related[1]}."
+            )
+        return (
+            f"At formal sequence {formal_seq}, problem {subject_ref} retained "
+            f"an unresolved rivalry among {len(related)} positions."
+        )
+
+    @classmethod
+    def create(cls, **values):
+        expected = cls.render_statement(
+            observation_kind=values["observation_kind"],
+            formal_seq=values["formal_seq"],
+            subject_ref=values["subject_ref"],
+            related_refs=values.get("related_refs", ()),
+        )
+        supplied = values.pop("statement", expected)
+        if supplied != expected:
+            raise ValueError("process observation statement must be deterministic")
+        return super().create(statement=expected, **values)
+
+    @model_validator(mode="after")
+    def _status_shape_and_statement_match(self):
+        related_count = len(self.related_refs)
+        if self.observation_kind == "acceptance" and related_count:
+            raise ValueError("acceptance process observations have no related refs")
+        if self.observation_kind == "refutation" and related_count > 1:
+            raise ValueError("refutation process observations have at most one attacker")
+        if self.observation_kind == "ruling" and related_count != 2:
+            raise ValueError("ruling process observations require winner and loser refs")
+        if self.observation_kind == "rivalry" and related_count < 2:
+            raise ValueError("rivalry process observations require at least two positions")
+        expected = self.render_statement(
+            observation_kind=self.observation_kind,
+            formal_seq=self.formal_seq,
+            subject_ref=self.subject_ref,
+            related_refs=self.related_refs,
+        )
+        if self.statement != expected:
+            raise ValueError("process observation statement must be deterministic")
+        return self
 
 
 class UncoveredRequirementV1(CanonicalBridgeRecord):
@@ -573,6 +681,7 @@ __all__ = [
     "GroundingFindingV1",
     "GroundingReviewV1",
     "GroundingStatus",
+    "ProcessObservationV1",
     "RenderingMode",
     "SourceConflictV1",
     "UncoveredRequirementV1",

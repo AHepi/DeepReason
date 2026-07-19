@@ -16,12 +16,34 @@ _CANONICAL_BLOB_REF = re.compile(r"^[0-9a-f]{64}$")
 _CANONICAL_BLOB_PREFIX = re.compile(r"^[0-9a-f]{1,64}$")
 
 
+def _io_path(path: Path) -> Path:
+    """Return a filesystem-only long-path spelling on Windows.
+
+    Blob references, shard names, and the store's public root remain in
+    their historical form. Only calls crossing the filesystem boundary use
+    the Win32 extended namespace, so canonical bytes and identities do not
+    depend on the host path spelling.
+    """
+
+    path = Path(path)
+    if os.name != "nt":
+        return path
+    value = str(path)
+    if not os.path.isabs(value):
+        value = os.path.abspath(value)
+    if len(value) < 240 or value.startswith("\\\\?\\"):
+        return Path(value)
+    if value.startswith("\\\\"):
+        return Path("\\\\?\\UNC\\" + value.lstrip("\\"))
+    return Path("\\\\?\\" + value)
+
+
 class BlobStore:
     def __init__(self, root: Path, *, read_only: bool = False) -> None:
         self.root = Path(root)
         self.read_only = read_only
         if not read_only:
-            self.root.mkdir(parents=True, exist_ok=True)
+            _io_path(self.root).mkdir(parents=True, exist_ok=True)
 
     def _path(self, ref: str) -> Path:
         if not isinstance(ref, str) or _CANONICAL_BLOB_REF.fullmatch(ref) is None:
@@ -33,46 +55,50 @@ class BlobStore:
             raise RuntimeError("blob store is read-only")
         ref = sha256_hex(data)
         path = self._path(ref)
-        if not path.exists():
-            path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = path.parent / f"{ref}.tmp.{os.getpid()}"
+        io_path = _io_path(path)
+        if not io_path.exists():
+            io_path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = io_path.parent / f"{ref}.tmp.{os.getpid()}"
             tmp.write_bytes(data)
-            os.replace(tmp, path)
+            os.replace(tmp, io_path)
         return ref
 
     def get(self, ref: str) -> bytes:
         path = self._path(ref)
         shard = path.parent
+        io_root = _io_path(self.root)
+        io_shard = _io_path(shard)
+        io_path = _io_path(path)
         try:
-            root_before = self.root.lstat()
-            shard_before = shard.lstat()
-            file_before = path.lstat()
+            root_before = io_root.lstat()
+            shard_before = io_shard.lstat()
+            file_before = io_path.lstat()
         except OSError as error:
             raise KeyError("blob not found") from error
         if (
             not stat.S_ISDIR(root_before.st_mode)
-            or _link_like(self.root, root_before)
+            or _link_like(io_root, root_before)
             or not stat.S_ISDIR(shard_before.st_mode)
-            or _link_like(shard, shard_before)
+            or _link_like(io_shard, shard_before)
             or not stat.S_ISREG(file_before.st_mode)
-            or _link_like(path, file_before)
+            or _link_like(io_path, file_before)
             or file_before.st_nlink != 1
         ):
             raise KeyError("invalid blob storage path")
         try:
-            data = path.read_bytes()
-            root_after = self.root.lstat()
-            shard_after = shard.lstat()
-            file_after = path.lstat()
+            data = io_path.read_bytes()
+            root_after = io_root.lstat()
+            shard_after = io_shard.lstat()
+            file_after = io_path.lstat()
         except OSError as error:
             raise KeyError("blob became unavailable") from error
         if (
             not _same_identity(root_before, root_after)
             or not _same_identity(shard_before, shard_after)
             or not _same_identity(file_before, file_after)
-            or _link_like(self.root, root_after)
-            or _link_like(shard, shard_after)
-            or _link_like(path, file_after)
+            or _link_like(io_root, root_after)
+            or _link_like(io_shard, shard_after)
+            or _link_like(io_path, file_after)
             or len(data) != file_after.st_size
             or sha256_hex(data) != ref
         ):
@@ -89,11 +115,12 @@ class BlobStore:
         ):
             raise ValueError("invalid blob prefix")
         if len(prefix) >= 2:
-            shard_dirs = [self.root / prefix[:2]]
+            shard_dirs = [_io_path(self.root / prefix[:2])]
         else:
-            if not self.root.exists():
+            io_root = _io_path(self.root)
+            if not io_root.exists():
                 raise KeyError(f"no blob matches prefix {prefix!r}")
-            shard_dirs = sorted(p for p in self.root.iterdir() if p.is_dir())
+            shard_dirs = sorted(p for p in io_root.iterdir() if p.is_dir())
         matches: list[str] = []
         for shard in shard_dirs:
             if not shard.is_dir():
@@ -160,18 +187,19 @@ def historical_sealed_refs(
             candidates.add(ref)
 
     holdout_root = store.root.parent / "holdout"
+    io_holdout_root = _io_path(holdout_root)
     try:
-        root_stat = holdout_root.lstat()
+        root_stat = io_holdout_root.lstat()
     except FileNotFoundError:
         return frozenset()
     except OSError as error:
         raise ValueError("invalid historical holdout namespace") from error
-    if not stat.S_ISDIR(root_stat.st_mode) or _link_like(holdout_root, root_stat):
+    if not stat.S_ISDIR(root_stat.st_mode) or _link_like(io_holdout_root, root_stat):
         raise ValueError("invalid historical holdout namespace")
 
     sealed: set[str] = set()
     for ref in candidates:
-        marker = holdout_root / ref
+        marker = _io_path(holdout_root / ref)
         try:
             marker_stat = marker.lstat()
         except FileNotFoundError:

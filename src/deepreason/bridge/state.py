@@ -9,12 +9,13 @@ are immutable objects and typed append-only events.
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 
 from pydantic import BaseModel
 
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
+from deepreason.control_events import ControlEventPayloadV3
 from deepreason.ontology.event import Event
 from deepreason.storage.objects import ObjectStore
 
@@ -117,6 +118,44 @@ class BridgeState:
     _awaiting_retry_attempt_start: bool = field(default=False, repr=False)
     _attempt_tokens: int = field(default=0, repr=False)
     _attempt_calls: list[BaseModel] = field(default_factory=list, repr=False)
+    _v6_provider_attempt_ids: set[str] = field(default_factory=set, repr=False)
+
+    def apply_v6_provider_result(self, event: Event, workflow_state) -> None:
+        """Account one bridge v6 provider receipt after canonical workflow replay.
+
+        ``WorkflowReplayState`` has already validated the control-event envelope,
+        receipt, dispatch authority, and LLM/token correspondence.  This bridge
+        index only selects its own v6 work and retains the validated call for
+        retry accounting; it never reinterprets transaction authority.
+        """
+
+        control = event.control
+        if not isinstance(control, ControlEventPayloadV3) or control.action != "provider_result":
+            return
+        item = workflow_state.transaction_work.get(control.inputs[0])
+        if item is None:
+            return
+        payload = item.preparation.task_payload_value
+        if (
+            not isinstance(payload, Mapping)
+            or payload.get("schema") != "bridge.transaction-task.v2"
+        ):
+            return
+        attempt = item.provider_attempts.get(item.preparation.attempt_index)
+        call = event.llm
+        if (
+            attempt is None
+            or attempt.id != control.inputs[1]
+            or call is None
+            or attempt.outcome != "provider_result"
+            or attempt.usage_status != "exact"
+        ):
+            return
+        if attempt.id in self._v6_provider_attempt_ids:
+            raise ValueError("bridge v6 provider result was counted twice")
+        self._v6_provider_attempt_ids.add(attempt.id)
+        self._attempt_tokens += call.tokens
+        self._attempt_calls.append(call)
 
     def _repair_lineage(self, output_id: str, review) -> bool:
         return any(

@@ -15,7 +15,11 @@ from pydantic import ConfigDict, Field, field_validator, model_validator
 from deepreason.bridge.events import BridgeEventPayloadV1
 from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.conjecture_events import ConjectureTurnEventPayloadV1
-from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
+from deepreason.control_events import (
+    ControlEventPayloadV1,
+    ControlEventPayloadV2,
+    ControlEventPayloadV3,
+)
 from deepreason.ontology.frozen import FrozenDict, FrozenList, FrozenRecord
 from deepreason.scratch.events import ScratchEventPayloadV1
 
@@ -244,6 +248,20 @@ class LLMCall(FrozenRecord):
         pattern=r"^sha256:[0-9a-f]{64}$",
         exclude_if=lambda value: value is None,
     )
+    # RunManifest-v6 calls carry the exact issued bundle.  This is distinct
+    # from the work ID so a non-conjecture role cannot acquire authority by
+    # copying an otherwise well-formed content address.
+    dispatch_authorization_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
+    prompt_tokens: int | None = Field(
+        default=None, ge=0, exclude_if=lambda value: value is None
+    )
+    completion_tokens: int | None = Field(
+        default=None, ge=0, exclude_if=lambda value: value is None
+    )
 
     @field_validator("attempt_trace", mode="after")
     @classmethod
@@ -252,8 +270,26 @@ class LLMCall(FrozenRecord):
 
     @model_validator(mode="after")
     def _school_route_matches_attempts(self):
-        if self.work_order_id is not None and self.role != "conjecturer":
-            raise ValueError("only conjecturer calls may name a workflow work order")
+        if (
+            self.work_order_id is not None
+            and self.role != "conjecturer"
+            and self.dispatch_authorization_ref is None
+        ):
+            raise ValueError(
+                "only conjecturer legacy calls may name a workflow work order; "
+                "non-conjecture work requires a transactional authorization bundle"
+            )
+        if (self.dispatch_authorization_ref is None) != (
+            self.work_order_id is None
+        ) and self.dispatch_authorization_ref is not None:
+            raise ValueError("transactional authorization requires one work order")
+        if (self.prompt_tokens is None) != (self.completion_tokens is None):
+            raise ValueError("provider token usage must include both exact sides")
+        if (
+            self.prompt_tokens is not None
+            and self.prompt_tokens + int(self.completion_tokens or 0) != self.tokens
+        ):
+            raise ValueError("provider token sides differ from the call total")
         receipt = self.school_route
         if receipt is not None:
             if receipt.role != self.role:
@@ -331,7 +367,9 @@ class Event(FrozenRecord):
     conjecture_turn: ConjectureTurnEventPayloadV1 | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
-    control: ControlEventPayloadV1 | ControlEventPayloadV2 | None = Field(
+    control: (
+        ControlEventPayloadV1 | ControlEventPayloadV2 | ControlEventPayloadV3 | None
+    ) = Field(
         default=None, exclude_if=lambda value: value is None
     )
     capability: CapabilityEventPayloadV1 | None = Field(
@@ -365,7 +403,10 @@ class Event(FrozenRecord):
         (or disappear as a torn tail) when the JSONL log is reopened.
         """
 
-        if isinstance(value, (ControlEventPayloadV1, ControlEventPayloadV2)):
+        if isinstance(
+            value,
+            (ControlEventPayloadV1, ControlEventPayloadV2, ControlEventPayloadV3),
+        ):
             return type(value).model_validate(
                 value.model_dump(mode="python", by_alias=True)
             )
@@ -438,7 +479,11 @@ class Event(FrozenRecord):
                 raise ValueError("control payload inputs must match Event.inputs")
             if list(self.outputs) != list(self.control.outputs):
                 raise ValueError("control payload outputs must match Event.outputs")
-            if self.llm is not None:
+            provider_result = (
+                isinstance(self.control, ControlEventPayloadV3)
+                and self.control.action == "provider_result"
+            )
+            if (self.llm is not None) != provider_result:
                 raise ValueError("control decisions cannot contain an LLM call")
         if (
             self.scratch is not None

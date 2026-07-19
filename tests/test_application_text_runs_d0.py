@@ -139,7 +139,104 @@ def test_cli_and_mcp_compile_the_same_start_intent(
 
     assert len(captured) == 2
     assert captured[0] == captured[1]
-    assert '"state"' not in capsys.readouterr().out
+    assert json.loads(capsys.readouterr().out)["state"] == "completed"
+
+
+@pytest.mark.parametrize(
+    ("state", "verification", "expected"),
+    [
+        ("completed", None, 0),
+        ("cancelled", None, 3),
+        ("failed", None, 4),
+        (
+            "completed",
+            {"integrity_valid": False, "security_valid": True},
+            5,
+        ),
+    ],
+)
+def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
+    tmp_path, monkeypatch, capsys, state, verification, expected
+):
+    manifest, manifest_path = _manifest(tmp_path)
+    root = tmp_path / state
+    payload = {
+        "schema": "deepreason-run-result-v1",
+        "state": state,
+        "workload": "text",
+    }
+    if verification is not None:
+        payload["verification"] = verification
+    monkeypatch.setattr(
+        TEXT_RUN_SERVICE,
+        "start",
+        lambda *_args, **_kwargs: RunStartedV1(
+            root=str(root.resolve()), manifest_digest=manifest.sha256
+        ),
+    )
+    monkeypatch.setattr(TEXT_RUN_SERVICE, "wait", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        TEXT_RUN_SERVICE,
+        "result",
+        lambda _intent: TextRunTerminalResultV1(
+            lifecycle=state, payload=payload
+        ),
+    )
+
+    exit_code = cli_main(
+        [
+            "--root",
+            str(root),
+            "reason",
+            "--text",
+            "Which terminal state controls automation?",
+            "--run-manifest",
+            str(manifest_path),
+            "--cycles",
+            "1",
+        ]
+    )
+
+    assert exit_code == expected
+    assert json.loads(capsys.readouterr().out)["state"] == state
+
+
+def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
+    tmp_path, monkeypatch, capsys
+):
+    manifest, manifest_path = _manifest(tmp_path)
+    root = tmp_path / "invalid"
+    monkeypatch.setattr(
+        TEXT_RUN_SERVICE,
+        "start",
+        lambda *_args, **_kwargs: RunStartedV1(
+            root=str(root.resolve()), manifest_digest=manifest.sha256
+        ),
+    )
+    monkeypatch.setattr(TEXT_RUN_SERVICE, "wait", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(
+        TEXT_RUN_SERVICE,
+        "result",
+        lambda _intent: (_ for _ in ()).throw(ValueError("RUN_RESULT_INVALID")),
+    )
+
+    assert (
+        cli_main(
+            [
+                "--root",
+                str(root),
+                "reason",
+                "--text",
+                "Can an unknown terminal be reported as success?",
+                "--run-manifest",
+                str(manifest_path),
+                "--cycles",
+                "1",
+            ]
+        )
+        == 6
+    )
+    assert "RUN_RESULT_INVALID" in capsys.readouterr().err
 
 
 def test_outstanding_work_projection_reads_replay_state_without_reducing(
@@ -175,6 +272,25 @@ def test_outstanding_work_projection_reads_replay_state_without_reducing(
         InspectTextRunIntentV1(root=str(tmp_path))
     ).presentation_payload()
     assert status["outstanding_work"] == projection.presentation_payload()
+
+
+def test_outstanding_work_projection_accepts_v6_transaction_ids(tmp_path):
+    from deepreason.llm.budget import TokenMeter
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+    from tests.test_v6_transaction_qualification import _manifest, _prepare
+
+    manifest = _manifest()
+    harness = Harness(tmp_path)
+    service = InquiryTransactionService(harness, manifest, TokenMeter(1_000))
+    preparation = _prepare(service, manifest, trigger="cancellation-inspection")
+
+    projection = TEXT_RUN_SERVICE.inspect_outstanding_work(tmp_path)
+
+    assert projection.process_digest == harness.workflow_state.digest
+    assert [item.work_order_id for item in projection.work] == [preparation.id]
+    assert projection.work[0].recovery == "prepared"
+    assert projection.work[0].contract_id == "conjecturer.turn.v6"
+    assert projection.work[0].reserved_tokens == 0
 
 
 def test_worker_harness_constructor_failure_releases_operator_lock(

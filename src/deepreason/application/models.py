@@ -55,6 +55,7 @@ class StartTextRunIntentV1(_StrictModel):
     workload: ReasoningWorkloadSpec
     run_manifest_ref: str = Field(min_length=1, max_length=4_096)
     budget: RunBudgetIntentV1
+    experimental_v5: bool = False
 
     @field_validator("root", "run_manifest_ref")
     @classmethod
@@ -73,6 +74,7 @@ class ContinueTextRunIntentV1(_StrictModel):
     expected_manifest_digest: str | None = Field(
         default=None, pattern=r"^[0-9a-f]{64}$"
     )
+    experimental_v5: bool = False
 
 
 class InspectTextRunIntentV1(_StrictModel):
@@ -169,6 +171,88 @@ class TextRunTerminalResultV1(_StrictModel):
     def presentation_payload(self) -> dict[str, Any]:
         return dict(self.payload)
 
+    def exit_code(self) -> int:
+        return run_result_exit_code(self.payload)
+
+
+class RunVerificationSummaryV2(_StrictModel):
+    schema_: Literal["verification.summary.v2"] = Field(
+        "verification.summary.v2", alias="schema"
+    )
+    valid: bool
+    integrity_valid: bool
+    security_valid: bool
+    completion_satisfied: bool
+    epistemic_checks_passed: bool
+    operational_checks_passed: bool
+    finding_counts: dict[str, StrictInt]
+
+    @model_validator(mode="after")
+    def _valid_means_authority_valid(self):
+        if self.valid != (self.integrity_valid and self.security_valid):
+            raise ValueError("verification summary valid flag is inconsistent")
+        expected = {
+            "integrity",
+            "security",
+            "completion",
+            "epistemic",
+            "operational",
+        }
+        if set(self.finding_counts) != expected or any(
+            isinstance(value, bool) or value < 0
+            for value in self.finding_counts.values()
+        ):
+            raise ValueError("verification summary finding counts are invalid")
+        return self
+
+
+class RunResultV2(BaseModel):
+    """Typed v6 terminal envelope; workload-specific fields remain extensible."""
+
+    model_config = ConfigDict(extra="allow", frozen=True, strict=True)
+
+    schema_: Literal["deepreason-run-result-v2"] = Field(
+        "deepreason-run-result-v2", alias="schema"
+    )
+    state: Literal["completed", "cancelled", "failed"]
+    workload: str = Field(min_length=1, max_length=128)
+    verification: RunVerificationSummaryV2
+    completion_status: Literal["satisfied", "incomplete"]
+    canonical_bridge_eligible: bool
+
+    @model_validator(mode="after")
+    def _derived_terminal_fields(self):
+        expected_completion = (
+            "satisfied" if self.verification.completion_satisfied else "incomplete"
+        )
+        if self.completion_status != expected_completion:
+            raise ValueError("completion status differs from verification summary")
+        expected_bridge = self.state == "completed" and self.verification.valid
+        if self.canonical_bridge_eligible != expected_bridge:
+            raise ValueError("canonical bridge eligibility is inconsistent")
+        return self
+
+
+def run_result_exit_code(payload: dict[str, Any]) -> int:
+    """Map one canonical terminal payload to the stable CLI exit contract."""
+
+    state = payload.get("state")
+    if state not in {"completed", "cancelled", "failed"}:
+        return 6
+    verification = payload.get("verification")
+    if isinstance(verification, dict) and (
+        verification.get("integrity_valid") is False
+        or verification.get("security_valid") is False
+    ):
+        return 5
+    if state == "completed":
+        return 0
+    if state == "cancelled":
+        return 3
+    if state == "failed":
+        return 4
+    return 4
+
 
 class RunCancellationAcceptedV1(_StrictModel):
     schema_: Literal["application.text-run.cancellation-accepted.v1"] = Field(
@@ -236,8 +320,11 @@ __all__ = [
     "RunBudgetIntentV1",
     "RunCancellationAcceptedV1",
     "RunProgressResultV1",
+    "RunResultV2",
     "RunStartedV1",
+    "RunVerificationSummaryV2",
     "StartTextRunIntentV1",
     "TextRunTerminalResultV1",
     "WatchTextRunIntentV1",
+    "run_result_exit_code",
 ]

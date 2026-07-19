@@ -29,7 +29,11 @@ from deepreason.bridge.state import BridgeState
 from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.capabilities.state import CapabilityReplayState
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.control_events import ControlEventPayloadV1, ControlEventPayloadV2
+from deepreason.control_events import (
+    ControlEventPayloadV1,
+    ControlEventPayloadV2,
+    ControlEventPayloadV3,
+)
 from deepreason.conjecture_turn import (
     ConjectureAbstentionV1,
     ContextRequestV1,
@@ -506,6 +510,38 @@ class Harness:
             outputs=[receipt.receipt_digest],
         )
 
+    def record_criticism_obligation(self, record) -> Event:
+        """Persist one assignment, attempt, or terminal coverage-debt record."""
+
+        from deepreason.workflow.criticism import (
+            CoverageDebtV1,
+            CriticismAssignmentV1,
+            CriticismAttemptV1,
+        )
+
+        self._ensure_writable()
+        mapping = {
+            CriticismAssignmentV1: "criticism-assignment-v1",
+            CriticismAttemptV1: "criticism-attempt-v1",
+            CoverageDebtV1: "criticism-coverage-debt-v1",
+        }
+        model_type = next(
+            (candidate for candidate in mapping if isinstance(record, candidate)),
+            None,
+        )
+        if model_type is None:
+            raise TypeError("unknown criticism obligation record")
+        record = model_type.model_validate(
+            record.model_dump(mode="python", by_alias=True)
+        )
+        schema = mapping[model_type]
+        self.objects.put(schema, record)
+        return self._commit(
+            Rule.MEASURE,
+            inputs=[record.schema_, record.id],
+            outputs=[record.id],
+        )
+
     def record_scratch_event(
         self,
         payload: ScratchEventPayloadV1,
@@ -836,6 +872,119 @@ class Harness:
             control=payload,
         )
 
+    def record_transaction_transition(
+        self,
+        transition,
+        *,
+        records=(),
+        llm=None,
+    ) -> Event:
+        """Atomically reach one controller-v3 lifecycle transition and records.
+
+        Object-store writes intentionally precede the append.  If validation,
+        process replay, or the log append fails, those immutable bytes remain
+        unreachable and therefore cannot assert either context exposure or
+        provider authority.
+        """
+
+        from deepreason.workflow.transaction import (
+            ContextExposureReceiptV2,
+            ContextPackPlanV1,
+            DispatchAuthorizationBundleV1,
+            ProviderAttemptV1,
+            SemanticAdmissionV1,
+            TokenReservationV2,
+            WorkLifecycleTransitionV1,
+            WorkPreparationV1,
+            WorkTerminalV1,
+            WorkTransitionKind,
+        )
+
+        self._ensure_writable()
+        transition = WorkLifecycleTransitionV1.model_validate(
+            transition.model_dump(mode="python", by_alias=True)
+        )
+        schema_by_type = {
+            WorkPreparationV1: "workflow-work-preparation-v1",
+            ContextPackPlanV1: "workflow-context-pack-plan-v1",
+            TokenReservationV2: "workflow-token-reservation-v2",
+            ContextExposureReceiptV2: "workflow-context-exposure-v2",
+            DispatchAuthorizationBundleV1: "workflow-dispatch-authorization-v1",
+            ProviderAttemptV1: "workflow-provider-attempt-v1",
+            SemanticAdmissionV1: "workflow-semantic-admission-v1",
+            WorkTerminalV1: "workflow-work-terminal-v1",
+        }
+        normalized: list[tuple[str, BaseModel]] = []
+        for supplied in records:
+            model_type = next(
+                (candidate for candidate in schema_by_type if isinstance(supplied, candidate)),
+                None,
+            )
+            if model_type is None:
+                raise TypeError("unknown controller-v3 transaction record")
+            value = model_type.model_validate(
+                supplied.model_dump(mode="python", by_alias=True)
+            )
+            if value.work_id != transition.work_id:
+                raise ValueError("transaction record belongs to another work item")
+            if value.attempt_index != transition.attempt_index:
+                raise ValueError("transaction record belongs to another attempt")
+            normalized.append((schema_by_type[model_type], value))
+
+        kinds = [type(value) for _schema, value in normalized]
+        expected = {
+            WorkTransitionKind.WORK_PREPARED: [WorkPreparationV1],
+            WorkTransitionKind.BUDGET_DENIED: [WorkTerminalV1],
+            WorkTransitionKind.PROVIDER_RESULT: [ProviderAttemptV1],
+            WorkTransitionKind.SEMANTIC_ADMISSION: [SemanticAdmissionV1],
+            WorkTransitionKind.WORK_TERMINATED: [WorkTerminalV1],
+        }
+        if transition.transition_kind == WorkTransitionKind.WORK_ISSUED:
+            if (
+                kinds.count(TokenReservationV2) != 1
+                or kinds.count(ContextExposureReceiptV2) != 1
+                or kinds.count(DispatchAuthorizationBundleV1) != 1
+                or any(
+                    kind
+                    not in {
+                        ContextPackPlanV1,
+                        TokenReservationV2,
+                        ContextExposureReceiptV2,
+                        DispatchAuthorizationBundleV1,
+                    }
+                    for kind in kinds
+                )
+            ):
+                raise ValueError("work_issued requires plans, reservation, exposure, and bundle")
+        elif kinds != expected[transition.transition_kind]:
+            raise ValueError("controller-v3 transition has the wrong record shape")
+        if (llm is not None) != (
+            transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT
+        ):
+            raise ValueError("only provider_result may carry an LLM call")
+
+        normalized.append(("workflow-work-lifecycle-transition-v1", transition))
+        for schema, value in normalized:
+            self.objects.put(schema, value)
+        outputs = [value.id for _schema, value in normalized]
+        payload = ControlEventPayloadV3(
+            action=(
+                "provider_result"
+                if transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT
+                else "work_transition"
+            ),
+            decision_ref=transition.id,
+            inputs=[transition.work_id, transition.trigger_ref],
+            outputs=outputs,
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=list(payload.inputs),
+            outputs=outputs,
+            llm=llm,
+            control=payload,
+        )
+
     def record_capability_transition(
         self,
         transition,
@@ -966,16 +1115,24 @@ class Harness:
             self.objects.put(schema, record)
         inputs = [observation.id, snapshot.id]
         outputs = [record.id for _schema, record in records]
-        payload_type = (
-            ControlEventPayloadV2
-            if decision.controller_version == "workflow.controller.v2"
-            else ControlEventPayloadV1
-        )
-        payload = payload_type(
-            decision_ref=decision.id,
-            inputs=inputs,
-            outputs=outputs,
-        )
+        if decision.controller_version == "workflow.controller.v3":
+            payload = ControlEventPayloadV3(
+                action="lifecycle_stopped",
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        else:
+            payload_type = (
+                ControlEventPayloadV2
+                if decision.controller_version == "workflow.controller.v2"
+                else ControlEventPayloadV1
+            )
+            payload = payload_type(
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
         return self._commit(
             Rule.CONTROL,
             inputs=inputs,
@@ -1020,6 +1177,7 @@ class Harness:
         if run_checkpoint_bytes not in {
             encoded_checkpoint,
             encoded_checkpoint + b"\n",
+            encoded_checkpoint + b"\r\n",
         }:
             raise ValueError("generic checkpoint bytes are not canonical")
         if (
@@ -1038,16 +1196,24 @@ class Harness:
             self.objects.put(schema, record)
         inputs = [terminal.id, snapshot.id]
         outputs = [record.id for _schema, record in records]
-        payload_type = (
-            ControlEventPayloadV2
-            if decision.controller_version == "workflow.controller.v2"
-            else ControlEventPayloadV1
-        )
-        payload = payload_type(
-            decision_ref=decision.id,
-            inputs=inputs,
-            outputs=outputs,
-        )
+        if decision.controller_version == "workflow.controller.v3":
+            payload = ControlEventPayloadV3(
+                action="lifecycle_resumed",
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
+        else:
+            payload_type = (
+                ControlEventPayloadV2
+                if decision.controller_version == "workflow.controller.v2"
+                else ControlEventPayloadV1
+            )
+            payload = payload_type(
+                decision_ref=decision.id,
+                inputs=inputs,
+                outputs=outputs,
+            )
         return self._commit(
             Rule.CONTROL,
             inputs=inputs,
@@ -1308,7 +1474,9 @@ class Harness:
         scratch: ScratchEventPayloadV1 | None = None,
         bridge: BridgeEventPayloadV1 | None = None,
         conjecture_turn: ConjectureTurnEventPayloadV1 | None = None,
-        control: ControlEventPayloadV1 | ControlEventPayloadV2 | None = None,
+        control: (
+            ControlEventPayloadV1 | ControlEventPayloadV2 | ControlEventPayloadV3 | None
+        ) = None,
         capability: CapabilityEventPayloadV1 | None = None,
     ) -> Event:
         self._ensure_writable()
@@ -1366,6 +1534,7 @@ class Harness:
                             self.blobs.get(ref)
                     resolved_workflow.append((schema, object_id, value))
                 self.workflow_state.apply(event, resolved_workflow)
+                self.bridge_state.apply_v6_provider_result(event, self.workflow_state)
             if event.capability is not None:
                 resolved_capability = []
                 for object_id in event.outputs:

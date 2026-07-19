@@ -27,8 +27,13 @@ from deepreason.bridge.ledger import (
     MAX_CATALOG_ITEMS,
     ClaimLedgerCatalogItemV1,
     ClaimLedgerInputCatalogV1,
+    ClaimLedgerInputCatalogV3,
 )
-from deepreason.bridge.models import CanonicalBridgeRecord, BridgeRecord
+from deepreason.bridge.models import (
+    CanonicalBridgeRecord,
+    BridgeRecord,
+    ProcessObservationV1,
+)
 from deepreason.frozen import FrozenList
 from deepreason.informal.skeleton import parse_skeleton
 from deepreason.ontology.artifact import RefRole
@@ -185,6 +190,15 @@ class EvidencePackV1(CanonicalBridgeRecord):
     )
     open_rivals: list[OpenRivalryV1] = Field(max_length=MAX_EVIDENCE_PACK_ITEMS)
     catalog_items: list[ClaimLedgerCatalogItemV1] = Field(max_length=MAX_CATALOG_ITEMS)
+    process_observations: list[ProcessObservationV1] | None = Field(
+        default=None,
+        max_length=MAX_EVIDENCE_PACK_ITEMS,
+        exclude_if=lambda value: value is None,
+    )
+    catalog_contract: Literal["bridge.catalog.v3"] | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
     legacy_text: str = Field(min_length=1, max_length=MAX_EVIDENCE_PACK_RENDERED)
     legacy_citable_ids: list[str] = Field(max_length=MAX_EVIDENCE_PACK_ITEMS)
     omissions: EvidencePackOmissionsV1
@@ -196,15 +210,20 @@ class EvidencePackV1(CanonicalBridgeRecord):
         "pairwise_rulings",
         "open_rivals",
         "catalog_items",
+        "process_observations",
         "legacy_citable_ids",
         mode="after",
     )
     @classmethod
     def _freeze_sequences(cls, value, info):
+        if value is None:
+            return None
         if info.field_name in {"problem_family_refs", "legacy_citable_ids"}:
             keys = list(value)
         elif info.field_name == "catalog_items":
             keys = [item.handle for item in value]
+        elif info.field_name == "process_observations":
+            keys = [item.id for item in value]
         elif info.field_name == "survivors":
             keys = [item.artifact_ref for item in value]
         elif info.field_name == "argued_refutations":
@@ -230,7 +249,7 @@ class EvidencePackV1(CanonicalBridgeRecord):
         advisory_context: AdvisoryContextV1 | None = None,
         advisory_context_ref: str | None = None,
         retrieval_receipt_ref: str | None = None,
-    ) -> ClaimLedgerInputCatalogV1:
+    ) -> ClaimLedgerInputCatalogV1 | ClaimLedgerInputCatalogV3:
         """Compile the existing closed Stage A catalog from this fixed view."""
 
         items, advisory_context_ref, retrieval_receipt_ref = _advisory_catalog_inputs(
@@ -239,15 +258,21 @@ class EvidencePackV1(CanonicalBridgeRecord):
             advisory_context_ref=advisory_context_ref,
             retrieval_receipt_ref=retrieval_receipt_ref,
         )
-        return ClaimLedgerInputCatalogV1.create(
-            problem_ref=self.problem_ref,
-            formal_seq=self.formal_seq,
-            problem_text=self.problem_text,
-            output_target=output_target,
-            items=items,
-            advisory_context_ref=advisory_context_ref,
-            retrieval_receipt_ref=retrieval_receipt_ref,
-        )
+        catalog_values = {
+            "problem_ref": self.problem_ref,
+            "formal_seq": self.formal_seq,
+            "problem_text": self.problem_text,
+            "output_target": output_target,
+            "items": items,
+            "advisory_context_ref": advisory_context_ref,
+            "retrieval_receipt_ref": retrieval_receipt_ref,
+        }
+        if self.catalog_contract == "bridge.catalog.v3":
+            return ClaimLedgerInputCatalogV3.create(
+                **catalog_values,
+                process_observations=self.process_observations or (),
+            )
+        return ClaimLedgerInputCatalogV1.create(**catalog_values)
 
 
 def problem_family(state, problem_id: str) -> list[str]:
@@ -486,7 +511,8 @@ def _catalog_items(
     refutations: Sequence[ArguedRefutationV1],
     rulings: Sequence[PairwiseRulingV1],
     rivalries: Sequence[OpenRivalryV1],
-) -> tuple[list[ClaimLedgerCatalogItemV1], int]:
+    catalog_version: Literal["v1", "v3"] = "v1",
+) -> tuple[list[ClaimLedgerCatalogItemV1], int, list[ProcessObservationV1]]:
     """Build a closed, priority-ordered catalog of harness-owned references."""
 
     candidates: list[tuple[str, str, str]] = []
@@ -499,26 +525,79 @@ def _catalog_items(
         seen.add(key)
         candidates.append((kind, ref, _bounded_structured_text(excerpt, MAX_CATALOG_EXCERPT)))
 
-    for survivor in survivors:
-        add("formal_artifact", survivor.artifact_ref, survivor.rendered_text)
-        add(
-            "formal_observation",
-            survivor.artifact_ref,
-            f"At formal sequence {formal_seq}, this position is accepted after criticism: "
-            f"{survivor.claim}",
-        )
-    for refutation in refutations:
-        add("formal_observation", refutation.artifact_ref, refutation.rendered_text)
-        if refutation.attacker_ref:
+    process_observations: list[ProcessObservationV1] = []
+    if catalog_version == "v3":
+        def process(
+            kind: Literal["acceptance", "refutation", "ruling", "rivalry"],
+            subject_ref: str,
+            related_refs: list[str],
+            statement: str,
+        ) -> None:
+            record = ProcessObservationV1.create(
+                observation_kind=kind,
+                formal_seq=formal_seq,
+                subject_ref=subject_ref,
+                related_refs=related_refs,
+                statement=statement,
+            )
+            process_observations.append(record)
+            add("process_observation", record.id, record.statement)
+
+        for survivor in survivors:
+            add("formal_artifact", survivor.artifact_ref, survivor.rendered_text)
+            process(
+                "acceptance",
+                survivor.artifact_ref,
+                [],
+                f"At formal sequence {formal_seq}, artifact {survivor.artifact_ref} "
+                "had formal status accepted.",
+            )
+        for refutation in refutations:
+            process(
+                "refutation",
+                refutation.artifact_ref,
+                ([refutation.attacker_ref] if refutation.attacker_ref else []),
+                f"At formal sequence {formal_seq}, artifact {refutation.artifact_ref} "
+                "had formal status refuted.",
+            )
+        for ruling in rulings:
+            process(
+                "ruling",
+                ruling.ruling_artifact_ref,
+                [ruling.winner_ref, ruling.loser_ref],
+                f"At formal sequence {formal_seq}, ruling "
+                f"{ruling.ruling_artifact_ref} recorded winner {ruling.winner_ref} "
+                f"and loser {ruling.loser_ref}.",
+            )
+        for rivalry in rivalries:
+            process(
+                "rivalry",
+                rivalry.problem_ref,
+                list(rivalry.rival_refs),
+                f"At formal sequence {formal_seq}, problem {rivalry.problem_ref} "
+                f"retained an unresolved rivalry among {len(rivalry.rival_refs)} positions.",
+            )
+    else:
+        for survivor in survivors:
+            add("formal_artifact", survivor.artifact_ref, survivor.rendered_text)
             add(
                 "formal_observation",
-                refutation.attacker_ref,
-                refutation.argued_case or "Recorded formal attack.",
+                survivor.artifact_ref,
+                f"At formal sequence {formal_seq}, this position is accepted after criticism: "
+                f"{survivor.claim}",
             )
-    for ruling in rulings:
-        add("formal_observation", ruling.ruling_artifact_ref, ruling.rendered_text)
-    for rivalry in rivalries:
-        add("formal_observation", rivalry.problem_ref, rivalry.rendered_text)
+        for refutation in refutations:
+            add("formal_observation", refutation.artifact_ref, refutation.rendered_text)
+            if refutation.attacker_ref:
+                add(
+                    "formal_observation",
+                    refutation.attacker_ref,
+                    refutation.argued_case or "Recorded formal attack.",
+                )
+        for ruling in rulings:
+            add("formal_observation", ruling.ruling_artifact_ref, ruling.rendered_text)
+        for rivalry in rivalries:
+            add("formal_observation", rivalry.problem_ref, rivalry.rendered_text)
 
     # Accepted import/user artifacts addressing the family are the record's
     # explicit evidence candidates. Their dependence closure supplies source
@@ -567,6 +646,7 @@ def _catalog_items(
     prefix = {
         "formal_artifact": "A",
         "formal_observation": "O",
+        "process_observation": "P",
         "evidence": "E",
         "source": "S",
         "trace": "T",
@@ -584,7 +664,13 @@ def _catalog_items(
                 excerpt=excerpt,
             )
         )
-    return items, len(candidates) - len(selected)
+    selected_process_refs = {
+        item.ref for item in items if item.kind == "process_observation"
+    }
+    process_observations = [
+        record for record in process_observations if record.id in selected_process_refs
+    ]
+    return items, len(candidates) - len(selected), process_observations
 
 
 def _validate_formal_seq(harness, formal_seq: int | None) -> int:
@@ -610,6 +696,7 @@ def assemble_evidence_pack(
     budget_chars: int = DEFAULT_EVIDENCE_PACK_BUDGET,
     formal_seq: int | None = None,
     source_run_digest: str | None = None,
+    catalog_version: Literal["v1", "v3"] = "v1",
 ) -> EvidencePackV1:
     """Extract a bounded structured/legacy pack at one exact formal fence."""
 
@@ -843,7 +930,9 @@ def assemble_evidence_pack(
     if harness._next_seq - 1 != seq:
         raise RuntimeError("formal harness advanced while evidence pack was assembled")
 
-    catalog, catalog_omitted = _catalog_items(
+    if catalog_version not in {"v1", "v3"}:
+        raise ValueError("catalog_version must be v1 or v3")
+    catalog, catalog_omitted, process_observations = _catalog_items(
         harness,
         formal_seq=seq,
         family=family,
@@ -851,6 +940,7 @@ def assemble_evidence_pack(
         refutations=refutations,
         rulings=rulings,
         rivalries=rivalries,
+        catalog_version=catalog_version,
     )
     if harness._next_seq - 1 != seq:
         raise RuntimeError("formal harness advanced while evidence catalog was assembled")
@@ -866,6 +956,12 @@ def assemble_evidence_pack(
         pairwise_rulings=rulings,
         open_rivals=rivalries,
         catalog_items=catalog,
+        process_observations=(
+            process_observations if catalog_version == "v3" else None
+        ),
+        catalog_contract=(
+            "bridge.catalog.v3" if catalog_version == "v3" else None
+        ),
         legacy_text=legacy_text,
         legacy_citable_ids=citable_ids,
         omissions=EvidencePackOmissionsV1(
@@ -885,7 +981,7 @@ def build_claim_ledger_catalog(
     advisory_context: AdvisoryContextV1 | None = None,
     advisory_context_ref: str | None = None,
     retrieval_receipt_ref: str | None = None,
-) -> ClaimLedgerInputCatalogV1:
+) -> ClaimLedgerInputCatalogV1 | ClaimLedgerInputCatalogV3:
     """Public functional spelling for bridge workflow integration."""
 
     pack = EvidencePackV1.model_validate(pack)

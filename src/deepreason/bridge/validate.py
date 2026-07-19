@@ -90,13 +90,14 @@ def _entry_grounding_findings(
             entry.event_refs,
             entry.trace_refs,
             entry.formal_observation_refs,
+            entry.process_observation_refs,
         )
     ):
         findings.append(
             _finding(
                 "BRIDGE_OBSERVATION_UNGROUNDED",
                 "A recorded observation requires evidence, event, trace, or "
-                "formal-observation references.",
+                "formal-observation, or exact process-observation references.",
                 pointer=f"{pointer}/evidence_refs",
                 ledger_ids=[entry.id],
                 corrections=_GROUNDING_CORRECTIONS,
@@ -221,9 +222,24 @@ def validate_claim_ledger(ledger: ClaimLedgerV1) -> BridgeValidationReportV1:
 
 
 def _allowed_modes(
-    entry: ClaimLedgerEntryV1, *, allow_observation_as_fact: bool
+    entry: ClaimLedgerEntryV1,
+    *,
+    allow_observation_as_fact: bool,
+    allow_conservative_mode: bool = False,
 ) -> frozenset[RenderingMode]:
     allowed = RENDERING_COMPATIBILITY[entry.claim_class]
+    if allow_conservative_mode:
+        precedence = (
+            RenderingMode.CONFLICT,
+            RenderingMode.UNKNOWN,
+            RenderingMode.ASSUMPTION,
+            RenderingMode.CONJECTURE,
+            RenderingMode.INFERENCE,
+            RenderingMode.OBSERVATION,
+            RenderingMode.FACT,
+        )
+        strongest = min(precedence.index(mode) for mode in allowed)
+        allowed = allowed | frozenset(precedence[: strongest + 1])
     if (
         allow_observation_as_fact
         and entry.claim_class == ClaimClass.RECORDED_OBSERVATION
@@ -245,6 +261,7 @@ def output_findings(
     output: BridgeOutputV1,
     *,
     allow_observation_as_fact: bool = False,
+    allow_conservative_mixed_modes: bool = False,
 ) -> list[BridgeValidationFindingV1]:
     findings = ledger_findings(ledger)
     entries = {entry.id: entry for entry in ledger.entries}
@@ -269,6 +286,39 @@ def output_findings(
                 )
             )
             continue
+        process_entries = [
+            entries[entry_id]
+            for entry_id in section.ledger_entry_ids
+            if entry_id in entries and entries[entry_id].process_observation_refs
+        ]
+        if process_entries and (
+            len(section.ledger_entry_ids) != 1 or len(process_entries) != 1
+        ):
+            findings.append(
+                _finding(
+                    "BRIDGE_PROCESS_OBSERVATION_SCOPE",
+                    "A process observation must occupy an exact, standalone span.",
+                    pointer=f"/sections/{section_index}/ledger_entry_ids",
+                    span_id=section.span_id,
+                    ledger_ids=[entry.id for entry in process_entries],
+                    corrections=_REFERENCE_CORRECTIONS,
+                )
+            )
+        elif process_entries and section.text != process_entries[0].claim:
+            findings.append(
+                _finding(
+                    "BRIDGE_PROCESS_OBSERVATION_SCOPE",
+                    "A process-observation span must reproduce its exact "
+                    "harness-authored status statement.",
+                    pointer=f"/sections/{section_index}/text",
+                    span_id=section.span_id,
+                    ledger_ids=[process_entries[0].id],
+                    corrections=[
+                        CorrectionMode.CORRECT_WORDING,
+                        CorrectionMode.REMOVE_SPAN,
+                    ],
+                )
+            )
         for ref_index, entry_id in enumerate(section.ledger_entry_ids):
             entry = entries.get(entry_id)
             if entry is None:
@@ -286,7 +336,12 @@ def output_findings(
                 )
                 continue
             if section.rendering_mode not in _allowed_modes(
-                entry, allow_observation_as_fact=allow_observation_as_fact
+                entry,
+                allow_observation_as_fact=allow_observation_as_fact,
+                allow_conservative_mode=(
+                    allow_conservative_mixed_modes
+                    and len(section.ledger_entry_ids) > 1
+                ),
             ):
                 code = (
                     "BRIDGE_UNKNOWN_ASSERTS_FACT"
@@ -349,6 +404,7 @@ def validate_bridge_output(
     output: BridgeOutputV1,
     *,
     allow_observation_as_fact: bool = False,
+    allow_conservative_mixed_modes: bool = False,
 ) -> BridgeValidationReportV1:
     ledger = ClaimLedgerV1.model_validate(ledger)
     output = BridgeOutputV1.model_validate(output)
@@ -356,6 +412,7 @@ def validate_bridge_output(
         ledger,
         output,
         allow_observation_as_fact=allow_observation_as_fact,
+        allow_conservative_mixed_modes=allow_conservative_mixed_modes,
     )
     return BridgeValidationReportV1.create(
         claim_ledger_id=ledger.id,

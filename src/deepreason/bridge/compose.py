@@ -169,6 +169,29 @@ class CompositionSpanWireV1(StrictWireModel):
         return value
 
 
+class CompositionSpanWireV2(StrictWireModel):
+    """v6 span: epistemic rendering is compiler-owned, never model-authored."""
+
+    span_id: str = Field(pattern=r"^S[1-9][0-9]{0,5}$")
+    text: str = Field(min_length=1, max_length=_MAX_COMPOSITION_TEXT)
+    ledger_entry_handles: list[str] = Field(min_length=1, max_length=2_048)
+
+    @field_validator("text")
+    @classmethod
+    def _span_is_not_blank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("span text must contain non-whitespace text")
+        return value
+
+    @field_validator("ledger_entry_handles")
+    @classmethod
+    def _handles_are_unique(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("ledger_entry_handles must not contain duplicates")
+        return value
+
+
+
 class CompositionUnresolvedWireV1(StrictWireModel):
     description: str = Field(min_length=1, max_length=_MAX_COMPOSITION_TEXT)
     reason: str | None = Field(default=None, min_length=1, max_length=_MAX_COMPOSITION_TEXT)
@@ -206,6 +229,47 @@ class BridgeCompositionWireV1(StrictWireModel):
     """Exactly one closed Stage B response; never a list of operations."""
 
     sections: list[CompositionSpanWireV1] = Field(max_length=_MAX_COMPOSITION_ITEMS)
+    unresolved_items: list[CompositionUnresolvedWireV1] | None = Field(
+        default=None, max_length=_MAX_COMPOSITION_ITEMS
+    )
+    resolution: Literal[
+        "answered",
+        "partially_answered",
+        "underdetermined",
+        "insufficient_evidence",
+        "conflicting_evidence",
+        "outside_scope",
+    ]
+    resolution_reason: str | None = Field(
+        default=None, min_length=1, max_length=_MAX_COMPOSITION_TEXT
+    )
+    ledger_amendment_request: LedgerAmendmentWireV1 | None = None
+
+    @field_validator("resolution_reason")
+    @classmethod
+    def _reason_is_not_blank(cls, value: str | None) -> str | None:
+        if value is not None and not value.strip():
+            raise ValueError("resolution_reason must contain non-whitespace text")
+        return value
+
+    @model_validator(mode="after")
+    def _amendment_is_a_distinct_outcome(self):
+        if self.ledger_amendment_request is not None:
+            if self.sections:
+                raise ValueError(
+                    "ledger amendment requests cannot smuggle composed sections"
+                )
+            if self.resolution == "answered":
+                raise ValueError("an amendment-needed result cannot be answered")
+            if self.resolution_reason is None:
+                raise ValueError("an amendment-needed result requires a resolution_reason")
+        return self
+
+
+class BridgeCompositionWireV2(StrictWireModel):
+    """v6 composition response with no rendering-mode authority."""
+
+    sections: list[CompositionSpanWireV2] = Field(max_length=_MAX_COMPOSITION_ITEMS)
     unresolved_items: list[CompositionUnresolvedWireV1] | None = Field(
         default=None, max_length=_MAX_COMPOSITION_ITEMS
     )
@@ -388,7 +452,168 @@ class BridgeCompositionWireContract(WireContract[CompositionDraftV1]):
         return CompositionDraftV1(output=output)
 
 
-def _composition_pack(ledger: ClaimLedgerV1, request: CompositionRequestV1) -> str:
+_RENDERING_PRECEDENCE = (
+    RenderingMode.CONFLICT,
+    RenderingMode.UNKNOWN,
+    RenderingMode.ASSUMPTION,
+    RenderingMode.CONJECTURE,
+    RenderingMode.INFERENCE,
+    RenderingMode.OBSERVATION,
+    RenderingMode.FACT,
+)
+_MODE_FOR_CLASS = {
+    "conflict": RenderingMode.CONFLICT,
+    "unknown": RenderingMode.UNKNOWN,
+    "assumption": RenderingMode.ASSUMPTION,
+    "surviving_conjecture": RenderingMode.CONJECTURE,
+    "supported_inference": RenderingMode.INFERENCE,
+    "recorded_observation": RenderingMode.OBSERVATION,
+    "source_fact": RenderingMode.FACT,
+}
+
+
+class BridgeCompositionWireContractV2(BridgeCompositionWireContract):
+    """v6 Stage B contract deriving the weakest mode from ledger classes."""
+
+    def __init__(
+        self,
+        ledger: ClaimLedgerV1,
+        *,
+        maximum_sections: int,
+        desired_length_chars: int,
+    ) -> None:
+        super().__init__(
+            ledger,
+            maximum_sections=maximum_sections,
+            desired_length_chars=desired_length_chars,
+        )
+        handles = tuple(self.aliases.aliases) or (_HANDLE_SENTINEL,)
+        handle_literal = Literal.__getitem__(handles)
+        bound_span = create_model(
+            "BoundCompositionSpanWireV2",
+            __base__=CompositionSpanWireV2,
+            ledger_entry_handles=(
+                list[handle_literal],
+                Field(min_length=1, max_length=2_048),
+            ),
+        )
+        bound_unresolved = create_model(
+            "BoundCompositionUnresolvedWireV2",
+            __base__=CompositionUnresolvedWireV1,
+            ledger_entry_handles=(
+                list[handle_literal] | None,
+                Field(default=None, max_length=2_048),
+            ),
+        )
+        self.wire_model = create_model(
+            "BoundBridgeCompositionWireV2",
+            __base__=BridgeCompositionWireV2,
+            sections=(list[bound_span], Field(max_length=maximum_sections)),
+            unresolved_items=(
+                list[bound_unresolved] | None,
+                Field(default=None, max_length=maximum_sections),
+            ),
+        )
+        self.contract_id = "bridge.composition.v2"
+
+    def _derived_mode(self, entry_ids: list[str]) -> RenderingMode:
+        by_id = {entry.id: entry for entry in self.ledger.entries}
+        modes = [_MODE_FOR_CLASS[by_id[entry_id].claim_class.value] for entry_id in entry_ids]
+        return min(modes, key=_RENDERING_PRECEDENCE.index)
+
+    def compile(self, wire: BridgeCompositionWireV2) -> CompositionDraftV1:
+        if wire.ledger_amendment_request is not None:
+            request = wire.ledger_amendment_request
+            return CompositionDraftV1(
+                amendment_needed=LedgerAmendmentNeededV1(
+                    requested_class=request.requested_class,
+                    proposed_claim=request.proposed_claim,
+                    reason=request.reason,
+                )
+            )
+        total_chars = sum(len(section.text) for section in wire.sections)
+        total_chars += sum(
+            len(item.description) + len(item.reason or "")
+            for item in wire.unresolved_items or []
+        )
+        total_chars += len(wire.resolution_reason or "")
+        if total_chars > self.desired_length_chars:
+            raise ValueError(
+                "composition exceeds the harness-authored desired_length_chars bound"
+            )
+
+        entries = {entry.id: entry for entry in self.ledger.entries}
+        sections = []
+        for index, section in enumerate(wire.sections):
+            entry_ids = self._resolve(section.ledger_entry_handles) or []
+            process_entries = [
+                entries[entry_id]
+                for entry_id in entry_ids
+                if entries[entry_id].process_observation_refs
+            ]
+            if process_entries:
+                if len(entry_ids) != 1 or len(process_entries) != 1:
+                    raise CompositionContractError(
+                        pointer=f"/sections/{index}/ledger_entry_handles",
+                        message=(
+                            "process observations must occupy an exact, standalone span"
+                        ),
+                    )
+                if section.text != process_entries[0].claim:
+                    raise CompositionContractError(
+                        pointer=f"/sections/{index}/text",
+                        message=(
+                            "process-observation spans must reproduce the exact "
+                            "harness-authored status statement"
+                        ),
+                    )
+            sections.append(
+                ClaimUseV1.create(
+                    span_id=section.span_id,
+                    text=section.text,
+                    rendering_mode=self._derived_mode(entry_ids),
+                    ledger_entry_ids=entry_ids,
+                )
+            )
+        unresolved_items = (
+            [
+                UnresolvedItemV1.create(
+                    description=item.description,
+                    reason=item.reason,
+                    ledger_entry_ids=self._resolve(item.ledger_entry_handles),
+                )
+                for item in wire.unresolved_items
+            ]
+            if wire.unresolved_items is not None
+            else None
+        )
+        output = BridgeOutputV1.create(
+            claim_ledger_id=self.ledger.id,
+            sections=sections,
+            unresolved_items=unresolved_items,
+            resolution=BridgeResolution(wire.resolution),
+            resolution_reason=wire.resolution_reason,
+        )
+        report = validate_bridge_output(
+            self.ledger,
+            output,
+            allow_conservative_mixed_modes=True,
+        )
+        if not report.valid:
+            first = report.findings[0]
+            raise CompositionContractError(
+                pointer=first.pointer or "",
+                message=f"{first.code}: {first.message}",
+            )
+        return CompositionDraftV1(output=output)
+
+
+def _composition_pack(
+    ledger: ClaimLedgerV1,
+    request: CompositionRequestV1,
+    *,
+    contract_version: Literal["v1", "v2"] = "v1",
+) -> str:
     aliases = AliasTable.from_values([entry.id for entry in ledger.entries], prefix="E")
     reverse = {canonical: alias for alias, canonical in aliases.aliases.items()}
     entries = []
@@ -419,24 +644,39 @@ def _composition_pack(ledger: ClaimLedgerV1, request: CompositionRequestV1) -> s
         "ledger_entries": entries,
         "uncovered_requirements": uncovered,
     }
-    return (
+    rules = (
         "The following is the complete validated claim ledger available to Stage B.\n"
         "Use only E-handles shown below. Rewording may preserve ledger meaning, but "
         "do not add facts, observations, premises, inferences, conjectures, sources, "
         "or evidence. If a new inference or conjecture is genuinely required, return "
-        "ledger_amendment_request and no sections. Missing answers remain missing.\n\n"
-        + json.dumps(payload, sort_keys=True, ensure_ascii=False)
+        "ledger_amendment_request and no sections. Missing answers remain missing."
     )
+    if contract_version == "v2":
+        rules += (
+            " Do not author rendering_mode; the compiler derives the weakest mode "
+            "from every referenced ledger class. Process observations may be used "
+            "only as an exact standalone status statement."
+        )
+    return rules + "\n\n" + json.dumps(payload, sort_keys=True, ensure_ascii=False)
 
 
 class BridgeComposer:
     """Execute one Stage B call through the repository's bounded repair kernel."""
 
-    def __init__(self, adapter, *, role: str = "thesis") -> None:
+    def __init__(
+        self,
+        adapter,
+        *,
+        role: str = "thesis",
+        contract_version: Literal["v1", "v2"] = "v1",
+    ) -> None:
         if role not in _COMPOSER_ROLES:
             raise ValueError("bridge composer role must be thesis or summarizer")
+        if contract_version not in {"v1", "v2"}:
+            raise ValueError("bridge composition contract_version must be v1 or v2")
         self.adapter = adapter
         self.role = role
+        self.contract_version = contract_version
 
     def compose(
         self,
@@ -465,7 +705,12 @@ class BridgeComposer:
                 ),
             )
 
-        contract = BridgeCompositionWireContract(
+        contract_type = (
+            BridgeCompositionWireContractV2
+            if self.contract_version == "v2"
+            else BridgeCompositionWireContract
+        )
+        contract = contract_type(
             ledger,
             maximum_sections=request.maximum_sections,
             desired_length_chars=request.desired_length_chars,
@@ -473,7 +718,11 @@ class BridgeComposer:
         try:
             draft, call = self.adapter.call(
                 self.role,
-                _composition_pack(ledger, request),
+                _composition_pack(
+                    ledger,
+                    request,
+                    contract_version=self.contract_version,
+                ),
                 CompositionDraftV1,
                 template_role="bridge_compose",
                 wire_contract=contract,
@@ -498,7 +747,11 @@ class BridgeComposer:
             )
 
         assert draft.output is not None
-        output_report = validate_bridge_output(ledger, draft.output)
+        output_report = validate_bridge_output(
+            ledger,
+            draft.output,
+            allow_conservative_mixed_modes=self.contract_version == "v2",
+        )
         if not output_report.valid:
             return CompositionResultV1(
                 status=CompositionStatus.VALIDATION_FAILED,
@@ -522,7 +775,10 @@ class BridgeComposer:
 __all__ = [
     "BridgeComposer",
     "BridgeCompositionWireContract",
+    "BridgeCompositionWireContractV2",
     "BridgeCompositionWireV1",
+    "BridgeCompositionWireV2",
+    "CompositionSpanWireV2",
     "CompositionDraftV1",
     "CompositionFailureV1",
     "CompositionRequestV1",

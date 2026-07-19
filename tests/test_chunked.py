@@ -494,7 +494,7 @@ def test_make_chunked_end_to_end(tmp_path, monkeypatch):
     assert calls == ["pi-plan", "pi-design", "pi-comp-header", "pi-comp-list"]
     pages = [p for p in paths if p.suffix == ".html"]
     assert len(pages) == 1 and pages[0].exists()
-    html = pages[0].read_text()
+    html = pages[0].read_text(encoding="utf-8")
     assert 'id="app-header"' in html and 'id="app-list"' in html
     assert html.index('id="app-header"') < html.index('id="app-list"')
     assert "vendored: baseline" in html and "vendored: classless" in html
@@ -591,4 +591,4 @@ def test_make_chunked_repairs_the_implicated_component(tmp_path, monkeypatch):
     repair_problem = harness.state.problems["pi-comp-list-r2"]
     assert repair_problem.provenance.trigger.value == "successor"
     pages = [p for p in paths if p.suffix == ".html"]
-    assert pages and 'window.addTodo' in pages[0].read_text()
+    assert pages and 'window.addTodo' in pages[0].read_text(encoding="utf-8")

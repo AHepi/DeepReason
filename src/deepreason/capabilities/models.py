@@ -179,6 +179,12 @@ class SimulationProposalV1(SimulationProposalDraftV1, _IdentifiedCapabilityRecor
         "capability.simulation-proposal.v1", alias="schema"
     )
     originating_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
+    # V5 binds this reference to a legacy WorkOrderEnvelope. V6 binds it to a
+    # WorkPreparationV1 and also names the exact durable provider result that
+    # supplied the semantic draft. The optional field is omitted from v5 bytes.
+    originating_provider_attempt_ref: str | None = Field(
+        default=None, pattern=_WORKFLOW_ID
+    )
     source_call_seq: int = Field(ge=0)
     proposal_index: int = Field(ge=0, le=31)
     problem_ref: str = Field(min_length=1, max_length=512)
@@ -480,6 +486,11 @@ class SimulationConsumptionV1(_IdentifiedCapabilityRecord):
     result_package_ref: str = Field(pattern=_WORKFLOW_ID)
     follow_up_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
     delivery: Literal["fresh_reasoning_work_order"] = "fresh_reasoning_work_order"
+    # Present only for v6: consumption follows a durable semantic admission
+    # and a completed terminal on the fresh transaction work item.
+    follow_up_semantic_admission_ref: str | None = Field(
+        default=None, pattern=_WORKFLOW_ID
+    )
 
 
 __all__ = [

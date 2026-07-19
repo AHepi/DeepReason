@@ -24,11 +24,13 @@ from pydantic import (
 
 from deepreason.conjecture_turn import (
     ConjectureAbstentionV1,
+    ConjectureTurnV6,
     ConjecturerTurnV4,
     ContextRequestV1,
     ReasoningConjecturerTurnV4,
     ConjecturerTurnV5,
     ReasoningConjecturerTurnV5,
+    ReasoningConjecturerTurnV6,
 )
 from deepreason.capabilities.models import (
     SimulationParameterSetV1,
@@ -36,6 +38,8 @@ from deepreason.capabilities.models import (
 )
 from deepreason.llm.contracts import (
     ArgumentativeCriticOutput,
+    BatchCase,
+    BatchCriticOutput,
     CandidateRef,
     ConjectureCandidate,
     ConjecturerOutput,
@@ -47,7 +51,16 @@ from deepreason.llm.contracts import (
     VariatorOutput,
 )
 from deepreason.llm.profiles import ModelProfile, get_profile
-from deepreason.llm.repair import parse_one_json_value
+from deepreason.llm.repair import (
+    RepairDiagnosticEnvelopeV2,
+    RepairPatchV1,
+    parse_one_json_value,
+    repair_patch_response_schema,
+)
+from deepreason.scratch.proposals import (
+    ScratchProposalV1,
+    V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION,
+)
 from deepreason.workloads.text import (
     AnalogyClaim,
     OperationalSidecar,
@@ -57,6 +70,11 @@ from deepreason.workloads.text import (
 
 
 CanonicalOutput = TypeVar("CanonicalOutput", bound=BaseModel)
+
+CONJECTURER_TURN_CONTRACT_V6 = "conjecturer.turn.v6"
+BATCH_CRITIC_CONTRACT_V2 = "batch-critic.v2"
+BRIDGE_LEDGER_CONTRACT_V3 = "bridge.ledger.v3"
+BRIDGE_COMPOSITION_CONTRACT_V2 = "bridge.composition.v2"
 
 class UnknownAliasError(ValueError):
     pass
@@ -68,6 +86,25 @@ class AliasTableRequiredError(ValueError):
 
 class CriticTargetRequiredError(ValueError):
     """A compact critic contract was not bound to its actual target."""
+
+
+class V6WireReferenceError(UnknownAliasError):
+    """A v6 value used a handle outside one exact call-local namespace."""
+
+    code = "V6_WIRE_REFERENCE_INVALID"
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        pointer: str,
+        legal_handles: tuple[str, ...] = (),
+    ) -> None:
+        super().__init__(message)
+        self.pointer = pointer
+        self.repair_scope = pointer
+        self.authorized_pointers = (pointer,)
+        self.legal_handles = legal_handles
 
 
 @dataclass(frozen=True)
@@ -236,6 +273,33 @@ class DirectWireContract(WireContract[CanonicalOutput]):
         name = canonical_model.__name__.removesuffix("Output").lower()
         super().__init__(f"{name}.direct.v1", canonical_model, canonical_model)
 
+class RepairPatchWireContract(WireContract[RepairPatchV1]):
+    """One local patch response under the frozen parent contract identity."""
+
+    def __init__(
+        self,
+        parent_contract_id: str,
+        envelope: RepairDiagnosticEnvelopeV2,
+    ) -> None:
+        if envelope.contract != parent_contract_id:
+            raise ValueError("repair envelope does not match the parent contract")
+        self.envelope = envelope
+        super().__init__(
+            parent_contract_id,
+            RepairPatchV1,
+            RepairPatchV1,
+            variant="repair-patch-v1",
+        )
+
+    def model_json_schema(self) -> dict:
+        return repair_patch_response_schema(self.envelope)
+
+    def compile(self, wire: RepairPatchV1) -> RepairPatchV1:
+        # The generic identity compiler dumps defaults before revalidation.
+        # That would turn an omitted remove-patch value into value null
+        # and falsely reject the already validated frozen patch.
+        return wire
+
 
 class CompactConjectureCandidate(StrictWireModel):
     content: str = Field(min_length=1)
@@ -386,6 +450,45 @@ class ContextRequestWireV1(StrictWireModel):
                 )
         return value
 
+
+class ContextRequestWireV2(StrictWireModel):
+    """V6 semantic retrieval using only SRC_### and SCR_### handles."""
+
+    query: str | None = Field(default=None, min_length=1, max_length=8_192)
+    requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
+    desired_retrieval_channels: list[str] = Field(
+        default_factory=list, max_length=16
+    )
+    purpose: str | None = Field(default=None, min_length=1, max_length=4_096)
+
+    @model_validator(mode="after")
+    def _has_semantic_selector(self):
+        if not (
+            self.query
+            or self.requested_visible_aliases
+            or self.desired_retrieval_channels
+        ):
+            raise ValueError(
+                "context request requires a query, visible alias, or channel"
+            )
+        return self
+
+    @field_validator("requested_visible_aliases", "desired_retrieval_channels")
+    @classmethod
+    def _unique_values(cls, value):
+        if len(value) != len(set(value)):
+            raise ValueError("context request values must not contain duplicates")
+        return value
+
+    @field_validator("requested_visible_aliases")
+    @classmethod
+    def _visible_alias_syntax(cls, value):
+        for alias in value:
+            if re.fullmatch(r"(?:SRC|SCR)_[0-9]{3}", alias) is None:
+                raise ValueError(
+                    "requested context must use a visible SRC_### or SCR_### alias"
+                )
+        return value
 
 class ConjecturerTurnWireV4(StrictWireModel):
     candidates: list[CompactConjectureCandidate] = Field(
@@ -605,6 +708,62 @@ class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
         return self
 
 
+class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
+    context_request: ContextRequestWireV2 | None = None
+    scratch_proposal: ScratchProposalV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        return self._meaningful_v6_outcome()
+
+    @model_validator(mode="after")
+    def _meaningful_v5_outcome(self):
+        return self._meaningful_v6_outcome()
+
+    def _meaningful_v6_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+            or self.scratch_proposal
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals or self.scratch_proposal
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
+class ReasoningConjecturerTurnWireV6(ReasoningConjecturerTurnWireV5):
+    context_request: ContextRequestWireV2 | None = None
+    scratch_proposal: ScratchProposalV1 | None = None
+
+    @model_validator(mode="after")
+    def _meaningful_outcome(self):
+        return self._meaningful_v6_outcome()
+
+    @model_validator(mode="after")
+    def _meaningful_v5_outcome(self):
+        return self._meaningful_v6_outcome()
+
+    def _meaningful_v6_outcome(self):
+        if not (
+            self.candidates
+            or self.context_request
+            or self.abstention
+            or self.simulation_proposals
+            or self.scratch_proposal
+        ):
+            raise ValueError("a conjecture turn requires at least one meaningful outcome")
+        if self.abstention is not None and (
+            self.candidates or self.simulation_proposals or self.scratch_proposal
+        ):
+            raise ValueError("abstention cannot accompany semantic proposals")
+        return self
+
+
 class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
     """Tranche-A compiler; simulation values remain semantic drafts."""
 
@@ -677,6 +836,477 @@ class ConjecturerTurnWireContractV5(ConjecturerTurnWireContractV4):
         values["simulation_proposals"] = simulations
         model = ReasoningConjecturerTurnV5 if self.reasoning else ConjecturerTurnV5
         return model.model_validate(values)
+
+
+class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
+    """Manifest- and call-specialized transactional conjecture contract."""
+
+    _SCRATCH_CEILINGS = (
+        ("new_blocks", "maximum_new_blocks_per_turn"),
+        ("revisions", "maximum_revisions_per_turn"),
+        ("links", "maximum_links_per_turn"),
+        ("unresolved_questions", "maximum_unresolved_questions_per_turn"),
+        ("cluster_suggestions", "maximum_cluster_suggestions_per_turn"),
+    )
+
+    def __init__(
+        self,
+        *,
+        reasoning: bool,
+        aliases: AliasTable,
+        scratch_aliases: Mapping[str, str] | None = None,
+        permitted_retrieval_channels: tuple[str, ...] = (),
+        simulation_enabled: bool = False,
+        maximum_simulation_proposals: int = 0,
+        simulation_input_aliases: Mapping[str, str] | tuple[str, ...] = (),
+        scratch_authoring_policy: Any | None = None,
+    ) -> None:
+        formal = tuple(aliases.aliases)
+        scratch = tuple((scratch_aliases or {}).keys())
+        if isinstance(simulation_input_aliases, Mapping):
+            simulation_inputs = tuple(simulation_input_aliases)
+            if any(not value for value in simulation_input_aliases.values()):
+                raise ValueError("simulation input catalog targets must be nonempty")
+        else:
+            simulation_inputs = tuple(simulation_input_aliases)
+        self._require_namespace(formal, "SRC")
+        self._require_namespace(scratch, "SCR")
+        self._require_namespace(simulation_inputs, "SIM")
+        all_visible = (*formal, *scratch, *simulation_inputs)
+        if len(all_visible) != len(set(all_visible)):
+            raise ValueError("v6 visible alias namespaces must be disjoint")
+        if simulation_enabled:
+            if not 1 <= maximum_simulation_proposals <= 32:
+                raise ValueError(
+                    "enabled simulation requires a per-turn maximum in 1..32"
+                )
+        elif maximum_simulation_proposals != 0:
+            raise ValueError("disabled simulation must have a zero proposal maximum")
+
+        self.simulation_enabled = bool(simulation_enabled)
+        self.simulation_input_aliases = tuple(sorted(simulation_inputs))
+        self.visible_context_aliases = tuple(sorted((*formal, *scratch)))
+        self.scratch_authoring_policy = scratch_authoring_policy
+        self.scratch_authoring_enabled = bool(
+            getattr(scratch_authoring_policy, "enabled", False)
+        )
+        ConjecturerTurnWireContractV5.__init__(
+            self,
+            reasoning=reasoning,
+            aliases=aliases,
+            scratch_aliases=scratch_aliases,
+            permitted_retrieval_channels=permitted_retrieval_channels,
+            maximum_simulation_proposals=maximum_simulation_proposals,
+        )
+        self.contract_id = CONJECTURER_TURN_CONTRACT_V6
+        self.wire_model = (
+            ReasoningConjecturerTurnWireV6
+            if reasoning
+            else ConjecturerTurnWireV6
+        )
+        self.canonical_model = (
+            ReasoningConjecturerTurnV6 if reasoning else ConjectureTurnV6
+        )
+        self.variant = "compact.v6"
+
+    @staticmethod
+    def _require_namespace(aliases: tuple[str, ...], prefix: str) -> None:
+        pattern = rf"^{prefix}_[0-9]{{3}}$"
+        malformed = tuple(alias for alias in aliases if re.fullmatch(pattern, alias) is None)
+        if malformed:
+            raise ValueError(
+                f"v6 {prefix} aliases must use {prefix}_###: {malformed!r}"
+            )
+
+    @staticmethod
+    def _omit_property(node: dict[str, Any], name: str) -> None:
+        node.get("properties", {}).pop(name, None)
+        required = node.get("required")
+        if isinstance(required, list) and name in required:
+            required.remove(name)
+
+    @staticmethod
+    def _bind_alias_array(
+        node: dict[str, Any],
+        name: str,
+        aliases: tuple[str, ...],
+    ) -> None:
+        if not aliases:
+            ConjecturerTurnWireContractV6._omit_property(node, name)
+            return
+        field = node.get("properties", {}).get(name)
+        if isinstance(field, dict):
+            field["items"] = {"enum": list(aliases), "type": "string"}
+
+    def model_json_schema(self) -> dict:
+        schema = super().model_json_schema()
+        properties = schema.get("properties", {})
+        if not self.simulation_enabled:
+            self._omit_property(schema, "simulation_proposals")
+        else:
+            proposals = properties.get("simulation_proposals", {})
+            proposals["maxItems"] = self.maximum_simulation_proposals
+        if not self.scratch_authoring_enabled:
+            self._omit_property(schema, "scratch_proposal")
+
+        definitions = schema.get("$defs", {})
+        if self.scratch_authoring_enabled:
+            workshop_purpose = V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION
+            properties.get("scratch_proposal", {})["description"] = workshop_purpose
+            definitions.get("ScratchProposalV1", {})["description"] = workshop_purpose
+        simulation = definitions.get("SimulationProposalWireV1", {})
+        self._bind_alias_array(
+            simulation,
+            "input_aliases",
+            self.simulation_input_aliases,
+        )
+        candidate_name = (
+            "ReasoningCandidateProposal"
+            if self.reasoning
+            else "CompactConjectureCandidate"
+        )
+        candidate = definitions.get(candidate_name, {})
+        self._bind_alias_array(
+            candidate,
+            "optional_refs" if self.reasoning else "neighbours",
+            tuple(sorted(self.aliases.aliases)),
+        )
+        context = definitions.get("ContextRequestWireV2", {})
+        self._bind_alias_array(
+            context,
+            "requested_visible_aliases",
+            self.visible_context_aliases,
+        )
+        self._bind_alias_array(
+            context,
+            "desired_retrieval_channels",
+            tuple(sorted(self.permitted_retrieval_channels)),
+        )
+        if self.reasoning:
+            sidecar = definitions.get("OperationalSidecar", {})
+            self._bind_alias_array(
+                sidecar,
+                "requested_context_aliases",
+                self.visible_context_aliases,
+            )
+        if self.scratch_authoring_enabled:
+            scratch = definitions.get("ScratchProposalV1", {})
+            for field, policy_field in self._SCRATCH_CEILINGS:
+                array_schema = scratch.get("properties", {}).get(field)
+                if isinstance(array_schema, dict):
+                    array_schema["maxItems"] = int(
+                        getattr(self.scratch_authoring_policy, policy_field)
+                    )
+        return schema
+
+    def _invalid_reference(
+        self,
+        pointer: str,
+        alias: str,
+        legal: tuple[str, ...],
+    ) -> None:
+        if alias not in legal:
+            raise V6WireReferenceError(
+                f"unknown v6 call-local alias {alias!r}",
+                pointer=pointer,
+                legal_handles=legal,
+            )
+
+    def _preflight_v6_references(self, value: Any) -> None:
+        if not isinstance(value, dict):
+            return
+        scratch = value.get("scratch_proposal")
+        if "scratch_proposal" in value and not self.scratch_authoring_enabled:
+            raise V6WireReferenceError(
+                "scratch_proposal is absent when scratch authoring is disabled",
+                pointer="/scratch_proposal",
+            )
+        if self.scratch_authoring_enabled and isinstance(scratch, dict):
+            for field, policy_field in self._SCRATCH_CEILINGS:
+                items = scratch.get(field)
+                maximum = int(getattr(self.scratch_authoring_policy, policy_field))
+                if isinstance(items, (list, tuple)) and len(items) > maximum:
+                    raise V6WireReferenceError(
+                        f"scratch {field} exceeds frozen per-turn authority",
+                        pointer=f"/scratch_proposal/{field}/{maximum}",
+                    )
+        proposals = value.get("simulation_proposals")
+        if "simulation_proposals" in value and not self.simulation_enabled:
+            raise V6WireReferenceError(
+                "simulation_proposals is absent when simulation is disabled",
+                pointer="/simulation_proposals",
+            )
+        if isinstance(proposals, list):
+            if len(proposals) > self.maximum_simulation_proposals:
+                raise V6WireReferenceError(
+                    "simulation proposal count exceeds frozen per-turn authority",
+                    pointer=(
+                        "/simulation_proposals/"
+                        f"{self.maximum_simulation_proposals}"
+                    ),
+                )
+            for index, proposal in enumerate(proposals):
+                if not isinstance(proposal, dict):
+                    continue
+                inputs = proposal.get("input_aliases")
+                pointer = f"/simulation_proposals/{index}/input_aliases"
+                if "input_aliases" in proposal and not self.simulation_input_aliases:
+                    raise V6WireReferenceError(
+                        "input_aliases is absent when no simulation inputs exist",
+                        pointer=pointer,
+                    )
+                if isinstance(inputs, list):
+                    for item_index, alias in enumerate(inputs):
+                        if isinstance(alias, str):
+                            self._invalid_reference(
+                                f"{pointer}/{item_index}",
+                                alias,
+                                self.simulation_input_aliases,
+                            )
+
+        candidates = value.get("candidates")
+        if isinstance(candidates, list):
+            source_aliases = tuple(sorted(self.aliases.aliases))
+            for index, candidate in enumerate(candidates):
+                if not isinstance(candidate, dict):
+                    continue
+                field = "optional_refs" if self.reasoning else "neighbours"
+                refs = candidate.get(field)
+                pointer = f"/candidates/{index}/{field}"
+                if field in candidate and not source_aliases:
+                    raise V6WireReferenceError(
+                        f"{field} is absent when no formal sources exist",
+                        pointer=pointer,
+                    )
+                if isinstance(refs, (list, tuple)):
+                    for item_index, alias in enumerate(refs):
+                        if isinstance(alias, str):
+                            self._invalid_reference(
+                                f"{pointer}/{item_index}",
+                                alias,
+                                source_aliases,
+                            )
+                if self.reasoning and isinstance(candidate.get("sidecar"), dict):
+                    sidecar = candidate["sidecar"]
+                    requested = sidecar.get(
+                        "requested_context_aliases"
+                    )
+                    sidecar_pointer = (
+                        f"/candidates/{index}/sidecar/requested_context_aliases"
+                    )
+                    if (
+                        "requested_context_aliases" in sidecar
+                        and not self.visible_context_aliases
+                    ):
+                        raise V6WireReferenceError(
+                            "requested_context_aliases is absent when no visible "
+                            "source or scratch catalog exists",
+                            pointer=sidecar_pointer,
+                        )
+                    if isinstance(requested, (list, tuple)):
+                        for item_index, alias in enumerate(requested):
+                            if isinstance(alias, str):
+                                self._invalid_reference(
+                                    f"{sidecar_pointer}/{item_index}",
+                                    alias,
+                                    self.visible_context_aliases,
+                                )
+
+        request = value.get("context_request")
+        if isinstance(request, dict):
+            requested = request.get("requested_visible_aliases")
+            requested_pointer = "/context_request/requested_visible_aliases"
+            if (
+                "requested_visible_aliases" in request
+                and not self.visible_context_aliases
+            ):
+                raise V6WireReferenceError(
+                    "requested_visible_aliases is absent when no visible source "
+                    "or scratch catalog exists",
+                    pointer=requested_pointer,
+                )
+            if isinstance(requested, list):
+                for index, alias in enumerate(requested):
+                    if isinstance(alias, str):
+                        self._invalid_reference(
+                            f"{requested_pointer}/{index}",
+                            alias,
+                            self.visible_context_aliases,
+                        )
+            channels = request.get("desired_retrieval_channels")
+            channel_pointer = "/context_request/desired_retrieval_channels"
+            if (
+                "desired_retrieval_channels" in request
+                and not self.permitted_retrieval_channels
+            ):
+                raise V6WireReferenceError(
+                    "desired_retrieval_channels is absent when no retrieval "
+                    "channels are permitted",
+                    pointer=channel_pointer,
+                )
+            if isinstance(channels, list):
+                legal_channels = tuple(sorted(self.permitted_retrieval_channels))
+                for index, channel in enumerate(channels):
+                    if isinstance(channel, str):
+                        self._invalid_reference(
+                            f"{channel_pointer}/{index}",
+                            channel,
+                            legal_channels,
+                        )
+
+    def _preflight_value(self, value: Any) -> None:
+        self._preflight_v6_references(value)
+        super()._preflight_value(value)
+
+    def validate_value(self, value: Any) -> BaseModel:
+        # The strict proposal records intentionally use immutable tuples.
+        # Validate through Pydantic's JSON boundary so JSON arrays are accepted
+        # as tuples without enabling Python-side scalar coercion.
+        self._preflight_value(value)
+        raw = json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        )
+        return self.wire_model.model_validate_json(raw)
+
+    def compile(self, wire: BaseModel) -> BaseModel:
+        # Defence in depth for callers compiling a constructed wire model
+        # without first invoking validate_value/validate_json.
+        self._preflight_v6_references(
+            wire.model_dump(mode="python", exclude_unset=True)
+        )
+        scratch = getattr(wire, "scratch_proposal", None)
+        if not (
+            wire.candidates
+            or wire.context_request
+            or wire.abstention
+            or wire.simulation_proposals
+        ) and scratch is not None:
+            values = {
+                "candidates": (),
+                "context_request": None,
+                "abstention": None,
+                "simulation_proposals": (),
+            }
+        else:
+            compiled = ConjecturerTurnWireContractV5.compile(self, wire)
+            values = compiled.model_dump(mode="python")
+        values["scratch_proposal"] = scratch
+        model = ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6
+        return model.model_validate(values)
+
+
+class BatchCriticCaseWireV2(StrictWireModel):
+    target_alias: str
+    attack: bool
+    case: str = ""
+    counterexample: list[Any] | None = None
+
+
+class BatchCriticWireV2(StrictWireModel):
+    cases: list[BatchCriticCaseWireV2] = Field(default_factory=list, max_length=256)
+
+    @model_validator(mode="after")
+    def _one_case_per_target(self):
+        targets = tuple(item.target_alias for item in self.cases)
+        if len(targets) != len(set(targets)):
+            raise ValueError("batch critic cannot return duplicate target cases")
+        return self
+
+
+class BatchCriticWireContractV2(WireContract[BatchCriticOutput]):
+    """Call-local batch critic whose targets are exact SRC_### literals."""
+
+    def __init__(
+        self,
+        aliases: AliasTable,
+        expected_targets: tuple[str, ...] | None = None,
+    ) -> None:
+        if not aliases.aliases:
+            raise AliasTableRequiredError(
+                "batch-critic.v2 requires a nonempty call-local target catalog"
+            )
+        ConjecturerTurnWireContractV6._require_namespace(
+            tuple(aliases.aliases), "SRC"
+        )
+        targets = tuple(
+            aliases.aliases.values()
+            if expected_targets is None
+            else expected_targets
+        )
+        if not targets:
+            raise ValueError("batch-critic.v2 requires at least one assigned target")
+        if len(targets) != len(set(targets)):
+            raise ValueError("expected batch critic targets must be unique")
+        expected_aliases = tuple(sorted(aliases.alias_for(item) for item in targets))
+        self.expected_aliases = expected_aliases
+        super().__init__(
+            BATCH_CRITIC_CONTRACT_V2,
+            BatchCriticWireV2,
+            BatchCriticOutput,
+            aliases=aliases,
+            variant="compact.v2",
+        )
+
+    def model_json_schema(self) -> dict:
+        schema = super().model_json_schema()
+        cases = schema.get("properties", {}).get("cases")
+        if isinstance(cases, dict):
+            cases["maxItems"] = len(self.expected_aliases)
+        case = schema.get("$defs", {}).get("BatchCriticCaseWireV2", {})
+        target = case.get("properties", {}).get("target_alias")
+        if isinstance(target, dict):
+            target.clear()
+            target.update({"enum": list(self.expected_aliases), "type": "string"})
+        return schema
+
+    def _check_targets(self, value: Any) -> None:
+        if not isinstance(value, dict) or not isinstance(value.get("cases"), list):
+            return
+        if len(value["cases"]) > len(self.expected_aliases):
+            raise V6WireReferenceError(
+                "batch critic returned more cases than assigned targets",
+                pointer=f"/cases/{len(self.expected_aliases)}",
+            )
+        seen: set[str] = set()
+        for index, case in enumerate(value["cases"]):
+            if not isinstance(case, dict):
+                continue
+            alias = case.get("target_alias")
+            if isinstance(alias, str) and alias in seen:
+                raise V6WireReferenceError(
+                    f"batch critic duplicated target {alias!r}",
+                    pointer=f"/cases/{index}/target_alias",
+                    legal_handles=self.expected_aliases,
+                )
+            if isinstance(alias, str):
+                seen.add(alias)
+            if isinstance(alias, str) and alias not in self.expected_aliases:
+                raise V6WireReferenceError(
+                    f"batch critic target {alias!r} was not assigned",
+                    pointer=f"/cases/{index}/target_alias",
+                    legal_handles=self.expected_aliases,
+                )
+
+    def _preflight_value(self, value: Any) -> None:
+        self._check_targets(value)
+        super()._preflight_value(value)
+
+    def compile(self, wire: BatchCriticWireV2) -> BatchCriticOutput:
+        self._check_targets(wire.model_dump(mode="python"))
+        return BatchCriticOutput(
+            cases=[
+                BatchCase(
+                    target=self.aliases.resolve(item.target_alias),
+                    attack=item.attack,
+                    case=item.case,
+                    counterexample=item.counterexample,
+                )
+                for item in wire.cases
+            ]
+        )
 
 class CompactCritic(StrictWireModel):
     attack: bool
@@ -924,6 +1554,10 @@ def minimal_example(contract: WireContract) -> str:
     """Exactly one syntax-only example suitable for compact prompts."""
     from deepreason.llm.repair import minimal_skeleton
 
-    if contract.contract_id in {"conjecturer.turn.v4", "conjecturer.turn.v5"}:
+    if contract.contract_id in {
+        "conjecturer.turn.v4",
+        "conjecturer.turn.v5",
+        CONJECTURER_TURN_CONTRACT_V6,
+    }:
         return '{"abstention":{"search_signal":"stuck"}}'
     return json.dumps(minimal_skeleton(contract.model_json_schema()), separators=(",", ":"))
