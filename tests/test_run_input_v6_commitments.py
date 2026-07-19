@@ -294,8 +294,10 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
     manifest = _manifest(6, frozen.run_input_digest)
     calls = []
 
-    def finish_without_provider(*_args, **_kwargs):
-        calls.append("scheduler")
+    def finish_without_provider(
+        _harness, _config, _cycles, token_budget, **_kwargs
+    ):
+        calls.append(token_budget)
         return (
             {"frontier": [], "survivors": []},
             None,
@@ -326,7 +328,25 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
     )
     assert terminal.lifecycle == "completed"
     assert terminal.payload["schema"] == "deepreason-run-result-v2"
-    assert calls == ["scheduler"]
+    assert calls == [None]
+
+    monkeypatch.setattr(
+        "deepreason.runtime.continuation.prepare_continuation",
+        lambda *_args, **_kwargs: {"prior_stop_digest": "a" * 64},
+    )
+    continued = service.continue_run(
+        ContinueTextRunIntentV1(
+            root=str(root),
+            budget=RunBudgetIntentV1(cycles=1, token_budget="unlimited"),
+            expected_manifest_digest=manifest.sha256,
+        ),
+        credential_checker=lambda _manifest: [],
+    )
+    service.wait(continued.root, timeout=10)
+    assert service.result(
+        InspectTextRunIntentV1(root=continued.root)
+    ).lifecycle == "completed"
+    assert calls == [None, None]
 
     workload_path = root / "text-workload.json"
     altered = json.loads(workload_path.read_text(encoding="utf-8"))
@@ -346,5 +366,4 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
             ),
             credential_checker=lambda _manifest: [],
         )
-    assert calls == ["scheduler"]
-
+    assert calls == [None, None]

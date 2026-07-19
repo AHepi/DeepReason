@@ -298,10 +298,25 @@ class Scheduler:
         if self._workflow_recovery_done:
             return
         outstanding = self.harness.workflow_state.outstanding_work_order_ids
-        if not outstanding:
+        manifest = self.run_manifest
+        admitted_effect_candidates = {}
+        if manifest is not None and manifest.schema_version == 6:
+            for item in self.harness.workflow_state.transaction_work.values():
+                attempt_index = item.preparation.attempt_index
+                provider_attempt = item.provider_attempts.get(attempt_index)
+                admission = item.admissions.get(attempt_index)
+                if (
+                    item.preparation.task_kind
+                    in {WorkflowTaskKind.CRITICISM, WorkflowTaskKind.SCRATCH_AUTHORING}
+                    and provider_attempt is not None
+                    and provider_attempt.outcome == "provider_result"
+                    and admission is not None
+                    and admission.outcome == "admitted"
+                ):
+                    admitted_effect_candidates[provider_attempt.id] = provider_attempt
+        if not outstanding and not admitted_effect_candidates:
             self._workflow_recovery_done = True
             return
-        manifest = self.run_manifest
         if manifest is not None and manifest.schema_version == 6:
             from deepreason.workflow.transaction_service import (
                 InquiryTransactionService,
@@ -315,8 +330,14 @@ class Scheduler:
                 manifest,
                 meter,
             )
-            pending_admission = transaction_service.recover_incomplete()
-            for provider_attempt in pending_admission:
+            pending_admission = list(transaction_service.recover_incomplete())
+            recovery_by_id = {attempt.id: attempt for attempt in pending_admission}
+            # Criticism admits its durable output before applying the
+            # caller-owned effect; scratch can crash between its effect and
+            # admission. Rechecking both canonical paths is safe and closes
+            # either exact-once crash window.
+            recovery_by_id.update(admitted_effect_candidates)
+            for provider_attempt in recovery_by_id.values():
                 item = self.harness.workflow_state.transaction_work[provider_attempt.work_id]
                 if item.preparation.task_kind == WorkflowTaskKind.CONJECTURE:
                     from deepreason.workflow.conjecture_recovery import (
@@ -1109,6 +1130,7 @@ class Scheduler:
             ForeignCriticismTargetV1,
             compile_criticism_assignments,
             plan_foreign_criticism,
+            record_completed_criticism_attempt,
         )
 
         completed = self._foreign_criticism_coverage()
@@ -1176,45 +1198,26 @@ class Scheduler:
             def record_coverage(target_id: str, source_call_seq: int) -> None:
                 if target_id not in expected or target_id in observed:
                     raise RuntimeError("foreign criticism reported non-canonical target coverage")
-                source = next(
-                    (event for event in self.harness.log.read() if event.seq == source_call_seq),
-                    None,
-                )
-                call = source.llm if source is not None else None
-                receipt = call.school_route if call is not None else None
-                if (
-                    source is None
-                    or source.seq >= self.harness._next_seq
-                    or call is None
-                    or call.role != "argumentative_critic"
-                    or receipt is None
-                    or receipt.school_id != batch.critic_school_id
-                    or receipt.route_sha256 != batch.route_sha256
-                ):
-                    raise RuntimeError("foreign criticism coverage has no exact routed source call")
-                self.harness.record_measure(
-                    inputs=[
-                        "foreign-criticism-coverage.v1",
-                        target_id,
-                        f"owner:{owner_by_target[target_id]}",
-                        f"critic:{batch.critic_school_id}",
-                        f"source:{source_call_seq}",
-                        f"route:{batch.route_sha256}",
-                    ]
-                )
                 if transactional_v6:
                     assignment = assignment_by_target_school[(target_id, batch.critic_school_id)]
-                    attempt_record = CriticismAttemptV1.create(
-                        assignment_ref=assignment.id,
-                        target_id=target_id,
-                        critic_school_id=batch.critic_school_id,
+                    attempt_record = record_completed_criticism_attempt(
+                        self.harness,
+                        assignment,
                         attempt_index=attempt_index,
-                        outcome="completed",
-                        coverage_completed=True,
                         source_call_seq=source_call_seq,
                     )
-                    self.harness.record_criticism_obligation(attempt_record)
                     attempt_refs_by_target.setdefault(target_id, []).append(attempt_record.id)
+                else:
+                    self.harness.record_measure(
+                        inputs=[
+                            "foreign-criticism-coverage.v1",
+                            target_id,
+                            f"owner:{owner_by_target[target_id]}",
+                            f"critic:{batch.critic_school_id}",
+                            f"source:{source_call_seq}",
+                            f"route:{batch.route_sha256}",
+                        ]
+                    )
                 observed.add(target_id)
 
             maximum_attempts = (

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 
 import pytest
@@ -33,6 +34,7 @@ from deepreason.run_manifest import (
 from deepreason.scratch.attention import AttentionPlanner
 from deepreason.scratch.authoring import ScratchAuthoringError, ScratchAuthoringService
 from deepreason.scratch.models import ScratchActor, ScratchProvenanceV1
+from deepreason.scratch.proposals import V6_SCRATCH_WORKSHOP_PROMPT
 from deepreason.scratch.render import ScratchRenderer
 from deepreason.scratch.service import ScratchService
 from deepreason.verification import verify_root_report
@@ -176,21 +178,41 @@ def test_block_link_and_guide_each_use_complete_independent_transactions(tmp_pat
     manifest = _bind_v6_root(root)
     service = ScratchService(root)
     renderer, rendered, first, second, cluster = _context(service)
+    prompts: dict[str, list[str]] = {
+        "conjecturer": [],
+        "synthesizer": [],
+        "summarizer": [],
+    }
+
+    def capture(role: str, response: str):
+        def respond(prompt: str) -> str:
+            prompts[role].append(prompt)
+            return response
+
+        return respond
+
     adapter, _endpoints = _adapter(
         service,
         manifest,
         {
-            "conjecturer": ['{"content":"wild but explicitly provisional"}'],
-            "synthesizer": [
+            "conjecturer": capture(
+                "conjecturer",
+                '{"content":"wild but explicitly provisional"}',
+            ),
+            "synthesizer": capture(
+                "synthesizer",
                 json.dumps(
                     {
                         "from_handle": "B1",
                         "to_handle": "B2",
                         "relation_hint": "may conflict",
                     }
-                )
-            ],
-            "summarizer": ['{"working_focus":"Keep both mechanisms alive"}'],
+                ),
+            ),
+            "summarizer": capture(
+                "summarizer",
+                '{"working_focus":"Keep both mechanisms alive"}',
+            ),
         },
     )
     author = ScratchAuthoringService(service, adapter, renderer=renderer, run_manifest=manifest)
@@ -202,8 +224,15 @@ def test_block_link_and_guide_each_use_complete_independent_transactions(tmp_pat
     )
 
     assert block.body.content == "wild but explicitly provisional"
+    assert block.body.why_keep_this is None
+    assert block.body.unfinished is None
+    assert block.body.possible_next_move is None
     assert (link.body.from_, link.body.to) == (first.id, second.id)
+    assert link.body.because is None
     assert guide.working_focus == "Keep both mechanisms alive"
+    assert guide.open_threads is None
+    assert guide.entry_points is None
+    assert guide.local_summary is None
     work = list(service.harness.workflow_state.transaction_work.values())
     assert [item.preparation.task_kind for item in work] == [
         WorkflowTaskKind.SCRATCH_AUTHORING,
@@ -224,6 +253,11 @@ def test_block_link_and_guide_each_use_complete_independent_transactions(tmp_pat
         "conjecturer",
         "synthesizer",
         "summarizer",
+    ]
+    assert [item.preparation.contract_id for item in work] == [
+        "scratch.block.compact.v1",
+        "scratch.link.compact.v1",
+        "scratch.cluster-guide.compact.v1",
     ]
     assert all(
         item.preparation.task_payload_value["purpose"] == "imaginative_workshop"
@@ -249,6 +283,30 @@ def test_block_link_and_guide_each_use_complete_independent_transactions(tmp_pat
         and event.scratch.context_ref in exposure_ids
     ]
     assert len(provider_events) == 3
+    assert all(len(values) == 1 for values in prompts.values())
+    for role, values in prompts.items():
+        prompt = values[0]
+        assert V6_SCRATCH_WORKSHOP_PROMPT in prompt
+        assert "IMAGINATIVE SCRATCH WORKSHOP" in prompt
+        assert "Explore boldly." in prompt
+        assert "Scratch remains advisory" in prompt
+        assert "never makes it a fact, evidence, a formal claim, or support" in prompt
+        assert "Do not turn uncertainty into a confident fact" in prompt
+        item = next(
+            candidate
+            for candidate in work
+            if candidate.preparation.route_lease.role == role
+        )
+        provider = item.provider_attempts[item.preparation.attempt_index]
+        event = next(
+            candidate
+            for candidate in provider_events
+            if candidate.llm.work_order_id == item.preparation.id
+        )
+        prompt_bytes = service.harness.blobs.get(event.llm.prompt_ref)
+        assert prompt_bytes.decode("utf-8") == prompt
+        assert hashlib.sha256(prompt_bytes).hexdigest() == item.exposure.prompt_sha256
+        assert provider.prompt_sha256 == item.exposure.prompt_sha256
     assert len(authored_effects) == 3
     assert all(event.llm is None for event in authored_effects)
     assert guide.authored_by.event_seq in {event.seq for event in provider_events}

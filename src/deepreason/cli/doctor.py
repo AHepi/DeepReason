@@ -499,7 +499,7 @@ def exercise_production_contract_case(
             contract=pair.contract_id,
             schema=schema,
             initial_request=request,
-            retry_max=2,
+            retry_max=manifest.bridge_policy.max_schema_repair_attempts,
         )
         for attempt in range(session.attempt_count):
             repair_count = attempt

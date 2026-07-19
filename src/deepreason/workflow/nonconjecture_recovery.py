@@ -1,14 +1,10 @@
-"""Conservative RunManifest-v6 recovery for non-conjecture provider work.
+"""RunManifest-v6 recovery for non-conjecture provider work.
 
 Recovery has no provider dependency.  It consumes the one durable raw result
-already bound by ``ProviderAttemptV1``, validates the immutable authority
-prefix, and closes the work transaction.  The original domain caller is gone,
-so a recovered response never creates criticism coverage, bridge state,
-scratch objects, or a repaired parent output.  A response whose exact wire
-contract can be reconstructed is retained only as a diagnostic semantic blob
-and the transaction is rejected as operationally unapplied.  Where the
-call-local contract was not persisted completely, recovery fails safe in the
-same typed way after validating everything that remains provable.
+already bound by ``ProviderAttemptV1`` and validates the immutable authority
+prefix. Criticism and scratch authoring retain enough durable authority to
+resume their ordinary semantic paths. Other caller-owned domains remain
+conservatively unapplied where their call-local contract is incomplete.
 """
 
 from __future__ import annotations
@@ -33,7 +29,7 @@ from deepreason.llm.wire import (
     BatchCriticWireContractV2,
     RepairPatchWireContract,
 )
-from deepreason.run_manifest import RunManifest
+from deepreason.run_manifest import RunManifest, config_from_run_manifest
 from deepreason.scratch.contracts import (
     ClusterGuideWireContract,
     ScratchBlockWireContract,
@@ -151,14 +147,14 @@ def _common_authority(harness, manifest: RunManifest, provider: ProviderAttemptV
         "authorization does not bind the replayed issue records",
     )
     payload = _mapping(preparation.task_payload_value, "task payload")
-    _event_seq, call = _source_call(harness, provider)
+    event_seq, call = _source_call(harness, provider)
     prompt = harness.blobs.get(call.prompt_ref)
     _authority(
         hashlib.sha256(prompt).hexdigest() == provider.prompt_sha256,
         "durable prompt bytes differ from issued authority",
     )
     _route(manifest, preparation, call)
-    return item, preparation, payload, call
+    return item, preparation, payload, event_seq, call
 
 
 def _trigger(preparation, payload: Mapping[str, Any], prefix: str) -> None:
@@ -241,6 +237,257 @@ def _schema_exhausted(
     )
 
 
+def _existing_admission(item, provider: ProviderAttemptV1):
+    admission = item.admissions.get(provider.attempt_index)
+    terminal = item.terminal
+    if admission is not None:
+        _authority(admission.provider_attempt_ref == provider.id, "admission provider differs")
+        _authority(admission.work_id == provider.work_id, "admission work differs")
+    if terminal is not None:
+        _authority(admission is not None, "terminal work has no semantic admission")
+        _authority(
+            terminal.semantic_admission_ref == admission.id
+            and terminal.provider_attempt_ref == provider.id,
+            "terminal completion differs from durable provider admission",
+        )
+    return admission
+
+
+def _complete_admitted(
+    service: InquiryTransactionService,
+    provider: ProviderAttemptV1,
+    *,
+    admitted_refs: tuple[str, ...],
+    reason_code: str,
+) -> SemanticAdmissionV1:
+    admission = service.record_semantic_admission(
+        provider,
+        outcome="admitted",
+        admitted_refs=admitted_refs,
+    )
+    service.terminate(
+        work_id=provider.work_id,
+        attempt_index=provider.attempt_index,
+        status="completed",
+        reason_code=reason_code,
+        usage_status=provider.usage_status,
+        prompt_tokens=provider.prompt_tokens,
+        completion_tokens=provider.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+    return admission
+
+
+def _recover_criticism_effect(
+    harness,
+    manifest,
+    item,
+    preparation,
+    payload,
+    provider,
+    source_call_seq,
+    call,
+    output,
+    service,
+) -> SemanticAdmissionV1:
+    from deepreason.rules.crit import (
+        _apply_counterexample_retry_result,
+        _crit_argumentative_batch_result,
+    )
+    from deepreason.workflow.criticism import record_completed_criticism_attempt
+
+    phase = str(payload["phase"])
+    fallback_cases = None
+    if phase.startswith("counterexample_retry:"):
+        # Retry lineage is semantic authority, so validate it before any
+        # admission or terminal append can mark this result successful.
+        fallback_cases = _criticism_retry_fallback_cases(
+            harness,
+            manifest,
+            preparation,
+            payload,
+        )
+    semantic_ref = harness.blobs.put(
+        canonical_json(output.model_dump(mode="json", exclude_none=True))
+    )
+    admission = _existing_admission(item, provider)
+    if admission is not None and admission.outcome != "admitted":
+        return admission
+    if admission is None:
+        # This is the ordinary critic transaction ordering: the provider output
+        # is admitted and terminal before the caller applies its domain effect.
+        admission = _complete_admitted(
+            service,
+            provider,
+            admitted_refs=(semantic_ref,),
+            reason_code="critic_output_admitted",
+        )
+    else:
+        _authority(
+            admission.admitted_refs == (semantic_ref,),
+            "critic admission differs from the durable validated output",
+        )
+
+    if fallback_cases is not None:
+        _apply_counterexample_retry_result(
+            harness,
+            output,
+            fallback_cases,
+            call,
+            critic_school_id=str(payload["critic_school_id"]),
+            llm_already_recorded=True,
+            restart_safe=True,
+            effect_source_call_seq=source_call_seq,
+        )
+        return admission
+
+    critics = _crit_argumentative_batch_result(
+        harness,
+        list(preparation.target_refs),
+        None,
+        config_from_run_manifest(manifest),
+        output,
+        call,
+        authority="observe_only",
+        call_kwargs={},
+        school_prefix="",
+        critic_school_id=str(payload["critic_school_id"]),
+        transactional_call=None,
+        llm_already_recorded=True,
+        restart_safe=True,
+        effect_source_call_seq=source_call_seq,
+        allow_provider_followup=False,
+    )
+    for assignment_ref in preparation.input_refs:
+        _schema, assignment = harness.objects.get(assignment_ref)
+        record_completed_criticism_attempt(
+            harness,
+            assignment,
+            attempt_index=preparation.attempt_index,
+            source_call_seq=source_call_seq,
+        )
+    # Force evaluation so a malformed artifact result cannot masquerade as a
+    # completed application. The canonical effects themselves are event-backed.
+    tuple(critic.id for critic in critics)
+    return admission
+
+
+def _criticism_retry_fallback_cases(
+    harness,
+    manifest,
+    preparation,
+    payload,
+) -> dict[str, str]:
+    phase = str(payload["phase"])
+    try:
+        retry_index = int(phase.removeprefix("counterexample_retry:"))
+    except ValueError as error:
+        raise NonConjectureRecoveryAuthorityError(
+            "critic retry phase is malformed"
+        ) from error
+    _authority(retry_index >= 0, "critic retry phase is malformed")
+    previous_phase = "primary" if retry_index == 0 else f"counterexample_retry:{retry_index - 1}"
+    caller_trigger_ref = payload.get("caller_trigger_ref")
+    _authority(
+        isinstance(caller_trigger_ref, str) and caller_trigger_ref,
+        "critic retry has no caller identity",
+    )
+    candidates = []
+    for previous in harness.workflow_state.transaction_work.values():
+        previous_payload = previous.preparation.task_payload_value
+        if not isinstance(previous_payload, Mapping):
+            continue
+        if (
+            previous.preparation.task_kind == WorkflowTaskKind.CRITICISM
+            and previous_payload.get("phase") == previous_phase
+            and previous_payload.get("caller_trigger_ref") == caller_trigger_ref
+            and previous_payload.get("critic_school_id") == payload.get("critic_school_id")
+            and previous_payload.get("coverage_attempt_index")
+            == payload.get("coverage_attempt_index")
+            and set(preparation.target_refs).issubset(previous.preparation.target_refs)
+        ):
+            provider = previous.provider_attempts.get(previous.preparation.attempt_index)
+            if provider is not None and provider.outcome == "provider_result":
+                candidates.append((previous, provider))
+    _authority(len(candidates) == 1, "critic retry has no unique durable predecessor")
+    previous, previous_provider = candidates[0]
+    (
+        authoritative_previous,
+        previous_preparation,
+        previous_payload,
+        _previous_source_seq,
+        _previous_call,
+    ) = _common_authority(harness, manifest, previous_provider)
+    _authority(authoritative_previous is previous, "critic retry predecessor differs")
+    previous_contract = _criticism_contract(
+        harness,
+        manifest,
+        previous,
+        previous_preparation,
+        previous_payload,
+    )
+    previous_raw = parse_one_json_value(
+        _raw_bytes(harness, previous_provider).decode("utf-8")
+    ).value
+    reject_model_control_fields(previous_raw)
+    previous_output = previous_contract.compile(
+        previous_contract.validate_value(previous_raw)
+    )
+    by_target = {
+        case.target: case.case
+        for case in previous_output.cases
+        if case.attack
+    }
+    _authority(
+        all(target_id in by_target for target_id in preparation.target_refs),
+        "critic retry predecessor does not authorize every target",
+    )
+    return {target_id: by_target[target_id] for target_id in preparation.target_refs}
+
+
+def _recover_scratch_effect(
+    harness,
+    item,
+    preparation,
+    payload,
+    provider,
+    source_call_seq,
+    call,
+    output,
+    service,
+) -> SemanticAdmissionV1:
+    from deepreason.scratch.authoring import ScratchAuthoringService
+    from deepreason.scratch.service import ScratchService
+
+    admission = _existing_admission(item, provider)
+    if admission is not None and admission.outcome != "admitted":
+        return admission
+    authored = ScratchAuthoringService(
+        ScratchService(harness),
+        adapter=None,
+    ).admit_transactional_effect(
+        operation=payload["operation"],
+        output=output,
+        payload=payload,
+        call=call,
+        provider_event_seq=source_call_seq,
+        context_ref=item.exposure.id,
+    )
+    if admission is None:
+        return _complete_admitted(
+            service,
+            provider,
+            admitted_refs=(authored.id,),
+            reason_code="scratch_output_admitted",
+        )
+    _authority(
+        admission.admitted_refs == (authored.id,),
+        "scratch admission differs from the canonical authored effect",
+    )
+    return admission
+
+
 def _unapplied(
     service: InquiryTransactionService,
     provider: ProviderAttemptV1,
@@ -295,6 +542,7 @@ def _criticism_contract(harness, manifest, item, preparation, payload):
     _authority(preparation.contract_id == versions.batch_critic_contract, "critic contract differs")
     policy = manifest.criticism_policy
     _authority(policy is not None, "manifest does not authorize criticism")
+    _authority(policy.authority == "observe_only", "critic authority is not recoverable")
     school_id = payload.get("critic_school_id")
     binding = next((value for value in policy.bindings if value.school_id == school_id), None)
     _authority(binding is not None, "critic school has no manifest binding")
@@ -620,10 +868,15 @@ def recover_nonconjecture_admission(
 
     manifest = RunManifest.model_validate(manifest)
     _authority(manifest.schema_version == 6, "non-conjecture recovery requires v6")
-    item, preparation, payload, _call = _common_authority(harness, manifest, provider)
+    item, preparation, payload, source_call_seq, call = _common_authority(
+        harness, manifest, provider
+    )
     service = InquiryTransactionService(harness, manifest, meter)
+    existing_admission = _existing_admission(item, provider)
 
     if provider.outcome == "transport_failure":
+        if item.terminal is not None:
+            return None
         service.terminate(
             work_id=provider.work_id,
             attempt_index=provider.attempt_index,
@@ -636,6 +889,8 @@ def recover_nonconjecture_admission(
         )
         return None
     _authority(provider.outcome == "provider_result", "unknown provider outcome")
+    if existing_admission is not None and existing_admission.outcome != "admitted":
+        return existing_admission
     raw_bytes = _raw_bytes(harness, provider)
     task = preparation.task_kind.value
     try:
@@ -651,30 +906,33 @@ def recover_nonconjecture_admission(
                 harness, manifest, item, preparation, payload
             )
             output = contract.compile(contract.validate_value(raw_value))
-            return _unapplied(
-                service,
+            return _recover_criticism_effect(
+                harness,
+                manifest,
+                item,
+                preparation,
+                payload,
                 provider,
-                task=task,
-                detail=(
-                    "stored critic output is wire-valid; the missing caller-owned "
-                    "attempt and coverage effects remain outstanding"
-                ),
-                output=output,
+                source_call_seq,
+                call,
+                output,
+                service,
             )
         if preparation.task_kind == WorkflowTaskKind.SCRATCH_AUTHORING:
             contract = _scratch_contract(
                 harness, manifest, item, preparation, payload
             )
             output = contract.compile(contract.validate_value(raw_value))
-            return _unapplied(
-                service,
+            return _recover_scratch_effect(
+                harness,
+                item,
+                preparation,
+                payload,
                 provider,
-                task=task,
-                detail=(
-                    "stored scratch output is wire-valid; no scratch object or "
-                    "provenance event was inferred after the caller disappeared"
-                ),
-                output=output,
+                source_call_seq,
+                call,
+                output,
+                service,
             )
         if preparation.task_kind in {
             WorkflowTaskKind.BRIDGE_LEDGER,

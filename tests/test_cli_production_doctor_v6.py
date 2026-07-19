@@ -12,11 +12,13 @@ from deepreason.cli.doctor import (
     _production_probe_contract,
     _admit_production_probe_output,
     _is_scope_violation,
+    exercise_production_contract_case,
     production_contract_pairs,
     run_production_contract_doctor,
 )
 from deepreason.cli.main import main
 from deepreason.config import BridgeConfig, Config
+from deepreason.llm.endpoints import MockEndpoint
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
@@ -48,6 +50,7 @@ def _manifest(
     scratch_authoring: bool = False,
     grounding_review: bool = True,
     grounding_repair_attempts: int = 4,
+    schema_repair_attempts: int = 2,
 ):
     roles = {
         "conjecturer": _route("conjecturer"),
@@ -64,6 +67,7 @@ def _manifest(
         bridge=BridgeConfig(
             mode="grounded_two_stage",
             grounding_review=grounding_review,
+            max_schema_repair_attempts=schema_repair_attempts,
             max_grounding_repair_attempts=grounding_repair_attempts,
         ),
     )
@@ -133,6 +137,132 @@ def _case(case_index: int, *, alias_failure: bool = False):
         semantic_admission=eventual,
         failure_code=None if eventual else "SCHEMA_EXHAUSTED",
     )
+
+
+def _exercise_grounding_verdict_case(monkeypatch, manifest, responses):
+    calls = []
+    scripted = iter(responses)
+
+    def respond(prompt):
+        calls.append(prompt)
+        return next(scripted)
+
+    route = manifest.roles["judge"][0]
+    endpoint = MockEndpoint(
+        respond,
+        name=route.base_url,
+        model=route.model_id,
+        max_tokens=route.max_tokens,
+    )
+    monkeypatch.setattr(
+        "deepreason.llm.adapter._endpoint_from_spec",
+        lambda _spec: endpoint,
+    )
+    pair = next(
+        item
+        for item in production_contract_pairs(manifest)
+        if item.contract_id == "groundingverdictwirev1.direct.v1"
+    )
+    result = exercise_production_contract_case(manifest, pair, 0)
+    return result, calls
+
+
+_VALID_GROUNDING_VERDICT = json.dumps({"finding": "supported"})
+_INVALID_BLANK_MESSAGE = json.dumps({"finding": "supported", "message": ""})
+_STILL_INVALID_MESSAGE_PATCH = json.dumps(
+    {
+        "schema": "repair.patch.v1",
+        "op": "replace",
+        "path": "/message",
+        "value": "",
+    }
+)
+_REMOVE_INVALID_MESSAGE = json.dumps(
+    {"schema": "repair.patch.v1", "op": "remove", "path": "/message"}
+)
+
+
+def test_doctor_zero_ceiling_rejects_initial_invalid_without_repair(
+    monkeypatch,
+):
+    manifest = _manifest(schema_repair_attempts=0)
+    result, calls = _exercise_grounding_verdict_case(
+        monkeypatch,
+        manifest,
+        [json.dumps({"finding": "supported", "retry_max": 2})],
+    )
+
+    assert manifest.bridge_policy.max_schema_repair_attempts == 0
+    assert result.eventual_valid is False
+    assert result.repair_count == 0
+    assert len(calls) == 1
+
+
+def test_doctor_one_ceiling_allows_exactly_one_successful_repair(monkeypatch):
+    manifest = _manifest(schema_repair_attempts=1)
+    result, calls = _exercise_grounding_verdict_case(
+        monkeypatch,
+        manifest,
+        [
+            _INVALID_BLANK_MESSAGE,
+            _REMOVE_INVALID_MESSAGE,
+        ],
+    )
+
+    assert manifest.bridge_policy.max_schema_repair_attempts == 1
+    assert result.eventual_valid is True
+    assert result.first_pass_valid is False
+    assert result.repair_count == 1
+    assert len(calls) == 2
+
+
+def test_doctor_one_ceiling_does_not_issue_second_required_repair(monkeypatch):
+    manifest = _manifest(schema_repair_attempts=1)
+    result, calls = _exercise_grounding_verdict_case(
+        monkeypatch,
+        manifest,
+        [
+            _INVALID_BLANK_MESSAGE,
+            _STILL_INVALID_MESSAGE_PATCH,
+            _REMOVE_INVALID_MESSAGE,
+        ],
+    )
+
+    assert result.eventual_valid is False
+    assert result.repair_count == 1
+    assert len(calls) == 2
+
+
+def test_doctor_two_ceiling_allows_second_required_repair(monkeypatch):
+    manifest = _manifest(schema_repair_attempts=2)
+    result, calls = _exercise_grounding_verdict_case(
+        monkeypatch,
+        manifest,
+        [
+            _INVALID_BLANK_MESSAGE,
+            _STILL_INVALID_MESSAGE_PATCH,
+            _REMOVE_INVALID_MESSAGE,
+        ],
+    )
+
+    assert result.eventual_valid is True
+    assert result.first_pass_valid is False
+    assert result.repair_count == 2
+    assert len(calls) == 3
+
+
+def test_doctor_valid_initial_response_consumes_no_repairs(monkeypatch):
+    manifest = _manifest(schema_repair_attempts=0)
+    result, calls = _exercise_grounding_verdict_case(
+        monkeypatch,
+        manifest,
+        [_VALID_GROUNDING_VERDICT],
+    )
+
+    assert result.first_pass_valid is True
+    assert result.eventual_valid is True
+    assert result.repair_count == 0
+    assert len(calls) == 1
 
 
 def test_matrix_preserves_core_pairs_and_adds_enabled_grounding_pairs():

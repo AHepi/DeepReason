@@ -590,13 +590,16 @@ def _bound_bridge_execution(root, manifest_digest: str, supplied_policy):
 
     supplied = BridgeWorkflowPolicy.model_validate(supplied_policy)
     path = root / MANIFEST_NAME
-    if path.is_symlink():
-        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
-    if not path.is_file():
+    try:
+        path.lstat()
+    except FileNotFoundError:
         return supplied, WorkflowRetryPolicyV1(), None
     manifest = load_run_manifest(path)
     if manifest.sha256 != manifest_digest:
         raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
+
+    require_v6_launch_allowed(manifest, operation="grounded bridge")
     if manifest.schema_version < 4:
         return supplied, WorkflowRetryPolicyV1(), None
 

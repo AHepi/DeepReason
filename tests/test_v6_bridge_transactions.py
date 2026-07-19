@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from pathlib import Path
 from types import SimpleNamespace
 import json
 
@@ -45,6 +46,7 @@ from deepreason.llm.wire import AliasTable, WireContract
 from deepreason.ontology import Problem, ProblemProvenance, Provenance
 from deepreason.ontology.event import LLMCall
 from deepreason.run_manifest import (
+    MANIFEST_NAME,
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
     ControlPlanePolicyV3,
@@ -667,6 +669,80 @@ def _run_recovery_bridge(harness, manifest, problem_id, adapter, *, policy=None)
         review_adapter=adapter,
         repair_adapter=adapter,
     )
+
+
+def test_bound_v6_direct_bridge_honors_disabled_launch_policy_before_dispatch(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "bridge-direct-launch-disabled"
+    manifest = _bind_recovery_manifest(root, WorkflowRetryPolicyV1())
+    harness = Harness(root)
+    problem_id = _seed_recovery_problem(harness)
+    dispatches = []
+    adapter = _recovery_adapter(
+        harness,
+        manifest,
+        _recovery_responses(),
+        dispatches,
+    )
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    monkeypatch.setenv("DEEPREASON_DISABLE_V6_LAUNCHES", "1")
+
+    with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
+        _run_recovery_bridge(harness, manifest, problem_id, adapter)
+
+    assert dispatches == []
+    assert {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    } == before
+
+
+def test_bound_direct_bridge_inaccessible_manifest_fails_before_dispatch(
+    tmp_path, monkeypatch
+):
+    root = tmp_path / "bridge-direct-manifest-inaccessible"
+    manifest = _bind_recovery_manifest(root, WorkflowRetryPolicyV1())
+    harness = Harness(root)
+    problem_id = _seed_recovery_problem(harness)
+    dispatches = []
+    adapter = _recovery_adapter(
+        harness,
+        manifest,
+        _recovery_responses(),
+        dispatches,
+    )
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    manifest_path = root / MANIFEST_NAME
+    original_lstat = Path.lstat
+
+    def inaccessible(path):
+        if path == manifest_path:
+            raise PermissionError("bound bridge manifest inspection denied")
+        return original_lstat(path)
+
+    with monkeypatch.context() as scoped:
+        scoped.setattr(Path, "lstat", inaccessible)
+        with pytest.raises(
+            PermissionError, match="bound bridge manifest inspection denied"
+        ):
+            _run_recovery_bridge(harness, manifest, problem_id, adapter)
+
+    assert dispatches == []
+    assert {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    } == before
 
 
 @pytest.mark.parametrize("crash_ordinal", range(4))

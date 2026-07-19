@@ -293,32 +293,41 @@ def test_outstanding_work_projection_accepts_v6_transaction_ids(tmp_path):
     assert projection.work[0].reserved_tokens == 0
 
 
-def test_worker_harness_constructor_failure_releases_operator_lock(
-    tmp_path, monkeypatch
-):
+def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
+    import deepreason.harness as harness_module
+
     manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / "constructor-failure"
     service = TextRunApplicationService(TextRunWorkerRegistry())
+    original_init = Harness.__init__
 
-    class BrokenHarness:
-        def __init__(self, *_args, **_kwargs):
-            raise RuntimeError("constructor failed")
+    def fail_constructor(_self, *_args, **_kwargs):
+        raise RuntimeError("constructor failed")
 
-    monkeypatch.setattr("deepreason.harness.Harness", BrokenHarness)
-    accepted = service.start(
-        StartTextRunIntentV1(
-            root=str(root),
-            workload=spec_from_text("Can construction fail safely?"),
-            run_manifest_ref=str(manifest_path),
-            budget={"cycles": 1, "token_budget": "unlimited"},
-        ),
-        credential_checker=lambda _manifest: [],
-    )
-    service.wait(accepted.root, timeout=2)
+    with pytest.MonkeyPatch.context() as scoped:
+        scoped.setattr(Harness, "__init__", fail_constructor)
+        assert harness_module.Harness is Harness
+        accepted = service.start(
+            StartTextRunIntentV1(
+                root=str(root),
+                workload=spec_from_text("Can construction fail safely?"),
+                run_manifest_ref=str(manifest_path),
+                budget={"cycles": 1, "token_budget": "unlimited"},
+            ),
+            credential_checker=lambda _manifest: [],
+        )
+        worker = service.registry.threads[str(root.resolve())]
+        service.wait(accepted.root)
 
-    assert service.result(
-        InspectTextRunIntentV1(root=accepted.root)
-    ).lifecycle == "failed"
+        assert not worker.is_alive()
+        assert service.registry.live(root) is None
+        terminal = service.result(InspectTextRunIntentV1(root=accepted.root))
+        assert terminal.lifecycle == "failed"
+        assert terminal.payload["error_type"] == "RuntimeError"
+        assert terminal.payload["error"] == "constructor failed"
+
+    assert harness_module.Harness is Harness
+    assert Harness.__init__ is original_init
     locks = operator_locks(root, owner="lock-release-test", blocking=False)
     locks.release()
 

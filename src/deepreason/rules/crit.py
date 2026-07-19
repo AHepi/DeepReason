@@ -463,6 +463,8 @@ def _observe_case(
     llm_call,
     *,
     critic_school_id: str | None = None,
+    restart_safe: bool = False,
+    effect_source_call_seq: int | None = None,
 ):
     """observe_only semantics: the case is scrutiny evidence, never a status
     change. Registers the case as a critic-role artifact with NO warrants and
@@ -478,10 +480,22 @@ def _observe_case(
         llm=llm_call,
     )
     carried = llm_call is not None and critic.id not in before
-    harness.record_measure(
-        inputs=["scrutiny", target_id, critic.id],
-        llm=None if carried else llm_call,
-    )
+    inputs = ["scrutiny", target_id, critic.id]
+    if effect_source_call_seq is not None:
+        inputs.append(f"source:{effect_source_call_seq}")
+    existing = [
+        event
+        for event in harness.log.read()
+        if event.rule == Rule.MEASURE
+        and list(event.inputs) == inputs
+    ]
+    if len(existing) > 1:
+        raise RuntimeError("criticism scrutiny effect is duplicated")
+    if not restart_safe or not existing:
+        harness.record_measure(
+            inputs=inputs,
+            llm=None if carried else llm_call,
+        )
     return critic
 
 
@@ -509,6 +523,8 @@ def try_counterexample(
     case: str,
     llm=None,
     critic_school_id: str | None = None,
+    restart_safe: bool = False,
+    effect_source_call_seq: int | None = None,
 ) -> tuple[Artifact | None, str]:
     """The critic's grounded recourse (§3 execution supremacy): the critic
     proposed a concrete INPUT; run the target on it and check the declared
@@ -561,6 +577,26 @@ def try_counterexample(
             continue
         harness.register_commitment(cx)
         if verdict_on_record(harness, cx.id, target_id):
+            if restart_safe and effect_source_call_seq is not None:
+                matches = []
+                for event in harness.log.read():
+                    if event.seq <= effect_source_call_seq:
+                        continue
+                    for artifact_id in event.outputs:
+                        artifact = harness.state.artifacts.get(artifact_id)
+                        if artifact is None:
+                            continue
+                        if any(
+                            (warrant := harness.warrants.get(warrant_id)) is not None
+                            and warrant.commitment == cx.id
+                            and warrant.target == target_id
+                            for warrant_id in artifact.warrants
+                        ):
+                            matches.append(artifact)
+                if len(matches) > 1:
+                    raise RuntimeError("grounded criticism effect is duplicated")
+                if matches:
+                    return matches[0], ""
             return None, "this exact counterexample already refutes the target"
         return register_fail_warrant(
             harness,
@@ -1176,6 +1212,9 @@ def crit_argumentative_batch(
             template_role="batch_critic",
             **call_kwargs,
         )
+    effect_source_call_seq = _llm_event_seq(harness, llm_call) if active_v6 else None
+    if active_v6 and effect_source_call_seq is None:
+        raise RuntimeError("v6 criticism has no durable source call")
     criticism_completed = False
     try:
         result = _crit_argumentative_batch_result(
@@ -1191,6 +1230,7 @@ def crit_argumentative_batch(
             critic_school_id=critic_school_id,
             transactional_call=transactional_call,
             llm_already_recorded=active_v6,
+            effect_source_call_seq=effect_source_call_seq,
         )
         criticism_completed = True
         return result
@@ -1202,6 +1242,61 @@ def crit_argumentative_batch(
                 llm_call,
                 coverage_observer,
             )
+
+
+def _apply_counterexample_retry_result(
+    harness,
+    output: BatchCriticOutput,
+    fallback_cases: Mapping[str, str],
+    llm_call,
+    *,
+    critic_school_id: str | None,
+    llm_already_recorded: bool = False,
+    restart_safe: bool = False,
+    effect_source_call_seq: int | None = None,
+) -> tuple[list[Artifact], list[dict]]:
+    """Apply one retry response through the ordinary counterexample path."""
+
+    critics: list[Artifact] = []
+    pending = None if llm_already_recorded else llm_call
+    seen: set[str] = set()
+    rejected: list[dict] = []
+    for case in output.cases:
+        if case.target not in fallback_cases or case.target in seen:
+            continue
+        seen.add(case.target)
+        if not case.attack:
+            continue
+        before = set(harness.state.artifacts)
+        grounded, reason = try_counterexample(
+            harness,
+            case.target,
+            case.counterexample,
+            case=case.case.strip() or fallback_cases[case.target],
+            llm=pending,
+            critic_school_id=critic_school_id,
+            restart_safe=restart_safe,
+            effect_source_call_seq=effect_source_call_seq,
+        )
+        if grounded is not None:
+            critics.append(grounded)
+            if grounded.id not in before:
+                pending = None
+            continue
+        rejected.append(
+            {
+                "target": case.target,
+                "counterexample": case.counterexample,
+                "reason": reason,
+                "case": case.case,
+            }
+        )
+    if pending is not None:
+        inputs = ["batch-crit-cx-retry", *sorted(fallback_cases)]
+        if effect_source_call_seq is not None:
+            inputs.append(f"source:{effect_source_call_seq}")
+        harness.record_measure(inputs=inputs, llm=pending)
+    return critics, rejected
 
 
 def _crit_argumentative_batch_result(
@@ -1218,6 +1313,9 @@ def _crit_argumentative_batch_result(
     critic_school_id: str | None,
     transactional_call=None,
     llm_already_recorded: bool = False,
+    restart_safe: bool = False,
+    effect_source_call_seq: int | None = None,
+    allow_provider_followup: bool = True,
 ) -> list[Artifact]:
     """Process one already-returned batch without changing its route policy."""
 
@@ -1242,6 +1340,8 @@ def _crit_argumentative_batch_result(
             case=case.case,
             llm=llm_pending,
             critic_school_id=critic_school_id,
+            restart_safe=restart_safe,
+            effect_source_call_seq=effect_source_call_seq,
         )
         if grounded is not None:
             critics.append(grounded)
@@ -1252,7 +1352,19 @@ def _crit_argumentative_batch_result(
             # Execution supremacy (§3): reality overrides the argument. Log the
             # override (llm=None — the shared call is accounted exactly once
             # elsewhere) and queue the target for the counterexample retry.
-            harness.record_measure(inputs=["arg-crit-overridden-by-execution", case.target])
+            override_inputs = ["arg-crit-overridden-by-execution", case.target]
+            if effect_source_call_seq is not None:
+                override_inputs.append(f"source:{effect_source_call_seq}")
+            existing_overrides = [
+                event
+                for event in harness.log.read()
+                if event.rule == Rule.MEASURE
+                and list(event.inputs) == override_inputs
+            ]
+            if len(existing_overrides) > 1:
+                raise RuntimeError("execution override criticism effect is duplicated")
+            if not restart_safe or not existing_overrides:
+                harness.record_measure(inputs=override_inputs)
             if _has_property_oracle(harness, case.target):
                 rejected.append(
                     {
@@ -1272,6 +1384,8 @@ def _crit_argumentative_batch_result(
                 case.case,
                 llm_pending,
                 critic_school_id=critic_school_id,
+                restart_safe=restart_safe,
+                effect_source_call_seq=effect_source_call_seq,
             )
             llm_pending = None  # accounted inside _observe_case
             critics.append(critic)
@@ -1320,7 +1434,8 @@ def _crit_argumentative_batch_result(
     # Counterexample retry (§3): ONE shared follow-up call per round for every
     # overridden attack, echoing each gate/oracle rejection reason. Same
     # batching philosophy as above — the call is shared, warrants per-target.
-    for retry_index in range(max(0, config.CX_RETRY_MAX)):
+    retry_limit = max(0, config.CX_RETRY_MAX) if allow_provider_followup else 0
+    for retry_index in range(retry_limit):
         if not rejected:
             break
         retry_inputs = [dict(item) for item in rejected]
@@ -1342,7 +1457,6 @@ def _crit_argumentative_batch_result(
                 retry_pack_factory,
                 f"counterexample_retry:{retry_index}",
             )
-            retry_pending: object | None = None
         else:
             retry_pack = retry_pack_factory()
             retry_out, retry_llm = adapter.call(
@@ -1352,42 +1466,23 @@ def _crit_argumentative_batch_result(
                 template_role="batch_critic",
                 **call_kwargs,
             )
-            retry_pending = retry_llm
-        seen_retry: set[str] = set()
-        next_rejected: list[dict] = []
-        for case in retry_out.cases:
-            if case.target not in allowed or case.target in seen_retry:
-                continue
-            seen_retry.add(case.target)
-            if not case.attack:
-                continue  # the critic withdrew this attack
-            before = set(harness.state.artifacts)
-            grounded, reason = try_counterexample(
-                harness,
-                case.target,
-                case.counterexample,
-                case=case.case.strip() or allowed[case.target].get("case", ""),
-                llm=retry_pending,
-                critic_school_id=critic_school_id,
-            )
-            if grounded is not None:
-                critics.append(grounded)
-                if grounded.id not in before:
-                    retry_pending = None
-                continue
-            next_rejected.append(
-                {
-                    "target": case.target,
-                    "counterexample": case.counterexample,
-                    "reason": reason,
-                    "case": case.case,
-                }
-            )
-        if retry_pending is not None:
-            harness.record_measure(
-                inputs=["batch-crit-cx-retry", *sorted(allowed)], llm=retry_pending
-            )
-        rejected = next_rejected
+        retry_source_call_seq = (
+            _llm_event_seq(harness, retry_llm)
+            if transactional_call is not None
+            else None
+        )
+        if transactional_call is not None and retry_source_call_seq is None:
+            raise RuntimeError("v6 criticism retry has no durable source call")
+        retry_critics, rejected = _apply_counterexample_retry_result(
+            harness,
+            retry_out,
+            {target: str(value.get("case", "")) for target, value in allowed.items()},
+            retry_llm,
+            critic_school_id=critic_school_id,
+            llm_already_recorded=(transactional_call is not None),
+            effect_source_call_seq=retry_source_call_seq,
+        )
+        critics.extend(retry_critics)
     if llm_pending is not None:
         # Nothing committed the call (no attacks, or every critic deduped).
         harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_pending)

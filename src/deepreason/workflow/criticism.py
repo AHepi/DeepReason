@@ -186,6 +186,75 @@ class CriticismAttemptV1(IdentifiedWorkflowRecord):
         return self
 
 
+def record_completed_criticism_attempt(
+    harness,
+    assignment: CriticismAssignmentV1,
+    *,
+    attempt_index: int,
+    source_call_seq: int,
+) -> CriticismAttemptV1:
+    """Append or verify one exact routed criticism-coverage effect."""
+
+    from deepreason.ontology import Rule
+
+    assignment = CriticismAssignmentV1.model_validate(assignment)
+    source = next(
+        (event for event in harness.log.read() if event.seq == source_call_seq),
+        None,
+    )
+    call = source.llm if source is not None else None
+    receipt = call.school_route if call is not None else None
+    if (
+        source is None
+        or source.seq >= harness._next_seq
+        or call is None
+        or call.role != "argumentative_critic"
+        or receipt is None
+        or receipt.school_id != assignment.critic_school_id
+        or receipt.route_sha256 != assignment.route_sha256
+    ):
+        raise RuntimeError("foreign criticism coverage has no exact routed source call")
+    attempt = CriticismAttemptV1.create(
+        assignment_ref=assignment.id,
+        target_id=assignment.target_id,
+        critic_school_id=assignment.critic_school_id,
+        attempt_index=attempt_index,
+        outcome="completed",
+        coverage_completed=True,
+        source_call_seq=source_call_seq,
+    )
+    measure_inputs = [
+        "foreign-criticism-coverage.v1",
+        assignment.target_id,
+        f"owner:{assignment.owner_school_id}",
+        f"critic:{assignment.critic_school_id}",
+        f"source:{source_call_seq}",
+        f"route:{assignment.route_sha256}",
+    ]
+    matching_measures = [
+        event
+        for event in harness.log.read()
+        if event.rule == Rule.MEASURE and list(event.inputs) == measure_inputs
+    ]
+    try:
+        schema, existing = harness.objects.get(attempt.id)
+    except KeyError:
+        existing = None
+    else:
+        if schema != "criticism-attempt-v1" or existing != attempt:
+            raise RuntimeError("durable criticism attempt identity differs")
+    if existing is not None:
+        if len(matching_measures) != 1:
+            raise RuntimeError("completed criticism attempt lacks one coverage measure")
+        return existing
+    if len(matching_measures) > 1:
+        raise RuntimeError("criticism coverage measure is duplicated")
+    if not matching_measures:
+        harness.record_measure(inputs=measure_inputs)
+    harness.record_criticism_obligation(attempt)
+    return attempt
+
+
 class CoverageDebtV1(IdentifiedWorkflowRecord):
     """Terminal dimensional record of completed and outstanding schools."""
 

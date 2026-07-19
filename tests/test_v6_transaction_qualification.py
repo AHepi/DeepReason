@@ -326,6 +326,77 @@ def test_budget_denial_is_terminal_and_never_claims_exposure(tmp_path):
     assert not any(event.llm is not None for event in harness.log.read())
 
 
+def test_unlimited_meter_reservation_usage_and_replay_are_authoritative(tmp_path):
+    manifest = _manifest()
+    root = tmp_path / "unlimited-meter"
+    harness = Harness(root)
+    meter = TokenMeter()
+    service = InquiryTransactionService(harness, manifest, meter)
+    preparation = _prepare(service, manifest, trigger="unlimited-accounting")
+    authorized = service.issue(
+        preparation, plans=(), prompt="authorized prompt", max_tokens=8
+    )
+
+    assert meter.budget is None
+    assert authorized.reservation_record.reserved_tokens > 0
+    assert (
+        authorized.reservation.amount
+        == authorized.reservation_record.reserved_tokens
+    )
+    call = _provider_call(harness, authorized, manifest)
+    authorized.reservation.settle(
+        {
+            "prompt_tokens": call.prompt_tokens,
+            "completion_tokens": call.completion_tokens,
+        }
+    )
+    provider = service.record_provider_attempt(
+        authorized,
+        call=call,
+        outcome="provider_result",
+        usage_status="exact",
+    )
+    admission = service.record_semantic_admission(
+        provider,
+        outcome="admitted",
+        admitted_refs=("sha256:" + "a" * 64,),
+    )
+    service.terminate(
+        work_id=preparation.id,
+        attempt_index=preparation.attempt_index,
+        status="completed",
+        reason_code="unlimited-accounting-complete",
+        usage_status="exact",
+        prompt_tokens=provider.prompt_tokens,
+        completion_tokens=provider.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+
+    assert meter.snapshot() == {
+        "prompt_tokens": 1,
+        "completion_tokens": 1,
+        "total": 2,
+        "budget": None,
+        "calls": 1,
+        "reserved": 0,
+    }
+    canonical_log = tuple(harness.log.read())
+    assert sum(event.llm.tokens for event in canonical_log if event.llm) == 2
+
+    for _ in range(2):
+        replayed = Harness(root)
+        item = replayed.workflow_state.transaction_work[preparation.id]
+        assert item.reservation == authorized.reservation_record
+        assert tuple(item.provider_attempts.values()) == (provider,)
+        assert item.terminal is not None and item.terminal.status == "completed"
+        assert (provider.prompt_tokens, provider.completion_tokens) == (1, 1)
+        assert sum(
+            event.llm.tokens for event in replayed.log.read() if event.llm
+        ) == 2
+        assert tuple(replayed.log.read()) == canonical_log
+
+
 def test_issued_without_provider_result_recovers_as_unknown_abandonment(tmp_path):
     manifest = _manifest()
     root = tmp_path / "issued"

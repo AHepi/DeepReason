@@ -318,6 +318,7 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
     )
 
     calls = []
+    captured = {}
 
     class Adapter:
         def has_role(self, role):
@@ -336,6 +337,7 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
 
     def build_adapter(*_args, **_kwargs):
         calls.append("adapter")
+        captured["meter"] = _kwargs["meter"]
         return Adapter()
 
     monkeypatch.setattr(run_manifest_module, "preflight_harness", preflight)
@@ -354,8 +356,18 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
     )
 
     assert result == {"cycles": 0}
-    assert meter is None
-    assert accounting["metered_tokens"] is None
+    assert meter is captured["meter"]
+    assert meter.budget is None
+    assert meter.snapshot() == {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total": 0,
+        "budget": None,
+        "calls": 0,
+        "reserved": 0,
+    }
+    assert accounting["metered_tokens"] == 0
+    assert accounting["delta"] == 0
     assert calls == ["manifest preflight", "adapter", "scheduler", ("run", 0)]
 
 
