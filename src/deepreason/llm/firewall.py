@@ -42,6 +42,10 @@ FORBIDDEN_MODEL_CONTROL_FIELDS = frozenset(
         "acceptance",
         "status",
         "concurrency",
+        "context_window_tokens",
+        "context_window",
+        "max_context_tokens",
+        "prompt_token_limit",
     }
 )
 
@@ -239,7 +243,12 @@ class EndpointLease:
             "json_mode": route.output_mode == "json_object",
             "output_mechanism": route.output_mechanism,
             "request_logprobs": route.logprobs,
+            "context_window_tokens": route.context_window_tokens,
         }
+        if route.context_window_tokens is not None:
+            # Qualified capacity binds the completion side of the envelope as
+            # well as the total. Legacy routes retain controller-owned tuning.
+            optional["max_tokens"] = route.max_tokens
         for attr, wanted in optional.items():
             if hasattr(endpoint, attr) and getattr(endpoint, attr) != wanted:
                 raise RouteFirewallError(
@@ -292,6 +301,7 @@ def route_from_endpoint(endpoint: object) -> Route:
         output_mechanism=getattr(endpoint, "output_mechanism", "json_text") or "json_text",
         temperature=getattr(endpoint, "temperature", None),
         max_tokens=getattr(endpoint, "max_tokens", None),
+        context_window_tokens=getattr(endpoint, "context_window_tokens", None),
         timeout_s=getattr(endpoint, "timeout_s", DEFAULT_TIMEOUT_S),
         logprobs=bool(getattr(endpoint, "request_logprobs", False)),
         api_key_env=None,
