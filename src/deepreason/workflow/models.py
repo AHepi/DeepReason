@@ -837,6 +837,97 @@ class WorkflowLifecycleDecisionV1(IdentifiedWorkflowRecord):
         return self
 
 
+class RunTerminalCommitmentV1(IdentifiedWorkflowRecord):
+    """Content-addressed first-terminal authority for one reasoning epoch."""
+
+    _identity_domain = "workflow.run-terminal-commitment.v1"
+
+    schema_: Literal["run-terminal-commitment.v1"] = Field(
+        "run-terminal-commitment.v1", alias="schema"
+    )
+    manifest_sha256: str = Field(pattern=_DIGEST_PATTERN)
+    run_id: str = Field(pattern=_DIGEST_PATTERN)
+    terminal_epoch: int = Field(ge=0)
+    parent_terminal_commitment_ref: str | None = Field(
+        default=None, pattern=_ID_PATTERN
+    )
+    opening_resume_ref: str | None = Field(default=None, pattern=_ID_PATTERN)
+    terminal_status: Literal["completed", "cancelled", "failed"]
+    stop_reason: str = Field(min_length=1, max_length=128)
+    reasoning_event_horizon_seq: int = Field(ge=0)
+    stop_record_digest: str = Field(pattern=_DIGEST_PATTERN)
+    stop_record_ref: str = Field(min_length=1, max_length=256)
+    terminal_source: Literal["workflow_lifecycle", "application_terminal"]
+    lifecycle_decision_ref: str | None = Field(default=None, pattern=_ID_PATTERN)
+    terminal_source_event_seq: int = Field(ge=0)
+    model_execution_summary_digest: str = Field(pattern=_DIGEST_PATTERN)
+    result_draft_ref: str = Field(pattern=_ID_PATTERN)
+    expected_commitment_event_seq: int = Field(ge=0)
+    allowed_post_terminal: Literal["exact_commitment_bound_descendants"] = (
+        "exact_commitment_bound_descendants"
+    )
+
+    @model_validator(mode="after")
+    def _terminal_commitment_shape(self):
+        parent_pair = (
+            self.parent_terminal_commitment_ref,
+            self.opening_resume_ref,
+        )
+        if self.terminal_epoch == 0:
+            if parent_pair != (None, None):
+                raise ValueError("terminal epoch zero cannot have a parent or resume")
+        elif any(value is None for value in parent_pair):
+            raise ValueError("child terminal epoch requires parent and resume references")
+        if self.reasoning_event_horizon_seq != self.terminal_source_event_seq:
+            raise ValueError("terminal source must be the reasoning event horizon")
+        if self.expected_commitment_event_seq <= self.reasoning_event_horizon_seq:
+            raise ValueError("terminal commitment must follow its reasoning horizon")
+        if self.stop_record_ref != (
+            "run-stops/"
+            f"{self.reasoning_event_horizon_seq:012d}-{self.stop_record_digest}.json"
+        ):
+            raise ValueError("terminal commitment stop reference is not canonical")
+        if self.terminal_source == "workflow_lifecycle":
+            if self.lifecycle_decision_ref is None:
+                raise ValueError("workflow terminal commitment requires lifecycle authority")
+        elif self.lifecycle_decision_ref is not None:
+            raise ValueError("application terminal commitment cannot claim lifecycle authority")
+        return self
+
+
+class RunTerminalResultDraftV1(IdentifiedWorkflowRecord):
+    """Immutable recoverable result body written before the terminal latch."""
+
+    _identity_domain = "workflow.run-terminal-result-draft.v1"
+
+    schema_: Literal["run-terminal-result-draft.v1"] = Field(
+        "run-terminal-result-draft.v1", alias="schema"
+    )
+    manifest_sha256: str = Field(pattern=_DIGEST_PATTERN)
+    run_id: str = Field(pattern=_DIGEST_PATTERN)
+    terminal_epoch: int = Field(ge=0)
+    result_body: dict[str, Any]
+
+    @field_validator("result_body", mode="after")
+    @classmethod
+    def _freeze_result_body(cls, value):
+        return freeze_workflow_json(value)
+
+    @model_validator(mode="after")
+    def _result_body_shape(self):
+        if self.result_body.get("schema") != "deepreason-run-result-v2":
+            raise ValueError("terminal result draft requires RunResult v2")
+        if "terminal_commitment_ref" in self.result_body:
+            raise ValueError("terminal result draft cannot contain a circular reference")
+        if self.result_body.get("state") not in {
+            "completed",
+            "cancelled",
+            "failed",
+        }:
+            raise ValueError("terminal result draft has an invalid terminal state")
+        return self
+
+
 class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
     """One controller-authorized return from a typed terminal checkpoint."""
 
@@ -861,6 +952,10 @@ class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
         "inquiry.active.v2",
     ]
     prior_terminal_decision_ref: str = Field(pattern=_ID_PATTERN)
+    prior_terminal_commitment_ref: str | None = Field(
+        default=None, pattern=_ID_PATTERN
+    )
+    opened_terminal_epoch: int | None = Field(default=None, ge=1)
     prior_metrics_observation_ref: str = Field(pattern=_ID_PATTERN)
     prior_process_digest: str = Field(pattern=_ID_PATTERN)
     prior_stop_digest: str = Field(pattern=_DIGEST_PATTERN)
@@ -884,6 +979,12 @@ class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
             == self.next_process_digest
         ):
             raise ValueError("resuming cannot rewrite terminal workflow process state")
+        if (self.prior_terminal_commitment_ref is None) != (
+            self.opened_terminal_epoch is None
+        ):
+            raise ValueError(
+                "terminal commitment reference and opened epoch must be paired"
+            )
         return self
 
 
@@ -902,6 +1003,8 @@ __all__ = [
     "ProposalReceiptV1",
     "ProposalValidationOutcome",
     "RepairWorkOrderV1",
+    "RunTerminalCommitmentV1",
+    "RunTerminalResultDraftV1",
     "RouteLeaseRefV1",
     "TransitionDecisionV1",
     "TransitionKind",
