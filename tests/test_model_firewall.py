@@ -99,6 +99,22 @@ def test_model_authored_control_fields_are_inert_validation_failures(payload, po
     assert raised.value.pointer == pointer
 
 
+@pytest.mark.parametrize(
+    "field",
+    (
+        "context_window_tokens",
+        "context_window",
+        "max_context_tokens",
+        "prompt_token_limit",
+    ),
+)
+def test_model_cannot_author_context_capacity(field):
+    with pytest.raises(ModelControlFieldError) as raised:
+        reject_model_control_fields({"candidates": [], field: 999_999})
+    assert raised.value.code == "MODEL_CONTROL_FIELD_FORBIDDEN"
+    assert raised.value.pointer == f"/{field}"
+
+
 def test_opaque_counterexample_application_data_is_not_mistaken_for_routing():
     reject_model_control_fields(
         {"attack": True, "case": "bad response", "counterexample": [{"status": 500}]}
