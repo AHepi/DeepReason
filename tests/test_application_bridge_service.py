@@ -241,7 +241,7 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda manifest, harness: _adapter(harness, manifest),
+        lambda manifest, harness, **_kwargs: _adapter(harness, manifest),
     )
 
     cli_args = SimpleNamespace(
@@ -288,7 +288,7 @@ def test_shared_bridge_service_accepts_bound_controlled_manifest_and_enacts_ledg
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda manifest, harness: _adapter(harness, manifest),
+        lambda manifest, harness, **_kwargs: _adapter(harness, manifest),
     )
 
     result = GROUNDED_BRIDGE_SERVICE.build(
@@ -535,6 +535,11 @@ def test_v6_canonical_bridge_rejects_legacy_result_before_adapter(
     )
     monkeypatch.setattr(
         bridge_application,
+        "_preflight_bridge_caller_policy",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(
+        bridge_application,
         "_build_bridge_adapter",
         lambda *_args: pytest.fail("result-version gate must precede adapter construction"),
     )
@@ -561,6 +566,11 @@ def test_v6_live_verification_rejects_post_terminal_corruption_before_adapter(
         bridge_application,
         "load_bound_manifest",
         lambda *_args, **_kwargs: SimpleNamespace(schema_version=6),
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_preflight_bridge_caller_policy",
+        lambda *_args, **_kwargs: None,
     )
     monkeypatch.setattr(
         bridge_application,
@@ -603,6 +613,11 @@ def test_disabled_v6_canonical_bridge_stops_before_preflight_or_mutation(
         bridge_application,
         "load_bound_manifest",
         lambda *_args, **_kwargs: manifest,
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_preflight_bridge_caller_policy",
+        lambda *_args, **_kwargs: None,
     )
     monkeypatch.setattr(
         bridge_application,
@@ -649,6 +664,11 @@ def test_disabled_v6_async_bridge_stops_before_worker_or_mutation(
     )
     monkeypatch.setattr(
         bridge_application,
+        "_preflight_bridge_caller_policy",
+        lambda *_args, **_kwargs: None,
+    )
+    monkeypatch.setattr(
+        bridge_application,
         "preflight_canonical_bridge",
         _forbid("asynchronous preflight"),
     )
@@ -685,6 +705,11 @@ def test_disabled_v6_derived_bridge_stops_before_destination_reservation(
         bridge_application,
         "load_bound_manifest",
         lambda *_args, **_kwargs: manifest,
+    )
+    monkeypatch.setattr(
+        bridge_application,
+        "_preflight_bridge_caller_policy",
+        lambda *_args, **_kwargs: None,
     )
     monkeypatch.setattr(
         derived_bridge,
