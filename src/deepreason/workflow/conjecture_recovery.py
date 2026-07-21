@@ -30,6 +30,7 @@ from deepreason.scratch.authoring import (
     ScratchAuthoringError,
     ScratchAuthoringService,
 )
+from deepreason.scratch.conjecture import validate_conjecture_context_call
 from deepreason.scratch.service import ScratchService
 from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.workflow.profiles import compile_workflow_profile
@@ -237,6 +238,35 @@ def _validate_authority(
         prompt_sha256 == provider.prompt_sha256,
         "stored prompt differs from provider authority",
     )
+    scratch_aliases = {
+        entry.alias: entry.object_ref
+        for entry in item.exposure.exposed_items
+        if entry.namespace == ContextNamespace.SCRATCH
+    }
+    if scratch_aliases:
+        _authority(
+            call.conjecture_context is not None,
+            "scratch-bearing provider result has no conjecture context authority",
+        )
+        try:
+            validate_conjecture_context_call(
+                ScratchService(harness),
+                call.conjecture_context,
+                manifest_digest=manifest.sha256,
+                problem_id=problem.id,
+                school_id=payload.get("school_id"),
+                scratch_aliases=scratch_aliases,
+                provider_prompt=prompt,
+            )
+        except ValueError as error:
+            raise ConjectureRecoveryAuthorityError(
+                f"conjecture context authority is invalid: {error}"
+            ) from error
+    else:
+        _authority(
+            call.conjecture_context is None,
+            "provider call claims scratch context absent from transaction exposure",
+        )
     return item, payload, problem, source_call_seq, call
 
 
@@ -366,8 +396,9 @@ def _materialize_formal(
     source_call_seq: int,
     *,
     embedder,
+    contract_id: str = "conjecturer.turn.v6",
 ) -> tuple[str, ...]:
-    reasoning = isinstance(output, ReasoningConjecturerTurnV6)
+    reasoning = bool(payload.get("reasoning", False))
     maximum = int(payload["maximum_candidates"])
     proposals = list(output.candidates)
     if bool(payload.get("tail_weighted", False)):
@@ -473,7 +504,7 @@ def _materialize_formal(
                 "text" if reasoning else manifest.workload_profile
             ),
             problem_family=family,
-            contract_id="conjecturer.turn.v6",
+            contract_id=contract_id,
             mandatory_refs=candidate_mandatory.domain_refs(),
             component_spec=payload.get("component_spec"),
             theorem_interface=payload.get("theorem_interface"),
@@ -777,4 +808,3 @@ __all__ = [
     "ConjectureRecoverySemanticError",
     "recover_conjecture_admission",
 ]
-
