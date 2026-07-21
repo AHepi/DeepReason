@@ -198,6 +198,11 @@ class BridgeCLIStatusV1(BaseModel):
     process_status: str | None = Field(default=None, pattern=r"^(?:success|failure)$")
     formal_seq: int | None = Field(default=None, ge=0)
     terminal_event_seq: int | None = Field(default=None, ge=0)
+    source_terminal_commitment_ref: str | None = Field(
+        default=None,
+        strict=True,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+    )
     resolution: BridgeResolution | None = None
     error_code: str | None = Field(default=None, pattern=r"^[A-Z][A-Z0-9_]{0,127}$")
 
@@ -224,6 +229,7 @@ class BridgeCLIStatusV1(BaseModel):
                 self.process_status,
                 self.formal_seq,
                 self.terminal_event_seq,
+                self.source_terminal_commitment_ref,
                 self.resolution,
                 self.error_code,
             )
@@ -506,7 +512,7 @@ def reasoning_run_state(root: Path, manifest=None) -> str | None:
     return str(state)
 
 
-def preflight_canonical_bridge(root: Path, manifest) -> None:
+def preflight_canonical_bridge(root: Path, manifest):
     state = reasoning_run_state(root, manifest)
     if state is not None and state != "completed":
         raise ValueError(
@@ -522,7 +528,26 @@ def preflight_canonical_bridge(root: Path, manifest) -> None:
                 "BRIDGE_RUN_NOT_ELIGIBLE: RunResult v2 denies canonical bridge construction"
             )
         if manifest.schema_version == 6:
+            from deepreason.runtime.terminal_authority import (
+                derive_terminal_authority,
+            )
             from deepreason.verification.report import verify_root_report
+
+            authority = derive_terminal_authority(root, manifest=manifest)
+            if not authority.current_valid:
+                raise ValueError(
+                    "BRIDGE_ROOT_AUTHORITY_INVALID: current v6 stop authority "
+                    "is absent"
+                )
+            if authority.terminal_status != "completed":
+                raise ValueError(
+                    "BRIDGE_REASONING_NOT_COMPLETED: canonical terminal authority "
+                    f"is {authority.terminal_status}"
+                )
+            if authority.canonical_bridge_eligible is not True:
+                raise ValueError(
+                    "BRIDGE_RUN_NOT_ELIGIBLE: terminal authority denies canonical bridge construction"
+                )
 
             try:
                 report = verify_root_report(root)
@@ -536,9 +561,11 @@ def preflight_canonical_bridge(root: Path, manifest) -> None:
                     "BRIDGE_ROOT_AUTHORITY_INVALID: live v2 verification found an "
                     "integrity or security failure"
                 )
+            return authority
+    return None
 
 
-def _build_bridge_adapter(manifest, harness):
+def _build_bridge_adapter(manifest, harness, *, terminal_authority=None):
     """Construct only frozen bridge routes with the manifest's repair cap."""
 
     from deepreason.llm.adapter import build_adapter
@@ -572,20 +599,43 @@ def _build_bridge_adapter(manifest, harness):
             TransactionalBridgeAdapter,
         )
 
-        return TransactionalBridgeAdapter(adapter, harness, manifest)
+        if terminal_authority is None:
+            from deepreason.runtime.terminal_authority import (
+                derive_terminal_authority,
+            )
+
+            terminal_authority = derive_terminal_authority(
+                harness.root,
+                manifest=manifest,
+            )
+        if not terminal_authority.current_valid:
+            raise ValueError("BRIDGE_TERMINAL_AUTHORITY_INVALID")
+        return TransactionalBridgeAdapter(
+            adapter,
+            harness,
+            manifest,
+            source_terminal_commitment_ref=(
+                terminal_authority.terminal_commitment_ref
+            ),
+        )
     return adapter
 
 
-def _compiled_bridge_workflow_policy(manifest):
-    """Select the immutable bridge contract pair owned by this manifest."""
+def _historical_bridge_caller_policy(manifest):
+    """Return the caller projection accepted by the manifest-bound harness."""
 
-    policy = manifest.bridge_policy
-    if manifest.schema_version == 6:
-        return policy.workflow_policy(
-            ledger_contract_version="v3",
-            composition_contract_version="v2",
-        )
-    return policy.workflow_policy()
+    return manifest.bridge_policy.workflow_policy(ledger_contract_version="v1")
+
+
+def _preflight_bridge_caller_policy(harness, manifest) -> None:
+    """Ask the bridge Harness to validate caller policy without retaining it."""
+
+    from deepreason.bridge.harness import preflight_bound_bridge_policy
+
+    preflight_bound_bridge_policy(
+        policy=_historical_bridge_caller_policy(manifest),
+        run_manifest=manifest,
+    )
 
 
 def preflight_focus(
@@ -669,15 +719,20 @@ def _prepare_bridge(
 
     root = Path(intent.root).resolve()
     manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
-    preflight_canonical_bridge(root, manifest)
+    terminal_authority = preflight_canonical_bridge(root, manifest)
     preflight = Harness(root, read_only=True)
+    _preflight_bridge_caller_policy(preflight, manifest)
     problem_id = resolve_problem(preflight, intent.problem)
     blocks = bounded_focus(intent.focus_blocks, "focus-block")
     clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
     resolved_blocks, resolved_clusters = preflight_focus(preflight, manifest, blocks, clusters)
     bind_run_manifest(manifest, root)
     harness = Harness(root)
-    adapter = _build_bridge_adapter(manifest, harness)
+    adapter = _build_bridge_adapter(
+        manifest,
+        harness,
+        terminal_authority=terminal_authority,
+    )
     if intent.token_budget is not None:
         adapter.meter = TokenMeter(intent.token_budget)
     attention = attention_pack(harness, manifest, resolved_blocks, resolved_clusters)
@@ -701,7 +756,7 @@ def _execute_bridge(prepared: _PreparedBridge) -> BridgeTerminalResultV1:
     terminal = prepared.harness.build_bridge(
         prepared.problem_id,
         prepared.target,
-        _compiled_bridge_workflow_policy(prepared.manifest),
+        _historical_bridge_caller_policy(prepared.manifest),
         run_manifest_digest=prepared.manifest.sha256,
         stage_a_adapter=prepared.adapter,
         composition_adapter=prepared.adapter,
@@ -733,9 +788,10 @@ def _build_canonical(
     blocks = bounded_focus(intent.focus_blocks, "focus-block")
     clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
     manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
-    require_v6_launch_allowed(manifest, operation="grounded bridge")
-    preflight_canonical_bridge(root, manifest)
     preflight = Harness(root, read_only=True)
+    _preflight_bridge_caller_policy(preflight, manifest)
+    require_v6_launch_allowed(manifest, operation="grounded bridge")
+    terminal_authority = preflight_canonical_bridge(root, manifest)
     problem_id = resolve_problem(preflight, intent.problem)
     resolved_blocks, resolved_clusters = preflight_focus(preflight, manifest, blocks, clusters)
     try:
@@ -745,7 +801,11 @@ def _build_canonical(
     try:
         bind_run_manifest(manifest, root)
         harness = Harness(root)
-        adapter = _build_bridge_adapter(manifest, harness)
+        adapter = _build_bridge_adapter(
+            manifest,
+            harness,
+            terminal_authority=terminal_authority,
+        )
         if intent.token_budget is not None:
             adapter.meter = TokenMeter(intent.token_budget)
         pack = attention_pack(harness, manifest, resolved_blocks, resolved_clusters)
@@ -753,7 +813,7 @@ def _build_canonical(
         terminal = harness.build_bridge(
             problem_id,
             intent.target,
-            _compiled_bridge_workflow_policy(manifest),
+            _historical_bridge_caller_policy(manifest),
             run_manifest_digest=manifest.sha256,
             stage_a_adapter=adapter,
             composition_adapter=adapter,
@@ -814,6 +874,7 @@ def _build_derived(
     source = open_derived_source(intent.root, intent.derived_output, intent.at_seq)
     problem_id = resolve_problem(source.harness, intent.problem)
     manifest = load_bound_manifest(source.destination_root, intent.run_manifest_ref, bind=False)
+    _preflight_bridge_caller_policy(source.harness, manifest)
     require_v6_launch_allowed(manifest, operation="grounded bridge")
     reserve_derived_destination(source)
     if intent.diagnostic_after_failure:
@@ -848,7 +909,7 @@ def _build_derived(
             destination,
             problem_id,
             intent.target,
-            _compiled_bridge_workflow_policy(manifest),
+            _historical_bridge_caller_policy(manifest),
             run_manifest_digest=manifest.sha256,
             stage_a_adapter=adapter,
             composition_adapter=adapter,
@@ -921,6 +982,15 @@ def load_snapshot(
     )
     if terminal_event is None or terminal_event.bridge is None:
         raise ValueError("BRIDGE_RESULT_INVALID: terminal bridge event is absent")
+    if (
+        terminal.source_terminal_commitment_ref is not None
+        and terminal.process_status == "success"
+        and terminal.source_terminal_commitment_ref
+        not in terminal_event.bridge.inputs
+    ):
+        raise ValueError(
+            "BRIDGE_RESULT_INVALID: terminal event lacks source commitment"
+        )
     if terminal.process_status == "success":
         if (
             terminal.terminal_event_seq not in state.completed_events
@@ -934,6 +1004,8 @@ def load_snapshot(
         }
         if terminal.review_id is not None:
             required_inputs.add(terminal.review_id)
+        if terminal.source_terminal_commitment_ref is not None:
+            required_inputs.add(terminal.source_terminal_commitment_ref)
         if None in required_inputs or set(terminal_event.bridge.inputs) != required_inputs:
             raise ValueError("BRIDGE_RESULT_INVALID: terminal completion inputs differ from result")
     else:
@@ -969,6 +1041,8 @@ def load_snapshot(
         pack.problem_ref != terminal.problem_id
         or pack.formal_seq != terminal.formal_seq
         or pack.source_run_digest != terminal.source_run_digest
+        or pack.source_terminal_commitment_ref
+        != terminal.source_terminal_commitment_ref
     ):
         raise ValueError("BRIDGE_RESULT_INVALID: evidence-pack source fence differs from result")
     if ledger is not None and (
@@ -1466,6 +1540,13 @@ def status_payload(root: Path) -> dict[str, Any]:
                 return operation.model_dump(mode="json", by_alias=True, exclude_none=True)
             raise
         terminal = snapshot.terminal
+        if (
+            terminal.source_terminal_commitment_ref
+            != status.source_terminal_commitment_ref
+        ):
+            raise ValueError(
+                "BRIDGE_STATUS_INVALID: status/result terminal commitment mismatch"
+            )
         if terminal.terminal_event_seq != status.terminal_event_seq:
             raise ValueError("BRIDGE_STATUS_INVALID: status/result sequence mismatch")
         if terminal.process_status != status.process_status:
@@ -1562,9 +1643,10 @@ class GroundedBridgeApplicationService:
             raise ValueError("BRIDGE_RUN_NOT_FOUND")
         root = root.resolve()
         manifest = load_bound_manifest(root, intent.run_manifest_ref, bind=False)
+        preflight = Harness(root, read_only=True)
+        _preflight_bridge_caller_policy(preflight, manifest)
         require_v6_launch_allowed(manifest, operation="grounded bridge")
         preflight_canonical_bridge(root, manifest)
-        preflight = Harness(root, read_only=True)
         resolve_problem(preflight, intent.problem)
         blocks = bounded_focus(intent.focus_blocks, "focus-block")
         clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
