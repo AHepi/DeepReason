@@ -13,6 +13,7 @@ compares the conjecture stream around an intervention and is correlational,
 not causal.
 """
 
+from deepreason.application.models import derive_model_execution_summary
 from deepreason.capture import detection, schools
 from deepreason.llm.embedder import HashingEmbedder, distance
 from deepreason.ontology import Rule, SpawnTrigger, Status
@@ -114,10 +115,11 @@ def _program_grounding_breakdown(harness) -> dict:
 def _process_report(harness, events) -> dict:
     """Replay-derived compatibility metrics, isolated from epistemic state.
 
-    A run has one frozen model profile.  Legacy roots without a manifest are
-    reported as ``unprofiled`` rather than guessed from model names or prompt
-    shapes.  This function reads event transport fields and the persisted run
-    manifest only; none of its values feed labels, warrants, or acceptance.
+    A v6 run has one manifest-default profile and may have distinct frozen
+    route-seat base profiles. Legacy roots without a manifest are reported as
+    ``unprofiled`` rather than guessed from model names or prompt shapes. This
+    function reads event transport fields and the persisted run manifest only;
+    none of its values feed labels, warrants, or acceptance.
     """
 
     manifest_path = harness.root / MANIFEST_NAME
@@ -130,33 +132,8 @@ def _process_report(harness, events) -> dict:
             manifest_error = f"{type(error).__name__}: {error}"[:400]
 
     calls = [event.llm for event in events if event.llm is not None]
-    attempts = sum(max(0, call.attempts) for call in calls)
-    repair_attempts = sum(max(0, call.attempts - 1) for call in calls)
-    attempt_distribution: dict[str, int] = {}
-    for call in calls:
-        key = str(call.attempts)
-        attempt_distribution[key] = attempt_distribution.get(key, 0) + 1
-
     profile = manifest.model_profile if manifest is not None else "unprofiled"
     traced_calls = [call for call in calls if call.attempt_trace]
-    first_pass_valid = sum(
-        1 for call in traced_calls if call.attempt_trace[0].valid
-    )
-    eventual_valid = sum(
-        1 for call in traced_calls if any(a.valid for a in call.attempt_trace)
-    )
-    transport_dropped = sum(
-        1
-        for call in traced_calls
-        if not any(a.valid for a in call.attempt_trace)
-        and any(a.usage_unknown for a in call.attempt_trace)
-    )
-    schema_exhausted = sum(
-        1
-        for call in traced_calls
-        if not any(a.valid for a in call.attempt_trace)
-        and not any(a.usage_unknown for a in call.attempt_trace)
-    )
     transport_profiles: dict[str, int] = {}
     contract_counts: dict[str, int] = {}
     compact_recovery_calls = 0
@@ -171,37 +148,91 @@ def _process_report(harness, events) -> dict:
             first.model_profile in {"standard", "frontier"}
             and transport == "compact"
         )
-    total = {
-        "calls": len(calls),
-        "attempts": attempts,
-        "repair_attempts": repair_attempts,
-        "repaired_calls": sum(1 for call in calls if call.attempts > 1),
-        "truncated_calls": sum(1 for call in calls if call.truncated),
-        "tokens": sum(call.tokens for call in calls),
-        "attempt_distribution": dict(sorted(attempt_distribution.items())),
-        "traced_calls": len(traced_calls),
-        "trace_coverage": len(traced_calls) / len(calls) if calls else None,
-        "first_pass_valid": first_pass_valid,
-        "first_pass_valid_rate": (
-            first_pass_valid / len(traced_calls) if traced_calls else None
-        ),
-        "eventual_valid": eventual_valid,
-        "eventual_valid_rate": (
-            eventual_valid / len(traced_calls) if traced_calls else None
-        ),
-        "schema_exhausted": schema_exhausted,
-        "transport_dropped": transport_dropped,
-        "usage_unknown_attempts": sum(
-            int(attempt.usage_unknown)
-            for call in traced_calls
-            for attempt in call.attempt_trace
-        ),
-        "provider_transport_attempts": sum(
-            attempt.transport_attempts
-            for call in traced_calls
-            for attempt in call.attempt_trace
-        ),
+    def call_totals(selected_calls):
+        selected_traced = [call for call in selected_calls if call.attempt_trace]
+        attempt_distribution: dict[str, int] = {}
+        for call in selected_calls:
+            key = str(call.attempts)
+            attempt_distribution[key] = attempt_distribution.get(key, 0) + 1
+        first_pass_valid = sum(
+            1 for call in selected_traced if call.attempt_trace[0].valid
+        )
+        eventual_valid = sum(
+            1 for call in selected_traced if any(a.valid for a in call.attempt_trace)
+        )
+        transport_dropped = sum(
+            1
+            for call in selected_traced
+            if not any(a.valid for a in call.attempt_trace)
+            and any(a.usage_unknown for a in call.attempt_trace)
+        )
+        schema_exhausted = sum(
+            1
+            for call in selected_traced
+            if not any(a.valid for a in call.attempt_trace)
+            and not any(a.usage_unknown for a in call.attempt_trace)
+        )
+        return {
+            "calls": len(selected_calls),
+            "attempts": sum(max(0, call.attempts) for call in selected_calls),
+            "repair_attempts": sum(
+                max(0, call.attempts - 1) for call in selected_calls
+            ),
+            "repaired_calls": sum(
+                1 for call in selected_calls if call.attempts > 1
+            ),
+            "truncated_calls": sum(1 for call in selected_calls if call.truncated),
+            "tokens": sum(call.tokens for call in selected_calls),
+            "attempt_distribution": dict(sorted(attempt_distribution.items())),
+            "traced_calls": len(selected_traced),
+            "trace_coverage": (
+                len(selected_traced) / len(selected_calls)
+                if selected_calls
+                else None
+            ),
+            "first_pass_valid": first_pass_valid,
+            "first_pass_valid_rate": (
+                first_pass_valid / len(selected_traced) if selected_traced else None
+            ),
+            "eventual_valid": eventual_valid,
+            "eventual_valid_rate": (
+                eventual_valid / len(selected_traced) if selected_traced else None
+            ),
+            "schema_exhausted": schema_exhausted,
+            "transport_dropped": transport_dropped,
+            "usage_unknown_attempts": sum(
+                int(attempt.usage_unknown)
+                for call in selected_traced
+                for attempt in call.attempt_trace
+            ),
+            "provider_transport_attempts": sum(
+                attempt.transport_attempts
+                for call in selected_traced
+                for attempt in call.attempt_trace
+            ),
+        }
+
+    calls_by_profile: dict[str, list] = {}
+    for call in calls:
+        call_profile = (
+            call.attempt_trace[0].model_profile
+            if call.attempt_trace
+            else profile
+        ) or "unprofiled"
+        calls_by_profile.setdefault(call_profile, []).append(call)
+    if not calls_by_profile:
+        calls_by_profile[profile] = []
+    profile_totals = {
+        key: call_totals(value)
+        for key, value in sorted(calls_by_profile.items())
     }
+    model_execution = (
+        derive_model_execution_summary(harness, manifest).model_dump(
+            mode="json", by_alias=True
+        )
+        if manifest is not None and manifest.schema_version == 6
+        else None
+    )
     return {
         "manifest_present": manifest_path.exists(),
         "manifest_valid": manifest is not None,
@@ -211,12 +242,13 @@ def _process_report(harness, events) -> dict:
         "model_profile": manifest.model_profile if manifest is not None else None,
         "pack_profile": manifest.pack_profile if manifest is not None else None,
         "output_profile": manifest.output_profile if manifest is not None else None,
-        "profile_totals": {profile: total},
+        "profile_totals": profile_totals,
         "transport_totals": {
             "profiles": dict(sorted(transport_profiles.items())),
             "contracts": dict(sorted(contract_counts.items())),
             "compact_recovery_calls": compact_recovery_calls,
         },
+        "model_execution": model_execution,
         "frozen_routes": role_matrix(manifest) if manifest is not None else [],
         "note": (
             "process/reporting metadata only; excluded from artifacts, warrants, "
