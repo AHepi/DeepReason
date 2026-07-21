@@ -7,6 +7,7 @@ Schema-invalid output => feed the error back, RETRY_MAX bounded retries,
 then SchemaRepairError (caller drops the cycle, logged).
 """
 
+import copy
 import json
 import hashlib
 import os
@@ -53,7 +54,11 @@ from deepreason.ontology.event import (
     LLMCall,
     SchoolRouteReceiptV1,
 )
-from deepreason.run_manifest import infer_model_family
+from deepreason.run_manifest import (
+    infer_model_family,
+    resolve_route_seat_behavioral_capability,
+    resolve_route_seat_base_profile,
+)
 
 
 class WorkflowAuthorizationError(RuntimeError):
@@ -62,6 +67,72 @@ class WorkflowAuthorizationError(RuntimeError):
     def __init__(self, message: str, *, spend: LLMCall | None = None) -> None:
         super().__init__(message)
         self.spend = spend
+
+
+class RequestEnvelopeExceeded(RuntimeError):
+    """A frozen route cannot contain the final request and completion bound."""
+
+    code = "REQUEST_ENVELOPE_EXCEEDED"
+
+    def __init__(
+        self,
+        *,
+        role: str,
+        route_seat: int,
+        prompt_upper_bound: int,
+        completion_bound: int,
+        total_bound: int,
+        context_capacity: int,
+    ) -> None:
+        self.role = role
+        self.route_seat = route_seat
+        self.prompt_upper_bound = prompt_upper_bound
+        self.completion_bound = completion_bound
+        self.total_bound = total_bound
+        self.context_capacity = context_capacity
+        super().__init__(
+            f"{self.code}: role={role!r} seat={route_seat} "
+            f"prompt_upper_bound={prompt_upper_bound} "
+            f"completion_bound={completion_bound} total_bound={total_bound} "
+            f"context_capacity={context_capacity}"
+        )
+
+
+class V6ModelProfileOverrideForbidden(RuntimeError):
+    """A transactional v6 call tried to replace its frozen presentation."""
+
+    code = "V6_MODEL_PROFILE_OVERRIDE_FORBIDDEN"
+
+    def __init__(self, *, role: str, frozen_profile: str | None) -> None:
+        self.role = role
+        self.frozen_profile = frozen_profile
+        super().__init__(
+            f"{self.code}: role={role!r} must use its frozen model profile"
+        )
+
+
+def _enforce_request_envelope(role: str, prompt: str, lease: EndpointLease) -> None:
+    """Apply the route's conservative complete-request bound after rendering."""
+
+    capacity = lease.route.context_window_tokens
+    if capacity is None:
+        return
+    completion_bound = lease.route.max_tokens
+    if completion_bound is None:  # Route validation makes this unreachable.
+        raise ValueError("qualified route has no finite completion allowance")
+    # Every token must contain at least one UTF-8 byte, so byte length is a
+    # deterministic conservative token upper bound without provider tokenizers.
+    prompt_upper_bound = len(prompt.encode("utf-8"))
+    total_bound = prompt_upper_bound + completion_bound
+    if total_bound > capacity:
+        raise RequestEnvelopeExceeded(
+            role=role,
+            route_seat=lease.seat,
+            prompt_upper_bound=prompt_upper_bound,
+            completion_bound=completion_bound,
+            total_bound=total_bound,
+            context_capacity=capacity,
+        )
 
 
 def _usage_tokens(usage: dict | None, request: str, raw: str) -> dict:
@@ -170,6 +241,245 @@ class LLMAdapter:
         self.leases = leases if leases is not None else leases_from_endpoints(endpoints)
         self.transaction_authority_required = bool(transaction_authority_required)
         self._compact_recovery_roles: set[str] = set()
+        self._v6_authority_harness = None
+        self._v6_authority_manifest = None
+
+    def bind_v6_authority(self, harness, manifest) -> None:
+        """Bind exact route-seat presentation to canonical v6 replay state."""
+
+        if getattr(manifest, "schema_version", None) != 6:
+            raise WorkflowAuthorizationError(
+                "transactional adapter requires RunManifest v6 authority"
+            )
+        if not self.transaction_authority_required:
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 authority requires transactional dispatch"
+            )
+        if manifest.route_seat_behavioral_capability_plan is None:
+            raise WorkflowAuthorizationError(
+                "transactional adapter requires route-seat behavioral authority"
+            )
+        classification = harness.workflow_state.route_seat_model_classification
+        if classification is None:
+            raise WorkflowAuthorizationError(
+                "transactional adapter requires durable model classification authority"
+            )
+        try:
+            harness.workflow_state._validate_model_classification(
+                manifest,
+                classification,
+            )
+        except ValueError as error:
+            raise WorkflowAuthorizationError(
+                "transactional adapter model classification differs from the manifest"
+            ) from error
+        if self.base_model_profile != manifest.model_profile:
+            raise WorkflowAuthorizationError(
+                "adapter presentation identity differs from the manifest"
+            )
+        if self.leases != leases_from_manifest(manifest):
+            raise WorkflowAuthorizationError(
+                "adapter route leases differ from the manifest"
+            )
+        if (
+            self._v6_authority_harness is not None
+            and self._v6_authority_harness is not harness
+        ):
+            raise WorkflowAuthorizationError(
+                "transactional adapter is already bound to another harness"
+            )
+        if (
+            self._v6_authority_manifest is not None
+            and self._v6_authority_manifest.sha256 != manifest.sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "transactional adapter is already bound to another manifest"
+            )
+        harness.bind_transaction_manifest(manifest)
+        replay_manifest = getattr(harness.workflow_state, "_run_manifest", None)
+        if replay_manifest is None or replay_manifest.sha256 != manifest.sha256:
+            raise WorkflowAuthorizationError(
+                "workflow replay state differs from adapter manifest authority"
+            )
+        self._v6_authority_harness = harness
+        self._v6_authority_manifest = manifest
+
+    def preview_request_with_v6_classification(
+        self,
+        harness,
+        manifest,
+        classification,
+        *args,
+        **kwargs,
+    ) -> tuple[str, WireContract, EndpointLease, int]:
+        """Purely preview using validated prospective v6 classification.
+
+        Standalone launch boundaries sometimes must render before the durable
+        classification event, then recheck a root manifest immediately before
+        any authority mutation.  A shallow adapter view supplies the exact
+        route/profile/compact replay state to the ordinary renderer without
+        mutating this adapter or the Harness.  Dispatch still requires the
+        normal durable binding.
+        """
+
+        if getattr(manifest, "schema_version", None) != 6:
+            raise WorkflowAuthorizationError(
+                "prospective classification preview requires RunManifest v6"
+            )
+        if manifest.route_seat_behavioral_capability_plan is None:
+            raise WorkflowAuthorizationError(
+                "prospective preview requires route-seat behavioral authority"
+            )
+        state = harness.workflow_state
+        replay_manifest = getattr(state, "_run_manifest", None)
+        if replay_manifest is None or replay_manifest.sha256 != manifest.sha256:
+            raise WorkflowAuthorizationError(
+                "prospective preview replay state differs from the manifest"
+            )
+        state._validate_model_classification(manifest, classification)
+        current = state.route_seat_model_classification
+        if current is not None and current != classification:
+            raise WorkflowAuthorizationError(
+                "prospective preview classification differs from durable authority"
+            )
+        if self.base_model_profile != manifest.model_profile:
+            raise WorkflowAuthorizationError(
+                "adapter presentation identity differs from the manifest"
+            )
+        if self.leases != leases_from_manifest(manifest):
+            raise WorkflowAuthorizationError(
+                "adapter route leases differ from the manifest"
+            )
+        preview_adapter = copy.copy(self)
+        preview_adapter.transaction_authority_required = True
+        preview_adapter._v6_authority_harness = harness
+        preview_adapter._v6_authority_manifest = manifest
+        return preview_adapter.preview_request(*args, **kwargs)
+
+    def _transactional_base_profile_for(
+        self,
+        role: str,
+        endpoint_index: int,
+        lease: EndpointLease,
+    ) -> str:
+        """Resolve base presentation from one replay-validated route seat."""
+
+        harness = self._v6_authority_harness
+        manifest = self._v6_authority_manifest
+        if harness is None or manifest is None:
+            raise WorkflowAuthorizationError(
+                "transactional adapter lacks canonical workflow authority"
+            )
+        state = harness.workflow_state
+        replay_manifest = getattr(state, "_run_manifest", None)
+        if replay_manifest is None or replay_manifest.sha256 != manifest.sha256:
+            raise WorkflowAuthorizationError(
+                "workflow replay state belongs to another manifest"
+            )
+        canonical_lease = select_lease(self.leases, role, endpoint_index)
+        if lease != canonical_lease:
+            raise WorkflowAuthorizationError(
+                "effective profile lease differs from frozen route authority"
+            )
+        return resolve_route_seat_base_profile(
+            manifest,
+            role=role,
+            seat=lease.seat,
+            endpoint_id=lease.route.endpoint_id,
+        )
+
+    def _transactional_profile_for(
+        self,
+        role: str,
+        endpoint_index: int,
+        lease: EndpointLease,
+    ) -> str:
+        """Resolve sticky presentation from one replay-validated route seat."""
+
+        base_value = self._transactional_base_profile_for(
+            role, endpoint_index, lease
+        )
+        base = get_profile(base_value).name
+        if base == ModelProfile.COMPACT:
+            return base.value
+        harness = self._v6_authority_harness
+        manifest = self._v6_authority_manifest
+        assert harness is not None and manifest is not None
+        state = harness.workflow_state
+        key = (
+            role,
+            lease.seat,
+            lease.route.endpoint_id,
+            route_fingerprint(lease.route),
+        )
+        transition = state.compact_recovery_by_route_seat.get(key)
+        if transition is None:
+            return base.value
+        policy = manifest.compact_recovery_policy
+        if (
+            policy is None
+            or base_value not in policy.source_profiles
+            or transition.manifest_digest != manifest.sha256
+            or transition.route_seat_key != key
+            or transition.source_profile != base_value
+            or transition.target_profile != policy.target_profile
+            or transition.trigger != policy.trigger
+            or transition.scope != policy.scope
+            or transition.sticky != policy.sticky
+            or transition.applies_to != policy.applies_to
+            or transition.retry_failed_work != policy.retry_failed_work
+        ):
+            raise WorkflowAuthorizationError(
+                "compact presentation transition differs from manifest authority"
+            )
+        return ModelProfile.COMPACT.value
+
+    def _require_transactional_route_dispatchable(self, route_lease) -> None:
+        """Recheck live terminal route authority immediately before dispatch."""
+
+        harness = self._v6_authority_harness
+        manifest = self._v6_authority_manifest
+        if harness is None or manifest is None:
+            raise WorkflowAuthorizationError(
+                "transactional adapter lacks canonical workflow authority"
+            )
+        state = harness.workflow_state
+        replay_manifest = getattr(state, "_run_manifest", None)
+        if replay_manifest is None or replay_manifest.sha256 != manifest.sha256:
+            raise WorkflowAuthorizationError(
+                "workflow replay state belongs to another manifest"
+            )
+        key = (
+            route_lease.role,
+            route_lease.seat,
+            route_lease.endpoint_id,
+            route_lease.route_sha256,
+        )
+        if key in state.insufficient_capability_by_route_seat:
+            raise WorkflowAuthorizationError(
+                "V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY: route seat has "
+                "terminally exhausted its smallest authorized contract"
+            )
+
+    def base_profile_for(
+        self,
+        role: str,
+        endpoint_index: int = 0,
+        *,
+        endpoint_lease: EndpointLease | None = None,
+    ) -> str | None:
+        """Frozen base profile for one route seat, before sticky transitions."""
+
+        if self.base_model_profile is None:
+            return None
+        if self.transaction_authority_required:
+            lease = endpoint_lease or select_lease(
+                self.leases, role, endpoint_index
+            )
+            return self._transactional_base_profile_for(
+                role, endpoint_index, lease
+            )
+        return get_profile(self.base_model_profile).name.value
 
     def rehydrate_compact_recovery(self, process_events) -> frozenset[str]:
         """Restore later-call compact transport from durable process evidence.
@@ -184,6 +494,8 @@ class LLMAdapter:
         alter a lease, or add an attempt to the exhausted call.
         """
 
+        if self.transaction_authority_required:
+            return frozenset()
         if self.base_model_profile is None:
             return frozenset()
         base = get_profile(self.base_model_profile).name
@@ -237,7 +549,13 @@ class LLMAdapter:
         self._compact_recovery_roles.update(recovered)
         return frozenset(recovered)
 
-    def profile_for(self, role: str) -> str | None:
+    def profile_for(
+        self,
+        role: str,
+        endpoint_index: int = 0,
+        *,
+        endpoint_lease: EndpointLease | None = None,
+    ) -> str | None:
         """Effective transport profile for the next ordinary call to ``role``.
 
         Standard/frontier roles enter compact recovery only after a complete
@@ -249,6 +567,11 @@ class LLMAdapter:
         if self.base_model_profile is None:
             return None
         base = get_profile(self.base_model_profile).name
+        if self.transaction_authority_required:
+            lease = endpoint_lease or select_lease(
+                self.leases, role, endpoint_index
+            )
+            return self._transactional_profile_for(role, endpoint_index, lease)
         if role in self._compact_recovery_roles and base in {
             ModelProfile.STANDARD,
             ModelProfile.FRONTIER,
@@ -264,6 +587,8 @@ class LLMAdapter:
     ) -> None:
         """Arm only a later call; never change transport inside this call."""
 
+        if self.transaction_authority_required:
+            return
         if self.base_model_profile is None or profile is None:
             return
         base = get_profile(self.base_model_profile).name
@@ -345,7 +670,11 @@ class LLMAdapter:
             conjecture_context=conjecture_context,
             pre_rendered_request=pre_rendered_request,
         )
-        maximum = getattr(endpoint, "max_tokens", lease.route.max_tokens)
+        maximum = (
+            lease.route.max_tokens
+            if lease.route.context_window_tokens is not None
+            else getattr(endpoint, "max_tokens", lease.route.max_tokens)
+        )
         return prompt, contract, lease, int(maximum or 0)
 
     def _render_request(
@@ -375,9 +704,33 @@ class LLMAdapter:
                 f"{role}[{endpoint_index}]"
             )
         lease.verify(endpoint)
-        profile = (
-            model_profile if model_profile is not None else self.profile_for(role)
+        frozen_profile = self.profile_for(
+            role,
+            endpoint_index,
+            endpoint_lease=lease,
         )
+        base_profile = self.base_profile_for(
+            role,
+            endpoint_index,
+            endpoint_lease=lease,
+        )
+        if self.transaction_authority_required:
+            if model_profile is not None:
+                try:
+                    requested_profile = get_profile(model_profile).name.value
+                except (KeyError, TypeError, ValueError) as error:
+                    raise V6ModelProfileOverrideForbidden(
+                        role=role,
+                        frozen_profile=base_profile,
+                    ) from error
+                if requested_profile != base_profile:
+                    raise V6ModelProfileOverrideForbidden(
+                        role=role,
+                        frozen_profile=base_profile,
+                    )
+            profile = frozen_profile
+        else:
+            profile = model_profile if model_profile is not None else frozen_profile
         if wire_contract is None:
             wire_contract = (
                 wire_contract_for(role, output_model, profile, aliases)
@@ -389,6 +742,25 @@ class LLMAdapter:
                 f"wire contract {wire_contract.contract_id} compiles to "
                 f"{wire_contract.canonical_model.__name__}, expected {output_model.__name__}"
             )
+        if self.transaction_authority_required:
+            manifest = self._v6_authority_manifest
+            if manifest is None:
+                raise WorkflowAuthorizationError(
+                    "transactional adapter lacks behavioral manifest authority"
+                )
+            behavioral = resolve_route_seat_behavioral_capability(
+                manifest,
+                role=role,
+                seat=lease.seat,
+                endpoint_id=lease.route.endpoint_id,
+                route_sha256=route_fingerprint(lease.route),
+            )
+            if behavioral.base_profile != base_profile or wire_contract.contract_id not in {
+                grant.contract_id for grant in behavioral.contracts
+            }:
+                raise WorkflowAuthorizationError(
+                    "wire contract differs from frozen route-seat behavioral authority"
+                )
         schema_value = wire_contract.model_json_schema()
         schema = json.dumps(schema_value, sort_keys=True)
         rendered_pack = pack
@@ -436,6 +808,7 @@ class LLMAdapter:
                 example=minimal_example(wire_contract),
                 aliases=alias_labels,
             )
+        _enforce_request_envelope(role, prompt, lease)
         return prompt, wire_contract, lease, endpoint, profile
 
     def call(
@@ -559,6 +932,7 @@ class LLMAdapter:
             )
             if not dispatch_authorization.reservation.is_open:
                 raise ValueError("transactional token reservation is no longer open")
+            self._require_transactional_route_dispatchable(route_ref)
         fixed_mechanism = OutputMechanism(lease.route.output_mechanism)
         requested_mechanism = (
             OutputMechanism(output_mechanism)
@@ -579,11 +953,13 @@ class LLMAdapter:
         raw_ref = ""
         prompt_ref = self.blobs.put(prompt.encode())
         attempt_trace: list[LLMAttempt] = []
-        frozen_profile = (
-            self.base_model_profile
-            if self.base_model_profile is not None
-            else profile
+        frozen_profile = self.base_profile_for(
+            role,
+            endpoint_index,
+            endpoint_lease=lease,
         )
+        if frozen_profile is None:
+            frozen_profile = profile
         trace_identity = {
             "contract_id": wire_contract.contract_id,
             "endpoint_id": lease.route.endpoint_id,
@@ -676,6 +1052,19 @@ class LLMAdapter:
             turn = repair.turn(attempt)
             request = turn.request
             response_schema = turn.response_schema
+            # Repair turns are model-visible provider requests too. Apply the
+            # same frozen envelope immediately before any reservation or
+            # provider-attempt work, even when the first turn was already
+            # checked by the shared renderer.
+            try:
+                _enforce_request_envelope(role, request, lease)
+            except RequestEnvelopeExceeded as error:
+                # A later repair can exceed the frozen envelope after earlier
+                # provider work has already settled. Preserve only that
+                # completed spend: prompt_ref is intentionally not advanced
+                # to the generated-but-unsent repair request until below.
+                error.spend = _spend(attempt)
+                raise
             # Re-check immediately before every provider request, including
             # both repair forms. A mid-call mutation is terminal, but its
             # exception carries prior spend for append-only process logging.
@@ -989,6 +1378,7 @@ def _endpoint_from_spec(spec: dict) -> OpenAICompatEndpoint | None:
         model, spec.get("provider") or ""
     )
     endpoint.model_revision = spec.get("model_revision") or None
+    endpoint.context_window_tokens = spec.get("context_window_tokens")
     return endpoint
 
 
