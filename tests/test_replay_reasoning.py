@@ -123,7 +123,7 @@ def test_reasoning_conj_replays_byte_for_byte_and_verifies_root(tmp_path):
     assert report["violations"] == []
     assert report["stats"]["problems"] == 1
     assert report["stats"]["accepted"] == 1
-    assert report["stats"]["process"]["profile_totals"]["unprofiled"][
+    assert report["stats"]["process"]["profile_totals"]["compact"][
         "eventual_valid"
     ] == 1
 
