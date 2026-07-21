@@ -225,6 +225,8 @@ class BridgeState:
         self,
         payload: BridgeEventPayloadV1,
         records: list[tuple[str, str, BaseModel]],
+        *,
+        terminal_commitment_ref: str | None = None,
     ) -> None:
         """Validate one action without mutating this materialized view."""
 
@@ -349,7 +351,16 @@ class BridgeState:
 
         if action == BridgeAction.WORKFLOW_RETRY_STARTED:
             _retry_id, retry = self._one(records, "bridge-workflow-retry")
-            if list(payload.inputs) != [retry.prior_failure_id]:
+            expected_inputs = [retry.prior_failure_id]
+            if terminal_commitment_ref is not None:
+                expected_inputs.append(terminal_commitment_ref)
+            observed_inputs = list(payload.inputs)
+            historical_shape = (
+                terminal_commitment_ref is None
+                and len(observed_inputs) in {1, 2}
+                and observed_inputs[0] == retry.prior_failure_id
+            )
+            if observed_inputs != expected_inputs and not historical_shape:
                 raise ValueError("workflow retry must name exactly its prior failure")
             failure = self.failures.get(retry.prior_failure_id)
             if failure is None:
@@ -651,18 +662,23 @@ class BridgeState:
         }
         indexes[schema][oid] = obj
 
-    def apply(self, event: Event, objects: ObjectStore) -> None:
+    def apply_resolved(
+        self,
+        event: Event,
+        records: list[tuple[str, str, BaseModel]],
+        *,
+        terminal_commitment_ref: str | None = None,
+    ) -> None:
+        """Apply one event whose output records were already resolved.
+
+        The live writer uses this path on an isolated shadow state before any
+        object or event persistence. Durable replay resolves through apply and
+        reaches the same validator.
+        """
+
         payload = event.bridge
         if payload is None:
             return
-        records: list[tuple[str, str, BaseModel]] = []
-        for oid in event.outputs:
-            schema, obj = objects.get(oid)
-            if not schema.startswith("bridge-"):
-                raise ValueError(
-                    f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
-                )
-            records.append((schema, oid, obj))
         if self._pending_retry is not None and event.bridge.action != BridgeAction.WORKFLOW_RETRY_STARTED:
             if self._awaiting_retry_attempt_start:
                 if event.bridge.action not in {
@@ -690,7 +706,11 @@ class BridgeState:
                             raise ValueError(
                                 "workflow retry start changed contract or route"
                             )
-        self.validate(payload, records)
+        self.validate(
+            payload,
+            records,
+            terminal_commitment_ref=terminal_commitment_ref,
+        )
         for schema, oid, obj in records:
             self._register(schema, oid, obj, event.seq)
         self.event_seqs.append(event.seq)
@@ -749,6 +769,260 @@ class BridgeState:
             self._attempt_tokens = 0
             self._attempt_calls = []
 
+    def apply(
+        self,
+        event: Event,
+        objects: ObjectStore,
+        *,
+        terminal_commitment_ref: str | None = None,
+    ) -> None:
+        payload = event.bridge
+        if payload is None:
+            return
+        records: list[tuple[str, str, BaseModel]] = []
+        for oid in event.outputs:
+            schema, obj = objects.get(oid)
+            if not schema.startswith("bridge-"):
+                raise ValueError(
+                    f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
+                )
+            records.append((schema, oid, obj))
+        self.apply_resolved(
+            event,
+            records,
+            terminal_commitment_ref=terminal_commitment_ref,
+        )
+
+
+@dataclass
+class TerminalBridgeHistory:
+    """Strict chronological projection for one terminal commitment.
+
+    This state is ephemeral and derived from the append-only log. It does not
+    grant authority itself; terminal authority invokes it as the canonical
+    Bridge-history validator, and the writer invokes the same path before
+    durable mutation.
+    """
+
+    commitment_ref: str
+    bridge_state: BridgeState = field(default_factory=BridgeState)
+    phase: str = "not_started"
+    last_failure_id: str | None = None
+    active_retry_id: str | None = None
+    active_object_ids: set[str] = field(default_factory=set)
+
+    def observe_control(self, event: Event, workflow_state) -> None:
+        self.bridge_state.apply_v6_provider_result(event, workflow_state)
+
+    def _attempt_pack(
+        self,
+        records: list[tuple[str, str, BaseModel]],
+    ) -> BaseModel:
+        packs = [
+            obj
+            for schema, _oid, obj in records
+            if schema == "bridge-evidence-pack"
+        ]
+        if len(packs) != 1:
+            raise ValueError(
+                "terminal bridge attempt must begin with exactly one evidence pack"
+            )
+        pack = packs[0]
+        if pack.source_terminal_commitment_ref != self.commitment_ref:
+            raise ValueError(
+                "terminal bridge evidence pack names another commitment"
+            )
+        return pack
+
+    def _typed_failure(
+        self,
+        records: list[tuple[str, str, BaseModel]],
+        *,
+        require_new_pack: bool = False,
+    ) -> BaseModel:
+        failures = [
+            obj for schema, _oid, obj in records if schema == "bridge-failure"
+        ]
+        if len(failures) != 1:
+            raise ValueError(
+                "terminal failed bridge event requires exactly one bridge failure"
+            )
+        failure = failures[0]
+        packs = {
+            oid: obj
+            for schema, oid, obj in records
+            if schema == "bridge-evidence-pack"
+        }
+        if require_new_pack and set(packs) != {failure.evidence_pack_id}:
+            raise ValueError(
+                "terminal bridge failure attempt must contain its evidence pack"
+            )
+        known_pack = self.bridge_state.evidence_packs.get(
+            failure.evidence_pack_id
+        )
+        if known_pack is not None:
+            packs.setdefault(known_pack.id, known_pack)
+        if set(packs) != {failure.evidence_pack_id}:
+            raise ValueError(
+                "terminal bridge failure requires exactly one evidence pack"
+            )
+        pack = packs[failure.evidence_pack_id]
+        if pack.source_terminal_commitment_ref != self.commitment_ref:
+            raise ValueError(
+                "terminal bridge failure evidence pack names another commitment"
+            )
+        return failure
+
+    def apply_bridge(
+        self,
+        event: Event,
+        records: list[tuple[str, str, BaseModel]],
+    ) -> None:
+        payload = event.bridge
+        if payload is None:
+            return
+        action = payload.action
+
+        if self.phase == "completed":
+            if action == BridgeAction.COMPLETED:
+                raise ValueError("TERMINAL_BRIDGE_COMPLETION_DUPLICATED")
+            raise ValueError("TERMINAL_BRIDGE_HISTORY_AFTER_COMPLETION")
+
+        if self.phase == "failed":
+            if action != BridgeAction.WORKFLOW_RETRY_STARTED:
+                raise ValueError(
+                    "terminal bridge failure requires an exact retry before another attempt"
+                )
+            retries = [
+                obj
+                for schema, _oid, obj in records
+                if schema == "bridge-workflow-retry"
+            ]
+            if (
+                len(retries) != 1
+                or retries[0].prior_failure_id != self.last_failure_id
+            ):
+                raise ValueError(
+                    "terminal bridge retry does not name the preceding typed failure"
+                )
+            self.bridge_state.apply_resolved(
+                event,
+                records,
+                terminal_commitment_ref=self.commitment_ref,
+            )
+            self.phase = "retry_authorized"
+            self.active_retry_id = retries[0].id
+            self.active_object_ids = set()
+            return
+
+        failure = None
+        if self.phase == "not_started":
+            if action == BridgeAction.LEDGER_CREATED:
+                self._attempt_pack(records)
+            elif action == BridgeAction.FAILED:
+                failure = self._typed_failure(records, require_new_pack=True)
+            else:
+                raise ValueError(
+                    "terminal bridge history does not begin with a typed attempt"
+                )
+        elif self.phase == "retry_authorized":
+            if action == BridgeAction.LEDGER_CREATED:
+                self._attempt_pack(records)
+            elif action == BridgeAction.FAILED:
+                failure = self._typed_failure(records, require_new_pack=True)
+            else:
+                raise ValueError(
+                    "terminal bridge retry is not linked to a fresh typed attempt"
+                )
+        elif self.phase == "open":
+            if action in {
+                BridgeAction.LEDGER_CREATED,
+                BridgeAction.WORKFLOW_RETRY_STARTED,
+            }:
+                raise ValueError(
+                    "terminal bridge attempt cannot be reopened while active"
+                )
+            known_inputs = {
+                oid
+                for oid in event.inputs
+                if oid in self.bridge_state.object_schemas
+            }
+            if not known_inputs.issubset(self.active_object_ids):
+                raise ValueError(
+                    "terminal bridge event references another attempt"
+                )
+            if action == BridgeAction.FAILED:
+                failure = self._typed_failure(records)
+
+        self.bridge_state.apply_resolved(
+            event,
+            records,
+            terminal_commitment_ref=self.commitment_ref,
+        )
+
+        if action == BridgeAction.LEDGER_CREATED:
+            self.phase = "open"
+            self.active_object_ids = {
+                oid for _schema, oid, _obj in records
+            }
+        elif action == BridgeAction.FAILED:
+            assert failure is not None
+            self.active_object_ids.update(
+                oid for _schema, oid, _obj in records
+            )
+            if self.active_retry_id is not None and (
+                self.bridge_state.retry_id_by_failure.get(failure.id)
+                != self.active_retry_id
+            ):
+                raise ValueError(
+                    "terminal bridge failure is outside its retry chain"
+                )
+            self.phase = "failed"
+            self.last_failure_id = failure.id
+            self.active_retry_id = None
+        elif action == BridgeAction.COMPLETED:
+            self.phase = "completed"
+            self.active_retry_id = None
+        else:
+            self.active_object_ids.update(
+                oid for _schema, oid, _obj in records
+            )
+
+
+def validate_terminal_bridge_history(
+    *,
+    events: Iterable[Event],
+    objects: ObjectStore,
+    workflow_state,
+    commitment_ref: str,
+    horizon_seq: int,
+    candidate_event: Event | None = None,
+    candidate_records: list[tuple[str, str, BaseModel]] | None = None,
+) -> TerminalBridgeHistory:
+    """Replay one commitment's post-horizon Bridge history chronologically."""
+
+    history = TerminalBridgeHistory(commitment_ref=commitment_ref)
+    for event in events:
+        if event.seq <= horizon_seq:
+            continue
+        if event.control is not None:
+            history.observe_control(event, workflow_state)
+        if event.bridge is not None:
+            records: list[tuple[str, str, BaseModel]] = []
+            for oid in event.outputs:
+                schema, obj = objects.get(oid)
+                if not schema.startswith("bridge-"):
+                    raise ValueError(
+                        f"bridge event output {oid!r} uses non-bridge schema {schema!r}"
+                    )
+                records.append((schema, oid, obj))
+            history.apply_bridge(event, records)
+    if candidate_event is not None:
+        if candidate_records is None:
+            raise ValueError("terminal bridge candidate records are required")
+        history.apply_bridge(candidate_event, candidate_records)
+    return history
+
 
 def rebuild_bridge_state(objects: ObjectStore, events: Iterable[Event]) -> BridgeState:
     state = BridgeState()
@@ -757,4 +1031,9 @@ def rebuild_bridge_state(objects: ObjectStore, events: Iterable[Event]) -> Bridg
     return state
 
 
-__all__ = ["BridgeState", "rebuild_bridge_state"]
+__all__ = [
+    "BridgeState",
+    "TerminalBridgeHistory",
+    "rebuild_bridge_state",
+    "validate_terminal_bridge_history",
+]
