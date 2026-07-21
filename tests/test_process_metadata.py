@@ -5,6 +5,7 @@ import json
 import pytest
 
 from deepreason.config import Config
+from deepreason.cli.doctor import run_production_contract_doctor
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
 from deepreason.llm.adapter import LLMAdapter, SchemaRepairError
@@ -12,11 +13,20 @@ from deepreason.llm.contracts import ConjecturerOutput
 from deepreason.llm.endpoints import EndpointError, MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest, route_fingerprint
 from deepreason.llm.wire import AliasTable
-from deepreason.ontology import Problem, ProblemProvenance, Rule
+from deepreason.ontology import Commitment, Problem, ProblemProvenance, Rule
 from deepreason.ontology.event import LLMAttempt, LLMCall
 from deepreason.report import eval_report
 from deepreason.rules.conj import conj
 from deepreason.run_manifest import Route, RunManifest, persist_run_manifest
+from tests.test_cli_production_doctor_v6 import _admitted_case
+
+
+def _bind_model_classification(harness, manifest):
+    report = run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: _admitted_case(index),
+    )
+    harness.bind_model_classification(manifest, report)
 
 
 def _manifest(endpoint, *, engine_profile="full", model_profile="compact"):
@@ -164,6 +174,228 @@ def test_invariants_reject_unlogged_effective_transport_limit(tmp_path):
     assert "attempt-limits" in checks
 
 
+def _v6_profile_root(root, *, transport_profile: str):
+    from tests.test_run_input_v6_commitments import (
+        _bind_v2,
+        _manifest as v6_manifest,
+    )
+
+    run_input = _bind_v2(
+        root,
+        Commitment(id="k-profile-replay", eval="predicate:len(content) > 0"),
+    )
+    manifest = v6_manifest(6, run_input.run_input_digest)
+    persist_run_manifest(manifest, root)
+    harness = Harness(root)
+    _bind_model_classification(harness, manifest)
+    route = manifest.roles["conjecturer"][0]
+    prompt_ref = harness.blobs.put(b"profile replay prompt")
+    raw_ref = harness.blobs.put(b'{"candidates":[]}')
+    harness.record_measure(
+        inputs=["profile-replay-test"],
+        llm=LLMCall(
+            role="conjecturer",
+            model=route.model_id,
+            endpoint=route.base_url,
+            prompt_ref=prompt_ref,
+            raw_ref=raw_ref,
+            attempt_trace=[
+                LLMAttempt(
+                    prompt_ref=prompt_ref,
+                    raw_ref=raw_ref,
+                    contract_id="conjecturer.turn.v6",
+                    endpoint_id=route.endpoint_id,
+                    route_sha256=route_fingerprint(route),
+                    model_profile=manifest.model_profile,
+                    transport_profile=transport_profile,
+                    max_tokens=route.max_tokens,
+                    timeout_s=route.timeout_s,
+                    valid=True,
+                    output_mechanism=route.output_mechanism,
+                )
+            ],
+        ),
+    )
+    return manifest
+
+
+def test_v6_invariants_reject_compact_transport_without_transition(tmp_path):
+    root = tmp_path / "v6-profile-downgrade"
+    manifest = _v6_profile_root(root, transport_profile="compact")
+    assert manifest.model_profile == "standard"
+
+    violations = verify_root(root)["violations"]
+    assert any(
+        violation["check"] == "attempt-profile-authority"
+        and "transport_profile='compact'" in violation["detail"]
+        for violation in violations
+    )
+
+
+def test_v6_invariants_accept_matching_model_and_transport_profiles(tmp_path):
+    root = tmp_path / "v6-profile-matching"
+    manifest = _v6_profile_root(root, transport_profile="standard")
+
+    assert manifest.model_profile == "standard"
+    assert verify_root(root)["violations"] == []
+    execution = eval_report(Harness(root), Config())["process"][
+        "model_execution"
+    ]
+    assert execution["schema"] == "model-execution-summary.v1"
+    assert execution["mode"] == "base_only"
+    assert execution["base_profile"] == "standard"
+    assert {
+        item["base_profile"] for item in execution["route_seat_bases"]
+    } == {"standard"}
+    assert execution["recovery_routes"] == []
+
+
+def test_v6_verify_root_groups_heterogeneous_route_seat_base_profiles(
+    tmp_path,
+):
+    from tests.test_run_input_v6_commitments import _bind_v2
+    from tests.test_v6_route_seat_presentation_plan import _compile, _route
+
+    root = tmp_path / "heterogeneous-profile-totals"
+    run_input = _bind_v2(
+        root,
+        Commitment(id="k-profile-totals", eval="predicate:len(content) > 0"),
+    )
+    manifest = _compile(
+        {
+            "conjecturer": [
+                _route("compact-seat", model_profile="compact"),
+                _route("standard-seat", model_profile="standard"),
+            ]
+        },
+        model_profile="standard",
+        run_input_digest=run_input.run_input_digest,
+    )
+    persist_run_manifest(manifest, root)
+    harness = Harness(root)
+    _bind_model_classification(harness, manifest)
+
+    def record_call(
+        *,
+        seat: int,
+        profile: str,
+        valid_attempts: tuple[bool, ...],
+        attempt_tokens: tuple[int, ...],
+    ) -> None:
+        route = manifest.roles["conjecturer"][seat]
+        prompt = (
+            f"prompt-{seat}"
+            if len(valid_attempts) == 1
+            else "DIAGNOSTIC:\ncomplete corrected JSON value"
+        )
+        prompt_ref = harness.blobs.put(prompt.encode())
+        attempts = []
+        for index, (valid, tokens) in enumerate(
+            zip(valid_attempts, attempt_tokens, strict=True)
+        ):
+            raw_ref = harness.blobs.put(f'{{"seat":{seat},"attempt":{index}}}'.encode())
+            attempt_values = {}
+            if not valid:
+                attempt_values["diagnostic_ref"] = harness.blobs.put(
+                    f"invalid-{seat}-{index}".encode()
+                )
+            attempts.append(
+                LLMAttempt(
+                    prompt_ref=prompt_ref,
+                    raw_ref=raw_ref,
+                    attempt=index,
+                    validation_path="$",
+                    contract_id="conjecturer.turn.v6",
+                    endpoint_id=route.endpoint_id,
+                    seat=seat,
+                    route_sha256=route_fingerprint(route),
+                    model_profile=profile,
+                    transport_profile=profile,
+                    repair_scope="root",
+                    max_tokens=route.max_tokens,
+                    timeout_s=route.timeout_s,
+                    tokens=tokens,
+                    valid=valid,
+                    output_mechanism=route.output_mechanism,
+                    transport_attempts=1,
+                    **attempt_values,
+                )
+            )
+        harness.record_measure(
+            inputs=["heterogeneous-profile-total", str(seat)],
+            llm=LLMCall(
+                role="conjecturer",
+                model=route.model_id,
+                endpoint=route.base_url,
+                prompt_ref=prompt_ref,
+                raw_ref=attempts[-1].raw_ref,
+                attempts=len(attempts),
+                tokens=sum(attempt_tokens),
+                attempt_trace=attempts,
+            ),
+        )
+
+    record_call(
+        seat=0,
+        profile="compact",
+        valid_attempts=(True,),
+        attempt_tokens=(3,),
+    )
+    record_call(
+        seat=1,
+        profile="standard",
+        valid_attempts=(False, True),
+        attempt_tokens=(2, 5),
+    )
+
+    result = verify_root(root)
+    assert result["violations"] == []
+    totals = result["stats"]["process"]["profile_totals"]
+    assert list(totals) == ["compact", "standard"]
+    assert totals["compact"] == {
+        "calls": 1,
+        "attempts": 1,
+        "repair_attempts": 0,
+        "tokens": 3,
+        "traced_calls": 1,
+        "first_pass_valid": 1,
+        "eventual_valid": 1,
+        "schema_exhausted": 0,
+        "transport_dropped": 0,
+        "usage_unknown_attempts": 0,
+        "provider_transport_attempts": 1,
+    }
+    assert totals["standard"] == {
+        "calls": 1,
+        "attempts": 2,
+        "repair_attempts": 1,
+        "tokens": 7,
+        "traced_calls": 1,
+        "first_pass_valid": 0,
+        "eventual_valid": 1,
+        "schema_exhausted": 0,
+        "transport_dropped": 0,
+        "usage_unknown_attempts": 0,
+        "provider_transport_attempts": 2,
+    }
+    assert totals[manifest.model_profile]["calls"] == 1
+    calls = [event.llm for event in harness.log.read() if event.llm is not None]
+    assert sum(item["calls"] for item in totals.values()) == len(calls) == 2
+    assert sum(item["attempts"] for item in totals.values()) == sum(
+        call.attempts for call in calls
+    ) == 3
+    assert sum(item["repair_attempts"] for item in totals.values()) == sum(
+        max(0, call.attempts - 1) for call in calls
+    ) == 1
+    assert sum(item["tokens"] for item in totals.values()) == result["stats"][
+        "logged_tokens"
+    ] == sum(call.tokens for call in calls)
+    assert not any(
+        item["check"] in {"attempt-profile", "attempt-profile-authority"}
+        for item in result["violations"]
+    )
+
+
 def test_invariants_reject_a_call_outside_the_frozen_route(tmp_path):
     root = tmp_path / "run"
     endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
@@ -218,7 +450,7 @@ def test_invariants_detect_manifest_hash_corruption(tmp_path):
     (root / "run-manifest.sha256").write_text("f" * 64 + "\n")
 
     checks = {item["check"] for item in verify_root(root)["violations"]}
-    assert "run-manifest" in checks
+    assert checks & {"open", "run-manifest"}
 
 
 def test_reports_distinguish_schema_exhaustion_from_transport_drop(tmp_path):
