@@ -31,27 +31,36 @@ from deepreason.workflow.context_continuation import (
 )
 from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
 from deepreason.workflow.transaction_service import InquiryTransactionService
+from tests.test_v6_compact_recovery_transition import _bind_classification
 
 
 STAMP = "2026-07-17T00:00:00Z"
 
 
-def _route() -> dict:
-    return {
+def _route(*, context_window_tokens: int | None = None) -> dict:
+    route = {
         "endpoint_id": "v6-context-conjecturer",
         "endpoint": "mock://v6-context-conjecturer",
         "model": "offline-v6-context-model",
         "provider": "mock",
         "family": "offline-v6-context-family",
         "max_tokens": 64,
+        "context_window_tokens": (
+            262_144 if context_window_tokens is None else context_window_tokens
+        ),
     }
+    return route
 
 
-def _config() -> Config:
+def _config(*, context_window_tokens: int | None = None) -> Config:
     return Config(
         N_SCHOOLS=0,
         RETRY_MAX=0,
-        roles={"conjecturer": [_route()]},
+        roles={
+            "conjecturer": [
+                _route(context_window_tokens=context_window_tokens)
+            ]
+        },
         scratchpad={
             "enabled": True,
             "max_blocks_per_pack": 4,
@@ -159,6 +168,8 @@ def _adapter(harness, manifest, responses, *, meter=None):
         leases=leases_from_manifest(manifest),
         transaction_authority_required=True,
     )
+    _bind_classification(harness, manifest)
+    adapter.bind_v6_authority(harness, manifest)
     return adapter, prompts
 
 
@@ -232,8 +243,42 @@ def test_granted_request_dispatches_fresh_bound_child_work(tmp_path):
         parent.authorization.id,
         child.authorization.id,
     ]
+    parent_context, child_context = [call.conjecture_context for call in calls]
+    assert parent_context is not None and child_context is not None
+    assert parent_context != child_context
+    assert child_context.prior_selection_receipt_ref == (
+        parent_context.selection_receipt_ref
+    )
+    assert child_context.expansion_decision_ref == binding["decision_ref"]
+    assert child_context.root_block_refs == [focus.id]
+    assert child_context.added_block_refs == [expansion.id]
+    parent_render = harness.blobs.get(
+        parent_context.rendered_context_ref
+    ).decode("utf-8")
+    child_render = harness.blobs.get(
+        child_context.rendered_context_ref
+    ).decode("utf-8")
+    assert parent_render != child_render
+    assert prompts[0].count(parent_render) == 1
+    assert prompts[1].count(child_render) == 1
+    scratch_state = ScratchService(harness).state
+    assert scratch_state.attention_receipts[
+        parent_context.selection_receipt_ref
+    ].final_order == [focus.id]
+    assert scratch_state.attention_receipts[
+        child_context.selection_receipt_ref
+    ].final_order == [focus.id, expansion.id]
+    attention_before = dict(scratch_state.attention_receipts)
+    advisory_before = dict(scratch_state.advisory_contexts)
+    visibility_before = dict(scratch_state.visibility)
+    coverage_before = dict(scratch_state.coverage_cycles)
     reopened = Harness(harness.root)
     assert len(reopened.workflow_state.transaction_work) == 2
+    reopened_state = ScratchService(reopened).state
+    assert reopened_state.attention_receipts == attention_before
+    assert reopened_state.advisory_contexts == advisory_before
+    assert reopened_state.visibility == visibility_before
+    assert reopened_state.coverage_cycles == coverage_before
 
 
 def test_limit_exhaustion_is_typed_unissued_and_does_not_dispatch(tmp_path):
@@ -282,7 +327,7 @@ def test_child_budget_denial_has_no_exposure_and_no_dispatch(tmp_path):
     config = _config()
     manifest = _manifest(config)
     harness = Harness(tmp_path / "budget")
-    _seed(harness)
+    _problem, focus, expansion, _tertiary = _seed(harness)
     meter = _DenySecondReservationMeter()
     adapter, prompts = _adapter(
         harness,
@@ -301,7 +346,99 @@ def test_child_budget_denial_has_no_exposure_and_no_dispatch(tmp_path):
     assert denied.authorization is None
     assert denied.provider_attempts == {}
     assert meter.reserve_attempts == 2
-    Harness(harness.root)
+    (parent_call,) = [
+        event.llm for event in harness.log.read() if event.llm is not None
+    ]
+    parent_context = parent_call.conjecture_context
+    assert parent_context is not None
+    scratch_state = ScratchService(harness).state
+    assert set(scratch_state.attention_receipts) == {
+        parent_context.selection_receipt_ref
+    }
+    assert set(scratch_state.advisory_contexts) == {
+        parent_context.advisory_context_ref
+    }
+    assert scratch_state.visibility[focus.id].render_count == 1
+    assert expansion.id not in scratch_state.visibility
+    assert scratch_state.coverage_cycles == {}
+    reopened_state = ScratchService(Harness(harness.root)).state
+    assert reopened_state.attention_receipts == scratch_state.attention_receipts
+    assert reopened_state.advisory_contexts == scratch_state.advisory_contexts
+    assert reopened_state.visibility == scratch_state.visibility
+    assert reopened_state.coverage_cycles == scratch_state.coverage_cycles
+
+
+def test_child_request_envelope_overflow_is_unissued_and_scratch_clean(tmp_path):
+    probe_config = _config()
+    probe_manifest = _manifest(probe_config)
+    probe = Harness(tmp_path / "envelope-probe")
+    _problem, _focus, _expansion, _tertiary = _seed(probe)
+    ScratchService(probe).create_block(
+        {
+            "content": "nebula-overflow " + ("advisory possibility " * 300),
+        },
+        ScratchProvenanceV1(actor="user", origin="v6-envelope-probe"),
+    )
+    probe_adapter, probe_prompts = _adapter(
+        probe,
+        probe_manifest,
+        [_request("nebula-overflow"), _abstention()],
+    )
+    assert _run(probe, probe_manifest, probe_config, probe_adapter) == []
+    assert len(probe_prompts) == 2
+    parent_total = len(probe_prompts[0].encode("utf-8")) + 64
+    child_total = len(probe_prompts[1].encode("utf-8")) + 64
+    assert child_total > parent_total + 1000
+
+    capacity = parent_total + 512
+    config = _config(context_window_tokens=capacity)
+    manifest = _manifest(config)
+    harness = Harness(tmp_path / "envelope-target")
+    _problem, focus, expansion, _tertiary = _seed(harness)
+    large = ScratchService(harness).create_block(
+        {
+            "content": "nebula-overflow " + ("advisory possibility " * 300),
+        },
+        ScratchProvenanceV1(actor="user", origin="v6-envelope-probe"),
+    )
+    adapter, prompts = _adapter(
+        harness,
+        manifest,
+        [_request("nebula-overflow")],
+    )
+
+    assert _run(harness, manifest, config, adapter) == []
+
+    parent, denied = tuple(harness.workflow_state.transaction_work.values())
+    assert len(prompts) == 1
+    assert len(prompts[0].encode("utf-8")) + 64 <= capacity
+    assert parent.terminal.status == "completed"
+    assert denied.terminal.status == "abandoned"
+    assert denied.terminal.reason_code == "request_envelope_exceeded"
+    assert denied.terminal.usage_status == "exact"
+    assert (denied.terminal.prompt_tokens, denied.terminal.completion_tokens) == (0, 0)
+    assert denied.issued is False
+    assert denied.reservation is None
+    assert denied.exposure is None
+    assert denied.authorization is None
+    assert denied.provider_attempts == {}
+    parent_call, = [
+        event.llm for event in harness.log.read() if event.llm is not None
+    ]
+    parent_context = parent_call.conjecture_context
+    assert parent_context is not None
+    scratch_state = ScratchService(harness).state
+    assert set(scratch_state.attention_receipts) == {
+        parent_context.selection_receipt_ref
+    }
+    assert set(scratch_state.advisory_contexts) == {
+        parent_context.advisory_context_ref
+    }
+    assert scratch_state.visibility[focus.id].render_count == 1
+    assert expansion.id not in scratch_state.visibility
+    assert large.id not in scratch_state.visibility
+    assert scratch_state.coverage_cycles == {}
+    assert adapter.meter.snapshot()["reserved"] == 0
 
 
 def _route_lease(manifest) -> RouteLeaseRefV1:
@@ -315,6 +452,7 @@ def _route_lease(manifest) -> RouteLeaseRefV1:
 
 
 def _manual_completed_parent(harness, manifest, request, meter):
+    _bind_classification(harness, manifest)
     service = InquiryTransactionService(harness, manifest, meter)
     fence = harness._next_seq - 1
     preparation = service.prepare(
