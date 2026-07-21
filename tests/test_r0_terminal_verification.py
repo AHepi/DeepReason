@@ -88,9 +88,51 @@ def test_run_result_v2_validates_derived_summary_fields():
             {**payload, "canonical_bridge_eligible": False}
         )
 
+    contradictory = {
+        **payload,
+        "verification": {
+            **payload["verification"],
+            "finding_counts": {
+                **payload["verification"]["finding_counts"],
+                "operational": 1,
+            },
+        },
+    }
+    with pytest.raises(ValueError, match="flags differ from finding counts"):
+        RunResultV2.model_validate(contradictory)
+
 
 def test_v6_writer_emits_verified_v2_envelope(tmp_path, monkeypatch):
+    import json
+
+    from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
     from deepreason.verification.report import VerificationReportV2
+    from tests.test_v6_compact_recovery_transition import (
+        _manifest,
+        _persist_manifest,
+    )
+
+    manifest = _manifest()
+    _persist_manifest(manifest, tmp_path)
+    harness = Harness(tmp_path)
+    policy = StopPolicy()
+    metrics = StopMetrics(cycle=0)
+    event = harness.record_measure(
+        inputs=[
+            "run-stop",
+            policy.digest,
+            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+            "completed",
+            str(harness._next_seq),
+        ]
+    )
+    stop = write_stop_record(
+        tmp_path,
+        reason="completed",
+        policy=policy,
+        metrics=metrics,
+        event_seq=event.seq,
+    )
 
     monkeypatch.setattr(
         "deepreason.verification.report.verify_root_report",
@@ -99,12 +141,13 @@ def test_v6_writer_emits_verified_v2_envelope(tmp_path, monkeypatch):
 
     payload = _v6_run_result(
         tmp_path,
-        SimpleNamespace(schema_version=6),
+        manifest,
         {
             "schema": "deepreason-run-result-v1",
             "state": "completed",
             "workload": "text",
             "survivors": [],
+            "stop": stop,
         },
     )
 
@@ -113,6 +156,9 @@ def test_v6_writer_emits_verified_v2_envelope(tmp_path, monkeypatch):
     assert payload["verification"]["valid"] is True
     assert payload["completion_status"] == "satisfied"
     assert payload["canonical_bridge_eligible"] is True
+    assert payload["model_execution"]["mode"] == "base_only"
+    assert payload["model_execution"]["event_horizon_seq"] == stop["event_seq"]
+    assert payload["stop"] == stop
     assert payload["survivors"] == []
 
 
@@ -287,4 +333,3 @@ def test_v6_legacy_run_result_schema_is_an_integrity_failure(
     assert not report.integrity_valid
     assert report.security_valid
     assert "run-result-version" in {finding.check for finding in report.integrity}
-
