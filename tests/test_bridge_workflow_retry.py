@@ -341,7 +341,7 @@ def test_production_coordinator_uses_v2_and_persists_before_fresh_attempt(
     monkeypatch.setattr(
         bridge_harness,
         "_bound_bridge_execution",
-        lambda *_args: (
+        lambda *_args, **_kwargs: (
             effective,
             retry_policy,
             EndpointLease("summarizer", 0, route),
@@ -467,7 +467,7 @@ def test_v4_bridge_route_mismatch_fails_before_provider_dispatch(tmp_path, monke
     monkeypatch.setattr(
         bridge_harness,
         "_bound_bridge_execution",
-        lambda *_args: (
+        lambda *_args, **_kwargs: (
             effective,
             WorkflowRetryPolicyV1(),
             EndpointLease("summarizer", 0, frozen_route),
