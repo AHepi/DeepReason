@@ -223,6 +223,32 @@ def _prepare_owned_v4_continuation(
                 requested_tokens=request.tokens,
                 resume_event_seq=resume_event_seq,
             )
+            terminal_policy = getattr(
+                manifest, "terminal_commitment_policy", None
+            )
+            if terminal_policy is not None:
+                parent_commitment = (
+                    harness.workflow_state.current_terminal_commitment
+                )
+                if parent_commitment is None:
+                    raise ValueError(
+                        "current terminal epoch lacks its commitment"
+                    )
+                from deepreason.workflow.models import WorkflowResumeDecisionV1
+
+                resume_values = resume.model_dump(
+                    mode="python",
+                    by_alias=True,
+                    exclude={"id"},
+                    exclude_none=True,
+                )
+                resume = WorkflowResumeDecisionV1.create(
+                    **resume_values,
+                    prior_terminal_commitment_ref=parent_commitment.id,
+                    opened_terminal_epoch=(
+                        harness.workflow_state.current_terminal_epoch + 1
+                    ),
+                )
         except ValueError as error:
             raise ValueError(f"CONTINUE_NOT_AUTHORIZED: {error}") from error
         event = harness.record_resume_transition(snapshot, resume)
