@@ -177,6 +177,11 @@ class EvidencePackV1(CanonicalBridgeRecord):
     source_run_digest: str | None = Field(
         default=None, pattern=r"^[0-9a-f]{64}$"
     )
+    source_terminal_commitment_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+        exclude_if=lambda value: value is None,
+    )
     problem_text: str = Field(min_length=1, max_length=262_144)
     problem_family_refs: list[str] = Field(
         min_length=1, max_length=MAX_EVIDENCE_PACK_ITEMS
@@ -696,6 +701,7 @@ def assemble_evidence_pack(
     budget_chars: int = DEFAULT_EVIDENCE_PACK_BUDGET,
     formal_seq: int | None = None,
     source_run_digest: str | None = None,
+    source_terminal_commitment_ref: str | None = None,
     catalog_version: Literal["v1", "v3"] = "v1",
 ) -> EvidencePackV1:
     """Extract a bounded structured/legacy pack at one exact formal fence."""
@@ -949,6 +955,7 @@ def assemble_evidence_pack(
         problem_ref=problem_id,
         formal_seq=seq,
         source_run_digest=source_run_digest,
+        source_terminal_commitment_ref=source_terminal_commitment_ref,
         problem_text=problem.description,
         problem_family_refs=family_order,
         survivors=survivors,
