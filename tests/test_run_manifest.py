@@ -8,10 +8,13 @@ from deepreason.harness import Harness
 from deepreason.locking import operator_locks
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
 from deepreason.run_manifest import (
+    CompactRecoveryPolicyV1,
     Route,
     RouteSecretError,
+    RunManifest,
     RunManifestError,
     ToolchainEntry,
+    TerminalCommitmentPolicyV1,
     bind_run_manifest,
     compile_run_manifest,
     config_from_run_manifest,
@@ -22,6 +25,7 @@ from deepreason.run_manifest import (
     role_matrix,
     write_run_manifest,
 )
+from deepreason.llm.firewall import route_fingerprint
 
 
 STAMP = "2026-07-11T00:00:00Z"
@@ -53,6 +57,173 @@ def _config():
             "synthesizer": route,
         }
     )
+
+
+def _compile_v6_manifest(
+    model_profile: str = "standard",
+    *,
+    run_input_digest: str = "a" * 64,
+):
+    from tests.test_run_input_v6_commitments import _config as v6_config
+    from tests.test_run_input_v6_commitments import _control
+
+    return compile_run_manifest(
+        v6_config(),
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        model_profile=model_profile,
+        control_plane_policy=_control(6),
+        run_input_digest=run_input_digest,
+    )
+
+
+def _compact_recovery_policy_payload() -> dict:
+    return {
+        "schema": "compact-recovery-policy.v1",
+        "trigger": "schema_exhausted",
+        "source_profiles": ["standard", "frontier"],
+        "target_profile": "compact",
+        "scope": "route_seat",
+        "sticky": True,
+        "applies_to": "all_subsequent_model_calls",
+        "retry_failed_work": False,
+    }
+
+
+@pytest.mark.parametrize("model_profile", ("standard", "frontier", "compact"))
+def test_new_v6_manifest_freezes_exact_compact_recovery_policy(model_profile):
+    manifest = _compile_v6_manifest(model_profile)
+
+    assert manifest.compact_recovery_policy is not None
+    assert manifest.compact_recovery_policy.model_dump(
+        mode="json", by_alias=True
+    ) == _compact_recovery_policy_payload()
+    assert manifest.provider_fallback is False
+
+
+@pytest.mark.parametrize("schema_version", (1, 2, 3, 4, 5))
+def test_pre_v6_manifests_omit_compact_recovery_policy(schema_version):
+    if schema_version <= 3:
+        manifest = compile_run_manifest(
+            _config(),
+            single_model="gemma4:31b",
+            model_profile="standard",
+            rubric_policy="forbid",
+            compiled_at=STAMP,
+            schema_version=schema_version,
+            workload_profile="text" if schema_version >= 2 else None,
+        )
+    elif schema_version == 4:
+        from tests.test_run_manifest_v4 import (
+            _compile_v4,
+            _control_policy,
+            _historical_config,
+        )
+
+        manifest = _compile_v4(_historical_config(), _control_policy())
+    else:
+        from tests.test_run_manifest_v5_inquiry import _compile
+
+        manifest = _compile("b" * 64)
+
+    assert manifest.compact_recovery_policy is None
+    assert "compact_recovery_policy" not in manifest.model_dump(mode="json")
+    assert b"compact_recovery_policy" not in manifest.canonical_bytes()
+    assert manifest.route_seat_presentation_plan is None
+    assert "route_seat_presentation_plan" not in manifest.model_dump(mode="json")
+    assert b"route_seat_presentation_plan" not in manifest.canonical_bytes()
+    assert manifest.terminal_commitment_policy is None
+    assert "terminal_commitment_policy" not in manifest.model_dump(mode="json")
+    assert b"terminal_commitment_policy" not in manifest.canonical_bytes()
+    with pytest.raises(ValueError, match="terminal commitment policy"):
+        RunManifest.model_validate(
+            {
+                **manifest.model_dump(mode="json", by_alias=True),
+                "terminal_commitment_policy": TerminalCommitmentPolicyV1().model_dump(
+                    mode="json", by_alias=True
+                ),
+            }
+        )
+
+
+def test_historical_v6_without_policy_loads_without_authority(tmp_path):
+    current = _compile_v6_manifest()
+    payload = json.loads(current.canonical_bytes())
+    payload.pop("compact_recovery_policy")
+    payload.pop("route_seat_behavioral_capability_plan")
+    path = tmp_path / "historical-v6.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    historical = load_run_manifest(path, verify_hash=False)
+
+    assert historical.compact_recovery_policy is None
+    assert "compact_recovery_policy" not in historical.model_dump(mode="json")
+    assert b"compact_recovery_policy" not in historical.canonical_bytes()
+    assert historical.sha256 != current.sha256
+
+
+def test_compact_recovery_policy_serializes_hashes_and_reloads_exactly(tmp_path):
+    manifest = _compile_v6_manifest("frontier")
+    path, digest_path = write_run_manifest(manifest, tmp_path / "v6.json")
+
+    assert path.read_bytes() == manifest.canonical_bytes()
+    assert digest_path.read_text(encoding="utf-8").strip() == manifest.sha256
+    assert load_run_manifest(path) == manifest
+    assert json.loads(path.read_text(encoding="utf-8"))[
+        "compact_recovery_policy"
+    ] == _compact_recovery_policy_payload()
+
+
+def test_compact_recovery_policy_presence_changes_binding_identity(tmp_path):
+    from tests.test_run_input_v6_commitments import _bind_v2
+
+    run_input = _bind_v2(
+        tmp_path,
+        Commitment(id="k-compact-recovery", eval="predicate:True"),
+    )
+    manifest = _compile_v6_manifest(run_input_digest=run_input.run_input_digest)
+    historical_payload = json.loads(manifest.canonical_bytes())
+    historical_payload.pop("compact_recovery_policy")
+    historical_payload.pop("route_seat_behavioral_capability_plan")
+    historical = RunManifest.model_validate(historical_payload)
+
+    assert historical.compact_recovery_policy is None
+    assert historical.sha256 != manifest.sha256
+    bind_run_manifest(manifest, tmp_path)
+    with pytest.raises(RunManifestError) as raised:
+        bind_run_manifest(historical, tmp_path)
+    assert raised.value.code == "RUN_MANIFEST_CONFLICT"
+
+
+@pytest.mark.parametrize(
+    ("field", "invalid"),
+    (
+        ("schema", "compact-recovery-policy.v2"),
+        ("trigger", "model_requested"),
+        ("source_profiles", ["standard", "compact"]),
+        ("target_profile", "standard"),
+        ("scope", "run"),
+        ("sticky", False),
+        ("applies_to", "next_model_call"),
+        ("retry_failed_work", True),
+    ),
+)
+def test_compact_recovery_policy_rejects_invalid_authority(field, invalid):
+    payload = _compact_recovery_policy_payload()
+    payload[field] = invalid
+
+    with pytest.raises(ValueError):
+        CompactRecoveryPolicyV1.model_validate(payload)
+
+
+def test_compact_recovery_policy_rejects_unknown_fields():
+    payload = _compact_recovery_policy_payload()
+    payload["model_may_enable"] = True
+
+    with pytest.raises(ValueError):
+        CompactRecoveryPolicyV1.model_validate(payload)
 
 
 @pytest.mark.parametrize(
@@ -260,6 +431,82 @@ def test_single_model_allows_role_specific_knobs_on_one_exact_endpoint():
     )
     assert manifest.roles["conjecturer"][0] == manifest.roles["argumentative_critic"][0]
     assert manifest.roles["conjecturer"][0].temperature == first["temperature"]
+
+
+def test_context_window_tokens_are_frozen_and_round_trip():
+    route = _route()
+    route.update(max_tokens=256, context_window_tokens=8192)
+    manifest = compile_run_manifest(
+        Config(roles={"conjecturer": route}),
+        single_model="gemma4:31b",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    frozen = manifest.roles["conjecturer"][0]
+
+    assert frozen.context_window_tokens == 8192
+    assert frozen.endpoint_spec()["context_window_tokens"] == 8192
+    rebuilt = config_from_run_manifest(manifest)
+    assert rebuilt.roles["conjecturer"]["context_window_tokens"] == 8192
+
+    changed_route = _route()
+    changed_route.update(max_tokens=256, context_window_tokens=8193)
+    changed = compile_run_manifest(
+        Config(roles={"conjecturer": changed_route}),
+        single_model="gemma4:31b",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+    )
+    assert changed.sha256 != manifest.sha256
+    assert route_fingerprint(changed.roles["conjecturer"][0]) != route_fingerprint(
+        frozen
+    )
+
+
+def test_invalid_context_window_combinations_are_rejected():
+    with pytest.raises(ValueError, match="requires a finite max_tokens"):
+        EndpointSpec(context_window_tokens=8192)
+    with pytest.raises(ValueError, match="greater than max_tokens"):
+        EndpointSpec(max_tokens=256, context_window_tokens=256)
+    with pytest.raises(ValueError, match="requires a finite max_tokens"):
+        Route(
+            endpoint_id="invalid",
+            base_url="mock://invalid",
+            model_id="offline-invalid",
+            provider="mock",
+            family="offline",
+            context_window_tokens=8192,
+        )
+    with pytest.raises(ValueError, match="greater than max_tokens"):
+        Route(
+            endpoint_id="invalid",
+            base_url="mock://invalid",
+            model_id="offline-invalid",
+            provider="mock",
+            family="offline",
+            max_tokens=256,
+            context_window_tokens=128,
+        )
+
+
+def test_single_model_routes_with_different_context_capacity_are_ambiguous():
+    first = _route()
+    first.update(max_tokens=256, context_window_tokens=8192)
+    second = _route()
+    second.update(max_tokens=256, context_window_tokens=16384)
+    with pytest.raises(RunManifestError) as raised:
+        compile_run_manifest(
+            Config(
+                roles={
+                    "conjecturer": first,
+                    "argumentative_critic": second,
+                }
+            ),
+            single_model="gemma4:31b",
+            rubric_policy="forbid",
+            compiled_at=STAMP,
+        )
+    assert raised.value.code == "SINGLE_MODEL_ROUTE_AMBIGUOUS"
 
 
 def test_output_mechanism_is_explicitly_frozen_from_source():
