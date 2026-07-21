@@ -7,7 +7,7 @@ state byte-for-byte (P0 acceptance). Adjudication (§4) recomputes after
 every registration; its only inputs are att and dep (§0).
 """
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from bisect import bisect_left
 from datetime import datetime, timezone
 import json
@@ -25,7 +25,10 @@ from deepreason.adjudication.edges import (
 from deepreason.adjudication.grounded import label0 as compute_label0
 from deepreason.adjudication.support import final_labels
 from deepreason.bridge.events import BridgeAction, BridgeEventPayloadV1
-from deepreason.bridge.state import BridgeState
+from deepreason.bridge.state import (
+    BridgeState,
+    validate_terminal_bridge_history,
+)
 from deepreason.capabilities.events import CapabilityEventPayloadV1
 from deepreason.capabilities.state import CapabilityReplayState
 from deepreason.canonical import canonical_json, sha256_hex
@@ -96,6 +99,7 @@ class Harness:
                 raise FileNotFoundError(f"read-only harness root does not exist: {self.root}")
         else:
             self.root.mkdir(parents=True, exist_ok=True)
+        self._workflow_manifest = self._load_workflow_manifest()
         self.blobs = BlobStore(self.root / "blobs", read_only=self._read_only)
         self.objects = ObjectStore(self.root / "objects", read_only=self._read_only)
         self.log = EventLog(self.root / "log.jsonl", read_only=self._read_only)
@@ -105,6 +109,14 @@ class Harness:
             if event.rule == Rule.REVEAL:
                 revealed_artifact_ids.update(event.inputs)
             self._apply_event(event, adjudicate=False)
+        if upto_seq is None and self.workflow_state.terminal_commitments_by_epoch:
+            from deepreason.runtime.terminal_authority import (
+                validate_terminal_commitment_storage,
+            )
+
+            validate_terminal_commitment_storage(
+                self.root, self.workflow_state
+            )
         self._adjudicate()
         if upto_seq is None:
             self._verify_workflow_checkpoint()
@@ -117,6 +129,27 @@ class Harness:
             )
 
     _TAIL_CAP = 512  # bounded in-memory event tail (windows are ~CAPTURE_W)
+
+    def _load_workflow_manifest(self):
+        """Load canonical transaction authority when this root has one."""
+
+        from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+        path = self.root / MANIFEST_NAME
+        try:
+            path.lstat()
+        except FileNotFoundError:
+            return None
+        return load_run_manifest(path)
+
+    def bind_transaction_manifest(self, manifest) -> None:
+        """Bind live transaction replay to the same immutable v6 manifest."""
+
+        current = self._workflow_manifest
+        if current is not None and current.sha256 != manifest.sha256:
+            raise ValueError("transaction manifest differs from bound root authority")
+        self._workflow_manifest = manifest
+        self.workflow_state.bind_run_manifest(manifest)
 
     def _reset(self) -> None:
         self.state = EpistemicState()
@@ -134,6 +167,11 @@ class Harness:
         from deepreason.workflow.replay import WorkflowReplayState
 
         self.workflow_state = WorkflowReplayState()
+        if (
+            self._workflow_manifest is not None
+            and self._workflow_manifest.schema_version == 6
+        ):
+            self.workflow_state.bind_run_manifest(self._workflow_manifest)
         # Autonomous capability authority is replayed independently from the
         # conjecture-provider controller and never enters formal adjudication.
         self.capability_state = CapabilityReplayState()
@@ -168,6 +206,21 @@ class Harness:
         if self._read_only:
             raise ReadOnlyHarnessError("time-travel harness is read-only")
 
+    def reload_durable_authority(self) -> None:
+        """Replace this writable view with one fresh canonical root replay.
+
+        Process locks serialize a terminal first-writer decision, but a Harness
+        may have been opened before its contender acquired that lock.  Reloading
+        inside the critical section discards every stale pre-lock assumption,
+        including the event-log size/sequence fence, before authority is read or
+        appended.
+        """
+
+        self._ensure_writable()
+        refreshed = type(self)(self.root)
+        self.__dict__.clear()
+        self.__dict__.update(refreshed.__dict__)
+
     @property
     def _workflow_checkpoint_path(self) -> Path:
         return self.root / "workflow-checkpoint.json"
@@ -186,6 +239,10 @@ class Harness:
                 self.workflow_state.outstanding_work_order_ids
             ),
         }
+        if self.workflow_state.terminal_commitments_by_epoch:
+            payload["terminal_commitment_ledger_digest"] = (
+                self.workflow_state.terminal_commitment_ledger_digest
+            )
         target = self._workflow_checkpoint_path
         temporary = target.with_suffix(f".tmp.{os.getpid()}")
         data = canonical_json(payload)
@@ -217,18 +274,25 @@ class Harness:
             return
         try:
             payload = json.loads(path.read_bytes())
-            if set(payload) != {
+            required = {
                 "schema",
                 "process_digest",
                 "last_control_seq",
                 "outstanding_work_order_ids",
-            } or payload["schema"] != "workflow.checkpoint.v1":
+            }
+            allowed = required | {"terminal_commitment_ledger_digest"}
+            if frozenset(payload) not in {frozenset(required), frozenset(allowed)} or payload[
+                "schema"
+            ] != "workflow.checkpoint.v1":
                 raise ValueError("workflow checkpoint has an invalid schema")
             checkpoint_seq = payload["last_control_seq"]
             if type(checkpoint_seq) is not int or checkpoint_seq < 0:
                 raise ValueError("workflow checkpoint sequence is invalid")
             process_digest = payload["process_digest"]
             outstanding = payload["outstanding_work_order_ids"]
+            terminal_ledger_digest = payload.get(
+                "terminal_commitment_ledger_digest"
+            )
             if (
                 not isinstance(process_digest, str)
                 or not process_digest.startswith("sha256:")
@@ -236,6 +300,14 @@ class Harness:
                 or not isinstance(outstanding, list)
                 or any(not isinstance(item, str) for item in outstanding)
                 or outstanding != sorted(set(outstanding))
+                or (
+                    terminal_ledger_digest is not None
+                    and (
+                        not isinstance(terminal_ledger_digest, str)
+                        or not terminal_ledger_digest.startswith("sha256:")
+                        or len(terminal_ledger_digest) != 71
+                    )
+                )
             ):
                 raise ValueError("workflow checkpoint authority fields are invalid")
             current_seq = (
@@ -254,14 +326,27 @@ class Harness:
             checkpoint_state = replay_workflow(
                 self.log.read(upto_seq=checkpoint_seq),
                 self.objects,
+                manifest=self._workflow_manifest,
             )
             if (
                 checkpoint_seq not in checkpoint_state.event_seqs
                 or process_digest != checkpoint_state.digest
                 or tuple(outstanding)
                 != checkpoint_state.outstanding_work_order_ids
+                or (
+                    terminal_ledger_digest is not None
+                    and terminal_ledger_digest
+                    != checkpoint_state.terminal_commitment_ledger_digest
+                )
             ):
                 raise ValueError("workflow checkpoint differs from replayed authority")
+            if (
+                checkpoint_state.terminal_commitments_by_epoch
+                and terminal_ledger_digest is None
+            ):
+                raise ValueError(
+                    "workflow checkpoint omits terminal commitment authority"
+                )
         except (KeyError, TypeError, json.JSONDecodeError) as error:
             raise ValueError("workflow checkpoint is corrupt") from error
 
@@ -742,7 +827,38 @@ class Harness:
         payload = BridgeEventPayloadV1.model_validate(payload_values)
         if payload.action == BridgeAction.WORKFLOW_RETRY_STARTED and llm is not None:
             raise ValueError("workflow retry authorization cannot contain an LLM call")
-        self.bridge_state.validate(payload, resolved_records)
+        terminal_commitment = self.workflow_state.current_terminal_commitment
+        terminal_commitment_ref = (
+            terminal_commitment.id
+            if terminal_commitment is not None
+            and self._next_seq > terminal_commitment.reasoning_event_horizon_seq
+            else None
+        )
+        self.bridge_state.validate(
+            payload,
+            resolved_records,
+            terminal_commitment_ref=terminal_commitment_ref,
+        )
+        if terminal_commitment_ref is not None:
+            candidate = Event(
+                seq=self._next_seq,
+                ts=datetime.now(timezone.utc).isoformat(),
+                rule=Rule.BRIDGE,
+                inputs=input_ids,
+                outputs=output_ids,
+                llm=llm,
+                state_diff=StateDiff(),
+                bridge=payload,
+            )
+            validate_terminal_bridge_history(
+                events=tuple(self.log.read()),
+                objects=self.objects,
+                workflow_state=self.workflow_state,
+                commitment_ref=terminal_commitment_ref,
+                horizon_seq=terminal_commitment.reasoning_event_horizon_seq,
+                candidate_event=candidate,
+                candidate_records=resolved_records,
+            )
 
         if llm is not None:
             if not llm.prompt_ref:
@@ -888,10 +1004,12 @@ class Harness:
         """
 
         from deepreason.workflow.transaction import (
+            CompactRecoveryTransitionV1,
             ContextExposureReceiptV2,
             ContextPackPlanV1,
             DispatchAuthorizationBundleV1,
             ProviderAttemptV1,
+            RouteSeatInsufficientCapabilityV1,
             SemanticAdmissionV1,
             TokenReservationV2,
             WorkLifecycleTransitionV1,
@@ -912,6 +1030,12 @@ class Harness:
             DispatchAuthorizationBundleV1: "workflow-dispatch-authorization-v1",
             ProviderAttemptV1: "workflow-provider-attempt-v1",
             SemanticAdmissionV1: "workflow-semantic-admission-v1",
+            CompactRecoveryTransitionV1: (
+                "workflow-compact-recovery-transition-v1"
+            ),
+            RouteSeatInsufficientCapabilityV1: (
+                "workflow-route-seat-insufficient-capability-v1"
+            ),
             WorkTerminalV1: "workflow-work-terminal-v1",
         }
         normalized: list[tuple[str, BaseModel]] = []
@@ -937,7 +1061,6 @@ class Harness:
             WorkTransitionKind.BUDGET_DENIED: [WorkTerminalV1],
             WorkTransitionKind.PROVIDER_RESULT: [ProviderAttemptV1],
             WorkTransitionKind.SEMANTIC_ADMISSION: [SemanticAdmissionV1],
-            WorkTransitionKind.WORK_TERMINATED: [WorkTerminalV1],
         }
         if transition.transition_kind == WorkTransitionKind.WORK_ISSUED:
             if (
@@ -956,6 +1079,56 @@ class Harness:
                 )
             ):
                 raise ValueError("work_issued requires plans, reservation, exposure, and bundle")
+        elif transition.transition_kind == WorkTransitionKind.WORK_TERMINATED:
+            if kinds not in (
+                [WorkTerminalV1],
+                [CompactRecoveryTransitionV1, WorkTerminalV1],
+                [RouteSeatInsufficientCapabilityV1, WorkTerminalV1],
+                [
+                    CompactRecoveryTransitionV1,
+                    RouteSeatInsufficientCapabilityV1,
+                    WorkTerminalV1,
+                ],
+            ):
+                raise ValueError(
+                    "work_terminated requires optional compact/capability authority "
+                    "followed by its terminal"
+                )
+            compact = next(
+                (
+                    value
+                    for _schema, value in normalized
+                    if isinstance(value, CompactRecoveryTransitionV1)
+                ),
+                None,
+            )
+            terminal = normalized[-1][1]
+            if compact is not None and (
+                terminal.compact_recovery_transition_ref != compact.id
+                or compact.semantic_admission_ref
+                != terminal.semantic_admission_ref
+            ):
+                raise ValueError(
+                    "compact recovery transition differs from its work terminal"
+                )
+            insufficient = next(
+                (
+                    value
+                    for _schema, value in normalized
+                    if isinstance(value, RouteSeatInsufficientCapabilityV1)
+                ),
+                None,
+            )
+            if insufficient is not None and (
+                terminal.insufficient_capability_ref != insufficient.id
+                or insufficient.semantic_admission_ref
+                != terminal.semantic_admission_ref
+                or insufficient.provider_attempt_ref
+                != terminal.provider_attempt_ref
+            ):
+                raise ValueError(
+                    "insufficient capability differs from its work terminal"
+                )
         elif kinds != expected[transition.transition_kind]:
             raise ValueError("controller-v3 transition has the wrong record shape")
         if (llm is not None) != (
@@ -984,6 +1157,267 @@ class Harness:
             llm=llm,
             control=payload,
         )
+
+    def bind_model_classification(self, manifest, report):
+        """Durably bind one already-validated route-seat classification plan."""
+
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.workflow.transaction import (
+            ModelClassificationBindingV1,
+            RouteSeatModelClassificationPlanV1,
+        )
+
+        self._ensure_writable()
+        plan = report.route_seat_model_classification
+        if not isinstance(plan, RouteSeatModelClassificationPlanV1):
+            raise ValueError("qualified report lacks route-seat model classification")
+        if plan.manifest_digest != manifest.sha256:
+            raise ValueError("model classification belongs to another manifest")
+        self.bind_transaction_manifest(manifest)
+        self.workflow_state._validate_model_classification(manifest, plan)
+        current = self.workflow_state.route_seat_model_classification
+        if current is not None:
+            if current != plan:
+                raise ValueError("model classification authority already differs")
+            return self.workflow_state.model_classification_binding
+        binding = ModelClassificationBindingV1.create(
+            manifest_digest=manifest.sha256,
+            classification_plan_ref=plan.id,
+            qualification_evidence_sha256=plan.qualification_evidence_sha256,
+        )
+        self.objects.put(
+            "workflow-route-seat-model-classification-plan-v1",
+            plan,
+        )
+        self.objects.put("workflow-model-classification-binding-v1", binding)
+        inputs = [plan.id, "classification:" + plan.qualification_evidence_sha256]
+        outputs = [plan.id, binding.id]
+        payload = ControlEventPayloadV3(
+            action="classification_bound",
+            decision_ref=binding.id,
+            inputs=inputs,
+            outputs=outputs,
+        )
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=payload,
+        )
+        return binding
+
+    def activate_contract_decomposition(
+        self,
+        manifest,
+        source_work_id: str,
+        *,
+        child_contexts: tuple[tuple[str, str], ...],
+    ):
+        """Persist one exact manifest-authorized strong-to-atomic transition."""
+
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.run_manifest import resolve_route_seat_contract_decomposition
+        from deepreason.workflow.transaction import ContractDecompositionTransitionV1
+
+        self._ensure_writable()
+        self.bind_transaction_manifest(manifest)
+        item = self.workflow_state.transaction_work.get(source_work_id)
+        if item is None or item.terminal is None:
+            raise ValueError("contract decomposition requires terminal source work")
+        existing = self.workflow_state.contract_decomposition_by_source_work.get(
+            source_work_id
+        )
+        if existing is not None:
+            return existing
+        terminal = item.terminal
+        admission = item.admissions.get(item.preparation.attempt_index)
+        if (
+            terminal.status != "schema_exhausted"
+            or admission is None
+            or admission.outcome != "schema_exhausted"
+        ):
+            raise ValueError("contract decomposition requires genuine schema exhaustion")
+        lease = item.preparation.route_lease
+        grant = resolve_route_seat_contract_decomposition(
+            manifest,
+            role=lease.role,
+            seat=lease.seat,
+            endpoint_id=lease.endpoint_id,
+            route_sha256=lease.route_sha256,
+            source_contract_id=item.preparation.contract_id,
+        )
+        child_keys = tuple(key for key, _pack in child_contexts)
+        if grant.child_partition == "conjecture_candidate_slot":
+            expected_keys = tuple(
+                f"candidate-slot-{index:03d}"
+                for index in range(grant.maximum_children)
+            )
+        elif grant.child_partition == "scratch_single_object":
+            payload = item.preparation.task_payload_value
+            if (
+                isinstance(payload, Mapping)
+                and payload.get("schema") == "repair.semantic-task.v1"
+            ):
+                parent = self.workflow_state.transaction_work.get(
+                    payload.get("parent_work_id")
+                )
+                payload = (
+                    parent.preparation.task_payload_value
+                    if parent is not None
+                    else None
+                )
+            operation = payload.get("operation") if isinstance(payload, Mapping) else None
+            if operation not in {"block", "link", "guide"}:
+                raise ValueError("scratch decomposition source operation is invalid")
+            expected_keys = (f"scratch-{operation}-minimal",)
+        else:
+            expected_keys = item.preparation.target_refs
+        if child_keys != expected_keys:
+            raise ValueError("decomposition child inventory differs from source work")
+        child_context_refs = tuple(
+            self.blobs.put(pack.encode("utf-8")) for _key, pack in child_contexts
+        )
+        transition = ContractDecompositionTransitionV1.create(
+            manifest_digest=manifest.sha256,
+            source_work_id=source_work_id,
+            source_attempt_index=item.preparation.attempt_index,
+            source_terminal_ref=terminal.id,
+            source_semantic_admission_ref=admission.id,
+            route_lease=lease,
+            source_contract_id=grant.source_contract_id,
+            atomic_contract_id=grant.atomic_contract_id,
+            trigger=grant.trigger,
+            child_partition=grant.child_partition,
+            maximum_children=grant.maximum_children,
+            coverage=grant.coverage,
+            execution=grant.execution,
+            source_failure_preserved=grant.source_failure_preserved,
+            child_keys=child_keys,
+            child_context_refs=child_context_refs,
+        )
+        self.workflow_state._validate_contract_decomposition_transition(transition)
+        self.objects.put(
+            "workflow-contract-decomposition-transition-v1",
+            transition,
+        )
+        inputs = [source_work_id, terminal.id]
+        outputs = [transition.id]
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=ControlEventPayloadV3(
+                action="contract_decomposition_activated",
+                decision_ref=transition.id,
+                inputs=inputs,
+                outputs=outputs,
+            ),
+        )
+        return transition
+
+    def complete_contract_decomposition(
+        self,
+        manifest,
+        transition,
+        *,
+        admitted_effect_refs: tuple[str, ...] = (),
+    ):
+        """Durably merge all exact atomic children without hiding source failure."""
+
+        from collections.abc import Mapping
+        from deepreason.control_events import ControlEventPayloadV3
+        from deepreason.workflow.transaction import (
+            ContractDecompositionCompletionV1,
+            ContractDecompositionTransitionV1,
+        )
+
+        self._ensure_writable()
+        self.bind_transaction_manifest(manifest)
+        transition = ContractDecompositionTransitionV1.model_validate(transition)
+        current = self.workflow_state.contract_decomposition_completion_by_transition.get(
+            transition.id
+        )
+        if current is not None:
+            if current.admitted_effect_refs != admitted_effect_refs:
+                raise ValueError("decomposition completion effects already differ")
+            return current
+        roots = [
+            item
+            for item in self.workflow_state.transaction_work.values()
+            if isinstance(item.preparation.task_payload_value, Mapping)
+            and item.preparation.task_payload_value.get("schema")
+            == "contract-decomposition-child.v1"
+            and item.preparation.task_payload_value.get(
+                "decomposition_transition_ref"
+            )
+            == transition.id
+        ]
+        roots.sort(key=lambda item: item.preparation.task_payload_value["child_index"])
+        if (
+            len(roots) != len(transition.child_keys)
+            or tuple(
+                item.preparation.task_payload_value["child_index"] for item in roots
+            )
+            != tuple(range(len(transition.child_keys)))
+        ):
+            raise ValueError("decomposition completion lacks exact child roots")
+        results = []
+        admissions = []
+        for root in roots:
+            candidates = [root]
+            candidates.extend(
+                item
+                for item in self.workflow_state.transaction_work.values()
+                if isinstance(item.preparation.task_payload_value, Mapping)
+                and item.preparation.task_payload_value.get("schema")
+                == "repair.semantic-task.v1"
+                and item.preparation.task_payload_value.get("parent_work_id")
+                == root.preparation.id
+            )
+            completed = [
+                item
+                for item in candidates
+                if item.terminal is not None and item.terminal.status == "completed"
+            ]
+            if len(completed) != 1:
+                raise ValueError("decomposition child lacks one completed result")
+            result = completed[0]
+            admission = result.admissions.get(result.preparation.attempt_index)
+            if admission is None or admission.outcome != "admitted":
+                raise ValueError("decomposition child result lacks semantic admission")
+            results.append(result)
+            admissions.append(admission)
+        self.workflow_state._validate_contract_decomposition_effects(
+            transition,
+            tuple(results),
+            tuple(dict.fromkeys(admitted_effect_refs)),
+            completion_event_seq=self._next_seq,
+        )
+        completion = ContractDecompositionCompletionV1.create(
+            manifest_digest=manifest.sha256,
+            transition_ref=transition.id,
+            source_work_id=transition.source_work_id,
+            child_work_ids=tuple(item.preparation.id for item in results),
+            child_semantic_admission_refs=tuple(item.id for item in admissions),
+            admitted_effect_refs=tuple(dict.fromkeys(admitted_effect_refs)),
+        )
+        self.objects.put(
+            "workflow-contract-decomposition-completion-v1", completion
+        )
+        inputs = [transition.source_work_id, transition.id]
+        outputs = [completion.id]
+        self._commit(
+            Rule.CONTROL,
+            inputs=inputs,
+            outputs=outputs,
+            control=ControlEventPayloadV3(
+                action="contract_decomposition_completed",
+                decision_ref=completion.id,
+                inputs=inputs,
+                outputs=outputs,
+            ),
+        )
+        return completion
 
     def record_capability_transition(
         self,
@@ -1219,6 +1653,42 @@ class Harness:
             inputs=inputs,
             outputs=outputs,
             control=payload,
+        )
+
+    def record_terminal_commitment(self, commitment, result_draft) -> Event:
+        """Persist and latch one manifest-owned terminal epoch authority."""
+
+        from deepreason.workflow.models import (
+            RunTerminalCommitmentV1,
+            RunTerminalResultDraftV1,
+        )
+
+        self._ensure_writable()
+        payload_data = commitment.model_dump(mode="python", by_alias=True)
+        commitment = RunTerminalCommitmentV1.model_validate(payload_data)
+        draft_data = result_draft.model_dump(mode="python", by_alias=True)
+        result_draft = RunTerminalResultDraftV1.model_validate(draft_data)
+        if commitment.result_draft_ref != result_draft.id:
+            raise ValueError("terminal commitment differs from its result draft")
+        source_ref = (
+            commitment.lifecycle_decision_ref
+            if commitment.terminal_source == "workflow_lifecycle"
+            else commitment.id
+        )
+        assert source_ref is not None
+        self.objects.put("workflow-run-terminal-result-draft-v1", result_draft)
+        self.objects.put("workflow-run-terminal-commitment-v1", commitment)
+        control = ControlEventPayloadV3(
+            action="terminal_committed",
+            decision_ref=commitment.id,
+            inputs=[source_ref, commitment.stop_record_digest],
+            outputs=[result_draft.id, commitment.id],
+        )
+        return self._commit(
+            Rule.CONTROL,
+            inputs=list(control.inputs),
+            outputs=list(control.outputs),
+            control=control,
         )
 
     def build_bridge(self, problem_id: str, target: str, policy, **kwargs):
@@ -1547,7 +2017,21 @@ class Harness:
             self.scratch_state.apply(event, self.objects)
         if event.bridge is not None:
             try:
-                self.bridge_state.apply(event, self.objects)
+                terminal_commitment = (
+                    self.workflow_state.current_terminal_commitment
+                )
+                terminal_commitment_ref = (
+                    terminal_commitment.id
+                    if terminal_commitment is not None
+                    and event.seq
+                    > terminal_commitment.reasoning_event_horizon_seq
+                    else None
+                )
+                self.bridge_state.apply(
+                    event,
+                    self.objects,
+                    terminal_commitment_ref=terminal_commitment_ref,
+                )
             except ValueError as error:
                 raise WellFormednessError(str(error)) from error
         if event.rule == Rule.REVEAL:
