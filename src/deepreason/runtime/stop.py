@@ -263,6 +263,21 @@ def persist_stop_record(root: Path | str, record: dict) -> dict:
     retain byte-for-byte output.
     """
 
+    record = validate_stop_record(record)
+
+    root_path = Path(root)
+    digest = record["digest"]
+    event_seq = record["event_seq"]
+    history = root_path / "run-stops" / f"{event_seq:012d}-{digest}.json"
+    if not history.exists():
+        _atomic_json(history, record)
+    _atomic_json(root_path / "run-stop.json", record)
+    return dict(record)
+
+
+def validate_stop_record(record: dict) -> dict:
+    """Return one canonical typed v1 stop without writing mutable pointers."""
+
     if not isinstance(record, dict):
         raise ValueError("stop record must be an object")
     required = {
@@ -297,11 +312,4 @@ def persist_stop_record(root: Path | str, record: dict) -> dict:
     ).hexdigest()
     if record.get("digest") != expected:
         raise ValueError("stop record digest does not match its canonical payload")
-
-    root_path = Path(root)
-    digest = record["digest"]
-    history = root_path / "run-stops" / f"{event_seq:012d}-{digest}.json"
-    if not history.exists():
-        _atomic_json(history, record)
-    _atomic_json(root_path / "run-stop.json", record)
     return dict(record)
