@@ -166,6 +166,9 @@ class Route(BaseModel):
     output_mechanism: Literal["native_json_schema", "grammar", "json_text"] = "json_text"
     temperature: float | None = None
     max_tokens: int | None = Field(default=None, gt=0)
+    # Frozen total prompt-plus-completion capacity. ``None`` retains legacy
+    # unqualified behavior and is not evidence of an unlimited window.
+    context_window_tokens: int | None = Field(default=None, gt=0)
     timeout_s: int = Field(default=DEFAULT_TIMEOUT_S, gt=0)
     logprobs: bool = False
     # The name of an environment variable is routing metadata, not a secret.
@@ -191,6 +194,27 @@ class Route(BaseModel):
             raise ValueError("production routes cannot contain auto or auto-alt")
         return value
 
+    @model_validator(mode="after")
+    def _qualified_context_window_has_finite_completion_allowance(self):
+        if self.context_window_tokens is None:
+            return self
+        if self.max_tokens is None:
+            raise ValueError(
+                "context_window_tokens requires a finite max_tokens allowance"
+            )
+        if self.context_window_tokens <= self.max_tokens:
+            raise ValueError("context_window_tokens must be greater than max_tokens")
+        return self
+
+    @model_serializer(mode="wrap")
+    def _serialize_context_capacity(self, handler):
+        payload = handler(self)
+        if self.context_window_tokens is None:
+            # Preserve historical route bytes while making an explicit
+            # qualified capacity part of route and manifest identity.
+            payload.pop("context_window_tokens", None)
+        return payload
+
     def endpoint_spec(self) -> dict[str, Any]:
         """Return the legacy Config role-table shape for this frozen route."""
         return {
@@ -203,6 +227,7 @@ class Route(BaseModel):
             "reasoning": self.reasoning,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
+            "context_window_tokens": self.context_window_tokens,
             "timeout_s": self.timeout_s,
             "json_mode": self.output_mode == "json_object",
             "output_mechanism": self.output_mechanism,
@@ -760,6 +785,370 @@ class ControlPlanePolicyV3(BaseModel):
     )
 
 
+class CompactRecoveryPolicyV1(BaseModel):
+    """Frozen authority for a later route-seat-local presentation transition."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["compact-recovery-policy.v1"] = Field(
+        "compact-recovery-policy.v1", alias="schema"
+    )
+    trigger: Literal["schema_exhausted"] = "schema_exhausted"
+    source_profiles: tuple[
+        Literal["standard"], Literal["frontier"]
+    ] = ("standard", "frontier")
+    target_profile: Literal["compact"] = "compact"
+    scope: Literal["route_seat"] = "route_seat"
+    sticky: Literal[True] = True
+    applies_to: Literal["all_subsequent_model_calls"] = (
+        "all_subsequent_model_calls"
+    )
+    retry_failed_work: Literal[False] = False
+
+
+class ContractSchemaRepairGrantV1(BaseModel):
+    """One manifest-owned schema-repair grant for one provider contract."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    contract_id: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+    )
+    maximum_schema_repairs: int = Field(ge=0, le=2, strict=True)
+    maximum_provider_calls: int = Field(ge=1, le=3, strict=True)
+    repair_execution: Literal["fresh_transaction_per_repair"] = (
+        "fresh_transaction_per_repair"
+    )
+    route_scope: Literal["same_route_seat"] = "same_route_seat"
+    exhaustion_status: Literal["schema_exhausted"] = "schema_exhausted"
+
+    @model_validator(mode="after")
+    def _provider_call_arithmetic_is_exact(self):
+        if self.maximum_provider_calls != self.maximum_schema_repairs + 1:
+            raise ValueError(
+                "maximum_provider_calls must equal maximum_schema_repairs + 1"
+            )
+        return self
+
+
+class ContractSchemaRepairPolicyV1(BaseModel):
+    """Frozen per-contract repair authority for transactional v6 calls."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["contract-schema-repair-policy.v1"] = Field(
+        "contract-schema-repair-policy.v1", alias="schema"
+    )
+    grants: tuple[ContractSchemaRepairGrantV1, ...]
+
+    @model_validator(mode="after")
+    def _grants_are_nonempty_unique_and_sorted(self):
+        if not self.grants:
+            raise ValueError("contract schema-repair policy requires at least one grant")
+        contract_ids = tuple(grant.contract_id for grant in self.grants)
+        if len(set(contract_ids)) != len(contract_ids):
+            raise ValueError("contract schema-repair grant IDs must be unique")
+        if contract_ids != tuple(sorted(contract_ids)):
+            raise ValueError(
+                "contract schema-repair grants must be sorted by contract_id"
+            )
+        return self
+
+
+class RouteSeatContractDecompositionGrantV1(BaseModel):
+    """Frozen strong-to-atomic authority for one exact v6 route seat."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    role: str = Field(min_length=1)
+    seat: int = Field(ge=0, strict=True)
+    endpoint_id: str = Field(min_length=1)
+    route_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    source_contract_id: str = Field(min_length=1, max_length=128)
+    atomic_contract_id: str = Field(min_length=1, max_length=128)
+    trigger: Literal["schema_exhausted"] = "schema_exhausted"
+    child_partition: Literal[
+        "conjecture_candidate_slot",
+        "critic_target",
+        "bridge_catalog_batch",
+        "bridge_ledger_batch",
+        "scratch_single_object",
+    ]
+    maximum_children: int = Field(ge=1, le=256, strict=True)
+    coverage: Literal["all_deterministically_assigned_children"] = (
+        "all_deterministically_assigned_children"
+    )
+    execution: Literal["fresh_transaction_per_child"] = (
+        "fresh_transaction_per_child"
+    )
+    source_failure_preserved: Literal[True] = True
+    model_selectable: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _contracts_are_distinct(self):
+        if self.source_contract_id == self.atomic_contract_id:
+            raise ValueError("decomposition source and atomic contracts must differ")
+        return self
+
+
+class RouteSeatContractDecompositionPlanV1(BaseModel):
+    """Complete immutable v6 authority for existing atomic fallbacks."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["route-seat-contract-decomposition-plan.v1"] = Field(
+        "route-seat-contract-decomposition-plan.v1", alias="schema"
+    )
+    entries: tuple[RouteSeatContractDecompositionGrantV1, ...]
+
+    @model_validator(mode="after")
+    def _entries_are_unique_and_sorted(self):
+        # Presence freezes the complete set of permitted edges.  An empty
+        # tuple is therefore an explicit grant of no decomposition authority,
+        # not an inferred fallback.  Newly compiled manifests still receive
+        # the canonical supported edges below.
+        keys = tuple(
+            (entry.role, entry.seat, entry.source_contract_id)
+            for entry in self.entries
+        )
+        if keys != tuple(sorted(set(keys))):
+            raise ValueError("contract decomposition entries must be unique and sorted")
+        return self
+
+
+class RouteSeatPresentationGrantV1(BaseModel):
+    """Frozen base-presentation authority for one exact manifest route seat."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    role: str = Field(min_length=1)
+    seat: int = Field(ge=0, strict=True)
+    endpoint_id: str = Field(min_length=1)
+    base_profile: Literal["compact", "standard", "frontier"]
+    selection_basis: Literal["manifest_default", "explicit_endpoint"]
+
+
+class RouteSeatPresentationPlanV1(BaseModel):
+    """Complete immutable presentation authority for concrete v6 route seats."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["route-seat-presentation-plan.v1"] = Field(
+        "route-seat-presentation-plan.v1", alias="schema"
+    )
+    entries: tuple[RouteSeatPresentationGrantV1, ...]
+
+    @model_validator(mode="after")
+    def _entries_are_nonempty_unique_and_sorted(self):
+        if not self.entries:
+            raise ValueError("route-seat presentation plan requires at least one entry")
+        keys = tuple((entry.role, entry.seat) for entry in self.entries)
+        if len(set(keys)) != len(keys):
+            raise ValueError("route-seat presentation entries must be unique")
+        if keys != tuple(sorted(keys)):
+            raise ValueError(
+                "route-seat presentation entries must be sorted by role and seat"
+            )
+        return self
+
+
+class RouteSeatBehavioralContractGrantV1(BaseModel):
+    """Frozen behavioral authority for one real contract on one route seat."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    contract_id: str = Field(
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+    )
+    schema_repair: ContractSchemaRepairGrantV1
+    request_envelope_qualification: Literal[
+        "complete_rendered_prompt_plus_completion"
+    ] = "complete_rendered_prompt_plus_completion"
+    scratch_read: Literal["none", "advisory"]
+    scratch_write: Literal["none", "contract_governed"]
+    scratch_formal_authority: Literal[False] = False
+    decomposition_permission: Literal["none", "authorized_atomic_children"] = "none"
+    contract_fallback_permission: Literal[
+        "none", "schema_exhaustion_to_atomic"
+    ] = "none"
+
+    @model_validator(mode="after")
+    def _repair_grant_matches_contract(self):
+        if self.schema_repair.contract_id != self.contract_id:
+            raise ValueError(
+                "behavioral contract grant must contain its exact repair grant"
+            )
+        return self
+
+
+class RouteSeatBehavioralCapabilityGrantV1(BaseModel):
+    """One exact route-seat behavioral authority grant, not capability evidence."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    role: str = Field(min_length=1)
+    seat: int = Field(ge=0, strict=True)
+    endpoint_id: str = Field(min_length=1)
+    route_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    base_profile: Literal["compact", "standard", "frontier"]
+    presentation_selection_basis: Literal[
+        "manifest_default", "explicit_endpoint"
+    ]
+    contracts: tuple[RouteSeatBehavioralContractGrantV1, ...] = ()
+    context_window_tokens: int | None = Field(default=None, gt=0)
+    maximum_completion_tokens: int | None = Field(default=None, gt=0)
+    scratch_access: Literal["advisory_available"] = "advisory_available"
+    scratch_formal_authority: Literal[False] = False
+    presentation_recovery: Literal["none", "authorized_compact_after_exhaustion"]
+    qualification_evidence: Literal["manifest_bound_production_doctor"] = (
+        "manifest_bound_production_doctor"
+    )
+
+    @model_validator(mode="after")
+    def _contracts_are_unique_and_sorted(self):
+        contract_ids = tuple(grant.contract_id for grant in self.contracts)
+        if len(set(contract_ids)) != len(contract_ids):
+            raise ValueError("route-seat behavioral contract grants must be unique")
+        if contract_ids != tuple(sorted(contract_ids)):
+            raise ValueError(
+                "route-seat behavioral contract grants must be sorted by contract_id"
+            )
+        if (self.context_window_tokens is None) != (
+            self.maximum_completion_tokens is None
+        ):
+            raise ValueError(
+                "route-seat behavioral capacity must be wholly present or absent"
+            )
+        if (
+            self.context_window_tokens is not None
+            and self.context_window_tokens <= self.maximum_completion_tokens
+        ):
+            raise ValueError(
+                "route-seat context capacity must exceed its completion allowance"
+            )
+        return self
+
+
+class RouteSeatBehavioralCapabilityPlanV1(BaseModel):
+    """Complete immutable behavioral authority for concrete v6 route seats."""
+
+    model_config = ConfigDict(
+        extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
+    )
+
+    schema_: Literal["route-seat-behavioral-capability-plan.v1"] = Field(
+        "route-seat-behavioral-capability-plan.v1", alias="schema"
+    )
+    authority: Literal["manifest_frozen_route_seat_behavior"] = (
+        "manifest_frozen_route_seat_behavior"
+    )
+    evidence: Literal["separate_exact_production_qualification"] = (
+        "separate_exact_production_qualification"
+    )
+    entries: tuple[RouteSeatBehavioralCapabilityGrantV1, ...]
+
+    @model_validator(mode="after")
+    def _entries_are_nonempty_unique_and_sorted(self):
+        if not self.entries:
+            raise ValueError("route-seat behavioral capability plan requires entries")
+        keys = tuple((entry.role, entry.seat) for entry in self.entries)
+        if len(set(keys)) != len(keys):
+            raise ValueError("route-seat behavioral capability entries must be unique")
+        if keys != tuple(sorted(keys)):
+            raise ValueError(
+                "route-seat behavioral capability entries must be sorted"
+            )
+        return self
+
+
+class ProductionQualificationPolicyV1(BaseModel):
+    """Frozen authority requiring exact production-contract qualification."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        populate_by_name=True,
+        serialize_by_alias=True,
+        strict=True,
+    )
+
+    schema_: Literal["production-qualification-policy.v1"] = Field(
+        "production-qualification-policy.v1", alias="schema"
+    )
+    required: Literal[True] = True
+    report_schema: Literal["deepreason-production-contract-doctor-v1"] = (
+        "deepreason-production-contract-doctor-v1"
+    )
+    report_filename: Literal["production-contract-qualification.json"] = (
+        "production-contract-qualification.json"
+    )
+    manifest_binding: Literal["exact_sha256"] = "exact_sha256"
+    pair_inventory: Literal["exact_manifest_pairs"] = "exact_manifest_pairs"
+    pair_requirement: Literal["all_qualified"] = "all_qualified"
+    repair_authority: Literal["exact_contract_grants"] = "exact_contract_grants"
+    enforcement_point: Literal["before_provider_dispatch"] = (
+        "before_provider_dispatch"
+    )
+
+    @field_validator("required", mode="before")
+    @classmethod
+    def _required_is_an_exact_boolean(cls, value):
+        if type(value) is not bool:
+            raise ValueError("required must be the boolean true literal")
+        return value
+
+
+class TerminalCommitmentPolicyV1(BaseModel):
+    """Frozen root-local authority for one terminal commitment per epoch."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        populate_by_name=True,
+        serialize_by_alias=True,
+        strict=True,
+    )
+
+    schema_: Literal["terminal-commitment-policy.v1"] = Field(
+        "terminal-commitment-policy.v1", alias="schema"
+    )
+    required: Literal[True] = True
+    commitment_schema: Literal["run-terminal-commitment.v1"] = (
+        "run-terminal-commitment.v1"
+    )
+    selection: Literal["first_commitment_per_epoch"] = (
+        "first_commitment_per_epoch"
+    )
+    resume: Literal["typed_resume_opens_next_epoch"] = (
+        "typed_resume_opens_next_epoch"
+    )
+    integrity_scope: Literal["root_local_manifest_and_replay"] = (
+        "root_local_manifest_and_replay"
+    )
+    post_terminal: Literal["exact_commitment_bound_descendants"] = (
+        "exact_commitment_bound_descendants"
+    )
+
+    @field_validator("required", mode="before")
+    @classmethod
+    def _required_is_an_exact_boolean(cls, value):
+        if type(value) is not bool:
+            raise ValueError("required must be the boolean true literal")
+        return value
+
+
 class RunManifest(BaseModel):
     """Canonical, immutable routing and presentation plan for one run."""
 
@@ -790,6 +1179,17 @@ class RunManifest(BaseModel):
     simulation_capability_policy: SimulationCapabilityPolicyV1 | None = None
     frozen_evidence_policy: FrozenEvidencePolicyV1 | None = None
     inquiry_capability_policy: InquiryCapabilityPolicyV1 | None = None
+    compact_recovery_policy: CompactRecoveryPolicyV1 | None = None
+    contract_schema_repair_policy: ContractSchemaRepairPolicyV1 | None = None
+    route_seat_presentation_plan: RouteSeatPresentationPlanV1 | None = None
+    route_seat_behavioral_capability_plan: (
+        RouteSeatBehavioralCapabilityPlanV1 | None
+    ) = None
+    route_seat_contract_decomposition_plan: (
+        RouteSeatContractDecompositionPlanV1 | None
+    ) = None
+    production_qualification_policy: ProductionQualificationPolicyV1 | None = None
+    terminal_commitment_policy: TerminalCommitmentPolicyV1 | None = None
     run_input_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     source_config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
     compiled_at: str = Field(min_length=1)
@@ -846,6 +1246,38 @@ class RunManifest(BaseModel):
                 payload.pop("simulation_capability_policy", None)
             if self.frozen_evidence_policy is None:
                 payload.pop("frozen_evidence_policy", None)
+        if self.schema_version < 6 or self.compact_recovery_policy is None:
+            # V1-v5 never had this authority. An omitted historical v6 field
+            # also remains absent and therefore authorizes no transition.
+            payload.pop("compact_recovery_policy", None)
+        if self.schema_version < 6 or self.contract_schema_repair_policy is None:
+            # Historical documents gain no inferred repair authority. V1-v5
+            # omit the field entirely, preserving their canonical byte shape.
+            payload.pop("contract_schema_repair_policy", None)
+        if self.schema_version < 6 or self.route_seat_presentation_plan is None:
+            # Historical v6 manifests gain no per-seat authority merely by
+            # being loaded by a newer binary.
+            payload.pop("route_seat_presentation_plan", None)
+        if (
+            self.schema_version < 6
+            or self.route_seat_behavioral_capability_plan is None
+        ):
+            # Historical v6 documents receive no behavioral authority from
+            # installing a newer binary.
+            payload.pop("route_seat_behavioral_capability_plan", None)
+        if (
+            self.schema_version < 6
+            or self.route_seat_contract_decomposition_plan is None
+        ):
+            payload.pop("route_seat_contract_decomposition_plan", None)
+        if self.schema_version < 6 or self.production_qualification_policy is None:
+            # Qualification authority is never inferred for historical v6
+            # documents, and the field did not exist in v1-v5.
+            payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or self.terminal_commitment_policy is None:
+            # Historical v6 documents gain no terminal authority merely by
+            # being loaded by a newer binary.
+            payload.pop("terminal_commitment_policy", None)
         # Criticism is an optional C3 extension.  Absence must preserve the
         # canonical bytes of every pre-C3 manifest, including schema v4.
         if self.criticism_policy is None:
@@ -868,6 +1300,53 @@ class RunManifest(BaseModel):
             or "run_input_digest" in self.model_fields_set
         ):
             raise ValueError("v1-v4 manifests cannot carry v5 capability policy")
+        if (
+            self.schema_version < 6
+            and "compact_recovery_policy" in self.model_fields_set
+        ):
+            raise ValueError("v1-v5 manifests cannot carry compact recovery policy")
+        if (
+            self.schema_version < 6
+            and "contract_schema_repair_policy" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry contract schema-repair policy"
+            )
+        if (
+            self.schema_version < 6
+            and "route_seat_presentation_plan" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry a route-seat presentation plan"
+            )
+        if (
+            self.schema_version < 6
+            and "route_seat_behavioral_capability_plan" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry a route-seat behavioral capability plan"
+            )
+        if (
+            self.schema_version < 6
+            and "route_seat_contract_decomposition_plan" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry a route-seat contract decomposition plan"
+            )
+        if (
+            self.schema_version < 6
+            and "production_qualification_policy" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry production qualification policy"
+            )
+        if (
+            self.schema_version < 6
+            and "terminal_commitment_policy" in self.model_fields_set
+        ):
+            raise ValueError(
+                "v1-v5 manifests cannot carry terminal commitment policy"
+            )
         if self.schema_version == 1:
             if self.workload_profile is not None or self.toolchains:
                 raise ValueError("v1 manifest cannot carry v2 workload/toolchain fields")
@@ -960,6 +1439,51 @@ class RunManifest(BaseModel):
             ):
                 raise ValueError("v6 manifest cannot use prototype split capability fields")
             _validate_v6_capability_policy(self)
+            if self.route_seat_presentation_plan is not None:
+                expected = tuple(
+                    (role, seat, route.endpoint_id)
+                    for role, routes in self.roles.items()
+                    for seat, route in enumerate(routes)
+                )
+                actual = tuple(
+                    (entry.role, entry.seat, entry.endpoint_id)
+                    for entry in self.route_seat_presentation_plan.entries
+                )
+                if actual != tuple(sorted(expected, key=lambda item: item[:2])):
+                    raise ValueError(
+                        "V6_ROUTE_SEAT_PRESENTATION_PLAN_MISMATCH: entries must "
+                        "exactly cover the frozen role seats and endpoint IDs"
+                    )
+            if self.route_seat_behavioral_capability_plan is not None:
+                expected_behavioral = _compile_route_seat_behavioral_capability_plan(
+                    self
+                )
+                if self.route_seat_behavioral_capability_plan != expected_behavioral:
+                    raise ValueError(
+                        "V6_ROUTE_SEAT_BEHAVIORAL_CAPABILITY_PLAN_MISMATCH: plan "
+                        "must exactly match frozen route, contract, presentation, "
+                        "scratch, repair, and fallback authority"
+                    )
+            if self.route_seat_contract_decomposition_plan is not None:
+                expected_decomposition = _compile_route_seat_contract_decomposition_plan(
+                    self,
+                    source_config=json.loads(self.engine_config_json),
+                )
+                expected_by_key = {
+                    (entry.role, entry.seat, entry.source_contract_id): entry
+                    for entry in expected_decomposition.entries
+                }
+                if any(
+                    expected_by_key.get(
+                        (entry.role, entry.seat, entry.source_contract_id)
+                    )
+                    != entry
+                    for entry in self.route_seat_contract_decomposition_plan.entries
+                ):
+                    raise ValueError(
+                        "V6_ROUTE_SEAT_CONTRACT_DECOMPOSITION_PLAN_MISMATCH: plan "
+                        "entries must be canonical supported edges for the frozen route"
+                    )
         for role, routes in self.roles.items():
             for index, route in enumerate(routes):
                 if route.model_id in _UNRESOLVED_MODELS:
@@ -1012,6 +1536,26 @@ class RunManifest(BaseModel):
                 payload.pop("simulation_capability_policy", None)
             if self.frozen_evidence_policy is None:
                 payload.pop("frozen_evidence_policy", None)
+        if self.schema_version < 6 or self.compact_recovery_policy is None:
+            payload.pop("compact_recovery_policy", None)
+        if self.schema_version < 6 or self.contract_schema_repair_policy is None:
+            payload.pop("contract_schema_repair_policy", None)
+        if self.schema_version < 6 or self.route_seat_presentation_plan is None:
+            payload.pop("route_seat_presentation_plan", None)
+        if (
+            self.schema_version < 6
+            or self.route_seat_behavioral_capability_plan is None
+        ):
+            payload.pop("route_seat_behavioral_capability_plan", None)
+        if (
+            self.schema_version < 6
+            or self.route_seat_contract_decomposition_plan is None
+        ):
+            payload.pop("route_seat_contract_decomposition_plan", None)
+        if self.schema_version < 6 or self.production_qualification_policy is None:
+            payload.pop("production_qualification_policy", None)
+        if self.schema_version < 6 or self.terminal_commitment_policy is None:
+            payload.pop("terminal_commitment_policy", None)
         if self.criticism_policy is None:
             payload.pop("criticism_policy", None)
         return _canonical_json(payload)
@@ -1019,6 +1563,524 @@ class RunManifest(BaseModel):
     @property
     def sha256(self) -> str:
         return hashlib.sha256(self.canonical_bytes()).hexdigest()
+
+
+def resolve_route_seat_base_profile(
+    manifest: RunManifest,
+    *,
+    role: str,
+    seat: int,
+    endpoint_id: str,
+) -> Literal["compact", "standard", "frontier"]:
+    """Resolve one exact v6 route seat's frozen base presentation authority.
+
+    Historical v6 manifests predate the per-seat plan and retain their global
+    profile semantics. Plan-bearing manifests must resolve through the exact
+    role, seat, and endpoint identity; absence is never implicit permission.
+    """
+
+    if manifest.schema_version != 6:
+        raise RunManifestError(
+            "ROUTE_SEAT_PRESENTATION_V6_REQUIRED",
+            "route-seat presentation authority requires RunManifest v6",
+            "/schema_version",
+        )
+    routes = manifest.roles.get(role, ())
+    if seat < 0 or seat >= len(routes):
+        raise RunManifestError(
+            "ROUTE_SEAT_PRESENTATION_ROUTE_REQUIRED",
+            f"frozen route seat {role}[{seat}] does not exist",
+            f"/roles/{role}/{seat}",
+        )
+    route = routes[seat]
+    if route.endpoint_id != endpoint_id:
+        raise RunManifestError(
+            "ROUTE_SEAT_PRESENTATION_ENDPOINT_MISMATCH",
+            f"endpoint identity differs from frozen route seat {role}[{seat}]",
+            f"/roles/{role}/{seat}/endpoint_id",
+        )
+    plan = manifest.route_seat_presentation_plan
+    if plan is None:
+        return manifest.model_profile
+    matches = tuple(
+        entry
+        for entry in plan.entries
+        if entry.role == role and entry.seat == seat
+    )
+    if len(matches) != 1:
+        raise RunManifestError(
+            "ROUTE_SEAT_PRESENTATION_GRANT_REQUIRED",
+            f"presentation plan lacks one exact grant for {role}[{seat}]",
+            "/route_seat_presentation_plan/entries",
+        )
+    entry = matches[0]
+    if entry.endpoint_id != endpoint_id:
+        raise RunManifestError(
+            "ROUTE_SEAT_PRESENTATION_GRANT_MISMATCH",
+            f"presentation grant differs from frozen route seat {role}[{seat}]",
+            "/route_seat_presentation_plan/entries",
+        )
+    return entry.base_profile
+
+
+def _compile_route_seat_contract_decomposition_plan(
+    manifest: RunManifest,
+    *,
+    source_config: dict[str, Any],
+) -> RouteSeatContractDecompositionPlanV1:
+    """Freeze every repository-owned strong-to-smaller execution edge."""
+
+    from deepreason.llm.firewall import route_fingerprint
+    from deepreason.llm.wire import (
+        ATOMIC_CONJECTURE_CONTRACT_V1,
+        ATOMIC_CRITIC_CONTRACT_V1,
+        BATCH_CRITIC_CONTRACT_V2,
+        CONJECTURER_TURN_CONTRACT_V6,
+    )
+
+    entries: list[RouteSeatContractDecompositionGrantV1] = []
+    candidate_slots = min(256, max(1, int(source_config.get("VS_K", 6))))
+    for seat, route in enumerate(manifest.roles.get("conjecturer", ())):
+        entries.append(
+            RouteSeatContractDecompositionGrantV1(
+                role="conjecturer",
+                seat=seat,
+                endpoint_id=route.endpoint_id,
+                route_sha256=route_fingerprint(route),
+                source_contract_id=CONJECTURER_TURN_CONTRACT_V6,
+                atomic_contract_id=ATOMIC_CONJECTURE_CONTRACT_V1,
+                child_partition="conjecture_candidate_slot",
+                maximum_children=candidate_slots,
+            )
+        )
+    critic_seats = {
+        binding.seat
+        for binding in (manifest.criticism_policy.bindings if manifest.criticism_policy else ())
+        if binding.role == "argumentative_critic"
+    }
+    if manifest.criticism_policy is None:
+        critic_seats = set(range(len(manifest.roles.get("argumentative_critic", ()))))
+    for seat in sorted(critic_seats):
+        route = manifest.roles["argumentative_critic"][seat]
+        entries.append(
+            RouteSeatContractDecompositionGrantV1(
+                role="argumentative_critic",
+                seat=seat,
+                endpoint_id=route.endpoint_id,
+                route_sha256=route_fingerprint(route),
+                source_contract_id=BATCH_CRITIC_CONTRACT_V2,
+                atomic_contract_id=ATOMIC_CRITIC_CONTRACT_V1,
+                child_partition="critic_target",
+                maximum_children=256,
+            )
+        )
+    bridge = manifest.bridge_policy
+    if bridge is not None and bridge.mode == "grounded_two_stage":
+        for role, source_contract, child_contract, partition in (
+            (
+                bridge.ledger_role,
+                "bridge.ledger.v3",
+                "bridge.ledger-batch.v1",
+                "bridge_catalog_batch",
+            ),
+            (
+                bridge.composer_role,
+                "bridge.composition.v2",
+                "bridge.composition-batch.v1",
+                "bridge_ledger_batch",
+            ),
+        ):
+            route = manifest.roles[role][0]
+            entries.append(
+                RouteSeatContractDecompositionGrantV1(
+                    role=role,
+                    seat=0,
+                    endpoint_id=route.endpoint_id,
+                    route_sha256=route_fingerprint(route),
+                    source_contract_id=source_contract,
+                    atomic_contract_id=child_contract,
+                    child_partition=partition,
+                    maximum_children=256,
+                )
+            )
+    scratch = manifest.scratch_policy
+    control = manifest.control_plane_policy
+    if (
+        scratch is not None
+        and scratch.enabled
+        and isinstance(control, ControlPlanePolicyV3)
+        and control.scratch_authoring.enabled
+    ):
+        for role, source_contract, child_contract in (
+            (
+                scratch.block_role,
+                "scratch.block.compact.v1",
+                "scratch.block.minimal.v1",
+            ),
+            (
+                scratch.link_role,
+                "scratch.link.compact.v1",
+                "scratch.link.minimal.v1",
+            ),
+            (
+                scratch.guide_role,
+                "scratch.cluster-guide.compact.v1",
+                "scratch.cluster-guide.minimal.v1",
+            ),
+        ):
+            route = manifest.roles[role][0]
+            entries.append(
+                RouteSeatContractDecompositionGrantV1(
+                    role=role,
+                    seat=0,
+                    endpoint_id=route.endpoint_id,
+                    route_sha256=route_fingerprint(route),
+                    source_contract_id=source_contract,
+                    atomic_contract_id=child_contract,
+                    child_partition="scratch_single_object",
+                    maximum_children=1,
+                )
+            )
+    return RouteSeatContractDecompositionPlanV1(
+        entries=tuple(
+            sorted(
+                entries,
+                key=lambda item: (item.role, item.seat, item.source_contract_id),
+            )
+        )
+    )
+
+
+def resolve_route_seat_contract_decomposition(
+    manifest: RunManifest,
+    *,
+    role: str,
+    seat: int,
+    endpoint_id: str,
+    route_sha256: str,
+    source_contract_id: str,
+) -> RouteSeatContractDecompositionGrantV1:
+    """Resolve one exact manifest-owned decomposition edge without fallback."""
+
+    plan = manifest.route_seat_contract_decomposition_plan
+    if manifest.schema_version != 6 or plan is None:
+        raise RunManifestError(
+            "V6_CONTRACT_DECOMPOSITION_AUTHORITY_REQUIRED",
+            "contract decomposition requires an explicit v6 route-seat plan",
+            "/route_seat_contract_decomposition_plan",
+        )
+    matches = tuple(
+        entry
+        for entry in plan.entries
+        if entry.role == role
+        and entry.seat == seat
+        and entry.source_contract_id == source_contract_id
+    )
+    if len(matches) != 1:
+        raise RunManifestError(
+            "V6_CONTRACT_DECOMPOSITION_GRANT_REQUIRED",
+            "route seat lacks one exact source-contract decomposition grant",
+            "/route_seat_contract_decomposition_plan/entries",
+        )
+    entry = matches[0]
+    if entry.endpoint_id != endpoint_id or entry.route_sha256 != route_sha256:
+        raise RunManifestError(
+            "V6_CONTRACT_DECOMPOSITION_GRANT_MISMATCH",
+            "contract decomposition grant differs from the frozen route seat",
+            "/route_seat_contract_decomposition_plan/entries",
+        )
+    return entry
+
+
+def _route_seat_behavioral_contract_assignments(
+    manifest: RunManifest,
+) -> tuple[tuple[str, str, int], ...]:
+    """Return the closed set of real v6 provider contracts and route seats.
+
+    This is the semantic inventory used to compile behavioral authority.  It
+    deliberately contains no pair IDs or qualification results; those are
+    evidence projected later by the production doctor.
+    """
+
+    if manifest.schema_version != 6:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_CAPABILITY_REQUIRED",
+            "behavioral capability authority requires RunManifest v6",
+            "/schema_version",
+        )
+    control = manifest.control_plane_policy
+    if not isinstance(control, ControlPlanePolicyV3):
+        raise RunManifestError(
+            "V6_BEHAVIORAL_CONTROL_POLICY_REQUIRED",
+            "behavioral capability authority requires workflow.controller.v3",
+            "/control_plane_policy",
+        )
+    contracts = control.contract_versions
+    assignments: set[tuple[str, str, int]] = set()
+
+    for seat, _route in enumerate(manifest.roles.get("conjecturer", ())):
+        assignments.add(
+            (contracts.conjecturer_turn_contract, "conjecturer", seat)
+        )
+
+    criticism = manifest.criticism_policy
+    if criticism is not None:
+        for binding in criticism.bindings:
+            if binding.role == "argumentative_critic":
+                assignments.add(
+                    (contracts.batch_critic_contract, binding.role, binding.seat)
+                )
+    else:
+        # The ordinary scheduler retains its non-school batch-criticism path
+        # when no foreign-school policy is configured. It still uses the real
+        # v2 batch contract, so each concrete critic seat is an active pair.
+        for seat, _route in enumerate(
+            manifest.roles.get("argumentative_critic", ())
+        ):
+            assignments.add(
+                (contracts.batch_critic_contract, "argumentative_critic", seat)
+            )
+
+    bridge = manifest.bridge_policy
+    if bridge is not None and bridge.mode == "grounded_two_stage":
+        assignments.add(
+            (contracts.bridge_ledger_wire_contract, bridge.ledger_role, 0)
+        )
+        assignments.add(
+            (contracts.bridge_composition_contract, bridge.composer_role, 0)
+        )
+        if bridge.grounding_review:
+            from deepreason.bridge.repair import GroundingRepairWireV1
+            from deepreason.bridge.review import GroundingVerdictWireV1
+            from deepreason.llm.wire import DirectWireContract
+
+            assignments.add(
+                (
+                    DirectWireContract(GroundingVerdictWireV1).contract_id,
+                    bridge.reviewer_role,
+                    bridge.reviewer_seat,
+                )
+            )
+            if bridge.max_grounding_repair_attempts:
+                assignments.add(
+                    (
+                        DirectWireContract(GroundingRepairWireV1).contract_id,
+                        bridge.grounding_repair_role,
+                        bridge.reviewer_seat,
+                    )
+                )
+
+    scratch = manifest.scratch_policy
+    if (
+        scratch is not None
+        and scratch.enabled
+        and control.scratch_authoring.enabled
+    ):
+        assignments.update(
+            {
+                ("scratch.block.compact.v1", scratch.block_role, 0),
+                ("scratch.link.compact.v1", scratch.link_role, 0),
+                ("scratch.cluster-guide.compact.v1", scratch.guide_role, 0),
+            }
+        )
+
+    for contract_id, role, seat in assignments:
+        routes = manifest.roles.get(role, ())
+        if seat < 0 or seat >= len(routes):
+            raise RunManifestError(
+                "V6_BEHAVIORAL_CONTRACT_ROUTE_REQUIRED",
+                f"contract {contract_id} requires frozen route seat {role}[{seat}]",
+                f"/roles/{role}/{seat}",
+            )
+    decomposition = manifest.route_seat_contract_decomposition_plan
+    if decomposition is not None:
+        assignments.update(
+            (entry.atomic_contract_id, entry.role, entry.seat)
+            for entry in decomposition.entries
+        )
+    return tuple(sorted(assignments, key=lambda item: (item[1], item[2], item[0])))
+
+
+def _compile_route_seat_behavioral_capability_plan(
+    manifest: RunManifest,
+) -> RouteSeatBehavioralCapabilityPlanV1:
+    """Compile exact behavioral authority from already-frozen v6 policies."""
+
+    from deepreason.llm.firewall import route_fingerprint
+
+    presentation = manifest.route_seat_presentation_plan
+    if presentation is None:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_PRESENTATION_PLAN_REQUIRED",
+            "behavioral capability compilation requires per-seat presentation authority",
+            "/route_seat_presentation_plan",
+        )
+    repair_policy = manifest.contract_schema_repair_policy
+    if repair_policy is None:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_REPAIR_POLICY_REQUIRED",
+            "behavioral capability compilation requires per-contract repair authority",
+            "/contract_schema_repair_policy",
+        )
+    repairs = {grant.contract_id: grant for grant in repair_policy.grants}
+    presentation_by_key = {
+        (entry.role, entry.seat): entry for entry in presentation.entries
+    }
+    assignments: dict[tuple[str, int], list[str]] = {}
+    for contract_id, role, seat in _route_seat_behavioral_contract_assignments(
+        manifest
+    ):
+        assignments.setdefault((role, seat), []).append(contract_id)
+    decomposition_by_contract = {
+        (entry.role, entry.seat, entry.source_contract_id): entry
+        for entry in (
+            manifest.route_seat_contract_decomposition_plan.entries
+            if manifest.route_seat_contract_decomposition_plan is not None
+            else ()
+        )
+    }
+
+    entries: list[RouteSeatBehavioralCapabilityGrantV1] = []
+    for role in sorted(manifest.roles):
+        for seat, route in enumerate(manifest.roles[role]):
+            key = (role, seat)
+            presentation_grant = presentation_by_key.get(key)
+            if (
+                presentation_grant is None
+                or presentation_grant.endpoint_id != route.endpoint_id
+            ):
+                raise RunManifestError(
+                    "V6_BEHAVIORAL_PRESENTATION_GRANT_REQUIRED",
+                    f"behavioral route seat {role}[{seat}] lacks exact presentation authority",
+                    "/route_seat_presentation_plan/entries",
+                )
+            contract_grants: list[RouteSeatBehavioralContractGrantV1] = []
+            for contract_id in sorted(assignments.get(key, ())):
+                repair = repairs.get(contract_id)
+                if repair is None:
+                    raise RunManifestError(
+                        "V6_BEHAVIORAL_REPAIR_GRANT_REQUIRED",
+                        f"contract {contract_id} lacks exact repair authority",
+                        "/contract_schema_repair_policy/grants",
+                    )
+                is_scratch = contract_id.startswith("scratch.")
+                is_conjecture = contract_id in {
+                    "conjecturer.turn.v6",
+                    "conjecturer.atomic-candidate.v1",
+                }
+                decomposition = decomposition_by_contract.get(
+                    (role, seat, contract_id)
+                )
+                contract_grants.append(
+                    RouteSeatBehavioralContractGrantV1(
+                        contract_id=contract_id,
+                        schema_repair=repair,
+                        scratch_read=(
+                            "advisory" if is_scratch or is_conjecture else "none"
+                        ),
+                        scratch_write=(
+                            "contract_governed"
+                            if is_scratch or contract_id == "conjecturer.turn.v6"
+                            else "none"
+                        ),
+                        decomposition_permission=(
+                            "authorized_atomic_children"
+                            if decomposition is not None
+                            else "none"
+                        ),
+                        contract_fallback_permission=(
+                            "schema_exhaustion_to_atomic"
+                            if decomposition is not None
+                            else "none"
+                        ),
+                    )
+                )
+            recovery = manifest.compact_recovery_policy
+            entries.append(
+                RouteSeatBehavioralCapabilityGrantV1(
+                    role=role,
+                    seat=seat,
+                    endpoint_id=route.endpoint_id,
+                    route_sha256=route_fingerprint(route),
+                    base_profile=presentation_grant.base_profile,
+                    presentation_selection_basis=(
+                        presentation_grant.selection_basis
+                    ),
+                    contracts=tuple(contract_grants),
+                    context_window_tokens=route.context_window_tokens,
+                    maximum_completion_tokens=(
+                        route.max_tokens
+                        if route.context_window_tokens is not None
+                        else None
+                    ),
+                    presentation_recovery=(
+                        "authorized_compact_after_exhaustion"
+                        if recovery is not None
+                        and presentation_grant.base_profile
+                        in recovery.source_profiles
+                        else "none"
+                    ),
+                )
+            )
+    return RouteSeatBehavioralCapabilityPlanV1(entries=tuple(entries))
+
+
+def resolve_route_seat_behavioral_capability(
+    manifest: RunManifest,
+    *,
+    role: str,
+    seat: int,
+    endpoint_id: str,
+    route_sha256: str,
+) -> RouteSeatBehavioralCapabilityGrantV1:
+    """Resolve one exact manifest-owned behavioral grant without fallback."""
+
+    if manifest.schema_version != 6:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_CAPABILITY_REQUIRED",
+            "behavioral capability authority requires RunManifest v6",
+            "/schema_version",
+        )
+    plan = manifest.route_seat_behavioral_capability_plan
+    if plan is None:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_CAPABILITY_PLAN_REQUIRED",
+            "historical manifest has no route-seat behavioral authority",
+            "/route_seat_behavioral_capability_plan",
+        )
+    routes = manifest.roles.get(role, ())
+    if seat < 0 or seat >= len(routes):
+        raise RunManifestError(
+            "V6_BEHAVIORAL_ROUTE_REQUIRED",
+            f"frozen route seat {role}[{seat}] does not exist",
+            f"/roles/{role}/{seat}",
+        )
+    route = routes[seat]
+    from deepreason.llm.firewall import route_fingerprint
+
+    if route.endpoint_id != endpoint_id or route_fingerprint(route) != route_sha256:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_ROUTE_MISMATCH",
+            f"route identity differs from frozen seat {role}[{seat}]",
+            f"/roles/{role}/{seat}",
+        )
+    matches = tuple(
+        entry for entry in plan.entries if (entry.role, entry.seat) == (role, seat)
+    )
+    if len(matches) != 1:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_GRANT_REQUIRED",
+            f"plan lacks one exact grant for {role}[{seat}]",
+            "/route_seat_behavioral_capability_plan/entries",
+        )
+    grant = matches[0]
+    if grant.endpoint_id != endpoint_id or grant.route_sha256 != route_sha256:
+        raise RunManifestError(
+            "V6_BEHAVIORAL_GRANT_MISMATCH",
+            f"behavioral grant differs from frozen seat {role}[{seat}]",
+            "/route_seat_behavioral_capability_plan/entries",
+        )
+    return grant
 
 
 def _canonical_json(value: Any) -> bytes:
@@ -1148,6 +2210,7 @@ def _route_from_spec(
         output_mechanism=mechanism or "json_text",
         temperature=spec.get("temperature"),
         max_tokens=spec.get("max_tokens"),
+        context_window_tokens=spec.get("context_window_tokens"),
         timeout_s=spec.get("timeout_s") or DEFAULT_TIMEOUT_S,
         logprobs=bool(spec.get("logprobs", False)),
         api_key_env=api_key_env,
@@ -1162,6 +2225,42 @@ def _configured_seats(config_data: dict[str, Any]):
         for index, spec in enumerate(seats):
             if isinstance(spec, dict) and spec.get("endpoint"):
                 yield role, index, spec
+
+
+def _compile_route_seat_presentation_plan(
+    *,
+    roles: dict[str, tuple[Route, ...]],
+    source_specs: dict[str, tuple[dict[str, Any], ...]],
+    manifest_default: Literal["compact", "standard", "frontier"],
+) -> RouteSeatPresentationPlanV1:
+    """Freeze one setup-owned presentation grant per concrete route seat."""
+
+    entries: list[RouteSeatPresentationGrantV1] = []
+    for role in sorted(roles):
+        routes = roles[role]
+        specs = source_specs.get(role, ())
+        if len(routes) != len(specs):
+            raise RunManifestError(
+                "ROUTE_SEAT_PRESENTATION_SOURCE_MISMATCH",
+                "resolved route seats no longer match their setup-time endpoint specs",
+                f"/roles/{role}",
+            )
+        for seat, (route, spec) in enumerate(zip(routes, specs, strict=True)):
+            explicit = spec.get("model_profile")
+            entries.append(
+                RouteSeatPresentationGrantV1(
+                    role=role,
+                    seat=seat,
+                    endpoint_id=route.endpoint_id,
+                    base_profile=explicit or manifest_default,
+                    selection_basis=(
+                        "explicit_endpoint"
+                        if explicit is not None
+                        else "manifest_default"
+                    ),
+                )
+            )
+    return RouteSeatPresentationPlanV1(entries=tuple(entries))
 
 
 def _select_single_model_seed(
@@ -1189,6 +2288,7 @@ def _select_single_model_seed(
                 route.provider,
                 route.family,
                 route.api_key_env,
+                route.context_window_tokens,
             ))
         if len(identities) > 1:
             raise RunManifestError(
@@ -1313,6 +2413,69 @@ def _compile_bridge_policy(source, *, model_profile: str):
     values["output_section_limit"] = output_section_limit
     values["grounding_repair_role"] = source.reviewer_role
     return BridgePolicy(**values)
+
+
+def _compile_contract_schema_repair_policy(
+    *,
+    source_config: dict[str, Any],
+    control_plane_policy: ControlPlanePolicyV3,
+    bridge_policy: BridgePolicy,
+) -> ContractSchemaRepairPolicyV1:
+    """Freeze current schema-repair authority per model-facing v6 contract."""
+
+    shared_ceiling = min(2, max(0, int(source_config.get("RETRY_MAX", 2))))
+    bridge_ceiling = min(2, max(0, bridge_policy.max_schema_repair_attempts))
+    ceilings = {
+        "batch-critic.v2": shared_ceiling,
+        "critic.atomic-target.v1": shared_ceiling,
+        "conjecturer.atomic-candidate.v1": shared_ceiling,
+        "conjecturer.turn.v6": shared_ceiling,
+    }
+    if control_plane_policy.scratch_authoring.enabled:
+        ceilings.update(
+            {
+                "scratch.block.compact.v1": shared_ceiling,
+                "scratch.cluster-guide.compact.v1": shared_ceiling,
+                "scratch.link.compact.v1": shared_ceiling,
+                "scratch.block.minimal.v1": shared_ceiling,
+                "scratch.cluster-guide.minimal.v1": shared_ceiling,
+                "scratch.link.minimal.v1": shared_ceiling,
+            }
+        )
+    if bridge_policy.mode == "grounded_two_stage":
+        ceilings.update(
+            {
+                "bridge.composition.v2": bridge_ceiling,
+                "bridge.ledger.v3": bridge_ceiling,
+                "bridge.composition-batch.v1": bridge_ceiling,
+                "bridge.ledger-batch.v1": bridge_ceiling,
+            }
+        )
+        if bridge_policy.grounding_review:
+            from deepreason.bridge.repair import GroundingRepairWireV1
+            from deepreason.bridge.review import GroundingVerdictWireV1
+            from deepreason.llm.wire import DirectWireContract
+
+            ceilings.update(
+                {
+                    DirectWireContract(
+                        GroundingRepairWireV1
+                    ).contract_id: bridge_ceiling,
+                    DirectWireContract(
+                        GroundingVerdictWireV1
+                    ).contract_id: bridge_ceiling,
+                }
+            )
+    return ContractSchemaRepairPolicyV1(
+        grants=tuple(
+            ContractSchemaRepairGrantV1(
+                contract_id=contract_id,
+                maximum_schema_repairs=ceiling,
+                maximum_provider_calls=ceiling + 1,
+            )
+            for contract_id, ceiling in sorted(ceilings.items())
+        )
+    )
 
 
 def _effective_source_policy(policy: ScratchPolicy | BridgePolicy) -> dict[str, Any]:
@@ -1710,6 +2873,14 @@ def compile_run_manifest(
     )
     data = _source_config_data(config)
     scratch_source, bridge_source = _source_feature_policies(data)
+    if schema_version < 6:
+        for role, seat, spec in _configured_seats(data):
+            if spec.get("model_profile") is not None:
+                raise RunManifestError(
+                    "ROUTE_SEAT_PRESENTATION_MANIFEST_V6_REQUIRED",
+                    "endpoint model_profile overrides require RunManifest schema v6",
+                    f"/roles/{role}/{seat}/model_profile",
+                )
     if schema_version < 4 and control_plane_policy is not None:
         raise RunManifestError(
             "CONTROL_PLANE_MANIFEST_V4_REQUIRED",
@@ -1817,7 +2988,11 @@ def compile_run_manifest(
         # A doctor result recommends presentation only. It may select the
         # default profile, never a route or an epistemic policy, and an
         # explicit config/CLI profile always wins.
-        if capability_cache is not None and not explicit_config_profile:
+        if (
+            schema_version < 6
+            and capability_cache is not None
+            and not explicit_config_profile
+        ):
             try:
                 seed = (
                     _select_single_model_seed(
@@ -1862,6 +3037,9 @@ def compile_run_manifest(
         if role in role_names
     }
     roles: dict[str, tuple[Route, ...]] = {role: () for role in role_names}
+    presentation_specs: dict[str, tuple[dict[str, Any], ...]] = {
+        role: () for role in role_names
+    }
 
     if schema_version >= 3 and bridge_source.mode == "grounded_two_stage":
         required_roles = {
@@ -1893,6 +3071,7 @@ def compile_run_manifest(
             # One exact route is copied to every active role. Ensembles are
             # not inferred from another provider or model.
             roles[role] = (exact,)
+            presentation_specs[role] = (seed,)
         if "judge" in configured_roles and judge_family:
             second_spec = _select_second_judge_spec(
                 data, judge_family, exact.family, capability_cache=capability_cache
@@ -1900,15 +3079,23 @@ def compile_run_manifest(
             roles["judge"] = (
                 exact, _route_from_spec(second_spec, capability_cache=capability_cache)
             )
+            presentation_specs["judge"] = (seed, second_spec)
     else:
         grouped: dict[str, list[Route]] = {role: [] for role in role_names}
+        grouped_specs: dict[str, list[dict[str, Any]]] = {
+            role: [] for role in role_names
+        }
         for role, _index, spec in _configured_seats(data):
             if role not in role_names:
                 continue
             grouped.setdefault(role, []).append(
                 _route_from_spec(spec, capability_cache=capability_cache)
             )
+            grouped_specs.setdefault(role, []).append(spec)
         roles = {role: tuple(grouped.get(role, ())) for role in role_names}
+        presentation_specs = {
+            role: tuple(grouped_specs.get(role, ())) for role in role_names
+        }
 
     if rubric_policy == "require_cross_family":
         families = {
@@ -1965,7 +3152,29 @@ def compile_run_manifest(
     if schema_version >= 5:
         manifest_values["inquiry_capability_policy"] = resolved_inquiry_policy
         manifest_values["run_input_digest"] = run_input_digest
-    return RunManifest(
+    if schema_version == 6:
+        manifest_values["compact_recovery_policy"] = CompactRecoveryPolicyV1()
+        manifest_values["production_qualification_policy"] = (
+            ProductionQualificationPolicyV1()
+        )
+        manifest_values["terminal_commitment_policy"] = TerminalCommitmentPolicyV1()
+        assert isinstance(resolved_control_policy, ControlPlanePolicyV3)
+        assert bridge_policy is not None
+        manifest_values["contract_schema_repair_policy"] = (
+            _compile_contract_schema_repair_policy(
+                source_config=data,
+                control_plane_policy=resolved_control_policy,
+                bridge_policy=bridge_policy,
+            )
+        )
+        manifest_values["route_seat_presentation_plan"] = (
+            _compile_route_seat_presentation_plan(
+                roles=roles,
+                source_specs=presentation_specs,
+                manifest_default=model_profile,
+            )
+        )
+    manifest = RunManifest(
         schema_version=schema_version,
         engine_profile=engine_profile,
         model_profile=model_profile,
@@ -1996,6 +3205,20 @@ def compile_run_manifest(
         engine_config_json=_canonical_json(engine_config).decode("utf-8"),
         **manifest_values,
     )
+    if schema_version != 6:
+        return manifest
+    payload = manifest.model_dump(mode="python", by_alias=False)
+    payload["route_seat_contract_decomposition_plan"] = (
+        _compile_route_seat_contract_decomposition_plan(
+            manifest,
+            source_config=data,
+        )
+    )
+    manifest = RunManifest.model_validate(payload)
+    behavioral_plan = _compile_route_seat_behavioral_capability_plan(manifest)
+    payload = manifest.model_dump(mode="python", by_alias=False)
+    payload["route_seat_behavioral_capability_plan"] = behavioral_plan
+    return RunManifest.model_validate(payload)
 
 
 def write_run_manifest(manifest: RunManifest, path: Path | str) -> tuple[Path, Path]:
