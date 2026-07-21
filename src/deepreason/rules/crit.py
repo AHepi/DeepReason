@@ -23,7 +23,7 @@ import math
 from deepreason import programs
 from deepreason.authority import argumentative_authority_mode
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCriticOutput
+from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCase, BatchCriticOutput
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, route_fingerprint
 from deepreason.llm.packs import (
@@ -36,6 +36,7 @@ from deepreason.llm.profiles import ModelProfile, get_profile
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
     AliasTable,
+    AtomicCriticWireContractV1,
     BatchCriticWireContractV2,
     wire_contract_for,
 )
@@ -224,6 +225,7 @@ def _v6_transactional_batch_call(
     phase: str,
     caller_trigger_ref: str | None,
     pack_factory: Callable[[], str],
+    recover_existing: bool = False,
 ) -> tuple[BatchCriticOutput, object]:
     """Authorize and terminalize one v6 critic provider boundary.
 
@@ -281,6 +283,29 @@ def _v6_transactional_batch_call(
         "caller_trigger_ref": caller_trigger_ref,
     }
     service = InquiryTransactionService(harness, manifest, meter)
+    aliases = AliasTable(
+        {f"SRC_{index:03d}": target_id for index, target_id in enumerate(targets, 1)}
+    )
+    contract = BatchCriticWireContractV2(
+        aliases,
+        expected_targets=targets,
+    )
+    if recover_existing:
+        matches = [
+            item
+            for item in harness.workflow_state.transaction_work.values()
+            if item.preparation.contract_id == contract.contract_id
+            and item.preparation.task_payload_value == payload
+            and item.preparation.route_lease == route_ref
+        ]
+        if len(matches) > 1:
+            raise ValueError("transactional criticism recovery is ambiguous")
+        if matches:
+            from deepreason.workflow.atomic_recovery import recover_atomic_child_output
+
+            return recover_atomic_child_output(
+                harness, manifest, service, matches[0], contract
+            )
     fence = max(0, harness._next_seq - 1)
     trigger_ref = "criticism:" + hashlib.sha256(canonical_json(payload)).hexdigest()
     preparation = service.prepare(
@@ -311,13 +336,6 @@ def _v6_transactional_batch_call(
         )
 
     try:
-        aliases = AliasTable(
-            {f"SRC_{index:03d}": target_id for index, target_id in enumerate(targets, 1)}
-        )
-        contract = BatchCriticWireContractV2(
-            aliases,
-            expected_targets=targets,
-        )
         pack = pack_factory()
         rendered_bytes = len(pack.encode("utf-8"))
         items = tuple(
@@ -404,20 +422,25 @@ def _v6_transactional_batch_call(
         error.transaction_terminalized = True
         raise
     except SchemaRepairError as error:
-        repaired = service.repair_schema_failure(
-            adapter=adapter,
-            authorized=authorized,
-            error=error,
-            role="argumentative_critic",
-            pack=pack,
-            output_model=BatchCriticOutput,
-            wire_contract=contract,
-            endpoint_index=endpoint_lease.seat,
-            template_role="batch_critic",
-            endpoint_lease=endpoint_lease,
-            school_id=critic_school_id,
-            reason_prefix="critic",
-        )
+        try:
+            repaired = service.repair_schema_failure(
+                adapter=adapter,
+                authorized=authorized,
+                error=error,
+                role="argumentative_critic",
+                pack=pack,
+                output_model=BatchCriticOutput,
+                wire_contract=contract,
+                endpoint_index=endpoint_lease.seat,
+                template_role="batch_critic",
+                endpoint_lease=endpoint_lease,
+                school_id=critic_school_id,
+                reason_prefix="critic",
+            )
+        except SchemaRepairError as exhausted:
+            if not isinstance(getattr(exhausted, "source_work_id", None), str):
+                exhausted.source_work_id = preparation.id
+            raise
         output = repaired.output
         llm_call = repaired.llm_call
         preparation = repaired.preparation
@@ -454,6 +477,216 @@ def _v6_transactional_batch_call(
         admission=admission,
     )
     return output, llm_call
+
+
+def _v6_transactional_atomic_critic_call(
+    harness,
+    adapter,
+    run_manifest,
+    *,
+    endpoint_lease: EndpointLease,
+    critic_school_id: str,
+    target_id: str,
+    transition,
+    child_index: int,
+    child_count: int,
+    pack_factory: Callable[[], str],
+) -> tuple[ArgumentativeCriticOutput, object]:
+    """Execute or recover one manifest-authorized target child transaction."""
+
+    from deepreason.run_manifest import RunManifest
+    from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
+    from deepreason.workflow.transaction import ContextNamespace, VisibleContextItemV1
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    manifest = RunManifest.model_validate(run_manifest)
+    route_ref = RouteLeaseRefV1(
+        role="argumentative_critic",
+        seat=endpoint_lease.seat,
+        endpoint_id=endpoint_lease.route.endpoint_id,
+        route_sha256=route_fingerprint(endpoint_lease.route),
+    )
+    if (
+        transition.route_lease != route_ref
+        or transition.atomic_contract_id != "critic.atomic-target.v1"
+        or not 0 <= child_index < child_count <= transition.maximum_children
+    ):
+        raise ValueError("atomic critic child differs from decomposition authority")
+    payload = {
+        "schema": "contract-decomposition-child.v1",
+        "decomposition_transition_ref": transition.id,
+        "source_work_id": transition.source_work_id,
+        "source_contract_id": transition.source_contract_id,
+        "atomic_contract_id": transition.atomic_contract_id,
+        "child_partition": transition.child_partition,
+        "child_index": child_index,
+        "child_count": child_count,
+        "child_key": target_id,
+        "critic_school_id": critic_school_id,
+    }
+    aliases = AliasTable({"SRC_001": target_id})
+    contract = AtomicCriticWireContractV1(aliases, expected_target=target_id)
+    service = InquiryTransactionService(harness, manifest, adapter.meter)
+
+    matches = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.contract_id == contract.contract_id
+        and item.preparation.task_payload_value == payload
+        and item.preparation.route_lease == route_ref
+    ]
+    if len(matches) > 1:
+        raise ValueError("atomic critic child history is ambiguous")
+    if matches:
+        item = matches[0]
+        from deepreason.workflow.atomic_recovery import recover_atomic_child_output
+
+        return recover_atomic_child_output(
+            harness, manifest, service, item, contract
+        )
+
+    fence = max(0, harness._next_seq - 1)
+    trigger_ref = "decomposition-child:" + hashlib.sha256(
+        canonical_json(payload)
+    ).hexdigest()
+    preparation = service.prepare(
+        task_kind=WorkflowTaskKind.CRITICISM,
+        attempt_index=0,
+        route_lease=route_ref,
+        contract_id=contract.contract_id,
+        trigger_ref=trigger_ref,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+        target_refs=(target_id,),
+        input_refs=(
+            transition.source_work_id,
+            transition.id,
+            transition.child_context_refs[child_index],
+            target_id,
+        ),
+        task_payload_value=payload,
+    )
+    pack = pack_factory()
+    rendered_bytes = len(pack.encode("utf-8"))
+    plan = service.context_plan(
+        preparation,
+        plan_kind="dossier",
+        items=(
+            VisibleContextItemV1(
+                namespace=ContextNamespace.SOURCE,
+                alias="SRC_001",
+                object_ref=target_id,
+                content_sha256=_artifact_context_digest(harness, target_id),
+                planned_bytes=rendered_bytes,
+            ),
+        ),
+        maximum_bytes=rendered_bytes,
+        rendered_bytes=rendered_bytes,
+    )
+    prompt, preview_contract, preview_lease, maximum_tokens = adapter.preview_request(
+        "argumentative_critic",
+        pack,
+        ArgumentativeCriticOutput,
+        endpoint_index=endpoint_lease.seat,
+        template_role="argumentative_critic",
+        wire_contract=contract,
+        aliases=aliases,
+        endpoint_lease=endpoint_lease,
+    )
+    if preview_contract is not contract or preview_lease != endpoint_lease:
+        raise ValueError("atomic critic preview changed frozen authority")
+    authorized = service.issue(
+        preparation, plans=(plan,), prompt=prompt, max_tokens=maximum_tokens
+    )
+    try:
+        output, call = adapter.call(
+            "argumentative_critic",
+            pack,
+            ArgumentativeCriticOutput,
+            endpoint_index=endpoint_lease.seat,
+            template_role="argumentative_critic",
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            school_id=critic_school_id,
+            dispatch_authorization=authorized,
+        )
+    except EndpointError as error:
+        spend = getattr(error, "spend", None)
+        if spend is None:
+            if authorized.reservation.is_open:
+                authorized.release()
+            service.terminate(
+                work_id=preparation.id,
+                attempt_index=preparation.attempt_index,
+                status="abandoned",
+                reason_code="atomic_critic_provider_result_unknown",
+                usage_status="unknown",
+            )
+        else:
+            diagnostic_ref = (
+                spend.attempt_trace[-1].diagnostic_ref
+                if spend.attempt_trace
+                else harness.blobs.put(str(error).encode("utf-8"))
+            )
+            provider = service.record_provider_attempt(
+                authorized,
+                call=spend,
+                outcome="transport_failure",
+                usage_status="unknown",
+                diagnostic_ref=diagnostic_ref,
+            )
+            service.terminate(
+                work_id=preparation.id,
+                attempt_index=preparation.attempt_index,
+                status="transport_failed",
+                reason_code="atomic_critic_transport_failure",
+                usage_status="unknown",
+                provider_attempt=provider,
+            )
+            error.spend = None
+        error.transaction_terminalized = True
+        raise
+    except SchemaRepairError as error:
+        repaired = service.repair_schema_failure(
+            adapter=adapter,
+            authorized=authorized,
+            error=error,
+            role="argumentative_critic",
+            pack=pack,
+            output_model=ArgumentativeCriticOutput,
+            wire_contract=contract,
+            endpoint_index=endpoint_lease.seat,
+            template_role="argumentative_critic",
+            endpoint_lease=endpoint_lease,
+            school_id=critic_school_id,
+            reason_prefix="atomic_critic",
+        )
+        output, call = repaired.output, repaired.llm_call
+        preparation, authorized = repaired.preparation, repaired.authorized
+        provider = repaired.provider_attempt
+    else:
+        provider = service.record_provider_attempt(
+            authorized, call=call, outcome="provider_result", usage_status="exact"
+        )
+    admitted_ref = harness.blobs.put(
+        canonical_json(output.model_dump(mode="json", exclude_none=True))
+    )
+    admission = service.record_semantic_admission(
+        provider, outcome="admitted", admitted_refs=(admitted_ref,)
+    )
+    service.terminate(
+        work_id=preparation.id,
+        attempt_index=preparation.attempt_index,
+        status="completed",
+        reason_code="atomic_critic_output_admitted",
+        usage_status="exact",
+        prompt_tokens=call.prompt_tokens,
+        completion_tokens=call.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+    return output, call
 
 
 def _observe_case(
@@ -1175,9 +1408,94 @@ def crit_argumentative_batch(
         return _condition_pack(pack, school_prefix)
 
     transactional_call = None
+    atomic_call_by_target: dict[str, object] = {}
+    decomposition_transition = None
+    resuming_atomic_decomposition = False
     if active_v6:
         assert endpoint_lease is not None
         assert critic_school_id is not None
+
+        from deepreason.workflow.models import RouteLeaseRefV1
+
+        expected_route_ref = RouteLeaseRefV1(
+            role="argumentative_critic",
+            seat=endpoint_lease.seat,
+            endpoint_id=endpoint_lease.route.endpoint_id,
+            route_sha256=route_fingerprint(endpoint_lease.route),
+        )
+        expected_strong_payload = {
+            "schema": "criticism.semantic-task.v1",
+            "critic_school_id": critic_school_id,
+            "target_ids": list(target_ids),
+            "assignment_refs": list(transaction_assignment_refs),
+            "coverage_attempt_index": transaction_attempt_index,
+            "phase": "primary",
+            "caller_trigger_ref": transaction_trigger_ref,
+        }
+
+        def source_root_payload(transition):
+            source = harness.workflow_state.transaction_work.get(
+                transition.source_work_id
+            )
+            if source is None:
+                return None
+            value = source.preparation.task_payload_value
+            if (
+                isinstance(value, Mapping)
+                and value.get("schema") == "repair.semantic-task.v1"
+            ):
+                source = harness.workflow_state.transaction_work.get(
+                    value.get("parent_work_id")
+                )
+                if source is None:
+                    return None
+                value = source.preparation.task_payload_value
+            return value
+
+        def execute_atomic_transition(transition):
+            nonlocal atomic_call_by_target
+            if (
+                transition.route_lease != expected_route_ref
+                or transition.source_contract_id != "batch-critic.v2"
+                or transition.atomic_contract_id != "critic.atomic-target.v1"
+                or tuple(transition.child_keys) != tuple(target_ids)
+                or len(transition.child_context_refs) != len(target_ids)
+            ):
+                raise ValueError("atomic criticism differs from decomposition authority")
+            atomic_cases = []
+            atomic_calls = []
+            for child_index, target_id in enumerate(target_ids):
+
+                def atomic_pack_factory(child_index=child_index):
+                    return harness.blobs.get(
+                        transition.child_context_refs[child_index]
+                    ).decode("utf-8")
+
+                atomic_output, atomic_call = _v6_transactional_atomic_critic_call(
+                    harness,
+                    adapter,
+                    run_manifest,
+                    endpoint_lease=endpoint_lease,
+                    critic_school_id=critic_school_id,
+                    target_id=target_id,
+                    transition=transition,
+                    child_index=child_index,
+                    child_count=len(target_ids),
+                    pack_factory=atomic_pack_factory,
+                )
+                atomic_cases.append(
+                    BatchCase(
+                        target=target_id,
+                        attack=atomic_output.attack,
+                        case=atomic_output.case,
+                        counterexample=atomic_output.counterexample,
+                    )
+                )
+                atomic_calls.append(atomic_call)
+                atomic_call_by_target[target_id] = atomic_call
+            if any(_llm_event_seq(harness, call) is None for call in atomic_calls):
+                raise RuntimeError("atomic criticism has an undurable source call")
+            return BatchCriticOutput(cases=atomic_cases), atomic_calls[-1]
 
         def transactional_call(
             selected_targets: tuple[str, ...],
@@ -1196,13 +1514,85 @@ def crit_argumentative_batch(
                 phase=phase,
                 caller_trigger_ref=transaction_trigger_ref,
                 pack_factory=pack_factory,
+                recover_existing=resuming_atomic_decomposition,
             )
 
-        output, llm_call = transactional_call(
-            tuple(target_ids),
-            primary_pack_factory,
-            "primary",
-        )
+        incomplete = [
+            transition
+            for transition in harness.workflow_state.contract_decomposition_by_source_work.values()
+            if transition.manifest_digest == run_manifest.sha256
+            and transition.route_lease == expected_route_ref
+            and transition.source_contract_id == "batch-critic.v2"
+            and transition.atomic_contract_id == "critic.atomic-target.v1"
+            and source_root_payload(transition) == expected_strong_payload
+            and transition.id
+            not in harness.workflow_state.contract_decomposition_completion_by_transition
+        ]
+        if len(incomplete) > 1:
+            raise ValueError("atomic criticism history is ambiguous")
+        if incomplete:
+            resuming_atomic_decomposition = True
+            decomposition_transition = incomplete[0]
+            output, llm_call = execute_atomic_transition(
+                decomposition_transition
+            )
+        else:
+            try:
+                output, llm_call = transactional_call(
+                    tuple(target_ids),
+                    primary_pack_factory,
+                    "primary",
+                )
+            except SchemaRepairError as exhausted:
+                source_work_id = getattr(exhausted, "source_work_id", None)
+                if not isinstance(source_work_id, str):
+                    raise
+                from deepreason.run_manifest import (
+                    RunManifestError,
+                    resolve_route_seat_contract_decomposition,
+                )
+
+                try:
+                    resolve_route_seat_contract_decomposition(
+                        run_manifest,
+                        role="argumentative_critic",
+                        seat=endpoint_lease.seat,
+                        endpoint_id=endpoint_lease.route.endpoint_id,
+                        route_sha256=expected_route_ref.route_sha256,
+                        source_contract_id="batch-critic.v2",
+                    )
+                except RunManifestError as authority_error:
+                    if authority_error.code in {
+                        "V6_CONTRACT_DECOMPOSITION_AUTHORITY_REQUIRED",
+                        "V6_CONTRACT_DECOMPOSITION_GRANT_REQUIRED",
+                    }:
+                        # The strong batch is already durably schema-exhausted.
+                        # No separately frozen edge means no atomic provider work.
+                        raise exhausted
+                    raise
+                atomic_packs = {
+                    target_id: _condition_pack(
+                        render_crit_pack(
+                            target_id,
+                            harness.state,
+                            harness.commitments,
+                            harness.blobs,
+                            token_budget=_conditioned_budget(
+                                config.PACK_TOKEN_BUDGET, school_prefix
+                            ),
+                        ),
+                        school_prefix,
+                    )
+                    for target_id in target_ids
+                }
+                decomposition_transition = harness.activate_contract_decomposition(
+                    run_manifest,
+                    source_work_id,
+                    child_contexts=tuple(atomic_packs.items()),
+                )
+                output, llm_call = execute_atomic_transition(
+                    decomposition_transition
+                )
     else:
         pack = primary_pack_factory()
         output, llm_call = adapter.call(
@@ -1230,18 +1620,48 @@ def crit_argumentative_batch(
             critic_school_id=critic_school_id,
             transactional_call=transactional_call,
             llm_already_recorded=active_v6,
+            restart_safe=resuming_atomic_decomposition,
+            decomposition_transition_ref=(
+                decomposition_transition.id
+                if decomposition_transition is not None
+                else None
+            ),
+            allow_provider_followup=decomposition_transition is None,
             effect_source_call_seq=effect_source_call_seq,
+            effect_source_call_seqs=(
+                {
+                    target_id: _llm_event_seq(harness, atomic_call)
+                    for target_id, atomic_call in atomic_call_by_target.items()
+                }
+                if atomic_call_by_target
+                else None
+            ),
         )
+        if decomposition_transition is not None:
+            harness.complete_contract_decomposition(
+                run_manifest,
+                decomposition_transition,
+                admitted_effect_refs=tuple(item.id for item in result),
+            )
         criticism_completed = True
         return result
     finally:
         if criticism_completed or not active_v6:
-            _observe_coverage(
-                harness,
-                tuple(target_ids),
-                llm_call,
-                coverage_observer,
-            )
+            if atomic_call_by_target:
+                for target_id, atomic_call in atomic_call_by_target.items():
+                    _observe_coverage(
+                        harness,
+                        (target_id,),
+                        atomic_call,
+                        coverage_observer,
+                    )
+            else:
+                _observe_coverage(
+                    harness,
+                    tuple(target_ids),
+                    llm_call,
+                    coverage_observer,
+                )
 
 
 def _apply_counterexample_retry_result(
@@ -1315,7 +1735,9 @@ def _crit_argumentative_batch_result(
     llm_already_recorded: bool = False,
     restart_safe: bool = False,
     effect_source_call_seq: int | None = None,
+    effect_source_call_seqs: Mapping[str, int] | None = None,
     allow_provider_followup: bool = True,
+    decomposition_transition_ref: str | None = None,
 ) -> list[Artifact]:
     """Process one already-returned batch without changing its route policy."""
 
@@ -1332,6 +1754,11 @@ def _crit_argumentative_batch_result(
         ruled.add(case.target)
         if not case.attack or not case.case.strip():
             continue  # no fault found for this target: registers nothing
+        case_source_call_seq = (
+            effect_source_call_seqs.get(case.target, effect_source_call_seq)
+            if effect_source_call_seqs is not None
+            else effect_source_call_seq
+        )
         before = set(harness.state.artifacts)
         grounded, reason = try_counterexample(
             harness,
@@ -1341,7 +1768,7 @@ def _crit_argumentative_batch_result(
             llm=llm_pending,
             critic_school_id=critic_school_id,
             restart_safe=restart_safe,
-            effect_source_call_seq=effect_source_call_seq,
+            effect_source_call_seq=case_source_call_seq,
         )
         if grounded is not None:
             critics.append(grounded)
@@ -1353,8 +1780,8 @@ def _crit_argumentative_batch_result(
             # override (llm=None — the shared call is accounted exactly once
             # elsewhere) and queue the target for the counterexample retry.
             override_inputs = ["arg-crit-overridden-by-execution", case.target]
-            if effect_source_call_seq is not None:
-                override_inputs.append(f"source:{effect_source_call_seq}")
+            if case_source_call_seq is not None:
+                override_inputs.append(f"source:{case_source_call_seq}")
             existing_overrides = [
                 event
                 for event in harness.log.read()
@@ -1385,7 +1812,7 @@ def _crit_argumentative_batch_result(
                 llm_pending,
                 critic_school_id=critic_school_id,
                 restart_safe=restart_safe,
-                effect_source_call_seq=effect_source_call_seq,
+                effect_source_call_seq=case_source_call_seq,
             )
             llm_pending = None  # accounted inside _observe_case
             critics.append(critic)
@@ -1480,10 +1907,27 @@ def _crit_argumentative_batch_result(
             retry_llm,
             critic_school_id=critic_school_id,
             llm_already_recorded=(transactional_call is not None),
+            restart_safe=restart_safe,
             effect_source_call_seq=retry_source_call_seq,
         )
         critics.extend(retry_critics)
     if llm_pending is not None:
         # Nothing committed the call (no attacks, or every critic deduped).
         harness.record_measure(inputs=["batch-crit", *target_ids], llm=llm_pending)
+    if decomposition_transition_ref is not None:
+        for critic in critics:
+            marker = [
+                "contract-decomposition-effect",
+                decomposition_transition_ref,
+                critic.id,
+            ]
+            existing = [
+                event
+                for event in harness.log.read()
+                if event.rule == Rule.MEASURE and list(event.inputs) == marker
+            ]
+            if len(existing) > 1:
+                raise RuntimeError("contract decomposition effect is duplicated")
+            if not existing:
+                harness.record_measure(inputs=marker)
     return critics
