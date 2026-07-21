@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+import re
 from typing import Any, Literal
 
 from pydantic import Field, field_validator, model_validator
@@ -33,6 +34,84 @@ class ContextNamespace(str, Enum):
     SOURCE = "source"
     SIMULATION = "simulation"
     SCRATCH = "scratch"
+
+
+class RouteSeatModelClassificationV1(WorkflowRecord):
+    """Deterministic result for one exact behavioral route-seat grant."""
+
+    role: str = Field(min_length=1, max_length=64)
+    seat: int = Field(ge=0, le=1_023)
+    endpoint_id: str = Field(min_length=1, max_length=256)
+    route_sha256: str = Field(pattern=_DIGEST)
+    behavioral_grant_sha256: str = Field(pattern=_DIGEST)
+    selected_class: Literal[
+        "qualified_exact_behavior",
+        "unqualified_exact_behavior",
+        "inactive_no_authorized_contract",
+    ]
+    authorized_contract_ids: tuple[str, ...] = ()
+    evidence_pair_ids: tuple[str, ...] = ()
+
+    @model_validator(mode="after")
+    def _classification_is_exact(self):
+        if self.authorized_contract_ids != tuple(
+            sorted(set(self.authorized_contract_ids))
+        ):
+            raise ValueError("classification contract IDs must be unique and sorted")
+        if self.evidence_pair_ids != tuple(sorted(set(self.evidence_pair_ids))):
+            raise ValueError("classification evidence pair IDs must be unique and sorted")
+        inactive = self.selected_class == "inactive_no_authorized_contract"
+        if inactive != (not self.authorized_contract_ids):
+            raise ValueError("inactive classification must have no authorized contracts")
+        if inactive != (not self.evidence_pair_ids):
+            raise ValueError("inactive classification must have no evidence pairs")
+        return self
+
+
+class RouteSeatModelClassificationPlanV1(IdentifiedWorkflowRecord):
+    """Manifest-bound deterministic selection derived from doctor evidence."""
+
+    _identity_domain = "workflow.route-seat-model-classification-plan.v1"
+
+    schema_: Literal["workflow.route-seat-model-classification-plan.v1"] = Field(
+        "workflow.route-seat-model-classification-plan.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    algorithm: Literal["exact-production-contract-qualification.v1"] = (
+        "exact-production-contract-qualification.v1"
+    )
+    algorithm_version: Literal[1] = 1
+    qualification_evidence_sha256: str = Field(pattern=_DIGEST)
+    entries: tuple[RouteSeatModelClassificationV1, ...]
+
+    @model_validator(mode="after")
+    def _entries_are_complete_ordered_identities(self):
+        if not self.entries:
+            raise ValueError("model classification plan requires route-seat entries")
+        keys = tuple(
+            (entry.role, entry.seat, entry.endpoint_id, entry.route_sha256)
+            for entry in self.entries
+        )
+        if keys != tuple(sorted(set(keys))):
+            raise ValueError("model classification entries must be unique and sorted")
+        return self
+
+
+class ModelClassificationBindingV1(IdentifiedWorkflowRecord):
+    """Exact-once durable reachability for one qualified classification plan."""
+
+    _identity_domain = "workflow.model-classification-binding.v1"
+
+    schema_: Literal["workflow.model-classification-binding.v1"] = Field(
+        "workflow.model-classification-binding.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    classification_plan_ref: str = Field(pattern=_ID)
+    algorithm: Literal["exact-production-contract-qualification.v1"] = (
+        "exact-production-contract-qualification.v1"
+    )
+    algorithm_version: Literal[1] = 1
+    qualification_evidence_sha256: str = Field(pattern=_DIGEST)
 
 
 class WorkTransitionKind(str, Enum):
@@ -83,6 +162,11 @@ class WorkPreparationV1(IdentifiedWorkflowRecord):
     input_refs: tuple[str, ...] = ()
     route_lease: RouteLeaseRefV1
     contract_id: str = Field(min_length=1, max_length=512)
+    source_terminal_commitment_ref: str | None = Field(
+        default=None,
+        pattern=_ID,
+        exclude_if=lambda value: value is None,
+    )
     task_payload_ref: str | None = Field(default=None, max_length=512)
     task_payload_value: Any | None = None
 
@@ -337,6 +421,188 @@ class SemanticAdmissionV1(IdentifiedWorkflowRecord):
         return self
 
 
+class CompactRecoveryTransitionV1(IdentifiedWorkflowRecord):
+    """Durable authority to use compact presentation on one route seat later."""
+
+    _identity_domain = "workflow.compact-recovery-transition.v1"
+
+    schema_: Literal["workflow.compact-recovery-transition.v1"] = Field(
+        "workflow.compact-recovery-transition.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    work_id: str = Field(pattern=_ID)
+    attempt_index: int = Field(ge=0, le=64)
+    route_lease: RouteLeaseRefV1
+    source_profile: Literal["standard", "frontier"]
+    target_profile: Literal["compact"] = "compact"
+    trigger: Literal["schema_exhausted"] = "schema_exhausted"
+    scope: Literal["route_seat"] = "route_seat"
+    sticky: Literal[True] = True
+    applies_to: Literal["all_subsequent_model_calls"] = (
+        "all_subsequent_model_calls"
+    )
+    retry_failed_work: Literal[False] = False
+    semantic_admission_ref: str = Field(pattern=_ID)
+
+    @property
+    def route_seat_key(self) -> tuple[str, int, str, str]:
+        lease = self.route_lease
+        return (lease.role, lease.seat, lease.endpoint_id, lease.route_sha256)
+
+
+class ContractDecompositionTransitionV1(IdentifiedWorkflowRecord):
+    """Durable authorization to replace one exhausted strong work item."""
+
+    _identity_domain = "workflow.contract-decomposition-transition.v1"
+
+    schema_: Literal["workflow.contract-decomposition-transition.v1"] = Field(
+        "workflow.contract-decomposition-transition.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    source_work_id: str = Field(pattern=_ID)
+    source_attempt_index: int = Field(ge=0, le=64)
+    source_terminal_ref: str = Field(pattern=_ID)
+    source_semantic_admission_ref: str = Field(pattern=_ID)
+    route_lease: RouteLeaseRefV1
+    source_contract_id: str = Field(min_length=1, max_length=128)
+    atomic_contract_id: str = Field(min_length=1, max_length=128)
+    trigger: Literal["schema_exhausted"] = "schema_exhausted"
+    child_partition: Literal[
+        "conjecture_candidate_slot",
+        "critic_target",
+        "bridge_catalog_batch",
+        "bridge_ledger_batch",
+        "scratch_single_object",
+    ]
+    maximum_children: int = Field(ge=1, le=256, strict=True)
+    coverage: Literal["all_deterministically_assigned_children"] = (
+        "all_deterministically_assigned_children"
+    )
+    execution: Literal["fresh_transaction_per_child"] = (
+        "fresh_transaction_per_child"
+    )
+    source_failure_preserved: Literal[True] = True
+    child_keys: tuple[str, ...]
+    child_context_refs: tuple[str, ...]
+
+    @model_validator(mode="after")
+    def _child_inventory_is_exact(self):
+        if (
+            not self.child_keys
+            or len(self.child_keys) != len(self.child_context_refs)
+            or len(self.child_keys) > self.maximum_children
+            or len(set(self.child_keys)) != len(self.child_keys)
+            or any(re.fullmatch(_DIGEST, ref) is None for ref in self.child_context_refs)
+        ):
+            raise ValueError("decomposition child inventory must be finite and exact")
+        return self
+
+
+class ContractDecompositionCompletionV1(IdentifiedWorkflowRecord):
+    """Durable merge receipt preserving the exhausted source separately."""
+
+    _identity_domain = "workflow.contract-decomposition-completion.v1"
+
+    schema_: Literal["workflow.contract-decomposition-completion.v1"] = Field(
+        "workflow.contract-decomposition-completion.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    transition_ref: str = Field(pattern=_ID)
+    source_work_id: str = Field(pattern=_ID)
+    child_work_ids: tuple[str, ...]
+    child_semantic_admission_refs: tuple[str, ...]
+    admitted_effect_refs: tuple[str, ...] = ()
+    source_failure_preserved: Literal[True] = True
+
+    @model_validator(mode="after")
+    def _child_results_are_exact(self):
+        if (
+            not self.child_work_ids
+            or len(self.child_work_ids) != len(self.child_semantic_admission_refs)
+            or len(set(self.child_work_ids)) != len(self.child_work_ids)
+            or len(set(self.child_semantic_admission_refs))
+            != len(self.child_semantic_admission_refs)
+            or len(set(self.admitted_effect_refs)) != len(self.admitted_effect_refs)
+        ):
+            raise ValueError("decomposition completion requires exact child results")
+        return self
+
+
+class RouteSeatInsufficientCapabilityV1(IdentifiedWorkflowRecord):
+    """Final route-seat outcome after its smallest authorized contract fails."""
+
+    _identity_domain = "workflow.route-seat-insufficient-capability.v1"
+
+    schema_: Literal["workflow.route-seat-insufficient-capability.v1"] = Field(
+        "workflow.route-seat-insufficient-capability.v1", alias="schema"
+    )
+    manifest_digest: str = Field(pattern=_DIGEST)
+    work_id: str = Field(pattern=_ID)
+    attempt_index: int = Field(ge=0, le=64)
+    route_lease: RouteLeaseRefV1
+    contract_id: str = Field(min_length=1, max_length=512)
+    provider_attempt_ref: str = Field(pattern=_ID)
+    semantic_admission_ref: str = Field(pattern=_ID)
+    outcome: Literal["insufficient_capability"] = "insufficient_capability"
+    reason: Literal["smallest_authorized_contract_schema_exhausted"] = (
+        "smallest_authorized_contract_schema_exhausted"
+    )
+    terminal_authority: Literal["workflow.work-terminal.v1"] = (
+        "workflow.work-terminal.v1"
+    )
+    attempted_work_ids: tuple[str, ...]
+    attempted_contract_ids: tuple[str, ...]
+    decomposition_transition_refs: tuple[str, ...] = ()
+    compact_recovery_transition_refs: tuple[str, ...] = ()
+    classification_plan_ref: str = Field(pattern=_ID)
+    classification_binding_ref: str = Field(pattern=_ID)
+    qualification_evidence_sha256: str = Field(pattern=_DIGEST)
+    behavioral_grant_sha256: str = Field(pattern=_DIGEST)
+    maximum_schema_repairs: int = Field(ge=0, le=2)
+    maximum_provider_calls: int = Field(ge=1, le=3)
+    observed_provider_calls: int = Field(ge=1, le=3)
+    retry_failed_work: Literal[False] = False
+
+    @field_validator(
+        "attempted_work_ids",
+        "attempted_contract_ids",
+        "decomposition_transition_refs",
+        "compact_recovery_transition_refs",
+    )
+    @classmethod
+    def _freeze_inventory(cls, value):
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _outcome_is_exact(self):
+        if (
+            not self.attempted_work_ids
+            or len(self.attempted_work_ids) != len(self.attempted_contract_ids)
+            or self.attempted_work_ids[-1] != self.work_id
+            or self.attempted_contract_ids[-1] != self.contract_id
+            or len(set(self.attempted_work_ids)) != len(self.attempted_work_ids)
+            or len(set(self.decomposition_transition_refs))
+            != len(self.decomposition_transition_refs)
+            or len(set(self.compact_recovery_transition_refs))
+            != len(self.compact_recovery_transition_refs)
+        ):
+            raise ValueError("insufficient-capability attempt history is not exact")
+        if self.maximum_provider_calls != self.maximum_schema_repairs + 1:
+            raise ValueError("insufficient-capability repair arithmetic differs")
+        if self.observed_provider_calls > self.maximum_provider_calls:
+            raise ValueError("insufficient-capability provider use exceeds authority")
+        return self
+
+    @property
+    def route_seat_key(self) -> tuple[str, int, str, str]:
+        return (
+            self.route_lease.role,
+            self.route_lease.seat,
+            self.route_lease.endpoint_id,
+            self.route_lease.route_sha256,
+        )
+
+
 class WorkTerminalV1(IdentifiedWorkflowRecord):
     _identity_domain = "workflow.work-terminal.v1"
 
@@ -359,6 +625,16 @@ class WorkTerminalV1(IdentifiedWorkflowRecord):
     completion_tokens: int | None = Field(default=None, ge=0)
     provider_attempt_ref: str | None = Field(default=None, pattern=_ID)
     semantic_admission_ref: str | None = Field(default=None, pattern=_ID)
+    compact_recovery_transition_ref: str | None = Field(
+        default=None,
+        pattern=_ID,
+        exclude_if=lambda value: value is None,
+    )
+    insufficient_capability_ref: str | None = Field(
+        default=None,
+        pattern=_ID,
+        exclude_if=lambda value: value is None,
+    )
     reason_code: str = Field(min_length=1, max_length=128)
 
     @model_validator(mode="after")
@@ -380,6 +656,14 @@ class WorkTerminalV1(IdentifiedWorkflowRecord):
             or self.completion_tokens != 0
         ):
             raise ValueError("budget denial cannot claim provider work or token use")
+        if self.insufficient_capability_ref is not None and (
+            self.status != "schema_exhausted"
+            or self.provider_attempt_ref is None
+            or self.semantic_admission_ref is None
+        ):
+            raise ValueError(
+                "insufficient capability requires schema-exhausted provider authority"
+            )
         return self
 
 
@@ -407,11 +691,18 @@ class WorkBudgetDenied(RuntimeError):
 
 __all__ = [
     "AuthorizedDispatch",
+    "CompactRecoveryTransitionV1",
+    "ContractDecompositionTransitionV1",
+    "ContractDecompositionCompletionV1",
+    "RouteSeatInsufficientCapabilityV1",
     "ContextExposureReceiptV2",
     "ContextNamespace",
     "ContextPackPlanV1",
     "DispatchAuthorizationBundleV1",
     "ProviderAttemptV1",
+    "ModelClassificationBindingV1",
+    "RouteSeatModelClassificationPlanV1",
+    "RouteSeatModelClassificationV1",
     "SemanticAdmissionV1",
     "TokenReservationV2",
     "VisibleContextItemV1",
