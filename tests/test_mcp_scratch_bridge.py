@@ -506,7 +506,7 @@ def test_bridge_start_poll_result_claims_and_unresolved_success(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
     formal_before = _formal_snapshot(mcp_run.root)
     progress = []
@@ -566,7 +566,7 @@ def test_duplicate_start_returns_typed_busy_without_launching_second_worker(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
     entered = threading.Event()
     release = threading.Event()
@@ -632,7 +632,7 @@ def test_worker_failure_is_persisted_and_visible_after_thread_registry_loss(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
     monkeypatch.setattr(
         bridge_application,
@@ -681,7 +681,7 @@ def test_thread_start_failure_persists_both_operation_records_and_releases_lock(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
     monkeypatch.setattr(
         threading.Thread,
@@ -711,7 +711,7 @@ def test_progress_callback_failure_cannot_relabel_success(mcp_run, monkeypatch):
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
 
     started = mcp.call_tool(
@@ -740,7 +740,7 @@ def test_system_exit_progress_callback_cannot_strand_worker_locks(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
 
     started = mcp.call_tool(
