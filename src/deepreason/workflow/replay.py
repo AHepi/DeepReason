@@ -14,6 +14,11 @@ from deepreason.control_events import (
     ControlEventPayloadV2,
     ControlEventPayloadV3,
 )
+from deepreason.run_manifest import (
+    resolve_route_seat_contract_decomposition,
+    resolve_route_seat_base_profile,
+    resolve_route_seat_behavioral_capability,
+)
 from deepreason.workflow.models import (
     CapabilityOutcome,
     GuardFindingOutcome,
@@ -21,6 +26,8 @@ from deepreason.workflow.models import (
     ProposalReceiptV1,
     ProposalValidationOutcome,
     RepairWorkOrderV1,
+    RunTerminalCommitmentV1,
+    RunTerminalResultDraftV1,
     StopMetricsObservationV1,
     TransitionDecisionV1,
     TransitionKind,
@@ -28,6 +35,7 @@ from deepreason.workflow.models import (
     WorkflowLifecycleDecisionV1,
     WorkflowLifecycleSnapshotV1,
     WorkflowResumeDecisionV1,
+    WorkflowTaskKind,
     repair_attempt_trigger_ref,
 )
 from deepreason.workflow.state import (
@@ -36,10 +44,16 @@ from deepreason.workflow.state import (
     apply_decision,
 )
 from deepreason.workflow.transaction import (
+    CompactRecoveryTransitionV1,
+    ContractDecompositionCompletionV1,
+    ContractDecompositionTransitionV1,
     ContextExposureReceiptV2,
     ContextPackPlanV1,
     DispatchAuthorizationBundleV1,
+    ModelClassificationBindingV1,
     ProviderAttemptV1,
+    RouteSeatInsufficientCapabilityV1,
+    RouteSeatModelClassificationPlanV1,
     SemanticAdmissionV1,
     TokenReservationV2,
     WorkLifecycleTransitionV1,
@@ -64,6 +78,8 @@ _SCHEMA_MODELS = {
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
     "workflow-resume-decision": WorkflowResumeDecisionV1,
+    "workflow-run-terminal-commitment-v1": RunTerminalCommitmentV1,
+    "workflow-run-terminal-result-draft-v1": RunTerminalResultDraftV1,
     "workflow-work-preparation-v1": WorkPreparationV1,
     "workflow-context-pack-plan-v1": ContextPackPlanV1,
     "workflow-token-reservation-v2": TokenReservationV2,
@@ -71,8 +87,22 @@ _SCHEMA_MODELS = {
     "workflow-dispatch-authorization-v1": DispatchAuthorizationBundleV1,
     "workflow-provider-attempt-v1": ProviderAttemptV1,
     "workflow-semantic-admission-v1": SemanticAdmissionV1,
+    "workflow-compact-recovery-transition-v1": CompactRecoveryTransitionV1,
+    "workflow-contract-decomposition-transition-v1": (
+        ContractDecompositionTransitionV1
+    ),
+    "workflow-contract-decomposition-completion-v1": (
+        ContractDecompositionCompletionV1
+    ),
+    "workflow-route-seat-insufficient-capability-v1": (
+        RouteSeatInsufficientCapabilityV1
+    ),
     "workflow-work-terminal-v1": WorkTerminalV1,
     "workflow-work-lifecycle-transition-v1": WorkLifecycleTransitionV1,
+    "workflow-route-seat-model-classification-plan-v1": (
+        RouteSeatModelClassificationPlanV1
+    ),
+    "workflow-model-classification-binding-v1": ModelClassificationBindingV1,
 }
 _PROVIDER_TRANSITIONS = {
     TransitionKind.PROPOSAL_RECEIVED,
@@ -184,6 +214,7 @@ class TransactionReplayItem:
     exposure: ContextExposureReceiptV2 | None = None
     authorization: DispatchAuthorizationBundleV1 | None = None
     provider_attempts: dict[int, ProviderAttemptV1] = field(default_factory=dict)
+    provider_calls: dict[int, Any] = field(default_factory=dict)
     admissions: dict[int, SemanticAdmissionV1] = field(default_factory=dict)
     terminal: WorkTerminalV1 | None = None
     transitions: list[WorkLifecycleTransitionV1] = field(default_factory=list)
@@ -222,24 +253,866 @@ class WorkflowReplayState:
     terminal_decision_id: str | None = None
     current_resume_decision_id: str | None = None
     resume_decision_event_seq: dict[str, int] = field(default_factory=dict)
+    terminal_commitments_by_epoch: dict[int, RunTerminalCommitmentV1] = field(
+        default_factory=dict
+    )
+    terminal_commitment_event_seq: dict[str, int] = field(default_factory=dict)
+    terminal_epoch_opening_resume_ref: dict[int, str] = field(default_factory=dict)
+    current_terminal_epoch: int = 0
     branches: dict[str, WorkflowBranchState] = field(default_factory=dict)
     work_to_branch: dict[str, str] = field(default_factory=dict)
     decision_event_seq: dict[str, int] = field(default_factory=dict)
     calls_by_seq: dict[int, Any] = field(default_factory=dict)
     transaction_work: dict[str, TransactionReplayItem] = field(default_factory=dict)
     transaction_calls_by_seq: dict[int, Any] = field(default_factory=dict)
+    compact_recovery_by_route_seat: dict[
+        tuple[str, int, str, str], CompactRecoveryTransitionV1
+    ] = field(default_factory=dict)
+    insufficient_capability_by_route_seat: dict[
+        tuple[str, int, str, str], RouteSeatInsufficientCapabilityV1
+    ] = field(default_factory=dict)
+    contract_decomposition_by_source_work: dict[
+        str, ContractDecompositionTransitionV1
+    ] = field(default_factory=dict)
+    contract_decomposition_event_seq: dict[str, int] = field(default_factory=dict)
+    contract_decomposition_completion_by_transition: dict[
+        str, ContractDecompositionCompletionV1
+    ] = field(default_factory=dict)
+    route_seat_model_classification: RouteSeatModelClassificationPlanV1 | None = None
+    model_classification_binding: ModelClassificationBindingV1 | None = None
+    model_classification_event_seq: int | None = None
     event_seqs: list[int] = field(default_factory=list)
+    event_inputs_by_seq: dict[int, tuple[str, ...]] = field(default_factory=dict)
+    event_outputs_by_seq: dict[int, tuple[str, ...]] = field(default_factory=dict)
+    _run_manifest: Any | None = field(default=None, repr=False)
+
+    def bind_run_manifest(self, manifest: Any) -> None:
+        """Bind replay validation to one immutable v6 manifest authority."""
+
+        if getattr(manifest, "schema_version", None) != 6:
+            raise ValueError("transaction replay requires RunManifest v6 authority")
+        current = self._run_manifest
+        if current is not None and current.sha256 != manifest.sha256:
+            raise ValueError("workflow replay is already bound to another manifest")
+        self._run_manifest = manifest
+        try:
+            for epoch, commitment in self.terminal_commitments_by_epoch.items():
+                if (
+                    commitment.manifest_sha256 != manifest.sha256
+                    or commitment.run_id != manifest.sha256
+                    or commitment.terminal_epoch != epoch
+                ):
+                    raise ValueError(
+                        "terminal commitment history belongs to another manifest"
+                    )
+            for item in self.transaction_work.values():
+                preparation = item.preparation
+                if preparation.manifest_digest != manifest.sha256:
+                    raise ValueError("transaction history belongs to another manifest")
+                self._validate_preparation_behavioral_authority(
+                    manifest,
+                    preparation,
+                )
+                self._validate_preparation_decomposition_authority(preparation)
+            for transition in self.contract_decomposition_by_source_work.values():
+                self._validate_contract_decomposition_transition(transition)
+            if any(
+                completion.manifest_digest != manifest.sha256
+                for completion in self.contract_decomposition_completion_by_transition.values()
+            ):
+                raise ValueError("decomposition completion belongs to another manifest")
+            if self.route_seat_model_classification is not None:
+                self._validate_model_classification(
+                    manifest,
+                    self.route_seat_model_classification,
+                )
+            for outcome in self.insufficient_capability_by_route_seat.values():
+                item = self.transaction_work.get(outcome.work_id)
+                attempt = (
+                    item.provider_attempts.get(outcome.attempt_index)
+                    if item is not None
+                    else None
+                )
+                admission = (
+                    item.admissions.get(outcome.attempt_index)
+                    if item is not None
+                    else None
+                )
+                if item is None or attempt is None or admission is None:
+                    raise ValueError(
+                        "insufficient capability lacks durable work authority"
+                    )
+                self._validate_insufficient_capability(
+                    outcome, item, attempt, admission
+                )
+        except BaseException:
+            self._run_manifest = current
+            raise
+
+    @staticmethod
+    def _validate_model_classification(manifest: Any, plan) -> None:
+        from deepreason.canonical import canonical_json
+        import hashlib
+
+        if plan.manifest_digest != manifest.sha256:
+            raise ValueError("model classification belongs to another manifest")
+        behavioral_plan = manifest.route_seat_behavioral_capability_plan
+        if behavioral_plan is None:
+            raise ValueError("model classification lacks behavioral authority")
+        if len(plan.entries) != len(behavioral_plan.entries):
+            raise ValueError("model classification route inventory is incomplete")
+        for selected, grant in zip(plan.entries, behavioral_plan.entries, strict=True):
+            grant_digest = hashlib.sha256(
+                b"deepreason.route-seat-behavioral-grant.v1\x00"
+                + canonical_json(
+                    grant.model_dump(mode="json", by_alias=True, exclude_none=True)
+                )
+            ).hexdigest()
+            identity = (grant.role, grant.seat, grant.endpoint_id, grant.route_sha256)
+            observed = (
+                selected.role,
+                selected.seat,
+                selected.endpoint_id,
+                selected.route_sha256,
+            )
+            contracts = tuple(item.contract_id for item in grant.contracts)
+            if (
+                observed != identity
+                or selected.behavioral_grant_sha256 != grant_digest
+                or selected.authorized_contract_ids != contracts
+            ):
+                raise ValueError("model classification differs from behavioral authority")
+            expected_class = (
+                "inactive_no_authorized_contract"
+                if not contracts
+                else "qualified_exact_behavior"
+            )
+            if selected.selected_class != expected_class:
+                raise ValueError("model classification does not authorize exact behavior")
+
+    def _apply_model_classification(self, event, payload, resolved_records) -> None:
+        if self.route_seat_model_classification is not None:
+            raise ValueError("model classification authority is already bound")
+        if [schema for schema, _object_id, _value in resolved_records] != [
+            "workflow-route-seat-model-classification-plan-v1",
+            "workflow-model-classification-binding-v1",
+        ]:
+            raise ValueError("classification binding has the wrong record order")
+        plan = resolved_records[0][2]
+        binding = resolved_records[1][2]
+        if (
+            payload.decision_ref != binding.id
+            or tuple(payload.inputs)
+            != (
+                plan.id,
+                "classification:" + plan.qualification_evidence_sha256,
+            )
+            or tuple(payload.outputs) != (plan.id, binding.id)
+            or binding.classification_plan_ref != plan.id
+            or binding.manifest_digest != plan.manifest_digest
+            or binding.algorithm != plan.algorithm
+            or binding.algorithm_version != plan.algorithm_version
+            or binding.qualification_evidence_sha256
+            != plan.qualification_evidence_sha256
+        ):
+            raise ValueError("classification binding differs from its plan")
+        if self._run_manifest is not None:
+            self._validate_model_classification(self._run_manifest, plan)
+        self.route_seat_model_classification = plan
+        self.model_classification_binding = binding
+        self.model_classification_event_seq = int(event.seq)
+        self.event_seqs.append(int(event.seq))
+
+    def _validate_contract_decomposition_transition(
+        self,
+        transition: ContractDecompositionTransitionV1,
+    ) -> None:
+        manifest = self._run_manifest
+        if manifest is None or transition.manifest_digest != manifest.sha256:
+            raise ValueError("contract decomposition lacks manifest authority")
+        item = self.transaction_work.get(transition.source_work_id)
+        if item is None or item.terminal is None:
+            raise ValueError("contract decomposition lacks terminal source work")
+        terminal = item.terminal
+        admission = item.admissions.get(transition.source_attempt_index)
+        if (
+            terminal.id != transition.source_terminal_ref
+            or terminal.status != "schema_exhausted"
+            or admission is None
+            or admission.id != transition.source_semantic_admission_ref
+            or admission.outcome != "schema_exhausted"
+            or item.preparation.contract_id != transition.source_contract_id
+            or item.preparation.route_lease != transition.route_lease
+        ):
+            raise ValueError("contract decomposition differs from exhausted source work")
+        grant = resolve_route_seat_contract_decomposition(
+            manifest,
+            role=transition.route_lease.role,
+            seat=transition.route_lease.seat,
+            endpoint_id=transition.route_lease.endpoint_id,
+            route_sha256=transition.route_lease.route_sha256,
+            source_contract_id=transition.source_contract_id,
+        )
+        if (
+            transition.atomic_contract_id != grant.atomic_contract_id
+            or transition.trigger != grant.trigger
+            or transition.child_partition != grant.child_partition
+            or transition.maximum_children != grant.maximum_children
+            or transition.coverage != grant.coverage
+            or transition.execution != grant.execution
+            or transition.source_failure_preserved != grant.source_failure_preserved
+        ):
+            raise ValueError("contract decomposition differs from manifest grant")
+        if grant.child_partition == "conjecture_candidate_slot":
+            expected_keys = tuple(
+                f"candidate-slot-{index:03d}"
+                for index in range(grant.maximum_children)
+            )
+        elif grant.child_partition == "scratch_single_object":
+            source = item
+            source_payload = source.preparation.task_payload_value
+            if (
+                isinstance(source_payload, Mapping)
+                and source_payload.get("schema") == "repair.semantic-task.v1"
+            ):
+                source = self.transaction_work.get(source_payload.get("parent_work_id"))
+                source_payload = (
+                    source.preparation.task_payload_value
+                    if source is not None
+                    else None
+                )
+            operation = (
+                source_payload.get("operation")
+                if isinstance(source_payload, Mapping)
+                else None
+            )
+            if operation not in {"block", "link", "guide"}:
+                raise ValueError("scratch decomposition source operation is invalid")
+            expected_keys = (f"scratch-{operation}-minimal",)
+        else:
+            expected_keys = item.preparation.target_refs
+        if transition.child_keys != expected_keys:
+            raise ValueError("contract decomposition child inventory differs")
+
+    def _apply_contract_decomposition(self, event, payload, resolved_records) -> None:
+        if [schema for schema, _object_id, _value in resolved_records] != [
+            "workflow-contract-decomposition-transition-v1"
+        ]:
+            raise ValueError("contract decomposition has a noncanonical record shape")
+        transition = resolved_records[0][2]
+        assert isinstance(transition, ContractDecompositionTransitionV1)
+        if (
+            payload.decision_ref != transition.id
+            or tuple(payload.inputs)
+            != (transition.source_work_id, transition.source_terminal_ref)
+            or tuple(payload.outputs) != (transition.id,)
+        ):
+            raise ValueError("contract decomposition control event differs")
+        if transition.source_work_id in self.contract_decomposition_by_source_work:
+            raise ValueError("source work has duplicate contract decomposition")
+        self._validate_contract_decomposition_transition(transition)
+        self.contract_decomposition_by_source_work[transition.source_work_id] = transition
+        self.contract_decomposition_event_seq[transition.id] = int(event.seq)
+        self.event_seqs.append(int(event.seq))
+
+    def _apply_contract_decomposition_completion(
+        self, event, payload, resolved_records
+    ) -> None:
+        if [schema for schema, _object_id, _value in resolved_records] != [
+            "workflow-contract-decomposition-completion-v1"
+        ]:
+            raise ValueError("decomposition completion has a noncanonical shape")
+        completion = resolved_records[0][2]
+        assert isinstance(completion, ContractDecompositionCompletionV1)
+        transition = next(
+            (
+                item
+                for item in self.contract_decomposition_by_source_work.values()
+                if item.id == completion.transition_ref
+            ),
+            None,
+        )
+        if (
+            transition is None
+            or completion.transition_ref
+            in self.contract_decomposition_completion_by_transition
+            or payload.decision_ref != completion.id
+            or tuple(payload.inputs)
+            != (completion.source_work_id, completion.transition_ref)
+            or tuple(payload.outputs) != (completion.id,)
+            or completion.manifest_digest != transition.manifest_digest
+            or completion.source_work_id != transition.source_work_id
+            or not completion.source_failure_preserved
+        ):
+            raise ValueError("decomposition completion differs from its transition")
+        children = [
+            item
+            for item in self.transaction_work.values()
+            if isinstance(item.preparation.task_payload_value, Mapping)
+            and item.preparation.task_payload_value.get(
+                "decomposition_transition_ref"
+            )
+            == transition.id
+            and item.preparation.task_payload_value.get("schema")
+            == "contract-decomposition-child.v1"
+        ]
+        children.sort(
+            key=lambda item: item.preparation.task_payload_value["child_index"]
+        )
+        if tuple(
+            item.preparation.task_payload_value["child_index"] for item in children
+        ) != tuple(range(len(transition.child_keys))):
+            raise ValueError("decomposition completion child indices differ")
+        results = []
+        admissions = []
+        for item in children:
+            candidates = [item]
+            candidates.extend(
+                candidate
+                for candidate in self.transaction_work.values()
+                if isinstance(candidate.preparation.task_payload_value, Mapping)
+                and candidate.preparation.task_payload_value.get("schema")
+                == "repair.semantic-task.v1"
+                and candidate.preparation.task_payload_value.get("parent_work_id")
+                == item.preparation.id
+            )
+            completed = [
+                candidate
+                for candidate in candidates
+                if candidate.terminal is not None
+                and candidate.terminal.status == "completed"
+            ]
+            if len(completed) != 1:
+                raise ValueError("decomposition completion names unfinished child work")
+            result = completed[0]
+            admission = result.admissions.get(result.preparation.attempt_index)
+            if admission is None or admission.outcome != "admitted":
+                raise ValueError("decomposition completion child admission differs")
+            results.append(result)
+            admissions.append(admission)
+        if (
+            len(children) != len(transition.child_keys)
+            or completion.child_work_ids
+            != tuple(item.preparation.id for item in results)
+            or completion.child_semantic_admission_refs
+            != tuple(admission.id for admission in admissions)
+        ):
+            raise ValueError("decomposition completion child inventory differs")
+        self._validate_contract_decomposition_effects(
+            transition,
+            tuple(results),
+            completion.admitted_effect_refs,
+            completion_event_seq=int(event.seq),
+        )
+        self.contract_decomposition_completion_by_transition[
+            transition.id
+        ] = completion
+        self.event_seqs.append(int(event.seq))
+
+    def _validate_contract_decomposition_effects(
+        self,
+        transition: ContractDecompositionTransitionV1,
+        results: tuple[TransactionReplayItem, ...],
+        effect_refs: tuple[str, ...],
+        *,
+        completion_event_seq: int,
+    ) -> None:
+        """Bind claimed merge effects to events following exact child calls."""
+
+        result_ids = {item.preparation.id for item in results}
+        child_call_seqs = sorted(
+            seq
+            for seq, call in self.transaction_calls_by_seq.items()
+            if call.work_order_id in result_ids
+        )
+        if len(child_call_seqs) != len(results):
+            raise ValueError("decomposition effects lack exact child provider calls")
+        latest = child_call_seqs[-1]
+        expected: list[str] = []
+        if transition.child_partition == "conjecture_candidate_slot":
+            marker = f"conjecture-call:{latest}"
+            for seq in sorted(self.event_outputs_by_seq):
+                if marker in self.event_inputs_by_seq.get(seq, ()):
+                    expected.extend(self.event_outputs_by_seq.get(seq, ()))
+        else:
+            marker = "contract-decomposition-effect"
+            marker_events: list[tuple[int, str]] = []
+            for seq in sorted(self.event_inputs_by_seq):
+                inputs = self.event_inputs_by_seq[seq]
+                if (
+                    len(inputs) == 3
+                    and inputs[0] == marker
+                    and inputs[1] == transition.id
+                    and latest < seq < completion_event_seq
+                ):
+                    marker_events.append((seq, inputs[2]))
+            if len(marker_events) != len(effect_refs):
+                raise ValueError(
+                    "decomposition completion lacks exact chronological effect markers"
+                )
+            for marker_seq, effect_ref in marker_events:
+                if not any(
+                    latest < effect_seq < marker_seq
+                    and effect_ref in outputs
+                    for effect_seq, outputs in self.event_outputs_by_seq.items()
+                ):
+                    raise ValueError(
+                        "decomposition effect is not reachable after exact child calls"
+                    )
+                expected.append(effect_ref)
+        expected_effects = tuple(dict.fromkeys(expected))
+        if effect_refs != expected_effects:
+            raise ValueError(
+                "decomposition completion differs from exact semantic effects"
+            )
+
+    @staticmethod
+    def _validate_preparation_behavioral_authority(
+        manifest: Any,
+        preparation: WorkPreparationV1,
+    ) -> None:
+        """Validate one durable preparation before or during manifest binding."""
+
+        if manifest.route_seat_behavioral_capability_plan is None:
+            return
+        behavioral = resolve_route_seat_behavioral_capability(
+            manifest,
+            role=preparation.route_lease.role,
+            seat=preparation.route_lease.seat,
+            endpoint_id=preparation.route_lease.endpoint_id,
+            route_sha256=preparation.route_lease.route_sha256,
+        )
+        if preparation.contract_id not in {
+            grant.contract_id for grant in behavioral.contracts
+        }:
+            raise ValueError(
+                "work preparation contract lacks route-seat behavioral authority"
+            )
+
+    def _validate_preparation_decomposition_authority(
+        self,
+        preparation: WorkPreparationV1,
+    ) -> None:
+        manifest = self._run_manifest
+        if manifest is None or manifest.route_seat_contract_decomposition_plan is None:
+            return
+        atomic_grants = {
+            entry.atomic_contract_id: entry
+            for entry in manifest.route_seat_contract_decomposition_plan.entries
+            if entry.role == preparation.route_lease.role
+            and entry.seat == preparation.route_lease.seat
+            and entry.endpoint_id == preparation.route_lease.endpoint_id
+            and entry.route_sha256 == preparation.route_lease.route_sha256
+        }
+        grant = atomic_grants.get(preparation.contract_id)
+        if grant is None:
+            return
+        payload = preparation.task_payload_value
+        if not isinstance(payload, Mapping):
+            raise ValueError("atomic child preparation lacks decomposition payload")
+        if payload.get("schema") == "repair.semantic-task.v1":
+            parent = self.transaction_work.get(payload.get("parent_work_id"))
+            if (
+                parent is None
+                or parent.preparation.contract_id != preparation.contract_id
+                or parent.preparation.route_lease != preparation.route_lease
+                or parent.preparation.target_refs != preparation.target_refs
+            ):
+                raise ValueError("atomic repair differs from its decomposition child")
+            self._validate_preparation_decomposition_authority(parent.preparation)
+            return
+        source_work_id = payload.get("source_work_id")
+        transition = self.contract_decomposition_by_source_work.get(source_work_id)
+        child_index = payload.get("child_index")
+        child_count = payload.get("child_count")
+        source = (
+            self.transaction_work.get(transition.source_work_id)
+            if transition is not None
+            else None
+        )
+        source_payload = (
+            source.preparation.task_payload_value if source is not None else None
+        )
+        if (
+            isinstance(source_payload, Mapping)
+            and source_payload.get("schema") == "repair.semantic-task.v1"
+        ):
+            source = self.transaction_work.get(source_payload.get("parent_work_id"))
+        if (
+            transition is None
+            or payload.get("schema") != "contract-decomposition-child.v1"
+            or payload.get("decomposition_transition_ref") != transition.id
+            or payload.get("source_work_id") != transition.source_work_id
+            or payload.get("source_contract_id") != transition.source_contract_id
+            or payload.get("atomic_contract_id") != transition.atomic_contract_id
+            or payload.get("child_partition") != transition.child_partition
+            or transition.atomic_contract_id != preparation.contract_id
+            or transition.source_contract_id != grant.source_contract_id
+            or preparation.route_lease != transition.route_lease
+            or not isinstance(child_index, int)
+            or isinstance(child_index, bool)
+            or not isinstance(child_count, int)
+            or isinstance(child_count, bool)
+            or child_count != len(transition.child_keys)
+            or not 0 <= child_index < child_count <= grant.maximum_children
+            or payload.get("child_key") != transition.child_keys[child_index]
+            or source is None
+            or (
+                transition.child_partition == "critic_target"
+                and preparation.target_refs
+                != (transition.child_keys[child_index],)
+            )
+            or (
+                transition.child_partition == "conjecture_candidate_slot"
+                and preparation.target_refs != source.preparation.target_refs
+            )
+            or (
+                transition.child_partition
+                in {"bridge_catalog_batch", "bridge_ledger_batch", "scratch_single_object"}
+                and preparation.target_refs
+                != (transition.child_keys[child_index],)
+            )
+            or transition.id not in preparation.input_refs
+            or transition.source_work_id not in preparation.input_refs
+            or transition.child_context_refs[child_index]
+            not in preparation.input_refs
+        ):
+            raise ValueError("atomic child preparation lacks prior exact decomposition")
+
+    @staticmethod
+    def _route_seat_key(route_lease) -> tuple[str, int, str, str]:
+        return (
+            route_lease.role,
+            route_lease.seat,
+            route_lease.endpoint_id,
+            route_lease.route_sha256,
+        )
+
+    def _root_transaction_item(self, item: TransactionReplayItem):
+        seen: set[str] = set()
+        current = item
+        while self._is_schema_repair_item(current):
+            payload = current.preparation.task_payload_value
+            parent_id = payload.get("parent_work_id") if isinstance(payload, Mapping) else None
+            if not isinstance(parent_id, str) or parent_id in seen:
+                raise ValueError("repair ancestry is not canonical")
+            seen.add(parent_id)
+            current = self.transaction_work.get(parent_id)
+            if current is None:
+                raise ValueError("repair ancestry lacks its parent work")
+        return current
+
+    @staticmethod
+    def _is_schema_repair_item(item: TransactionReplayItem) -> bool:
+        """Distinguish schema-repair children from domain repair work."""
+
+        payload = item.preparation.task_payload_value
+        return (
+            item.preparation.task_kind == WorkflowTaskKind.REPAIR
+            and isinstance(payload, Mapping)
+            and payload.get("schema") == "repair.semantic-task.v1"
+        )
+
+    def _transaction_chain(self, root: TransactionReplayItem):
+        values = []
+        for item in self.transaction_work.values():
+            if (
+                item.preparation.id == root.preparation.id
+                or (
+                    self._is_schema_repair_item(item)
+                    and self._root_transaction_item(item).preparation.id
+                    == root.preparation.id
+                )
+            ):
+                if (
+                    item.preparation.contract_id != root.preparation.contract_id
+                    or item.preparation.route_lease != root.preparation.route_lease
+                ):
+                    raise ValueError("repair chain differs from its root authority")
+                values.append(item)
+        return tuple(
+            sorted(
+                values,
+                key=lambda item: (
+                    min(item.event_seqs) if item.event_seqs else 2**63,
+                    item.preparation.id,
+                ),
+            )
+        )
+
+    def insufficient_capability_fields(
+        self,
+        work_id: str,
+        attempt_index: int,
+    ) -> dict[str, Any] | None:
+        """Derive final route-seat authority from canonical durable state only."""
+
+        manifest = self._run_manifest
+        item = self.transaction_work.get(work_id)
+        if manifest is None or item is None:
+            return None
+        preparation = item.preparation
+        attempt = item.provider_attempts.get(attempt_index)
+        admission = item.admissions.get(attempt_index)
+        if (
+            manifest.schema_version != 6
+            or manifest.route_seat_behavioral_capability_plan is None
+            or manifest.route_seat_contract_decomposition_plan is None
+            or attempt is None
+            or admission is None
+            or attempt.outcome != "provider_result"
+            or admission.outcome != "schema_exhausted"
+            or attempt.contract_id != preparation.contract_id
+            or attempt.route_lease != preparation.route_lease
+        ):
+            return None
+        key = self._route_seat_key(preparation.route_lease)
+        outgoing = tuple(
+            grant
+            for grant in manifest.route_seat_contract_decomposition_plan.entries
+            if (
+                grant.role,
+                grant.seat,
+                grant.endpoint_id,
+                grant.route_sha256,
+                grant.source_contract_id,
+            )
+            == (*key, preparation.contract_id)
+        )
+        if outgoing:
+            return None
+
+        plan = self.route_seat_model_classification
+        binding = self.model_classification_binding
+        if plan is None or binding is None:
+            return None
+        selected = tuple(
+            entry
+            for entry in plan.entries
+            if (entry.role, entry.seat, entry.endpoint_id, entry.route_sha256) == key
+        )
+        if (
+            len(selected) != 1
+            or selected[0].selected_class != "qualified_exact_behavior"
+            or preparation.contract_id not in selected[0].authorized_contract_ids
+            or binding.classification_plan_ref != plan.id
+            or binding.qualification_evidence_sha256
+            != plan.qualification_evidence_sha256
+        ):
+            return None
+        repair_policy = manifest.contract_schema_repair_policy
+        repair_grants = tuple(
+            grant
+            for grant in (repair_policy.grants if repair_policy is not None else ())
+            if grant.contract_id == preparation.contract_id
+        )
+        if len(repair_grants) != 1:
+            return None
+        repair_grant = repair_grants[0]
+
+        final_root = self._root_transaction_item(item)
+        transition = None
+        payload = final_root.preparation.task_payload_value
+        if isinstance(payload, Mapping) and payload.get("schema") == (
+            "contract-decomposition-child.v1"
+        ):
+            transition_ref = payload.get("decomposition_transition_ref")
+            transition = next(
+                (
+                    value
+                    for value in self.contract_decomposition_by_source_work.values()
+                    if value.id == transition_ref
+                ),
+                None,
+            )
+            if (
+                transition is None
+                or transition.atomic_contract_id != preparation.contract_id
+                or transition.route_lease != preparation.route_lease
+            ):
+                return None
+
+        chains = []
+        if transition is not None:
+            source = self.transaction_work.get(transition.source_work_id)
+            if source is None:
+                return None
+            chains.extend(self._transaction_chain(self._root_transaction_item(source)))
+        chains.extend(self._transaction_chain(final_root))
+        attempted = tuple(
+            dict.fromkeys(
+                item.preparation.id
+                for item in sorted(
+                    chains,
+                    key=lambda value: (
+                        min(value.event_seqs) if value.event_seqs else 2**63,
+                        value.preparation.id,
+                    ),
+                )
+            )
+        )
+        attempted_items = tuple(self.transaction_work[item_id] for item_id in attempted)
+        if not attempted_items or attempted_items[-1].preparation.id != work_id:
+            return None
+        final_chain = self._transaction_chain(final_root)
+        observed_provider_calls = sum(
+            len(value.provider_attempts) for value in final_chain
+        )
+        if not 1 <= observed_provider_calls <= repair_grant.maximum_provider_calls:
+            return None
+        compact_refs = tuple(
+            value.id
+            for route_key, value in sorted(
+                self.compact_recovery_by_route_seat.items(), key=lambda pair: pair[1].id
+            )
+            if route_key == key
+        )
+        return {
+            "manifest_digest": manifest.sha256,
+            "work_id": work_id,
+            "attempt_index": attempt_index,
+            "route_lease": preparation.route_lease,
+            "contract_id": preparation.contract_id,
+            "provider_attempt_ref": attempt.id,
+            "semantic_admission_ref": admission.id,
+            "attempted_work_ids": attempted,
+            "attempted_contract_ids": tuple(
+                value.preparation.contract_id for value in attempted_items
+            ),
+            "decomposition_transition_refs": (
+                (transition.id,) if transition is not None else ()
+            ),
+            "compact_recovery_transition_refs": compact_refs,
+            "classification_plan_ref": plan.id,
+            "classification_binding_ref": binding.id,
+            "qualification_evidence_sha256": plan.qualification_evidence_sha256,
+            "behavioral_grant_sha256": selected[0].behavioral_grant_sha256,
+            "maximum_schema_repairs": repair_grant.maximum_schema_repairs,
+            "maximum_provider_calls": repair_grant.maximum_provider_calls,
+            "observed_provider_calls": observed_provider_calls,
+        }
+
+    def _validate_insufficient_capability(
+        self,
+        outcome: RouteSeatInsufficientCapabilityV1,
+        item: TransactionReplayItem,
+        attempt: ProviderAttemptV1,
+        admission: SemanticAdmissionV1,
+    ) -> tuple[str, int, str, str]:
+        expected = self.insufficient_capability_fields(
+            item.preparation.id,
+            item.preparation.attempt_index,
+        )
+        if (
+            expected is None
+            or outcome != RouteSeatInsufficientCapabilityV1.create(**expected)
+            or outcome.provider_attempt_ref != attempt.id
+            or outcome.semantic_admission_ref != admission.id
+        ):
+            raise ValueError(
+                "insufficient-capability outcome differs from durable authority"
+            )
+        return outcome.route_seat_key
+
+    def _manifest_route(self, route_lease):
+        manifest = self._run_manifest
+        if manifest is None:
+            raise ValueError("compact recovery transition lacks manifest authority")
+        routes = manifest.roles.get(route_lease.role, ())
+        if route_lease.seat >= len(routes):
+            raise ValueError("compact recovery route seat is outside the manifest")
+        route = routes[route_lease.seat]
+        if route.endpoint_id != route_lease.endpoint_id:
+            raise ValueError("compact recovery endpoint differs from the manifest")
+        from deepreason.llm.firewall import route_fingerprint
+
+        if route_fingerprint(route) != route_lease.route_sha256:
+            raise ValueError("compact recovery route digest differs from the manifest")
+        return route
+
+    def _compact_policy(self, preparation: WorkPreparationV1):
+        manifest = self._run_manifest
+        if manifest is None:
+            return None
+        if preparation.manifest_digest != manifest.sha256:
+            raise ValueError("compact recovery work belongs to another manifest")
+        return manifest.compact_recovery_policy
+
+    def _validate_compact_transition(
+        self,
+        compact: CompactRecoveryTransitionV1,
+        item: TransactionReplayItem,
+        attempt: ProviderAttemptV1,
+        admission: SemanticAdmissionV1,
+    ) -> tuple[str, int, str, str]:
+        manifest = self._run_manifest
+        policy = self._compact_policy(item.preparation)
+        if manifest is None or policy is None:
+            raise ValueError("compact recovery was not authorized by the manifest")
+        route = self._manifest_route(compact.route_lease)
+        base_profile = resolve_route_seat_base_profile(
+            manifest,
+            role=compact.route_lease.role,
+            seat=compact.route_lease.seat,
+            endpoint_id=compact.route_lease.endpoint_id,
+        )
+        if base_profile not in policy.source_profiles:
+            raise ValueError("manifest profile cannot source compact recovery")
+        if (
+            compact.manifest_digest != manifest.sha256
+            or compact.work_id != item.preparation.id
+            or compact.attempt_index != admission.attempt_index
+            or compact.semantic_admission_ref != admission.id
+            or compact.route_lease != item.preparation.route_lease
+            or compact.route_lease != attempt.route_lease
+            or compact.source_profile != base_profile
+            or compact.source_profile not in policy.source_profiles
+            or compact.target_profile != policy.target_profile
+            or compact.trigger != policy.trigger
+            or compact.scope != policy.scope
+            or compact.sticky != policy.sticky
+            or compact.applies_to != policy.applies_to
+            or compact.retry_failed_work != policy.retry_failed_work
+            or admission.outcome != "schema_exhausted"
+            or attempt.outcome != "provider_result"
+        ):
+            raise ValueError("compact recovery transition differs from durable authority")
+        call = item.provider_calls.get(compact.attempt_index)
+        if call is None or not call.attempt_trace:
+            raise ValueError("compact recovery lacks a durable provider attempt trace")
+        if (
+            call.role != compact.route_lease.role
+            or call.model != route.model_id
+            or call.endpoint != route.base_url
+            or len(call.attempt_trace) != call.attempts
+            or any(
+                trace.contract_id != item.preparation.contract_id
+                or trace.endpoint_id != compact.route_lease.endpoint_id
+                or trace.route_sha256 != compact.route_lease.route_sha256
+                or trace.seat != compact.route_lease.seat
+                or trace.model_profile != compact.source_profile
+                or trace.transport_profile != compact.source_profile
+                for trace in call.attempt_trace
+            )
+        ):
+            raise ValueError("compact recovery provider trace differs from its route seat")
+        return compact.route_seat_key
 
     def observe_event(self, event: Any) -> None:
         """Index a preceding work-bound provider call without mutating authority."""
 
         call = getattr(event, "llm", None)
         seq = getattr(event, "seq", None)
+        if seq is not None:
+            seq = int(seq)
+            if seq in self.event_inputs_by_seq or seq in self.event_outputs_by_seq:
+                raise ValueError("workflow event sequence appears more than once")
+            self.event_inputs_by_seq[seq] = tuple(getattr(event, "inputs", ()))
+            self.event_outputs_by_seq[seq] = tuple(getattr(event, "outputs", ()))
         if call is None or seq is None or getattr(call, "work_order_id", None) is None:
             return
         if self.terminal_decision_id is not None:
             raise ValueError("work-bound provider call follows terminal lifecycle state")
-        seq = int(seq)
         if seq in self.calls_by_seq:
             raise ValueError("workflow provider-call sequence appears more than once")
         work_id = call.work_order_id
@@ -999,6 +1872,171 @@ class WorkflowReplayState:
             event_seq=event_seq,
         )
 
+    def _apply_terminal_commitment(
+        self,
+        event: Any,
+        payload: ControlEventPayloadV3,
+        resolved_records: Iterable[tuple[str, str, BaseModel]],
+    ) -> None:
+        """Fill one manifest-owned terminal-epoch latch exactly once."""
+
+        records = _record_map(resolved_records)
+        if tuple(records) != tuple(payload.outputs):
+            raise ValueError(
+                "resolved terminal commitment differs from control outputs"
+            )
+        entry = records.get(payload.decision_ref)
+        if (
+            entry is None
+            or entry[0] != "workflow-run-terminal-commitment-v1"
+            or len(records) != 2
+        ):
+            raise ValueError("terminal commitment event has the wrong record shape")
+        commitment = entry[1]
+        assert isinstance(commitment, RunTerminalCommitmentV1)
+        draft_entry = records.get(commitment.result_draft_ref)
+        if (
+            draft_entry is None
+            or draft_entry[0] != "workflow-run-terminal-result-draft-v1"
+        ):
+            raise ValueError("terminal commitment lacks its result draft")
+        draft = draft_entry[1]
+        assert isinstance(draft, RunTerminalResultDraftV1)
+        manifest = self._run_manifest
+        policy = getattr(manifest, "terminal_commitment_policy", None)
+        if manifest is None or policy is None:
+            raise ValueError(
+                "terminal commitment requires manifest-owned terminal authority"
+            )
+        seq = int(getattr(event, "seq"))
+        if commitment.expected_commitment_event_seq != seq:
+            raise ValueError("terminal commitment differs from its event fence")
+        if (
+            commitment.manifest_sha256 != manifest.sha256
+            or commitment.run_id != manifest.sha256
+            or draft.manifest_sha256 != manifest.sha256
+            or draft.run_id != manifest.sha256
+            or draft.terminal_epoch != commitment.terminal_epoch
+        ):
+            raise ValueError("terminal commitment belongs to another run manifest")
+        epoch = commitment.terminal_epoch
+        if epoch != self.current_terminal_epoch:
+            raise ValueError("terminal commitment names a non-current epoch")
+        if epoch in self.terminal_commitments_by_epoch:
+            raise ValueError("terminal epoch already has a canonical commitment")
+        if epoch == 0:
+            if (
+                commitment.parent_terminal_commitment_ref is not None
+                or commitment.opening_resume_ref is not None
+            ):
+                raise ValueError("terminal epoch zero cannot rewrite a parent")
+        else:
+            parent = self.terminal_commitments_by_epoch.get(epoch - 1)
+            opening = self.terminal_epoch_opening_resume_ref.get(epoch)
+            if (
+                parent is None
+                or commitment.parent_terminal_commitment_ref != parent.id
+                or opening is None
+                or commitment.opening_resume_ref != opening
+            ):
+                raise ValueError("terminal child epoch differs from resume authority")
+        if tuple(payload.inputs)[1] != commitment.stop_record_digest:
+            raise ValueError("terminal commitment trigger differs from its stop")
+        draft_stop = draft.result_body.get("stop")
+        draft_summary = draft.result_body.get("model_execution")
+        if (
+            not isinstance(draft_stop, Mapping)
+            or draft_stop.get("digest") != commitment.stop_record_digest
+            or draft_stop.get("event_seq")
+            != commitment.reasoning_event_horizon_seq
+            or draft.result_body.get("state") != commitment.terminal_status
+            or not isinstance(draft_summary, Mapping)
+            or draft_summary.get("event_horizon_seq")
+            != commitment.reasoning_event_horizon_seq
+            or sha256_hex(canonical_json(dict(draft_summary)))
+            != commitment.model_execution_summary_digest
+        ):
+            raise ValueError("terminal result draft differs from its commitment")
+        if commitment.terminal_source == "workflow_lifecycle":
+            terminal = self.terminal_lifecycle_decision
+            if (
+                terminal is None
+                or tuple(payload.inputs)[0] != terminal.id
+                or commitment.lifecycle_decision_ref != terminal.id
+                or commitment.reasoning_event_horizon_seq
+                != terminal.stop_event_seq
+                or commitment.stop_record_digest != terminal.stop_record_digest
+                or commitment.stop_reason
+                != terminal.deterministic_decision.reason
+            ):
+                raise ValueError(
+                    "terminal commitment differs from lifecycle authority"
+                )
+        else:
+            if tuple(payload.inputs)[0] != commitment.id:
+                raise ValueError(
+                    "application terminal commitment has a foreign source"
+                )
+            source_inputs = self.event_inputs_by_seq.get(
+                commitment.reasoning_event_horizon_seq
+            )
+            from deepreason.runtime.terminal_authority import (
+                validate_application_stop_source,
+            )
+
+            validate_application_stop_source(
+                source_inputs,
+                dict(draft_stop),
+                event_seq=commitment.reasoning_event_horizon_seq,
+            )
+        # The summary is a deterministic projection of this exact replay
+        # prefix. Validate its digest here so neither the writer nor a later
+        # result payload can invent terminal execution history.
+        from types import SimpleNamespace
+
+        from deepreason.application.models import derive_model_execution_summary
+
+        horizon_events = tuple(
+            SimpleNamespace(
+                seq=seq,
+                outputs=list(outputs),
+                llm=(
+                    self.transaction_calls_by_seq.get(seq)
+                    or self.calls_by_seq.get(seq)
+                ),
+            )
+            for seq, outputs in sorted(self.event_outputs_by_seq.items())
+            if seq <= commitment.reasoning_event_horizon_seq
+        )
+        summary = derive_model_execution_summary(
+            SimpleNamespace(
+                log=SimpleNamespace(read=lambda: horizon_events),
+                workflow_state=self,
+            ),
+            manifest,
+        ).model_copy(
+            update={
+                "event_horizon_seq": commitment.reasoning_event_horizon_seq
+            }
+        )
+        expected_summary_digest = sha256_hex(
+            canonical_json(
+                summary.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
+            )
+        )
+        if (
+            commitment.model_execution_summary_digest
+            != expected_summary_digest
+        ):
+            raise ValueError(
+                "terminal commitment summary differs from replayed execution"
+            )
+        self.terminal_commitments_by_epoch[epoch] = commitment
+        self.terminal_commitment_event_seq[commitment.id] = seq
+        self.event_seqs.append(seq)
+
     def _apply_lifecycle(
         self,
         event: Any,
@@ -1192,11 +2230,42 @@ class WorkflowReplayState:
             raise ValueError("resume outstanding-work snapshot does not replay")
         if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
             raise ValueError("RESUMED cannot forget unfinished workflow authority")
+        manifest = self._run_manifest
+        commitment_policy = getattr(manifest, "terminal_commitment_policy", None)
+        if commitment_policy is not None:
+            parent_commitment = self.terminal_commitments_by_epoch.get(
+                self.current_terminal_epoch
+            )
+            expected_epoch = self.current_terminal_epoch + 1
+            if parent_commitment is None:
+                raise ValueError(
+                    "RESUMED requires the current epoch terminal commitment"
+                )
+            if (
+                decision.prior_terminal_commitment_ref != parent_commitment.id
+                or decision.opened_terminal_epoch != expected_epoch
+            ):
+                raise ValueError(
+                    "RESUMED differs from terminal commitment authority"
+                )
+        elif (
+            decision.prior_terminal_commitment_ref is not None
+            or decision.opened_terminal_epoch is not None
+        ):
+            raise ValueError(
+                "historical replay cannot fabricate terminal commitment epochs"
+            )
         self.lifecycle_snapshots[snapshot.id] = snapshot
         self.resume_decisions[decision.id] = decision
         self.resume_decision_event_seq[decision.id] = seq
         self.current_resume_decision_id = decision.id
         self.terminal_decision_id = None
+        if commitment_policy is not None:
+            assert decision.opened_terminal_epoch is not None
+            self.current_terminal_epoch = decision.opened_terminal_epoch
+            self.terminal_epoch_opening_resume_ref[
+                self.current_terminal_epoch
+            ] = decision.id
         self.event_seqs.append(seq)
 
     def _apply_transaction(
@@ -1256,6 +2325,24 @@ class WorkflowReplayState:
                 or preparation.trigger_ref != transition.trigger_ref
             ):
                 raise ValueError("preparation transition differs from prepared authority")
+            if (
+                self._route_seat_key(preparation.route_lease)
+                in self.insufficient_capability_by_route_seat
+            ):
+                raise ValueError(
+                    "work preparation follows terminal route-seat capability"
+                )
+            manifest = self._run_manifest
+            if manifest is not None:
+                if self.route_seat_model_classification is None:
+                    raise ValueError(
+                        "work preparation precedes model classification authority"
+                    )
+                self._validate_preparation_behavioral_authority(
+                    manifest,
+                    preparation,
+                )
+                self._validate_preparation_decomposition_authority(preparation)
             item = TransactionReplayItem(preparation=preparation)
             self.transaction_work[preparation.id] = item
         elif item is None:
@@ -1265,6 +2352,13 @@ class WorkflowReplayState:
         elif kind == WorkTransitionKind.WORK_ISSUED:
             if item.issued:
                 raise ValueError("transactional work was already issued")
+            if (
+                self._route_seat_key(item.preparation.route_lease)
+                in self.insufficient_capability_by_route_seat
+            ):
+                raise ValueError(
+                    "work issuance follows terminal route-seat capability"
+                )
             plans = [
                 record
                 for schema, record in phase_records
@@ -1337,6 +2431,13 @@ class WorkflowReplayState:
                 "workflow-provider-attempt-v1"
             ]:
                 raise ValueError("provider result requires issued authority")
+            if (
+                self._route_seat_key(item.preparation.route_lease)
+                in self.insufficient_capability_by_route_seat
+            ):
+                raise ValueError(
+                    "provider result follows terminal route-seat capability"
+                )
             attempt = phase_records[0][1]
             assert isinstance(attempt, ProviderAttemptV1)
             if attempt.attempt_index in item.provider_attempts:
@@ -1360,6 +2461,7 @@ class WorkflowReplayState:
             ):
                 raise ValueError("provider result usage differs from its LLM call")
             item.provider_attempts[attempt.attempt_index] = attempt
+            item.provider_calls[attempt.attempt_index] = call
         elif kind == WorkTransitionKind.SEMANTIC_ADMISSION:
             if [schema for schema, _record in phase_records] != [
                 "workflow-semantic-admission-v1"
@@ -1376,11 +2478,45 @@ class WorkflowReplayState:
                 raise ValueError("semantic admission lacks one durable provider result")
             item.admissions[admission.attempt_index] = admission
         elif kind == WorkTransitionKind.WORK_TERMINATED:
-            if [schema for schema, _record in phase_records] != [
-                "workflow-work-terminal-v1"
-            ]:
+            schemas = [schema for schema, _record in phase_records]
+            if schemas not in (
+                ["workflow-work-terminal-v1"],
+                [
+                    "workflow-compact-recovery-transition-v1",
+                    "workflow-work-terminal-v1",
+                ],
+                [
+                    "workflow-route-seat-insufficient-capability-v1",
+                    "workflow-work-terminal-v1",
+                ],
+                [
+                    "workflow-compact-recovery-transition-v1",
+                    "workflow-route-seat-insufficient-capability-v1",
+                    "workflow-work-terminal-v1",
+                ],
+            ):
                 raise ValueError("work termination has a noncanonical record shape")
-            terminal = phase_records[0][1]
+            compact = next(
+                (
+                    record
+                    for schema, record in phase_records
+                    if schema == "workflow-compact-recovery-transition-v1"
+                ),
+                None,
+            )
+            insufficient = next(
+                (
+                    record
+                    for schema, record in phase_records
+                    if schema == "workflow-route-seat-insufficient-capability-v1"
+                ),
+                None,
+            )
+            terminal = phase_records[-1][1]
+            if compact is not None:
+                assert isinstance(compact, CompactRecoveryTransitionV1)
+            if insufficient is not None:
+                assert isinstance(insufficient, RouteSeatInsufficientCapabilityV1)
             assert isinstance(terminal, WorkTerminalV1)
             attempt = item.provider_attempts.get(terminal.attempt_index)
             admission = item.admissions.get(terminal.attempt_index)
@@ -1404,6 +2540,103 @@ class WorkflowReplayState:
                     raise ValueError("transport terminal lacks a failed provider attempt")
             elif terminal.status != expected_status:
                 raise ValueError("work terminal differs from semantic admission")
+
+            policy = self._compact_policy(item.preparation)
+            eligible = (
+                terminal.status == "schema_exhausted"
+                and admission is not None
+                and policy is not None
+                and self._run_manifest is not None
+                and resolve_route_seat_base_profile(
+                    self._run_manifest,
+                    role=item.preparation.route_lease.role,
+                    seat=item.preparation.route_lease.seat,
+                    endpoint_id=item.preparation.route_lease.endpoint_id,
+                )
+                in policy.source_profiles
+            )
+            compact_ref = terminal.compact_recovery_transition_ref
+            if eligible:
+                if compact_ref is None:
+                    raise ValueError(
+                        "authorized schema exhaustion lacks compact recovery transition"
+                    )
+                if attempt is None or admission is None:
+                    raise ValueError("compact recovery lacks provider admission authority")
+                key = self._route_seat_key(item.preparation.route_lease)
+                if compact is not None:
+                    if compact.id != compact_ref:
+                        raise ValueError(
+                            "terminal names another compact recovery transition"
+                        )
+                    validated_key = self._validate_compact_transition(
+                        compact, item, attempt, admission
+                    )
+                    if validated_key != key:
+                        raise ValueError("compact recovery durable key does not replay")
+                    if key in self.compact_recovery_by_route_seat:
+                        raise ValueError(
+                            "route seat has a duplicate compact recovery transition"
+                        )
+                    self.compact_recovery_by_route_seat[key] = compact
+                else:
+                    existing = self.compact_recovery_by_route_seat.get(key)
+                    if existing is None or existing.id != compact_ref:
+                        raise ValueError(
+                            "terminal compact recovery reference is missing or foreign"
+                        )
+            elif compact is not None or compact_ref is not None:
+                raise ValueError(
+                    "work terminal claims unauthorized compact recovery authority"
+                )
+
+            insufficient_ref = terminal.insufficient_capability_ref
+            expected_insufficient = self.insufficient_capability_fields(
+                item.preparation.id,
+                item.preparation.attempt_index,
+            )
+            if expected_insufficient is not None:
+                if insufficient_ref is None:
+                    raise ValueError(
+                        "smallest-contract exhaustion lacks capability terminal"
+                    )
+                route_key = self._route_seat_key(item.preparation.route_lease)
+                if insufficient is not None:
+                    if insufficient.id != insufficient_ref:
+                        raise ValueError(
+                            "work terminal names another capability outcome"
+                        )
+                    if attempt is None or admission is None:
+                        raise ValueError(
+                            "insufficient capability lacks provider admission"
+                        )
+                    validated_key = self._validate_insufficient_capability(
+                        insufficient,
+                        item,
+                        attempt,
+                        admission,
+                    )
+                    if validated_key != route_key:
+                        raise ValueError(
+                            "insufficient capability route key does not replay"
+                        )
+                    if route_key in self.insufficient_capability_by_route_seat:
+                        raise ValueError(
+                            "route seat has duplicate insufficient capability"
+                        )
+                    self.insufficient_capability_by_route_seat[route_key] = insufficient
+                else:
+                    existing = self.insufficient_capability_by_route_seat.get(
+                        route_key
+                    )
+                    if existing is None or existing.id != insufficient_ref:
+                        raise ValueError(
+                            "terminal capability reference is missing or foreign"
+                        )
+            elif insufficient is not None or insufficient_ref is not None:
+                raise ValueError(
+                    "work terminal claims unauthorized insufficient capability"
+                )
             item.terminal = terminal
         else:  # pragma: no cover - enum validation keeps this fail-closed
             raise ValueError("unknown controller-v3 transaction transition")
@@ -1429,6 +2662,32 @@ class WorkflowReplayState:
             and payload.action in {"work_transition", "provider_result"}
         ):
             self._apply_transaction(event, payload, resolved_records)
+            return
+        if (
+            isinstance(payload, ControlEventPayloadV3)
+            and payload.action == "terminal_committed"
+        ):
+            self._apply_terminal_commitment(event, payload, resolved_records)
+            return
+        if (
+            isinstance(payload, ControlEventPayloadV3)
+            and payload.action == "classification_bound"
+        ):
+            self._apply_model_classification(event, payload, resolved_records)
+            return
+        if (
+            isinstance(payload, ControlEventPayloadV3)
+            and payload.action == "contract_decomposition_activated"
+        ):
+            self._apply_contract_decomposition(event, payload, resolved_records)
+            return
+        if (
+            isinstance(payload, ControlEventPayloadV3)
+            and payload.action == "contract_decomposition_completed"
+        ):
+            self._apply_contract_decomposition_completion(
+                event, payload, resolved_records
+            )
             return
         decision_entry = next(
             (
@@ -1515,6 +2774,48 @@ class WorkflowReplayState:
         if self.terminal_decision_id is None:
             return None
         return self.lifecycle_decisions[self.terminal_decision_id]
+
+    @property
+    def current_terminal_commitment(self) -> RunTerminalCommitmentV1 | None:
+        """Committed authority for the current epoch, absent while it is open."""
+
+        return self.terminal_commitments_by_epoch.get(self.current_terminal_epoch)
+
+    @property
+    def current_terminal_authority(self) -> RunTerminalCommitmentV1 | None:
+        """Alias naming the only terminal head eligible for later consumers."""
+
+        return self.current_terminal_commitment
+
+    def terminal_commitment_ledger_payload(self) -> dict[str, Any]:
+        """Stable replay projection kept separate from the process digest."""
+
+        return {
+            "schema": "terminal-commitment-ledger.v1",
+            "run_id": (
+                self._run_manifest.sha256 if self._run_manifest is not None else None
+            ),
+            "current_epoch": self.current_terminal_epoch,
+            "commitments": [
+                {
+                    "epoch": epoch,
+                    "commitment_ref": commitment.id,
+                    "event_seq": self.terminal_commitment_event_seq[commitment.id],
+                    "opening_resume_ref": self.terminal_epoch_opening_resume_ref.get(
+                        epoch
+                    ),
+                }
+                for epoch, commitment in sorted(
+                    self.terminal_commitments_by_epoch.items()
+                )
+            ],
+        }
+
+    @property
+    def terminal_commitment_ledger_digest(self) -> str:
+        return "sha256:" + sha256_hex(
+            canonical_json(self.terminal_commitment_ledger_payload())
+        )
 
     @property
     def terminal_lifecycle_snapshot(self) -> WorkflowLifecycleSnapshotV1 | None:
@@ -1624,15 +2925,75 @@ class WorkflowReplayState:
                 }
                 for work_id, item in sorted(self.transaction_work.items())
             ]
+        if self.compact_recovery_by_route_seat:
+            payload["compact_recovery_by_route_seat"] = [
+                {
+                    "role": key[0],
+                    "seat": key[1],
+                    "endpoint_id": key[2],
+                    "route_sha256": key[3],
+                    "transition_ref": transition.id,
+                }
+                for key, transition in sorted(
+                    self.compact_recovery_by_route_seat.items()
+                )
+            ]
+        if self.insufficient_capability_by_route_seat:
+            payload["insufficient_capability_by_route_seat"] = [
+                {
+                    "role": key[0],
+                    "seat": key[1],
+                    "endpoint_id": key[2],
+                    "route_sha256": key[3],
+                    "outcome_ref": outcome.id,
+                }
+                for key, outcome in sorted(
+                    self.insufficient_capability_by_route_seat.items()
+                )
+            ]
+        if self.contract_decomposition_by_source_work:
+            payload["contract_decomposition_by_source_work"] = [
+                {
+                    "source_work_id": source_work_id,
+                    "transition_ref": transition.id,
+                    "event_seq": self.contract_decomposition_event_seq[transition.id],
+                }
+                for source_work_id, transition in sorted(
+                    self.contract_decomposition_by_source_work.items()
+                )
+            ]
+        if self.contract_decomposition_completion_by_transition:
+            payload["contract_decomposition_completions"] = [
+                {
+                    "transition_ref": transition_ref,
+                    "completion_ref": completion.id,
+                }
+                for transition_ref, completion in sorted(
+                    self.contract_decomposition_completion_by_transition.items()
+                )
+            ]
+        if self.route_seat_model_classification is not None:
+            payload["route_seat_model_classification"] = {
+                "plan_ref": self.route_seat_model_classification.id,
+                "binding_ref": self.model_classification_binding.id,
+                "event_seq": self.model_classification_event_seq,
+            }
         return "sha256:" + sha256_hex(
             b"workflow.replay-state.v1\x00" + canonical_json(payload)
         )
 
 
-def replay_workflow(events: Iterable[Any], objects: Any) -> WorkflowReplayState:
+def replay_workflow(
+    events: Iterable[Any],
+    objects: Any,
+    *,
+    manifest: Any | None = None,
+) -> WorkflowReplayState:
     """Reconstruct workflow state from records; never run a model or reducer."""
 
     state = WorkflowReplayState()
+    if manifest is not None and getattr(manifest, "schema_version", None) == 6:
+        state.bind_run_manifest(manifest)
     for event in events:
         state.observe_event(event)
         payload = getattr(event, "control", None)
