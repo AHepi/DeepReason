@@ -37,6 +37,8 @@ from deepreason.run_manifest import (
     SchoolRoleBindingV1,
     ScratchAuthoringPolicyV1,
     compile_run_manifest,
+    resolve_route_seat_base_profile,
+    write_run_manifest,
 )
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.scratch.render import ScratchRenderReceiptV1
@@ -60,6 +62,7 @@ from deepreason.workflow.transaction import (
     VisibleContextItemV1,
 )
 from deepreason.workflow.transaction_service import InquiryTransactionService
+from tests.test_v6_compact_recovery_transition import _bind_classification
 
 
 STAMP = "2026-07-18T00:00:00Z"
@@ -73,6 +76,7 @@ def _route(role: str, seat: int = 0) -> dict:
         "provider": "mock",
         "family": f"offline-{role}-{seat}",
         "max_tokens": 64,
+        "context_window_tokens": 262_144,
     }
 
 
@@ -194,6 +198,13 @@ def _provider_prefix(
     attempt_index: int = 0,
     call_prompt: str | None = None,
 ):
+    manifest_path = harness.root / "run-manifest.json"
+    try:
+        manifest_path.lstat()
+    except FileNotFoundError:
+        write_run_manifest(manifest, manifest_path)
+    if harness.workflow_state.route_seat_model_classification is None:
+        _bind_classification(harness, manifest)
     service = InquiryTransactionService(harness, manifest, TokenMeter(100_000))
     trigger = trigger_prefix + hashlib.sha256(canonical_json(payload)).hexdigest()
     fence = max(0, harness._next_seq - 1)
@@ -234,6 +245,12 @@ def _provider_prefix(
     recorded_prompt = prompt if call_prompt is None else call_prompt
     recorded_prompt_ref = harness.blobs.put(recorded_prompt.encode("utf-8"))
     raw_ref = harness.blobs.put(raw)
+    base_profile = resolve_route_seat_base_profile(
+        manifest,
+        role=role,
+        seat=seat,
+        endpoint_id=route.endpoint_id,
+    )
     call = LLMCall(
         role=role,
         model=route.model_id,
@@ -243,23 +260,24 @@ def _provider_prefix(
         tokens=2,
         prompt_tokens=1,
         completion_tokens=1,
+        attempts=1,
         work_order_id=authorized.bundle.work_id,
         dispatch_authorization_ref=authorized.bundle.id,
-        attempt_trace=(
-            [
-                LLMAttempt(
-                    prompt_ref=recorded_prompt_ref,
-                    raw_ref=raw_ref,
-                    contract_id=contract_id,
-                    endpoint_id=route.endpoint_id,
-                    route_sha256=route_fingerprint(route),
-                    seat=seat,
-                    valid=True,
-                )
-            ]
-            if task_kind == WorkflowTaskKind.CRITICISM
-            else []
-        ),
+        attempt_trace=[
+            LLMAttempt(
+                prompt_ref=recorded_prompt_ref,
+                raw_ref=raw_ref,
+                attempt=attempt_index,
+                contract_id=contract_id,
+                endpoint_id=route.endpoint_id,
+                route_sha256=route_fingerprint(route),
+                seat=seat,
+                model_profile=base_profile,
+                transport_profile=base_profile,
+                tokens=2,
+                valid=True,
+            )
+        ],
         school_route=(
             SchoolRouteReceiptV1(
                 school_id=payload["critic_school_id"],
@@ -745,12 +763,17 @@ def _scratch_prefix(
         content_sha256=hashlib.sha256(rendered_bytes).hexdigest(),
         planned_bytes=len(rendered_bytes),
     )
+    provider_contract = (
+        "scratch.block.compact.v1"
+        if provider_role == "conjecturer"
+        else "scratch.link.compact.v1"
+    )
     preparation, provider = _provider_prefix(
         harness,
         manifest,
         task_kind=WorkflowTaskKind.SCRATCH_AUTHORING,
         role=provider_role,
-        contract_id="scratch.block.compact.v1",
+        contract_id=provider_contract,
         payload=payload,
         trigger_prefix="scratch-authoring:",
         raw=raw,
