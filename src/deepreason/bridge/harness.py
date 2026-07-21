@@ -59,6 +59,10 @@ class BridgeTerminalResultV1(FrozenRecord):
     run_manifest_digest: str
     formal_seq: int = Field(ge=0)
     source_run_digest: str | None = None
+    source_terminal_commitment_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+    )
     terminal_event_seq: int = Field(ge=0)
     problem_id: str = Field(min_length=1, max_length=512)
     target: Literal["thesis", "summary", "answer"]
@@ -148,6 +152,7 @@ class _BridgeExecutionSnapshot:
     problem_id: str
     target: str
     source_run_digest: str | None
+    source_terminal_commitment_ref: str | None
     evidence_budget_chars: int
     attention_pack_id: str | None
     advisory_context_id: str | None
@@ -193,6 +198,9 @@ def _load_bridge_execution_snapshot(
     problem_id = payload.get("problem_id")
     target = payload.get("target")
     source_run_digest = payload.get("source_run_digest")
+    source_terminal_commitment_ref = payload.get(
+        "source_terminal_commitment_ref"
+    )
     attention_pack_id = payload.get("attention_pack_id")
     advisory_context_id = payload.get("advisory_context_id")
     if (
@@ -205,6 +213,12 @@ def _load_bridge_execution_snapshot(
         or target not in {"thesis", "summary", "answer"}
         or source_run_digest is not None
         and not isinstance(source_run_digest, str)
+        or source_terminal_commitment_ref is not None
+        and (
+            not isinstance(source_terminal_commitment_ref, str)
+            or re.fullmatch(r"sha256:[0-9a-f]{64}", source_terminal_commitment_ref)
+            is None
+        )
         or attention_pack_id is not None
         and not isinstance(attention_pack_id, str)
         or advisory_context_id is not None
@@ -232,6 +246,8 @@ def _load_bridge_execution_snapshot(
         evidence_pack.formal_seq != formal_seq
         or evidence_pack.problem_ref != problem_id
         or evidence_pack.source_run_digest != source_run_digest
+        or evidence_pack.source_terminal_commitment_ref
+        != source_terminal_commitment_ref
         or catalog.formal_seq != formal_seq
         or catalog.problem_ref != problem_id
         or catalog.output_target != target
@@ -246,6 +262,7 @@ def _load_bridge_execution_snapshot(
         problem_id=problem_id,
         target=target,
         source_run_digest=source_run_digest,
+        source_terminal_commitment_ref=source_terminal_commitment_ref,
         evidence_budget_chars=evidence_budget_chars,
         attention_pack_id=attention_pack_id,
         advisory_context_id=advisory_context_id,
@@ -264,6 +281,7 @@ def _write_bridge_execution_snapshot(
     problem_id: str,
     target: str,
     source_run_digest: str | None,
+    source_terminal_commitment_ref: str | None,
     evidence_budget_chars: int,
     attention_pack,
     advisory_context,
@@ -279,6 +297,7 @@ def _write_bridge_execution_snapshot(
         "problem_id": problem_id,
         "target": target,
         "source_run_digest": source_run_digest,
+        "source_terminal_commitment_ref": source_terminal_commitment_ref,
         "evidence_budget_chars": evidence_budget_chars,
         "attention_pack_id": _attention_pack_id(attention_pack),
         "advisory_context_id": (
@@ -297,12 +316,22 @@ def _write_bridge_execution_snapshot(
     )
 
 
-def _find_bridge_execution_snapshot(harness, manifest_digest: str):
+def _find_bridge_execution_snapshot(
+    harness,
+    manifest_digest: str,
+    source_terminal_commitment_ref: str | None,
+):
     v2_items = []
     for item in harness.workflow_state.transaction_work.values():
         payload = item.preparation.task_payload_value
         task_kind = getattr(item.preparation.task_kind, "value", item.preparation.task_kind)
-        if isinstance(payload, Mapping) and payload.get("schema") == _BRIDGE_TRANSACTION_SCHEMA_V2:
+        if (
+            isinstance(payload, Mapping)
+            and payload.get("schema")
+            in {_BRIDGE_TRANSACTION_SCHEMA_V2, "contract-decomposition-child.v1"}
+            and isinstance(payload.get("execution_id"), str)
+            and isinstance(payload.get("execution_snapshot_ref"), str)
+        ):
             v2_items.append((item, payload))
         elif item.terminal is None and task_kind in _BRIDGE_TASK_KINDS:
             raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_MISSING")
@@ -326,7 +355,11 @@ def _find_bridge_execution_snapshot(harness, manifest_digest: str):
         snapshot_ref,
         manifest_digest=manifest_digest,
     )
-    if execution_id != snapshot.execution_id:
+    if (
+        execution_id != snapshot.execution_id
+        or snapshot.source_terminal_commitment_ref
+        != source_terminal_commitment_ref
+    ):
         raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
     for item, payload in v2_items:
         if (
@@ -335,6 +368,8 @@ def _find_bridge_execution_snapshot(harness, manifest_digest: str):
             or item.preparation.scratch_fence_seq != snapshot.formal_seq
             or payload.get("execution_id") != snapshot.execution_id
             or payload.get("execution_snapshot_ref") != snapshot.snapshot_ref
+            or item.preparation.source_terminal_commitment_ref
+            != source_terminal_commitment_ref
         ):
             raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
     return snapshot
@@ -352,12 +387,37 @@ def _transactional_bridge_adapters(*adapters):
     return tuple(unique)
 
 
+def _transactional_v6_manifest_required(*adapters) -> bool:
+    """Return whether canonical transactional bridge authority is present."""
+
+    from deepreason.bridge.transactional_adapter import TransactionalBridgeAdapter
+
+    return any(
+        isinstance(adapter, TransactionalBridgeAdapter)
+        for adapter in adapters
+        if adapter is not None
+    )
+
+
+def _transactional_source_terminal_commitment_ref(*adapters) -> str | None:
+    transactional = _transactional_bridge_adapters(*adapters)
+    if not transactional:
+        return None
+    refs = {
+        adapter.source_terminal_commitment_ref for adapter in transactional
+    }
+    if None in refs or len(refs) != 1:
+        raise ValueError("BRIDGE_TERMINAL_AUTHORITY_MISMATCH")
+    return next(iter(refs))
+
+
 def _assert_snapshot_matches_invocation(
     snapshot: _BridgeExecutionSnapshot,
     *,
     problem_id: str,
     target: str,
     source_run_digest: str | None,
+    source_terminal_commitment_ref: str | None,
     evidence_budget_chars: int,
     attention_pack,
     composition_request: CompositionRequestV1,
@@ -367,6 +427,8 @@ def _assert_snapshot_matches_invocation(
         snapshot.problem_id != problem_id
         or snapshot.target != target
         or snapshot.source_run_digest != source_run_digest
+        or snapshot.source_terminal_commitment_ref
+        != source_terminal_commitment_ref
         or snapshot.evidence_budget_chars != evidence_budget_chars
         or snapshot.attention_pack_id != _attention_pack_id(attention_pack)
         or snapshot.composition_request != composition_request
@@ -382,6 +444,7 @@ def _read_existing_bridge_terminal(
     problem_id: str,
     target: str,
     source_run_digest: str | None,
+    source_terminal_commitment_ref: str | None,
 ) -> BridgeTerminalResultV1 | None:
     path = harness.root / BRIDGE_RESULT_NAME
     if path.is_symlink() or path.exists() and not path.is_file():
@@ -402,6 +465,8 @@ def _read_existing_bridge_terminal(
         or terminal.problem_id != problem_id
         or terminal.target != target
         or terminal.source_run_digest != source_run_digest
+        or terminal.source_terminal_commitment_ref
+        != source_terminal_commitment_ref
     ):
         raise ValueError("BRIDGE_RESULT_AUTHORITY_MISMATCH")
     return terminal
@@ -416,6 +481,7 @@ class _HarnessBridgeSink:
         manifest_digest: str,
         problem_id: str,
         target: str,
+        source_terminal_commitment_ref: str | None,
         recovery: bool = False,
         recovery_completion_assertion=None,
     ) -> None:
@@ -425,6 +491,7 @@ class _HarnessBridgeSink:
         self.manifest_digest = manifest_digest
         self.problem_id = problem_id
         self.target = target
+        self.source_terminal_commitment_ref = source_terminal_commitment_ref
         self._recovery = recovery
         self._pack_written = False
         self._recovery_completion_assertion = recovery_completion_assertion
@@ -473,6 +540,12 @@ class _HarnessBridgeSink:
         # its semantic bridge event.  Legacy calls have no authorization ref.
         persisted_llm = batch.llm
         event_inputs = tuple(batch.inputs)
+        if (
+            self.source_terminal_commitment_ref is not None
+            and batch.action != BridgeAction.FAILED
+            and self.source_terminal_commitment_ref not in event_inputs
+        ):
+            event_inputs += (self.source_terminal_commitment_ref,)
         if getattr(persisted_llm, "dispatch_authorization_ref", None) is not None:
             persisted_llm = None
             if batch.action not in {BridgeAction.FAILED, BridgeAction.COMPLETED}:
@@ -578,28 +651,10 @@ def _bound_scratch_attention_policy(root, manifest_digest: str, attention_pack):
     return scratch.attention_policy()
 
 
-def _bound_bridge_execution(root, manifest_digest: str, supplied_policy):
-    """Resolve the sole v4 contract/retry authority from the bound manifest.
-
-    A missing or historical manifest preserves the original low-level fixture
-    path exactly.  For v4, callers may supply only the bridge-policy projection;
-    the control plane owns the wire contract and whole-workflow retry ceiling.
-    """
-
-    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+def _derive_bridge_execution_policy(manifest, supplied_policy):
+    """Purely derive effective bridge authority from one immutable manifest."""
 
     supplied = BridgeWorkflowPolicy.model_validate(supplied_policy)
-    path = root / MANIFEST_NAME
-    try:
-        path.lstat()
-    except FileNotFoundError:
-        return supplied, WorkflowRetryPolicyV1(), None
-    manifest = load_run_manifest(path)
-    if manifest.sha256 != manifest_digest:
-        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
-    from deepreason.runtime.launch_policy import require_v6_launch_allowed
-
-    require_v6_launch_allowed(manifest, operation="grounded bridge")
     if manifest.schema_version < 4:
         return supplied, WorkflowRetryPolicyV1(), None
 
@@ -627,6 +682,49 @@ def _bound_bridge_execution(root, manifest_digest: str, supplied_policy):
         control.workflow_retry,
         EndpointLease(role=effective.ledger_role, seat=seat, route=route),
     )
+
+
+def preflight_bound_bridge_policy(*, policy, run_manifest):
+    """Validate and derive bridge authority without mutating runtime state."""
+
+    effective, _retry, _lease = _derive_bridge_execution_policy(
+        run_manifest,
+        policy,
+    )
+    return effective
+
+
+def _bound_bridge_execution(
+    root,
+    manifest_digest: str,
+    supplied_policy,
+    *,
+    transactional_manifest_required: bool = False,
+):
+    """Resolve the sole v4 contract/retry authority from the bound manifest.
+
+    A missing or historical manifest preserves the original low-level fixture
+    path exactly.  For v4, callers may supply only the bridge-policy projection;
+    the control plane owns the wire contract and whole-workflow retry ceiling.
+    """
+
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+    path = root / MANIFEST_NAME
+    try:
+        path.lstat()
+    except FileNotFoundError:
+        if transactional_manifest_required:
+            raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+        supplied = BridgeWorkflowPolicy.model_validate(supplied_policy)
+        return supplied, WorkflowRetryPolicyV1(), None
+    manifest = load_run_manifest(path)
+    if manifest.sha256 != manifest_digest:
+        raise ValueError("BRIDGE_MANIFEST_MISMATCH")
+    from deepreason.runtime.launch_policy import require_v6_launch_allowed
+
+    require_v6_launch_allowed(manifest, operation="grounded bridge")
+    return _derive_bridge_execution_policy(manifest, supplied_policy)
 
 
 def _assert_adapter_matches_retry_lease(adapter, expected) -> None:
@@ -668,6 +766,9 @@ def _terminal_record(
         run_manifest_digest=manifest_digest,
         formal_seq=evidence_pack.formal_seq,
         source_run_digest=evidence_pack.source_run_digest,
+        source_terminal_commitment_ref=(
+            evidence_pack.source_terminal_commitment_ref
+        ),
         terminal_event_seq=terminal_event_seq,
         problem_id=problem_id,
         target=target,
@@ -711,6 +812,12 @@ def build_grounded_bridge(
     """Build and persist one grounded final view without touching formal state."""
 
     harness._ensure_writable()
+    transactional_manifest_required = _transactional_v6_manifest_required(
+        stage_a_adapter,
+        composition_adapter,
+        review_adapter,
+        repair_adapter,
+    )
     derived = (
         source_harness is not None
         or source_run_digest is not None
@@ -769,7 +876,10 @@ def build_grounded_bridge(
         harness.root, manifest_digest, attention_pack
     )
     workflow_policy, retry_policy, retry_lease = _bound_bridge_execution(
-        harness.root, manifest_digest, policy
+        harness.root,
+        manifest_digest,
+        policy,
+        transactional_manifest_required=transactional_manifest_required,
     )
     composition_request = CompositionRequestV1(
         output_target=target,
@@ -791,17 +901,48 @@ def build_grounded_bridge(
         if adapter is not None
     )
     transactional_adapters = _transactional_bridge_adapters(*active_adapters)
+    source_terminal_commitment_ref = (
+        _transactional_source_terminal_commitment_ref(*active_adapters)
+    )
     if transactional_adapters:
+        from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+        from deepreason.runtime.terminal_authority import derive_terminal_authority
+        from deepreason.verification.report import verify_root_report
+
+        bound_manifest = load_run_manifest(harness.root / MANIFEST_NAME)
+        authority = derive_terminal_authority(
+            harness.root,
+            manifest=bound_manifest,
+        )
+        if (
+            not authority.current_valid
+            or authority.terminal_commitment_ref
+            != source_terminal_commitment_ref
+        ):
+            raise ValueError("BRIDGE_TERMINAL_AUTHORITY_MISMATCH")
+        if (
+            authority.terminal_status != "completed"
+            or authority.canonical_bridge_eligible is not True
+        ):
+            raise ValueError("BRIDGE_TERMINAL_OUTCOME_INELIGIBLE")
+        verification = verify_root_report(harness.root)
+        if not verification.integrity_valid or not verification.security_valid:
+            raise ValueError("BRIDGE_ROOT_AUTHORITY_INVALID")
         terminal = _read_existing_bridge_terminal(
             harness,
             manifest_digest=manifest_digest,
             problem_id=problem_id,
             target=target,
             source_run_digest=source_run_digest,
+            source_terminal_commitment_ref=source_terminal_commitment_ref,
         )
         if terminal is not None:
             return terminal
-        recovery_snapshot = _find_bridge_execution_snapshot(harness, manifest_digest)
+        recovery_snapshot = _find_bridge_execution_snapshot(
+            harness,
+            manifest_digest,
+            source_terminal_commitment_ref,
+        )
     else:
         recovery_snapshot = None
     recovery = recovery_snapshot is not None
@@ -817,6 +958,7 @@ def build_grounded_bridge(
             problem_id=problem_id,
             target=target,
             source_run_digest=source_run_digest,
+            source_terminal_commitment_ref=source_terminal_commitment_ref,
             evidence_budget_chars=evidence_budget_chars,
             attention_pack=attention_pack,
             composition_request=composition_request,
@@ -844,6 +986,9 @@ def build_grounded_bridge(
                     budget_chars=evidence_budget_chars,
                     formal_seq=formal_seq,
                     source_run_digest=source_run_digest,
+                    source_terminal_commitment_ref=(
+                        source_terminal_commitment_ref
+                    ),
                     catalog_version=(
                         "v3"
                         if workflow_policy.ledger_contract_version == "v3"
@@ -861,6 +1006,9 @@ def build_grounded_bridge(
                 budget_chars=evidence_budget_chars,
                 formal_seq=formal_seq,
                 source_run_digest=source_run_digest,
+                source_terminal_commitment_ref=(
+                    source_terminal_commitment_ref
+                ),
                 catalog_version=(
                     "v3"
                     if workflow_policy.ledger_contract_version == "v3"
@@ -899,6 +1047,9 @@ def build_grounded_bridge(
                 problem_id=problem_id,
                 target=target,
                 source_run_digest=source_run_digest,
+                source_terminal_commitment_ref=(
+                    source_terminal_commitment_ref
+                ),
                 evidence_budget_chars=evidence_budget_chars,
                 attention_pack=attention_pack,
                 advisory_context=context,
@@ -943,6 +1094,9 @@ def build_grounded_bridge(
             manifest_digest=manifest_digest,
             problem_id=problem_id,
             target=target,
+            source_terminal_commitment_ref=(
+                source_terminal_commitment_ref
+            ),
             recovery=recovery,
             recovery_completion_assertion=(
                 assert_recovery_complete if recovery else None
@@ -996,9 +1150,12 @@ def build_grounded_bridge(
 
         def persist_retry(receipt):
             records = [("bridge-workflow-retry", receipt)]
+            retry_inputs = (receipt.prior_failure_id,)
+            if source_terminal_commitment_ref is not None:
+                retry_inputs += (source_terminal_commitment_ref,)
             batch = BridgePersistenceBatch(
                 action=BridgeAction.WORKFLOW_RETRY_STARTED,
-                inputs=(receipt.prior_failure_id,),
+                inputs=retry_inputs,
                 records=tuple(records),
             )
             if sinks[-1]._already_persisted(
@@ -1007,7 +1164,7 @@ def build_grounded_bridge(
                 return
             harness.record_bridge_event(
                 BridgeAction.WORKFLOW_RETRY_STARTED,
-                inputs=[receipt.prior_failure_id],
+                inputs=list(retry_inputs),
                 records=records,
             )
 
@@ -1055,6 +1212,9 @@ def build_grounded_bridge(
             "process_status": terminal.process_status,
             "formal_seq": terminal.formal_seq,
             "terminal_event_seq": terminal.terminal_event_seq,
+            "source_terminal_commitment_ref": (
+                terminal.source_terminal_commitment_ref
+            ),
             "resolution": (
                 terminal.resolution.value if terminal.resolution is not None else None
             ),
@@ -1069,4 +1229,5 @@ __all__ = [
     "BRIDGE_STATUS_NAME",
     "BridgeTerminalResultV1",
     "build_grounded_bridge",
+    "preflight_bound_bridge_policy",
 ]
