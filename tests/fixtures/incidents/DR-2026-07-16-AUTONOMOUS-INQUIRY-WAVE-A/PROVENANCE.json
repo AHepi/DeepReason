@@ -6,9 +6,9 @@
   },
   "fixture_kind": "minimized-derived-reproduction",
   "generated_root_sha256": {
-    "A1": "97330634bf23563f6f583f5325df5fb2f28ca6dbed7883168e152d6fa8c5a8bc",
-    "A2": "e3e291b4261f950692e370b31cc161edc3299c9894af19e9fe4b4fa1a28e48dc",
-    "A3": "e3193cd5b613cb3eccee2c721d2e46daeead06e1736d4d3daaa8666ce71a718f"
+    "A1": "dd0f5df44d86d4220b2b08af1db999a093db44284de6989e87b15d6d2b661dd6",
+    "A2": "b6c8de91f91a5a0cf191729bce5f54c741963c99ec23bf4e3a0044adfbe23833",
+    "A3": "89313dc7363def6dfa3c56948d7f61d422822dc8991ce772fac6bb6ba3d3402e"
   },
   "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
   "original_archive": {
