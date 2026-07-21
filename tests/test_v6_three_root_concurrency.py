@@ -24,6 +24,7 @@ from deepreason.llm.firewall import leases_from_manifest
 from deepreason.ontology import Provenance
 from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.runtime.progress import _atomic_json
+from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.verification.report import verify_root_report
 from deepreason.workloads.text import (
@@ -37,6 +38,7 @@ from tests.test_v6_transaction_qualification import (
     _control,
     _criticism_policy,
 )
+from tests.test_v6_compact_recovery_transition import _bind_classification
 
 
 VALID_CRITIC = json.dumps(
@@ -125,7 +127,13 @@ def test_three_concurrent_roots_isolate_schema_budget_and_success(tmp_path):
             if mode == "denied":
                 responses = forbidden
             elif mode == "schema" and seat == 1:
-                responses = ["{not-json", "{still-not-json"]
+                responses = [
+                    "{not-json",
+                    "{still-not-json",
+                    "{atomic-not-json",
+                    "{atomic-still-not-json",
+                    "{atomic-final-not-json",
+                ]
             else:
                 responses = [VALID_CRITIC]
             critics.append(
@@ -149,8 +157,29 @@ def test_three_concurrent_roots_isolate_schema_budget_and_success(tmp_path):
             leases=leases_from_manifest(manifest),
             transaction_authority_required=True,
         )
+        _bind_classification(harness, manifest)
         barrier.wait(timeout=10)
         Scheduler(harness, adapter, config, run_manifest=manifest)._foreign_arg_crit()
+        stop_policy = StopPolicy()
+        stop_metrics = StopMetrics(cycle=0)
+        event_horizon = harness._next_seq
+        stop_event = harness.record_measure(
+            inputs=[
+                "run-stop",
+                stop_policy.digest,
+                json.dumps(stop_metrics.model_dump(mode="json"), sort_keys=True),
+                "completed",
+                str(event_horizon),
+            ]
+        )
+        assert stop_event.seq == event_horizon
+        stop = write_stop_record(
+            root,
+            reason="completed",
+            policy=stop_policy,
+            metrics=stop_metrics,
+            event_seq=stop_event.seq,
+        )
         _atomic_json(
             root / "run-result.json",
             _v6_run_result(
@@ -161,9 +190,10 @@ def test_three_concurrent_roots_isolate_schema_budget_and_success(tmp_path):
                     "state": "completed",
                     "workload": "text",
                     "problem_id": f"concurrency-{run_id}",
+                    "stop": stop,
                 },
+                harness=harness,
             ),
-
         )
         work = dict(harness.workflow_state.transaction_work)
         debts = []
