@@ -608,6 +608,30 @@ class BridgeCompositionWireContractV2(BridgeCompositionWireContract):
         return CompositionDraftV1(output=output)
 
 
+class BridgeCompositionBatchWireContractV1(BridgeCompositionWireContractV2):
+    """Separately qualified bounded-ledger child of composition v2."""
+
+    MAXIMUM_BATCH_ENTRIES = 8
+
+    def __init__(
+        self,
+        ledger: ClaimLedgerV1,
+        *,
+        maximum_sections: int,
+        desired_length_chars: int,
+    ) -> None:
+        if not 1 <= len(ledger.entries) <= self.MAXIMUM_BATCH_ENTRIES:
+            raise ValueError(
+                "bridge.composition-batch.v1 requires one through eight ledger entries"
+            )
+        super().__init__(
+            ledger,
+            maximum_sections=maximum_sections,
+            desired_length_chars=desired_length_chars,
+        )
+        self.contract_id = "bridge.composition-batch.v1"
+
+
 def _composition_pack(
     ledger: ClaimLedgerV1,
     request: CompositionRequestV1,
@@ -728,6 +752,18 @@ class BridgeComposer:
                 wire_contract=contract,
             )
         except SchemaRepairError as error:
+            staged = getattr(self.adapter, "staged_composition_fallback", None)
+            if staged is not None and self.contract_version == "v2":
+                output, call = staged(error, ledger, request)
+                return CompositionResultV1(
+                    status=CompositionStatus.COMPOSED,
+                    output=output,
+                    ledger_validation=ledger_report,
+                    output_validation=validate_bridge_output(
+                        ledger, output, allow_conservative_mixed_modes=True
+                    ),
+                    call_receipt=call,
+                )
             return CompositionResultV1(
                 status=CompositionStatus.VALIDATION_FAILED,
                 ledger_validation=ledger_report,
@@ -776,6 +812,7 @@ __all__ = [
     "BridgeComposer",
     "BridgeCompositionWireContract",
     "BridgeCompositionWireContractV2",
+    "BridgeCompositionBatchWireContractV1",
     "BridgeCompositionWireV1",
     "BridgeCompositionWireV2",
     "CompositionSpanWireV2",
