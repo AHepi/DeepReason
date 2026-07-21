@@ -229,7 +229,7 @@ def test_bridge_build_holds_operator_locks_through_model_calls(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: adapter(harness),
     )
     result: list[int] = []
     worker = threading.Thread(
@@ -280,7 +280,7 @@ def built_bridge(bridge_run, monkeypatch, capsys):
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: _scripted_adapter(harness),
+        lambda _manifest, harness, terminal_authority=None: _scripted_adapter(harness),
     )
     assert (
         _run(
@@ -358,7 +358,55 @@ def test_unresolved_status_result_and_validation_are_process_success(
     status = json.loads(capsys.readouterr().out)
     assert status["process_status"] == "success"
     assert status["resolution"] == "insufficient_evidence"
+    assert "source_terminal_commitment_ref" not in status
     assert status["stable_ids"]["bridge_output_id"].startswith("sha256:")
+
+
+def test_bridge_status_commitment_reference_is_strict_and_terminal_only():
+    terminal = {
+        "schema": "deepreason-bridge-status-v1",
+        "state": "completed",
+        "process_status": "success",
+        "formal_seq": 1,
+        "terminal_event_seq": 2,
+        "source_terminal_commitment_ref": "sha256:" + "a" * 64,
+        "resolution": "insufficient_evidence",
+    }
+
+    validated = bridge_application.BridgeCLIStatusV1.model_validate(terminal)
+    assert validated.source_terminal_commitment_ref == "sha256:" + "a" * 64
+    with pytest.raises(ValueError):
+        bridge_application.BridgeCLIStatusV1.model_validate(
+            {**terminal, "source_terminal_commitment_ref": 7}
+        )
+    with pytest.raises(ValueError):
+        bridge_application.BridgeCLIStatusV1.model_validate(
+            {**terminal, "source_terminal_commitment_ref": "sha256:" + "A" * 64}
+        )
+    with pytest.raises(ValueError):
+        bridge_application.BridgeCLIStatusV1.model_validate(
+            {**terminal, "unexpected_authority": "sha256:" + "b" * 64}
+        )
+    with pytest.raises(ValueError):
+        bridge_application.BridgeCLIStatusV1.model_validate(
+            {
+                "schema": "deepreason-bridge-status-v1",
+                "state": "running",
+                "source_terminal_commitment_ref": "sha256:" + "a" * 64,
+            }
+        )
+
+
+def test_historical_status_cannot_substitute_terminal_commitment_authority(
+    built_bridge, capsys
+):
+    status_path = built_bridge.root / "bridge-status.json"
+    payload = json.loads(status_path.read_text(encoding="utf-8"))
+    payload["source_terminal_commitment_ref"] = "sha256:" + "a" * 64
+    status_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    assert _run(built_bridge.root, "status") == 1
+    assert "terminal commitment mismatch" in capsys.readouterr().err
 
 
 def test_bridge_read_commands_are_physically_read_only(built_bridge, capsys):
@@ -584,7 +632,9 @@ def test_adapter_preflight_failure_does_not_commit_attention_receipt(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda *_args: (_ for _ in ()).throw(ValueError("BRIDGE_ROUTE_UNAVAILABLE")),
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            ValueError("BRIDGE_ROUTE_UNAVAILABLE")
+        ),
     )
 
     assert (
@@ -617,7 +667,11 @@ def test_failed_stage_a_terminal_remains_readable_without_bridge_objects(
             retry_max=0,
         )
 
-    monkeypatch.setattr(bridge_application, "_build_bridge_adapter", lambda _m, h: exhausted(h))
+    monkeypatch.setattr(
+        bridge_application,
+        "_build_bridge_adapter",
+        lambda _m, h, terminal_authority=None: exhausted(h),
+    )
 
     assert _run(bridge_run.root, "build", bridge_run.problem_id) == 1
     assert "Bridge failed" in capsys.readouterr().out
@@ -766,7 +820,7 @@ def test_successful_review_must_match_output_and_pass(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, current: _reviewed_adapter(current),
+        lambda _manifest, current, terminal_authority=None: _reviewed_adapter(current),
     )
     assert _run(root, "build", "problem-reviewed") == 0
     capsys.readouterr()
@@ -807,7 +861,9 @@ def test_failed_review_on_prior_output_accepts_only_replayed_safe_removal(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, current: _safe_removal_adapter(current),
+        lambda _manifest, current, terminal_authority=None: _safe_removal_adapter(
+            current
+        ),
     )
 
     assert _run(root, "build", "problem-safe-removal") == 0
@@ -830,7 +886,7 @@ def test_failure_sidecar_fields_reconcile_to_replay_record(
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda _manifest, harness: LLMAdapter(
+        lambda _manifest, harness, terminal_authority=None: LLMAdapter(
             {
                 "summarizer": MockEndpoint([], name="exhausted"),
                 "thesis": MockEndpoint([], name="unused"),
