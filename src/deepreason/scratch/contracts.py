@@ -83,6 +83,17 @@ class ScratchBlockWireV1(ScratchWireModel):
         return _nonblank(value)
 
 
+class ScratchBlockMinimalWireV1(ScratchWireModel):
+    """Smallest separately qualified scratch block: one advisory thought."""
+
+    content: WireText
+
+    @field_validator("content")
+    @classmethod
+    def _content_is_nonblank(cls, value):
+        return _nonblank(value)
+
+
 class ScratchLinkWireV1(ScratchWireModel):
     """A provisional relation using only call-local endpoint references.
 
@@ -109,6 +120,34 @@ class ScratchLinkWireV1(ScratchWireModel):
     @field_validator("relation_hint", "because", "holds_when", "weakens_when")
     @classmethod
     def _nonblank_text(cls, value):
+        return _nonblank(value)
+
+    @model_validator(mode="after")
+    def _one_reference_per_endpoint(self):
+        if (self.from_index is None) == (self.from_handle is None):
+            raise ValueError("provide exactly one of from_index or from_handle")
+        if (self.to_index is None) == (self.to_handle is None):
+            raise ValueError("provide exactly one of to_index or to_handle")
+        return self
+
+
+class ScratchLinkMinimalWireV1(ScratchWireModel):
+    """Smallest separately qualified provisional relation."""
+
+    from_index: LocalIndex | None = None
+    from_handle: LocalHandle | None = None
+    to_index: LocalIndex | None = None
+    to_handle: LocalHandle | None = None
+    relation_hint: WireShortText
+
+    @field_validator("from_handle", "to_handle", mode="before")
+    @classmethod
+    def _handles_are_local(cls, value):
+        return None if value is None else _local_handle(value)
+
+    @field_validator("relation_hint")
+    @classmethod
+    def _relation_is_nonblank(cls, value):
         return _nonblank(value)
 
     @model_validator(mode="after")
@@ -157,6 +196,16 @@ class ClusterGuideWireV1(ScratchWireModel):
         return value
 
 
+class ClusterGuideMinimalWireV1(ScratchWireModel):
+    """Smallest separately qualified navigation guide."""
+
+    working_focus: WireText
+
+    @field_validator("working_focus")
+    @classmethod
+    def _focus_is_nonblank(cls, value):
+        return _nonblank(value)
+
 class ClusterGuideDraftV1(FrozenRecord):
     """Harness-side guide content after local handles are resolved."""
 
@@ -191,6 +240,19 @@ class ScratchBlockWireContract(WireContract[ScratchBlockBodyV1]):
 
     def compile(self, wire: ScratchBlockWireV1) -> ScratchBlockBodyV1:
         return ScratchBlockBodyV1.model_validate(wire.model_dump(exclude_none=True))
+
+
+class ScratchBlockMinimalWireContract(WireContract[ScratchBlockBodyV1]):
+    def __init__(self) -> None:
+        super().__init__(
+            "scratch.block.minimal.v1",
+            ScratchBlockMinimalWireV1,
+            ScratchBlockBodyV1,
+            variant="minimal",
+        )
+
+    def compile(self, wire: ScratchBlockMinimalWireV1) -> ScratchBlockBodyV1:
+        return ScratchBlockBodyV1(content=wire.content)
 
 
 class _ReferenceCompiler:
@@ -268,6 +330,45 @@ class ScratchLinkWireContract(_ReferenceCompiler, WireContract[ScratchLinkBodyV1
         )
 
 
+class ScratchLinkMinimalWireContract(
+    _ReferenceCompiler, WireContract[ScratchLinkBodyV1]
+):
+    def __init__(
+        self,
+        *,
+        indexed_block_ids: Sequence[str] = (),
+        handles: Mapping[str, str] | AliasTable | None = None,
+    ) -> None:
+        _ReferenceCompiler.__init__(
+            self, indexed_block_ids=indexed_block_ids, handles=handles
+        )
+        WireContract.__init__(
+            self,
+            "scratch.link.minimal.v1",
+            ScratchLinkMinimalWireV1,
+            ScratchLinkBodyV1,
+            aliases=self.handles,
+            variant="minimal",
+        )
+
+    def compile(self, wire: ScratchLinkMinimalWireV1) -> ScratchLinkBodyV1:
+        return ScratchLinkBodyV1(
+            from_=self._resolve(
+                index=wire.from_index,
+                handle=wire.from_handle,
+                pointer=(
+                    "/from_index" if wire.from_index is not None else "/from_handle"
+                ),
+            ),
+            to=self._resolve(
+                index=wire.to_index,
+                handle=wire.to_handle,
+                pointer="/to_index" if wire.to_index is not None else "/to_handle",
+            ),
+            relation_hint=wire.relation_hint,
+        )
+
+
 class ClusterGuideWireContract(_ReferenceCompiler, WireContract[ClusterGuideDraftV1]):
     def __init__(self, *, handles: Mapping[str, str] | AliasTable) -> None:
         _ReferenceCompiler.__init__(self, handles=handles)
@@ -297,6 +398,24 @@ class ClusterGuideWireContract(_ReferenceCompiler, WireContract[ClusterGuideDraf
         )
 
 
+class ClusterGuideMinimalWireContract(
+    _ReferenceCompiler, WireContract[ClusterGuideDraftV1]
+):
+    def __init__(self, *, handles: Mapping[str, str] | AliasTable) -> None:
+        _ReferenceCompiler.__init__(self, handles=handles)
+        WireContract.__init__(
+            self,
+            "scratch.cluster-guide.minimal.v1",
+            ClusterGuideMinimalWireV1,
+            ClusterGuideDraftV1,
+            aliases=self.handles,
+            variant="minimal",
+        )
+
+    def compile(self, wire: ClusterGuideMinimalWireV1) -> ClusterGuideDraftV1:
+        return ClusterGuideDraftV1(working_focus=wire.working_focus)
+
+
 # Explicit compact aliases make intent clear at call sites without creating a
 # second protocol or model-profile fork.
 CompactScratchBlockV1 = ScratchBlockWireV1
@@ -307,6 +426,8 @@ CompactClusterGuideV1 = ClusterGuideWireV1
 __all__ = [
     "ClusterGuideDraftV1",
     "ClusterGuideWireContract",
+    "ClusterGuideMinimalWireContract",
+    "ClusterGuideMinimalWireV1",
     "ClusterGuideWireV1",
     "CompactClusterGuideV1",
     "CompactScratchBlockV1",
@@ -319,8 +440,12 @@ __all__ = [
     "MAX_LOCAL_INDEX",
     "SCRATCH_CONTRACT_INSTRUCTIONS",
     "ScratchBlockWireContract",
+    "ScratchBlockMinimalWireContract",
+    "ScratchBlockMinimalWireV1",
     "ScratchBlockWireV1",
     "ScratchLinkWireContract",
+    "ScratchLinkMinimalWireContract",
+    "ScratchLinkMinimalWireV1",
     "ScratchLinkWireV1",
     "ScratchWireReferenceError",
 ]
