@@ -337,26 +337,32 @@ def run_scheduler(harness, config, cycles: int, token_budget: int | None = None,
     invocation (the log may carry prior runs on a resumed root): silent
     spend was the pipeline's most-recurrent bug class, so the check ships
     in-band with every run rather than living in an operator's habits."""
-    effective_manifest = run_manifest
-    if effective_manifest is None:
-        root = getattr(harness, "root", None)
-        if root is not None:
-            from pathlib import Path
+    root = getattr(harness, "root", None)
+    from deepreason.runtime.launch_policy import resolve_effective_run_manifest
 
-            from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
-
-            manifest_path = Path(root) / MANIFEST_NAME
-            try:
-                manifest_path.lstat()
-            except FileNotFoundError:
-                pass
-            else:
-                effective_manifest = load_run_manifest(manifest_path)
+    effective_manifest = resolve_effective_run_manifest(
+        run_manifest,
+        root=root,
+        operation="full scheduler",
+    )
 
     if effective_manifest is not None:
-        from deepreason.runtime.launch_policy import require_v6_launch_allowed
+        from deepreason.runtime.launch_policy import (
+            require_v6_launch_allowed,
+            require_v6_production_qualification,
+        )
 
         require_v6_launch_allowed(effective_manifest, operation="full scheduler")
+        if (
+            getattr(effective_manifest, "schema_version", None) == 6
+            and int(cycles) > 0
+        ):
+            qualification = require_v6_production_qualification(
+                effective_manifest,
+                root=getattr(harness, "root", None),
+                operation="full scheduler",
+            )
+            harness.bind_model_classification(effective_manifest, qualification)
 
     require_full_engine(effective_manifest or config, workload="full scheduler")
 
