@@ -73,6 +73,8 @@ CanonicalOutput = TypeVar("CanonicalOutput", bound=BaseModel)
 
 CONJECTURER_TURN_CONTRACT_V6 = "conjecturer.turn.v6"
 BATCH_CRITIC_CONTRACT_V2 = "batch-critic.v2"
+ATOMIC_CONJECTURE_CONTRACT_V1 = "conjecturer.atomic-candidate.v1"
+ATOMIC_CRITIC_CONTRACT_V1 = "critic.atomic-target.v1"
 BRIDGE_LEDGER_CONTRACT_V3 = "bridge.ledger.v3"
 BRIDGE_COMPOSITION_CONTRACT_V2 = "bridge.composition.v2"
 
@@ -331,6 +333,133 @@ class ConjecturerWireContract(WireContract[ConjecturerOutput]):
                 )
                 for item in wire.candidates
             ]
+        )
+
+
+class AtomicConjectureCandidateWireV1(StrictWireModel):
+    """One bounded candidate slot or an honest no-candidate outcome."""
+
+    candidate: CompactConjectureCandidate | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+
+    @model_validator(mode="after")
+    def _exactly_one_outcome(self):
+        if (self.candidate is None) == (self.abstention is None):
+            raise ValueError(
+                "atomic conjecture requires exactly one candidate or abstention"
+            )
+        return self
+
+
+class AtomicReasoningConjectureCandidateWireV1(StrictWireModel):
+    """One bounded reasoning-envelope candidate or honest abstention."""
+
+    candidate: ReasoningCandidateProposal | None = None
+    abstention: ConjectureAbstentionV1 | None = None
+
+    @model_validator(mode="after")
+    def _exactly_one_outcome(self):
+        if (self.candidate is None) == (self.abstention is None):
+            raise ValueError(
+                "atomic reasoning conjecture requires exactly one candidate or abstention"
+            )
+        return self
+
+
+class AtomicConjectureWireContractV1(WireContract[BaseModel]):
+    """Separately named single-candidate contract for authorized decomposition."""
+
+    def __init__(self, aliases: AliasTable, *, reasoning: bool = False) -> None:
+        self.reasoning = bool(reasoning)
+        self.visible_aliases = tuple(sorted(aliases.aliases))
+        super().__init__(
+            ATOMIC_CONJECTURE_CONTRACT_V1,
+            (
+                AtomicReasoningConjectureCandidateWireV1
+                if self.reasoning
+                else AtomicConjectureCandidateWireV1
+            ),
+            ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6,
+            aliases=aliases,
+            variant="atomic.v1",
+        )
+
+    def model_json_schema(self) -> dict:
+        schema = super().model_json_schema()
+        definitions = schema.get("$defs", {})
+        candidate = definitions.get(
+            "ReasoningCandidateProposal"
+            if self.reasoning
+            else "CompactConjectureCandidate",
+            {},
+        )
+        reference_field = candidate.get("properties", {}).get(
+            "optional_refs" if self.reasoning else "neighbours"
+        )
+        if isinstance(reference_field, dict):
+            if self.visible_aliases:
+                reference_field["items"] = {
+                    "enum": list(self.visible_aliases),
+                    "type": "string",
+                }
+            else:
+                reference_field["maxItems"] = 0
+        if self.reasoning:
+            sidecar = definitions.get("OperationalSidecar", {})
+            requested = sidecar.get("properties", {}).get(
+                "requested_context_aliases"
+            )
+            if isinstance(requested, dict):
+                if self.visible_aliases:
+                    requested["items"] = {
+                        "enum": list(self.visible_aliases),
+                        "type": "string",
+                    }
+                else:
+                    requested["maxItems"] = 0
+        return schema
+
+    def compile(self, wire: BaseModel) -> BaseModel:
+        if wire.abstention is not None:
+            model = ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6
+            return model(abstention=wire.abstention)
+        assert wire.candidate is not None
+        candidate = wire.candidate
+        if self.reasoning:
+            requested = tuple(
+                self.aliases.resolve(alias)
+                for alias in candidate.sidecar.requested_context_aliases
+            )
+            return ReasoningConjecturerTurnV6(
+                candidates=(
+                    ReasoningCandidateProposal(
+                        claim=candidate.claim,
+                        mechanism=candidate.mechanism,
+                        counterconditions=candidate.counterconditions,
+                        typicality=candidate.typicality,
+                        optional_refs=tuple(
+                            self.aliases.resolve(alias)
+                            for alias in candidate.optional_refs
+                        ),
+                        analogy=candidate.analogy,
+                        sidecar=OperationalSidecar(
+                            search_signal=candidate.sidecar.search_signal,
+                            requested_context_aliases=requested,
+                        ),
+                    ),
+                )
+            )
+        return ConjectureTurnV6(
+            candidates=(
+                ConjectureCandidate(
+                    content=candidate.content,
+                    typicality=candidate.typicality,
+                    refs=tuple(
+                        CandidateRef(target=self.aliases.resolve(alias))
+                        for alias in candidate.neighbours
+                    ),
+                ),
+            )
         )
 
 
@@ -1358,6 +1487,15 @@ class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
             case="\n".join(parts),
             counterexample=wire.counterexample,
         )
+
+
+class AtomicCriticWireContractV1(CriticWireContract):
+    """One exact deterministic target under separately frozen authority."""
+
+    def __init__(self, aliases: AliasTable, expected_target: str) -> None:
+        super().__init__(aliases, expected_target)
+        self.contract_id = ATOMIC_CRITIC_CONTRACT_V1
+        self.variant = "atomic.v1"
 
 
 class ResponseClause(StrictWireModel):
