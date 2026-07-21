@@ -61,6 +61,8 @@ from deepreason.workflow.models import (
     GuardResultV1,
     ProposalReceiptV1,
     RepairWorkOrderV1,
+    RunTerminalCommitmentV1,
+    RunTerminalResultDraftV1,
     StopMetricsObservationV1,
     TransitionDecisionV1,
     WorkOrderEnvelopeV1,
@@ -69,10 +71,16 @@ from deepreason.workflow.models import (
     WorkflowResumeDecisionV1,
 )
 from deepreason.workflow.transaction import (
+    CompactRecoveryTransitionV1,
+    ContractDecompositionCompletionV1,
+    ContractDecompositionTransitionV1,
     ContextExposureReceiptV2,
     ContextPackPlanV1,
     DispatchAuthorizationBundleV1,
+    ModelClassificationBindingV1,
     ProviderAttemptV1,
+    RouteSeatInsufficientCapabilityV1,
+    RouteSeatModelClassificationPlanV1,
     SemanticAdmissionV1,
     TokenReservationV2,
     WorkLifecycleTransitionV1,
@@ -144,6 +152,8 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "workflow-lifecycle-snapshot": WorkflowLifecycleSnapshotV1,
     "workflow-lifecycle-decision": WorkflowLifecycleDecisionV1,
     "workflow-resume-decision": WorkflowResumeDecisionV1,
+    "workflow-run-terminal-commitment-v1": RunTerminalCommitmentV1,
+    "workflow-run-terminal-result-draft-v1": RunTerminalResultDraftV1,
     "workflow-work-preparation-v1": WorkPreparationV1,
     "workflow-context-pack-plan-v1": ContextPackPlanV1,
     "workflow-token-reservation-v2": TokenReservationV2,
@@ -151,8 +161,22 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "workflow-dispatch-authorization-v1": DispatchAuthorizationBundleV1,
     "workflow-provider-attempt-v1": ProviderAttemptV1,
     "workflow-semantic-admission-v1": SemanticAdmissionV1,
+    "workflow-compact-recovery-transition-v1": CompactRecoveryTransitionV1,
+    "workflow-contract-decomposition-transition-v1": (
+        ContractDecompositionTransitionV1
+    ),
+    "workflow-contract-decomposition-completion-v1": (
+        ContractDecompositionCompletionV1
+    ),
+    "workflow-route-seat-insufficient-capability-v1": (
+        RouteSeatInsufficientCapabilityV1
+    ),
     "workflow-work-terminal-v1": WorkTerminalV1,
     "workflow-work-lifecycle-transition-v1": WorkLifecycleTransitionV1,
+    "workflow-route-seat-model-classification-plan-v1": (
+        RouteSeatModelClassificationPlanV1
+    ),
+    "workflow-model-classification-binding-v1": ModelClassificationBindingV1,
     "criticism-assignment-v1": CriticismAssignmentV1,
     "criticism-attempt-v1": CriticismAttemptV1,
     "criticism-coverage-debt-v1": CoverageDebtV1,
