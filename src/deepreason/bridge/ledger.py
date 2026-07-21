@@ -1518,6 +1518,23 @@ class ClaimLedgerWireContractV3(ClaimLedgerWireContractV2):
         return compiled
 
 
+class ClaimLedgerBatchWireContractV1(ClaimLedgerWireContractV3):
+    """Separately qualified bounded-catalog child of ``bridge.ledger.v3``."""
+
+    MAXIMUM_BATCH_ITEMS = 8
+
+    def __init__(self, catalog: ClaimLedgerInputCatalogV3) -> None:
+        if (
+            len(catalog.items) > self.MAXIMUM_BATCH_ITEMS
+            or (not catalog.items and not catalog.process_observations)
+        ):
+            raise ValueError(
+                "bridge.ledger-batch.v1 requires a nonempty bounded catalog batch"
+            )
+        super().__init__(catalog)
+        self.contract_id = "bridge.ledger-batch.v1"
+
+
 class ClaimLedgerStageAFailureV1(LedgerFrozenRecord):
     code: Literal["BRIDGE_LEDGER_REPAIR_EXHAUSTED"] = (
         "BRIDGE_LEDGER_REPAIR_EXHAUSTED"
@@ -1558,6 +1575,7 @@ class ClaimLedgerCallReceiptV1(LedgerFrozenRecord):
         "bridge.claim-ledger.compact.v1",
         "bridge.claim-ledger.compact.v2",
         "bridge.ledger.v3",
+        "bridge.ledger-batch.v1",
     ] = "bridge.claim-ledger.compact.v1"
     catalog_id: HashRef
     llm_call: LLMCall | None = None
@@ -1830,6 +1848,7 @@ def build_claim_ledger_stage_a(
     pack = render_claim_ledger_stage_a_pack(catalog, contract=contract)
     failure = None
     exhausted = False
+    receipt_contract_id = contract.contract_id
     try:
         ledger, call = adapter.call(
             role,
@@ -1839,10 +1858,15 @@ def build_claim_ledger_stage_a(
             wire_contract=contract,
         )
     except SchemaRepairError as error:
-        ledger = _fallback_ledger(catalog, contract_version=contract_version)
-        call = error.spend
-        exhausted = True
-        failure = ClaimLedgerStageAFailureV1(message=_failure_message(error))
+        staged = getattr(adapter, "staged_ledger_fallback", None)
+        if staged is not None and contract_version == "v3":
+            ledger, call = staged(error, catalog)
+            receipt_contract_id = "bridge.ledger-batch.v1"
+        else:
+            ledger = _fallback_ledger(catalog, contract_version=contract_version)
+            call = error.spend
+            exhausted = True
+            failure = ClaimLedgerStageAFailureV1(message=_failure_message(error))
     report = validate_claim_ledger(ledger)
     fallback = _fallback_ledger(catalog, contract_version=contract_version)
     return ClaimLedgerStageAResultV1(
@@ -1850,7 +1874,7 @@ def build_claim_ledger_stage_a(
         ledger=ledger,
         validation_report=report,
         receipt=ClaimLedgerCallReceiptV1(
-            contract_id=contract.contract_id,
+            contract_id=receipt_contract_id,
             catalog_id=catalog.id,
             llm_call=call,
             repair_exhausted=exhausted,
@@ -1956,6 +1980,7 @@ __all__ = [
     "ClaimLedgerStageAFailureV1",
     "ClaimLedgerStageAResultV1",
     "ClaimLedgerWireContractV3",
+    "ClaimLedgerBatchWireContractV1",
     "ClaimLedgerWireContract",
     "ClaimLedgerWireContractV2",
     "ClaimLedgerWireReferenceError",
