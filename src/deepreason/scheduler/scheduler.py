@@ -199,6 +199,8 @@ class Scheduler:
             raise WorkflowAuthorizationError(
                 "RunManifest v6 scheduler requires the global transaction dispatch guard"
             )
+        if run_manifest is not None and run_manifest.schema_version == 6:
+            adapter.bind_v6_authority(harness, run_manifest)
         self.embedder = embedder or HashingEmbedder()
         # Research service (§12; research/backends.py). Accepts a
         # ResearchService, a bare duck-typed backend (legacy tests: wrapped
