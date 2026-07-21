@@ -7,10 +7,13 @@ from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError
 from deepreason.llm.endpoints import MockEndpoint
+from deepreason.llm.firewall import leases_from_manifest
 from deepreason.measures.hv import HV_FLOOR_PROGRAM
 from deepreason.ontology import Problem, ProblemProvenance, Provenance, Status
 from deepreason.oracle import PROPERTY_PROGRAM
 from deepreason.scheduler.scheduler import Scheduler
+from tests.test_v6_compact_recovery_transition import _bind_classification
+from tests.test_v6_transaction_qualification import _manifest
 
 
 class _Log:
@@ -269,6 +272,8 @@ def test_v6_audit_vision_and_lazy_hv_defer_without_dispatch(monkeypatch):
 
 def test_v6_pairwise_discrimination_never_reaches_unbound_judge(tmp_path, monkeypatch):
     harness = Harness(tmp_path / "run")
+    manifest = _manifest()
+    _bind_classification(harness, manifest)
     first = harness.create_artifact(
         "rival A", provenance=Provenance(role="conjecturer")
     )
@@ -292,6 +297,8 @@ def test_v6_pairwise_discrimination_never_reaches_unbound_judge(tmp_path, monkey
             )
         },
         harness.blobs,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
         transaction_authority_required=True,
     )
     scheduler = Scheduler(
@@ -299,7 +306,7 @@ def test_v6_pairwise_discrimination_never_reaches_unbound_judge(tmp_path, monkey
         adapter,
         Config(N_SCHOOLS=0, FUZZ_N=0, ADVISORY_TRIALS_PER_CYCLE=1),
         workload_profile="text",
-        run_manifest=SimpleNamespace(schema_version=6),
+        run_manifest=manifest,
     )
     monkeypatch.setattr(scheduler, "_simulation_capability_step", lambda: False)
 
