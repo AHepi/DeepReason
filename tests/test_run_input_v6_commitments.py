@@ -29,6 +29,7 @@ from deepreason.evidence import (
     load_run_input,
     verify_run_input,
 )
+from deepreason.llm.firewall import route_fingerprint
 from deepreason.ontology import Commitment
 from deepreason.ontology.commitment import Budget
 from deepreason.run_manifest import (
@@ -42,6 +43,14 @@ from deepreason.run_manifest import (
     bind_run_manifest,
     compile_run_manifest,
 )
+from deepreason.runtime.stop import (
+    StopController,
+    StopMetrics,
+    StopPolicy,
+    build_stop_record,
+    persist_stop_record,
+)
+from deepreason.workflow.lifecycle import build_stopped_lifecycle
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
 
@@ -60,6 +69,7 @@ def _config() -> Config:
                 "provider": "mock",
                 "family": "offline",
                 "max_tokens": 64,
+                "context_window_tokens": 262_144,
             }
         }
     )
@@ -298,8 +308,34 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
         _harness, _config, _cycles, token_budget, **_kwargs
     ):
         calls.append(token_budget)
+        policy = StopPolicy(min_cycles=0, window=1, stable_windows=1)
+        controller = StopController(policy)
+        before = controller.snapshot()
+        metrics = StopMetrics(cycle=len(calls) - 1)
+        decision = controller.evaluate(metrics)
+        stop = build_stop_record(
+            reason=decision.reason,
+            policy=policy,
+            metrics=metrics,
+            event_seq=_harness._next_seq,
+        )
+        observation, snapshot, lifecycle = build_stopped_lifecycle(
+            _harness.workflow_state,
+            manifest_digest=manifest.sha256,
+            controller_version="workflow.controller.v3",
+            workflow_profile="inquiry.active.v2",
+            policy=policy,
+            metrics=metrics,
+            deterministic_decision=decision,
+            controller_state_before=before,
+            controller_state_after=controller.snapshot(),
+            stop_event_seq=_harness._next_seq,
+            stop_record_digest=stop["digest"],
+        )
+        _harness.record_lifecycle_transition(observation, snapshot, lifecycle)
+        persist_stop_record(root, stop)
         return (
-            {"frontier": [], "survivors": []},
+            {"frontier": [], "survivors": [], "stop_reason": "converged"},
             None,
             {
                 "metered_tokens": None,
@@ -328,12 +364,29 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
     )
     assert terminal.lifecycle == "completed"
     assert terminal.payload["schema"] == "deepreason-run-result-v2"
+    assert terminal.payload["model_execution"] == {
+        "schema": "model-execution-summary.v1",
+        "mode": "base_only",
+        "base_profile": manifest.model_profile,
+        "route_seat_bases": [
+            {
+                "schema": "route-seat-base-projection.v1",
+                "role": entry.role,
+                "seat": entry.seat,
+                "endpoint_id": entry.endpoint_id,
+                "route_sha256": route_fingerprint(
+                    manifest.roles[entry.role][entry.seat]
+                ),
+                "base_profile": entry.base_profile,
+                "selection_basis": entry.selection_basis,
+            }
+            for entry in manifest.route_seat_presentation_plan.entries
+        ],
+        "recovery_routes": [],
+        "event_horizon_seq": terminal.payload["stop"]["event_seq"],
+    }
     assert calls == [None]
 
-    monkeypatch.setattr(
-        "deepreason.runtime.continuation.prepare_continuation",
-        lambda *_args, **_kwargs: {"prior_stop_digest": "a" * 64},
-    )
     continued = service.continue_run(
         ContinueTextRunIntentV1(
             root=str(root),
