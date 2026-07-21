@@ -44,8 +44,15 @@ class EndpointSpec(BaseModel):
     temperature: float | None = None
     api_key_env: str | None = None
     provider: str | None = None
+    # Setup-time presentation authority for this exact endpoint assignment.
+    # Runtime model output cannot alter it; v6 compilation freezes it into the
+    # route-seat presentation plan.
+    model_profile: Literal["compact", "standard", "frontier"] | None = None
     reasoning: str | int | None = None
     max_tokens: int | None = Field(default=None, gt=0)
+    # Total prompt-plus-completion capacity declared by the route owner.
+    # ``None`` is legacy/unqualified capacity, not an infinite window.
+    context_window_tokens: int | None = Field(default=None, gt=0)
     json_mode: bool = False
     output_mode: Literal["json_object", "text"] | None = None
     # Compile-time transport choice. Runtime calls never probe/fall back.
@@ -55,6 +62,18 @@ class EndpointSpec(BaseModel):
     # the endpoint default. Slow hosted open-model endpoints need headroom:
     # a run was killed by ~110s+ generations against a fixed 120s wait.
     timeout_s: int | None = Field(default=None, gt=0)
+
+    @model_validator(mode="after")
+    def _qualified_context_window_has_finite_completion_allowance(self):
+        if self.context_window_tokens is None:
+            return self
+        if self.max_tokens is None:
+            raise ValueError(
+                "context_window_tokens requires a finite max_tokens allowance"
+            )
+        if self.context_window_tokens <= self.max_tokens:
+            raise ValueError("context_window_tokens must be greater than max_tokens")
+        return self
 
     @field_validator("api_key_env")
     @classmethod
