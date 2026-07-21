@@ -16,19 +16,29 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import stat
 from collections.abc import Callable
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from deepreason.canonical import canonical_json
-from deepreason.llm.firewall import route_fingerprint
-from deepreason.run_manifest import RunManifest, RunManifestError, load_run_manifest
+from deepreason.run_manifest import (
+    ContractSchemaRepairGrantV1,
+    RouteSeatBehavioralContractGrantV1,
+    RunManifest,
+    RunManifestError,
+    load_run_manifest,
+    resolve_route_seat_behavioral_capability,
+    resolve_route_seat_base_profile,
+)
+from deepreason.workflow.transaction import RouteSeatModelClassificationPlanV1
 
 
 PRODUCTION_CASES_PER_PAIR = 20
 PRODUCTION_EVENTUAL_VALID_MINIMUM = 19
+_MAX_PRODUCTION_CONTRACT_REPORT_BYTES = 4 * 1024 * 1024
 
 
 class _DoctorRecord(BaseModel):
@@ -41,14 +51,21 @@ class ProductionContractPairV1(_DoctorRecord):
     pair_id: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     contract_id: Literal[
         "conjecturer.turn.v6",
+        "conjecturer.atomic-candidate.v1",
         "batch-critic.v2",
+        "critic.atomic-target.v1",
         "bridge.ledger.v3",
+        "bridge.ledger-batch.v1",
         "bridge.composition.v2",
+        "bridge.composition-batch.v1",
         "groundingverdictwirev1.direct.v1",
         "groundingrepairwirev1.direct.v1",
         "scratch.block.compact.v1",
         "scratch.link.compact.v1",
         "scratch.cluster-guide.compact.v1",
+        "scratch.block.minimal.v1",
+        "scratch.link.minimal.v1",
+        "scratch.cluster-guide.minimal.v1",
     ]
     role: str = Field(min_length=1, max_length=64)
     seat: int = Field(ge=0, le=1_023)
@@ -174,6 +191,7 @@ class ProductionContractDoctorReportV1(_DoctorRecord):
     )
     pairs: tuple[ProductionContractPairReportV1, ...]
     summary: ProductionContractDoctorSummaryV1
+    route_seat_model_classification: RouteSeatModelClassificationPlanV1 | None = None
 
     @model_validator(mode="after")
     def _summary_matches_pairs(self):
@@ -202,6 +220,10 @@ class ProductionContractDoctorReportV1(_DoctorRecord):
         }
         if self.summary.model_dump() != expected:
             raise ValueError("doctor summary does not match pair reports")
+        classification = self.route_seat_model_classification
+        if classification is not None:
+            if classification.manifest_digest != self.run_manifest_sha256:
+                raise ValueError("classification plan belongs to another manifest")
         return self
 
 
@@ -233,59 +255,10 @@ def _pair_id(
     ).hexdigest()
 
 
-def _role_pairs(
-    manifest: RunManifest,
-    *,
-    contract_id: str,
-    role: str,
-    seats: tuple[int, ...] | None = None,
-) -> list[ProductionContractPairV1]:
-    routes = manifest.roles.get(role, ())
-    selected = tuple(range(len(routes))) if seats is None else seats
-    pairs: list[ProductionContractPairV1] = []
-    for seat in selected:
-        if seat < 0 or seat >= len(routes):
-            raise RunManifestError(
-                "DOCTOR_ROUTE_REQUIRED",
-                f"{contract_id} selects unavailable {role}[{seat}]",
-                f"/roles/{role}/{seat}",
-            )
-        route = routes[seat]
-        route_sha256 = route_fingerprint(route)
-        pairs.append(
-            ProductionContractPairV1(
-                pair_id=_pair_id(
-                    manifest.sha256,
-                    contract_id=contract_id,
-                    role=role,
-                    seat=seat,
-                    route_sha256=route_sha256,
-                ),
-                contract_id=contract_id,
-                role=role,
-                seat=seat,
-                endpoint_id=route.endpoint_id,
-                route_sha256=route_sha256,
-                model_id=route.model_id,
-                model_revision=route.model_revision,
-                provider=route.provider,
-                family=route.family,
-                output_mechanism=route.output_mechanism,
-            )
-        )
-    if not pairs:
-        raise RunManifestError(
-            "DOCTOR_ROUTE_REQUIRED",
-            f"{contract_id} requires a frozen {role} route",
-            f"/roles/{role}",
-        )
-    return pairs
-
-
 def production_contract_pairs(
     manifest: RunManifest,
 ) -> tuple[ProductionContractPairV1, ...]:
-    """Resolve the complete exact route/contract matrix from v6 authority."""
+    """Project exact doctor pairs from the manifest behavioral plan."""
 
     if manifest.schema_version != 6:
         raise RunManifestError(
@@ -293,105 +266,43 @@ def production_contract_pairs(
             "production-contract qualification accepts only RunManifest v6",
             "/schema_version",
         )
-    control = manifest.control_plane_policy
-    if control is None or getattr(control, "controller_version", None) != (
-        "workflow.controller.v3"
-    ):
+    plan = manifest.route_seat_behavioral_capability_plan
+    if plan is None:
         raise RunManifestError(
-            "DOCTOR_CONTROL_V3_REQUIRED",
-            "production-contract qualification requires workflow.controller.v3",
-            "/control_plane_policy",
+            "DOCTOR_BEHAVIORAL_CAPABILITY_PLAN_REQUIRED",
+            "production qualification requires frozen route-seat behavioral authority",
+            "/route_seat_behavioral_capability_plan",
         )
-    contracts = control.contract_versions
-    expected = (
-        (contracts.conjecturer_turn_contract, "conjecturer"),
-        (contracts.batch_critic_contract, "argumentative_critic"),
-    )
     pairs: list[ProductionContractPairV1] = []
-    for contract_id, role in expected:
-        if contract_id == "batch-critic.v2" and manifest.criticism_policy is not None:
-            seats = tuple(
-                sorted(
-                    {
-                        binding.seat
-                        for binding in manifest.criticism_policy.bindings
-                        if binding.role == role
-                    }
-                )
-            )
-            if not seats:
-                raise RunManifestError(
-                    "DOCTOR_CRITIC_ROUTE_REQUIRED",
-                    "batch-critic.v2 has no manifest criticism binding",
-                    "/criticism_policy/bindings",
-                )
-        else:
-            seats = None
-        pairs.extend(
-            _role_pairs(
-                manifest,
-                contract_id=contract_id,
-                role=role,
-                seats=seats,
-            )
-        )
-
-    bridge = manifest.bridge_policy
-    if bridge is None or bridge.mode != "grounded_two_stage":
-        raise RunManifestError(
-            "DOCTOR_BRIDGE_POLICY_REQUIRED",
-            "v6 production contracts require grounded_two_stage bridge policy",
-            "/bridge_policy",
-        )
-    pairs.extend(
-        _role_pairs(
+    for entry in plan.entries:
+        route = manifest.roles[entry.role][entry.seat]
+        grant = resolve_route_seat_behavioral_capability(
             manifest,
-            contract_id=contracts.bridge_ledger_wire_contract,
-            role=bridge.ledger_role,
-            seats=(0,),
+            role=entry.role,
+            seat=entry.seat,
+            endpoint_id=entry.endpoint_id,
+            route_sha256=entry.route_sha256,
         )
-    )
-    pairs.extend(
-        _role_pairs(
-            manifest,
-            contract_id=contracts.bridge_composition_contract,
-            role=bridge.composer_role,
-            seats=(0,),
-        )
-    )
-    if bridge.grounding_review:
-        pairs.extend(
-            _role_pairs(
-                manifest,
-                contract_id="groundingverdictwirev1.direct.v1",
-                role=bridge.reviewer_role,
-                seats=(bridge.reviewer_seat,),
-            )
-        )
-        if bridge.max_grounding_repair_attempts:
-            pairs.extend(
-                _role_pairs(
-                    manifest,
-                    contract_id="groundingrepairwirev1.direct.v1",
-                    role=bridge.grounding_repair_role,
-                    seats=(bridge.reviewer_seat,),
-                )
-            )
-
-    scratch = manifest.scratch_policy
-    if scratch is not None and scratch.enabled and control.scratch_authoring.enabled:
-        scratch_contracts = (
-            ("scratch.block.compact.v1", scratch.block_role),
-            ("scratch.link.compact.v1", scratch.link_role),
-            ("scratch.cluster-guide.compact.v1", scratch.guide_role),
-        )
-        for contract_id, role in scratch_contracts:
-            pairs.extend(
-                _role_pairs(
-                    manifest,
-                    contract_id=contract_id,
-                    role=role,
-                    seats=(0,),
+        for contract in grant.contracts:
+            pairs.append(
+                ProductionContractPairV1(
+                    pair_id=_pair_id(
+                        manifest.sha256,
+                        contract_id=contract.contract_id,
+                        role=entry.role,
+                        seat=entry.seat,
+                        route_sha256=entry.route_sha256,
+                    ),
+                    contract_id=contract.contract_id,
+                    role=entry.role,
+                    seat=entry.seat,
+                    endpoint_id=entry.endpoint_id,
+                    route_sha256=entry.route_sha256,
+                    model_id=route.model_id,
+                    model_revision=route.model_revision,
+                    provider=route.provider,
+                    family=route.family,
+                    output_mechanism=route.output_mechanism,
                 )
             )
     return tuple(
@@ -406,6 +317,47 @@ def production_contract_pairs(
             ),
         )
     )
+
+
+def _contract_schema_repair_grant(
+    manifest: RunManifest,
+    pair: ProductionContractPairV1,
+) -> ContractSchemaRepairGrantV1:
+    """Resolve only the manifest-owned repair grant for one exact pair."""
+    return _behavioral_contract_grant(manifest, pair).schema_repair
+
+
+def _behavioral_contract_grant(
+    manifest: RunManifest,
+    pair: ProductionContractPairV1,
+) -> RouteSeatBehavioralContractGrantV1:
+    route_grant = resolve_route_seat_behavioral_capability(
+        manifest,
+        role=pair.role,
+        seat=pair.seat,
+        endpoint_id=pair.endpoint_id,
+        route_sha256=pair.route_sha256,
+    )
+    for grant in route_grant.contracts:
+        if grant.contract_id == pair.contract_id:
+            return grant
+    raise RunManifestError(
+        "DOCTOR_BEHAVIORAL_CONTRACT_GRANT_REQUIRED",
+        f"production contract {pair.contract_id} lacks exact route-seat authority",
+        "/route_seat_behavioral_capability_plan/entries",
+    )
+
+
+def _require_constructed_contract_identity(
+    pair: ProductionContractPairV1,
+    contract,
+) -> None:
+    if contract.contract_id != pair.contract_id:
+        raise RunManifestError(
+            "DOCTOR_PRODUCTION_CONTRACT_MISMATCH",
+            "constructed production contract differs from the active pair",
+            "/control_plane_policy/contract_versions",
+        )
 
 
 def _failure_code(error: BaseException) -> str:
@@ -480,6 +432,12 @@ def exercise_production_contract_case(
         V6PatchRepairSession,
     )
 
+    grant = _contract_schema_repair_grant(manifest, pair)
+    contract, request = _production_probe_contract(manifest, pair, case_index)
+    _require_constructed_contract_identity(pair, contract)
+    _validate_production_contract_request_envelopes(
+        manifest, pair, case_index
+    )
     case_id = f"case-{case_index + 1:03d}"
     alias_failures = 0
     scope_violations = 0
@@ -487,7 +445,6 @@ def exercise_production_contract_case(
     last_error: BaseException | None = None
 
     try:
-        contract, request = _production_probe_contract(manifest, pair, case_index)
         route = manifest.roles[pair.role][pair.seat]
         from deepreason.llm.adapter import _endpoint_from_spec
 
@@ -499,11 +456,16 @@ def exercise_production_contract_case(
             contract=pair.contract_id,
             schema=schema,
             initial_request=request,
-            retry_max=manifest.bridge_policy.max_schema_repair_attempts,
+            retry_max=grant.maximum_schema_repairs,
         )
+        from deepreason.llm.adapter import _enforce_request_envelope
+        from deepreason.llm.firewall import EndpointLease
+
+        lease = EndpointLease(role=pair.role, seat=pair.seat, route=route)
         for attempt in range(session.attempt_count):
             repair_count = attempt
             turn = session.turn(attempt)
+            _enforce_request_envelope(pair.role, turn.request, lease)
             kwargs = {}
             mechanism = OutputMechanism(route.output_mechanism)
             if mechanism is not OutputMechanism.JSON_TEXT:
@@ -557,11 +519,12 @@ def exercise_production_contract_case(
     )
 
 
-def _production_bridge_ledger_probe():
+def _production_bridge_ledger_probe(*, batched: bool = False):
     from deepreason.bridge.ledger import (
         ClaimLedgerCatalogItemV1,
         ClaimLedgerInputCatalogV3,
         ClaimLedgerWireContractV3,
+        ClaimLedgerBatchWireContractV1,
         render_claim_ledger_stage_a_pack,
     )
 
@@ -579,13 +542,18 @@ def _production_bridge_ledger_probe():
             )
         ],
     )
-    contract = ClaimLedgerWireContractV3(catalog)
+    contract = (
+        ClaimLedgerBatchWireContractV1(catalog)
+        if batched
+        else ClaimLedgerWireContractV3(catalog)
+    )
     return contract, render_claim_ledger_stage_a_pack(catalog, contract=contract)
 
 
-def _production_bridge_composition_probe():
+def _production_bridge_composition_probe(*, batched: bool = False):
     from deepreason.bridge.compose import (
         BridgeCompositionWireContractV2,
+        BridgeCompositionBatchWireContractV1,
         CompositionRequestV1,
         _composition_pack,
     )
@@ -612,7 +580,12 @@ def _production_bridge_composition_probe():
         desired_length_chars=4_096,
         maximum_sections=4,
     )
-    contract = BridgeCompositionWireContractV2(
+    contract_type = (
+        BridgeCompositionBatchWireContractV1
+        if batched
+        else BridgeCompositionWireContractV2
+    )
+    contract = contract_type(
         ledger,
         maximum_sections=request.maximum_sections,
         desired_length_chars=request.desired_length_chars,
@@ -697,6 +670,12 @@ def _production_scratch_probe(contract_id: str):
         contract = ScratchBlockWireContract()
         template_role = "scratch_block"
         task = "Stretch imaginatively toward one provisional mechanism."
+    elif contract_id == "scratch.block.minimal.v1":
+        from deepreason.scratch.contracts import ScratchBlockMinimalWireContract
+
+        contract = ScratchBlockMinimalWireContract()
+        template_role = "scratch_block"
+        task = "Write one provisional advisory thought."
     elif contract_id == "scratch.link.compact.v1":
         from deepreason.scratch.contracts import ScratchLinkWireContract
 
@@ -706,12 +685,27 @@ def _production_scratch_probe(contract_id: str):
         )
         template_role = "scratch_link"
         task = "Explore one provisional relation without asserting it as fact."
+    elif contract_id == "scratch.link.minimal.v1":
+        from deepreason.scratch.contracts import ScratchLinkMinimalWireContract
+
+        contract = ScratchLinkMinimalWireContract(
+            indexed_block_ids=tuple(handles.values()),
+            handles=handles,
+        )
+        template_role = "scratch_link"
+        task = "Name one provisional relation between the supplied handles."
     elif contract_id == "scratch.cluster-guide.compact.v1":
         from deepreason.scratch.contracts import ClusterGuideWireContract
 
         contract = ClusterGuideWireContract(handles=handles)
         template_role = "scratch_guide"
         task = "Map open imaginative directions while preserving uncertainty."
+    elif contract_id == "scratch.cluster-guide.minimal.v1":
+        from deepreason.scratch.contracts import ClusterGuideMinimalWireContract
+
+        contract = ClusterGuideMinimalWireContract(handles=handles)
+        template_role = "scratch_guide"
+        task = "State one temporary navigation focus."
     else:
         raise ValueError(f"unsupported scratch contract {contract_id!r}")
     pack = (
@@ -733,6 +727,8 @@ def _production_probe_contract(
     from deepreason.llm.roles import render_role_prompt
     from deepreason.llm.wire import (
         AliasTable,
+        AtomicConjectureWireContractV1,
+        AtomicCriticWireContractV1,
         BatchCriticWireContractV2,
         ConjecturerTurnWireContractV6,
         minimal_example,
@@ -769,17 +765,35 @@ def _production_probe_contract(
             scratch_authoring_policy=control.scratch_authoring,
         )
         template_role = "conjecturer"
+    elif contract_id == "conjecturer.atomic-candidate.v1":
+        contract = AtomicConjectureWireContractV1(
+            AliasTable({"SRC_001": "qualification-source"}),
+            reasoning=case_index >= (PRODUCTION_CASES_PER_PAIR // 2),
+        )
+        template_role = "conjecturer"
     elif contract_id == "batch-critic.v2":
         contract = BatchCriticWireContractV2(
             AliasTable({"SRC_001": "qualification-target"}),
             expected_targets=("qualification-target",),
         )
         template_role = "batch_critic"
+    elif contract_id == "critic.atomic-target.v1":
+        contract = AtomicCriticWireContractV1(
+            AliasTable({"SRC_001": "qualification-target"}),
+            expected_target="qualification-target",
+        )
+        template_role = "argumentative_critic"
     elif contract_id == "bridge.ledger.v3":
         contract, task = _production_bridge_ledger_probe()
         template_role = "bridge_ledger"
+    elif contract_id == "bridge.ledger-batch.v1":
+        contract, task = _production_bridge_ledger_probe(batched=True)
+        template_role = "bridge_ledger"
     elif contract_id == "bridge.composition.v2":
         contract, task = _production_bridge_composition_probe()
+        template_role = "bridge_compose"
+    elif contract_id == "bridge.composition-batch.v1":
+        contract, task = _production_bridge_composition_probe(batched=True)
         template_role = "bridge_compose"
     elif contract_id == "groundingverdictwirev1.direct.v1":
         contract, task = _production_grounding_probe(repair=False)
@@ -798,16 +812,50 @@ def _production_probe_contract(
         template_role,
         schema=schema,
         pack=task,
-        profile=manifest.model_profile,
+        profile=resolve_route_seat_base_profile(
+            manifest,
+            role=pair.role,
+            seat=pair.seat,
+            endpoint_id=pair.endpoint_id,
+        ),
         example=minimal_example(contract),
         aliases=aliases,
     )
-    if contract.contract_id != contract_id:
-        raise ValueError(
-            f"production contract mismatch: expected {contract_id}, "
-            f"constructed {contract.contract_id}"
-        )
+    _require_constructed_contract_identity(pair, contract)
     return contract, request
+
+
+def _validate_production_contract_request_envelopes(
+    manifest: RunManifest,
+    pair: ProductionContractPairV1,
+    case_index: int,
+) -> None:
+    """Validate the complete initial-and-repair request envelope read-only."""
+
+    from deepreason.llm.adapter import _enforce_request_envelope
+    from deepreason.llm.firewall import EndpointLease
+
+    route_grant = resolve_route_seat_behavioral_capability(
+        manifest,
+        role=pair.role,
+        seat=pair.seat,
+        endpoint_id=pair.endpoint_id,
+        route_sha256=pair.route_sha256,
+    )
+    if (
+        route_grant.context_window_tokens is None
+        or route_grant.maximum_completion_tokens is None
+    ):
+        raise RunManifestError(
+            "DOCTOR_REQUEST_ENVELOPE_CAPACITY_REQUIRED",
+            "production qualification requires a finite prompt-plus-completion capacity",
+            f"/roles/{pair.role}/{pair.seat}/context_window_tokens",
+        )
+    contract, request = _production_probe_contract(manifest, pair, case_index)
+    route = manifest.roles[pair.role][pair.seat]
+    lease = EndpointLease(role=pair.role, seat=pair.seat, route=route)
+    _require_constructed_contract_identity(pair, contract)
+    _enforce_request_envelope(pair.role, request, lease)
 
 
 def _pair_report(
@@ -837,6 +885,116 @@ def _pair_report(
     )
 
 
+def _production_qualification_evidence_sha256(
+    *,
+    run_manifest_sha256: str,
+    pairs: tuple[ProductionContractPairReportV1, ...],
+    summary: ProductionContractDoctorSummaryV1,
+) -> str:
+    """Digest only qualified evidence inputs, excluding the derived plan."""
+
+    payload = {
+        "schema": "production-qualification-evidence.v1",
+        "run_manifest_sha256": run_manifest_sha256,
+        "run_manifest_schema_version": 6,
+        "production_contracts": True,
+        "representative_cases_per_pair": PRODUCTION_CASES_PER_PAIR,
+        "eventual_valid_minimum_per_pair": PRODUCTION_EVENTUAL_VALID_MINIMUM,
+        "pairs": [
+            item.model_dump(mode="json", by_alias=True, exclude_none=True)
+            for item in pairs
+        ],
+        "summary": summary.model_dump(
+            mode="json", by_alias=True, exclude_none=True
+        ),
+    }
+    return hashlib.sha256(
+        b"deepreason.production-qualification-evidence.v1\x00"
+        + canonical_json(payload)
+    ).hexdigest()
+
+
+def derive_route_seat_model_classification(
+    manifest: RunManifest,
+    *,
+    pairs: tuple[ProductionContractPairReportV1, ...],
+    summary: ProductionContractDoctorSummaryV1,
+) -> RouteSeatModelClassificationPlanV1:
+    """Classify every exact route seat from frozen grants and doctor evidence."""
+
+    plan = manifest.route_seat_behavioral_capability_plan
+    if plan is None:
+        raise RunManifestError(
+            "DOCTOR_BEHAVIORAL_CAPABILITY_PLAN_REQUIRED",
+            "model classification requires frozen route-seat behavioral authority",
+            "/route_seat_behavioral_capability_plan",
+        )
+    by_route: dict[tuple[str, int, str, str], list[ProductionContractPairReportV1]] = {}
+    for pair_report in pairs:
+        pair = pair_report.pair
+        key = (pair.role, pair.seat, pair.endpoint_id, pair.route_sha256)
+        by_route.setdefault(key, []).append(pair_report)
+
+    from deepreason.workflow.transaction import RouteSeatModelClassificationV1
+
+    entries = []
+    for grant in plan.entries:
+        key = (grant.role, grant.seat, grant.endpoint_id, grant.route_sha256)
+        route_reports = tuple(
+            sorted(by_route.pop(key, ()), key=lambda item: item.pair.contract_id)
+        )
+        contract_ids = tuple(item.contract_id for item in grant.contracts)
+        observed_contract_ids = tuple(item.pair.contract_id for item in route_reports)
+        if observed_contract_ids != contract_ids:
+            raise RunManifestError(
+                "DOCTOR_CLASSIFICATION_PAIR_INVENTORY_MISMATCH",
+                "classification evidence differs from exact route-seat contracts",
+                "/pairs",
+            )
+        behavioral_digest = hashlib.sha256(
+            b"deepreason.route-seat-behavioral-grant.v1\x00"
+            + canonical_json(
+                grant.model_dump(mode="json", by_alias=True, exclude_none=True)
+            )
+        ).hexdigest()
+        if not contract_ids:
+            selected_class = "inactive_no_authorized_contract"
+        elif all(item.qualified for item in route_reports):
+            selected_class = "qualified_exact_behavior"
+        else:
+            selected_class = "unqualified_exact_behavior"
+        entries.append(
+            RouteSeatModelClassificationV1(
+                role=grant.role,
+                seat=grant.seat,
+                endpoint_id=grant.endpoint_id,
+                route_sha256=grant.route_sha256,
+                behavioral_grant_sha256=behavioral_digest,
+                selected_class=selected_class,
+                authorized_contract_ids=contract_ids,
+                evidence_pair_ids=tuple(
+                    sorted(item.pair.pair_id for item in route_reports)
+                ),
+            )
+        )
+    if by_route:
+        raise RunManifestError(
+            "DOCTOR_CLASSIFICATION_FOREIGN_ROUTE",
+            "classification evidence contains a foreign route seat",
+            "/pairs",
+        )
+    evidence_sha256 = _production_qualification_evidence_sha256(
+        run_manifest_sha256=manifest.sha256,
+        pairs=pairs,
+        summary=summary,
+    )
+    return RouteSeatModelClassificationPlanV1.create(
+        manifest_digest=manifest.sha256,
+        qualification_evidence_sha256=evidence_sha256,
+        entries=tuple(entries),
+    )
+
+
 def run_production_contract_doctor(
     manifest: RunManifest,
     *,
@@ -845,15 +1003,30 @@ def run_production_contract_doctor(
     """Execute and summarize all exact v6 production route/contract pairs."""
 
     pairs = production_contract_pairs(manifest)
+    grants = {
+        pair.pair_id: _contract_schema_repair_grant(manifest, pair)
+        for pair in pairs
+    }
     executor = case_executor or exercise_production_contract_case
     reports = []
     for pair in pairs:
-        cases = tuple(
-            ProductionContractCaseResultV1.model_validate(
+        grant = grants[pair.pair_id]
+        cases_list = []
+        for case_index in range(PRODUCTION_CASES_PER_PAIR):
+            _validate_production_contract_request_envelopes(
+                manifest, pair, case_index
+            )
+            case = ProductionContractCaseResultV1.model_validate(
                 executor(manifest, pair, case_index)
             )
-            for case_index in range(PRODUCTION_CASES_PER_PAIR)
-        )
+            if case.repair_count > grant.maximum_schema_repairs:
+                raise RunManifestError(
+                    "DOCTOR_CONTRACT_REPAIR_GRANT_EXCEEDED",
+                    f"case for {pair.contract_id} exceeds its frozen repair grant",
+                    "/contract_schema_repair_policy/grants",
+                )
+            cases_list.append(case)
+        cases = tuple(cases_list)
         reports.append(_pair_report(pair, cases))
     pair_reports = tuple(reports)
     summary = ProductionContractDoctorSummaryV1(
@@ -872,10 +1045,16 @@ def run_production_contract_doctor(
         qualified_pair_count=sum(item.qualified for item in pair_reports),
         qualified=all(item.qualified for item in pair_reports),
     )
+    classification = derive_route_seat_model_classification(
+        manifest,
+        pairs=pair_reports,
+        summary=summary,
+    )
     return ProductionContractDoctorReportV1(
         run_manifest_sha256=manifest.sha256,
         pairs=pair_reports,
         summary=summary,
+        route_seat_model_classification=classification,
     )
 
 
@@ -904,6 +1083,234 @@ def write_production_contract_report(
     ) + b"\n"
     _atomic_write_report(path, payload)
     return path
+
+
+class _DuplicateDoctorReportKey(ValueError):
+    """Internal marker for a duplicate JSON member in a persisted report."""
+
+
+def _read_production_contract_report(path: Path) -> bytes:
+    """Read one bounded regular report without following symbolic links."""
+
+    pointer = f"/{path.name}"
+    try:
+        observed = path.lstat()
+    except FileNotFoundError as error:
+        raise RunManifestError(
+            "DOCTOR_REPORT_MISSING",
+            "production-contract doctor report is absent",
+            pointer,
+        ) from error
+    except OSError as error:
+        raise RunManifestError(
+            "DOCTOR_REPORT_UNSAFE",
+            "production-contract doctor report cannot be inspected safely",
+            pointer,
+        ) from error
+    if not stat.S_ISREG(observed.st_mode) or stat.S_ISLNK(observed.st_mode):
+        raise RunManifestError(
+            "DOCTOR_REPORT_UNSAFE",
+            "production-contract doctor report must be a regular non-symlink file",
+            pointer,
+        )
+    if observed.st_size > _MAX_PRODUCTION_CONTRACT_REPORT_BYTES:
+        raise RunManifestError(
+            "DOCTOR_REPORT_TOO_LARGE",
+            "production-contract doctor report exceeds the fixed byte ceiling",
+            pointer,
+        )
+
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+        with os.fdopen(descriptor, "rb") as stream:
+            opened = os.fstat(stream.fileno())
+            if not stat.S_ISREG(opened.st_mode):
+                raise RunManifestError(
+                    "DOCTOR_REPORT_UNSAFE",
+                    "production-contract doctor report changed while opening",
+                    pointer,
+                )
+            if opened.st_size > _MAX_PRODUCTION_CONTRACT_REPORT_BYTES:
+                raise RunManifestError(
+                    "DOCTOR_REPORT_TOO_LARGE",
+                    "production-contract doctor report exceeds the fixed byte ceiling",
+                    pointer,
+                )
+            if (
+                opened.st_size != observed.st_size
+                or (
+                    observed.st_ino
+                    and opened.st_ino
+                    and (observed.st_dev, observed.st_ino)
+                    != (opened.st_dev, opened.st_ino)
+                )
+            ):
+                raise RunManifestError(
+                    "DOCTOR_REPORT_UNSAFE",
+                    "production-contract doctor report changed while opening",
+                    pointer,
+                )
+            payload = stream.read(_MAX_PRODUCTION_CONTRACT_REPORT_BYTES + 1)
+        current = path.lstat()
+    except RunManifestError:
+        raise
+    except OSError as error:
+        raise RunManifestError(
+            "DOCTOR_REPORT_UNSAFE",
+            "production-contract doctor report cannot be read safely",
+            pointer,
+        ) from error
+
+    if len(payload) > _MAX_PRODUCTION_CONTRACT_REPORT_BYTES:
+        raise RunManifestError(
+            "DOCTOR_REPORT_TOO_LARGE",
+            "production-contract doctor report exceeds the fixed byte ceiling",
+            pointer,
+        )
+    if (
+        len(payload) != opened.st_size
+        or not stat.S_ISREG(current.st_mode)
+        or current.st_size != opened.st_size
+        or (
+            opened.st_ino
+            and current.st_ino
+            and (opened.st_dev, opened.st_ino)
+            != (current.st_dev, current.st_ino)
+        )
+    ):
+        raise RunManifestError(
+            "DOCTOR_REPORT_UNSAFE",
+            "production-contract doctor report changed while it was read",
+            pointer,
+        )
+    return payload
+
+
+def load_production_contract_report(
+    source: Path | str,
+) -> ProductionContractDoctorReportV1:
+    """Load one strict, canonical, persisted production-doctor report."""
+
+    path = Path(source)
+    payload = _read_production_contract_report(path)
+
+    def reject_duplicates(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise _DuplicateDoctorReportKey
+            value[key] = item
+        return value
+
+    try:
+        decoded = json.loads(payload, object_pairs_hook=reject_duplicates)
+        report = ProductionContractDoctorReportV1.model_validate(decoded)
+    except (
+        _DuplicateDoctorReportKey,
+        json.JSONDecodeError,
+        RecursionError,
+        UnicodeDecodeError,
+        ValidationError,
+    ) as error:
+        raise RunManifestError(
+            "DOCTOR_REPORT_INVALID",
+            "production-contract doctor report is not valid strict JSON",
+            f"/{path.name}",
+        ) from error
+
+    canonical = canonical_json(
+        report.model_dump(mode="json", by_alias=True, exclude_none=True)
+    ) + b"\n"
+    if payload != canonical:
+        raise RunManifestError(
+            "DOCTOR_REPORT_NONCANONICAL",
+            "production-contract doctor report is not in canonical form",
+            f"/{path.name}",
+        )
+    return report
+
+
+def validate_production_contract_qualification(
+    report: ProductionContractDoctorReportV1,
+    manifest: RunManifest,
+) -> ProductionContractDoctorReportV1:
+    """Require a fully qualified report for the exact supplied v6 manifest."""
+
+    if manifest.schema_version != 6:
+        raise RunManifestError(
+            "DOCTOR_REPORT_MANIFEST_V6_REQUIRED",
+            "production-contract qualification validation requires RunManifest v6",
+            "/schema_version",
+        )
+    if report.run_manifest_schema_version != 6:
+        raise RunManifestError(
+            "DOCTOR_REPORT_SCHEMA_VERSION_MISMATCH",
+            "production-contract doctor report does not qualify RunManifest v6",
+            "/run_manifest_schema_version",
+        )
+    if report.run_manifest_sha256 != manifest.sha256:
+        raise RunManifestError(
+            "DOCTOR_REPORT_MANIFEST_MISMATCH",
+            "production-contract doctor report belongs to another manifest",
+            "/run_manifest_sha256",
+        )
+
+    expected_pairs = production_contract_pairs(manifest)
+    for pair in expected_pairs:
+        for case_index in range(PRODUCTION_CASES_PER_PAIR):
+            _validate_production_contract_request_envelopes(
+                manifest, pair, case_index
+            )
+    observed_pairs = tuple(item.pair for item in report.pairs)
+    if observed_pairs != expected_pairs:
+        raise RunManifestError(
+            "DOCTOR_REPORT_PAIR_INVENTORY_MISMATCH",
+            "production-contract doctor report differs from the manifest "
+            "pair inventory",
+            "/pairs",
+        )
+
+    for pair_index, pair_report in enumerate(report.pairs):
+        grant = _contract_schema_repair_grant(manifest, pair_report.pair)
+        for case_index, case in enumerate(pair_report.cases):
+            if case.repair_count > grant.maximum_schema_repairs:
+                raise RunManifestError(
+                    "DOCTOR_REPORT_REPAIR_GRANT_EXCEEDED",
+                    "production-contract doctor case exceeds manifest repair authority",
+                    f"/pairs/{pair_index}/cases/{case_index}/repair_count",
+                )
+        if not pair_report.qualified:
+            raise RunManifestError(
+                "DOCTOR_REPORT_PAIR_UNQUALIFIED",
+                "production-contract doctor report contains an unqualified pair",
+                f"/pairs/{pair_index}/qualified",
+            )
+
+    if not report.summary.qualified:
+        raise RunManifestError(
+            "DOCTOR_REPORT_SUMMARY_UNQUALIFIED",
+            "production-contract doctor report is not qualified",
+            "/summary/qualified",
+        )
+    if report.summary.qualified_pair_count != len(expected_pairs):
+        raise RunManifestError(
+            "DOCTOR_REPORT_QUALIFIED_PAIR_COUNT_MISMATCH",
+            "qualified pair count differs from the manifest pair inventory",
+            "/summary/qualified_pair_count",
+        )
+    expected_classification = derive_route_seat_model_classification(
+        manifest,
+        pairs=report.pairs,
+        summary=report.summary,
+    )
+    if report.route_seat_model_classification != expected_classification:
+        raise RunManifestError(
+            "DOCTOR_REPORT_CLASSIFICATION_MISMATCH",
+            "doctor report lacks the exact deterministic route-seat classification",
+            "/route_seat_model_classification",
+        )
+    return report
 
 
 def run_production_contract_doctor_cli(
@@ -935,9 +1342,12 @@ __all__ = [
     "ProductionContractDoctorSummaryV1",
     "ProductionContractPairReportV1",
     "ProductionContractPairV1",
+    "derive_route_seat_model_classification",
     "exercise_production_contract_case",
+    "load_production_contract_report",
     "production_contract_pairs",
     "run_production_contract_doctor",
     "run_production_contract_doctor_cli",
+    "validate_production_contract_qualification",
     "write_production_contract_report",
 ]
