@@ -193,7 +193,11 @@ def _scratch_simulation_manifest():
     )
     config = Config(
         N_SCHOOLS=0,
-        roles={"conjecturer": [_route("conjecturer-route")]},
+        roles={
+            "conjecturer": [_route("conjecturer-route")],
+            "synthesizer": [_route("synthesizer-route")],
+            "summarizer": [_route("summarizer-route")],
+        },
         scratchpad={
             "enabled": True,
             "max_blocks_per_pack": 4,
