@@ -180,7 +180,10 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
     assert {item["params"]["progressToken"] for item in notifications} == {"progress-1"}
 
 
-def test_v5_text_run_writes_canonical_capability_audits(tmp_path, monkeypatch):
+def test_mcp_rejects_contained_v5_before_worker_or_capability_audits(
+    tmp_path,
+    monkeypatch,
+):
     root = tmp_path / "run-v5"
     problem_text = "When is a simulation discriminating?"
     problem_id = spec_from_text(problem_text).problem.id
@@ -204,31 +207,22 @@ def test_v5_text_run_writes_canonical_capability_audits(tmp_path, monkeypatch):
         )
 
     monkeypatch.setattr("deepreason.ops.run_scheduler", fake_run)
-    _payload(
-        _call(
-            "start_run",
-            {
-                "root": str(root),
-                "workload": "text",
-                "problem": {"description": problem_text},
-                "run_manifest_ref": str(manifest_path),
-                "budget": {"cycles": 1, "token_budget": "unlimited"},
-            },
-        )
+    rejected = _call(
+        "start_run",
+        {
+            "root": str(root),
+            "workload": "text",
+            "problem": {"description": problem_text},
+            "run_manifest_ref": str(manifest_path),
+            "budget": {"cycles": 1, "token_budget": "unlimited"},
+        },
     )
-    mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
-
-    result = _payload(_call("run_result", {"root": str(root)}))
-    assert result["state"] == "completed"
-    assert set(result["capability_audits"]) == {
-        "CAPABILITY_REQUEST_AUDIT.md",
-        "REPLAY_VALIDATION.json",
-        "RESEARCH_SOURCE_AUDIT.md",
-        "SIMULATION_RESULTS.md",
-        "THEORY_TEST_LINEAGE.md",
-        "TOKEN_ACCOUNTING.json",
-    }
-    assert json.loads((root / "REPLAY_VALIDATION.json").read_text())["valid"] is True
+    assert rejected["isError"] is True
+    assert "V5_ACTIVE_INQUIRY_CONTAINED" in rejected["content"][0]["text"]
+    assert str(root.resolve()) not in mcp_server._RUN_THREADS
+    assert not (root / "run-result.json").exists()
+    assert not list(root.glob("*_AUDIT.*"))
+    assert not (root / "REPLAY_VALIDATION.json").exists()
 
 
 def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypatch):
