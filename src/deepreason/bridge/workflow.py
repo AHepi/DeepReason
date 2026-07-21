@@ -261,6 +261,18 @@ class BridgeWorkflow:
         if call is not None:
             self._calls.append(call)
 
+    def _record_adapter_calls(self, adapter, fallback_call: LLMCall | None) -> None:
+        consume = getattr(adapter, "consume_staged_calls", None)
+        calls = consume(fallback_call) if consume is not None else ((fallback_call,) if fallback_call else ())
+        for call in calls:
+            self._record_call(call)
+
+    @staticmethod
+    def _finalize_adapter_effect(adapter, effect_ref: str) -> None:
+        finalize = getattr(adapter, "finalize_staged_effect", None)
+        if finalize is not None:
+            finalize(effect_ref)
+
     def _result(
         self,
         *,
@@ -429,7 +441,7 @@ class BridgeWorkflow:
         ledger = stage_a.ledger
         stage_a_call = stage_a.receipt.llm_call
         if stage_a.failure is None:
-            self._record_call(stage_a_call)
+            self._record_adapter_calls(self.stage_a_adapter, stage_a_call)
         self._persist(
             BridgePersistenceBatch(
                 action=BridgeAction.LEDGER_CREATED,
@@ -437,6 +449,8 @@ class BridgeWorkflow:
                 llm=stage_a_call if stage_a.failure is None else None,
             )
         )
+        if stage_a.failure is None:
+            self._finalize_adapter_effect(self.stage_a_adapter, ledger.id)
         self._persist(
             BridgePersistenceBatch(
                 action=BridgeAction.LEDGER_VALIDATED,
@@ -600,7 +614,9 @@ class BridgeWorkflow:
             assert composition.output_validation is not None
             output = composition.output
             report = composition.output_validation
-            self._record_call(composition.call_receipt)
+            self._record_adapter_calls(
+                self.composition_adapter, composition.call_receipt
+            )
             self._persist(
                 BridgePersistenceBatch(
                     action=BridgeAction.OUTPUT_COMPOSED,
@@ -609,6 +625,7 @@ class BridgeWorkflow:
                     llm=composition.call_receipt,
                 )
             )
+            self._finalize_adapter_effect(self.composition_adapter, output.id)
             self._persist(
                 BridgePersistenceBatch(
                     action=BridgeAction.OUTPUT_VALIDATED,
