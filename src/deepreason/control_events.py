@@ -128,10 +128,14 @@ class ControlEventPayloadV3(FrozenRecord):
         "provider_result",
         "lifecycle_stopped",
         "lifecycle_resumed",
+        "terminal_committed",
+        "classification_bound",
+        "contract_decomposition_activated",
+        "contract_decomposition_completed",
     ] = "work_transition"
     decision_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     inputs: list[str] = Field(default_factory=FrozenList, min_length=2, max_length=2)
-    outputs: list[str] = Field(default_factory=FrozenList, min_length=2, max_length=32)
+    outputs: list[str] = Field(default_factory=FrozenList, min_length=1, max_length=32)
 
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
@@ -143,6 +147,9 @@ class ControlEventPayloadV3(FrozenRecord):
         expected_outputs = {
             "lifecycle_stopped": 3,
             "lifecycle_resumed": 2,
+            "terminal_committed": 2,
+            "contract_decomposition_activated": 1,
+            "contract_decomposition_completed": 1,
         }.get(self.action)
         if expected_outputs is not None and len(self.outputs) != expected_outputs:
             raise ValueError(
