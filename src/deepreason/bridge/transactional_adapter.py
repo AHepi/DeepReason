@@ -18,13 +18,20 @@ from pydantic import BaseModel
 
 from deepreason.canonical import canonical_json
 from deepreason.llm.budget import TokenMeter
+from deepreason.llm.adapter import (
+    V6ModelProfileOverrideForbidden,
+    WorkflowAuthorizationError,
+)
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import (
+    leases_from_manifest,
     reject_model_control_fields,
     route_fingerprint,
     select_lease,
 )
 from deepreason.llm.repair import SchemaRepairError, parse_one_json_value
+from deepreason.llm.profiles import get_profile
+from deepreason.run_manifest import resolve_route_seat_base_profile
 from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
 from deepreason.workflow.transaction import (
     ContextNamespace,
@@ -41,8 +48,11 @@ _TEMPLATE_TASKS = {
     "bridge_grounding_repair": WorkflowTaskKind.REPAIR,
 }
 _EXACT_V6_CONTRACTS = {
-    "bridge_ledger": "bridge.ledger.v3",
-    "bridge_compose": "bridge.composition.v2",
+    "bridge_ledger": {"bridge.ledger.v3", "bridge.ledger-batch.v1"},
+    "bridge_compose": {
+        "bridge.composition.v2",
+        "bridge.composition-batch.v1",
+    },
 }
 _BRIDGE_TRANSACTION_SCHEMA_V2 = "bridge.transaction-task.v2"
 
@@ -54,6 +64,48 @@ class BridgeRecoveryError(RuntimeError):
         self.code = code
         self.spend = spend
         super().__init__(message)
+
+
+def _require_durable_model_classification(harness, manifest, qualification) -> None:
+    """Purely match durable classification to the validated doctor report."""
+
+    from deepreason.workflow.transaction import (
+        ModelClassificationBindingV1,
+        RouteSeatModelClassificationPlanV1,
+    )
+
+    expected = qualification.route_seat_model_classification
+    state = harness.workflow_state
+    current = state.route_seat_model_classification
+    binding = state.model_classification_binding
+    event_seq = state.model_classification_event_seq
+    if (
+        not isinstance(expected, RouteSeatModelClassificationPlanV1)
+        or not isinstance(current, RouteSeatModelClassificationPlanV1)
+        or not isinstance(binding, ModelClassificationBindingV1)
+        or event_seq is None
+    ):
+        raise WorkflowAuthorizationError(
+            "BRIDGE_MODEL_CLASSIFICATION_REQUIRED"
+        )
+    try:
+        state._validate_model_classification(manifest, current)
+    except ValueError as error:
+        raise WorkflowAuthorizationError(
+            "BRIDGE_MODEL_CLASSIFICATION_MISMATCH"
+        ) from error
+    if (
+        current != expected
+        or binding.manifest_digest != manifest.sha256
+        or binding.classification_plan_ref != current.id
+        or binding.algorithm != current.algorithm
+        or binding.algorithm_version != current.algorithm_version
+        or binding.qualification_evidence_sha256
+        != current.qualification_evidence_sha256
+    ):
+        raise WorkflowAuthorizationError(
+            "BRIDGE_MODEL_CLASSIFICATION_MISMATCH"
+        )
 
 
 def _semantic_bytes(value: Any) -> bytes:
@@ -163,18 +215,130 @@ def _context_items(harness, contract, pack: str):
 class TransactionalBridgeAdapter:
     """v6-only bridge adapter that owns one transaction per model call."""
 
-    def __init__(self, adapter, harness, manifest) -> None:
+    def __init__(
+        self,
+        adapter,
+        harness,
+        manifest,
+        *,
+        source_terminal_commitment_ref: str | None = None,
+    ) -> None:
+        from deepreason.runtime.launch_policy import (
+            BOUND_RUN_MANIFEST_REQUIRED,
+            require_v6_launch_allowed,
+            require_v6_production_qualification,
+            resolve_effective_run_manifest,
+        )
+        from deepreason.run_manifest import RunManifestError
+
+        operation = "standalone transactional grounded bridge"
+        try:
+            manifest = resolve_effective_run_manifest(
+                manifest,
+                root=getattr(harness, "root", None),
+                operation=operation,
+                require_bound_manifest=True,
+            )
+        except RunManifestError as error:
+            if error.code == BOUND_RUN_MANIFEST_REQUIRED:
+                raise ValueError("BRIDGE_MANIFEST_MISMATCH") from error
+            raise
+        if manifest is None:
+            raise ValueError("transactional bridge adapter requires RunManifest v6")
         if manifest.schema_version != 6:
             raise ValueError("transactional bridge adapter requires RunManifest v6")
+        require_v6_launch_allowed(manifest, operation=operation)
+        qualification = require_v6_production_qualification(
+            manifest,
+            root=getattr(harness, "root", None),
+            operation=operation,
+        )
+        from deepreason.runtime.terminal_authority import derive_terminal_authority
+
+        terminal_authority = derive_terminal_authority(
+            harness.root,
+            manifest=manifest,
+        )
+        if not terminal_authority.current_valid:
+            raise ValueError("BRIDGE_TERMINAL_AUTHORITY_INVALID")
+        if (
+            terminal_authority.terminal_status != "completed"
+            or terminal_authority.canonical_bridge_eligible is not True
+        ):
+            raise ValueError("BRIDGE_TERMINAL_OUTCOME_INELIGIBLE")
+        from deepreason.verification.report import verify_root_report
+
+        verification = verify_root_report(harness.root)
+        if not verification.integrity_valid or not verification.security_valid:
+            raise ValueError("BRIDGE_ROOT_AUTHORITY_INVALID")
+        if (
+            source_terminal_commitment_ref is not None
+            and source_terminal_commitment_ref
+            != terminal_authority.terminal_commitment_ref
+        ):
+            raise ValueError("BRIDGE_TERMINAL_AUTHORITY_MISMATCH")
+        source_terminal_commitment_ref = (
+            terminal_authority.terminal_commitment_ref
+        )
         versions = manifest.control_plane_policy.contract_versions
         if (
             versions.bridge_ledger_wire_contract != "bridge.ledger.v3"
             or versions.bridge_composition_contract != "bridge.composition.v2"
         ):
             raise ValueError("v6 bridge adapter requires the frozen v3/v2 contract pair")
+        if adapter.base_model_profile != manifest.model_profile:
+            raise WorkflowAuthorizationError(
+                "adapter presentation identity differs from the manifest"
+            )
+        if adapter.leases != leases_from_manifest(manifest):
+            raise WorkflowAuthorizationError(
+                "adapter route leases differ from the manifest"
+            )
+        if (
+            adapter._v6_authority_harness is not None
+            and adapter._v6_authority_harness is not harness
+        ):
+            raise WorkflowAuthorizationError(
+                "transactional adapter is already bound to another harness"
+            )
+        if (
+            adapter._v6_authority_manifest is not None
+            and adapter._v6_authority_manifest.sha256 != manifest.sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "transactional adapter is already bound to another manifest"
+            )
+        harness_manifest = getattr(harness, "_workflow_manifest", None)
+        if (
+            harness_manifest is not None
+            and harness_manifest.sha256 != manifest.sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "transaction manifest differs from bound root authority"
+            )
+        replay_state = harness.workflow_state
+        replay_manifest = getattr(replay_state, "_run_manifest", None)
+        if (
+            replay_manifest is not None
+            and replay_manifest.sha256 != manifest.sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "workflow replay is already bound to another manifest"
+            )
+        if any(
+            item.preparation.manifest_digest != manifest.sha256
+            for item in replay_state.transaction_work.values()
+        ):
+            raise WorkflowAuthorizationError(
+                "transaction history belongs to another manifest"
+            )
+        _require_durable_model_classification(harness, manifest, qualification)
         self._adapter = adapter
         self.harness = harness
         self.manifest = manifest
+        self.source_terminal_commitment_ref = source_terminal_commitment_ref
+        self._adapter.transaction_authority_required = True
+        self._adapter.bind_v6_authority(harness, manifest)
         self._ordinal = 0
         self._ordinal_lock = Lock()
         if self._adapter.meter is None:
@@ -185,6 +349,8 @@ class TransactionalBridgeAdapter:
         self._recovery_mode = False
         self._recovery_items = ()
         self._recovered_work_ids: set[str] = set()
+        self._staged_calls = []
+        self._pending_staged_transition = None
 
     def bind_bridge_execution(
         self,
@@ -214,6 +380,8 @@ class TransactionalBridgeAdapter:
         self._recovery_items = self._execution_items() if self._recovery_mode else ()
         self._recovered_work_ids = set()
         self._ordinal = 0
+        self._staged_calls = []
+        self._pending_staged_transition = None
 
     def _execution_items(self):
         if self._execution_id is None:
@@ -221,11 +389,10 @@ class TransactionalBridgeAdapter:
         items = []
         for item in self.harness.workflow_state.transaction_work.values():
             payload = item.preparation.task_payload_value
-            if (
-                isinstance(payload, Mapping)
-                and payload.get("schema") == _BRIDGE_TRANSACTION_SCHEMA_V2
-                and payload.get("execution_id") == self._execution_id
-            ):
+            if isinstance(payload, Mapping) and payload.get("execution_id") == self._execution_id and payload.get("schema") in {
+                _BRIDGE_TRANSACTION_SCHEMA_V2,
+                "contract-decomposition-child.v1",
+            }:
                 items.append((item, payload))
         return tuple(items)
 
@@ -510,10 +677,38 @@ class TransactionalBridgeAdapter:
                 "bridge recovery preview changed frozen call authority",
             )
         prompt_sha256 = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+        if prompt_sha256 != provider.prompt_sha256:
+            key = (
+                route_ref.role,
+                route_ref.seat,
+                route_ref.endpoint_id,
+                route_ref.route_sha256,
+            )
+            compact = self.harness.workflow_state.compact_recovery_by_route_seat.get(
+                key
+            )
+            # The exhausted strong call necessarily predates the compact
+            # transition that it triggered.  Reconstructing it from the live
+            # sticky state would render the *later* compact presentation and
+            # falsely reject its already-bound base-profile prompt.  The exact
+            # task payload, route, contract, authorization bundle, stored prompt
+            # bytes, and chronological source transition remain independently
+            # replay-validated below.
+            if not (
+                terminal is not None
+                and terminal.status == "schema_exhausted"
+                and compact is not None
+                and compact.work_id == preparation.id
+                and compact.route_lease == route_ref
+            ):
+                raise BridgeRecoveryError(
+                    "BRIDGE_RECOVERY_AUTHORITY_MISMATCH",
+                    "stored provider result differs from the reconstructed request",
+                )
+            prompt_sha256 = provider.prompt_sha256
         if (
             provider.contract_id != wire_contract.contract_id
             or provider.route_lease != route_ref
-            or provider.prompt_sha256 != prompt_sha256
         ):
             raise BridgeRecoveryError(
                 "BRIDGE_RECOVERY_AUTHORITY_MISMATCH",
@@ -569,6 +764,7 @@ class TransactionalBridgeAdapter:
             )
             error = SchemaRepairError(message, spend=call)
             error.transaction_terminalized = True
+            error.source_work_id = preparation.id
             raise error
         try:
             raw_bytes = self.harness.blobs.get(provider.raw_ref)
@@ -659,6 +855,246 @@ class TransactionalBridgeAdapter:
             )
         return output, call
 
+    @staticmethod
+    def _chunks(values, size: int = 8):
+        values = tuple(values)
+        return tuple(values[index : index + size] for index in range(0, len(values), size))
+
+    def staged_ledger_fallback(self, error, catalog):
+        """Execute exact catalog batches after durable strong-ledger exhaustion."""
+
+        from deepreason.bridge.ledger import (
+            ClaimLedgerBatchWireContractV1,
+            ClaimLedgerInputCatalogV3,
+            render_claim_ledger_stage_a_pack,
+        )
+        from deepreason.bridge.models import ClaimLedgerV1
+        from deepreason.bridge.validate import validate_claim_ledger
+
+        source_work_id = getattr(error, "source_work_id", None)
+        if not isinstance(source_work_id, str):
+            raise error
+        item_chunks = self._chunks(catalog.items)
+        batches = []
+        if item_chunks:
+            for index, items in enumerate(item_chunks):
+                batches.append(
+                    ClaimLedgerInputCatalogV3.create(
+                        problem_ref=catalog.problem_ref,
+                        formal_seq=catalog.formal_seq,
+                        problem_text=catalog.problem_text,
+                        output_target=catalog.output_target,
+                        items=items,
+                        process_observations=(
+                            catalog.process_observations or () if index == 0 else ()
+                        ),
+                        advisory_context_ref=catalog.advisory_context_ref,
+                        retrieval_receipt_ref=catalog.retrieval_receipt_ref,
+                    )
+                )
+        elif catalog.process_observations:
+            batches.append(
+                ClaimLedgerInputCatalogV3.create(
+                    problem_ref=catalog.problem_ref,
+                    formal_seq=catalog.formal_seq,
+                    problem_text=catalog.problem_text,
+                    output_target=catalog.output_target,
+                    items=(),
+                    process_observations=catalog.process_observations,
+                    advisory_context_ref=catalog.advisory_context_ref,
+                    retrieval_receipt_ref=catalog.retrieval_receipt_ref,
+                )
+            )
+        else:
+            raise error
+        contracts = tuple(ClaimLedgerBatchWireContractV1(batch) for batch in batches)
+        packs = tuple(
+            render_claim_ledger_stage_a_pack(batch, contract=contract)
+            for batch, contract in zip(batches, contracts, strict=True)
+        )
+        child_contexts = tuple(
+            (f"catalog-batch-{index:03d}", pack)
+            for index, pack in enumerate(packs)
+        )
+        transition = self.harness.activate_contract_decomposition(
+            self.manifest, source_work_id, child_contexts=child_contexts
+        )
+        ledgers = []
+        calls = []
+        for index, (batch, contract, pack) in enumerate(
+            zip(batches, contracts, packs, strict=True)
+        ):
+            ledger, call = self.call(
+                transition.route_lease.role,
+                pack,
+                ClaimLedgerV1,
+                endpoint_index=transition.route_lease.seat,
+                template_role="bridge_ledger",
+                wire_contract=contract,
+                _decomposition_transition=transition,
+                _decomposition_child_index=index,
+            )
+            ledgers.append(ledger)
+            calls.append(call)
+        entries = tuple(dict.fromkeys(entry.id for ledger in ledgers for entry in ledger.entries))
+        entry_by_id = {entry.id: entry for ledger in ledgers for entry in ledger.entries}
+        uncovered_by_id = {
+            value.id: value
+            for ledger in ledgers
+            for value in ledger.uncovered_requirements or ()
+        }
+        conflicts_by_id = {
+            value.id: value
+            for ledger in ledgers
+            for value in ledger.source_conflicts or ()
+        }
+        merged = ClaimLedgerV1.create(
+            problem_ref=catalog.problem_ref,
+            formal_seq=catalog.formal_seq,
+            output_target=catalog.output_target,
+            entries=[entry_by_id[ref] for ref in entries],
+            uncovered_requirements=list(uncovered_by_id.values()) or None,
+            source_conflicts=list(conflicts_by_id.values()) or None,
+            advisory_context_ref=catalog.advisory_context_ref,
+            retrieval_receipt_ref=catalog.retrieval_receipt_ref,
+        )
+        if not validate_claim_ledger(merged).valid:
+            raise ValueError("staged ledger merge failed canonical validation")
+        self._staged_calls = calls
+        self._pending_staged_transition = (transition, merged.id)
+        return merged, calls[-1]
+
+    def staged_composition_fallback(self, error, ledger, request):
+        """Execute exact ledger batches after durable strong-composition exhaustion."""
+
+        from deepreason.bridge.compose import (
+            BridgeCompositionBatchWireContractV1,
+            CompositionDraftV1,
+            _composition_pack,
+        )
+        from deepreason.bridge.models import (
+            BridgeOutputV1,
+            BridgeResolution,
+            ClaimLedgerV1,
+            ClaimUseV1,
+        )
+        from deepreason.bridge.validate import validate_bridge_output
+
+        source_work_id = getattr(error, "source_work_id", None)
+        if not isinstance(source_work_id, str):
+            raise error
+        entry_chunks = self._chunks(ledger.entries)
+        if not entry_chunks:
+            raise error
+        subledgers = tuple(
+            ClaimLedgerV1.create(
+                problem_ref=ledger.problem_ref,
+                formal_seq=ledger.formal_seq,
+                output_target=ledger.output_target,
+                entries=chunk,
+                advisory_context_ref=ledger.advisory_context_ref,
+                retrieval_receipt_ref=ledger.retrieval_receipt_ref,
+            )
+            for chunk in entry_chunks
+        )
+        contracts = tuple(
+            BridgeCompositionBatchWireContractV1(
+                item,
+                maximum_sections=min(request.maximum_sections, 8),
+                desired_length_chars=request.desired_length_chars,
+            )
+            for item in subledgers
+        )
+        packs = tuple(
+            _composition_pack(item, request, contract_version="v2")
+            for item in subledgers
+        )
+        child_contexts = tuple(
+            (f"ledger-batch-{index:03d}", pack)
+            for index, pack in enumerate(packs)
+        )
+        transition = self.harness.activate_contract_decomposition(
+            self.manifest, source_work_id, child_contexts=child_contexts
+        )
+        outputs = []
+        calls = []
+        for index, (contract, pack) in enumerate(zip(contracts, packs, strict=True)):
+            draft, call = self.call(
+                transition.route_lease.role,
+                pack,
+                CompositionDraftV1,
+                endpoint_index=transition.route_lease.seat,
+                template_role="bridge_compose",
+                wire_contract=contract,
+                _decomposition_transition=transition,
+                _decomposition_child_index=index,
+            )
+            if draft.amendment_needed is not None or draft.output is None:
+                raise ValueError("staged composition child requested unsupported amendment")
+            outputs.append(draft.output)
+            calls.append(call)
+        sections = []
+        for output in outputs:
+            for section in output.sections:
+                sections.append(
+                    ClaimUseV1.create(
+                        span_id=f"S{len(sections) + 1}",
+                        text=section.text,
+                        rendering_mode=section.rendering_mode,
+                        ledger_entry_ids=section.ledger_entry_ids,
+                    )
+                )
+        unresolved = [item for output in outputs for item in output.unresolved_items or ()]
+        rank = {
+            BridgeResolution.ANSWERED: 0,
+            BridgeResolution.PARTIALLY_ANSWERED: 1,
+            BridgeResolution.UNDERDETERMINED: 2,
+            BridgeResolution.INSUFFICIENT_EVIDENCE: 3,
+            BridgeResolution.CONFLICTING_EVIDENCE: 4,
+            BridgeResolution.OUTSIDE_SCOPE: 5,
+        }
+        resolution = max((item.resolution for item in outputs), key=rank.__getitem__)
+        reasons = tuple(
+            dict.fromkeys(item.resolution_reason for item in outputs if item.resolution_reason)
+        )
+        merged = BridgeOutputV1.create(
+            claim_ledger_id=ledger.id,
+            sections=sections,
+            unresolved_items=unresolved or None,
+            resolution=resolution,
+            resolution_reason="\n".join(reasons) or None,
+        )
+        report = validate_bridge_output(
+            ledger, merged, allow_conservative_mixed_modes=True
+        )
+        if not report.valid:
+            raise ValueError("staged composition merge failed canonical validation")
+        self._staged_calls = calls
+        self._pending_staged_transition = (transition, merged.id)
+        return merged, calls[-1]
+
+    def consume_staged_calls(self, fallback_call):
+        calls = tuple(self._staged_calls) or ((fallback_call,) if fallback_call else ())
+        self._staged_calls = []
+        return calls
+
+    def finalize_staged_effect(self, effect_ref: str) -> None:
+        pending = self._pending_staged_transition
+        if pending is None:
+            return
+        transition, expected_ref = pending
+        if effect_ref != expected_ref:
+            raise ValueError("staged bridge effect differs from deterministic merge")
+        if not any(effect_ref in event.outputs for event in self.harness.log.read()):
+            raise ValueError("staged bridge effect is not canonically reachable")
+        marker = ["contract-decomposition-effect", transition.id, effect_ref]
+        if not any(list(event.inputs) == marker for event in self.harness.log.read()):
+            self.harness.record_measure(inputs=marker)
+        self.harness.complete_contract_decomposition(
+            self.manifest, transition, admitted_effect_refs=(effect_ref,)
+        )
+        self._pending_staged_transition = None
+
     def call(
         self,
         role: str,
@@ -674,6 +1110,8 @@ class TransactionalBridgeAdapter:
         endpoint_lease=None,
         school_id: str | None = None,
         conjecture_context=None,
+        _decomposition_transition=None,
+        _decomposition_child_index: int | None = None,
         **authority,
     ):
         if authority:
@@ -683,13 +1121,39 @@ class TransactionalBridgeAdapter:
         if wire_contract is None:
             raise ValueError("v6 bridge calls require an exact call-local contract")
         expected = _EXACT_V6_CONTRACTS.get(template_role)
-        if expected is not None and wire_contract.contract_id != expected:
+        if expected is not None and wire_contract.contract_id not in expected:
             raise ValueError(
-                f"{template_role} requires frozen contract {expected}, "
+                f"{template_role} requires one frozen contract from {sorted(expected)}, "
                 f"not {wire_contract.contract_id}"
             )
+        is_smaller = wire_contract.contract_id in {
+            "bridge.ledger-batch.v1",
+            "bridge.composition-batch.v1",
+        }
+        if is_smaller != (_decomposition_transition is not None):
+            raise ValueError("staged bridge contract requires exact decomposition authority")
 
         lease = endpoint_lease or select_lease(self._adapter.leases, role, endpoint_index)
+        base_profile = resolve_route_seat_base_profile(
+            self.manifest,
+            role=role,
+            seat=endpoint_index,
+            endpoint_id=lease.route.endpoint_id,
+        )
+        if model_profile is not None:
+            try:
+                requested_profile = get_profile(model_profile).name.value
+            except (KeyError, TypeError, ValueError) as error:
+                raise V6ModelProfileOverrideForbidden(
+                    role=role,
+                    frozen_profile=base_profile,
+                ) from error
+            if requested_profile != base_profile:
+                raise V6ModelProfileOverrideForbidden(
+                    role=role,
+                    frozen_profile=base_profile,
+                )
+        model_profile = base_profile
         route_ref = RouteLeaseRefV1(
             role=role,
             seat=endpoint_index,
@@ -707,6 +1171,9 @@ class TransactionalBridgeAdapter:
             "contract_id": wire_contract.contract_id,
             "output_model": output_model.__name__,
             "pack_sha256": pack_sha256,
+            "source_terminal_commitment_ref": (
+                self.source_terminal_commitment_ref
+            ),
         }
         if self._execution_id is not None:
             if (
@@ -720,9 +1187,69 @@ class TransactionalBridgeAdapter:
                 "execution_id": self._execution_id,
                 "execution_snapshot_ref": self._execution_snapshot_ref,
             }
+        target_refs = ()
+        if (
+            wire_contract.contract_id == "bridge.ledger.v3"
+            and (catalog := getattr(wire_contract, "catalog", None)) is not None
+        ):
+            count = max(1, (len(catalog.items) + 7) // 8)
+            target_refs = tuple(f"catalog-batch-{index:03d}" for index in range(count))
+        elif (
+            wire_contract.contract_id == "bridge.composition.v2"
+            and (ledger := getattr(wire_contract, "ledger", None)) is not None
+        ):
+            count = max(1, (len(ledger.entries) + 7) // 8)
+            target_refs = tuple(f"ledger-batch-{index:03d}" for index in range(count))
+        if target_refs:
+            payload["decomposition_child_keys"] = list(target_refs)
         context_refs = tuple(
             object_ref for _namespace, object_ref, _content in _context_seeds(wire_contract, pack)
         )
+        if _decomposition_transition is not None:
+            transition = _decomposition_transition
+            child_index = _decomposition_child_index
+            if (
+                transition.manifest_digest != self.manifest.sha256
+                or transition.route_lease != route_ref
+                or transition.atomic_contract_id != wire_contract.contract_id
+                or type(child_index) is not int
+                or not 0 <= child_index < len(transition.child_keys)
+            ):
+                raise ValueError("staged bridge child differs from decomposition authority")
+            payload = {
+                "schema": "contract-decomposition-child.v1",
+                "decomposition_transition_ref": transition.id,
+                "source_work_id": transition.source_work_id,
+                "source_contract_id": transition.source_contract_id,
+                "atomic_contract_id": transition.atomic_contract_id,
+                "child_partition": transition.child_partition,
+                "child_index": child_index,
+                "child_count": len(transition.child_keys),
+                "child_key": transition.child_keys[child_index],
+                "execution_id": self._execution_id,
+                "execution_snapshot_ref": self._execution_snapshot_ref,
+                "ordinal": ordinal,
+                "role": role,
+                "seat": endpoint_index,
+                "template_role": template_role,
+                "contract_id": wire_contract.contract_id,
+                "output_model": output_model.__name__,
+                "pack_sha256": pack_sha256,
+                "source_terminal_commitment_ref": (
+                    self.source_terminal_commitment_ref
+                ),
+            }
+            target_refs = (transition.child_keys[child_index],)
+            context_refs = tuple(
+                dict.fromkeys(
+                    (
+                        transition.id,
+                        transition.source_work_id,
+                        transition.child_context_refs[child_index],
+                        *context_refs,
+                    )
+                )
+            )
         recovery_item = self._matching_recovery_item(payload)
         if recovery_item is not None:
             try:
@@ -769,6 +1296,10 @@ class TransactionalBridgeAdapter:
             scratch_fence_seq=fence,
             task_payload_value=payload,
             input_refs=context_refs,
+            target_refs=target_refs,
+            source_terminal_commitment_ref=(
+                self.source_terminal_commitment_ref
+            ),
         )
         authorized = None
 
@@ -893,11 +1424,6 @@ class TransactionalBridgeAdapter:
                 output_mechanism=output_mechanism,
                 endpoint_lease=lease,
                 school_id=school_id,
-                retry_max=(
-                    self.manifest.bridge_policy.max_schema_repair_attempts
-                    if self.manifest.bridge_policy is not None
-                    else 2
-                ),
                 reason_prefix="bridge",
                 preserve_terminalized_spend=True,
             )
