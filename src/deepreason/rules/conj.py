@@ -31,13 +31,15 @@ from deepreason.conjecture_turn import (
     ReasoningConjecturerTurnV4,
     ReasoningConjecturerTurnV5,
 )
-from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.adapter import RequestEnvelopeExceeded, WorkflowAuthorizationError
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
-from deepreason.llm.firewall import EndpointLease
+from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import EndpointLease, RouteFirewallError
 from deepreason.llm.packs import aliases_for_pack, render_conj_pack
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
     AliasTable,
+    AtomicConjectureWireContractV1,
     ConjecturerTurnWireContractV4,
     ConjecturerTurnWireContractV5,
     ConjecturerTurnWireContractV6,
@@ -367,6 +369,244 @@ def _v6_no_context_reason(scratch_policy, context_policy, prior_plan) -> str:
     return "no_context_capacity" if total_cap <= prior_count else "no_additional_context"
 
 
+def _v6_atomic_conjecture_fallback(
+    harness,
+    adapter,
+    manifest,
+    *,
+    endpoint_lease: EndpointLease,
+    school_id: str | None,
+    problem,
+    strong_payload: dict,
+    pack: str,
+    aliases: AliasTable,
+    exposure_items: tuple,
+    transition,
+):
+    """Execute or recover all deterministic single-candidate child calls."""
+
+    from deepreason.llm.firewall import route_fingerprint
+    from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
+    from deepreason.workflow.transaction import VisibleContextItemV1
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    route_ref = RouteLeaseRefV1(
+        role="conjecturer",
+        seat=endpoint_lease.seat,
+        endpoint_id=endpoint_lease.route.endpoint_id,
+        route_sha256=route_fingerprint(endpoint_lease.route),
+    )
+    if (
+        transition.route_lease != route_ref
+        or transition.atomic_contract_id != "conjecturer.atomic-candidate.v1"
+    ):
+        raise ValueError("atomic conjecture differs from decomposition authority")
+    reasoning = bool(strong_payload.get("reasoning", False))
+    contract = AtomicConjectureWireContractV1(aliases, reasoning=reasoning)
+    output_model = ReasoningConjecturerTurnV6 if reasoning else ConjectureTurnV6
+    service = InquiryTransactionService(harness, manifest, adapter.meter)
+    child_count = transition.maximum_children
+    candidates = []
+    abstentions = []
+    calls = []
+
+    for child_index in range(child_count):
+        child_pack = harness.blobs.get(
+            transition.child_context_refs[child_index]
+        ).decode("utf-8")
+        payload = {
+            "schema": "contract-decomposition-child.v1",
+            "decomposition_transition_ref": transition.id,
+            "source_work_id": transition.source_work_id,
+            "source_contract_id": transition.source_contract_id,
+            "atomic_contract_id": transition.atomic_contract_id,
+            "child_partition": transition.child_partition,
+            "child_index": child_index,
+            "child_count": child_count,
+            "child_key": f"candidate-slot-{child_index:03d}",
+            "problem_ref": problem.id,
+            "school_id": school_id,
+            "run_input_digest": manifest.run_input_digest,
+            "mandatory_interface": strong_payload.get("mandatory_interface"),
+            "component_spec": strong_payload.get("component_spec"),
+            "theorem_interface": strong_payload.get("theorem_interface"),
+            "tail_weighted": bool(strong_payload.get("tail_weighted", False)),
+        }
+        matches = [
+            item
+            for item in harness.workflow_state.transaction_work.values()
+            if item.preparation.contract_id == contract.contract_id
+            and item.preparation.task_payload_value == payload
+            and item.preparation.route_lease == route_ref
+        ]
+        if len(matches) > 1:
+            raise ValueError("atomic conjecture child history is ambiguous")
+        if matches:
+            item = matches[0]
+            from deepreason.workflow.atomic_recovery import (
+                recover_atomic_child_output,
+            )
+
+            output, call = recover_atomic_child_output(
+                harness, manifest, service, item, contract
+            )
+        else:
+            fence = max(0, harness._next_seq - 1)
+            trigger_ref = "decomposition-child:" + hashlib.sha256(
+                canonical_json(payload)
+            ).hexdigest()
+            preparation = service.prepare(
+                task_kind=WorkflowTaskKind.CONJECTURE,
+                attempt_index=0,
+                route_lease=route_ref,
+                contract_id=contract.contract_id,
+                trigger_ref=trigger_ref,
+                formal_fence_seq=fence,
+                scratch_fence_seq=fence,
+                target_refs=(problem.id,),
+                input_refs=(
+                    transition.source_work_id,
+                    transition.id,
+                    transition.child_context_refs[child_index],
+                    problem.id,
+                ),
+                task_payload_value=payload,
+            )
+            planned_bytes = sum(item.planned_bytes for item in exposure_items)
+            cloned_items = tuple(
+                VisibleContextItemV1.model_validate(item.model_dump(mode="python"))
+                for item in exposure_items
+            )
+            plan = service.context_plan(
+                preparation,
+                plan_kind="combined",
+                items=cloned_items,
+                maximum_bytes=planned_bytes,
+                rendered_bytes=planned_bytes,
+            )
+            prompt, preview_contract, preview_lease, maximum_tokens = (
+                adapter.preview_request(
+                    "conjecturer",
+                    child_pack,
+                    output_model,
+                    endpoint_index=endpoint_lease.seat,
+                    wire_contract=contract,
+                    aliases=aliases,
+                    endpoint_lease=endpoint_lease,
+                )
+            )
+            if preview_contract is not contract or preview_lease != endpoint_lease:
+                raise ValueError("atomic conjecture preview changed frozen authority")
+            authorized = service.issue(
+                preparation,
+                plans=(plan,),
+                prompt=prompt,
+                max_tokens=maximum_tokens,
+            )
+            try:
+                output, call = adapter.call(
+                    "conjecturer",
+                    child_pack,
+                    output_model,
+                    endpoint_index=endpoint_lease.seat,
+                    wire_contract=contract,
+                    aliases=aliases,
+                    endpoint_lease=endpoint_lease,
+                    school_id=school_id,
+                    dispatch_authorization=authorized,
+                )
+            except EndpointError as error:
+                spend = getattr(error, "spend", None)
+                if spend is None:
+                    if authorized.reservation.is_open:
+                        authorized.release()
+                    service.terminate(
+                        work_id=preparation.id,
+                        attempt_index=preparation.attempt_index,
+                        status="abandoned",
+                        reason_code="atomic_conjecture_provider_result_unknown",
+                        usage_status="unknown",
+                    )
+                else:
+                    diagnostic_ref = (
+                        spend.attempt_trace[-1].diagnostic_ref
+                        if spend.attempt_trace
+                        else harness.blobs.put(str(error).encode("utf-8"))
+                    )
+                    provider = service.record_provider_attempt(
+                        authorized,
+                        call=spend,
+                        outcome="transport_failure",
+                        usage_status="unknown",
+                        diagnostic_ref=diagnostic_ref,
+                    )
+                    service.terminate(
+                        work_id=preparation.id,
+                        attempt_index=preparation.attempt_index,
+                        status="transport_failed",
+                        reason_code="atomic_conjecture_transport_failure",
+                        usage_status="unknown",
+                        provider_attempt=provider,
+                    )
+                    error.spend = None
+                error.transaction_terminalized = True
+                raise
+            except SchemaRepairError as error:
+                repaired = service.repair_schema_failure(
+                    adapter=adapter,
+                    authorized=authorized,
+                    error=error,
+                    role="conjecturer",
+                    pack=child_pack,
+                    output_model=output_model,
+                    wire_contract=contract,
+                    endpoint_index=endpoint_lease.seat,
+                    endpoint_lease=endpoint_lease,
+                    school_id=school_id,
+                    reason_prefix="atomic_conjecture",
+                )
+                output, call = repaired.output, repaired.llm_call
+                preparation, authorized = repaired.preparation, repaired.authorized
+                provider = repaired.provider_attempt
+            else:
+                provider = service.record_provider_attempt(
+                    authorized,
+                    call=call,
+                    outcome="provider_result",
+                    usage_status="exact",
+                )
+            admitted_ref = harness.blobs.put(
+                canonical_json(output.model_dump(mode="json", exclude_none=True))
+            )
+            admission = service.record_semantic_admission(
+                provider, outcome="admitted", admitted_refs=(admitted_ref,)
+            )
+            service.terminate(
+                work_id=preparation.id,
+                attempt_index=preparation.attempt_index,
+                status="completed",
+                reason_code="atomic_conjecture_output_admitted",
+                usage_status="exact",
+                prompt_tokens=call.prompt_tokens,
+                completion_tokens=call.completion_tokens,
+                provider_attempt=provider,
+                admission=admission,
+            )
+        candidates.extend(output.candidates)
+        if output.abstention is not None:
+            abstentions.append(output.abstention)
+        calls.append(call)
+
+    combined_model = ReasoningConjecturerTurnV6 if reasoning else ConjectureTurnV6
+    if candidates:
+        combined = combined_model(candidates=tuple(candidates))
+    elif abstentions:
+        combined = combined_model(abstention=abstentions[0])
+    else:  # contract validation should make this unreachable
+        raise ValueError("atomic conjecture children produced no meaningful outcome")
+    return combined, calls
+
+
 def conj(
     harness,
     problem_id: str,
@@ -425,6 +665,9 @@ def conj(
     transaction_preparation = None
     transaction_authorization = None
     transaction_provider_attempt = None
+    atomic_fallback_completed = False
+    atomic_source_call_seq = None
+    atomic_decomposition_transition = None
     transaction_simulation_aliases: dict[str, str] = {}
     transaction_capability_result_alias = None
     transaction_capability_result_package_ref = _capability_result_package_ref
@@ -613,6 +856,97 @@ def conj(
             run_manifest,
             meter,
         )
+
+        def decomposition_source_root(transition):
+            source = harness.workflow_state.transaction_work.get(
+                transition.source_work_id
+            )
+            if source is None:
+                return None
+            value = source.preparation.task_payload_value
+            if (
+                isinstance(value, dict)
+                and value.get("schema") == "repair.semantic-task.v1"
+            ):
+                source = harness.workflow_state.transaction_work.get(
+                    value.get("parent_work_id")
+                )
+            return source
+
+        incomplete_decompositions = []
+        for transition in (
+            harness.workflow_state.contract_decomposition_by_source_work.values()
+        ):
+            source_root = decomposition_source_root(transition)
+            if (
+                transition.manifest_digest == run_manifest.sha256
+                and transition.route_lease == route_ref
+                and transition.source_contract_id == "conjecturer.turn.v6"
+                and transition.atomic_contract_id
+                == "conjecturer.atomic-candidate.v1"
+                and source_root is not None
+                and source_root.preparation.task_payload_value == payload
+                and transition.id
+                not in harness.workflow_state.contract_decomposition_completion_by_transition
+            ):
+                incomplete_decompositions.append((transition, source_root))
+        if len(incomplete_decompositions) > 1:
+            raise ValueError("atomic conjecture history is ambiguous")
+        if incomplete_decompositions:
+            transition, source_root = incomplete_decompositions[0]
+            if source_root.exposure is None:
+                raise ValueError("atomic conjecture source lacks durable exposure")
+            from deepreason.workflow.transaction import ContextNamespace
+
+            recovered_aliases = AliasTable(
+                {
+                    item.alias: item.object_ref
+                    for item in source_root.exposure.exposed_items
+                    if item.namespace == ContextNamespace.SOURCE
+                }
+            )
+            recovered_output, recovered_calls = _v6_atomic_conjecture_fallback(
+                harness,
+                adapter,
+                run_manifest,
+                endpoint_lease=dispatch_endpoint_lease,
+                school_id=execution_school_id,
+                problem=problem,
+                strong_payload=payload,
+                pack=harness.blobs.get(transition.child_context_refs[0]).decode(
+                    "utf-8"
+                ),
+                aliases=recovered_aliases,
+                exposure_items=tuple(source_root.exposure.exposed_items),
+                transition=transition,
+            )
+            recovered_source_seqs = [
+                event.seq
+                for event in harness.log.read()
+                for call in recovered_calls
+                if event.llm == call
+            ]
+            if len(recovered_source_seqs) != len(recovered_calls):
+                raise RuntimeError("atomic conjecture recovery lacks durable calls")
+            from deepreason.workflow.conjecture_recovery import _materialize_formal
+
+            recovered_refs = _materialize_formal(
+                harness,
+                run_manifest,
+                recovered_output,
+                payload,
+                problem,
+                recovered_source_seqs[-1],
+                embedder=embedder,
+                contract_id="conjecturer.atomic-candidate.v1",
+            )
+            harness.complete_contract_decomposition(
+                run_manifest,
+                transition,
+                admitted_effect_refs=recovered_refs,
+            )
+            return [harness.state.artifacts[ref] for ref in recovered_refs]
+
         fence = max(0, harness._next_seq - 1)
         trigger_ref = "conjecture:" + hashlib.sha256(canonical_json(payload)).hexdigest()
         transaction_preparation = transaction_service.prepare(
@@ -646,6 +980,24 @@ def conj(
             ),
             task_payload_value=payload,
         )
+
+        def abandon_v6_context_preissue(
+            reason_code: str = "conjecture_context_preissue_failed",
+        ) -> None:
+            item = harness.workflow_state.transaction_work[
+                transaction_preparation.id
+            ]
+            if item.terminal is None and not item.issued:
+                transaction_service.terminate(
+                    work_id=transaction_preparation.id,
+                    attempt_index=transaction_preparation.attempt_index,
+                    status="abandoned",
+                    reason_code=reason_code,
+                    usage_status="exact",
+                    prompt_tokens=0,
+                    completion_tokens=0,
+                )
+
         if v6_context_continuation is not None:
             from deepreason.scratch.conjecture import plan_conjecture_context_expansion
             from deepreason.scratch.service import ScratchService
@@ -677,20 +1029,24 @@ def conj(
                 )
                 return []
             plan_fence = harness._next_seq - 1
-            conjecture_context_plan = plan_conjecture_context_expansion(
-                ScratchService(harness),
-                problem=problem,
-                school_id=execution_school_id,
-                manifest_digest=run_manifest.sha256,
-                scratch_policy=scratch_policy,
-                context_policy=context_policy,
-                request=v6_context_request,
-                prior_plan=v6_prior_context_plan,
-                expansion_decision_ref=v6_context_continuation.decision_ref,
-                expansion_index=v6_context_continuation.expansion_index,
-                formal_fence_seq=plan_fence,
-                scratch_fence_seq=plan_fence,
-            )
+            try:
+                conjecture_context_plan = plan_conjecture_context_expansion(
+                    ScratchService(harness),
+                    problem=problem,
+                    school_id=execution_school_id,
+                    manifest_digest=run_manifest.sha256,
+                    scratch_policy=scratch_policy,
+                    context_policy=context_policy,
+                    request=v6_context_request,
+                    prior_plan=v6_prior_context_plan,
+                    expansion_decision_ref=v6_context_continuation.decision_ref,
+                    expansion_index=v6_context_continuation.expansion_index,
+                    formal_fence_seq=plan_fence,
+                    scratch_fence_seq=plan_fence,
+                )
+            except Exception:
+                abandon_v6_context_preissue()
+                raise
             if conjecture_context_plan is None:
                 reason = _v6_no_context_reason(
                     scratch_policy, context_policy, v6_prior_context_plan
@@ -714,22 +1070,27 @@ def conj(
                 or len(conjecture_context_plan.added_block_refs or ())
                 > context_policy.max_extra_blocks
             ):
+                abandon_v6_context_preissue()
                 raise ValueError("expanded v6 context plan differs from child authority")
         elif context_policy.mode != "disabled" and scratch_policy.enabled:
             from deepreason.scratch.conjecture import plan_conjecture_context
             from deepreason.scratch.service import ScratchService
 
             plan_fence = harness._next_seq - 1
-            conjecture_context_plan = plan_conjecture_context(
-                ScratchService(harness),
-                problem=problem,
-                school_id=execution_school_id,
-                manifest_digest=run_manifest.sha256,
-                scratch_policy=scratch_policy,
-                context_policy=context_policy,
-                formal_fence_seq=plan_fence,
-                scratch_fence_seq=plan_fence,
-            )
+            try:
+                conjecture_context_plan = plan_conjecture_context(
+                    ScratchService(harness),
+                    problem=problem,
+                    school_id=execution_school_id,
+                    manifest_digest=run_manifest.sha256,
+                    scratch_policy=scratch_policy,
+                    context_policy=context_policy,
+                    formal_fence_seq=plan_fence,
+                    scratch_fence_seq=plan_fence,
+                )
+            except Exception:
+                abandon_v6_context_preissue()
+                raise
 
     workflow_guard_findings = []
     workflow_guard_occurrences: dict[str, int] = {}
@@ -768,13 +1129,22 @@ def conj(
     if conjecture_context_plan is not None:
         from deepreason.scratch.conjecture import PlannedConjectureContextV1
 
-        conjecture_context_plan = PlannedConjectureContextV1.model_validate(conjecture_context_plan)
-        if conjecture_context_plan.problem_id != problem_id:
-            raise ValueError("conjecture context was planned for another problem")
-        if conjecture_context_plan.school_id != execution_school_id:
-            raise ValueError("conjecture context was planned for another school")
-        if generation_context:
-            raise ValueError("typed scratch context cannot be replaced by raw generation_context")
+        try:
+            conjecture_context_plan = PlannedConjectureContextV1.model_validate(
+                conjecture_context_plan
+            )
+            if conjecture_context_plan.problem_id != problem_id:
+                raise ValueError("conjecture context was planned for another problem")
+            if conjecture_context_plan.school_id != execution_school_id:
+                raise ValueError("conjecture context was planned for another school")
+            if generation_context:
+                raise ValueError(
+                    "typed scratch context cannot be replaced by raw generation_context"
+                )
+        except Exception:
+            if active_v6:
+                abandon_v6_context_preissue()
+            raise
     if active_v4:
         control = run_manifest.control_plane_policy
         if (
@@ -896,25 +1266,21 @@ def conj(
     v6_scratch_rendered_text = None
     v6_simulation_rendered_text = ""
     if active_v6 and conjecture_context_plan is not None:
-        handle_maps = (
-            conjecture_context_plan.rendered_context.receipt.block_handles,
-            conjecture_context_plan.rendered_context.receipt.cluster_handles,
-            conjecture_context_plan.rendered_context.receipt.link_handles,
-            conjecture_context_plan.rendered_context.receipt.guide_handles,
-        )
-        replacements = {}
-        for handle_map in handle_maps:
-            for handle, target in handle_map.items():
-                alias = f"SCR_{len(scratch_aliases) + 1:03d}"
-                scratch_aliases[alias] = target
-                replacements[handle] = alias
-        v6_scratch_rendered_text = conjecture_context_plan.rendered_context.text
-        for handle, alias in sorted(
-            replacements.items(), key=lambda item: (-len(item[0]), item[0])
-        ):
-            pattern = rf"(?<![A-Za-z0-9_]){re.escape(handle)}(?![A-Za-z0-9_])"
-            pack = re.sub(pattern, alias, pack)
-            v6_scratch_rendered_text = re.sub(pattern, alias, v6_scratch_rendered_text)
+        from deepreason.scratch.conjecture import render_v6_conjecture_context
+
+        try:
+            v6_scratch_rendered_text, scratch_aliases = render_v6_conjecture_context(
+                conjecture_context_plan
+            )
+            canonical_scratch_text = conjecture_context_plan.rendered_context.text
+            if pack.count(canonical_scratch_text) != 1:
+                raise ValueError(
+                    "v6 Conj pack must contain canonical scratch context once"
+                )
+            pack = pack.replace(canonical_scratch_text, v6_scratch_rendered_text, 1)
+        except Exception:
+            abandon_v6_context_preissue()
+            raise
 
     if active_v6:
         simulation_policy = run_manifest.inquiry_capability_policy.simulation
@@ -1167,31 +1533,115 @@ def conj(
                     rendered_bytes=rendered_bytes,
                 )
             )
-        prompt, preview_contract, preview_lease, maximum_tokens = adapter.preview_request(
-            "conjecturer",
-            pack,
-            output_model,
-            endpoint_index=endpoint_index,
-            aliases=aliases,
-            wire_contract=turn_contract,
-            endpoint_lease=dispatch_endpoint_lease,
-            conjecture_context=None,
-        )
+        if conjecture_context_plan is not None:
+            from deepreason.scratch.conjecture import (
+                commit_conjecture_context,
+                prepare_conjecture_context_call,
+            )
+            from deepreason.scratch.service import ScratchService
+
+            previewed_request = []
+
+            def validate_context_call_receipt(receipt):
+                preview = adapter.preview_request(
+                    "conjecturer",
+                    pack,
+                    output_model,
+                    endpoint_index=endpoint_index,
+                    aliases=aliases,
+                    wire_contract=turn_contract,
+                    endpoint_lease=dispatch_endpoint_lease,
+                    conjecture_context=receipt,
+                )
+                if preview[1] is not turn_contract or preview[2] != dispatch_endpoint_lease:
+                    raise ValueError("v6 conjecture preview changed frozen call authority")
+                previewed_request.append(preview)
+
+            try:
+                context_receipt = prepare_conjecture_context_call(
+                    ScratchService(harness),
+                    conjecture_context_plan,
+                    final_conjecture_pack=pack,
+                    attention_policy=conjecture_context_plan.attention_policy,
+                    model_facing_rendered_context=v6_scratch_rendered_text,
+                    model_facing_aliases=scratch_aliases,
+                    validate_call_receipt=validate_context_call_receipt,
+                )
+            except RequestEnvelopeExceeded:
+                abandon_v6_context_preissue("request_envelope_exceeded")
+                return []
+            except Exception:
+                abandon_v6_context_preissue()
+                raise
+            (
+                prompt,
+                preview_contract,
+                preview_lease,
+                maximum_tokens,
+            ) = previewed_request[0]
+        else:
+            try:
+                prompt, preview_contract, preview_lease, maximum_tokens = (
+                    adapter.preview_request(
+                        "conjecturer",
+                        pack,
+                        output_model,
+                        endpoint_index=endpoint_index,
+                        aliases=aliases,
+                        wire_contract=turn_contract,
+                        endpoint_lease=dispatch_endpoint_lease,
+                        conjecture_context=None,
+                    )
+                )
+            except RequestEnvelopeExceeded:
+                abandon_v6_context_preissue("request_envelope_exceeded")
+                return []
         if preview_contract is not turn_contract or preview_lease != dispatch_endpoint_lease:
             raise ValueError("v6 conjecture preview changed frozen call authority")
         from deepreason.workflow.transaction import WorkBudgetDenied
 
         try:
-            transaction_authorization = transaction_service.issue(
-                transaction_preparation,
-                plans=transaction_plans,
-                prompt=prompt,
-                max_tokens=maximum_tokens,
-            )
+            if conjecture_context_plan is not None:
+                reserved_dispatch = transaction_service.reserve_dispatch(
+                    transaction_preparation,
+                    prompt=prompt,
+                    max_tokens=maximum_tokens,
+                )
+            else:
+                transaction_authorization = transaction_service.issue(
+                    transaction_preparation,
+                    plans=transaction_plans,
+                    prompt=prompt,
+                    max_tokens=maximum_tokens,
+                )
         except WorkBudgetDenied:
             if v6_context_continuation is not None:
                 return []
             raise
+        if conjecture_context_plan is not None:
+            try:
+                committed_receipt = commit_conjecture_context(
+                    ScratchService(harness),
+                    conjecture_context_plan,
+                    final_conjecture_pack=pack,
+                    attention_policy=conjecture_context_plan.attention_policy,
+                    model_facing_rendered_context=v6_scratch_rendered_text,
+                    model_facing_aliases=scratch_aliases,
+                    prepared_call_receipt=context_receipt,
+                )
+                if committed_receipt != context_receipt:
+                    raise ValueError(
+                        "committed v6 context differs from prepared call authority"
+                    )
+                transaction_authorization = transaction_service.finalize_dispatch(
+                    reserved_dispatch,
+                    plans=transaction_plans,
+                    prompt=prompt,
+                )
+            except Exception:
+                reserved_dispatch.release()
+                abandon_v6_context_preissue()
+                raise
 
     transaction_context_authorization = transaction_authorization
 
@@ -1220,6 +1670,22 @@ def conj(
             workflow_dispatch_required=active_v4,
             dispatch_authorization=transaction_authorization,
         )
+    except (WorkflowAuthorizationError, RouteFirewallError) as error:
+        if not active_v6 or getattr(error, "spend", None) is not None:
+            raise
+        if transaction_authorization.reservation.is_open:
+            transaction_authorization.release()
+        transaction_service.terminate(
+            work_id=transaction_preparation.id,
+            attempt_index=transaction_preparation.attempt_index,
+            status="abandoned",
+            reason_code="provider_predispatch_authority_failed",
+            usage_status="exact",
+            prompt_tokens=0,
+            completion_tokens=0,
+        )
+        error.transaction_terminalized = True
+        raise
     except EndpointError as error:
         if not active_v6:
             raise
@@ -1250,26 +1716,88 @@ def conj(
     except SchemaRepairError as error:
         if not active_v6:
             raise
-        repaired = transaction_service.repair_schema_failure(
-            adapter=adapter,
-            authorized=transaction_authorization,
-            error=error,
-            role="conjecturer",
-            pack=pack,
-            output_model=output_model,
-            wire_contract=turn_contract,
-            endpoint_index=endpoint_index,
-            endpoint_lease=dispatch_endpoint_lease,
-            school_id=execution_school_id,
-            reason_prefix="conjecture",
-        )
-        output = repaired.output
-        llm_call = repaired.llm_call
-        transaction_preparation = repaired.preparation
-        transaction_authorization = repaired.authorized
-        transaction_provider_attempt = repaired.provider_attempt
+        try:
+            repaired = transaction_service.repair_schema_failure(
+                adapter=adapter,
+                authorized=transaction_authorization,
+                error=error,
+                role="conjecturer",
+                pack=pack,
+                output_model=output_model,
+                wire_contract=turn_contract,
+                endpoint_index=endpoint_index,
+                endpoint_lease=dispatch_endpoint_lease,
+                school_id=execution_school_id,
+                reason_prefix="conjecture",
+            )
+        except SchemaRepairError as exhausted:
+            source_work_id = getattr(exhausted, "source_work_id", None)
+            if not isinstance(source_work_id, str):
+                raise
+            from deepreason.run_manifest import (
+                RunManifestError,
+                resolve_route_seat_contract_decomposition,
+            )
 
-    if active_v6 and transaction_provider_attempt is None:
+            try:
+                decomposition_grant = resolve_route_seat_contract_decomposition(
+                    run_manifest,
+                    role="conjecturer",
+                    seat=dispatch_endpoint_lease.seat,
+                    endpoint_id=dispatch_endpoint_lease.route.endpoint_id,
+                    route_sha256=route_ref.route_sha256,
+                    source_contract_id="conjecturer.turn.v6",
+                )
+            except RunManifestError as authority_error:
+                if authority_error.code in {
+                    "V6_CONTRACT_DECOMPOSITION_AUTHORITY_REQUIRED",
+                    "V6_CONTRACT_DECOMPOSITION_GRANT_REQUIRED",
+                }:
+                    # The strong work is already durably schema-exhausted.
+                    # Absence of a separately frozen edge authorizes no
+                    # additional provider work and preserves that terminal.
+                    raise exhausted
+                raise
+            transition = harness.activate_contract_decomposition(
+                run_manifest,
+                source_work_id,
+                child_contexts=tuple(
+                    (f"candidate-slot-{index:03d}", pack)
+                    for index in range(decomposition_grant.maximum_children)
+                ),
+            )
+            atomic_decomposition_transition = transition
+            output, atomic_calls = _v6_atomic_conjecture_fallback(
+                harness,
+                adapter,
+                run_manifest,
+                endpoint_lease=dispatch_endpoint_lease,
+                school_id=execution_school_id,
+                problem=problem,
+                strong_payload=payload,
+                pack=pack,
+                aliases=aliases,
+                exposure_items=tuple(
+                    transaction_context_authorization.exposure_receipt.exposed_items
+                ),
+                transition=transition,
+            )
+            llm_call = atomic_calls[-1]
+            atomic_fallback_completed = True
+            matching_events = [
+                event.seq for event in harness.log.read() if event.llm == llm_call
+            ]
+            if len(matching_events) != 1:
+                raise RuntimeError("atomic conjecture call lacks one durable event")
+            atomic_source_call_seq = matching_events[0]
+        else:
+            output = repaired.output
+            llm_call = repaired.llm_call
+            transaction_preparation = repaired.preparation
+            transaction_authorization = repaired.authorized
+            transaction_provider_attempt = repaired.provider_attempt
+
+    if active_v6 and transaction_provider_attempt is None and not atomic_fallback_completed:
         transaction_provider_attempt = transaction_service.record_provider_attempt(
             transaction_authorization,
             call=llm_call,
@@ -1279,7 +1807,11 @@ def conj(
     bound_work_order_id = llm_call.work_order_id
     source_call_seq = None
     if active_v6:
-        source_call_seq = harness._next_seq - 1
+        source_call_seq = (
+            atomic_source_call_seq
+            if atomic_fallback_completed
+            else harness._next_seq - 1
+        )
     elif active_v4 or bound_work_order_id is not None:
         extra = (f"school:{execution_school_id}",) if execution_school_id is not None else ()
         harness.record_llm_calls(
@@ -1533,7 +2065,11 @@ def conj(
         # Gate first (spec §3): a refuted-equivalent is a block, not a dedupe.
         effective_workload = "text" if reasoning else workload_profile
         effective_contract = (
-            "conjecturer.turn.v6"
+            (
+                "conjecturer.atomic-candidate.v1"
+                if atomic_fallback_completed
+                else "conjecturer.turn.v6"
+            )
             if active_v6
             else ("conjecturer.turn.v5" if active_v5 else "conjecturer.turn.v4")
             if active_v4
@@ -1737,6 +2273,13 @@ def conj(
         extra = (f"school:{execution_school_id}",) if execution_school_id is not None else ()
         if source_call_seq is None:
             harness.record_llm_calls([llm_call], "conj-noregister", *extra)
+    if active_v6 and atomic_fallback_completed:
+        harness.complete_contract_decomposition(
+            run_manifest,
+            atomic_decomposition_transition,
+            admitted_effect_refs=tuple(artifact.id for artifact in registered),
+        )
+        return registered
     if active_v6:
         scratch_output_refs = ()
         if scratch_proposal is not None:
