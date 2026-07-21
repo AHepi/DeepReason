@@ -23,6 +23,8 @@ from deepreason.run_manifest import (
     MANIFEST_HASH_NAME,
     MANIFEST_NAME,
     load_run_manifest,
+    resolve_route_seat_behavioral_capability,
+    resolve_route_seat_base_profile,
 )
 
 
@@ -244,6 +246,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 )
 
             for event in control_events:
+                control_action = getattr(event.control, "action", None)
                 decision = h.workflow_state.decisions.get(
                     event.control.decision_ref
                 )
@@ -253,13 +256,70 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 resume = h.workflow_state.resume_decisions.get(
                     event.control.decision_ref
                 )
+                classification_binding = (
+                    h.workflow_state.model_classification_binding
+                    if control_action == "classification_bound"
+                    else None
+                )
+                decomposition_record = None
+                if control_action == "contract_decomposition_activated":
+                    decomposition_record = next(
+                        (
+                            item
+                            for item in h.workflow_state.contract_decomposition_by_source_work.values()
+                            if item.id == event.control.decision_ref
+                        ),
+                        None,
+                    )
+                elif control_action == "contract_decomposition_completed":
+                    decomposition_record = next(
+                        (
+                            item
+                            for item in h.workflow_state.contract_decomposition_completion_by_transition.values()
+                            if item.id == event.control.decision_ref
+                        ),
+                        None,
+                    )
                 if decision is None:
-                    process_decision = lifecycle or resume
+                    process_decision = (
+                        lifecycle
+                        or resume
+                        or classification_binding
+                        or decomposition_record
+                    )
                     if process_decision is None:
                         fail(
                             "workflow-decision",
                             f"event seq={event.seq}: decision is absent after replay",
                         )
+                        continue
+                    if decomposition_record is not None:
+                        if (
+                            decomposition_record.manifest_digest != manifest.sha256
+                            or tuple(event.outputs) != (decomposition_record.id,)
+                        ):
+                            fail(
+                                "contract-decomposition-authority",
+                                f"event seq={event.seq}: decomposition record "
+                                "differs from replayed manifest authority",
+                            )
+                        continue
+                    if classification_binding is not None:
+                        plan = h.workflow_state.route_seat_model_classification
+                        if (
+                            plan is None
+                            or event.seq
+                            != h.workflow_state.model_classification_event_seq
+                            or tuple(event.outputs)
+                            != (plan.id, classification_binding.id)
+                            or classification_binding.manifest_digest
+                            != manifest.sha256
+                        ):
+                            fail(
+                                "model-classification-authority",
+                                f"event seq={event.seq}: classification binding "
+                                "differs from replayed manifest authority",
+                            )
                         continue
                     if (
                         process_decision.manifest_digest != manifest.sha256
@@ -299,7 +359,10 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
 
                     transport_profiles = {manifest.model_profile}
-                    if manifest.model_profile in {"standard", "frontier"}:
+                    if (
+                        manifest.schema_version < 6
+                        and manifest.model_profile in {"standard", "frontier"}
+                    ):
                         # A logged direct-contract exhaustion can arm compact
                         # transport for a later call without changing the
                         # manifest's frozen model identity.
@@ -1072,18 +1135,27 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     # 4. Accounting: meter total == sum of logged call tokens; every
     #    llm-bearing event's prompt/raw blobs exist.
     logged = 0
-    llm_calls = 0
-    llm_attempts = 0
-    repair_attempts = 0
-    traced_calls = 0
-    first_pass_valid = 0
-    eventual_valid = 0
-    schema_exhausted = 0
-    transport_dropped = 0
-    usage_unknown_attempts = 0
-    provider_transport_attempts = 0
+    profile_totals: dict[str, dict[str, int]] = {}
     authorized_controller_limits: dict[str, set[int]] = {}
     foreign_criticism_coverage: dict[str, set[str]] = {}
+
+    def profile_row(profile: str) -> dict[str, int]:
+        return profile_totals.setdefault(
+            profile,
+            {
+                "calls": 0,
+                "attempts": 0,
+                "repair_attempts": 0,
+                "tokens": 0,
+                "traced_calls": 0,
+                "first_pass_valid": 0,
+                "eventual_valid": 0,
+                "schema_exhausted": 0,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0,
+                "provider_transport_attempts": 0,
+            },
+        )
 
     def validate_school_route(event) -> None:
         call = event.llm
@@ -2025,6 +2097,72 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             return
         covered.add(critic_school_id)
 
+    compact_transition_seq_by_route_seat: dict[
+        tuple[str, int, str, str], int
+    ] = {}
+    classification_by_route_seat = {}
+    classification_event_seq = None
+    if manifest is not None and manifest.schema_version == 6:
+        classification = h.workflow_state.route_seat_model_classification
+        binding = h.workflow_state.model_classification_binding
+        classification_event_seq = h.workflow_state.model_classification_event_seq
+        if classification is not None or binding is not None:
+            try:
+                if classification is None or binding is None:
+                    raise ValueError("classification binding is incomplete")
+                h.workflow_state._validate_model_classification(
+                    manifest,
+                    classification,
+                )
+                if (
+                    classification_event_seq is None
+                    or binding.classification_plan_ref != classification.id
+                    or binding.manifest_digest != manifest.sha256
+                    or binding.qualification_evidence_sha256
+                    != classification.qualification_evidence_sha256
+                ):
+                    raise ValueError("classification binding differs from its plan")
+                classification_by_route_seat = {
+                    (
+                        entry.role,
+                        entry.seat,
+                        entry.endpoint_id,
+                        entry.route_sha256,
+                    ): entry
+                    for entry in classification.entries
+                }
+            except ValueError as error:
+                fail("model-classification-authority", str(error))
+        for item in h.workflow_state.transaction_work.values():
+            prepared_seq = item.event_seqs[0] if item.event_seqs else None
+            if manifest.route_seat_behavioral_capability_plan is not None and (
+                classification_event_seq is None
+                or prepared_seq is None
+                or classification_event_seq >= prepared_seq
+            ):
+                fail(
+                    "model-classification-authority",
+                    f"work {item.preparation.id}: preparation precedes exact "
+                    "route-seat classification authority",
+                )
+        for event in events:
+            for object_id in event.outputs:
+                try:
+                    schema, value = h.objects.get(object_id)
+                except (KeyError, ValueError):
+                    continue
+                if schema != "workflow-compact-recovery-transition-v1":
+                    continue
+                key = value.route_seat_key
+                if key in compact_transition_seq_by_route_seat:
+                    fail(
+                        "attempt-profile-authority",
+                        f"event seq={event.seq}: duplicate compact transition "
+                        f"for {key[0]}[{key[1]}]",
+                    )
+                    continue
+                compact_transition_seq_by_route_seat[key] = event.seq
+
     for e in events:
         validate_school_route(e)
         validate_conjecture_context(e)
@@ -2062,11 +2200,21 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
         if e.llm is None:
             continue
-        llm_calls += 1
-        llm_attempts += e.llm.attempts
-        repair_attempts += max(0, e.llm.attempts - 1)
-        logged += e.llm.tokens
         trace = list(e.llm.attempt_trace)
+        fallback_profile = (
+            manifest.model_profile if manifest is not None else "unprofiled"
+        )
+        profile = (
+            str(trace[0].model_profile or fallback_profile)
+            if trace
+            else fallback_profile
+        )
+        profile_stats = profile_row(profile)
+        profile_stats["calls"] += 1
+        profile_stats["attempts"] += e.llm.attempts
+        profile_stats["repair_attempts"] += max(0, e.llm.attempts - 1)
+        profile_stats["tokens"] += e.llm.tokens
+        logged += e.llm.tokens
         control_policy = (
             manifest.control_plane_policy
             if manifest is not None and manifest.schema_version in {4, 5, 6}
@@ -2099,20 +2247,22 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             workflow_failure_call_seqs,
         )
         if trace:
-            traced_calls += 1
-            first_pass_valid += int(trace[0].valid)
-            eventual_valid += int(any(attempt.valid for attempt in trace))
-            usage_unknown_attempts += sum(
+            profile_stats["traced_calls"] += 1
+            profile_stats["first_pass_valid"] += int(trace[0].valid)
+            profile_stats["eventual_valid"] += int(
+                any(attempt.valid for attempt in trace)
+            )
+            profile_stats["usage_unknown_attempts"] += sum(
                 int(attempt.usage_unknown) for attempt in trace
             )
-            provider_transport_attempts += sum(
+            profile_stats["provider_transport_attempts"] += sum(
                 attempt.transport_attempts for attempt in trace
             )
             if not any(attempt.valid for attempt in trace):
                 if any(attempt.usage_unknown for attempt in trace):
-                    transport_dropped += 1
+                    profile_stats["transport_dropped"] += 1
                 else:
-                    schema_exhausted += 1
+                    profile_stats["schema_exhausted"] += 1
 
             if len(trace) != e.llm.attempts:
                 fail(
@@ -2240,12 +2390,6 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
             for index, attempt in enumerate(trace):
                 prefix = f"event seq={e.seq} attempt={index}"
-                if attempt.model_profile != manifest.model_profile:
-                    fail(
-                        "attempt-profile",
-                        f"{prefix}: model_profile={attempt.model_profile!r}, "
-                        f"manifest={manifest.model_profile!r}",
-                    )
                 if attempt.seat < 0 or attempt.seat >= len(routes):
                     fail(
                         "attempt-route",
@@ -2272,6 +2416,99 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     fail(
                         "attempt-route",
                         f"{prefix}: route hash does not match manifest seat",
+                    )
+                if manifest.schema_version == 6:
+                    try:
+                        base_profile = resolve_route_seat_base_profile(
+                            manifest,
+                            role=e.llm.role,
+                            seat=attempt.seat,
+                            endpoint_id=route.endpoint_id,
+                        )
+                    except Exception as error:  # invalid authority is a finding
+                        fail(
+                            "attempt-profile-authority",
+                            f"{prefix}: route-seat base profile cannot resolve: "
+                            f"{error!r}",
+                        )
+                        continue
+                    if manifest.route_seat_behavioral_capability_plan is not None:
+                        try:
+                            behavioral = resolve_route_seat_behavioral_capability(
+                                manifest,
+                                role=e.llm.role,
+                                seat=attempt.seat,
+                                endpoint_id=route.endpoint_id,
+                                route_sha256=expected_route_hash,
+                            )
+                        except Exception as error:
+                            fail(
+                                "attempt-behavioral-authority",
+                                f"{prefix}: route-seat behavioral capability "
+                                f"cannot resolve: {error!r}",
+                            )
+                            continue
+                        if attempt.contract_id not in {
+                            grant.contract_id for grant in behavioral.contracts
+                        }:
+                            fail(
+                                "attempt-behavioral-authority",
+                                f"{prefix}: contract_id={attempt.contract_id!r} "
+                                "is not authorized for the route seat",
+                            )
+                    if attempt.model_profile != base_profile:
+                        fail(
+                            "attempt-profile",
+                            f"{prefix}: model_profile={attempt.model_profile!r}, "
+                            f"route-seat base={base_profile!r}",
+                        )
+                    key = (
+                        e.llm.role,
+                        attempt.seat,
+                        route.endpoint_id,
+                        expected_route_hash,
+                    )
+                    transition_seq = compact_transition_seq_by_route_seat.get(
+                        key
+                    )
+                    compact_authorized = (
+                        manifest.compact_recovery_policy is not None
+                        and base_profile in {"standard", "frontier"}
+                        and transition_seq is not None
+                        and transition_seq < e.seq
+                    )
+                    expected_transport = (
+                        "compact" if compact_authorized else base_profile
+                    )
+                    if attempt.transport_profile != expected_transport:
+                        fail(
+                            "attempt-profile-authority",
+                            f"{prefix}: transport_profile="
+                            f"{attempt.transport_profile!r}, expected="
+                            f"{expected_transport!r} for chronological "
+                            "route-seat authority",
+                        )
+                    if manifest.route_seat_behavioral_capability_plan is not None:
+                        selected = classification_by_route_seat.get(key)
+                        if (
+                            classification_event_seq is None
+                            or classification_event_seq >= e.seq
+                            or selected is None
+                            or selected.selected_class
+                            != "qualified_exact_behavior"
+                            or attempt.contract_id
+                            not in selected.authorized_contract_ids
+                        ):
+                            fail(
+                                "attempt-model-classification",
+                                f"{prefix}: attempt precedes or differs from exact "
+                                "route-seat model classification authority",
+                            )
+                elif attempt.model_profile != manifest.model_profile:
+                    fail(
+                        "attempt-profile",
+                        f"{prefix}: model_profile={attempt.model_profile!r}, "
+                        f"manifest={manifest.model_profile!r}",
                     )
                 if attempt.output_mechanism != route.output_mechanism:
                     fail(
@@ -2405,6 +2642,47 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     except Exception as e:  # noqa: BLE001
         fail("detection-total", repr(e))
 
+    if not profile_totals:
+        profile_row(
+            manifest.model_profile if manifest is not None else "unprofiled"
+        )
+    canonical_profile_totals = {
+        profile: profile_totals[profile] for profile in sorted(profile_totals)
+    }
+    model_execution = None
+    if manifest is not None and manifest.schema_version == 6:
+        try:
+            from deepreason.application.models import derive_model_execution_summary
+            from deepreason.runtime.terminal_authority import (
+                derive_terminal_authority,
+            )
+
+            terminal_authority = derive_terminal_authority(
+                root,
+                manifest=manifest,
+            )
+            if terminal_authority.status == "invalid_incomplete":
+                fail(
+                    "terminal-authority",
+                    "canonical terminal authority is invalid: "
+                    f"{terminal_authority.detail_code}",
+                )
+
+            model_execution = derive_model_execution_summary(
+                h,
+                manifest,
+                event_horizon_seq=(
+                    terminal_authority.reasoning_event_horizon_seq
+                    if terminal_authority.current_valid
+                    else None
+                ),
+            ).model_dump(mode="json", by_alias=True)
+        except Exception as error:  # replay disagreement is an invariant finding
+            fail(
+                "model-execution-summary",
+                f"canonical model execution projection failed: {error!r}",
+            )
+
     stats = {
         "events": len(events),
         "artifacts": len(h.state.artifacts),
@@ -2418,21 +2696,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             "manifest_sha256": manifest.sha256 if manifest is not None else None,
             "engine_profile": manifest.engine_profile if manifest is not None else None,
             "model_profile": manifest.model_profile if manifest is not None else None,
-            "profile_totals": {
-                (manifest.model_profile if manifest is not None else "unprofiled"): {
-                    "calls": llm_calls,
-                    "attempts": llm_attempts,
-                    "repair_attempts": repair_attempts,
-                    "tokens": logged,
-                    "traced_calls": traced_calls,
-                    "first_pass_valid": first_pass_valid,
-                    "eventual_valid": eventual_valid,
-                    "schema_exhausted": schema_exhausted,
-                    "transport_dropped": transport_dropped,
-                    "usage_unknown_attempts": usage_unknown_attempts,
-                    "provider_transport_attempts": provider_transport_attempts,
-                }
-            },
+            "profile_totals": canonical_profile_totals,
+            "model_execution": model_execution,
         },
         "gate_blocks": sum(1 for e in events for i in e.inputs if i.startswith("gate:")),
         "trial_blocks": sum(1 for e in events for i in e.inputs
