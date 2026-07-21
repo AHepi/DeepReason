@@ -337,6 +337,368 @@ def _manifest_schema_version(root: Path) -> int | None:
         return None
 
 
+def _model_execution_findings(
+    root: Path,
+    payload: dict[str, Any] | None,
+    *,
+    terminal_authority=None,
+) -> tuple[VerificationFindingV2, ...]:
+    """Compare stored v6 execution reporting with a fresh canonical replay."""
+
+    if payload is None or payload.get("schema") != "deepreason-run-result-v2":
+        return ()
+    from deepreason.application.models import derive_model_execution_summary
+    from deepreason.harness import Harness
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+    try:
+        manifest = load_run_manifest(root / MANIFEST_NAME)
+    except Exception:
+        # Manifest integrity is already reported by the legacy verifier.
+        return ()
+    if manifest.schema_version != 6:
+        return ()
+    stored = payload.get("model_execution")
+    if manifest.terminal_commitment_policy is not None:
+        if terminal_authority is None or not terminal_authority.current_valid:
+            return ()
+        if not isinstance(stored, dict):
+            return ()
+        try:
+            harness = Harness(root, read_only=True)
+            expected = derive_model_execution_summary(
+                harness,
+                manifest,
+                event_horizon_seq=(
+                    terminal_authority.reasoning_event_horizon_seq
+                ),
+            ).model_dump(mode="json", by_alias=True, exclude_none=True)
+        except Exception as error:
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    f"model execution summary cannot be replayed: {error!r}"[:2_000],
+                    source="derived",
+                ),
+            )
+        if stored != expected:
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "stored model execution summary differs from canonical replay",
+                    source="terminal",
+                ),
+            )
+        return ()
+    if stored is None:
+        # Gate 4R-A policy presence identifies manifests compiled after this
+        # summary became part of the v6 terminal contract. Historical v6
+        # results remain readable without retroactive claims.
+        if manifest.compact_recovery_policy is None:
+            return ()
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "new v6 run-result omits its replay-derived model execution summary",
+                source="terminal",
+            ),
+        )
+    stop = payload.get("stop")
+    stop_seq = stop.get("event_seq") if isinstance(stop, dict) else None
+    stored_horizon = (
+        stored.get("event_horizon_seq") if isinstance(stored, dict) else None
+    )
+    if stored_horizon is not None and type(stop_seq) is not int:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "stored model execution horizon has no typed run stop",
+                source="terminal",
+            ),
+        )
+    if stop_seq is not None and stored_horizon != stop_seq:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "stored model execution horizon differs from the run stop",
+                source="terminal",
+            ),
+        )
+    try:
+        harness = Harness(root, read_only=True)
+    except Exception as error:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                f"durable execution history cannot be replayed: {error!r}"[:2_000],
+                source="derived",
+            ),
+        )
+    events = tuple(harness.log.read())
+    lifecycle_stop_bound = any(
+        decision.stop_event_seq is not None
+        and decision.stop_record_digest is not None
+        for decision in harness.workflow_state.lifecycle_decisions.values()
+    )
+    event_stop_bound = any(
+        event.rule.value == "Measure"
+        and list(event.inputs)[:1] == ["run-stop"]
+        for event in events
+    )
+    try:
+        (root / "run-stop.json").lstat()
+        durable_stop_pointer = True
+    except FileNotFoundError:
+        durable_stop_pointer = False
+    except OSError:
+        # Inspection debt cannot make a current root look historical.
+        durable_stop_pointer = True
+    current_stop_authority_required = (
+        payload.get("state") == "completed"
+        and manifest.production_qualification_policy is not None
+        and (lifecycle_stop_bound or event_stop_bound or durable_stop_pointer)
+    )
+    if current_stop_authority_required and type(stored_horizon) is not int:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "current completed v6 run-result omits its authorised event horizon",
+                source="terminal",
+            ),
+        )
+    if current_stop_authority_required and type(stop_seq) is not int:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "current completed v6 run-result omits its canonical stop receipt",
+                source="terminal",
+            ),
+        )
+    if stored_horizon is not None:
+        from deepreason.canonical import canonical_json, sha256_hex
+        from deepreason.ontology.event import Rule
+
+        required_stop_fields = {
+            "schema",
+            "reason",
+            "policy_digest",
+            "metrics",
+            "event_seq",
+            "digest",
+        }
+        if not isinstance(stop, dict) or set(stop) != required_stop_fields:
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "stored model execution horizon lacks its canonical stop receipt",
+                    source="terminal",
+                ),
+            )
+        unsigned_stop = {key: value for key, value in stop.items() if key != "digest"}
+        stop_digest = stop.get("digest")
+        if (
+            stop.get("schema") != "deepreason-run-stop-v1"
+            or not isinstance(stop_digest, str)
+            or stop_digest != sha256_hex(canonical_json(unsigned_stop))
+        ):
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "stored model execution stop receipt is not canonical",
+                    source="terminal",
+                ),
+            )
+        history_path = root / "run-stops" / (
+            f"{stored_horizon:012d}-{stop_digest}.json"
+        )
+        try:
+            metadata = history_path.lstat()
+            if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 64 * 1024:
+                raise ValueError("unsafe stop receipt")
+            history_bytes = history_path.read_bytes()
+        except (OSError, ValueError) as error:
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    f"durable model execution stop receipt is unavailable: {error!r}"[:2_000],
+                    source="terminal",
+                ),
+            )
+        if history_bytes != canonical_json(stop) + b"\n":
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "durable model execution stop receipt differs from the terminal",
+                    source="terminal",
+                ),
+            )
+        lifecycle_bound = any(
+            decision.stop_event_seq == stored_horizon
+            and decision.stop_record_digest == stop_digest
+            for decision in harness.workflow_state.lifecycle_decisions.values()
+        )
+        post_horizon = tuple(
+            event for event in events if event.seq > stored_horizon
+        )
+        bridge_work_ids = {
+            work.preparation.id
+            for work in harness.workflow_state.transaction_work.values()
+            if isinstance(work.preparation.task_payload_value, dict)
+            and work.preparation.task_payload_value.get("schema")
+            in {"bridge.transaction-task.v2", "contract-decomposition-child.v1"}
+            and isinstance(
+                work.preparation.task_payload_value.get("execution_id"), str
+            )
+            and isinstance(
+                work.preparation.task_payload_value.get("execution_snapshot_ref"),
+                str,
+            )
+        }
+        classification_schemas = {
+            "workflow-route-seat-model-classification-plan-v1",
+            "workflow-model-classification-binding-v1",
+        }
+
+        def _is_canonical_downstream_bridge_event(event) -> bool:
+            if event.rule == Rule.BRIDGE:
+                return True
+            if event.rule != Rule.CONTROL:
+                return False
+            refs = set(event.inputs) | set(event.outputs)
+            if refs & bridge_work_ids:
+                return True
+            output_schemas = set()
+            for object_id in event.outputs:
+                try:
+                    schema, _record = harness.objects.get(object_id)
+                except Exception:
+                    return False
+                output_schemas.add(schema)
+            return bool(output_schemas) and output_schemas <= classification_schemas
+
+        if current_stop_authority_required and any(
+            not _is_canonical_downstream_bridge_event(event)
+            for event in post_horizon
+        ):
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "durable execution history extends beyond the authorised stop horizon",
+                    source="derived",
+                ),
+            )
+        stop_event = next(
+            (event for event in events if event.seq == stored_horizon),
+            None,
+        )
+        metrics_json = json.dumps(stop.get("metrics"), sort_keys=True)
+        measure_prefix = [
+            "run-stop",
+            stop.get("policy_digest"),
+            metrics_json,
+            stop.get("reason"),
+        ]
+        measure_bound = (
+            stop_event is not None
+            and stop_event.rule == Rule.MEASURE
+            and list(stop_event.inputs)[:4] == measure_prefix
+        )
+        if not lifecycle_bound and not measure_bound:
+            return (
+                _finding(
+                    "integrity",
+                    "model-execution-summary",
+                    "model execution stop receipt is not bound to durable history",
+                    source="terminal",
+                ),
+            )
+    try:
+        expected = derive_model_execution_summary(
+            harness,
+            manifest,
+            event_horizon_seq=stored_horizon,
+        ).model_dump(mode="json", by_alias=True, exclude_none=True)
+    except Exception as error:  # canonical replay disagreement is integrity debt
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                f"model execution summary cannot be replayed: {error!r}"[:2_000],
+                source="derived",
+            ),
+        )
+    if stored != expected:
+        return (
+            _finding(
+                "integrity",
+                "model-execution-summary",
+                "stored model execution summary differs from canonical replay",
+                source="terminal",
+            ),
+        )
+    return ()
+
+
+def _terminal_authority_findings(
+    root: Path,
+    payload: dict[str, Any] | None,
+    manifest,
+):
+    from deepreason.runtime.terminal_authority import derive_terminal_authority
+
+    authority = derive_terminal_authority(
+        root,
+        manifest=manifest,
+        result_payload=payload,
+    )
+    if authority.status == "historical_read_only":
+        if getattr(manifest, "schema_version", None) != 6:
+            return authority, ()
+        return authority, (
+            _finding(
+                "operational",
+                "terminal-authority",
+                "historical v6 root is readable but has no current terminal authority",
+                source="derived",
+            ),
+        )
+    if authority.status == "operational_abort":
+        return authority, ()
+    if authority.status == "current_open_uncommitted":
+        return authority, (
+            _finding(
+                "operational",
+                "terminal-authority",
+                "current v6 terminal epoch remains open and uncommitted",
+                source="derived",
+            ),
+        )
+    if authority.status == "invalid_incomplete":
+        return authority, (
+            _finding(
+                "integrity",
+                "terminal-authority",
+                "current v6 terminal authority is incomplete or inconsistent "
+                f"({authority.detail_code or 'TERMINAL_AUTHORITY_INVALID'})",
+                source="derived",
+            ),
+        )
+    return authority, ()
+
+
 def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
     """Audit v6 work authority and classify terminals dimensionally.
 
@@ -403,7 +765,22 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
         expected_seat: int | None = None
         expected_endpoint: str | None = None
 
-        if task == "conjecture":
+        is_atomic_child = (
+            payload is not None
+            and payload.get("schema") == "contract-decomposition-child.v1"
+        )
+        if is_atomic_child:
+            try:
+                harness.workflow_state._validate_preparation_decomposition_authority(
+                    preparation
+                )
+            except ValueError as error:
+                differences.append(str(error))
+            expected_contract = preparation.contract_id
+            expected_role = lease.role
+            expected_seat = lease.seat
+            expected_endpoint = lease.endpoint_id
+        elif task == "conjecture":
             expected_contract = versions.conjecturer_turn_contract
             expected_role = "conjecturer"
             if payload is not None and payload.get("schema") in {
@@ -520,7 +897,8 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
                     if lease != parent.preparation.route_lease:
                         differences.append("repair route differs from its parent transaction")
             elif (
-                payload.get("schema") == "bridge.transaction-task.v1"
+                payload.get("schema")
+                in {"bridge.transaction-task.v1", "bridge.transaction-task.v2"}
                 and payload.get("template_role") == "bridge_grounding_repair"
             ):
                 expected_contract = "groundingrepairwirev1.direct.v1"
@@ -761,7 +1139,33 @@ def verify_root_report(
         )
     for finding in _terminal_findings(payload):
         channels[finding.channel].append(finding)
+    terminal_authority = None
     if manifest_schema_version == 6:
+        try:
+            from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+            authority_manifest = load_run_manifest(resolved / MANIFEST_NAME)
+        except Exception:
+            authority_manifest = None
+        if authority_manifest is not None:
+            terminal_authority, authority_findings = _terminal_authority_findings(
+                resolved,
+                payload,
+                authority_manifest,
+            )
+            if not (
+                allow_missing_terminal
+                and payload is None
+                and terminal_authority.status == "current_open_uncommitted"
+            ):
+                for finding in authority_findings:
+                    channels[finding.channel].append(finding)
+        for finding in _model_execution_findings(
+            resolved,
+            payload,
+            terminal_authority=terminal_authority,
+        ):
+            channels[finding.channel].append(finding)
         for finding in _transaction_findings(resolved):
             channels[finding.channel].append(finding)
         for finding in _deferred_model_phase_findings(resolved):
