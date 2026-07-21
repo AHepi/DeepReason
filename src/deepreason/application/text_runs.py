@@ -26,6 +26,7 @@ from deepreason.application.models import (
     StartTextRunIntentV1,
     TextRunTerminalResultV1,
     WatchTextRunIntentV1,
+    derive_model_execution_summary,
 )
 from deepreason.locking import ProcessLockBusy, operator_locks
 
@@ -80,7 +81,13 @@ def _check_experimental_v5(manifest, enabled: bool) -> None:
         )
 
 
-def _v6_run_result(root: Path, manifest, payload: dict[str, Any]) -> dict[str, Any]:
+def _v6_run_result(
+    root: Path,
+    manifest,
+    payload: dict[str, Any],
+    *,
+    harness=None,
+) -> dict[str, Any]:
     """Add the v2 terminal envelope only for opt-in v6 runs."""
 
     if manifest.schema_version != 6:
@@ -106,6 +113,14 @@ def _v6_run_result(root: Path, manifest, payload: dict[str, Any]) -> dict[str, A
             )
         )
     state = payload["state"]
+    if (
+        manifest.terminal_commitment_policy is not None
+        and payload.get("stop") is None
+        and not (state == "failed" and harness is None)
+    ):
+        raise ValueError(
+            "current v6 terminal writing requires canonical stop authority"
+        )
     updates: dict[str, tuple] = {}
     if state in {"failed", "cancelled"} and not report.completion:
         updates["completion"] = (
@@ -131,7 +146,19 @@ def _v6_run_result(root: Path, manifest, payload: dict[str, Any]) -> dict[str, A
         )
     if updates:
         report = report.model_copy(update=updates)
-    result = {
+    from deepreason.harness import Harness
+
+    stop = payload.get("stop")
+    event_horizon_seq = (
+        stop.get("event_seq") if isinstance(stop, dict) else None
+    )
+    authority_harness = harness or Harness(root)
+    model_execution = derive_model_execution_summary(
+        authority_harness,
+        manifest,
+        event_horizon_seq=event_horizon_seq,
+    )
+    result_body = {
         **payload,
         "schema": "deepreason-run-result-v2",
         "verification": report.summary_payload(),
@@ -139,6 +166,30 @@ def _v6_run_result(root: Path, manifest, payload: dict[str, Any]) -> dict[str, A
             "satisfied" if report.completion_satisfied else "incomplete"
         ),
         "canonical_bridge_eligible": state == "completed" and report.valid,
+        "model_execution": model_execution,
+    }
+    result_body = RunResultV2.model_validate(result_body).model_dump(
+        mode="json", by_alias=True, exclude_none=True
+    )
+    terminal_commitment_ref = None
+    if stop is not None and manifest.terminal_commitment_policy is not None:
+        from deepreason.runtime.terminal_authority import (
+            ensure_terminal_commitment,
+        )
+
+        terminal_commitment = ensure_terminal_commitment(
+            authority_harness,
+            manifest,
+            terminal_status=state,
+            stop=stop,
+            model_execution=model_execution,
+            result_body=result_body,
+        )
+        assert terminal_commitment is not None
+        terminal_commitment_ref = terminal_commitment.id
+    result = {
+        **result_body,
+        "terminal_commitment_ref": terminal_commitment_ref,
     }
     return RunResultV2.model_validate(result).model_dump(
         mode="json", by_alias=True, exclude_none=True
@@ -439,6 +490,28 @@ class TextRunApplicationService:
         intent = InspectTextRunIntentV1.model_validate(intent)
         root = Path(intent.root).resolve()
         target = root / "run-result.json"
+        try:
+            target.lstat()
+        except FileNotFoundError:
+            from deepreason.harness import Harness
+            from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+            from deepreason.runtime.progress import _atomic_json
+            from deepreason.runtime.terminal_authority import (
+                recover_terminal_result,
+            )
+
+            manifest_path = root / MANIFEST_NAME
+            try:
+                manifest_path.lstat()
+            except FileNotFoundError:
+                recovered = None
+            else:
+                manifest = load_run_manifest(manifest_path)
+                recovered = recover_terminal_result(
+                    Harness(root), manifest
+                )
+            if recovered is not None:
+                _atomic_json(target, recovered)
         if not target.exists():
             lifecycle = self.inspect(intent).lifecycle
             raise ValueError(f"RUN_RESULT_NOT_READY: current state is {lifecycle}")
@@ -860,7 +933,7 @@ class TextRunApplicationService:
                 ),
                 "capability_audits": capability_audits,
                 "stop": stop,
-            })
+            }, harness=harness)
             _atomic_json(root / "run-result.json", payload)
             terminal = progress.emit(
                 state=payload["state"],
@@ -913,7 +986,7 @@ class TextRunApplicationService:
                         policy.digest,
                         json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
                         "operational_failure",
-                        type(error).__name__,
+                        str(harness._next_seq),
                     ]
                 )
                 stop = write_stop_record(
@@ -939,7 +1012,7 @@ class TextRunApplicationService:
                     "error_type": type(error).__name__,
                     "error": str(error)[:2000],
                     "stop": stop,
-                })
+                }, harness=harness)
                 _atomic_json(root / "run-result.json", payload)
                 failed = progress.emit(
                     state="failed",
