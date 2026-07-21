@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import hashlib
+import re
+from collections.abc import Callable, Mapping
 
 from pydantic import Field, model_validator
 
@@ -16,6 +18,7 @@ from deepreason.scratch.attention import (
     AttentionPlanner,
     AttentionPolicyV1,
     AttentionRequestV1,
+    GuideSelectionV1,
 )
 from deepreason.scratch.contracts import SCRATCH_CONTRACT_INSTRUCTIONS
 from deepreason.scratch.errors import ScratchReadOnly
@@ -25,7 +28,11 @@ from deepreason.scratch.models import (
     ScratchRecord,
     domain_hash,
 )
-from deepreason.scratch.render import RenderedScratchPackV1, ScratchRenderer
+from deepreason.scratch.render import (
+    RenderedScratchPackV1,
+    ScratchRenderer,
+    ScratchRenderReceiptV1,
+)
 from deepreason.scratch.service import ScratchService
 
 
@@ -36,6 +43,47 @@ class ConjectureContextStale(RuntimeError):
 
     def __init__(self) -> None:
         super().__init__(f"{self.code}: rebuild the advisory context plan")
+
+
+def _v6_aliases_for_render_receipt(
+    receipt: ScratchRenderReceiptV1,
+) -> tuple[dict[str, str], dict[str, str]]:
+    aliases: dict[str, str] = {}
+    replacements: dict[str, str] = {}
+    for handle_map in (
+        receipt.block_handles,
+        receipt.cluster_handles,
+        receipt.link_handles,
+        receipt.guide_handles,
+    ):
+        for handle, target in handle_map.items():
+            if target in aliases.values():
+                raise ValueError("canonical scratch target has multiple render handles")
+            alias = f"SCR_{len(aliases) + 1:03d}"
+            aliases[alias] = target
+            replacements[handle] = alias
+    return aliases, replacements
+
+
+def _replace_local_handles(text: str, replacements: Mapping[str, str]) -> str:
+    for handle, alias in sorted(
+        replacements.items(), key=lambda item: (-len(item[0]), item[0])
+    ):
+        pattern = rf"(?<![A-Za-z0-9_]){re.escape(handle)}(?![A-Za-z0-9_])"
+        text = re.sub(pattern, alias, text)
+    return text
+
+
+def render_v6_conjecture_context(
+    plan: PlannedConjectureContextV1,
+) -> tuple[str, dict[str, str]]:
+    """Return the exact v6 model-facing render and canonical SCR aliases."""
+
+    plan = PlannedConjectureContextV1.model_validate(plan)
+    aliases, replacements = _v6_aliases_for_render_receipt(
+        plan.rendered_context.receipt
+    )
+    return _replace_local_handles(plan.rendered_context.text, replacements), aliases
 
 
 class PlannedConjectureContextV1(ScratchRecord):
@@ -362,17 +410,21 @@ def plan_conjecture_context(
     )
 
 
-def commit_conjecture_context(
+def prepare_conjecture_context_call(
     service: ScratchService,
     plan: PlannedConjectureContextV1,
     *,
     final_conjecture_pack: str,
     attention_policy: AttentionPolicyV1,
+    model_facing_rendered_context: str | None = None,
+    model_facing_aliases: Mapping[str, str] | None = None,
+    validate_call_receipt: Callable[[ConjectureContextCallReceiptV1], None]
+    | None = None,
 ) -> ConjectureContextCallReceiptV1:
-    """Commit a pure plan immediately before its exact model call."""
+    """Seal and validate exact call context without recording consumption."""
 
     if service.read_only:
-        raise ScratchReadOnly("historical scratch views cannot commit Conj context")
+        raise ScratchReadOnly("historical scratch views cannot prepare Conj context")
     plan = PlannedConjectureContextV1.model_validate(plan)
     attention_policy = AttentionPolicyV1.model_validate(attention_policy)
     current = service.harness._next_seq - 1
@@ -395,25 +447,29 @@ def commit_conjecture_context(
     )
     if rendered != plan.rendered_context:
         raise ValueError("rendered advisory context differs from the plan")
-    if final_conjecture_pack.count(rendered.text) != 1:
+    if (model_facing_rendered_context is None) != (model_facing_aliases is None):
+        raise ValueError("model-facing context requires both rendered bytes and aliases")
+    receipt_text = rendered.text
+    if model_facing_rendered_context is not None:
+        expected_text, expected_aliases = render_v6_conjecture_context(plan)
+        if model_facing_rendered_context != expected_text:
+            raise ValueError("model-facing scratch render differs from canonical v6 aliases")
+        if dict(model_facing_aliases or {}) != expected_aliases:
+            raise ValueError("model-facing scratch aliases differ from canonical selection")
+        receipt_text = model_facing_rendered_context
+    if final_conjecture_pack.count(receipt_text) != 1:
         raise ValueError("final Conj pack must contain the exact advisory context once")
 
     render_receipt_ref = renderer.persist_receipt(rendered.receipt)
-    rendered_context_ref = service.harness.blobs.put(rendered.text.encode("utf-8"))
-    committed = service.commit_prepared_advisory_context(
-        plan.attention_pack,
-        expected_context,
-        context_ref=render_receipt_ref,
-        coverage_policy=attention_policy,
-    )
-    return ConjectureContextCallReceiptV1(
+    rendered_context_ref = service.harness.blobs.put(receipt_text.encode("utf-8"))
+    call_receipt = ConjectureContextCallReceiptV1(
         manifest_digest=plan.manifest_digest,
         problem_id=plan.problem_id,
         school_id=plan.school_id,
         formal_fence_seq=plan.formal_fence_seq,
         scratch_fence_seq=plan.scratch_fence_seq,
         selection_receipt_ref=plan.attention_pack.selection_receipt.id,
-        advisory_context_ref=committed.id,
+        advisory_context_ref=expected_context.id,
         render_receipt_ref=render_receipt_ref,
         rendered_context_ref=rendered_context_ref,
         expansion_decision_ref=plan.expansion_decision_ref,
@@ -431,6 +487,139 @@ def commit_conjecture_context(
             else None
         ),
     )
+    if validate_call_receipt is not None:
+        validate_call_receipt(call_receipt)
+    return call_receipt
+
+
+def commit_conjecture_context(
+    service: ScratchService,
+    plan: PlannedConjectureContextV1,
+    *,
+    final_conjecture_pack: str,
+    attention_policy: AttentionPolicyV1,
+    model_facing_rendered_context: str | None = None,
+    model_facing_aliases: Mapping[str, str] | None = None,
+    prepared_call_receipt: ConjectureContextCallReceiptV1 | None = None,
+    validate_call_receipt: Callable[[ConjectureContextCallReceiptV1], None]
+    | None = None,
+) -> ConjectureContextCallReceiptV1:
+    """Commit one already validated plan immediately before provider dispatch."""
+
+    call_receipt = prepare_conjecture_context_call(
+        service,
+        plan,
+        final_conjecture_pack=final_conjecture_pack,
+        attention_policy=attention_policy,
+        model_facing_rendered_context=model_facing_rendered_context,
+        model_facing_aliases=model_facing_aliases,
+        validate_call_receipt=(
+            validate_call_receipt if prepared_call_receipt is None else None
+        ),
+    )
+    if (
+        prepared_call_receipt is not None
+        and ConjectureContextCallReceiptV1.model_validate(prepared_call_receipt)
+        != call_receipt
+    ):
+        raise ValueError("prepared conjecture context receipt changed before commit")
+    plan = PlannedConjectureContextV1.model_validate(plan)
+    committed = service.commit_prepared_advisory_context(
+        plan.attention_pack,
+        plan.advisory_context,
+        context_ref=call_receipt.render_receipt_ref,
+        coverage_policy=attention_policy,
+    )
+    if committed.id != call_receipt.advisory_context_ref:
+        raise ValueError("committed advisory context differs from call receipt")
+    return call_receipt
+
+
+def validate_conjecture_context_call(
+    service: ScratchService,
+    receipt: ConjectureContextCallReceiptV1,
+    *,
+    manifest_digest: str,
+    problem_id: str,
+    school_id: str | None,
+    scratch_aliases: Mapping[str, str],
+    provider_prompt: bytes,
+) -> None:
+    """Validate one durable v6 context receipt against canonical replay state."""
+
+    receipt = ConjectureContextCallReceiptV1.model_validate(receipt)
+    if receipt.manifest_digest != manifest_digest:
+        raise ValueError("conjecture context belongs to another manifest")
+    if receipt.problem_id != problem_id:
+        raise ValueError("conjecture context belongs to another problem")
+    if receipt.school_id != school_id:
+        raise ValueError("conjecture context belongs to another school")
+
+    selection = service.state.attention_receipts.get(receipt.selection_receipt_ref)
+    if selection is None:
+        raise ValueError("conjecture context selection is not canonical")
+    if selection.state_seq != receipt.scratch_fence_seq:
+        raise ValueError("conjecture context selection differs from its scratch fence")
+    advisory = service.state.advisory_contexts.get(receipt.advisory_context_ref)
+    if advisory is None or advisory.retrieval_receipt != selection.id:
+        raise ValueError("conjecture advisory context is not canonical")
+
+    try:
+        render_receipt = ScratchRenderReceiptV1.model_validate_json(
+            service.harness.blobs.get(receipt.render_receipt_ref)
+        )
+        rendered_text = service.harness.blobs.get(
+            receipt.rendered_context_ref
+        ).decode("utf-8")
+        prompt = provider_prompt.decode("utf-8")
+    except (KeyError, UnicodeDecodeError, ValueError) as error:
+        raise ValueError("conjecture context blobs are unavailable or invalid") from error
+    if (
+        render_receipt.attention_receipt != selection.id
+        or render_receipt.state_seq != selection.state_seq
+    ):
+        raise ValueError("conjecture render receipt differs from canonical selection")
+    if tuple(render_receipt.block_handles.values()) != tuple(selection.final_order):
+        raise ValueError("conjecture render blocks differ from canonical attention order")
+    historical = ScratchService(
+        service.harness.root,
+        upto_seq=receipt.scratch_fence_seq,
+    )
+    try:
+        historical_pack = AttentionPackV1(
+            state_seq=selection.state_seq,
+            request_hash=selection.request_hash,
+            current_focus=(),
+            blocks=[historical.state.blocks[item] for item in selection.final_order],
+            channel_blocks=selection.selected_by_channel,
+            cluster_guides=[
+                GuideSelectionV1(
+                    guide=guide,
+                    state=historical.state.guide_state(guide),
+                )
+                for guide in advisory.guides or ()
+            ],
+            selection_receipt=selection,
+        )
+        expected_advisory = historical.prepare_advisory_context(
+            historical_pack,
+            warning=SCRATCH_CONTRACT_INSTRUCTIONS,
+        )
+        canonical_render = ScratchRenderer(historical).render_advisory_context(
+            historical_pack,
+            expected_advisory,
+        )
+    except (KeyError, ValueError) as error:
+        raise ValueError("conjecture context cannot be reconstructed at its fence") from error
+    if advisory != expected_advisory or render_receipt != canonical_render.receipt:
+        raise ValueError("conjecture context differs from canonical historical render")
+    expected_aliases, replacements = _v6_aliases_for_render_receipt(render_receipt)
+    if dict(scratch_aliases) != expected_aliases:
+        raise ValueError("transaction scratch exposure differs from canonical render")
+    if rendered_text != _replace_local_handles(canonical_render.text, replacements):
+        raise ValueError("model-facing context differs from canonical aliased render")
+    if prompt.count(rendered_text) != 1:
+        raise ValueError("provider prompt must contain the exact advisory context once")
 
 
 def plan_conjecture_context_expansion(
