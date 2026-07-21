@@ -19,7 +19,7 @@ from deepreason.capabilities.policy import (
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.indexes import DerivedIndexError, load_indexes, rebuild_indexes
-from deepreason.llm.adapter import LLMAdapter
+from deepreason.llm.adapter import LLMAdapter, RequestEnvelopeExceeded
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import EndpointError, MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest, route_fingerprint
@@ -32,6 +32,7 @@ from deepreason.ontology import (
     Provenance,
     Status,
 )
+from deepreason.ontology.event import LLMAttempt
 from deepreason.oracle import property_oracle_commitment
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
@@ -41,8 +42,12 @@ from deepreason.run_manifest import (
     SchoolExecutionPolicyV1,
     SchoolRoleBindingV1,
     ScratchAuthoringPolicyV1,
+    RouteSeatContractDecompositionPlanV1,
+    RunManifest,
     ToolchainEntry,
+    _compile_route_seat_behavioral_capability_plan,
     compile_run_manifest,
+    write_run_manifest,
 )
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.rules.conj import conj
@@ -52,7 +57,7 @@ from deepreason.scratch.attention import (
     AttentionRequestV1,
 )
 from deepreason.scratch.authoring import ScratchAuthoringService
-from deepreason.scratch.models import RetrievalChannel
+from deepreason.scratch.models import RetrievalChannel, ScratchProvenanceV1
 from deepreason.scratch.proposals import (
     ScratchBlockDraftBodyV1,
     ScratchNewBlockDraftV1,
@@ -65,13 +70,20 @@ from deepreason.scratch.service import ScratchService
 from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
 from deepreason.workflow.transaction import WorkBudgetDenied
 from deepreason.workflow.transaction_service import InquiryTransactionService
+from deepreason.cli.doctor import run_production_contract_doctor
+from tests.test_cli_production_doctor_v6 import _admitted_case
 
 
 STAMP = "2026-07-17T00:00:00Z"
 
 
-def _route(endpoint_id: str, seat: int = 0) -> dict:
-    return {
+def _route(
+    endpoint_id: str,
+    seat: int = 0,
+    *,
+    context_window_tokens: int | None = None,
+) -> dict:
+    route = {
         "endpoint_id": endpoint_id,
         "endpoint": f"mock://{endpoint_id}",
         "model": f"offline-model-{seat}",
@@ -79,6 +91,10 @@ def _route(endpoint_id: str, seat: int = 0) -> dict:
         "family": f"offline-family-{seat}",
         "max_tokens": 64,
     }
+    route["context_window_tokens"] = (
+        262_144 if context_window_tokens is None else context_window_tokens
+    )
+    return route
 
 
 def _config(*, critics: bool = False) -> Config:
@@ -181,6 +197,25 @@ def _manifest(
     )
 
 
+def _without_decomposition_authority(manifest: RunManifest) -> RunManifest:
+    """Retain canonical behavioral authority while denying atomic fallback."""
+
+    provisional = manifest.model_copy(
+        update={
+            "route_seat_contract_decomposition_plan": (
+                RouteSeatContractDecompositionPlanV1(entries=())
+            )
+        }
+    )
+    return provisional.model_copy(
+        update={
+            "route_seat_behavioral_capability_plan": (
+                _compile_route_seat_behavioral_capability_plan(provisional)
+            )
+        }
+    )
+
+
 def _simulation_policy(
     *, input_catalog: tuple[SimulationInputBindingV1, ...] = ()
 ) -> SimulationCapabilityPolicyV1:
@@ -213,7 +248,18 @@ def _lease(manifest) -> RouteLeaseRefV1:
     )
 
 
+def _bind_classification(harness: Harness, manifest) -> None:
+    if harness.workflow_state.route_seat_model_classification is not None:
+        return
+    report = run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: _admitted_case(index),
+    )
+    harness.bind_model_classification(manifest, report)
+
+
 def _prepare(service: InquiryTransactionService, manifest, *, trigger: str):
+    _bind_classification(service.harness, manifest)
     return service.prepare(
         task_kind=WorkflowTaskKind.CONJECTURE,
         attempt_index=0,
@@ -241,6 +287,20 @@ def _provider_call(harness: Harness, authorized, manifest) -> LLMCall:
         completion_tokens=1,
         work_order_id=authorized.bundle.work_id,
         dispatch_authorization_ref=authorized.bundle.id,
+        attempt_trace=[
+            LLMAttempt(
+                prompt_ref=prompt_ref,
+                raw_ref=raw_ref,
+                contract_id=authorized.bundle.contract_id,
+                endpoint_id=authorized.bundle.route_lease.endpoint_id,
+                route_sha256=authorized.bundle.route_lease.route_sha256,
+                seat=authorized.bundle.route_lease.seat,
+                model_profile=manifest.model_profile,
+                transport_profile=manifest.model_profile,
+                tokens=2,
+                valid=False,
+            )
+        ],
     )
 
 
@@ -657,6 +717,7 @@ def test_v6_critic_schema_failure_is_operational_and_leaves_coverage_debt(tmp_pa
         run_input_digest="f" * 64,
     )
     harness = Harness(tmp_path / "criticism")
+    _bind_classification(harness, manifest)
     target = harness.create_artifact(
         "school-owned target",
         provenance=Provenance(role="conjecturer", school="school-0"),
@@ -664,7 +725,12 @@ def test_v6_critic_schema_failure_is_operational_and_leaves_coverage_debt(tmp_pa
     endpoints = {
         "conjecturer": MockEndpoint('{"candidates":[]}'),
         "argumentative_critic": [
-            MockEndpoint("{not-json", name=route.base_url, model=route.model_id)
+            MockEndpoint(
+                "{not-json",
+                name=route.base_url,
+                model=route.model_id,
+                max_tokens=route.max_tokens,
+            )
             for route in manifest.roles["argumentative_critic"]
         ],
     }
@@ -770,18 +836,73 @@ def _live_adapter(harness, manifest, response, *, budget=100_000):
         model=route.model_id,
         max_tokens=route.max_tokens,
     )
-    return (
-        LLMAdapter(
-            {"conjecturer": endpoint},
-            harness.blobs,
-            retry_max=0,
-            meter=TokenMeter(budget),
-            model_profile=manifest.model_profile,
-            leases=leases_from_manifest(manifest),
-            transaction_authority_required=True,
-        ),
-        endpoint,
+    adapter = LLMAdapter(
+        {"conjecturer": endpoint},
+        harness.blobs,
+        retry_max=0,
+        meter=TokenMeter(budget),
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
     )
+    _bind_classification(harness, manifest)
+    adapter.bind_v6_authority(harness, manifest)
+    return adapter, endpoint
+
+
+def _scratch_context_config_and_manifest(
+    *,
+    coverage: bool = False,
+    context_window_tokens: int | None = None,
+):
+    config = Config(
+        N_SCHOOLS=0,
+        roles={
+            "conjecturer": [
+                _route(
+                    "conjecturer-route",
+                    context_window_tokens=context_window_tokens,
+                )
+            ]
+        },
+        scratchpad={
+            "enabled": True,
+            "max_blocks_per_pack": 2,
+            "max_guides_per_pack": 0,
+            "semantic_retrieval": False,
+            "keyword_retrieval": True,
+            "coverage_enabled": coverage,
+            "coverage_slot_every_n_packs": 1,
+            "exploratory_fraction": 0,
+            "underexposed_fraction": 0,
+        },
+    )
+    context = ConjectureContextPolicyV1(
+        mode="harness_only",
+        initial_max_blocks=1,
+        initial_max_guides=0,
+        max_context_expansion_requests=0,
+        max_extra_blocks=0,
+        permitted_retrieval_channels=(
+            "focus",
+            "keyword",
+            *(("coverage",) if coverage else ()),
+        ),
+        coverage_slot_mandatory=False,
+        exploration_slot_mandatory=False,
+    )
+    control_values = _control().model_dump(mode="python")
+    control_values["conjecture_context"] = context.model_dump(mode="python")
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=ControlPlanePolicyV3.model_validate(control_values),
+        run_input_digest="f" * 64,
+    )
+    return config, manifest
 
 
 def test_live_v6_conjecture_dispatch_observes_durable_issue_authority(tmp_path):
@@ -822,6 +943,7 @@ def test_live_v6_conjecture_dispatch_observes_durable_issue_authority(tmp_path):
         )
 
     adapter, _endpoint = _live_adapter(harness, manifest, response)
+    adapter.bind_v6_authority(harness, manifest)
     Scheduler(
         harness,
         adapter,
@@ -980,6 +1102,7 @@ def test_v6_simulation_uses_transaction_origin_and_fresh_completed_follow_up(
         return json.dumps(responses.pop(0))
 
     adapter, _endpoint = _live_adapter(harness, manifest, response)
+    adapter.bind_v6_authority(harness, manifest)
     assert (
         conj(
             harness,
@@ -1073,8 +1196,11 @@ def test_live_v6_conjecture_failure_is_typed_and_replayable(
     tmp_path, response, terminal_status
 ):
     config = _config()
-    manifest = _manifest()
-    harness = Harness(tmp_path / terminal_status)
+    manifest = _without_decomposition_authority(_manifest())
+    root = tmp_path / terminal_status
+    write_run_manifest(manifest, root / "run-manifest.json")
+    harness = Harness(root)
+    _bind_classification(harness, manifest)
     _seed_live_conjecture(harness)
 
     if isinstance(response, Exception):
@@ -1118,6 +1244,24 @@ def test_live_v6_conjecture_failure_is_typed_and_replayable(
     assert len([event for event in harness.log.read() if event.llm is not None]) == (
         2 if repairs else 1
     )
+    assert adapter.profile_for("conjecturer") == (
+        "compact"
+        if terminal_status == "schema_exhausted"
+        else manifest.model_profile
+    )
+    assert adapter._compact_recovery_roles == set()
+    assert {
+        attempt.model_profile
+        for event in harness.log.read()
+        if event.llm is not None
+        for attempt in event.llm.attempt_trace
+    } == {manifest.model_profile}
+    assert {
+        attempt.transport_profile
+        for event in harness.log.read()
+        if event.llm is not None
+        for attempt in event.llm.attempt_trace
+    } == {manifest.model_profile}
     reopened = Harness(harness.root)
     assert reopened.workflow_state.transaction_work[
         primary.preparation.id
@@ -1130,10 +1274,23 @@ def test_live_v6_conjecture_failure_is_typed_and_replayable(
 
 
 def test_live_v6_budget_denial_never_dispatches_or_exposes_context(tmp_path):
-    config = _config()
-    manifest = _manifest()
+    config, manifest = _scratch_context_config_and_manifest(coverage=True)
     harness = Harness(tmp_path / "live-denied")
     _seed_live_conjecture(harness)
+    scratch_service = ScratchService(harness)
+    scratch = scratch_service.create_block(
+        {"content": "Budget denial must not consume this advisory fragment."},
+        ScratchProvenanceV1(
+            actor="user",
+            origin="v6-budget-denial-test",
+            formal_artifact_refs=["pi-live-v6"],
+        ),
+    )
+    scratch_service.start_coverage_cycle()
+    attention_before = dict(scratch_service.state.attention_receipts)
+    advisory_before = dict(scratch_service.state.advisory_contexts)
+    visibility_before = dict(scratch_service.state.visibility)
+    coverage_before = dict(scratch_service.state.coverage_cycles)
     called = []
 
     def forbidden(_prompt):
@@ -1152,14 +1309,67 @@ def test_live_v6_budget_denial_never_dispatches_or_exposes_context(tmp_path):
     assert called == []
     work, = harness.workflow_state.transaction_work.values()
     assert work.terminal.status == "budget_denied"
+    assert work.terminal.usage_status == "exact"
+    assert (work.terminal.prompt_tokens, work.terminal.completion_tokens) == (0, 0)
     assert work.exposure is None
     assert work.authorization is None
+    assert work.provider_attempts == {}
     assert not any(event.llm is not None for event in harness.log.read())
+    assert scratch.id not in scratch_service.state.visibility
+    assert scratch_service.state.attention_receipts == attention_before
+    assert scratch_service.state.advisory_contexts == advisory_before
+    assert scratch_service.state.visibility == visibility_before
+    assert scratch_service.state.coverage_cycles == coverage_before
+    assert adapter.meter.snapshot()["reserved"] == 0
+
+
+def test_v6_total_request_envelope_failure_is_exact_zero_and_scratch_clean(
+    tmp_path,
+):
+    config, manifest = _scratch_context_config_and_manifest(
+        coverage=True,
+        context_window_tokens=65,
+    )
+    harness = Harness(tmp_path / "request-envelope-denied")
+    _seed_live_conjecture(harness)
+    scratch_service = ScratchService(harness)
+    scratch = scratch_service.create_block(
+        {"content": "Envelope denial must not consume this advisory fragment."},
+        ScratchProvenanceV1(
+            actor="user",
+            origin="v6-envelope-denial-test",
+            formal_artifact_refs=["pi-live-v6"],
+        ),
+    )
+    scratch_service.start_coverage_cycle()
+    attention_before = dict(scratch_service.state.attention_receipts)
+    advisory_before = dict(scratch_service.state.advisory_contexts)
+    visibility_before = dict(scratch_service.state.visibility)
+    coverage_before = dict(scratch_service.state.coverage_cycles)
+    called = []
+
+    def forbidden(_prompt):
+        called.append(True)
+        raise AssertionError("oversized provider request was dispatched")
+
+    with pytest.raises(RequestEnvelopeExceeded):
+        _live_adapter(harness, manifest, forbidden)
+
+    assert called == []
+    assert harness.workflow_state.transaction_work == {}
+    assert harness.workflow_state.route_seat_model_classification is None
+    assert not any(event.llm is not None for event in harness.log.read())
+    assert scratch.id not in scratch_service.state.visibility
+    assert scratch_service.state.attention_receipts == attention_before
+    assert scratch_service.state.advisory_contexts == advisory_before
+    assert scratch_service.state.visibility == visibility_before
+    assert scratch_service.state.coverage_cycles == coverage_before
 
 def test_v6_foreign_criticism_mixed_failure_and_success_are_root_local(tmp_path):
     config = _config(critics=True)
-    manifest = _manifest(critics=True)
+    manifest = _without_decomposition_authority(_manifest(critics=True))
     harness = Harness(tmp_path / "criticism-mixed")
+    _bind_classification(harness, manifest)
     target = harness.create_artifact(
         "school-owned target",
         provenance=Provenance(role="conjecturer", school="school-0"),
@@ -1309,6 +1519,7 @@ def test_v6_counterexample_retry_has_a_distinct_issued_transaction(tmp_path):
     config.CX_RETRY_MAX = 1
     manifest = _manifest(critics=True)
     harness = Harness(tmp_path / "criticism-cx-retry")
+    _bind_classification(harness, manifest)
     commitment = property_oracle_commitment(
         "solve",
         [[[3, 1, 2]]],
@@ -1422,6 +1633,7 @@ def test_v6_criticism_budget_denial_records_debt_without_exposure_or_dispatch(
     config = _config(critics=True)
     manifest = _manifest(critics=True)
     harness = Harness(tmp_path / "criticism-budget-denied")
+    _bind_classification(harness, manifest)
     target = harness.create_artifact(
         "school-owned target",
         provenance=Provenance(role="conjecturer", school="school-0"),
@@ -1504,6 +1716,7 @@ def test_v6_failed_counterexample_retry_leaves_criticism_coverage_outstanding(
     config.CX_RETRY_MAX = 1
     manifest = _manifest(critics=True)
     harness = Harness(tmp_path / "criticism-cx-retry-failure")
+    _bind_classification(harness, manifest)
     commitment = property_oracle_commitment(
         "solve",
         [[[3, 1, 2]]],
@@ -1632,11 +1845,25 @@ def test_v6_restart_admits_durable_conjecture_result_without_redispatch(
     tmp_path,
     monkeypatch,
 ):
-    config = _config()
-    manifest = _manifest()
+    config, manifest = _scratch_context_config_and_manifest()
     root = tmp_path / "provider-result-restart"
     harness = Harness(root)
+    _bind_classification(harness, manifest)
     _seed_live_conjecture(harness)
+    scratch_service = ScratchService(harness)
+    scratch = scratch_service.create_block(
+        {
+            "content": (
+                "A reversible advisory fragment should be stretched before "
+                "formal admission."
+            )
+        },
+        ScratchProvenanceV1(
+            actor="user",
+            origin="v6-conjecture-recovery-test",
+            formal_artifact_refs=["pi-live-v6"],
+        ),
+    )
     source = harness.create_artifact(
         "A formal source visible through a frozen alias."
     )
@@ -1644,6 +1871,7 @@ def test_v6_restart_admits_durable_conjecture_result_without_redispatch(
 
     def response(prompt):
         first_calls.append(True)
+        assert "SCR_001" in prompt
         assert "SRC_001" in prompt
         assert source.id not in prompt
         return json.dumps(
@@ -1696,6 +1924,20 @@ def test_v6_restart_admits_durable_conjecture_result_without_redispatch(
     assert work.terminal is None
     assert set(crashed.state.artifacts) == {source.id}
     assert first_calls == [True]
+    (call,) = [event.llm for event in crashed.log.read() if event.llm is not None]
+    assert call.conjecture_context is not None
+    rendered = crashed.blobs.get(
+        call.conjecture_context.rendered_context_ref
+    ).decode("utf-8")
+    assert crashed.blobs.get(call.prompt_ref).decode("utf-8").count(rendered) == 1
+    scratch_state = ScratchService(crashed).state
+    assert scratch_state.attention_receipts[
+        call.conjecture_context.selection_receipt_ref
+    ].final_order == [scratch.id]
+    attention_before = dict(scratch_state.attention_receipts)
+    advisory_before = dict(scratch_state.advisory_contexts)
+    visibility_before = dict(scratch_state.visibility)
+    coverage_before = dict(scratch_state.coverage_cycles)
 
     restarted_calls = []
 
@@ -1733,6 +1975,31 @@ def test_v6_restart_admits_durable_conjecture_result_without_redispatch(
         source.id
     ]
     assert restarted_calls == []
+    recovered_scratch_state = ScratchService(crashed).state
+    assert recovered_scratch_state.attention_receipts == attention_before
+    assert recovered_scratch_state.advisory_contexts == advisory_before
+    assert recovered_scratch_state.visibility == visibility_before
+    assert recovered_scratch_state.coverage_cycles == coverage_before
+
+    reopened = Harness(root)
+    repeated_adapter, _endpoint = _live_adapter(
+        reopened,
+        manifest,
+        forbidden,
+    )
+    Scheduler(
+        reopened,
+        repeated_adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
+    ).run(0)
+    repeated_scratch_state = ScratchService(reopened).state
+    assert repeated_scratch_state.attention_receipts == attention_before
+    assert repeated_scratch_state.advisory_contexts == advisory_before
+    assert repeated_scratch_state.visibility == visibility_before
+    assert repeated_scratch_state.coverage_cycles == coverage_before
+    assert restarted_calls == []
     assert len(
         [
             event
@@ -1759,7 +2026,9 @@ def test_v6_restart_schema_exhaustion_uses_stored_raw_without_dispatch(
     config = _config()
     manifest = _manifest()
     root = tmp_path / "stored-invalid-result"
+    write_run_manifest(manifest, root / "run-manifest.json")
     harness = Harness(root)
+    _bind_classification(harness, manifest)
     _seed_live_conjecture(harness)
     problem = harness.state.problems["pi-live-v6"]
     service = InquiryTransactionService(
@@ -1863,6 +2132,9 @@ def test_v6_restart_schema_exhaustion_uses_stored_raw_without_dispatch(
     assert item.terminal.status == "schema_exhausted"
     admission, = item.admissions.values()
     assert admission.outcome == "schema_exhausted"
+    compact = tuple(reopened.workflow_state.compact_recovery_by_route_seat.values())
+    assert len(compact) == 1
+    assert item.terminal.compact_recovery_transition_ref == compact[0].id
     assert called == []
 
 
