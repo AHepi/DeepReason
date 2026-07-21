@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from deepreason.canonical import canonical_json
 from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import route_fingerprint
 from deepreason.llm.repair import (
     RepairPatchV1,
     SchemaExhaustedError,
@@ -163,7 +164,6 @@ def repair_schema_failure(
     preserve_terminalized_spend: bool = False,
     school_id: str | None = None,
     root_authorized_pointers: tuple[str, ...] = (),
-    retry_max: int | None = None,
     reason_prefix: str = "schema",
 ) -> TransactionRepairResult:
     """Repair one invalid v6 result through independently issued work items.
@@ -179,21 +179,28 @@ def repair_schema_failure(
     parent = authorized.preparation
     if wire_contract.contract_id != parent.contract_id:
         raise ValueError("repair contract differs from its parent authority")
+    if (
+        authorized.bundle.contract_id != parent.contract_id
+        or authorized.bundle.route_lease != parent.route_lease
+    ):
+        raise ValueError("repair parent authorization differs from its preparation")
     if endpoint_lease is None:
         raise ValueError("repair requires the parent's frozen endpoint lease")
+    if (
+        endpoint_lease.role != parent.route_lease.role
+        or endpoint_lease.seat != parent.route_lease.seat
+        or endpoint_lease.route.endpoint_id != parent.route_lease.endpoint_id
+        or route_fingerprint(endpoint_lease.route) != parent.route_lease.route_sha256
+    ):
+        raise ValueError("repair endpoint lease differs from its parent authority")
     spend = getattr(error, "spend", None)
     if spend is None:
         raise ValueError("schema failure has no durable provider spend") from error
     if spend.work_order_id != parent.id or spend.attempts != 1:
         raise ValueError("v6 parent call used unbound or internal repair authority")
 
-    maximum_repairs = min(
-        2,
-        max(
-            0,
-            int(2 if retry_max is None else retry_max),
-        ),
-    )
+    grant = service.resolve_schema_repair_grant(parent.contract_id)
+    maximum_repairs = grant.maximum_schema_repairs if grant is not None else 0
     initial_request = service.harness.blobs.get(spend.prompt_ref).decode("utf-8")
     exhaustion_spend = spend if preserve_terminalized_spend else None
     session = V6PatchRepairSession(
@@ -230,7 +237,7 @@ def repair_schema_failure(
             authorized,
             spend,
             diagnostic_ref=original_diagnostic_ref or unrepairable_ref,
-            admission_outcome="unrepairable",
+            admission_outcome="schema_exhausted",
             admission_diagnostic_refs=_diagnostic_refs(original_diagnostic_ref, unrepairable_ref),
             authorized_pointers=(),
             reason_code=f"{reason_prefix}_unrepairable",
@@ -491,7 +498,7 @@ def repair_schema_failure(
                 repair_authorized,
                 repair_call,
                 diagnostic_ref=trace_ref or unrepairable_ref,
-                admission_outcome="unrepairable",
+                admission_outcome="schema_exhausted",
                 admission_diagnostic_refs=_diagnostic_refs(trace_ref, unrepairable_ref),
                 authorized_pointers=turn.authorized_pointers,
                 reason_code=f"{reason_prefix}_repair_unrepairable",
