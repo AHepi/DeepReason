@@ -72,20 +72,6 @@ def _require_v6_manifest(manifest, *, operation: str) -> None:
         )
 
 
-def _check_experimental_v5(manifest, enabled: bool) -> None:
-    """Fail closed while the legacy CLI flag awaits removal in G02."""
-
-    _require_v6_manifest(manifest, operation="full scheduler")
-    if enabled:
-        from deepreason.run_manifest import RunManifestError
-
-        raise RunManifestError(
-            "EXPERIMENTAL_V5_UNSUPPORTED",
-            "experimental_v5 cannot enable a historical execution path",
-            "/experimental_v5",
-        )
-
-
 def _v6_run_result(
     root: Path,
     manifest,

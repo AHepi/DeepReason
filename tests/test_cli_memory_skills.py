@@ -42,12 +42,15 @@ def test_brain_cli_explicit_lifecycle(tmp_path, capsys) -> None:
 
 
 def test_skills_cli_snapshots_and_emits_receipt(tmp_path, capsys) -> None:
+    from tests.test_v6_only_cli_admission import _prepared_v6_root
+
     capsule_path = tmp_path / "capsule.json"
     capsule_path.write_text(_capsule().model_dump_json(by_alias=True))
+    prepared = _prepared_v6_root(tmp_path / "run")
     assert main(
         [
             "--root",
-            str(tmp_path / "run"),
+            str(prepared.root),
             "skills",
             "--capsule",
             str(capsule_path),
@@ -65,7 +68,10 @@ def test_skills_cli_snapshots_and_emits_receipt(tmp_path, capsys) -> None:
 
 
 def test_distill_cli_requires_verified_accepted_source(tmp_path, capsys) -> None:
-    source = Harness(tmp_path / "source-run")
+    from tests.test_v6_only_cli_admission import _prepared_v6_root
+
+    prepared = _prepared_v6_root(tmp_path / "source-run")
+    source = Harness(prepared.root)
     commitment = Commitment(id="k", eval="predicate:'stable' in content")
     source.register_commitment(commitment)
     accepted = source.create_artifact(

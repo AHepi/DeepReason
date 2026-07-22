@@ -22,31 +22,46 @@ from deepreason.application.text_runs import (
     TextRunApplicationService,
     TextRunWorkerRegistry,
 )
-from deepreason.application.intents import start_text_run_intent
 from deepreason.cli import main as cli_module
 from deepreason.cli.main import main as cli_main
 from deepreason.harness import Harness
 from deepreason.locking import operator_locks
-from deepreason.run_manifest import write_run_manifest
+from deepreason.run_manifest import bind_run_manifest, write_run_manifest
 from deepreason.workloads.text import spec_from_text
 
 
-def _manifest(tmp_path):
+def _prepared_cli_manifest(root, text):
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+        bind_run_input,
+    )
     from tests.test_run_input_v6_commitments import _manifest as compile_v6_manifest
 
-    manifest = compile_v6_manifest(6, "f" * 64)
-    path, _ = write_run_manifest(manifest, tmp_path / "manifest.json")
-    return manifest, path
-
-
-def _install_g02_cli_constructor_bridge(monkeypatch):
-    """Keep non-G02 CLI coverage while production rejects the removed field."""
-
-    def construct(**values):
-        assert values.pop("experimental_v5") is False
-        return start_text_run_intent(**values)
-
-    monkeypatch.setattr("deepreason.application.start_text_run_intent", construct)
+    spec = spec_from_text(text)
+    dossier = EvidenceDossierV1.create(
+        problem_ref=spec.problem.id,
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="G02 CLI fixture",
+            acquisition_method="test preparation",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id=spec.problem.id,
+            description=spec.problem.description,
+            criteria=spec.criteria,
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    manifest = compile_v6_manifest(6, run_input.run_input_digest)
+    manifest_path, _ = bind_run_manifest(manifest, root)
+    return manifest, manifest_path
 
 
 def test_start_intent_is_strict_and_has_no_client_authority_fields(tmp_path):
@@ -102,9 +117,9 @@ def test_start_intent_is_strict_and_has_no_client_authority_fields(tmp_path):
 def test_cli_and_mcp_compile_the_same_start_intent(
     tmp_path, monkeypatch, capsys
 ):
-    manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / "same-root"
     text = "Why should equivalent clients produce equivalent authority?"
+    manifest, manifest_path = _prepared_cli_manifest(root, text)
     captured = []
 
     def fake_start(intent, **_kwargs):
@@ -113,7 +128,6 @@ def test_cli_and_mcp_compile_the_same_start_intent(
             root=str(root.resolve()), manifest_digest=manifest.sha256
         )
 
-    _install_g02_cli_constructor_bridge(monkeypatch)
     monkeypatch.setattr(TEXT_RUN_SERVICE, "start", fake_start)
     monkeypatch.setattr(TEXT_RUN_SERVICE, "wait", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(
@@ -178,8 +192,9 @@ def test_cli_and_mcp_compile_the_same_start_intent(
 def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
     tmp_path, monkeypatch, capsys, state, verification, expected
 ):
-    manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / state
+    text = "Which terminal state controls automation?"
+    manifest, manifest_path = _prepared_cli_manifest(root, text)
     payload = {
         "schema": "deepreason-run-result-v1",
         "state": state,
@@ -187,7 +202,6 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
     }
     if verification is not None:
         payload["verification"] = verification
-    _install_g02_cli_constructor_bridge(monkeypatch)
     monkeypatch.setattr(
         TEXT_RUN_SERVICE,
         "start",
@@ -210,7 +224,7 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
             str(root),
             "reason",
             "--text",
-            "Which terminal state controls automation?",
+            text,
             "--run-manifest",
             str(manifest_path),
             "--cycles",
@@ -225,9 +239,9 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
 def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
     tmp_path, monkeypatch, capsys
 ):
-    manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / "invalid"
-    _install_g02_cli_constructor_bridge(monkeypatch)
+    text = "Can an unknown terminal be reported as success?"
+    manifest, manifest_path = _prepared_cli_manifest(root, text)
     monkeypatch.setattr(
         TEXT_RUN_SERVICE,
         "start",
@@ -249,7 +263,7 @@ def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
                 str(root),
                 "reason",
                 "--text",
-                "Can an unknown terminal be reported as success?",
+                    text,
                 "--run-manifest",
                 str(manifest_path),
                 "--cycles",

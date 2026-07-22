@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from deepreason.cli.main import main
-from deepreason.evidence import RunInputManifestV1, RunInputManifestV2, load_run_input
+from deepreason.evidence import RunInputManifestV2, load_run_input
 
 
 def _workload(*, evaluation: str = "predicate:True", sources=()) -> dict:
@@ -53,8 +55,6 @@ def test_input_freeze_binds_complete_v6_criterion_and_is_idempotent(
         "freeze",
         "--problem",
         str(problem),
-        "--schema-version",
-        "6",
     ]
     assert main(argv) == 0
     result = json.loads(capsys.readouterr().out)
@@ -84,29 +84,29 @@ def test_input_freeze_binds_complete_v6_criterion_and_is_idempotent(
     assert load_run_input(root) == frozen
 
 
-def test_input_freeze_keeps_v5_id_only_and_requires_dossier_for_sources(
+def test_input_freeze_rejects_v5_selection_and_requires_dossier_for_sources(
     tmp_path, capsys
 ):
     problem = tmp_path / "problem.json"
     _write(problem, _workload())
     v5_root = tmp_path / "v5"
 
-    assert main(
-        [
-            "--root",
-            str(v5_root),
-            "input",
-            "freeze",
-            "--problem",
-            str(problem),
-            "--schema-version",
-            "5",
-        ]
-    ) == 0
+    with pytest.raises(SystemExit) as raised:
+        main(
+            [
+                "--root",
+                str(v5_root),
+                "input",
+                "freeze",
+                "--problem",
+                str(problem),
+                "--schema-version",
+                "5",
+            ]
+        )
+    assert raised.value.code == 2
+    assert not v5_root.exists()
     capsys.readouterr()
-    legacy = load_run_input(v5_root)
-    assert isinstance(legacy, RunInputManifestV1)
-    assert legacy.problem.criteria == ("C001",)
 
     sourced = tmp_path / "sourced.json"
     _write(sourced, _workload(sources=("SRC1",)))

@@ -108,35 +108,18 @@ def test_compact_reasoning_contract_rejects_control_fields(harness):
         conj(harness, "reason:control", adapter, Config(VS_K=1, RETRY_MAX=0))
 
 
-def test_reason_cli_dry_run_accepts_text_v2_manifest(tmp_path, capsys):
+def test_reason_cli_dry_run_accepts_bound_v6_manifest(tmp_path, capsys):
     from deepreason.cli.main import main
+    from tests.test_v6_only_cli_admission import _prepared_v6_root
 
-    config = tmp_path / "config.yaml"
-    config.write_text(
-        "model_profile: compact\n"
-        "roles:\n"
-        "  conjecturer:\n"
-        "    endpoint: https://example.invalid/v1\n"
-        "    model: gemma4:31b\n"
-        "    provider: ollama\n"
-        "    family: gemma\n"
-    )
-    manifest = tmp_path / "manifest.json"
+    text = "Why does X happen?"
+    prepared = _prepared_v6_root(tmp_path / "run", text=text)
     assert main(
         [
-            "--config", str(config), "config", "compile",
-            "--schema-version", "2", "--workload-profile", "text",
-            "--single-model", "gemma4:31b", "--rubric-policy", "forbid",
-            "--out", str(manifest),
-        ]
-    ) == 0
-    capsys.readouterr()
-    assert main(
-        [
-            "--root", str(tmp_path / "run"), "reason",
-            "--text", "Why does X happen?", "--run-manifest", str(manifest),
+            "--root", str(prepared.root), "reason",
+            "--text", text, "--run-manifest", str(prepared.manifest_path),
             "--dry-run",
         ]
     ) == 0
     output = capsys.readouterr().out
-    assert "gemma4:31b" in output and "sha256=" in output
+    assert "offline-model" in output and "sha256=" in output

@@ -608,8 +608,12 @@ def test_mcp_and_cli_expose_the_research_channel(tmp_path, monkeypatch):
     assert "stays open" in reply
 
     # CLI parity over a fresh root.
-    harness2, rid2, _ = _open_research_harness(tmp_path / "second")
-    root2 = str(tmp_path / "second" / "run")
+    from tests.test_v6_only_cli_admission import _prepared_v6_root
+
+    second = tmp_path / "second"
+    prepared = _prepared_v6_root(second / "run")
+    harness2, rid2, _ = _open_research_harness(second)
+    root2 = str(prepared.root)
     assert cli_main(["--root", root2, "research"]) == 0
     evidence_file = tmp_path / "evidence.txt"
     evidence_file.write_text("measured tide tables again")

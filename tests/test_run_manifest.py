@@ -827,83 +827,46 @@ def test_run_root_binding_honors_orphaned_digest_record(tmp_path):
     assert not (tmp_path / "run-manifest.json").exists()
 
 
-def test_cli_compiles_historical_manifest_but_public_loaders_reject_it(
-    tmp_path, monkeypatch, capsys
-):
+def test_cli_compiles_and_inspects_only_explicit_complete_v6(tmp_path, capsys):
     from deepreason.cli.main import main
+    from tests.test_run_input_v6_commitments import _config as v6_config
+    from tests.test_run_input_v6_commitments import _control
 
-    config_path = tmp_path / "gemma.yaml"
-    config_path.write_text(
-        "roles:\n"
-        "  conjecturer:\n"
-        "    endpoint_id: gemma-cloud\n"
-        "    endpoint: https://ollama.invalid/v1\n"
-        "    model: gemma4:31b\n"
-        "    provider: ollama\n"
-        "    family: gemma\n"
-    )
+    config_path = tmp_path / "v6-config.json"
+    config_path.write_text(v6_config().model_dump_json())
+    control_path = tmp_path / "control-plane-v3.json"
+    control_path.write_text(_control(6).model_dump_json())
     manifest_path = tmp_path / "manifest.json"
     assert main(
         [
             "--config", str(config_path), "config", "compile",
-            "--single-model", "gemma4:31b", "--profile", "compact",
+            "--profile", "compact",
             "--rubric-policy", "forbid", "--out", str(manifest_path),
+            "--workload-profile", "text",
+            "--control-plane-policy", str(control_path),
+            "--run-input-digest", "f" * 64,
         ]
     ) == 0
     compiled = capsys.readouterr().out
-    assert "conjecturer[0]" in compiled and "model=gemma4:31b" in compiled
+    assert "conjecturer[0]" in compiled and "model=offline-model" in compiled
     assert manifest_path.exists()
+    assert load_run_manifest(manifest_path).schema_version == 6
 
-    assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 1
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
-
-    monkeypatch.setattr(
-        "deepreason.easy.make", lambda *_a, **_k: pytest.fail("dry-run invoked make")
-    )
-    assert main(
-        [
-            "--root", str(tmp_path / "run"), "make", "DNA page",
-            "--run-manifest", str(manifest_path), "--dry-run",
-        ]
-    ) == 1
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
+    assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 0
+    assert '"schema_version": 6' in capsys.readouterr().out
 
 
 def test_cli_make_rejects_bound_pre_v6_manifest_and_replacement(
     tmp_path, monkeypatch, capsys
 ):
     from deepreason.cli.main import main
-    from deepreason.run_manifest import write_run_manifest
 
     run_root = tmp_path / "run"
-    bound = compile_run_manifest(
-        _config(), single_model="gemma4:31b", rubric_policy="forbid",
-        compiled_at=STAMP,
-    )
-    bind_run_manifest(bound, run_root)
-    monkeypatch.setattr(
-        "deepreason.run_manifest.compile_run_manifest",
-        lambda *_a, **_k: pytest.fail("resume recompiled source configuration"),
-    )
-    assert main(["--root", str(run_root), "make", "DNA page", "--dry-run"]) == 1
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
-
-    replacement = bound.model_copy(update={"concurrency": bound.concurrency + 1})
-    replacement_path, _ = write_run_manifest(replacement, tmp_path / "replacement.json")
-    monkeypatch.setattr(
-        "deepreason.easy.make", lambda *_a, **_k: pytest.fail("conflict invoked make")
-    )
-    assert main(
-        [
-            "--root", str(run_root), "make", "DNA page",
-            "--run-manifest", str(replacement_path),
-        ]
-    ) == 1
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
-    with pytest.raises(RunManifestError) as raised:
-        load_run_manifest(run_root / "run-manifest.json")
-    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
-    assert raised.value.rejected_version == 1
+    with pytest.raises(SystemExit) as raised:
+        main(["--root", str(run_root), "make", "DNA page"])
+    assert raised.value.code == 2
+    assert "invalid choice: 'make'" in capsys.readouterr().err
+    assert not run_root.exists()
 
 
 def test_cli_run_rejects_bound_pre_v6_manifest_and_replacement(
@@ -955,14 +918,8 @@ def test_direct_cli_rejects_pre_v6_before_operator_contention(
         compiled_at=STAMP,
     )
     bind_run_manifest(manifest, root)
-    monkeypatch.setattr(
-        "deepreason.easy.make",
-        lambda *_args, **_kwargs: pytest.fail("contended make executed"),
-    )
     locks = operator_locks(root, owner="test-holder", blocking=False)
     try:
-        assert main(["--root", str(root), "make", "locked site"]) == 1
-        assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
         assert main(["--root", str(root), "run", "--budget", "1"]) == 1
         assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     finally:
@@ -1108,22 +1065,12 @@ def test_cli_make_implicit_manifest_is_persisted_and_drives_easy(tmp_path, monke
         "    provider: ollama\n"
     )
     run_root = tmp_path / "run"
-    received = []
-    monkeypatch.setattr(
-        "deepreason.easy.make", lambda *args, **kwargs: received.append((args, kwargs)) or []
-    )
-
-    assert main(
-        [
-            "--root", str(run_root), "--config", str(config_path),
-            "make", "DNA page", "--cycles", "2", "--token-budget", "0",
-        ]
-    ) == 0
-
-    assert (run_root / "run-manifest.json").exists()
-    assert (run_root / "run-manifest.sha256").exists()
-    assert received[0][1]["root"] == str(run_root)
-    assert received[0][1]["config"] == str(run_root / ".run-manifest-config.json")
-    materialized = json.loads((run_root / ".run-manifest-config.json").read_text())
-    assert materialized["roles"]["conjecturer"]["model"] == "gemma4:31b"
-    assert materialized["model_profile"] == "compact"
+    with pytest.raises(SystemExit) as raised:
+        main(
+            [
+                "--root", str(run_root), "--config", str(config_path),
+                "make", "DNA page", "--cycles", "2", "--token-budget", "0",
+            ]
+        )
+    assert raised.value.code == 2
+    assert not run_root.exists()

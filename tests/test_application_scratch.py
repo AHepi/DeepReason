@@ -8,6 +8,7 @@ import inspect
 import io
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from pydantic import TypeAdapter, ValidationError
@@ -24,10 +25,8 @@ from deepreason.cli import scratch as cli_scratch
 from deepreason.cli.scratch import dispatch_scratch, register_scratch_parser
 from deepreason.config import Config
 from deepreason.harness import Harness
-from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
+from deepreason.run_manifest import ConjectureContextPolicyV1, bind_run_manifest, compile_run_manifest
 from deepreason.scratch.service import ScratchService
-from tests.test_mcp_scratch_bridge import _create_run
-from tests.test_run_manifest_v4 import _control_policy
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -63,47 +62,79 @@ def _mcp_payload(name: str, arguments: dict) -> dict:
     return payload
 
 
-def _create_active_v4_scratch_run(root: Path):
-    route = {
-        "endpoint_id": "scratch-v4-route",
-        "endpoint": "https://models.invalid/v1",
-        "model": "fixture-31b",
-        "provider": "fixture",
-        "family": "fixture",
-        "api_key_env": "FIXTURE_API_KEY",
-    }
+def _create_v6_scratch_run(root: Path, *, active: bool = False):
+    from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
+    from tests.test_run_input_v6_commitments import (
+        _bind_v2,
+        _commitment,
+        _config,
+        _control,
+    )
+
+    frozen = _bind_v2(root, _commitment())
+    base = _config()
+    config = base.model_copy(
+        update={
+            "scratchpad": base.scratchpad.model_copy(
+                update={"enabled": True, "max_blocks_per_pack": 24}
+            )
+        }
+    )
+    control = _control(6)
+    inquiry_policy = None
+    if active:
+        control = control.model_copy(
+            update={
+                "conjecture_context": ConjectureContextPolicyV1(
+                    mode="harness_plus_model_request",
+                    initial_max_blocks=8,
+                    initial_max_guides=2,
+                    max_context_expansion_requests=1,
+                    max_extra_blocks=4,
+                    permitted_retrieval_channels=(
+                        "focus",
+                        "exploratory",
+                        "coverage",
+                    ),
+                    coverage_slot_mandatory=True,
+                    exploration_slot_mandatory=True,
+                )
+            }
+        )
+        inquiry_policy = InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2"
+        )
     manifest = compile_run_manifest(
-        Config(
-            scratchpad={"enabled": True, "max_blocks_per_pack": 24},
-            roles={"conjecturer": route},
-        ),
-        schema_version=4,
+        config,
+        schema_version=6,
         workload_profile="text",
         rubric_policy="forbid",
-        compiled_at="2026-07-16T00:00:00Z",
-        control_plane_policy=_control_policy(),
+        compiled_at="2026-07-22T00:00:00Z",
+        control_plane_policy=control,
+        inquiry_capability_policy=inquiry_policy,
+        run_input_digest=frozen.run_input_digest,
     )
-    harness = Harness(root)
     bind_run_manifest(manifest, root)
+    harness = Harness(root)
     scratch = ScratchService(harness)
     blocks = tuple(
         scratch.create_block(
-            {"content": f"active v4 attention thought {index}"},
-            {"actor": "user", "origin": "application-v4-test"},
+            {"content": f"active v6 attention thought {index}"},
+            {"actor": "user", "origin": "application-v6-test"},
         )
         for index in range(3)
     )
     cluster = scratch.create_cluster(
         "active v4 attention",
-        {"actor": "user", "origin": "application-v4-test"},
+        {"actor": "user", "origin": "application-v6-test"},
     )
     scratch.add_cluster_member(
         cluster.id,
         blocks[0].id,
         None,
-        {"actor": "user", "origin": "application-v4-test"},
+        {"actor": "user", "origin": "application-v6-test"},
     )
-    return manifest, blocks, cluster
+    return SimpleNamespace(root=root, manifest=manifest, blocks=blocks, cluster=cluster)
 
 
 def test_query_union_is_closed_and_direct_open_is_not_a_preview_mode(tmp_path):
@@ -146,7 +177,7 @@ def test_query_union_is_closed_and_direct_open_is_not_a_preview_mode(tmp_path):
 
 
 def test_cli_and_mcp_query_payloads_are_equivalent_and_read_only(tmp_path):
-    run = _create_run(tmp_path / "run")
+    run = _create_v6_scratch_run(tmp_path / "run")
     event_seq = Harness(run.root, read_only=True)._next_seq - 1
     before = _tree_digest(run.root)
     block = run.blocks[0].id[7:19]
@@ -218,7 +249,7 @@ def test_preview_and_record_direct_open_have_distinct_mutation_semantics(tmp_pat
 
 
 def test_attention_preview_matches_mcp_and_remains_uncommitted(tmp_path):
-    run = _create_run(tmp_path / "run")
+    run = _create_v6_scratch_run(tmp_path / "run")
     before = _tree_digest(run.root)
     arguments = {
         "root": str(run.root),
@@ -244,13 +275,14 @@ def test_attention_preview_matches_mcp_and_remains_uncommitted(tmp_path):
     assert _tree_digest(run.root) == before
 
 
-def test_active_v4_attention_preview_is_deterministic_across_service_and_mcp(tmp_path):
-    root = tmp_path / "run-v4"
-    manifest, blocks, cluster = _create_active_v4_scratch_run(root)
-    assert manifest.schema_version == 4
+def test_active_v6_attention_preview_is_deterministic_across_service_and_mcp(tmp_path):
+    root = tmp_path / "run-v6"
+    run = _create_v6_scratch_run(root, active=True)
+    manifest, blocks, cluster = run.manifest, run.blocks, run.cluster
+    assert manifest.schema_version == 6
     assert manifest.scratch_policy is not None
     assert manifest.control_plane_policy is not None
-    assert manifest.control_plane_policy.mode == "active_conjecture"
+    assert manifest.control_plane_policy.mode == "active_inquiry"
 
     before = _tree_digest(root)
     arguments = {

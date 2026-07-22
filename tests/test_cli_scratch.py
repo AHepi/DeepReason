@@ -19,6 +19,7 @@ from deepreason.cli.scratch import (
 )
 from deepreason.harness import Harness
 from deepreason.locking import operator_locks
+from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.scratch.errors import ScratchLinkPrefixAmbiguous
 from deepreason.scratch.models import SimilarityHitV1
 from deepreason.scratch.service import ScratchService
@@ -34,7 +35,38 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _invoke(root: Path, *arguments: str, stdin: str = ""):
+def _prepare_v6_root(root: Path) -> None:
+    if (root / "run-manifest.json").exists():
+        return
+    from tests.test_run_input_v6_commitments import (
+        _bind_v2,
+        _commitment,
+        _config,
+        _control,
+    )
+
+    frozen = _bind_v2(root, _commitment())
+    base = _config()
+    configured = base.model_copy(
+        update={
+            "scratchpad": base.scratchpad.model_copy(update={"enabled": True})
+        }
+    )
+    manifest = compile_run_manifest(
+        configured,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at="2026-07-22T00:00:00Z",
+        control_plane_policy=_control(6),
+        run_input_digest=frozen.run_input_digest,
+    )
+    bind_run_manifest(manifest, root)
+
+
+def _invoke(root: Path, *arguments: str, stdin: str = "", prepare: bool = True):
+    if prepare:
+        _prepare_v6_root(root)
     args = _parser().parse_args(["--root", str(root), "scratch", *arguments])
     stdout = io.StringIO()
     stderr = io.StringIO()
@@ -68,6 +100,7 @@ def _snapshot(root: Path) -> dict[str, tuple]:
 
 
 def _create(root: Path, content: str):
+    _prepare_v6_root(root)
     return ScratchService(root).create_block(
         {"content": content}, {"actor": "user", "origin": "test-fixture"}
     )
@@ -252,6 +285,7 @@ def test_cluster_create_add_remove_and_bounded_map(tmp_path):
 
 def test_search_related_map_dormant_underexposed_sample_and_coverage_are_pure(tmp_path):
     root = tmp_path / "run"
+    _prepare_v6_root(root)
     service = ScratchService(root)
     focus = service.create_block({"content": "alpha anchor"}, {"actor": "user"})
     linked = service.create_block({"content": "alpha linked"}, {"actor": "user"})
@@ -337,6 +371,7 @@ def test_current_show_records_direct_open_visibility_but_historical_show_does_no
 
 def test_historical_reads_are_physically_read_only_for_every_read_command(tmp_path):
     root = tmp_path / "run"
+    _prepare_v6_root(root)
     service = ScratchService(root)
     first = service.create_block({"content": "first alpha"}, {"actor": "user"})
     service.create_block({"content": "later alpha"}, {"actor": "user"})
@@ -361,18 +396,20 @@ def test_historical_reads_are_physically_read_only_for_every_read_command(tmp_pa
 
 def test_read_errors_do_not_create_roots_and_json_errors_are_typed(tmp_path):
     missing = tmp_path / "missing"
-    status, stdout, stderr = _invoke(missing, "search", "anything", "--json")
+    status, stdout, stderr = _invoke(
+        missing, "search", "anything", "--json", prepare=False
+    )
     assert status == 1 and not stdout
     error = json.loads(stderr)
-    assert error["error"]["code"] == "SCRATCH_RUN_NOT_FOUND"
+    assert error["error"]["code"] == "MANIFEST_FILE_UNAVAILABLE"
     assert not missing.exists()
 
     current_show = tmp_path / "missing-show"
     status, stdout, stderr = _invoke(
-        current_show, "show", "deadbeef", "--json"
+        current_show, "show", "deadbeef", "--json", prepare=False
     )
     assert status == 1 and not stdout
-    assert json.loads(stderr)["error"]["code"] == "SCRATCH_RUN_NOT_FOUND"
+    assert json.loads(stderr)["error"]["code"] == "MANIFEST_FILE_UNAVAILABLE"
     assert not current_show.exists()
 
     root = tmp_path / "run"

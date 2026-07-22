@@ -103,13 +103,13 @@ def register_bridge_commands(subparsers) -> None:
     build.add_argument(
         "--run-manifest",
         default=None,
-        help="v3/v4 manifest (needed only when this run is not already bound)",
+        help="explicit schema-6 manifest matching the already-bound run root",
     )
     build.add_argument(
         "--derived-output",
         default=None,
         metavar="DIRECTORY",
-        help="build from a historical source fence into a new v3/v4 output directory",
+        help="build from a historical source fence into a new V6 output directory",
     )
     build.add_argument(
         "--at-seq",
@@ -395,8 +395,8 @@ def _render_inspect(snapshot: _BridgeSnapshot) -> str:
     return "\n".join(lines)
 
 
-def handle_bridge_command(args) -> int:
-    """Execute one parsed bridge subcommand using stable process exit codes."""
+def _handle_bridge_command(args) -> int:
+    """Execute one already-admitted bridge subcommand."""
 
     try:
         command = args.bridge_command
@@ -527,6 +527,32 @@ def handle_bridge_command(args) -> int:
     except (KeyError, ProcessLockError, OSError, ValueError) as error:
         print(_safe_human(error, maximum=2_048), file=sys.stderr)
         return 1
+
+
+def handle_bridge_command(args) -> int:
+    """Admit one V6 root, then execute a parsed bridge subcommand."""
+
+    try:
+        from deepreason.cli.main import _admit_v6_root
+
+        _admit_v6_root(args.root, operation=f"CLI bridge {args.bridge_command}")
+        if (
+            args.bridge_command == "build"
+            and getattr(args, "derived_output", None) is not None
+        ):
+            _admit_v6_root(
+                args.derived_output,
+                operation="CLI bridge derived output",
+            )
+            if args.run_manifest is None:
+                raise ValueError(
+                    "V6_BRIDGE_DERIVED_MANIFEST_REQUIRED: pass the explicit "
+                    "schema-6 manifest already bound to the derived output root"
+                )
+    except (OSError, ValueError) as error:
+        print(_safe_human(error, maximum=2_048), file=sys.stderr)
+        return 1
+    return _handle_bridge_command(args)
 
 
 dispatch_bridge = handle_bridge_command

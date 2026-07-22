@@ -103,7 +103,7 @@ def test_bound_v6_mini_reaches_engine_preflight_before_adapter(
     assert caught.value.code == "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN"
 
 
-def test_cli_rejects_mini_run_and_website_with_stable_codes(
+def test_cli_rejects_mini_run_and_omits_historical_make(
     tmp_path, monkeypatch, capsys
 ):
     _manifest, path = _mini_manifest(tmp_path)
@@ -115,16 +115,24 @@ def test_cli_rejects_mini_run_and_website_with_stable_codes(
     )
 
     website_root = tmp_path / "website-run"
-    assert cli_main(
-        [
-            "--root", str(website_root), "make", "DNA page",
-            "--run-manifest", str(path), "--dry-run",
-        ]
-    ) == 1
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
+    with pytest.raises(SystemExit) as raised:
+        cli_main(
+            [
+                "--root", str(website_root), "make", "DNA page",
+                "--run-manifest", str(path), "--dry-run",
+            ]
+        )
+    assert raised.value.code == 2
+    assert "invalid choice: 'make'" in capsys.readouterr().err
     assert not (website_root / "run-manifest.json").exists()
 
     full_root = tmp_path / "full-run"
+    full_root.mkdir()
+    (full_root / "run-manifest.json").write_bytes(path.read_bytes())
+    (full_root / "run-manifest.sha256").write_bytes(
+        path.with_suffix(path.suffix + ".sha256").read_bytes()
+    )
+    before = {item.name: item.read_bytes() for item in full_root.iterdir()}
     assert cli_main(
         [
             "--root", str(full_root), "run", "--budget", "1",
@@ -132,7 +140,7 @@ def test_cli_rejects_mini_run_and_website_with_stable_codes(
         ]
     ) == 1
     assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
-    assert not (full_root / "run-manifest.json").exists()
+    assert {item.name: item.read_bytes() for item in full_root.iterdir()} == before
 
 
 def test_mcp_rejects_mini_before_worker_or_manifest_binding(tmp_path):

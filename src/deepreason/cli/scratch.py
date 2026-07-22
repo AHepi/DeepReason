@@ -408,6 +408,14 @@ def _error_payload(error: Exception) -> dict[str, Any]:
             "message": str(error),
             "location": error.location,
         }
+    typed_code = getattr(error, "code", None)
+    if isinstance(typed_code, str) and typed_code:
+        location = getattr(error, "pointer", "") or ""
+        return {
+            "code": typed_code,
+            "message": str(error)[:16_384],
+            "location": location,
+        }
     code = "SCRATCH_RUN_NOT_FOUND" if isinstance(error, FileNotFoundError) else "SCRATCH_INPUT_INVALID"
     return {"code": code, "message": str(error)[:16_384], "location": ""}
 
@@ -640,24 +648,16 @@ def _dormant_threshold(args) -> int:
         value = args.after_events
     else:
         manifest_path = Path(args.root) / "run-manifest.json"
-        if manifest_path.is_file():
-            from deepreason.run_manifest import load_run_manifest
+        from deepreason.run_manifest import load_run_manifest
 
-            manifest = load_run_manifest(manifest_path)
-            policy = getattr(manifest, "scratch_policy", None)
-            if policy is not None:
-                value = policy.dormant_after_events
-            else:
-                value = None
-        else:
-            value = None
+        manifest = load_run_manifest(manifest_path)
+        policy = getattr(manifest, "scratch_policy", None)
+        value = policy.dormant_after_events if policy is not None else None
         if value is None:
-            from deepreason.config import load as load_config
-
-            configured = load_config(
-                Path(args.config) if getattr(args, "config", None) else None
+            raise ScratchCliInputError(
+                "bound V6 manifest has no scratch policy",
+                location="/scratch_policy",
             )
-            value = configured.scratchpad.dormant_after_events
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise ScratchCliInputError(
             "after-events must be a non-negative integer", location="/after_events"
@@ -777,6 +777,9 @@ def dispatch_scratch(
         "coverage": lambda: _coverage(args),
     }
     try:
+        from deepreason.cli.main import _admit_v6_root
+
+        _admit_v6_root(args.root, operation=f"CLI scratch {args.scratch_command}")
         locks = None
         mutates = args.scratch_command in {
             "add",

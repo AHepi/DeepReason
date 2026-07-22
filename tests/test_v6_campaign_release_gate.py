@@ -250,7 +250,7 @@ def test_release_switch_rejects_reason_before_root_mutation_but_not_inspection(
     )
 
 
-def test_release_switch_precedes_v6_make_contract_preflight(
+def test_removed_make_command_cannot_reach_release_or_contract_preflight(
     tmp_path, monkeypatch, capsys
 ):
     monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "1")
@@ -262,19 +262,20 @@ def test_release_switch_precedes_v6_make_contract_preflight(
     )
     root = tmp_path / "site"
 
-    exit_code = main(
-        [
-            "--root",
-            str(root),
-            "make",
-            "rollback site",
-            "--run-manifest",
-            str(tmp_path / "v6.json"),
-        ]
-    )
+    with pytest.raises(SystemExit) as raised:
+        main(
+            [
+                "--root",
+                str(root),
+                "make",
+                "rollback site",
+                "--run-manifest",
+                str(tmp_path / "v6.json"),
+            ]
+        )
 
-    assert exit_code == 1
-    assert "V6_LAUNCH_DISABLED" in capsys.readouterr().err
+    assert raised.value.code == 2
+    assert "invalid choice: 'make'" in capsys.readouterr().err
     assert not root.exists()
 
 def test_release_switch_rejects_campaign_before_runner(tmp_path, monkeypatch):

@@ -717,7 +717,7 @@ def test_cli_production_mode_rejects_non_v6_without_output(tmp_path, capsys):
             str(output),
         ]
     ) == 1
-    assert "DOCTOR_RUN_MANIFEST_V6_REQUIRED" in capsys.readouterr().err
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     assert not output.exists()
 
 

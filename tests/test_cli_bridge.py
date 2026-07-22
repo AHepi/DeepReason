@@ -7,6 +7,7 @@ import hashlib
 import json
 import threading
 from dataclasses import replace
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -44,6 +45,8 @@ def _route(model: str = "fixture-31b") -> dict:
         "model": model,
         "provider": "fixture",
         "family": "fixture",
+        "max_tokens": 64,
+        "context_window_tokens": 262_144,
     }
 
 
@@ -53,10 +56,22 @@ def _manifest(
     max_schema_repair_attempts: int = 0,
     grounding_review: bool = False,
     max_grounding_repair_attempts: int = 0,
+    run_input_digest: str = "f" * 64,
+    schema_version: int = 3,
 ):
+    from tests.test_run_input_v6_commitments import _control
+
     roles = {"summarizer": _route(), "thesis": _route()}
     if grounding_review:
         roles["judge"] = _route()
+    v6 = (
+        {
+            "control_plane_policy": _control(6),
+            "run_input_digest": run_input_digest,
+        }
+        if schema_version == 6
+        else {}
+    )
     return compile_run_manifest(
         Config(
             scratchpad={"enabled": True},
@@ -69,10 +84,29 @@ def _manifest(
             },
             roles=roles,
         ),
-        schema_version=3,
+        schema_version=schema_version,
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
+        **v6,
+    )
+
+
+@pytest.fixture(autouse=True)
+def _preserve_pre_v6_bridge_component_tests_below_public_admission(monkeypatch):
+    """Keep bridge component coverage without reopening the public G02 wrapper."""
+
+    from deepreason.run_manifest import RunManifest
+
+    monkeypatch.setattr(
+        "deepreason.run_manifest.load_run_manifest",
+        lambda path, **_kwargs: RunManifest.model_validate_json(
+            Path(path).read_bytes()
+        ),
+    )
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
     )
 
 
@@ -81,6 +115,15 @@ def _problem(problem_id: str) -> Problem:
         id=problem_id,
         description="What conclusion is justified by this run?",
         provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+    )
+
+
+def _mock(responses) -> MockEndpoint:
+    return MockEndpoint(
+        responses,
+        name="https://models.invalid/v1",
+        model="fixture-31b",
+        max_tokens=64,
     )
 
 
@@ -94,10 +137,12 @@ def _parser() -> argparse.ArgumentParser:
 
 def _run(root, *argv: str) -> int:
     args = _parser().parse_args(["--root", str(root), "bridge", *argv])
-    return bridge_cli.run_command(args)
+    return bridge_cli._handle_bridge_command(args)
 
 
 def _scripted_adapter(harness: Harness) -> LLMAdapter:
+    from deepreason.llm.firewall import leases_from_manifest
+
     entry = {
         "entry_key": "K1",
         "claim_class": "unknown",
@@ -112,7 +157,7 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
         requirement["scratch_handles"] = ["B1"]
         requirement["reason"] = "Scratch provenance cannot ground an answer."
     endpoints = {
-        "summarizer": MockEndpoint(
+        "summarizer": _mock(
             [
                 json.dumps(
                     {
@@ -121,9 +166,8 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                     }
                 )
             ],
-            name="scripted-summarizer",
         ),
-        "thesis": MockEndpoint(
+        "thesis": _mock(
             [
                 json.dumps(
                     {
@@ -140,10 +184,14 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                     }
                 )
             ],
-            name="scripted-thesis",
         ),
     }
-    return LLMAdapter(endpoints, harness.blobs, retry_max=0)
+    return LLMAdapter(
+        endpoints,
+        harness.blobs,
+        retry_max=0,
+        leases=leases_from_manifest(harness._workflow_manifest),
+    )
 
 
 def _reviewed_adapter(harness: Harness) -> LLMAdapter:
@@ -151,12 +199,11 @@ def _reviewed_adapter(harness: Harness) -> LLMAdapter:
     return LLMAdapter(
         {
             **base.endpoints,
-            "judge": MockEndpoint(
-                [json.dumps({"finding": "supported"})], name="scripted-judge"
-            ),
+            "judge": _mock([json.dumps({"finding": "supported"})]),
         },
         harness.blobs,
         retry_max=0,
+        leases=base.leases,
     )
 
 
@@ -165,7 +212,7 @@ def _safe_removal_adapter(harness: Harness) -> LLMAdapter:
     return LLMAdapter(
         {
             **base.endpoints,
-            "judge": MockEndpoint(
+            "judge": _mock(
                 [
                     json.dumps(
                         {
@@ -175,11 +222,11 @@ def _safe_removal_adapter(harness: Harness) -> LLMAdapter:
                     ),
                     json.dumps({"action": "remove_span"}),
                 ],
-                name="scripted-safe-removal",
             ),
         },
         harness.blobs,
         retry_max=0,
+        leases=base.leases,
     )
 
 
@@ -218,12 +265,11 @@ def test_bridge_build_holds_operator_locks_through_model_calls(
         return LLMAdapter(
             {
                 **base.endpoints,
-                "summarizer": MockEndpoint(
-                    blocking_ledger, name="blocking-summarizer"
-                ),
+                "summarizer": _mock(blocking_ledger),
             },
             harness.blobs,
             retry_max=0,
+            leases=base.leases,
         )
 
     monkeypatch.setattr(
@@ -427,16 +473,17 @@ def test_manifest_schema_repair_cap_controls_adapter_without_policy_mutation(
         return sentinel
 
     monkeypatch.setattr("deepreason.llm.adapter.build_adapter", fake_build)
-    before = bridge_run.manifest.canonical_bytes()
+    component_manifest = _manifest()
+    before = component_manifest.canonical_bytes()
 
     adapter = bridge_application._build_bridge_adapter(
-        bridge_run.manifest, Harness(bridge_run.root)
+        component_manifest, Harness(bridge_run.root)
     )
 
     assert adapter is sentinel
     assert adapter.retry_max == 0
-    assert bridge_run.manifest.bridge_policy.max_schema_repair_attempts == 0
-    assert bridge_run.manifest.canonical_bytes() == before
+    assert component_manifest.bridge_policy.max_schema_repair_attempts == 0
+    assert component_manifest.canonical_bytes() == before
 
 
 def test_bound_manifest_conflict_fails_before_any_adapter_call(
@@ -658,13 +705,16 @@ def test_failed_stage_a_terminal_remains_readable_without_bridge_objects(
     bridge_run, monkeypatch, capsys
 ):
     def exhausted(harness):
+        from deepreason.llm.firewall import leases_from_manifest
+
         return LLMAdapter(
             {
-                "summarizer": MockEndpoint([], name="exhausted-summarizer"),
-                "thesis": MockEndpoint([], name="unused-thesis"),
+                "summarizer": _mock([]),
+                "thesis": _mock([]),
             },
             harness.blobs,
             retry_max=0,
+            leases=leases_from_manifest(harness._workflow_manifest),
         )
 
     monkeypatch.setattr(
@@ -751,15 +801,10 @@ def test_malformed_fixed_sidecar_does_not_echo_model_authored_input(
     assert secret not in error
 
 
-def test_main_dispatch_returns_zero_for_unresolved_and_nonzero_for_corruption(
+def test_admitted_dispatch_returns_zero_for_unresolved_and_nonzero_for_corruption(
     built_bridge, capsys
 ):
-    from deepreason.cli.main import main
-
-    assert (
-        main(["--root", str(built_bridge.root), "bridge", "result", "--json"])
-        == 0
-    )
+    assert _run(built_bridge.root, "result", "--json") == 0
     assert json.loads(capsys.readouterr().out)["output"]["resolution"] == (
         "insufficient_evidence"
     )
@@ -767,7 +812,7 @@ def test_main_dispatch_returns_zero_for_unresolved_and_nonzero_for_corruption(
     (built_bridge.root / "bridge-result.json").write_text(
         "{corrupt", encoding="utf-8"
     )
-    assert main(["--root", str(built_bridge.root), "bridge", "result"]) == 1
+    assert _run(built_bridge.root, "result") == 1
     assert "BRIDGE_RECORD_CORRUPT" in capsys.readouterr().err
 
 
@@ -883,17 +928,20 @@ def test_failed_review_on_prior_output_accepts_only_replayed_safe_removal(
 def test_failure_sidecar_fields_reconcile_to_replay_record(
     bridge_run, monkeypatch, capsys
 ):
+    from deepreason.llm.firewall import leases_from_manifest
+
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
         lambda _manifest, harness, terminal_authority=None: LLMAdapter(
             {
-                "summarizer": MockEndpoint([], name="exhausted"),
-                "thesis": MockEndpoint([], name="unused"),
-            },
-            harness.blobs,
-            retry_max=0,
-        ),
+                    "summarizer": _mock([]),
+                    "thesis": _mock([]),
+                },
+                harness.blobs,
+                retry_max=0,
+                leases=leases_from_manifest(harness._workflow_manifest),
+            ),
     )
     assert _run(bridge_run.root, "build", bridge_run.problem_id) == 1
     capsys.readouterr()

@@ -18,7 +18,10 @@ from tests.test_act import PNG, SCRIPT, FakeBrowser
 
 @pytest.fixture()
 def root(tmp_path):
-    harness = Harness(tmp_path / "run")
+    from tests.test_v6_only_cli_admission import _prepared_v6_root
+
+    prepared = _prepared_v6_root(tmp_path / "run")
+    harness = Harness(prepared.root)
     c = browser_commitment(SCRIPT)
     harness.register_commitment(c)
     harness.register_problem(Problem(
@@ -31,7 +34,7 @@ def root(tmp_path):
         provenance=Provenance(role="conjecturer"), problem_id="pi-app",
     )
     run_browser_evidence(harness, app.id, FakeBrowser("fail"), Config())
-    return tmp_path / "run", harness, app
+    return prepared.root, harness, app
 
 
 def test_trace_compact_and_json(root, capsys):

@@ -999,50 +999,32 @@ def _cli_args(root, *, dry_run: bool):
     return SimpleNamespace(
         budget="1",
         root=str(root),
-        run_manifest=str(root.parent / "v6-manifest.json"),
+        run_manifest=str(root / "run-manifest.json"),
         config=None,
         problem=None,
         dry_run=dry_run,
-        experimental_v5=False,
         token_budget=1,
     )
 
 
-def _install_cli_v6_manifest(monkeypatch, manifest):
-    import deepreason.ops as ops
-    import deepreason.run_manifest as run_manifest_module
-
-    monkeypatch.setattr(run_manifest_module, "load_run_manifest", lambda _path: manifest)
-    monkeypatch.setattr(
-        run_manifest_module,
-        "config_from_run_manifest",
-        lambda _manifest: SimpleNamespace(),
-    )
-    monkeypatch.setattr(
-        ops,
-        "require_full_engine",
-        lambda *_args, **_kwargs: None,
-    )
-    return run_manifest_module
-
-
-def test_cli_v6_launch_policy_precedes_root_binding(tmp_path, monkeypatch, capsys):
+def test_cli_v6_launch_policy_precedes_qualification_and_lock(
+    tmp_path, monkeypatch, capsys
+):
     from deepreason.cli import main as cli_module
     import deepreason.locking as locking_module
+    import deepreason.runtime.launch_policy as launch_policy_module
 
     _disable_v6(monkeypatch)
     root = tmp_path / "blocked-cli-root"
-    manifest = SimpleNamespace(
-        schema_version=6,
-        engine_profile="full",
-        sha256="a" * 64,
+    _manifest, _harness, _config, _report = _bound_qualified_v6_scheduler_root(
+        root
     )
-    run_manifest_module = _install_cli_v6_manifest(monkeypatch, manifest)
+    before = _root_snapshot(root)
     calls = []
     monkeypatch.setattr(
-        run_manifest_module,
-        "bind_run_manifest",
-        _forbid(calls, "manifest binding"),
+        launch_policy_module,
+        "require_v6_production_qualification",
+        _forbid(calls, "production qualification"),
     )
     monkeypatch.setattr(
         locking_module,
@@ -1053,7 +1035,7 @@ def test_cli_v6_launch_policy_precedes_root_binding(tmp_path, monkeypatch, capsy
     assert cli_module._cmd_run(_cli_args(root, dry_run=False)) == 1
     assert "V6_LAUNCH_DISABLED" in capsys.readouterr().err
     assert calls == []
-    assert not root.exists()
+    assert _root_snapshot(root) == before
 
 
 def test_execute_bound_run_v6_launch_policy_precedes_harness(
@@ -1085,25 +1067,19 @@ def test_cli_dry_run_remains_available_while_v6_is_disabled(
 ):
     from deepreason.cli import main as cli_module
     import deepreason.locking as locking_module
+    import deepreason.runtime.launch_policy as launch_policy_module
 
     _disable_v6(monkeypatch)
     root = tmp_path / "dry-run-root"
-    manifest = SimpleNamespace(
-        schema_version=6,
-        engine_profile="full",
-        sha256="b" * 64,
+    manifest, _harness, _config, _report = _bound_qualified_v6_scheduler_root(
+        root
     )
-    run_manifest_module = _install_cli_v6_manifest(monkeypatch, manifest)
+    before = _root_snapshot(root)
     calls = []
     monkeypatch.setattr(
-        run_manifest_module,
-        "bind_run_manifest",
-        _forbid(calls, "manifest binding"),
-    )
-    monkeypatch.setattr(
-        run_manifest_module,
-        "render_role_matrix",
-        lambda _manifest: "dry-run role matrix",
+        launch_policy_module,
+        "require_v6_production_qualification",
+        _forbid(calls, "production qualification"),
     )
     monkeypatch.setattr(
         locking_module,
@@ -1112,6 +1088,8 @@ def test_cli_dry_run_remains_available_while_v6_is_disabled(
     )
 
     assert cli_module._cmd_run(_cli_args(root, dry_run=True)) == 0
-    assert "dry-run role matrix" in capsys.readouterr().out
+    output = capsys.readouterr().out
+    assert "offline-scheduler-guard" in output
+    assert f"sha256={manifest.sha256}" in output
     assert calls == []
-    assert not root.exists()
+    assert _root_snapshot(root) == before
