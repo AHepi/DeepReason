@@ -1,13 +1,13 @@
 """Provider setup helpers and retired Easy execution scaffolding.
 
 The historical website execution facade is fail-closed. Managed V6
-question-to-run preparation will replace it in a later bounded tranche.
+question-to-run preparation is internal here; public CLI and MCP wiring land
+in a later bounded tranche.
 
-Key handling: the engine config still holds only ``api_key_env`` NAMES
-(keys never live in configs, packs, or the log — §1). The wizard stores the
-actual key in ~/.deepreason/credentials (chmod 0600, the aws/gh precedent)
-and load_credentials() injects it into the process environment at startup,
-losing to any variable the user already exported."""
+Key handling: the typed provider profile holds only a credential environment
+variable name. The wizard stores a newly supplied value separately in
+``~/.deepreason/credentials`` (chmod 0600); an existing environment or stored
+credential is reused without asking the operator to paste it again."""
 
 import getpass
 import os
@@ -15,9 +15,12 @@ import re
 import stat
 from pathlib import Path
 
-import yaml
-
-from deepreason.config import Config
+from deepreason.provider_profile import (
+    ProviderProfileV1,
+    setup_provider_profile_path,
+    write_provider_profile,
+)
+from deepreason.run_manifest import infer_model_family, infer_provider
 
 
 class EasyV6PreparationRequired(RuntimeError):
@@ -361,51 +364,119 @@ def save_credential(name: str, key: str) -> Path:
     return path
 
 
-def setup_wizard(input_fn=input, getpass_fn=None) -> Path:
-    """Two questions: provider, key. Writes ~/.deepreason/engine.yaml (models
-    and knobs, editable, NO key) and stores the key separately. Returns the
-    config path."""
+def _stored_credential_present(name: str) -> bool:
+    path = credentials_path()
+    if not path.is_file() or path.is_symlink():
+        return False
+    for line in path.read_text().splitlines():
+        candidate, separator, value = line.partition("=")
+        if separator and candidate.strip() == name and value.strip():
+            return True
+    return False
+
+
+def _positive_capacity(value, *, label: str) -> int:
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError) as error:
+        raise ValueError(f"{label} must be a positive integer") from error
+    if isinstance(value, bool) or parsed <= 0 or str(value).strip() != str(parsed):
+        raise ValueError(f"{label} must be a positive integer")
+    return parsed
+
+
+def setup_wizard(
+    input_fn=input,
+    getpass_fn=None,
+    *,
+    provider: str | None = None,
+    endpoint: str | None = None,
+    model: str | None = None,
+    model_revision: str | None = None,
+    family: str | None = None,
+    context_window_tokens: int | None = None,
+    maximum_completion_tokens: int | None = None,
+    credential_env: str | None = None,
+) -> Path:
+    """Write one strict setup provider profile, interactively or explicitly."""
     getpass_fn = getpass_fn or getpass.getpass
     print("Let's set DeepReason up (one time, ~30 seconds).\n")
-    keys = list(PROVIDERS)
-    for i, key in enumerate(keys, 1):
-        print(f"  {i}) {PROVIDERS[key]['label']}")
-    while True:
-        raw = input_fn(f"\nWhich AI provider do you use? [1-{len(keys)}]: ").strip()
-        if raw in {str(i) for i in range(1, len(keys) + 1)}:
-            preset = PROVIDERS[keys[int(raw) - 1]]
-            break
-        print("Please answer with a number from the list.")
-    base, model = preset["base"], preset["model"]
-    if base is None:
-        base = input_fn("Endpoint URL (e.g. https://api.example.com/v1): ").strip()
-        model = input_fn("Model name: ").strip()
-    key = ""
-    while not key:
-        key = getpass_fn("Paste your API key (input stays hidden): ").strip()
-    save_credential(preset["env"], key)
+    preset = None
+    if provider is None:
+        keys = list(PROVIDERS)
+        for i, key in enumerate(keys, 1):
+            print(f"  {i}) {PROVIDERS[key]['label']}")
+        while True:
+            raw = input_fn(
+                f"\nWhich AI provider do you use? [1-{len(keys)}]: "
+            ).strip()
+            if raw in {str(i) for i in range(1, len(keys) + 1)}:
+                provider = keys[int(raw) - 1]
+                preset = PROVIDERS[provider]
+                break
+            print("Please answer with a number from the list.")
+    elif provider in PROVIDERS:
+        preset = PROVIDERS[provider]
 
-    profile = {
-        **MAKE_OVERRIDES,
-        "roles": preset["roles"](base, model, preset["env"]),
-    }
-    if preset["vision"]:
-        profile["VISION_CRIT_PER_CYCLE"] = 2
-    # The wizard and hand-written profiles pass through the exact same strict
-    # schema. Keep the file partial; omitted values inherit Config defaults.
-    Config.model_validate(profile)
-    path = config_path()
-    path.write_text(
-        "# DeepReason engine config — written by `deepreason setup`.\n"
-        "# Edit models/limits freely. Your API key is NOT here: it lives in\n"
-        f"# {credentials_path()} (private to your user), referenced by name.\n"
-        + yaml.safe_dump(profile, sort_keys=False)
+    endpoint = endpoint or (preset and preset["base"])
+    model = model or (preset and preset["model"])
+    credential_env = credential_env or (preset and preset["env"])
+    if endpoint is None:
+        endpoint = input_fn("Endpoint URL (e.g. https://api.example.com/v1): ").strip()
+    if model is None:
+        model = input_fn("Model name: ").strip()
+    if credential_env is None:
+        credential_env = input_fn("Credential environment variable name: ").strip()
+    if context_window_tokens is None:
+        context_window_tokens = _positive_capacity(
+            input_fn("Finite model context-window tokens: ").strip(),
+            label="context-window capacity",
+        )
+    else:
+        context_window_tokens = _positive_capacity(
+            context_window_tokens, label="context-window capacity"
+        )
+    if maximum_completion_tokens is None:
+        maximum_completion_tokens = _positive_capacity(
+            input_fn("Finite maximum completion tokens: ").strip(),
+            label="maximum completion capacity",
+        )
+    else:
+        maximum_completion_tokens = _positive_capacity(
+            maximum_completion_tokens, label="maximum completion capacity"
+        )
+
+    provider_kind = infer_provider(endpoint) if preset is not None else provider
+    if provider_kind is None:
+        provider_kind = infer_provider(endpoint)
+    profile = ProviderProfileV1.create(
+        provider=provider_kind,
+        endpoint=endpoint,
+        model_id=model,
+        model_revision=model_revision,
+        family=family or infer_model_family(model, provider_kind),
+        context_window_tokens=context_window_tokens,
+        maximum_completion_tokens=maximum_completion_tokens,
+        credential_env=credential_env,
     )
-    print(f"\nDone. Config: {path}")
-    print(f"Key stored:  {credentials_path()} (only your user can read it)")
+    path = write_provider_profile(profile, setup_provider_profile_path())
+    already_available = bool(os.environ.get(credential_env, "").strip()) or (
+        _stored_credential_present(credential_env)
+    )
+    if not already_available:
+        key = ""
+        while not key:
+            key = getpass_fn("Paste your API key (input stays hidden): ").strip()
+        save_credential(credential_env, key)
+
+    print(f"\nDone. Provider profile: {path}")
+    if already_available:
+        print(f"Credential reference: {credential_env} (already available)")
+    else:
+        print(f"Credential stored: {credentials_path()} (only your user can read it)")
     print(
-        "\nProvider configuration saved. Managed V6 run preparation is not "
-        "implemented yet; use an operator-prepared bound V6 root."
+        "\nProvider configuration saved. Managed V6 preparation is available "
+        "internally; public question entry is wired in the next bounded task."
     )
     return path
 

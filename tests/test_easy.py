@@ -6,10 +6,10 @@ import os
 import stat
 
 import pytest
-import yaml
 
 from deepreason import easy
 from deepreason.config import Config
+from deepreason.provider_profile import load_provider_profile
 
 
 @pytest.fixture(autouse=True)
@@ -50,48 +50,71 @@ def test_load_credentials_without_file_is_quiet():
     assert easy.load_credentials() == 0
 
 
-# ---- setup wizard: two questions, key never lands in the config file ----
+# ---- setup wizard: typed provider profile, key never lands in the profile ----
 
 def test_setup_wizard_writes_config_without_the_key(monkeypatch, capsys):
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
-    answers = iter(["1"])  # provider: deepseek
+    answers = iter(["1", "262144", "4096"])  # provider and finite capacities
     path = easy.setup_wizard(
         input_fn=lambda _: next(answers),
         getpass_fn=lambda _: "sk-super-secret",
     )
     text = path.read_text()
     assert "sk-super-secret" not in text          # the invariant: no keys in configs
-    assert "api_key_env: DEEPSEEK_API_KEY" in text
-    config = Config.model_validate(yaml.safe_load(text))
-    assert "conjecturer" in config.roles and "argumentative_critic" in config.roles
-    assert config.FUZZ_N == 0 and config.BROWSER_PER_CYCLE == 2
+    assert "credential_env: DEEPSEEK_API_KEY" in text
+    profile = load_provider_profile(path)
+    assert profile.provider == "deepseek"
+    assert profile.context_window_tokens == 262144
+    assert profile.maximum_completion_tokens == 4096
     assert "DEEPSEEK_API_KEY=sk-super-secret" in easy.credentials_path().read_text()
     output = capsys.readouterr().out
     assert "sk-super-secret" not in output
     assert "deepreason make" not in output
-    assert "Managed V6 run preparation is not implemented" in output
+    assert "public question entry is wired in the next bounded task" in output
 
 
 def test_setup_wizard_custom_provider_asks_url_and_model():
-    answers = iter(["3", "https://api.example.com/v1", "my-model"])
+    answers = iter(
+        ["3", "https://api.example.com/v1", "my-model", "131072", "2048"]
+    )
     path = easy.setup_wizard(
         input_fn=lambda _: next(answers),
         getpass_fn=lambda _: "k",
     )
-    config = Config.model_validate(yaml.safe_load(path.read_text()))
-    seat = config.roles["conjecturer"]
-    assert seat["endpoint"] == "https://api.example.com/v1"
-    assert seat["model"] == "my-model"
-    assert seat["api_key_env"] == "LLM_API_KEY"
+    profile = load_provider_profile(path)
+    assert profile.endpoint == "https://api.example.com/v1"
+    assert profile.model_id == "my-model"
+    assert profile.credential_env == "LLM_API_KEY"
 
 
 def test_setup_wizard_rejects_nonsense_then_recovers():
-    answers = iter(["banana", "0", "1"])
+    answers = iter(["banana", "0", "1", "65536", "1024"])
     path = easy.setup_wizard(
         input_fn=lambda _: next(answers),
         getpass_fn=lambda _: "k",
     )
     assert path.exists()
+
+
+def test_setup_wizard_reuses_existing_credential_without_prompt(monkeypatch):
+    monkeypatch.setenv("EXISTING_KEY", "already-set")
+
+    def forbidden(_prompt):
+        pytest.fail("setup asked for a credential that is already available")
+
+    path = easy.setup_wizard(
+        input_fn=lambda _prompt: pytest.fail("explicit setup should not prompt"),
+        getpass_fn=forbidden,
+        provider="custom",
+        endpoint="https://api.example.com/v1",
+        model="model-1",
+        context_window_tokens=32768,
+        maximum_completion_tokens=1024,
+        credential_env="EXISTING_KEY",
+    )
+
+    assert load_provider_profile(path).credential_env == "EXISTING_KEY"
+    assert not easy.credentials_path().exists()
 
 
 def test_gemma4_31b_preset_pins_every_model_bearing_role_to_ollama_cloud():
