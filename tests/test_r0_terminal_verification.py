@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import json
-from types import SimpleNamespace
 
 import pytest
+from pydantic import ValidationError
 
 from deepreason.application.models import (
     InspectTextRunIntentV1,
@@ -19,6 +19,7 @@ from deepreason.application.text_runs import (
     _v6_run_result,
 )
 from deepreason.harness import Harness
+from deepreason.run_manifest import RunManifestError
 from deepreason.verification.report import verify_root_report
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
@@ -260,7 +261,7 @@ def test_application_reader_normalizes_malformed_terminal_to_unknown_exit(
         service.result(InspectTextRunIntentV1(root=str(tmp_path)))
 
 
-def test_v5_active_inquiry_is_contained_and_override_is_durable(
+def test_v5_active_inquiry_and_override_fail_before_application_launch(
     tmp_path, monkeypatch
 ):
     from tests.test_run_manifest_v5_inquiry import _compile, _empty_input
@@ -278,31 +279,37 @@ def test_v5_active_inquiry_is_contained_and_override_is_durable(
         "run_manifest_ref": str(tmp_path / "unused.json"),
         "budget": {"cycles": 1, "token_budget": "unlimited"},
     }
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    calls = []
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler",
+        lambda *_args, **_kwargs: calls.append("scheduler"),
+    )
 
-    with pytest.raises(ValueError, match="V5_ACTIVE_INQUIRY_CONTAINED"):
+    with pytest.raises(RunManifestError) as caught:
         service.start(
             StartTextRunIntentV1(**base),
             manifest_override=manifest,
             credential_checker=lambda _manifest: [],
         )
+    assert caught.value.code == "V6_RUN_MANIFEST_REQUIRED"
 
-    monkeypatch.setattr(
-        "deepreason.ops.run_scheduler",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            RuntimeError("stop after containment marker")
-        ),
-    )
-    accepted = service.start(
-        StartTextRunIntentV1(**base, experimental_v5=True),
-        manifest_override=manifest,
-        credential_checker=lambda _manifest: [],
-    )
-    service.wait(accepted.root, timeout=5)
+    with pytest.raises(ValidationError, match="extra_forbidden"):
+        StartTextRunIntentV1(**base, experimental_v5=True)
 
-    result = service.result(InspectTextRunIntentV1(root=accepted.root))
-    assert result.lifecycle == "failed"
-    inputs = [event.inputs for event in Harness(root, read_only=True).log.read()]
-    assert ["experimental-v5-override.v1", manifest.sha256] in inputs
+    after = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    assert after == before
+    assert calls == []
+
+
 def test_v6_legacy_run_result_schema_is_an_integrity_failure(
     tmp_path, monkeypatch
 ):

@@ -250,6 +250,9 @@ def test_agent_mode_is_the_default_and_wired_by_ops(tmp_path, monkeypatch):
     caller wiring — the gate that silently disabled research is gone."""
     import deepreason.scheduler.scheduler as sched_mod
     from deepreason import ops
+    from tests.test_v6_global_dispatch_guard import (
+        _bound_qualified_v6_scheduler_root,
+    )
 
     assert Config().RESEARCH_BACKEND == "agent"
     seen = {}
@@ -266,9 +269,10 @@ def test_agent_mode_is_the_default_and_wired_by_ops(tmp_path, monkeypatch):
             return {"survivors": []}
 
     monkeypatch.setattr(sched_mod, "Scheduler", _FakeScheduler)
-    h = Harness(tmp_path / "run")
-    ops.run_scheduler(h, Config(roles={"conjecturer": {
-        "endpoint": "https://example.invalid", "model": "m"}}), cycles=0)
+    manifest, h, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "run"
+    )
+    ops.run_scheduler(h, config, cycles=1, run_manifest=manifest)
     service = seen["research"]
     assert isinstance(service, ResearchService)
     assert service.mode == "agent" and not service.internal  # no web fetcher

@@ -184,6 +184,18 @@ def _spec(commitment: Commitment) -> ReasoningWorkloadSpec:
     )
 
 
+def _write_qualification(root, manifest, *, report=None):
+    from deepreason.cli.doctor import write_production_contract_report
+    from tests.test_cli_production_doctor_v6 import _qualified_report
+
+    policy = manifest.production_qualification_policy
+    assert policy is not None
+    return write_production_contract_report(
+        report or _qualified_report(manifest),
+        root / policy.report_filename,
+    )
+
+
 @pytest.mark.parametrize(
     "changed",
     [
@@ -302,6 +314,7 @@ def test_exact_v6_commitments_start_worker_and_continuation_rechecks_full_bytes(
     commitment = _commitment()
     frozen = _bind_v2(root, commitment)
     manifest = _manifest(6, frozen.run_input_digest)
+    _write_qualification(root, manifest)
     calls = []
 
     def finish_without_provider(

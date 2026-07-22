@@ -3,6 +3,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
@@ -10,7 +12,12 @@ from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.packs import render_conj_pack
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
-from deepreason.run_manifest import RunManifest, persist_run_manifest
+from deepreason.run_manifest import (
+    RunManifest,
+    RunManifestError,
+    persist_run_manifest,
+)
+from deepreason.runtime.launch_policy import V6_RUN_MANIFEST_REQUIRED
 from deepreason.runtime.progress import ProgressSink
 from deepreason.runtime.stop import StopController, StopPolicy
 from deepreason.scheduler.scheduler import Scheduler, problem_family_key
@@ -310,8 +317,86 @@ def test_verify_root_accepts_independent_v2_profiles(tmp_path):
     ]
 
 
-def test_ops_forwards_manifest_workload_profile(monkeypatch, tmp_path):
-    harness = Harness(tmp_path / "run")
+@pytest.mark.parametrize(
+    ("name", "manifest"),
+    (
+        (
+            "schema-less",
+            SimpleNamespace(engine_profile="full", workload_profile="formal"),
+        ),
+        (
+            "legacy",
+            SimpleNamespace(engine_profile="full", workload_profile=None),
+        ),
+        (
+            "v2",
+            SimpleNamespace(
+                engine_profile="full",
+                workload_profile="text",
+                schema_version=2,
+                stop_policy={"enabled": False},
+            ),
+        ),
+        (
+            "v3",
+            SimpleNamespace(
+                engine_profile="full",
+                workload_profile="text",
+                schema_version=3,
+                stop_policy={"enabled": False},
+            ),
+        ),
+    ),
+)
+def test_ops_rejects_non_v6_before_scheduler_wiring(
+    monkeypatch,
+    tmp_path,
+    name,
+    manifest,
+):
+    calls = []
+
+    def unreachable(boundary):
+        def fail(*_args, **_kwargs):
+            calls.append(boundary)
+            raise AssertionError(f"non-V6 admission reached {boundary}")
+
+        return fail
+
+    monkeypatch.setattr(
+        "deepreason.llm.adapter.build_adapter", unreachable("adapter")
+    )
+    monkeypatch.setattr(
+        "deepreason.scheduler.scheduler.Scheduler", unreachable("scheduler")
+    )
+    monkeypatch.setattr(
+        "deepreason.run_manifest.preflight_harness", unreachable("preflight")
+    )
+
+    from deepreason.ops import run_scheduler
+
+    with pytest.raises(RunManifestError) as caught:
+        run_scheduler(
+            Harness(tmp_path / name),
+            Config(CONTROLLER=False),
+            0,
+            run_manifest=manifest,
+        )
+
+    assert caught.value.code == V6_RUN_MANIFEST_REQUIRED
+    assert calls == []
+
+
+def test_ops_forwards_bound_v6_workload_and_stop_policy(monkeypatch, tmp_path):
+    from tests.test_v6_global_dispatch_guard import (
+        _bound_qualified_v6_scheduler_root,
+    )
+
+    manifest, harness, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "v6-stop-policy",
+        stop_policy={"enabled": False},
+    )
+    config = config.model_copy(update={"CONTROLLER": False})
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint([_candidate_response("unused")])},
         harness.blobs,
@@ -330,70 +415,17 @@ def test_ops_forwards_manifest_workload_profile(monkeypatch, tmp_path):
     monkeypatch.setattr("deepreason.run_manifest.preflight_harness", lambda *_a: None)
     monkeypatch.setattr("deepreason.ops.make_embedder", lambda *_a: None)
     monkeypatch.setattr("deepreason.ops.make_research_service", lambda *_a: None)
-    manifest = SimpleNamespace(engine_profile="full", workload_profile="formal")
 
     from deepreason.ops import run_scheduler
 
     result, _, _ = run_scheduler(
         harness,
-        Config(CONTROLLER=False),
-        0,
+        config,
+        1,
         run_manifest=manifest,
     )
-    assert result == {"cycles": 0}
-    assert captured["workload_profile"] == "formal"
-
-    legacy = SimpleNamespace(engine_profile="full", workload_profile=None)
-    run_scheduler(
-        Harness(tmp_path / "legacy-website"),
-        Config(CONTROLLER=False),
-        0,
-        run_manifest=legacy,
-    )
-    assert captured["workload_profile"] is None
-
-    v2 = SimpleNamespace(
-        engine_profile="full",
-        workload_profile="text",
-        schema_version=2,
-        stop_policy={"enabled": False},
-    )
-    run_scheduler(
-        Harness(tmp_path / "v2-stop-policy"),
-        Config(CONTROLLER=False),
-        0,
-        run_manifest=v2,
-    )
-    assert isinstance(captured["stop_controller"], StopController)
-    assert not captured["stop_controller"].policy.enabled
-
-    v3 = SimpleNamespace(
-        engine_profile="full",
-        workload_profile="text",
-        schema_version=3,
-        stop_policy={"enabled": False},
-    )
-    run_scheduler(
-        Harness(tmp_path / "v3-stop-policy"),
-        Config(CONTROLLER=False),
-        0,
-        run_manifest=v3,
-    )
-    assert isinstance(captured["stop_controller"], StopController)
-    assert not captured["stop_controller"].policy.enabled
-
-    v6 = SimpleNamespace(
-        engine_profile="full",
-        workload_profile="text",
-        schema_version=6,
-        stop_policy={"enabled": False},
-    )
-    run_scheduler(
-        Harness(tmp_path / "v6-stop-policy"),
-        Config(CONTROLLER=False),
-        0,
-        run_manifest=v6,
-    )
+    assert result == {"cycles": 1}
+    assert captured["workload_profile"] == "text"
     assert isinstance(captured["stop_controller"], StopController)
     assert not captured["stop_controller"].policy.enabled
 

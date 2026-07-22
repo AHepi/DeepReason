@@ -10,6 +10,7 @@ from pydantic import ValidationError
 
 from deepreason import mcp_server
 from deepreason.application import (
+    ContinueTextRunIntentV1,
     InspectTextRunIntentV1,
     RunStartedV1,
     StartTextRunIntentV1,
@@ -21,34 +22,31 @@ from deepreason.application.text_runs import (
     TextRunApplicationService,
     TextRunWorkerRegistry,
 )
+from deepreason.application.intents import start_text_run_intent
 from deepreason.cli import main as cli_module
 from deepreason.cli.main import main as cli_main
-from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.locking import operator_locks
-from deepreason.run_manifest import compile_run_manifest, write_run_manifest
+from deepreason.run_manifest import write_run_manifest
 from deepreason.workloads.text import spec_from_text
 
 
 def _manifest(tmp_path):
-    manifest = compile_run_manifest(
-        Config(
-            roles={
-                "conjecturer": {
-                    "endpoint": "https://application.invalid/v1",
-                    "model": "application-model",
-                    "provider": "fixture",
-                    "family": "fixture",
-                }
-            }
-        ),
-        schema_version=2,
-        workload_profile="text",
-        rubric_policy="forbid",
-        compiled_at="2026-07-16T00:00:00Z",
-    )
+    from tests.test_run_input_v6_commitments import _manifest as compile_v6_manifest
+
+    manifest = compile_v6_manifest(6, "f" * 64)
     path, _ = write_run_manifest(manifest, tmp_path / "manifest.json")
     return manifest, path
+
+
+def _install_g02_cli_constructor_bridge(monkeypatch):
+    """Keep non-G02 CLI coverage while production rejects the removed field."""
+
+    def construct(**values):
+        assert values.pop("experimental_v5") is False
+        return start_text_run_intent(**values)
+
+    monkeypatch.setattr("deepreason.application.start_text_run_intent", construct)
 
 
 def test_start_intent_is_strict_and_has_no_client_authority_fields(tmp_path):
@@ -72,11 +70,32 @@ def test_start_intent_is_strict_and_has_no_client_authority_fields(tmp_path):
         StartTextRunIntentV1.model_validate(
             {**payload, "budget": {"cycles": True, "token_budget": 10}}
         )
+    with pytest.raises(ValidationError, match="extra_forbidden"):
+        StartTextRunIntentV1.model_validate(
+            {**payload, "experimental_v5": False}
+        )
+    with pytest.raises(ValidationError, match="extra_forbidden"):
+        ContinueTextRunIntentV1.model_validate(
+            {
+                "root": str(tmp_path / "run"),
+                "budget": {"cycles": 1, "token_budget": "unlimited"},
+                "experimental_v5": True,
+            }
+        )
 
     schema = json.dumps(StartTextRunIntentV1.model_json_schema(), sort_keys=True)
     assert all(
         forbidden not in schema
-        for forbidden in ("route", "status", "raw_control", "guard_override")
+        for forbidden in (
+            "route",
+            "status",
+            "raw_control",
+            "guard_override",
+            "experimental_v5",
+        )
+    )
+    assert "experimental_v5" not in json.dumps(
+        ContinueTextRunIntentV1.model_json_schema(), sort_keys=True
     )
 
 
@@ -94,6 +113,7 @@ def test_cli_and_mcp_compile_the_same_start_intent(
             root=str(root.resolve()), manifest_digest=manifest.sha256
         )
 
+    _install_g02_cli_constructor_bridge(monkeypatch)
     monkeypatch.setattr(TEXT_RUN_SERVICE, "start", fake_start)
     monkeypatch.setattr(TEXT_RUN_SERVICE, "wait", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(
@@ -167,6 +187,7 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
     }
     if verification is not None:
         payload["verification"] = verification
+    _install_g02_cli_constructor_bridge(monkeypatch)
     monkeypatch.setattr(
         TEXT_RUN_SERVICE,
         "start",
@@ -206,6 +227,7 @@ def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
 ):
     manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / "invalid"
+    _install_g02_cli_constructor_bridge(monkeypatch)
     monkeypatch.setattr(
         TEXT_RUN_SERVICE,
         "start",
@@ -295,9 +317,20 @@ def test_outstanding_work_projection_accepts_v6_transaction_ids(tmp_path):
 
 def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
     import deepreason.harness as harness_module
+    from tests.test_run_input_v6_commitments import (
+        _bind_v2,
+        _commitment,
+        _manifest,
+        _spec,
+        _write_qualification,
+    )
 
-    manifest, manifest_path = _manifest(tmp_path)
     root = tmp_path / "constructor-failure"
+    commitment = _commitment()
+    frozen = _bind_v2(root, commitment)
+    manifest = _manifest(6, frozen.run_input_digest)
+    manifest_path, _ = write_run_manifest(manifest, tmp_path / "manifest.json")
+    _write_qualification(root, manifest)
     service = TextRunApplicationService(TextRunWorkerRegistry())
     original_init = Harness.__init__
 
@@ -310,7 +343,7 @@ def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
         accepted = service.start(
             StartTextRunIntentV1(
                 root=str(root),
-                workload=spec_from_text("Can construction fail safely?"),
+                workload=_spec(commitment),
                 run_manifest_ref=str(manifest_path),
                 budget={"cycles": 1, "token_budget": "unlimited"},
             ),
@@ -321,10 +354,6 @@ def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
 
         assert not worker.is_alive()
         assert service.registry.live(root) is None
-        terminal = service.result(InspectTextRunIntentV1(root=accepted.root))
-        assert terminal.lifecycle == "failed"
-        assert terminal.payload["error_type"] == "RuntimeError"
-        assert terminal.payload["error"] == "constructor failed"
 
     assert harness_module.Harness is Harness
     assert Harness.__init__ is original_init

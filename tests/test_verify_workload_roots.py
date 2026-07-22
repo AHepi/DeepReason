@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
 
 from deepreason.brain import BrainStore, ingest_file, retrieve, snapshot_retrieval
 from deepreason.canonical import canonical_json
@@ -8,7 +9,11 @@ from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
 from deepreason.ontology import Interface, Provenance
-from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
+from deepreason.run_manifest import (
+    MANIFEST_NAME,
+    bind_run_manifest,
+    compile_run_manifest,
+)
 from deepreason.skills.adoption import import_capsule
 from deepreason.skills.models import SkillCapsule
 from deepreason.skills.retrieve import retrieve_skills
@@ -25,7 +30,9 @@ from deepreason.workloads.formal import (
 from deepreason.workloads.text import seed_reasoning_workload, spec_from_text
 
 
-def _root(tmp_path, name: str, workload: str) -> Harness:
+def _root(
+    tmp_path, name: str, workload: str, manifests: dict[Path, object]
+) -> Harness:
     route = {
         "endpoint": "https://example.invalid/v1",
         "model": "gemma4:31b",
@@ -42,6 +49,7 @@ def _root(tmp_path, name: str, workload: str) -> Harness:
     )
     root = tmp_path / name
     bind_run_manifest(manifest, root)
+    manifests[(root / MANIFEST_NAME).resolve()] = manifest
     return Harness(root)
 
 
@@ -58,10 +66,37 @@ def _capsule() -> SkillCapsule:
     )
 
 
-def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(tmp_path) -> None:
+def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(
+    tmp_path, monkeypatch
+) -> None:
+    import deepreason.invariants as invariants_module
+    import deepreason.run_manifest as run_manifest_module
+
+    manifests: dict[Path, object] = {}
+    public_loader = run_manifest_module.load_run_manifest
+    invariant_loader = invariants_module.load_run_manifest
+
+    def load_for_internal_harness(path, *args, **kwargs):
+        target = Path(path).resolve()
+        if target in manifests:
+            return manifests[target]
+        return public_loader(path, *args, **kwargs)
+
+    def load_for_invariants(path, *args, **kwargs):
+        target = Path(path).resolve()
+        if target in manifests:
+            return manifests[target]
+        return invariant_loader(path, *args, **kwargs)
+
+    monkeypatch.setattr(
+        run_manifest_module, "load_run_manifest", load_for_internal_harness
+    )
+    monkeypatch.setattr(
+        invariants_module, "load_run_manifest", load_for_invariants
+    )
     roots: dict[str, Harness] = {}
 
-    text = _root(tmp_path, "text", "text")
+    text = _root(tmp_path, "text", "text", manifests)
     seed_reasoning_workload(text, spec_from_text("Why can feedback oscillate?"))
     roots["text"] = text
 
@@ -73,7 +108,7 @@ def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(tmp_path) ->
         root_digest=declared_root_digest(source, ("*.py",)),
         allowed_paths=("*.py",),
     )
-    code = _root(tmp_path, "code", "code")
+    code = _root(tmp_path, "code", "code", manifests)
     snapshot = snapshot_workspace(spec, blobs=code.blobs)
     code.create_artifact(
         canonical_json(snapshot.model_dump(mode="json", by_alias=True)),
@@ -83,7 +118,7 @@ def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(tmp_path) ->
     )
     roots["code"] = code
 
-    formal = _root(tmp_path, "formal", "formal")
+    formal = _root(tmp_path, "formal", "formal", manifests)
     statement = "The empty list has length zero."
     source_ref = formal.blobs.put(
         b"theorem empty_length : [].length = 0 := by rfl\n"
@@ -116,7 +151,7 @@ def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(tmp_path) ->
     )
     roots["formal"] = formal
 
-    skills = _root(tmp_path, "skills", "text")
+    skills = _root(tmp_path, "skills", "text", manifests)
     capsule = _capsule()
     import_capsule(skills, capsule)
     library = snapshot_library((capsule,), skills.blobs, library_id="test-skills")
@@ -130,7 +165,7 @@ def test_verify_root_is_clean_for_text_code_formal_skills_and_brain(tmp_path) ->
     )
     roots["skills"] = skills
 
-    brain_run = _root(tmp_path, "brain-run", "text")
+    brain_run = _root(tmp_path, "brain-run", "text", manifests)
     external = BrainStore.init(tmp_path / "brain")
     note = tmp_path / "memory.txt"
     note.write_text("bounded partition coverage")

@@ -1,6 +1,7 @@
 """Compatibility profile/repair/route data stays process-only and replayable."""
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -17,7 +18,12 @@ from deepreason.ontology import Commitment, Problem, ProblemProvenance, Rule
 from deepreason.ontology.event import LLMAttempt, LLMCall
 from deepreason.report import eval_report
 from deepreason.rules.conj import conj
-from deepreason.run_manifest import Route, RunManifest, persist_run_manifest
+from deepreason.run_manifest import (
+    MANIFEST_NAME,
+    Route,
+    RunManifest,
+    persist_run_manifest,
+)
 from tests.test_cli_production_doctor_v6 import _admitted_case
 
 
@@ -54,7 +60,41 @@ def _manifest(endpoint, *, engine_profile="full", model_profile="compact"):
     )
 
 
-def _profiled_run(root):
+def _patch_legacy_manifest_consumers(monkeypatch, root, manifest) -> None:
+    """Keep internal process tests independent of the closed public loader."""
+
+    import deepreason.invariants as invariants_module
+    import deepreason.report as report_module
+    import deepreason.run_manifest as run_manifest_module
+
+    target = (Path(root) / MANIFEST_NAME).resolve()
+    public_loader = run_manifest_module.load_run_manifest
+    invariant_loader = invariants_module.load_run_manifest
+    report_loader = report_module.load_run_manifest
+
+    def load_for_internal_harness(path, *args, **kwargs):
+        if Path(path).resolve() == target:
+            return manifest
+        return public_loader(path, *args, **kwargs)
+
+    def load_for_invariants(path, *args, **kwargs):
+        if Path(path).resolve() == target:
+            return manifest
+        return invariant_loader(path, *args, **kwargs)
+
+    def load_for_report(path, *args, **kwargs):
+        if Path(path).resolve() == target:
+            return manifest
+        return report_loader(path, *args, **kwargs)
+
+    monkeypatch.setattr(
+        run_manifest_module, "load_run_manifest", load_for_internal_harness
+    )
+    monkeypatch.setattr(invariants_module, "load_run_manifest", load_for_invariants)
+    monkeypatch.setattr(report_module, "load_run_manifest", load_for_report)
+
+
+def _profiled_run(root, monkeypatch=None):
     invalid = '{"candidates":[{"content":"keep","typicality":2}]}'
     valid = json.dumps(
         {"candidates": [{"content": "keep", "typicality": 0.5}]}
@@ -62,6 +102,8 @@ def _profiled_run(root):
     endpoint = MockEndpoint([invalid, valid], name="mock://profiled", model="model-1")
     manifest = _manifest(endpoint)
     persist_run_manifest(manifest, root)
+    if monkeypatch is not None:
+        _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
     harness = Harness(root)
     harness.register_problem(
         Problem(
@@ -83,9 +125,11 @@ def _profiled_run(root):
     return harness, manifest
 
 
-def test_report_groups_repair_metrics_by_frozen_model_profile(tmp_path):
+def test_report_groups_repair_metrics_by_frozen_model_profile(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
-    harness, manifest = _profiled_run(root)
+    harness, manifest = _profiled_run(root, monkeypatch)
 
     first = eval_report(harness, Config())["process"]
     second = eval_report(Harness(root), Config())["process"]
@@ -123,9 +167,11 @@ def test_report_groups_repair_metrics_by_frozen_model_profile(tmp_path):
     assert not ({"engine_profile", "model_profile", "repair_attempts"} & ontology.keys())
 
 
-def test_invariants_verify_manifest_routes_blobs_and_profile_totals(tmp_path):
+def test_invariants_verify_manifest_routes_blobs_and_profile_totals(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
-    _profiled_run(root)
+    _profiled_run(root, monkeypatch)
     result = verify_root(root)
 
     assert result["violations"] == []
@@ -137,11 +183,14 @@ def test_invariants_verify_manifest_routes_blobs_and_profile_totals(tmp_path):
     assert process["profile_totals"]["compact"]["repair_attempts"] == 1
 
 
-def test_invariants_reject_unlogged_effective_transport_limit(tmp_path):
+def test_invariants_reject_unlogged_effective_transport_limit(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
     endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
     manifest = _manifest(endpoint)
     persist_run_manifest(manifest, root)
+    _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
     route = manifest.roles["conjecturer"][0]
     harness = Harness(root)
     prompt_ref = harness.blobs.put(b"prompt")
@@ -396,10 +445,14 @@ def test_v6_verify_root_groups_heterogeneous_route_seat_base_profiles(
     )
 
 
-def test_invariants_reject_a_call_outside_the_frozen_route(tmp_path):
+def test_invariants_reject_a_call_outside_the_frozen_route(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
     endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
-    persist_run_manifest(_manifest(endpoint), root)
+    manifest = _manifest(endpoint)
+    persist_run_manifest(manifest, root)
+    _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
     harness = Harness(root)
     prompt_ref = harness.blobs.put(b"prompt")
     raw_ref = harness.blobs.put(b"{}")
@@ -420,10 +473,14 @@ def test_invariants_reject_a_call_outside_the_frozen_route(tmp_path):
     assert "frozen-route" in checks
 
 
-def test_invariants_reject_unbounded_or_untraceable_repair_metadata(tmp_path):
+def test_invariants_reject_unbounded_or_untraceable_repair_metadata(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
     endpoint = MockEndpoint([], name="mock://frozen", model="model-1")
-    persist_run_manifest(_manifest(endpoint), root)
+    manifest = _manifest(endpoint)
+    persist_run_manifest(manifest, root)
+    _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
     harness = Harness(root)
     harness._commit(
         Rule.MEASURE,
@@ -453,13 +510,16 @@ def test_invariants_detect_manifest_hash_corruption(tmp_path):
     assert checks & {"open", "run-manifest"}
 
 
-def test_reports_distinguish_schema_exhaustion_from_transport_drop(tmp_path):
+def test_reports_distinguish_schema_exhaustion_from_transport_drop(
+    tmp_path, monkeypatch
+):
     root = tmp_path / "run"
     route_endpoint = MockEndpoint(
         [], name="mock://profiled", model="model-1"
     )
     manifest = _manifest(route_endpoint)
     persist_run_manifest(manifest, root)
+    _patch_legacy_manifest_consumers(monkeypatch, root, manifest)
     harness = Harness(root)
 
     schema_endpoint = MockEndpoint(

@@ -27,6 +27,7 @@ _TRUE = frozenset({"1", "true", "yes", "on"})
 _FALSE = frozenset({"0", "false", "no", "off"})
 _MAX_POLICY_BYTES = 64 * 1024
 BOUND_RUN_MANIFEST_REQUIRED = "RUN_MANIFEST_BOUND_REQUIRED"
+V6_RUN_MANIFEST_REQUIRED = "V6_RUN_MANIFEST_REQUIRED"
 
 
 def _invalid(detail: str) -> ValueError:
@@ -84,14 +85,16 @@ def _read_policy(path: Path) -> Mapping[str, Any]:
 
 
 def require_v6_launch_allowed(subject: Any, *, operation: str) -> None:
-    """Reject a new v6 launch when the central rollback policy disables it.
+    """Require v6, then apply the central rollback policy to a new launch."""
 
-    Non-v6 subjects return before environment or policy parsing.  A broken
-    rollback configuration therefore cannot change any v1-v5 launch path.
-    """
+    from deepreason.run_manifest import RunManifestError
 
     if getattr(subject, "schema_version", None) != 6:
-        return
+        raise RunManifestError(
+            V6_RUN_MANIFEST_REQUIRED,
+            f"{operation} requires RunManifest schema version 6",
+            "/schema_version",
+        )
 
     raw_disable = os.environ.get(V6_LAUNCH_DISABLE_ENV)
     if raw_disable is not None:
@@ -119,9 +122,9 @@ def resolve_effective_run_manifest(
     *,
     root: Path | str | None,
     operation: str,
-    require_bound_manifest: bool = False,
+    require_bound_manifest: bool = True,
 ) -> RunManifest | None:
-    """Reconcile explicit and run-root manifest authority without mutation."""
+    """Reconcile explicit and run-root authority, requiring a binding by default."""
 
     from deepreason.run_manifest import (
         MANIFEST_NAME,
@@ -130,6 +133,11 @@ def resolve_effective_run_manifest(
     )
 
     effective_manifest = explicit_manifest
+    if require_bound_manifest and effective_manifest is not None:
+        # Release eligibility precedes durable binding for explicit launch
+        # authority.  The caller rechecks after reconciliation so a changed
+        # release policy can only fail closed.
+        require_v6_launch_allowed(effective_manifest, operation=operation)
     if root is None or (isinstance(root, str) and not root.strip()):
         if require_bound_manifest:
             raise RunManifestError(
@@ -239,6 +247,7 @@ __all__ = [
     "RELEASE_POLICY_ENV",
     "RELEASE_POLICY_SCHEMA",
     "V6_LAUNCH_DISABLE_ENV",
+    "V6_RUN_MANIFEST_REQUIRED",
     "resolve_effective_run_manifest",
     "require_v6_launch_allowed",
     "require_v6_production_qualification",

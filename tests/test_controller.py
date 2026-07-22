@@ -388,6 +388,9 @@ def test_run_scheduler_wires_controller_by_default(tmp_path, monkeypatch):
     depend on a research-script flag."""
     import deepreason.scheduler.scheduler as sched_mod
     from deepreason import ops
+    from tests.test_v6_global_dispatch_guard import (
+        _bound_qualified_v6_scheduler_root,
+    )
 
     seen = {}
 
@@ -403,12 +406,20 @@ def test_run_scheduler_wires_controller_by_default(tmp_path, monkeypatch):
             return {"survivors": []}
 
     monkeypatch.setattr(sched_mod, "Scheduler", _FakeScheduler)
-    roles = {"conjecturer": {"endpoint": "https://example.invalid", "model": "m"}}
 
-    h = _harness_with_problem(tmp_path / "a")
-    ops.run_scheduler(h, Config(roles=roles), cycles=0)
+    manifest, h, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "a"
+    )
+    ops.run_scheduler(h, config, cycles=1, run_manifest=manifest)
     assert isinstance(seen["controller"], Controller)
 
-    h2 = _harness_with_problem(tmp_path / "b")
-    ops.run_scheduler(h2, Config(CONTROLLER=False, roles=roles), cycles=0)
+    manifest2, h2, config2, _report2 = _bound_qualified_v6_scheduler_root(
+        tmp_path / "b"
+    )
+    ops.run_scheduler(
+        h2,
+        config2.model_copy(update={"CONTROLLER": False}),
+        cycles=1,
+        run_manifest=manifest2,
+    )
     assert seen["controller"] is None

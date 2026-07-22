@@ -58,7 +58,6 @@ class StartTextRunIntentV1(_StrictModel):
     workload: ReasoningWorkloadSpec
     run_manifest_ref: str = Field(min_length=1, max_length=4_096)
     budget: RunBudgetIntentV1
-    experimental_v5: bool = False
 
     @field_validator("root", "run_manifest_ref")
     @classmethod
@@ -77,7 +76,6 @@ class ContinueTextRunIntentV1(_StrictModel):
     expected_manifest_digest: str | None = Field(
         default=None, pattern=r"^[0-9a-f]{64}$"
     )
-    experimental_v5: bool = False
 
 
 class InspectTextRunIntentV1(_StrictModel):

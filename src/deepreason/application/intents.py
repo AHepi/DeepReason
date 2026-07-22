@@ -27,25 +27,23 @@ def budget_intent(cycles, token_budget) -> RunBudgetIntentV1:
 
 
 def start_text_run_intent(
-    *, root, workload, run_manifest_ref, cycles, token_budget, experimental_v5=False
+    *, root, workload, run_manifest_ref, cycles, token_budget
 ) -> StartTextRunIntentV1:
     return StartTextRunIntentV1(
         root=str(root),
         workload=workload,
         run_manifest_ref=str(run_manifest_ref),
         budget=budget_intent(cycles, token_budget),
-        experimental_v5=experimental_v5,
     )
 
 
 def continue_text_run_intent(
-    *, root, cycles, token_budget, expected_manifest_digest=None, experimental_v5=False
+    *, root, cycles, token_budget, expected_manifest_digest=None
 ) -> ContinueTextRunIntentV1:
     return ContinueTextRunIntentV1(
         root=str(root),
         budget=budget_intent(cycles, token_budget),
         expected_manifest_digest=expected_manifest_digest,
-        experimental_v5=experimental_v5,
     )
 
 

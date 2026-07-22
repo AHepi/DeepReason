@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+import pytest
+
 from deepreason import mcp_server
 from deepreason.cli.main import main as cli_main
 from deepreason.config import Config
-from deepreason.harness import Harness
 from deepreason.ops import EngineProfileError, run_scheduler
-from deepreason.run_manifest import compile_run_manifest, write_run_manifest
+from deepreason.run_manifest import (
+    RunManifestError,
+    compile_run_manifest,
+    write_run_manifest,
+)
+from deepreason.runtime.launch_policy import V6_RUN_MANIFEST_REQUIRED
 
 
 def _mini_manifest(tmp_path):
@@ -41,9 +47,44 @@ def _mcp_call(name: str, arguments: dict) -> dict:
     )["result"]
 
 
-def test_ops_rejects_mini_before_adapter_or_model_call(tmp_path, monkeypatch):
+def test_ops_rejects_pre_v6_mini_before_adapter_or_model_call(
+    tmp_path,
+    monkeypatch,
+):
     manifest, _ = _mini_manifest(tmp_path)
-    harness = Harness(tmp_path / "run")
+    from deepreason.harness import Harness
+
+    harness = Harness(tmp_path / "legacy-run")
+    monkeypatch.setattr(
+        "deepreason.llm.adapter.build_adapter",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("historical admission built an adapter")
+        ),
+    )
+
+    with pytest.raises(RunManifestError) as caught:
+        run_scheduler(
+            harness,
+            Config(engine_profile="mini"),
+            cycles=1,
+            run_manifest=manifest,
+        )
+
+    assert caught.value.code == V6_RUN_MANIFEST_REQUIRED
+
+
+def test_bound_v6_mini_reaches_engine_preflight_before_adapter(
+    tmp_path,
+    monkeypatch,
+):
+    from tests.test_v6_global_dispatch_guard import (
+        _bound_qualified_v6_scheduler_root,
+    )
+
+    manifest, harness, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "run",
+        engine_profile="mini",
+    )
     monkeypatch.setattr(
         "deepreason.llm.adapter.build_adapter",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
@@ -51,17 +92,15 @@ def test_ops_rejects_mini_before_adapter_or_model_call(tmp_path, monkeypatch):
         ),
     )
 
-    try:
+    with pytest.raises(EngineProfileError) as caught:
         run_scheduler(
             harness,
-            Config(engine_profile="mini"),
+            config,
             cycles=1,
             run_manifest=manifest,
         )
-    except EngineProfileError as error:
-        assert error.code == "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN"
-    else:  # pragma: no cover - assertion clarity
-        raise AssertionError("mini engine reached the full scheduler")
+
+    assert caught.value.code == "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN"
 
 
 def test_cli_rejects_mini_run_and_website_with_stable_codes(
@@ -82,7 +121,7 @@ def test_cli_rejects_mini_run_and_website_with_stable_codes(
             "--run-manifest", str(path), "--dry-run",
         ]
     ) == 1
-    assert "ENGINE_PROFILE_UNSUPPORTED_FOR_WEBSITE" in capsys.readouterr().err
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     assert not (website_root / "run-manifest.json").exists()
 
     full_root = tmp_path / "full-run"
@@ -92,7 +131,7 @@ def test_cli_rejects_mini_run_and_website_with_stable_codes(
             "--run-manifest", str(path), "--dry-run",
         ]
     ) == 1
-    assert "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN" in capsys.readouterr().err
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     assert not (full_root / "run-manifest.json").exists()
 
 
@@ -109,7 +148,7 @@ def test_mcp_rejects_mini_before_worker_or_manifest_binding(tmp_path):
         },
     )
     assert result["isError"] is True
-    assert "ENGINE_PROFILE_UNSUPPORTED_FOR_WEBSITE" in result["content"][0]["text"]
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in result["content"][0]["text"]
     assert not (website_root / "run-manifest.json").exists()
     assert str(website_root.resolve()) not in mcp_server._MAKE_THREADS
 

@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 
@@ -30,7 +29,10 @@ from deepreason.runtime.launch_policy import (
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
 
-MANIFEST_SHA256 = "a" * 64
+def _v6_manifest():
+    from tests.test_cli_production_doctor_v6 import _manifest
+
+    return _manifest()
 
 
 def _verification_report():
@@ -78,14 +80,16 @@ def _plan(tmp_path: Path, *, qualification: bool) -> CampaignPlan:
     )
 
 
-def _report_refs(tmp_path: Path) -> tuple[QualificationReportRef, ...]:
+def _report_refs(
+    tmp_path: Path, manifest_sha256: str
+) -> tuple[QualificationReportRef, ...]:
     refs = []
     for gate in ("R0", "R1", "R2", "R3", "R4"):
         payload = {
             "schema": "deepreason-v6-qualification-report-v1",
             "gate": gate,
             "passed": True,
-            "manifest_sha256s": [MANIFEST_SHA256],
+            "manifest_sha256s": [manifest_sha256],
             "checks": [{"id": f"{gate}-qualification", "passed": True}],
         }
         raw = canonical_json(payload)
@@ -110,7 +114,7 @@ def test_qualification_mode_can_run_without_prior_reports(
     tmp_path, monkeypatch
 ):
     _clear_release_policy(monkeypatch)
-    manifest = SimpleNamespace(schema_version=6, sha256=MANIFEST_SHA256)
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
@@ -128,13 +132,13 @@ def test_qualification_mode_can_run_without_prior_reports(
     gate = index.to_dict()["qualification_gate"]
     assert gate["mode"] == "qualification"
     assert gate["required"] is False
-    assert gate["manifest_sha256s"] == [MANIFEST_SHA256]
+    assert gate["manifest_sha256s"] == [manifest.sha256]
     assert gate["reports"] == []
 
 
 def test_broad_v6_requires_reports_before_runner(tmp_path, monkeypatch):
     _clear_release_policy(monkeypatch)
-    manifest = SimpleNamespace(schema_version=6, sha256=MANIFEST_SHA256)
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
@@ -157,7 +161,7 @@ def test_broad_v6_verifies_and_binds_exact_r0_r4_reports(
     tmp_path, monkeypatch
 ):
     _clear_release_policy(monkeypatch)
-    manifest = SimpleNamespace(schema_version=6, sha256=MANIFEST_SHA256)
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
@@ -166,7 +170,7 @@ def test_broad_v6_verifies_and_binds_exact_r0_r4_reports(
     plan = CampaignPlan(
         waves=plan.waves,
         qualification=False,
-        qualification_reports=_report_refs(tmp_path),
+        qualification_reports=_report_refs(tmp_path, manifest.sha256),
     )
 
     def runner(_command, _cwd):
@@ -194,12 +198,12 @@ def test_changed_qualification_report_fails_before_runner(
     tmp_path, monkeypatch
 ):
     _clear_release_policy(monkeypatch)
-    manifest = SimpleNamespace(schema_version=6, sha256=MANIFEST_SHA256)
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
     )
-    refs = _report_refs(tmp_path)
+    refs = _report_refs(tmp_path, manifest.sha256)
     refs[2].path.write_text("{}", encoding="utf-8")
     plan = CampaignPlan(
         waves=_plan(tmp_path, qualification=False).waves,
@@ -229,11 +233,12 @@ def test_release_switch_rejects_reason_before_root_mutation_but_not_inspection(
         run_manifest_ref=str(tmp_path / "unused.json"),
         budget={"cycles": 1, "token_budget": "unlimited"},
     )
+    manifest = _v6_manifest()
 
     with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
         service.start(
             intent,
-            manifest_override=SimpleNamespace(schema_version=6),
+            manifest_override=manifest,
             credential_checker=lambda _manifest: pytest.fail(
                 "rollback rejection reached credential checking"
             ),
@@ -250,7 +255,7 @@ def test_release_switch_precedes_v6_make_contract_preflight(
 ):
     monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "1")
     monkeypatch.delenv(RELEASE_POLICY_ENV, raising=False)
-    manifest = SimpleNamespace(schema_version=6, engine_profile="full")
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.run_manifest.load_run_manifest",
         lambda _path: manifest,
@@ -275,7 +280,7 @@ def test_release_switch_precedes_v6_make_contract_preflight(
 def test_release_switch_rejects_campaign_before_runner(tmp_path, monkeypatch):
     monkeypatch.setenv(V6_LAUNCH_DISABLE_ENV, "on")
     monkeypatch.delenv(RELEASE_POLICY_ENV, raising=False)
-    manifest = SimpleNamespace(schema_version=6, sha256=MANIFEST_SHA256)
+    manifest = _v6_manifest()
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
@@ -287,29 +292,35 @@ def test_release_switch_rejects_campaign_before_runner(tmp_path, monkeypatch):
         ).run(_plan(tmp_path, qualification=True))
 
 
-def test_broad_legacy_campaign_needs_no_v6_reports(tmp_path, monkeypatch):
+def test_broad_legacy_campaign_is_rejected_before_runner(tmp_path, monkeypatch):
+    from tests.test_run_manifest_v5_inquiry import _compile
+
     _clear_release_policy(monkeypatch)
-    manifest = SimpleNamespace(schema_version=5, sha256="b" * 64)
+    manifest = _compile("b" * 64)
     monkeypatch.setattr(
         "deepreason.experiments.campaign.load_run_manifest",
         lambda _path: manifest,
     )
 
+    runner_called = False
+
     def runner(_command, _cwd):
-        _write_terminal(tmp_path / "run")
+        nonlocal runner_called
+        runner_called = True
         return 0
 
-    index = CampaignCoordinator(
-        runner=runner,
-        verifier=lambda _root: _verification_report(),
-    ).run(_plan(tmp_path, qualification=False))
-    assert index.qualification_gate.required is False
-    assert index.qualification_gate.reports == ()
+    with pytest.raises(ValueError, match="V6_RUN_MANIFEST_REQUIRED"):
+        CampaignCoordinator(runner=runner).run(
+            _plan(tmp_path, qualification=False)
+        )
+    assert runner_called is False
 
 
+def test_release_policy_and_non_v6_subjects_both_fail_closed(
+    tmp_path, monkeypatch
+):
+    from tests.test_run_manifest_v5_inquiry import _compile
 
-
-def test_release_policy_file_is_fail_closed_only_for_v6(tmp_path, monkeypatch):
     monkeypatch.delenv(V6_LAUNCH_DISABLE_ENV, raising=False)
     policy = tmp_path / "release-policy.json"
     policy.write_text(
@@ -325,14 +336,12 @@ def test_release_policy_file_is_fail_closed_only_for_v6(tmp_path, monkeypatch):
 
     with pytest.raises(ValueError, match="V6_LAUNCH_DISABLED"):
         require_v6_launch_allowed(
-            SimpleNamespace(schema_version=6),
+            _v6_manifest(),
             operation="test launch",
         )
     policy.write_text("{", encoding="utf-8")
-    assert (
+    with pytest.raises(ValueError, match="V6_RUN_MANIFEST_REQUIRED"):
         require_v6_launch_allowed(
-            SimpleNamespace(schema_version=5),
+            _compile("c" * 64),
             operation="legacy launch",
         )
-        is None
-    )

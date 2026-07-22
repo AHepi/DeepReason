@@ -39,9 +39,13 @@ def test_stop_history_is_preserved_behind_latest_pointer(tmp_path):
     assert json.loads((tmp_path / "run-stop.json").read_text())["digest"] == second["digest"]
 
 
-def test_continue_keeps_manifest_and_appends_after_stop(tmp_path):
+def test_continue_keeps_manifest_and_appends_after_stop(tmp_path, monkeypatch):
     manifest = _manifest()
     bind_run_manifest(manifest, tmp_path)
+    monkeypatch.setattr(
+        "deepreason.runtime.continuation.load_run_manifest",
+        lambda _path: manifest,
+    )
     stop = write_stop_record(
         tmp_path, reason="converged", policy=StopPolicy(),
         metrics=StopMetrics(cycle=8), event_seq=10,
@@ -61,9 +65,13 @@ def test_continue_keeps_manifest_and_appends_after_stop(tmp_path):
     assert (tmp_path / "run-stops" / f"{10:012d}-{stop['digest']}.json").exists()
 
 
-def test_continue_rejects_tampered_stop_digest(tmp_path):
+def test_continue_rejects_tampered_stop_digest(tmp_path, monkeypatch):
     manifest = _manifest()
     bind_run_manifest(manifest, tmp_path)
+    monkeypatch.setattr(
+        "deepreason.runtime.continuation.load_run_manifest",
+        lambda _path: manifest,
+    )
     stop = write_stop_record(
         tmp_path, reason="converged", policy=StopPolicy(),
         metrics=StopMetrics(cycle=8), event_seq=10,

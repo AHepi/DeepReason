@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -29,7 +31,7 @@ from deepreason.evidence import (
 )
 from deepreason.harness import Harness, WellFormednessError
 from deepreason.invariants import verify_root
-from deepreason.llm.adapter import LLMAdapter, WorkflowAuthorizationError
+from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import ModelControlFieldError, leases_from_manifest
 from deepreason.llm.wire import AliasTable, ConjecturerTurnWireContractV5
@@ -41,18 +43,42 @@ from deepreason.run_manifest import (
     ControlPlanePolicyV2,
     SchoolExecutionPolicyV1,
     ToolchainEntry,
+    RunManifestError,
     bind_run_manifest,
     compile_run_manifest,
 )
+from deepreason.runtime.launch_policy import V6_RUN_MANIFEST_REQUIRED
 from deepreason.scheduler.scheduler import Scheduler
-from deepreason.workflow.models import TransitionKind
-from deepreason.workflow.shadow import ConjectureShadowObserver
-from deepreason.workflow.trace import ConjectureControlTrace
 
 
 STAMP = "2026-07-16T00:00:00Z"
 PROBLEM_ID = "pi-autonomous-simulation-v5"
 PROBLEM_TEXT = "Exercise one bounded, model-proposed numerical simulation."
+
+
+@contextmanager
+def _v5_component_loading(manifest):
+    """Permit test-only replay checks without exercising public V5 loading."""
+
+    with (
+        patch.object(Harness, "_load_workflow_manifest", return_value=manifest),
+        patch("deepreason.invariants.load_run_manifest", return_value=manifest),
+        patch(
+            "deepreason.capabilities.audit.load_run_manifest",
+            return_value=manifest,
+        ),
+    ):
+        yield
+
+
+def _verify_v5_component_root(root, manifest):
+    with _v5_component_loading(manifest):
+        return verify_root(root)
+
+
+def _write_v5_component_audits(root, manifest):
+    with _v5_component_loading(manifest):
+        return write_tranche_a_audits(root)
 
 
 def _control() -> ControlPlanePolicyV2:
@@ -190,8 +216,11 @@ def _prepare_run(
         run_input_digest=run_input.run_input_digest,
         toolchains=toolchains,
     )
-    bind_run_manifest(manifest, root)
     harness = Harness(root)
+    # These are lower-level historical component tests.  Construct the
+    # harness before persisting the V5 fixture so no public manifest-loading
+    # path treats that fixture as an admissible run.
+    bind_run_manifest(manifest, root)
     problem = harness.register_problem(
         Problem(
             id=PROBLEM_ID,
@@ -311,130 +340,26 @@ def _initial_conjecture(harness, manifest, config, adapter):
     )
 
 
-def test_run_scheduler_initializes_v5_authority_before_provider_dispatch(
+def test_run_scheduler_rejects_v5_before_provider_dispatch(
     tmp_path, monkeypatch
 ):
-    """The production constructor seam must bind authority before cycle zero."""
-
     config, manifest, harness = _prepare_run(tmp_path / "production-authority")
-    observed = {}
-    original_authorize = ConjectureControlTrace.authorize_dispatch
+    calls = []
+    before = {
+        path.relative_to(harness.root).as_posix(): path.read_bytes()
+        for path in harness.root.rglob("*")
+        if path.is_file()
+    }
 
-    def observe_authorize(trace, reserved_tokens=0):
-        observed["trace"] = trace
-        result = original_authorize(trace, reserved_tokens)
-        observed["authorized_before_provider"] = (
-            trace.authoritative and trace.dispatch_authorized
-        )
-        return result
+    def forbidden(*_args, **_kwargs):
+        calls.append("adapter")
+        raise AssertionError("V5 admission reached provider construction")
 
-    monkeypatch.setattr(
-        ConjectureControlTrace, "authorize_dispatch", observe_authorize
-    )
-
-    def complete(_prompt):
-        # This callback is the provider boundary.  Both durable planning
-        # transitions and the authoritative in-memory trace must predate it.
-        assert observed["authorized_before_provider"] is True
-        work_ids = tuple(harness.workflow_state.work_orders)
-        assert len(work_ids) == 1
-        work_id = work_ids[0]
-        transition_kinds = set()
-        for event in harness.log.read():
-            if event.control is None:
-                continue
-            _schema, decision = harness.objects.get(
-                event.control.decision_ref,
-                schema="workflow-transition-decision",
-            )
-            if decision.work_order_id == work_id:
-                transition_kinds.add(decision.transition_kind)
-        assert {
-            TransitionKind.WORK_ENABLED,
-            TransitionKind.WORK_ISSUED,
-        }.issubset(transition_kinds)
-        observed["work_order_id"] = work_id
-        return json.dumps(
-            {
-                "candidates": [
-                    {
-                        "content": "A production-path v5 authority candidate.",
-                        "typicality": 0.4,
-                        "neighbours": [],
-                    }
-                ]
-            }
-        )
-
-    _patch_production_adapter(monkeypatch, manifest, complete)
+    monkeypatch.setattr("deepreason.llm.adapter.build_adapter", forbidden)
 
     from deepreason.ops import run_scheduler
 
-    run_scheduler(
-        harness,
-        config,
-        cycles=1,
-        token_budget=100_000,
-        run_manifest=manifest,
-    )
-
-    work_id = observed["work_order_id"]
-    work = harness.workflow_state.work_orders[work_id]
-    assert work.workflow_profile == "inquiry.active.v1"
-    assert work.contract_id == "conjecturer.turn.v5"
-    assert observed["trace"].authoritative is True
-
-    events = tuple(harness.log.read())
-    controls = []
-    for event in events:
-        if event.control is None:
-            continue
-        _schema, decision = harness.objects.get(
-            event.control.decision_ref,
-            schema="workflow-transition-decision",
-        )
-        if decision.work_order_id == work_id:
-            controls.append(decision.transition_kind)
-    assert TransitionKind.WORK_ENABLED in controls
-    assert TransitionKind.WORK_ISSUED in controls
-    (provider_event,) = tuple(
-        event
-        for event in events
-        if event.llm is not None and event.llm.role == "conjecturer"
-    )
-    assert provider_event.llm.work_order_id == work_id
-    assert provider_event.llm.attempt_trace[-1].contract_id == work.contract_id
-    assert any(event.rule == Rule.CONTROL for event in events)
-
-    replayed = Harness(harness.root)
-    assert replayed.workflow_state.digest == harness.workflow_state.digest
-    assert replayed.workflow_state.outstanding_work_order_ids == ()
-    assert verify_root(harness.root)["violations"] == []
-
-
-def test_run_scheduler_fails_closed_when_v5_authority_is_genuinely_absent(
-    tmp_path, monkeypatch
-):
-    config, manifest, harness = _prepare_run(tmp_path / "authority-absent")
-    provider_calls = []
-
-    def complete(_prompt):
-        provider_calls.append("called")
-        return json.dumps({"abstention": {"search_signal": "stuck"}})
-
-    _patch_production_adapter(monkeypatch, manifest, complete)
-    monkeypatch.setattr(
-        ConjectureShadowObserver,
-        "from_manifest",
-        classmethod(lambda _cls, _manifest: None),
-    )
-
-    from deepreason.ops import run_scheduler
-
-    with pytest.raises(
-        WorkflowAuthorizationError,
-        match="active conjecture control trace is unavailable",
-    ):
+    with pytest.raises(RunManifestError) as caught:
         run_scheduler(
             harness,
             config,
@@ -443,7 +368,46 @@ def test_run_scheduler_fails_closed_when_v5_authority_is_genuinely_absent(
             run_manifest=manifest,
         )
 
-    assert provider_calls == []
+    after = {
+        path.relative_to(harness.root).as_posix(): path.read_bytes()
+        for path in harness.root.rglob("*")
+        if path.is_file()
+    }
+    assert caught.value.code == V6_RUN_MANIFEST_REQUIRED
+    assert calls == []
+    assert after == before
+    assert not any(event.llm is not None for event in harness.log.read())
+
+
+def test_v5_rejection_precedes_legacy_authority_resolution(
+    tmp_path, monkeypatch
+):
+    config, manifest, harness = _prepare_run(tmp_path / "authority-absent")
+    calls = []
+
+    def forbidden(*_args, **_kwargs):
+        calls.append("legacy authority")
+        raise AssertionError("V5 admission reached legacy authority resolution")
+
+    monkeypatch.setattr(
+        "deepreason.workflow.shadow.ConjectureShadowObserver.from_manifest",
+        classmethod(forbidden),
+    )
+    monkeypatch.setattr("deepreason.llm.adapter.build_adapter", forbidden)
+
+    from deepreason.ops import run_scheduler
+
+    with pytest.raises(RunManifestError) as caught:
+        run_scheduler(
+            harness,
+            config,
+            cycles=1,
+            token_budget=100_000,
+            run_manifest=manifest,
+        )
+
+    assert caught.value.code == V6_RUN_MANIFEST_REQUIRED
+    assert calls == []
     assert not any(event.llm is not None for event in harness.log.read())
 
 
@@ -570,9 +534,9 @@ def test_conjecture_records_only_proposal_and_scheduler_executes_later(tmp_path)
         CapabilityLifecycle.RESULT_PACKAGED,
         CapabilityLifecycle.CONSUMED,
     ]
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
-    written = write_tranche_a_audits(harness.root)
+    written = _write_v5_component_audits(harness.root, manifest)
     assert "CAPABILITY_REQUEST_AUDIT.md" in written
     assert "SIMULATION_RESULTS.md" in written
     replay = json.loads((harness.root / "REPLAY_VALIDATION.json").read_text())
@@ -607,7 +571,7 @@ def test_unavailable_frozen_runner_is_denied_before_execution(tmp_path):
     assert transition.lifecycle == CapabilityLifecycle.DENIED
     assert transition.reason_code == "runner_unavailable"
     assert harness.capability_state.execution_count == 0
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
 
 def test_invalid_declarative_program_is_denied_without_dispatch(tmp_path):
@@ -639,7 +603,7 @@ def test_invalid_declarative_program_is_denied_without_dispatch(tmp_path):
     assert transition.lifecycle == CapabilityLifecycle.DENIED
     assert transition.reason_code == "invalid_model_program"
     assert not harness.capability_state.work_orders
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
 
 def test_request_exhaustion_denies_later_proposal_and_duplicate_dispatch_fails(tmp_path):
@@ -688,7 +652,7 @@ def test_request_exhaustion_denies_later_proposal_and_duplicate_dispatch_fails(t
             ],
         )
     assert harness.capability_state.digest == before
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
 
 def test_sandboxed_python_has_no_host_fallback(tmp_path):
@@ -714,7 +678,7 @@ def test_sandboxed_python_has_no_host_fallback(tmp_path):
     assert transition.reason_code == "runner_unavailable"
     assert not harness.capability_state.compiled
     assert harness.capability_state.execution_count == 0
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
 
 def test_operational_failure_is_packaged_and_does_not_refute_hypothesis(tmp_path):
@@ -750,7 +714,7 @@ def test_operational_failure_is_packaged_and_does_not_refute_hypothesis(tmp_path
     assert pending == []
     assert "does not refute the hypothesis" in prompts[1]
     assert harness.capability_state.consumption_count == 1
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
 
 
 def test_dispatched_crash_recovers_as_unknown_without_silent_rerun(
@@ -817,4 +781,4 @@ def test_dispatched_crash_recovers_as_unknown_without_silent_rerun(
     assert pending == []
     assert "did not silently rerun" in prompts[1]
     assert harness.capability_state.consumption_count == 1
-    assert verify_root(harness.root)["violations"] == []
+    assert _verify_v5_component_root(harness.root, manifest)["violations"] == []

@@ -39,6 +39,7 @@ from deepreason.runtime.launch_policy import (
     RELEASE_POLICY_ENV,
     RELEASE_POLICY_SCHEMA,
     V6_LAUNCH_DISABLE_ENV,
+    V6_RUN_MANIFEST_REQUIRED,
     require_v6_production_qualification,
 )
 from deepreason.storage.blobs import BlobStore
@@ -121,8 +122,12 @@ def _assert_scheduler_policy_rejected(monkeypatch, manifest, expected_error: str
     assert calls == []
 
 
-def _bound_v6_scheduler_harness(tmp_path):
-    root = tmp_path / "bound-v6-scheduler-root"
+def _bound_qualified_v6_scheduler_root(
+    root,
+    *,
+    engine_profile="full",
+    stop_policy=None,
+):
     problem_id = "bound-v6-scheduler-problem"
     dossier = EvidenceDossierV1.create(
         problem_ref=problem_id,
@@ -143,6 +148,7 @@ def _bound_v6_scheduler_harness(tmp_path):
     )
     bind_run_input(run_input, dossier, root)
     config = Config(
+        engine_profile=engine_profile,
         N_SCHOOLS=0,
         roles={
             "conjecturer": [
@@ -188,9 +194,21 @@ def _bound_v6_scheduler_harness(tmp_path):
         compiled_at="2026-07-19T00:00:00Z",
         control_plane_policy=control,
         run_input_digest=run_input.run_input_digest,
+        stop_policy=stop_policy,
     )
     bind_run_manifest(manifest, root)
-    return Harness(root), config
+    from tests.test_cli_production_doctor_v6 import _qualified_report
+
+    report = _qualified_report(manifest)
+    _write_required_report(root, manifest, report)
+    return manifest, Harness(root), config, report
+
+
+def _bound_v6_scheduler_harness(tmp_path):
+    _manifest, harness, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "bound-v6-scheduler-root"
+    )
+    return harness, config
 
 
 def _root_snapshot(root):
@@ -291,6 +309,7 @@ def test_v6_scheduler_requires_qualification_before_protected_work(
     manifest, _report = _qualified_manifest_and_report()
     root = tmp_path / "missing-qualification"
     root.mkdir()
+    write_run_manifest(manifest, root / MANIFEST_NAME)
     harness = _scheduler_harness(root)
     before = _root_snapshot(root)
     calls = _forbid_bound_scheduler_work(monkeypatch, harness)
@@ -318,7 +337,7 @@ def test_canonical_qualified_report_allows_existing_scheduler_path(
     manifest, report = _qualified_manifest_and_report()
     root = tmp_path / "qualified"
     root.mkdir()
-    assert not (root / MANIFEST_NAME).exists()
+    write_run_manifest(manifest, root / MANIFEST_NAME)
     _write_required_report(root, manifest, report)
     assert require_v6_production_qualification(
         manifest,
@@ -377,6 +396,7 @@ def test_inexact_qualification_reports_fail_before_scheduler_work(
     manifest, report = _qualified_manifest_and_report()
     root = tmp_path / variant
     root.mkdir()
+    write_run_manifest(manifest, root / MANIFEST_NAME)
     policy = manifest.production_qualification_policy
     assert policy is not None
     required = root / policy.report_filename
@@ -502,6 +522,7 @@ def test_repair_overclaim_and_unqualified_reports_fail_before_scheduler_work(
     ):
         root = tmp_path / name
         root.mkdir()
+        write_run_manifest(manifest, root / MANIFEST_NAME)
         _write_required_report(root, manifest, report)
         harness = _scheduler_harness(root)
         before = _root_snapshot(root)
@@ -530,6 +551,7 @@ def test_historical_v6_policy_absence_and_missing_root_fail_closed(
     historical = RunManifest.model_validate(payload)
     root = tmp_path / "historical"
     root.mkdir()
+    write_run_manifest(historical, root / MANIFEST_NAME)
     harness = _scheduler_harness(root)
     calls = _forbid_bound_scheduler_work(monkeypatch, harness)
 
@@ -552,7 +574,7 @@ def test_historical_v6_policy_absence_and_missing_root_fail_closed(
     assert caught.value.code == "V6_PRODUCTION_QUALIFICATION_ROOT_REQUIRED"
 
 
-def test_zero_cycles_and_pre_v6_never_inspect_qualification_report(
+def test_zero_cycles_skips_qualification_and_pre_v6_fails_before_it(
     tmp_path,
     monkeypatch,
 ):
@@ -570,6 +592,7 @@ def test_zero_cycles_and_pre_v6_never_inspect_qualification_report(
     config = SimpleNamespace(CONTROLLER=False, engine_profile="full")
     root = tmp_path / "no-report-inspection"
     root.mkdir()
+    write_run_manifest(manifest, root / MANIFEST_NAME)
 
     ops.run_scheduler(
         _scheduler_harness(root),
@@ -579,21 +602,23 @@ def test_zero_cycles_and_pre_v6_never_inspect_qualification_report(
         stop_controller=object(),
     )
     for schema_version in range(1, 6):
-        ops.run_scheduler(
-            _scheduler_harness(root),
-            config,
-            cycles=1,
-            run_manifest=SimpleNamespace(
-                schema_version=schema_version,
-                engine_profile="full",
-                workload_profile="text",
-            ),
-            stop_controller=object(),
-        )
+        with pytest.raises(RunManifestError) as caught:
+            ops.run_scheduler(
+                _scheduler_harness(root),
+                config,
+                cycles=1,
+                run_manifest=SimpleNamespace(
+                    schema_version=schema_version,
+                    engine_profile="full",
+                    workload_profile="text",
+                ),
+                stop_controller=object(),
+            )
+        assert caught.value.code == V6_RUN_MANIFEST_REQUIRED
     assert "qualification report" not in calls
 
 
-def test_bound_and_explicit_manifest_launches_require_the_same_report(
+def test_explicit_manifest_requires_binding_before_qualification_report(
     tmp_path,
     monkeypatch,
 ):
@@ -606,7 +631,10 @@ def test_bound_and_explicit_manifest_launches_require_the_same_report(
     bound_root.mkdir()
     write_run_manifest(manifest, bound_root / MANIFEST_NAME)
 
-    for root, supplied in ((explicit_root, manifest), (bound_root, None)):
+    for root, supplied, expected_code in (
+        (explicit_root, manifest, "RUN_MANIFEST_BOUND_REQUIRED"),
+        (bound_root, None, "DOCTOR_REPORT_MISSING"),
+    ):
         harness = _scheduler_harness(root)
         calls = _forbid_bound_scheduler_work(monkeypatch, harness)
         with pytest.raises(RunManifestError) as caught:
@@ -616,7 +644,7 @@ def test_bound_and_explicit_manifest_launches_require_the_same_report(
                 cycles=1,
                 run_manifest=supplied,
             )
-        assert caught.value.code == "DOCTOR_REPORT_MISSING"
+        assert caught.value.code == expected_code
         assert calls == []
 
 
@@ -734,6 +762,7 @@ def test_qualification_loader_and_validator_run_once_per_scheduler_invocation(
     manifest, report = _qualified_manifest_and_report()
     root = tmp_path / "qualification-once"
     root.mkdir()
+    write_run_manifest(manifest, root / MANIFEST_NAME)
     _write_required_report(root, manifest, report)
     counts = {"load": 0, "validate": 0}
     original_load = doctor_module.load_production_contract_report
@@ -907,11 +936,10 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
     )
     monkeypatch.delenv(V6_LAUNCH_DISABLE_ENV, raising=False)
     monkeypatch.setenv(RELEASE_POLICY_ENV, str(policy))
-    manifest = SimpleNamespace(
-        schema_version=6,
-        engine_profile="full",
-        workload_profile="text",
+    manifest, harness, config, _report = _bound_qualified_v6_scheduler_root(
+        tmp_path / "enabled-explicit-v6"
     )
+    config = config.model_copy(update={"CONTROLLER": False})
 
     calls = []
     captured = {}
@@ -944,14 +972,14 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
     monkeypatch.setattr(ops.importlib.util, "find_spec", lambda _name: None)
 
     result, meter, accounting = ops.run_scheduler(
-        SimpleNamespace(blobs=object(), log=SimpleNamespace(read=lambda: ())),
-        SimpleNamespace(CONTROLLER=False, engine_profile="full"),
-        cycles=0,
+        harness,
+        config,
+        cycles=1,
         run_manifest=manifest,
         stop_controller=object(),
     )
 
-    assert result == {"cycles": 0}
+    assert result == {"cycles": 1}
     assert meter is captured["meter"]
     assert meter.budget is None
     assert meter.snapshot() == {
@@ -964,7 +992,7 @@ def test_direct_scheduler_allows_enabled_explicit_v6_manifest(tmp_path, monkeypa
     }
     assert accounting["metered_tokens"] == 0
     assert accounting["delta"] == 0
-    assert calls == ["manifest preflight", "adapter", "scheduler", ("run", 0)]
+    assert calls == ["manifest preflight", "adapter", "scheduler", ("run", 1)]
 
 
 def _cli_args(root, *, dry_run: bool):
