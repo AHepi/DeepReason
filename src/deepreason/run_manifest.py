@@ -97,6 +97,19 @@ class RunManifestError(ValueError):
         super().__init__(f"{code}{location}: {message}")
 
 
+class UnsupportedRunManifestVersionError(RunManifestError):
+    """A historical top-level RunManifest version was rejected raw."""
+
+    def __init__(self, rejected_version: int) -> None:
+        self.rejected_version = rejected_version
+        super().__init__(
+            "UNSUPPORTED_RUN_MANIFEST_VERSION",
+            f"RunManifest schema version {rejected_version} is unsupported; "
+            f"only schema version {LATEST_SCHEMA_VERSION} is accepted",
+            "/schema_version",
+        )
+
+
 class RouteSecretError(RuntimeError):
     """A route URL contains credential material that must not be persisted.
 
@@ -3503,6 +3516,44 @@ def persist_run_manifest(manifest: RunManifest, root: Path | str) -> tuple[Path,
     return bind_run_manifest(manifest, root)
 
 
+def _discriminate_raw_run_manifest_version(raw: bytes) -> None:
+    """Reject historical versions before any RunManifest model validation."""
+    try:
+        payload = json.loads(raw)
+    except RecursionError as error:
+        raise RunManifestError(
+            "INVALID_RUN_MANIFEST",
+            "manifest JSON nesting exceeds the supported depth",
+        ) from error
+    except (ValueError, UnicodeDecodeError):
+        # Preserve the existing model-validation error path for malformed JSON.
+        return
+    if not isinstance(payload, dict):
+        # Preserve the existing model-validation error path for other JSON roots.
+        return
+    if "schema_version" not in payload:
+        raise RunManifestError(
+            "INVALID_RUN_MANIFEST",
+            "manifest JSON must declare an integer schema_version",
+            "/schema_version",
+        )
+    schema_version = payload["schema_version"]
+    if type(schema_version) is not int:
+        raise RunManifestError(
+            "INVALID_RUN_MANIFEST",
+            "manifest schema_version must be an integer",
+            "/schema_version",
+        )
+    if 1 <= schema_version <= 5:
+        raise UnsupportedRunManifestVersionError(schema_version)
+    if schema_version != LATEST_SCHEMA_VERSION:
+        raise RunManifestError(
+            "INVALID_RUN_MANIFEST",
+            f"manifest schema_version must be {LATEST_SCHEMA_VERSION}",
+            "/schema_version",
+        )
+
+
 def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManifest:
     target = Path(path)
     raw = _read_bounded_regular(
@@ -3511,6 +3562,7 @@ def load_run_manifest(path: Path | str, *, verify_hash: bool = True) -> RunManif
         required=True,
     )
     assert raw is not None
+    _discriminate_raw_run_manifest_version(raw)
     try:
         manifest = RunManifest.model_validate_json(raw)
     except ValueError as error:

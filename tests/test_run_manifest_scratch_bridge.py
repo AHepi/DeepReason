@@ -99,13 +99,15 @@ def test_v1_v2_bytes_and_source_hash_ignore_new_typed_defaults(
 def test_v3_round_trip_freezes_complete_attention_and_bridge_policy(tmp_path):
     manifest = _compile(_grounded_config())
     path, digest_path = write_run_manifest(manifest, tmp_path / "manifest.json")
-    reopened = load_run_manifest(path)
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(path)
 
     assert digest_path.read_text().strip() == manifest.sha256
-    assert reopened == manifest
-    assert reopened.scratch_policy is not None
-    assert reopened.bridge_policy is not None
-    assert set(reopened.scratch_policy.per_channel_limits) == {
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.rejected_version == 3
+    assert manifest.scratch_policy is not None
+    assert manifest.bridge_policy is not None
+    assert set(manifest.scratch_policy.per_channel_limits) == {
         "focus",
         "link",
         "cluster",
@@ -118,14 +120,14 @@ def test_v3_round_trip_freezes_complete_attention_and_bridge_policy(tmp_path):
         "exploratory",
         "coverage",
     }
-    assert reopened.scratch_policy.attention_policy().max_blocks_per_pack == 24
-    workflow = reopened.bridge_policy.workflow_policy()
+    assert manifest.scratch_policy.attention_policy().max_blocks_per_pack == 24
+    workflow = manifest.bridge_policy.workflow_policy()
     assert workflow.ledger_role == "summarizer"
     assert workflow.composer_role == "thesis"
     assert workflow.reviewer_role == "judge"
-    assert reopened.bridge_policy.reviewer_seat == 0
-    assert reopened.bridge_policy.grounding_repair_role == "judge"
-    engine_data = json.loads(reopened.engine_config_json)
+    assert manifest.bridge_policy.reviewer_seat == 0
+    assert manifest.bridge_policy.grounding_repair_role == "judge"
+    engine_data = json.loads(manifest.engine_config_json)
     assert "scratchpad" not in engine_data
     assert "bridge" not in engine_data
 

@@ -79,6 +79,16 @@ def _compile_v6_manifest(
     )
 
 
+def _compile_bound_v6_manifest(root, commitment_id):
+    from tests.test_run_input_v6_commitments import _bind_v2
+
+    run_input = _bind_v2(
+        root,
+        Commitment(id=commitment_id, eval="predicate:True"),
+    )
+    return _compile_v6_manifest(run_input_digest=run_input.run_input_digest)
+
+
 def _compact_recovery_policy_payload() -> dict:
     return {
         "schema": "compact-recovery-policy.v1",
@@ -657,10 +667,7 @@ def test_property_proposal_rubric_path_fails_before_any_model_call(tmp_path):
 
 
 def test_manifest_is_immutable_canonical_and_hash_verified(tmp_path):
-    manifest = compile_run_manifest(
-        _config(), single_model="gemma4:31b", rubric_policy="forbid",
-        compiled_at=STAMP,
-    )
+    manifest = _compile_bound_v6_manifest(tmp_path, "k-manifest-identity")
     path, digest_path = persist_run_manifest(manifest, tmp_path)
     assert path.name == "run-manifest.json"
     assert digest_path.name == "run-manifest.sha256"
@@ -677,10 +684,7 @@ def test_manifest_is_immutable_canonical_and_hash_verified(tmp_path):
 
 
 def test_load_rejects_conflicting_digest_even_when_first_sidecar_matches(tmp_path):
-    manifest = compile_run_manifest(
-        _config(), single_model="gemma4:31b", rubric_policy="forbid",
-        compiled_at=STAMP,
-    )
+    manifest = _compile_bound_v6_manifest(tmp_path, "k-conflicting-digest")
     path, fixed_digest = persist_run_manifest(manifest, tmp_path)
     path.with_suffix(path.suffix + ".sha256").write_text(manifest.sha256 + "\n")
     fixed_digest.write_text("f" * 64 + "\n")
@@ -694,10 +698,7 @@ def test_load_rejects_conflicting_digest_even_when_first_sidecar_matches(tmp_pat
 def test_manifest_load_rejects_symlinked_control_files_without_leaking_target(
     tmp_path, unsafe_part
 ):
-    manifest = compile_run_manifest(
-        _config(), single_model="gemma4:31b", rubric_policy="forbid",
-        compiled_at=STAMP,
-    )
+    manifest = _compile_v6_manifest()
     path, json_digest = write_run_manifest(manifest, tmp_path / "input.json")
     fixed_digest = tmp_path / "run-manifest.sha256"
     secret = "credential-like-secret-must-not-leak"
@@ -774,7 +775,10 @@ def test_v2_manifest_is_immutable_replayable_and_toolchains_are_resolved(tmp_pat
     assert manifest.pack_profile == "reasoning.formal.v1"
     assert manifest.output_profile == "compact.v2"
     path, _ = persist_run_manifest(manifest, tmp_path)
-    assert load_run_manifest(path) == manifest
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(path)
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.rejected_version == 2
     with pytest.raises(TypeError, match="immutable"):
         manifest.budget_policy["cycles"] = {}
     with pytest.raises(ValueError, match="resolved"):
@@ -785,10 +789,7 @@ def test_v2_manifest_is_immutable_replayable_and_toolchains_are_resolved(tmp_pat
 
 
 def test_run_root_binding_is_idempotent_and_never_overwrites_conflict(tmp_path):
-    first = compile_run_manifest(
-        _config(), single_model="gemma4:31b", rubric_policy="forbid",
-        compiled_at=STAMP,
-    )
+    first = _compile_bound_v6_manifest(tmp_path, "k-idempotent-binding")
     different = first.model_copy(update={"concurrency": first.concurrency + 1})
     path, digest = bind_run_manifest(first, tmp_path)
     original_bytes = path.read_bytes()
@@ -826,7 +827,9 @@ def test_run_root_binding_honors_orphaned_digest_record(tmp_path):
     assert not (tmp_path / "run-manifest.json").exists()
 
 
-def test_cli_compile_inspect_and_make_dry_run(tmp_path, monkeypatch, capsys):
+def test_cli_compiles_historical_manifest_but_public_loaders_reject_it(
+    tmp_path, monkeypatch, capsys
+):
     from deepreason.cli.main import main
 
     config_path = tmp_path / "gemma.yaml"
@@ -851,9 +854,8 @@ def test_cli_compile_inspect_and_make_dry_run(tmp_path, monkeypatch, capsys):
     assert "conjecturer[0]" in compiled and "model=gemma4:31b" in compiled
     assert manifest_path.exists()
 
-    assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 0
-    inspected = capsys.readouterr().out
-    assert "sha256=" in inspected and '"provider_fallback": false' in inspected
+    assert main(["config", "inspect", "--run-manifest", str(manifest_path)]) == 1
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
 
     monkeypatch.setattr(
         "deepreason.easy.make", lambda *_a, **_k: pytest.fail("dry-run invoked make")
@@ -863,11 +865,11 @@ def test_cli_compile_inspect_and_make_dry_run(tmp_path, monkeypatch, capsys):
             "--root", str(tmp_path / "run"), "make", "DNA page",
             "--run-manifest", str(manifest_path), "--dry-run",
         ]
-    ) == 0
-    assert "gemma4:31b" in capsys.readouterr().out
+    ) == 1
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
 
 
-def test_cli_make_resume_uses_bound_manifest_and_rejects_replacement(
+def test_cli_make_rejects_bound_pre_v6_manifest_and_replacement(
     tmp_path, monkeypatch, capsys
 ):
     from deepreason.cli.main import main
@@ -883,8 +885,8 @@ def test_cli_make_resume_uses_bound_manifest_and_rejects_replacement(
         "deepreason.run_manifest.compile_run_manifest",
         lambda *_a, **_k: pytest.fail("resume recompiled source configuration"),
     )
-    assert main(["--root", str(run_root), "make", "DNA page", "--dry-run"]) == 0
-    assert "gemma4:31b" in capsys.readouterr().out
+    assert main(["--root", str(run_root), "make", "DNA page", "--dry-run"]) == 1
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
 
     replacement = bound.model_copy(update={"concurrency": bound.concurrency + 1})
     replacement_path, _ = write_run_manifest(replacement, tmp_path / "replacement.json")
@@ -897,11 +899,14 @@ def test_cli_make_resume_uses_bound_manifest_and_rejects_replacement(
             "--run-manifest", str(replacement_path),
         ]
     ) == 1
-    assert "RUN_MANIFEST_CONFLICT" in capsys.readouterr().err
-    assert load_run_manifest(run_root / "run-manifest.json") == bound
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(run_root / "run-manifest.json")
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.rejected_version == 1
 
 
-def test_cli_run_resume_uses_bound_manifest_and_rejects_replacement(
+def test_cli_run_rejects_bound_pre_v6_manifest_and_replacement(
     tmp_path, monkeypatch, capsys
 ):
     from deepreason.cli.main import main
@@ -919,8 +924,8 @@ def test_cli_run_resume_uses_bound_manifest_and_rejects_replacement(
     )
     assert main(
         ["--root", str(run_root), "run", "--budget", "1", "--dry-run"]
-    ) == 0
-    assert "gemma4:31b" in capsys.readouterr().out
+    ) == 1
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
 
     replacement = bound.model_copy(update={"concurrency": bound.concurrency + 1})
     replacement_path, _ = write_run_manifest(replacement, tmp_path / "run-new.json")
@@ -930,11 +935,14 @@ def test_cli_run_resume_uses_bound_manifest_and_rejects_replacement(
             "--run-manifest", str(replacement_path), "--dry-run",
         ]
     ) == 1
-    assert "RUN_MANIFEST_CONFLICT" in capsys.readouterr().err
-    assert load_run_manifest(run_root / "run-manifest.json") == bound
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(run_root / "run-manifest.json")
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.rejected_version == 1
 
 
-def test_direct_cli_make_run_and_reason_respect_operator_contention(
+def test_direct_cli_rejects_pre_v6_before_operator_contention(
     tmp_path, monkeypatch, capsys
 ):
     from deepreason.cli.main import main
@@ -954,9 +962,9 @@ def test_direct_cli_make_run_and_reason_respect_operator_contention(
     locks = operator_locks(root, owner="test-holder", blocking=False)
     try:
         assert main(["--root", str(root), "make", "locked site"]) == 1
-        assert "MAKE_ALREADY_RUNNING" in capsys.readouterr().err
+        assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
         assert main(["--root", str(root), "run", "--budget", "1"]) == 1
-        assert "RUN_ALREADY_RUNNING" in capsys.readouterr().err
+        assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     finally:
         locks.release()
 
@@ -986,7 +994,7 @@ def test_direct_cli_make_run_and_reason_respect_operator_contention(
             )
             == 1
         )
-        assert "RUN_ALREADY_RUNNING" in capsys.readouterr().err
+        assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
     finally:
         locks.release()
 

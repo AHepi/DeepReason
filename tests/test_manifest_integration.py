@@ -56,15 +56,17 @@ def test_compile_bind_preflight_text_manifest(tmp_path):
 
     root = tmp_path / "run"
     bind_run_manifest(manifest, root)
-    reloaded = load_run_manifest(root / "run-manifest.json")
-    assert reloaded.sha256 == manifest.sha256
+    with pytest.raises(RunManifestError) as raised:
+        load_run_manifest(root / "run-manifest.json")
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.rejected_version == 2
 
     # A rubric-bearing seeded harness passes preflight under this manifest.
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
     from live_run import seed_bronze
 
-    harness = Harness(root)
+    harness = Harness(tmp_path / "preflight")
     seed_bronze(harness)
     preflight_harness(manifest, harness, config)  # must not raise
 
