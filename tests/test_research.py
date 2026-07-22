@@ -582,30 +582,41 @@ def test_grounding_brake_escalates_agent_docket(tmp_path):
 
 # ---- MCP / CLI parity ------------------------------------------------ #
 
-def test_mcp_and_cli_expose_the_research_channel(tmp_path, monkeypatch):
+def test_mcp_omits_research_mutations_while_cli_retains_the_channel(
+    tmp_path, monkeypatch
+):
     from deepreason import mcp_server
     from deepreason.cli.main import main as cli_main
 
-    # The research verbs are a deliberate migration-only surface; the
-    # production MCP surface remains start/status/result only.
+    # The environment switch cannot restore the removed migration surface.
     monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
 
-    harness, rid, _ = _open_research_harness(tmp_path)
-    root = str(tmp_path / "run")
-
-    listing = mcp_server.call_tool("research_docket", {"root": root})
-    assert rid in listing
-    reply = mcp_server.call_tool("submit_evidence", {
-        "root": root, "problem_id": rid, "source": "https://noaa.example",
-        "content": "measured tide tables",
-        "retrieved_at": "2026-07-11T04:00:00Z",
-    })
-    assert "candidate evidence registered" in reply and "covered" in reply
-    reply = mcp_server.call_tool("report_research_failure", {
-        "root": root, "problem_id": rid, "source": "https://www.science.org",
-        "reason": "blocked",
-    })
-    assert "stays open" in reply
+    mcp_root = tmp_path / "mcp-removed"
+    removed_calls = (
+        ("research_docket", {"root": str(mcp_root)}),
+        (
+            "submit_evidence",
+            {
+                "root": str(mcp_root),
+                "problem_id": "research:removed",
+                "source": "https://noaa.example",
+                "content": "measured tide tables",
+            },
+        ),
+        (
+            "report_research_failure",
+            {
+                "root": str(mcp_root),
+                "problem_id": "research:removed",
+                "source": "https://www.science.org",
+                "reason": "blocked",
+            },
+        ),
+    )
+    for name, arguments in removed_calls:
+        with pytest.raises(ValueError, match="MCP_TOOL_NOT_EXPOSED"):
+            mcp_server.call_tool(name, arguments)
+    assert not mcp_root.exists()
 
     # CLI parity over a fresh root.
     from tests.test_v6_only_cli_admission import _prepared_v6_root

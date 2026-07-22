@@ -250,18 +250,18 @@ def test_argument_cannot_refute_passing_candidate(harness):
     assert last.llm is not None
 
 
-def test_argument_still_refutes_failing_candidate(harness):
+def test_argument_against_unchecked_failing_candidate_is_observe_only(harness):
     _, bad = _oracle_candidate(harness, "def solve(x):\n    return x + 999")
 
-    # Direct argumentative refutation is the pre-repair authority (RC1):
-    # this regression opts into legacy_direct explicitly.
     critic = crit_argumentative(
         harness, bad.id, _attacking_critic(harness),
-        Config(ARGUMENTATIVE_AUTHORITY="legacy_direct"),
+        Config(),
     )
 
-    assert critic is not None                             # not execution-backed: argument stands
-    assert harness.state.status[bad.id] == Status.REFUTED
+    assert critic is not None
+    assert harness.state.status[bad.id] == Status.ACCEPTED
+    assert not any(w.target == bad.id for w in harness.warrants.values())
+    assert any(event.inputs[:2] == ["scrutiny", bad.id] for event in harness.log.read())
 
 
 def test_execution_still_refutes_a_passing_looking_but_wrong_candidate(harness):
@@ -320,7 +320,7 @@ def test_pairwise_preference_cannot_refute_execution_backed_loser(harness):
         {"winner": "B", "decisive_point": "return x + x"},
     )
     critic = pairwise_discriminate(
-        harness, p, a.id, b.id, adapter, Config(), authority="legacy_status"
+        harness, p, a.id, b.id, adapter, Config(), authority="status"
     )
     assert critic is None                                 # rivalry stands unresolved
     assert harness.state.status[b.id] == Status.ACCEPTED  # preference can't beat execution
@@ -349,7 +349,7 @@ def test_pairwise_preference_still_refutes_a_non_execution_loser(harness):
         {"winner": "B", "decisive_point": "just an assertion"},
     )
     critic = pairwise_discriminate(
-        harness, p, a.id, b.id, adapter, Config(), authority="legacy_status"
+        harness, p, a.id, b.id, adapter, Config(), authority="status"
     )
     assert critic is not None
     assert harness.state.status[b.id] == Status.REFUTED

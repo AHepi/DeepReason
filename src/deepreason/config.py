@@ -368,13 +368,10 @@ class Config(BaseModel):
     #   trial_required - the case goes to the defended cross-family trial;
     #                    only a guard-accepted sustained ruling mints the
     #                    ARGUMENTATIVE warrant.
-    #   legacy_direct  - pre-repair behavior: the critic's self-authored
-    #                    validity node certifies the case. Explicit opt-in for
-    #                    replay of old roots and pre-registered experiments.
     # Demonstrative outcomes (counterexamples, program/verifier failures)
     # remain status-changing under every mode.
     ARGUMENTATIVE_AUTHORITY: Literal[
-        "observe_only", "trial_required", "legacy_direct"
+        "observe_only", "trial_required"
     ] = "observe_only"
     # LLM-mediated text adjudication has its own policy surface.  A status
     # mode is prospective only: schema-v2 text manifests preflight it against

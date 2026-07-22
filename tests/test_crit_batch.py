@@ -1,9 +1,7 @@
 """Batch criticism (docs/TOKEN_ECONOMY.md angle 3): one argumentative-critic
-call over K targets. The call is shared; the epistemology is not — every
-attacking case registers a per-target argumentative warrant with its own nu,
-cases naming unlisted targets are dropped, and the shared call is logged
-exactly once (on the first registration, or on a Measure when nothing
-registers)."""
+call over K targets. The call is shared; each attacking case remains separately
+observable, cases naming unlisted targets are dropped, and the shared call is
+logged exactly once."""
 
 import json
 
@@ -17,7 +15,6 @@ from deepreason.ontology import (
     ProblemProvenance,
     Rule,
     Status,
-    WarrantType,
 )
 from deepreason.rules.crit import crit_argumentative_batch
 from deepreason.scheduler.scheduler import Scheduler
@@ -41,7 +38,7 @@ def _two_targets(harness):
     return a, b
 
 
-def test_batch_registers_per_target_warrants(harness):
+def test_batch_registers_per_target_observations_without_warrants(harness):
     a, b = _two_targets(harness)
     adapter = _adapter(
         harness,
@@ -53,28 +50,25 @@ def test_batch_registers_per_target_warrants(harness):
         ],
     )
     critics = crit_argumentative_batch(
-        harness, [a.id, b.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+        harness, [a.id, b.id], adapter, Config()
     )
     assert len(critics) == 2
-    warrants = [w for c in critics for w in harness.warrants.values() if w.target in (a.id, b.id)]
-    assert {w.target for w in warrants} == {a.id, b.id}
-    assert all(w.type == WarrantType.ARGUMENTATIVE for w in warrants)
-    # Each warrant hangs on its OWN attackable validity node.
-    assert len({w.validity_node for w in warrants}) == 2
-    # Unanswered attacks stand: both targets fall, independently.
-    assert harness.state.status[a.id] == Status.REFUTED
-    assert harness.state.status[b.id] == Status.REFUTED
+    assert not harness.warrants
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED
+    scrutiny = [event for event in harness.log.read() if event.inputs[:1] == ["scrutiny"]]
+    assert {event.inputs[1] for event in scrutiny} == {a.id, b.id}
     # The shared call is logged exactly once across the two registrations.
     llm_events = [e for e in harness.log.read() if e.llm is not None]
     assert len(llm_events) == 1
 
 
-def test_shared_case_text_still_attacks_each_target(harness):
+def test_shared_case_text_is_observed_for_each_target(harness):
     """Critic content is an artifact; carriage is a separate relation.
 
     A genuinely shared fault may be stated byte-for-byte identically for two
     targets. Content-addressing should dedupe the prose without deduping either
-    warrant carried by that prose artifact.
+    scrutiny record associated with that prose artifact.
     """
     a, b = _two_targets(harness)
     shared = "both claims omit the same boundary condition"
@@ -89,18 +83,20 @@ def test_shared_case_text_still_attacks_each_target(harness):
     )
 
     critics = crit_argumentative_batch(
-        harness, [a.id, b.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+        harness, [a.id, b.id], adapter, Config()
     )
 
     assert len({critic.id for critic in critics}) == 1  # prose dedupes
     carrier_id = critics[0].id
-    carried = set(harness.carried_warrant_ids(carrier_id))
-    assert carried == {
-        w.id for w in harness.warrants.values() if w.target in {a.id, b.id}
+    assert not harness.carried_warrant_ids(carrier_id)
+    assert not harness.warrants
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert harness.state.status[b.id] == Status.ACCEPTED
+    scrutiny = [event for event in harness.log.read() if event.inputs[:1] == ["scrutiny"]]
+    assert {(event.inputs[1], event.inputs[2]) for event in scrutiny} == {
+        (a.id, carrier_id),
+        (b.id, carrier_id),
     }
-    assert len(carried) == 2
-    assert harness.state.status[a.id] == Status.REFUTED
-    assert harness.state.status[b.id] == Status.REFUTED
     # The shared model call is still accounted exactly once.
     assert sum(e.llm is not None for e in harness.log.read()) == 1
 
@@ -132,10 +128,11 @@ def test_single_target_delegates_to_single_contract(harness):
     # Response shaped for ArgumentativeCriticOutput — only valid via delegation.
     adapter = _adapter(harness, [json.dumps({"attack": True, "case": "no solar term"})])
     critics = crit_argumentative_batch(
-        harness, [a.id], adapter, Config(ARGUMENTATIVE_AUTHORITY="legacy_direct")
+        harness, [a.id], adapter, Config()
     )
     assert len(critics) == 1
-    assert harness.state.status[a.id] == Status.REFUTED
+    assert harness.state.status[a.id] == Status.ACCEPTED
+    assert not harness.warrants
 
 
 def _seeded_scheduler(tmp_path, critic_endpoint, **config_kwargs):

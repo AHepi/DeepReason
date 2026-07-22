@@ -236,18 +236,44 @@ def _forbid(label: str):
 def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     tmp_path, monkeypatch, capsys
 ):
-    cli_root = _run_root(tmp_path / "cli")
-    mcp_root = _run_root(tmp_path / "mcp")
+    from deepreason.llm import adapter as adapter_module
+    from tests.test_v6_bridge_transactions import (
+        _bind_recovery_manifest,
+        _recovery_responses,
+        _scripted_application_endpoint_factory,
+        _seed_recovery_problem,
+        _write_bridge_qualification,
+        _write_eligible_v6_run_result,
+    )
+
+    def prepared_v6_root(root):
+        manifest = _bind_recovery_manifest(root, WorkflowRetryPolicyV1())
+        harness = Harness(root)
+        problem_id = _seed_recovery_problem(harness)
+        _write_eligible_v6_run_result(root, manifest)
+        _write_bridge_qualification(harness, manifest)
+        return root, manifest, problem_id
+
+    cli_root, manifest, problem_id = prepared_v6_root(tmp_path / "cli")
+    mcp_root, mcp_manifest, mcp_problem_id = prepared_v6_root(tmp_path / "mcp")
+    assert mcp_manifest.canonical_bytes() == manifest.canonical_bytes()
+    assert mcp_problem_id == problem_id
+
+    responses = {role: [] for role in ("summarizer", "thesis", "judge")}
+    for _root in (cli_root, mcp_root):
+        for role, response in _recovery_responses():
+            responses[role].append(response)
+    dispatches = []
     monkeypatch.setattr(
-        bridge_application,
-        "_build_bridge_adapter",
-        lambda manifest, harness, **_kwargs: _adapter(harness, manifest),
+        adapter_module,
+        "_endpoint_from_spec",
+        _scripted_application_endpoint_factory(manifest, responses, dispatches),
     )
 
     cli_args = SimpleNamespace(
         root=str(cli_root),
         bridge_command="build",
-        problem="problem-application-boundary",
+        problem=problem_id,
         target="answer",
         run_manifest=None,
         derived_output=None,
@@ -265,7 +291,7 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
         "start_bridge",
         {
             "root": str(mcp_root),
-            "problem": "problem-application-boundary",
+            "problem": problem_id,
             "target": "answer",
         },
     )
@@ -278,6 +304,16 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     assert [event["action"] for event in _bridge_events(cli_root)][-1] == (
         BridgeAction.COMPLETED.value
     )
+    assert dispatches == [
+        "summarizer",
+        "thesis",
+        "judge",
+        "judge",
+        "summarizer",
+        "thesis",
+        "judge",
+        "judge",
+    ]
 
 
 @pytest.mark.parametrize("schema_version", [4, 5])

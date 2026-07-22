@@ -569,7 +569,7 @@ def test_pairwise_blocks_empty_decisive_point(tmp_path):
     before = set(h.state.artifacts)
     result = pairwise_discriminate(
         h, h.state.problems["pi"], a.id, b.id, adapter, Config(),
-        authority="legacy_status",
+        authority="status",
     )
     assert result is None  # blocked
     assert h.state.status.get(b.id) == Status.ACCEPTED  # loser NOT refuted

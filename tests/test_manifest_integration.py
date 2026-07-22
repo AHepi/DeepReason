@@ -5,6 +5,7 @@ tokens. The plan's manifest_integration regression."""
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from deepreason.config import Config, apply_overrides
 from deepreason.harness import Harness
@@ -228,19 +229,18 @@ def test_runtime_cannot_mutate_frozen_text_authority_policy(tmp_path):
         preflight_harness(manifest, Harness(tmp_path / "run"), mutated)
 
 
-def test_missing_argumentative_authority_fails_closed_for_v2_text_manifest():
-    legacy_shape = _config().model_dump(mode="json")
-    legacy_shape.pop("ARGUMENTATIVE_AUTHORITY")
+def test_missing_argumentative_authority_uses_safe_observe_only_default():
+    partial = _config().model_dump(mode="json")
+    partial.pop("ARGUMENTATIVE_AUTHORITY")
 
-    with pytest.raises(
-        RunManifestError, match="LEGACY_TEXT_STATUS_AUTHORITY_FORBIDDEN"
-    ):
-        compile_run_manifest(
-            legacy_shape,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    manifest = compile_run_manifest(
+        partial,
+        schema_version=2,
+        workload_profile="text",
+        rubric_policy="require_cross_family",
+    )
+
+    assert config_from_run_manifest(manifest).ARGUMENTATIVE_AUTHORITY == "observe_only"
 
 
 def test_text_authority_config_round_trips_from_frozen_manifest():
@@ -261,14 +261,5 @@ def test_text_authority_config_round_trips_from_frozen_manifest():
 
 
 def test_legacy_text_status_authority_is_not_a_normal_manifest_mode():
-    config = apply_overrides(_config(), {"PAIRWISE_AUTHORITY": "legacy_status"})
-
-    with pytest.raises(
-        RunManifestError, match="LEGACY_TEXT_STATUS_AUTHORITY_FORBIDDEN"
-    ):
-        compile_run_manifest(
-            config,
-            schema_version=2,
-            workload_profile="text",
-            rubric_policy="require_cross_family",
-        )
+    with pytest.raises(ValidationError, match="PAIRWISE_AUTHORITY"):
+        apply_overrides(_config(), {"PAIRWISE_AUTHORITY": "legacy_status"})

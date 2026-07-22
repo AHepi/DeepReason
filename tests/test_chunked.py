@@ -428,91 +428,27 @@ def test_component_stage_runs_through_the_real_scheduler(tmp_path):
 
 # ---- the chunked make flow drives the NORMAL engine --------------------- #
 
-def _chunked_faker(calls):
-    """run_scheduler stub that plays a compliant engine for the chunked
-    pipeline: plan doc, design doc WITH manifest, then contract-satisfying
-    fragments — each addressed to the newest seeded problem with the
-    required lineage ref, exactly as conj would register them."""
-
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
-                 run_manifest=None):
-        pid = config.FOCUS_FAMILY
-        problem = harness.state.problems[pid]
-        refs = []
-        for cid in problem.criteria:
-            kappa = harness.commitments.get(cid)
-            if kappa is not None and kappa.eval == "program:lineage_ref":
-                refs = [Ref(target=e, role="dependence")
-                        for e in kappa.budget.extra["endpoints"].split(",")]
-        if pid == "pi-plan":
-            content = "PLAN: pages, features, interactions, acceptance. " * 15
-        elif pid == "pi-design":
-            content = _design_doc()
-        elif pid.startswith("pi-comp-header"):
-            content = HEADER_FRAGMENT
-        elif pid.startswith("pi-comp-list"):
-            content = LIST_FRAGMENT
-        else:  # pragma: no cover - unexpected stage
-            raise AssertionError(f"unexpected stage problem {pid}")
-        harness.create_artifact(
-            content,
-            interface=Interface(commitments=list(problem.criteria), refs=refs),
-            provenance=Provenance(role="conjecturer"), problem_id=pid)
-        if on_cycle is not None:
-            from types import SimpleNamespace
-
-            on_cycle(SimpleNamespace(harness=harness))
-        calls.append(pid)
-        return ({"survivors": 1}, None,
-                {"logged_tokens_this_run": 1000, "metered_tokens": 1000})
-
-    return fake_run
 
 
-def test_make_chunked_end_to_end(tmp_path, monkeypatch):
-    """plan -> design manifest -> per-component problems -> deterministic
-    assembly -> export, through the real seeding/picking/assembly/export
-    paths; only the scheduler runs are stubbed (they need live endpoints)."""
-    import os
-
-    import yaml
-
-    from deepreason import ops
-
-    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "dot"))
-    monkeypatch.setenv("FAKE_MAKE_KEY", "k")
-    cfg = tmp_path / "engine.yaml"
-    cfg.write_text(yaml.safe_dump({"roles": {"conjecturer": {
-        "endpoint": "https://x.invalid", "model": "m",
-        "api_key_env": "FAKE_MAKE_KEY"}}}))
+def test_make_chunked_public_facade_is_fail_closed_without_side_effects(
+    tmp_path, monkeypatch
+):
+    """The retired Easy facade cannot recreate the historical workflow."""
     calls = []
-    monkeypatch.setattr(ops, "run_scheduler", _chunked_faker(calls))
-    lines = []
-    paths = easy.make("a todo site", out=str(tmp_path / "site"),
-                      config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append)
-    assert calls == ["pi-plan", "pi-design", "pi-comp-header", "pi-comp-list"]
-    pages = [p for p in paths if p.suffix == ".html"]
-    assert len(pages) == 1 and pages[0].exists()
-    html = pages[0].read_text(encoding="utf-8")
-    assert 'id="app-header"' in html and 'id="app-list"' in html
-    assert html.index('id="app-header"') < html.index('id="app-list"')
-    assert "vendored: baseline" in html and "vendored: classless" in html
-    joined = "\n".join(lines)
-    assert "components: header, list" in joined
-    assert "assembled deterministically" in joined
-    assert "Your website is ready" in joined
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler",
+        lambda *_args, **_kwargs: calls.append("scheduler"),
+    )
+    root = tmp_path / "run"
+    output = tmp_path / "site"
 
-    harness = Harness(tmp_path / "r")
-    picks = [e.inputs[1] for e in harness.log.read()
-             if e.rule == Rule.MEASURE and e.inputs
-             and e.inputs[0] == "stage-pick"]
-    assert picks == ["plan", "design", "component:header", "component:list"]
-    assembled_measures = [e for e in harness.log.read()
-                          if e.rule == Rule.MEASURE and e.inputs
-                          and e.inputs[0] == "assembled"]
-    assert len(assembled_measures) == 1
-    assert os.path.exists(tmp_path / "site")
+    with pytest.raises(easy.EasyV6PreparationRequired) as caught:
+        easy.make("a todo site", out=str(output), root=str(root))
+
+    assert caught.value.code == "V6_PREPARATION_REQUIRED"
+    assert calls == []
+    assert not root.exists()
+    assert not output.exists()
 
 
 def test_assembled_page_passes_browser_smoke_in_real_chromium(tmp_path):
@@ -539,56 +475,29 @@ def test_assembled_page_passes_browser_smoke_in_real_chromium(tmp_path):
     assert evidence[0]["screenshots"]
 
 
-def test_make_chunked_repairs_the_implicated_component(tmp_path, monkeypatch):
-    """An integration failure spawns a SUCCESSOR repair problem for the
-    implicated component only; the second assembly uses the fix."""
-    import yaml
-
-    from deepreason import ops
-
-    monkeypatch.setenv("DEEPREASON_HOME", str(tmp_path / "dot"))
-    monkeypatch.setenv("FAKE_MAKE_KEY", "k")
-    cfg = tmp_path / "engine.yaml"
-    cfg.write_text(yaml.safe_dump({"roles": {"conjecturer": {
-        "endpoint": "https://x.invalid", "model": "m",
-        "api_key_env": "FAKE_MAKE_KEY"}}}))
+def test_make_chunked_repair_facade_cannot_read_config_or_create_a_root(
+    tmp_path, monkeypatch
+):
+    """Even former repair-mode arguments reach only the Easy tombstone."""
     calls = []
-    base = _chunked_faker(calls)
+    monkeypatch.setattr(
+        "deepreason.ops.run_scheduler",
+        lambda *_args, **_kwargs: calls.append("scheduler"),
+    )
+    missing_config = tmp_path / "must-not-be-read.yaml"
+    root = tmp_path / "repair-run"
+    output = tmp_path / "site"
 
-    def flaky(harness, config, cycles, token_budget=None, on_cycle=None,
-              run_manifest=None):
-        pid = config.FOCUS_FAMILY
-        if pid == "pi-comp-list":
-            # First attempt: mount is right but the declared export is
-            # missing — passes nothing at the page level.
-            problem = harness.state.problems[pid]
-            refs = []
-            for cid in problem.criteria:
-                kappa = harness.commitments.get(cid)
-                if kappa is not None and kappa.eval == "program:lineage_ref":
-                    refs = [Ref(target=e, role="dependence")
-                            for e in kappa.budget.extra["endpoints"].split(",")]
-            harness.create_artifact(
-                '<section id="app-list"></section>',
-                interface=Interface(commitments=[
-                    c for c in problem.criteria
-                    if "component-wf" not in c] , refs=refs),
-                provenance=Provenance(role="conjecturer"), problem_id=pid)
-            calls.append(pid)
-            return ({"survivors": 1}, None,
-                    {"logged_tokens_this_run": 1000, "metered_tokens": 1000})
-        return base(harness, config, cycles, token_budget=token_budget,
-                    on_cycle=on_cycle, run_manifest=run_manifest)
+    with pytest.raises(easy.EasyV6PreparationRequired) as caught:
+        easy.make(
+            "a todo site",
+            out=str(output),
+            config=str(missing_config),
+            root=str(root),
+        )
 
-    monkeypatch.setattr(ops, "run_scheduler", flaky)
-    lines = []
-    paths = easy.make("a todo site", out=str(tmp_path / "site"),
-                      config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append)
-    assert "pi-comp-list-r2" in calls  # targeted repair, header untouched
-    assert not any(c == "pi-comp-header-r2" for c in calls)
-    harness = Harness(tmp_path / "r")
-    repair_problem = harness.state.problems["pi-comp-list-r2"]
-    assert repair_problem.provenance.trigger.value == "successor"
-    pages = [p for p in paths if p.suffix == ".html"]
-    assert pages and 'window.addTodo' in pages[0].read_text(encoding="utf-8")
+    assert caught.value.code == "V6_PREPARATION_REQUIRED"
+    assert calls == []
+    assert not missing_config.exists()
+    assert not root.exists()
+    assert not output.exists()

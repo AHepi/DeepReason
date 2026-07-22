@@ -87,4 +87,5 @@ def test_signals_command_lists_meanings_and_counts(root, capsys):
     out = capsys.readouterr().out
     assert "browser-pass:" in out            # registry meanings listed
     assert "trial-blocked:*" in out          # prefix families listed
+    assert "jolt-" not in out                 # retired pilot is not public
     assert "(unregistered" not in out.replace("(unregistered signal)", "")

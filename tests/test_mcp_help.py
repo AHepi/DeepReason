@@ -31,15 +31,12 @@ REQUEST_OPERATIONS = (
     "continue_run",
     "grounded_bridge",
 )
-EXISTING_DEFAULT_TOOL_NAMES = {
+SUPPORTED_TOOL_NAMES = {
     "start_run",
     "run_status",
     "run_result",
     "continue_run",
     "cancel_run",
-    "start_make",
-    "make_status",
-    "make_result",
     "scratch_map",
     "scratch_search",
     "scratch_open",
@@ -49,6 +46,7 @@ EXISTING_DEFAULT_TOOL_NAMES = {
     "bridge_status",
     "bridge_result",
     "bridge_claims",
+    *HELP_TOOL_NAMES,
 }
 ANNOTATIONS = {
     "readOnlyHint": True,
@@ -99,14 +97,18 @@ def _tree_snapshot(root: Path) -> list[tuple[str, int]]:
     )
 
 
-def test_help_tools_are_listed_with_exact_closed_schemas_and_annotations():
+def test_help_tools_are_listed_with_exact_closed_schemas_and_annotations(monkeypatch):
     initialization = mcp_server.handle(
         {"jsonrpc": "2.0", "id": 0, "method": "initialize", "params": {}}
     )
     assert initialization["result"]["serverInfo"]["name"] == "deepreason"
+    assert "operator-prepared" in initialization["result"]["instructions"]
+    assert "RunManifest schema 6" in initialization["result"]["instructions"]
 
     tools = _listed_tools()
-    assert EXISTING_DEFAULT_TOOL_NAMES <= set(tools)
+    assert set(tools) == SUPPORTED_TOOL_NAMES
+    monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
+    assert set(_listed_tools()) == SUPPORTED_TOOL_NAMES
     assert tuple(name for name in tools if name in HELP_TOOL_NAMES) == HELP_TOOL_NAMES
     assert {name: tools[name]["inputSchema"] for name in HELP_TOOL_NAMES} == {
         "get_capabilities": {
@@ -173,10 +175,6 @@ def test_capabilities_are_deterministic_and_only_describe_registered_core_operat
         "trial",
         "experimental",
         "legacy",
-        "manifest",
-        "provider",
-        "credential",
-        "route",
         "hash",
         "path",
         "file",
@@ -184,6 +182,8 @@ def test_capabilities_are_deterministic_and_only_describe_registered_core_operat
         "filesystem",
     ):
         assert forbidden not in serialized
+    assert "operator-prepared v6 root" in serialized
+    assert "accepts no provider, route, policy, credential" in serialized
 
 
 @pytest.mark.parametrize("topic", HELP_TOPICS)
@@ -227,11 +227,17 @@ def test_each_request_requirements_response_uses_the_stable_bounded_shape(
     assert payload["schema_version"] == "deepreason.mcp-help.v1"
     assert payload["operation"] == operation
     assert payload["next_operation"] in _listed_tools()
+    assert "root" not in {
+        entry["field"] for entry in payload["required_information"]
+    }
+    assert "root" in {
+        entry["field"] for entry in payload["optional_information"]
+    }
     for entries in (
         payload["required_information"],
         payload["optional_information"],
     ):
-        assert 1 <= len(entries) <= 4
+        assert 1 <= len(entries) <= 6
         for entry in entries:
             assert set(entry) == {"field", "reason"}
             assert all(
@@ -318,7 +324,6 @@ def test_help_dispatch_is_local_and_does_not_access_or_mutate_state(
 
     monkeypatch.setattr(socket, "create_connection", forbidden)
     monkeypatch.setattr(mcp_server, "_start_run", forbidden)
-    monkeypatch.setattr(mcp_server, "_start_make", forbidden)
     for method_name in (
         "exists",
         "iterdir",

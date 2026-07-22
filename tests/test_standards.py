@@ -60,7 +60,7 @@ def test_standard_refutation_collapses_and_reinstates_replayed(tmp_path):
                  interface=Interface(commitments=["kappa-taste"]))
     run_trial(
         harness, target.id, kappa, _trial_adapter(harness, [FAIL] * 3),
-        Config(TRIAL_PARAPHRASE_N=2), authority="legacy_status",
+        Config(TRIAL_PARAPHRASE_N=2), authority="status",
     )
     assert harness.state.status[target.id] == Status.REFUTED
 
@@ -94,7 +94,7 @@ def test_user_ruling_enters_precedent_slice_and_is_revisable(harness):
     adapter = _trial_adapter(harness, [FAIL] * 3)
     run_trial(
         harness, target.id, kappa, adapter, Config(TRIAL_PARAPHRASE_N=2),
-        authority="legacy_status",
+        authority="status",
     )
     judge_prompt = harness.blobs.get(
         next(e.llm.prompt_ref for e in harness.log.read() if e.llm and e.llm.role == "judge")

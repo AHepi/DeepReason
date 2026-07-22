@@ -3,6 +3,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.config import Config
 from deepreason.harness import Harness
@@ -348,20 +350,22 @@ def test_default_precomputed_argument_trial_is_advisory(harness):
     assert not harness.state.att
 
 
-def test_explicit_legacy_trial_authority_preserves_compatibility(harness):
+def test_legacy_trial_authority_is_rejected_before_provider_use(harness):
     target, commitment, _ = _rubric_target(harness)
+    adapter = _rubric_adapter(harness)
 
-    critic = run_trial(
-        harness,
-        target.id,
-        commitment,
-        _rubric_adapter(harness),
-        Config(TRIAL_PARAPHRASE_N=0),
-        authority=TrialAuthority.LEGACY_STATUS,
-    )
+    with pytest.raises(ValueError, match="legacy_status"):
+        run_trial(
+            harness,
+            target.id,
+            commitment,
+            adapter,
+            Config(TRIAL_PARAPHRASE_N=0),
+            authority="legacy_status",
+        )
 
-    assert critic is not None
-    assert harness.state.status[target.id] == Status.REFUTED
+    assert harness.state.status[target.id] == Status.ACCEPTED
+    assert not [event for event in harness.log.read() if event.llm]
 
 
 def test_text_display_says_standing_without_mutating_internal_status(harness):

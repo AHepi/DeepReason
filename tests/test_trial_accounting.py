@@ -69,11 +69,11 @@ def test_deduped_critic_does_not_swallow_the_ruling(tmp_path):
     config = Config()
     run_trial(
         h, target.id, h.commitments["kappa-x"], adapter, config, [],
-        authority="legacy_status",
+        authority="status",
     )
     run_trial(
         h, target.id, h.commitments["fc:same-standard"], adapter, config, [],
-        authority="legacy_status",
+        authority="status",
     )
     assert _logged(h) == meter.total  # every token on the log exactly once
 
@@ -99,7 +99,7 @@ def test_seat_one_spend_survives_seat_two_storm(tmp_path):
     with pytest.raises(SchemaRepairError) as err:
         run_trial(
             h, target.id, h.commitments["kappa-x"], adapter, Config(), [],
-            authority="legacy_status",
+            authority="status",
         )
     # The storming seat's spend rides the exception (the scheduler logs it);
     # seat 1's COMPLETED call must already be on the log, not lost with the

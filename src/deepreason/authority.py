@@ -18,7 +18,6 @@ class TextAuthorityMode(str, Enum):
 
     OBSERVE_ONLY = "observe_only"
     CALIBRATED_STATUS = "calibrated_status"
-    LEGACY_STATUS = "legacy_status"
 
 
 class TrialAuthority(str, Enum):
@@ -26,7 +25,6 @@ class TrialAuthority(str, Enum):
 
     OBSERVE_ONLY = "observe_only"
     STATUS = "status"
-    LEGACY_STATUS = "legacy_status"
 
 
 class AuthoritySurface(str, Enum):
@@ -42,8 +40,7 @@ _SURFACE_FIELDS = {
     AuthoritySurface.PAIRWISE: "PAIRWISE_AUTHORITY",
     AuthoritySurface.INFRASTRUCTURE: "INFRASTRUCTURE_REVIEW_AUTHORITY",
 }
-_ARGUMENTATIVE_VALUES = {"observe_only", "trial_required", "legacy_direct"}
-_MISSING = object()
+_ARGUMENTATIVE_VALUES = {"observe_only", "trial_required"}
 
 
 @dataclass(frozen=True)
@@ -73,21 +70,14 @@ def text_authority_mode(config, surface: AuthoritySurface | str) -> TextAuthorit
     return TextAuthorityMode(raw)
 
 
-def argumentative_authority_mode(
-    config, *, missing: str = "observe_only"
-) -> str:
-    """Read the prose-authority mode with an explicit missing-field policy.
+def argumentative_authority_mode(config) -> str:
+    """Read the V6 prose-authority mode and reject historical bypasses."""
 
-    Direct helper calls fail safe to ``observe_only``. Manifest preflight uses
-    ``missing="legacy_direct"`` so an ambiguous archived config is rejected
-    rather than silently reinterpreted during a schema-v2 text run.
-    """
-
-    raw = _get(config, "ARGUMENTATIVE_AUTHORITY", _MISSING)
-    if raw is _MISSING:
-        return missing
+    raw = _get(config, "ARGUMENTATIVE_AUTHORITY", "observe_only")
     value = _value(raw)
-    return value if value in _ARGUMENTATIVE_VALUES else "observe_only"
+    if value not in _ARGUMENTATIVE_VALUES:
+        raise ValueError(f"unsupported argumentative authority: {value}")
+    return value
 
 
 def trial_authority_for(
@@ -105,8 +95,6 @@ def trial_authority_for(
     if workload_profile != "text":
         return TrialAuthority.STATUS
     mode = text_authority_mode(config, surface)
-    if mode == TextAuthorityMode.LEGACY_STATUS:
-        return TrialAuthority.LEGACY_STATUS
     # calibrated_status is unavailable prospectively until a receipt
     # verifier exists. Never let a bare config value create status authority.
     return TrialAuthority.OBSERVE_ONLY
@@ -139,21 +127,8 @@ def text_status_authority_issues(
     issues: list[AuthorityPolicyIssue] = []
     receipt = calibration_receipt(config)
 
-    # Direct helpers treat a missing field as observe-only, but a schema-v2
-    # manifest rejects the ambiguous archived shape instead of silently
-    # reinterpreting a historical configuration.
-    argumentative = argumentative_authority_mode(
-        config, missing="legacy_direct"
-    )
-    if argumentative == "legacy_direct":
-        issues.append(
-            AuthorityPolicyIssue(
-                "LEGACY_TEXT_STATUS_AUTHORITY_FORBIDDEN",
-                "legacy_direct prose authority is unavailable in schema-v2 text runs",
-                "/engine_config/ARGUMENTATIVE_AUTHORITY",
-            )
-        )
-    elif argumentative == "trial_required":
+    argumentative = argumentative_authority_mode(config)
+    if argumentative == "trial_required":
         if receipt is None:
             issues.append(
                 AuthorityPolicyIssue(
@@ -173,15 +148,7 @@ def text_status_authority_issues(
 
     for surface, field in _SURFACE_FIELDS.items():
         mode = text_authority_mode(config, surface)
-        if mode == TextAuthorityMode.LEGACY_STATUS:
-            issues.append(
-                AuthorityPolicyIssue(
-                    "LEGACY_TEXT_STATUS_AUTHORITY_FORBIDDEN",
-                    f"{field}=legacy_status is unavailable in schema-v2 text runs",
-                    f"/engine_config/{field}",
-                )
-            )
-        elif mode == TextAuthorityMode.CALIBRATED_STATUS:
+        if mode == TextAuthorityMode.CALIBRATED_STATUS:
             if receipt is None:
                 issues.append(
                     AuthorityPolicyIssue(
@@ -205,9 +172,7 @@ def authority_policy_snapshot(config) -> dict[str, str | None]:
     """Return the frozen policy fields relevant to text status authority."""
 
     return {
-        "ARGUMENTATIVE_AUTHORITY": argumentative_authority_mode(
-            config, missing="legacy_direct"
-        ),
+        "ARGUMENTATIVE_AUTHORITY": argumentative_authority_mode(config),
         **{
             field: text_authority_mode(config, surface).value
             for surface, field in _SURFACE_FIELDS.items()

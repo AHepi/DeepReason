@@ -143,7 +143,10 @@ def test_cli_rejects_mini_run_and_omits_historical_make(
     assert {item.name: item.read_bytes() for item in full_root.iterdir()} == before
 
 
-def test_mcp_rejects_mini_before_worker_or_manifest_binding(tmp_path):
+def test_mcp_make_is_not_exposed_even_when_legacy_switch_is_set(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
     _manifest, path = _mini_manifest(tmp_path)
     website_root = tmp_path / "mcp-website"
     result = _mcp_call(
@@ -156,12 +159,13 @@ def test_mcp_rejects_mini_before_worker_or_manifest_binding(tmp_path):
         },
     )
     assert result["isError"] is True
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in result["content"][0]["text"]
-    assert not (website_root / "run-manifest.json").exists()
-    assert str(website_root.resolve()) not in mcp_server._MAKE_THREADS
+    assert "MCP_TOOL_NOT_EXPOSED" in result["content"][0]["text"]
+    assert not website_root.exists()
 
 
-def test_mcp_run_cycles_rejects_mini_config_before_binding(tmp_path, monkeypatch):
+def test_mcp_run_cycles_is_not_exposed_even_when_legacy_switch_is_set(
+    tmp_path, monkeypatch
+):
     monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
     root = tmp_path / "mcp-run"
     config = tmp_path / "mini.yaml"
@@ -178,5 +182,5 @@ def test_mcp_run_cycles_rejects_mini_config_before_binding(tmp_path, monkeypatch
         "run_cycles", {"root": str(root), "config": str(config), "cycles": 1}
     )
     assert result["isError"] is True
-    assert "ENGINE_PROFILE_UNSUPPORTED_FOR_FULL_RUN" in result["content"][0]["text"]
-    assert not (root / "run-manifest.json").exists()
+    assert "MCP_TOOL_NOT_EXPOSED" in result["content"][0]["text"]
+    assert not root.exists()

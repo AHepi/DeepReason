@@ -627,10 +627,24 @@ def _main(argv: list[str] | None = None) -> int:
             signal = event_signal(event)
             if signal is not None:
                 counts[family(signal)] += 1
-        for name, meaning in {**SIGNALS, **{k + "*": v for k, v in PREFIXES.items()}}.items():
+        public_signals = {
+            name: meaning
+            for name, meaning in SIGNALS.items()
+            if not name.startswith("jolt-")
+        }
+        public_prefixes = {
+            key: meaning
+            for key, meaning in PREFIXES.items()
+            if not key.startswith("jolt-")
+        }
+        for name, meaning in {
+            **public_signals,
+            **{k + "*": v for k, v in public_prefixes.items()},
+        }.items():
             print(f"{counts.get(name, 0):6}  {name}: {meaning}")
         unregistered = {k: n for k, n in counts.items()
-                        if k not in SIGNALS and not k.endswith("*")}
+                        if not k.startswith("jolt-")
+                        and k not in SIGNALS and not k.endswith("*")}
         for name, n in sorted(unregistered.items()):
             print(f"{n:6}  {name}: (unregistered signal)")
         return 0

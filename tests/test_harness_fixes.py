@@ -413,16 +413,14 @@ def test_appellate_rule_succeeds_with_registered_standard(harness):
     assert harness.state.status[precedent.id] == Status.ACCEPTED
 
 
-def test_appellate_rule_actionable_through_mcp_surface(harness, monkeypatch):
+def test_appellate_rule_is_not_exposed_through_mcp_surface(harness, monkeypatch):
     import pytest
 
-    from deepreason.informal.standards import register_standard
     from deepreason.mcp_server import call_tool
 
     monkeypatch.setenv("DEEPREASON_ENABLE_LEGACY_MCP", "1")
 
-    register_standard(harness, "std-usability", rubric="r")
-    with pytest.raises(ValueError, match="std-usability"):
+    with pytest.raises(ValueError, match="MCP_TOOL_NOT_EXPOSED"):
         call_tool(
             "appellate_rule",
             {"root": str(harness.root), "case_id": "c", "holding": "h", "standard": "nope"},

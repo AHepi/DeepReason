@@ -35,10 +35,14 @@ def _route() -> dict:
         "model": "fixture-31b",
         "provider": "fixture",
         "family": "fixture",
+        "max_tokens": 64,
+        "context_window_tokens": 262_144,
     }
 
 
-def _manifest(*, scratch_max_blocks: int = 24):
+def _manifest(*, scratch_max_blocks: int = 24, run_input_digest: str = "a" * 64):
+    from tests.test_run_input_v6_commitments import _control
+
     return compile_run_manifest(
         Config(
             scratchpad={
@@ -48,20 +52,39 @@ def _manifest(*, scratch_max_blocks: int = 24):
             bridge={
                 "mode": "grounded_two_stage",
                 "grounding_review": False,
-                "max_schema_repair_attempts": 0,
+                "max_schema_repair_attempts": 1,
                 "max_grounding_repair_attempts": 0,
             },
             roles={"summarizer": _route(), "thesis": _route()},
         ),
-        schema_version=3,
+        schema_version=6,
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
+        control_plane_policy=_control(6),
+        run_input_digest=run_input_digest,
     )
 
 
 def _create_run(root, *, scratch_max_blocks: int = 24):
+    from tests.test_run_input_v6_commitments import (
+        _bind_v2,
+        _commitment,
+        _write_qualification,
+    )
+
+    frozen = _bind_v2(root, _commitment())
+    manifest = _manifest(
+        scratch_max_blocks=scratch_max_blocks,
+        run_input_digest=frozen.run_input_digest,
+    )
+    bind_run_manifest(manifest, root)
+    from tests.test_cli_production_doctor_v6 import _qualified_report
+
+    qualification = _qualified_report(manifest)
+    _write_qualification(root, manifest, report=qualification)
     harness = Harness(root)
+    harness.bind_model_classification(manifest, qualification)
     harness.register_problem(
         Problem(
             id="problem-mcp-grounded",
@@ -71,8 +94,6 @@ def _create_run(root, *, scratch_max_blocks: int = 24):
             ),
         )
     )
-    manifest = _manifest(scratch_max_blocks=scratch_max_blocks)
-    bind_run_manifest(manifest, root)
     service = ScratchService(harness)
     blocks = [
         service.create_block(
@@ -104,6 +125,9 @@ def _create_run(root, *, scratch_max_blocks: int = 24):
         None,
         {"actor": "user", "origin": "mcp-test"},
     )
+    from tests.test_v6_bridge_transactions import _write_eligible_v6_run_result
+
+    _write_eligible_v6_run_result(root, manifest)
     return SimpleNamespace(
         root=root,
         manifest=manifest,
@@ -148,7 +172,11 @@ def _assert_closed_objects(schema: object) -> None:
 
 
 def _scripted_adapter(harness: Harness) -> LLMAdapter:
-    return LLMAdapter(
+    from deepreason.bridge.transactional_adapter import TransactionalBridgeAdapter
+    from deepreason.llm.firewall import leases_from_manifest
+
+    manifest = harness._workflow_manifest
+    base = LLMAdapter(
         {
             "summarizer": MockEndpoint(
                 [
@@ -156,7 +184,7 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                         {
                             "entries": [
                                 {
-                                    "entry_key": "K1",
+                                    "entry_key": "CLM_1",
                                     "claim_class": "unknown",
                                     "claim": "The conclusion is not established.",
                                 }
@@ -170,7 +198,9 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                         }
                     )
                 ],
-                name="mcp-scripted-summarizer",
+                name="https://models.invalid/v1",
+                model="fixture-31b",
+                max_tokens=64,
             ),
             "thesis": MockEndpoint(
                 [
@@ -180,7 +210,6 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                                 {
                                     "span_id": "S1",
                                     "text": "The requested conclusion remains unknown.",
-                                    "rendering_mode": "unknown",
                                     "ledger_entry_handles": ["E1"],
                                 }
                             ],
@@ -189,12 +218,17 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
                         }
                     )
                 ],
-                name="mcp-scripted-thesis",
+                name="https://models.invalid/v1",
+                model="fixture-31b",
+                max_tokens=64,
             ),
         },
         harness.blobs,
         retry_max=0,
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
     )
+    return TransactionalBridgeAdapter(base, harness, manifest)
 
 
 def _server_call(name: str, arguments: dict) -> tuple[dict, dict]:
@@ -455,12 +489,12 @@ def test_bound_manifest_symlink_is_rejected_without_reading_target(
             {"root": str(mcp_run.root), "problem": "problem-mcp-grounded"},
         )
 
-    assert "BRIDGE_MANIFEST_INVALID" in str(error.value)
+    assert "MANIFEST_FILE_UNSAFE" in str(error.value)
     assert secret not in str(error.value)
     assert target.read_text(encoding="utf-8") == secret
 
 
-def test_supplied_manifest_sidecar_symlink_is_rejected_without_secret_echo(
+def test_missing_bound_manifest_wins_before_supplied_sidecar_is_inspected(
     tmp_path,
 ):
     root = tmp_path / "unbound-run"
@@ -495,7 +529,7 @@ def test_supplied_manifest_sidecar_symlink_is_rejected_without_secret_echo(
             },
         )
 
-    assert "BRIDGE_MANIFEST_INVALID" in str(error.value)
+    assert "MANIFEST_FILE_UNAVAILABLE" in str(error.value)
     assert secret not in str(error.value)
     assert target.read_text(encoding="utf-8") == secret
 
@@ -515,7 +549,7 @@ def test_bridge_start_poll_result_claims_and_unresolved_success(
         "start_bridge",
         {
             "root": str(mcp_run.root),
-            "problem": "problem-mcp",
+                "problem": "problem-mcp-grounded",
             "target": "answer",
             "run_manifest_ref": str(mcp_run.manifest_ref),
             "focus_blocks": [mcp_run.blocks[0].id[7:19]],
@@ -544,14 +578,6 @@ def test_bridge_start_poll_result_claims_and_unresolved_success(
     assert claims["entries"][0]["claim_class"] == "unknown"
     assert [event["seq"] for event in progress] == [0, 1]
     assert _formal_snapshot(mcp_run.root) == formal_before
-    completed = mcp.call_tool(
-        "start_bridge",
-        {
-            "root": str(mcp_run.root),
-            "problem": "problem-mcp-grounded",
-        },
-    )
-    assert completed["state"] == "completed"
     transport, transported_result = _server_call(
         "bridge_result", {"root": str(mcp_run.root), "limit": 1}
     )
@@ -811,9 +837,9 @@ def test_all_scratch_bridge_tools_reject_a_symlink_run_root(
 
 def test_missing_read_roots_are_not_created(tmp_path):
     missing = tmp_path / "does-not-exist"
-    with pytest.raises(ValueError, match="SCRATCH_RUN_NOT_FOUND"):
+    with pytest.raises(ValueError, match="MANIFEST_FILE_UNAVAILABLE"):
         mcp.call_tool("scratch_map", {"root": str(missing)})
     for name in ("bridge_status", "bridge_result"):
-        with pytest.raises(ValueError, match="BRIDGE_RUN_NOT_FOUND"):
+        with pytest.raises(ValueError, match="MANIFEST_FILE_UNAVAILABLE"):
             mcp.call_tool(name, {"root": str(missing)})
     assert not missing.exists()

@@ -53,32 +53,33 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
         ),
     },
     "examples": {
-        "title": "Example questions",
-        "summary": "Describe the practical question in ordinary language.",
+        "title": "Example prepared-run calls",
+        "summary": (
+            "The current MCP surface operates an already-prepared V6 root; "
+            "it does not prepare a normal question yet."
+        ),
         "details": (
-            "Include relevant material when it will affect the answer.",
-            "State important limits or commitments that the answer should respect.",
+            "Use start_run only after an operator has frozen RunInputManifestV2 and its dossier.",
+            "The root must already contain the exact bound and production-qualified V6 manifest.",
         ),
         "examples": (
-            "Develop plausible explanations without presenting conjectures as facts.",
-            "Compare two proposals and show their strongest objections.",
-            "Explain which conclusions have support and which remain open.",
+            "start_run(root, workload='text', problem.description, run_manifest_ref, budget)",
         ),
     },
     "creating_a_run": {
-        "title": "Preparing a reasoning request",
+        "title": "Starting an operator-prepared V6 run",
         "summary": (
-            "A clear question, relevant material, and stated constraints make a "
-            "reasoning request easier to prepare."
+            "DeepReason does not yet expose run preparation over MCP. Supply an "
+            "existing prepared, bound, and production-qualified V6 root."
         ),
         "details": (
-            "State the goal in everyday language.",
-            "Include material to consider or explain what the answer should draw upon.",
-            "Describe commitments, limits, or viewpoints that must be preserved.",
-            "Review the summary before choosing to begin.",
+            "The root must contain RunManifest schema 6, RunInputManifestV2, and its exact dossier.",
+            "problem.description must exactly match the frozen V6 input.",
+            "run_manifest_ref must identify the same immutable manifest bound to the root.",
+            "Supply explicit cycle and token budgets; no historical fallback is compiled.",
         ),
         "examples": (
-            "Investigate why these two accounts disagree, preserving each account's stated limits.",
+            "First action: ask the operator for the path to a prepared V6 root and its bound manifest.",
         ),
     },
     "epistemic_outcomes": {
@@ -125,15 +126,15 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
         ),
     },
     "troubleshooting": {
-        "title": "When a request is unclear",
-        "summary": "Start with the goal, material, limits, and desired focus.",
+        "title": "When a run cannot start",
+        "summary": "Check the prepared V6 root and exact frozen bindings first.",
         "details": (
-            "It is fine to say that a needed detail is unknown.",
-            "Ask what information would make the answer more useful.",
-            "Use progress and result operations only after selecting an earlier reasoning request.",
+            "A missing RunManifest is distinct from an unsupported historical version.",
+            "Every lifecycle, scratch, and bridge operation requires a valid V6 root.",
+            "Provider selection, credentials, route selection, policy construction, and preparation are not MCP fields.",
         ),
         "examples": (
-            "I want to compare these accounts; please tell me which source material would help.",
+            "If only a normal question is available, report that managed V6 preparation is not implemented yet.",
         ),
     },
 }
@@ -141,42 +142,46 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
 _REQUIREMENT_CONTENT: dict[str, dict[str, Any]] = {
     "reasoning_run": {
         "required_information": (
-            ("question", "States the practical question to examine."),
-            ("materials", "Supplies or describes material that should inform the answer."),
-            ("commitments", "Names limits or commitments the answer must respect."),
+            ("workload", "Must be the fixed value text."),
+            ("problem.description", "Exactly matches the question frozen in RunInputManifestV2."),
+            ("run_manifest_ref", "Identifies the exact schema-6 manifest already bound to the root."),
+            ("budget.cycles", "Sets a positive integer cycle allowance or unlimited."),
+            ("budget.token_budget", "Sets a non-negative integer token allowance or unlimited."),
         ),
         "optional_information": (
-            ("background", "Adds context that may help frame the question."),
-            ("desired_focus", "Identifies the aspect that matters most to the requester."),
+            ("root", "Selects an existing prepared, bound, and qualified V6 run root; defaults to .deepreason."),
         ),
         "next_operation": "start_run",
     },
     "continue_run": {
         "required_information": (
-            ("existing_run", "Selects the earlier reasoning request to continue."),
-            ("additional_allowance", "States how much further work is wanted."),
+            ("budget.cycles", "Sets a positive integer cycle allowance or unlimited."),
+            ("budget.token_budget", "Sets a non-negative integer token allowance or unlimited."),
         ),
         "optional_information": (
-            ("new_material", "Adds material that was not available earlier."),
-            ("revised_focus", "Refines the question for the continued work."),
+            ("root", "Selects an existing prepared and bound V6 run root; defaults to .deepreason."),
+            ("expected_manifest_digest", "Pins the already-bound manifest digest."),
         ),
         "next_operation": "continue_run",
     },
     "grounded_bridge": {
         "required_information": (
-            ("existing_run", "Selects the reasoning result to compose from."),
-            ("focus", "States what the final answer should emphasize."),
+            ("problem", "Names the bounded problem identifier to compose from."),
         ),
         "optional_information": (
-            ("audience", "Adapts the explanation for its intended readers."),
-            ("format", "Requests a concise structure for the final answer."),
+            ("root", "Selects an existing prepared, bound, and qualified V6 run root; defaults to .deepreason."),
+            ("target", "Selects thesis, summary, or answer; defaults to answer."),
+            ("run_manifest_ref", "Pins the same schema-6 manifest already bound to the root."),
+            ("focus_blocks", "Selects bounded canonical scratch block references."),
+            ("focus_clusters", "Selects bounded canonical scratch cluster references."),
+            ("budget.token_budget", "Sets a positive bounded bridge token allowance."),
         ),
         "next_operation": "start_bridge",
     },
 }
 
 _CAPABILITY_AREAS = (
-    ("reasoning_runs", "Prepare and inspect structured reasoning work.", ("start_run",)),
+    ("reasoning_runs", "Start work only in an operator-prepared V6 root.", ("start_run",)),
     ("continuation", "Request continued work from an earlier reasoning request.", ("continue_run",)),
     ("run_information", "Read reasoning progress and final information.", ("run_status", "run_result")),
     ("cancellation", "Request a safe stop for a reasoning request.", ("cancel_run",)),
@@ -196,6 +201,8 @@ _CAPABILITY_AREAS = (
 _LIMITATIONS = (
     "Help responses describe the interface and do not make changes.",
     "Help responses do not examine saved reasoning work.",
+    "Question-only V6 preparation and readiness are not implemented on MCP yet.",
+    "MCP accepts no provider, route, policy, credential, or plaintext key fields.",
 )
 
 

@@ -7,8 +7,6 @@ import threading
 
 from deepreason.application import OperatorCancellationIntentV1
 from deepreason import mcp_server
-from deepreason.bridge.retry import WorkflowRetryPolicyV1
-from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
 from deepreason.cli.main import main as cli_main
 from deepreason.config import Config
 from deepreason.evidence import (
@@ -19,45 +17,33 @@ from deepreason.evidence import (
     bind_run_input,
 )
 from deepreason.run_manifest import (
-    ConjectureContextPolicyV1,
-    ContractVersionPolicyV2,
-    ControlPlanePolicyV2,
-    SchoolExecutionPolicyV1,
     ToolchainEntry,
+    bind_run_manifest,
     compile_run_manifest,
     write_run_manifest,
 )
+from deepreason.runtime.stop import (
+    StopController,
+    StopMetrics,
+    StopPolicy,
+    build_stop_record,
+    persist_stop_record,
+)
 from deepreason.verification.models import VerificationResult
+from deepreason.workflow.lifecycle import build_stopped_lifecycle
 from deepreason.workloads.text import spec_from_text
 
 
-def _manifest(tmp_path):
-    route = {
-        "endpoint": "https://example.invalid/v1",
-        "model": "gemma4:31b",
-        "provider": "ollama",
-        "family": "gemma",
-    }
-    manifest = compile_run_manifest(
-        Config(roles={"conjecturer": route}),
-        single_model="gemma4:31b",
-        rubric_policy="forbid",
-        compiled_at="2026-07-13T00:00:00Z",
-        schema_version=2,
-        workload_profile="text",
-    )
-    path, _ = write_run_manifest(manifest, tmp_path / "manifest.json")
+def _manifest(root, text):
+    from tests.test_application_text_runs_d0 import _prepared_cli_manifest
+    from tests.test_run_input_v6_commitments import _write_qualification
+
+    manifest, path = _prepared_cli_manifest(root, text)
+    _write_qualification(root, manifest)
     return manifest, path
 
 
 def _manifest_v5(tmp_path, run_root, *, problem_id: str, problem_text: str):
-    route = {
-        "endpoint_id": "v5-offline-fixture",
-        "endpoint": "https://example.invalid/v1",
-        "model": "gemma4:31b",
-        "provider": "ollama",
-        "family": "gemma",
-    }
     provenance = AttachedSourceProvenanceV1(
         supplied_by="offline MCP fixture",
         acquisition_method="pre-freeze construction",
@@ -73,38 +59,10 @@ def _manifest_v5(tmp_path, run_root, *, problem_id: str, problem_text: str):
         evidence_dossier_digest=dossier.dossier_digest,
     )
     bind_run_input(run_input, dossier, run_root)
-    control = ControlPlanePolicyV2(
-        school_execution=SchoolExecutionPolicyV1(
-            mode="conditioning_only",
-            bindings=(),
-            allow_shared=True,
-            require_distinct_models=False,
-            require_distinct_families=False,
-        ),
-        conjecture_context=ConjectureContextPolicyV1(
-            mode="disabled",
-            initial_max_blocks=0,
-            initial_max_guides=0,
-            max_context_expansion_requests=0,
-            max_extra_blocks=0,
-            permitted_retrieval_channels=(),
-            coverage_slot_mandatory=False,
-            exploration_slot_mandatory=False,
-        ),
-        workflow_retry=WorkflowRetryPolicyV1(),
-        contract_versions=ContractVersionPolicyV2(),
-    )
-    manifest = compile_run_manifest(
-        Config(roles={"conjecturer": route}),
-        rubric_policy="forbid",
-        compiled_at="2026-07-16T00:00:00Z",
-        schema_version=5,
-        workload_profile="text",
-        control_plane_policy=control,
-        inquiry_capability_policy=InquiryCapabilityPolicyV1(),
-        run_input_digest=run_input.run_input_digest,
-    )
-    path, _ = write_run_manifest(manifest, tmp_path / "manifest-v5.json")
+    from tests.test_run_input_v6_commitments import _manifest as compile_version
+
+    manifest = compile_version(5, run_input.run_input_digest)
+    path, _ = bind_run_manifest(manifest, run_root)
     return manifest, path
 
 
@@ -132,8 +90,52 @@ class _SchedulerView:
         return {"frontier": []}
 
 
+def _typed_finish(manifest, calls):
+    def finish_without_provider(
+        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
+        progress_sink=None,
+    ):
+        assert run_manifest == manifest
+        calls.append(token_budget)
+        policy = StopPolicy(min_cycles=0, window=1, stable_windows=1)
+        controller = StopController(policy)
+        before = controller.snapshot()
+        metrics = StopMetrics(cycle=len(calls) - 1)
+        decision = controller.evaluate(metrics)
+        stop = build_stop_record(
+            reason=decision.reason,
+            policy=policy,
+            metrics=metrics,
+            event_seq=harness._next_seq,
+        )
+        observation, snapshot, lifecycle = build_stopped_lifecycle(
+            harness.workflow_state,
+            manifest_digest=manifest.sha256,
+            controller_version="workflow.controller.v3",
+            workflow_profile="inquiry.active.v2",
+            policy=policy,
+            metrics=metrics,
+            deterministic_decision=decision,
+            controller_state_before=before,
+            controller_state_after=controller.snapshot(),
+            stop_event_seq=harness._next_seq,
+            stop_record_digest=stop["digest"],
+        )
+        harness.record_lifecycle_transition(observation, snapshot, lifecycle)
+        persist_stop_record(harness.root, stop)
+        return (
+            {"frontier": [], "survivors": [], "stop_reason": decision.reason},
+            None,
+            {"metered_tokens": None, "logged_tokens_this_run": 0, "delta": None},
+        )
+
+    return finish_without_provider
+
+
 def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
-    manifest, manifest_path = _manifest(tmp_path)
+    root = tmp_path / "run"
+    text = "Why do explanations generalize?"
+    manifest, manifest_path = _manifest(root, text)
 
     def fake_run(
         harness, _config, _cycles, token_budget, on_cycle, run_manifest,
@@ -150,7 +152,6 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
         )
 
     monkeypatch.setattr("deepreason.ops.run_scheduler", fake_run)
-    root = tmp_path / "run"
     notifications = []
     started = _payload(
         _call(
@@ -158,7 +159,7 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
             {
                 "root": str(root),
                 "workload": "text",
-                "problem": {"description": "Why do explanations generalize?"},
+                "problem": {"description": text},
                 "run_manifest_ref": str(manifest_path),
                 "budget": {"cycles": 1, "token_budget": "unlimited"},
             },
@@ -218,15 +219,17 @@ def test_mcp_rejects_contained_v5_before_worker_or_capability_audits(
         },
     )
     assert rejected["isError"] is True
-    assert "V5_ACTIVE_INQUIRY_CONTAINED" in rejected["content"][0]["text"]
+    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in rejected["content"][0]["text"]
     assert str(root.resolve()) not in mcp_server._RUN_THREADS
     assert not (root / "run-result.json").exists()
     assert not list(root.glob("*_AUDIT.*"))
     assert not (root / "REPLAY_VALIDATION.json").exists()
 
 
-def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypatch):
-    manifest, manifest_path = _manifest(tmp_path)
+def test_cancel_waits_for_safe_boundary(tmp_path, monkeypatch):
+    root = tmp_path / "run"
+    text = "What makes a test discriminating?"
+    manifest, manifest_path = _manifest(root, text)
     cycle_started = threading.Event()
     release_cycle = threading.Event()
 
@@ -245,14 +248,13 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
         )
 
     monkeypatch.setattr("deepreason.ops.run_scheduler", blocked_run)
-    root = tmp_path / "run"
     _payload(
         _call(
             "start_run",
             {
                 "root": str(root),
                 "workload": "text",
-                "problem": {"description": "What makes a test discriminating?"},
+                "problem": {"description": text},
                 "run_manifest_ref": str(manifest_path),
                 "budget": {"cycles": "unlimited", "token_budget": "unlimited"},
             },
@@ -274,20 +276,27 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
     mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
     assert _payload(_call("run_result", {"root": str(root)}))["state"] == "cancelled"
 
-    def resumed_run(
-        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
-        progress_sink=None,
-    ):
-        assert token_budget is None and run_manifest == manifest
-        assert not (root / "cancel.requested").exists()
-        on_cycle(_SchedulerView(harness, 1))
-        return (
-            {"frontier": [], "survivors": [], "problems": [], "diagnostics": []},
-            None,
-            {"metered_tokens": None, "logged_tokens_this_run": 0, "delta": None},
-        )
+def test_typed_v6_stop_can_continue_and_append(tmp_path, monkeypatch):
+    root = tmp_path / "converged-run"
+    text = "When should search converge?"
+    manifest, manifest_path = _manifest(root, text)
 
-    monkeypatch.setattr("deepreason.ops.run_scheduler", resumed_run)
+    calls = []
+    monkeypatch.setattr("deepreason.ops.run_scheduler", _typed_finish(manifest, calls))
+    _payload(
+        _call(
+            "start_run",
+            {
+                "root": str(root),
+                "workload": "text",
+                "problem": {"description": text},
+                "run_manifest_ref": str(manifest_path),
+                "budget": {"cycles": 12, "token_budget": "unlimited"},
+            },
+        )
+    )
+    mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
+    assert _payload(_call("run_result", {"root": str(root)}))["stop"]["reason"] == "converged"
     continued = _payload(
         _call(
             "continue_run",
@@ -302,61 +311,7 @@ def test_cancel_waits_for_safe_boundary_then_continue_appends(tmp_path, monkeypa
     mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
     assert len(list((root / "run-stops").glob("*.json"))) == 2
     assert len((root / "continuations.jsonl").read_text().splitlines()) == 1
-    assert any(
-        event.inputs and event.inputs[0] == "run-resume"
-        for event in __import__("deepreason.harness", fromlist=["Harness"]).Harness(root).log.read()
-    )
-
-
-def test_scheduler_convergence_stop_is_not_overwritten(tmp_path, monkeypatch):
-    manifest, manifest_path = _manifest(tmp_path)
-
-    def converged_run(
-        harness, _config, _cycles, token_budget, on_cycle, run_manifest,
-        progress_sink=None,
-    ):
-        from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
-
-        on_cycle(_SchedulerView(harness, 3))
-        policy = StopPolicy()
-        metrics = StopMetrics(cycle=3)
-        harness.record_measure(inputs=["scheduler-stop", "converged", policy.digest])
-        write_stop_record(
-            harness.root,
-            reason="converged",
-            policy=policy,
-            metrics=metrics,
-            event_seq=harness._next_seq - 1,
-        )
-        return (
-            {
-                "frontier": [],
-                "survivors": [],
-                "problems": [],
-                "diagnostics": [],
-                "stop_reason": "converged",
-            },
-            None,
-            {"metered_tokens": None, "logged_tokens_this_run": 0, "delta": None},
-        )
-
-    monkeypatch.setattr("deepreason.ops.run_scheduler", converged_run)
-    root = tmp_path / "converged-run"
-    _payload(
-        _call(
-            "start_run",
-            {
-                "root": str(root),
-                "workload": "text",
-                "problem": {"description": "When should search converge?"},
-                "run_manifest_ref": str(manifest_path),
-                "budget": {"cycles": 12, "token_budget": "unlimited"},
-            },
-        )
-    )
-    mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
-    assert _payload(_call("run_result", {"root": str(root)}))["stop"]["reason"] == "converged"
-    assert len(list((root / "run-stops").glob("*.json"))) == 1
+    assert calls == [None, None]
 
 
 def test_watch_once_is_read_only(tmp_path, capsys):

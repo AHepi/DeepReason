@@ -20,9 +20,27 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_built_in_and_empty_default_profile_are_identical(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("HOME", str(tmp_path / "hostile-home"))
+    monkeypatch.setenv("DEEPREASON_PROFILE", str(tmp_path / "ambient.yaml"))
+    (tmp_path / "engine.yaml").write_text("N_SCHOOLS: 99\n")
+    (tmp_path / "ambient.yaml").write_text("N_SCHOOLS: 98\n")
 
     assert load() == Config()
     assert load(ROOT / "config" / "default.yaml") == Config()
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("ARGUMENTATIVE_AUTHORITY", "legacy_direct"),
+        ("TEXT_RUBRIC_AUTHORITY", "legacy_status"),
+        ("PAIRWISE_AUTHORITY", "legacy_status"),
+        ("INFRASTRUCTURE_REVIEW_AUTHORITY", "legacy_status"),
+    ],
+)
+def test_historical_authority_values_are_rejected_by_the_typed_config(field, value):
+    with pytest.raises(ValidationError):
+        Config.model_validate({field: value})
 
 
 def test_deepseek_is_a_partial_profile_over_typed_defaults():

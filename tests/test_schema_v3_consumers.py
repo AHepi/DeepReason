@@ -4,16 +4,11 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import pytest
-
-from deepreason import mcp_server
 from deepreason.cli.main import (
     _doctor_policy_readiness,
     _text_manifest_schema_version,
     build_parser,
 )
-from deepreason.config import Config
-from deepreason.run_manifest import compile_run_manifest, write_run_manifest
 
 
 def test_config_compile_parser_accepts_schema_v3():
@@ -121,36 +116,3 @@ def test_doctor_keeps_manual_scratch_ready_without_authoring_routes(monkeypatch)
         "synthesizer",
         "summarizer",
     ]
-
-
-def test_mcp_start_run_accepts_v3_text_before_credential_preflight(
-    tmp_path, monkeypatch
-):
-    manifest = compile_run_manifest(
-        Config(),
-        schema_version=3,
-        workload_profile="text",
-        rubric_policy="forbid",
-        compiled_at="2026-07-16T00:00:00Z",
-    )
-    manifest_path, _digest_path = write_run_manifest(
-        manifest, tmp_path / "manifest.json"
-    )
-    monkeypatch.setattr("deepreason.run_manifest.preflight_payload", lambda *_args: None)
-    monkeypatch.setattr("deepreason.ops.require_full_engine", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr(
-        mcp_server,
-        "_missing_manifest_credentials",
-        lambda _manifest: ["DEEPREASON_TEST_STOP_AFTER_VERSION_CHECK"],
-    )
-
-    with pytest.raises(ValueError, match="RUN_CREDENTIAL_MISSING"):
-        mcp_server._start_run(
-            {
-                "root": str(tmp_path / "run"),
-                "workload": "text",
-                "problem": {"description": "Why?"},
-                "run_manifest_ref": str(manifest_path),
-                "budget": {"cycles": 1, "token_budget": 1},
-            }
-        )

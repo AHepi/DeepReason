@@ -222,7 +222,10 @@ _DESCRIPTIONS = {
     "scratch_open": "Open one immutable scratch block and bounded relationships without recording attention.",
     "scratch_related": "Read bounded explicit, cluster, and retrieval-only similarity neighbours.",
     "scratch_attention": "Preview a deterministic bounded attention plan without committing a receipt or visibility.",
-    "start_bridge": "Start the harness-owned two-stage grounded bridge from a precompiled v3/v4 RunManifest.",
+    "start_bridge": (
+        "Start the harness-owned two-stage grounded bridge in an existing "
+        "prepared, bound, and qualified V6 run root."
+    ),
     "bridge_status": "Read fixed bridge operational status and replay-validate terminal state.",
     "bridge_result": "Read a bounded replay-validated grounded bridge result.",
     "bridge_claims": "Read a bounded replay-validated claim ledger.",
@@ -467,6 +470,13 @@ def call_tool(name: str, arguments: dict[str, Any], *, progress_callback=None) -
         raise ValueError(
             f"MCP_INPUT_INVALID: {name} arguments violate the closed bounded schema"
         ) from error
+
+    # Enforce the same G02 V6 root boundary for direct module callers as for
+    # the JSON-RPC server. Temporal ``at_seq`` remains a query over a valid V6
+    # root; it is not historical run-version compatibility.
+    from deepreason.cli.main import _admit_v6_root
+
+    _admit_v6_root(value.root, operation=f"MCP {name}")
     if name == "start_bridge":
         return _start_bridge(value, progress_callback=progress_callback)
     return _HANDLERS[name](value)

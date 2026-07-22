@@ -554,9 +554,9 @@ def run_argument_trial_from_case(
 ):
     """Defended trial over a PRECOMPUTED critic case (phase C trial_required).
 
-    New calls are advisory by default. An explicit ``status`` or
-    ``legacy_status`` authority is required to enter the historical defended
-    court path. The critic call already happened upstream; its LLMCall arrives as
+    New calls are advisory by default. Explicit canonical ``status`` authority
+    is required to enter the defended court path. The critic call already
+    happened upstream; its LLMCall arrives as
     ``llm_call`` and is accounted here exactly once (a trial-llm Measure, or
     riding the critic registration when the decisive ruling commits; the
     upstream caller must not log it again). The defender answers, the frozen

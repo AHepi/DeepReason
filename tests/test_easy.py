@@ -52,7 +52,7 @@ def test_load_credentials_without_file_is_quiet():
 
 # ---- setup wizard: two questions, key never lands in the config file ----
 
-def test_setup_wizard_writes_config_without_the_key(monkeypatch):
+def test_setup_wizard_writes_config_without_the_key(monkeypatch, capsys):
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     answers = iter(["1"])  # provider: deepseek
     path = easy.setup_wizard(
@@ -66,6 +66,10 @@ def test_setup_wizard_writes_config_without_the_key(monkeypatch):
     assert "conjecturer" in config.roles and "argumentative_critic" in config.roles
     assert config.FUZZ_N == 0 and config.BROWSER_PER_CYCLE == 2
     assert "DEEPSEEK_API_KEY=sk-super-secret" in easy.credentials_path().read_text()
+    output = capsys.readouterr().out
+    assert "sk-super-secret" not in output
+    assert "deepreason make" not in output
+    assert "Managed V6 run preparation is not implemented" in output
 
 
 def test_setup_wizard_custom_provider_asks_url_and_model():
@@ -134,220 +138,55 @@ def test_website_script_uses_only_known_ops():
     assert {step["op"] for step in easy.WEBSITE_SCRIPT} <= _STEP_OPS
 
 
-# ---- make: friendly wrapper, honest failure modes ----
+# ---- retired Easy execution: fail closed before any side effect ----
 
-def test_make_without_config_fails_with_guidance(monkeypatch):
-    monkeypatch.setattr("sys.stdin", type("T", (), {"isatty": lambda self: False})())
-    with pytest.raises(SystemExit, match="deepreason setup"):
-        easy.make("a site", root="unused")
-
-
-def test_make_without_key_fails_with_guidance(tmp_path, monkeypatch):
-    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
-    cfg = tmp_path / "engine.yaml"
-    cfg.write_text(yaml.safe_dump({"roles": {"conjecturer": {
-        "endpoint": "https://api.deepseek.com", "model": "m",
-        "api_key_env": "DEEPSEEK_API_KEY"}}}))
-    with pytest.raises(SystemExit, match="DEEPSEEK_API_KEY"):
-        easy.make("a site", config=str(cfg), root=str(tmp_path / "r"))
-
-
-def _fake_cfg(tmp_path, monkeypatch):
-    monkeypatch.setenv("FAKE_MAKE_KEY", "k")
-    cfg = tmp_path / "engine.yaml"
-    cfg.write_text(yaml.safe_dump({"roles": {"conjecturer": {
-        "endpoint": "https://x.invalid", "model": "m",
-        "api_key_env": "FAKE_MAKE_KEY"}}}))
-    return cfg
-
-
-def _stage_faker(calls):
-    """A run_scheduler stub that plays a compliant engine: per invocation it
-    registers one ACCEPTED artifact addressed to the newest seeded problem,
-    carrying that problem's criteria and (for lineage-bound stages) the
-    required dependence ref."""
-    from deepreason.ontology import Interface, Provenance, Ref
-
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
-                 run_manifest=None):
-        pid = list(harness.state.problems)[-1]
-        problem = harness.state.problems[pid]
-        refs = []
-        for cid in problem.criteria:
-            kappa = harness.commitments.get(cid)
-            if kappa is not None and kappa.eval == "program:lineage_ref":
-                refs = [Ref(target=e, role="dependence")
-                        for e in kappa.budget.extra["endpoints"].split(",")]
-        content = {
-            "pi-plan": "PLAN: pages, features, interactions, acceptance. " * 15,
-            "pi-design": "DESIGN: layout, palette, components, states. " * 20,
-            "pi-website": "<!doctype html><html><head><title>Hi</title></head>"
-                          "<body><h1>Hi</h1></body></html>",
-        }[pid]
-        harness.create_artifact(
-            content,
-            interface=Interface(commitments=list(problem.criteria), refs=refs),
-            provenance=Provenance(role="conjecturer"), problem_id=pid)
-        if on_cycle is not None:  # one "cycle", as the real scheduler would
-            from types import SimpleNamespace
-
-            on_cycle(SimpleNamespace(harness=harness))
-        calls.append({"pid": pid, "focus_family": config.FOCUS_FAMILY,
-                      "token_budget": token_budget})
-        return ({"survivors": 1}, None, {"logged_tokens_this_run": 1000,
-                                         "metered_tokens": 1000})
-
-    return fake_run
-
-
-def test_staged_make_runs_three_stages_and_exports(tmp_path, monkeypatch):
-    """plan -> design -> build through the real seeding, picking, and export
-    paths; only the scheduler runs are stubbed (they need live endpoints)."""
-    from deepreason import ops
-
-    cfg = _fake_cfg(tmp_path, monkeypatch)
-    calls = []
-    monkeypatch.setattr(ops, "run_scheduler", _stage_faker(calls))
-    lines = []
-    paths = easy.make("my test site", out=str(tmp_path / "site"),
-                      config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append, chunked=False)  # legacy compat mode
-    assert [c["pid"] for c in calls] == ["pi-plan", "pi-design", "pi-website"]
-    assert [c["focus_family"] for c in calls] == ["pi-plan", "pi-design", "pi-website"]
-    # One global ceiling, threaded as the remainder.
-    assert calls[0]["token_budget"] == 150_000
-    assert calls[1]["token_budget"] == 149_000
-    assert calls[2]["token_budget"] == 148_000
-    pages = [p for p in paths if p.suffix == ".html"]
-    assert len(pages) == 1 and pages[0].exists()
-    docs = sorted(p.name for p in paths if p.suffix == ".md" and p.name != "README.md")
-    assert any(n.startswith("plan-") for n in docs)
-    assert any(n.startswith("design-") for n in docs)
-    joined = "\n".join(lines)
-    assert "planning round" in joined and "designing round" in joined \
-        and "building round" in joined
-    assert "plan chosen:" in joined and "design chosen:" in joined
-    assert "Your website is ready" in joined
-    # The picks are on the record.
-    from deepreason.harness import Harness
-    from deepreason.ontology import Rule
-    harness = Harness(tmp_path / "r")
-    picks = [e.inputs[1] for e in harness.log.read()
-             if e.rule == Rule.MEASURE and e.inputs and e.inputs[0] == "stage-pick"]
-    assert picks == ["plan", "design"]
-
-
-def test_staged_make_stops_when_no_plan_survives(tmp_path, monkeypatch):
-    from deepreason import ops
-
-    cfg = _fake_cfg(tmp_path, monkeypatch)
-    calls = []
-
-    def barren(harness, config, cycles, token_budget=None, on_cycle=None,
-               run_manifest=None):
-        calls.append(config.FOCUS_FAMILY)
-        return ({"survivors": 0}, None, {"logged_tokens_this_run": 7})
-
-    monkeypatch.setattr(ops, "run_scheduler", barren)
-    lines = []
-    paths = easy.make("doomed site", out=str(tmp_path / "site"),
-                      config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append, chunked=False)
-    assert paths == []
-    assert calls == ["pi-plan"]  # later stages never ran
-    joined = "\n".join(lines)
-    assert "No plan survived" in joined and "--cycles" in joined
-
-
-def test_make_single_stage_legacy_path(tmp_path, monkeypatch):
-    """staged=False reproduces the old single-problem behavior."""
-    from deepreason import ops
-    from deepreason.ontology import Interface, Provenance
-
-    cfg = _fake_cfg(tmp_path, monkeypatch)
-
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
-                 run_manifest=None):
-        assert config.FOCUS_FAMILY is None
-        cid = next(iter(harness.commitments))
-        harness.create_artifact(
-            "<!doctype html><html><head><title>Hi</title></head>"
-            "<body><h1>Hi</h1></body></html>",
-            interface=Interface(commitments=[cid]),
-            provenance=Provenance(role="conjecturer"), problem_id="pi-website")
-        return ({"survivors": 1}, None, {"logged_tokens_this_run": 1234})
-
-    monkeypatch.setattr(ops, "run_scheduler", fake_run)
-    lines = []
-    paths = easy.make("my test site", out=str(tmp_path / "site"),
-                      config=str(cfg), root=str(tmp_path / "r"),
-                      echo=lines.append, staged=False)
-    pages = [p for p in paths if p.suffix == ".html"]
-    assert len(pages) == 1 and pages[0].exists()
-    assert "1,234 tokens" in "\n".join(lines)
-
-
-def test_direct_easy_make_binds_manifest_before_scheduler(tmp_path, monkeypatch):
-    from deepreason import ops
-    from deepreason.run_manifest import load_run_manifest
-
-    cfg = _fake_cfg(tmp_path, monkeypatch)
-    run_root = tmp_path / "bound-run"
-
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
-                 run_manifest=None):
-        manifest_path = run_root / "run-manifest.json"
-        assert manifest_path.exists()
-        manifest = load_run_manifest(manifest_path)
-        assert run_manifest == manifest
-        assert config.roles["conjecturer"]["model"] == "m"
-        assert manifest.roles["conjecturer"][0].model_id == "m"
-        return ({"survivors": 0}, None, {"logged_tokens_this_run": 0})
-
-    monkeypatch.setattr(ops, "run_scheduler", fake_run)
-    easy.make(
-        "bound site", config=str(cfg), root=str(run_root),
-        out=str(tmp_path / "out"), staged=False, echo=lambda *_: None,
-    )
-    assert (run_root / "run-manifest.sha256").exists()
-    assert (run_root / ".run-manifest-config.json").exists()
-
-
-def test_direct_easy_make_resume_uses_bound_manifest_not_new_source(
-    tmp_path, monkeypatch
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {},
+        {"staged": False},
+        {"chunked": False},
+        {"config": "missing-engine.yaml"},
+    ],
+)
+def test_easy_make_requires_future_v6_preparation_before_any_side_effect(
+    tmp_path, monkeypatch, kwargs
 ):
-    from deepreason import ops
-    from deepreason.run_manifest import (
-        bind_run_manifest,
-        compile_run_manifest,
-        load_run_manifest,
-    )
+    from deepreason import ops, run_manifest
 
-    cfg_path = _fake_cfg(tmp_path, monkeypatch)
-    source = Config.model_validate(yaml.safe_load(cfg_path.read_text()))
-    manifest = compile_run_manifest(
-        source, rubric_policy="forbid", compiled_at="2026-07-11T00:00:00Z"
-    )
-    run_root = tmp_path / "resume-run"
-    bind_run_manifest(manifest, run_root)
-    monkeypatch.setattr(
-        "deepreason.run_manifest.compile_run_manifest",
-        lambda *_a, **_k: pytest.fail("resume attempted to compile a new manifest"),
-    )
+    run_root = tmp_path / "must-not-exist"
 
-    def fake_run(harness, config, cycles, token_budget=None, on_cycle=None,
-                 run_manifest=None):
-        assert load_run_manifest(run_root / "run-manifest.json") == manifest
-        assert run_manifest == manifest
-        assert config.roles["conjecturer"]["model"] == "m"
-        return ({"survivors": 0}, None, {"logged_tokens_this_run": 0})
+    def forbidden(*_args, **_kwargs):
+        pytest.fail("retired Easy execution reached a stateful or provider-facing seam")
 
-    monkeypatch.setattr(ops, "run_scheduler", fake_run)
-    easy.make(
-        "resume site", config=str(tmp_path / "does-not-exist.yaml"),
-        root=str(run_root), out=str(tmp_path / "resume-out"),
-        staged=False, echo=lambda *_: None,
-    )
+    monkeypatch.setattr(run_manifest, "compile_run_manifest", forbidden)
+    monkeypatch.setattr(run_manifest, "bind_run_manifest", forbidden)
+    monkeypatch.setattr(ops, "run_scheduler", forbidden)
+
+    with pytest.raises(easy.EasyV6PreparationRequired) as error:
+        easy.make("a site", root=str(run_root), **kwargs)
+
+    assert error.value.code == "V6_PREPARATION_REQUIRED"
+    assert not run_root.exists()
+
+
+@pytest.mark.parametrize("entry", [easy._run_stage, easy._make_chunked, easy._make_single])
+def test_internal_easy_execution_facades_are_fail_closed_tombstones(entry):
+    with pytest.raises(easy.EasyV6PreparationRequired) as error:
+        if entry is easy._run_stage:
+            entry(
+                None,
+                None,
+                label="retired",
+                root_pid="pi",
+                cycles=1,
+                token_budget=1,
+                echo=lambda *_: None,
+                stop_on_survivor=False,
+            )
+        else:
+            entry(None, None, "retired", None, 1, 1, lambda *_: None)
+    assert error.value.code == "V6_PREPARATION_REQUIRED"
 
 
 # ---- staged seeding, enforcement, and the FOUNDATION pack section ----

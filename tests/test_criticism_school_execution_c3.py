@@ -71,12 +71,12 @@ def test_batch_uses_exact_school_route_conditioning_and_durable_coverage(harness
     )
     observed: list[tuple[str, int]] = []
 
-    # The mutable compatibility value is hostile; explicit v4 policy wins.
+    # The manifest-owned policy is explicit and route-bound.
     critics = crit_argumentative_batch(
         harness,
         [target.id for target in targets],
         adapter,
-        Config(ARGUMENTATIVE_AUTHORITY="legacy_direct"),
+        Config(),
         **_policy_kwargs(lease, coverage_observer=lambda target, seq: observed.append((target, seq))),
     )
 
@@ -114,7 +114,7 @@ def test_policy_route_never_falls_back_to_config_or_legacy_direct(
             harness,
             target.id,
             adapter,
-            Config(ARGUMENTATIVE_AUTHORITY="legacy_direct"),
+            Config(),
             **kwargs,
         )
     assert calls == 0

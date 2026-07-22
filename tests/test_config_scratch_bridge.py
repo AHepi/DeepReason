@@ -85,8 +85,8 @@ def test_grounded_mode_cannot_disable_unresolved_success_safety(field):
     ):
         BridgeConfig(mode="grounded_two_stage", **{field: False})
 
-    # Legacy mode remains an exact compatibility surface; inactive grounded
-    # policy does not change the historical thesis path.
+    # ``legacy_thesis`` is a canonical V6 bridge policy value; inactive
+    # grounded policy does not change that preserved path.
     assert BridgeConfig(**{field: False}).mode == "legacy_thesis"
 
 
@@ -159,4 +159,3 @@ def test_embedder_failure_policy_is_closed_without_requiring_neural_dependency()
     ).scratchpad.semantic_retrieval is False
     with pytest.raises(ValidationError):
         Config(EMBEDDER_FAILURE_POLICY="silent")
-

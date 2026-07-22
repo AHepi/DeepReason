@@ -252,7 +252,7 @@ def test_compact_trial_preserves_ensemble_and_referential_integrity(tmp_path):
     )
     result = run_trial(
         harness, target.id, commitment, adapter, Config(TRIAL_PARAPHRASE_N=0),
-        authority="legacy_status",
+        authority="status",
     )
     assert result is not None
     assert harness.state.status[target.id] == Status.REFUTED
@@ -289,7 +289,7 @@ def test_compact_pairwise_aliases_preserve_order_swap(harness):
     )
     ruling = pairwise_discriminate(
         harness, problem, first.id, second.id, adapter, Config(),
-        authority="legacy_status",
+        authority="status",
     )
     assert ruling is not None
     assert harness.state.status[second.id] == Status.REFUTED

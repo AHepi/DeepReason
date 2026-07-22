@@ -7,7 +7,7 @@
   case may do to a non-execution-backed target is governed by
   config.ARGUMENTATIVE_AUTHORITY (RC1): observe_only records scrutiny
   evidence, trial_required routes the case through the defended cross-family
-  trial, legacy_direct preserves the pre-repair self-certifying warrant.
+  trial. No configuration may grant a self-certifying prose warrant.
   Demonstrative outcomes (counterexamples run against the target) remain
   status-changing under every mode. Rubric verdicts exist only downstream
   of the trial guard (P5).
@@ -22,7 +22,7 @@ import math
 
 from deepreason import programs
 from deepreason.authority import argumentative_authority_mode
-from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.canonical import canonical_json
 from deepreason.llm.contracts import ArgumentativeCriticOutput, BatchCase, BatchCriticOutput
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, route_fingerprint
@@ -40,7 +40,7 @@ from deepreason.llm.wire import (
     BatchCriticWireContractV2,
     wire_contract_for,
 )
-from deepreason.ontology import Artifact, Provenance, Rule, Warrant, WarrantType
+from deepreason.ontology import Artifact, Provenance, Rule
 from deepreason.rules.warrants import (
     execution_backed,
     register_fail_warrant,
@@ -48,20 +48,8 @@ from deepreason.rules.warrants import (
 )
 
 
-def _register_nu(harness, content: str, *, critic_school_id: str | None = None) -> Artifact:
-    return harness.create_artifact(
-        content,
-        provenance=Provenance(role="critic", school=critic_school_id),
-    )
-
-
 def _authority(config) -> str:
-    """ARGUMENTATIVE_AUTHORITY (RC1), fail-safe for direct helper callers.
-
-    Historical shims must now state ``legacy_direct`` explicitly. Missing or
-    malformed duck-typed values are observe-only rather than an implicit route
-    to prose-derived status authority.
-    """
+    """Resolve the closed V6 argumentative-authority policy."""
     return argumentative_authority_mode(config)
 
 
@@ -82,11 +70,9 @@ def _resolve_authority(
 ) -> str:
     """Resolve prose authority before provider dispatch.
 
-    Legacy direct helpers retain their Config-based compatibility behavior.
-    A manifest-owned criticism call, however, must carry the already-frozen
-    policy value explicitly.  It can never discover authority by rereading a
-    mutable Config object, and the historical ``legacy_direct`` escape hatch
-    is deliberately not a v4 policy value.
+    Direct helpers use the validated Config policy. A manifest-owned criticism
+    call must carry the already-frozen policy value explicitly and can never
+    discover authority by rereading a mutable Config object.
     """
 
     if explicit_authority is None:
@@ -1260,9 +1246,8 @@ def crit_argumentative(
                 inputs=["arg-crit-overridden-by-execution", target_id], llm=llm_call
             )
             return None
-        # Authority gate (RC1): only the historical legacy path lets a prose
-        # case mint its own warrant. Manifest policy permits observation or a
-        # defended trial; demonstrative execution above remains authoritative.
+        # Authority gate (RC1): prose can only be observed or enter a defended
+        # trial; demonstrative execution above remains authoritative.
         if authority == "observe_only":
             return _observe_case(
                 harness,
@@ -1284,31 +1269,7 @@ def crit_argumentative(
                 authority="status",
                 critic_school_id=critic_school_id,
             )
-        case_hash = sha256_hex(output.case.encode())[:16]
-        nu = _register_nu(
-            harness,
-            f"nu: argumentative case {case_hash} against {target_id} is sound",
-            critic_school_id=critic_school_id,
-        )
-        warrant = Warrant(
-            id=f"w:arg:{case_hash}:{target_id}",
-            target=target_id,
-            type=WarrantType.ARGUMENTATIVE,
-            validity_node=nu.id,
-        )
-        before = set(harness.state.artifacts)
-        critic = harness.create_artifact(
-            output.case,
-            provenance=Provenance(role="critic", school=critic_school_id),
-            warrants=[warrant],
-            rule=Rule.CRIT,
-            llm=llm_call,
-        )
-        if critic.id in before:
-            # The critic content deduped to an existing artifact, so no event
-            # carried llm_call — log it so token accounting sees the call once.
-            harness.record_measure(inputs=["arg-crit", target_id], llm=llm_call)
-        return critic
+        raise RuntimeError("unreachable argumentative authority mode")
     finally:
         _observe_coverage(
             harness,
@@ -1835,29 +1796,7 @@ def _crit_argumentative_batch_result(
             if trial_critic is not None:
                 critics.append(trial_critic)
             continue
-        case_hash = sha256_hex(case.case.encode())[:16]
-        nu = _register_nu(
-            harness,
-            f"nu: argumentative case {case_hash} against {case.target} is sound",
-            critic_school_id=critic_school_id,
-        )
-        warrant = Warrant(
-            id=f"w:arg:{case_hash}:{case.target}",
-            target=case.target,
-            type=WarrantType.ARGUMENTATIVE,
-            validity_node=nu.id,
-        )
-        before = set(harness.state.artifacts)
-        critic = harness.create_artifact(
-            case.case,
-            provenance=Provenance(role="critic", school=critic_school_id),
-            warrants=[warrant],
-            rule=Rule.CRIT,
-            llm=llm_pending,
-        )
-        critics.append(critic)
-        if critic.id not in before:
-            llm_pending = None  # a real event carried the call
+        raise RuntimeError("unreachable argumentative authority mode")
     # Counterexample retry (§3): ONE shared follow-up call per round for every
     # overridden attack, echoing each gate/oracle rejection reason. Same
     # batching philosophy as above — the call is shared, warrants per-target.

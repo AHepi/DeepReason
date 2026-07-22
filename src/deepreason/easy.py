@@ -1,12 +1,7 @@
-"""The two-command path (spec §13 usability): setup once, then make things.
+"""Provider setup helpers and retired Easy execution scaffolding.
 
-    deepreason setup                  # pick a provider, paste a key — once
-    deepreason make "a recipe website"
-
-Everything here is sugar over the same machinery the expert surface uses —
-seed_problem_payload-grade seeding, run_scheduler, views/export — so the
-easy path produces the same append-only, replayable record as the hard one.
-Nothing is decided here; this module only removes ceremony.
+The historical website execution facade is fail-closed. Managed V6
+question-to-run preparation will replace it in a later bounded tranche.
 
 Key handling: the engine config still holds only ``api_key_env`` NAMES
 (keys never live in configs, packs, or the log — §1). The wizard stores the
@@ -18,12 +13,27 @@ import getpass
 import os
 import re
 import stat
-import sys
 from pathlib import Path
 
 import yaml
 
-from deepreason.config import Config, role_api_key_envs
+from deepreason.config import Config
+
+
+class EasyV6PreparationRequired(RuntimeError):
+    """A retired Easy execution entry cannot prepare a canonical V6 run."""
+
+    code = "V6_PREPARATION_REQUIRED"
+
+    def __init__(self) -> None:
+        super().__init__(
+            f"{self.code}: Easy execution is retired; use an operator-prepared "
+            "bound and qualified V6 root until managed preparation is implemented"
+        )
+
+
+def _preparation_required() -> None:
+    raise EasyV6PreparationRequired()
 
 # Generic website smoke script: loads, renders something, survives two
 # seconds of virtual time. Deliberately minimal — DOM assertions gate only
@@ -393,7 +403,10 @@ def setup_wizard(input_fn=input, getpass_fn=None) -> Path:
     )
     print(f"\nDone. Config: {path}")
     print(f"Key stored:  {credentials_path()} (only your user can read it)")
-    print('\nTry:  deepreason make "a pomodoro timer website"')
+    print(
+        "\nProvider configuration saved. Managed V6 run preparation is not "
+        "implemented yet; use an operator-prepared bound V6 root."
+    )
     return path
 
 
@@ -775,46 +788,8 @@ def _echo(message: str) -> None:
 def _run_stage(harness, cfg, *, label: str, root_pid: str, cycles: int,
                token_budget: int | None, echo, stop_on_survivor: bool,
                min_cycles: int = 1, run_manifest=None) -> dict:
-    """One staged run_scheduler invocation, selection locked to the stage's
-    problem family. The ticker counts candidates addressed into the family
-    (successor generations included) and — for plan/design stages — stops
-    the stage early once a survivor exists, so leftover cycles flow to the
-    build. Returns the invocation's accounting for budget threading."""
-    from deepreason.ontology import Status
-    from deepreason.ops import run_scheduler
-    from deepreason.scheduler.scheduler import problem_family
-
-    # min_cycles=1: candidates are criticized WITHIN their own cycle
-    # (crit_program + the argumentative pass run before on_cycle fires), so a
-    # round-1 survivor has already faced a full criticism pass. Observed
-    # live: forcing a second round just gave the critic a second free shot
-    # and the plan stage ended empty. Later stages keep re-criticizing
-    # standing survivors anyway (RECRIT_STANDING is global); a foundation
-    # refuted later orphans its dependents rather than falsely refuting them.
-    stage_cfg = cfg.model_copy(update={"FOCUS_FAMILY": root_pid})
-    rounds = [0]
-
-    def ticker(scheduler):
-        rounds[0] += 1
-        state = scheduler.harness.state
-        family = problem_family(state, root_pid)
-        mine = {aid for aid, pid in state.addr if pid in family}
-        cands = [aid for aid in mine
-                 if (a := state.artifacts.get(aid)) is not None
-                 and a.provenance
-                 and a.provenance.role.value in ("conjecturer", "synthesizer")]
-        alive = sum(1 for a in cands if state.status.get(a) == Status.ACCEPTED)
-        dead = sum(1 for a in cands if state.status.get(a) == Status.REFUTED)
-        echo(f"  {label} round {rounds[0]}/{cycles}: {alive} standing, "
-             f"{dead} criticized away")
-        if stop_on_survivor and rounds[0] >= min_cycles:
-            return pick_survivor(harness, root_pid) is not None
-        return False
-
-    _, _, accounting = run_scheduler(
-        harness, stage_cfg, cycles, token_budget=token_budget, on_cycle=ticker,
-        run_manifest=run_manifest)
-    return accounting
+    """Retired scheduler facade retained only for import stability."""
+    _preparation_required()
 
 
 def _first_line(harness, aid: str, limit: int = 100) -> str:
@@ -829,230 +804,17 @@ def make(description: str, out: str | None = None, cycles: int = 10,
          token_budget: int | None = 150_000, config: str | None = None,
          root: str | None = None, echo=_echo, staged: bool = True,
          chunked: bool | None = None) -> list[Path]:
-    """Build a website from a plain-language description the way a person
-    would: PLAN it (what pages/features), DESIGN it (layout, look, behavior,
-    and — chunked mode — a component manifest), then BUILD it. In chunked
-    mode (the default, config WEBSITE_CHUNKED) each manifest component is
-    its own bounded problem and repository code assembles the accepted
-    fragments deterministically — no LLM call ever needs the whole page.
-    chunked=False (or WEBSITE_CHUNKED: false) is the legacy one-giant-page
-    compatibility mode; staged=False is the legacy single-stage loop
-    (programmatic/tests only). Neither compatibility mode disables capture
-    machinery. Exports what survives; returns the exported file paths."""
-    from deepreason.config import load
-    from deepreason.harness import Harness
-    from deepreason.llm.capabilities import CapabilityCache
-    from deepreason.ontology import Status
-    from deepreason.ops import require_website_transaction_contracts
-    from deepreason.run_manifest import (
-        MANIFEST_NAME,
-        bind_run_manifest,
-        compile_run_manifest,
-        config_from_run_manifest,
-        load_run_manifest,
-        materialize_run_config,
-        preflight_payload,
-    )
-    from deepreason.runtime.launch_policy import require_v6_launch_allowed
-    from deepreason.views.export import export_run
-
-    run_root = Path(root) if root else _fresh(Path("runs") / _slug(description))
-    bound_path = run_root / MANIFEST_NAME
-    if bound_path.exists():
-        # A resumed root is governed solely by its first manifest. Source
-        # YAML (including an explicitly supplied path) cannot reroute it.
-        manifest = load_run_manifest(bound_path)
-        cfg = config_from_run_manifest(manifest)
-    else:
-        source_path = Path(config) if config else config_path()
-        if not source_path.exists():
-            if config is None and sys.stdin.isatty():
-                echo("First run — let's set up your AI provider.\n")
-                source_path = setup_wizard()
-                echo("")
-            else:
-                raise SystemExit(
-                    "No engine config found. Run `deepreason setup` once first "
-                    f"(looked for {source_path})."
-                )
-        source_config = load(source_path)
-        # Website commitments are executable program/predicate checks, so a
-        # cross-family rubric ensemble is not silently fabricated here.
-        manifest = compile_run_manifest(
-            source_config,
-            rubric_policy="forbid",
-            capability_cache=CapabilityCache(run_root / "capabilities.json"),
-        )
-        cfg = config_from_run_manifest(manifest)
-    require_v6_launch_allowed(manifest, operation="website build")
-    require_website_transaction_contracts(manifest)
-    load_credentials()
-    missing = sorted(
-        name for name in role_api_key_envs(cfg) if not os.environ.get(name)
-    )
-    if missing:
-        raise SystemExit(
-            f"Missing API key ({', '.join(missing)}). Run `deepreason setup` "
-            "to store it, or export it in your shell."
-        )
-
-    preflight_payload(
-        manifest, {"problem": {"description": description}, "commitments": []}
-    )
-    bind_run_manifest(manifest, run_root)
-    cfg_path = materialize_run_config(manifest, run_root)
-    harness = Harness(run_root)
-    out_dir = Path(out) if out else Path(_slug(description) + "-site")
-    echo(f"Building: {description.strip()}")
-    echo(f"(work happens in {run_root}; every step is on the record there)\n")
-
-    if not staged:
-        return _make_single(harness, cfg, description, out_dir, cycles,
-                            token_budget, echo, run_manifest=manifest)
-    if chunked if chunked is not None else cfg.WEBSITE_CHUNKED:
-        return _make_chunked(harness, cfg, description, out_dir, cycles,
-                             token_budget, echo, config_path=cfg_path,
-                             run_manifest=manifest)
-
-    plan_cycles = max(2, cycles // 4)
-    design_cycles = max(2, cycles // 4)
-    build_cycles = max(2, cycles - plan_cycles - design_cycles)
-    echo(f"Stages: planning (up to {plan_cycles} rounds) -> designing "
-         f"(up to {design_cycles}) -> building ({build_cycles})\n")
-    spent = 0
-
-    def remaining() -> int | None:
-        return None if token_budget is None else max(0, token_budget - spent)
-
-    def spend(accounting: dict) -> None:
-        nonlocal spent
-        spent += (accounting.get("metered_tokens")
-                  or accounting.get("logged_tokens_this_run") or 0)
-
-    # ---- stage 1: plan ----
-    seed_plan(harness, description)
-    spend(_run_stage(harness, cfg, label="planning", root_pid="pi-plan",
-                     cycles=plan_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True, run_manifest=manifest))
-    plan_id = pick_survivor(harness, "pi-plan")
-    if plan_id is None:
-        echo("\nNo plan survived criticism — that's the tool being honest. "
-             f'Try more rounds:\n  deepreason make "{description.strip()}" '
-             f"--cycles {cycles + 4}")
-        return []
-    harness.record_measure(inputs=["stage-pick", "plan", plan_id])
-    echo(f"  plan chosen: {_first_line(harness, plan_id)}\n")
-    if remaining() == 0:
-        echo("Ran out of token budget after planning — raise --token-budget.")
-        return []
-
-    # ---- stage 2: design ----
-    seed_design(harness, description, plan_id)
-    spend(_run_stage(harness, cfg, label="designing", root_pid="pi-design",
-                     cycles=design_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=True, run_manifest=manifest))
-    design_id = pick_survivor(harness, "pi-design")
-    if design_id is None:
-        echo("\nA plan survived but no design did — try more rounds:\n"
-             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
-        return []
-    harness.record_measure(inputs=["stage-pick", "design", design_id])
-    echo(f"  design chosen: {_first_line(harness, design_id)}\n")
-    if remaining() == 0:
-        echo("Ran out of token budget after designing — raise --token-budget.")
-        return []
-
-    # ---- stage 3: build ----
-    seed_build(harness, description, design_id)
-    spend(_run_stage(harness, cfg, label="building", root_pid="pi-website",
-                     cycles=build_cycles, token_budget=remaining(), echo=echo,
-                     stop_on_survivor=False, run_manifest=manifest))
-    echo(f"\nDone thinking ({spent:,} tokens).")
-
-    paths = export_run(harness, out_dir)
-    from deepreason.programs import content_text
-    for stage, aid in (("plan", plan_id), ("design", design_id)):
-        doc = out_dir / f"{stage}-{aid[:12]}.md"
-        doc.write_text(content_text(harness.state.artifacts[aid], harness.blobs))
-        paths.append(doc)
-    pages = [p for p in paths if p.suffix == ".html"]
-    if pages:
-        echo(f"\nYour website is ready — {len(pages)} version(s) survived criticism:")
-        for p in pages:
-            echo(f"  {p.resolve()}")
-        echo("\nDouble-click one to open it in your browser. The folder also "
-             "holds the plan and design it implements, and the README "
-             "explains why each version survived.")
-    else:
-        echo("\nThe plan and design survived, but no build did — that's the "
-             "tool being honest, not broken. Try again with more rounds:\n"
-             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
-        if harness.state.status.get(design_id) != Status.ACCEPTED:
-            echo("(Note: the chosen design was itself refuted under later "
-                 "criticism, so builds depending on it were suspended — "
-                 "orphaned, not proven wrong.)")
-    return paths
+    """Fail closed before configuration, root, adapter, or provider activity."""
+    _preparation_required()
 
 
 def _make_chunked(harness, cfg, description: str, out_dir: Path, cycles: int,
                   token_budget: int | None, echo,
                   config_path: Path | None = None, run_manifest=None) -> list[Path]:
-    """Compatibility facade for the deterministic website state machine."""
-    from deepreason.workflows.website import run_website_workflow
-
-    return run_website_workflow(
-        harness,
-        cfg,
-        description,
-        out_dir,
-        cycles,
-        token_budget,
-        echo,
-        config_path=config_path,
-        run_manifest=run_manifest,
-    )
+    """Retired chunked execution facade retained only for import stability."""
+    _preparation_required()
 
 def _make_single(harness, cfg, description: str, out_dir: Path, cycles: int,
                  token_budget: int | None, echo, *, run_manifest=None) -> list[Path]:
-    """The legacy single-stage loop: conjecture finished pages directly."""
-    from deepreason.ontology import Status
-    from deepreason.ops import run_scheduler
-    from deepreason.views.export import export_run
-
-    seed_website(harness, description)
-
-    def ticker(scheduler):
-        # Count ALL design candidates in the run, not just those addressed
-        # to the seed problem: refuted designs spawn successor problems and
-        # later candidates address THOSE (observed live: the eventual
-        # survivor sat three successor generations deep). The root is
-        # dedicated to this one build, so the global count is the build.
-        state = scheduler.harness.state
-        designs = [aid for aid, a in state.artifacts.items()
-                   if a.provenance and a.provenance.role.value
-                   in ("conjecturer", "synthesizer")]
-        alive = sum(1 for a in designs if state.status.get(a) == Status.ACCEPTED)
-        dead = sum(1 for a in designs if state.status.get(a) == Status.REFUTED)
-        n = scheduler._cycles
-        echo(f"  round {n}/{cycles}: {alive} design(s) standing, "
-             f"{dead} criticized away")
-
-    _, _, accounting = run_scheduler(
-        harness, cfg, cycles, token_budget=token_budget, on_cycle=ticker,
-        run_manifest=run_manifest)
-    spent = accounting.get("logged_tokens_this_run") or 0
-    echo(f"\nDone thinking ({spent:,} tokens).")
-
-    paths = export_run(harness, out_dir)
-    pages = [p for p in paths if p.suffix == ".html"]
-    if pages:
-        echo(f"\nYour website is ready — {len(pages)} version(s) survived criticism:")
-        for p in pages:
-            echo(f"  {p.resolve()}")
-        echo("\nDouble-click one to open it in your browser. The folder's "
-             "README explains why each survived.")
-    else:
-        echo("\nNothing survived criticism this time — that's the tool being "
-             "honest, not broken. Try again with more rounds:\n"
-             f'  deepreason make "{description.strip()}" --cycles {cycles + 4}')
-    return paths
+    """Retired single-stage execution facade retained only for import stability."""
+    _preparation_required()
