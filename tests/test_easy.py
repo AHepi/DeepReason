@@ -70,7 +70,7 @@ def test_setup_wizard_writes_config_without_the_key(monkeypatch, capsys):
     output = capsys.readouterr().out
     assert "sk-super-secret" not in output
     assert "deepreason make" not in output
-    assert "public question entry is wired in the next bounded task" in output
+    assert "Qualification remains an explicit action" in output
 
 
 def test_setup_wizard_custom_provider_asks_url_and_model():

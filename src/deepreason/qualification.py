@@ -157,6 +157,28 @@ class ReusableQualificationBundleV1(BaseModel):
 QualificationExecutor = Callable[[RunManifest], ProductionContractDoctorReportV1]
 
 
+def production_qualification_maximum_provider_calls(manifest: RunManifest) -> int:
+    """Return the frozen worst-case call count before qualification dispatch."""
+
+    from deepreason.cli.doctor import _contract_schema_repair_grant
+
+    return sum(
+        PRODUCTION_CASES_PER_PAIR
+        * _contract_schema_repair_grant(manifest, pair).maximum_provider_calls
+        for pair in production_contract_pairs(manifest)
+    )
+
+
+def default_qualification_executor(
+    manifest: RunManifest,
+) -> ProductionContractDoctorReportV1:
+    """Run the production doctor; callers must invoke this explicitly."""
+
+    from deepreason.cli.doctor import run_production_contract_doctor
+
+    return run_production_contract_doctor(manifest)
+
+
 def _pair_payload(pair: ProductionContractPairV1) -> dict:
     return pair.model_dump(mode="json", exclude={"pair_id"})
 
@@ -518,8 +540,10 @@ __all__ = [
     "ReusableQualificationBundleV1",
     "ReusableQualificationPairV1",
     "completed_bundle_from_report",
+    "default_qualification_executor",
     "load_completed_qualification",
     "project_qualification_report",
+    "production_qualification_maximum_provider_calls",
     "qualification_cache_path",
     "qualification_subject_digest",
     "qualification_subject_payload",

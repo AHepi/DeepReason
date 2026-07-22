@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import json
 import re
-import stat
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
@@ -40,7 +39,7 @@ from deepreason.application.scratch import (
 )
 
 
-_MAX_ROOT_CHARS = 4_096
+_MAX_RUN_ID_CHARS = 128
 _MAX_QUERY_CHARS = 4_096
 _MAX_REFERENCE_CHARS = 512
 _MAX_RESULTS = 25
@@ -49,7 +48,6 @@ _MAX_FOCUS = 64
 _MAX_ATTENTION_BLOCKS = 32
 _MAX_ATTENTION_GUIDES = 8
 _MAX_TEXT_RESULT_CHARS = 16_384
-_MAX_MANIFEST_BYTES = 4 * 1024 * 1024
 _HEX_REFERENCE = re.compile(r"^(?:sha256:)?[0-9a-f]{1,64}$")
 _REFERENCE_PATTERN = r"^(?:sha256:)?[0-9a-fA-F]{1,64}$"
 HashReference = Annotated[
@@ -65,13 +63,13 @@ HashReference = Annotated[
 class _Input(BaseModel):
     model_config = ConfigDict(extra="forbid", hide_input_in_errors=True)
 
-    root: str = Field(default=".deepreason", min_length=1, max_length=_MAX_ROOT_CHARS)
+    run_id: str = Field(min_length=1, max_length=_MAX_RUN_ID_CHARS)
 
-    @field_validator("root")
+    @field_validator("run_id")
     @classmethod
-    def _safe_root(cls, value: str) -> str:
-        if "\x00" in value:
-            raise ValueError("root contains a NUL byte")
+    def _safe_run_id(cls, value: str) -> str:
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", value) is None:
+            raise ValueError("run_id must be an opaque managed identity")
         return value
 
 
@@ -146,9 +144,6 @@ class BridgeStartBudget(BaseModel):
 class StartBridgeInput(_Input):
     problem: str = Field(min_length=1, max_length=_MAX_REFERENCE_CHARS)
     target: Literal["thesis", "summary", "answer"] = "answer"
-    run_manifest_ref: str | None = Field(
-        default=None, min_length=1, max_length=_MAX_ROOT_CHARS
-    )
     focus_blocks: list[HashReference] = Field(
         default_factory=list,
         max_length=_MAX_FOCUS,
@@ -168,15 +163,6 @@ class StartBridgeInput(_Input):
             raise ValueError("problem must be a bounded identifier, not a path")
         if value in {".", ".."}:
             raise ValueError("problem must not traverse paths")
-        return value
-
-    @field_validator("run_manifest_ref")
-    @classmethod
-    def _manifest_reference(cls, value: str | None) -> str | None:
-        if value is None:
-            return None
-        if "\x00" in value:
-            raise ValueError("run_manifest_ref contains a NUL byte")
         return value
 
     @field_validator("focus_blocks", "focus_clusters")
@@ -224,7 +210,7 @@ _DESCRIPTIONS = {
     "scratch_attention": "Preview a deterministic bounded attention plan without committing a receipt or visibility.",
     "start_bridge": (
         "Start the harness-owned two-stage grounded bridge in an existing "
-        "prepared, bound, and qualified V6 run root."
+        "managed, bound, and qualified V6 run."
     ),
     "bridge_status": "Read fixed bridge operational status and replay-validate terminal state.",
     "bridge_result": "Read a bounded replay-validated grounded bridge result.",
@@ -289,7 +275,7 @@ def _bounded_scratch_payload(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def _scratch_map(value: ScratchMapInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     result = SCRATCH_QUERY_SERVICE.execute(
         ScratchMapQueryV1(
             root=str(root),
@@ -302,7 +288,7 @@ def _scratch_map(value: ScratchMapInput) -> dict[str, Any]:
 
 
 def _scratch_search(value: ScratchSearchInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     result = SCRATCH_QUERY_SERVICE.execute(
         ScratchSearchQueryV1(
             root=str(root),
@@ -315,7 +301,7 @@ def _scratch_search(value: ScratchSearchInput) -> dict[str, Any]:
 
 
 def _scratch_open(value: ScratchOpenInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     result = SCRATCH_QUERY_SERVICE.execute(
         ScratchOpenPreviewQueryV1(
             root=str(root),
@@ -329,7 +315,7 @@ def _scratch_open(value: ScratchOpenInput) -> dict[str, Any]:
 
 
 def _scratch_related(value: ScratchRelatedInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     result = SCRATCH_QUERY_SERVICE.execute(
         ScratchRelatedQueryV1(
             root=str(root),
@@ -343,7 +329,7 @@ def _scratch_related(value: ScratchRelatedInput) -> dict[str, Any]:
 
 
 def _scratch_attention(value: ScratchAttentionInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="SCRATCH_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     result = SCRATCH_QUERY_SERVICE.execute(
         ScratchAttentionPreviewQueryV1(
             root=str(root),
@@ -362,40 +348,21 @@ _BRIDGE_THREADS = GROUNDED_BRIDGE_WORKERS.threads
 _BRIDGE_THREAD_LOCK = GROUNDED_BRIDGE_WORKERS.lock
 
 
-def _safe_manifest_ref(value: str) -> Path:
-    path = Path(value)
-    try:
-        observed = path.lstat()
-    except OSError as error:
-        raise ValueError("BRIDGE_MANIFEST_UNAVAILABLE") from error
-    if (
-        not stat.S_ISREG(observed.st_mode)
-        or path.is_symlink()
-        or not 2 <= observed.st_size <= _MAX_MANIFEST_BYTES
-    ):
-        raise ValueError("BRIDGE_MANIFEST_UNAVAILABLE")
-    return path
+def _managed_root(run_id: str) -> Path:
+    from deepreason.preparation import resolve_managed_run_root
 
-
-def _safe_root(value: str, *, code: str) -> Path:
-    raw = Path(value)
-    if raw.is_symlink() or not raw.is_dir():
-        raise ValueError(code)
-    return raw.resolve()
+    return resolve_managed_run_root(run_id)
 
 
 def _bridge_intent(value: StartBridgeInput) -> GroundedBridgeBuildIntentV1:
-    root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
-    manifest_ref = (
-        _safe_manifest_ref(value.run_manifest_ref)
-        if value.run_manifest_ref is not None
-        else None
-    )
+    from deepreason.run_manifest import MANIFEST_NAME
+
+    root = _managed_root(value.run_id)
     return GroundedBridgeBuildIntentV1(
         root=str(root),
         problem=value.problem,
         target=value.target,
-        run_manifest_ref=(str(manifest_ref) if manifest_ref is not None else None),
+        run_manifest_ref=str(root / MANIFEST_NAME),
         focus_blocks=tuple(value.focus_blocks),
         focus_clusters=tuple(value.focus_clusters),
         token_budget=(
@@ -415,14 +382,14 @@ def _start_bridge(
 
 
 def _bridge_status(value: BridgeStatusInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     return GROUNDED_BRIDGE_SERVICE.status(
         GroundedBridgeStatusIntentV1(root=str(root))
     ).presentation_payload()
 
 
 def _bridge_result(value: BridgeResultInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     return GROUNDED_BRIDGE_SERVICE.result(
         GroundedBridgeResultIntentV1(
             root=str(root),
@@ -433,7 +400,7 @@ def _bridge_result(value: BridgeResultInput) -> dict[str, Any]:
 
 
 def _bridge_claims(value: BridgeClaimsInput) -> dict[str, Any]:
-    root = _safe_root(value.root, code="BRIDGE_RUN_NOT_FOUND")
+    root = _managed_root(value.run_id)
     return GROUNDED_BRIDGE_SERVICE.claims(
         GroundedBridgeClaimsIntentV1(
             root=str(root),
@@ -476,10 +443,17 @@ def call_tool(name: str, arguments: dict[str, Any], *, progress_callback=None) -
     # root; it is not historical run-version compatibility.
     from deepreason.cli.main import _admit_v6_root
 
-    _admit_v6_root(value.root, operation=f"MCP {name}")
+    root = _managed_root(value.run_id)
+    _admit_v6_root(root, operation=f"MCP {name}")
     if name == "start_bridge":
-        return _start_bridge(value, progress_callback=progress_callback)
-    return _HANDLERS[name](value)
+        payload = _start_bridge(value, progress_callback=progress_callback)
+    else:
+        payload = _HANDLERS[name](value)
+    payload = dict(payload)
+    for field in ("root", "run_manifest_ref", "manifest_path"):
+        payload.pop(field, None)
+    payload["run_id"] = value.run_id
+    return payload
 
 
 def call_tool_text(

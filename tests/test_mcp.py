@@ -11,6 +11,7 @@ from deepreason import mcp_server
 
 
 SUPPORTED_TOOLS = {
+    "get_readiness",
     "start_run",
     "run_status",
     "run_result",
@@ -79,8 +80,8 @@ def test_initialize_and_tools_list_are_truthful_and_exact(monkeypatch):
         {"jsonrpc": "2.0", "id": 0, "method": "initialize", "params": {}}
     )
     assert initialized["result"]["serverInfo"]["name"] == "deepreason"
-    assert "operator-prepared" in initialized["result"]["instructions"]
-    assert "RunManifest schema 6" in initialized["result"]["instructions"]
+    assert "call get_readiness" in initialized["result"]["instructions"]
+    assert "normal question" in initialized["result"]["instructions"]
     assert (
         mcp_server.handle(
             {"jsonrpc": "2.0", "method": "notifications/initialized"}
@@ -191,7 +192,7 @@ def test_no_removed_make_state_is_created_by_mcp(tmp_path: Path):
         "bridge_status",
     ),
 )
-def test_every_mcp_root_family_rejects_historical_manifest_before_sidecars_or_service(
+def test_public_mcp_rejects_caller_owned_historical_roots_before_interpretation(
     tmp_path, monkeypatch, version, name
 ):
     import deepreason.evidence as evidence
@@ -249,7 +250,7 @@ def test_every_mcp_root_family_rejects_historical_manifest_before_sidecars_or_se
 
     assert result["isError"] is True
     text = result["content"][0]["text"]
-    assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in text
+    assert "MCP_INPUT_INVALID" in text
     assert secret not in text
     assert _tree_digest(root) == before
 
@@ -264,7 +265,7 @@ def test_every_mcp_root_family_rejects_historical_manifest_before_sidecars_or_se
         "bridge_status",
     ),
 )
-def test_every_mcp_root_family_rejects_missing_manifest_without_creating_root(
+def test_every_mcp_family_rejects_caller_owned_missing_root_without_creation(
     tmp_path, name
 ):
     root = tmp_path / name
@@ -285,46 +286,31 @@ def test_every_mcp_root_family_rejects_missing_manifest_without_creating_root(
     result = _call(name, arguments)
 
     assert result["isError"] is True
-    assert "MANIFEST_FILE_UNAVAILABLE" in result["content"][0]["text"]
+    assert "MCP_INPUT_INVALID" in result["content"][0]["text"]
     assert not root.exists()
 
 
 def test_missing_credential_error_redacts_the_configured_reference(
     tmp_path, monkeypatch
 ):
-    from tests.test_application_text_runs_d0 import _prepared_cli_manifest
+    from deepreason.provider_profile import ProviderProfileV1, write_provider_profile
 
-    root = tmp_path / "prepared"
-    question = "Why must MCP credential failures be reference-free?"
-    _manifest, manifest_path = _prepared_cli_manifest(root, question)
+    state = tmp_path / "state"
+    monkeypatch.setenv("DEEPREASON_HOME", str(state))
     secret_reference = "DEEPREASON_PRIVATE_PROVIDER_REFERENCE"
     monkeypatch.delenv(secret_reference, raising=False)
-    credential_manifest = SimpleNamespace(
-        roles={
-            "conjecturer": (
-                SimpleNamespace(api_key_env=secret_reference),
-            )
-        }
+    profile = ProviderProfileV1.create(
+        provider="fixture",
+        endpoint="https://example.invalid/v1",
+        model_id="model-a",
+        family="family-a",
+        context_window_tokens=8192,
+        maximum_completion_tokens=1024,
+        credential_env=secret_reference,
     )
-
-    def reject_missing(_intent, *, credential_checker, **_kwargs):
-        missing = credential_checker(credential_manifest)
-        raise ValueError("RUN_CREDENTIAL_MISSING: " + ", ".join(missing))
-
-    monkeypatch.setattr(mcp_server.TEXT_RUN_SERVICE, "start", reject_missing)
-    result = _call(
-        "start_run",
-        {
-            "root": str(root),
-            "workload": "text",
-            "problem": {"description": question},
-            "run_manifest_ref": str(manifest_path),
-            "budget": {"cycles": 1, "token_budget": 1},
-        },
-    )
-
-    assert result["isError"] is True
+    write_provider_profile(profile, state / "provider.yaml")
+    result = _call("get_readiness", {})
+    assert result["isError"] is False
     text = result["content"][0]["text"]
-    assert "RUN_CREDENTIAL_MISSING" in text
-    assert "configured provider credential" in text
+    assert '"credential_present":false' in text
     assert secret_reference not in text

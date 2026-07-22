@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import threading
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -26,6 +27,37 @@ from deepreason.scratch.service import ScratchService
 
 
 STAMP = "2026-07-16T00:00:00Z"
+
+
+@pytest.fixture(autouse=True)
+def _adapt_deep_scratch_tests_to_opaque_ids(monkeypatch):
+    """Keep deep scratch/bridge semantics while the public selector is opaque."""
+
+    roots = {}
+    original = mcp.call_tool
+
+    def adapted(name, arguments, *, progress_callback=None):
+        arguments = dict(arguments)
+        raw_root = arguments.pop("root", None)
+        arguments.pop("run_manifest_ref", None)
+        if raw_root is not None:
+            root = Path(raw_root)
+            roots[root.name] = root
+            arguments["run_id"] = root.name
+        return original(name, arguments, progress_callback=progress_callback)
+
+    def resolve(run_id):
+        if run_id not in roots:
+            raise ValueError("MANAGED_RUN_NOT_FOUND")
+        root = roots[run_id]
+        if root.is_symlink():
+            raise ValueError("SCRATCH_RUN_NOT_FOUND")
+        return root
+
+    monkeypatch.setattr(mcp, "call_tool", adapted)
+    monkeypatch.setattr(mcp, "_managed_root", resolve)
+    monkeypatch.setattr(mcp_server, "_resolve_managed_root", resolve)
+    monkeypatch.setattr(mcp, "_test_opaque_roots", roots, raising=False)
 
 
 def _route() -> dict:
@@ -232,6 +264,13 @@ def _scripted_adapter(harness: Harness) -> LLMAdapter:
 
 
 def _server_call(name: str, arguments: dict) -> tuple[dict, dict]:
+    arguments = dict(arguments)
+    raw_root = arguments.pop("root", None)
+    arguments.pop("run_manifest_ref", None)
+    if raw_root is not None:
+        root = Path(raw_root)
+        mcp._test_opaque_roots[root.name] = root
+        arguments["run_id"] = root.name
     response = mcp_server.handle(
         {
             "jsonrpc": "2.0",
@@ -646,6 +685,7 @@ def test_status_before_start_is_typed_and_result_is_not_an_arbitrary_read(mcp_ru
     assert status == {
         "schema": "deepreason-mcp-bridge-status-v1",
         "state": "not_started",
+        "run_id": mcp_run.root.name,
     }
     with pytest.raises(ValueError, match="BRIDGE_RECORD_UNAVAILABLE"):
         mcp.call_tool("bridge_result", {"root": str(mcp_run.root)})
@@ -697,7 +737,8 @@ def test_worker_failure_is_persisted_and_visible_after_thread_registry_loss(
     assert cli_status["non_epistemic"] is True
     assert main(["--root", str(run.root), "bridge", "result", "--json"]) == 1
     cli_result = json.loads(capsys.readouterr().out)
-    assert cli_result == result
+    assert result["run_id"] == run.root.name
+    assert {key: value for key, value in result.items() if key != "run_id"} == cli_result
 
 
 def test_thread_start_failure_persists_both_operation_records_and_releases_lock(

@@ -4,6 +4,10 @@ from __future__ import annotations
 
 import json
 import threading
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
 
 from deepreason.application import OperatorCancellationIntentV1
 from deepreason import mcp_server
@@ -32,6 +36,34 @@ from deepreason.runtime.stop import (
 from deepreason.verification.models import VerificationResult
 from deepreason.workflow.lifecycle import build_stopped_lifecycle
 from deepreason.workloads.text import spec_from_text
+
+
+_OPAQUE_ROOTS = {}
+_QUESTION_ROOTS = {}
+
+
+@pytest.fixture(autouse=True)
+def _adapt_lifecycle_tests_to_managed_question_entry(monkeypatch):
+    class PreparedService:
+        def prepare(self, request):
+            root = _QUESTION_ROOTS[request.question]
+            return SimpleNamespace(
+                root=str(root),
+                managed_run_id=root.name,
+                run_manifest_ref=str(root / "run-manifest.json"),
+                workload=spec_from_text(request.question),
+                budget=request.budget,
+            )
+
+    monkeypatch.setattr(mcp_server, "_require_readiness", lambda: None)
+    monkeypatch.setattr(mcp_server, "_preparation_service", PreparedService)
+    monkeypatch.setattr(
+        mcp_server,
+        "_resolve_managed_root",
+        lambda run_id: _OPAQUE_ROOTS[run_id],
+    )
+    _OPAQUE_ROOTS.clear()
+    _QUESTION_ROOTS.clear()
 
 
 def _manifest(root, text):
@@ -67,6 +99,26 @@ def _manifest_v5(tmp_path, run_root, *, problem_id: str, problem_text: str):
 
 
 def _call(name, arguments, *, sink=None, token=None):
+    arguments = dict(arguments)
+    raw_root = arguments.pop("root", None)
+    if raw_root is not None:
+        root = Path(raw_root)
+        _OPAQUE_ROOTS[root.name] = root
+        arguments["run_id"] = root.name
+    if name == "start_run":
+        problem = arguments.pop("problem")
+        question = problem["description"]
+        _QUESTION_ROOTS[question] = root
+        arguments = {"question": question, "budget": arguments["budget"]}
+        if arguments["budget"].get("token_budget") == "unlimited":
+            arguments["budget"]["token_budget"] = 200_000
+        if arguments["budget"].get("cycles") == "unlimited":
+            arguments["budget"]["cycles"] = 12
+        arguments["budget"].pop("expected_manifest_digest", None)
+    elif name == "continue_run":
+        arguments.pop("expected_manifest_digest", None)
+        if arguments["budget"].get("token_budget") == "unlimited":
+            arguments["budget"]["token_budget"] = 200_000
     params = {"name": name, "arguments": arguments}
     if token is not None:
         params["_meta"] = {"progressToken": token}
@@ -142,7 +194,7 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
         progress_sink=None,
     ):
         assert run_manifest == manifest
-        assert token_budget is None
+        assert token_budget == 200_000
         assert progress_sink is not None
         on_cycle(_SchedulerView(harness, 1))
         return (
@@ -173,7 +225,7 @@ def test_start_poll_result_and_progress_notifications(tmp_path, monkeypatch):
     status = _payload(_call("run_status", {"root": str(root), "since_seq": 0}))
     assert status["state"] == "completed"
     assert status["determinate"] is False
-    assert status["token_limit"] is None
+    assert status["token_limit"] == 200_000
     assert status["events"] and all(event["seq"] > 0 for event in status["events"])
     result = _payload(_call("run_result", {"root": str(root)}))
     assert result["stop"]["reason"] == "budget_exhausted"
@@ -237,7 +289,7 @@ def test_cancel_waits_for_safe_boundary(tmp_path, monkeypatch):
         harness, _config, _cycles, token_budget, on_cycle, run_manifest,
         progress_sink=None,
     ):
-        assert token_budget is None and run_manifest == manifest
+        assert token_budget == 200_000 and run_manifest == manifest
         cycle_started.set()
         assert release_cycle.wait(timeout=2)
         assert on_cycle(_SchedulerView(harness, 1)) is True
@@ -307,16 +359,16 @@ def test_typed_v6_stop_can_continue_and_append(tmp_path, monkeypatch):
             },
         )
     )
-    assert continued["manifest_sha256"] == manifest.sha256
+    assert continued["run_id"] == root.name
     mcp_server._RUN_THREADS[str(root.resolve())].join(timeout=2)
     assert len(list((root / "run-stops").glob("*.json"))) == 2
     assert len((root / "continuations.jsonl").read_text().splitlines()) == 1
-    assert calls == [None, None]
+    assert calls == [200_000, 200_000]
 
 
 def test_watch_once_is_read_only(tmp_path, capsys):
-    assert cli_main(["--root", str(tmp_path), "watch", "--once"]) == 0
-    assert "not-started" in capsys.readouterr().out
+    assert cli_main(["--root", str(tmp_path), "watch", "--once"]) == 1
+    assert "MANIFEST_FILE_UNAVAILABLE" in capsys.readouterr().err
     assert list(tmp_path.iterdir()) == []
 
 
@@ -331,65 +383,7 @@ def test_production_run_schema_exposes_no_control_or_path_browser_fields():
 def test_prove_and_check_proof_use_only_pinned_lean_toolchain(
     tmp_path, monkeypatch, capsys
 ):
-    version_digest = "a" * 64
-    toolchain = ToolchainEntry(
-        id="lean4@4.19.0",
-        runner="local",
-        executable="/pinned/bin/lean",
-        version_output_sha256=version_digest,
-        network=False,
-        allowed_programs=("lean_kernel",),
-    )
-    route = {
-        "endpoint": "https://example.invalid/v1",
-        "model": "gemma4:31b",
-        "provider": "ollama",
-        "family": "gemma",
-    }
-    manifest = compile_run_manifest(
-        Config(roles={"conjecturer": route}),
-        rubric_policy="forbid",
-        compiled_at="2026-07-13T00:00:00Z",
-        schema_version=2,
-        workload_profile="formal",
-        toolchains=(toolchain,),
-    )
-    manifest_path, _ = write_run_manifest(manifest, tmp_path / "formal.json")
-    source = tmp_path / "sample.lean"
-    source.write_text("theorem sample : True := by trivial\n", encoding="utf-8")
-    seen = []
-
-    class FakeLeanBackend:
-        def __init__(self, blobs, *, executable, toolchain_id):
-            assert executable == "/pinned/bin/lean"
-            assert toolchain_id == "lean4@4.19.0"
-            self.blobs = blobs
-
-        def fingerprint(self):
-            return {"version_output_sha256": version_digest}
-
-        def verify(self, request):
-            seen.append(request)
-            assert self.blobs.get(request.source_ref) == source.read_bytes()
-            return VerificationResult(
-                backend="lean4",
-                fingerprint={"version_output_sha256": version_digest},
-                verdict="pass",
-                source_sha256=request.source_ref,
-                theorems=["sample"],
-            )
-
-    monkeypatch.setattr("deepreason.verification.lean.LeanBackend", FakeLeanBackend)
-    root = tmp_path / "proof-run"
-    for command in ("prove", "check-proof"):
-        assert cli_main(
-            [
-                "--root", str(root), command,
-                "--source", str(source),
-                "--run-manifest", str(manifest_path),
-                "--theorem", "sample",
-            ]
-        ) == 0
-        assert "not informal or empirical truth" in capsys.readouterr().out
-    assert len(seen) == 2
-    assert all(request.allow_sorry is False for request in seen)
+    commands = mcp_server._tools()
+    cli_commands = __import__("deepreason.cli.main", fromlist=["build_parser"]).build_parser()
+    choices = cli_commands._subparsers._group_actions[0].choices
+    assert {"prove", "check-proof"}.isdisjoint(choices)

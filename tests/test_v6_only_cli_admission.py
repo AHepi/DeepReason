@@ -103,7 +103,6 @@ def _prepared_v6_root(
 
 
 ROOT_COMMANDS = {
-    "attack": ("attack", "id"),
     "blob": ("blob", "sha256:deadbeef"),
     "calibrate": ("calibrate",),
     "cancel": ("cancel",),
@@ -111,9 +110,7 @@ ROOT_COMMANDS = {
     "continue": ("continue", "--budget", "1"),
     "docket": ("docket",),
     "evidence": ("evidence", "id"),
-    "expand": ("expand",),
     "export": ("export", "--out", "unused"),
-    "focus": ("focus", "id"),
     "frontier": ("frontier",),
     "merge": ("merge", "other-root"),
     "narrate": ("narrate",),
@@ -133,7 +130,6 @@ ROOT_COMMANDS = {
     "schools": ("schools",),
     "signals": ("signals",),
     "skills": ("skills", "--capsule", "missing", "--query", "q", "--school", "s"),
-    "step": ("step",),
     "submit-evidence": (
         "submit-evidence",
         "problem",
@@ -259,7 +255,7 @@ def test_v5_input_and_experimental_flags_are_not_public(tmp_path, capsys):
     problem.write_text(spec_from_text("freeze me").model_dump_json(by_alias=True))
     attempts = (
         ("input", "freeze", "--problem", str(problem), "--schema-version", "5"),
-        ("reason", "--text", "q", "--experimental-v5"),
+        ("reason", "q", "--experimental-v5"),
         ("continue", "--budget", "1", "--experimental-v5"),
         ("run", "--budget", "1", "--experimental-v5"),
     )
@@ -273,32 +269,31 @@ def test_v5_input_and_experimental_flags_are_not_public(tmp_path, capsys):
     assert not hasattr(text_runs, "_check_experimental_v5")
 
 
-def test_question_only_reason_requires_preparation_without_creating_root(tmp_path, capsys):
-    root = tmp_path / "missing"
-    assert main(["--root", str(root), "reason", "--text", "What now?"]) == 1
-    assert "V6_PREPARATION_REQUIRED" in capsys.readouterr().err
-    assert not root.exists()
+def test_question_only_reason_requires_readiness_without_creating_root(
+    tmp_path, monkeypatch, capsys
+):
+    state = tmp_path / "state"
+    monkeypatch.setenv("DEEPREASON_HOME", str(state))
+    assert main(["reason", "What now?"]) == 1
+    assert "PROVIDER_PROFILE_MISSING" in capsys.readouterr().err
+    assert not (state / "runs").exists()
 
 
 def test_explicit_manifest_cannot_bind_an_unprepared_root(tmp_path, capsys):
     prepared = _prepared_v6_root(tmp_path / "source")
     destination = tmp_path / "unbound"
 
-    assert (
+    with pytest.raises(SystemExit) as raised:
         main(
             [
-                "--root",
-                str(destination),
                 "reason",
-                "--text",
                 prepared.spec.problem.description,
                 "--run-manifest",
                 str(prepared.manifest_path),
             ]
         )
-        == 1
-    )
-    assert "MANIFEST_FILE_UNAVAILABLE" in capsys.readouterr().err
+    assert raised.value.code == 2
+    assert "unrecognized arguments: --run-manifest" in capsys.readouterr().err
     assert not destination.exists()
 
 
@@ -351,7 +346,7 @@ def test_v6_manifest_rejects_v1_run_input_without_translation(tmp_path, capsys):
     assert (root / "run-input.json").read_text().count("run-input-manifest.v1") == 1
 
 
-def test_reason_question_mismatch_fails_before_application_service(
+def test_reason_rejects_caller_owned_root_before_application_service(
     tmp_path, monkeypatch, capsys
 ):
     prepared = _prepared_v6_root(tmp_path / "run", text="the frozen question")
@@ -367,15 +362,12 @@ def test_reason_question_mismatch_fails_before_application_service(
                 "--root",
                 str(prepared.root),
                 "reason",
-                "--text",
                 "a different question",
-                "--run-manifest",
-                str(prepared.manifest_path),
             ]
         )
         == 1
     )
-    assert "RUN_INPUT_MISMATCH" in capsys.readouterr().err
+    assert "PUBLIC_REASON_ROOT_FORBIDDEN" in capsys.readouterr().err
 
 
 def test_run_requires_qualification_before_operator_lock(tmp_path, monkeypatch, capsys):
@@ -392,54 +384,22 @@ def test_run_requires_qualification_before_operator_lock(tmp_path, monkeypatch, 
     assert "DOCTOR_REPORT_MISSING" in capsys.readouterr().err
 
 
-def test_prepared_v6_root_and_reason_reach_shared_application_seam(
+def test_ordinary_reason_parser_has_no_manifest_authority(
     tmp_path, monkeypatch, capsys
 ):
     text = "Does the explicit V6 CLI reach shared application admission?"
     prepared = _prepared_v6_root(tmp_path / "run", text=text)
-    captured = []
-
-    def start(intent, **kwargs):
-        captured.append((intent, kwargs))
-        return RunStartedV1(
-            root=str(prepared.root.resolve()),
-            manifest_digest=prepared.manifest.sha256,
-        )
-
-    monkeypatch.setattr(TEXT_RUN_SERVICE, "start", start)
-    monkeypatch.setattr(TEXT_RUN_SERVICE, "wait", lambda *_args, **_kwargs: None)
-    monkeypatch.setattr(
-        TEXT_RUN_SERVICE,
-        "result",
-        lambda _intent: TextRunTerminalResultV1(
-            lifecycle="completed",
-            payload={
-                "schema": "deepreason-run-result-v2",
-                "state": "completed",
-                "workload": "text",
-            },
-        ),
-    )
-
-    assert (
+    with pytest.raises(SystemExit) as raised:
         main(
             [
-                "--root",
-                str(prepared.root),
                 "reason",
-                "--text",
                 text,
                 "--run-manifest",
                 str(prepared.manifest_path),
-                "--cycles",
-                "1",
             ]
         )
-        == 0
-    )
-    assert captured[0][1]["manifest_override"] == prepared.manifest
-    assert "experimental_v5" not in captured[0][0].model_dump()
-    assert json.loads(capsys.readouterr().out)["state"] == "completed"
+    assert raised.value.code == 2
+    assert "unrecognized arguments: --run-manifest" in capsys.readouterr().err
 
 
 def test_v6_watch_bridge_scratch_and_temporal_query_pass_admission(
@@ -620,5 +580,8 @@ def test_prospective_endpoint_doctor_needs_no_run_root(tmp_path, capsys):
 
 def test_public_parser_omits_make_and_unqualified_advanced_commands():
     commands = cli_module.build_parser()._subparsers._group_actions[0].choices
-    assert {"make", "prove", "check-proof", "code", "simulate"}.isdisjoint(commands)
+    assert {
+        "make", "prove", "check-proof", "code", "simulate",
+        "focus", "expand", "attack", "step",
+    }.isdisjoint(commands)
     assert cli_module._ROOT_ADMISSION_COMMANDS == frozenset(ROOT_COMMANDS)

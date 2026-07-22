@@ -1,32 +1,30 @@
-"""Closed MCP facade for already-prepared V6 reasoning roots.
+"""Closed MCP facade for managed question-only V6 reasoning.
 
 Endpoint models never receive MCP tools and cannot select providers, routes,
 policies, credentials, edit configuration, write events, or alter authority.
-Run preparation is intentionally not part of this surface yet.
+Paths, manifests, provider authority, and credentials are host-owned.
 """
 
 import json
 import re
 import sys
 import threading
-from pathlib import Path
 
 from deepreason.application.text_runs import TEXT_RUN_SERVICE, TEXT_RUN_WORKERS
 
 _PROTOCOL = "2024-11-05"
-_MAX_MCP_PATH_CHARS = 4_096
 _MAX_MCP_TEXT_CHARS = 65_536
 _MAX_MCP_INPUT_BYTES = 1_048_576
 _MAX_MCP_TOOL_NAME_CHARS = 128
 _MCP_TOOL_NAME = re.compile(r"^[a-z][a-z0-9_]{0,127}$")
-_ROOT = {
-    "root": {
+_SAFE_ERROR_CODE = re.compile(r"^[A-Z][A-Z0-9_]{2,127}$")
+_RUN_ID = {
+    "run_id": {
         "type": "string",
-        "description": "harness state directory",
-        "default": ".deepreason",
+        "description": "opaque DeepReason-managed run identity",
         "minLength": 1,
-        "maxLength": _MAX_MCP_PATH_CHARS,
-        "pattern": "^[^\\x00]+$",
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
     }
 }
 # Read-only process-local views for integrations that wait on an accepted
@@ -35,61 +33,48 @@ _RUN_THREADS = TEXT_RUN_WORKERS.threads
 _RUN_LOCK = TEXT_RUN_WORKERS.lock
 
 
-def _limit_schema(*, legacy_zero: bool = False) -> dict:
-    minimum = 0 if legacy_zero else 1
-    return {
-        "anyOf": [
-            {"type": "integer", "minimum": minimum},
-            {"type": "string", "enum": ["unlimited"]},
-        ]
-    }
-
-
 def _run_tools() -> list[dict]:
+    from deepreason.preparation import PUBLIC_MAX_CYCLES, PUBLIC_MAX_TOKEN_BUDGET
+
     budget = {
         "type": "object",
         "properties": {
-            "cycles": _limit_schema(),
-            "token_budget": _limit_schema(legacy_zero=True),
+            "cycles": {"type": "integer", "minimum": 1, "maximum": PUBLIC_MAX_CYCLES},
+            "token_budget": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": PUBLIC_MAX_TOKEN_BUDGET,
+            },
         },
-        "required": ["cycles", "token_budget"],
         "additionalProperties": False,
     }
     return [
         {
+            "name": "get_readiness",
+            "description": "Read secret-free V6 provider and qualification readiness.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": False,
+            },
+        },
+        {
             "name": "start_run",
             "description": (
-                "Start reasoning in an existing prepared V6 root using its exact "
-                "bound immutable RunManifest. Exposes no shell, path browser, "
-                "route editor, event writer, guard bypass, or status setter."
+                "Prepare and start one normal question using host-owned V6 authority."
             ),
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    **_ROOT,
-                    "workload": {"type": "string", "enum": ["text"]},
-                    "problem": {
-                        "type": "object",
-                        "properties": {
-                            "description": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": _MAX_MCP_TEXT_CHARS,
-                                "pattern": "^[^\\x00]+$",
-                            },
-                        },
-                        "required": ["description"],
-                        "additionalProperties": False,
-                    },
-                    "run_manifest_ref": {
+                    "question": {
                         "type": "string",
                         "minLength": 1,
-                        "maxLength": _MAX_MCP_PATH_CHARS,
+                        "maxLength": _MAX_MCP_TEXT_CHARS,
                         "pattern": "^[^\\x00]+$",
                     },
                     "budget": budget,
                 },
-                "required": ["workload", "problem", "run_manifest_ref", "budget"],
+                "required": ["question"],
                 "additionalProperties": False,
             },
         },
@@ -102,17 +87,19 @@ def _run_tools() -> list[dict]:
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    **_ROOT,
+                    **_RUN_ID,
                     "since_seq": {"type": "integer", "minimum": -1, "default": -1},
                 },
+                "required": ["run_id"],
                 "additionalProperties": False,
             },
         },
         {
             "name": "run_result",
-            "description": "Read the fixed terminal run result below the run root.",
+            "description": "Read the fixed terminal result for one managed run.",
             "inputSchema": {
-                "type": "object", "properties": {**_ROOT},
+                "type": "object", "properties": {**_RUN_ID},
+                "required": ["run_id"],
                 "additionalProperties": False,
             },
         },
@@ -125,16 +112,10 @@ def _run_tools() -> list[dict]:
             "inputSchema": {
                 "type": "object",
                 "properties": {
-                    **_ROOT,
+                    **_RUN_ID,
                     "budget": budget,
-                    "expected_manifest_digest": {
-                        "type": "string",
-                        "minLength": 64,
-                        "maxLength": 64,
-                        "pattern": "^[0-9a-f]{64}$",
-                    },
                 },
-                "required": ["budget"],
+                "required": ["run_id", "budget"],
                 "additionalProperties": False,
             },
         },
@@ -145,7 +126,8 @@ def _run_tools() -> list[dict]:
                 "safe completed-cycle boundary."
             ),
             "inputSchema": {
-                "type": "object", "properties": {**_ROOT},
+                "type": "object", "properties": {**_RUN_ID},
+                "required": ["run_id"],
                 "additionalProperties": False,
             },
         },
@@ -332,6 +314,38 @@ def _missing_manifest_credentials(manifest) -> list[str]:
     )
 
 
+def _resolve_managed_root(run_id: str):
+    from deepreason.preparation import resolve_managed_run_root
+
+    return resolve_managed_run_root(run_id)
+
+
+def _public_budget(arguments: dict):
+    from deepreason.application.models import RunBudgetIntentV1
+    from deepreason.preparation import PUBLIC_DEFAULT_CYCLES, PUBLIC_DEFAULT_TOKEN_BUDGET
+
+    raw = arguments.get("budget") or {}
+    return RunBudgetIntentV1(
+        cycles=raw.get("cycles", PUBLIC_DEFAULT_CYCLES),
+        token_budget=raw.get("token_budget", PUBLIC_DEFAULT_TOKEN_BUDGET),
+    )
+
+
+def _require_readiness():
+    from deepreason.readiness import get_readiness
+
+    readiness = get_readiness()
+    if not readiness.ready:
+        raise ValueError(f"READINESS_REQUIRED: {readiness.next_action}")
+    return readiness
+
+
+def _preparation_service():
+    from deepreason.preparation import RunPreparationService
+
+    return RunPreparationService()
+
+
 def _start_run(
     arguments: dict,
     *,
@@ -339,57 +353,52 @@ def _start_run(
     progress_callback=None,
 ) -> dict:
     """Start one run-neutral worker under a durable cross-process lock."""
-    from deepreason.application.models import (
-        ContinueTextRunIntentV1,
-    )
-    from deepreason.application.intents import (
-        budget_intent,
-        start_text_run_intent,
-    )
-    from deepreason.workloads.text import spec_from_text
+    from deepreason.application.models import ContinueTextRunIntentV1
+    from deepreason.application.intents import start_text_run_intent
 
-    raw_budget = arguments["budget"]
-    budget = budget_intent(
-        raw_budget.get("cycles"), raw_budget.get("token_budget")
-    )
+    budget = _public_budget(arguments)
     if continuation:
+        root = _resolve_managed_root(arguments["run_id"])
         accepted = TEXT_RUN_SERVICE.continue_run(
             ContinueTextRunIntentV1(
-                root=str(arguments.get("root") or ".deepreason"),
+                root=str(root),
                 budget=budget,
-                expected_manifest_digest=arguments.get(
-                    "expected_manifest_digest"
-                ),
             ),
             progress_callback=progress_callback,
             credential_checker=_missing_manifest_credentials,
         )
     else:
-        if arguments.get("workload") != "text":
-            raise ValueError(
-                "RUN_WORKLOAD_UNSUPPORTED: start_run currently executes text"
-            )
-        problem = arguments.get("problem")
-        if not isinstance(problem, dict) or not str(
-            problem.get("description") or ""
-        ).strip():
-            raise ValueError(
-                "start_run.problem.description must be a non-empty string"
-            )
+        _require_readiness()
+        from deepreason.preparation import RunPreparationRequestV1
+
+        prepared = _preparation_service().prepare(
+            RunPreparationRequestV1(question=arguments["question"], budget=budget)
+        )
         accepted = TEXT_RUN_SERVICE.start(
             start_text_run_intent(
-                root=str(arguments.get("root") or ".deepreason"),
-                workload=spec_from_text(str(problem["description"])),
-                run_manifest_ref=str(arguments["run_manifest_ref"]),
+                root=prepared.root,
+                workload=prepared.workload,
+                run_manifest_ref=prepared.run_manifest_ref,
                 cycles=budget.cycles,
                 token_budget=budget.token_budget,
             ),
             progress_callback=progress_callback,
             credential_checker=_missing_manifest_credentials,
         )
-    return accepted.presentation_payload()
+        return {
+            "state": accepted.lifecycle,
+            "run_id": prepared.managed_run_id,
+            "status_operation": "run_status",
+            "result_operation": "run_result",
+        }
+    return {
+        "state": accepted.lifecycle,
+        "run_id": arguments["run_id"],
+        "status_operation": "run_status",
+        "result_operation": "run_result",
+    }
 
-def _read_run_result(root: Path) -> dict:
+def _read_run_result(root) -> dict:
     from deepreason.application.models import InspectTextRunIntentV1
 
     return TEXT_RUN_SERVICE.result(
@@ -397,12 +406,31 @@ def _read_run_result(root: Path) -> dict:
     ).presentation_payload()
 
 
-_REQUIRED_ARGS = {
-    "start_run": ("workload", "problem", "run_manifest_ref", "budget"),
-    "continue_run": ("budget",),
-}
+def _managed_response(run_id: str, payload: dict) -> dict:
+    """Remove host path authority and pin the caller-facing managed identity."""
+
+    safe = dict(payload)
+    for field in ("root", "run_manifest_ref", "manifest_path"):
+        safe.pop(field, None)
+    safe["run_id"] = run_id
+    return safe
+
+
+def _safe_tool_error(error: Exception) -> str:
+    """Expose stable codes, never arbitrary provider, path, or payload text."""
+
+    message = str(error)
+    if message.startswith(("MCP_INPUT_INVALID:", "MCP_TOOL_NOT_EXPOSED:")):
+        return f"{type(error).__name__}: {message}"
+    code = getattr(error, "code", None)
+    if not isinstance(code, str) or _SAFE_ERROR_CODE.fullmatch(code) is None:
+        matched = re.match(r"^([A-Z][A-Z0-9_]{2,127})(?::|\b)", message)
+        code = matched.group(1) if matched is not None else "MCP_OPERATION_FAILED"
+    return f"{type(error).__name__}: {code}"
+
+
 _RUN_TOOL_NAMES = frozenset(
-    {"start_run", "run_status", "run_result", "continue_run", "cancel_run"}
+    {"get_readiness", "start_run", "run_status", "run_result", "continue_run", "cancel_run"}
 )
 
 
@@ -459,23 +487,13 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
             progress_callback=progress_callback,
         )
 
-    missing = [k for k in _REQUIRED_ARGS.get(name, ()) if k not in arguments]
-    if missing:
-        raise ValueError(
-            f"{name}: missing required argument(s) {missing}; received "
-            f"{sorted(k for k in arguments if k != 'root')}. "
-            f"Required: {list(_REQUIRED_ARGS[name])}."
-        )
     if name not in _RUN_TOOL_NAMES:
         raise ValueError("MCP_TOOL_NOT_EXPOSED: requested tool is outside the active surface")
 
-    # Admission is deliberately before every application/service read or
-    # mutation. It loads only the bound V6 manifest, RunInputManifestV2 and
-    # exact dossier commitments; G00 errors pass through unchanged.
-    from deepreason.cli.main import _admit_v6_root
+    if name == "get_readiness":
+        from deepreason.readiness import get_readiness
 
-    root = Path(arguments.get("root") or ".deepreason").resolve()
-    _admit_v6_root(root, operation=f"MCP {name}")
+        return get_readiness().model_dump_json(by_alias=True)
 
     if name == "start_run":
         return json.dumps(
@@ -484,21 +502,33 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
             sort_keys=True,
         )
 
+    from deepreason.cli.main import _admit_v6_root
+
+    root = _resolve_managed_root(arguments["run_id"])
+    _admit_v6_root(root, operation=f"MCP {name}")
+
     if name == "run_status":
         from deepreason.application.models import InspectTextRunIntentV1
 
         return json.dumps(
-            TEXT_RUN_SERVICE.inspect(
-                InspectTextRunIntentV1(
-                    root=str(root), since_seq=int(arguments.get("since_seq", -1))
-                )
-            ).presentation_payload(),
+            _managed_response(
+                arguments["run_id"],
+                TEXT_RUN_SERVICE.inspect(
+                    InspectTextRunIntentV1(
+                        root=str(root), since_seq=int(arguments.get("since_seq", -1))
+                    )
+                ).presentation_payload(),
+            ),
             indent=2,
             sort_keys=True,
         )
 
     if name == "run_result":
-        return json.dumps(_read_run_result(root), indent=2, sort_keys=True)
+        return json.dumps(
+            _managed_response(arguments["run_id"], _read_run_result(root)),
+            indent=2,
+            sort_keys=True,
+        )
 
     if name == "continue_run":
         return json.dumps(
@@ -515,9 +545,12 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
         from deepreason.application.models import CancelTextRunIntentV1
 
         return json.dumps(
-            TEXT_RUN_SERVICE.cancel(
-                CancelTextRunIntentV1(root=str(root))
-            ).presentation_payload(),
+            _managed_response(
+                arguments["run_id"],
+                TEXT_RUN_SERVICE.cancel(
+                    CancelTextRunIntentV1(root=str(root))
+                ).presentation_payload(),
+            ),
             indent=2,
             sort_keys=True,
         )
@@ -538,10 +571,8 @@ def handle(message: dict, *, notification_sink=None) -> dict | None:
                 "capabilities": {"tools": {}},
                 "serverInfo": {"name": "deepreason", "version": "0.1.0"},
                 "instructions": (
-                    "First action: obtain an operator-prepared run root containing "
-                    "an exactly bound and production-qualified RunManifest schema 6, "
-                    "RunInputManifestV2, and its evidence dossier. Managed question-only "
-                    "preparation and readiness are not implemented on MCP yet."
+                    "First action: call get_readiness. When ready, call start_run "
+                    "with a normal question and optional bounded budget."
                 ),
             },
         }
@@ -616,14 +647,17 @@ def handle(message: dict, *, notification_sink=None) -> dict | None:
             )
             result = {"content": [{"type": "text", "text": text}], "isError": False}
         except Exception as e:  # tool errors are results, not protocol errors
-            result = {"content": [{"type": "text", "text": f"{type(e).__name__}: {e}"}], "isError": True}
+            result = {
+                "content": [{"type": "text", "text": _safe_tool_error(e)}],
+                "isError": True,
+            }
         return {"jsonrpc": "2.0", "id": msg_id, "result": result}
     if msg_id is None:
         return None  # unknown notification: ignore per JSON-RPC
     return {
         "jsonrpc": "2.0",
         "id": msg_id,
-        "error": {"code": -32601, "message": f"method not found: {method}"},
+        "error": {"code": -32601, "message": "method not found"},
     }
 
 

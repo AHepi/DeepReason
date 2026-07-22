@@ -87,6 +87,8 @@ class ProviderProfileV1(BaseModel):
     def _bounded_nonblank_text(cls, value: str | None) -> str | None:
         if value is not None and not value.strip():
             raise ValueError("profile text fields must be nonblank")
+        if value is not None and any(not character.isprintable() for character in value):
+            raise ValueError("profile text fields must not contain control characters")
         return value
 
     @field_validator("endpoint")

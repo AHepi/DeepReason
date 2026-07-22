@@ -53,33 +53,26 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
         ),
     },
     "examples": {
-        "title": "Example prepared-run calls",
-        "summary": (
-            "The current MCP surface operates an already-prepared V6 root; "
-            "it does not prepare a normal question yet."
-        ),
+        "title": "Example managed-run calls",
+        "summary": "Start with readiness, then supply a normal question.",
         "details": (
-            "Use start_run only after an operator has frozen RunInputManifestV2 and its dossier.",
-            "The root must already contain the exact bound and production-qualified V6 manifest.",
+            "Call get_readiness before start_run.",
+            "DeepReason owns input freezing, policy, qualification projection, manifests, and paths.",
         ),
         "examples": (
-            "start_run(root, workload='text', problem.description, run_manifest_ref, budget)",
+            "start_run(question='Why does the sky appear blue?')",
         ),
     },
     "creating_a_run": {
-        "title": "Starting an operator-prepared V6 run",
-        "summary": (
-            "DeepReason does not yet expose run preparation over MCP. Supply an "
-            "existing prepared, bound, and production-qualified V6 root."
-        ),
+        "title": "Starting a managed V6 run",
+        "summary": "Supply a question; DeepReason prepares the exact V6 run.",
         "details": (
-            "The root must contain RunManifest schema 6, RunInputManifestV2, and its exact dossier.",
-            "problem.description must exactly match the frozen V6 input.",
-            "run_manifest_ref must identify the same immutable manifest bound to the root.",
-            "Supply explicit cycle and token budgets; no historical fallback is compiled.",
+            "Qualification must already have been completed by the operator.",
+            "An optional finite budget may narrow the conservative default.",
+            "The returned run_id is opaque and survives MCP process restart.",
         ),
         "examples": (
-            "First action: ask the operator for the path to a prepared V6 root and its bound manifest.",
+            "First action: call get_readiness.",
         ),
     },
     "epistemic_outcomes": {
@@ -127,14 +120,14 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
     },
     "troubleshooting": {
         "title": "When a run cannot start",
-        "summary": "Check the prepared V6 root and exact frozen bindings first.",
+        "summary": "Check readiness and the opaque managed run identity first.",
         "details": (
-            "A missing RunManifest is distinct from an unsupported historical version.",
-            "Every lifecycle, scratch, and bridge operation requires a valid V6 root.",
-            "Provider selection, credentials, route selection, policy construction, and preparation are not MCP fields.",
+            "A run cannot start until profile, credential, and qualification readiness are complete.",
+            "Every lifecycle, scratch, and bridge operation requires a valid managed run_id.",
+            "Provider selection, credentials, routes, policy, manifests, and paths are not MCP fields.",
         ),
         "examples": (
-            "If only a normal question is available, report that managed V6 preparation is not implemented yet.",
+            "Use the one next_action returned by get_readiness.",
         ),
     },
 }
@@ -142,36 +135,30 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
 _REQUIREMENT_CONTENT: dict[str, dict[str, Any]] = {
     "reasoning_run": {
         "required_information": (
-            ("workload", "Must be the fixed value text."),
-            ("problem.description", "Exactly matches the question frozen in RunInputManifestV2."),
-            ("run_manifest_ref", "Identifies the exact schema-6 manifest already bound to the root."),
-            ("budget.cycles", "Sets a positive integer cycle allowance or unlimited."),
-            ("budget.token_budget", "Sets a non-negative integer token allowance or unlimited."),
+            ("question", "The normal question to prepare and reason over."),
         ),
         "optional_information": (
-            ("root", "Selects an existing prepared, bound, and qualified V6 run root; defaults to .deepreason."),
+            ("budget.cycles", "Narrows the finite conservative cycle allowance."),
+            ("budget.token_budget", "Narrows the finite conservative token allowance."),
         ),
         "next_operation": "start_run",
     },
     "continue_run": {
         "required_information": (
-            ("budget.cycles", "Sets a positive integer cycle allowance or unlimited."),
-            ("budget.token_budget", "Sets a non-negative integer token allowance or unlimited."),
+            ("run_id", "Identifies the managed V6 run without exposing a path."),
+            ("budget.cycles", "Sets a finite bounded cycle allowance."),
+            ("budget.token_budget", "Sets a finite bounded token allowance."),
         ),
-        "optional_information": (
-            ("root", "Selects an existing prepared and bound V6 run root; defaults to .deepreason."),
-            ("expected_manifest_digest", "Pins the already-bound manifest digest."),
-        ),
+        "optional_information": (),
         "next_operation": "continue_run",
     },
     "grounded_bridge": {
         "required_information": (
+            ("run_id", "Identifies the managed V6 run without exposing a path."),
             ("problem", "Names the bounded problem identifier to compose from."),
         ),
         "optional_information": (
-            ("root", "Selects an existing prepared, bound, and qualified V6 run root; defaults to .deepreason."),
             ("target", "Selects thesis, summary, or answer; defaults to answer."),
-            ("run_manifest_ref", "Pins the same schema-6 manifest already bound to the root."),
             ("focus_blocks", "Selects bounded canonical scratch block references."),
             ("focus_clusters", "Selects bounded canonical scratch cluster references."),
             ("budget.token_budget", "Sets a positive bounded bridge token allowance."),
@@ -181,7 +168,8 @@ _REQUIREMENT_CONTENT: dict[str, dict[str, Any]] = {
 }
 
 _CAPABILITY_AREAS = (
-    ("reasoning_runs", "Start work only in an operator-prepared V6 root.", ("start_run",)),
+    ("readiness", "Check whether a managed V6 question may start.", ("get_readiness",)),
+    ("reasoning_runs", "Start a normal question under host-owned V6 authority.", ("start_run",)),
     ("continuation", "Request continued work from an earlier reasoning request.", ("continue_run",)),
     ("run_information", "Read reasoning progress and final information.", ("run_status", "run_result")),
     ("cancellation", "Request a safe stop for a reasoning request.", ("cancel_run",)),
@@ -201,8 +189,8 @@ _CAPABILITY_AREAS = (
 _LIMITATIONS = (
     "Help responses describe the interface and do not make changes.",
     "Help responses do not examine saved reasoning work.",
-    "Question-only V6 preparation and readiness are not implemented on MCP yet.",
-    "MCP accepts no provider, route, policy, credential, or plaintext key fields.",
+    "Qualification is an explicit operator action and cannot be started through MCP.",
+    "MCP accepts no provider, route, policy, manifest, path, credential, or plaintext key fields.",
 )
 
 

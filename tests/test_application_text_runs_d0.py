@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import inspect
 import json
+from types import SimpleNamespace
 
 import pytest
 from pydantic import ValidationError
@@ -64,6 +65,25 @@ def _prepared_cli_manifest(root, text):
     return manifest, manifest_path
 
 
+def _install_public_preparation(monkeypatch, root, text, manifest_path):
+    class PreparedService:
+        def prepare(self, request):
+            assert request.question == text
+            return SimpleNamespace(
+                root=str(root),
+                managed_run_id=root.name,
+                run_manifest_ref=str(manifest_path),
+                workload=spec_from_text(text),
+                budget=request.budget,
+            )
+
+    monkeypatch.setattr(
+        "deepreason.preparation.RunPreparationService", PreparedService
+    )
+    monkeypatch.setattr(mcp_server, "_preparation_service", PreparedService)
+    monkeypatch.setattr(mcp_server, "_require_readiness", lambda: None)
+
+
 def test_start_intent_is_strict_and_has_no_client_authority_fields(tmp_path):
     spec = spec_from_text("Why should clients share one application service?")
     payload = {
@@ -120,6 +140,7 @@ def test_cli_and_mcp_compile_the_same_start_intent(
     root = tmp_path / "same-root"
     text = "Why should equivalent clients produce equivalent authority?"
     manifest, manifest_path = _prepared_cli_manifest(root, text)
+    _install_public_preparation(monkeypatch, root, text, manifest_path)
     captured = []
 
     def fake_start(intent, **_kwargs):
@@ -145,23 +166,15 @@ def test_cli_and_mcp_compile_the_same_start_intent(
 
     mcp_server._start_run(
         {
-            "root": str(root),
-            "workload": "text",
-            "problem": {"description": text},
-            "run_manifest_ref": str(manifest_path),
+            "question": text,
             "budget": {"cycles": 12, "token_budget": 200_000},
         }
     )
     assert (
         cli_main(
             [
-                "--root",
-                str(root),
                 "reason",
-                "--text",
                 text,
-                "--run-manifest",
-                str(manifest_path),
                 "--cycles",
                 "12",
                 "--token-budget",
@@ -195,6 +208,7 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
     root = tmp_path / state
     text = "Which terminal state controls automation?"
     manifest, manifest_path = _prepared_cli_manifest(root, text)
+    _install_public_preparation(monkeypatch, root, text, manifest_path)
     payload = {
         "schema": "deepreason-run-result-v1",
         "state": state,
@@ -220,13 +234,8 @@ def test_synchronous_cli_preserves_state_and_uses_terminal_exit_contract(
 
     exit_code = cli_main(
         [
-            "--root",
-            str(root),
             "reason",
-            "--text",
             text,
-            "--run-manifest",
-            str(manifest_path),
             "--cycles",
             "1",
         ]
@@ -242,6 +251,7 @@ def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
     root = tmp_path / "invalid"
     text = "Can an unknown terminal be reported as success?"
     manifest, manifest_path = _prepared_cli_manifest(root, text)
+    _install_public_preparation(monkeypatch, root, text, manifest_path)
     monkeypatch.setattr(
         TEXT_RUN_SERVICE,
         "start",
@@ -259,13 +269,8 @@ def test_synchronous_cli_returns_unknown_terminal_exit_for_invalid_result(
     assert (
         cli_main(
             [
-                "--root",
-                str(root),
                 "reason",
-                "--text",
-                    text,
-                "--run-manifest",
-                str(manifest_path),
+                text,
                 "--cycles",
                 "1",
             ]
@@ -378,7 +383,7 @@ def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
 def test_clients_have_only_thin_service_dispatch_and_one_registry():
     assert mcp_server._RUN_THREADS is TEXT_RUN_WORKERS.threads
     assert mcp_server._RUN_LOCK is TEXT_RUN_WORKERS.lock
-    for function in (mcp_server._start_run, cli_module._execute_reason):
+    for function in (mcp_server._start_run, cli_module._cmd_reason):
         source = inspect.getsource(function)
         assert "run_scheduler" not in source
         assert "StopPolicy" not in source

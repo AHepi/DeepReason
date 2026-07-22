@@ -1,14 +1,4 @@
-"""CLI entry point (spec §13).
-
-Commands: reason · continue · watch ·
-frontier · focus <id> · expand · attack <id> · step ·
-run --budget <spec> · why <id> · theory <id> · prose <id> · docket ·
-rule <case-id> · schools · capture · reseed <school-id> · merge <path> ·
-trace <id>.
-
-P0 wires the inspect commands (frontier, why, trace) against a harness
-directory; loop/scheduler commands land with P1/P2.
-"""
+"""Public V6 command-line facade and advanced bound-root operations."""
 
 import argparse
 import json
@@ -32,14 +22,34 @@ def build_parser() -> argparse.ArgumentParser:
         "--config", default=None,
         help="partial YAML profile (default: built-in typed defaults)",
     )
+    parser.add_argument(
+        "--provider-profile",
+        default=None,
+        help="explicit secret-free provider profile (overrides DEEPREASON_PROFILE)",
+    )
     sub = parser.add_subparsers(dest="command")
     from deepreason.cli.bridge import register_bridge_commands
     from deepreason.cli.scratch import register_scratch_parser
 
     register_scratch_parser(sub)
     register_bridge_commands(sub)
-    sub.add_parser("setup", help="one-time wizard: pick an AI provider, store "
-                                 "your API key privately")
+    setup_cmd = sub.add_parser(
+        "setup", help="configure one trusted provider profile and credential reference"
+    )
+    setup_cmd.add_argument("--provider", default=None)
+    setup_cmd.add_argument("--endpoint", default=None)
+    setup_cmd.add_argument("--model", default=None)
+    setup_cmd.add_argument("--model-revision", default=None)
+    setup_cmd.add_argument("--family", default=None)
+    setup_cmd.add_argument("--context-window-tokens", type=int, default=None)
+    setup_cmd.add_argument("--maximum-completion-tokens", type=int, default=None)
+    setup_cmd.add_argument("--credential-env", default=None)
+    qualify_cmd = sub.add_parser(
+        "qualify", help="explicitly qualify the configured V6 provider contract"
+    )
+    qualify_cmd.add_argument("--json", action="store_true")
+    status_cmd = sub.add_parser("status", help="show provider and V6 qualification readiness")
+    status_cmd.add_argument("--json", action="store_true")
     config_cmd = sub.add_parser(
         "config", help="print source config, or compile/inspect a frozen RunManifest"
     )
@@ -126,19 +136,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="deterministic production-contract qualification report path",
     )
     reason_cmd = sub.add_parser(
-        "reason", help="reason over a text question using conjecture and criticism"
+        "reason", help="prepare and reason over one normal question"
     )
-    reason_input = reason_cmd.add_mutually_exclusive_group(required=True)
-    reason_input.add_argument("--problem", help="deepreason-text-workload-v1 YAML/JSON")
-    reason_input.add_argument("--text", help="plain explanatory question")
-    reason_cmd.add_argument(
-        "--run-manifest",
-        default=None,
-        help="explicit schema-6 manifest already bound to the prepared --root",
-    )
-    reason_cmd.add_argument("--cycles", type=int, default=12)
-    reason_cmd.add_argument("--token-budget", default="200000")
-    reason_cmd.add_argument("--dry-run", action="store_true")
+    reason_cmd.add_argument("question", help="the question DeepReason should examine")
+    reason_cmd.add_argument("--cycles", type=int, default=None)
+    reason_cmd.add_argument("--token-budget", type=int, default=None)
     skills_cmd = sub.add_parser(
         "skills", help="snapshot and retrieve from explicit advisory skill capsules"
     )
@@ -197,10 +199,6 @@ def build_parser() -> argparse.ArgumentParser:
         "cancel", help="request cancellation at the next completed-cycle boundary"
     )
     sub.add_parser("frontier", help="show the problem frontier")
-    sub.add_parser("focus", help="focus a problem/artifact").add_argument("id")
-    sub.add_parser("expand", help="expand the focused node")
-    sub.add_parser("attack", help="solicit criticism of an artifact").add_argument("id")
-    sub.add_parser("step", help="apply one enabled rule under budget")
     run = sub.add_parser("run", help="run the full scheduler (Conj->Crit->Adj, schools, capture)")
     run.add_argument("--budget", required=True, help="cycles=<N> or plain <N>")
     run.add_argument("--problem", default=None, help="problem file (json/yaml) to register first")
@@ -293,7 +291,6 @@ def _resolve(harness: Harness, prefix: str) -> str:
 
 _ROOT_ADMISSION_COMMANDS = frozenset(
     {
-        "attack",
         "blob",
         "calibrate",
         "cancel",
@@ -301,9 +298,7 @@ _ROOT_ADMISSION_COMMANDS = frozenset(
         "continue",
         "docket",
         "evidence",
-        "expand",
         "export",
-        "focus",
         "frontier",
         "merge",
         "narrate",
@@ -316,7 +311,6 @@ _ROOT_ADMISSION_COMMANDS = frozenset(
         "schools",
         "signals",
         "skills",
-        "step",
         "submit-evidence",
         "theory",
         "trace",
@@ -417,17 +411,36 @@ def main(argv: list[str] | None = None) -> int:
 
 def _main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if args.command is None:
-        build_parser().print_help()
-        return 0
-
     from deepreason import easy
 
     easy.load_credentials()  # stored keys reach every command; env vars win
 
+    if args.command is None:
+        return _cmd_status(args)
+
     if args.command == "setup":
-        easy.setup_wizard()
+        try:
+            easy.setup_wizard(
+                provider=args.provider,
+                endpoint=args.endpoint,
+                model=args.model,
+                model_revision=args.model_revision,
+                family=args.family,
+                context_window_tokens=args.context_window_tokens,
+                maximum_completion_tokens=args.maximum_completion_tokens,
+                credential_env=args.credential_env,
+            )
+        except ValueError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        print("Next action: deepreason qualify")
         return 0
+
+    if args.command == "status":
+        return _cmd_status(args)
+
+    if args.command == "qualify":
+        return _cmd_qualify(args)
 
     if args.command == "scratch":
         from deepreason.cli.scratch import dispatch_scratch
@@ -1282,100 +1295,118 @@ def _load_problem_file(harness: Harness, path: Path) -> str:
     return seed_problem_payload(harness, _read_problem_file(path)).id
 
 
-def _cmd_reason(args) -> int:
-    from deepreason.ops import require_full_engine
-    from deepreason.run_manifest import (
-        MANIFEST_NAME,
-        RunManifestError,
-        load_run_manifest,
-        render_role_matrix,
-    )
-    from deepreason.workloads.text import (
-        ReasoningWorkloadSpec,
-        spec_from_text,
+def _cmd_status(args) -> int:
+    from deepreason.readiness import get_readiness, readiness_json, readiness_text
+
+    readiness = get_readiness(getattr(args, "provider_profile", None))
+    print(readiness_json(readiness) if getattr(args, "json", False) else readiness_text(readiness))
+    return 0 if readiness.ready else 1
+
+
+def _cmd_qualify(args) -> int:
+    from deepreason.preparation import qualification_subject_manifest
+    from deepreason.provider_profile import credential_present, provider_state_dir, resolve_provider_profile
+    from deepreason.qualification import (
+        QualificationError,
+        default_qualification_executor,
+        load_completed_qualification,
+        production_qualification_maximum_provider_calls,
+        qualification_subject_digest,
+        resolve_completed_qualification,
     )
 
-    if args.cycles < 1:
-        print("reason --cycles must be positive", file=sys.stderr)
-        return 1
-    token_text = str(args.token_budget).strip().casefold()
-    token_budget = None if token_text in {"unlimited", "0"} else int(token_text)
-    if token_budget is not None and token_budget < 1:
-        print("reason --token-budget must be positive or unlimited", file=sys.stderr)
-        return 1
-    if args.problem:
-        data = _read_problem_file(Path(args.problem))
-        try:
-            spec = ReasoningWorkloadSpec.model_validate(data)
-        except ValueError as error:
-            print(str(error), file=sys.stderr)
-            return 1
-    else:
-        spec = spec_from_text(args.text)
-
-    root = Path(args.root)
     try:
-        if not args.run_manifest and not (root / MANIFEST_NAME).exists():
-            raise RunManifestError(
-                "V6_PREPARATION_REQUIRED",
-                "reason requires --run-manifest for an already-prepared V6 root",
-                "/run-manifest",
+        resolved = resolve_provider_profile(args.provider_profile)
+        profile = resolved.profile
+        if not credential_present(profile):
+            raise QualificationError(
+                "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
             )
-        manifest, run_input, dossier = _admit_v6_root(
-            root, operation="CLI reason"
-        )
-        if not args.run_manifest:
-            raise RunManifestError(
-                "V6_PREPARATION_REQUIRED",
-                "reason requires the explicit manifest already bound to this V6 root",
-                "/run-manifest",
+        manifest = qualification_subject_manifest(profile)
+        cache_dir = provider_state_dir() / "qualification-cache"
+        subject = qualification_subject_digest(manifest, profile)
+        try:
+            bundle = load_completed_qualification(cache_dir, subject)
+            maximum_calls = 0
+            state = "ready"
+            reused = True
+        except QualificationError as error:
+            if error.code != "QUALIFICATION_NOT_CONFIGURED":
+                raise
+            maximum_calls = production_qualification_maximum_provider_calls(manifest)
+            notice = (
+                f"Qualification will test {profile.provider}/{profile.model_id}; "
+                f"maximum expected provider calls: {maximum_calls}."
             )
-        requested = load_run_manifest(args.run_manifest)
-        if requested.canonical_bytes() != manifest.canonical_bytes():
-            raise RunManifestError(
-                "RUN_MANIFEST_CONFLICT",
-                "run root is already bound to a different manifest",
-                "/run-manifest.json",
+            print(notice, file=sys.stderr, flush=True)
+            bundle = resolve_completed_qualification(
+                manifest,
+                profile,
+                cache_dir=cache_dir,
+                executor=default_qualification_executor,
             )
-        _require_v6_workload_match(run_input, dossier, spec)
-        require_full_engine(manifest, workload="text reasoning")
-        if manifest.workload_profile != "text":
-            raise RunManifestError(
-                "WORKLOAD_PROFILE_MISMATCH",
-                f"reason requires text, got {manifest.workload_profile}",
-                "/workload_profile",
-            )
+            state = "ready"
+            reused = False
+        payload = {
+            "schema": "deepreason-qualification-result.v1",
+            "provider": profile.provider,
+            "model_id": profile.model_id,
+            "profile_source": resolved.source,
+            "qualification_state": state,
+            "cache_reused": reused,
+            "maximum_expected_provider_calls": maximum_calls,
+            "qualification_subject_digest": bundle.subject_digest,
+            "next_action": 'deepreason reason "YOUR QUESTION"',
+        }
     except ValueError as error:
         print(str(error), file=sys.stderr)
         return 1
-    if args.dry_run:
-        print(render_role_matrix(manifest))
-        print(f"sha256={manifest.sha256}")
-        return 0
-    return _execute_reason(args, spec, manifest, root, token_budget)
+    if args.json:
+        print(json.dumps(payload, sort_keys=True, separators=(",", ":")))
+    else:
+        print(f"Qualified: {payload['provider']}/{payload['model_id']}")
+        print(f"Qualification state: {payload['qualification_state']}")
+        print(f"Next action: {payload['next_action']}")
+    return 0
 
 
-def _execute_reason(args, spec, manifest, root: Path, token_budget) -> int:
-    """Submit one typed text-run intent and render its terminal result."""
+def _cmd_reason(args) -> int:
+    """Prepare one question and execute it through the shared V6 application."""
 
-    from deepreason.application import (
-        InspectTextRunIntentV1,
-        TEXT_RUN_SERVICE,
-        start_text_run_intent,
+    from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
+    from deepreason.application.intents import start_text_run_intent
+    from deepreason.preparation import (
+        PUBLIC_DEFAULT_CYCLES,
+        PUBLIC_DEFAULT_TOKEN_BUDGET,
+        RunPreparationRequestV1,
+        RunPreparationService,
     )
 
+    if args.root != ".deepreason":
+        print("PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned", file=sys.stderr)
+        return 1
+    cycles = args.cycles if args.cycles is not None else PUBLIC_DEFAULT_CYCLES
+    tokens = (
+        args.token_budget
+        if args.token_budget is not None
+        else PUBLIC_DEFAULT_TOKEN_BUDGET
+    )
     try:
+        prepared = RunPreparationService().prepare(
+            RunPreparationRequestV1(
+                question=args.question,
+                budget={"cycles": cycles, "token_budget": tokens},
+                profile_path=args.provider_profile,
+            )
+        )
         accepted = TEXT_RUN_SERVICE.start(
             start_text_run_intent(
-                root=str(root),
-                workload=spec,
-                run_manifest_ref=str(args.run_manifest or "<compiled-manifest>"),
-                cycles=args.cycles,
-                token_budget=(
-                    "unlimited" if token_budget is None else token_budget
-                ),
-            ),
-            manifest_override=manifest,
+                root=prepared.root,
+                workload=prepared.workload,
+                run_manifest_ref=prepared.run_manifest_ref,
+                cycles=prepared.budget.cycles,
+                token_budget=prepared.budget.token_budget,
+            )
         )
         TEXT_RUN_SERVICE.wait(accepted.root)
         terminal = TEXT_RUN_SERVICE.result(
@@ -1385,6 +1416,7 @@ def _execute_reason(args, spec, manifest, root: Path, token_budget) -> int:
         print(str(error), file=sys.stderr)
         return 6 if str(error).startswith(("RUN_RESULT_INVALID", "RUN_RESULT_NOT_READY")) else 1
     payload = terminal.presentation_payload()
+    payload["run_id"] = prepared.managed_run_id
     print(json.dumps(payload, indent=2, sort_keys=True))
     return terminal.exit_code()
 

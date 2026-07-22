@@ -474,10 +474,7 @@ def setup_wizard(
         print(f"Credential reference: {credential_env} (already available)")
     else:
         print(f"Credential stored: {credentials_path()} (only your user can read it)")
-    print(
-        "\nProvider configuration saved. Managed V6 preparation is available "
-        "internally; public question entry is wired in the next bounded task."
-    )
+    print("\nProvider configuration saved. Qualification remains an explicit action.")
     return path
 
 

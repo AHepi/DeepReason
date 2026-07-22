@@ -940,18 +940,17 @@ def test_direct_cli_rejects_pre_v6_before_operator_contention(
         assert (
             main(
                 [
-                    "--root",
-                    str(text_root),
-                    "reason",
-                    "--text",
-                    "What follows?",
+                        "--root",
+                        str(text_root),
+                        "reason",
+                        "What follows?",
                     "--cycles",
                     "1",
                 ]
             )
             == 1
         )
-        assert "UNSUPPORTED_RUN_MANIFEST_VERSION" in capsys.readouterr().err
+        assert "PUBLIC_REASON_ROOT_FORBIDDEN" in capsys.readouterr().err
     finally:
         locks.release()
 

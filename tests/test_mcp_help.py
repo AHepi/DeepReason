@@ -32,6 +32,7 @@ REQUEST_OPERATIONS = (
     "grounded_bridge",
 )
 SUPPORTED_TOOL_NAMES = {
+    "get_readiness",
     "start_run",
     "run_status",
     "run_result",
@@ -102,8 +103,8 @@ def test_help_tools_are_listed_with_exact_closed_schemas_and_annotations(monkeyp
         {"jsonrpc": "2.0", "id": 0, "method": "initialize", "params": {}}
     )
     assert initialization["result"]["serverInfo"]["name"] == "deepreason"
-    assert "operator-prepared" in initialization["result"]["instructions"]
-    assert "RunManifest schema 6" in initialization["result"]["instructions"]
+    assert "call get_readiness" in initialization["result"]["instructions"]
+    assert "normal question" in initialization["result"]["instructions"]
 
     tools = _listed_tools()
     assert set(tools) == SUPPORTED_TOOL_NAMES
@@ -146,6 +147,7 @@ def test_capabilities_are_deterministic_and_only_describe_registered_core_operat
     assert set(first) == {"schema_version", "capabilities", "limitations"}
     assert first["schema_version"] == "deepreason.mcp-help.v1"
     assert [capability["id"] for capability in first["capabilities"]] == [
+        "readiness",
         "reasoning_runs",
         "continuation",
         "run_information",
@@ -176,14 +178,13 @@ def test_capabilities_are_deterministic_and_only_describe_registered_core_operat
         "experimental",
         "legacy",
         "hash",
-        "path",
         "file",
         "directory",
         "filesystem",
     ):
         assert forbidden not in serialized
-    assert "operator-prepared v6 root" in serialized
-    assert "accepts no provider, route, policy, credential" in serialized
+    assert "normal question" in serialized
+    assert "accepts no provider, route, policy, manifest, path, credential" in serialized
 
 
 @pytest.mark.parametrize("topic", HELP_TOPICS)
@@ -230,14 +231,12 @@ def test_each_request_requirements_response_uses_the_stable_bounded_shape(
     assert "root" not in {
         entry["field"] for entry in payload["required_information"]
     }
-    assert "root" in {
-        entry["field"] for entry in payload["optional_information"]
-    }
+    assert "root" not in {entry["field"] for entry in payload["optional_information"]}
     for entries in (
         payload["required_information"],
         payload["optional_information"],
     ):
-        assert 1 <= len(entries) <= 6
+        assert len(entries) <= 6
         for entry in entries:
             assert set(entry) == {"field", "reason"}
             assert all(

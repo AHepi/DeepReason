@@ -73,6 +73,12 @@ _QUESTION_DOMAIN = b"deepreason.question.v1\x00"
 _DIGEST = r"^[0-9a-f]{64}$"
 _RUN_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 _MAX_RECORD_BYTES = 128 * 1024
+PUBLIC_DEFAULT_CYCLES = 6
+PUBLIC_DEFAULT_TOKEN_BUDGET = 100_000
+PUBLIC_MAX_CYCLES = 12
+PUBLIC_MAX_TOKEN_BUDGET = 200_000
+_QUALIFICATION_QUESTION = "DeepReason reusable V6 qualification subject"
+_QUALIFICATION_COMPILED_AT = "2000-01-01T00:00:00Z"
 
 
 class RunPreparationError(ValueError):
@@ -97,7 +103,10 @@ class RunPreparationRequestV1(BaseModel):
         "deepreason-run-preparation-request.v1", alias="schema"
     )
     question: str = Field(min_length=1, max_length=262_144)
-    budget: RunBudgetIntentV1
+    budget: RunBudgetIntentV1 = RunBudgetIntentV1(
+        cycles=PUBLIC_DEFAULT_CYCLES,
+        token_budget=PUBLIC_DEFAULT_TOKEN_BUDGET,
+    )
     profile_path: str | None = Field(default=None, min_length=1, max_length=4_096)
     managed_run_id: str | None = Field(default=None, min_length=1, max_length=128)
 
@@ -121,6 +130,20 @@ class RunPreparationRequestV1(BaseModel):
         if value is not None and _RUN_ID.fullmatch(value) is None:
             raise ValueError("managed_run_id contains unsafe characters")
         return value
+
+    @model_validator(mode="after")
+    def _public_budget_is_finite_and_bounded(self):
+        if (
+            not isinstance(self.budget.cycles, int)
+            or self.budget.cycles > PUBLIC_MAX_CYCLES
+            or not isinstance(self.budget.token_budget, int)
+            or self.budget.token_budget < 1
+            or self.budget.token_budget > PUBLIC_MAX_TOKEN_BUDGET
+        ):
+            raise ValueError(
+                "public budget must be finite and within the fixed V6 policy ceiling"
+            )
+        return self
 
 
 class RunPreparationRecordV1(BaseModel):
@@ -262,6 +285,64 @@ def _records_for_question(
         sources=(),
     )
     return dossier, run_input, workload
+
+
+def build_preparation_manifest(
+    profile: ProviderProfileV1,
+    *,
+    question: str,
+    compiled_at: str,
+):
+    """Build the in-memory V6 manifest used by qualification and preparation."""
+
+    _dossier, run_input, _workload = _records_for_question(question)
+    return compile_run_manifest(
+        _config_for_profile(profile),
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=compiled_at,
+        control_plane_policy=conservative_control_plane_policy_v3(),
+        run_input_digest=run_input.run_input_digest,
+    )
+
+
+def qualification_subject_manifest(profile: ProviderProfileV1):
+    """Return a stable per-profile manifest whose reusable subject is question-neutral."""
+
+    return build_preparation_manifest(
+        profile,
+        question=_QUALIFICATION_QUESTION,
+        compiled_at=_QUALIFICATION_COMPILED_AT,
+    )
+
+
+def resolve_managed_run_root(
+    managed_run_id: str,
+    *,
+    runs_dir: Path | str | None = None,
+    environ: Mapping[str, str] | None = None,
+    home: Path | str | None = None,
+) -> Path:
+    """Resolve an opaque managed ID from its durable record, never from a path."""
+
+    if _RUN_ID.fullmatch(managed_run_id) is None:
+        raise RunPreparationError(
+            "MANAGED_RUN_ID_INVALID", "managed run id has an invalid form"
+        )
+    state = provider_state_dir(home=home, environ=environ)
+    base = Path(runs_dir) if runs_dir is not None else state / "runs"
+    root = base / managed_run_id
+    if not root.is_dir() or root.is_symlink():
+        raise RunPreparationError(
+            "MANAGED_RUN_NOT_FOUND", "managed run id does not identify a run"
+        )
+    record = load_preparation_record(root)
+    if record.managed_run_id != managed_run_id or root.name != managed_run_id:
+        raise RunPreparationError(
+            "MANAGED_RUN_IDENTITY_MISMATCH", "managed run identity is inconsistent"
+        )
+    return root
 
 
 def _compiled_at(clock: Callable[[], datetime]) -> str:
@@ -407,24 +488,11 @@ class RunPreparationService:
 
         request_digest = _request_digest(request, profile)
         managed_id = request.managed_run_id or f"run-{request_digest[:32]}"
-        root = self._runs_dir / managed_id
-        if root.exists():
-            return self._load_existing(
-                root=root,
-                request=request,
-                request_digest=request_digest,
-                resolved=resolved,
-            )
-
         dossier, run_input, workload = _records_for_question(request.question)
-        manifest = compile_run_manifest(
-            _config_for_profile(profile),
-            schema_version=6,
-            workload_profile="text",
-            rubric_policy="forbid",
+        manifest = build_preparation_manifest(
+            profile,
+            question=request.question,
             compiled_at=_compiled_at(self._clock),
-            control_plane_policy=conservative_control_plane_policy_v3(),
-            run_input_digest=run_input.run_input_digest,
         )
         bundle = resolve_completed_qualification(
             manifest,
@@ -434,6 +502,15 @@ class RunPreparationService:
         )
         report = project_qualification_report(bundle, manifest, profile)
         subject_digest = qualification_subject_digest(manifest, profile)
+        root = self._runs_dir / managed_id
+        if root.exists():
+            return self._load_existing(
+                root=root,
+                request=request,
+                request_digest=request_digest,
+                resolved=resolved,
+                expected_bundle_digest=bundle.bundle_digest,
+            )
         record = RunPreparationRecordV1.create(
             managed_run_id=managed_id,
             request_digest=request_digest,
@@ -464,6 +541,7 @@ class RunPreparationService:
                     request=request,
                     request_digest=request_digest,
                     resolved=resolved,
+                    expected_bundle_digest=bundle.bundle_digest,
                 )
             temporary = self._runs_dir / (
                 f".{managed_id}.preparing.{uuid.uuid4().hex}"
@@ -497,6 +575,7 @@ class RunPreparationService:
         request: RunPreparationRequestV1,
         request_digest: str,
         resolved: ResolvedProviderProfileV1,
+        expected_bundle_digest: str,
     ) -> PreparedRunV1:
         if not root.is_dir() or root.is_symlink():
             raise RunPreparationError(
@@ -523,6 +602,11 @@ class RunPreparationService:
             raise RunPreparationError(
                 "PREPARATION_PROFILE_CONFLICT",
                 "managed run identity is already bound to another provider profile",
+            )
+        if record.qualification_bundle_digest != expected_bundle_digest:
+            raise RunPreparationError(
+                "PREPARATION_QUALIFICATION_BUNDLE_MISMATCH",
+                "managed run qualification differs from the completed cache",
             )
         run_input = load_run_input(root)
         if not isinstance(run_input, RunInputManifestV2):
@@ -611,10 +695,17 @@ class RunPreparationService:
 
 __all__ = [
     "PREPARATION_RECORD_NAME",
+    "PUBLIC_DEFAULT_CYCLES",
+    "PUBLIC_DEFAULT_TOKEN_BUDGET",
+    "PUBLIC_MAX_CYCLES",
+    "PUBLIC_MAX_TOKEN_BUDGET",
     "PreparedRunV1",
     "RunPreparationError",
     "RunPreparationRecordV1",
     "RunPreparationRequestV1",
     "RunPreparationService",
+    "build_preparation_manifest",
     "load_preparation_record",
+    "qualification_subject_manifest",
+    "resolve_managed_run_root",
 ]
