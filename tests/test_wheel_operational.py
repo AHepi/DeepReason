@@ -146,7 +146,7 @@ def test_operational_poll_waits_for_a_new_terminal_commitment():
         def __init__(self):
             self.result_calls = 0
 
-        def tool(self, name, _arguments):
+        def tool(self, name, _arguments, **_kwargs):
             if name == "run_status":
                 return {"state": "completed"}
             self.result_calls += 1
@@ -165,6 +165,404 @@ def test_operational_poll_waits_for_a_new_terminal_commitment():
     )
     assert result["terminal_commitment_ref"] == "sha256:new"
     assert client.result_calls == 2
+
+
+def _annotation_record(stderr: str) -> dict:
+    prefix = (
+        "::error title=DeepReason installed-wheel operational smoke failed::"
+    )
+    assert stderr.count(prefix) == 1
+    return json.loads(stderr.strip().removeprefix(prefix))
+
+
+def _diagnostic_sentinels(repo: Path, temp_root: Path) -> tuple[str, ...]:
+    return (
+        "SENTINEL_ARBITRARY_EXCEPTION_MESSAGE",
+        "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE",
+        "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE",
+        "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE",
+        "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
+        str(repo.resolve()),
+        str(temp_root.resolve()),
+        "SENTINEL_COMPLETE_COMMAND",
+        "SENTINEL_CAPTURED_STDOUT",
+        "SENTINEL_CAPTURED_STDERR",
+        "SyntheticUnexpectedFailure",
+    )
+
+
+def _assert_sentinels_absent(payload: str, sentinels: tuple[str, ...]) -> None:
+    for sentinel in sentinels:
+        assert sentinel not in payload
+
+
+def test_command_failure_is_structured_payload_free_and_preserves_exit_status(
+    tmp_path, monkeypatch, capsys
+):
+    repo = Path(OPERATIONAL.__file__).resolve().parents[1]
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    sentinels = _diagnostic_sentinels(repo, temp_root)
+    command = [
+        "SENTINEL_COMPLETE_COMMAND",
+        "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE",
+    ]
+    environment = {
+        "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE": (
+            "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE"
+        )
+    }
+
+    def failed_subprocess(args, **_kwargs):
+        return OPERATIONAL.subprocess.CompletedProcess(
+            args,
+            23,
+            stdout=(
+                "SENTINEL_CAPTURED_STDOUT "
+                "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE "
+                "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD"
+            ),
+            stderr=(
+                "SENTINEL_CAPTURED_STDERR "
+                "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE "
+                "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE"
+            ),
+        )
+
+    monkeypatch.setattr(OPERATIONAL.subprocess, "run", failed_subprocess)
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._run(
+            command,
+            cwd=repo,
+            env=environment,
+            stage=OPERATIONAL.STAGE_BUILD_WHEEL,
+        )
+    public_failure = str(raised.value)
+    _assert_sentinels_absent(public_failure, sentinels)
+    assert json.loads(public_failure) == {
+        "exit_status": 23,
+        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
+        "timeout": False,
+    }
+
+    monkeypatch.setattr(
+        OPERATIONAL.tempfile,
+        "mkdtemp",
+        lambda **_kwargs: str(temp_root),
+    )
+    monkeypatch.setattr(OPERATIONAL, "_unused_loopback_port", lambda: 1)
+
+    def fail_build(_repo, _temp_root):
+        OPERATIONAL._run(
+            command,
+            cwd=repo,
+            env=environment,
+            stage=OPERATIONAL.STAGE_BUILD_WHEEL,
+        )
+
+    monkeypatch.setattr(OPERATIONAL, "_build_wheel", fail_build)
+    assert OPERATIONAL.main([]) == 23
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert captured.out == ""
+    assert record == {
+        "cleanup_completed": True,
+        "exit_status": 23,
+        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
+        "platform_family": OPERATIONAL._platform_family(),
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(
+        public_failure + captured.out + captured.err + json.dumps(record),
+        sentinels,
+    )
+    assert not temp_root.exists()
+
+
+def test_unexpected_exception_is_fail_closed_and_payload_free(
+    tmp_path, monkeypatch, capsys
+):
+    repo = Path(OPERATIONAL.__file__).resolve().parents[1]
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    sentinels = _diagnostic_sentinels(repo, temp_root)
+    arbitrary_message = " ".join(sentinels)
+
+    class SyntheticUnexpectedFailure(Exception):
+        pass
+
+    monkeypatch.setattr(
+        OPERATIONAL.tempfile,
+        "mkdtemp",
+        lambda **_kwargs: str(temp_root),
+    )
+    monkeypatch.setattr(OPERATIONAL, "_unused_loopback_port", lambda: 1)
+
+    def fail_build(_repo, _temp_root):
+        raise SyntheticUnexpectedFailure(arbitrary_message)
+
+    monkeypatch.setattr(OPERATIONAL, "_build_wheel", fail_build)
+    assert OPERATIONAL.main([]) == 1
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert captured.out == ""
+    assert record == {
+        "cleanup_completed": True,
+        "failure_kind": OPERATIONAL.FAILURE_UNEXPECTED,
+        "platform_family": OPERATIONAL._platform_family(),
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(
+        captured.out + captured.err + json.dumps(record),
+        sentinels,
+    )
+    assert not temp_root.exists()
+
+
+def test_timeout_failure_text_is_fixed_and_payload_free(monkeypatch, tmp_path):
+    repo = Path(OPERATIONAL.__file__).resolve().parents[1]
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    sentinels = _diagnostic_sentinels(repo, temp_root)
+    command = ["SENTINEL_COMPLETE_COMMAND"]
+
+    def timed_out(args, **_kwargs):
+        raise OPERATIONAL.subprocess.TimeoutExpired(
+            args,
+            5,
+            output="SENTINEL_CAPTURED_STDOUT",
+            stderr="SENTINEL_CAPTURED_STDERR",
+        )
+
+    monkeypatch.setattr(OPERATIONAL.subprocess, "run", timed_out)
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._run(
+            command,
+            cwd=repo,
+            env={
+                "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE": (
+                    "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE"
+                )
+            },
+            stage=OPERATIONAL.STAGE_REASON,
+        )
+    public_failure = str(raised.value)
+    _assert_sentinels_absent(public_failure, sentinels)
+    assert json.loads(public_failure) == {
+        "failure_kind": OPERATIONAL.FAILURE_TIMEOUT,
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_REASON,
+        "timeout": True,
+    }
+
+
+def test_mcp_child_exit_is_payload_free_and_preserves_process_status(
+    tmp_path, monkeypatch, capsys
+):
+    repo = Path(OPERATIONAL.__file__).resolve().parents[1]
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    sentinels = _diagnostic_sentinels(repo, temp_root)
+    processes = []
+
+    class InputStream:
+        def write(self, value):
+            return len(value)
+
+        def flush(self):
+            return None
+
+    class OutputStream:
+        def readline(self):
+            return ""
+
+    class ErrorStream:
+        def __init__(self):
+            self.read_calls = 0
+
+        def read(self):
+            self.read_calls += 1
+            return (
+                "SENTINEL_CAPTURED_STDERR "
+                "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE "
+                "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"
+            )
+
+    class FailedMCPProcess:
+        def __init__(self):
+            self.stdin = InputStream()
+            self.stdout = OutputStream()
+            self.stderr = ErrorStream()
+
+        def poll(self):
+            return 47
+
+        def wait(self, **_kwargs):
+            return 47
+
+    def failed_popen(*_args, **_kwargs):
+        process = FailedMCPProcess()
+        processes.append(process)
+        return process
+
+    monkeypatch.setattr(OPERATIONAL.subprocess, "Popen", failed_popen)
+
+    def request_from_failed_child():
+        client = OPERATIONAL.MCPClient(
+            Path("SENTINEL_COMPLETE_COMMAND"),
+            cwd=repo,
+            env={
+                "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE": (
+                    "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE"
+                )
+            },
+        )
+        client.request(
+            "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
+            {"payload": "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"},
+            stage=OPERATIONAL.STAGE_MCP_REQUEST,
+        )
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        request_from_failed_child()
+    public_failure = str(raised.value)
+    assert json.loads(public_failure) == {
+        "exit_status": 47,
+        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_MCP_REQUEST,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(public_failure, sentinels)
+    assert processes[-1].stderr.read_calls == 0
+
+    monkeypatch.setattr(
+        OPERATIONAL.tempfile,
+        "mkdtemp",
+        lambda **_kwargs: str(temp_root),
+    )
+    monkeypatch.setattr(OPERATIONAL, "_unused_loopback_port", lambda: 1)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_build_wheel",
+        lambda _repo, _temp_root: request_from_failed_child(),
+    )
+    assert OPERATIONAL.main([]) == 47
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert captured.out == ""
+    assert record == {
+        "cleanup_completed": True,
+        "exit_status": 47,
+        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
+        "platform_family": OPERATIONAL._platform_family(),
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_MCP_REQUEST,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(
+        public_failure + captured.out + captured.err + json.dumps(record),
+        sentinels,
+    )
+    assert processes[-1].stderr.read_calls == 0
+    assert not temp_root.exists()
+
+
+def test_mcp_response_failures_never_enter_public_diagnostics(
+    tmp_path, monkeypatch, capsys
+):
+    repo = Path(OPERATIONAL.__file__).resolve().parents[1]
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    sentinels = _diagnostic_sentinels(repo, temp_root)
+    arbitrary_response = " ".join(sentinels)
+
+    class PayloadClient(OPERATIONAL.MCPClient):
+        def __init__(self):
+            self.is_error = True
+
+        def request(self, *_args, **_kwargs):
+            return {
+                "result": {
+                    "content": [{"text": arbitrary_response}],
+                    "isError": self.is_error,
+                }
+            }
+
+    client = PayloadClient()
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        client.tool(
+            "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
+            {"payload": "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"},
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        )
+    public_failure = str(raised.value)
+    assert json.loads(public_failure) == {
+        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(public_failure, sentinels)
+
+    client.is_error = False
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised_success:
+        client.tool_error(
+            "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
+            {"payload": "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"},
+            stage=OPERATIONAL.STAGE_CONTINUATION_REJECTION,
+        )
+    unexpected_success_failure = str(raised_success.value)
+    assert json.loads(unexpected_success_failure) == {
+        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_CONTINUATION_REJECTION,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(unexpected_success_failure, sentinels)
+
+    client.is_error = True
+    monkeypatch.setattr(
+        OPERATIONAL.tempfile,
+        "mkdtemp",
+        lambda **_kwargs: str(temp_root),
+    )
+    monkeypatch.setattr(OPERATIONAL, "_unused_loopback_port", lambda: 1)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_build_wheel",
+        lambda _repo, _temp_root: client.tool(
+            "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
+            {"payload": "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"},
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        ),
+    )
+    assert OPERATIONAL.main([]) == 1
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert captured.out == ""
+    assert record == {
+        "cleanup_completed": True,
+        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
+        "platform_family": OPERATIONAL._platform_family(),
+        "schema": OPERATIONAL.FAILURE_SCHEMA,
+        "stage": OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        "timeout": False,
+    }
+    _assert_sentinels_absent(
+        public_failure
+        + unexpected_success_failure
+        + captured.out
+        + captured.err
+        + json.dumps(record),
+        sentinels,
+    )
+    assert not temp_root.exists()
 
 
 def test_package_layout_excludes_mini_and_external_smoke_fixture():

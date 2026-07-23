@@ -53,6 +53,105 @@ TEST_CREDENTIAL = "loopback-credential-must-never-appear"
 RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
+FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v1"
+STAGE_BUILD_WHEEL = "build_wheel"
+STAGE_CREATE_ENVIRONMENT = "create_environment"
+STAGE_INSTALL_WHEEL = "install_wheel"
+STAGE_SETUP_PROFILE = "setup_profile"
+STAGE_QUALIFY = "qualify"
+STAGE_READINESS = "readiness"
+STAGE_REASON = "reason"
+STAGE_MCP_INITIALIZE = "mcp_initialize"
+STAGE_MCP_REQUEST = "mcp_request"
+STAGE_CONTINUATION_REJECTION = "continuation_rejection"
+STAGE_CONTINUATION_RESUME = "continuation_resume"
+STAGE_REPLAY_VALIDATION = "replay_validation"
+STAGE_RESTART_RECOVERY = "restart_recovery"
+STAGE_BUDGET_REJECTION = "budget_rejection"
+STAGE_MANIFEST_REJECTION = "manifest_rejection"
+STAGE_DISCLOSURE_CHECK = "disclosure_check"
+STAGE_CLEANUP = "cleanup"
+ALLOWED_FAILURE_STAGES = frozenset(
+    {
+        STAGE_BUILD_WHEEL,
+        STAGE_CREATE_ENVIRONMENT,
+        STAGE_INSTALL_WHEEL,
+        STAGE_SETUP_PROFILE,
+        STAGE_QUALIFY,
+        STAGE_READINESS,
+        STAGE_REASON,
+        STAGE_MCP_INITIALIZE,
+        STAGE_MCP_REQUEST,
+        STAGE_CONTINUATION_REJECTION,
+        STAGE_CONTINUATION_RESUME,
+        STAGE_REPLAY_VALIDATION,
+        STAGE_RESTART_RECOVERY,
+        STAGE_BUDGET_REJECTION,
+        STAGE_MANIFEST_REJECTION,
+        STAGE_DISCLOSURE_CHECK,
+        STAGE_CLEANUP,
+    }
+)
+FAILURE_COMMAND = "command_failed"
+FAILURE_TIMEOUT = "timeout"
+FAILURE_ASSERTION = "assertion_failed"
+FAILURE_UNEXPECTED = "unexpected_failure"
+FAILURE_CLEANUP = "cleanup_failed"
+ALLOWED_FAILURE_KINDS = frozenset(
+    {
+        FAILURE_COMMAND,
+        FAILURE_TIMEOUT,
+        FAILURE_ASSERTION,
+        FAILURE_UNEXPECTED,
+        FAILURE_CLEANUP,
+    }
+)
+
+
+class OperationalSmokeFailure(Exception):
+    """Fixed, payload-free operational failure."""
+
+    def __init__(
+        self,
+        *,
+        stage: str,
+        failure_kind: str,
+        exit_status: int | None = None,
+        timeout: bool = False,
+    ) -> None:
+        if stage not in ALLOWED_FAILURE_STAGES:
+            raise ValueError("invalid fixed operational stage")
+        if failure_kind not in ALLOWED_FAILURE_KINDS:
+            raise ValueError("invalid fixed operational failure kind")
+        if exit_status is not None and (
+            isinstance(exit_status, bool) or not isinstance(exit_status, int)
+        ):
+            raise TypeError("operational exit status must be an integer")
+        if not isinstance(timeout, bool):
+            raise TypeError("operational timeout status must be boolean")
+        self.stage = stage
+        self.failure_kind = failure_kind
+        self.exit_status = exit_status
+        self.timeout = timeout
+        record: dict[str, object] = {
+            "failure_kind": failure_kind,
+            "schema": FAILURE_SCHEMA,
+            "stage": stage,
+            "timeout": timeout,
+        }
+        if exit_status is not None:
+            record["exit_status"] = exit_status
+        super().__init__(json.dumps(record, sort_keys=True, separators=(",", ":")))
+
+
+class _MCPToolResponseError(OperationalSmokeFailure):
+    """Payload-free signal for an expected MCP tool error response."""
+
+    def __init__(self, *, stage: str) -> None:
+        super().__init__(
+            stage=stage,
+            failure_kind=FAILURE_ASSERTION,
+        )
 
 
 def _resolve_ref(schema: dict, root: dict) -> dict:
@@ -217,7 +316,7 @@ def response_for_schema(schema: dict, prompt: str) -> dict:
         return {"candidates": reasoning_candidates}
     value = _schema_value(schema, schema)
     if not isinstance(value, dict):
-        raise AssertionError(f"provider fixture cannot satisfy schema {title!r}")
+        raise AssertionError("provider fixture cannot satisfy advertised schema")
     return value
 
 
@@ -315,9 +414,14 @@ def _provider_server(state: ProviderState):
                 self.send_header("Content-Length", str(len(encoded)))
                 self.end_headers()
                 self.wfile.write(encoded)
-            except Exception as error:  # fixture failures must fail the real call
+            except Exception:  # fixture failures must fail the real call
                 encoded = json.dumps(
-                    {"error": {"type": type(error).__name__, "message": str(error)}}
+                    {
+                        "error": {
+                            "type": "loopback_fixture_failure",
+                            "message": "loopback fixture request failed",
+                        }
+                    }
                 ).encode()
                 self.send_response(500)
                 self.send_header("Content-Type", "application/json")
@@ -367,8 +471,18 @@ def _provider_counts(path: Path) -> dict[str, int]:
     }
 
 
+def _assert_no_incremental_provider_calls(path: Path, before: int) -> None:
+    if _provider_counts(path)["total_calls"] != before:
+        raise AssertionError("zero-call operation dispatched to the provider")
+
+
 def _install_loopback_fixture(
-    *, repo: Path, python: Path, work: Path, env: dict[str, str]
+    *,
+    repo: Path,
+    python: Path,
+    work: Path,
+    env: dict[str, str],
+    stage: str,
 ) -> Path:
     purelib = Path(
         _run(
@@ -379,6 +493,7 @@ def _install_loopback_fixture(
             ],
             cwd=work,
             env=env,
+            stage=stage,
         ).stdout.strip()
     )
     target = purelib / "sitecustomize.py"
@@ -397,89 +512,222 @@ def _run(
     *,
     cwd: Path,
     env: dict[str, str],
+    stage: str,
     expected: tuple[int, ...] = (0,),
     timeout: int = 600,
 ) -> subprocess.CompletedProcess[str]:
-    completed = subprocess.run(
-        command,
-        cwd=cwd,
-        env=env,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout,
-    )
+    try:
+        completed = subprocess.run(
+            command,
+            cwd=cwd,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired:
+        raise OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_TIMEOUT,
+            timeout=True,
+        ) from None
     if completed.returncode not in expected:
-        raise RuntimeError(
-            f"command failed ({completed.returncode}): {' '.join(command)}\n"
-            f"stdout:\n{completed.stdout}\nstderr:\n{completed.stderr}"
+        raise OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_COMMAND,
+            exit_status=int(completed.returncode),
         )
     return completed
 
 
 class MCPClient:
-    def __init__(self, executable: Path, *, cwd: Path, env: dict[str, str]) -> None:
-        self.process = subprocess.Popen(
-            [str(executable)],
-            cwd=cwd,
-            env=env,
-            text=True,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            bufsize=1,
-        )
+    def __init__(
+        self,
+        executable: Path,
+        *,
+        cwd: Path,
+        env: dict[str, str],
+        stage: str = STAGE_MCP_INITIALIZE,
+    ) -> None:
+        try:
+            self.process = subprocess.Popen(
+                [str(executable)],
+                cwd=cwd,
+                env=env,
+                text=True,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                bufsize=1,
+            )
+        except OSError:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_UNEXPECTED,
+            ) from None
         self._next_id = 1
         self.transcript: list[str] = []
 
-    def request(self, method: str, params: dict | None = None) -> dict:
+    def _raise_process_failure(self, *, stage: str) -> None:
+        returncode = self.process.poll()
+        if returncode is None:
+            try:
+                returncode = self.process.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                raise OperationalSmokeFailure(
+                    stage=stage,
+                    failure_kind=FAILURE_TIMEOUT,
+                    timeout=True,
+                ) from None
+        raise OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_COMMAND,
+            exit_status=int(returncode),
+        ) from None
+
+    @staticmethod
+    def _response_text(
+        response: dict,
+        *,
+        stage: str,
+    ) -> tuple[bool, str]:
+        try:
+            result = response["result"]
+            text = result["content"][0]["text"]
+        except (IndexError, KeyError, TypeError):
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            ) from None
+        if not isinstance(result, dict) or not isinstance(text, str):
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            )
+        is_error = result.get("isError", False)
+        if not isinstance(is_error, bool):
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            )
+        return is_error, text
+
+    def request(
+        self,
+        method: str,
+        params: dict | None = None,
+        *,
+        stage: str = STAGE_MCP_REQUEST,
+    ) -> dict:
         assert self.process.stdin is not None and self.process.stdout is not None
         request_id = self._next_id
         self._next_id += 1
         message = {"jsonrpc": "2.0", "id": request_id, "method": method}
         if params is not None:
             message["params"] = params
-        self.process.stdin.write(json.dumps(message, separators=(",", ":")) + "\n")
-        self.process.stdin.flush()
+        try:
+            self.process.stdin.write(
+                json.dumps(message, separators=(",", ":")) + "\n"
+            )
+            self.process.stdin.flush()
+        except (BrokenPipeError, OSError, ValueError):
+            self._raise_process_failure(stage=stage)
         while True:
-            line = self.process.stdout.readline()
+            try:
+                line = self.process.stdout.readline()
+            except (OSError, ValueError):
+                self._raise_process_failure(stage=stage)
             if not line:
-                stderr = self.process.stderr.read() if self.process.stderr else ""
-                raise RuntimeError(f"MCP server exited before response: {stderr}")
+                self._raise_process_failure(stage=stage)
             self.transcript.append(line)
-            response = json.loads(line)
+            try:
+                response = json.loads(line)
+            except (json.JSONDecodeError, TypeError):
+                raise OperationalSmokeFailure(
+                    stage=stage,
+                    failure_kind=FAILURE_ASSERTION,
+                ) from None
+            if not isinstance(response, dict):
+                raise OperationalSmokeFailure(
+                    stage=stage,
+                    failure_kind=FAILURE_ASSERTION,
+                )
             if response.get("id") == request_id:
                 return response
 
-    def tool(self, name: str, arguments: dict) -> dict:
+    def tool(
+        self,
+        name: str,
+        arguments: dict,
+        *,
+        stage: str = STAGE_MCP_REQUEST,
+    ) -> dict:
         response = self.request(
-            "tools/call", {"name": name, "arguments": arguments}
+            "tools/call",
+            {"name": name, "arguments": arguments},
+            stage=stage,
         )
-        result = response["result"]
-        text = result["content"][0]["text"]
-        if result.get("isError"):
-            raise RuntimeError(f"MCP {name} failed: {text}")
-        return json.loads(text)
+        is_error, text = self._response_text(response, stage=stage)
+        if is_error:
+            raise _MCPToolResponseError(stage=stage) from None
+        try:
+            payload = json.loads(text)
+        except (json.JSONDecodeError, TypeError):
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            ) from None
+        if not isinstance(payload, dict):
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            )
+        return payload
 
-    def tool_error(self, name: str, arguments: dict) -> str:
+    def tool_error(
+        self,
+        name: str,
+        arguments: dict,
+        *,
+        stage: str = STAGE_MCP_REQUEST,
+    ) -> str:
         response = self.request(
-            "tools/call", {"name": name, "arguments": arguments}
+            "tools/call",
+            {"name": name, "arguments": arguments},
+            stage=stage,
         )
-        result = response["result"]
-        text = result["content"][0]["text"]
-        if not result.get("isError"):
-            raise AssertionError(f"MCP {name} unexpectedly succeeded: {text}")
+        is_error, text = self._response_text(response, stage=stage)
+        if not is_error:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_ASSERTION,
+            )
         return text
 
-    def close(self) -> None:
+    def close(self, *, stage: str = STAGE_MCP_REQUEST) -> None:
         if self.process.stdin:
-            self.process.stdin.close()
+            try:
+                self.process.stdin.close()
+            except OSError:
+                self._raise_process_failure(stage=stage)
         try:
-            self.process.wait(timeout=10)
+            returncode = self.process.wait(timeout=10)
         except subprocess.TimeoutExpired:
             self.process.terminate()
             self.process.wait(timeout=10)
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_TIMEOUT,
+                timeout=True,
+            ) from None
+        if returncode != 0:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_COMMAND,
+                exit_status=int(returncode),
+            )
 
 
 def _build_wheel(repo: Path, temp_root: Path) -> Path:
@@ -492,30 +740,41 @@ def _build_wheel(repo: Path, temp_root: Path) -> Path:
     build_env["HOME"] = str(build_home)
     build_env["USERPROFILE"] = str(build_home)
     build_env["PYTHONNOUSERSITE"] = "1"
-    completed = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "pip",
-            "wheel",
-            ".",
-            "--no-deps",
-            "--wheel-dir",
-            str(wheelhouse),
-        ],
-        cwd=repo,
-        env=build_env,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=600,
-    )
+    try:
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "wheel",
+                ".",
+                "--no-deps",
+                "--wheel-dir",
+                str(wheelhouse),
+            ],
+            cwd=repo,
+            env=build_env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=600,
+        )
+    except subprocess.TimeoutExpired:
+        raise OperationalSmokeFailure(
+            stage=STAGE_BUILD_WHEEL,
+            failure_kind=FAILURE_TIMEOUT,
+            timeout=True,
+        ) from None
     if completed.returncode:
-        raise RuntimeError(completed.stdout + completed.stderr)
+        raise OperationalSmokeFailure(
+            stage=STAGE_BUILD_WHEEL,
+            failure_kind=FAILURE_COMMAND,
+            exit_status=int(completed.returncode),
+        )
     wheels = sorted(wheelhouse.glob("deepreason-*.whl"))
     if len(wheels) != 1:
-        raise AssertionError(f"expected one built wheel, found {len(wheels)}")
+        raise AssertionError("wheel build did not produce exactly one wheel")
     return wheels[0]
 
 
@@ -531,7 +790,7 @@ def _inspect_operational_wheel(wheel: Path) -> None:
         "deepreason/mcp_registration.py",
     }
     if not required <= names:
-        raise AssertionError(f"operational wheel omits {sorted(required - names)}")
+        raise AssertionError("operational wheel omits required installed modules")
     if any(
         name.startswith(("mini/", "minireason/", "tests/", "scripts/"))
         or "deterministic_provider" in name
@@ -549,12 +808,12 @@ def _assert_resumable_terminal(payload: dict) -> None:
         "operational_checks_passed",
     )
     if not all(verification.get(name) is True for name in required):
-        raise AssertionError(f"terminal verification is incomplete: {verification}")
+        raise AssertionError("terminal verification is incomplete")
     if payload.get("completion_status") != "satisfied":
         raise AssertionError("terminal completion was not satisfied")
     stop = payload.get("stop") or {}
     if stop.get("reason") != "converged":
-        raise AssertionError(f"terminal is not a resumable convergence stop: {stop}")
+        raise AssertionError("terminal is not a resumable convergence stop")
 
 
 def _assert_non_resumable_rejection(text: str) -> None:
@@ -562,18 +821,18 @@ def _assert_non_resumable_rejection(text: str) -> None:
         "CONTINUE_TYPED_STOP_REQUIRED",
         "ValueError: CONTINUE_TYPED_STOP_REQUIRED",
     }:
-        raise AssertionError(f"completed non-resumable run was not rejected: {text}")
+        raise AssertionError("completed non-resumable run was not rejected")
 
 
 def _assert_committed_terminal(payload: dict) -> None:
     if payload.get("schema") != "deepreason-run-result-v2":
-        raise AssertionError(f"terminal result is not V6: {payload.get('schema')}")
+        raise AssertionError("terminal result schema is not V6")
     if payload.get("state") != "completed":
-        raise AssertionError(f"reasoning did not complete: {payload.get('state')}")
+        raise AssertionError("reasoning did not complete")
     verification = payload.get("verification") or {}
     for field in ("valid", "integrity_valid", "security_valid"):
         if verification.get(field) is not True:
-            raise AssertionError(f"terminal {field} verification failed: {verification}")
+            raise AssertionError("terminal verification failed")
     if not str(payload.get("terminal_commitment_ref", "")).startswith("sha256:"):
         raise AssertionError("terminal result lacks durable terminal authority")
 
@@ -582,22 +841,25 @@ def _assert_durable_replay(home: Path, run_id: str) -> None:
     replay_path = home / ".deepreason" / "runs" / run_id / "REPLAY_VALIDATION.json"
     replay = json.loads(replay_path.read_text(encoding="utf-8"))
     if replay.get("schema") != "replay-validation.v1" or replay.get("valid") is not True:
-        raise AssertionError(f"durable replay verification failed: {replay}")
+        raise AssertionError("durable replay verification failed")
     if not re.fullmatch(r"[0-9a-f]{64}", str(replay.get("manifest_digest", ""))):
         raise AssertionError("durable replay omitted its exact manifest digest")
 
 
 def _tool_list(client: MCPClient) -> list[dict]:
-    initialized = client.request("initialize", {})
+    initialized = client.request("initialize", {}, stage=STAGE_MCP_INITIALIZE)
     if initialized["result"]["serverInfo"]["name"] != "deepreason":
         raise AssertionError("installed MCP server identity drifted")
-    return client.request("tools/list")["result"]["tools"]
+    return client.request(
+        "tools/list",
+        stage=STAGE_MCP_INITIALIZE,
+    )["result"]["tools"]
 
 
 def _assert_exact_tools(tools: list[dict]) -> None:
     names = tuple(tool["name"] for tool in tools)
     if names != EXPECTED_MCP_TOOLS:
-        raise AssertionError(f"MCP tool inventory drifted: {names}")
+        raise AssertionError("MCP tool inventory drifted")
     encoded = json.dumps(tools, sort_keys=True, separators=(",", ":")).encode()
     if hashlib.sha256(encoded).hexdigest() != EXPECTED_MCP_SCHEMA_SHA256:
         raise AssertionError("MCP schemas differ from the accepted public facade")
@@ -611,7 +873,7 @@ def _assert_exact_tools(tools: list[dict]) -> None:
         "api_key",
     ):
         if forbidden in lowered:
-            raise AssertionError(f"MCP schema exposes forbidden authority: {forbidden}")
+            raise AssertionError("MCP schema exposes forbidden authority")
 
 
 def _poll_terminal(
@@ -619,14 +881,19 @@ def _poll_terminal(
     run_id: str,
     *,
     prior_terminal_commitment_ref: str | None = None,
+    stage: str = STAGE_MCP_REQUEST,
 ) -> tuple[dict, dict]:
     deadline = time.monotonic() + 600
     while time.monotonic() < deadline:
-        status = client.tool("run_status", {"run_id": run_id})
+        status = client.tool("run_status", {"run_id": run_id}, stage=stage)
         if status.get("state") in {"completed", "failed", "cancelled"}:
             try:
-                result = client.tool("run_result", {"run_id": run_id})
-            except RuntimeError:
+                result = client.tool(
+                    "run_result",
+                    {"run_id": run_id},
+                    stage=stage,
+                )
+            except _MCPToolResponseError:
                 time.sleep(0.05)
                 continue
             if (
@@ -638,7 +905,11 @@ def _poll_terminal(
                 continue
             return status, result
         time.sleep(0.05)
-    raise TimeoutError(f"managed run {run_id} did not reach terminal state")
+    raise OperationalSmokeFailure(
+        stage=stage,
+        failure_kind=FAILURE_TIMEOUT,
+        timeout=True,
+    )
 
 
 def _assert_no_disclosure(
@@ -655,7 +926,76 @@ def _assert_no_disclosure(
         payload = path.read_bytes()
         for value in forbidden:
             if value.encode() in payload:
-                raise AssertionError(f"run/state record disclosed forbidden data: {path.name}")
+                raise AssertionError("run/state record disclosed forbidden data")
+
+
+def _platform_family() -> str:
+    if sys.platform == "win32":
+        return "windows"
+    if sys.platform == "darwin":
+        return "macos"
+    if sys.platform.startswith("linux"):
+        return "linux"
+    return "other"
+
+
+def _diagnostic_record(
+    failure: OperationalSmokeFailure,
+    *,
+    cleanup_completed: bool,
+) -> dict[str, object]:
+    if not isinstance(cleanup_completed, bool):
+        raise TypeError("cleanup status must be boolean")
+    record: dict[str, object] = {
+        "cleanup_completed": cleanup_completed,
+        "failure_kind": failure.failure_kind,
+        "platform_family": _platform_family(),
+        "schema": FAILURE_SCHEMA,
+        "stage": failure.stage,
+        "timeout": failure.timeout,
+    }
+    if failure.exit_status is not None:
+        record["exit_status"] = failure.exit_status
+    return record
+
+
+def _emit_failure_diagnostic(
+    failure: OperationalSmokeFailure,
+    *,
+    cleanup_completed: bool,
+) -> None:
+    """Emit one fixed-schema, payload-free Actions annotation."""
+
+    encoded = json.dumps(
+        _diagnostic_record(failure, cleanup_completed=cleanup_completed),
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    try:
+        print(
+            "::error title=DeepReason installed-wheel operational smoke failed::"
+            f"{encoded}",
+            file=sys.stderr,
+            flush=True,
+        )
+    except Exception:
+        return
+
+
+def _failure_exit_status(failure: OperationalSmokeFailure) -> int:
+    if failure.exit_status is not None and 1 <= failure.exit_status <= 255:
+        return failure.exit_status
+    return 1
+
+
+def _cleanup_temp_root(temp_root: Path | None) -> bool:
+    if temp_root is None:
+        return True
+    try:
+        shutil.rmtree(temp_root)
+        return not temp_root.exists()
+    except OSError:
+        return False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -663,14 +1003,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--keep", action="store_true")
     args = parser.parse_args(argv)
     repo = Path(__file__).resolve().parents[1]
-    temp_root = Path(tempfile.mkdtemp(prefix="deepreason-wheel-operational-"))
-    provider_port = _unused_loopback_port()
-    provider_state_path = temp_root / "loopback-provider-counts.json"
-    outputs: list[str] = []
-    transcripts: list[str] = []
+    temp_root: Path | None = None
+    failure: OperationalSmokeFailure | None = None
+    succeeded = False
+    stage = STAGE_CREATE_ENVIRONMENT
     try:
+        temp_root = Path(tempfile.mkdtemp(prefix="deepreason-wheel-operational-"))
+        provider_port = _unused_loopback_port()
+        provider_state_path = temp_root / "loopback-provider-counts.json"
+        outputs: list[str] = []
+        transcripts: list[str] = []
+        stage = STAGE_BUILD_WHEEL
         wheel = _build_wheel(repo, temp_root)
         _inspect_operational_wheel(wheel)
+        stage = STAGE_CREATE_ENVIRONMENT
         environment = temp_root / "installed environment with spaces"
         venv.EnvBuilder(
             with_pip=True,
@@ -693,6 +1039,7 @@ def main(argv: list[str] | None = None) -> int:
             provider_port=provider_port,
             provider_state_path=provider_state_path,
         )
+        stage = STAGE_INSTALL_WHEEL
         _run(
             [
                 str(python),
@@ -704,17 +1051,25 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
+            stage=stage,
         )
-        _run([str(python), "-m", "pip", "check"], cwd=work, env=clean_env)
+        _run(
+            [str(python), "-m", "pip", "check"],
+            cwd=work,
+            env=clean_env,
+            stage=stage,
+        )
         fixture_path = _install_loopback_fixture(
             repo=repo,
             python=python,
             work=work,
             env=clean_env,
+            stage=stage,
         )
         if environment.resolve() not in fixture_path.resolve().parents:
             raise AssertionError("external provider fixture escaped the disposable venv")
 
+        stage = STAGE_INSTALL_WHEEL
         imported = json.loads(
             _run(
                 [
@@ -727,20 +1082,29 @@ def main(argv: list[str] | None = None) -> int:
                 ],
                 cwd=work,
                 env=clean_env,
+                stage=stage,
             ).stdout
         )
         module_file = Path(imported["file"]).resolve()
         if environment.resolve() not in module_file.parents or repo.resolve() in module_file.parents:
-            raise AssertionError(f"installed import escaped the clean venv: {module_file}")
+            raise AssertionError("installed import escaped the clean venv")
         if any(str(repo.resolve()).casefold() in str(item).casefold() for item in imported["path"]):
             raise AssertionError("repository path appears in installed sys.path")
 
-        bare = _run([str(deepreason)], cwd=work, env=clean_env, expected=(1,))
+        stage = STAGE_READINESS
+        bare = _run(
+            [str(deepreason)],
+            cwd=work,
+            env=clean_env,
+            stage=stage,
+            expected=(1,),
+        )
         outputs.extend((bare.stdout, bare.stderr))
         if "Next action: deepreason setup" not in bare.stdout:
             raise AssertionError("bare deepreason did not report setup readiness")
 
         endpoint = f"http://127.0.0.1:{provider_port}/v1"
+        stage = STAGE_SETUP_PROFILE
         setup = _run(
             [
                 str(deepreason),
@@ -764,21 +1128,33 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
+            stage=stage,
         )
         outputs.extend((setup.stdout, setup.stderr))
+        stage = STAGE_READINESS
+        calls_before_status = _provider_counts(provider_state_path)["total_calls"]
         unqualified = _run(
             [str(deepreason), "status", "--json"],
             cwd=work,
             env=clean_env,
+            stage=stage,
             expected=(1,),
         )
         outputs.extend((unqualified.stdout, unqualified.stderr))
         unqualified_payload = json.loads(unqualified.stdout)
         if unqualified_payload["qualification_state"] != "unqualified":
             raise AssertionError("setup did not transition readiness to unqualified")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_status,
+        )
 
+        stage = STAGE_QUALIFY
         qualified = _run(
-            [str(deepreason), "qualify", "--yes"], cwd=work, env=clean_env
+            [str(deepreason), "qualify", "--yes"],
+            cwd=work,
+            env=clean_env,
+            stage=stage,
         )
         outputs.extend((qualified.stdout, qualified.stderr))
         notice = re.search(
@@ -787,13 +1163,18 @@ def main(argv: list[str] | None = None) -> int:
         if notice is None or int(notice.group(1)) != 240:
             raise AssertionError("qualification did not announce the frozen maximum")
         counts = _provider_counts(provider_state_path)
-        if counts["qualification_calls"] != 80:
+        if counts != {"qualification_calls": 80, "total_calls": 80}:
             raise AssertionError(
-                f"qualification made {counts['qualification_calls']} calls, expected 80"
+                "qualification did not make exactly 80 loopback calls"
             )
 
+        stage = STAGE_READINESS
+        calls_before_status = counts["total_calls"]
         ready = _run(
-            [str(deepreason), "status", "--json"], cwd=work, env=clean_env
+            [str(deepreason), "status", "--json"],
+            cwd=work,
+            env=clean_env,
+            stage=stage,
         )
         outputs.extend((ready.stdout, ready.stderr))
         ready_payload = json.loads(ready.stdout)
@@ -803,27 +1184,39 @@ def main(argv: list[str] | None = None) -> int:
             [str(python), "-m", "deepreason", "status", "--json"],
             cwd=work,
             env=clean_env,
+            stage=stage,
         )
         outputs.extend((module_status.stdout, module_status.stderr))
         if json.loads(module_status.stdout) != ready_payload:
             raise AssertionError("python -m status differs from the console")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_status,
+        )
 
+        stage = STAGE_QUALIFY
+        calls_before_cache = _provider_counts(provider_state_path)["total_calls"]
         cached = _run(
             [str(deepreason), "qualify", "--yes", "--json"],
             cwd=work,
             env=clean_env,
+            stage=stage,
         )
         outputs.extend((cached.stdout, cached.stderr))
         cached_payload = json.loads(cached.stdout)
         if not cached_payload["cache_reused"] or cached_payload["maximum_expected_provider_calls"] != 0:
             raise AssertionError("completed qualification cache was not reused")
-        if _provider_counts(provider_state_path)["qualification_calls"] != 80:
-            raise AssertionError("cache reuse made a qualification provider call")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_cache,
+        )
 
+        stage = STAGE_REASON
         first = _run(
             [str(deepreason), "reason", "Why can layered explanations remain testable?"],
             cwd=work,
             env=clean_env,
+            stage=stage,
             expected=(0, 5),
             timeout=600,
         )
@@ -834,8 +1227,13 @@ def main(argv: list[str] | None = None) -> int:
         if _provider_counts(provider_state_path)["qualification_calls"] != 80:
             raise AssertionError("question preparation silently requalified")
 
+        stage = STAGE_MCP_INITIALIZE
+        calls_before_retrieval = _provider_counts(provider_state_path)["total_calls"]
         registration = _run(
-            [str(deepreason), "mcp-registration"], cwd=work, env=clean_env
+            [str(deepreason), "mcp-registration"],
+            cwd=work,
+            env=clean_env,
+            stage=stage,
         )
         outputs.extend((registration.stdout, registration.stderr))
         registration_payload = json.loads(registration.stdout)
@@ -843,15 +1241,26 @@ def main(argv: list[str] | None = None) -> int:
         if registered != {"command": str(mcp.resolve()), "args": []} or " " not in registered["command"]:
             raise AssertionError("generic MCP registration mishandled the installed spaced path")
 
+        stage = STAGE_MCP_INITIALIZE
         first_client = MCPClient(mcp, cwd=work, env=clean_env)
         _assert_exact_tools(_tool_list(first_client))
-        first_status = first_client.tool("run_status", {"run_id": first_run_id})
-        first_retrieved = first_client.tool("run_result", {"run_id": first_run_id})
+        stage = STAGE_MCP_REQUEST
+        first_status = first_client.tool(
+            "run_status",
+            {"run_id": first_run_id},
+            stage=stage,
+        )
+        first_retrieved = first_client.tool(
+            "run_result",
+            {"run_id": first_run_id},
+            stage=stage,
+        )
         _assert_committed_terminal(first_retrieved)
         if first_retrieved != {key: value for key, value in first_result.items()}:
             raise AssertionError("durable CLI result changed when retrieved through MCP")
         if first_status.get("state") != "completed":
             raise AssertionError("restarted process did not recover CLI run status")
+        stage = STAGE_CONTINUATION_REJECTION
         calls_before_rejection = _provider_counts(provider_state_path)["total_calls"]
         rejected_continuation = first_client.tool_error(
             "continue_run",
@@ -859,15 +1268,27 @@ def main(argv: list[str] | None = None) -> int:
                 "run_id": first_run_id,
                 "budget": {"cycles": 6, "token_budget": 100000},
             },
+            stage=stage,
         )
         _assert_non_resumable_rejection(rejected_continuation)
-        if _provider_counts(provider_state_path)["total_calls"] != calls_before_rejection:
-            raise AssertionError("rejected continuation dispatched to the provider")
-        if first_client.tool("run_result", {"run_id": first_run_id}) != first_retrieved:
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_rejection,
+        )
+        if first_client.tool(
+            "run_result",
+            {"run_id": first_run_id},
+            stage=stage,
+        ) != first_retrieved:
             raise AssertionError("rejected continuation changed the terminal result")
         transcripts.extend(first_client.transcript)
-        first_client.close()
+        first_client.close(stage=stage)
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_retrieval,
+        )
 
+        stage = STAGE_REASON
         resumable = _run(
             [
                 str(deepreason),
@@ -880,6 +1301,7 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
+            stage=stage,
             expected=(0, 5),
             timeout=600,
         )
@@ -887,19 +1309,30 @@ def main(argv: list[str] | None = None) -> int:
         resumable_result = json.loads(resumable.stdout)
         _assert_resumable_terminal(resumable_result)
         resumable_run_id = resumable_result["run_id"]
+        stage = STAGE_CONTINUATION_RESUME
+        calls_before_resumable_retrieval = _provider_counts(provider_state_path)[
+            "total_calls"
+        ]
         continuation_client = MCPClient(mcp, cwd=work, env=clean_env)
         _assert_exact_tools(_tool_list(continuation_client))
         resumable_retrieved = continuation_client.tool(
-            "run_result", {"run_id": resumable_run_id}
+            "run_result",
+            {"run_id": resumable_run_id},
+            stage=stage,
         )
         if resumable_retrieved != resumable_result:
             raise AssertionError("resumable CLI result changed when retrieved through MCP")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_resumable_retrieval,
+        )
         continued = continuation_client.tool(
             "continue_run",
             {
                 "run_id": resumable_run_id,
                 "budget": {"cycles": 6, "token_budget": 100000},
             },
+            stage=stage,
         )
         if continued.get("run_id") != resumable_run_id:
             raise AssertionError("continuation changed the opaque managed identity")
@@ -909,35 +1342,49 @@ def main(argv: list[str] | None = None) -> int:
             prior_terminal_commitment_ref=resumable_result[
                 "terminal_commitment_ref"
             ],
+            stage=stage,
         )
         _assert_resumable_terminal(final_resumable_result)
         transcripts.extend(continuation_client.transcript)
-        continuation_client.close()
+        continuation_client.close(stage=stage)
 
+        stage = STAGE_RESTART_RECOVERY
+        calls_before_restart = _provider_counts(provider_state_path)["total_calls"]
         restarted_first = MCPClient(mcp, cwd=work, env=clean_env)
         _assert_exact_tools(_tool_list(restarted_first))
         restarted_first_status = restarted_first.tool(
-            "run_status", {"run_id": resumable_run_id}
+            "run_status",
+            {"run_id": resumable_run_id},
+            stage=stage,
         )
         restarted_first_result = restarted_first.tool(
-            "run_result", {"run_id": resumable_run_id}
+            "run_result",
+            {"run_id": resumable_run_id},
+            stage=stage,
         )
         transcripts.extend(restarted_first.transcript)
-        restarted_first.close()
+        restarted_first.close(stage=stage)
         if (
             restarted_first_status.get("state") != "completed"
             or restarted_first_result != final_resumable_result
         ):
             raise AssertionError("continued CLI run did not survive process restart")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_restart,
+        )
+        stage = STAGE_REPLAY_VALIDATION
         _assert_durable_replay(home, first_run_id)
         _assert_durable_replay(home, resumable_run_id)
 
+        stage = STAGE_BUDGET_REJECTION
         before_roots = {path.name for path in (home / ".deepreason" / "runs").iterdir() if path.is_dir()}
         before_calls = _provider_counts(provider_state_path)["total_calls"]
         over_budget = _run(
             [str(deepreason), "reason", "This must not start", "--cycles", "13"],
             cwd=work,
             env=clean_env,
+            stage=stage,
             expected=(1,),
         )
         outputs.extend((over_budget.stdout, over_budget.stderr))
@@ -948,6 +1395,7 @@ def main(argv: list[str] | None = None) -> int:
         ):
             raise AssertionError("over-ceiling reasoning mutated state or called the provider")
 
+        stage = STAGE_REASON
         second = _run(
             [
                 str(deepreason),
@@ -958,6 +1406,7 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
+            stage=stage,
             timeout=180,
         )
         outputs.extend((second.stdout, second.stderr))
@@ -965,6 +1414,7 @@ def main(argv: list[str] | None = None) -> int:
         if _provider_counts(provider_state_path)["qualification_calls"] != 80:
             raise AssertionError("second preparation made qualification calls")
 
+        stage = STAGE_MCP_REQUEST
         mcp_client = MCPClient(mcp, cwd=work, env=clean_env)
         _assert_exact_tools(_tool_list(mcp_client))
         started = mcp_client.tool(
@@ -973,24 +1423,47 @@ def main(argv: list[str] | None = None) -> int:
                 "question": "What makes a new explanation robust under criticism?",
                 "budget": {"cycles": 1, "token_budget": 50000},
             },
+            stage=stage,
         )
         mcp_run_id = started["run_id"]
-        _status, mcp_result = _poll_terminal(mcp_client, mcp_run_id)
+        _status, mcp_result = _poll_terminal(
+            mcp_client,
+            mcp_run_id,
+            stage=stage,
+        )
         transcripts.extend(mcp_client.transcript)
-        mcp_client.close()
+        mcp_client.close(stage=stage)
         _assert_committed_terminal(mcp_result)
         if _provider_counts(provider_state_path)["qualification_calls"] != 80:
             raise AssertionError("MCP preparation initiated qualification")
 
+        stage = STAGE_RESTART_RECOVERY
+        calls_before_restart = _provider_counts(provider_state_path)["total_calls"]
         restarted = MCPClient(mcp, cwd=work, env=clean_env)
         _assert_exact_tools(_tool_list(restarted))
-        restarted_status = restarted.tool("run_status", {"run_id": mcp_run_id})
-        restarted_result = restarted.tool("run_result", {"run_id": mcp_run_id})
+        restarted_status = restarted.tool(
+            "run_status",
+            {"run_id": mcp_run_id},
+            stage=stage,
+        )
+        restarted_result = restarted.tool(
+            "run_result",
+            {"run_id": mcp_run_id},
+            stage=stage,
+        )
         transcripts.extend(restarted.transcript)
-        restarted.close()
+        restarted.close(stage=stage)
         if restarted_status.get("state") != "completed" or restarted_result != mcp_result:
             raise AssertionError("managed MCP identity did not survive server restart")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_restart,
+        )
 
+        stage = STAGE_MANIFEST_REJECTION
+        calls_before_manifest_rejection = _provider_counts(provider_state_path)[
+            "total_calls"
+        ]
         runs_before_history = {
             path.name for path in (home / ".deepreason" / "runs").iterdir() if path.is_dir()
         }
@@ -1007,11 +1480,12 @@ def main(argv: list[str] | None = None) -> int:
                 ],
                 cwd=work,
                 env=clean_env,
+                stage=stage,
                 expected=(1,),
             )
             outputs.extend((rejected.stdout, rejected.stderr))
             if "UNSUPPORTED_RUN_MANIFEST_VERSION" not in rejected.stderr:
-                raise AssertionError(f"historical manifest v{version} was not rejected")
+                raise AssertionError("historical manifest was not rejected")
             if TEST_CREDENTIAL in rejected.stdout + rejected.stderr:
                 raise AssertionError("historical rejection echoed nested payload content")
         runs_after_history = {
@@ -1019,26 +1493,58 @@ def main(argv: list[str] | None = None) -> int:
         }
         if runs_before_history != runs_after_history:
             raise AssertionError("historical manifest rejection created a managed run root")
+        _assert_no_incremental_provider_calls(
+            provider_state_path,
+            calls_before_manifest_rejection,
+        )
 
+        stage = STAGE_DISCLOSURE_CHECK
         _assert_no_disclosure(
             repo=repo,
             home=home,
             outputs=outputs,
             transcripts=transcripts,
         )
+        final_provider_counts = _provider_counts(provider_state_path)
         print(
             "wheel operational smoke passed: installed setup, explicit qualification "
-            f"({_provider_counts(provider_state_path)['qualification_calls']} calls), "
+            f"({final_provider_counts['qualification_calls']} qualification calls; "
+            f"{final_provider_counts['total_calls']} total calls), "
             "readiness, question-only "
             "reasoning, replay-verified terminal retrieval, cache reuse, opaque MCP "
             "restart, budget ceiling, and pre-V6 fail-closed admission"
         )
+        succeeded = True
+    except OperationalSmokeFailure as error:
+        failure = error
+    except AssertionError:
+        failure = OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_ASSERTION,
+        )
+    except Exception:
+        failure = OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_UNEXPECTED,
+        )
+
+    if succeeded and args.keep:
+        print(f"retained: {temp_root}")
         return 0
-    finally:
-        if args.keep:
-            print(f"retained: {temp_root}")
-        else:
-            shutil.rmtree(temp_root, ignore_errors=True)
+
+    cleanup_completed = _cleanup_temp_root(temp_root)
+    if failure is None and not cleanup_completed:
+        failure = OperationalSmokeFailure(
+            stage=STAGE_CLEANUP,
+            failure_kind=FAILURE_CLEANUP,
+        )
+    if failure is not None:
+        _emit_failure_diagnostic(
+            failure,
+            cleanup_completed=cleanup_completed,
+        )
+        return _failure_exit_status(failure)
+    return 0
 
 
 if __name__ == "__main__":
