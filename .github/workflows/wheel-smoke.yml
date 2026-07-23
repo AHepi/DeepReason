@@ -23,3 +23,5 @@ jobs:
           cache: pip
       - name: Build and verify installed wheel
         run: python scripts/wheel_smoke.py
+      - name: Qualify and operate installed wheel
+        run: python scripts/wheel_operational_smoke.py

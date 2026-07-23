@@ -1,43 +1,42 @@
-# Installing DeepReason as a Deterministic Tool
+# Installing DeepReason V6 as a Deterministic Tool
 
 DeepReason separates the model-facing role from the process-facing driver:
 
-- **Engine role** (the γ operator): any OpenAI-compatible provider —
-  OpenAI, DeepSeek, ollama, llama.cpp server, most gateways — configured
-  per role in the §15 role table. No code changes to switch models.
-- **Driver role:** the deterministic CLI or narrow MCP operations compile an
-  immutable `RunManifest`, bind exact endpoint leases, and invoke the harness.
-  A general LLM is not a supported repository-level operator. Do not ask one
-  to browse YAML, assign roles, choose/fallback models, spawn peers, repair
-  policy, or decide workflow transitions.
+- **Engine role:** one operator-configured OpenAI-compatible provider.
+- **Driver role:** DeepReason owns routing, policy, V6 input freezing,
+  qualification projection, manifests, managed paths, and execution.
+
+The public installed product is V6-only. A human performs provider setup and
+explicit qualification once; a person or LLM then supplies only a question
+and an optional bounded budget.
 
 ## Install
 
 ```bash
-pip install .            # from the repo root; installs `deepreason` + `deepreason-mcp`
+python -m pip install .
+deepreason setup
+deepreason qualify --yes
+deepreason status --json
+deepreason reason "Why can independent checks improve reliability?"
 ```
 
 ### As MCP tools (any MCP client)
 
 ```bash
-# Claude Code
-claude mcp add deepreason -- deepreason-mcp
-
-# Generic MCP client config (stdio transport)
-{ "mcpServers": { "deepreason": { "command": "deepreason-mcp" } } }
+deepreason mcp-registration
 ```
 
-The server speaks newline-delimited JSON-RPC 2.0 over stdio (MCP stdio
-transport) with zero dependencies beyond the package.
+The command prints generic JSON containing the absolute installed
+`deepreason-mcp` path. Copy it into the MCP client's configuration; DeepReason
+does not modify client settings. The server speaks newline-delimited JSON-RPC
+2.0 over stdio. Call `get_readiness`, then `start_run` with a question and
+optional budget. Use the returned opaque `run_id` for `run_status` and
+`run_result`. MCP accepts no provider, route, policy, credential, manifest, or
+filesystem-path authority and cannot initiate qualification.
 
-### As a CLI (any agent that can run commands)
-
-```bash
-deepreason --root .deepreason --config config/my-provider.yaml \
-    run --budget cycles=6 --token-budget 100000 --problem problem.yaml
-deepreason --root .deepreason report
-deepreason --root .deepreason theory <id-prefix>
-```
+`deepreason status --json` is the stable machine-readable readiness boundary.
+Bare `deepreason` prints the same readiness as human-readable text and exactly
+one next action. Credential presence is reported only as a boolean.
 
 ## Compile the engine LLM route(s)
 

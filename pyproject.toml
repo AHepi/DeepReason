@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "deepreason"
 version = "0.1.0"
-description = "Conjecture-Criticism Harness (creativity-calculus build spec v1.3)"
+description = "DeepReason V6-only deterministic reasoning harness"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -37,7 +37,7 @@ deepreason = "deepreason.cli.main:main"
 deepreason-mcp = "deepreason.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/deepreason", "mini/minireason"]
+packages = ["src/deepreason"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "mini/tests"]

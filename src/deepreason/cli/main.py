@@ -47,6 +47,11 @@ def build_parser() -> argparse.ArgumentParser:
     qualify_cmd = sub.add_parser(
         "qualify", help="explicitly qualify the configured V6 provider contract"
     )
+    qualify_cmd.add_argument(
+        "--yes",
+        action="store_true",
+        help="confirm the provider/model and announced maximum call count",
+    )
     qualify_cmd.add_argument("--json", action="store_true")
     status_cmd = sub.add_parser("status", help="show provider and V6 qualification readiness")
     status_cmd.add_argument("--json", action="store_true")
@@ -141,6 +146,10 @@ def build_parser() -> argparse.ArgumentParser:
     reason_cmd.add_argument("question", help="the question DeepReason should examine")
     reason_cmd.add_argument("--cycles", type=int, default=None)
     reason_cmd.add_argument("--token-budget", type=int, default=None)
+    sub.add_parser(
+        "mcp-registration",
+        help="print generic secret-free MCP stdio registration JSON",
+    )
     skills_cmd = sub.add_parser(
         "skills", help="snapshot and retrieve from explicit advisory skill capsules"
     )
@@ -441,6 +450,16 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "qualify":
         return _cmd_qualify(args)
+
+    if args.command == "mcp-registration":
+        from deepreason.mcp_registration import MCPRegistrationError, registration_json
+
+        try:
+            print(registration_json())
+        except MCPRegistrationError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        return 0
 
     if args.command == "scratch":
         from deepreason.cli.scratch import dispatch_scratch
@@ -1339,6 +1358,11 @@ def _cmd_qualify(args) -> int:
                 f"maximum expected provider calls: {maximum_calls}."
             )
             print(notice, file=sys.stderr, flush=True)
+            if not args.yes and sys.stdin.isatty():
+                confirmed = input("Proceed with qualification? [y/N]: ").strip().casefold()
+                if confirmed not in {"y", "yes"}:
+                    print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)
+                    return 1
             bundle = resolve_completed_qualification(
                 manifest,
                 profile,

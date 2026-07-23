@@ -11,41 +11,51 @@ does all the bookkeeping and decides nothing on vibes. The output isn't one
 confident paragraph — it's a *map* of which explanations survived scrutiny,
 which died and exactly why, and where the evidence genuinely can't decide.
 
-There are two ways to run it: the **full harness** (all the machinery) and
-**MiniReason** (the measured reduced engine profile). Which to use is the
-most important decision, so it has its own section below.
+The installed public product is V6-only. Provider routing, the conservative
+policy, qualification projection, manifests, managed paths, and run identity
+are owned by DeepReason rather than supplied on each question.
 
 ---
 
 ## Quickstart
 
-### Reason over a text question
+### Install and reason over a question
 
 ```bash
-pip install .
+python -m pip install .
 
 deepreason setup
-deepreason --config config/my-provider.yaml config compile \
-  --schema-version 2 --workload-profile text --profile compact \
-  --single-model gemma4:31b --rubric-policy forbid --out run-manifest.json
-deepreason --root runs/my-question reason --text "why does X happen?" \
-  --run-manifest run-manifest.json
+deepreason qualify --yes
+deepreason status --json
+deepreason reason "Why does X happen?"
 ```
 
-The text-first path generates rival explanatory claims, compiles their
-counterconditions into current-run commitments, criticizes the candidates,
-and retains the surviving argument graph in a replayable run root. `setup`
-stores provider credentials privately in
-`~/.deepreason/credentials` (owner-only file; the key never appears in any
-config, prompt, or log).
+`setup` records a typed, secret-free provider profile and a credential
+environment-variable reference. If that credential is already present, it is
+reused without asking for its value. `qualify` is the only command that may
+initiate the bounded production-contract qualification calls; it announces the
+provider, model, and maximum expected call count before dispatch. A completed
+qualification is reused across questions. `status` reports readiness and one
+exact next action without printing credential values.
 
-Long runs expose append-only, workload-neutral progress and can be watched or
-resumed without replacing their bound manifest:
+`reason` accepts a normal question and optional bounded `--cycles` and
+`--token-budget` overrides. DeepReason freezes the V2 input and dossier,
+constructs and binds the V6 manifest, projects reusable qualification, creates
+an opaque managed run identity, and launches through the shared application
+service. It does not accept a manifest path or provider choice.
+
+The same parser is available through `python -m deepreason`. To register the
+installed MCP stdio server with a client, print generic JSON and copy it into
+that client's configuration:
 
 ```bash
-deepreason --root runs/my-question watch
-deepreason --root runs/my-question continue --budget cycles=4 --token-budget 50000
+deepreason mcp-registration
 ```
+
+The emitted command is the absolute installed `deepreason-mcp` executable.
+DeepReason does not edit VS Code, Claude, ChatGPT, or other client settings.
+MCP `start_run` accepts a question and optional bounded budget; subsequent
+status and result calls use only the returned opaque `run_id`.
 
 ### Advisory scratchpad and grounded answers
 
