@@ -129,6 +129,446 @@ def _expected_call_outcome(
     return ExpectedCallOutcome.SUCCESS_REQUIRED
 
 
+def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
+    """Audit controller-v3 correlations without changing the inspected root.
+
+    The controller-v3 provider event and the later formal event are deliberately
+    non-adjacent.  Their durable join is::
+
+        Conj ``conjecture-call:<event-seq>``
+          -> provider-result event
+          -> ProviderAttemptV1
+          -> DispatchAuthorizationBundleV1 / WorkPreparationV1
+          -> SemanticAdmissionV1.admitted_refs
+
+    This pass reads those canonical records directly.  In particular it does
+    not synthesize a historical ``TransitionDecisionV1`` or infer identity from
+    school names, timestamps, provider text, or list position.
+    """
+
+    findings: list[dict] = []
+    seen_findings: set[tuple[str, str]] = set()
+
+    def finding(check: str, detail: str) -> None:
+        key = (check, detail)
+        if key not in seen_findings:
+            seen_findings.add(key)
+            findings.append({"check": check, "detail": detail[:400]})
+
+    context = {
+        "events": (),
+        "provider_events_by_seq": {},
+        "transition_by_id": {},
+        "failure_call_seqs": set(),
+    }
+    manifest_path = Path(root) / MANIFEST_NAME
+    try:
+        manifest = load_run_manifest(manifest_path)
+    except Exception:  # the main verifier reports manifest/open failures
+        return findings, context
+    if manifest.schema_version != 6:
+        return findings, context
+
+    from deepreason.log.event_log import EventLog
+    from deepreason.storage.objects import ObjectStore
+    from deepreason.workflow.transaction import (
+        DispatchAuthorizationBundleV1,
+        ProviderAttemptV1,
+        SemanticAdmissionV1,
+        WorkLifecycleTransitionV1,
+        WorkPreparationV1,
+        WorkTransitionKind,
+    )
+
+    try:
+        events = tuple(EventLog(Path(root) / "log.jsonl", read_only=True).read())
+    except Exception:  # malformed logs remain the main verifier's open finding
+        return findings, context
+    context["events"] = events
+    objects = ObjectStore(Path(root) / "objects", read_only=True)
+    rows_by_work: dict[str, list[tuple[object, WorkLifecycleTransitionV1, dict]]] = {}
+    preparations: dict[str, WorkPreparationV1] = {}
+    authorizations: dict[str, DispatchAuthorizationBundleV1] = {}
+    authorization_owner: dict[str, str] = {}
+    attempt_owner: dict[str, tuple[str, int]] = {}
+    admissions: dict[tuple[str, int], list[SemanticAdmissionV1]] = {}
+    provider_rows: dict[int, dict] = {}
+
+    transaction_actions = {"work_transition", "provider_result"}
+    for event in events:
+        payload = getattr(event, "control", None)
+        if (
+            getattr(payload, "schema_", None) != "control.event.v3"
+            or getattr(payload, "action", None) not in transaction_actions
+        ):
+            continue
+        try:
+            transition_schema, transition = objects.get(payload.decision_ref)
+        except Exception as error:  # noqa: BLE001 - corrupt durable authority
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: lifecycle transition is unavailable: {error!r}",
+            )
+            continue
+        if (
+            transition_schema != "workflow-work-lifecycle-transition-v1"
+            or not isinstance(transition, WorkLifecycleTransitionV1)
+        ):
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: decision is not a controller-v3 lifecycle transition",
+            )
+            continue
+        previous = context["transition_by_id"].setdefault(transition.id, transition)
+        if previous is not transition:
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: lifecycle transition is ambiguously reused",
+            )
+        records: dict[str, tuple[str, object]] = {}
+        for object_id in event.outputs:
+            try:
+                records[object_id] = objects.get(object_id)
+            except Exception as error:  # noqa: BLE001 - missing committed output
+                finding(
+                    "workflow-decision",
+                    f"event seq={event.seq}: transaction output is unavailable: {error!r}",
+                )
+        if (
+            tuple(event.inputs) != (transition.work_id, transition.trigger_ref)
+            or tuple(payload.inputs) != tuple(event.inputs)
+            or tuple(payload.outputs) != tuple(event.outputs)
+            or not event.outputs
+            or event.outputs[-1] != transition.id
+        ):
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: transition envelope differs from durable work identity",
+            )
+        expected_action = (
+            "provider_result"
+            if transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT
+            else "work_transition"
+        )
+        if payload.action != expected_action:
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: control action differs from lifecycle phase",
+            )
+        phase_records = [
+            value for object_id, value in records.items() if object_id != transition.id
+        ]
+        if any(
+            getattr(record, "work_id", None) != transition.work_id
+            or getattr(record, "attempt_index", None) != transition.attempt_index
+            for _schema, record in phase_records
+        ):
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: lifecycle phase contains cross-work records",
+            )
+        rows_by_work.setdefault(transition.work_id, []).append(
+            (event, transition, records)
+        )
+
+        for schema, record in phase_records:
+            if schema == "workflow-work-preparation-v1" and isinstance(
+                record, WorkPreparationV1
+            ):
+                if record.id in preparations:
+                    finding(
+                        "workflow-decision",
+                        f"event seq={event.seq}: work preparation is duplicated",
+                    )
+                preparations[record.id] = record
+            elif schema == "workflow-dispatch-authorization-v1" and isinstance(
+                record, DispatchAuthorizationBundleV1
+            ):
+                owner = authorization_owner.setdefault(record.id, transition.work_id)
+                if owner != transition.work_id:
+                    finding(
+                        "workflow-call-pairing",
+                        f"event seq={event.seq}: authorization is reused across work",
+                    )
+                authorizations[record.id] = record
+            elif schema == "workflow-provider-attempt-v1" and isinstance(
+                record, ProviderAttemptV1
+            ):
+                owner = attempt_owner.setdefault(
+                    record.id, (transition.work_id, transition.attempt_index)
+                )
+                if owner != (transition.work_id, transition.attempt_index):
+                    finding(
+                        "workflow-call-pairing",
+                        f"event seq={event.seq}: provider attempt is reused across work",
+                    )
+            elif schema == "workflow-semantic-admission-v1" and isinstance(
+                record, SemanticAdmissionV1
+            ):
+                admissions.setdefault(
+                    (transition.work_id, transition.attempt_index), []
+                ).append(record)
+
+        if transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT:
+            provider_attempts = [
+                record
+                for schema, record in phase_records
+                if schema == "workflow-provider-attempt-v1"
+                and isinstance(record, ProviderAttemptV1)
+            ]
+            call = event.llm
+            if len(provider_attempts) != 1 or call is None:
+                finding(
+                    "workflow-call-pairing",
+                    f"event seq={event.seq}: provider result lacks one durable call/attempt pair",
+                )
+                continue
+            attempt = provider_attempts[0]
+            authorization = authorizations.get(attempt.authorization_bundle_ref)
+            if authorization is None:
+                try:
+                    schema, candidate = objects.get(attempt.authorization_bundle_ref)
+                except Exception:  # reported by the exact pairing comparison below
+                    candidate = None
+                    schema = None
+                if schema == "workflow-dispatch-authorization-v1" and isinstance(
+                    candidate, DispatchAuthorizationBundleV1
+                ):
+                    authorization = candidate
+            exact_pair = bool(
+                authorization is not None
+                and authorization.work_id == transition.work_id
+                and authorization.attempt_index == transition.attempt_index
+                and call.work_order_id == transition.work_id
+                and call.dispatch_authorization_ref == authorization.id
+                and attempt.authorization_bundle_ref == authorization.id
+                and attempt.contract_id == authorization.contract_id
+                and attempt.route_lease == authorization.route_lease
+                and attempt.prompt_sha256 == authorization.prompt_sha256
+                and attempt.raw_ref == call.raw_ref
+            )
+            if not exact_pair:
+                finding(
+                    "workflow-call-pairing",
+                    f"event seq={event.seq}: provider result differs from its authorized attempt",
+                )
+            duplicate = next(
+                (
+                    row
+                    for row in provider_rows.values()
+                    if row["attempt"].id == attempt.id
+                    or (
+                        row["work_id"] == transition.work_id
+                        and row["attempt_index"] == transition.attempt_index
+                    )
+                ),
+                None,
+            )
+            if duplicate is not None:
+                finding(
+                    "workflow-call-pairing",
+                    f"event seq={event.seq}: provider result pairing is duplicate or ambiguous",
+                )
+            provider_rows[int(event.seq)] = {
+                "event": event,
+                "transition": transition,
+                "attempt": attempt,
+                "authorization": authorization,
+                "work_id": transition.work_id,
+                "attempt_index": transition.attempt_index,
+            }
+
+    legal_progressions = {
+        (WorkTransitionKind.WORK_PREPARED,),
+        (WorkTransitionKind.WORK_PREPARED, WorkTransitionKind.WORK_ISSUED),
+        (
+            WorkTransitionKind.WORK_PREPARED,
+            WorkTransitionKind.WORK_ISSUED,
+            WorkTransitionKind.PROVIDER_RESULT,
+        ),
+        (
+            WorkTransitionKind.WORK_PREPARED,
+            WorkTransitionKind.WORK_ISSUED,
+            WorkTransitionKind.PROVIDER_RESULT,
+            WorkTransitionKind.SEMANTIC_ADMISSION,
+        ),
+        (WorkTransitionKind.WORK_PREPARED, WorkTransitionKind.BUDGET_DENIED),
+        (WorkTransitionKind.WORK_PREPARED, WorkTransitionKind.WORK_TERMINATED),
+        (
+            WorkTransitionKind.WORK_PREPARED,
+            WorkTransitionKind.WORK_ISSUED,
+            WorkTransitionKind.WORK_TERMINATED,
+        ),
+        (
+            WorkTransitionKind.WORK_PREPARED,
+            WorkTransitionKind.WORK_ISSUED,
+            WorkTransitionKind.PROVIDER_RESULT,
+            WorkTransitionKind.WORK_TERMINATED,
+        ),
+        (
+            WorkTransitionKind.WORK_PREPARED,
+            WorkTransitionKind.WORK_ISSUED,
+            WorkTransitionKind.PROVIDER_RESULT,
+            WorkTransitionKind.SEMANTIC_ADMISSION,
+            WorkTransitionKind.WORK_TERMINATED,
+        ),
+    }
+    for work_id, rows in rows_by_work.items():
+        seqs = tuple(int(row[0].seq) for row in rows)
+        progression = tuple(row[1].transition_kind for row in rows)
+        attempts_for_work = {row[1].attempt_index for row in rows}
+        transition_ids = tuple(row[1].id for row in rows)
+        if (
+            seqs != tuple(sorted(seqs))
+            or len(seqs) != len(set(seqs))
+            or len(transition_ids) != len(set(transition_ids))
+            or len(attempts_for_work) != 1
+            or progression not in legal_progressions
+            or work_id not in preparations
+        ):
+            finding(
+                "workflow-decision",
+                f"work {work_id}: lifecycle progression is missing, duplicate, out of order, or ambiguous",
+            )
+
+    # Every transaction-authorized call must be the call on exactly one
+    # provider-result transition.  A detached LLM event is not accepted as a
+    # substitute for the missing lifecycle decision.
+    for event in events:
+        call = event.llm
+        if call is None or call.dispatch_authorization_ref is None:
+            continue
+        row = provider_rows.get(int(event.seq))
+        if row is None:
+            finding(
+                "workflow-decision",
+                f"event seq={event.seq}: transaction call has no provider-result lifecycle transition",
+            )
+            finding(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: transaction call has no authorized attempt result",
+            )
+
+    # Associate each formal Conj event with the exact provider attempt and the
+    # later admission that made its output durable.  The source event may be
+    # separated by arbitrary intervening records.
+    source_users: dict[int, int] = {}
+    admitted_owners: dict[str, set[tuple[str, int]]] = {}
+    for key, values in admissions.items():
+        for admission in values:
+            for ref in admission.admitted_refs:
+                # A content-addressed formal artifact may be independently
+                # rediscovered and admitted by more than one provider attempt.
+                # Ownership is therefore the provider-attempt/admission pair,
+                # not global uniqueness of the semantic object ID.
+                admitted_owners.setdefault(ref, set()).add(key)
+    for event in events:
+        if event.rule.value != "Conj":
+            continue
+        refs = [
+            value for value in event.inputs if value.startswith("conjecture-call:")
+        ]
+        if not refs:
+            continue
+        try:
+            source_seqs = tuple(
+                int(value.removeprefix("conjecture-call:")) for value in refs
+            )
+        except ValueError:
+            source_seqs = ()
+        if len(source_seqs) != 1:
+            finding(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: Conj has an ambiguous provider-result reference",
+            )
+            continue
+        source_seq = source_seqs[0]
+        row = provider_rows.get(source_seq)
+        if row is None or source_seq >= int(event.seq):
+            finding(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: Conj source is not one preceding provider attempt",
+            )
+            continue
+        previous_user = source_users.setdefault(source_seq, int(event.seq))
+        if previous_user != int(event.seq):
+            finding(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: provider result is reused by multiple Conj records",
+            )
+        key = (row["work_id"], row["attempt_index"])
+        matching_admissions = [
+            admission
+            for admission in admissions.get(key, ())
+            if admission.provider_attempt_ref == row["attempt"].id
+            and set(event.outputs).issubset(set(admission.admitted_refs))
+        ]
+        if len(matching_admissions) != 1:
+            owners = {
+                owner
+                for output in event.outputs
+                for owner in admitted_owners.get(output, ())
+            }
+            cross_work = bool(owners) and key not in owners
+            finding(
+                "workflow-call-pairing",
+                f"event seq={event.seq}: Conj outputs are {'cross-work' if cross_work else 'not uniquely'} admitted by their provider attempt",
+            )
+
+    # Verify the school receipt through the frozen work preparation and route
+    # lease.  The generic school verifier below separately checks that the same
+    # receipt resolves to the manifest's frozen route-seat policy.
+    for source_seq, row in provider_rows.items():
+        preparation = preparations.get(row["work_id"])
+        authorization = row["authorization"]
+        attempt = row["attempt"]
+        call = row["event"].llm
+        if preparation is None or authorization is None or call is None:
+            continue
+        payload = preparation.task_payload_value
+        school_id = payload.get("school_id") if hasattr(payload, "get") else None
+        receipt = call.school_route
+        if school_id is not None and receipt is None:
+            finding(
+                "school-route",
+                f"event seq={source_seq}: school work has no route-seat receipt",
+            )
+            continue
+        if receipt is not None and (
+            receipt.school_id != school_id
+            or receipt.role != preparation.route_lease.role
+            or receipt.seat != preparation.route_lease.seat
+            or receipt.endpoint_id != preparation.route_lease.endpoint_id
+            or receipt.route_sha256 != preparation.route_lease.route_sha256
+            or receipt.contract_id != preparation.contract_id
+            or authorization.route_lease != preparation.route_lease
+            or attempt.route_lease != preparation.route_lease
+        ):
+            finding(
+                "school-route",
+                f"event seq={source_seq}: provider route differs from prepared route-seat lease",
+            )
+
+    for source_seq, row in provider_rows.items():
+        key = (row["work_id"], row["attempt_index"])
+        admission = next(
+            (
+                value
+                for value in admissions.get(key, ())
+                if value.provider_attempt_ref == row["attempt"].id
+            ),
+            None,
+        )
+        if row["attempt"].outcome == "transport_failure" or (
+            admission is not None and admission.outcome != "admitted"
+        ):
+            context["failure_call_seqs"].add(source_seq)
+    context["provider_events_by_seq"] = {
+        seq: row["event"] for seq, row in provider_rows.items()
+    }
+    return findings, context
+
+
 def verify_root(root: Path, meter_total: int | None = None) -> dict:
     """Run every invariant over the session at ``root``. Returns
     {"violations": [{"check", "detail"}, ...], "stats": {...}}."""
@@ -137,10 +577,16 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
     def fail(check: str, detail: str) -> None:
         violations.append({"check": check, "detail": detail[:400]})
 
+    # Controller-v3 history is correlated from durable records before normal
+    # replay.  If replay cannot open a corrupted history, these typed findings
+    # retain the exact failed boundary instead of collapsing it to a generic
+    # legacy verifier error.
+    controller_v3_findings, controller_v3 = _controller_v3_history(Path(root))
+
     # 1. Replay determinism: two independent materializations agree.
     try:
-        h = Harness(root)
-        second = Harness(root)
+        h = Harness(root, read_only=True)
+        second = Harness(root, read_only=True)
         if second.state.model_dump_json() != h.state.model_dump_json():
             fail("replay", "two replays of the same log produced different state")
         if second.scratch_state != h.scratch_state:
@@ -152,7 +598,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         if second.capability_state.digest != h.capability_state.digest:
             fail("capability-replay", "two replays produced different capability state")
     except Exception as e:  # noqa: BLE001 - an unopenable root is the finding
+        if controller_v3_findings:
+            return {"violations": controller_v3_findings, "stats": {}}
         return {"violations": [{"check": "open", "detail": repr(e)[:400]}], "stats": {}}
+
+    for item in controller_v3_findings:
+        fail(str(item["check"]), str(item["detail"]))
 
     events = list(h.log.read())
     legacy_failure_call_seqs = _legacy_bridge_failure_call_seqs(
@@ -164,6 +615,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         if receipt.validation_outcome.value
         in {"repair_exhausted", "transport_failed"}
     }
+    workflow_failure_call_seqs.update(controller_v3["failure_call_seqs"])
 
     # Process metadata is replay/audit input only.  Its checks never inspect
     # or alter att, dep, status, warrants, guards, or acceptance.
@@ -247,6 +699,21 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
             for event in control_events:
                 control_action = getattr(event.control, "action", None)
+                transaction_transition = controller_v3["transition_by_id"].get(
+                    event.control.decision_ref
+                )
+                if transaction_transition is not None:
+                    if (
+                        transaction_transition.controller_version
+                        != control.controller_version
+                        or transaction_transition.workflow_profile
+                        != control.workflow_profile
+                    ):
+                        fail(
+                            "workflow-manifest",
+                            f"event seq={event.seq}: transaction transition differs from manifest authority",
+                        )
+                    continue
                 decision = h.workflow_state.decisions.get(
                     event.control.decision_ref
                 )
@@ -255,6 +722,14 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 )
                 resume = h.workflow_state.resume_decisions.get(
                     event.control.decision_ref
+                )
+                terminal_commitment = next(
+                    (
+                        item
+                        for item in h.workflow_state.terminal_commitments_by_epoch.values()
+                        if item.id == event.control.decision_ref
+                    ),
+                    None,
                 )
                 classification_binding = (
                     h.workflow_state.model_classification_binding
@@ -284,6 +759,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     process_decision = (
                         lifecycle
                         or resume
+                        or terminal_commitment
                         or classification_binding
                         or decomposition_record
                     )
@@ -302,6 +778,20 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                                 "contract-decomposition-authority",
                                 f"event seq={event.seq}: decomposition record "
                                 "differs from replayed manifest authority",
+                        )
+                        continue
+                    if terminal_commitment is not None:
+                        if (
+                            terminal_commitment.manifest_sha256 != manifest.sha256
+                            or terminal_commitment.run_id != manifest.sha256
+                            or h.workflow_state.terminal_commitment_event_seq.get(
+                                terminal_commitment.id
+                            )
+                            != event.seq
+                        ):
+                            fail(
+                                "workflow-manifest",
+                                f"event seq={event.seq}: terminal commitment differs from manifest authority",
                             )
                         continue
                     if classification_binding is not None:
@@ -1108,7 +1598,14 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 "workflow-call-pairing",
                 f"event seq={event.seq}: active conjecture call is not bound to work",
             )
-        if (
+        if work_order_id is not None and work_order_id in h.workflow_state.transaction_work:
+            provider_event = controller_v3["provider_events_by_seq"].get(int(event.seq))
+            if provider_event is None or provider_event != event:
+                fail(
+                    "workflow-call-pairing",
+                    f"event seq={event.seq}: transaction call is not its durable provider result",
+                )
+        elif (
             work_order_id is not None
             and work_order_id not in h.workflow_state.work_orders
         ):
@@ -1119,7 +1616,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
     # 2. Incremental transitions == from-scratch walk.
     try:
-        if h.transitions() != Harness(root).transitions():
+        if h.transitions() != Harness(root, read_only=True).transitions():
             fail("transitions", "incremental transitions diverge from a fresh walk")
     except Exception as e:  # noqa: BLE001
         fail("transitions", repr(e))
@@ -1171,9 +1668,15 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     source_seq = int(source_refs[0].removeprefix("conjecture-call:"))
                 except ValueError:
                     source_seq = -1
-                source = next(
-                    (candidate for candidate in events if candidate.seq == source_seq),
-                    None,
+                source = controller_v3["provider_events_by_seq"].get(source_seq)
+                if source is None:
+                    source = next(
+                        (candidate for candidate in events if candidate.seq == source_seq),
+                        None,
+                    )
+                controller_v3_source = (
+                    source is not None
+                    and source is controller_v3["provider_events_by_seq"].get(source_seq)
                 )
                 active_source = (
                     source is not None
@@ -1193,8 +1696,13 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     and source.seq < event.seq
                     and source.llm is not None
                     and event.inputs
-                    and source.inputs[1] == event.inputs[0]
-                    and (active_source or shadow_source)
+                    and (
+                        controller_v3_source
+                        or (
+                            source.inputs[1] == event.inputs[0]
+                            and (active_source or shadow_source)
+                        )
+                    )
                 ):
                     call = source.llm
                     receipt = source.llm.school_route

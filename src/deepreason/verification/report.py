@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import json
 import stat
-import re
 from pathlib import Path
 from typing import Any, Literal
 
@@ -1027,51 +1026,6 @@ def _deferred_model_phase_findings(
 
 
 
-def _v6_legacy_suppression(root: Path) -> dict[str, set[int]]:
-    """Identify v3 events that the unchanged v1-v5 verifier cannot model."""
-
-    from deepreason.harness import Harness
-
-    suppressed = {
-        "workflow-decision": set(),
-        "workflow-call-pairing": set(),
-        "attempt-validity": set(),
-    }
-    try:
-        harness = Harness(root, read_only=True)
-        work_ids = set(harness.workflow_state.transaction_work)
-        events = tuple(harness.log.read())
-    except Exception:
-        return suppressed
-    for event in events:
-        seq = int(event.seq)
-        control = getattr(event, "control", None)
-        if getattr(control, "schema_", None) == "control.event.v3":
-            suppressed["workflow-decision"].add(seq)
-        call = getattr(event, "llm", None)
-        if call is not None and call.dispatch_authorization_ref and call.work_order_id in work_ids:
-            suppressed["workflow-call-pairing"].add(seq)
-            item = harness.workflow_state.transaction_work[call.work_order_id]
-            terminal = item.terminal
-            admission = (
-                item.admissions.get(terminal.attempt_index)
-                if terminal is not None
-                else None
-            )
-            # Legacy assumes every provider-result event is a successful call.
-            # V3 first records invalid results and then typed rejection; only
-            # those false positives are suppressed. Completed work must still
-            # satisfy the legacy attempt-validity check.
-            if (
-                terminal is None
-                or terminal.status != "completed"
-                or admission is None
-                or admission.outcome != "admitted"
-            ):
-                suppressed["attempt-validity"].add(seq)
-    return suppressed
-
-
 def verify_root_report(
     root: Path | str,
     meter_total: int | None = None,
@@ -1085,8 +1039,6 @@ def verify_root_report(
     resolved = Path(root)
     manifest_schema_version = _manifest_schema_version(resolved)
     legacy = verify_root(resolved, meter_total=meter_total)
-    suppression = _v6_legacy_suppression(resolved) if manifest_schema_version == 6 else {}
-    suppressed_legacy = 0
     retained_legacy = 0
     channels: dict[str, list[VerificationFindingV2]] = {
         "integrity": [],
@@ -1098,10 +1050,6 @@ def verify_root_report(
     for item in legacy.get("violations", ()):  # tolerate historical mapping shape
         check = str(item.get("check") or "legacy")
         detail = str(item.get("detail") or "legacy verifier finding")
-        matched_seq = re.search(r"event seq=(\d+)", detail)
-        if matched_seq is not None and int(matched_seq.group(1)) in suppression.get(check, set()):
-            suppressed_legacy += 1
-            continue
         retained_legacy += 1
         channel = _legacy_channel(check, detail)
         channels[channel].append(_finding(channel, check, detail, source="legacy"))
@@ -1193,7 +1141,7 @@ def verify_root_report(
     stats["verification_v2"] = {
         "terminal_state": payload.get("state") if payload is not None else None,
         "legacy_violation_count": retained_legacy,
-        "legacy_adapter_suppressed_count": suppressed_legacy,
+        "legacy_adapter_suppressed_count": 0,
         "manifest_schema_version": manifest_schema_version,
     }
     return VerificationReportV2(

@@ -9,6 +9,7 @@ from pydantic import ValidationError
 
 from deepreason.canonical import canonical_json
 from deepreason.harness import Harness, ReadOnlyHarnessError, WellFormednessError
+from deepreason.invariants import verify_root
 from deepreason.log.event_log import EventSequenceError
 from deepreason.ontology import (
     Commitment,
@@ -163,6 +164,20 @@ def test_time_travel_does_not_create_or_repair_storage(tmp_path):
     before = harness.log.path.read_bytes()
     with pytest.warns(UserWarning, match="dropping torn final line"):
         Harness.at(root, 1)
+    assert harness.log.path.read_bytes() == before
+
+
+def test_replay_verification_does_not_repair_a_torn_tail(tmp_path):
+    root = tmp_path / "verify-read-only"
+    harness = Harness(root)
+    harness.create_artifact("durable", provenance=Provenance(role="seed"))
+    with open(harness.log.path, "a", encoding="utf-8") as stream:
+        stream.write('{"seq":1,"rule":"Meas')
+    before = harness.log.path.read_bytes()
+
+    with pytest.warns(UserWarning, match="dropping torn final line"):
+        verify_root(root)
+
     assert harness.log.path.read_bytes() == before
 
 
