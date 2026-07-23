@@ -469,7 +469,7 @@ class TextRunApplicationService:
         from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
 
         manifest_path = root / MANIFEST_NAME
-        if manifest_path.exists():
+        if manifest_path.exists() or not target.exists():
             from deepreason.harness import Harness
             from deepreason.runtime.progress import _atomic_json
             from deepreason.runtime.terminal_authority import (
@@ -505,6 +505,7 @@ class TextRunApplicationService:
                             f"{lifecycle}"
                         )
         if not target.exists():
+            load_run_manifest(manifest_path)
             lifecycle = self.inspect(intent).lifecycle
             raise ValueError(f"RUN_RESULT_NOT_READY: current state is {lifecycle}")
         try:
