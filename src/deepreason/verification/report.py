@@ -247,7 +247,11 @@ def _read_terminal(root: Path) -> tuple[dict[str, Any] | None, VerificationFindi
     return payload, None
 
 
-def _terminal_findings(payload: dict[str, Any] | None) -> list[VerificationFindingV2]:
+def _terminal_findings(
+    payload: dict[str, Any] | None,
+    *,
+    include_stored_verification: bool = True,
+) -> list[VerificationFindingV2]:
     if payload is None:
         return []
     findings: list[VerificationFindingV2] = []
@@ -273,7 +277,10 @@ def _terminal_findings(payload: dict[str, Any] | None) -> list[VerificationFindi
             )
         )
 
-    if payload.get("schema") == "deepreason-run-result-v2":
+    if (
+        include_stored_verification
+        and payload.get("schema") == "deepreason-run-result-v2"
+    ):
         summary = payload.get("verification")
         if isinstance(summary, dict):
             if summary.get("integrity_valid") is False:
@@ -1031,6 +1038,7 @@ def verify_root_report(
     meter_total: int | None = None,
     *,
     allow_missing_terminal: bool = False,
+    _include_stored_verification: bool = True,
 ) -> VerificationReportV2:
     """Derive a v2 report without altering legacy verification or root bytes."""
 
@@ -1085,7 +1093,10 @@ def verify_root_report(
                 source="derived",
             )
         )
-    for finding in _terminal_findings(payload):
+    for finding in _terminal_findings(
+        payload,
+        include_stored_verification=_include_stored_verification,
+    ):
         channels[finding.channel].append(finding)
     terminal_authority = None
     if manifest_schema_version == 6:
@@ -1154,9 +1165,29 @@ def verify_root_report(
     )
 
 
+def verify_post_commit_report(
+    root: Path | str,
+    meter_total: int | None = None,
+) -> VerificationReportV2:
+    """Recompute a terminal projection without trusting its stored summary.
+
+    The immutable terminal-result draft is created before its commitment
+    exists.  A post-commit projection must therefore derive the report from
+    current durable authority instead of feeding the draft's pre-commit
+    summary back into verification as a fresh finding.
+    """
+
+    return verify_root_report(
+        root,
+        meter_total=meter_total,
+        _include_stored_verification=False,
+    )
+
+
 __all__ = [
     "VerificationChannel",
     "VerificationFindingV2",
     "VerificationReportV2",
+    "verify_post_commit_report",
     "verify_root_report",
 ]

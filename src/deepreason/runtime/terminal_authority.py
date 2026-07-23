@@ -20,6 +20,61 @@ from deepreason.workflow.models import (
 
 
 _TERMINAL_COMMITMENT_LOCK_NAME = ".terminal-commitment.lock"
+_REPLAY_VALIDATION_NAME = "REPLAY_VALIDATION.json"
+_RESULT_PROJECTION_FIELDS = frozenset(
+    {
+        "verification",
+        "completion_status",
+        "canonical_bridge_eligible",
+    }
+)
+
+
+class TerminalReplayValidationBindingV1(BaseModel):
+    """Derived binding from replay validation to one committed terminal head."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    schema_: Literal["terminal-replay-validation-binding.v1"] = Field(
+        "terminal-replay-validation-binding.v1", alias="schema"
+    )
+    run_id: str = Field(pattern=r"^[0-9a-f]{64}$")
+    manifest_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    terminal_epoch: int = Field(ge=0)
+    terminal_commitment_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    result_draft_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    parent_terminal_commitment_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+    )
+    opening_resume_ref: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+    )
+    terminal_commitment_event_seq: int = Field(ge=0)
+    reasoning_event_horizon_seq: int = Field(ge=0)
+    evaluated_event_horizon_seq: int = Field(ge=0)
+    terminal_commitment_ledger_digest: str = Field(
+        pattern=r"^sha256:[0-9a-f]{64}$"
+    )
+    stop_record_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    replay_validation_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+    result_projection_digest: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @model_validator(mode="after")
+    def _binding_shape(self):
+        if self.run_id != self.manifest_digest:
+            raise ValueError("terminal replay binding names another run")
+        if self.evaluated_event_horizon_seq < self.terminal_commitment_event_seq:
+            raise ValueError("terminal replay binding excludes its commitment event")
+        parent_bound = self.parent_terminal_commitment_ref is not None
+        resume_bound = self.opening_resume_ref is not None
+        if self.terminal_epoch == 0:
+            if parent_bound or resume_bound:
+                raise ValueError("epoch zero replay binding cannot name a predecessor")
+        elif not parent_bound or not resume_bound:
+            raise ValueError("resumed replay binding requires predecessor and resume")
+        return self
 
 
 class TerminalAuthorityDerivationV1(BaseModel):
@@ -124,6 +179,99 @@ def _read_current_result(root: Path) -> dict[str, Any] | None:
     return payload
 
 
+def _result_without_projection(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: value
+        for key, value in payload.items()
+        if key not in _RESULT_PROJECTION_FIELDS
+    }
+
+
+def _result_projection(payload: dict[str, Any]) -> dict[str, Any]:
+    if not _RESULT_PROJECTION_FIELDS <= payload.keys():
+        raise ValueError("TERMINAL_RESULT_PROJECTION_INCOMPLETE")
+    return {
+        key: payload[key]
+        for key in (
+            "verification",
+            "completion_status",
+            "canonical_bridge_eligible",
+        )
+    }
+
+
+def _result_projection_digest(payload: dict[str, Any]) -> str:
+    return sha256_hex(canonical_json(_result_projection(payload)))
+
+
+def _pending_terminal_result(expected: dict[str, Any]) -> dict[str, Any]:
+    """Return one deterministic fail-closed projection over an immutable draft."""
+
+    verification = dict(expected["verification"])
+    counts = dict(verification["finding_counts"])
+    counts["integrity"] = max(1, int(counts["integrity"]))
+    verification.update(
+        {
+            "valid": False,
+            "integrity_valid": False,
+            "finding_counts": counts,
+        }
+    )
+    pending = {
+        **expected,
+        "verification": verification,
+        "completion_status": (
+            "satisfied"
+            if verification["completion_satisfied"]
+            else "incomplete"
+        ),
+        "canonical_bridge_eligible": False,
+    }
+    from deepreason.application.models import RunResultV2
+
+    return RunResultV2.model_validate(pending).model_dump(
+        mode="json",
+        by_alias=True,
+        exclude_none=True,
+    )
+
+
+def _read_replay_validation(root: Path) -> dict[str, Any] | None:
+    path = root / _REPLAY_VALIDATION_NAME
+    try:
+        observed = path.lstat()
+    except FileNotFoundError:
+        return None
+    if (
+        not stat.S_ISREG(observed.st_mode)
+        or observed.st_size < 2
+        or observed.st_size > 16 * 1024 * 1024
+    ):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_UNSAFE")
+    try:
+        raw = path.read_bytes()
+        payload = json.loads(raw)
+    except (OSError, json.JSONDecodeError, UnicodeError) as error:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_INVALID") from error
+    if not isinstance(payload, dict) or raw not in {
+        canonical_json(payload),
+        canonical_json(payload) + b"\n",
+    }:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_NONCANONICAL")
+    return payload
+
+
+def _public_terminal_projection_required(draft: RunTerminalResultDraftV1) -> bool:
+    """Identify public text terminals whose audit report must be post-commit."""
+
+    body = draft.result_body
+    return (
+        isinstance(body.get("capability_audits"), dict)
+        or body.get("workload") == "text"
+        and isinstance(body.get("error_type"), str)
+    )
+
+
 def _same_epoch_commitment_objects(harness, manifest, epoch: int):
     directory = Path(harness.objects.root) / "workflow-run-terminal-commitment-v1"
     try:
@@ -167,6 +315,142 @@ def _validate_commitment_checkpoint(root: Path, harness, commitment) -> None:
         != harness.workflow_state.terminal_commitment_ledger_digest
     ):
         raise ValueError("TERMINAL_COMMITMENT_CHECKPOINT_MISMATCH")
+
+
+def _replay_validation_base(payload: dict[str, Any]) -> dict[str, Any]:
+    base = {
+        key: value
+        for key, value in payload.items()
+        if key != "terminal_binding"
+    }
+    if set(base) != {
+        "schema",
+        "manifest_digest",
+        "workflow_process_digest",
+        "capability_process_digest",
+        "valid",
+        "verification",
+    }:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_SHAPE_INVALID")
+    if base.get("schema") != "replay-validation.v1":
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_SCHEMA_INVALID")
+    verification = base.get("verification")
+    if not isinstance(verification, dict):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_REPORT_INVALID")
+    violations = verification.get("violations")
+    if not isinstance(violations, list) or base.get("valid") is not (
+        not violations
+    ):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_VALIDITY_MISMATCH")
+    return base
+
+
+def _evaluated_replay_horizon(
+    harness,
+    manifest,
+    commitment,
+    replay_validation: dict[str, Any],
+) -> int:
+    base = _replay_validation_base(replay_validation)
+    verification = base["verification"]
+    stats = verification.get("stats")
+    process = stats.get("process") if isinstance(stats, dict) else None
+    events = stats.get("events") if isinstance(stats, dict) else None
+    durable_events = tuple(harness.log.read())
+    if (
+        base.get("manifest_digest") != manifest.sha256
+        or not isinstance(process, dict)
+        or process.get("manifest_sha256") != manifest.sha256
+        or base.get("workflow_process_digest")
+        != stats.get("workflow_process_digest")
+        or base.get("capability_process_digest")
+        != stats.get("capability_process_digest")
+        or type(events) is not int
+        or events < 1
+        or events > len(durable_events)
+    ):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_AUTHORITY_MISMATCH")
+    if events == len(durable_events) and (
+        base.get("workflow_process_digest") != harness.workflow_state.digest
+        or base.get("capability_process_digest") != harness.capability_state.digest
+    ):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_PROCESS_MISMATCH")
+    evaluated = events - 1
+    commitment_seq = harness.workflow_state.terminal_commitment_event_seq.get(
+        commitment.id
+    )
+    if (
+        commitment_seq is None
+        or evaluated < commitment_seq
+        or evaluated >= len(durable_events)
+    ):
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_HORIZON_MISMATCH")
+    return evaluated
+
+
+def _expected_replay_binding(
+    harness,
+    manifest,
+    commitment,
+    replay_validation: dict[str, Any],
+    result: dict[str, Any],
+) -> TerminalReplayValidationBindingV1:
+    evaluated = _evaluated_replay_horizon(
+        harness,
+        manifest,
+        commitment,
+        replay_validation,
+    )
+    return TerminalReplayValidationBindingV1(
+        run_id=commitment.run_id,
+        manifest_digest=manifest.sha256,
+        terminal_epoch=commitment.terminal_epoch,
+        terminal_commitment_ref=commitment.id,
+        result_draft_ref=commitment.result_draft_ref,
+        parent_terminal_commitment_ref=(
+            commitment.parent_terminal_commitment_ref
+        ),
+        opening_resume_ref=commitment.opening_resume_ref,
+        terminal_commitment_event_seq=(
+            harness.workflow_state.terminal_commitment_event_seq[commitment.id]
+        ),
+        reasoning_event_horizon_seq=commitment.reasoning_event_horizon_seq,
+        evaluated_event_horizon_seq=evaluated,
+        terminal_commitment_ledger_digest=(
+            harness.workflow_state.terminal_commitment_ledger_digest
+        ),
+        stop_record_digest=commitment.stop_record_digest,
+        replay_validation_digest=sha256_hex(
+            canonical_json(_replay_validation_base(replay_validation))
+        ),
+        result_projection_digest=_result_projection_digest(result),
+    )
+
+
+def _validate_result_projection_binding(
+    harness,
+    manifest,
+    commitment,
+    result: dict[str, Any],
+) -> None:
+    replay_validation = _read_replay_validation(Path(harness.root))
+    if replay_validation is None:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_REQUIRED")
+    try:
+        observed = TerminalReplayValidationBindingV1.model_validate(
+            replay_validation.get("terminal_binding")
+        )
+        expected = _expected_replay_binding(
+            harness,
+            manifest,
+            commitment,
+            replay_validation,
+            result,
+        )
+    except (TypeError, ValueError) as error:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_BINDING_INVALID") from error
+    if observed != expected:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH")
 
 
 def is_commitment_bound_bridge_work(
@@ -385,8 +669,27 @@ def derive_terminal_authority(
         expected_result = RunResultV2.model_validate(expected_result).model_dump(
             mode="json", by_alias=True, exclude_none=True
         )
-        if result != expected_result:
+        if _result_without_projection(result) != _result_without_projection(
+            expected_result
+        ):
             raise ValueError("TERMINAL_RESULT_DRAFT_MISMATCH")
+        pending_result = _pending_terminal_result(expected_result)
+        if result == pending_result:
+            pass
+        elif (
+            result == expected_result
+            and not _public_terminal_projection_required(draft)
+        ):
+            # Historical and lower-level callers did not own the public audit
+            # projection.  Preserve their exact draft-plus-reference contract.
+            pass
+        else:
+            _validate_result_projection_binding(
+                harness,
+                manifest,
+                current,
+                result,
+            )
         stop = validate_stop_record(dict(result["stop"]))
         pointer = root / "run-stop.json"
         observed = pointer.lstat()
@@ -749,8 +1052,231 @@ def _seal_terminal_commitment_checkpoint(harness, manifest, commitment) -> None:
         raise ValueError("TERMINAL_COMMITMENT_CHECKPOINT_SEAL_FAILED")
 
 
+def _expected_terminal_result(harness, manifest, commitment):
+    schema, draft = harness.objects.get(
+        commitment.result_draft_ref,
+        schema="workflow-run-terminal-result-draft-v1",
+    )
+    if schema != "workflow-run-terminal-result-draft-v1" or not isinstance(
+        draft, RunTerminalResultDraftV1
+    ):
+        raise ValueError("TERMINAL_RESULT_DRAFT_REQUIRED")
+    if (
+        draft.manifest_sha256 != manifest.sha256
+        or draft.run_id != manifest.sha256
+        or draft.terminal_epoch != commitment.terminal_epoch
+    ):
+        raise ValueError("TERMINAL_RESULT_DRAFT_MISMATCH")
+    from deepreason.application.models import RunResultV2
+
+    expected = {
+        **dict(draft.result_body),
+        "terminal_commitment_ref": commitment.id,
+    }
+    return (
+        RunResultV2.model_validate(expected).model_dump(
+            mode="json",
+            by_alias=True,
+            exclude_none=True,
+        ),
+        draft,
+    )
+
+
+def _fresh_replay_validation(root: Path) -> dict[str, Any]:
+    from deepreason.harness import Harness
+    from deepreason.invariants import verify_root
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+    manifest = load_run_manifest(root / MANIFEST_NAME)
+    replayed = Harness(root, read_only=True)
+    verification = verify_root(root)
+    return {
+        "schema": "replay-validation.v1",
+        "manifest_digest": manifest.sha256,
+        "workflow_process_digest": replayed.workflow_state.digest,
+        "capability_process_digest": replayed.capability_state.digest,
+        "valid": not verification["violations"],
+        "verification": verification,
+    }
+
+
+def _post_commit_result(expected: dict[str, Any], report) -> dict[str, Any]:
+    from deepreason.application.models import RunResultV2
+
+    projected = {
+        **expected,
+        "verification": report.summary_payload(),
+        "completion_status": (
+            "satisfied" if report.completion_satisfied else "incomplete"
+        ),
+        "canonical_bridge_eligible": (
+            expected["state"] == "completed" and report.valid
+        ),
+    }
+    return RunResultV2.model_validate(projected).model_dump(
+        mode="json",
+        by_alias=True,
+        exclude_none=True,
+    )
+
+
+def _current_projection_is_fresh(
+    harness,
+    manifest,
+    commitment,
+    expected: dict[str, Any],
+    observed: dict[str, Any],
+) -> bool:
+    if _result_without_projection(observed) != _result_without_projection(expected):
+        return False
+    try:
+        _validate_result_projection_binding(
+            harness,
+            manifest,
+            commitment,
+            observed,
+        )
+        persisted = _read_replay_validation(Path(harness.root))
+        if persisted is None or _replay_validation_base(persisted) != (
+            _fresh_replay_validation(Path(harness.root))
+        ):
+            return False
+        from deepreason.verification.report import verify_post_commit_report
+
+        current = _post_commit_result(
+            expected,
+            verify_post_commit_report(harness.root),
+        )
+    except (OSError, TypeError, ValueError):
+        return False
+    return observed == current
+
+
+def _publish_current_replay_projection(
+    harness,
+    manifest,
+    commitment,
+    expected: dict[str, Any],
+) -> dict[str, Any]:
+    from deepreason.capabilities.audit import write_tranche_a_audits
+    from deepreason.verification.report import verify_post_commit_report
+
+    write_tranche_a_audits(harness.root)
+    replay_validation = _read_replay_validation(Path(harness.root))
+    if replay_validation is None:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_REQUIRED")
+    fresh = _fresh_replay_validation(Path(harness.root))
+    if _replay_validation_base(replay_validation) != fresh:
+        raise ValueError("TERMINAL_REPLAY_VALIDATION_REFRESH_MISMATCH")
+
+    result = _post_commit_result(
+        expected,
+        verify_post_commit_report(harness.root),
+    )
+    binding = _expected_replay_binding(
+        harness,
+        manifest,
+        commitment,
+        replay_validation,
+        result,
+    )
+    bound_validation = {
+        **fresh,
+        "terminal_binding": binding.model_dump(
+            mode="json",
+            by_alias=True,
+            exclude_none=False,
+        ),
+    }
+    _atomic_json(
+        Path(harness.root) / _REPLAY_VALIDATION_NAME,
+        bound_validation,
+    )
+    _validate_result_projection_binding(
+        harness,
+        manifest,
+        commitment,
+        result,
+    )
+    return result
+
+
+def _finalize_terminal_result_locked(
+    harness,
+    manifest,
+    commitment,
+    expected: dict[str, Any],
+) -> dict[str, Any]:
+    root = Path(harness.root)
+    observed = _read_current_result(root)
+    if observed is not None and _current_projection_is_fresh(
+        harness,
+        manifest,
+        commitment,
+        expected,
+        observed,
+    ):
+        return observed
+    if observed is not None and _result_without_projection(
+        observed
+    ) != _result_without_projection(expected):
+        prior_refs = {
+            item.id
+            for epoch, item in harness.workflow_state.terminal_commitments_by_epoch.items()
+            if epoch < commitment.terminal_epoch
+        }
+        if observed.get("terminal_commitment_ref") not in prior_refs:
+            raise ValueError("TERMINAL_RESULT_CONFLICT")
+
+    pending = _pending_terminal_result(expected)
+    if observed != pending:
+        _atomic_json(root / "run-result.json", pending)
+    return _publish_current_replay_projection(
+        harness,
+        manifest,
+        commitment,
+        expected,
+    )
+
+
+def finalize_terminal_result(
+    harness,
+    manifest,
+    result: dict[str, Any],
+) -> dict[str, Any]:
+    """Publish current post-commit validation without changing immutable records."""
+
+    policy = getattr(manifest, "terminal_commitment_policy", None)
+    if getattr(manifest, "schema_version", None) != 6 or policy is None:
+        return result
+    with _terminal_commitment_lock(harness):
+        harness.reload_durable_authority()
+        commitment = harness.workflow_state.current_terminal_commitment
+        if commitment is None:
+            raise ValueError("TERMINAL_COMMITMENT_REQUIRED")
+        _seal_terminal_commitment_checkpoint(harness, manifest, commitment)
+        expected, draft = _expected_terminal_result(
+            harness,
+            manifest,
+            commitment,
+        )
+        if _result_without_projection(result) != _result_without_projection(
+            expected
+        ):
+            raise ValueError("TERMINAL_RESULT_DRAFT_MISMATCH")
+        if not _public_terminal_projection_required(draft):
+            return result
+        return _finalize_terminal_result_locked(
+            harness,
+            manifest,
+            commitment,
+            expected,
+        )
+
+
 def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
-    """Reconstruct the exact final result after an event-before-file crash."""
+    """Reconstruct and, for public text runs, revalidate the current result."""
 
     policy = getattr(manifest, "terminal_commitment_policy", None)
     if getattr(manifest, "schema_version", None) != 6 or policy is None:
@@ -761,32 +1287,22 @@ def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
         if commitment is None:
             return None
         _seal_terminal_commitment_checkpoint(harness, manifest, commitment)
-        schema, draft = harness.objects.get(
-            commitment.result_draft_ref,
-            schema="workflow-run-terminal-result-draft-v1",
+        expected, draft = _expected_terminal_result(
+            harness,
+            manifest,
+            commitment,
         )
-        if schema != "workflow-run-terminal-result-draft-v1" or not isinstance(
-            draft, RunTerminalResultDraftV1
-        ):
-            raise ValueError("TERMINAL_RESULT_DRAFT_REQUIRED")
-        if (
-            draft.manifest_sha256 != manifest.sha256
-            or draft.run_id != manifest.sha256
-            or draft.terminal_epoch != commitment.terminal_epoch
-        ):
-            raise ValueError("TERMINAL_RESULT_DRAFT_MISMATCH")
         stop = validate_stop_record(
             json.loads((Path(harness.root) / commitment.stop_record_ref).read_bytes())
         )
         _write_generic_terminal_checkpoint(harness, manifest, stop)
-        from deepreason.application.models import RunResultV2
-
-        recovered = {
-            **dict(draft.result_body),
-            "terminal_commitment_ref": commitment.id,
-        }
-        return RunResultV2.model_validate(recovered).model_dump(
-            mode="json", by_alias=True, exclude_none=True
+        if not _public_terminal_projection_required(draft):
+            return expected
+        return _finalize_terminal_result_locked(
+            harness,
+            manifest,
+            commitment,
+            expected,
         )
 
 
@@ -794,6 +1310,7 @@ __all__ = [
     "TerminalAuthorityDerivationV1",
     "derive_terminal_authority",
     "ensure_terminal_commitment",
+    "finalize_terminal_result",
     "is_commitment_bound_bridge_work",
     "model_execution_summary_digest",
     "recover_terminal_result",

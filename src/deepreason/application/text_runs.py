@@ -466,21 +466,44 @@ class TextRunApplicationService:
         intent = InspectTextRunIntentV1.model_validate(intent)
         root = Path(intent.root).resolve()
         target = root / "run-result.json"
-        try:
-            target.lstat()
-        except FileNotFoundError:
+        from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+
+        manifest_path = root / MANIFEST_NAME
+        if manifest_path.exists():
             from deepreason.harness import Harness
-            from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
             from deepreason.runtime.progress import _atomic_json
             from deepreason.runtime.terminal_authority import (
+                derive_terminal_authority,
                 recover_terminal_result,
             )
 
-            manifest = load_run_manifest(root / MANIFEST_NAME)
-            _require_v6_manifest(manifest, operation="run result recovery")
-            recovered = recover_terminal_result(Harness(root), manifest)
-            if recovered is not None:
-                _atomic_json(target, recovered)
+            manifest = load_run_manifest(manifest_path)
+            if manifest.schema_version == 6:
+                _require_v6_manifest(manifest, operation="run result recovery")
+                recovered = recover_terminal_result(Harness(root), manifest)
+                if recovered is not None:
+                    try:
+                        durable = json.loads(target.read_text(encoding="utf-8"))
+                    except (
+                        FileNotFoundError,
+                        OSError,
+                        UnicodeError,
+                        json.JSONDecodeError,
+                    ):
+                        durable = None
+                    if durable != recovered:
+                        _atomic_json(target, recovered)
+                elif manifest.terminal_commitment_policy is not None:
+                    authority = derive_terminal_authority(
+                        root,
+                        manifest=manifest,
+                    )
+                    if authority.status != "operational_abort":
+                        lifecycle = self.inspect(intent).lifecycle
+                        raise ValueError(
+                            "RUN_RESULT_NOT_READY: current terminalization is "
+                            f"{lifecycle}"
+                        )
         if not target.exists():
             lifecycle = self.inspect(intent).lifecycle
             raise ValueError(f"RUN_RESULT_NOT_READY: current state is {lifecycle}")
@@ -758,6 +781,7 @@ class TextRunApplicationService:
         from deepreason.run_manifest import config_from_run_manifest
         from deepreason.runtime.progress import _atomic_json
         from deepreason.runtime.stop import StopMetrics, StopPolicy, write_stop_record
+        from deepreason.runtime.terminal_authority import finalize_terminal_result
         from deepreason.status_display import display_status_counts
         from deepreason.workloads.text import seed_reasoning_workload
         from deepreason.capabilities.audit import write_tranche_a_audits
@@ -918,6 +942,7 @@ class TextRunApplicationService:
                 "capability_audits": capability_audits,
                 "stop": stop,
             }, harness=harness)
+            payload = finalize_terminal_result(harness, manifest, payload)
             _atomic_json(root / "run-result.json", payload)
             terminal = progress.emit(
                 state=payload["state"],
@@ -997,6 +1022,7 @@ class TextRunApplicationService:
                     "error": str(error)[:2000],
                     "stop": stop,
                 }, harness=harness)
+                payload = finalize_terminal_result(harness, manifest, payload)
                 _atomic_json(root / "run-result.json", payload)
                 failed = progress.emit(
                     state="failed",
