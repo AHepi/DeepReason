@@ -1159,55 +1159,86 @@ def _publish_current_replay_projection(
     commitment,
     expected: dict[str, Any],
 ) -> dict[str, Any]:
-    from deepreason.capabilities.audit import write_tranche_a_audits
     from deepreason.verification.report import verify_post_commit_report
 
-    write_tranche_a_audits(harness.root)
-    replay_validation = _read_replay_validation(Path(harness.root))
-    if replay_validation is None:
-        raise ValueError("TERMINAL_REPLAY_VALIDATION_REQUIRED")
-    fresh = _fresh_replay_validation(Path(harness.root))
-    if _replay_validation_base(replay_validation) != fresh:
-        raise ValueError("TERMINAL_REPLAY_VALIDATION_REFRESH_MISMATCH")
+    # Ordinary text terminals already wrote the non-replay audit projections
+    # immediately before their immutable draft was committed.  Their only
+    # post-commit change is the replay report's new commitment event.  Failure
+    # terminals without that receipt still require the complete audit writer.
+    if not isinstance(expected.get("capability_audits"), dict):
+        from deepreason.capabilities.audit import write_tranche_a_audits
 
+        write_tranche_a_audits(harness.root)
+
+    # Replay and verification derivation are read-only and can be expensive on
+    # Windows.  Keep them outside the exact-once commitment lock so a public
+    # recovery caller can complete an interrupted publication.
+    fresh = _fresh_replay_validation(Path(harness.root))
     result = _post_commit_result(
         expected,
         verify_post_commit_report(harness.root),
     )
-    binding = _expected_replay_binding(
-        harness,
-        manifest,
-        commitment,
-        replay_validation,
-        result,
-    )
-    bound_validation = {
-        **fresh,
-        "terminal_binding": binding.model_dump(
-            mode="json",
-            by_alias=True,
-            exclude_none=False,
-        ),
-    }
-    _atomic_json(
-        Path(harness.root) / _REPLAY_VALIDATION_NAME,
-        bound_validation,
-    )
-    _validate_result_projection_binding(
-        harness,
-        manifest,
-        commitment,
-        result,
-    )
-    return result
+    with _terminal_commitment_lock(harness):
+        # The durable authority may have changed while the report was derived.
+        # Revalidate the exact committed draft before publishing any candidate.
+        harness.reload_durable_authority()
+        current = harness.workflow_state.current_terminal_commitment
+        if current is None or current.id != commitment.id:
+            raise ValueError("TERMINAL_PUBLICATION_AUTHORITY_CHANGED")
+        current_expected, draft = _expected_terminal_result(
+            harness,
+            manifest,
+            current,
+        )
+        if (
+            current_expected != expected
+            or not _public_terminal_projection_required(draft)
+        ):
+            raise ValueError("TERMINAL_PUBLICATION_DRAFT_CHANGED")
+
+        observed = _prepare_terminal_result_locked(
+            harness,
+            manifest,
+            current,
+            current_expected,
+        )
+        if observed is not None:
+            return observed
+
+        binding = _expected_replay_binding(
+            harness,
+            manifest,
+            current,
+            fresh,
+            result,
+        )
+        bound_validation = {
+            **fresh,
+            "terminal_binding": binding.model_dump(
+                mode="json",
+                by_alias=True,
+                exclude_none=False,
+            ),
+        }
+        _atomic_json(
+            Path(harness.root) / _REPLAY_VALIDATION_NAME,
+            bound_validation,
+        )
+        _validate_result_projection_binding(
+            harness,
+            manifest,
+            current,
+            result,
+        )
+        return result
 
 
-def _finalize_terminal_result_locked(
+def _prepare_terminal_result_locked(
     harness,
     manifest,
     commitment,
     expected: dict[str, Any],
-) -> dict[str, Any]:
+) -> dict[str, Any] | None:
     root = Path(harness.root)
     observed = _read_current_result(root)
     if observed is not None and _current_projection_is_fresh(
@@ -1232,12 +1263,7 @@ def _finalize_terminal_result_locked(
     pending = _pending_terminal_result(expected)
     if observed != pending:
         _atomic_json(root / "run-result.json", pending)
-    return _publish_current_replay_projection(
-        harness,
-        manifest,
-        commitment,
-        expected,
-    )
+    return None
 
 
 def finalize_terminal_result(
@@ -1267,12 +1293,20 @@ def finalize_terminal_result(
             raise ValueError("TERMINAL_RESULT_DRAFT_MISMATCH")
         if not _public_terminal_projection_required(draft):
             return result
-        return _finalize_terminal_result_locked(
+        observed = _prepare_terminal_result_locked(
             harness,
             manifest,
             commitment,
             expected,
         )
+        if observed is not None:
+            return observed
+    return _publish_current_replay_projection(
+        harness,
+        manifest,
+        commitment,
+        expected,
+    )
 
 
 def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
@@ -1298,12 +1332,20 @@ def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
         _write_generic_terminal_checkpoint(harness, manifest, stop)
         if not _public_terminal_projection_required(draft):
             return expected
-        return _finalize_terminal_result_locked(
+        observed = _prepare_terminal_result_locked(
             harness,
             manifest,
             commitment,
             expected,
         )
+        if observed is not None:
+            return observed
+    return _publish_current_replay_projection(
+        harness,
+        manifest,
+        commitment,
+        expected,
+    )
 
 
 __all__ = [

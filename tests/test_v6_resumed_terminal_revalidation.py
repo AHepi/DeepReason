@@ -21,6 +21,7 @@ from deepreason.application.text_runs import (
 )
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.harness import Harness
+from deepreason.locking import ProcessLock
 from deepreason.runtime.stop import (
     StopController,
     StopMetrics,
@@ -32,6 +33,7 @@ from deepreason.runtime.continuation import prepare_continuation
 from deepreason.runtime.terminal_authority import (
     _expected_commitment,
     derive_terminal_authority,
+    ensure_terminal_commitment,
 )
 from deepreason.verification.report import (
     verify_post_commit_report,
@@ -59,6 +61,19 @@ def _terminal_object_bytes(root):
         for path in sorted(directory.glob("*.json")):
             found[path.relative_to(root).as_posix()] = path.read_bytes()
     return found
+
+
+def _derived_audit_bytes(root):
+    return {
+        name: (root / name).read_bytes()
+        for name in (
+            "CAPABILITY_REQUEST_AUDIT.md",
+            "RESEARCH_SOURCE_AUDIT.md",
+            "SIMULATION_RESULTS.md",
+            "THEORY_TEST_LINEAGE.md",
+            "TOKEN_ACCOUNTING.json",
+        )
+    }
 
 
 def _terminal_commit_events(harness):
@@ -341,6 +356,98 @@ def test_public_epochs_publish_only_commitment_inclusive_validation(
     assert all(final_objects[path] == data for path, data in epoch_zero_objects.items())
 
 
+def test_public_recovery_completes_while_original_replay_refresh_is_interrupted(
+    tmp_path, monkeypatch
+):
+    root, manifest, service, scheduler_calls, _epoch_zero = _start_converged_run(
+        tmp_path,
+        monkeypatch,
+    )
+    from deepreason.runtime import terminal_authority
+
+    original_fresh = terminal_authority._fresh_replay_validation
+    main_thread = threading.current_thread()
+    refresh_entered = threading.Event()
+    permit_refresh = threading.Event()
+
+    def interrupt_original_refresh(bound_root):
+        current = Harness(bound_root, read_only=True).workflow_state
+        if (
+            threading.current_thread() is not main_thread
+            and current.current_terminal_epoch == 1
+            and not refresh_entered.is_set()
+        ):
+            refresh_entered.set()
+            assert permit_refresh.wait(timeout=15)
+        return original_fresh(bound_root)
+
+    def fail_fast_terminal_lock(harness):
+        return ProcessLock(
+            (
+                harness.root
+                / terminal_authority._TERMINAL_COMMITMENT_LOCK_NAME
+            ),
+            owner="terminal-commitment",
+            blocking=False,
+        )
+
+    monkeypatch.setattr(
+        terminal_authority,
+        "_fresh_replay_validation",
+        interrupt_original_refresh,
+    )
+    monkeypatch.setattr(
+        terminal_authority,
+        "_terminal_commitment_lock",
+        fail_fast_terminal_lock,
+    )
+    continued = service.continue_run(
+        ContinueTextRunIntentV1(
+            root=str(root),
+            budget=RunBudgetIntentV1(cycles=1, token_budget="unlimited"),
+            expected_manifest_digest=manifest.sha256,
+        ),
+        credential_checker=lambda _manifest: [],
+    )
+    try:
+        assert refresh_entered.wait(timeout=15)
+        interrupted = Harness(root, read_only=True)
+        child = interrupted.workflow_state.current_terminal_commitment
+        assert child is not None
+        assert child.terminal_epoch == 1
+        assert child.opening_resume_ref == (
+            interrupted.workflow_state.terminal_epoch_opening_resume_ref[1]
+        )
+        pending = json.loads((root / "run-result.json").read_text())
+        replay = json.loads((root / "REPLAY_VALIDATION.json").read_text())
+        assert pending["terminal_commitment_ref"] == child.id
+        assert pending["verification"]["valid"] is False
+        assert "terminal_binding" not in replay
+        assert len(interrupted.workflow_state.terminal_commitments_by_epoch) == 2
+        assert len(_terminal_commit_events(interrupted)) == 2
+        assert len(_terminal_object_bytes(root)) == 4
+
+        _forbid_dispatch(monkeypatch)
+        recovered = TextRunApplicationService(TextRunWorkerRegistry()).result(
+            InspectTextRunIntentV1(root=str(root))
+        ).payload
+    finally:
+        permit_refresh.set()
+        service.wait(continued.root, timeout=15)
+
+    recovered_harness, recovered_child, _replay = _assert_current_validation(
+        root,
+        manifest,
+        recovered,
+        epoch=1,
+    )
+    assert recovered_child == child
+    assert len(recovered_harness.workflow_state.terminal_commitments_by_epoch) == 2
+    assert len(_terminal_commit_events(recovered_harness)) == 2
+    assert len(_terminal_object_bytes(root)) == 4
+    assert scheduler_calls == [None, None]
+
+
 def test_restart_recovers_stale_preceding_epoch_without_redispatch(
     tmp_path, monkeypatch
 ):
@@ -361,6 +468,7 @@ def test_restart_recovers_stale_preceding_epoch_without_redispatch(
     expected_replay = (root / "REPLAY_VALIDATION.json").read_bytes()
     log_bytes = (root / "log.jsonl").read_bytes()
     immutable_bytes = _terminal_object_bytes(root)
+    audit_bytes = _derived_audit_bytes(root)
 
     (root / "run-result.json").write_bytes(epoch_zero_result)
     (root / "REPLAY_VALIDATION.json").write_bytes(epoch_zero_replay)
@@ -375,6 +483,7 @@ def test_restart_recovers_stale_preceding_epoch_without_redispatch(
     assert scheduler_calls == [None, None]
     assert (root / "log.jsonl").read_bytes() == log_bytes
     assert _terminal_object_bytes(root) == immutable_bytes
+    assert _derived_audit_bytes(root) == audit_bytes
     assert len(_terminal_commit_events(Harness(root, read_only=True))) == 2
     assert (root / "run-result.json").read_bytes() == expected_result
     assert (root / "REPLAY_VALIDATION.json").read_bytes() == expected_replay
@@ -388,6 +497,91 @@ def test_restart_recovers_stale_preceding_epoch_without_redispatch(
     assert (root / "REPLAY_VALIDATION.json").read_bytes() == first_replay_bytes
     assert (root / "log.jsonl").read_bytes() == log_bytes
     assert _terminal_object_bytes(root) == immutable_bytes
+    assert _derived_audit_bytes(root) == audit_bytes
+
+
+def test_interrupted_replay_and_result_publication_recover_exact_bytes(
+    tmp_path, monkeypatch
+):
+    root, manifest, service, scheduler_calls, epoch_zero = _start_converged_run(
+        tmp_path,
+        monkeypatch,
+    )
+    epoch_zero_replay = (root / "REPLAY_VALIDATION.json").read_bytes()
+    epoch_one = _continue_converged_run(root, manifest, service)
+    harness, child, _replay = _assert_current_validation(
+        root,
+        manifest,
+        epoch_one,
+        epoch=1,
+    )
+    expected_result_bytes = (root / "run-result.json").read_bytes()
+    expected_replay_bytes = (root / "REPLAY_VALIDATION.json").read_bytes()
+    log_bytes = (root / "log.jsonl").read_bytes()
+    immutable_bytes = _terminal_object_bytes(root)
+    audit_bytes = _derived_audit_bytes(root)
+    from deepreason.runtime import terminal_authority
+
+    expected, _draft = terminal_authority._expected_terminal_result(
+        harness,
+        manifest,
+        child,
+    )
+    pending = terminal_authority._pending_terminal_result(expected)
+    (root / "run-result.json").write_bytes(canonical_json(pending) + b"\n")
+    (root / "REPLAY_VALIDATION.json").write_bytes(epoch_zero_replay)
+    _forbid_dispatch(monkeypatch)
+
+    original_atomic = terminal_authority._atomic_json
+    replacement_attempted = False
+
+    def interrupt_replay_replacement(path, value):
+        nonlocal replacement_attempted
+        if path.name == "REPLAY_VALIDATION.json" and not replacement_attempted:
+            replacement_attempted = True
+            raise OSError("simulated replay replacement interruption")
+        return original_atomic(path, value)
+
+    monkeypatch.setattr(
+        terminal_authority,
+        "_atomic_json",
+        interrupt_replay_replacement,
+    )
+    with pytest.raises(OSError, match="simulated replay replacement interruption"):
+        TextRunApplicationService(TextRunWorkerRegistry()).result(
+            InspectTextRunIntentV1(root=str(root))
+        )
+    assert replacement_attempted is True
+    assert json.loads((root / "run-result.json").read_text()) == pending
+    assert (root / "REPLAY_VALIDATION.json").read_bytes() == epoch_zero_replay
+    assert derive_terminal_authority(
+        root,
+        manifest=manifest,
+    ).status == "current_valid_committed"
+
+    monkeypatch.setattr(terminal_authority, "_atomic_json", original_atomic)
+    recovered = TextRunApplicationService(TextRunWorkerRegistry()).result(
+        InspectTextRunIntentV1(root=str(root))
+    ).payload
+    assert recovered == epoch_one
+    assert (root / "run-result.json").read_bytes() == expected_result_bytes
+    assert (root / "REPLAY_VALIDATION.json").read_bytes() == expected_replay_bytes
+
+    (root / "run-result.json").write_bytes(canonical_json(pending) + b"\n")
+    assert (root / "REPLAY_VALIDATION.json").read_bytes() == expected_replay_bytes
+    recovered_after_result_interruption = TextRunApplicationService(
+        TextRunWorkerRegistry()
+    ).result(InspectTextRunIntentV1(root=str(root))).payload
+
+    assert recovered_after_result_interruption == epoch_one
+    assert epoch_zero["terminal_commitment_ref"] != child.id
+    assert (root / "run-result.json").read_bytes() == expected_result_bytes
+    assert (root / "REPLAY_VALIDATION.json").read_bytes() == expected_replay_bytes
+    assert (root / "log.jsonl").read_bytes() == log_bytes
+    assert _terminal_object_bytes(root) == immutable_bytes
+    assert _derived_audit_bytes(root) == audit_bytes
+    assert len(_terminal_commit_events(Harness(root, read_only=True))) == 2
+    assert scheduler_calls == [None, None]
 
 
 def test_windows_text_translation_cannot_change_terminal_json_bytes(
@@ -475,7 +669,7 @@ def test_windows_text_translation_cannot_change_terminal_json_bytes(
     assert all("b" in mode for mode in opened_modes)
 
 
-def test_failed_post_commit_audit_leaves_fail_closed_recoverable_result(
+def test_failed_post_commit_refresh_leaves_fail_closed_recoverable_result(
     tmp_path, monkeypatch
 ):
     root, manifest, service, scheduler_calls, _epoch_zero = _start_converged_run(
@@ -497,15 +691,19 @@ def test_failed_post_commit_audit_leaves_fail_closed_recoverable_result(
     (root / "run-result.json").write_bytes(preceding_result)
     (root / "REPLAY_VALIDATION.json").write_bytes(preceding_replay)
     _forbid_dispatch(monkeypatch)
-    from deepreason.capabilities import audit
+    from deepreason.runtime import terminal_authority
 
-    original_audit = audit.write_tranche_a_audits
+    original_fresh = terminal_authority._fresh_replay_validation
 
-    def fail_audit(_root):
-        raise RuntimeError("simulated post-commit audit failure")
+    def fail_refresh(_root):
+        raise RuntimeError("simulated post-commit refresh failure")
 
-    monkeypatch.setattr(audit, "write_tranche_a_audits", fail_audit)
-    with pytest.raises(RuntimeError, match="simulated post-commit audit failure"):
+    monkeypatch.setattr(
+        terminal_authority,
+        "_fresh_replay_validation",
+        fail_refresh,
+    )
+    with pytest.raises(RuntimeError, match="simulated post-commit refresh failure"):
         TextRunApplicationService(TextRunWorkerRegistry()).result(
             InspectTextRunIntentV1(root=str(root))
         )
@@ -520,7 +718,11 @@ def test_failed_post_commit_audit_leaves_fail_closed_recoverable_result(
     assert len(_terminal_commit_events(Harness(root))) == 2
     assert scheduler_calls == [None, None]
 
-    monkeypatch.setattr(audit, "write_tranche_a_audits", original_audit)
+    monkeypatch.setattr(
+        terminal_authority,
+        "_fresh_replay_validation",
+        original_fresh,
+    )
     recovered = TextRunApplicationService(TextRunWorkerRegistry()).result(
         InspectTextRunIntentV1(root=str(root))
     ).payload
@@ -717,6 +919,26 @@ def test_open_epoch_rejects_missing_or_broken_child_commitment(
         opened.record_terminal_commitment(broken_parent, draft)
     assert Harness(root).workflow_state.current_terminal_commitment is None
     assert len(_terminal_commit_events(Harness(root))) == 1
+
+    opened.record_terminal_commitment(correct, draft)
+    objects_before_conflict = _terminal_object_bytes(root)
+    with pytest.raises(ValueError, match="^TERMINAL_COMMITMENT_CONFLICT$"):
+        ensure_terminal_commitment(
+            opened,
+            manifest,
+            terminal_status="completed",
+            stop=stop,
+            model_execution=summary,
+            result_body={
+                **_result_body("completed", stop, summary),
+                "completion_status": "incomplete",
+            },
+        )
+    committed = Harness(root, read_only=True)
+    assert committed.workflow_state.current_terminal_commitment == correct
+    assert len(committed.workflow_state.terminal_commitments_by_epoch) == 2
+    assert len(_terminal_commit_events(committed)) == 2
+    assert _terminal_object_bytes(root) == objects_before_conflict
     assert scheduler_calls == [None]
 
 
