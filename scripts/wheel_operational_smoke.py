@@ -2932,7 +2932,7 @@ def main(argv: list[str] | None = None) -> int:
             CONTINUATION_POLL_PROFILE_NORMAL,
             CONTINUATION_POLL_PROFILE_SPARSE,
         ),
-        default=CONTINUATION_POLL_PROFILE_NORMAL,
+        default=CONTINUATION_POLL_PROFILE_SPARSE,
     )
     args = parser.parse_args(argv)
     repo = Path(__file__).resolve().parents[1]
