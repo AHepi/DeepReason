@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import queue
 import re
 import shutil
 import socket
@@ -55,7 +56,10 @@ LOOPBACK_READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
 RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
-FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v2"
+FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v3"
+CONTINUATION_DEADLINE_SECONDS = 600
+POLL_INTERVAL_SECONDS = 0.05
+DIAGNOSTIC_INSPECTION_TIMEOUT_SECONDS = 10
 STAGE_BUILD_WHEEL = "build_wheel"
 STAGE_CREATE_ENVIRONMENT = "create_environment"
 STAGE_INSTALL_WHEEL = "install_wheel"
@@ -165,6 +169,297 @@ ALLOWED_STATE_PRESENCE_FIELDS = frozenset(
         STATE_LOOPBACK_START_PRESENT,
     }
 )
+DIAGNOSTIC_INSPECTION_NOT_ATTEMPTED = "not_attempted"
+DIAGNOSTIC_INSPECTION_SUCCEEDED = "succeeded"
+DIAGNOSTIC_INSPECTION_FAILED = "failed"
+ALLOWED_DIAGNOSTIC_INSPECTION_STATUSES = frozenset(
+    {
+        DIAGNOSTIC_INSPECTION_NOT_ATTEMPTED,
+        DIAGNOSTIC_INSPECTION_SUCCEEDED,
+        DIAGNOSTIC_INSPECTION_FAILED,
+    }
+)
+LIFECYCLE_NOT_OBSERVED = "not_observed"
+LIFECYCLE_NOT_STARTED = "not_started"
+LIFECYCLE_STARTING = "starting"
+LIFECYCLE_RUNNING = "running"
+LIFECYCLE_PAUSED = "paused"
+LIFECYCLE_COMPLETED = "completed"
+LIFECYCLE_FAILED = "failed"
+LIFECYCLE_CANCELLED = "cancelled"
+LIFECYCLE_UNKNOWN = "unknown"
+ALLOWED_DIAGNOSTIC_LIFECYCLES = frozenset(
+    {
+        LIFECYCLE_NOT_OBSERVED,
+        LIFECYCLE_NOT_STARTED,
+        LIFECYCLE_STARTING,
+        LIFECYCLE_RUNNING,
+        LIFECYCLE_PAUSED,
+        LIFECYCLE_COMPLETED,
+        LIFECYCLE_FAILED,
+        LIFECYCLE_CANCELLED,
+        LIFECYCLE_UNKNOWN,
+    }
+)
+_LIFECYCLE_MAP = {
+    "not-started": LIFECYCLE_NOT_STARTED,
+    "starting": LIFECYCLE_STARTING,
+    "running": LIFECYCLE_RUNNING,
+    "paused": LIFECYCLE_PAUSED,
+    "completed": LIFECYCLE_COMPLETED,
+    "failed": LIFECYCLE_FAILED,
+    "cancelled": LIFECYCLE_CANCELLED,
+}
+PHASE_NOT_OBSERVED = "not_observed"
+PHASE_MANIFEST = "manifest"
+PHASE_RESUME = "resume"
+PHASE_WORKLOAD = "workload"
+PHASE_REASONING = "reasoning"
+PHASE_STOP = "stop"
+PHASE_UNKNOWN = "unknown"
+ALLOWED_DIAGNOSTIC_PHASES = frozenset(
+    {
+        PHASE_NOT_OBSERVED,
+        PHASE_MANIFEST,
+        PHASE_RESUME,
+        PHASE_WORKLOAD,
+        PHASE_REASONING,
+        PHASE_STOP,
+        PHASE_UNKNOWN,
+    }
+)
+_PHASE_MAP = {
+    "manifest": PHASE_MANIFEST,
+    "resume": PHASE_RESUME,
+    "workload": PHASE_WORKLOAD,
+    "reasoning": PHASE_REASONING,
+    "stop": PHASE_STOP,
+}
+MCP_LIVENESS_NOT_STARTED = "not_started"
+MCP_LIVENESS_ALIVE = "alive"
+MCP_LIVENESS_EXITED = "exited"
+MCP_LIVENESS_UNKNOWN = "unknown"
+ALLOWED_MCP_LIVENESS = frozenset(
+    {
+        MCP_LIVENESS_NOT_STARTED,
+        MCP_LIVENESS_ALIVE,
+        MCP_LIVENESS_EXITED,
+        MCP_LIVENESS_UNKNOWN,
+    }
+)
+RESULT_BINDING_ABSENT = "absent"
+RESULT_BINDING_PRIOR = "prior_commitment"
+RESULT_BINDING_CURRENT = "current_commitment"
+RESULT_BINDING_UNBOUND = "unbound"
+RESULT_BINDING_UNKNOWN = "unknown"
+ALLOWED_RESULT_BINDINGS = frozenset(
+    {
+        RESULT_BINDING_ABSENT,
+        RESULT_BINDING_PRIOR,
+        RESULT_BINDING_CURRENT,
+        RESULT_BINDING_UNBOUND,
+        RESULT_BINDING_UNKNOWN,
+    }
+)
+CONTINUATION_DIAGNOSTIC_FIELDS = frozenset(
+    {
+        "diagnostic_inspection_status",
+        "first_lifecycle_state",
+        "last_lifecycle_state",
+        "status_observation_count",
+        "last_progress_sequence",
+        "last_progress_phase",
+        "stale_epoch0_result_observation_count",
+        "result_read_error_count",
+        "status_read_error_count",
+        "provider_call_delta",
+        "loopback_provider_error_count",
+        "mcp_liveness",
+        "opening_resume_decision_present",
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+        "commitment_inclusive_replay_binding_present",
+        "durable_result_binding",
+    }
+)
+FAILURE_RECORD_FIELDS = frozenset(
+    {
+        "schema",
+        "platform_family",
+        "stage",
+        "failure_kind",
+        "timeout",
+        "cleanup_completed",
+        "exit_status",
+        "detail_code",
+        "durable_progress",
+        *ALLOWED_STATE_PRESENCE_FIELDS,
+        *CONTINUATION_DIAGNOSTIC_FIELDS,
+    }
+)
+
+
+def _nonnegative_integer_or_none(value, *, field: str) -> int | None:
+    if value is None:
+        return None
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise TypeError(f"{field} must be a non-negative integer or null")
+    return value
+
+
+def _default_continuation_diagnostic() -> dict[str, object]:
+    return {
+        "diagnostic_inspection_status": (
+            DIAGNOSTIC_INSPECTION_NOT_ATTEMPTED
+        ),
+        "first_lifecycle_state": LIFECYCLE_NOT_OBSERVED,
+        "last_lifecycle_state": LIFECYCLE_NOT_OBSERVED,
+        "status_observation_count": 0,
+        "last_progress_sequence": None,
+        "last_progress_phase": PHASE_NOT_OBSERVED,
+        "stale_epoch0_result_observation_count": 0,
+        "result_read_error_count": 0,
+        "status_read_error_count": 0,
+        "provider_call_delta": None,
+        "loopback_provider_error_count": None,
+        "mcp_liveness": MCP_LIVENESS_NOT_STARTED,
+        "opening_resume_decision_present": None,
+        "durable_terminal_epoch": None,
+        "terminal_draft_count": None,
+        "terminal_commitment_count": None,
+        "latest_commitment_epoch": None,
+        "commitment_inclusive_replay_binding_present": None,
+        "durable_result_binding": RESULT_BINDING_UNKNOWN,
+    }
+
+
+def _validated_continuation_diagnostic(
+    values: dict[str, object] | None,
+) -> dict[str, object]:
+    diagnostic = _default_continuation_diagnostic()
+    if values is not None:
+        if set(values) != CONTINUATION_DIAGNOSTIC_FIELDS:
+            raise ValueError("continuation diagnostic field inventory drifted")
+        diagnostic.update(values)
+    if (
+        diagnostic["diagnostic_inspection_status"]
+        not in ALLOWED_DIAGNOSTIC_INSPECTION_STATUSES
+    ):
+        raise ValueError("invalid diagnostic inspection status")
+    if diagnostic["first_lifecycle_state"] not in ALLOWED_DIAGNOSTIC_LIFECYCLES:
+        raise ValueError("invalid first lifecycle state")
+    if diagnostic["last_lifecycle_state"] not in ALLOWED_DIAGNOSTIC_LIFECYCLES:
+        raise ValueError("invalid last lifecycle state")
+    if diagnostic["last_progress_phase"] not in ALLOWED_DIAGNOSTIC_PHASES:
+        raise ValueError("invalid progress phase")
+    if diagnostic["mcp_liveness"] not in ALLOWED_MCP_LIVENESS:
+        raise ValueError("invalid MCP liveness")
+    if diagnostic["durable_result_binding"] not in ALLOWED_RESULT_BINDINGS:
+        raise ValueError("invalid durable result binding")
+    for field in (
+        "status_observation_count",
+        "last_progress_sequence",
+        "stale_epoch0_result_observation_count",
+        "result_read_error_count",
+        "status_read_error_count",
+        "provider_call_delta",
+        "loopback_provider_error_count",
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+    ):
+        diagnostic[field] = _nonnegative_integer_or_none(
+            diagnostic[field], field=field
+        )
+    for field in (
+        "opening_resume_decision_present",
+        "commitment_inclusive_replay_binding_present",
+    ):
+        if diagnostic[field] is not None and type(diagnostic[field]) is not bool:
+            raise TypeError(f"{field} must be boolean or null")
+    return diagnostic
+
+
+class ContinuationObservations:
+    """Payload-free in-memory observations from one accepted continuation."""
+
+    def __init__(self) -> None:
+        self.first_lifecycle_state = LIFECYCLE_NOT_OBSERVED
+        self.last_lifecycle_state = LIFECYCLE_NOT_OBSERVED
+        self.status_observation_count = 0
+        self.last_progress_sequence: int | None = None
+        self.last_progress_phase = PHASE_NOT_OBSERVED
+        self.stale_epoch0_result_observation_count = 0
+        self.result_read_error_count = 0
+        self.status_read_error_count = 0
+
+    def observe_status(self, status: dict) -> None:
+        lifecycle = _LIFECYCLE_MAP.get(
+            status.get("state"), LIFECYCLE_UNKNOWN
+        )
+        if self.status_observation_count == 0:
+            self.first_lifecycle_state = lifecycle
+        self.last_lifecycle_state = lifecycle
+        self.status_observation_count += 1
+        sequence = status.get("seq")
+        if (
+            isinstance(sequence, int)
+            and not isinstance(sequence, bool)
+            and sequence >= 0
+        ):
+            self.last_progress_sequence = sequence
+        self.last_progress_phase = _PHASE_MAP.get(
+            status.get("phase"), PHASE_UNKNOWN
+        )
+
+    def snapshot(self) -> dict[str, object]:
+        values = _default_continuation_diagnostic()
+        values.update(
+            {
+                "first_lifecycle_state": self.first_lifecycle_state,
+                "last_lifecycle_state": self.last_lifecycle_state,
+                "status_observation_count": self.status_observation_count,
+                "last_progress_sequence": self.last_progress_sequence,
+                "last_progress_phase": self.last_progress_phase,
+                "stale_epoch0_result_observation_count": (
+                    self.stale_epoch0_result_observation_count
+                ),
+                "result_read_error_count": self.result_read_error_count,
+                "status_read_error_count": self.status_read_error_count,
+            }
+        )
+        return _validated_continuation_diagnostic(values)
+
+
+class ContinuationDiagnosticContext:
+    """Private inputs for one bounded, read-only continuation inspection."""
+
+    def __init__(
+        self,
+        *,
+        python: Path,
+        work: Path,
+        env: dict[str, str],
+        run_root: Path,
+        prior_terminal_commitment_ref: str,
+        provider_state_path: Path,
+        provider_call_baseline: int,
+        observations: ContinuationObservations,
+    ) -> None:
+        self.python = Path(python)
+        self.work = Path(work)
+        self.env = dict(env)
+        self.run_root = Path(run_root)
+        self.prior_terminal_commitment_ref = prior_terminal_commitment_ref
+        self.provider_state_path = Path(provider_state_path)
+        self.provider_call_baseline = _nonnegative_integer_or_none(
+            provider_call_baseline, field="provider call baseline"
+        )
+        assert self.provider_call_baseline is not None
+        self.observations = observations
 
 
 class OperationalSmokeFailure(Exception):
@@ -180,15 +475,15 @@ class OperationalSmokeFailure(Exception):
         detail_code: str | None = None,
         durable_progress: str | None = None,
         state_presence: dict[str, bool] | None = None,
+        continuation_diagnostic: dict[str, object] | None = None,
     ) -> None:
         if stage not in ALLOWED_FAILURE_STAGES:
             raise ValueError("invalid fixed operational stage")
         if failure_kind not in ALLOWED_FAILURE_KINDS:
             raise ValueError("invalid fixed operational failure kind")
-        if exit_status is not None and (
-            isinstance(exit_status, bool) or not isinstance(exit_status, int)
-        ):
-            raise TypeError("operational exit status must be an integer")
+        exit_status = _nonnegative_integer_or_none(
+            exit_status, field="operational exit status"
+        )
         if not isinstance(timeout, bool):
             raise TypeError("operational timeout status must be boolean")
         if detail_code is not None and detail_code not in ALLOWED_DETAIL_CODES:
@@ -212,20 +507,30 @@ class OperationalSmokeFailure(Exception):
         self.state_presence = {
             key: fixed_state[key] for key in sorted(fixed_state)
         }
-        record: dict[str, object] = {
-            "failure_kind": failure_kind,
-            "schema": FAILURE_SCHEMA,
-            "stage": stage,
-            "timeout": timeout,
-        }
-        if exit_status is not None:
-            record["exit_status"] = exit_status
-        if detail_code is not None:
-            record["detail_code"] = detail_code
-        if durable_progress is not None:
-            record["durable_progress"] = durable_progress
-        record.update(self.state_presence)
-        super().__init__(json.dumps(record, sort_keys=True, separators=(",", ":")))
+        self.continuation_diagnostic = _validated_continuation_diagnostic(
+            continuation_diagnostic
+        )
+        super().__init__(
+            json.dumps(
+                _diagnostic_record(self, cleanup_completed=None),
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+        )
+
+    def attach_continuation_diagnostic(
+        self, diagnostic: dict[str, object]
+    ) -> None:
+        self.continuation_diagnostic = _validated_continuation_diagnostic(
+            diagnostic
+        )
+        self.args = (
+            json.dumps(
+                _diagnostic_record(self, cleanup_completed=None),
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+        )
 
 
 class _MCPToolResponseError(OperationalSmokeFailure):
@@ -853,6 +1158,7 @@ class MCPClient:
             ) from None
         self._next_id = 1
         self.transcript: list[str] = []
+        self._closed = False
 
     def _raise_process_failure(self, *, stage: str) -> None:
         returncode = self.process.poll()
@@ -904,6 +1210,7 @@ class MCPClient:
         params: dict | None = None,
         *,
         stage: str = STAGE_MCP_REQUEST,
+        deadline: float | None = None,
     ) -> dict:
         assert self.process.stdin is not None and self.process.stdout is not None
         request_id = self._next_id
@@ -919,10 +1226,7 @@ class MCPClient:
         except (BrokenPipeError, OSError, ValueError):
             self._raise_process_failure(stage=stage)
         while True:
-            try:
-                line = self.process.stdout.readline()
-            except (OSError, ValueError):
-                self._raise_process_failure(stage=stage)
+            line = self._readline(stage=stage, deadline=deadline)
             if not line:
                 self._raise_process_failure(stage=stage)
             self.transcript.append(line)
@@ -941,17 +1245,60 @@ class MCPClient:
             if response.get("id") == request_id:
                 return response
 
+    def _readline(self, *, stage: str, deadline: float | None) -> str:
+        assert self.process.stdout is not None
+        if deadline is None:
+            try:
+                return self.process.stdout.readline()
+            except (OSError, ValueError):
+                self._raise_process_failure(stage=stage)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_TIMEOUT,
+                timeout=True,
+            )
+        channel: queue.Queue[tuple[bool, str]] = queue.Queue(maxsize=1)
+
+        def read_one_line() -> None:
+            try:
+                observed = self.process.stdout.readline()
+            except (OSError, ValueError):
+                outcome = (False, "")
+            else:
+                outcome = (True, observed)
+            try:
+                channel.put_nowait(outcome)
+            except queue.Full:
+                return
+
+        threading.Thread(target=read_one_line, daemon=True).start()
+        try:
+            readable, line = channel.get(timeout=remaining)
+        except queue.Empty:
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_TIMEOUT,
+                timeout=True,
+            ) from None
+        if not readable:
+            self._raise_process_failure(stage=stage)
+        return line
+
     def tool(
         self,
         name: str,
         arguments: dict,
         *,
         stage: str = STAGE_MCP_REQUEST,
+        deadline: float | None = None,
     ) -> dict:
         response = self.request(
             "tools/call",
             {"name": name, "arguments": arguments},
             stage=stage,
+            deadline=deadline,
         )
         is_error, text = self._response_text(response, stage=stage)
         if is_error:
@@ -976,11 +1323,13 @@ class MCPClient:
         arguments: dict,
         *,
         stage: str = STAGE_MCP_REQUEST,
+        deadline: float | None = None,
     ) -> str:
         response = self.request(
             "tools/call",
             {"name": name, "arguments": arguments},
             stage=stage,
+            deadline=deadline,
         )
         is_error, text = self._response_text(response, stage=stage)
         if not is_error:
@@ -991,27 +1340,74 @@ class MCPClient:
         return text
 
     def close(self, *, stage: str = STAGE_MCP_REQUEST) -> None:
+        if self._closed:
+            return
+        failure: OperationalSmokeFailure | None = None
         if self.process.stdin:
             try:
                 self.process.stdin.close()
-            except OSError:
-                self._raise_process_failure(stage=stage)
+            except (OSError, ValueError):
+                failure = OperationalSmokeFailure(
+                    stage=stage,
+                    failure_kind=FAILURE_UNEXPECTED,
+                )
+        returncode = self.process.poll()
         try:
-            returncode = self.process.wait(timeout=10)
-        except subprocess.TimeoutExpired:
-            self.process.terminate()
-            self.process.wait(timeout=10)
-            raise OperationalSmokeFailure(
-                stage=stage,
-                failure_kind=FAILURE_TIMEOUT,
-                timeout=True,
-            ) from None
-        if returncode != 0:
-            raise OperationalSmokeFailure(
-                stage=stage,
-                failure_kind=FAILURE_COMMAND,
-                exit_status=int(returncode),
-            )
+            if returncode is None:
+                try:
+                    returncode = self.process.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    if failure is None:
+                        failure = OperationalSmokeFailure(
+                            stage=stage,
+                            failure_kind=FAILURE_TIMEOUT,
+                            timeout=True,
+                        )
+                    try:
+                        self.process.terminate()
+                        returncode = self.process.wait(timeout=10)
+                    except (
+                        AttributeError,
+                        OSError,
+                        subprocess.TimeoutExpired,
+                    ):
+                        try:
+                            self.process.kill()
+                            returncode = self.process.wait(timeout=2)
+                        except (
+                            AttributeError,
+                            OSError,
+                            subprocess.TimeoutExpired,
+                        ):
+                            returncode = None
+            if returncode is not None and returncode != 0 and failure is None:
+                failure = OperationalSmokeFailure(
+                    stage=stage,
+                    failure_kind=FAILURE_COMMAND,
+                    exit_status=(
+                        int(returncode) if int(returncode) >= 0 else None
+                    ),
+                )
+        finally:
+            for stream_name in ("stdout", "stderr"):
+                stream = getattr(self.process, stream_name, None)
+                close_stream = getattr(stream, "close", None)
+                if close_stream is None:
+                    continue
+                try:
+                    close_stream()
+                except (OSError, ValueError):
+                    if failure is None:
+                        failure = OperationalSmokeFailure(
+                            stage=stage,
+                            failure_kind=FAILURE_UNEXPECTED,
+                        )
+            try:
+                self._closed = self.process.poll() is not None
+            except Exception:
+                self._closed = False
+        if failure is not None:
+            raise failure
 
 
 def _build_wheel(repo: Path, temp_root: Path) -> Path:
@@ -1166,34 +1562,339 @@ def _poll_terminal(
     *,
     prior_terminal_commitment_ref: str | None = None,
     stage: str = STAGE_MCP_REQUEST,
+    observations: ContinuationObservations | None = None,
+    _clock=None,
+    _sleep=None,
 ) -> tuple[dict, dict]:
-    deadline = time.monotonic() + 600
-    while time.monotonic() < deadline:
-        status = client.tool("run_status", {"run_id": run_id}, stage=stage)
+    clock = _clock or time.monotonic
+    sleep = _sleep or time.sleep
+    deadline = clock() + CONTINUATION_DEADLINE_SECONDS
+    observed = observations or ContinuationObservations()
+    while clock() < deadline:
+        try:
+            status = client.tool(
+                "run_status",
+                {"run_id": run_id},
+                stage=stage,
+                deadline=deadline,
+            )
+        except _MCPToolResponseError:
+            observed.status_read_error_count += 1
+            raise
+        observed.observe_status(status)
         if status.get("state") in {"completed", "failed", "cancelled"}:
             try:
                 result = client.tool(
                     "run_result",
                     {"run_id": run_id},
                     stage=stage,
+                    deadline=deadline,
                 )
             except _MCPToolResponseError:
-                time.sleep(0.05)
+                observed.result_read_error_count += 1
+                sleep(POLL_INTERVAL_SECONDS)
                 continue
             if (
                 prior_terminal_commitment_ref is not None
                 and result.get("terminal_commitment_ref")
                 == prior_terminal_commitment_ref
             ):
-                time.sleep(0.05)
+                observed.stale_epoch0_result_observation_count += 1
+                sleep(POLL_INTERVAL_SECONDS)
                 continue
             return status, result
-        time.sleep(0.05)
+        sleep(POLL_INTERVAL_SECONDS)
     raise OperationalSmokeFailure(
         stage=stage,
         failure_kind=FAILURE_TIMEOUT,
         timeout=True,
     )
+
+
+_DURABLE_SNAPSHOT_FIELDS = frozenset(
+    {
+        "opening_resume_decision_present",
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+        "commitment_inclusive_replay_binding_present",
+        "durable_result_binding",
+    }
+)
+_DURABLE_INSPECTION_PROGRAM = r"""
+import json
+from pathlib import Path
+import stat
+import sys
+
+try:
+    from deepreason.application.models import RunResultV2
+    from deepreason.harness import Harness
+    from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
+    from deepreason.runtime.terminal_authority import (
+        TerminalReplayValidationBindingV1,
+        _read_current_result,
+        _read_replay_validation,
+        _replay_validation_base,
+        _validate_result_projection_binding,
+    )
+    from deepreason.workflow.models import (
+        RunTerminalCommitmentV1,
+        RunTerminalResultDraftV1,
+    )
+
+    request = json.loads(sys.stdin.read())
+    if set(request) != {"root", "prior_terminal_commitment_ref"}:
+        raise ValueError
+    root = Path(request["root"])
+    prior_ref = request["prior_terminal_commitment_ref"]
+    if not isinstance(prior_ref, str):
+        raise ValueError
+    manifest = load_run_manifest(root / MANIFEST_NAME)
+    harness = Harness(root, read_only=True)
+    state = harness.workflow_state
+    epoch = state.current_terminal_epoch
+    if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch < 0:
+        raise ValueError
+    opening_ref = state.terminal_epoch_opening_resume_ref.get(epoch)
+    if opening_ref is not None and opening_ref not in state.resume_decisions:
+        raise ValueError
+    opening_present = opening_ref is not None
+
+    def typed_objects(schema, model):
+        directory = Path(harness.objects.root) / schema
+        try:
+            observed = directory.lstat()
+        except FileNotFoundError:
+            return []
+        if not stat.S_ISDIR(observed.st_mode):
+            raise ValueError
+        paths = sorted(directory.glob("*.json"))
+        if len(paths) > 64:
+            raise ValueError
+        values = []
+        for path in paths:
+            item = path.lstat()
+            if not stat.S_ISREG(item.st_mode) or item.st_size > 4 * 1024 * 1024:
+                raise ValueError
+            found_schema, value, _record = harness.objects._read_record(path)
+            if found_schema != schema or not isinstance(value, model):
+                raise ValueError
+            if (
+                value.manifest_sha256 == manifest.sha256
+                and value.run_id == manifest.sha256
+            ):
+                values.append(value)
+        return values
+
+    drafts = typed_objects(
+        "workflow-run-terminal-result-draft-v1",
+        RunTerminalResultDraftV1,
+    )
+    commitments = typed_objects(
+        "workflow-run-terminal-commitment-v1",
+        RunTerminalCommitmentV1,
+    )
+    latest_epoch = (
+        max(item.terminal_epoch for item in commitments)
+        if commitments
+        else None
+    )
+    current_refs = [
+        item.id for item in commitments if item.terminal_epoch == epoch
+    ]
+    current_items = [
+        item for item in commitments if item.terminal_epoch == epoch
+    ]
+    if len(current_items) == 1 and epoch > 0:
+        current = current_items[0]
+        if (
+            current.parent_terminal_commitment_ref != prior_ref
+            or current.opening_resume_ref != opening_ref
+        ):
+            raise ValueError
+
+    result = _read_current_result(root)
+    if result is None:
+        typed_result = None
+        result_binding = "absent"
+    else:
+        typed_result = RunResultV2.model_validate(result)
+        result_ref = typed_result.terminal_commitment_ref
+        if result_ref is None:
+            result_binding = "unbound"
+        elif result_ref == prior_ref:
+            result_binding = "prior_commitment"
+        elif len(current_refs) == 1 and result_ref == current_refs[0]:
+            result_binding = "current_commitment"
+        else:
+            result_binding = "unknown"
+
+    replay = _read_replay_validation(root)
+    replay_binding_present = False
+    if replay is not None and replay.get("terminal_binding") is not None:
+        TerminalReplayValidationBindingV1.model_validate(
+            replay["terminal_binding"]
+        )
+        _replay_validation_base(replay)
+        if len(current_items) == 1 and typed_result is not None:
+            try:
+                _validate_result_projection_binding(
+                    harness,
+                    manifest,
+                    current_items[0],
+                    result,
+                )
+            except (TypeError, ValueError):
+                pass
+            else:
+                replay_binding_present = True
+
+    payload = {
+        "opening_resume_decision_present": opening_present,
+        "durable_terminal_epoch": epoch,
+        "terminal_draft_count": len(drafts),
+        "terminal_commitment_count": len(commitments),
+        "latest_commitment_epoch": latest_epoch,
+        "commitment_inclusive_replay_binding_present": (
+            replay_binding_present
+        ),
+        "durable_result_binding": result_binding,
+    }
+    sys.stdout.write(json.dumps(payload, sort_keys=True, separators=(",", ":")))
+except BaseException:
+    raise SystemExit(2)
+"""
+
+
+def _read_loopback_diagnostic_state(path: Path) -> tuple[int, int]:
+    try:
+        observed = path.lstat()
+    except FileNotFoundError:
+        return 0, 0
+    if not stat.S_ISREG(observed.st_mode) or not 2 <= observed.st_size <= 1024 * 1024:
+        raise ValueError("loopback diagnostic state is unavailable")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("loopback diagnostic state is unavailable")
+    total_calls = _nonnegative_integer_or_none(
+        payload.get("total_calls"), field="loopback total calls"
+    )
+    errors = payload.get("errors")
+    if total_calls is None or not isinstance(errors, list):
+        raise ValueError("loopback diagnostic state is unavailable")
+    return total_calls, len(errors)
+
+
+def _validate_durable_snapshot(payload: object) -> dict[str, object]:
+    if not isinstance(payload, dict) or set(payload) != _DURABLE_SNAPSHOT_FIELDS:
+        raise ValueError("durable diagnostic field inventory drifted")
+    for field in (
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+    ):
+        payload[field] = _nonnegative_integer_or_none(
+            payload[field], field=field
+        )
+    for field in (
+        "opening_resume_decision_present",
+        "commitment_inclusive_replay_binding_present",
+    ):
+        if type(payload[field]) is not bool:
+            raise TypeError(f"{field} must be boolean")
+    if payload["durable_result_binding"] not in ALLOWED_RESULT_BINDINGS:
+        raise ValueError("invalid durable result binding")
+    return payload
+
+
+def _run_durable_inspection(
+    context: ContinuationDiagnosticContext,
+) -> dict[str, object]:
+    inspection_env = dict(context.env)
+    inspection_env.pop("DEEPREASON_WHEEL_LOOPBACK_FIXTURE", None)
+    inspection_env.pop(LOOPBACK_READY_ENV, None)
+    request = json.dumps(
+        {
+            "root": str(context.run_root),
+            "prior_terminal_commitment_ref": (
+                context.prior_terminal_commitment_ref
+            ),
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    completed = subprocess.run(
+        [str(context.python), "-c", _DURABLE_INSPECTION_PROGRAM],
+        cwd=context.work,
+        env=inspection_env,
+        input=request,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        check=False,
+        timeout=DIAGNOSTIC_INSPECTION_TIMEOUT_SECONDS,
+    )
+    if (
+        completed.returncode != 0
+        or not isinstance(completed.stdout, str)
+        or len(completed.stdout.encode("utf-8")) > 4096
+    ):
+        raise ValueError("durable diagnostic inspection failed")
+    return _validate_durable_snapshot(json.loads(completed.stdout))
+
+
+def _mcp_liveness(clients: list[MCPClient]) -> str:
+    if not clients:
+        return MCP_LIVENESS_NOT_STARTED
+    states = []
+    try:
+        for client in clients:
+            states.append(client.process.poll() is None)
+    except Exception:
+        return MCP_LIVENESS_UNKNOWN
+    return MCP_LIVENESS_ALIVE if any(states) else MCP_LIVENESS_EXITED
+
+
+def _capture_continuation_diagnostic(
+    context: ContinuationDiagnosticContext | None,
+    *,
+    clients: list[MCPClient],
+) -> dict[str, object]:
+    diagnostic = (
+        context.observations.snapshot()
+        if context is not None
+        else _default_continuation_diagnostic()
+    )
+    diagnostic["mcp_liveness"] = _mcp_liveness(clients)
+    if context is None:
+        return _validated_continuation_diagnostic(diagnostic)
+    try:
+        total_calls, error_count = _read_loopback_diagnostic_state(
+            context.provider_state_path
+        )
+        delta = total_calls - context.provider_call_baseline
+        if delta < 0:
+            raise ValueError("loopback provider count moved backwards")
+        durable = _run_durable_inspection(context)
+    except Exception:
+        diagnostic["diagnostic_inspection_status"] = (
+            DIAGNOSTIC_INSPECTION_FAILED
+        )
+        return _validated_continuation_diagnostic(diagnostic)
+    diagnostic.update(durable)
+    diagnostic.update(
+        {
+            "diagnostic_inspection_status": (
+                DIAGNOSTIC_INSPECTION_SUCCEEDED
+            ),
+            "provider_call_delta": delta,
+            "loopback_provider_error_count": error_count,
+        }
+    )
+    return _validated_continuation_diagnostic(diagnostic)
 
 
 def _assert_no_disclosure(
@@ -1226,25 +1927,30 @@ def _platform_family() -> str:
 def _diagnostic_record(
     failure: OperationalSmokeFailure,
     *,
-    cleanup_completed: bool,
+    cleanup_completed: bool | None,
 ) -> dict[str, object]:
-    if not isinstance(cleanup_completed, bool):
-        raise TypeError("cleanup status must be boolean")
+    if cleanup_completed is not None and type(cleanup_completed) is not bool:
+        raise TypeError("cleanup status must be boolean or null")
     record: dict[str, object] = {
         "cleanup_completed": cleanup_completed,
+        "detail_code": failure.detail_code,
+        "durable_progress": failure.durable_progress,
+        "exit_status": failure.exit_status,
         "failure_kind": failure.failure_kind,
         "platform_family": _platform_family(),
         "schema": FAILURE_SCHEMA,
         "stage": failure.stage,
         "timeout": failure.timeout,
     }
-    if failure.exit_status is not None:
-        record["exit_status"] = failure.exit_status
-    if failure.detail_code is not None:
-        record["detail_code"] = failure.detail_code
-    if failure.durable_progress is not None:
-        record["durable_progress"] = failure.durable_progress
-    record.update(failure.state_presence)
+    record.update(
+        {
+            field: failure.state_presence.get(field)
+            for field in ALLOWED_STATE_PRESENCE_FIELDS
+        }
+    )
+    record.update(failure.continuation_diagnostic)
+    if set(record) != FAILURE_RECORD_FIELDS:
+        raise ValueError("failure diagnostic field inventory drifted")
     return record
 
 
@@ -1255,12 +1961,14 @@ def _emit_failure_diagnostic(
 ) -> None:
     """Emit one fixed-schema, payload-free Actions annotation."""
 
-    encoded = json.dumps(
-        _diagnostic_record(failure, cleanup_completed=cleanup_completed),
-        sort_keys=True,
-        separators=(",", ":"),
-    )
     try:
+        encoded = json.dumps(
+            _diagnostic_record(
+                failure, cleanup_completed=cleanup_completed
+            ),
+            sort_keys=True,
+            separators=(",", ":"),
+        )
         print(
             "::error title=DeepReason installed-wheel operational smoke failed::"
             f"{encoded}",
@@ -1287,16 +1995,87 @@ def _cleanup_temp_root(temp_root: Path | None) -> bool:
         return False
 
 
+def _new_mcp_client(
+    clients: list[MCPClient],
+    executable: Path,
+    *,
+    cwd: Path,
+    env: dict[str, str],
+    stage: str = STAGE_MCP_INITIALIZE,
+) -> MCPClient:
+    client = MCPClient(executable, cwd=cwd, env=env, stage=stage)
+    clients.append(client)
+    return client
+
+
+def _shutdown_mcp_clients(
+    clients: list[MCPClient],
+) -> tuple[bool, OperationalSmokeFailure | None]:
+    first_failure: OperationalSmokeFailure | None = None
+    for client in reversed(clients):
+        try:
+            client.close(stage=STAGE_CLEANUP)
+        except OperationalSmokeFailure as error:
+            if first_failure is None:
+                first_failure = error
+        except Exception:
+            if first_failure is None:
+                first_failure = OperationalSmokeFailure(
+                    stage=STAGE_CLEANUP,
+                    failure_kind=FAILURE_CLEANUP,
+                )
+    try:
+        stopped = all(client.process.poll() is not None for client in clients)
+    except Exception:
+        stopped = False
+    return stopped, first_failure
+
+
 def _finalize_operational_smoke(
     failure: OperationalSmokeFailure | None,
     *,
     temp_root: Path | None,
+    mcp_clients: list[MCPClient] | None = None,
+    diagnostic_context: ContinuationDiagnosticContext | None = None,
 ) -> int:
-    cleanup_completed = _cleanup_temp_root(temp_root)
+    clients = list(mcp_clients or ())
+    diagnostic: dict[str, object] | None = None
+    if clients and (
+        failure is not None
+        or any(not getattr(client, "_closed", False) for client in clients)
+    ):
+        try:
+            diagnostic = _capture_continuation_diagnostic(
+                diagnostic_context,
+                clients=clients,
+            )
+        except Exception:
+            diagnostic = (
+                diagnostic_context.observations.snapshot()
+                if diagnostic_context is not None
+                else _default_continuation_diagnostic()
+            )
+            diagnostic["diagnostic_inspection_status"] = (
+                DIAGNOSTIC_INSPECTION_FAILED
+            )
+            diagnostic["mcp_liveness"] = _mcp_liveness(clients)
+            diagnostic = _validated_continuation_diagnostic(diagnostic)
+        if failure is not None:
+            failure.attach_continuation_diagnostic(diagnostic)
+    mcp_cleanup_completed, shutdown_failure = _shutdown_mcp_clients(clients)
+    if failure is None and shutdown_failure is not None:
+        failure = shutdown_failure
+        if diagnostic is not None:
+            failure.attach_continuation_diagnostic(diagnostic)
+    root_cleanup_completed = _cleanup_temp_root(temp_root)
+    cleanup_completed = (
+        mcp_cleanup_completed and root_cleanup_completed
+    )
     if failure is None and not cleanup_completed:
         failure = OperationalSmokeFailure(
             stage=STAGE_CLEANUP,
             failure_kind=FAILURE_CLEANUP,
+            continuation_diagnostic=diagnostic,
         )
     if failure is not None:
         _emit_failure_diagnostic(
@@ -1314,6 +2093,8 @@ def main(argv: list[str] | None = None) -> int:
     repo = Path(__file__).resolve().parents[1]
     temp_root: Path | None = None
     failure: OperationalSmokeFailure | None = None
+    mcp_clients: list[MCPClient] = []
+    diagnostic_context: ContinuationDiagnosticContext | None = None
     succeeded = False
     stage = STAGE_CREATE_ENVIRONMENT
     try:
@@ -1552,7 +2333,9 @@ def main(argv: list[str] | None = None) -> int:
             raise AssertionError("generic MCP registration mishandled the installed spaced path")
 
         stage = STAGE_MCP_INITIALIZE
-        first_client = MCPClient(mcp, cwd=work, env=clean_env)
+        first_client = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
         _assert_exact_tools(_tool_list(first_client))
         stage = STAGE_MCP_REQUEST
         first_status = first_client.tool(
@@ -1624,7 +2407,9 @@ def main(argv: list[str] | None = None) -> int:
         calls_before_resumable_retrieval = _provider_counts(provider_state_path)[
             "total_calls"
         ]
-        continuation_client = MCPClient(mcp, cwd=work, env=clean_env)
+        continuation_client = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
         _assert_exact_tools(_tool_list(continuation_client))
         resumable_retrieved = continuation_client.tool(
             "run_result",
@@ -1637,6 +2422,9 @@ def main(argv: list[str] | None = None) -> int:
             provider_state_path,
             calls_before_resumable_retrieval,
         )
+        provider_call_baseline = _provider_counts(provider_state_path)[
+            "total_calls"
+        ]
         continued = continuation_client.tool(
             "continue_run",
             {
@@ -1647,6 +2435,21 @@ def main(argv: list[str] | None = None) -> int:
         )
         if continued.get("run_id") != resumable_run_id:
             raise AssertionError("continuation changed the opaque managed identity")
+        continuation_observations = ContinuationObservations()
+        diagnostic_context = ContinuationDiagnosticContext(
+            python=python,
+            work=work,
+            env=clean_env,
+            run_root=(
+                home / ".deepreason" / "runs" / resumable_run_id
+            ),
+            prior_terminal_commitment_ref=resumable_result[
+                "terminal_commitment_ref"
+            ],
+            provider_state_path=provider_state_path,
+            provider_call_baseline=provider_call_baseline,
+            observations=continuation_observations,
+        )
         _continued_status, final_resumable_result = _poll_terminal(
             continuation_client,
             resumable_run_id,
@@ -1654,14 +2457,30 @@ def main(argv: list[str] | None = None) -> int:
                 "terminal_commitment_ref"
             ],
             stage=stage,
+            observations=continuation_observations,
         )
         _assert_resumable_terminal(final_resumable_result)
         transcripts.extend(continuation_client.transcript)
         continuation_client.close(stage=stage)
+        continued_durable = _run_durable_inspection(diagnostic_context)
+        if continued_durable != {
+            "opening_resume_decision_present": True,
+            "durable_terminal_epoch": 1,
+            "terminal_draft_count": 2,
+            "terminal_commitment_count": 2,
+            "latest_commitment_epoch": 1,
+            "commitment_inclusive_replay_binding_present": True,
+            "durable_result_binding": RESULT_BINDING_CURRENT,
+        }:
+            raise AssertionError(
+                "continued terminal authority or replay binding drifted"
+            )
 
         stage = STAGE_RESTART_RECOVERY
         calls_before_restart = _provider_counts(provider_state_path)["total_calls"]
-        restarted_first = MCPClient(mcp, cwd=work, env=clean_env)
+        restarted_first = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
         _assert_exact_tools(_tool_list(restarted_first))
         restarted_first_status = restarted_first.tool(
             "run_status",
@@ -1727,7 +2546,9 @@ def main(argv: list[str] | None = None) -> int:
             raise AssertionError("second preparation made qualification calls")
 
         stage = STAGE_MCP_REQUEST
-        mcp_client = MCPClient(mcp, cwd=work, env=clean_env)
+        mcp_client = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
         _assert_exact_tools(_tool_list(mcp_client))
         started = mcp_client.tool(
             "start_run",
@@ -1751,7 +2572,9 @@ def main(argv: list[str] | None = None) -> int:
 
         stage = STAGE_RESTART_RECOVERY
         calls_before_restart = _provider_counts(provider_state_path)["total_calls"]
-        restarted = MCPClient(mcp, cwd=work, env=clean_env)
+        restarted = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=clean_env
+        )
         _assert_exact_tools(_tool_list(restarted))
         restarted_status = restarted.tool(
             "run_status",
@@ -1844,7 +2667,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"retained: {temp_root}")
         return 0
 
-    return _finalize_operational_smoke(failure, temp_root=temp_root)
+    return _finalize_operational_smoke(
+        failure,
+        temp_root=temp_root,
+        mcp_clients=mcp_clients,
+        diagnostic_context=diagnostic_context,
+    )
 
 
 if __name__ == "__main__":

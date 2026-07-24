@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
+import sys
 import threading
 
 import pytest
@@ -16,6 +18,11 @@ from deepreason.llm.endpoints import OpenAICompatEndpoint
 from deepreason.llm.wire import ReasoningConjecturerTurnWireV6
 from deepreason.preparation import qualification_subject_manifest
 from deepreason.provider_profile import ProviderProfileV1
+from deepreason.runtime.continuation import prepare_continuation
+from tests.test_v6_resumed_terminal_revalidation import (
+    _continue_converged_run,
+    _start_converged_run,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -167,6 +174,169 @@ def test_operational_poll_waits_for_a_new_terminal_commitment():
     assert client.result_calls == 2
 
 
+class _DeadlineClock:
+    def __init__(self, iterations: int):
+        self._values = iter(
+            [
+                0.0,
+                *([0.0] * iterations),
+                float(OPERATIONAL.CONTINUATION_DEADLINE_SECONDS),
+            ]
+        )
+
+    def __call__(self) -> float:
+        return next(self._values)
+
+
+def test_continuation_deadline_and_fixed_running_observations_are_exact():
+    observations = OPERATIONAL.ContinuationObservations()
+    sleeps = []
+
+    class FixedRunningClient:
+        def __init__(self):
+            self.status_calls = 0
+
+        def tool(self, name, _arguments, **_kwargs):
+            assert name == "run_status"
+            self.status_calls += 1
+            return {
+                "state": "running",
+                "phase": "reasoning",
+                "seq": 17,
+            }
+
+    client = FixedRunningClient()
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            client,
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(3),
+            _sleep=sleeps.append,
+        )
+    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 600
+    assert OPERATIONAL.POLL_INTERVAL_SECONDS == 0.05
+    assert raised.value.failure_kind == OPERATIONAL.FAILURE_TIMEOUT
+    assert raised.value.timeout is True
+    assert client.status_calls == 3
+    assert sleeps == [0.05, 0.05, 0.05]
+    assert observations.snapshot() == {
+        **OPERATIONAL._default_continuation_diagnostic(),
+        "first_lifecycle_state": "running",
+        "last_lifecycle_state": "running",
+        "status_observation_count": 3,
+        "last_progress_sequence": 17,
+        "last_progress_phase": "reasoning",
+    }
+
+
+def test_continuation_poll_counts_stale_epoch_zero_results():
+    observations = OPERATIONAL.ContinuationObservations()
+    sleeps = []
+
+    class StaleClient:
+        def tool(self, name, _arguments, **_kwargs):
+            if name == "run_status":
+                return {"state": "completed", "phase": "stop", "seq": 19}
+            return {
+                "state": "completed",
+                "terminal_commitment_ref": (
+                    "SENTINEL_SYNTHETIC_COMMITMENT_REF"
+                ),
+            }
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure):
+        OPERATIONAL._poll_terminal(
+            StaleClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            prior_terminal_commitment_ref=(
+                "SENTINEL_SYNTHETIC_COMMITMENT_REF"
+            ),
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(4),
+            _sleep=sleeps.append,
+        )
+    assert observations.status_observation_count == 4
+    assert observations.stale_epoch0_result_observation_count == 4
+    assert observations.result_read_error_count == 0
+    assert sleeps == [0.05] * 4
+
+
+def test_continuation_poll_counts_repeated_result_read_failures():
+    observations = OPERATIONAL.ContinuationObservations()
+
+    class ResultFailureClient:
+        def tool(self, name, _arguments, **kwargs):
+            if name == "run_status":
+                return {"state": "completed", "phase": "stop", "seq": 23}
+            raise OPERATIONAL._MCPToolResponseError(
+                stage=kwargs["stage"]
+            )
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure):
+        OPERATIONAL._poll_terminal(
+            ResultFailureClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(3),
+            _sleep=lambda _seconds: None,
+        )
+    assert observations.status_observation_count == 3
+    assert observations.result_read_error_count == 3
+    assert observations.stale_epoch0_result_observation_count == 0
+
+
+def test_continuation_status_failure_remains_primary_and_is_counted():
+    observations = OPERATIONAL.ContinuationObservations()
+
+    class StatusFailureClient:
+        def tool(self, _name, _arguments, **kwargs):
+            raise OPERATIONAL._MCPToolResponseError(
+                stage=kwargs["stage"]
+            )
+
+    with pytest.raises(OPERATIONAL._MCPToolResponseError) as raised:
+        OPERATIONAL._poll_terminal(
+            StatusFailureClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(1),
+            _sleep=lambda _seconds: None,
+        )
+    assert raised.value.failure_kind == OPERATIONAL.FAILURE_ASSERTION
+    assert observations.status_read_error_count == 1
+    assert observations.status_observation_count == 0
+
+
+def test_continuation_child_exit_status_is_preserved():
+    observations = OPERATIONAL.ContinuationObservations()
+
+    class ExitedClient:
+        def tool(self, _name, _arguments, **kwargs):
+            raise OPERATIONAL.OperationalSmokeFailure(
+                stage=kwargs["stage"],
+                failure_kind=OPERATIONAL.FAILURE_COMMAND,
+                exit_status=47,
+            )
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            ExitedClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(1),
+            _sleep=lambda _seconds: None,
+        )
+    assert raised.value.exit_status == 47
+    assert raised.value.failure_kind == OPERATIONAL.FAILURE_COMMAND
+    assert observations.status_observation_count == 0
+
+
 def _annotation_record(stderr: str) -> dict:
     prefix = (
         "::error title=DeepReason installed-wheel operational smoke failed::"
@@ -178,14 +348,25 @@ def _annotation_record(stderr: str) -> dict:
 def _diagnostic_sentinels(repo: Path, temp_root: Path) -> tuple[str, ...]:
     return (
         "SENTINEL_ARBITRARY_EXCEPTION_MESSAGE",
+        "SENTINEL_RAW_LIFECYCLE_VALUE",
+        "SENTINEL_RAW_PROGRESS_PHASE",
         "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE",
         "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE",
+        "SENTINEL_SYNTHETIC_ENVIRONMENT_NAME",
         "SENTINEL_SYNTHETIC_ARGUMENT",
         "SENTINEL_SYNTHETIC_QUESTION",
+        "SENTINEL_SYNTHETIC_PROMPT",
+        "SENTINEL_SYNTHETIC_PROVIDER_REQUEST",
         "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE",
         "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD",
         "SENTINEL_SYNTHETIC_MANAGED_ID",
         "SENTINEL_SYNTHETIC_MANIFEST_PATH",
+        "SENTINEL_SYNTHETIC_COMMITMENT_REF",
+        "SENTINEL_SYNTHETIC_RESULT_REF",
+        "SENTINEL_SYNTHETIC_REPLAY_REF",
+        "SENTINEL_SYNTHETIC_PREPARATION_REF",
+        "SENTINEL_SYNTHETIC_RESUME_REF",
+        "SENTINEL_SYNTHETIC_OBJECT_HASH",
         str(repo.resolve()),
         str(temp_root.resolve()),
         "SENTINEL_COMPLETE_COMMAND",
@@ -199,6 +380,701 @@ def _assert_sentinels_absent(payload: str, sentinels: tuple[str, ...]) -> None:
     folded = payload.casefold()
     for sentinel in sentinels:
         assert sentinel.casefold() not in folded
+
+
+def _expected_failure(
+    *,
+    stage: str,
+    failure_kind: str,
+    timeout: bool = False,
+    cleanup_completed: bool | None = None,
+    exit_status: int | None = None,
+    detail_code: str | None = None,
+    durable_progress: str | None = None,
+    state_presence: dict[str, bool] | None = None,
+    continuation_diagnostic: dict[str, object] | None = None,
+) -> dict[str, object]:
+    record: dict[str, object] = {
+        "cleanup_completed": cleanup_completed,
+        "detail_code": detail_code,
+        "durable_progress": durable_progress,
+        "exit_status": exit_status,
+        "failure_kind": failure_kind,
+        "platform_family": OPERATIONAL._platform_family(),
+        "schema": "deepreason-wheel-operational-failure-v3",
+        "stage": stage,
+        "timeout": timeout,
+        "event_log_present": None,
+        "loopback_start_present": None,
+        "managed_registration_present": None,
+        "manifest_present": None,
+        "preparation_present": None,
+        "progress_log_present": None,
+        "run_root_present": None,
+        "terminal_result_present": None,
+        "diagnostic_inspection_status": "not_attempted",
+        "first_lifecycle_state": "not_observed",
+        "last_lifecycle_state": "not_observed",
+        "status_observation_count": 0,
+        "last_progress_sequence": None,
+        "last_progress_phase": "not_observed",
+        "stale_epoch0_result_observation_count": 0,
+        "result_read_error_count": 0,
+        "status_read_error_count": 0,
+        "provider_call_delta": None,
+        "loopback_provider_error_count": None,
+        "mcp_liveness": "not_started",
+        "opening_resume_decision_present": None,
+        "durable_terminal_epoch": None,
+        "terminal_draft_count": None,
+        "terminal_commitment_count": None,
+        "latest_commitment_epoch": None,
+        "commitment_inclusive_replay_binding_present": None,
+        "durable_result_binding": "unknown",
+    }
+    record.update(state_presence or {})
+    record.update(continuation_diagnostic or {})
+    return record
+
+
+class _TrackedProcess:
+    def __init__(self, returncode: int | None = None):
+        self.returncode = returncode
+        self.args = [
+            "SENTINEL_COMPLETE_COMMAND",
+            "SENTINEL_SYNTHETIC_ARGUMENT",
+        ]
+        self.stdout = "SENTINEL_CAPTURED_STDOUT"
+        self.stderr = "SENTINEL_CAPTURED_STDERR"
+
+    def poll(self):
+        return self.returncode
+
+
+class _TrackedContinuationClient:
+    def __init__(
+        self,
+        *,
+        order: list[str] | None = None,
+        state: str = "running",
+        phase: str = "reasoning",
+        sequence: int = 29,
+    ):
+        self.process = _TrackedProcess()
+        self._closed = False
+        self.order = order
+        self.state = state
+        self.phase = phase
+        self.sequence = sequence
+        self.transcript = [
+            {
+                "question": "SENTINEL_SYNTHETIC_QUESTION",
+                "prompt": "SENTINEL_SYNTHETIC_PROMPT",
+                "provider_request": (
+                    "SENTINEL_SYNTHETIC_PROVIDER_REQUEST"
+                ),
+                "provider_response": (
+                    "SENTINEL_SYNTHETIC_PROVIDER_RESPONSE"
+                ),
+            }
+        ]
+
+    def tool(self, name, _arguments, **_kwargs):
+        assert name == "run_status"
+        return {
+            "state": self.state,
+            "phase": self.phase,
+            "seq": self.sequence,
+        }
+
+    def close(self, **_kwargs):
+        if self._closed:
+            return
+        if self.order is not None:
+            self.order.append("mcp_shutdown")
+        self.process.returncode = 0
+        self._closed = True
+
+
+def _diagnostic_context(
+    tmp_path: Path,
+    observations: object,
+    *,
+    provider_call_baseline: int = 10,
+) -> object:
+    work = tmp_path / "unrelated-work"
+    work.mkdir(exist_ok=True)
+    return OPERATIONAL.ContinuationDiagnosticContext(
+        python=Path(sys.executable),
+        work=work,
+        env={
+            "SENTINEL_SYNTHETIC_ENVIRONMENT_NAME": (
+                "SENTINEL_SYNTHETIC_CREDENTIAL_VALUE"
+            ),
+            "SENTINEL_SYNTHETIC_CREDENTIAL_REFERENCE": (
+                "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD"
+            ),
+        },
+        run_root=tmp_path / "SENTINEL_SYNTHETIC_MANAGED_ID",
+        prior_terminal_commitment_ref=(
+            "SENTINEL_SYNTHETIC_COMMITMENT_REF"
+        ),
+        provider_state_path=tmp_path / "provider-state.json",
+        provider_call_baseline=provider_call_baseline,
+        observations=observations,
+    )
+
+
+def _durable_snapshot(
+    *,
+    opening_resume_decision_present: bool = True,
+    durable_terminal_epoch: int = 1,
+    terminal_draft_count: int = 1,
+    terminal_commitment_count: int = 1,
+    latest_commitment_epoch: int | None = 0,
+    commitment_inclusive_replay_binding_present: bool = True,
+    durable_result_binding: str = "prior_commitment",
+) -> dict[str, object]:
+    return {
+        "opening_resume_decision_present": (
+            opening_resume_decision_present
+        ),
+        "durable_terminal_epoch": durable_terminal_epoch,
+        "terminal_draft_count": terminal_draft_count,
+        "terminal_commitment_count": terminal_commitment_count,
+        "latest_commitment_epoch": latest_commitment_epoch,
+        "commitment_inclusive_replay_binding_present": (
+            commitment_inclusive_replay_binding_present
+        ),
+        "durable_result_binding": durable_result_binding,
+    }
+
+
+def test_timeout_wrapper_captures_state_and_shuts_down_before_cleanup(
+    tmp_path, monkeypatch, capsys
+):
+    order = []
+    client = _TrackedContinuationClient(order=order)
+    observations = OPERATIONAL.ContinuationObservations()
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            client,
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            prior_terminal_commitment_ref=(
+                "SENTINEL_SYNTHETIC_COMMITMENT_REF"
+            ),
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(2),
+            _sleep=lambda _seconds: None,
+        )
+    context = _diagnostic_context(tmp_path, observations)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (10, 0),
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_run_durable_inspection",
+        lambda _context: _durable_snapshot(),
+    )
+    original_cleanup = OPERATIONAL._cleanup_temp_root
+
+    def ordered_cleanup(root):
+        order.append("temporary_root_cleanup")
+        return original_cleanup(root)
+
+    monkeypatch.setattr(
+        OPERATIONAL, "_cleanup_temp_root", ordered_cleanup
+    )
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    assert (
+        OPERATIONAL._finalize_operational_smoke(
+            raised.value,
+            temp_root=temp_root,
+            mcp_clients=[client],
+            diagnostic_context=context,
+        )
+        == 1
+    )
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert order == ["mcp_shutdown", "temporary_root_cleanup"]
+    assert record["cleanup_completed"] is True
+    assert record["failure_kind"] == OPERATIONAL.FAILURE_TIMEOUT
+    assert record["stage"] == OPERATIONAL.STAGE_CONTINUATION_RESUME
+    assert record["diagnostic_inspection_status"] == "succeeded"
+    assert record["first_lifecycle_state"] == "running"
+    assert record["last_lifecycle_state"] == "running"
+    assert record["status_observation_count"] == 2
+    assert record["last_progress_sequence"] == 29
+    assert record["last_progress_phase"] == "reasoning"
+    assert record["provider_call_delta"] == 0
+    assert record["loopback_provider_error_count"] == 0
+    assert record["mcp_liveness"] == "alive"
+    assert record["opening_resume_decision_present"] is True
+    assert record["durable_terminal_epoch"] == 1
+    assert record["terminal_draft_count"] == 1
+    assert record["terminal_commitment_count"] == 1
+    assert record["latest_commitment_epoch"] == 0
+    assert (
+        record["commitment_inclusive_replay_binding_present"] is True
+    )
+    assert record["durable_result_binding"] == "prior_commitment"
+    assert set(record) == OPERATIONAL.FAILURE_RECORD_FIELDS
+    assert not temp_root.exists()
+    sentinels = _diagnostic_sentinels(
+        Path(OPERATIONAL.__file__).resolve().parents[1], temp_root
+    )
+    _assert_sentinels_absent(
+        str(raised.value) + captured.out + captured.err,
+        sentinels,
+    )
+
+
+def test_provider_progress_without_terminalization_is_distinguished(
+    tmp_path, monkeypatch
+):
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {"state": "running", "phase": "reasoning", "seq": 31}
+    )
+    context = _diagnostic_context(tmp_path, observations)
+    client = _TrackedContinuationClient()
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (14, 2),
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_run_durable_inspection",
+        lambda _context: _durable_snapshot(),
+    )
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context, clients=[client]
+    )
+    assert diagnostic["provider_call_delta"] == 4
+    assert diagnostic["loopback_provider_error_count"] == 2
+    assert diagnostic["latest_commitment_epoch"] == 0
+    assert diagnostic["durable_result_binding"] == "prior_commitment"
+
+
+def test_current_commitment_with_stale_status_and_prior_result_is_distinguished(
+    tmp_path, monkeypatch
+):
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {"state": "completed", "phase": "stop", "seq": 37}
+    )
+    observations.stale_epoch0_result_observation_count = 5
+    context = _diagnostic_context(tmp_path, observations)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (12, 0),
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_run_durable_inspection",
+        lambda _context: _durable_snapshot(
+            terminal_draft_count=2,
+            terminal_commitment_count=2,
+            latest_commitment_epoch=1,
+            durable_result_binding="prior_commitment",
+        ),
+    )
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context, clients=[_TrackedContinuationClient()]
+    )
+    assert diagnostic["last_lifecycle_state"] == "completed"
+    assert diagnostic["stale_epoch0_result_observation_count"] == 5
+    assert diagnostic["terminal_commitment_count"] == 2
+    assert diagnostic["latest_commitment_epoch"] == 1
+    assert diagnostic["durable_result_binding"] == "prior_commitment"
+
+
+def test_durable_current_result_not_yet_accepted_by_poll_is_distinguished(
+    tmp_path, monkeypatch
+):
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {"state": "running", "phase": "reasoning", "seq": 41}
+    )
+    context = _diagnostic_context(tmp_path, observations)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (13, 0),
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_run_durable_inspection",
+        lambda _context: _durable_snapshot(
+            terminal_draft_count=2,
+            terminal_commitment_count=2,
+            latest_commitment_epoch=1,
+            durable_result_binding="current_commitment",
+        ),
+    )
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context, clients=[_TrackedContinuationClient()]
+    )
+    assert diagnostic["last_lifecycle_state"] == "running"
+    assert diagnostic["latest_commitment_epoch"] == 1
+    assert diagnostic["durable_result_binding"] == "current_commitment"
+
+
+def test_installed_durable_inspector_is_read_only_and_finds_open_epoch(
+    tmp_path, monkeypatch
+):
+    root, manifest, _service, _scheduler_calls, epoch_zero = (
+        _start_converged_run(tmp_path, monkeypatch)
+    )
+    prepare_continuation(
+        root,
+        cycles=1,
+        tokens="unlimited",
+        expected_manifest_digest=manifest.sha256,
+    )
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    work = tmp_path / "inspector-unrelated-work"
+    work.mkdir()
+    helper_env = dict(os.environ)
+    helper_env["PYTHONPATH"] = str(ROOT / "src")
+    helper_env["PYTHONDONTWRITEBYTECODE"] = "1"
+    context = OPERATIONAL.ContinuationDiagnosticContext(
+        python=Path(sys.executable),
+        work=work,
+        env=helper_env,
+        run_root=root,
+        prior_terminal_commitment_ref=epoch_zero[
+            "terminal_commitment_ref"
+        ],
+        provider_state_path=tmp_path / "unused-provider-state.json",
+        provider_call_baseline=0,
+        observations=OPERATIONAL.ContinuationObservations(),
+    )
+    snapshot = OPERATIONAL._run_durable_inspection(context)
+    after = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    assert snapshot == _durable_snapshot(
+        commitment_inclusive_replay_binding_present=False
+    )
+    assert after == before
+
+
+def test_installed_durable_inspector_rejects_stale_binding_for_current_commitment(
+    tmp_path, monkeypatch
+):
+    root, manifest, service, _scheduler_calls, epoch_zero = (
+        _start_converged_run(tmp_path, monkeypatch)
+    )
+    stale_epoch_zero_replay = (root / "REPLAY_VALIDATION.json").read_bytes()
+    _continue_converged_run(root, manifest, service)
+    (root / "REPLAY_VALIDATION.json").write_bytes(stale_epoch_zero_replay)
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    work = tmp_path / "stale-binding-inspector-work"
+    work.mkdir()
+    helper_env = dict(os.environ)
+    helper_env["PYTHONPATH"] = str(ROOT / "src")
+    helper_env["PYTHONDONTWRITEBYTECODE"] = "1"
+    context = OPERATIONAL.ContinuationDiagnosticContext(
+        python=Path(sys.executable),
+        work=work,
+        env=helper_env,
+        run_root=root,
+        prior_terminal_commitment_ref=epoch_zero[
+            "terminal_commitment_ref"
+        ],
+        provider_state_path=tmp_path / "unused-provider-state.json",
+        provider_call_baseline=0,
+        observations=OPERATIONAL.ContinuationObservations(),
+    )
+    snapshot = OPERATIONAL._run_durable_inspection(context)
+    after = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+    assert snapshot == _durable_snapshot(
+        terminal_draft_count=2,
+        terminal_commitment_count=2,
+        latest_commitment_epoch=1,
+        commitment_inclusive_replay_binding_present=False,
+        durable_result_binding="current_commitment",
+    )
+    assert after == before
+
+
+def test_malformed_durable_inputs_emit_only_fixed_inspection_failure(
+    tmp_path, monkeypatch
+):
+    root, manifest, _service, _scheduler_calls, epoch_zero = (
+        _start_converged_run(tmp_path, monkeypatch)
+    )
+    prepare_continuation(
+        root,
+        cycles=1,
+        tokens="unlimited",
+        expected_manifest_digest=manifest.sha256,
+    )
+    (root / "log.jsonl").write_text(
+        "SENTINEL_SYNTHETIC_FIXTURE_PAYLOAD\n",
+        encoding="utf-8",
+    )
+    provider_state = tmp_path / "provider-state.json"
+    provider_state.write_text(
+        json.dumps({"errors": [], "total_calls": 10}),
+        encoding="utf-8",
+    )
+    work = tmp_path / "malformed-inspector-work"
+    work.mkdir()
+    helper_env = dict(os.environ)
+    helper_env["PYTHONPATH"] = str(ROOT / "src")
+    helper_env["PYTHONDONTWRITEBYTECODE"] = "1"
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {"state": "running", "phase": "reasoning", "seq": 43}
+    )
+    context = OPERATIONAL.ContinuationDiagnosticContext(
+        python=Path(sys.executable),
+        work=work,
+        env=helper_env,
+        run_root=root,
+        prior_terminal_commitment_ref=epoch_zero[
+            "terminal_commitment_ref"
+        ],
+        provider_state_path=provider_state,
+        provider_call_baseline=10,
+        observations=observations,
+    )
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context, clients=[_TrackedContinuationClient()]
+    )
+    assert diagnostic["diagnostic_inspection_status"] == "failed"
+    assert diagnostic["first_lifecycle_state"] == "running"
+    assert diagnostic["provider_call_delta"] is None
+    assert diagnostic["durable_terminal_epoch"] is None
+    assert diagnostic["terminal_draft_count"] is None
+    assert diagnostic["terminal_commitment_count"] is None
+    assert diagnostic["latest_commitment_epoch"] is None
+    assert diagnostic["opening_resume_decision_present"] is None
+    assert (
+        diagnostic["commitment_inclusive_replay_binding_present"] is None
+    )
+    assert diagnostic["durable_result_binding"] == "unknown"
+    public = json.dumps(diagnostic, sort_keys=True)
+    _assert_sentinels_absent(
+        public,
+        _diagnostic_sentinels(ROOT, tmp_path),
+    )
+
+
+def test_diagnostic_collection_failure_preserves_primary_and_redacts_raw_values(
+    tmp_path, monkeypatch, capsys
+):
+    order = []
+    client = _TrackedContinuationClient(
+        order=order,
+        state="SENTINEL_RAW_LIFECYCLE_VALUE",
+        phase="SENTINEL_RAW_PROGRESS_PHASE",
+    )
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {
+            "state": "SENTINEL_RAW_LIFECYCLE_VALUE",
+            "phase": "SENTINEL_RAW_PROGRESS_PHASE",
+            "seq": 47,
+        }
+    )
+    context = _diagnostic_context(tmp_path, observations)
+    failure = OPERATIONAL.OperationalSmokeFailure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+        timeout=True,
+    )
+
+    def fail_collection(*_args, **_kwargs):
+        raise RuntimeError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    monkeypatch.setattr(
+        OPERATIONAL, "_capture_continuation_diagnostic", fail_collection
+    )
+    original_cleanup = OPERATIONAL._cleanup_temp_root
+
+    def ordered_cleanup(root):
+        order.append("temporary_root_cleanup")
+        return original_cleanup(root)
+
+    monkeypatch.setattr(
+        OPERATIONAL, "_cleanup_temp_root", ordered_cleanup
+    )
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    assert (
+        OPERATIONAL._finalize_operational_smoke(
+            failure,
+            temp_root=temp_root,
+            mcp_clients=[client],
+            diagnostic_context=context,
+        )
+        == 1
+    )
+    captured = capsys.readouterr()
+    record = _annotation_record(captured.err)
+    assert order == ["mcp_shutdown", "temporary_root_cleanup"]
+    assert record["failure_kind"] == OPERATIONAL.FAILURE_TIMEOUT
+    assert record["timeout"] is True
+    assert record["diagnostic_inspection_status"] == "failed"
+    assert record["first_lifecycle_state"] == "unknown"
+    assert record["last_lifecycle_state"] == "unknown"
+    assert record["last_progress_phase"] == "unknown"
+    assert record["cleanup_completed"] is True
+    _assert_sentinels_absent(
+        str(failure)
+        + captured.out
+        + captured.err
+        + json.dumps(record),
+        _diagnostic_sentinels(ROOT, temp_root),
+    )
+
+
+def test_shutdown_failure_cannot_replace_primary_timeout(
+    tmp_path, monkeypatch, capsys
+):
+    class ShutdownFailureClient(_TrackedContinuationClient):
+        def close(self, **_kwargs):
+            self.process.returncode = 0
+            self._closed = True
+            raise OPERATIONAL.OperationalSmokeFailure(
+                stage=OPERATIONAL.STAGE_CLEANUP,
+                failure_kind=OPERATIONAL.FAILURE_COMMAND,
+                exit_status=99,
+            )
+
+    client = ShutdownFailureClient()
+    failure = OPERATIONAL.OperationalSmokeFailure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+        timeout=True,
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_capture_continuation_diagnostic",
+        lambda _context, *, clients: {
+            **OPERATIONAL._default_continuation_diagnostic(),
+            "diagnostic_inspection_status": "failed",
+            "mcp_liveness": "alive",
+        },
+    )
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    assert (
+        OPERATIONAL._finalize_operational_smoke(
+            failure,
+            temp_root=temp_root,
+            mcp_clients=[client],
+        )
+        == 1
+    )
+    record = _annotation_record(capsys.readouterr().err)
+    assert record["failure_kind"] == OPERATIONAL.FAILURE_TIMEOUT
+    assert record["stage"] == OPERATIONAL.STAGE_CONTINUATION_RESUME
+    assert record["exit_status"] is None
+    assert record["cleanup_completed"] is True
+
+
+def test_unreadable_durable_diagnostic_is_fixed_and_payload_free(
+    tmp_path, monkeypatch
+):
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_status(
+        {"state": "running", "phase": "resume", "seq": 53}
+    )
+    context = _diagnostic_context(tmp_path, observations)
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (10, 0),
+    )
+
+    def unreadable(_context):
+        raise PermissionError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    monkeypatch.setattr(
+        OPERATIONAL, "_run_durable_inspection", unreadable
+    )
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context, clients=[_TrackedContinuationClient()]
+    )
+    assert diagnostic["diagnostic_inspection_status"] == "failed"
+    assert diagnostic["last_progress_phase"] == "resume"
+    assert diagnostic["durable_terminal_epoch"] is None
+    _assert_sentinels_absent(
+        json.dumps(diagnostic),
+        _diagnostic_sentinels(ROOT, tmp_path),
+    )
+
+
+def test_exited_continuation_child_keeps_exit_status_and_cleans_up(
+    tmp_path, monkeypatch, capsys
+):
+    class ExitedTrackedClient(_TrackedContinuationClient):
+        def __init__(self):
+            super().__init__()
+            self.process.returncode = 47
+
+        def close(self, **_kwargs):
+            self._closed = True
+            raise OPERATIONAL.OperationalSmokeFailure(
+                stage=OPERATIONAL.STAGE_CLEANUP,
+                failure_kind=OPERATIONAL.FAILURE_COMMAND,
+                exit_status=47,
+            )
+
+    client = ExitedTrackedClient()
+    failure = OPERATIONAL.OperationalSmokeFailure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        exit_status=47,
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_capture_continuation_diagnostic",
+        lambda _context, *, clients: {
+            **OPERATIONAL._default_continuation_diagnostic(),
+            "mcp_liveness": "exited",
+        },
+    )
+    temp_root = tmp_path / "SENTINEL_TEMPORARY_PATH"
+    temp_root.mkdir()
+    assert (
+        OPERATIONAL._finalize_operational_smoke(
+            failure,
+            temp_root=temp_root,
+            mcp_clients=[client],
+        )
+        == 47
+    )
+    record = _annotation_record(capsys.readouterr().err)
+    assert record["exit_status"] == 47
+    assert record["mcp_liveness"] == "exited"
+    assert record["cleanup_completed"] is True
+    assert not temp_root.exists()
 
 
 def test_command_failure_is_structured_payload_free_and_preserves_exit_status(
@@ -244,13 +1120,11 @@ def test_command_failure_is_structured_payload_free_and_preserves_exit_status(
         )
     public_failure = str(raised.value)
     _assert_sentinels_absent(public_failure, sentinels)
-    assert json.loads(public_failure) == {
-        "exit_status": 23,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
-        "timeout": False,
-    }
+    assert json.loads(public_failure) == _expected_failure(
+        stage=OPERATIONAL.STAGE_BUILD_WHEEL,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        exit_status=23,
+    )
 
     monkeypatch.setattr(
         OPERATIONAL.tempfile,
@@ -272,15 +1146,12 @@ def test_command_failure_is_structured_payload_free_and_preserves_exit_status(
     captured = capsys.readouterr()
     record = _annotation_record(captured.err)
     assert captured.out == ""
-    assert record == {
-        "cleanup_completed": True,
-        "exit_status": 23,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
-        "platform_family": OPERATIONAL._platform_family(),
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_BUILD_WHEEL,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        cleanup_completed=True,
+        exit_status=23,
+    )
     _assert_sentinels_absent(
         public_failure + captured.out + captured.err + json.dumps(record),
         sentinels,
@@ -315,14 +1186,11 @@ def test_unexpected_exception_is_fail_closed_and_payload_free(
     captured = capsys.readouterr()
     record = _annotation_record(captured.err)
     assert captured.out == ""
-    assert record == {
-        "cleanup_completed": True,
-        "failure_kind": OPERATIONAL.FAILURE_UNEXPECTED,
-        "platform_family": OPERATIONAL._platform_family(),
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_BUILD_WHEEL,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_BUILD_WHEEL,
+        failure_kind=OPERATIONAL.FAILURE_UNEXPECTED,
+        cleanup_completed=True,
+    )
     _assert_sentinels_absent(
         captured.out + captured.err + json.dumps(record),
         sentinels,
@@ -362,22 +1230,17 @@ def test_timeout_failure_text_is_fixed_and_payload_free(monkeypatch, tmp_path):
         )
     public_failure = str(raised.value)
     _assert_sentinels_absent(public_failure, sentinels)
-    assert json.loads(public_failure) == {
-        "detail_code": OPERATIONAL.DETAIL_CHILD_TIMEOUT,
-        "durable_progress": OPERATIONAL.DURABLE_PREPARATION_ABSENT,
-        "event_log_present": False,
-        "failure_kind": OPERATIONAL.FAILURE_TIMEOUT,
-        "loopback_start_present": False,
-        "managed_registration_present": False,
-        "manifest_present": False,
-        "preparation_present": False,
-        "progress_log_present": False,
-        "run_root_present": False,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_REASON,
-        "terminal_result_present": False,
-        "timeout": True,
-    }
+    assert json.loads(public_failure) == _expected_failure(
+        stage=OPERATIONAL.STAGE_REASON,
+        failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+        timeout=True,
+        detail_code=OPERATIONAL.DETAIL_CHILD_TIMEOUT,
+        durable_progress=OPERATIONAL.DURABLE_PREPARATION_ABSENT,
+        state_presence={
+            field: False
+            for field in OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS
+        },
+    )
 
 
 def test_mcp_child_exit_is_payload_free_and_preserves_process_status(
@@ -450,13 +1313,11 @@ def test_mcp_child_exit_is_payload_free_and_preserves_process_status(
     with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
         request_from_failed_child()
     public_failure = str(raised.value)
-    assert json.loads(public_failure) == {
-        "exit_status": 47,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_MCP_REQUEST,
-        "timeout": False,
-    }
+    assert json.loads(public_failure) == _expected_failure(
+        stage=OPERATIONAL.STAGE_MCP_REQUEST,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        exit_status=47,
+    )
     _assert_sentinels_absent(public_failure, sentinels)
     assert processes[-1].stderr.read_calls == 0
 
@@ -475,15 +1336,12 @@ def test_mcp_child_exit_is_payload_free_and_preserves_process_status(
     captured = capsys.readouterr()
     record = _annotation_record(captured.err)
     assert captured.out == ""
-    assert record == {
-        "cleanup_completed": True,
-        "exit_status": 47,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
-        "platform_family": OPERATIONAL._platform_family(),
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_MCP_REQUEST,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_MCP_REQUEST,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        cleanup_completed=True,
+        exit_status=47,
+    )
     _assert_sentinels_absent(
         public_failure + captured.out + captured.err + json.dumps(record),
         sentinels,
@@ -521,12 +1379,10 @@ def test_mcp_response_failures_never_enter_public_diagnostics(
             stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
         )
     public_failure = str(raised.value)
-    assert json.loads(public_failure) == {
-        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_CONTINUATION_RESUME,
-        "timeout": False,
-    }
+    assert json.loads(public_failure) == _expected_failure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_ASSERTION,
+    )
     _assert_sentinels_absent(public_failure, sentinels)
 
     client.is_error = False
@@ -537,12 +1393,10 @@ def test_mcp_response_failures_never_enter_public_diagnostics(
             stage=OPERATIONAL.STAGE_CONTINUATION_REJECTION,
         )
     unexpected_success_failure = str(raised_success.value)
-    assert json.loads(unexpected_success_failure) == {
-        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_CONTINUATION_REJECTION,
-        "timeout": False,
-    }
+    assert json.loads(unexpected_success_failure) == _expected_failure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_REJECTION,
+        failure_kind=OPERATIONAL.FAILURE_ASSERTION,
+    )
     _assert_sentinels_absent(unexpected_success_failure, sentinels)
 
     client.is_error = True
@@ -565,14 +1419,11 @@ def test_mcp_response_failures_never_enter_public_diagnostics(
     captured = capsys.readouterr()
     record = _annotation_record(captured.err)
     assert captured.out == ""
-    assert record == {
-        "cleanup_completed": True,
-        "failure_kind": OPERATIONAL.FAILURE_ASSERTION,
-        "platform_family": OPERATIONAL._platform_family(),
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_CONTINUATION_RESUME,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_ASSERTION,
+        cleanup_completed=True,
+    )
     _assert_sentinels_absent(
         public_failure
         + unexpected_success_failure
@@ -584,8 +1435,8 @@ def test_mcp_response_failures_never_enter_public_diagnostics(
     assert not temp_root.exists()
 
 
-def test_v2_diagnostic_fields_and_allowlists_are_closed():
-    assert OPERATIONAL.FAILURE_SCHEMA == "deepreason-wheel-operational-failure-v2"
+def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
+    assert OPERATIONAL.FAILURE_SCHEMA == "deepreason-wheel-operational-failure-v3"
     assert OPERATIONAL.ALLOWED_TYPED_REASON_CODES == {"RUN_WORKER_NOT_FOUND"}
     assert OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS == {
         "event_log_present",
@@ -597,6 +1448,102 @@ def test_v2_diagnostic_fields_and_allowlists_are_closed():
         "run_root_present",
         "terminal_result_present",
     }
+    assert OPERATIONAL.CONTINUATION_DIAGNOSTIC_FIELDS == {
+        "diagnostic_inspection_status",
+        "first_lifecycle_state",
+        "last_lifecycle_state",
+        "status_observation_count",
+        "last_progress_sequence",
+        "last_progress_phase",
+        "stale_epoch0_result_observation_count",
+        "result_read_error_count",
+        "status_read_error_count",
+        "provider_call_delta",
+        "loopback_provider_error_count",
+        "mcp_liveness",
+        "opening_resume_decision_present",
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+        "commitment_inclusive_replay_binding_present",
+        "durable_result_binding",
+    }
+    assert OPERATIONAL.FAILURE_RECORD_FIELDS == {
+        "schema",
+        "platform_family",
+        "stage",
+        "failure_kind",
+        "timeout",
+        "cleanup_completed",
+        "exit_status",
+        "detail_code",
+        "durable_progress",
+        *OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS,
+        *OPERATIONAL.CONTINUATION_DIAGNOSTIC_FIELDS,
+    }
+    assert OPERATIONAL.ALLOWED_DIAGNOSTIC_LIFECYCLES == {
+        "not_observed",
+        "not_started",
+        "starting",
+        "running",
+        "paused",
+        "completed",
+        "failed",
+        "cancelled",
+        "unknown",
+    }
+    assert OPERATIONAL.ALLOWED_DIAGNOSTIC_PHASES == {
+        "not_observed",
+        "manifest",
+        "resume",
+        "workload",
+        "reasoning",
+        "stop",
+        "unknown",
+    }
+    assert OPERATIONAL.ALLOWED_MCP_LIVENESS == {
+        "not_started",
+        "alive",
+        "exited",
+        "unknown",
+    }
+    assert OPERATIONAL.ALLOWED_RESULT_BINDINGS == {
+        "absent",
+        "prior_commitment",
+        "current_commitment",
+        "unbound",
+        "unknown",
+    }
+    failure = OPERATIONAL.OperationalSmokeFailure(
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+        timeout=True,
+    )
+    record = OPERATIONAL._diagnostic_record(
+        failure, cleanup_completed=False
+    )
+    assert set(record) == OPERATIONAL.FAILURE_RECORD_FIELDS
+    for field in (
+        "status_observation_count",
+        "stale_epoch0_result_observation_count",
+        "result_read_error_count",
+        "status_read_error_count",
+    ):
+        assert type(record[field]) is int and record[field] >= 0
+    for field in (
+        "exit_status",
+        "last_progress_sequence",
+        "provider_call_delta",
+        "loopback_provider_error_count",
+        "durable_terminal_epoch",
+        "terminal_draft_count",
+        "terminal_commitment_count",
+        "latest_commitment_epoch",
+    ):
+        assert record[field] is None
+    assert type(record["timeout"]) is bool
+    assert type(record["cleanup_completed"]) is bool
 
     with pytest.raises(ValueError, match="detail code"):
         OPERATIONAL.OperationalSmokeFailure(
@@ -621,6 +1568,24 @@ def test_v2_diagnostic_fields_and_allowlists_are_closed():
             stage=OPERATIONAL.STAGE_REASON,
             failure_kind=OPERATIONAL.FAILURE_COMMAND,
             state_presence={OPERATIONAL.STATE_RUN_ROOT_PRESENT: 1},
+        )
+    invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
+    invalid_diagnostic["first_lifecycle_state"] = (
+        "SENTINEL_RAW_LIFECYCLE_VALUE"
+    )
+    with pytest.raises(ValueError, match="lifecycle"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+            continuation_diagnostic=invalid_diagnostic,
+        )
+    invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
+    invalid_diagnostic["provider_call_delta"] = -1
+    with pytest.raises(TypeError, match="non-negative"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+            continuation_diagnostic=invalid_diagnostic,
         )
 
 
@@ -732,35 +1697,27 @@ def test_reason_wrapper_admits_only_exact_typed_code_and_reports_boolean_state(
         )
     public_failure = str(raised.value)
     record = json.loads(public_failure)
-    assert record == {
-        "detail_code": OPERATIONAL.TYPED_REASON_RUN_WORKER_NOT_FOUND,
-        "durable_progress": OPERATIONAL.DURABLE_EVENT_LOG_PRESENT,
+    reason_state = {
         "event_log_present": True,
-        "exit_status": 23,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
         "loopback_start_present": True,
         "managed_registration_present": True,
         "manifest_present": True,
         "preparation_present": True,
         "progress_log_present": True,
         "run_root_present": True,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_REASON,
         "terminal_result_present": False,
-        "timeout": False,
     }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_REASON,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        exit_status=23,
+        detail_code=OPERATIONAL.TYPED_REASON_RUN_WORKER_NOT_FOUND,
+        durable_progress=OPERATIONAL.DURABLE_EVENT_LOG_PRESENT,
+        state_presence=reason_state,
+    )
     assert record["detail_code"] in OPERATIONAL.ALLOWED_DETAIL_CODES
     assert record["durable_progress"] in OPERATIONAL.ALLOWED_DURABLE_PROGRESS
-    assert set(record) <= {
-        "schema",
-        "stage",
-        "failure_kind",
-        "timeout",
-        "exit_status",
-        "detail_code",
-        "durable_progress",
-        *OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS,
-    }
+    assert set(record) == OPERATIONAL.FAILURE_RECORD_FIELDS
     for field in OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS:
         assert type(record[field]) is bool
     _assert_sentinels_absent(public_failure, sentinels)
@@ -775,7 +1732,6 @@ def test_reason_wrapper_admits_only_exact_typed_code_and_reports_boolean_state(
     assert annotation == {
         **record,
         "cleanup_completed": True,
-        "platform_family": OPERATIONAL._platform_family(),
     }
     _assert_sentinels_absent(
         captured.out + captured.err + json.dumps(annotation),
@@ -869,7 +1825,7 @@ def test_reason_launch_failures_are_fixed_and_payload_free(
     public_failure = str(raised.value)
     record = json.loads(public_failure)
     assert record["detail_code"] == expected_detail
-    assert "exit_status" not in record
+    assert record["exit_status"] is None
     assert record["failure_kind"] == OPERATIONAL.FAILURE_UNEXPECTED
     _assert_sentinels_absent(public_failure, sentinels)
 
@@ -909,15 +1865,13 @@ def test_reason_state_inspection_errors_are_fixed_and_preserve_child_exit(
     )
     public_failure = str(failure)
     record = json.loads(public_failure)
-    assert record == {
-        "detail_code": expected_detail,
-        "durable_progress": OPERATIONAL.DURABLE_STATE_INSPECTION_UNAVAILABLE,
-        "exit_status": 41,
-        "failure_kind": OPERATIONAL.FAILURE_COMMAND,
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_REASON,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_REASON,
+        failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        exit_status=41,
+        detail_code=expected_detail,
+        durable_progress=OPERATIONAL.DURABLE_STATE_INSPECTION_UNAVAILABLE,
+    )
     _assert_sentinels_absent(public_failure, sentinels)
 
 
@@ -976,14 +1930,11 @@ def test_cleanup_failure_is_fail_closed_and_payload_free(
     captured = capsys.readouterr()
     assert captured.out == ""
     record = _annotation_record(captured.err)
-    assert record == {
-        "cleanup_completed": False,
-        "failure_kind": OPERATIONAL.FAILURE_CLEANUP,
-        "platform_family": OPERATIONAL._platform_family(),
-        "schema": OPERATIONAL.FAILURE_SCHEMA,
-        "stage": OPERATIONAL.STAGE_CLEANUP,
-        "timeout": False,
-    }
+    assert record == _expected_failure(
+        stage=OPERATIONAL.STAGE_CLEANUP,
+        failure_kind=OPERATIONAL.FAILURE_CLEANUP,
+        cleanup_completed=False,
+    )
     _assert_sentinels_absent(captured.out + captured.err, sentinels)
 
 
@@ -997,6 +1948,13 @@ def test_every_operational_reason_command_uses_the_diagnostic_wrapper():
             env={},
             stage=OPERATIONAL.STAGE_REASON,
         )
+
+
+def test_every_operational_mcp_child_uses_tracked_construction():
+    source = Path(OPERATIONAL.__file__).read_text(encoding="utf-8")
+    assert source.count("MCPClient(") == 1
+    assert source.count("= _new_mcp_client(") == 5
+    assert "mcp_clients=mcp_clients" in source
 
 
 def test_package_layout_excludes_mini_and_external_smoke_fixture():
