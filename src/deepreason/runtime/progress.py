@@ -63,6 +63,10 @@ def _atomic_json(path: Path, value: dict) -> None:
     path = Path(path)
     io_path = _io_path(path)
     io_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = (
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        + b"\n"
+    )
     descriptor, temporary_name = tempfile.mkstemp(
         dir=io_path.parent,
         prefix=".atomic.",
@@ -70,9 +74,8 @@ def _atomic_json(path: Path, value: dict) -> None:
     )
     temporary = Path(temporary_name)
     try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
-            json.dump(value, stream, sort_keys=True, separators=(",", ":"))
-            stream.write("\n")
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(payload)
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, io_path)

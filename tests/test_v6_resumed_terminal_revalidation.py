@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import threading
 
@@ -387,6 +388,91 @@ def test_restart_recovers_stale_preceding_epoch_without_redispatch(
     assert (root / "REPLAY_VALIDATION.json").read_bytes() == first_replay_bytes
     assert (root / "log.jsonl").read_bytes() == log_bytes
     assert _terminal_object_bytes(root) == immutable_bytes
+
+
+def test_windows_text_translation_cannot_change_terminal_json_bytes(
+    tmp_path, monkeypatch
+):
+    from deepreason.runtime import progress as progress_module
+
+    original_fdopen = progress_module.os.fdopen
+    opened_modes = []
+
+    def windows_translation_oracle(descriptor, mode, *args, **kwargs):
+        opened_modes.append(mode)
+        if "b" not in mode:
+            kwargs["newline"] = "\r\n"
+        return original_fdopen(descriptor, mode, *args, **kwargs)
+
+    monkeypatch.setattr(progress_module.os, "fdopen", windows_translation_oracle)
+    root, manifest, _service, scheduler_calls, terminal = _start_converged_run(
+        tmp_path,
+        monkeypatch,
+    )
+    raw = (root / "run-result.json").read_bytes()
+    expected = (
+        json.dumps(terminal, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        + b"\n"
+    )
+
+    assert raw.decode("utf-8")
+    assert raw == expected
+    assert raw.endswith(b"\n")
+    assert not raw.endswith(b"\n\n")
+    assert not raw.endswith(b"\r\n")
+    assert not raw.startswith(b"\xef\xbb\xbf")
+    harness, commitment, _replay = _assert_current_validation(
+        root,
+        manifest,
+        terminal,
+        epoch=0,
+    )
+    assert verify_post_commit_report(root).valid is True
+
+    log_bytes = (root / "log.jsonl").read_bytes()
+    replay_bytes = (root / "REPLAY_VALIDATION.json").read_bytes()
+    immutable_bytes = _terminal_object_bytes(root)
+    _forbid_dispatch(monkeypatch)
+    recovered = TextRunApplicationService(TextRunWorkerRegistry()).result(
+        InspectTextRunIntentV1(root=str(root))
+    ).payload
+
+    assert recovered == terminal
+    assert (root / "run-result.json").read_bytes() == raw
+    assert (root / "REPLAY_VALIDATION.json").read_bytes() == replay_bytes
+    assert (root / "log.jsonl").read_bytes() == log_bytes
+    assert _terminal_object_bytes(root) == immutable_bytes
+    recovered_harness = Harness(root, read_only=True)
+    assert recovered_harness.workflow_state.current_terminal_commitment == commitment
+    assert len(_terminal_commit_events(recovered_harness)) == 1
+    assert scheduler_calls == [None]
+
+    representative = tmp_path / "representative.json"
+    progress_module._atomic_json(
+        representative,
+        {
+            "z": {
+                "unicode": "Māori—雪",
+                "logical_newline": "line1\nline2",
+            },
+            "a": [True, None, 3, 1.25],
+        },
+    )
+    golden = (
+        b'{"a":[true,null,3,1.25],"z":{"logical_newline":"line1\\nline2",'
+        b'"unicode":"M\\u0101ori\\u2014\\u96ea"}}\n'
+    )
+    representative_bytes = representative.read_bytes()
+    assert representative_bytes == golden
+    assert (
+        hashlib.sha256(representative_bytes).hexdigest()
+        == "3d88b7505b375a2b0af1f95aae511436fda72ae8341be812fbda0729e7211c39"
+    )
+    assert representative_bytes.count(b"\n") == 1
+    assert b"line1\\nline2" in representative_bytes
+    assert not representative_bytes.endswith(b"\r\n")
+    assert "wb" in opened_modes
+    assert all("b" in mode for mode in opened_modes)
 
 
 def test_failed_post_commit_audit_leaves_fail_closed_recoverable_result(
