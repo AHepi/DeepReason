@@ -16,6 +16,7 @@ from pathlib import Path
 import re
 import shutil
 import socket
+import stat
 import subprocess
 import sys
 import tempfile
@@ -50,10 +51,11 @@ EXPECTED_MCP_TOOLS = (
 )
 TEST_CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 TEST_CREDENTIAL = "loopback-credential-must-never-appear"
+LOOPBACK_READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
 RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
-FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v1"
+FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v2"
 STAGE_BUILD_WHEEL = "build_wheel"
 STAGE_CREATE_ENVIRONMENT = "create_environment"
 STAGE_INSTALL_WHEEL = "install_wheel"
@@ -106,6 +108,63 @@ ALLOWED_FAILURE_KINDS = frozenset(
         FAILURE_CLEANUP,
     }
 )
+DETAIL_CHILD_EXIT_NONZERO = "child_exit_nonzero"
+DETAIL_CHILD_LAUNCH_FAILED = "child_launch_failed"
+DETAIL_CHILD_TIMEOUT = "child_timeout"
+DETAIL_EXECUTABLE_RESOLUTION_FAILED = "executable_resolution_failed"
+DETAIL_FILESYSTEM_ACCESS_DENIED = "filesystem_access_denied"
+DETAIL_UNKNOWN_REASON_FAILURE = "unknown_reason_failure"
+TYPED_REASON_RUN_WORKER_NOT_FOUND = "RUN_WORKER_NOT_FOUND"
+ALLOWED_TYPED_REASON_CODES = frozenset({TYPED_REASON_RUN_WORKER_NOT_FOUND})
+ALLOWED_DETAIL_CODES = frozenset(
+    {
+        DETAIL_CHILD_EXIT_NONZERO,
+        DETAIL_CHILD_LAUNCH_FAILED,
+        DETAIL_CHILD_TIMEOUT,
+        DETAIL_EXECUTABLE_RESOLUTION_FAILED,
+        DETAIL_FILESYSTEM_ACCESS_DENIED,
+        DETAIL_UNKNOWN_REASON_FAILURE,
+        *ALLOWED_TYPED_REASON_CODES,
+    }
+)
+DURABLE_PREPARATION_ABSENT = "preparation_absent"
+DURABLE_RUN_ROOT_PRESENT = "run_root_present"
+DURABLE_PREPARATION_PRESENT = "preparation_present"
+DURABLE_MANAGED_REGISTRATION_PRESENT = "managed_registration_present"
+DURABLE_EVENT_LOG_PRESENT = "event_log_present"
+DURABLE_TERMINAL_RESULT_PRESENT = "terminal_result_present"
+DURABLE_STATE_INSPECTION_UNAVAILABLE = "state_inspection_unavailable"
+ALLOWED_DURABLE_PROGRESS = frozenset(
+    {
+        DURABLE_PREPARATION_ABSENT,
+        DURABLE_RUN_ROOT_PRESENT,
+        DURABLE_PREPARATION_PRESENT,
+        DURABLE_MANAGED_REGISTRATION_PRESENT,
+        DURABLE_EVENT_LOG_PRESENT,
+        DURABLE_TERMINAL_RESULT_PRESENT,
+        DURABLE_STATE_INSPECTION_UNAVAILABLE,
+    }
+)
+STATE_RUN_ROOT_PRESENT = "run_root_present"
+STATE_PREPARATION_PRESENT = "preparation_present"
+STATE_MANIFEST_PRESENT = "manifest_present"
+STATE_MANAGED_REGISTRATION_PRESENT = "managed_registration_present"
+STATE_PROGRESS_LOG_PRESENT = "progress_log_present"
+STATE_EVENT_LOG_PRESENT = "event_log_present"
+STATE_TERMINAL_RESULT_PRESENT = "terminal_result_present"
+STATE_LOOPBACK_START_PRESENT = "loopback_start_present"
+ALLOWED_STATE_PRESENCE_FIELDS = frozenset(
+    {
+        STATE_RUN_ROOT_PRESENT,
+        STATE_PREPARATION_PRESENT,
+        STATE_MANIFEST_PRESENT,
+        STATE_MANAGED_REGISTRATION_PRESENT,
+        STATE_PROGRESS_LOG_PRESENT,
+        STATE_EVENT_LOG_PRESENT,
+        STATE_TERMINAL_RESULT_PRESENT,
+        STATE_LOOPBACK_START_PRESENT,
+    }
+)
 
 
 class OperationalSmokeFailure(Exception):
@@ -118,6 +177,9 @@ class OperationalSmokeFailure(Exception):
         failure_kind: str,
         exit_status: int | None = None,
         timeout: bool = False,
+        detail_code: str | None = None,
+        durable_progress: str | None = None,
+        state_presence: dict[str, bool] | None = None,
     ) -> None:
         if stage not in ALLOWED_FAILURE_STAGES:
             raise ValueError("invalid fixed operational stage")
@@ -129,10 +191,27 @@ class OperationalSmokeFailure(Exception):
             raise TypeError("operational exit status must be an integer")
         if not isinstance(timeout, bool):
             raise TypeError("operational timeout status must be boolean")
+        if detail_code is not None and detail_code not in ALLOWED_DETAIL_CODES:
+            raise ValueError("invalid fixed operational detail code")
+        if (
+            durable_progress is not None
+            and durable_progress not in ALLOWED_DURABLE_PROGRESS
+        ):
+            raise ValueError("invalid fixed durable progress")
+        fixed_state = dict(state_presence or {})
+        if not set(fixed_state) <= ALLOWED_STATE_PRESENCE_FIELDS:
+            raise ValueError("invalid fixed state-presence field")
+        if any(type(value) is not bool for value in fixed_state.values()):
+            raise TypeError("state-presence values must be boolean")
         self.stage = stage
         self.failure_kind = failure_kind
         self.exit_status = exit_status
         self.timeout = timeout
+        self.detail_code = detail_code
+        self.durable_progress = durable_progress
+        self.state_presence = {
+            key: fixed_state[key] for key in sorted(fixed_state)
+        }
         record: dict[str, object] = {
             "failure_kind": failure_kind,
             "schema": FAILURE_SCHEMA,
@@ -141,6 +220,11 @@ class OperationalSmokeFailure(Exception):
         }
         if exit_status is not None:
             record["exit_status"] = exit_status
+        if detail_code is not None:
+            record["detail_code"] = detail_code
+        if durable_progress is not None:
+            record["durable_progress"] = durable_progress
+        record.update(self.state_presence)
         super().__init__(json.dumps(record, sort_keys=True, separators=(",", ":")))
 
 
@@ -440,6 +524,7 @@ def _environment(
 ) -> dict[str, str]:
     environment = dict(os.environ)
     environment.pop("PYTHONPATH", None)
+    environment.pop(LOOPBACK_READY_ENV, None)
     environment["HOME"] = str(home)
     environment["USERPROFILE"] = str(home)
     environment["PYTHONNOUSERSITE"] = "1"
@@ -507,6 +592,132 @@ def _venv_executable(root: Path, name: str) -> Path:
     return directory / f"{name}{suffix}"
 
 
+def _is_regular_file(path: Path) -> bool:
+    try:
+        observed = path.lstat()
+    except FileNotFoundError:
+        return False
+    return stat.S_ISREG(observed.st_mode)
+
+
+def _managed_run_roots(home: Path) -> frozenset[Path]:
+    runs = home / ".deepreason" / "runs"
+    try:
+        entries = tuple(runs.iterdir())
+    except FileNotFoundError:
+        return frozenset()
+    roots = []
+    for entry in entries:
+        observed = entry.lstat()
+        if stat.S_ISDIR(observed.st_mode) and not entry.name.startswith("."):
+            roots.append(entry)
+    return frozenset(roots)
+
+
+def _reason_state_presence(
+    *,
+    home: Path,
+    ready_marker: Path,
+    roots_before: frozenset[Path] | None,
+) -> tuple[dict[str, bool], str]:
+    if roots_before is None:
+        raise OSError("reason state baseline was unavailable")
+    roots = _managed_run_roots(home) - roots_before
+    state = {
+        STATE_RUN_ROOT_PRESENT: bool(roots),
+        STATE_PREPARATION_PRESENT: any(
+            _is_regular_file(root / "run-preparation.json") for root in roots
+        ),
+        STATE_MANIFEST_PRESENT: any(
+            _is_regular_file(root / "run-manifest.json") for root in roots
+        ),
+        STATE_MANAGED_REGISTRATION_PRESENT: any(
+            _is_regular_file(root / "run-request.json") for root in roots
+        ),
+        STATE_PROGRESS_LOG_PRESENT: any(
+            _is_regular_file(root / "progress.jsonl") for root in roots
+        ),
+        STATE_EVENT_LOG_PRESENT: any(
+            _is_regular_file(root / "log.jsonl") for root in roots
+        ),
+        STATE_TERMINAL_RESULT_PRESENT: any(
+            _is_regular_file(root / "run-result.json") for root in roots
+        ),
+        STATE_LOOPBACK_START_PRESENT: _is_regular_file(ready_marker),
+    }
+    if state[STATE_TERMINAL_RESULT_PRESENT]:
+        durable = DURABLE_TERMINAL_RESULT_PRESENT
+    elif state[STATE_EVENT_LOG_PRESENT]:
+        durable = DURABLE_EVENT_LOG_PRESENT
+    elif (
+        state[STATE_MANAGED_REGISTRATION_PRESENT]
+        or state[STATE_PROGRESS_LOG_PRESENT]
+    ):
+        durable = DURABLE_MANAGED_REGISTRATION_PRESENT
+    elif state[STATE_PREPARATION_PRESENT] or state[STATE_MANIFEST_PRESENT]:
+        durable = DURABLE_PREPARATION_PRESENT
+    elif state[STATE_RUN_ROOT_PRESENT]:
+        durable = DURABLE_RUN_ROOT_PRESENT
+    else:
+        durable = DURABLE_PREPARATION_ABSENT
+    return state, durable
+
+
+def _typed_reason_code(stdout: str, stderr: str) -> str | None:
+    for captured in (stderr, stdout):
+        candidate = captured.strip()
+        if candidate in ALLOWED_TYPED_REASON_CODES:
+            return candidate
+    return None
+
+
+def _reason_failure(
+    *,
+    failure_kind: str,
+    home: Path,
+    ready_marker: Path,
+    roots_before: frozenset[Path] | None,
+    exit_status: int | None = None,
+    stdout: str = "",
+    stderr: str = "",
+    timeout: bool = False,
+    fixed_detail_code: str | None = None,
+) -> OperationalSmokeFailure:
+    typed_code = _typed_reason_code(stdout, stderr)
+    detail_code = fixed_detail_code or typed_code
+    try:
+        state_presence, durable_progress = _reason_state_presence(
+            home=home,
+            ready_marker=ready_marker,
+            roots_before=roots_before,
+        )
+    except PermissionError:
+        state_presence = {}
+        durable_progress = DURABLE_STATE_INSPECTION_UNAVAILABLE
+        if detail_code is None:
+            detail_code = DETAIL_FILESYSTEM_ACCESS_DENIED
+    except OSError:
+        state_presence = {}
+        durable_progress = DURABLE_STATE_INSPECTION_UNAVAILABLE
+        if detail_code is None:
+            detail_code = DETAIL_UNKNOWN_REASON_FAILURE
+    if detail_code is None:
+        detail_code = (
+            DETAIL_UNKNOWN_REASON_FAILURE
+            if stdout or stderr
+            else DETAIL_CHILD_EXIT_NONZERO
+        )
+    return OperationalSmokeFailure(
+        stage=STAGE_REASON,
+        failure_kind=failure_kind,
+        exit_status=exit_status,
+        timeout=timeout,
+        detail_code=detail_code,
+        durable_progress=durable_progress,
+        state_presence=state_presence,
+    )
+
+
 def _run(
     command: list[str],
     *,
@@ -515,7 +726,10 @@ def _run(
     stage: str,
     expected: tuple[int, ...] = (0,),
     timeout: int = 600,
+    _reason_context: tuple[Path, Path, frozenset[Path] | None] | None = None,
 ) -> subprocess.CompletedProcess[str]:
+    if (stage == STAGE_REASON) != (_reason_context is not None):
+        raise ValueError("reason stage must use the fixed diagnostic wrapper")
     try:
         completed = subprocess.run(
             command,
@@ -528,18 +742,88 @@ def _run(
             timeout=timeout,
         )
     except subprocess.TimeoutExpired:
+        if _reason_context is not None:
+            home, ready_marker, roots_before = _reason_context
+            raise _reason_failure(
+                failure_kind=FAILURE_TIMEOUT,
+                home=home,
+                ready_marker=ready_marker,
+                roots_before=roots_before,
+                timeout=True,
+                fixed_detail_code=DETAIL_CHILD_TIMEOUT,
+            ) from None
         raise OperationalSmokeFailure(
             stage=stage,
             failure_kind=FAILURE_TIMEOUT,
             timeout=True,
         ) from None
+    except FileNotFoundError:
+        if _reason_context is None:
+            raise
+        home, ready_marker, roots_before = _reason_context
+        raise _reason_failure(
+            failure_kind=FAILURE_UNEXPECTED,
+            home=home,
+            ready_marker=ready_marker,
+            roots_before=roots_before,
+            fixed_detail_code=DETAIL_EXECUTABLE_RESOLUTION_FAILED,
+        ) from None
+    except OSError:
+        if _reason_context is None:
+            raise
+        home, ready_marker, roots_before = _reason_context
+        raise _reason_failure(
+            failure_kind=FAILURE_UNEXPECTED,
+            home=home,
+            ready_marker=ready_marker,
+            roots_before=roots_before,
+            fixed_detail_code=DETAIL_CHILD_LAUNCH_FAILED,
+        ) from None
     if completed.returncode not in expected:
+        if _reason_context is not None:
+            home, ready_marker, roots_before = _reason_context
+            raise _reason_failure(
+                failure_kind=FAILURE_COMMAND,
+                home=home,
+                ready_marker=ready_marker,
+                roots_before=roots_before,
+                exit_status=int(completed.returncode),
+                stdout=completed.stdout,
+                stderr=completed.stderr,
+            )
         raise OperationalSmokeFailure(
             stage=stage,
             failure_kind=FAILURE_COMMAND,
             exit_status=int(completed.returncode),
         )
     return completed
+
+
+def _run_reason(
+    command: list[str],
+    *,
+    cwd: Path,
+    env: dict[str, str],
+    home: Path,
+    ready_marker: Path,
+    expected: tuple[int, ...] = (0,),
+    timeout: int = 600,
+) -> subprocess.CompletedProcess[str]:
+    try:
+        roots_before: frozenset[Path] | None = _managed_run_roots(home)
+    except OSError:
+        roots_before = None
+    reason_env = dict(env)
+    reason_env[LOOPBACK_READY_ENV] = str(ready_marker)
+    return _run(
+        command,
+        cwd=cwd,
+        env=reason_env,
+        stage=STAGE_REASON,
+        expected=expected,
+        timeout=timeout,
+        _reason_context=(home, ready_marker, roots_before),
+    )
 
 
 class MCPClient:
@@ -956,6 +1240,11 @@ def _diagnostic_record(
     }
     if failure.exit_status is not None:
         record["exit_status"] = failure.exit_status
+    if failure.detail_code is not None:
+        record["detail_code"] = failure.detail_code
+    if failure.durable_progress is not None:
+        record["durable_progress"] = failure.durable_progress
+    record.update(failure.state_presence)
     return record
 
 
@@ -996,6 +1285,26 @@ def _cleanup_temp_root(temp_root: Path | None) -> bool:
         return not temp_root.exists()
     except OSError:
         return False
+
+
+def _finalize_operational_smoke(
+    failure: OperationalSmokeFailure | None,
+    *,
+    temp_root: Path | None,
+) -> int:
+    cleanup_completed = _cleanup_temp_root(temp_root)
+    if failure is None and not cleanup_completed:
+        failure = OperationalSmokeFailure(
+            stage=STAGE_CLEANUP,
+            failure_kind=FAILURE_CLEANUP,
+        )
+    if failure is not None:
+        _emit_failure_diagnostic(
+            failure,
+            cleanup_completed=cleanup_completed,
+        )
+        return _failure_exit_status(failure)
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1212,11 +1521,12 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         stage = STAGE_REASON
-        first = _run(
+        first = _run_reason(
             [str(deepreason), "reason", "Why can layered explanations remain testable?"],
             cwd=work,
             env=clean_env,
-            stage=stage,
+            home=home,
+            ready_marker=temp_root / ".initial-reason-loopback-ready",
             expected=(0, 5),
             timeout=600,
         )
@@ -1289,7 +1599,7 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         stage = STAGE_REASON
-        resumable = _run(
+        resumable = _run_reason(
             [
                 str(deepreason),
                 "reason",
@@ -1301,7 +1611,8 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
-            stage=stage,
+            home=home,
+            ready_marker=temp_root / ".resumable-reason-loopback-ready",
             expected=(0, 5),
             timeout=600,
         )
@@ -1396,7 +1707,7 @@ def main(argv: list[str] | None = None) -> int:
             raise AssertionError("over-ceiling reasoning mutated state or called the provider")
 
         stage = STAGE_REASON
-        second = _run(
+        second = _run_reason(
             [
                 str(deepreason),
                 "reason",
@@ -1406,7 +1717,8 @@ def main(argv: list[str] | None = None) -> int:
             ],
             cwd=work,
             env=clean_env,
-            stage=stage,
+            home=home,
+            ready_marker=temp_root / ".second-reason-loopback-ready",
             timeout=180,
         )
         outputs.extend((second.stdout, second.stderr))
@@ -1532,19 +1844,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"retained: {temp_root}")
         return 0
 
-    cleanup_completed = _cleanup_temp_root(temp_root)
-    if failure is None and not cleanup_completed:
-        failure = OperationalSmokeFailure(
-            stage=STAGE_CLEANUP,
-            failure_kind=FAILURE_CLEANUP,
-        )
-    if failure is not None:
-        _emit_failure_diagnostic(
-            failure,
-            cleanup_completed=cleanup_completed,
-        )
-        return _failure_exit_status(failure)
-    return 0
+    return _finalize_operational_smoke(failure, temp_root=temp_root)
 
 
 if __name__ == "__main__":

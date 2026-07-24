@@ -20,6 +20,7 @@ import threading
 ENABLE_ENV = "DEEPREASON_WHEEL_LOOPBACK_FIXTURE"
 PORT_ENV = "DEEPREASON_WHEEL_LOOPBACK_PORT"
 STATE_ENV = "DEEPREASON_WHEEL_LOOPBACK_STATE"
+READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
 CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 CREDENTIAL = "loopback-credential-must-never-appear"
 RESUMABLE_STOP_MARKER = "typed resumable stop"
@@ -344,6 +345,14 @@ def _start_if_enabled() -> None:
     thread.start()
     # The global reference keeps the listening socket alive for the process.
     globals()["_ACTIVE_SERVER"] = server
+    ready_path = os.environ.get(READY_ENV)
+    if ready_path:
+        try:
+            Path(ready_path).write_bytes(b"ready\n")
+        except OSError:
+            # Marker absence remains an unknown diagnostic state.  It must not
+            # change whether the deterministic fixture can serve requests.
+            pass
 
 
 _start_if_enabled()
