@@ -8,11 +8,9 @@ by :mod:`deepreason`, and is excluded from the wheel by the package layout.
 from __future__ import annotations
 
 import argparse
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import hashlib
 import json
 import os
-from pathlib import Path
 import queue
 import re
 import shutil
@@ -25,7 +23,8 @@ import threading
 import time
 import venv
 import zipfile
-
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 
 EXPECTED_MCP_SCHEMA_SHA256 = (
     "7520ea29fa8efba50c98a9ffa76adfbe0c59c66f51541dfe609dee7736bf82e1"
@@ -53,13 +52,36 @@ EXPECTED_MCP_TOOLS = (
 TEST_CREDENTIAL_ENV = "DEEPREASON_LOOPBACK_SMOKE_KEY"
 TEST_CREDENTIAL = "loopback-credential-must-never-appear"
 LOOPBACK_READY_ENV = "DEEPREASON_WHEEL_LOOPBACK_READY"
+TERMINAL_DIAGNOSTIC_ENABLE_ENV = (
+    "DEEPREASON_WHEEL_TERMINAL_PHASE_DIAGNOSTIC"
+)
+TERMINAL_DIAGNOSTIC_LEDGER_ENV = (
+    "DEEPREASON_WHEEL_TERMINAL_PHASE_LEDGER"
+)
+TERMINAL_DIAGNOSTIC_MAX_RECORDS = 32_768
+TERMINAL_DIAGNOSTIC_MAX_BYTES = 8 * 1024 * 1024
+TERMINAL_PUBLICATION_RECOVERY_SENTINEL = (
+    "TERMINAL_PUBLICATION_RECOVERY_REQUIRED"
+)
 RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
-FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v3"
+FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v4"
 CONTINUATION_DEADLINE_SECONDS = 600
 POLL_INTERVAL_SECONDS = 0.05
 DIAGNOSTIC_INSPECTION_TIMEOUT_SECONDS = 10
+PLATFORM_WINDOWS = "windows"
+PLATFORM_MACOS = "macos"
+PLATFORM_LINUX = "linux"
+PLATFORM_OTHER = "other"
+ALLOWED_PLATFORM_FAMILIES = frozenset(
+    {
+        PLATFORM_WINDOWS,
+        PLATFORM_MACOS,
+        PLATFORM_LINUX,
+        PLATFORM_OTHER,
+    }
+)
 STAGE_BUILD_WHEEL = "build_wheel"
 STAGE_CREATE_ENVIRONMENT = "create_environment"
 STAGE_INSTALL_WHEEL = "install_wheel"
@@ -261,6 +283,115 @@ ALLOWED_RESULT_BINDINGS = frozenset(
         RESULT_BINDING_UNKNOWN,
     }
 )
+W1_PRECOMMIT_AUDITS = "W1_PRECOMMIT_AUDITS"
+W2_PRECOMMIT_VERIFICATION = "W2_PRECOMMIT_VERIFICATION"
+W3_TERMINAL_AUTHORITY_STATE = "W3_TERMINAL_AUTHORITY_STATE"
+W4_TERMINAL_DRAFT_CONSTRUCTION = "W4_TERMINAL_DRAFT_CONSTRUCTION"
+W5_COMMITMENT_ENSURE = "W5_COMMITMENT_ENSURE"
+W6_PENDING_RESULT_PUBLICATION = "W6_PENDING_RESULT_PUBLICATION"
+W7_FRESH_REPLAY_DERIVATION = "W7_FRESH_REPLAY_DERIVATION"
+W8_POSTCOMMIT_ROOT_VERIFICATION = "W8_POSTCOMMIT_ROOT_VERIFICATION"
+W9_REPLAY_BINDING_VALIDATION = "W9_REPLAY_BINDING_VALIDATION"
+W10_REPLAY_AND_FINAL_RESULT_PUBLICATION = (
+    "W10_REPLAY_AND_FINAL_RESULT_PUBLICATION"
+)
+TERMINAL_LOCK = "TERMINAL_LOCK"
+APPLICATION_INSPECT = "APPLICATION_INSPECT"
+APPLICATION_RESULT = "APPLICATION_RESULT"
+TERMINALIZATION_NOT_OBSERVED = "not_observed"
+TERMINALIZATION_PHASES = (
+    W1_PRECOMMIT_AUDITS,
+    W2_PRECOMMIT_VERIFICATION,
+    W3_TERMINAL_AUTHORITY_STATE,
+    W4_TERMINAL_DRAFT_CONSTRUCTION,
+    W5_COMMITMENT_ENSURE,
+    W6_PENDING_RESULT_PUBLICATION,
+    W7_FRESH_REPLAY_DERIVATION,
+    W8_POSTCOMMIT_ROOT_VERIFICATION,
+    W9_REPLAY_BINDING_VALIDATION,
+    W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+)
+DIAGNOSTIC_LEDGER_PHASES = (
+    *TERMINALIZATION_PHASES,
+    TERMINAL_LOCK,
+    APPLICATION_INSPECT,
+    APPLICATION_RESULT,
+)
+ALLOWED_LEDGER_PHASES = frozenset(DIAGNOSTIC_LEDGER_PHASES)
+ALLOWED_TERMINALIZATION_OBSERVATIONS = frozenset(
+    {TERMINALIZATION_NOT_OBSERVED, *TERMINALIZATION_PHASES, TERMINAL_LOCK}
+)
+ALLOWED_LEDGER_EDGES = frozenset(
+    {"enter", "return", "error", "wait_start", "acquired", "released"}
+)
+ALLOWED_LEDGER_ACTORS = frozenset({"worker", "mcp_server", "other"})
+ERROR_NONE = "none"
+ERROR_RUN_RESULT_NOT_READY = "run_result_not_ready"
+ERROR_MANIFEST_ADMISSION = "manifest_admission"
+ERROR_PROCESS_LOCK_BUSY = "process_lock_busy"
+ERROR_TERMINAL_AUTHORITY = "terminal_authority"
+ERROR_REPLAY_VERIFICATION = "replay_verification"
+ERROR_REPLAY_BINDING = "replay_binding"
+ERROR_ATOMIC_PERSISTENCE = "atomic_persistence"
+ERROR_REPLAY_SIDECAR_PERSISTENCE = "replay_sidecar_persistence"
+ERROR_FINAL_RESULT_PERSISTENCE = "final_result_persistence"
+ERROR_VALUE_OTHER = "value_error_other"
+ERROR_OS_OTHER = "operating_system_error_other"
+ERROR_UNEXPECTED = "unexpected_error"
+ALLOWED_LEDGER_ERROR_FAMILIES = frozenset(
+    {
+        ERROR_NONE,
+        ERROR_RUN_RESULT_NOT_READY,
+        ERROR_MANIFEST_ADMISSION,
+        ERROR_PROCESS_LOCK_BUSY,
+        ERROR_TERMINAL_AUTHORITY,
+        ERROR_REPLAY_VERIFICATION,
+        ERROR_REPLAY_BINDING,
+        ERROR_ATOMIC_PERSISTENCE,
+        ERROR_REPLAY_SIDECAR_PERSISTENCE,
+        ERROR_FINAL_RESULT_PERSISTENCE,
+        ERROR_VALUE_OTHER,
+        ERROR_OS_OTHER,
+        ERROR_UNEXPECTED,
+    }
+)
+WORKER_LIVENESS_ALIVE = "alive"
+WORKER_LIVENESS_NOT_ALIVE = "not_alive"
+WORKER_LIVENESS_NOT_REGISTERED = "not_registered"
+WORKER_LIVENESS_UNKNOWN = "unknown"
+ALLOWED_WORKER_LIVENESS = frozenset(
+    {
+        WORKER_LIVENESS_ALIVE,
+        WORKER_LIVENESS_NOT_ALIVE,
+        WORKER_LIVENESS_NOT_REGISTERED,
+        WORKER_LIVENESS_UNKNOWN,
+    }
+)
+RESULT_ERROR_RUN_RESULT_NOT_READY = "run_result_not_ready"
+RESULT_ERROR_MANIFEST_ADMISSION = "manifest_admission_failure"
+RESULT_ERROR_TERMINAL_RECOVERY = "terminal_recovery_failure"
+RESULT_ERROR_OTHER_SAFE = "other_safe_failure"
+RESULT_ERROR_CODE_KEYS = (
+    RESULT_ERROR_RUN_RESULT_NOT_READY,
+    RESULT_ERROR_MANIFEST_ADMISSION,
+    RESULT_ERROR_TERMINAL_RECOVERY,
+    RESULT_ERROR_OTHER_SAFE,
+)
+ALLOWED_RESULT_ERROR_CODES = frozenset(RESULT_ERROR_CODE_KEYS)
+MCP_TIMING_FIELDS = frozenset(
+    {
+        "call_count",
+        "total_ms",
+        "maximum_ms",
+        "timeout_count",
+        "error_count",
+        "baseline_call_count",
+        "baseline_total_ms",
+        "baseline_maximum_ms",
+        "baseline_timeout_count",
+        "baseline_error_count",
+    }
+)
 CONTINUATION_DIAGNOSTIC_FIELDS = frozenset(
     {
         "diagnostic_inspection_status",
@@ -282,6 +413,26 @@ CONTINUATION_DIAGNOSTIC_FIELDS = frozenset(
         "latest_commitment_epoch",
         "commitment_inclusive_replay_binding_present",
         "durable_result_binding",
+        "terminalization_last_entered_phase",
+        "terminalization_last_returned_phase",
+        "terminalization_last_error_phase",
+        "terminalization_last_error_family",
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_total_ms",
+        "terminalization_ledger_overflow",
+        "terminal_lock_acquire_count",
+        "terminal_lock_wait_total_ms",
+        "terminal_lock_wait_max_ms",
+        "worker_liveness",
+        "terminal_publication_recovery_required_observed",
+        "result_error_code_counts",
+        "mcp_status_timing",
+        "mcp_result_timing",
+        "continuation_elapsed_ms",
+        "application_recovery_interference_observed",
+        "application_recovery_last_entered_phase",
     }
 )
 FAILURE_RECORD_FIELDS = frozenset(
@@ -309,6 +460,18 @@ def _nonnegative_integer_or_none(value, *, field: str) -> int | None:
     return value
 
 
+def _zero_phase_mapping() -> dict[str, int]:
+    return {phase: 0 for phase in DIAGNOSTIC_LEDGER_PHASES}
+
+
+def _zero_result_error_counts() -> dict[str, int]:
+    return {key: 0 for key in RESULT_ERROR_CODE_KEYS}
+
+
+def _empty_mcp_timing() -> dict[str, int]:
+    return {field: 0 for field in sorted(MCP_TIMING_FIELDS)}
+
+
 def _default_continuation_diagnostic() -> dict[str, object]:
     return {
         "diagnostic_inspection_status": (
@@ -332,6 +495,34 @@ def _default_continuation_diagnostic() -> dict[str, object]:
         "latest_commitment_epoch": None,
         "commitment_inclusive_replay_binding_present": None,
         "durable_result_binding": RESULT_BINDING_UNKNOWN,
+        "terminalization_last_entered_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_returned_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_error_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_error_family": ERROR_NONE,
+        "terminalization_phase_entry_counts": _zero_phase_mapping(),
+        "terminalization_phase_return_counts": _zero_phase_mapping(),
+        "terminalization_phase_error_counts": _zero_phase_mapping(),
+        "terminalization_phase_total_ms": _zero_phase_mapping(),
+        "terminalization_ledger_overflow": False,
+        "terminal_lock_acquire_count": 0,
+        "terminal_lock_wait_total_ms": 0,
+        "terminal_lock_wait_max_ms": 0,
+        "worker_liveness": WORKER_LIVENESS_UNKNOWN,
+        "terminal_publication_recovery_required_observed": False,
+        "result_error_code_counts": _zero_result_error_counts(),
+        "mcp_status_timing": _empty_mcp_timing(),
+        "mcp_result_timing": _empty_mcp_timing(),
+        "continuation_elapsed_ms": None,
+        "application_recovery_interference_observed": False,
+        "application_recovery_last_entered_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
     }
 
 
@@ -359,6 +550,68 @@ def _validated_continuation_diagnostic(
     if diagnostic["durable_result_binding"] not in ALLOWED_RESULT_BINDINGS:
         raise ValueError("invalid durable result binding")
     for field in (
+        "terminalization_last_entered_phase",
+        "terminalization_last_returned_phase",
+        "terminalization_last_error_phase",
+        "application_recovery_last_entered_phase",
+    ):
+        if diagnostic[field] not in ALLOWED_TERMINALIZATION_OBSERVATIONS:
+            raise ValueError(f"invalid {field}")
+    if (
+        diagnostic["terminalization_last_error_family"]
+        not in ALLOWED_LEDGER_ERROR_FAMILIES
+    ):
+        raise ValueError("invalid terminalization error family")
+    for field in (
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_total_ms",
+    ):
+        mapping = diagnostic[field]
+        if not isinstance(mapping, dict) or set(mapping) != set(
+            DIAGNOSTIC_LEDGER_PHASES
+        ):
+            raise ValueError(f"{field} inventory drifted")
+        for phase, value in mapping.items():
+            mapping[phase] = _nonnegative_integer_or_none(
+                value, field=f"{field}.{phase}"
+            )
+            assert mapping[phase] is not None
+    result_errors = diagnostic["result_error_code_counts"]
+    if not isinstance(result_errors, dict) or set(result_errors) != set(
+        RESULT_ERROR_CODE_KEYS
+    ):
+        raise ValueError("result error code inventory drifted")
+    for code, value in result_errors.items():
+        result_errors[code] = _nonnegative_integer_or_none(
+            value, field=f"result_error_code_counts.{code}"
+        )
+        assert result_errors[code] is not None
+    for field in ("mcp_status_timing", "mcp_result_timing"):
+        timing = diagnostic[field]
+        if not isinstance(timing, dict) or set(timing) != MCP_TIMING_FIELDS:
+            raise ValueError(f"{field} inventory drifted")
+        for key, value in timing.items():
+            timing[key] = _nonnegative_integer_or_none(
+                value, field=f"{field}.{key}"
+            )
+            assert timing[key] is not None
+        if timing["maximum_ms"] > timing["total_ms"]:
+            raise ValueError(f"{field} maximum exceeds total")
+        if timing["baseline_maximum_ms"] > timing["baseline_total_ms"]:
+            raise ValueError(f"{field} baseline maximum exceeds total")
+        if timing["error_count"] > timing["call_count"]:
+            raise ValueError(f"{field} error count exceeds calls")
+        if timing["timeout_count"] > timing["error_count"]:
+            raise ValueError(f"{field} timeout count exceeds errors")
+        if timing["baseline_error_count"] > timing["baseline_call_count"]:
+            raise ValueError(f"{field} baseline errors exceed calls")
+        if timing["baseline_timeout_count"] > timing["baseline_error_count"]:
+            raise ValueError(f"{field} baseline timeouts exceed errors")
+    if diagnostic["worker_liveness"] not in ALLOWED_WORKER_LIVENESS:
+        raise ValueError("invalid worker liveness")
+    for field in (
         "status_observation_count",
         "last_progress_sequence",
         "stale_epoch0_result_observation_count",
@@ -370,16 +623,32 @@ def _validated_continuation_diagnostic(
         "terminal_draft_count",
         "terminal_commitment_count",
         "latest_commitment_epoch",
+        "terminal_lock_acquire_count",
+        "terminal_lock_wait_total_ms",
+        "terminal_lock_wait_max_ms",
+        "continuation_elapsed_ms",
     ):
         diagnostic[field] = _nonnegative_integer_or_none(
             diagnostic[field], field=field
         )
+    if (
+        diagnostic["terminal_lock_wait_max_ms"]
+        > diagnostic["terminal_lock_wait_total_ms"]
+    ):
+        raise ValueError("terminal lock maximum exceeds total")
     for field in (
         "opening_resume_decision_present",
         "commitment_inclusive_replay_binding_present",
     ):
         if diagnostic[field] is not None and type(diagnostic[field]) is not bool:
             raise TypeError(f"{field} must be boolean or null")
+    for field in (
+        "terminalization_ledger_overflow",
+        "terminal_publication_recovery_required_observed",
+        "application_recovery_interference_observed",
+    ):
+        if type(diagnostic[field]) is not bool:
+            raise TypeError(f"{field} must be boolean")
     return diagnostic
 
 
@@ -395,6 +664,63 @@ class ContinuationObservations:
         self.stale_epoch0_result_observation_count = 0
         self.result_read_error_count = 0
         self.status_read_error_count = 0
+        self.result_error_code_counts = _zero_result_error_counts()
+        self.mcp_status_timing = _empty_mcp_timing()
+        self.mcp_result_timing = _empty_mcp_timing()
+        self.continuation_accepted_at: float | None = None
+        self.continuation_elapsed_ms: int | None = None
+        self.terminal_publication_recovery_required_observed = False
+        self.diagnostic_collection_failed = False
+
+    def mark_continuation_accepted(self, observed_at: float) -> None:
+        if isinstance(observed_at, bool) or not isinstance(
+            observed_at, (int, float)
+        ):
+            raise TypeError("continuation acceptance time must be numeric")
+        self.continuation_accepted_at = float(observed_at)
+        self.continuation_elapsed_ms = None
+
+    def finish_continuation(self, observed_at: float) -> None:
+        if self.continuation_accepted_at is None:
+            self.mark_continuation_accepted(observed_at)
+        elapsed = max(0.0, float(observed_at) - self.continuation_accepted_at)
+        self.continuation_elapsed_ms = min(
+            int(elapsed * 1000),
+            86_400_000,
+        )
+
+    def observe_call(
+        self,
+        operation: str,
+        *,
+        elapsed_ms: int,
+        baseline: bool,
+        error: bool,
+        timeout: bool,
+    ) -> None:
+        if operation == "run_status":
+            timing = self.mcp_status_timing
+        elif operation == "run_result":
+            timing = self.mcp_result_timing
+        else:
+            raise ValueError("unsupported timed MCP operation")
+        elapsed = _nonnegative_integer_or_none(
+            elapsed_ms, field="MCP call elapsed time"
+        )
+        assert elapsed is not None
+        prefix = "baseline_" if baseline else ""
+        timing[f"{prefix}call_count"] += 1
+        timing[f"{prefix}total_ms"] += elapsed
+        maximum = f"{prefix}maximum_ms"
+        timing[maximum] = max(timing[maximum], elapsed)
+        timing[f"{prefix}error_count"] += int(error)
+        timing[f"{prefix}timeout_count"] += int(timeout)
+
+    def observe_result_error(self, classification: str) -> None:
+        if classification not in ALLOWED_RESULT_ERROR_CODES:
+            classification = RESULT_ERROR_OTHER_SAFE
+        self.result_read_error_count += 1
+        self.result_error_code_counts[classification] += 1
 
     def observe_status(self, status: dict) -> None:
         lifecycle = _LIFECYCLE_MAP.get(
@@ -419,6 +745,11 @@ class ContinuationObservations:
         values = _default_continuation_diagnostic()
         values.update(
             {
+                "diagnostic_inspection_status": (
+                    DIAGNOSTIC_INSPECTION_FAILED
+                    if self.diagnostic_collection_failed
+                    else DIAGNOSTIC_INSPECTION_NOT_ATTEMPTED
+                ),
                 "first_lifecycle_state": self.first_lifecycle_state,
                 "last_lifecycle_state": self.last_lifecycle_state,
                 "status_observation_count": self.status_observation_count,
@@ -429,6 +760,15 @@ class ContinuationObservations:
                 ),
                 "result_read_error_count": self.result_read_error_count,
                 "status_read_error_count": self.status_read_error_count,
+                "result_error_code_counts": dict(
+                    self.result_error_code_counts
+                ),
+                "mcp_status_timing": dict(self.mcp_status_timing),
+                "mcp_result_timing": dict(self.mcp_result_timing),
+                "continuation_elapsed_ms": self.continuation_elapsed_ms,
+                "terminal_publication_recovery_required_observed": (
+                    self.terminal_publication_recovery_required_observed
+                ),
             }
         )
         return _validated_continuation_diagnostic(values)
@@ -448,6 +788,7 @@ class ContinuationDiagnosticContext:
         provider_state_path: Path,
         provider_call_baseline: int,
         observations: ContinuationObservations,
+        terminal_phase_ledger_path: Path | None = None,
     ) -> None:
         self.python = Path(python)
         self.work = Path(work)
@@ -460,6 +801,11 @@ class ContinuationDiagnosticContext:
         )
         assert self.provider_call_baseline is not None
         self.observations = observations
+        self.terminal_phase_ledger_path = (
+            None
+            if terminal_phase_ledger_path is None
+            else Path(terminal_phase_ledger_path)
+        )
 
 
 class OperationalSmokeFailure(Exception):
@@ -533,10 +879,49 @@ class OperationalSmokeFailure(Exception):
         )
 
 
+def _classify_result_error_text(text: object) -> str:
+    """Reduce one MCP-safe error to a fixed result-read classification."""
+
+    if not isinstance(text, str) or len(text) > 512:
+        return RESULT_ERROR_OTHER_SAFE
+    matched = re.fullmatch(
+        r"([A-Za-z_][A-Za-z0-9_]{0,127}): ([A-Z][A-Z0-9_]{2,127})",
+        text,
+    )
+    if matched is None:
+        return RESULT_ERROR_OTHER_SAFE
+    error_type, code = matched.groups()
+    if code == "RUN_RESULT_NOT_READY":
+        return RESULT_ERROR_RUN_RESULT_NOT_READY
+    if error_type in {
+        "RunManifestError",
+        "UnsupportedRunManifestVersionError",
+    } or code.startswith(
+        (
+            "RUN_MANIFEST_",
+            "MANIFEST_",
+            "V6_RUN_MANIFEST_",
+            "RUN_INPUT_",
+        )
+    ):
+        return RESULT_ERROR_MANIFEST_ADMISSION
+    if code.startswith("TERMINAL_"):
+        return RESULT_ERROR_TERMINAL_RECOVERY
+    return RESULT_ERROR_OTHER_SAFE
+
+
 class _MCPToolResponseError(OperationalSmokeFailure):
     """Payload-free signal for an expected MCP tool error response."""
 
-    def __init__(self, *, stage: str) -> None:
+    def __init__(
+        self,
+        *,
+        stage: str,
+        result_error_classification: str = RESULT_ERROR_OTHER_SAFE,
+    ) -> None:
+        if result_error_classification not in ALLOWED_RESULT_ERROR_CODES:
+            result_error_classification = RESULT_ERROR_OTHER_SAFE
+        self.result_error_classification = result_error_classification
         super().__init__(
             stage=stage,
             failure_kind=FAILURE_ASSERTION,
@@ -830,6 +1215,8 @@ def _environment(
     environment = dict(os.environ)
     environment.pop("PYTHONPATH", None)
     environment.pop(LOOPBACK_READY_ENV, None)
+    environment.pop(TERMINAL_DIAGNOSTIC_ENABLE_ENV, None)
+    environment.pop(TERMINAL_DIAGNOSTIC_LEDGER_ENV, None)
     environment["HOME"] = str(home)
     environment["USERPROFILE"] = str(home)
     environment["PYTHONNOUSERSITE"] = "1"
@@ -1159,6 +1546,7 @@ class MCPClient:
         self._next_id = 1
         self.transcript: list[str] = []
         self._closed = False
+        self.terminal_publication_recovery_required_observed = False
 
     def _raise_process_failure(self, *, stage: str) -> None:
         returncode = self.process.poll()
@@ -1204,6 +1592,22 @@ class MCPClient:
             )
         return is_error, text
 
+    def _observe_progress_notification(self, response: object) -> None:
+        try:
+            if not isinstance(response, dict) or response.get("method") != (
+                "notifications/progress"
+            ):
+                return
+            params = response.get("params")
+            if (
+                isinstance(params, dict)
+                and params.get("message")
+                == TERMINAL_PUBLICATION_RECOVERY_SENTINEL
+            ):
+                self.terminal_publication_recovery_required_observed = True
+        except Exception:
+            return
+
     def request(
         self,
         method: str,
@@ -1242,6 +1646,7 @@ class MCPClient:
                     stage=stage,
                     failure_kind=FAILURE_ASSERTION,
                 )
+            self._observe_progress_notification(response)
             if response.get("id") == request_id:
                 return response
 
@@ -1302,7 +1707,14 @@ class MCPClient:
         )
         is_error, text = self._response_text(response, stage=stage)
         if is_error:
-            raise _MCPToolResponseError(stage=stage) from None
+            raise _MCPToolResponseError(
+                stage=stage,
+                result_error_classification=(
+                    _classify_result_error_text(text)
+                    if name == "run_result"
+                    else RESULT_ERROR_OTHER_SAFE
+                ),
+            ) from None
         try:
             payload = json.loads(text)
         except (json.JSONDecodeError, TypeError):
@@ -1556,6 +1968,61 @@ def _assert_exact_tools(tools: list[dict]) -> None:
             raise AssertionError("MCP schema exposes forbidden authority")
 
 
+def _timed_mcp_tool(
+    client: MCPClient,
+    operation: str,
+    arguments: dict,
+    *,
+    stage: str,
+    observations: ContinuationObservations,
+    baseline: bool,
+    deadline: float | None = None,
+    _timer=None,
+) -> dict:
+    timer = _timer or time.perf_counter
+    try:
+        started = timer()
+    except BaseException:
+        started = None
+        observations.diagnostic_collection_failed = True
+
+    def observe(*, error: bool, timeout: bool) -> None:
+        try:
+            elapsed = (
+                max(0, int((timer() - started) * 1000))
+                if started is not None
+                else 0
+            )
+            observations.observe_call(
+                operation,
+                elapsed_ms=elapsed,
+                baseline=baseline,
+                error=error,
+                timeout=timeout,
+            )
+        except BaseException:
+            try:
+                observations.diagnostic_collection_failed = True
+            except BaseException:
+                pass
+
+    try:
+        payload = client.tool(
+            operation,
+            arguments,
+            stage=stage,
+            deadline=deadline,
+        )
+    except OperationalSmokeFailure as error:
+        observe(error=True, timeout=error.timeout)
+        raise
+    except BaseException:
+        observe(error=True, timeout=False)
+        raise
+    observe(error=False, timeout=False)
+    return payload
+
+
 def _poll_terminal(
     client: MCPClient,
     run_id: str,
@@ -1565,35 +2032,64 @@ def _poll_terminal(
     observations: ContinuationObservations | None = None,
     _clock=None,
     _sleep=None,
+    _timer=None,
 ) -> tuple[dict, dict]:
     clock = _clock or time.monotonic
     sleep = _sleep or time.sleep
-    deadline = clock() + CONTINUATION_DEADLINE_SECONDS
     observed = observations or ContinuationObservations()
-    while clock() < deadline:
+    started = clock()
+    deadline = started + CONTINUATION_DEADLINE_SECONDS
+    if observed.continuation_accepted_at is None:
+        observed.mark_continuation_accepted(started)
+    while True:
+        now = clock()
+        if now >= deadline:
+            observed.finish_continuation(now)
+            raise OperationalSmokeFailure(
+                stage=stage,
+                failure_kind=FAILURE_TIMEOUT,
+                timeout=True,
+            )
         try:
-            status = client.tool(
+            status = _timed_mcp_tool(
+                client,
                 "run_status",
                 {"run_id": run_id},
                 stage=stage,
+                observations=observed,
+                baseline=False,
                 deadline=deadline,
+                _timer=_timer,
             )
         except _MCPToolResponseError:
             observed.status_read_error_count += 1
+            observed.finish_continuation(clock())
+            raise
+        except BaseException:
+            observed.finish_continuation(clock())
             raise
         observed.observe_status(status)
         if status.get("state") in {"completed", "failed", "cancelled"}:
             try:
-                result = client.tool(
+                result = _timed_mcp_tool(
+                    client,
                     "run_result",
                     {"run_id": run_id},
                     stage=stage,
+                    observations=observed,
+                    baseline=False,
                     deadline=deadline,
+                    _timer=_timer,
                 )
-            except _MCPToolResponseError:
-                observed.result_read_error_count += 1
+            except _MCPToolResponseError as error:
+                observed.observe_result_error(
+                    error.result_error_classification
+                )
                 sleep(POLL_INTERVAL_SECONDS)
                 continue
+            except BaseException:
+                observed.finish_continuation(clock())
+                raise
             if (
                 prior_terminal_commitment_ref is not None
                 and result.get("terminal_commitment_ref")
@@ -1602,13 +2098,9 @@ def _poll_terminal(
                 observed.stale_epoch0_result_observation_count += 1
                 sleep(POLL_INTERVAL_SECONDS)
                 continue
+            observed.finish_continuation(clock())
             return status, result
         sleep(POLL_INTERVAL_SECONDS)
-    raise OperationalSmokeFailure(
-        stage=stage,
-        failure_kind=FAILURE_TIMEOUT,
-        timeout=True,
-    )
 
 
 _DURABLE_SNAPSHOT_FIELDS = frozenset(
@@ -1846,6 +2338,180 @@ def _run_durable_inspection(
     return _validate_durable_snapshot(json.loads(completed.stdout))
 
 
+def _empty_terminal_phase_snapshot() -> dict[str, object]:
+    return {
+        "terminalization_last_entered_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_returned_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_error_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+        "terminalization_last_error_family": ERROR_NONE,
+        "terminalization_phase_entry_counts": _zero_phase_mapping(),
+        "terminalization_phase_return_counts": _zero_phase_mapping(),
+        "terminalization_phase_error_counts": _zero_phase_mapping(),
+        "terminalization_phase_total_ms": _zero_phase_mapping(),
+        "terminalization_ledger_overflow": False,
+        "terminal_lock_acquire_count": 0,
+        "terminal_lock_wait_total_ms": 0,
+        "terminal_lock_wait_max_ms": 0,
+        "worker_liveness": WORKER_LIVENESS_UNKNOWN,
+        "terminal_publication_recovery_required_observed": False,
+        "application_recovery_interference_observed": False,
+        "application_recovery_last_entered_phase": (
+            TERMINALIZATION_NOT_OBSERVED
+        ),
+    }
+
+
+def _read_terminal_phase_ledger(path: Path) -> dict[str, object]:
+    """Read the bounded smoke ledger without interpreting dynamic content."""
+
+    try:
+        observed = path.lstat()
+    except FileNotFoundError as error:
+        raise ValueError("terminal phase ledger is missing") from error
+    if (
+        not stat.S_ISREG(observed.st_mode)
+        or observed.st_size > TERMINAL_DIAGNOSTIC_MAX_BYTES
+    ):
+        raise ValueError("terminal phase ledger is unavailable")
+    raw = path.read_bytes()
+    lines = raw.splitlines(keepends=True)
+    if lines and not lines[-1].endswith(b"\n"):
+        lines.pop()
+    if len(lines) > TERMINAL_DIAGNOSTIC_MAX_RECORDS:
+        raise ValueError("terminal phase ledger exceeds its record bound")
+
+    snapshot = _empty_terminal_phase_snapshot()
+    entries = snapshot["terminalization_phase_entry_counts"]
+    returns = snapshot["terminalization_phase_return_counts"]
+    errors = snapshot["terminalization_phase_error_counts"]
+    totals = snapshot["terminalization_phase_total_ms"]
+    assert isinstance(entries, dict)
+    assert isinstance(returns, dict)
+    assert isinstance(errors, dict)
+    assert isinstance(totals, dict)
+    current_liveness = WORKER_LIVENESS_UNKNOWN
+    worker_publication_depth = 0
+    overflow_seen = False
+    for line in lines:
+        if overflow_seen:
+            raise ValueError("terminal phase ledger continued after overflow")
+        if len(line) > 1024:
+            raise ValueError("terminal phase ledger record is oversized")
+        try:
+            record = json.loads(line)
+        except (UnicodeError, json.JSONDecodeError) as error:
+            raise ValueError("terminal phase ledger is malformed") from error
+        if not isinstance(record, dict):
+            raise ValueError("terminal phase ledger record is not an object")
+        if set(record) == {"overflow"}:
+            if record["overflow"] is not True:
+                raise ValueError("terminal phase overflow marker is invalid")
+            snapshot["terminalization_ledger_overflow"] = True
+            overflow_seen = True
+            continue
+        if set(record) == {"observation", "value"}:
+            observation = record["observation"]
+            value = record["value"]
+            if observation == "worker_liveness":
+                if value not in ALLOWED_WORKER_LIVENESS:
+                    raise ValueError("terminal phase liveness is invalid")
+                current_liveness = value
+                snapshot["worker_liveness"] = value
+                continue
+            if observation == (
+                "terminal_publication_recovery_required"
+            ):
+                if value is not True:
+                    raise ValueError("terminal recovery sentinel is invalid")
+                snapshot[
+                    "terminal_publication_recovery_required_observed"
+                ] = True
+                continue
+            if observation == "instrumentation_failure":
+                raise ValueError("terminal phase instrumentation failed")
+            raise ValueError("terminal phase observation is unknown")
+        if set(record) != {
+            "phase",
+            "edge",
+            "elapsed_ms",
+            "actor",
+            "error_family",
+        }:
+            raise ValueError("terminal phase record inventory drifted")
+        phase = record["phase"]
+        edge = record["edge"]
+        actor = record["actor"]
+        family = record["error_family"]
+        elapsed = record["elapsed_ms"]
+        if (
+            phase not in ALLOWED_LEDGER_PHASES
+            or edge not in ALLOWED_LEDGER_EDGES
+            or actor not in ALLOWED_LEDGER_ACTORS
+            or family not in ALLOWED_LEDGER_ERROR_FAMILIES
+            or isinstance(elapsed, bool)
+            or not isinstance(elapsed, int)
+            or not 0 <= elapsed <= 86_400_000
+        ):
+            raise ValueError("terminal phase record value is invalid")
+        if edge in {"enter", "wait_start"}:
+            entries[phase] += 1
+        elif edge in {"return", "acquired"}:
+            returns[phase] += 1
+            totals[phase] += elapsed
+        elif edge == "error":
+            errors[phase] += 1
+            totals[phase] += elapsed
+        if phase == TERMINAL_LOCK and edge == "acquired":
+            snapshot["terminal_lock_acquire_count"] += 1
+            snapshot["terminal_lock_wait_total_ms"] += elapsed
+            snapshot["terminal_lock_wait_max_ms"] = max(
+                snapshot["terminal_lock_wait_max_ms"],
+                elapsed,
+            )
+        terminalization_specific = (
+            phase in TERMINALIZATION_PHASES or phase == TERMINAL_LOCK
+        )
+        if actor == "worker" and terminalization_specific:
+            if edge in {"enter", "wait_start"}:
+                snapshot["terminalization_last_entered_phase"] = phase
+            elif edge in {"return", "acquired"}:
+                snapshot["terminalization_last_returned_phase"] = phase
+        if terminalization_specific and edge == "error":
+            snapshot["terminalization_last_error_phase"] = phase
+            snapshot["terminalization_last_error_family"] = family
+        if (
+            actor == "worker"
+            and phase == W10_REPLAY_AND_FINAL_RESULT_PUBLICATION
+        ):
+            if edge == "enter":
+                worker_publication_depth += 1
+            elif edge in {"return", "error"}:
+                worker_publication_depth = max(
+                    0,
+                    worker_publication_depth - 1,
+                )
+        if (
+            actor == "mcp_server"
+            and phase in TERMINALIZATION_PHASES
+            and edge == "enter"
+        ):
+            snapshot["application_recovery_last_entered_phase"] = phase
+            if (
+                current_liveness == WORKER_LIVENESS_ALIVE
+                and worker_publication_depth > 0
+            ):
+                snapshot[
+                    "application_recovery_interference_observed"
+                ] = True
+    return snapshot
+
+
 def _mcp_liveness(clients: list[MCPClient]) -> str:
     if not clients:
         return MCP_LIVENESS_NOT_STARTED
@@ -1869,8 +2535,25 @@ def _capture_continuation_diagnostic(
         else _default_continuation_diagnostic()
     )
     diagnostic["mcp_liveness"] = _mcp_liveness(clients)
+    if any(
+        bool(
+            getattr(
+                client,
+                "terminal_publication_recovery_required_observed",
+                False,
+            )
+        )
+        for client in clients
+    ):
+        diagnostic[
+            "terminal_publication_recovery_required_observed"
+        ] = True
     if context is None:
         return _validated_continuation_diagnostic(diagnostic)
+    inspection_succeeded = (
+        diagnostic["diagnostic_inspection_status"]
+        != DIAGNOSTIC_INSPECTION_FAILED
+    )
     try:
         total_calls, error_count = _read_loopback_diagnostic_state(
             context.provider_state_path
@@ -1878,21 +2561,44 @@ def _capture_continuation_diagnostic(
         delta = total_calls - context.provider_call_baseline
         if delta < 0:
             raise ValueError("loopback provider count moved backwards")
-        durable = _run_durable_inspection(context)
     except Exception:
-        diagnostic["diagnostic_inspection_status"] = (
-            DIAGNOSTIC_INSPECTION_FAILED
+        inspection_succeeded = False
+    else:
+        diagnostic.update(
+            {
+                "provider_call_delta": delta,
+                "loopback_provider_error_count": error_count,
+            }
         )
-        return _validated_continuation_diagnostic(diagnostic)
-    diagnostic.update(durable)
-    diagnostic.update(
-        {
-            "diagnostic_inspection_status": (
-                DIAGNOSTIC_INSPECTION_SUCCEEDED
-            ),
-            "provider_call_delta": delta,
-            "loopback_provider_error_count": error_count,
-        }
+    try:
+        diagnostic.update(_run_durable_inspection(context))
+    except Exception:
+        inspection_succeeded = False
+    if context.terminal_phase_ledger_path is not None:
+        try:
+            ledger = _read_terminal_phase_ledger(
+                context.terminal_phase_ledger_path
+            )
+        except Exception:
+            inspection_succeeded = False
+        else:
+            sentinel_observed = bool(
+                diagnostic[
+                    "terminal_publication_recovery_required_observed"
+                ]
+            )
+            diagnostic.update(ledger)
+            diagnostic[
+                "terminal_publication_recovery_required_observed"
+            ] = sentinel_observed or bool(
+                ledger[
+                    "terminal_publication_recovery_required_observed"
+                ]
+            )
+    diagnostic["diagnostic_inspection_status"] = (
+        DIAGNOSTIC_INSPECTION_SUCCEEDED
+        if inspection_succeeded
+        else DIAGNOSTIC_INSPECTION_FAILED
     )
     return _validated_continuation_diagnostic(diagnostic)
 
@@ -1916,12 +2622,12 @@ def _assert_no_disclosure(
 
 def _platform_family() -> str:
     if sys.platform == "win32":
-        return "windows"
+        return PLATFORM_WINDOWS
     if sys.platform == "darwin":
-        return "macos"
+        return PLATFORM_MACOS
     if sys.platform.startswith("linux"):
-        return "linux"
-    return "other"
+        return PLATFORM_LINUX
+    return PLATFORM_OTHER
 
 
 def _diagnostic_record(
@@ -2101,6 +2807,9 @@ def main(argv: list[str] | None = None) -> int:
         temp_root = Path(tempfile.mkdtemp(prefix="deepreason-wheel-operational-"))
         provider_port = _unused_loopback_port()
         provider_state_path = temp_root / "loopback-provider-counts.json"
+        terminal_phase_ledger_path = (
+            temp_root / "terminal-phase-ledger.jsonl"
+        )
         outputs: list[str] = []
         transcripts: list[str] = []
         stage = STAGE_BUILD_WHEEL
@@ -2124,6 +2833,14 @@ def main(argv: list[str] | None = None) -> int:
         work = temp_root / "unrelated empty directory"
         home.mkdir()
         work.mkdir()
+        if (
+            home.resolve() in terminal_phase_ledger_path.resolve().parents
+            or environment.resolve()
+            in terminal_phase_ledger_path.resolve().parents
+        ):
+            raise AssertionError(
+                "terminal phase ledger entered managed or package storage"
+            )
         clean_env = _environment(
             home,
             provider_port=provider_port,
@@ -2407,21 +3124,46 @@ def main(argv: list[str] | None = None) -> int:
         calls_before_resumable_retrieval = _provider_counts(provider_state_path)[
             "total_calls"
         ]
-        continuation_client = _new_mcp_client(
+        baseline_client = _new_mcp_client(
             mcp_clients, mcp, cwd=work, env=clean_env
         )
-        _assert_exact_tools(_tool_list(continuation_client))
-        resumable_retrieved = continuation_client.tool(
+        _assert_exact_tools(_tool_list(baseline_client))
+        continuation_observations = ContinuationObservations()
+        resumable_retrieved = _timed_mcp_tool(
+            baseline_client,
             "run_result",
             {"run_id": resumable_run_id},
             stage=stage,
+            observations=continuation_observations,
+            baseline=True,
+        )
+        resumable_baseline_status = _timed_mcp_tool(
+            baseline_client,
+            "run_status",
+            {"run_id": resumable_run_id},
+            stage=stage,
+            observations=continuation_observations,
+            baseline=True,
         )
         if resumable_retrieved != resumable_result:
             raise AssertionError("resumable CLI result changed when retrieved through MCP")
+        if resumable_baseline_status.get("state") != "completed":
+            raise AssertionError("resumable baseline status was not terminal")
+        transcripts.extend(baseline_client.transcript)
+        baseline_client.close(stage=stage)
         _assert_no_incremental_provider_calls(
             provider_state_path,
             calls_before_resumable_retrieval,
         )
+        diagnostic_env = dict(clean_env)
+        diagnostic_env[TERMINAL_DIAGNOSTIC_ENABLE_ENV] = "1"
+        diagnostic_env[TERMINAL_DIAGNOSTIC_LEDGER_ENV] = str(
+            terminal_phase_ledger_path
+        )
+        continuation_client = _new_mcp_client(
+            mcp_clients, mcp, cwd=work, env=diagnostic_env
+        )
+        _assert_exact_tools(_tool_list(continuation_client))
         provider_call_baseline = _provider_counts(provider_state_path)[
             "total_calls"
         ]
@@ -2435,7 +3177,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         if continued.get("run_id") != resumable_run_id:
             raise AssertionError("continuation changed the opaque managed identity")
-        continuation_observations = ContinuationObservations()
+        continuation_observations.mark_continuation_accepted(
+            time.monotonic()
+        )
         diagnostic_context = ContinuationDiagnosticContext(
             python=python,
             work=work,
@@ -2449,6 +3193,7 @@ def main(argv: list[str] | None = None) -> int:
             provider_state_path=provider_state_path,
             provider_call_baseline=provider_call_baseline,
             observations=continuation_observations,
+            terminal_phase_ledger_path=terminal_phase_ledger_path,
         )
         _continued_status, final_resumable_result = _poll_terminal(
             continuation_client,
@@ -2474,6 +3219,22 @@ def main(argv: list[str] | None = None) -> int:
         }:
             raise AssertionError(
                 "continued terminal authority or replay binding drifted"
+            )
+        continued_phase_snapshot = _read_terminal_phase_ledger(
+            terminal_phase_ledger_path
+        )
+        if (
+            continued_phase_snapshot[
+                "terminalization_phase_entry_counts"
+            ][W6_PENDING_RESULT_PUBLICATION]
+            == 0
+            or continued_phase_snapshot[
+                "terminalization_phase_error_counts"
+            ][W9_REPLAY_BINDING_VALIDATION]
+            != 0
+        ):
+            raise AssertionError(
+                "expected W6 freshness probe produced false W9 evidence"
             )
 
         stage = STAGE_RESTART_RECOVERY

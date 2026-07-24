@@ -3,9 +3,10 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
-from pathlib import Path
+import subprocess
 import sys
 import threading
+from pathlib import Path
 
 import pytest
 
@@ -23,7 +24,6 @@ from tests.test_v6_resumed_terminal_revalidation import (
     _continue_converged_run,
     _start_converged_run,
 )
-
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_PATH = ROOT / "scripts" / "wheel_loopback_sitecustomize.py"
@@ -138,6 +138,1220 @@ def test_external_provider_can_drive_a_genuine_resumable_stop():
     assert parsed.abstention.search_signal == "stuck"
 
 
+def _configured_fixture_ledger(
+    tmp_path: Path,
+    monkeypatch,
+    *,
+    actor: str = "worker",
+) -> Path:
+    ledger = tmp_path / "terminal-phase-ledger.jsonl"
+    FIXTURE._configure_terminal_diagnostic_ledger(ledger)
+    monkeypatch.setattr(FIXTURE, "_diagnostic_actor", lambda: actor)
+    return ledger
+
+
+def _ledger_records(path: Path) -> list[dict]:
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding="ascii").splitlines()
+    ]
+
+
+def _install_w6_w9_test_wrappers(monkeypatch, observations):
+    from deepreason.runtime import terminal_authority
+
+    original_validate = (
+        terminal_authority._validate_result_projection_binding
+    )
+
+    def observed_validate(*args, **kwargs):
+        inside_w6 = (
+            FIXTURE.W6_PENDING_RESULT_PUBLICATION
+            in tuple(FIXTURE._diagnostic_stack())
+        )
+        try:
+            value = original_validate(*args, **kwargs)
+        except BaseException as error:
+            observations.append(("error", inside_w6, error))
+            raise
+        observations.append(("return", inside_w6, None))
+        return value
+
+    target = (
+        "deepreason.runtime.terminal_authority."
+        "_validate_result_projection_binding"
+    )
+    monkeypatch.setattr(
+        terminal_authority,
+        "_validate_result_projection_binding",
+        FIXTURE._diagnostic_phase_wrapper(
+            observed_validate,
+            FIXTURE.W9_REPLAY_BINDING_VALIDATION,
+            skip_inside=FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS[
+                target
+            ],
+        ),
+    )
+    monkeypatch.setattr(
+        terminal_authority,
+        "_prepare_terminal_result_locked",
+        FIXTURE._diagnostic_phase_wrapper(
+            terminal_authority._prepare_terminal_result_locked,
+            FIXTURE.W6_PENDING_RESULT_PUBLICATION,
+        ),
+    )
+    return terminal_authority
+
+
+def test_terminal_diagnostics_disabled_are_fully_inert(
+    tmp_path, monkeypatch
+):
+    ledger = tmp_path / "must-not-exist.jsonl"
+    monkeypatch.delenv(FIXTURE.TERMINAL_DIAGNOSTIC_ENABLE_ENV, raising=False)
+    monkeypatch.delenv(FIXTURE.TERMINAL_DIAGNOSTIC_LEDGER_ENV, raising=False)
+    configured = []
+    monkeypatch.setattr(
+        FIXTURE,
+        "_configure_terminal_diagnostic_ledger",
+        configured.append,
+    )
+
+    FIXTURE._install_terminal_diagnostics_if_enabled()
+
+    assert configured == []
+    assert not ledger.exists()
+    assert FIXTURE._DIAGNOSTIC_WRAPPERS_INSTALLED is False
+
+
+def test_diagnostic_installation_wraps_exact_current_source_seams(
+    tmp_path
+):
+    bootstrap = tmp_path / "bootstrap"
+    bootstrap.mkdir()
+    (bootstrap / "sitecustomize.py").write_bytes(FIXTURE_PATH.read_bytes())
+    ledger = tmp_path / "install-ledger.jsonl"
+    environment = dict(os.environ)
+    environment["PYTHONPATH"] = os.pathsep.join(
+        (str(bootstrap), str(ROOT / "src"))
+    )
+    environment[FIXTURE.TERMINAL_DIAGNOSTIC_ENABLE_ENV] = "1"
+    environment[FIXTURE.TERMINAL_DIAGNOSTIC_LEDGER_ENV] = str(ledger)
+    environment.pop(FIXTURE.ENABLE_ENV, None)
+    program = r"""
+import json
+import sitecustomize as diagnostic
+from deepreason.application import text_runs
+from deepreason.capabilities import audit
+from deepreason import locking
+from deepreason.runtime import progress, terminal_authority
+from deepreason.verification import report
+
+checks = (
+    audit.write_tranche_a_audits,
+    report.verify_root_report,
+    text_runs.derive_model_execution_summary,
+    terminal_authority._expected_commitment,
+    terminal_authority.ensure_terminal_commitment,
+    terminal_authority._prepare_terminal_result_locked,
+    terminal_authority._fresh_replay_validation,
+    report.verify_post_commit_report,
+    terminal_authority._expected_replay_binding,
+    terminal_authority._validate_result_projection_binding,
+    terminal_authority._publish_current_replay_projection,
+    locking.ProcessLock.acquire,
+    locking.ProcessLock.release,
+    text_runs.TextRunApplicationService.inspect,
+    text_runs.TextRunApplicationService.result,
+    text_runs.TextRunApplicationService._worker,
+    progress.ProgressSink.emit,
+    progress._atomic_json,
+)
+print(json.dumps({
+    "installed": diagnostic._DIAGNOSTIC_WRAPPERS_INSTALLED,
+    "wrapped": all(hasattr(value, "__wrapped__") for value in checks),
+    "phase_count": len(diagnostic.TERMINAL_PHASE_WRAPPER_MAP),
+}))
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", program],
+        cwd=tmp_path,
+        env=environment,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+        timeout=30,
+    )
+    assert completed.returncode == 0
+    assert completed.stderr == ""
+    assert json.loads(completed.stdout) == {
+        "installed": True,
+        "wrapped": True,
+        "phase_count": 10,
+    }
+
+
+@pytest.mark.parametrize("phase", FIXTURE.TERMINAL_PHASE_WRAPPER_MAP)
+def test_every_w1_w10_phase_records_entry_and_return(
+    phase, tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    clock = iter((10.0, 10.125)).__next__
+    returned = object()
+    wrapper = FIXTURE._diagnostic_phase_wrapper(
+        lambda value: value,
+        phase,
+        clock=clock,
+    )
+
+    assert wrapper(returned) is returned
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_last_entered_phase"] == phase
+    assert snapshot["terminalization_last_returned_phase"] == phase
+    assert snapshot["terminalization_phase_entry_counts"][phase] == 1
+    assert snapshot["terminalization_phase_return_counts"][phase] == 1
+    assert snapshot["terminalization_phase_total_ms"][phase] == 125
+
+
+def test_phase_error_is_closed_and_reraises_original_exception(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    clock = iter((5.0, 5.25)).__next__
+    original = RuntimeError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    def fail():
+        raise original
+
+    wrapped = FIXTURE._diagnostic_phase_wrapper(
+        fail,
+        FIXTURE.W7_FRESH_REPLAY_DERIVATION,
+        clock=clock,
+    )
+    with pytest.raises(RuntimeError) as raised:
+        wrapped()
+
+    assert raised.value is original
+    encoded = ledger.read_text(encoding="ascii")
+    assert "SENTINEL_ARBITRARY_EXCEPTION_MESSAGE" not in encoded
+    assert "RuntimeError" not in encoded
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_last_error_phase"] == (
+        OPERATIONAL.W7_FRESH_REPLAY_DERIVATION
+    )
+    assert snapshot["terminalization_last_error_family"] == (
+        OPERATIONAL.ERROR_UNEXPECTED
+    )
+
+
+def test_secondary_phase_diagnostic_failure_cannot_change_control_flow(
+    monkeypatch
+):
+    returned = object()
+    original = RuntimeError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    def diagnostic_failure(*_args, **_kwargs):
+        raise OSError("SENTINEL_CAPTURED_STDERR")
+
+    monkeypatch.setattr(
+        FIXTURE,
+        "_record_diagnostic_phase",
+        diagnostic_failure,
+    )
+    success = FIXTURE._diagnostic_phase_wrapper(
+        lambda: returned,
+        FIXTURE.W7_FRESH_REPLAY_DERIVATION,
+        clock=lambda: (_ for _ in ()).throw(
+            OSError("SENTINEL_CAPTURED_STDOUT")
+        ),
+    )
+    assert success() is returned
+
+    def fail():
+        raise original
+
+    failure = FIXTURE._diagnostic_phase_wrapper(
+        fail,
+        FIXTURE.W8_POSTCOMMIT_ROOT_VERIFICATION,
+    )
+    with pytest.raises(RuntimeError) as raised:
+        failure()
+    assert raised.value is original
+
+
+def test_nested_phase_stack_attributes_inner_and_outer_work(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    returned = object()
+    inner = FIXTURE._diagnostic_phase_wrapper(
+        lambda: returned,
+        FIXTURE.W7_FRESH_REPLAY_DERIVATION,
+    )
+    outer = FIXTURE._diagnostic_phase_wrapper(
+        inner,
+        FIXTURE.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+    )
+
+    assert outer() is returned
+
+    records = _ledger_records(ledger)
+    assert [
+        (record["phase"], record["edge"]) for record in records
+    ] == [
+        (FIXTURE.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION, "enter"),
+        (FIXTURE.W7_FRESH_REPLAY_DERIVATION, "enter"),
+        (FIXTURE.W7_FRESH_REPLAY_DERIVATION, "return"),
+        (FIXTURE.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION, "return"),
+    ]
+
+
+def test_nested_verification_does_not_misattribute_authority_state(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    authority = FIXTURE._diagnostic_phase_wrapper(
+        lambda: "authority",
+        FIXTURE.W3_TERMINAL_AUTHORITY_STATE,
+        skip_inside=frozenset({FIXTURE.W2_PRECOMMIT_VERIFICATION}),
+    )
+    verification = FIXTURE._diagnostic_phase_wrapper(
+        authority,
+        FIXTURE.W2_PRECOMMIT_VERIFICATION,
+    )
+
+    assert verification() == "authority"
+    records = _ledger_records(ledger)
+    assert {record["phase"] for record in records} == {
+        FIXTURE.W2_PRECOMMIT_VERIFICATION
+    }
+
+
+def test_expected_w6_freshness_probe_bypasses_w9_before_emission(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="mcp_server",
+    )
+    expected = ValueError("TERMINAL_REPLAY_VALIDATION_REQUIRED")
+    reached_w6 = []
+    target = (
+        "deepreason.runtime.terminal_authority."
+        "_validate_result_projection_binding"
+    )
+
+    def validate():
+        raise expected
+
+    validation = FIXTURE._diagnostic_phase_wrapper(
+        validate,
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION,
+        skip_inside=FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS[
+            target
+        ],
+    )
+
+    def current_projection_is_fresh():
+        try:
+            validation()
+        except ValueError as error:
+            reached_w6.append(error)
+            return False
+        raise AssertionError("expected replay validation requirement")
+
+    prepare = FIXTURE._diagnostic_phase_wrapper(
+        current_projection_is_fresh,
+        FIXTURE.W6_PENDING_RESULT_PUBLICATION,
+    )
+
+    assert prepare() is False
+    assert reached_w6 == [expected]
+    records = _ledger_records(ledger)
+    assert [
+        (record["phase"], record["edge"]) for record in records
+    ] == [
+        (FIXTURE.W6_PENDING_RESULT_PUBLICATION, "enter"),
+        (FIXTURE.W6_PENDING_RESULT_PUBLICATION, "return"),
+    ]
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    for field in (
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_total_ms",
+    ):
+        assert snapshot[field][FIXTURE.W9_REPLAY_BINDING_VALIDATION] == 0
+
+
+@pytest.mark.parametrize("operation", ("finalization", "recovery"))
+def test_healthy_terminal_publication_omits_nested_w6_probe_from_w9(
+    tmp_path,
+    monkeypatch,
+    operation,
+):
+    root, manifest, _service, _scheduler_calls, epoch_zero = (
+        _start_converged_run(tmp_path, monkeypatch)
+    )
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="mcp_server",
+    )
+    observations = []
+    terminal_authority = _install_w6_w9_test_wrappers(
+        monkeypatch,
+        observations,
+    )
+    (root / "REPLAY_VALIDATION.json").unlink()
+
+    from deepreason.harness import Harness
+
+    if operation == "finalization":
+        result = terminal_authority.finalize_terminal_result(
+            Harness(root),
+            manifest,
+            epoch_zero,
+        )
+    else:
+        result = terminal_authority.recover_terminal_result(
+            Harness(root),
+            manifest,
+        )
+
+    assert result is not None
+    assert result["verification"]["valid"] is True
+    nested_errors = [
+        error
+        for edge, inside_w6, error in observations
+        if edge == "error" and inside_w6
+    ]
+    assert nested_errors
+    assert all(
+        isinstance(error, ValueError)
+        and str(error) == "TERMINAL_REPLAY_VALIDATION_REQUIRED"
+        for error in nested_errors
+    )
+    direct_returns = sum(
+        edge == "return" and not inside_w6
+        for edge, inside_w6, _error in observations
+    )
+    assert direct_returns > 0
+    records = _ledger_records(ledger)
+    w9_records = [
+        record
+        for record in records
+        if record["phase"] == FIXTURE.W9_REPLAY_BINDING_VALIDATION
+    ]
+    assert len(w9_records) == direct_returns * 2
+    assert [record["edge"] for record in w9_records] == [
+        edge
+        for _ in range(direct_returns)
+        for edge in ("enter", "return")
+    ]
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_phase_entry_counts"][
+        FIXTURE.W6_PENDING_RESULT_PUBLICATION
+    ] > 0
+    assert snapshot["terminalization_phase_entry_counts"][
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION
+    ] == direct_returns
+    assert snapshot["terminalization_phase_return_counts"][
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION
+    ] == direct_returns
+    assert snapshot["terminalization_phase_error_counts"][
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION
+    ] == 0
+
+
+def test_direct_authoritative_w9_validation_remains_instrumented(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="mcp_server",
+    )
+    returned = object()
+    target = (
+        "deepreason.runtime.terminal_authority."
+        "_validate_result_projection_binding"
+    )
+    validation = FIXTURE._diagnostic_phase_wrapper(
+        lambda value: value,
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION,
+        skip_inside=FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS[
+            target
+        ],
+    )
+
+    assert validation(returned) is returned
+    assert [
+        (record["phase"], record["edge"])
+        for record in _ledger_records(ledger)
+    ] == [
+        (FIXTURE.W9_REPLAY_BINDING_VALIDATION, "enter"),
+        (FIXTURE.W9_REPLAY_BINDING_VALIDATION, "return"),
+    ]
+
+
+def test_genuine_w9_failure_outside_w6_is_retained(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="mcp_server",
+    )
+    original = ValueError("TERMINAL_REPLAY_VALIDATION_BINDING_MISMATCH")
+    target = (
+        "deepreason.runtime.terminal_authority."
+        "_validate_result_projection_binding"
+    )
+
+    def fail():
+        raise original
+
+    validation = FIXTURE._diagnostic_phase_wrapper(
+        fail,
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION,
+        skip_inside=FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS[
+            target
+        ],
+    )
+
+    with pytest.raises(ValueError) as raised:
+        validation()
+    assert raised.value is original
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_last_error_phase"] == (
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    )
+    assert snapshot["terminalization_last_error_family"] == (
+        OPERATIONAL.ERROR_REPLAY_BINDING
+    )
+    assert snapshot["terminalization_phase_error_counts"][
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    ] == 1
+
+
+@pytest.mark.parametrize(
+    ("phase", "family"),
+    (
+        (
+            OPERATIONAL.W7_FRESH_REPLAY_DERIVATION,
+            OPERATIONAL.ERROR_REPLAY_VERIFICATION,
+        ),
+        (
+            OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+            OPERATIONAL.ERROR_REPLAY_BINDING,
+        ),
+        (
+            OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+            OPERATIONAL.ERROR_REPLAY_SIDECAR_PERSISTENCE,
+        ),
+        (
+            OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+            OPERATIONAL.ERROR_FINAL_RESULT_PERSISTENCE,
+        ),
+    ),
+)
+def test_repeated_mcp_w6_probes_cannot_overwrite_genuine_worker_error(
+    tmp_path,
+    monkeypatch,
+    phase,
+    family,
+):
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="worker",
+    )
+    FIXTURE._record_diagnostic_phase(
+        phase,
+        "error",
+        actor="worker",
+        error_family=family,
+    )
+    FIXTURE._record_worker_liveness("not_alive")
+    monkeypatch.setattr(
+        FIXTURE,
+        "_diagnostic_actor",
+        lambda: "mcp_server",
+    )
+    expected = ValueError("TERMINAL_REPLAY_VALIDATION_REQUIRED")
+    target = (
+        "deepreason.runtime.terminal_authority."
+        "_validate_result_projection_binding"
+    )
+
+    def validate():
+        raise expected
+
+    validation = FIXTURE._diagnostic_phase_wrapper(
+        validate,
+        FIXTURE.W9_REPLAY_BINDING_VALIDATION,
+        skip_inside=FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS[
+            target
+        ],
+    )
+
+    def current_projection_is_fresh():
+        try:
+            validation()
+        except ValueError as error:
+            assert error is expected
+            return False
+        raise AssertionError("expected replay validation requirement")
+
+    prepare = FIXTURE._diagnostic_phase_wrapper(
+        current_projection_is_fresh,
+        FIXTURE.W6_PENDING_RESULT_PUBLICATION,
+    )
+    for _ in range(3):
+        assert prepare() is False
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["worker_liveness"] == "not_alive"
+    assert snapshot["terminalization_last_error_phase"] == phase
+    assert snapshot["terminalization_last_error_family"] == family
+    assert snapshot["terminalization_phase_error_counts"][
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    ] == (1 if phase == OPERATIONAL.W9_REPLAY_BINDING_VALIDATION else 0)
+    assert snapshot["terminalization_phase_entry_counts"][
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    ] == 0
+    assert snapshot["terminalization_phase_return_counts"][
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    ] == 0
+    assert snapshot["terminalization_phase_total_ms"][
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION
+    ] == 0
+
+
+def test_terminal_lock_wait_acquire_release_preserve_lock_behavior(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+
+    class Lock:
+        owner = "terminal-commitment"
+
+        def __init__(self):
+            self.acquired = False
+
+    lock = Lock()
+
+    def acquire(value):
+        value.acquired = True
+        return value
+
+    def release(value):
+        value.acquired = False
+        return "released"
+
+    clock = iter((1.0, 1.2, 2.0, 2.01)).__next__
+    wrapped_acquire = FIXTURE._terminal_lock_acquire_wrapper(
+        acquire, clock=clock
+    )
+    wrapped_release = FIXTURE._terminal_lock_release_wrapper(
+        release, clock=clock
+    )
+
+    assert wrapped_acquire(lock) is lock
+    assert lock.acquired is True
+    assert wrapped_release(lock) == "released"
+    assert lock.acquired is False
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminal_lock_acquire_count"] == 1
+    assert snapshot["terminal_lock_wait_total_ms"] == 199
+    assert snapshot["terminal_lock_wait_max_ms"] == 199
+    assert snapshot["terminalization_phase_entry_counts"][
+        OPERATIONAL.TERMINAL_LOCK
+    ] == 1
+    assert snapshot["terminalization_phase_return_counts"][
+        OPERATIONAL.TERMINAL_LOCK
+    ] == 1
+
+
+def test_actual_worker_liveness_alive_not_alive_and_not_registered(
+    tmp_path
+):
+    root = tmp_path / "run"
+    started = threading.Event()
+    release = threading.Event()
+
+    def work():
+        started.set()
+        release.wait(timeout=5)
+
+    thread = threading.Thread(target=work)
+
+    class Registry:
+        threads = {str(root.resolve()): thread}
+
+    thread.start()
+    assert started.wait(timeout=5)
+    assert FIXTURE._worker_liveness(Registry, root) == "alive"
+    release.set()
+    thread.join(timeout=5)
+    assert FIXTURE._worker_liveness(Registry, root) == "not_alive"
+    Registry.threads.clear()
+    assert FIXTURE._worker_liveness(Registry, root) == "not_registered"
+
+
+def test_worker_wrapper_records_exit_only_after_actual_thread_exit(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    started = threading.Event()
+    release = threading.Event()
+    exit_recorded = threading.Event()
+    record_liveness = FIXTURE._safe_record_worker_liveness
+
+    def observed_record(value):
+        record_liveness(value)
+        if value == "not_alive":
+            exit_recorded.set()
+
+    monkeypatch.setattr(
+        FIXTURE,
+        "_safe_record_worker_liveness",
+        observed_record,
+    )
+
+    def work():
+        started.set()
+        assert release.wait(timeout=5)
+        return "finished"
+
+    wrapped = FIXTURE._worker_wrapper(work)
+    thread = threading.Thread(target=wrapped)
+    thread.start()
+    assert started.wait(timeout=5)
+    assert _ledger_records(ledger)[-1] == {
+        "observation": "worker_liveness",
+        "value": "alive",
+    }
+    release.set()
+    thread.join(timeout=5)
+    assert not thread.is_alive()
+    assert exit_recorded.wait(timeout=5)
+    assert _ledger_records(ledger)[-1] == {
+        "observation": "worker_liveness",
+        "value": "not_alive",
+    }
+
+
+@pytest.mark.parametrize(
+    ("safe_text", "classification"),
+    (
+        (
+            "ValueError: RUN_RESULT_NOT_READY",
+            "run_result_not_ready",
+        ),
+        (
+            "RunManifestError: RUN_MANIFEST_MISMATCH",
+            "manifest_admission_failure",
+        ),
+        (
+            "ValueError: TERMINAL_AUTHORITY_INVALID",
+            "terminal_recovery_failure",
+        ),
+        (
+            "ValueError: MCP_OPERATION_FAILED",
+            "other_safe_failure",
+        ),
+        (
+            "SENTINEL_ARBITRARY_EXCEPTION_MESSAGE",
+            "other_safe_failure",
+        ),
+    ),
+)
+def test_run_result_errors_reduce_to_fixed_safe_classifications(
+    safe_text, classification
+):
+    assert OPERATIONAL._classify_result_error_text(safe_text) == classification
+
+
+def test_fixed_progress_sentinel_detection_discards_other_messages():
+    client = object.__new__(OPERATIONAL.MCPClient)
+    client.terminal_publication_recovery_required_observed = False
+    client._observe_progress_notification(
+        {
+            "method": "notifications/progress",
+            "params": {"message": "SENTINEL_ARBITRARY_EXCEPTION_MESSAGE"},
+        }
+    )
+    assert not client.terminal_publication_recovery_required_observed
+    client._observe_progress_notification(
+        {
+            "method": "notifications/progress",
+            "params": {
+                "message": (
+                    OPERATIONAL.TERMINAL_PUBLICATION_RECOVERY_SENTINEL
+                )
+            },
+        }
+    )
+    assert client.terminal_publication_recovery_required_observed
+
+
+def test_status_and_result_timing_aggregates_are_fixed():
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.observe_call(
+        "run_status",
+        elapsed_ms=7,
+        baseline=True,
+        error=False,
+        timeout=False,
+    )
+    observations.observe_call(
+        "run_status",
+        elapsed_ms=11,
+        baseline=False,
+        error=True,
+        timeout=True,
+    )
+    observations.observe_call(
+        "run_result",
+        elapsed_ms=13,
+        baseline=True,
+        error=False,
+        timeout=False,
+    )
+    observations.observe_call(
+        "run_result",
+        elapsed_ms=17,
+        baseline=False,
+        error=True,
+        timeout=False,
+    )
+    snapshot = observations.snapshot()
+    assert snapshot["mcp_status_timing"] == {
+        **OPERATIONAL._empty_mcp_timing(),
+        "baseline_call_count": 1,
+        "baseline_total_ms": 7,
+        "baseline_maximum_ms": 7,
+        "call_count": 1,
+        "total_ms": 11,
+        "maximum_ms": 11,
+        "error_count": 1,
+        "timeout_count": 1,
+    }
+    assert snapshot["mcp_result_timing"] == {
+        **OPERATIONAL._empty_mcp_timing(),
+        "baseline_call_count": 1,
+        "baseline_total_ms": 13,
+        "baseline_maximum_ms": 13,
+        "call_count": 1,
+        "total_ms": 17,
+        "maximum_ms": 17,
+        "error_count": 1,
+    }
+
+
+def test_secondary_mcp_timing_failure_preserves_return_and_exception():
+    observations = OPERATIONAL.ContinuationObservations()
+
+    def diagnostic_failure(*_args, **_kwargs):
+        raise RuntimeError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    observations.observe_call = diagnostic_failure
+    returned = object()
+
+    class SuccessClient:
+        def tool(self, *_args, **_kwargs):
+            return returned
+
+    assert (
+        OPERATIONAL._timed_mcp_tool(
+            SuccessClient(),
+            "run_status",
+            {},
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            baseline=False,
+        )
+        is returned
+    )
+    assert observations.diagnostic_collection_failed is True
+
+    original = RuntimeError("SENTINEL_CAPTURED_STDERR")
+
+    class FailureClient:
+        def tool(self, *_args, **_kwargs):
+            raise original
+
+    with pytest.raises(RuntimeError) as raised:
+        OPERATIONAL._timed_mcp_tool(
+            FailureClient(),
+            "run_result",
+            {},
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            baseline=False,
+        )
+    assert raised.value is original
+    assert observations.snapshot()["diagnostic_inspection_status"] == "failed"
+
+
+def test_bounded_ledger_records_one_fixed_overflow_marker(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    monkeypatch.setattr(FIXTURE, "TERMINAL_DIAGNOSTIC_MAX_RECORDS", 3)
+    for _index in range(10):
+        FIXTURE._record_diagnostic_phase(
+            FIXTURE.W1_PRECOMMIT_AUDITS,
+            "enter",
+            actor="worker",
+        )
+
+    records = _ledger_records(ledger)
+    assert len(records) == 3
+    assert records[-1] == {"overflow": True}
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_ledger_overflow"] is True
+
+
+def test_missing_malformed_partial_and_dynamic_ledger_records(
+    tmp_path
+):
+    missing = tmp_path / "missing.jsonl"
+    with pytest.raises(ValueError, match="missing"):
+        OPERATIONAL._read_terminal_phase_ledger(missing)
+
+    malformed = tmp_path / "malformed.jsonl"
+    malformed.write_bytes(b"{not-json}\n")
+    with pytest.raises(ValueError, match="malformed"):
+        OPERATIONAL._read_terminal_phase_ledger(malformed)
+
+    dynamic = tmp_path / "dynamic.jsonl"
+    dynamic.write_text(
+        json.dumps(
+            {
+                "phase": OPERATIONAL.W1_PRECOMMIT_AUDITS,
+                "edge": "enter",
+                "elapsed_ms": 0,
+                "actor": "worker",
+                "error_family": "none",
+                "SENTINEL_SYNTHETIC_ARGUMENT": True,
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="inventory"):
+        OPERATIONAL._read_terminal_phase_ledger(dynamic)
+
+    partial = tmp_path / "partial.jsonl"
+    valid = {
+        "phase": OPERATIONAL.W1_PRECOMMIT_AUDITS,
+        "edge": "enter",
+        "elapsed_ms": 0,
+        "actor": "worker",
+        "error_family": "none",
+    }
+    partial.write_bytes(
+        json.dumps(valid, separators=(",", ":")).encode() + b"\n{\"phase\":"
+    )
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(partial)
+    assert snapshot["terminalization_phase_entry_counts"][
+        OPERATIONAL.W1_PRECOMMIT_AUDITS
+    ] == 1
+
+
+def _fixed_phase_record(
+    phase: str,
+    edge: str,
+    *,
+    actor: str,
+    error_family: str = "none",
+    elapsed_ms: int = 0,
+) -> dict[str, object]:
+    return {
+        "actor": actor,
+        "edge": edge,
+        "elapsed_ms": elapsed_ms,
+        "error_family": error_family,
+        "phase": phase,
+    }
+
+
+@pytest.mark.parametrize(
+    ("phase", "family"),
+    (
+        (
+            OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+            OPERATIONAL.ERROR_REPLAY_BINDING,
+        ),
+        (
+            OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+            OPERATIONAL.ERROR_REPLAY_SIDECAR_PERSISTENCE,
+        ),
+        (
+            OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+            OPERATIONAL.ERROR_FINAL_RESULT_PERSISTENCE,
+        ),
+    ),
+)
+def test_mcp_terminal_error_survives_outer_application_result_error(
+    tmp_path,
+    phase,
+    family,
+):
+    ledger = tmp_path / "nested-mcp-error.jsonl"
+    records = [
+        _fixed_phase_record(
+            OPERATIONAL.APPLICATION_RESULT,
+            "enter",
+            actor="mcp_server",
+        ),
+        _fixed_phase_record(phase, "enter", actor="mcp_server"),
+        _fixed_phase_record(
+            phase,
+            "error",
+            actor="mcp_server",
+            error_family=family,
+        ),
+        _fixed_phase_record(
+            OPERATIONAL.APPLICATION_RESULT,
+            "error",
+            actor="mcp_server",
+            error_family=OPERATIONAL.ERROR_UNEXPECTED,
+        ),
+    ]
+    ledger.write_text(
+        "".join(
+            json.dumps(record, separators=(",", ":")) + "\n"
+            for record in records
+        ),
+        encoding="ascii",
+    )
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+
+    assert snapshot["terminalization_last_error_phase"] == phase
+    assert snapshot["terminalization_last_error_family"] == family
+    assert snapshot["terminalization_phase_error_counts"][phase] == 1
+    assert snapshot["terminalization_phase_error_counts"][
+        OPERATIONAL.APPLICATION_RESULT
+    ] == 1
+
+
+@pytest.mark.parametrize(
+    ("records", "expected_phase", "expected_family"),
+    (
+        (
+            (
+                (
+                    OPERATIONAL.W7_FRESH_REPLAY_DERIVATION,
+                    "worker",
+                    OPERATIONAL.ERROR_REPLAY_VERIFICATION,
+                ),
+                (
+                    OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+                    "mcp_server",
+                    OPERATIONAL.ERROR_REPLAY_BINDING,
+                ),
+            ),
+            OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+            OPERATIONAL.ERROR_REPLAY_BINDING,
+        ),
+        (
+            (
+                (
+                    OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+                    "mcp_server",
+                    OPERATIONAL.ERROR_REPLAY_BINDING,
+                ),
+                (
+                    OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+                    "worker",
+                    OPERATIONAL.ERROR_FINAL_RESULT_PERSISTENCE,
+                ),
+            ),
+            OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+            OPERATIONAL.ERROR_FINAL_RESULT_PERSISTENCE,
+        ),
+        (
+            (
+                (
+                    OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+                    "mcp_server",
+                    OPERATIONAL.ERROR_REPLAY_BINDING,
+                ),
+                (
+                    OPERATIONAL.W8_POSTCOMMIT_ROOT_VERIFICATION,
+                    "other",
+                    OPERATIONAL.ERROR_REPLAY_VERIFICATION,
+                ),
+            ),
+            OPERATIONAL.W8_POSTCOMMIT_ROOT_VERIFICATION,
+            OPERATIONAL.ERROR_REPLAY_VERIFICATION,
+        ),
+    ),
+)
+def test_latest_terminal_error_follows_record_order_across_actors(
+    tmp_path,
+    records,
+    expected_phase,
+    expected_family,
+):
+    ledger = tmp_path / "chronological-errors.jsonl"
+    encoded = [
+        _fixed_phase_record(
+            phase,
+            "error",
+            actor=actor,
+            error_family=family,
+            elapsed_ms=0,
+        )
+        for phase, actor, family in records
+    ]
+    ledger.write_text(
+        "".join(
+            json.dumps(record, separators=(",", ":")) + "\n"
+            for record in encoded
+        ),
+        encoding="ascii",
+    )
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+
+    assert snapshot["terminalization_last_error_phase"] == expected_phase
+    assert snapshot["terminalization_last_error_family"] == expected_family
+
+
+def test_application_result_error_without_terminal_error_is_not_observed(
+    tmp_path,
+):
+    ledger = tmp_path / "application-only-error.jsonl"
+    ledger.write_text(
+        json.dumps(
+            _fixed_phase_record(
+                OPERATIONAL.APPLICATION_RESULT,
+                "error",
+                actor="mcp_server",
+                error_family=OPERATIONAL.ERROR_UNEXPECTED,
+            ),
+            separators=(",", ":"),
+        )
+        + "\n",
+        encoding="ascii",
+    )
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+
+    assert snapshot["terminalization_last_error_phase"] == "not_observed"
+    assert snapshot["terminalization_last_error_family"] == "none"
+    assert snapshot["terminalization_phase_error_counts"][
+        OPERATIONAL.APPLICATION_RESULT
+    ] == 1
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("phase", "SENTINEL_DYNAMIC_PHASE"),
+        ("actor", "SENTINEL_DYNAMIC_ACTOR"),
+        ("edge", "SENTINEL_DYNAMIC_EDGE"),
+        ("error_family", "SENTINEL_DYNAMIC_ERROR_FAMILY"),
+    ),
+)
+def test_malformed_ledger_domains_cannot_influence_summary(
+    tmp_path,
+    field,
+    value,
+):
+    ledger = tmp_path / f"malformed-{field}.jsonl"
+    record = _fixed_phase_record(
+        OPERATIONAL.W9_REPLAY_BINDING_VALIDATION,
+        "error",
+        actor="mcp_server",
+        error_family=OPERATIONAL.ERROR_REPLAY_BINDING,
+    )
+    record[field] = value
+    ledger.write_text(
+        json.dumps(record, separators=(",", ":")) + "\n",
+        encoding="ascii",
+    )
+
+    with pytest.raises(ValueError, match="record value is invalid"):
+        OPERATIONAL._read_terminal_phase_ledger(ledger)
+
+
+def test_instrumentation_can_report_no_observed_terminal_phase(
+    tmp_path
+):
+    ledger = tmp_path / "observations-only.jsonl"
+    ledger.write_text(
+        '{"observation":"worker_liveness","value":"alive"}\n',
+        encoding="ascii",
+    )
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["worker_liveness"] == "alive"
+    assert snapshot["terminalization_last_entered_phase"] == "not_observed"
+    assert all(
+        value == 0
+        for value in snapshot[
+            "terminalization_phase_entry_counts"
+        ].values()
+    )
+
+
+def test_atomic_persistence_errors_are_specific_and_original_is_reraised(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(tmp_path, monkeypatch)
+    sidecar_error = OSError("SENTINEL_ARBITRARY_EXCEPTION_MESSAGE")
+
+    def fail_atomic(_path, _payload):
+        raise sidecar_error
+
+    atomic = FIXTURE._atomic_json_wrapper(fail_atomic)
+
+    def publish():
+        atomic(tmp_path / "REPLAY_VALIDATION.json", {})
+
+    wrapped = FIXTURE._diagnostic_phase_wrapper(
+        publish,
+        FIXTURE.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+    )
+    with pytest.raises(OSError) as raised:
+        wrapped()
+    assert raised.value is sidecar_error
+    assert id(sidecar_error) not in FIXTURE._diagnostic_error_overrides()
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_last_error_family"] == (
+        OPERATIONAL.ERROR_REPLAY_SIDECAR_PERSISTENCE
+    )
+
+    ledger.unlink()
+    FIXTURE._configure_terminal_diagnostic_ledger(ledger)
+    result_error = OSError("SENTINEL_CAPTURED_STDERR")
+
+    def fail_result(_path, _payload):
+        raise result_error
+
+    final_atomic = FIXTURE._atomic_json_wrapper(fail_result)
+    with pytest.raises(OSError) as raised:
+        final_atomic(tmp_path / "run-result.json", {})
+    assert raised.value is result_error
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+    assert snapshot["terminalization_last_error_family"] == (
+        OPERATIONAL.ERROR_FINAL_RESULT_PERSISTENCE
+    )
+    _assert_sentinels_absent(
+        ledger.read_text(encoding="ascii"),
+        _diagnostic_sentinels(ROOT, tmp_path),
+    )
+
+
 def test_operational_smoke_requires_exact_non_resumable_rejection():
     OPERATIONAL._assert_non_resumable_rejection(
         "ValueError: CONTINUE_TYPED_STOP_REQUIRED"
@@ -214,6 +1428,7 @@ def test_continuation_deadline_and_fixed_running_observations_are_exact():
             observations=observations,
             _clock=_DeadlineClock(3),
             _sleep=sleeps.append,
+            _timer=lambda: 0.0,
         )
     assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 600
     assert OPERATIONAL.POLL_INTERVAL_SECONDS == 0.05
@@ -226,9 +1441,14 @@ def test_continuation_deadline_and_fixed_running_observations_are_exact():
         "first_lifecycle_state": "running",
         "last_lifecycle_state": "running",
         "status_observation_count": 3,
-        "last_progress_sequence": 17,
-        "last_progress_phase": "reasoning",
-    }
+            "last_progress_sequence": 17,
+            "last_progress_phase": "reasoning",
+            "continuation_elapsed_ms": 600000,
+            "mcp_status_timing": {
+                **OPERATIONAL._empty_mcp_timing(),
+                "call_count": 3,
+            },
+        }
 
 
 def test_continuation_poll_counts_stale_epoch_zero_results():
@@ -286,7 +1506,41 @@ def test_continuation_poll_counts_repeated_result_read_failures():
         )
     assert observations.status_observation_count == 3
     assert observations.result_read_error_count == 3
+    assert observations.result_error_code_counts == {
+        "run_result_not_ready": 0,
+        "manifest_admission_failure": 0,
+        "terminal_recovery_failure": 0,
+        "other_safe_failure": 3,
+    }
     assert observations.stale_epoch0_result_observation_count == 0
+
+
+def test_continuation_poll_retains_run_result_not_ready_classification():
+    observations = OPERATIONAL.ContinuationObservations()
+
+    class ResultNotReadyClient:
+        def tool(self, name, _arguments, **kwargs):
+            if name == "run_status":
+                return {"state": "completed", "phase": "stop", "seq": 23}
+            raise OPERATIONAL._MCPToolResponseError(
+                stage=kwargs["stage"],
+                result_error_classification="run_result_not_ready",
+            )
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure):
+        OPERATIONAL._poll_terminal(
+            ResultNotReadyClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=_DeadlineClock(2),
+            _sleep=lambda _seconds: None,
+            _timer=lambda: 0.0,
+        )
+    assert observations.result_read_error_count == 2
+    assert observations.result_error_code_counts[
+        "run_result_not_ready"
+    ] == 2
 
 
 def test_continuation_status_failure_remains_primary_and_is_counted():
@@ -401,7 +1655,7 @@ def _expected_failure(
         "exit_status": exit_status,
         "failure_kind": failure_kind,
         "platform_family": OPERATIONAL._platform_family(),
-        "schema": "deepreason-wheel-operational-failure-v3",
+        "schema": "deepreason-wheel-operational-failure-v4",
         "stage": stage,
         "timeout": timeout,
         "event_log_present": None,
@@ -412,25 +1666,7 @@ def _expected_failure(
         "progress_log_present": None,
         "run_root_present": None,
         "terminal_result_present": None,
-        "diagnostic_inspection_status": "not_attempted",
-        "first_lifecycle_state": "not_observed",
-        "last_lifecycle_state": "not_observed",
-        "status_observation_count": 0,
-        "last_progress_sequence": None,
-        "last_progress_phase": "not_observed",
-        "stale_epoch0_result_observation_count": 0,
-        "result_read_error_count": 0,
-        "status_read_error_count": 0,
-        "provider_call_delta": None,
-        "loopback_provider_error_count": None,
-        "mcp_liveness": "not_started",
-        "opening_resume_decision_present": None,
-        "durable_terminal_epoch": None,
-        "terminal_draft_count": None,
-        "terminal_commitment_count": None,
-        "latest_commitment_epoch": None,
-        "commitment_inclusive_replay_binding_present": None,
-        "durable_result_binding": "unknown",
+        **OPERATIONAL._default_continuation_diagnostic(),
     }
     record.update(state_presence or {})
     record.update(continuation_diagnostic or {})
@@ -501,6 +1737,7 @@ def _diagnostic_context(
     observations: object,
     *,
     provider_call_baseline: int = 10,
+    terminal_phase_ledger_path: Path | None = None,
 ) -> object:
     work = tmp_path / "unrelated-work"
     work.mkdir(exist_ok=True)
@@ -522,6 +1759,7 @@ def _diagnostic_context(
         provider_state_path=tmp_path / "provider-state.json",
         provider_call_baseline=provider_call_baseline,
         observations=observations,
+        terminal_phase_ledger_path=terminal_phase_ledger_path,
     )
 
 
@@ -548,6 +1786,119 @@ def _durable_snapshot(
         ),
         "durable_result_binding": durable_result_binding,
     }
+
+
+def test_mcp_can_remain_alive_while_worker_is_not_alive(
+    tmp_path, monkeypatch
+):
+    ledger = _configured_fixture_ledger(
+        tmp_path,
+        monkeypatch,
+        actor="mcp_server",
+    )
+    FIXTURE._record_worker_liveness("not_alive")
+    observations = OPERATIONAL.ContinuationObservations()
+    context = _diagnostic_context(
+        tmp_path,
+        observations,
+        terminal_phase_ledger_path=ledger,
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_read_loopback_diagnostic_state",
+        lambda _path: (10, 0),
+    )
+    monkeypatch.setattr(
+        OPERATIONAL,
+        "_run_durable_inspection",
+        lambda _context: _durable_snapshot(),
+    )
+    client = _TrackedContinuationClient()
+
+    diagnostic = OPERATIONAL._capture_continuation_diagnostic(
+        context,
+        clients=[client],
+    )
+
+    assert diagnostic["mcp_liveness"] == "alive"
+    assert diagnostic["worker_liveness"] == "not_alive"
+    assert diagnostic["diagnostic_inspection_status"] == "succeeded"
+
+
+def test_application_recovery_interference_is_actor_and_liveness_bound(
+    tmp_path
+):
+    ledger = tmp_path / "interference.jsonl"
+    records = [
+        {"observation": "worker_liveness", "value": "alive"},
+        {
+            "actor": "worker",
+            "edge": "enter",
+            "elapsed_ms": 0,
+            "error_family": "none",
+            "phase": OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+        },
+        {
+            "actor": "mcp_server",
+            "edge": "enter",
+            "elapsed_ms": 0,
+            "error_family": "none",
+            "phase": OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+        },
+        {
+            "actor": "mcp_server",
+            "edge": "return",
+            "elapsed_ms": 3,
+            "error_family": "none",
+            "phase": OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+        },
+        {
+            "actor": "worker",
+            "edge": "return",
+            "elapsed_ms": 4,
+            "error_family": "none",
+            "phase": OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION,
+        },
+        {"observation": "worker_liveness", "value": "not_alive"},
+    ]
+    ledger.write_text(
+        "".join(
+            json.dumps(record, separators=(",", ":")) + "\n"
+            for record in records
+        ),
+        encoding="ascii",
+    )
+
+    snapshot = OPERATIONAL._read_terminal_phase_ledger(ledger)
+
+    assert snapshot["application_recovery_interference_observed"] is True
+    assert snapshot["application_recovery_last_entered_phase"] == (
+        OPERATIONAL.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION
+    )
+    assert snapshot["worker_liveness"] == "not_alive"
+
+    no_interference = tmp_path / "no-interference.jsonl"
+    reordered = [
+        records[0],
+        records[1],
+        records[4],
+        records[2],
+        records[3],
+        records[5],
+    ]
+    no_interference.write_text(
+        "".join(
+            json.dumps(record, separators=(",", ":")) + "\n"
+            for record in reordered
+        ),
+        encoding="ascii",
+    )
+    clean_snapshot = OPERATIONAL._read_terminal_phase_ledger(
+        no_interference
+    )
+    assert clean_snapshot[
+        "application_recovery_interference_observed"
+    ] is False
 
 
 def test_timeout_wrapper_captures_state_and_shuts_down_before_cleanup(
@@ -867,7 +2218,7 @@ def test_malformed_durable_inputs_emit_only_fixed_inspection_failure(
     )
     assert diagnostic["diagnostic_inspection_status"] == "failed"
     assert diagnostic["first_lifecycle_state"] == "running"
-    assert diagnostic["provider_call_delta"] is None
+    assert diagnostic["provider_call_delta"] == 0
     assert diagnostic["durable_terminal_epoch"] is None
     assert diagnostic["terminal_draft_count"] is None
     assert diagnostic["terminal_commitment_count"] is None
@@ -1435,9 +2786,175 @@ def test_mcp_response_failures_never_enter_public_diagnostics(
     assert not temp_root.exists()
 
 
-def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
-    assert OPERATIONAL.FAILURE_SCHEMA == "deepreason-wheel-operational-failure-v3"
+def test_v4_diagnostic_fields_types_and_allowlists_are_closed():
+    assert OPERATIONAL.FAILURE_SCHEMA == "deepreason-wheel-operational-failure-v4"
+    assert FIXTURE.ALLOWED_DIAGNOSTIC_PHASES == {
+        "W1_PRECOMMIT_AUDITS",
+        "W2_PRECOMMIT_VERIFICATION",
+        "W3_TERMINAL_AUTHORITY_STATE",
+        "W4_TERMINAL_DRAFT_CONSTRUCTION",
+        "W5_COMMITMENT_ENSURE",
+        "W6_PENDING_RESULT_PUBLICATION",
+        "W7_FRESH_REPLAY_DERIVATION",
+        "W8_POSTCOMMIT_ROOT_VERIFICATION",
+        "W9_REPLAY_BINDING_VALIDATION",
+        "W10_REPLAY_AND_FINAL_RESULT_PUBLICATION",
+        "TERMINAL_LOCK",
+        "APPLICATION_INSPECT",
+        "APPLICATION_RESULT",
+    }
+    assert FIXTURE.ALLOWED_DIAGNOSTIC_EDGES == {
+        "enter",
+        "return",
+        "error",
+        "wait_start",
+        "acquired",
+        "released",
+    }
+    assert FIXTURE.ALLOWED_DIAGNOSTIC_ACTORS == {
+        "worker",
+        "mcp_server",
+        "other",
+    }
+    assert FIXTURE.ALLOWED_DIAGNOSTIC_ERROR_FAMILIES == {
+        "none",
+        "run_result_not_ready",
+        "manifest_admission",
+        "process_lock_busy",
+        "terminal_authority",
+        "replay_verification",
+        "replay_binding",
+        "atomic_persistence",
+        "replay_sidecar_persistence",
+        "final_result_persistence",
+        "value_error_other",
+        "operating_system_error_other",
+        "unexpected_error",
+    }
+    assert FIXTURE.ALLOWED_WORKER_LIVENESS == {
+        "alive",
+        "not_alive",
+        "not_registered",
+        "unknown",
+    }
+    assert FIXTURE.TERMINAL_PHASE_WRAPPER_MAP == {
+        "W1_PRECOMMIT_AUDITS": (
+            "deepreason.capabilities.audit.write_tranche_a_audits",
+        ),
+        "W2_PRECOMMIT_VERIFICATION": (
+            "deepreason.verification.report.verify_root_report",
+        ),
+        "W3_TERMINAL_AUTHORITY_STATE": (
+            "deepreason.application.text_runs."
+            "derive_model_execution_summary",
+        ),
+        "W4_TERMINAL_DRAFT_CONSTRUCTION": (
+            "deepreason.runtime.terminal_authority."
+            "_expected_commitment",
+        ),
+        "W5_COMMITMENT_ENSURE": (
+            "deepreason.runtime.terminal_authority."
+            "ensure_terminal_commitment",
+        ),
+        "W6_PENDING_RESULT_PUBLICATION": (
+            "deepreason.runtime.terminal_authority."
+            "_prepare_terminal_result_locked",
+        ),
+        "W7_FRESH_REPLAY_DERIVATION": (
+            "deepreason.runtime.terminal_authority."
+            "_fresh_replay_validation",
+        ),
+        "W8_POSTCOMMIT_ROOT_VERIFICATION": (
+            "deepreason.verification.report."
+            "verify_post_commit_report",
+        ),
+        "W9_REPLAY_BINDING_VALIDATION": (
+            "deepreason.runtime.terminal_authority."
+            "_expected_replay_binding",
+            "deepreason.runtime.terminal_authority."
+            "_validate_result_projection_binding",
+        ),
+        "W10_REPLAY_AND_FINAL_RESULT_PUBLICATION": (
+            "deepreason.runtime.terminal_authority."
+            "_publish_current_replay_projection",
+            "deepreason.runtime.progress._atomic_json[run-result.json]",
+        ),
+    }
+    assert FIXTURE.TERMINAL_PHASE_NESTING_EXCLUSIONS == {
+        (
+            "deepreason.capabilities.audit."
+            "write_tranche_a_audits"
+        ): frozenset(
+            {FIXTURE.W10_REPLAY_AND_FINAL_RESULT_PUBLICATION}
+        ),
+        "deepreason.verification.report.verify_root_report": frozenset(
+            {FIXTURE.W8_POSTCOMMIT_ROOT_VERIFICATION}
+        ),
+        (
+            "deepreason.application.text_runs."
+            "derive_model_execution_summary"
+        ): frozenset(
+            {
+                FIXTURE.W2_PRECOMMIT_VERIFICATION,
+                FIXTURE.W8_POSTCOMMIT_ROOT_VERIFICATION,
+            }
+        ),
+        (
+            "deepreason.runtime.terminal_authority."
+            "_validate_result_projection_binding"
+        ): frozenset({FIXTURE.W6_PENDING_RESULT_PUBLICATION}),
+    }
+    assert OPERATIONAL.ALLOWED_PLATFORM_FAMILIES == {
+        "windows",
+        "macos",
+        "linux",
+        "other",
+    }
+    assert OPERATIONAL.ALLOWED_FAILURE_STAGES == {
+        "build_wheel",
+        "create_environment",
+        "install_wheel",
+        "setup_profile",
+        "qualify",
+        "readiness",
+        "reason",
+        "mcp_initialize",
+        "mcp_request",
+        "continuation_rejection",
+        "continuation_resume",
+        "replay_validation",
+        "restart_recovery",
+        "budget_rejection",
+        "manifest_rejection",
+        "disclosure_check",
+        "cleanup",
+    }
+    assert OPERATIONAL.ALLOWED_FAILURE_KINDS == {
+        "command_failed",
+        "timeout",
+        "assertion_failed",
+        "unexpected_failure",
+        "cleanup_failed",
+    }
     assert OPERATIONAL.ALLOWED_TYPED_REASON_CODES == {"RUN_WORKER_NOT_FOUND"}
+    assert OPERATIONAL.ALLOWED_DETAIL_CODES == {
+        "child_exit_nonzero",
+        "child_launch_failed",
+        "child_timeout",
+        "executable_resolution_failed",
+        "filesystem_access_denied",
+        "unknown_reason_failure",
+        "RUN_WORKER_NOT_FOUND",
+    }
+    assert OPERATIONAL.ALLOWED_DURABLE_PROGRESS == {
+        "preparation_absent",
+        "run_root_present",
+        "preparation_present",
+        "managed_registration_present",
+        "event_log_present",
+        "terminal_result_present",
+        "state_inspection_unavailable",
+    }
     assert OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS == {
         "event_log_present",
         "loopback_start_present",
@@ -1447,6 +2964,11 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
         "progress_log_present",
         "run_root_present",
         "terminal_result_present",
+    }
+    assert OPERATIONAL.ALLOWED_DIAGNOSTIC_INSPECTION_STATUSES == {
+        "not_attempted",
+        "succeeded",
+        "failed",
     }
     assert OPERATIONAL.CONTINUATION_DIAGNOSTIC_FIELDS == {
         "diagnostic_inspection_status",
@@ -1468,20 +2990,86 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
         "latest_commitment_epoch",
         "commitment_inclusive_replay_binding_present",
         "durable_result_binding",
+        "terminalization_last_entered_phase",
+        "terminalization_last_returned_phase",
+        "terminalization_last_error_phase",
+        "terminalization_last_error_family",
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_total_ms",
+        "terminalization_ledger_overflow",
+        "terminal_lock_acquire_count",
+        "terminal_lock_wait_total_ms",
+        "terminal_lock_wait_max_ms",
+        "worker_liveness",
+        "terminal_publication_recovery_required_observed",
+        "result_error_code_counts",
+        "mcp_status_timing",
+        "mcp_result_timing",
+        "continuation_elapsed_ms",
+        "application_recovery_interference_observed",
+        "application_recovery_last_entered_phase",
     }
     assert OPERATIONAL.FAILURE_RECORD_FIELDS == {
-        "schema",
-        "platform_family",
-        "stage",
-        "failure_kind",
-        "timeout",
+        "application_recovery_interference_observed",
+        "application_recovery_last_entered_phase",
         "cleanup_completed",
-        "exit_status",
+        "commitment_inclusive_replay_binding_present",
+        "continuation_elapsed_ms",
         "detail_code",
+        "diagnostic_inspection_status",
         "durable_progress",
-        *OPERATIONAL.ALLOWED_STATE_PRESENCE_FIELDS,
-        *OPERATIONAL.CONTINUATION_DIAGNOSTIC_FIELDS,
+        "durable_result_binding",
+        "durable_terminal_epoch",
+        "event_log_present",
+        "exit_status",
+        "failure_kind",
+        "first_lifecycle_state",
+        "last_lifecycle_state",
+        "last_progress_phase",
+        "last_progress_sequence",
+        "latest_commitment_epoch",
+        "loopback_provider_error_count",
+        "loopback_start_present",
+        "managed_registration_present",
+        "manifest_present",
+        "mcp_liveness",
+        "mcp_result_timing",
+        "mcp_status_timing",
+        "opening_resume_decision_present",
+        "platform_family",
+        "preparation_present",
+        "progress_log_present",
+        "provider_call_delta",
+        "result_error_code_counts",
+        "result_read_error_count",
+        "run_root_present",
+        "schema",
+        "stage",
+        "stale_epoch0_result_observation_count",
+        "status_observation_count",
+        "status_read_error_count",
+        "terminal_commitment_count",
+        "terminal_draft_count",
+        "terminal_lock_acquire_count",
+        "terminal_lock_wait_max_ms",
+        "terminal_lock_wait_total_ms",
+        "terminal_publication_recovery_required_observed",
+        "terminal_result_present",
+        "terminalization_last_entered_phase",
+        "terminalization_last_error_family",
+        "terminalization_last_error_phase",
+        "terminalization_last_returned_phase",
+        "terminalization_ledger_overflow",
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_total_ms",
+        "timeout",
+        "worker_liveness",
     }
+    assert len(OPERATIONAL.FAILURE_RECORD_FIELDS) == 56
     assert OPERATIONAL.ALLOWED_DIAGNOSTIC_LIFECYCLES == {
         "not_observed",
         "not_started",
@@ -1515,6 +3103,95 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
         "unbound",
         "unknown",
     }
+    assert OPERATIONAL.ALLOWED_TERMINALIZATION_OBSERVATIONS == {
+        "not_observed",
+        "W1_PRECOMMIT_AUDITS",
+        "W2_PRECOMMIT_VERIFICATION",
+        "W3_TERMINAL_AUTHORITY_STATE",
+        "W4_TERMINAL_DRAFT_CONSTRUCTION",
+        "W5_COMMITMENT_ENSURE",
+        "W6_PENDING_RESULT_PUBLICATION",
+        "W7_FRESH_REPLAY_DERIVATION",
+        "W8_POSTCOMMIT_ROOT_VERIFICATION",
+        "W9_REPLAY_BINDING_VALIDATION",
+        "W10_REPLAY_AND_FINAL_RESULT_PUBLICATION",
+        "TERMINAL_LOCK",
+    }
+    expected_phase_mapping_keys = {
+        "W1_PRECOMMIT_AUDITS",
+        "W2_PRECOMMIT_VERIFICATION",
+        "W3_TERMINAL_AUTHORITY_STATE",
+        "W4_TERMINAL_DRAFT_CONSTRUCTION",
+        "W5_COMMITMENT_ENSURE",
+        "W6_PENDING_RESULT_PUBLICATION",
+        "W7_FRESH_REPLAY_DERIVATION",
+        "W8_POSTCOMMIT_ROOT_VERIFICATION",
+        "W9_REPLAY_BINDING_VALIDATION",
+        "W10_REPLAY_AND_FINAL_RESULT_PUBLICATION",
+        "TERMINAL_LOCK",
+        "APPLICATION_INSPECT",
+        "APPLICATION_RESULT",
+    }
+    assert OPERATIONAL.ALLOWED_LEDGER_PHASES == expected_phase_mapping_keys
+    assert set(OPERATIONAL.DIAGNOSTIC_LEDGER_PHASES) == (
+        expected_phase_mapping_keys
+    )
+    assert OPERATIONAL.ALLOWED_LEDGER_EDGES == {
+        "enter",
+        "return",
+        "error",
+        "wait_start",
+        "acquired",
+        "released",
+    }
+    assert OPERATIONAL.ALLOWED_LEDGER_ACTORS == {
+        "worker",
+        "mcp_server",
+        "other",
+    }
+    assert OPERATIONAL.ALLOWED_LEDGER_ERROR_FAMILIES == {
+        "none",
+        "run_result_not_ready",
+        "manifest_admission",
+        "process_lock_busy",
+        "terminal_authority",
+        "replay_verification",
+        "replay_binding",
+        "atomic_persistence",
+        "replay_sidecar_persistence",
+        "final_result_persistence",
+        "value_error_other",
+        "operating_system_error_other",
+        "unexpected_error",
+    }
+    assert OPERATIONAL.ALLOWED_WORKER_LIVENESS == {
+        "alive",
+        "not_alive",
+        "not_registered",
+        "unknown",
+    }
+    expected_result_error_keys = {
+        "run_result_not_ready",
+        "manifest_admission_failure",
+        "terminal_recovery_failure",
+        "other_safe_failure",
+    }
+    assert OPERATIONAL.ALLOWED_RESULT_ERROR_CODES == (
+        expected_result_error_keys
+    )
+    expected_mcp_timing_keys = {
+        "call_count",
+        "total_ms",
+        "maximum_ms",
+        "timeout_count",
+        "error_count",
+        "baseline_call_count",
+        "baseline_total_ms",
+        "baseline_maximum_ms",
+        "baseline_timeout_count",
+        "baseline_error_count",
+    }
+    assert OPERATIONAL.MCP_TIMING_FIELDS == expected_mcp_timing_keys
     failure = OPERATIONAL.OperationalSmokeFailure(
         stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
         failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
@@ -1540,16 +3217,49 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
         "terminal_draft_count",
         "terminal_commitment_count",
         "latest_commitment_epoch",
+        "continuation_elapsed_ms",
     ):
         assert record[field] is None
     assert type(record["timeout"]) is bool
     assert type(record["cleanup_completed"]) is bool
+    for field in (
+        "terminalization_phase_entry_counts",
+        "terminalization_phase_return_counts",
+        "terminalization_phase_error_counts",
+        "terminalization_phase_total_ms",
+    ):
+        assert set(record[field]) == expected_phase_mapping_keys
+        assert record[field] == {
+            key: 0 for key in expected_phase_mapping_keys
+        }
+    assert set(record["result_error_code_counts"]) == expected_result_error_keys
+    assert record["result_error_code_counts"] == {
+        key: 0 for key in expected_result_error_keys
+    }
+    assert set(record["mcp_status_timing"]) == expected_mcp_timing_keys
+    assert set(record["mcp_result_timing"]) == expected_mcp_timing_keys
+    assert record["mcp_status_timing"] == {
+        key: 0 for key in expected_mcp_timing_keys
+    }
+    assert record["mcp_result_timing"] == {
+        key: 0 for key in expected_mcp_timing_keys
+    }
 
     with pytest.raises(ValueError, match="detail code"):
         OPERATIONAL.OperationalSmokeFailure(
             stage=OPERATIONAL.STAGE_REASON,
             failure_kind=OPERATIONAL.FAILURE_COMMAND,
             detail_code="SENTINEL_ARBITRARY_EXCEPTION_MESSAGE",
+        )
+    with pytest.raises(ValueError, match="operational stage"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage="SENTINEL_DYNAMIC_STAGE",
+            failure_kind=OPERATIONAL.FAILURE_COMMAND,
+        )
+    with pytest.raises(ValueError, match="failure kind"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_REASON,
+            failure_kind="SENTINEL_DYNAMIC_FAILURE_KIND",
         )
     with pytest.raises(ValueError, match="durable progress"):
         OPERATIONAL.OperationalSmokeFailure(
@@ -1580,6 +3290,34 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
             continuation_diagnostic=invalid_diagnostic,
         )
     invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
+    invalid_diagnostic["last_progress_phase"] = "SENTINEL_DYNAMIC_PHASE"
+    with pytest.raises(ValueError, match="progress phase"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+            continuation_diagnostic=invalid_diagnostic,
+        )
+    invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
+    invalid_diagnostic["terminalization_last_error_phase"] = (
+        "SENTINEL_DYNAMIC_TERMINAL_PHASE"
+    )
+    with pytest.raises(ValueError, match="terminalization_last_error_phase"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+            continuation_diagnostic=invalid_diagnostic,
+        )
+    invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
+    invalid_diagnostic["terminalization_last_error_family"] = (
+        "SENTINEL_DYNAMIC_ERROR_FAMILY"
+    )
+    with pytest.raises(ValueError, match="error family"):
+        OPERATIONAL.OperationalSmokeFailure(
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+            continuation_diagnostic=invalid_diagnostic,
+        )
+    invalid_diagnostic = OPERATIONAL._default_continuation_diagnostic()
     invalid_diagnostic["provider_call_delta"] = -1
     with pytest.raises(TypeError, match="non-negative"):
         OPERATIONAL.OperationalSmokeFailure(
@@ -1587,6 +3325,17 @@ def test_v3_diagnostic_fields_types_and_allowlists_are_closed():
             failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
             continuation_diagnostic=invalid_diagnostic,
         )
+
+
+def test_platform_family_reduces_arbitrary_runtime_values_to_fixed_domain(
+    monkeypatch,
+):
+    observed = set()
+    for value in ("win32", "darwin", "linux", "linux2", "freebsd"):
+        monkeypatch.setattr(OPERATIONAL.sys, "platform", value)
+        observed.add(OPERATIONAL._platform_family())
+
+    assert observed == {"windows", "macos", "linux", "other"}
 
 
 def test_loopback_ready_marker_is_scrubbed_then_injected_reason_only(
@@ -1953,7 +3702,7 @@ def test_every_operational_reason_command_uses_the_diagnostic_wrapper():
 def test_every_operational_mcp_child_uses_tracked_construction():
     source = Path(OPERATIONAL.__file__).read_text(encoding="utf-8")
     assert source.count("MCPClient(") == 1
-    assert source.count("= _new_mcp_client(") == 5
+    assert source.count("= _new_mcp_client(") == 6
     assert "mcp_clients=mcp_clients" in source
 
 
