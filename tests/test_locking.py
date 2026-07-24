@@ -6,11 +6,13 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
+import deepreason.locking as locking_module
 from deepreason.locking import (
     MAKE_OPERATOR_LOCK_NAME,
     OPERATOR_LOCK_NAMES,
@@ -138,6 +140,102 @@ def test_windows_byte_range_backend_can_be_selected_without_fcntl(
 
     assert calls == [(fake.LK_NBLCK, 1), (fake.LK_UNLCK, 1)]
     assert lock.path.read_bytes() == b"\0"
+
+
+def test_windows_blocking_lock_waits_past_lk_lock_exhaustion_until_available(
+    tmp_path, monkeypatch
+):
+    calls: list[tuple[int, int]] = []
+    sleeps: list[float] = []
+    nonblocking_attempts = 0
+    fake = SimpleNamespace(LK_LOCK=1, LK_NBLCK=2, LK_UNLCK=3)
+
+    def controlled_locking(_fd, mode, count):
+        nonlocal nonblocking_attempts
+        calls.append((mode, count))
+        if mode == fake.LK_LOCK:
+            raise OSError(13, "simulated LK_LOCK retry exhaustion")
+        if mode == fake.LK_NBLCK:
+            nonblocking_attempts += 1
+            if nonblocking_attempts < 3:
+                raise OSError(13, "simulated ordinary contention")
+
+    fake.locking = controlled_locking
+    monkeypatch.setitem(sys.modules, "msvcrt", fake)
+    monkeypatch.setattr(time, "sleep", sleeps.append)
+
+    lock = ProcessLock(
+        tmp_path / "blocking-windows.lock",
+        owner="blocking-windows-test",
+        blocking=True,
+        _platform="windows",
+    )
+    lock.acquire()
+    assert lock.acquired
+    lock.release()
+
+    assert calls == [
+        (fake.LK_NBLCK, 1),
+        (fake.LK_NBLCK, 1),
+        (fake.LK_NBLCK, 1),
+        (fake.LK_UNLCK, 1),
+    ]
+    assert sleeps == [
+        locking_module._WINDOWS_LOCK_POLL_SECONDS,
+        locking_module._WINDOWS_LOCK_POLL_SECONDS,
+    ]
+    assert lock.path.read_bytes() == b"\0"
+
+
+def test_windows_nonblocking_lock_is_fail_fast_and_never_waits(
+    tmp_path, monkeypatch
+):
+    calls: list[tuple[int, int]] = []
+    fake = SimpleNamespace(LK_LOCK=1, LK_NBLCK=2, LK_UNLCK=3)
+
+    def contended(_fd, mode, count):
+        calls.append((mode, count))
+        raise OSError(13, "simulated ordinary contention")
+
+    fake.locking = contended
+    monkeypatch.setitem(sys.modules, "msvcrt", fake)
+    monkeypatch.setattr(
+        time,
+        "sleep",
+        lambda _interval: pytest.fail("nonblocking acquisition must not wait"),
+    )
+
+    with pytest.raises(ProcessLockBusy, match="process lock is already held"):
+        ProcessLock(
+            tmp_path / "nonblocking-windows.lock",
+            owner="nonblocking-windows-test",
+            blocking=False,
+            _platform="windows",
+        ).acquire()
+
+    assert calls == [(fake.LK_NBLCK, 1)]
+
+
+def test_windows_noncontention_error_is_not_reclassified_as_busy(
+    tmp_path, monkeypatch
+):
+    fake = SimpleNamespace(LK_LOCK=1, LK_NBLCK=2, LK_UNLCK=3)
+
+    def unavailable(_fd, _mode, _count):
+        raise OSError(22, "simulated unexpected operating-system failure")
+
+    fake.locking = unavailable
+    monkeypatch.setitem(sys.modules, "msvcrt", fake)
+
+    with pytest.raises(OSError) as caught:
+        ProcessLock(
+            tmp_path / "unexpected-windows.lock",
+            owner="unexpected-windows-test",
+            blocking=False,
+            _platform="windows",
+        ).acquire()
+
+    assert caught.value.errno == 22
 
 
 def test_portable_modules_import_when_fcntl_is_unavailable(tmp_path):

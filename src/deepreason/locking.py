@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import os
 import stat
+import time
 import unicodedata
 from pathlib import Path
 from typing import BinaryIO, Iterable
@@ -27,6 +28,8 @@ OPERATOR_LOCK_NAMES = tuple(
 _LOCK_SENTINEL = b"\0"
 _MAX_OWNER_CHARS = 128
 _MAX_METADATA_BYTES = 1_024
+_WINDOWS_LOCK_CONTENTION_ERRNOS = frozenset({13, 36})
+_WINDOWS_LOCK_POLL_SECONDS = 0.05
 
 
 class ProcessLockError(RuntimeError):
@@ -150,14 +153,17 @@ def _windows_acquire(stream: BinaryIO, *, blocking: bool) -> None:
         import msvcrt
     except ImportError as error:  # pragma: no cover - non-Windows hosts
         raise ProcessLockUnavailable("Windows process locking is unavailable") from error
-    stream.seek(0)
-    mode = msvcrt.LK_LOCK if blocking else msvcrt.LK_NBLCK
-    try:
-        msvcrt.locking(stream.fileno(), mode, 1)
-    except OSError as error:
-        if not blocking or error.errno in {13, 36}:
-            raise ProcessLockBusy("process lock is already held") from error
-        raise
+    while True:
+        stream.seek(0)
+        try:
+            msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+            return
+        except OSError as error:
+            if error.errno not in _WINDOWS_LOCK_CONTENTION_ERRNOS:
+                raise
+            if not blocking:
+                raise ProcessLockBusy("process lock is already held") from error
+        time.sleep(_WINDOWS_LOCK_POLL_SECONDS)
 
 
 def _windows_release(stream: BinaryIO) -> None:

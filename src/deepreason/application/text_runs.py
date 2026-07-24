@@ -470,7 +470,6 @@ class TextRunApplicationService:
 
         manifest_path = root / MANIFEST_NAME
         if manifest_path.exists() or not target.exists():
-            from deepreason.harness import Harness
             from deepreason.runtime.progress import _atomic_json
             from deepreason.runtime.terminal_authority import (
                 derive_terminal_authority,
@@ -480,30 +479,37 @@ class TextRunApplicationService:
             manifest = load_run_manifest(manifest_path)
             if manifest.schema_version == 6:
                 _require_v6_manifest(manifest, operation="run result recovery")
-                recovered = recover_terminal_result(Harness(root), manifest)
-                if recovered is not None:
-                    try:
-                        durable = json.loads(target.read_text(encoding="utf-8"))
-                    except (
-                        FileNotFoundError,
-                        OSError,
-                        UnicodeError,
-                        json.JSONDecodeError,
-                    ):
-                        durable = None
-                    if durable != recovered:
-                        _atomic_json(target, recovered)
-                elif manifest.terminal_commitment_policy is not None:
-                    authority = derive_terminal_authority(
-                        root,
-                        manifest=manifest,
-                    )
-                    if authority.status != "operational_abort":
-                        lifecycle = self.inspect(intent).lifecycle
+                with self.registry.lock:
+                    if self.registry.live(root) is not None:
                         raise ValueError(
-                            "RUN_RESULT_NOT_READY: current terminalization is "
-                            f"{lifecycle}"
+                            "RUN_RESULT_NOT_READY: terminalization remains active"
                         )
+                    from deepreason.harness import Harness
+
+                    recovered = recover_terminal_result(Harness(root), manifest)
+                    if recovered is not None:
+                        try:
+                            durable = json.loads(target.read_text(encoding="utf-8"))
+                        except (
+                            FileNotFoundError,
+                            OSError,
+                            UnicodeError,
+                            json.JSONDecodeError,
+                        ):
+                            durable = None
+                        if durable != recovered:
+                            _atomic_json(target, recovered)
+                    elif manifest.terminal_commitment_policy is not None:
+                        authority = derive_terminal_authority(
+                            root,
+                            manifest=manifest,
+                        )
+                        if authority.status != "operational_abort":
+                            lifecycle = self.inspect(intent).lifecycle
+                            raise ValueError(
+                                "RUN_RESULT_NOT_READY: current terminalization is "
+                                f"{lifecycle}"
+                            )
         if not target.exists():
             load_run_manifest(manifest_path)
             lifecycle = self.inspect(intent).lifecycle
@@ -981,6 +987,22 @@ class TextRunApplicationService:
                         token_limit=token_budget,
                         determinate=False,
                         message=str(error)[:500],
+                        stop_reason="operational_failure",
+                    )
+                    notify(failed)
+                except Exception:
+                    pass
+                return
+            if harness.workflow_state.current_terminal_commitment is not None:
+                try:
+                    failed = progress.emit(
+                        state="failed",
+                        phase="stop",
+                        activity="terminal publication recovery required",
+                        cycle=latest_cycle,
+                        token_limit=token_budget,
+                        determinate=False,
+                        message="TERMINAL_PUBLICATION_RECOVERY_REQUIRED",
                         stop_reason="operational_failure",
                     )
                     notify(failed)

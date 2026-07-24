@@ -8,6 +8,7 @@ import threading
 
 import pytest
 
+import deepreason.application.text_runs as text_runs_module
 from deepreason.application import (
     ContinueTextRunIntentV1,
     InspectTextRunIntentV1,
@@ -21,7 +22,7 @@ from deepreason.application.text_runs import (
 )
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.harness import Harness
-from deepreason.locking import ProcessLock
+from deepreason.locking import ProcessLock, ProcessLockBusy
 from deepreason.runtime.stop import (
     StopController,
     StopMetrics,
@@ -732,6 +733,201 @@ def test_failed_post_commit_refresh_leaves_fail_closed_recoverable_result(
     assert harness.workflow_state.terminal_commitments_by_epoch == (
         Harness(root).workflow_state.terminal_commitments_by_epoch
     )
+
+
+def test_worker_post_commit_publication_failure_preserves_terminal_authority(
+    tmp_path, monkeypatch
+):
+    root, manifest, service, scheduler_calls, _epoch_zero = _start_converged_run(
+        tmp_path,
+        monkeypatch,
+    )
+    from deepreason.runtime import terminal_authority
+
+    original_fresh = terminal_authority._fresh_replay_validation
+    original_v6_result = text_runs_module._v6_run_result
+    failure_text = "SENTINEL_POST_COMMIT_PUBLICATION_EXCEPTION"
+    observed_result_states: list[str] = []
+    captured: dict[str, object] = {}
+
+    def observe_v6_result(*args, **kwargs):
+        payload = args[2]
+        observed_result_states.append(payload["state"])
+        return original_v6_result(*args, **kwargs)
+
+    def fail_after_current_pending_result(bound_root):
+        durable = Harness(bound_root, read_only=True)
+        commitment = durable.workflow_state.current_terminal_commitment
+        if (
+            commitment is not None
+            and commitment.terminal_epoch == 1
+            and not captured
+        ):
+            pending = json.loads(
+                (root / "run-result.json").read_text(encoding="utf-8")
+            )
+            assert pending["terminal_commitment_ref"] == commitment.id
+            assert pending["verification"]["valid"] is False
+            replay = json.loads(
+                (root / "REPLAY_VALIDATION.json").read_text(encoding="utf-8")
+            )
+            assert "terminal_binding" not in replay
+            captured.update(
+                {
+                    "log": (root / "log.jsonl").read_bytes(),
+                    "stop_pointer": (root / "run-stop.json").read_bytes(),
+                    "checkpoint": (root / "checkpoint.json").read_bytes(),
+                    "workflow_checkpoint": (
+                        root / "workflow-checkpoint.json"
+                    ).read_bytes(),
+                    "pending_result": (root / "run-result.json").read_bytes(),
+                    "replay": (root / "REPLAY_VALIDATION.json").read_bytes(),
+                    "stops": {
+                        path.relative_to(root).as_posix(): path.read_bytes()
+                        for path in sorted((root / "run-stops").glob("*.json"))
+                    },
+                    "terminal_objects": _terminal_object_bytes(root),
+                    "commitment": commitment,
+                }
+            )
+            raise ProcessLockBusy(failure_text)
+        return original_fresh(bound_root)
+
+    monkeypatch.setattr(
+        text_runs_module,
+        "_v6_run_result",
+        observe_v6_result,
+    )
+    monkeypatch.setattr(
+        terminal_authority,
+        "_fresh_replay_validation",
+        fail_after_current_pending_result,
+    )
+    continued = service.continue_run(
+        ContinueTextRunIntentV1(
+            root=str(root),
+            budget=RunBudgetIntentV1(cycles=1, token_budget="unlimited"),
+            expected_manifest_digest=manifest.sha256,
+        ),
+        credential_checker=lambda _manifest: [],
+    )
+    service.wait(continued.root, timeout=15)
+
+    worker = service.registry.threads[str(root.resolve())]
+    assert not worker.is_alive()
+    assert captured
+    current_stops = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in sorted((root / "run-stops").glob("*.json"))
+    }
+    current_terminal_objects = _terminal_object_bytes(root)
+    committed = Harness(root, read_only=True)
+    child = captured["commitment"]
+    status = service.inspect(
+        InspectTextRunIntentV1(root=str(root))
+    ).presentation_payload()
+    observed = {
+        "single_completed_terminal_attempt": observed_result_states
+        == ["completed"],
+        "event_log_preserved": (
+            root / "log.jsonl"
+        ).read_bytes()
+        == captured["log"],
+        "stop_pointer_preserved": (
+            root / "run-stop.json"
+        ).read_bytes()
+        == captured["stop_pointer"],
+        "checkpoint_preserved": (
+            root / "checkpoint.json"
+        ).read_bytes()
+        == captured["checkpoint"],
+        "workflow_checkpoint_preserved": (
+            root / "workflow-checkpoint.json"
+        ).read_bytes()
+        == captured["workflow_checkpoint"],
+        "pending_result_preserved": (
+            root / "run-result.json"
+        ).read_bytes()
+        == captured["pending_result"],
+        "replay_preserved": (
+            root / "REPLAY_VALIDATION.json"
+        ).read_bytes()
+        == captured["replay"],
+        "stop_inventory_preserved": current_stops == captured["stops"],
+        "terminal_inventory_preserved": (
+            current_terminal_objects == captured["terminal_objects"]
+        ),
+        "current_commitment_preserved": (
+            committed.workflow_state.current_terminal_commitment == child
+        ),
+        "commitment_count": len(
+            committed.workflow_state.terminal_commitments_by_epoch
+        ),
+        "commitment_event_count": len(_terminal_commit_events(committed)),
+        "draft_and_commitment_object_count": len(current_terminal_objects),
+        "fixed_operational_status": (
+            status["state"] == "failed"
+            and status["phase"] == "stop"
+            and status["activity"]
+            == "terminal publication recovery required"
+            and status["message"]
+            == "TERMINAL_PUBLICATION_RECOVERY_REQUIRED"
+            and status["stop_reason"] == "operational_failure"
+        ),
+    }
+    assert observed == {
+        "single_completed_terminal_attempt": True,
+        "event_log_preserved": True,
+        "stop_pointer_preserved": True,
+        "checkpoint_preserved": True,
+        "workflow_checkpoint_preserved": True,
+        "pending_result_preserved": True,
+        "replay_preserved": True,
+        "stop_inventory_preserved": True,
+        "terminal_inventory_preserved": True,
+        "current_commitment_preserved": True,
+        "commitment_count": 2,
+        "commitment_event_count": 2,
+        "draft_and_commitment_object_count": 4,
+        "fixed_operational_status": True,
+    }
+    public_operational_bytes = json.dumps(
+        {
+            "status": status,
+            "result": json.loads(
+                (root / "run-result.json").read_text(encoding="utf-8")
+            ),
+        },
+        sort_keys=True,
+    )
+    assert failure_text not in public_operational_bytes
+
+    monkeypatch.setattr(
+        terminal_authority,
+        "_fresh_replay_validation",
+        original_fresh,
+    )
+    _forbid_dispatch(monkeypatch)
+    recovered = service.result(
+        InspectTextRunIntentV1(root=str(root))
+    ).payload
+    recovered_harness, recovered_child, _replay = _assert_current_validation(
+        root,
+        manifest,
+        recovered,
+        epoch=1,
+    )
+    assert recovered_child == child
+    assert len(recovered_harness.workflow_state.terminal_commitments_by_epoch) == 2
+    assert len(_terminal_commit_events(recovered_harness)) == 2
+    assert (root / "log.jsonl").read_bytes() == captured["log"]
+    assert (root / "run-stop.json").read_bytes() == captured["stop_pointer"]
+    assert {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in sorted((root / "run-stops").glob("*.json"))
+    } == captured["stops"]
+    assert _terminal_object_bytes(root) == captured["terminal_objects"]
+    assert scheduler_calls == [None, None]
 
 
 def test_foreign_or_stale_validation_binding_is_rederived(

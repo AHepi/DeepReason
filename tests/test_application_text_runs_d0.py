@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import inspect
 import json
+import threading
 from types import SimpleNamespace
 
 import pytest
@@ -25,6 +26,7 @@ from deepreason.application.text_runs import (
 )
 from deepreason.cli import main as cli_module
 from deepreason.cli.main import main as cli_main
+from deepreason.canonical import canonical_json
 from deepreason.harness import Harness
 from deepreason.locking import operator_locks
 from deepreason.run_manifest import bind_run_manifest, write_run_manifest
@@ -378,6 +380,134 @@ def test_worker_harness_constructor_failure_releases_operator_lock(tmp_path):
     assert Harness.__init__ is original_init
     locks = operator_locks(root, owner="lock-release-test", blocking=False)
     locks.release()
+
+
+def test_result_does_not_enter_recovery_while_process_local_worker_is_alive(
+    tmp_path, monkeypatch
+):
+    import deepreason.harness as harness_module
+    from deepreason.runtime import progress as progress_module
+    from deepreason.runtime import terminal_authority
+    from tests.test_v6_resumed_terminal_revalidation import (
+        _forbid_dispatch,
+        _start_converged_run,
+    )
+
+    root, manifest, _initial_service, scheduler_calls, epoch_zero = (
+        _start_converged_run(tmp_path, monkeypatch)
+    )
+    authority = Harness(root)
+    commitment = authority.workflow_state.current_terminal_commitment
+    assert commitment is not None
+    expected, _draft = terminal_authority._expected_terminal_result(
+        authority,
+        manifest,
+        commitment,
+    )
+    pending = terminal_authority._pending_terminal_result(expected)
+    (root / "run-result.json").write_bytes(canonical_json(pending) + b"\n")
+    (root / "REPLAY_VALIDATION.json").unlink()
+    before = {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in sorted(root.rglob("*"))
+        if path.is_file()
+    }
+
+    registry = TextRunWorkerRegistry()
+    original_live = registry.live
+
+    class TrackingLock:
+        def __init__(self):
+            self._lock = threading.Lock()
+            self.held = False
+
+        def __enter__(self):
+            self._lock.acquire()
+            self.held = True
+            return self
+
+        def __exit__(self, _exc_type, _exc, _traceback):
+            self.held = False
+            self._lock.release()
+
+    registry.lock = TrackingLock()
+
+    def live_requires_registry_lock(bound_root):
+        assert registry.lock.held
+        return original_live(bound_root)
+
+    monkeypatch.setattr(registry, "live", live_requires_registry_lock)
+    service = TextRunApplicationService(registry)
+    entered = threading.Event()
+    release = threading.Event()
+
+    def parked_worker():
+        entered.set()
+        assert release.wait(timeout=15)
+
+    worker = threading.Thread(target=parked_worker, daemon=True)
+    registry.put(root, worker)
+    worker.start()
+    assert entered.wait(timeout=15)
+    _forbid_dispatch(monkeypatch)
+    forbidden_calls: list[str] = []
+
+    def forbidden(name):
+        def fail(*_args, **_kwargs):
+            forbidden_calls.append(name)
+            raise AssertionError(f"live-worker result reached {name}")
+
+        return fail
+
+    try:
+        with pytest.MonkeyPatch.context() as scoped:
+            scoped.setattr(harness_module, "Harness", forbidden("harness"))
+            scoped.setattr(
+                terminal_authority,
+                "recover_terminal_result",
+                forbidden("terminal recovery"),
+            )
+            scoped.setattr(
+                terminal_authority,
+                "_terminal_commitment_lock",
+                forbidden("terminal lock"),
+            )
+            scoped.setattr(
+                terminal_authority,
+                "_fresh_replay_validation",
+                forbidden("replay regeneration"),
+            )
+            scoped.setattr(
+                progress_module,
+                "_atomic_json",
+                forbidden("filesystem mutation"),
+            )
+            with pytest.raises(
+                ValueError,
+                match=(
+                    "^RUN_RESULT_NOT_READY: terminalization remains active$"
+                ),
+            ):
+                service.result(InspectTextRunIntentV1(root=str(root)))
+    finally:
+        release.set()
+        worker.join(timeout=15)
+
+    assert not worker.is_alive()
+    assert original_live(root) is None
+    assert forbidden_calls == []
+    assert {
+        path.relative_to(root).as_posix(): path.read_bytes()
+        for path in sorted(root.rglob("*"))
+        if path.is_file()
+    } == before
+
+    recovered = service.result(
+        InspectTextRunIntentV1(root=str(root))
+    ).payload
+    assert recovered == epoch_zero
+    assert recovered["terminal_commitment_ref"] == commitment.id
+    assert scheduler_calls == [None]
 
 
 def test_clients_have_only_thin_service_dispatch_and_one_registry():
