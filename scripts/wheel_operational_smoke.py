@@ -69,6 +69,16 @@ RESUMABLE_STOP_QUESTION = (
 FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v4"
 CONTINUATION_DEADLINE_SECONDS = 600
 POLL_INTERVAL_SECONDS = 0.05
+CONTINUATION_POLL_PROFILE_NORMAL = "normal"
+CONTINUATION_POLL_PROFILE_SPARSE = "sparse"
+ALLOWED_CONTINUATION_POLL_PROFILES = frozenset(
+    {
+        CONTINUATION_POLL_PROFILE_NORMAL,
+        CONTINUATION_POLL_PROFILE_SPARSE,
+    }
+)
+SPARSE_CONTINUATION_QUIET_SECONDS = 360
+SPARSE_CONTINUATION_POLL_INTERVAL_SECONDS = 30
 DIAGNOSTIC_INSPECTION_TIMEOUT_SECONDS = 10
 PLATFORM_WINDOWS = "windows"
 PLATFORM_MACOS = "macos"
@@ -2030,17 +2040,33 @@ def _poll_terminal(
     prior_terminal_commitment_ref: str | None = None,
     stage: str = STAGE_MCP_REQUEST,
     observations: ContinuationObservations | None = None,
+    continuation_poll_profile: str = CONTINUATION_POLL_PROFILE_NORMAL,
     _clock=None,
     _sleep=None,
     _timer=None,
 ) -> tuple[dict, dict]:
+    if continuation_poll_profile not in ALLOWED_CONTINUATION_POLL_PROFILES:
+        raise ValueError("invalid continuation polling profile")
+    if continuation_poll_profile == CONTINUATION_POLL_PROFILE_SPARSE:
+        return _poll_terminal_sparse(
+            client,
+            run_id,
+            prior_terminal_commitment_ref=prior_terminal_commitment_ref,
+            stage=stage,
+            observations=observations,
+            _clock=_clock,
+            _sleep=_sleep,
+            _timer=_timer,
+        )
     clock = _clock or time.monotonic
     sleep = _sleep or time.sleep
     observed = observations or ContinuationObservations()
     started = clock()
-    deadline = started + CONTINUATION_DEADLINE_SECONDS
     if observed.continuation_accepted_at is None:
         observed.mark_continuation_accepted(started)
+    deadline = (
+        observed.continuation_accepted_at + CONTINUATION_DEADLINE_SECONDS
+    )
     while True:
         now = clock()
         if now >= deadline:
@@ -2101,6 +2127,111 @@ def _poll_terminal(
             observed.finish_continuation(clock())
             return status, result
         sleep(POLL_INTERVAL_SECONDS)
+
+
+def _poll_terminal_sparse(
+    client: MCPClient,
+    run_id: str,
+    *,
+    prior_terminal_commitment_ref: str | None,
+    stage: str,
+    observations: ContinuationObservations | None,
+    _clock,
+    _sleep,
+    _timer,
+) -> tuple[dict, dict]:
+    clock = _clock or time.monotonic
+    sleep = _sleep or time.sleep
+    observed = observations or ContinuationObservations()
+    started = clock()
+    if observed.continuation_accepted_at is None:
+        observed.mark_continuation_accepted(started)
+    accepted_at = observed.continuation_accepted_at
+    deadline = accepted_at + CONTINUATION_DEADLINE_SECONDS
+    next_observation_at = (
+        accepted_at + SPARSE_CONTINUATION_QUIET_SECONDS
+    )
+
+    def timeout(observed_at: float) -> None:
+        observed.finish_continuation(observed_at)
+        raise OperationalSmokeFailure(
+            stage=stage,
+            failure_kind=FAILURE_TIMEOUT,
+            timeout=True,
+        )
+
+    def advance_observation_boundary(observed_at: float) -> float:
+        boundary = next_observation_at
+        while boundary <= observed_at:
+            boundary += SPARSE_CONTINUATION_POLL_INTERVAL_SECONDS
+        return boundary
+
+    while True:
+        now = clock()
+        if now >= deadline:
+            timeout(now)
+        if now < next_observation_at:
+            sleep(min(next_observation_at, deadline) - now)
+            continue
+        try:
+            status = _timed_mcp_tool(
+                client,
+                "run_status",
+                {"run_id": run_id},
+                stage=stage,
+                observations=observed,
+                baseline=False,
+                deadline=deadline,
+                _timer=_timer,
+            )
+        except _MCPToolResponseError:
+            observed.status_read_error_count += 1
+            observed.finish_continuation(clock())
+            raise
+        except BaseException:
+            observed.finish_continuation(clock())
+            raise
+        observed.observe_status(status)
+        now = clock()
+        if now >= deadline:
+            timeout(now)
+        if status.get("state") in {"completed", "failed", "cancelled"}:
+            try:
+                result = _timed_mcp_tool(
+                    client,
+                    "run_result",
+                    {"run_id": run_id},
+                    stage=stage,
+                    observations=observed,
+                    baseline=False,
+                    deadline=deadline,
+                    _timer=_timer,
+                )
+            except _MCPToolResponseError as error:
+                observed.observe_result_error(
+                    error.result_error_classification
+                )
+                next_observation_at = advance_observation_boundary(
+                    clock()
+                )
+                continue
+            except BaseException:
+                observed.finish_continuation(clock())
+                raise
+            now = clock()
+            if now >= deadline:
+                timeout(now)
+            if (
+                prior_terminal_commitment_ref is not None
+                and result.get("terminal_commitment_ref")
+                == prior_terminal_commitment_ref
+            ):
+                observed.stale_epoch0_result_observation_count += 1
+                next_observation_at = advance_observation_boundary(now)
+                continue
+            observed.finish_continuation(now)
+            return status, result
+        next_observation_at = advance_observation_boundary(now)
 
 
 _DURABLE_SNAPSHOT_FIELDS = frozenset(
@@ -2795,6 +2926,14 @@ def _finalize_operational_smoke(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--keep", action="store_true")
+    parser.add_argument(
+        "--continuation-poll-profile",
+        choices=(
+            CONTINUATION_POLL_PROFILE_NORMAL,
+            CONTINUATION_POLL_PROFILE_SPARSE,
+        ),
+        default=CONTINUATION_POLL_PROFILE_NORMAL,
+    )
     args = parser.parse_args(argv)
     repo = Path(__file__).resolve().parents[1]
     temp_root: Path | None = None
@@ -3203,6 +3342,7 @@ def main(argv: list[str] | None = None) -> int:
             ],
             stage=stage,
             observations=continuation_observations,
+            continuation_poll_profile=args.continuation_poll_profile,
         )
         _assert_resumable_terminal(final_resumable_result)
         transcripts.extend(continuation_client.transcript)

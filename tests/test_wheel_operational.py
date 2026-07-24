@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import ast
 import importlib.util
+import inspect
 import json
 import os
 import subprocess
@@ -9,6 +11,7 @@ import threading
 from pathlib import Path
 
 import pytest
+import yaml
 
 from deepreason.cli.doctor import (
     _admit_production_probe_output,
@@ -1400,6 +1403,388 @@ class _DeadlineClock:
 
     def __call__(self) -> float:
         return next(self._values)
+
+
+class _AdvancingClock:
+    def __init__(self, value: float = 0.0):
+        self.value = float(value)
+        self.sleeps: list[float] = []
+
+    def __call__(self) -> float:
+        return self.value
+
+    def sleep(self, seconds: float) -> None:
+        assert seconds >= 0
+        self.sleeps.append(seconds)
+        self.value += seconds
+
+    def advance(self, seconds: float) -> None:
+        self.value += seconds
+
+
+def test_continuation_poll_profile_domain_and_normal_default_are_exact():
+    assert OPERATIONAL.ALLOWED_CONTINUATION_POLL_PROFILES == {
+        "normal",
+        "sparse",
+    }
+    assert OPERATIONAL.CONTINUATION_POLL_PROFILE_NORMAL == "normal"
+    assert OPERATIONAL.CONTINUATION_POLL_PROFILE_SPARSE == "sparse"
+    assert OPERATIONAL.SPARSE_CONTINUATION_QUIET_SECONDS == 360
+    assert OPERATIONAL.SPARSE_CONTINUATION_POLL_INTERVAL_SECONDS == 30
+    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 600
+    assert OPERATIONAL.POLL_INTERVAL_SECONDS == 0.05
+    assert (
+        inspect.signature(OPERATIONAL._poll_terminal)
+        .parameters["continuation_poll_profile"]
+        .default
+        == "normal"
+    )
+
+
+def test_normal_profile_polls_immediately_and_uses_acceptance_deadline():
+    clock = _AdvancingClock(5.0)
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.mark_continuation_accepted(0.0)
+    calls = []
+
+    class RunningClient:
+        def tool(self, name, arguments, **_kwargs):
+            calls.append((name, arguments, clock()))
+            return {"state": "running", "phase": "reasoning", "seq": 1}
+
+    def expire_after_normal_sleep(seconds):
+        assert seconds == 0.05
+        clock.sleeps.append(seconds)
+        clock.value = 600.0
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            RunningClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            _clock=clock,
+            _sleep=expire_after_normal_sleep,
+            _timer=clock,
+        )
+    assert raised.value.timeout is True
+    assert calls == [
+        (
+            "run_status",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            5.0,
+        )
+    ]
+    assert clock.sleeps == [0.05]
+    assert observations.continuation_elapsed_ms == 600000
+
+
+def test_sparse_profile_quiet_period_and_absolute_schedule_are_exact():
+    clock = _AdvancingClock()
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.mark_continuation_accepted(clock())
+    calls = []
+
+    class ScheduledClient:
+        def __init__(self):
+            self.status_calls = 0
+
+        def tool(self, name, arguments, **_kwargs):
+            calls.append((name, arguments, clock()))
+            if name == "run_status":
+                self.status_calls += 1
+                if self.status_calls == 1:
+                    clock.advance(47.0)
+                return {
+                    "state": (
+                        "completed"
+                        if self.status_calls == 3
+                        else "running"
+                    ),
+                    "phase": "stop",
+                    "seq": self.status_calls,
+                }
+            assert self.status_calls == 3
+            return {
+                "state": "completed",
+                "terminal_commitment_ref": "sha256:new",
+            }
+
+    _status, result = OPERATIONAL._poll_terminal(
+        ScheduledClient(),
+        "SENTINEL_SYNTHETIC_MANAGED_ID",
+        prior_terminal_commitment_ref="sha256:old",
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        observations=observations,
+        continuation_poll_profile="sparse",
+        _clock=clock,
+        _sleep=clock.sleep,
+        _timer=clock,
+    )
+    assert result["terminal_commitment_ref"] == "sha256:new"
+    assert calls == [
+        (
+            "run_status",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            360.0,
+        ),
+        (
+            "run_status",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            420.0,
+        ),
+        (
+            "run_status",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            450.0,
+        ),
+        (
+            "run_result",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            450.0,
+        ),
+    ]
+    assert clock.sleeps == [360.0, 13.0, 30.0]
+    assert all(
+        observed_at >= 360.0 for _name, _arguments, observed_at in calls
+    )
+    assert observations.status_observation_count == 3
+    assert observations.stale_epoch0_result_observation_count == 0
+
+
+def test_sparse_profile_never_observes_at_or_after_the_deadline():
+    clock = _AdvancingClock()
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.mark_continuation_accepted(clock())
+    calls = []
+
+    class RunningClient:
+        def tool(self, name, arguments, **_kwargs):
+            calls.append((name, arguments, clock()))
+            assert name == "run_status"
+            return {"state": "running", "phase": "reasoning", "seq": 4}
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            RunningClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            continuation_poll_profile="sparse",
+            _clock=clock,
+            _sleep=clock.sleep,
+            _timer=clock,
+        )
+    assert raised.value.timeout is True
+    assert [observed_at for _name, _arguments, observed_at in calls] == [
+        360.0,
+        390.0,
+        420.0,
+        450.0,
+        480.0,
+        510.0,
+        540.0,
+        570.0,
+    ]
+    assert all(name == "run_status" for name, _arguments, _time in calls)
+    assert observations.status_observation_count == 8
+    assert observations.continuation_elapsed_ms == 600000
+    record = json.loads(
+        str(
+            OPERATIONAL.OperationalSmokeFailure(
+                stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+                failure_kind=OPERATIONAL.FAILURE_TIMEOUT,
+                timeout=True,
+                continuation_diagnostic=observations.snapshot(),
+            )
+        )
+    )
+    assert set(record) == OPERATIONAL.FAILURE_RECORD_FIELDS
+    assert "continuation_poll_profile" not in record
+    assert "sparse" not in json.dumps(record, sort_keys=True)
+
+
+def test_sparse_slow_call_cannot_reset_or_extend_the_deadline():
+    clock = _AdvancingClock()
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.mark_continuation_accepted(clock())
+    calls = []
+
+    class SlowClient:
+        def tool(self, name, arguments, **_kwargs):
+            calls.append((name, arguments, clock()))
+            assert name == "run_status"
+            clock.advance(241.0)
+            return {"state": "completed", "phase": "stop", "seq": 5}
+
+    with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
+        OPERATIONAL._poll_terminal(
+            SlowClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+            observations=observations,
+            continuation_poll_profile="sparse",
+            _clock=clock,
+            _sleep=clock.sleep,
+            _timer=clock,
+        )
+    assert raised.value.timeout is True
+    assert calls == [
+        (
+            "run_status",
+            {"run_id": "SENTINEL_SYNTHETIC_MANAGED_ID"},
+            360.0,
+        )
+    ]
+    assert observations.continuation_elapsed_ms == 601000
+    assert observations.mcp_status_timing == {
+        **OPERATIONAL._empty_mcp_timing(),
+        "call_count": 1,
+        "total_ms": 241000,
+        "maximum_ms": 241000,
+    }
+    assert observations.mcp_result_timing == OPERATIONAL._empty_mcp_timing()
+
+
+def test_sparse_profile_rejects_stale_epoch_zero_until_new_commitment():
+    clock = _AdvancingClock()
+    observations = OPERATIONAL.ContinuationObservations()
+    observations.mark_continuation_accepted(clock())
+    calls = []
+
+    class StaleThenCurrentClient:
+        def __init__(self):
+            self.result_calls = 0
+
+        def tool(self, name, arguments, **_kwargs):
+            calls.append((name, arguments, clock()))
+            if name == "run_status":
+                return {"state": "completed", "phase": "stop", "seq": 7}
+            self.result_calls += 1
+            return {
+                "state": "completed",
+                "terminal_commitment_ref": (
+                    "sha256:epoch-0"
+                    if self.result_calls == 1
+                    else "sha256:epoch-1"
+                ),
+            }
+
+    _status, result = OPERATIONAL._poll_terminal(
+        StaleThenCurrentClient(),
+        "SENTINEL_SYNTHETIC_MANAGED_ID",
+        prior_terminal_commitment_ref="sha256:epoch-0",
+        stage=OPERATIONAL.STAGE_CONTINUATION_RESUME,
+        observations=observations,
+        continuation_poll_profile="sparse",
+        _clock=clock,
+        _sleep=clock.sleep,
+        _timer=clock,
+    )
+    assert result["terminal_commitment_ref"] == "sha256:epoch-1"
+    assert [name for name, _arguments, _time in calls] == [
+        "run_status",
+        "run_result",
+        "run_status",
+        "run_result",
+    ]
+    assert [observed_at for _name, _arguments, observed_at in calls] == [
+        360.0,
+        360.0,
+        390.0,
+        390.0,
+    ]
+    assert observations.stale_epoch0_result_observation_count == 1
+
+
+def test_polling_profile_is_smoke_only_and_has_one_selected_value_flow():
+    source = Path(OPERATIONAL.__file__).read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    parents = {
+        child: parent
+        for parent in ast.walk(tree)
+        for child in ast.iter_child_nodes(parent)
+    }
+    selected_uses = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Attribute)
+        and isinstance(node.value, ast.Name)
+        and node.value.id == "args"
+        and node.attr == "continuation_poll_profile"
+    ]
+    assert len(selected_uses) == 1
+    selected_keyword = parents[selected_uses[0]]
+    assert isinstance(selected_keyword, ast.keyword)
+    assert selected_keyword.arg == "continuation_poll_profile"
+    selected_call = parents[selected_keyword]
+    assert isinstance(selected_call, ast.Call)
+    assert isinstance(selected_call.func, ast.Name)
+    assert selected_call.func.id == "_poll_terminal"
+    profile_value_loads = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Name)
+        and isinstance(node.ctx, ast.Load)
+        and node.id == "continuation_poll_profile"
+    ]
+    assert len(profile_value_loads) == 2
+    assert all(
+        isinstance(parents[node], ast.Compare)
+        for node in profile_value_loads
+    )
+    assert [
+        node.lineno
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and node.value == "sparse"
+    ] == [
+        next(
+            node.lineno
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Assign)
+            and any(
+                isinstance(target, ast.Name)
+                and target.id == "CONTINUATION_POLL_PROFILE_SPARSE"
+                for target in node.targets
+            )
+        )
+    ]
+    assert not any(
+        "poll_profile" in key
+        for key in OPERATIONAL._default_continuation_diagnostic()
+    )
+
+
+def test_unknown_polling_profiles_fail_before_external_side_effects(
+    monkeypatch, capsys
+):
+    class UnusedClient:
+        def tool(self, _name, _arguments, **_kwargs):
+            raise AssertionError("invalid profile reached MCP")
+
+    with pytest.raises(ValueError, match="polling profile"):
+        OPERATIONAL._poll_terminal(
+            UnusedClient(),
+            "SENTINEL_SYNTHETIC_MANAGED_ID",
+            continuation_poll_profile="SENTINEL_UNKNOWN_PROFILE",
+        )
+
+    def unexpected_side_effect(*_args, **_kwargs):
+        raise AssertionError("argument rejection reached an external side effect")
+
+    monkeypatch.setattr(OPERATIONAL.tempfile, "mkdtemp", unexpected_side_effect)
+    monkeypatch.setattr(
+        OPERATIONAL, "_unused_loopback_port", unexpected_side_effect
+    )
+    monkeypatch.setattr(OPERATIONAL, "_build_wheel", unexpected_side_effect)
+    with pytest.raises(SystemExit) as raised:
+        OPERATIONAL.main(
+            ["--continuation-poll-profile", "SENTINEL_UNKNOWN_PROFILE"]
+        )
+    assert raised.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "invalid choice" in captured.err
 
 
 def test_continuation_deadline_and_fixed_running_observations_are_exact():
@@ -3704,6 +4089,76 @@ def test_every_operational_mcp_child_uses_tracked_construction():
     assert source.count("MCPClient(") == 1
     assert source.count("= _new_mcp_client(") == 6
     assert "mcp_clients=mcp_clients" in source
+
+
+def test_wheel_workflow_preserves_normal_matrix_and_adds_one_sparse_arm():
+    workflow_path = ROOT / ".github" / "workflows" / "wheel-smoke.yml"
+    workflow_text = workflow_path.read_text(encoding="utf-8")
+    workflow = yaml.load(workflow_text, Loader=yaml.BaseLoader)
+    assert set(workflow) == {"name", "on", "permissions", "jobs"}
+    assert set(workflow["on"]) == {"push", "pull_request"}
+    assert "workflow_dispatch" not in workflow["on"]
+    assert workflow["permissions"] == {"contents": "read"}
+    assert set(workflow["jobs"]) == {
+        "wheel-smoke",
+        "wheel-smoke-sparse-windows",
+    }
+
+    normal = workflow["jobs"]["wheel-smoke"]
+    sparse = workflow["jobs"]["wheel-smoke-sparse-windows"]
+    assert set(normal) == {"name", "runs-on", "strategy", "steps"}
+    assert normal["name"] == "${{ matrix.os }} / Python 3.11"
+    assert normal["runs-on"] == "${{ matrix.os }}"
+    assert normal["strategy"] == {
+        "fail-fast": "false",
+        "matrix": {
+            "os": [
+                "ubuntu-latest",
+                "macos-latest",
+                "windows-latest",
+            ]
+        },
+    }
+    assert set(sparse) == {"name", "runs-on", "steps"}
+    assert (
+        sparse["name"]
+        == "windows-latest / Python 3.11 / sparse continuation polling"
+    )
+    assert sparse["runs-on"] == "windows-latest"
+    assert "needs" not in sparse
+    assert "needs" not in normal
+
+    assert len(normal["steps"]) == 4
+    assert len(sparse["steps"]) == 4
+    assert normal["steps"][:3] == sparse["steps"][:3]
+    assert normal["steps"][0] == {"uses": "actions/checkout@v4"}
+    assert normal["steps"][1] == {
+        "uses": "actions/setup-python@v5",
+        "with": {"python-version": "3.11"},
+    }
+    assert normal["steps"][2] == {
+        "name": "Build and verify installed wheel",
+        "run": "python scripts/wheel_smoke.py",
+    }
+    assert normal["steps"][3] == {
+        "name": "Qualify and operate installed wheel",
+        "run": "python -u scripts/wheel_operational_smoke.py",
+    }
+    assert sparse["steps"][3] == {
+        "name": "Qualify and operate installed wheel",
+        "run": (
+            "python -u scripts/wheel_operational_smoke.py "
+            "--continuation-poll-profile sparse"
+        ),
+    }
+    assert normal.get("env") == sparse.get("env") is None
+    assert normal["steps"][3].get("env") == sparse["steps"][3].get("env")
+
+    encoded = json.dumps(workflow, sort_keys=True)
+    assert "continue-on-error" not in encoded
+    assert "actions/upload-artifact" not in encoded
+    assert "cache" not in normal["steps"][1]["with"]
+    assert "cache" not in sparse["steps"][1]["with"]
 
 
 def test_package_layout_excludes_mini_and_external_smoke_fixture():
