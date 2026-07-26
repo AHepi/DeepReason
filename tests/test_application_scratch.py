@@ -29,6 +29,37 @@ from deepreason.run_manifest import ConjectureContextPolicyV1, bind_run_manifest
 from deepreason.scratch.service import ScratchService
 
 
+@pytest.fixture(autouse=True)
+def _adapt_application_scratch_tests_to_opaque_ids(monkeypatch):
+    """Keep CLI/MCP equivalence semantics while the public selector is opaque.
+
+    MCP tools no longer accept a caller-supplied ``root`` path; they take a
+    mandatory bounded ``run_id`` resolved against managed run records. These
+    tests keep passing explicit roots and translate them into opaque managed
+    identities exactly like the green MCP suites do.
+    """
+
+    roots = {}
+    original = mcp.call_tool
+
+    def adapted(name, arguments, *, progress_callback=None):
+        arguments = dict(arguments)
+        raw_root = arguments.pop("root", None)
+        if raw_root is not None:
+            root = Path(raw_root)
+            roots[root.name] = root
+            arguments["run_id"] = root.name
+        return original(name, arguments, progress_callback=progress_callback)
+
+    def resolve(run_id):
+        if run_id not in roots:
+            raise ValueError("MANAGED_RUN_NOT_FOUND")
+        return roots[run_id]
+
+    monkeypatch.setattr(mcp, "call_tool", adapted)
+    monkeypatch.setattr(mcp, "_managed_root", resolve)
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="deepreason")
     parser.add_argument("--root", default=".deepreason")
@@ -59,6 +90,7 @@ def _mcp_payload(name: str, arguments: dict) -> dict:
     payload = mcp.call_tool(name, arguments)
     truncation = payload.pop("truncation")
     assert truncation == {"truncated": False, "fields": []}
+    assert payload.pop("run_id") == Path(arguments["root"]).name
     return payload
 
 

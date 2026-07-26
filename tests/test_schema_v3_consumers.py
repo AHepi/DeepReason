@@ -1,41 +1,55 @@
-"""Focused checks for runtime consumers of RunManifest schema version 3."""
+"""Historical schema-v3 consumers are gone: the runtime is V6-only."""
 
 from __future__ import annotations
 
 from types import SimpleNamespace
 
-from deepreason.cli.main import (
-    _doctor_policy_readiness,
-    _text_manifest_schema_version,
-    build_parser,
-)
+import pytest
+
+from deepreason.cli.main import _doctor_policy_readiness, build_parser
 
 
-def test_config_compile_parser_accepts_schema_v3():
-    parsed = build_parser().parse_args(
-        ["config", "compile", "--schema-version", "3", "--out", "manifest.json"]
+def test_config_compile_parser_rejects_historical_schema_version_selector(capsys):
+    parser = build_parser()
+
+    with pytest.raises(SystemExit) as excinfo:
+        parser.parse_args(
+            ["config", "compile", "--schema-version", "3", "--out", "manifest.json"]
+        )
+    assert excinfo.value.code == 2
+    assert "--schema-version" in capsys.readouterr().err
+
+    parsed = parser.parse_args(["config", "compile", "--out", "manifest.json"])
+    assert not hasattr(parsed, "schema_version")
+
+
+def test_text_entrypoint_prepares_v6_only_manifests():
+    import deepreason.cli.main as cli_main
+
+    # The per-policy schema selector was removed with the V6-only CLI; text
+    # entry now always flows through managed V6 preparation.
+    assert not hasattr(cli_main, "_text_manifest_schema_version")
+
+    from deepreason.preparation import build_preparation_manifest
+    from deepreason.provider_profile import ProviderProfileV1
+
+    profile = ProviderProfileV1.create(
+        provider="openai",
+        endpoint="https://api.example.test/v1",
+        model_id="model-schema-consumers",
+        model_revision="revision-1",
+        family="family-schema-consumers",
+        context_window_tokens=131_072,
+        maximum_completion_tokens=4_096,
+        credential_env="DEEPREASON_SCHEMA_CONSUMERS_TEST_KEY",
+    )
+    manifest = build_preparation_manifest(
+        profile,
+        question="What does the bounded record establish?",
+        compiled_at="2026-07-22T00:00:00Z",
     )
 
-    assert parsed.schema_version == 3
-
-
-def test_text_entrypoint_selects_v3_only_for_v3_policy():
-    legacy = SimpleNamespace(
-        scratchpad=SimpleNamespace(enabled=False),
-        bridge=SimpleNamespace(mode="legacy_thesis"),
-    )
-    scratch = SimpleNamespace(
-        scratchpad=SimpleNamespace(enabled=True),
-        bridge=SimpleNamespace(mode="legacy_thesis"),
-    )
-    bridge = SimpleNamespace(
-        scratchpad=SimpleNamespace(enabled=False),
-        bridge=SimpleNamespace(mode="grounded_two_stage"),
-    )
-
-    assert _text_manifest_schema_version(legacy) == 2
-    assert _text_manifest_schema_version(scratch) == 3
-    assert _text_manifest_schema_version(bridge) == 3
+    assert manifest.schema_version == 6
 
 
 def test_doctor_reports_policy_roles_and_visible_hashing_fallback(monkeypatch):

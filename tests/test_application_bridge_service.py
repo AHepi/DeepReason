@@ -26,24 +26,26 @@ from deepreason.evidence import (
     AttachedSourceProvenanceV1,
     EvidenceDossierV1,
     RunInputManifestV1,
+    RunInputManifestV2,
     RunInputProblemV1,
+    RunInputProblemV2,
     bind_run_input,
 )
 from deepreason.harness import Harness
-from deepreason.llm.adapter import LLMAdapter
-from deepreason.llm.endpoints import MockEndpoint
-from deepreason.llm.firewall import leases_from_manifest
 from deepreason.locking import operator_locks
 from deepreason.ontology import Problem, ProblemProvenance
 from deepreason.run_manifest import (
+    MANIFEST_NAME,
     ConjectureContextPolicyV1,
     ContractVersionPolicyV1,
     ContractVersionPolicyV2,
     ControlPlanePolicyV1,
     ControlPlanePolicyV2,
+    RunManifestError,
     SchoolExecutionPolicyV1,
     bind_run_manifest,
     compile_run_manifest,
+    load_run_manifest,
 )
 from deepreason.runtime.launch_policy import V6_LAUNCH_DISABLE_ENV
 
@@ -58,6 +60,8 @@ def _route() -> dict:
         "model": "fixture-31b",
         "provider": "fixture",
         "family": "fixture",
+        "max_tokens": 64,
+        "context_window_tokens": 262_144,
     }
 
 
@@ -101,7 +105,15 @@ def _control_policy(*, schema_version: int = 4):
     )
 
 
-def _manifest(*, schema_version: int = 3, run_input_digest: str | None = None):
+def _manifest(*, schema_version: int = 6, run_input_digest: str | None = None):
+    if schema_version == 6:
+        from tests.test_run_input_v6_commitments import _control
+
+        control = _control(6)
+    elif schema_version in {4, 5}:
+        control = _control_policy(schema_version=schema_version)
+    else:
+        control = None
     return compile_run_manifest(
         Config(
             scratchpad={"enabled": True},
@@ -121,19 +133,55 @@ def _manifest(*, schema_version: int = 3, run_input_digest: str | None = None):
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=STAMP,
-        control_plane_policy=(
-            _control_policy(schema_version=schema_version)
-            if schema_version in {4, 5}
-            else None
-        ),
+        control_plane_policy=control,
         inquiry_capability_policy=(
             InquiryCapabilityPolicyV1() if schema_version == 5 else None
         ),
-        run_input_digest=(run_input_digest if schema_version == 5 else None),
+        run_input_digest=(
+            run_input_digest if schema_version in {5, 6} else None
+        ),
     )
 
 
-def _run_root(root, *, schema_version: int = 3):
+def _run_root(root):
+    """Bind one managed V6 run root with a frozen input and a seeded problem."""
+
+    provenance = AttachedSourceProvenanceV1(
+        supplied_by="offline bridge fixture",
+        acquisition_method="pre-freeze construction",
+    )
+    dossier = EvidenceDossierV1.create(
+        problem_ref="problem-application-boundary",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=provenance,
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id="problem-application-boundary",
+            description="What does the bounded record establish?",
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    bind_run_manifest(
+        _manifest(schema_version=6, run_input_digest=run_input.run_input_digest),
+        root,
+    )
+    harness = Harness(root)
+    harness.register_problem(
+        Problem(
+            id="problem-application-boundary",
+            description="What does the bounded record establish?",
+            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
+        )
+    )
+    return root
+
+
+def _bind_historical_root(root, *, schema_version: int):
+    """Bind an unsupported pre-V6 manifest exactly as historical roots held it."""
+
     run_input = None
     if schema_version == 5:
         provenance = AttachedSourceProvenanceV1(
@@ -161,61 +209,7 @@ def _run_root(root, *, schema_version: int = 3):
         ),
         root,
     )
-    harness = Harness(root)
-    harness.register_problem(
-        Problem(
-            id="problem-application-boundary",
-            description="What does the bounded record establish?",
-            provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
-        )
-    )
     return root
-
-
-def _adapter(harness: Harness, manifest=None) -> LLMAdapter:
-    return LLMAdapter(
-        {
-            "summarizer": MockEndpoint(
-                [
-                    json.dumps(
-                        {
-                            "entries": [
-                                {
-                                    "entry_key": "CLM_1",
-                                    "claim_class": "unknown",
-                                    "claim": "The bounded record does not establish an answer.",
-                                }
-                            ]
-                        }
-                    )
-                ],
-                name="https://models.invalid/v1",
-                model="fixture-31b",
-            ),
-            "thesis": MockEndpoint(
-                [
-                    json.dumps(
-                        {
-                            "sections": [
-                                {
-                                    "span_id": "S1",
-                                    "text": "The requested answer remains unknown.",
-                                    "rendering_mode": "unknown",
-                                    "ledger_entry_handles": ["E1"],
-                                }
-                            ],
-                            "resolution": "insufficient_evidence",
-                        }
-                    )
-                ],
-                name="https://models.invalid/v1",
-                model="fixture-31b",
-            ),
-        },
-        harness.blobs,
-        retry_max=0,
-        leases=(leases_from_manifest(manifest) if manifest is not None else None),
-    )
 
 
 def _bridge_events(root) -> list[dict]:
@@ -287,15 +281,18 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
     assert bridge_cli.handle_bridge_command(cli_args) == 0
     capsys.readouterr()
 
+    run_id = mcp_root.name
+    monkeypatch.setattr(mcp, "_managed_root", lambda value: {run_id: mcp_root}[value])
     started = mcp.call_tool(
         "start_bridge",
         {
-            "root": str(mcp_root),
+            "run_id": run_id,
             "problem": problem_id,
             "target": "answer",
         },
     )
     assert started["state"] == "running"
+    assert started["run_id"] == run_id
     worker = mcp._BRIDGE_THREADS[str(mcp_root.resolve())]
     worker.join(timeout=5)
     assert not worker.is_alive()
@@ -317,32 +314,36 @@ def test_equivalent_cli_and_mcp_intents_emit_equivalent_bridge_control_events(
 
 
 @pytest.mark.parametrize("schema_version", [4, 5])
-def test_shared_bridge_service_accepts_bound_controlled_manifest_and_enacts_ledger_v2(
+def test_shared_bridge_service_rejects_pre_v6_bound_manifests_before_adapter(
     tmp_path, monkeypatch, schema_version
 ):
-    root = _run_root(tmp_path / f"v{schema_version}", schema_version=schema_version)
+    """Controlled v4/v5 manifests are a removed path: rejection is fail-closed."""
+
+    root = _bind_historical_root(
+        tmp_path / f"v{schema_version}", schema_version=schema_version
+    )
     monkeypatch.setattr(
         bridge_application,
         "_build_bridge_adapter",
-        lambda manifest, harness, **_kwargs: _adapter(harness, manifest),
+        lambda *_args, **_kwargs: pytest.fail(
+            "unsupported manifest versions must be rejected before adapter construction"
+        ),
+    )
+    before = sorted(
+        path.relative_to(root).as_posix() for path in root.rglob("*")
     )
 
-    result = GROUNDED_BRIDGE_SERVICE.build(
-        GroundedBridgeBuildIntentV1(
-            root=str(root),
-            problem="problem-application-boundary",
+    with pytest.raises(RunManifestError, match="UNSUPPORTED_RUN_MANIFEST_VERSION"):
+        GROUNDED_BRIDGE_SERVICE.build(
+            GroundedBridgeBuildIntentV1(
+                root=str(root),
+                problem="problem-application-boundary",
+            )
         )
-    )
 
-    assert result.exit_code == 0
-    assert result.snapshot.terminal.process_status == "success"
-    contracts = {
-        attempt.contract_id
-        for event in Harness(root, read_only=True).log.read()
-        if event.llm is not None and event.llm.role == "summarizer"
-        for attempt in event.llm.attempt_trace
-    }
-    assert contracts == {"bridge.claim-ledger.compact.v2"}
+    assert sorted(
+        path.relative_to(root).as_posix() for path in root.rglob("*")
+    ) == before
 
 
 def test_bridge_intents_are_closed_and_do_not_expose_control_or_routes():
@@ -389,19 +390,39 @@ def test_existing_failed_terminal_start_preserves_explicit_null_resolution():
     assert result.presentation_payload()["resolution"] is None
 
 
+def _noncompleted_v6_run_result(state: str) -> dict:
+    return {
+        "schema": "deepreason-run-result-v2",
+        "state": state,
+        "workload": "text",
+        "verification": {
+            "schema": "verification.summary.v2",
+            "valid": True,
+            "integrity_valid": True,
+            "security_valid": True,
+            "completion_satisfied": False,
+            "epistemic_checks_passed": True,
+            "operational_checks_passed": True,
+            "finding_counts": {
+                "integrity": 0,
+                "security": 0,
+                "completion": 1,
+                "epistemic": 0,
+                "operational": 0,
+            },
+        },
+        "completion_status": "incomplete",
+        "canonical_bridge_eligible": False,
+    }
+
+
 @pytest.mark.parametrize("state", ["failed", "cancelled"])
 def test_canonical_bridge_rejects_noncompleted_reasoning_before_adapter(
     tmp_path, monkeypatch, state
 ):
     root = _run_root(tmp_path / state)
     (root / "run-result.json").write_text(
-        json.dumps(
-            {
-                "schema": "deepreason-run-result-v1",
-                "state": state,
-                "workload": "text",
-            }
-        ),
+        json.dumps(_noncompleted_v6_run_result(state)),
         encoding="utf-8",
     )
     monkeypatch.setattr(
@@ -480,7 +501,15 @@ def test_diagnostic_after_failure_requires_separate_derived_output():
 def test_async_terminal_race_error_releases_acquired_operator_lock(
     tmp_path, monkeypatch
 ):
+    from tests.test_v6_bridge_transactions import (
+        _write_bridge_qualification,
+        _write_eligible_v6_run_result,
+    )
+
     root = _run_root(tmp_path / "terminal-race")
+    manifest = load_run_manifest(root / MANIFEST_NAME)
+    _write_eligible_v6_run_result(root, manifest)
+    _write_bridge_qualification(Harness(root), manifest)
     calls = 0
 
     def terminal_race(_root):
