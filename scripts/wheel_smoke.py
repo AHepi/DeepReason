@@ -51,6 +51,9 @@ REQUIRED_MODULES = {
     "deepreason/preparation.py",
     "deepreason/readiness.py",
     "deepreason/mcp_registration.py",
+    "deepreason/shallow.py",
+    "minireason/__init__.py",
+    "minireason/loop.py",
 }
 
 
@@ -109,7 +112,6 @@ def inspect_wheel(wheel: Path) -> None:
             raise AssertionError(f"wheel omits V6 facade modules: {sorted(missing)}")
         lowered = {name.casefold() for name in names}
         forbidden_fragments = (
-            "minireason/",
             "/tests/",
             "deterministic_provider",
             "credentials",
@@ -238,10 +240,12 @@ import deepreason.preparation
 import deepreason.provider_profile
 import deepreason.qualification
 import deepreason.readiness
+import deepreason.shallow
+_mini_spec = importlib.util.find_spec("minireason")
 print(json.dumps({
     "module_file": deepreason.__file__,
     "sys_path": sys.path,
-    "mini": importlib.util.find_spec("minireason"),
+    "mini": None if _mini_spec is None else _mini_spec.origin,
 }, sort_keys=True))
 """
         imported = json.loads(
@@ -250,8 +254,11 @@ print(json.dumps({
         module_file = Path(imported["module_file"]).resolve()
         if environment.resolve() not in module_file.parents or repo.resolve() in module_file.parents:
             raise AssertionError(f"deepreason imported outside the clean venv: {module_file}")
-        if imported["mini"] is not None:
-            raise AssertionError("MiniReason leaked into the installed wheel")
+        if imported["mini"] is None:
+            raise AssertionError("MiniReason shallow engine missing from the installed wheel")
+        mini_origin = Path(str(imported["mini"])).resolve()
+        if environment.resolve() not in mini_origin.parents or repo.resolve() in mini_origin.parents:
+            raise AssertionError(f"minireason imported outside the clean venv: {mini_origin}")
         repo_text = str(repo.resolve()).casefold()
         if any(repo_text in str(item).casefold() for item in imported["sys_path"]):
             raise AssertionError("repository path leaked into installed sys.path")
@@ -265,8 +272,8 @@ print(json.dumps({
         for removed in ("focus", "expand", "attack", "step"):
             if f"\n    {removed} " in console_help:
                 raise AssertionError(f"removed public surface remains installed: {removed}")
-        if "MiniReason" in console_help:
-            raise AssertionError("MiniReason remains in installed console help")
+        if "shallow" not in console_help:
+            raise AssertionError("shallow reduced-engine option missing from installed console help")
 
         registration = json.loads(
             _run([str(deepreason), "mcp-registration"], cwd=work, env=clean_env).stdout

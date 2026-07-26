@@ -4147,8 +4147,7 @@ def test_wheel_workflow_uses_canonical_sparse_default_on_exact_matrix():
     assert "--continuation-poll-profile" not in encoded
 
 
-def test_package_layout_excludes_mini_and_external_smoke_fixture():
+def test_package_layout_ships_shallow_engine_and_excludes_smoke_fixture():
     project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert 'packages = ["src/deepreason"]' in project
-    assert "mini/minireason" not in project
+    assert 'packages = ["src/deepreason", "mini/minireason"]' in project
     assert not (ROOT / "src" / "deepreason" / "deterministic_provider.py").exists()

@@ -141,11 +141,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="deterministic production-contract qualification report path",
     )
     reason_cmd = sub.add_parser(
-        "reason", help="prepare and reason over one normal question"
+        "reason",
+        help="prepare and reason over one normal question (--shallow runs the reduced engine)",
     )
     reason_cmd.add_argument("question", help="the question DeepReason should examine")
     reason_cmd.add_argument("--cycles", type=int, default=None)
     reason_cmd.add_argument("--token-budget", type=int, default=None)
+    reason_cmd.add_argument(
+        "--shallow",
+        action="store_true",
+        help=(
+            "run the MiniReason reduced engine instead of the qualified V6 "
+            "inquiry; no qualification required, result is labeled shallow"
+        ),
+    )
     sub.add_parser(
         "mcp-registration",
         help="print generic secret-free MCP stdio registration JSON",
@@ -1392,6 +1401,13 @@ def _cmd_qualify(args) -> int:
         }
     except ValueError as error:
         print(str(error), file=sys.stderr)
+        if str(error).startswith(("QUALIFICATION_EXECUTION_FAILED", "DOCTOR_")):
+            print(
+                "This model did not complete production qualification. The "
+                'reduced engine remains available: deepreason reason --shallow '
+                '"YOUR QUESTION"',
+                file=sys.stderr,
+            )
         return 1
     if args.json:
         print(json.dumps(payload, sort_keys=True, separators=(",", ":")))
@@ -1402,8 +1418,33 @@ def _cmd_qualify(args) -> int:
     return 0
 
 
+def _cmd_reason_shallow(args) -> int:
+    """Run one explicit reduced-engine inquiry; never touches qualification."""
+
+    from deepreason.shallow import ShallowReasonError, run_shallow_question
+
+    if args.root != ".deepreason":
+        print("PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned", file=sys.stderr)
+        return 1
+    try:
+        payload = run_shallow_question(
+            args.question,
+            cycles=args.cycles,
+            token_budget=args.token_budget,
+            profile_path=args.provider_profile,
+        )
+    except ShallowReasonError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
 def _cmd_reason(args) -> int:
     """Prepare one question and execute it through the shared V6 application."""
+
+    if getattr(args, "shallow", False):
+        return _cmd_reason_shallow(args)
 
     from deepreason.application import InspectTextRunIntentV1, TEXT_RUN_SERVICE
     from deepreason.application.intents import start_text_run_intent

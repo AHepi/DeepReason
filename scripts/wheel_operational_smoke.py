@@ -1893,12 +1893,14 @@ def _inspect_operational_wheel(wheel: Path) -> None:
     }
     if not required <= names:
         raise AssertionError("operational wheel omits required installed modules")
+    if not any(name.startswith("minireason/") for name in names):
+        raise AssertionError("operational wheel omits the minireason shallow engine")
     if any(
-        name.startswith(("mini/", "minireason/", "tests/", "scripts/"))
+        name.startswith(("mini/", "tests/", "scripts/"))
         or "deterministic_provider" in name
         for name in names
     ):
-        raise AssertionError("repository-only fixture, tests, or Mini entered the wheel")
+        raise AssertionError("repository-only fixture or tests entered the wheel")
 
 
 def _assert_resumable_terminal(payload: dict) -> None:
