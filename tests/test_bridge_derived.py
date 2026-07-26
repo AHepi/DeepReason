@@ -48,6 +48,31 @@ from deepreason.storage.blobs import BlobStore
 STAMP = "2026-07-16T00:00:00Z"
 
 
+@pytest.fixture(autouse=True)
+def _preserve_pre_v6_bridge_component_tests_below_public_admission(monkeypatch):
+    """Keep derived-bridge component coverage without reopening public admission.
+
+    The public CLI wrapper is V6-only and fails closed on pre-V6 roots with
+    UNSUPPORTED_RUN_MANIFEST_VERSION; that contract is covered by
+    tests/test_v6_only_cli_admission.py and tests/test_v6_only_manifest_loading.py.
+    These component tests exercise C13 derived views over immutable historical
+    sources below that wrapper, matching tests/test_cli_bridge.py.
+    """
+
+    from deepreason.run_manifest import RunManifest
+
+    monkeypatch.setattr(
+        "deepreason.run_manifest.load_run_manifest",
+        lambda path, **_kwargs: RunManifest.model_validate_json(
+            Path(path).read_bytes()
+        ),
+    )
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _route() -> dict:
     return {
         "endpoint_id": "fixture-route",
@@ -150,7 +175,7 @@ def _parser() -> argparse.ArgumentParser:
 
 def _run(root: Path, *argv: str) -> int:
     args = _parser().parse_args(["--root", str(root), "bridge", *argv])
-    return bridge_cli.run_command(args)
+    return bridge_cli._handle_bridge_command(args)
 
 
 def _tree_snapshot(root: Path) -> dict[str, tuple]:

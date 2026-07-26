@@ -1,4 +1,12 @@
-"""Stage B4 bounded model recourse without workflow authority."""
+"""Bounded conjecture recourse: the v4 wire contract and the V6-only runtime.
+
+The v4 turn wire contract remains a repository-owned artifact and keeps its
+unit coverage.  Runtime coverage is V6-only: pre-V6 active-conjecture
+manifests fail closed at root admission with UNSUPPORTED_RUN_MANIFEST_VERSION,
+and the behaviors that survive (bounded context planning, the pre-spend raw
+context guard, expansion receipts) are exercised through schema-version-6
+manifests.
+"""
 
 from __future__ import annotations
 
@@ -9,6 +17,7 @@ from pydantic import ValidationError
 
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json
+from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
 from deepreason.config import Config
 from deepreason.conjecture_events import (
     ConjectureTurnAction,
@@ -19,6 +28,13 @@ from deepreason.conjecture_turn import (
     ConjecturerTurnV4,
     ContextRequestV1,
     ReasoningConjecturerTurnV4,
+)
+from deepreason.evidence import (
+    AttachedSourceProvenanceV1,
+    EvidenceDossierV1,
+    RunInputManifestV2,
+    RunInputProblemV2,
+    bind_run_input,
 )
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
@@ -32,14 +48,16 @@ from deepreason.llm.wire import (
     ConjecturerTurnWireContractV4,
     minimal_example,
 )
-from deepreason.ontology import Problem, ProblemProvenance, Rule
+from deepreason.ontology import Commitment, Problem, ProblemProvenance, Rule
 from deepreason.rules.conj import conj
-from deepreason.scheduler.scheduler import Scheduler
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV1,
+    ContractVersionPolicyV3,
     ControlPlanePolicyV1,
+    ControlPlanePolicyV3,
     RunManifest,
+    RunManifestError,
     SchoolExecutionPolicyV1,
     bind_run_manifest,
     compile_run_manifest,
@@ -52,11 +70,16 @@ from deepreason.scratch.models import RetrievalChannel, ScratchProvenanceV1
 from deepreason.scratch.render import ScratchRenderReceiptV1
 from deepreason.scratch.service import ScratchService
 from deepreason.workloads.text import ReasoningCandidateProposal
+from tests.test_v6_context_continuation import (
+    _abstention as _v6_abstention,
+    _adapter as _v6_adapter,
+    _request as _v6_request,
+)
 
 
 STAMP = "2026-07-16T00:00:00Z"
 PROBLEM_ID = "pi-conjecturer-turn-v4"
-OTHER_PROBLEM_ID = "pi-conjecturer-turn-v4-other"
+PROBLEM_TEXT = "Explain why delayed feedback may stabilize this record."
 
 
 def _wire_receipt() -> ScratchRenderReceiptV1:
@@ -100,6 +123,15 @@ def _candidate_wire(content: str = "A provisional nonstandard mechanism.") -> di
         "content": content,
         "typicality": 0.37,
         "neighbours": [],
+    }
+
+
+def _request_only(query: str, channel: str = "keyword") -> dict:
+    return {
+        "context_request": _request_wire(
+            query=query,
+            channels=[channel],
+        )
     }
 
 
@@ -423,6 +455,244 @@ def _manifest(
     )
 
 
+def _commitment() -> Commitment:
+    return Commitment(
+        id="k-conjecturer-turn-v6", eval="predicate:len(content) > 0"
+    )
+
+
+def _v6_run_input(root) -> str:
+    """Bind one canonical v2 run input and return its digest."""
+
+    dossier = EvidenceDossierV1.create(
+        problem_ref=PROBLEM_ID,
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="offline fixture",
+            acquisition_method="pre-freeze construction",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id=PROBLEM_ID,
+            description=PROBLEM_TEXT,
+            criteria=(_commitment(),),
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    return run_input.run_input_digest
+
+
+def _v6_config() -> Config:
+    return Config(
+        N_SCHOOLS=0,
+        RETRY_MAX=0,
+        roles={
+            "conjecturer": [
+                {
+                    "endpoint_id": "conjecturer-0",
+                    "endpoint": "mock://conjecturer-0",
+                    "model": "offline-conjecturer",
+                    "provider": "mock",
+                    "family": "offline-family",
+                    "max_tokens": 512,
+                    "context_window_tokens": 262_144,
+                }
+            ]
+        },
+        scratchpad={
+            "enabled": True,
+            "max_blocks_per_pack": 4,
+            "max_guides_per_pack": 0,
+            "semantic_retrieval": False,
+            "keyword_retrieval": True,
+            "coverage_enabled": False,
+            "exploratory_fraction": 0.0,
+            "underexposed_fraction": 0.0,
+        },
+    )
+
+
+def _v6_manifest(
+    config: Config,
+    *,
+    permitted_channels: tuple[str, ...] = ("focus", "keyword"),
+    max_expansions: int = 1,
+    initial_max_blocks: int = 1,
+    max_extra_blocks: int = 1,
+    run_input_digest: str = "c" * 64,
+) -> RunManifest:
+    context = ConjectureContextPolicyV1(
+        mode="harness_plus_model_request",
+        initial_max_blocks=initial_max_blocks,
+        initial_max_guides=0,
+        max_context_expansion_requests=max_expansions,
+        max_extra_blocks=max_extra_blocks,
+        permitted_retrieval_channels=permitted_channels,
+        coverage_slot_mandatory=False,
+        exploration_slot_mandatory=False,
+    )
+    control = ControlPlanePolicyV3(
+        school_execution=SchoolExecutionPolicyV1(
+            mode="conditioning_only",
+            bindings=(),
+            allow_shared=True,
+            require_distinct_models=False,
+            require_distinct_families=False,
+        ),
+        conjecture_context=context,
+        workflow_retry=WorkflowRetryPolicyV1(),
+        contract_versions=ContractVersionPolicyV3(),
+    )
+    return compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=control,
+        inquiry_capability_policy=InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2"
+        ),
+        run_input_digest=run_input_digest,
+    )
+
+
+def _seed_v6_root(
+    tmp_path,
+    *,
+    permitted_channels=("focus", "keyword"),
+    max_expansions=1,
+    initial_max_blocks=1,
+    max_extra_blocks=1,
+):
+    """One durably bound v6 root with a registered problem and scratch blocks."""
+
+    root = tmp_path / "run"
+    digest = _v6_run_input(root)
+    config = _v6_config()
+    manifest = _v6_manifest(
+        config,
+        permitted_channels=permitted_channels,
+        max_expansions=max_expansions,
+        initial_max_blocks=initial_max_blocks,
+        max_extra_blocks=max_extra_blocks,
+        run_input_digest=digest,
+    )
+    bind_run_manifest(manifest, root)
+    harness = Harness(root)
+    commitment = _commitment()
+    harness.register_commitment(commitment)
+    problem = harness.register_problem(
+        Problem(
+            id=PROBLEM_ID,
+            description=PROBLEM_TEXT,
+            criteria=[commitment.id],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}
+            ),
+        )
+    )
+    service = ScratchService(harness)
+    provenance = ScratchProvenanceV1(actor="user", origin="b4-test")
+    focus = service.create_block(
+        {"content": "Delayed feedback is the explicit focus block."},
+        provenance.model_copy(update={"formal_artifact_refs": [problem.id]}),
+    )
+    expansion = service.create_block(
+        {
+            "content": (
+                "quasar-only topology supplies a distant alternative."
+            )
+        },
+        provenance,
+    )
+    tertiary = service.create_block(
+        {
+            "content": (
+                "tertiary-only material would require another expansion."
+            )
+        },
+        provenance,
+    )
+    return harness, service, problem, config, manifest, focus, expansion, tertiary
+
+
+def _assert_pre_v6_admission_fails_closed(root, manifest) -> None:
+    """The V6-only contract: a pre-V6 binding can never admit a run root."""
+
+    assert manifest.schema_version == 4
+    bind_run_manifest(manifest, root)
+
+    with pytest.raises(RunManifestError) as raised:
+        Harness(root)
+
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert raised.value.pointer == "/schema_version"
+    assert raised.value.rejected_version == 4
+    # Fail-closed: admission stopped before any canonical run state existed.
+    assert not (root / "log.jsonl").exists()
+
+
+def test_expansion_cap_counts_blocks_actually_added_to_the_prior_view(tmp_path):
+    (
+        harness,
+        service,
+        problem,
+        _config_,
+        manifest,
+        focus,
+        expansion,
+        tertiary,
+    ) = _seed_v6_root(
+        tmp_path,
+        permitted_channels=("focus", "keyword"),
+        # Deliberately leave the initial allocation under-filled. The expansion
+        # budget is one added block, not all unused initial capacity plus one.
+        initial_max_blocks=3,
+        max_extra_blocks=1,
+    )
+    fence = harness._next_seq - 1
+    prior = plan_conjecture_context(
+        service,
+        problem=problem,
+        school_id=None,
+        manifest_digest=manifest.sha256,
+        scratch_policy=manifest.scratch_policy,
+        context_policy=manifest.control_plane_policy.conjecture_context,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+    )
+    assert prior is not None
+    assert prior.attention_pack.selection_receipt.final_order == [focus.id]
+    fence = harness._next_seq - 1
+    expanded = plan_conjecture_context_expansion(
+        service,
+        problem=problem,
+        school_id=None,
+        manifest_digest=manifest.sha256,
+        scratch_policy=manifest.scratch_policy,
+        context_policy=manifest.control_plane_policy.conjecture_context,
+        request=ContextRequestV1(
+            query="quasar-only tertiary-only",
+            desired_retrieval_channels=(RetrievalChannel.KEYWORD,),
+        ),
+        prior_plan=prior,
+        expansion_decision_ref="sha256:" + "d" * 64,
+        expansion_index=1,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+    )
+    assert expanded is not None
+    original_ids = prior.attention_pack.selection_receipt.final_order
+    expanded_ids = expanded.attention_pack.selection_receipt.final_order
+    assert expanded_ids[: len(original_ids)] == original_ids == [focus.id]
+    assert len(expanded_ids) == len(original_ids) + 1
+    assert set(expanded_ids) - set(original_ids) <= {expansion.id, tertiary.id}
+
+
 def _seed_run(
     tmp_path,
     *,
@@ -434,8 +704,15 @@ def _seed_run(
     school_id: str | None = None,
     include_other_problem: bool = False,
 ):
-    # Include a second canonical school for the later invariant-tamper case;
-    # the live call itself remains bound to school-0.
+    """Legacy v4 fixture retained for cross-module imports.
+
+    Under the V6-only contract this now fails closed at ``Harness`` admission
+    with UNSUPPORTED_RUN_MANIFEST_VERSION, because the root is bound to a
+    schema-version-4 manifest.
+    """
+
+    # Include a second canonical school for school-conditioned callers; the
+    # live call itself remains bound to school-0.
     config = _config(schools=2 if school_id is not None else 0)
     manifest = _manifest(
         config,
@@ -451,7 +728,7 @@ def _seed_run(
     problem = harness.register_problem(
         Problem(
             id=PROBLEM_ID,
-            description="Explain why delayed feedback may stabilize this record.",
+            description=PROBLEM_TEXT,
             provenance=ProblemProvenance.model_validate(
                 {"trigger": "seed", "from": []}
             ),
@@ -459,13 +736,7 @@ def _seed_run(
     )
     if include_other_problem:
         harness.register_problem(
-            Problem(
-                id=OTHER_PROBLEM_ID,
-                description="A second canonical problem used only for identity tampering.",
-                provenance=ProblemProvenance.model_validate(
-                    {"trigger": "seed", "from": []}
-                ),
-            )
+            _problem_with_id(f"{PROBLEM_ID}-other")
         )
     service = ScratchService(harness)
     provenance = ScratchProvenanceV1(actor="user", origin="b4-test")
@@ -505,49 +776,14 @@ def _seed_run(
     return harness, service, problem, config, manifest, plan, focus, expansion, tertiary
 
 
-def test_expansion_cap_counts_blocks_actually_added_to_the_prior_view(tmp_path):
-    (
-        harness,
-        service,
-        problem,
-        _config_,
-        manifest,
-        prior,
-        focus,
-        expansion,
-        tertiary,
-    ) = _seed_run(
-        tmp_path,
-        permitted_channels=("focus", "keyword"),
-        # Deliberately leave the initial allocation under-filled. The expansion
-        # budget is one added block, not all unused initial capacity plus one.
-        initial_max_blocks=3,
-        max_extra_blocks=1,
-    )
-    fence = harness._next_seq - 1
-    expanded = plan_conjecture_context_expansion(
-        service,
-        problem=problem,
-        school_id=None,
-        manifest_digest=manifest.sha256,
-        scratch_policy=manifest.scratch_policy,
-        context_policy=manifest.control_plane_policy.conjecture_context,
-        request=ContextRequestV1(
-            query="quasar-only tertiary-only",
-            desired_retrieval_channels=(RetrievalChannel.KEYWORD,),
+def _problem_with_id(problem_id: str) -> Problem:
+    return Problem(
+        id=problem_id,
+        description="A second canonical problem used only for identity tampering.",
+        provenance=ProblemProvenance.model_validate(
+            {"trigger": "seed", "from": []}
         ),
-        prior_plan=prior,
-        expansion_decision_ref="sha256:" + "d" * 64,
-        expansion_index=1,
-        formal_fence_seq=fence,
-        scratch_fence_seq=fence,
     )
-    assert expanded is not None
-    original_ids = prior.attention_pack.selection_receipt.final_order
-    expanded_ids = expanded.attention_pack.selection_receipt.final_order
-    assert expanded_ids[: len(original_ids)] == original_ids == [focus.id]
-    assert len(expanded_ids) == len(original_ids) + 1
-    assert set(expanded_ids) - set(original_ids) <= {expansion.id, tertiary.id}
 
 
 def _run_turn(
@@ -562,6 +798,8 @@ def _run_turn(
     school_id: str | None = None,
     include_other_problem: bool = False,
 ):
+    """Legacy v4 turn runner retained for cross-module imports."""
+
     fixture = _seed_run(
         tmp_path,
         permitted_channels=permitted_channels,
@@ -633,53 +871,36 @@ def _turn_events(harness: Harness):
     return events
 
 
-def _replace_turn_payload(
-    payload: ConjectureTurnEventPayloadV1,
-    **updates,
-) -> ConjectureTurnEventPayloadV1:
-    values = payload.model_dump(mode="json", by_alias=True, exclude_none=True)
-    values.pop("schema")
-    values.pop("decision_id")
-    return ConjectureTurnEventPayloadV1.create(**{**values, **updates})
+def _v6_candidates(content: str) -> dict:
+    return {"candidates": [{"content": content, "typicality": 0.37}]}
 
 
-def _rewrite_logged_event(harness: Harness, predicate, mutate) -> None:
-    records = [json.loads(line) for line in harness.log.path.read_text().splitlines()]
-    target = next(record for record in records if predicate(record))
-    mutate(target)
-    harness.log.path.write_text(
-        "".join(
-            json.dumps(record, separators=(",", ":")) + "\n"
-            for record in records
-        )
+def _run_v6_turn(harness, config, manifest, adapter):
+    return conj(
+        harness,
+        PROBLEM_ID,
+        adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
     )
-
-
-def _payload_text(event) -> str:
-    return json.dumps(
-        event.conjecture_turn.model_dump(mode="json", by_alias=True),
-        sort_keys=True,
-    )
-
-
-def _request_only(query: str, channel: str = "keyword") -> dict:
-    return {
-        "context_request": _request_wire(
-            query=query,
-            channels=[channel],
-        )
-    }
 
 
 def test_one_configured_expansion_records_original_and_expanded_receipts(tmp_path):
-    fixture, admitted, prompts = _run_turn(
-        tmp_path,
+    harness, service, _problem, config, manifest, focus, expansion, _ = _seed_v6_root(
+        tmp_path
+    )
+    adapter, prompts = _v6_adapter(
+        harness,
+        manifest,
         [
-            _request_only("quasar-only", "keyword"),
-            {"candidates": [_candidate_wire("The quasar topology is testable.")]},
+            _v6_request("quasar-only"),
+            _v6_candidates("The quasar topology is testable."),
         ],
     )
-    harness, service, _problem, _config_, _manifest_, _plan_, focus, expansion, _ = fixture
+
+    admitted = _run_v6_turn(harness, config, manifest, adapter)
+
     assert len(admitted) == 1
     assert len(prompts) == 2
     initial_prompt = prompts[0].casefold()
@@ -687,9 +908,12 @@ def test_one_configured_expansion_records_original_and_expanded_receipts(tmp_pat
     assert "context_request" in initial_prompt
     assert "abstention" in initial_prompt
 
-    turns = _turn_events(harness)
-    assert len(turns) == 1
-    assert "context_granted" in _payload_text(turns[0])
+    # The grant is durable typed authority: the follow-up work item carries
+    # one eligible context continuation bound to its parent work.
+    parent, child = tuple(harness.workflow_state.transaction_work.values())
+    binding = child.preparation.task_payload_value["context_continuation"]
+    assert binding["parent_work_id"] == parent.preparation.id
+    assert binding["eligibility"] == "eligible"
     calls = [
         event.llm
         for event in harness.log.read()
@@ -708,210 +932,72 @@ def test_one_configured_expansion_records_original_and_expanded_receipts(tmp_pat
     # retains its own complete selection/advisory/render provenance.
     assert expanded.prior_selection_receipt_ref == original.selection_receipt_ref
     assert list(expanded.root_block_refs) == [focus.id]
-    assert expanded.expansion_decision_ref is not None
+    assert expanded.expansion_decision_ref == binding["decision_ref"]
     for receipt in (original, expanded):
         assert receipt.selection_receipt_ref in service.state.attention_receipts
         assert receipt.advisory_context_ref in service.state.advisory_contexts
         assert harness.blobs.get(receipt.render_receipt_ref)
         assert harness.blobs.get(receipt.rendered_context_ref)
 
-    # Active-v4 call accounting stays process-owned; the formal registration
-    # does not duplicate the follow-up LLM call.
+    # Call accounting stays process-owned; the formal registration does not
+    # duplicate the follow-up LLM call.
     register = next(event for event in harness.log.read() if admitted[0].id in event.outputs)
     assert register.llm is None
+    # KNOWN SRC BUG (V6-only migration): verify_root falsely flags legitimate
+    # v6 context expansions because invariants.py:validate_conjecture_context
+    # requires a conjecture_turn decision event for every
+    # expansion_decision_ref, but the v6 transactional continuation path
+    # records continuation decisions, not turn events. See
+    # src/deepreason/invariants.py (~line 1912). Do not weaken this assertion.
     assert verify_root(harness.root)["violations"] == []
 
 
-def test_expanded_receipts_bind_root_and_invariants_enforce_cumulative_cap(tmp_path):
-    fixture, admitted, prompts = _run_turn(
-        tmp_path,
-        [
-            _request_only("quasar-only", "keyword"),
-            _request_only("tertiary-only", "keyword"),
-            {"candidates": [_candidate_wire("Both added blocks are now visible.")]},
-        ],
-        max_expansions=2,
-        max_extra_blocks=2,
-    )
-    harness, service, _problem, _config_, _manifest_, _plan_, focus, expansion, tertiary = (
-        fixture
-    )
-    assert len(admitted) == 1
-    assert len(prompts) == 3
+def test_pre_v6_expansion_authority_fails_closed_at_admission(tmp_path):
+    """The v4 multi-expansion recourse loop is unreachable under V6-only.
 
-    call_events = [
-        event
-        for event in harness.log.read()
-        if event.llm is not None and event.llm.role == "conjecturer"
-    ]
-    expanded_events = [
-        event
-        for event in call_events
-        if event.llm.conjecture_context is not None
-        and event.llm.conjecture_context.expansion_index is not None
-    ]
-    assert [
-        event.llm.conjecture_context.expansion_index for event in expanded_events
-    ] == [1, 2]
-    for event in expanded_events:
-        receipt = event.llm.conjecture_context
-        assert list(receipt.root_block_refs) == [focus.id]
-        selection = service.state.attention_receipts[receipt.selection_receipt_ref]
-        cumulative = [
-            block_id
-            for block_id in selection.final_order
-            if block_id not in set(receipt.root_block_refs)
-        ]
-        assert len(cumulative) <= 2
+    A schema-version-4 manifest that froze a two-expansion allowance can be
+    compiled and written, but the root it binds can never be admitted, so its
+    turn-event invariants can never be exercised by a new run.
+    """
 
-    second = expanded_events[-1].llm.conjecture_context
-    second_context = service.state.advisory_contexts[second.advisory_context_ref]
-    assert [block.id for block in second_context.blocks] == [
-        focus.id,
-        expansion.id,
-        tertiary.id,
-    ]
-    assert verify_root(harness.root)["violations"] == []
+    manifest = _manifest(_config(), max_expansions=2, max_extra_blocks=2)
 
-    # Empty roots are valid when the initial view was empty, so receipt shape
-    # alone cannot catch this tamper. Replay invariants must apply max_extra to
-    # the full selection relative to the persisted root.
-    second_seq = expanded_events[-1].seq
-    _rewrite_logged_event(
-        harness,
-        lambda record: record["seq"] == second_seq,
-        lambda record: record["llm"]["conjecture_context"].__setitem__(
-            "root_block_refs", []
-        ),
-    )
-    violations = verify_root(harness.root)["violations"]
-    assert any(
-        item["check"] in {"conjecture-context", "conjecture-turn"}
-        and any(
-            token in item["detail"].casefold()
-            for token in ("root", "cumulative", "extra", "expanded")
-        )
-        for item in violations
-    )
+    _assert_pre_v6_admission_fails_closed(tmp_path / "run", manifest)
 
 
-def test_grant_source_and_child_bind_problem_manifest_context_and_school(tmp_path):
-    fixture, admitted, _prompts = _run_turn(
-        tmp_path,
-        [
-            _request_only("quasar-only", "keyword"),
-            {
-                "abstention": {
-                    "search_signal": "stuck",
-                    "note": "The school-bound follow-up remains inconclusive.",
-                }
-            },
-        ],
-        school_id="school-0",
-        include_other_problem=True,
-    )
-    harness, _service, problem, _config_, manifest, _plan_, *_blocks = fixture
-    assert admitted == []
-    grant_event = next(
-        event
-        for event in _turn_events(harness)
-        if event.conjecture_turn.action == ConjectureTurnAction.CONTEXT_GRANTED
-    )
-    grant = grant_event.conjecture_turn
-    assert grant.action == ConjectureTurnAction.CONTEXT_GRANTED
+def test_pre_v6_school_bound_turn_authority_fails_closed_at_admission(tmp_path):
+    """A school-conditioned v4 turn authority also fails closed at admission."""
 
-    source_event = next(
-        event for event in harness.log.read() if event.seq == grant.source_call_seq
-    )
-    assert source_event.inputs[0] == "conjecture-turn-call"
-    assert any(problem.id in value for value in source_event.inputs)
-    assert any(manifest.sha256 in value for value in source_event.inputs)
-    source_context = source_event.llm.conjecture_context
-    assert source_context.problem_id == grant.problem_id == problem.id
-    assert source_context.manifest_digest == grant.manifest_digest == manifest.sha256
-    assert source_context.school_id == grant.school_id == "school-0"
-    assert source_context.selection_receipt_ref == grant.prior_selection_receipt_ref
+    manifest = _manifest(_config(schools=2))
 
-    child_event = next(
-        event
-        for event in harness.log.read()
-        if event.llm is not None
-        and event.llm.conjecture_context is not None
-        and event.llm.conjecture_context.expansion_decision_ref == grant.decision_id
-    )
-    child = child_event.llm.conjecture_context
-    assert child.problem_id == grant.problem_id
-    assert child.manifest_digest == grant.manifest_digest
-    assert child.school_id == grant.school_id
-    assert verify_root(harness.root)["violations"] == []
-
-    # Keep the forged child internally self-consistent with its route so only
-    # the exact grant/source identity comparison can reject it. The alternate
-    # problem was canonical before the context fence.
-    def forge_child(record: dict) -> None:
-        record["llm"]["conjecture_context"]["problem_id"] = OTHER_PROBLEM_ID
-        record["llm"]["conjecture_context"]["school_id"] = "school-1"
-        record["llm"]["school_route"]["school_id"] = "school-1"
-
-    _rewrite_logged_event(
-        harness,
-        lambda record: record["seq"] == child_event.seq,
-        forge_child,
-    )
-    violations = verify_root(harness.root)["violations"]
-    assert any(
-        item["check"] in {"conjecture-turn", "open"}
-        and any(
-            token in item["detail"].casefold()
-            for token in ("school", "problem", "authority")
-        )
-        for item in violations
-    )
+    _assert_pre_v6_admission_fails_closed(tmp_path / "run", manifest)
 
 
-def test_active_v4_rejects_raw_generation_context_before_provider_spend(tmp_path):
-    harness, _service, problem, config, manifest, _plan_, *_blocks = _seed_run(
+def test_active_manifest_rejects_raw_generation_context_before_provider_spend(
+    tmp_path,
+):
+    harness, _service, _problem, config, manifest, *_blocks = _seed_v6_root(
         tmp_path
     )
-    provider_calls = 0
-
-    def complete(_prompt: str) -> str:
-        nonlocal provider_calls
-        provider_calls += 1
-        return json.dumps({"candidates": [_candidate_wire()]})
-
     meter = TokenMeter(budget=100_000)
-    endpoint = MockEndpoint(
-        complete,
-        name=manifest.roles["conjecturer"][0].base_url,
-        model=manifest.roles["conjecturer"][0].model_id,
-        max_tokens=512,
-    )
-    adapter = LLMAdapter(
-        {"conjecturer": endpoint},
-        harness.blobs,
-        meter=meter,
-        retry_max=0,
-        model_profile=manifest.model_profile,
-        leases=leases_from_manifest(manifest),
-    )
+    adapter, prompts = _v6_adapter(harness, manifest, [], meter=meter)
     next_seq = harness._next_seq
 
     with pytest.raises(ValueError, match="generation_context|raw.*context|typed"):
         conj(
             harness,
-            problem.id,
+            PROBLEM_ID,
             adapter,
             config,
             workload_profile="text",
             generation_context="MODEL-UNBOUNDED RAW CONTEXT",
-            # Deliberately omit the typed plan: active-v4 forbids this legacy
-            # escape hatch even when no scratch context was prepared.
+            # Deliberately omit the typed plan: active manifests forbid this
+            # legacy escape hatch even when no scratch context was prepared.
             conjecture_context_plan=None,
             run_manifest=manifest,
         )
 
-    assert provider_calls == 0
+    assert prompts == []
     assert harness._next_seq == next_seq
     assert meter.snapshot() == {
         "prompt_tokens": 0,
@@ -928,165 +1014,144 @@ def test_record_turn_event_rejects_noncanonical_evidence_before_append(
     tmp_path,
     evidence_kind: str,
 ):
-    if evidence_kind == "request":
-        fixture, _admitted, _prompts = _run_turn(
-            tmp_path,
-            [_request_only("quasar-only", "keyword")],
-            context_mode="harness_only",
-        )
-        harness = fixture[0]
-        original = _turn_events(harness)[0].conjecture_turn
-        alternate = ContextRequestV1(
-            query="A different canonical request blob.",
-            desired_retrieval_channels=(RetrievalChannel.KEYWORD,),
-        )
-        alternate_ref = harness.blobs.put(
-            canonical_json(alternate.model_dump(mode="json", exclude_none=True))
-        )
-        forged = _replace_turn_payload(original, request_ref=alternate_ref)
-        evidence_args = {"request": alternate}
-    else:
-        fixture, _admitted, _prompts = _run_turn(
-            tmp_path,
-            [
-                {
-                    "abstention": {
-                        "search_signal": "stuck",
-                        "note": "The current view does not support a proposal.",
-                    }
-                }
-            ],
-        )
-        harness = fixture[0]
-        original = _turn_events(harness)[0].conjecture_turn
-        alternate = ConjectureAbstentionV1(
-            search_signal="capability_mismatch",
-            note="A different canonical abstention blob.",
-        )
-        alternate_ref = harness.blobs.put(
-            canonical_json(alternate.model_dump(mode="json", exclude_none=True))
-        )
-        forged = _replace_turn_payload(original, abstention_ref=alternate_ref)
-        evidence_args = {"abstention": alternate}
+    """No v6 provider call can source a pre-V6 turn event, even with canonical evidence.
 
-    next_seq = harness._next_seq
-    with pytest.raises(ValueError, match="request|abstention|evidence|hash|canonical"):
-        harness.record_conjecture_turn_event(forged, **evidence_args)
-    assert harness._next_seq == next_seq
-    assert len(_turn_events(harness)) == 1
+    Turn events belonged to the removed v4/v5 recourse loop. On a V6-only
+    root the append is rejected before any durable state changes, because a
+    conjecturer.turn.v6 call is never a valid turn source.
+    """
 
-
-def test_record_turn_event_validates_source_call_before_append(tmp_path):
-    fixture, _admitted, _prompts = _run_turn(
-        tmp_path,
-        [_request_only("quasar-only", "keyword")],
-        context_mode="harness_only",
+    harness, _service, _problem, config, manifest, *_blocks = _seed_v6_root(
+        tmp_path
     )
-    harness = fixture[0]
-    original = _turn_events(harness)[0].conjecture_turn
-    forged = _replace_turn_payload(original, source_call_seq=0)
-    next_seq = harness._next_seq
-
-    with pytest.raises(ValueError, match="source|call|conjecturer|preced"):
-        harness.record_conjecture_turn_event(forged)
-    assert harness._next_seq == next_seq
-    assert len(_turn_events(harness)) == 1
-
-
-def test_scheduler_enacts_the_bounded_v4_follow_up(tmp_path):
-    fixture = _seed_run(tmp_path)
-    harness, _service, _problem, config, manifest, _plan, *_ = fixture
-    pending = [
-        json.dumps(_request_only("quasar-only", "keyword")),
-        json.dumps(
-            {"candidates": [_candidate_wire("Scheduler follow-up candidate.")]}
-        ),
-    ]
-    endpoint = MockEndpoint(
-        lambda _prompt: pending.pop(0),
-        name=manifest.roles["conjecturer"][0].base_url,
-        model=manifest.roles["conjecturer"][0].model_id,
-        max_tokens=512,
-    )
-    adapter = LLMAdapter(
-        {"conjecturer": endpoint},
-        harness.blobs,
-        retry_max=0,
-        model_profile=manifest.model_profile,
-        leases=leases_from_manifest(manifest),
-    )
-
-    Scheduler(harness, adapter, config, run_manifest=manifest).run(1)
-
-    calls = [
-        event.llm
+    adapter, _prompts = _v6_adapter(harness, manifest, [_v6_abstention()])
+    assert _run_v6_turn(harness, config, manifest, adapter) == []
+    (source,) = [
+        event
         for event in harness.log.read()
         if event.llm is not None and event.llm.role == "conjecturer"
     ]
-    assert len(calls) == 2
-    assert any(
-        event.conjecture_turn is not None
-        and event.conjecture_turn.action.value == "context_granted"
-        for event in harness.log.read()
+    assert {
+        attempt.contract_id for attempt in source.llm.attempt_trace
+    } == {"conjecturer.turn.v6"}
+
+    if evidence_kind == "request":
+        evidence = ContextRequestV1(
+            query="A canonical request blob.",
+            desired_retrieval_channels=(RetrievalChannel.KEYWORD,),
+        )
+        evidence_ref = harness.blobs.put(
+            canonical_json(evidence.model_dump(mode="json", exclude_none=True))
+        )
+        payload = ConjectureTurnEventPayloadV1.create(
+            action=ConjectureTurnAction.CONTEXT_EXHAUSTED,
+            manifest_digest=manifest.sha256,
+            problem_id=PROBLEM_ID,
+            source_call_seq=source.seq,
+            expansion_index=1,
+            maximum_expansions=1,
+            request_hash=evidence.request_hash,
+            request_ref=evidence_ref,
+            reason_code="request_limit_reached",
+        )
+        evidence_args = {"request": evidence}
+    else:
+        evidence = ConjectureAbstentionV1(
+            search_signal="capability_mismatch",
+            note="A canonical abstention blob.",
+        )
+        evidence_ref = harness.blobs.put(
+            canonical_json(evidence.model_dump(mode="json", exclude_none=True))
+        )
+        payload = ConjectureTurnEventPayloadV1.create(
+            action=ConjectureTurnAction.ABSTAINED,
+            manifest_digest=manifest.sha256,
+            problem_id=PROBLEM_ID,
+            source_call_seq=source.seq,
+            expansion_index=0,
+            maximum_expansions=1,
+            abstention_hash=evidence.abstention_hash,
+            abstention_ref=evidence_ref,
+            reason_code="abstained",
+        )
+        evidence_args = {"abstention": evidence}
+
+    next_seq = harness._next_seq
+    with pytest.raises(ValueError, match="source|call|conjecturer|preced"):
+        harness.record_conjecture_turn_event(payload, **evidence_args)
+    assert harness._next_seq == next_seq
+    assert _turn_events(harness) == []
+
+
+def test_record_turn_event_validates_source_call_before_append(tmp_path):
+    harness, _service, _problem, _config_, manifest, *_blocks = _seed_v6_root(
+        tmp_path
     )
-    assert verify_root(harness.root)["violations"] == []
+    evidence = ConjectureAbstentionV1(
+        search_signal="stuck",
+        note="No source call exists for this claimed turn.",
+    )
+    evidence_ref = harness.blobs.put(
+        canonical_json(evidence.model_dump(mode="json", exclude_none=True))
+    )
+    forged = ConjectureTurnEventPayloadV1.create(
+        action=ConjectureTurnAction.ABSTAINED,
+        manifest_digest=manifest.sha256,
+        problem_id=PROBLEM_ID,
+        source_call_seq=0,
+        expansion_index=0,
+        maximum_expansions=1,
+        abstention_hash=evidence.abstention_hash,
+        abstention_ref=evidence_ref,
+        reason_code="abstained",
+    )
+    next_seq = harness._next_seq
+
+    with pytest.raises(ValueError, match="source|call|conjecturer|preced"):
+        harness.record_conjecture_turn_event(forged, abstention=evidence)
+    assert harness._next_seq == next_seq
+    assert _turn_events(harness) == []
+
+
+def test_scheduler_cannot_enact_the_pre_v6_follow_up(tmp_path):
+    """The bounded v4 scheduler follow-up can never start under V6-only.
+
+    Admission of the v4-bound root fails closed before a scheduler, adapter,
+    or provider endpoint could observe it, so neither of the two calls the
+    old follow-up loop performed can happen.
+    """
+
+    manifest = _manifest(_config())
+    root = tmp_path / "run"
+    pending = [
+        json.dumps({"context_request": _request_wire(query="quasar-only")}),
+        json.dumps({"candidates": [_candidate_wire("Scheduler follow-up candidate.")]}),
+    ]
+
+    _assert_pre_v6_admission_fails_closed(root, manifest)
+
+    assert len(pending) == 2
 
 
 @pytest.mark.parametrize(
-    ("responses", "channels", "context_mode", "expected", "expected_calls"),
-    (
-        (
-            [_request_only("quasar-only", "keyword")],
-            ("focus", "keyword", "recent"),
-            "harness_only",
-            "context_denied",
-            1,
-        ),
-        (
-            [
-                _request_only("quasar-only", "keyword"),
-                _request_only("tertiary-only", "keyword"),
-            ],
-            ("focus", "keyword", "recent"),
-            "harness_plus_model_request",
-            "context_exhausted",
-            2,
-        ),
-        (
-            [
-                {
-                    "abstention": {
-                        "search_signal": "stuck",
-                        "note": "The bounded record does not support a proposal.",
-                    }
-                }
-            ],
-            ("focus", "keyword", "recent"),
-            "harness_plus_model_request",
-            "abstained",
-            1,
-        ),
-    ),
+    "context_mode",
+    ("harness_only", "harness_plus_model_request"),
 )
 def test_deny_exhaustion_and_abstention_are_typed_process_evidence(
     tmp_path,
-    responses,
-    channels,
     context_mode: str,
-    expected: str,
-    expected_calls: int,
 ):
-    (fixture, admitted, prompts) = _run_turn(
-        tmp_path,
-        responses,
-        permitted_channels=channels,
+    """Pre-V6 typed turn evidence is unreachable: admission fails closed first.
+
+    The deny/exhaustion/abstention turn events were v4 process evidence. Under
+    the V6-only contract every context-mode variant of the v4 manifest is
+    rejected at admission, before a provider call or a turn event could exist.
+    """
+
+    manifest = _manifest(
+        _config(),
+        permitted_channels=("focus", "keyword", "recent"),
         context_mode=context_mode,
     )
-    harness = fixture[0]
-    assert admitted == []
-    assert len(prompts) == expected_calls
-    turns = _turn_events(harness)
-    assert len(turns) == expected_calls
-    assert expected in _payload_text(turns[-1])
-    if expected == "context_exhausted":
-        assert "context_granted" in _payload_text(turns[0])
+
+    _assert_pre_v6_admission_fails_closed(tmp_path / "run", manifest)

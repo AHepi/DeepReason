@@ -39,12 +39,18 @@ def _explicit_test_launch_manifest(monkeypatch):
                 ) from error
             if name == "unreadable":
                 raise OSError("synthetic unreadable bound manifest")
-            if name not in {"campaign-test-v5.json", "campaign-test-v6.json"}:
+            if name not in {
+                "campaign-test-v5.json",
+                "campaign-test-v6.json",
+                "campaign-test-v6-alt.json",
+            }:
                 return canonical_load_run_manifest(candidate)
         if name == "campaign-test-v5.json":
             return SimpleNamespace(schema_version=5, sha256="5" * 64)
         if name == "campaign-test-v6.json":
             return SimpleNamespace(schema_version=6, sha256="6" * 64)
+        if name == "campaign-test-v6-alt.json":
+            return SimpleNamespace(schema_version=6, sha256="a" * 64)
         raise AssertionError(f"unexpected synthetic launch manifest: {path}")
 
     monkeypatch.setattr(
@@ -57,8 +63,14 @@ def _explicit_test_launch_manifest(monkeypatch):
     )
 
 
-def _manifest_authority(tmp_path: Path, version: int = 5) -> Path:
+def _manifest_authority(tmp_path: Path, version: int = 6) -> Path:
     return tmp_path / f"campaign-test-v{version}.json"
+
+
+def _alt_manifest_authority(tmp_path: Path) -> Path:
+    """A second, distinct schema-version-6 launch authority."""
+
+    return tmp_path / "campaign-test-v6-alt.json"
 
 
 def _bind_manifest(root: Path, authority: Path) -> None:
@@ -108,6 +120,43 @@ def _append_bridge(root: Path, action: str, *, sequence: int = 0) -> None:
     }
     with (root / "log.jsonl").open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(event) + "\n")
+
+
+def _write_v6_result_v2(
+    root: Path, *, eligible: bool = True, manifest: Path | None = None
+) -> None:
+    root.mkdir(parents=True, exist_ok=True)
+    if manifest is not None:
+        _bind_manifest(root, manifest)
+    valid = bool(eligible)
+    payload = {
+        "schema": "deepreason-run-result-v2",
+        "state": "completed",
+        "workload": "text",
+        "verification": {
+            "schema": "verification.summary.v2",
+            "valid": valid,
+            "integrity_valid": valid,
+            "security_valid": True,
+            "completion_satisfied": True,
+            "epistemic_checks_passed": True,
+            "operational_checks_passed": True,
+            "finding_counts": {
+                "integrity": 0 if valid else 1,
+                "security": 0,
+                "completion": 0,
+                "epistemic": 0,
+                "operational": 0,
+            },
+        },
+        "completion_status": "satisfied",
+        "canonical_bridge_eligible": valid,
+    }
+    (root / "run-result.json").write_text(
+        json.dumps(payload),
+        encoding="utf-8",
+    )
+    (root / "log.jsonl").touch()
 
 
 def test_audit_uses_canonical_result_and_log_not_process_or_events_file(tmp_path):
@@ -203,11 +252,10 @@ def test_ordinary_root_failure_does_not_suppress_sibling_or_later_wave(tmp_path)
         phase, run_id = command
         calls.append((phase, run_id))
         if phase == "reason":
-            _write_result(
-                roots[run_id],
-                "failed" if run_id == "A1" else "completed",
-                manifest=authority,
-            )
+            if run_id == "A1":
+                _write_result(roots[run_id], "failed", manifest=authority)
+            else:
+                _write_v6_result_v2(roots[run_id], manifest=authority)
         else:
             _append_bridge(roots[run_id], "completed")
         return 0
@@ -254,7 +302,7 @@ def test_systemic_finding_suppresses_later_wave_only_after_siblings_finish(tmp_p
     def runner(command, _cwd):
         run_id = command[1]
         calls.append(run_id)
-        _write_result(roots[run_id], "completed", manifest=authority)
+        _write_v6_result_v2(roots[run_id], manifest=authority)
         return 0
 
     def verifier(root):
@@ -307,7 +355,7 @@ def test_nonzero_process_exit_cannot_block_bridge_for_completed_canonical_run(tm
     def runner(command, _cwd):
         nonlocal bridge_called
         if command[0] == "reason":
-            _write_result(root, "completed", manifest=authority)
+            _write_v6_result_v2(root, manifest=authority)
             return 4
         bridge_called = True
         _append_bridge(root, "completed")
@@ -455,41 +503,6 @@ def test_cross_root_scan_reads_log_jsonl_not_events_jsonl(tmp_path):
     )
     index = CampaignCoordinator(verifier=lambda _: _report()).run(plan)
     assert index.waves[0].runs[0].audit.classification == RootClassification.SECURITY_FAILURE
-def _write_v6_result_v2(
-    root: Path, *, eligible: bool = True, manifest: Path | None = None
-) -> None:
-    root.mkdir(parents=True, exist_ok=True)
-    if manifest is not None:
-        _bind_manifest(root, manifest)
-    valid = bool(eligible)
-    payload = {
-        "schema": "deepreason-run-result-v2",
-        "state": "completed",
-        "workload": "text",
-        "verification": {
-            "schema": "verification.summary.v2",
-            "valid": valid,
-            "integrity_valid": valid,
-            "security_valid": True,
-            "completion_satisfied": True,
-            "epistemic_checks_passed": True,
-            "operational_checks_passed": True,
-            "finding_counts": {
-                "integrity": 0 if valid else 1,
-                "security": 0,
-                "completion": 0,
-                "epistemic": 0,
-                "operational": 0,
-            },
-        },
-        "completion_status": "satisfied",
-        "canonical_bridge_eligible": valid,
-    }
-    (root / "run-result.json").write_text(
-        json.dumps(payload),
-        encoding="utf-8",
-    )
-    (root / "log.jsonl").touch()
 
 
 def test_v6_campaign_rejects_v1_result_before_auto_bridge(tmp_path):
@@ -583,24 +596,20 @@ def test_v6_campaign_uses_report_before_self_asserted_auto_bridge(tmp_path):
 
 
 def test_declared_v5_manifest_cannot_authorize_v6_root_or_auto_bridge(tmp_path):
+    """V6-only admission: a declared pre-V6 authority fails closed at launch.
+
+    The coordinator now rejects a schema-version-5 launch manifest before any
+    reasoning or bridge command runs, so a pre-V6 declaration can never
+    authorize a root or an automatic bridge.
+    """
+
     root = tmp_path / "A1"
     later_root = tmp_path / "B1"
     declared_v5 = _manifest_authority(tmp_path, version=5)
-    actual_v6 = _manifest_authority(tmp_path, version=6)
-    bridge_calls = 0
-    reasoning_calls: list[str] = []
+    calls: list[tuple[str, ...]] = []
 
     def runner(command, _cwd):
-        nonlocal bridge_calls
-        phase, run_id = command
-        if phase == "bridge":
-            bridge_calls += 1
-            return 0
-        reasoning_calls.append(run_id)
-        if run_id == "A1":
-            _write_v6_result_v2(root, manifest=actual_v6)
-        else:
-            _write_result(later_root, "completed", manifest=declared_v5)
+        calls.append(tuple(command))
         return 0
 
     plan = CampaignPlan(
@@ -631,26 +640,19 @@ def test_declared_v5_manifest_cannot_authorize_v6_root_or_auto_bridge(tmp_path):
         )
     )
 
-    index = CampaignCoordinator(runner=runner, verifier=lambda _: _report()).run(plan)
+    with pytest.raises(RunManifestError) as raised:
+        CampaignCoordinator(runner=runner, verifier=lambda _: _report()).run(plan)
 
-    record = index.waves[0].runs[0]
-    assert reasoning_calls == ["A1"]
-    assert bridge_calls == 0
-    assert record.bridge_decision == "skipped_not_bridge_eligible"
-    assert record.audit.classification == RootClassification.SECURITY_FAILURE
-    assert record.audit.canonical_bridge_eligible is False
-    assert any(
-        finding.check == CAMPAIGN_MANIFEST_AUTHORITY_MISMATCH
-        for finding in record.audit.dimensions.security
-    )
-    assert index.systemic_stop is True
-    assert index.waves[1].state == "suppressed"
+    assert raised.value.code == "V6_RUN_MANIFEST_REQUIRED"
+    assert calls == []
+    assert not root.exists()
+    assert not later_root.exists()
 
 
 def test_runs_cannot_borrow_each_others_declared_manifest_authority(tmp_path):
     roots = {"A1": tmp_path / "A1", "A2": tmp_path / "A2"}
-    declared_v5 = _manifest_authority(tmp_path, version=5)
-    declared_v6 = _manifest_authority(tmp_path, version=6)
+    declared_a1 = _manifest_authority(tmp_path, version=6)
+    declared_a2 = _alt_manifest_authority(tmp_path)
     bridge_calls: list[str] = []
 
     def runner(command, _cwd):
@@ -659,9 +661,9 @@ def test_runs_cannot_borrow_each_others_declared_manifest_authority(tmp_path):
             bridge_calls.append(run_id)
             return 0
         if run_id == "A1":
-            _write_v6_result_v2(roots[run_id], manifest=declared_v6)
+            _write_v6_result_v2(roots[run_id], manifest=declared_a2)
         else:
-            _write_result(roots[run_id], "completed", manifest=declared_v5)
+            _write_v6_result_v2(roots[run_id], manifest=declared_a1)
         return 0
 
     plan = CampaignPlan(
@@ -675,14 +677,14 @@ def test_runs_cannot_borrow_each_others_declared_manifest_authority(tmp_path):
                         roots["A1"],
                         ("reason", "A1"),
                         ("bridge", "A1"),
-                        run_manifest=declared_v5,
+                        run_manifest=declared_a1,
                     ),
                     CampaignRunPlan(
                         "A2",
                         roots["A2"],
                         ("reason", "A2"),
                         ("bridge", "A2"),
-                        run_manifest=declared_v6,
+                        run_manifest=declared_a2,
                     ),
                 ),
             ),
@@ -709,7 +711,7 @@ def test_matched_per_run_manifest_remains_eligible_under_existing_rules(tmp_path
     def runner(command, _cwd):
         nonlocal bridge_calls
         if command[0] == "reason":
-            _write_result(root, "completed", manifest=authority)
+            _write_v6_result_v2(root, manifest=authority)
         else:
             bridge_calls += 1
             _append_bridge(root, "completed")
@@ -960,7 +962,7 @@ def test_direct_plan_with_disjoint_roots_runs_normally(tmp_path):
 
     def runner(command, _cwd):
         calls.append(tuple(command))
-        _write_result(roots[command[1]], "completed", manifest=authority)
+        _write_v6_result_v2(roots[command[1]], manifest=authority)
         return 0
 
     plan = _direct_campaign_plan(
@@ -993,7 +995,7 @@ def _run_foreign_root_scan_case(tmp_path, write_log):
             _append_bridge(roots[run_id], "completed")
             return 0
         reasoning_calls.append(run_id)
-        _write_result(roots[run_id], "completed", manifest=authority)
+        _write_v6_result_v2(roots[run_id], manifest=authority)
         if run_id == "A1":
             write_log(roots[run_id] / "log.jsonl", roots["B1"])
         return 0
@@ -1134,7 +1136,7 @@ def test_foreign_root_scan_avoids_component_prefix_false_positive(tmp_path):
             _append_bridge(roots[run_id], "completed")
             return 0
         reasoning_calls.append(run_id)
-        _write_result(roots[run_id], "completed", manifest=authority)
+        _write_v6_result_v2(roots[run_id], manifest=authority)
         if run_id == "A1":
             (roots[run_id] / "log.jsonl").write_text(
                 json.dumps({"path": str(roots[run_id].resolve())}) + "\n",
@@ -1189,7 +1191,7 @@ def test_foreign_root_scan_allows_clean_log_to_bridge(tmp_path):
             bridge_calls += 1
             _append_bridge(root, "completed")
         else:
-            _write_result(root, "completed", manifest=authority)
+            _write_v6_result_v2(root, manifest=authority)
         return 0
 
     plan = CampaignPlan(
