@@ -1209,3 +1209,94 @@ def test_qualification_requires_v6_manifest():
         )
 
     assert caught.value.code == "DOCTOR_REPORT_MANIFEST_V6_REQUIRED"
+
+
+def test_root_cross_field_violation_gets_finite_top_level_repair_authority():
+    from deepreason.cli.doctor import _production_probe_contract
+    from deepreason.llm.repair import (
+        RepairDiagnosticEnvelopeV2,
+        UnrepairableDiagnosticError,
+        V6PatchRepairSession,
+    )
+
+    manifest = _manifest()
+    pair = next(
+        item
+        for item in production_contract_pairs(manifest)
+        if item.contract_id == "conjecturer.atomic-candidate.v1"
+    )
+    contract, request = _production_probe_contract(manifest, pair, 3)
+    schema = contract.model_json_schema()
+    raw = "{}"
+
+    bare = V6PatchRepairSession(
+        contract=pair.contract_id,
+        schema=schema,
+        initial_request=request,
+        retry_max=2,
+    )
+    turn = bare.turn(0)
+    with pytest.raises(Exception) as caught:
+        contract.validate_value(bare.candidate_from_raw(turn, raw))
+    with pytest.raises(UnrepairableDiagnosticError):
+        bare.note_invalid(turn, raw, caught.value)
+
+    authorized = V6PatchRepairSession(
+        contract=pair.contract_id,
+        schema=schema,
+        initial_request=request,
+        retry_max=2,
+        root_authorized_pointers=tuple(
+            sorted("/" + name for name in schema["properties"])
+        ),
+    )
+    turn = authorized.turn(0)
+    with pytest.raises(Exception) as caught:
+        contract.validate_value(authorized.candidate_from_raw(turn, raw))
+    envelope = authorized.note_invalid(turn, raw, caught.value)
+    assert isinstance(envelope, RepairDiagnosticEnvelopeV2)
+
+
+def test_doctor_case_repairs_root_cross_field_violation_within_grant(monkeypatch):
+    import json as json_module
+
+    from deepreason.cli.doctor import exercise_production_contract_case
+
+    manifest = _manifest()
+    pair = next(
+        item
+        for item in production_contract_pairs(manifest)
+        if item.contract_id == "conjecturer.atomic-candidate.v1"
+    )
+
+    class ScriptedEndpoint:
+        def __init__(self):
+            self.calls = 0
+
+        def complete(self, request, **kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                # Parseable output violating only the whole-object rule:
+                # "atomic conjecture requires exactly one candidate or
+                # abstention". Observed live from a small model; previously
+                # this was REPAIR_DIAGNOSTIC_UNREPAIRABLE at zero repairs.
+                return "{}"
+            return json_module.dumps(
+                {
+                    "op": "add",
+                    "path": "/abstention",
+                    "value": {"search_signal": "stuck", "note": None},
+                }
+            )
+
+    endpoint = ScriptedEndpoint()
+    monkeypatch.setattr(
+        "deepreason.llm.adapter._endpoint_from_spec", lambda _spec: endpoint
+    )
+    case = exercise_production_contract_case(manifest, pair, 3)
+    assert endpoint.calls == 2
+    assert case.first_pass_valid is False
+    assert case.eventual_valid is True
+    assert case.repair_count == 1
+    assert case.semantic_admission is True
+    assert case.failure_code is None

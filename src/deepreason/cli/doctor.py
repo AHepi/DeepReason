@@ -457,6 +457,16 @@ def exercise_production_contract_case(
             schema=schema,
             initial_request=request,
             retry_max=grant.maximum_schema_repairs,
+            # Cross-field rules (e.g. "abstention cannot accompany semantic
+            # proposals") fail at the object root with no pydantic location.
+            # Qualification grants each case finite repairs; without explicit
+            # root authority those violations were declared unrepairable at
+            # zero attempts and disqualified the pair outright — observed
+            # live with small models. The closed top-level property set is
+            # the exact finite edit authority such a violation needs.
+            root_authorized_pointers=tuple(
+                sorted("/" + name for name in (schema.get("properties") or {}))
+            ),
         )
         from deepreason.llm.adapter import _enforce_request_envelope
         from deepreason.llm.firewall import EndpointLease
