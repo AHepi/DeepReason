@@ -5,7 +5,10 @@ import json
 import pytest
 
 from deepreason.llm.firewall import RouteFirewallError
-from deepreason.run_manifest import load_run_manifest
+from deepreason.run_manifest import (
+    UnsupportedRunManifestVersionError,
+    load_run_manifest,
+)
 from minireason.call import HttpEndpoint, MockEndpoint, TokenMeter, call
 from minireason.compat import DEFAULT_MODEL_PROFILE, ENGINE_PROFILE, initialize
 from minireason.log import BlobStore
@@ -52,6 +55,26 @@ def test_mini_defaults_are_explicit_and_manifested(tmp_path):
     assert manifest.rubric_policy == "forbid"
     assert manifest.concurrency == 1
     assert manifest.roles["conjecturer"][0].model_id == "gemma-mini"
+    # New mini roots are V6-native: the mandatory control plane is present in
+    # its minimal/disabled form and every transactional-only authority the
+    # reduced loop cannot honor is explicitly absent, not declared-and-ignored.
+    assert manifest.schema_version == 6
+    assert manifest.control_plane_policy is not None
+    assert manifest.control_plane_policy.mode == "active_inquiry"
+    assert manifest.control_plane_policy.school_execution.mode == "conditioning_only"
+    assert manifest.control_plane_policy.conjecture_context.mode == "disabled"
+    assert manifest.control_plane_policy.scratch_authoring.enabled is False
+    assert manifest.run_input_digest is not None
+    assert manifest.route_seat_presentation_plan is not None
+    assert manifest.production_qualification_policy is None
+    assert manifest.terminal_commitment_policy is None
+    assert manifest.compact_recovery_policy is None
+    assert manifest.contract_schema_repair_policy is None
+    assert manifest.route_seat_behavioral_capability_plan is None
+    assert manifest.route_seat_contract_decomposition_plan is None
+    from deepreason.evidence import verify_run_input
+
+    assert verify_run_input(root)["run_input_digest"] == manifest.run_input_digest
     # Compact VS_K=4 is a presentation/process default; the fifth valid
     # response never enters MiniReason's unchanged admission loop.
     assert summary["problems"] == {"pi-1": 4}
@@ -176,6 +199,62 @@ def test_compact_survivor_context_exposes_content_without_reference_ids(tmp_path
     assert survivor not in prompts[1]
     assert survivor[:12] not in prompts[1]
     assert "neighbours" not in prompts[1]
+
+
+def test_legacy_v1_root_fails_closed_but_replays_read_only(tmp_path):
+    """Legacy mini roots stay v1 on disk and are never migrated or mutated.
+
+    Reopening one through the parent loader is the intended fail-closed
+    refusal; the log itself remains readable through the manifest-free
+    read-only replay path.
+    """
+    from deepreason.canonical import canonical_json, sha256_hex
+    from deepreason.llm.firewall import route_from_endpoint
+    from deepreason.run_manifest import RunManifest
+    from minireason.log import replay
+    from minireason.loop import Session
+
+    root = tmp_path / "legacy-mini"
+    session = Session(root)  # pre-manifest root: plain canonical log
+    session.spawn_problem("pi-legacy", "a retired mini investigation")
+    session.measure(["ok"])
+    digest_before = session.state.digest()
+
+    endpoint = MockEndpoint([], name="mock://legacy-mini", model="legacy-mini")
+    legacy = RunManifest(
+        schema_version=1,
+        engine_profile=ENGINE_PROFILE,
+        model_profile=DEFAULT_MODEL_PROFILE.value,
+        roles={"conjecturer": (route_from_endpoint(endpoint),)},
+        rubric_policy="forbid",
+        concurrency=1,
+        pack_profile=DEFAULT_MODEL_PROFILE.value,
+        output_profile=DEFAULT_MODEL_PROFILE.value,
+        source_config_hash=sha256_hex(canonical_json({"legacy": True})),
+        compiled_at="2026-01-01T00:00:00Z",
+        engine_config_json="{}",
+    )
+    (root / "run-manifest.json").write_bytes(legacy.canonical_bytes())
+    (root / "run-manifest.sha256").write_text(legacy.sha256 + "\n")
+    tracked = {
+        path.relative_to(root): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+    with pytest.raises(UnsupportedRunManifestVersionError):
+        initialize(root, endpoint)
+    with pytest.raises(UnsupportedRunManifestVersionError):
+        run([("pi-x", "d")], endpoint, budget=1_000, root=root, max_cycles=1)
+
+    state = replay(root)
+    assert set(state.problems) == {"pi-legacy"}
+    assert state.digest() == digest_before
+    assert {
+        path.relative_to(root): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    } == tracked
 
 
 def test_existing_full_root_cannot_be_silently_downgraded(tmp_path):

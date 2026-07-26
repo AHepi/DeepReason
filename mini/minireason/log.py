@@ -22,6 +22,7 @@ from deepreason.ontology.event import Event as ParentEvent
 from deepreason.ontology.event import LLMCall as Call
 from deepreason.ontology.state import Status
 from deepreason.storage.blobs import BlobStore as BlobStore
+from deepreason.run_manifest import UnsupportedRunManifestVersionError
 from deepreason.storage.objects import ObjectStore as ParentObjectStore
 from deepreason.storage.objects import SCHEMAS as PARENT_SCHEMAS
 
@@ -209,9 +210,38 @@ class State:
         }))
 
 
+class _LegacyMiniRootHarness(Harness):
+    """Read-only replay view over a retired pre-v6 mini root.
+
+    The parent loader refuses v1-v5 manifests, so a legacy root can never be
+    reopened for writing, resuming, or graduation — that rejection is the
+    intended fail-closed behavior.  Replay, however, rebuilds state purely
+    from the canonical event log and object/blob stores; the retired
+    manifest carries no workflow authority a v1 root could exercise, so it
+    is ignored here instead of loaded.  This class is only ever constructed
+    with ``read_only=True`` and never mutates the root.
+    """
+
+    def _load_workflow_manifest(self):
+        try:
+            return super()._load_workflow_manifest()
+        except UnsupportedRunManifestVersionError:
+            return None
+
+
 def replay(root: Path) -> State:
-    """Replay through the parent Harness, translating only Mini diagnostics."""
+    """Replay through the parent Harness, translating only Mini diagnostics.
+
+    Legacy pre-v6 roots stay readable: their state is rebuilt read-only from
+    the log alone, while every writing path (``Session``, ``initialize``)
+    keeps failing closed on the unsupported manifest version.
+    """
     try:
         return State(Harness(Path(root)))
+    except UnsupportedRunManifestVersionError:
+        try:
+            return State(_LegacyMiniRootHarness(Path(root), read_only=True))
+        except (CorruptLogError, EventSequenceError) as error:
+            raise SeqError(str(error)) from error
     except (CorruptLogError, EventSequenceError) as error:
         raise SeqError(str(error)) from error

@@ -1,4 +1,13 @@
-"""D0: Mini reuses the parent's opt-in conjecture authority envelope."""
+"""D0, migrated to the V6-only boundary.
+
+Mini's historical opt-in v4 control envelope is retired together with every
+pre-v6 manifest: a root bound to the v4 shadow controller now fails closed in
+the parent loader.  New mini roots are V6-native and run through the parent
+Harness primitive layer only — provider calls stay plain canonical events
+with the shared bounded-repair protocol and no workflow records, and a
+pre-bound v6 mini manifest is semantically indistinguishable from the one
+mini compiles for itself.
+"""
 
 from __future__ import annotations
 
@@ -17,12 +26,15 @@ from deepreason.run_manifest import (
     ContractVersionPolicyV1,
     ControlPlanePolicyV1,
     SchoolExecutionPolicyV1,
+    UnsupportedRunManifestVersionError,
     bind_run_manifest,
     compile_run_manifest,
 )
-from deepreason.workflow.models import ProposalReceiptV1, WorkOrderEnvelopeV1
 from minireason.call import MockEndpoint
+from minireason.compat import bind_mini_root
 from minireason.loop import run
+
+import pytest
 
 
 def _candidate() -> str:
@@ -72,7 +84,8 @@ def _shadow_policy() -> ControlPlanePolicyV1:
     )
 
 
-def _bind_shadow_manifest(endpoint, root):
+def _bind_legacy_shadow_manifest(endpoint, root):
+    """Reproduce a historical opt-in v4 shadow root byte-for-byte."""
     config = Config(
         roles={"conjecturer": route_from_endpoint(endpoint).endpoint_spec()},
         model_profile="compact",
@@ -91,15 +104,45 @@ def _bind_shadow_manifest(endpoint, root):
     return manifest
 
 
-def test_opt_in_mini_v4_uses_parent_work_order_and_receipt_types(tmp_path):
+def _files(root):
+    return {
+        path.relative_to(root): path.read_bytes()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+
+def test_legacy_v4_shadow_root_fails_closed_without_mutation(tmp_path):
     endpoint = MockEndpoint(
         [_candidate()], name="mock://mini-v4", model="mini-v4-model"
     )
     root = tmp_path / "mini-v4"
-    _bind_shadow_manifest(endpoint, root)
+    _bind_legacy_shadow_manifest(endpoint, root)
+    tracked = _files(root)
+
+    with pytest.raises(UnsupportedRunManifestVersionError):
+        run(
+            [("pi-mini-v4", "Why might this happen?")],
+            endpoint,
+            budget=100_000,
+            root=root,
+            vs_k=1,
+            max_cycles=1,
+        )
+
+    assert _files(root) == tracked
+
+
+def test_v6_mini_call_is_one_plain_canonical_event_without_workflow_records(
+    tmp_path,
+):
+    endpoint = MockEndpoint(
+        [_candidate()], name="mock://mini-v6", model="mini-v6-model"
+    )
+    root = tmp_path / "mini-v6"
 
     summary = run(
-        [("pi-mini-v4", "Why might this happen?")],
+        [("pi-mini-v6", "Why might this happen?")],
         endpoint,
         budget=100_000,
         root=root,
@@ -109,30 +152,21 @@ def test_opt_in_mini_v4_uses_parent_work_order_and_receipt_types(tmp_path):
 
     replayed = Harness(root)
     workflow = replayed.workflow_state
-    work, = workflow.work_orders.values()
-    receipt, = workflow.proposal_receipts.values()
-    assert isinstance(work, WorkOrderEnvelopeV1)
-    assert isinstance(receipt, ProposalReceiptV1)
-    assert work.workflow_profile == "conjecture.shadow.v1"
-    assert work.school_id is None
-    assert receipt.work_order_id == work.id
-    assert receipt.source_call_seq < workflow.decision_event_seq[
-        next(
-            decision_id
-            for decision_id, decision in workflow.decisions.items()
-            if decision.transition_kind.value == "proposal_received"
-        )
-    ]
+    # Mini exercises the parent primitive layer only: the v6 transactional
+    # controller (and the retired v4 envelope) leave no records here.
+    assert workflow.work_orders == {}
+    assert workflow.proposal_receipts == {}
+    assert workflow.transaction_work == {}
     call_events = [event for event in replayed.log.read() if event.llm is not None]
     assert len(call_events) == 1
-    assert call_events[0].inputs[0] == "workflow-conjecture-call"
-    assert call_events[0].llm.work_order_id == work.id
+    assert call_events[0].llm.work_order_id is None
+    assert call_events[0].llm.dispatch_authorization_ref is None
     assert any(event.rule == Rule.CONJ for event in replayed.log.read())
     assert summary["meter_equals_log"]
     assert verify_root(root)["violations"] == []
 
 
-def test_mini_v4_repairs_are_authorized_before_the_next_provider_attempt(tmp_path):
+def test_mini_v6_repairs_use_the_shared_bounded_repair_protocol(tmp_path):
     content = json.loads(_candidate())["candidates"][0]["content"]
     endpoint = MockEndpoint(
         [
@@ -141,14 +175,13 @@ def test_mini_v4_repairs_are_authorized_before_the_next_provider_attempt(tmp_pat
             ),
             _candidate(),
         ],
-        name="mock://mini-v4-repair",
-        model="mini-v4-model",
+        name="mock://mini-v6-repair",
+        model="mini-v6-model",
     )
-    root = tmp_path / "mini-v4-repair"
-    _bind_shadow_manifest(endpoint, root)
+    root = tmp_path / "mini-v6-repair"
 
     run(
-        [("pi-mini-v4-repair", "Why might this happen?")],
+        [("pi-mini-v6-repair", "Why might this happen?")],
         endpoint,
         budget=100_000,
         root=root,
@@ -157,34 +190,36 @@ def test_mini_v4_repairs_are_authorized_before_the_next_provider_attempt(tmp_pat
     )
 
     harness = Harness(root)
-    receipt, = harness.workflow_state.proposal_receipts.values()
-    transitions = [
-        decision.transition_kind.value
-        for decision in harness.workflow_state.decisions.values()
-    ]
-    assert transitions.index("repair_requested") < transitions.index(
-        "proposal_received"
+    call_event, = (
+        event for event in harness.log.read() if event.llm is not None
     )
-    assert receipt.validation_outcome.value == "valid_after_repair"
-    assert receipt.attempt_count == 2
-    assert verify_root(root)["violations"] == []
+    assert call_event.llm.attempts == 2
+    assert [attempt.valid for attempt in call_event.llm.attempt_trace] == [
+        False,
+        True,
+    ]
+    report = verify_root(root)
+    assert report["violations"] == []
+    totals = report["stats"]["process"]["profile_totals"]["compact"]
+    assert totals["repair_attempts"] == 1
+    assert totals["eventual_valid"] == 1
+    assert totals["first_pass_valid"] == 0
 
 
-def test_mini_v4_schema_exhaustion_is_a_typed_failed_workflow_call(tmp_path):
+def test_mini_v6_schema_exhaustion_is_a_typed_logged_drop(tmp_path):
     content = json.loads(_candidate())["candidates"][0]["content"]
     invalid = json.dumps(
         {"candidates": [{"content": content, "typicality": 2.0}]}
     )
     endpoint = MockEndpoint(
         [invalid, invalid, invalid],
-        name="mock://mini-v4-exhausted",
-        model="mini-v4-model",
+        name="mock://mini-v6-exhausted",
+        model="mini-v6-model",
     )
-    root = tmp_path / "mini-v4-exhausted"
-    _bind_shadow_manifest(endpoint, root)
+    root = tmp_path / "mini-v6-exhausted"
 
     summary = run(
-        [("pi-mini-v4-exhausted", "Why might this happen?")],
+        [("pi-mini-v6-exhausted", "Why might this happen?")],
         endpoint,
         budget=100_000,
         root=root,
@@ -193,9 +228,13 @@ def test_mini_v4_schema_exhaustion_is_a_typed_failed_workflow_call(tmp_path):
     )
 
     harness = Harness(root)
-    receipt, = harness.workflow_state.proposal_receipts.values()
-    assert receipt.validation_outcome.value == "repair_exhausted"
-    assert receipt.attempt_count == 3
+    dropped, = (
+        event
+        for event in harness.log.read()
+        if event.llm is not None and "dropped-call" in event.inputs
+    )
+    assert dropped.llm.attempts == 3
+    assert not any(attempt.valid for attempt in dropped.llm.attempt_trace)
     assert summary["meter_equals_log"]
     report = verify_root(root)
     assert report["violations"] == []
@@ -217,7 +256,9 @@ def test_mini_client_does_not_implement_workflow_records_or_transitions():
         assert forbidden not in source
 
 
-def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_path):
+def test_mini_prebound_v6_manifest_preserves_semantic_diversity_and_executable_utility(
+    tmp_path,
+):
     families = ("mini-family-alpha", "mini-family-beta")
     bodies = [
         json.dumps(
@@ -243,7 +284,7 @@ def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_pat
             ]
         }
     )
-    prompts = {"legacy": [], "shadow": []}
+    prompts = {"default": [], "prebound": []}
 
     def endpoint(mode):
         def complete(prompt):
@@ -256,33 +297,39 @@ def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_pat
             model="mini-d2-semantic-model",
         )
 
-    legacy_endpoint = endpoint("legacy")
-    shadow_endpoint = endpoint("shadow")
-    legacy_root = tmp_path / "legacy"
-    shadow_root = tmp_path / "shadow"
-    _bind_shadow_manifest(shadow_endpoint, shadow_root)
+    default_endpoint = endpoint("default")
+    prebound_endpoint = endpoint("prebound")
+    default_root = tmp_path / "default"
+    prebound_root = tmp_path / "prebound"
+    # Pre-binding through the shared kernel interface (the same call the
+    # advisory/scratch phases build on) must be indistinguishable from the
+    # manifest mini compiles for itself on first contact.
+    prebound = bind_mini_root(prebound_root, prebound_endpoint)
+    assert prebound.schema_version == 6
+    assert prebound.engine_profile == "mini"
 
     summaries = {
-        "legacy": run(
+        "default": run(
             [("pi-mini-d2", "Compare two compact mechanisms.")],
-            legacy_endpoint,
+            default_endpoint,
             budget=100_000,
-            root=legacy_root,
+            root=default_root,
             vs_k=2,
             max_cycles=1,
         ),
-        "shadow": run(
+        "prebound": run(
             [("pi-mini-d2", "Compare two compact mechanisms.")],
-            shadow_endpoint,
+            prebound_endpoint,
             budget=100_000,
-            root=shadow_root,
+            root=prebound_root,
             vs_k=2,
             max_cycles=1,
         ),
     }
+    assert summaries["prebound"]["run_manifest_sha256"] == prebound.sha256
     harnesses = {
-        "legacy": Harness(legacy_root),
-        "shadow": Harness(shadow_root),
+        "default": Harness(default_root),
+        "prebound": Harness(prebound_root),
     }
 
     def semantic_projection(harness):
@@ -316,11 +363,11 @@ def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_pat
         )
         return artifacts, verdicts
 
-    legacy_projection = semantic_projection(harnesses["legacy"])
-    shadow_projection = semantic_projection(harnesses["shadow"])
-    assert prompts["shadow"] == prompts["legacy"]
-    assert shadow_projection == legacy_projection
-    artifacts, verdicts = shadow_projection
+    default_projection = semantic_projection(harnesses["default"])
+    prebound_projection = semantic_projection(harnesses["prebound"])
+    assert prompts["prebound"] == prompts["default"]
+    assert prebound_projection == default_projection
+    artifacts, verdicts = prebound_projection
     assert len(artifacts) == 2
     assert len({content for _id, content, _status in artifacts}) == 2
     assert all(
@@ -336,6 +383,7 @@ def test_mini_shadow_preserves_semantic_diversity_and_executable_utility(tmp_pat
         candidate_verdicts == (programs.PASS, programs.PASS)
         for _artifact_id, candidate_verdicts in verdicts
     )
-    assert summaries["shadow"]["tokens"] == summaries["legacy"]["tokens"]
-    assert summaries["shadow"]["problems"] == summaries["legacy"]["problems"]
-    assert verify_root(shadow_root)["violations"] == []
+    assert summaries["prebound"]["tokens"] == summaries["default"]["tokens"]
+    assert summaries["prebound"]["problems"] == summaries["default"]["problems"]
+    assert verify_root(prebound_root)["violations"] == []
+    assert verify_root(default_root)["violations"] == []
