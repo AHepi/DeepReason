@@ -6,6 +6,8 @@ import json
 import shutil
 from pathlib import Path
 
+import pytest
+
 from deepreason.bridge.events import BridgeAction
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
@@ -20,6 +22,30 @@ JOLT_RUN = (
     / "jolt_architecture_2026-07-16"
     / "run"
 )
+
+
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep the tracked pre-v6 chain verifiable below the public admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; this
+    test's subject is that the exact immutable legacy failure chain still
+    verifies clean.
+    """
+
+    import deepreason.invariants as invariants_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
 
 
 def _failed_stage_a_root(root: Path) -> Path:
@@ -114,7 +140,9 @@ def test_nonfailed_event_with_all_invalid_trace_remains_a_violation(tmp_path):
     assert "successful call" in details[0]["detail"]
 
 
-def test_exact_immutable_jolt_legacy_failure_chain_verifies_clean(tmp_path):
+def test_exact_immutable_jolt_legacy_failure_chain_verifies_clean(
+    tmp_path, _below_public_admission
+):
     copied = tmp_path / "jolt-run"
     shutil.copytree(JOLT_RUN, copied)
 

@@ -79,6 +79,31 @@ class _FrozenEventDateTime(datetime):
         return cls(2026, 7, 16, 12, 47, 0, tzinfo=tz)
 
 
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep the derived v5 incident roots readable below the public admission.
+
+    The incident mechanisms are inherently RunManifest-v5 and the generated
+    roots are frozen byte-for-byte, so they cannot be recompiled as v6.  The
+    raw V6-only loading boundary has its own coverage in
+    test_v6_only_manifest_loading; this mirrors the committed test_cli_bridge
+    idiom.
+    """
+
+    import deepreason.invariants as invariants_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -343,7 +368,7 @@ def _checks(findings) -> list[str]:
 
 @pytest.mark.parametrize("fixture_id", FIXTURE_IDS)
 def test_incident_derived_roots_receive_expected_v2_dimensions(
-    tmp_path, fixture_id
+    tmp_path, fixture_id, _below_public_admission
 ):
     descriptor = _descriptor(fixture_id)
     root = tmp_path / fixture_id
@@ -418,7 +443,7 @@ def test_incident_descriptors_are_honest_and_source_linked():
 
 
 def test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic(
-    tmp_path,
+    tmp_path, _below_public_admission
 ):
     provenance = _read_json(FIXTURE_DIR / "PROVENANCE.json")
     for fixture_id in FIXTURE_IDS:

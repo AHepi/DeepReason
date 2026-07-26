@@ -30,6 +30,31 @@ from tests.test_workflow_shadow_c0 import (
 Validator = Callable[[str], BaseModel]
 
 
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 controller coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; this
+    file's subject is the v4 conjecture controller's semantic acceptance.
+    """
+
+    from pathlib import Path
+
+    import deepreason.invariants as invariants_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _generic_response(*bodies: str) -> str:
     return json.dumps(
         {
@@ -201,6 +226,7 @@ def _semantic_diagnostics(run, validator: Validator, families: tuple[str, str]):
 def test_active_controller_preserves_diverse_verifier_backed_semantics(
     tmp_path,
     workload,
+    _below_public_admission,
 ):
     profile, reasoning, response, validator, families = _semantic_fixture(workload)
     runs = {

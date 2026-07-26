@@ -181,8 +181,19 @@ def test_cli_broken_pipe_exits_quietly(monkeypatch, tmp_path):
 
     from deepreason.cli.main import main
     from deepreason.harness import Harness
+    from deepreason.ontology import Commitment
+    from deepreason.run_manifest import bind_run_manifest
+    from tests.test_run_input_v6_commitments import _bind_v2
+    from tests.test_run_manifest import _compile_v6_manifest
 
-    Harness(tmp_path / "run")  # a valid, empty root
+    # A valid, empty root: CLI root admission is V6-only, so the root must
+    # carry a bound run input and a matching schema-version-6 manifest.
+    root = tmp_path / "run"
+    run_input = _bind_v2(root, Commitment(id="k-broken-pipe", eval="predicate:True"))
+    bind_run_manifest(
+        _compile_v6_manifest(run_input_digest=run_input.run_input_digest), root
+    )
+    Harness(root)
 
     class _ClosedPipe:
         def write(self, *_):

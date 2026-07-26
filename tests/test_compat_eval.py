@@ -122,30 +122,40 @@ def test_compact_recovery_uses_stable_signal_token_and_legacy_fallback():
 
 
 def test_mock_manifest_route_cannot_be_labelled_live_transport(tmp_path):
+    from deepreason.config import Config
     from deepreason.harness import Harness
-    from deepreason.ontology import LLMAttempt, LLMCall
-    from deepreason.run_manifest import Route, RunManifest, persist_run_manifest
+    from deepreason.ontology import Commitment, LLMAttempt, LLMCall
+    from deepreason.run_manifest import compile_run_manifest, persist_run_manifest
+    from tests.test_run_input_v6_commitments import _bind_v2, _control
 
     root = tmp_path / "work" / "roots" / "compact" / "W001-s1729"
-    route = Route(
-        endpoint_id="mock-seat",
-        base_url="mock://compat",
-        model_id="gemma4:31b",
-        provider="mock",
-        family="gemma",
+    run_input = _bind_v2(
+        root, Commitment(id="k-compat-mock-route", eval="predicate:True")
     )
-    manifest = RunManifest(
-        engine_profile="full",
-        model_profile="compact",
-        roles={"conjecturer": (route,)},
+    manifest = compile_run_manifest(
+        Config(
+            roles={
+                "conjecturer": {
+                    "endpoint_id": "mock-seat",
+                    "endpoint": "mock://compat",
+                    "model": "gemma4:31b",
+                    "provider": "mock",
+                    "family": "gemma",
+                    "max_tokens": 64,
+                    "context_window_tokens": 262_144,
+                }
+            }
+        ),
+        schema_version=6,
+        workload_profile="text",
         rubric_policy="forbid",
-        concurrency=1,
-        pack_profile="compact",
-        output_profile="compact",
-        source_config_hash="0" * 64,
         compiled_at="2026-07-12T00:00:00Z",
-        engine_config_json="{}",
+        model_profile="compact",
+        control_plane_policy=_control(6),
+        run_input_digest=run_input.run_input_digest,
     )
+    route = manifest.roles["conjecturer"][0]
+    assert route.provider == "mock" and route.base_url == "mock://compat"
     persist_run_manifest(manifest, root)
     harness = Harness(root)
     prompt_ref = harness.blobs.put(b"prompt")

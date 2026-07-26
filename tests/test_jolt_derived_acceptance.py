@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from deepreason.bridge.events import BridgeAction
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.config import Config
@@ -31,6 +33,29 @@ FIXTURE = (
     Path(__file__).parent / "fixtures" / "jolt_derived_acceptance.json"
 )
 STAMP = "2026-07-16T00:00:00Z"
+
+
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 component coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; this
+    file's subject is the offline derived Jolt v2 repair acceptance path.
+    """
+
+    import deepreason.invariants as invariants_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
 
 
 def _route() -> dict:
@@ -110,7 +135,9 @@ def _manifest():
     )
 
 
-def test_derived_jolt_v2_repair_reaches_stage_b_and_verifies_cleanly(tmp_path):
+def test_derived_jolt_v2_repair_reaches_stage_b_and_verifies_cleanly(
+    tmp_path, _below_public_admission
+):
     fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
     original = Path(__file__).parents[1] / fixture["source_root"]
     original_before = {

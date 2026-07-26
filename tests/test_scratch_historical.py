@@ -17,6 +17,7 @@ from deepreason.scratch.models import (
     ScratchProvenanceV1,
     domain_hash,
 )
+from tests.test_cli_scratch import _prepare_v6_root
 
 
 def _tree_snapshot(root):
@@ -101,6 +102,9 @@ def test_historical_scratch_cli_show_and_map_make_zero_filesystem_changes(
             action="block_created", actor="user", outputs=[block.id]
         )
     )
+    # CLI root admission is V6-only: the historical reads must run against a
+    # root carrying a bound run input and schema-version-6 manifest.
+    _prepare_v6_root(root)
     before = _tree_snapshot(root)
     monkeypatch.setattr("deepreason.easy.load_credentials", lambda: None)
 

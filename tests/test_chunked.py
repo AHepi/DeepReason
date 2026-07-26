@@ -10,6 +10,7 @@ import json
 import pytest
 
 from deepreason import easy
+from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.manifest import (
     Manifest,
@@ -305,7 +306,7 @@ def test_integration_failure_refutes_page_and_spawns_targeted_repair(tmp_path):
                            '<section id="app-list"></section>').id,
     }
     assembled = easy.register_assembly(harness, design.id, manifest, chosen)
-    cfg = easy.Config(**easy.MAKE_OVERRIDES)
+    cfg = Config(**easy.MAKE_OVERRIDES)
     implicated = easy.integration_criticism(
         harness, assembled.id, manifest, cfg, browser_backend=None)
     assert "list" in implicated
@@ -465,7 +466,7 @@ def test_assembled_page_passes_browser_smoke_in_real_chromium(tmp_path):
         "list": _candidate(harness, problems["list"], design, LIST_FRAGMENT).id,
     }
     assembled = easy.register_assembly(harness, design.id, manifest, chosen)
-    cfg = easy.Config(**easy.MAKE_OVERRIDES)
+    cfg = Config(**easy.MAKE_OVERRIDES)
     implicated = easy.integration_criticism(
         harness, assembled.id, manifest, cfg, browser_backend=PlaywrightBrowser())
     assert implicated == []

@@ -43,6 +43,30 @@ from deepreason.scheduler.scheduler import Scheduler
 STAMP = "2026-07-16T00:00:00Z"
 
 
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 component coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; this
+    file's subject is the v4 school-to-route binding enactment contract.
+    """
+
+    from pathlib import Path
+
+    import deepreason.invariants as invariants_module
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _route(
     endpoint_id: str,
     *,
@@ -424,7 +448,9 @@ def test_prompt_and_response_route_prose_cannot_change_the_resolved_lease(tmp_pa
     assert _school_calls(harness)[0].school_route.seat == 1
 
 
-def test_school_route_receipt_survives_replay_and_matches_token_accounting(tmp_path):
+def test_school_route_receipt_survives_replay_and_matches_token_accounting(
+    tmp_path, _below_public_admission
+):
     config = _config(schools=1)
     manifest = _manifest(
         config,

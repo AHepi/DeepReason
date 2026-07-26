@@ -3,8 +3,12 @@
 These tests keep provider I/O offline, but deliberately retain the real CLI,
 RunManifest, endpoint construction, route leases, compact wire contracts,
 bounded repair, website workflow, event log, and replay paths.  The only
-substitutions are a scripted completion transport and, for the complete page
-build, a deterministic scheduler that registers ordinary canonical artifacts.
+substitution is a scripted completion transport.
+
+Under the V6-only contract, the public CLI compiles only schema-version-6
+manifests and the retired ``make`` facade fails closed, so the original
+complete page build is reproduced at the component level while the public
+half asserts the current compile and dispatch boundaries.
 """
 
 from __future__ import annotations
@@ -14,7 +18,6 @@ import re
 import threading
 import time
 from collections import Counter
-from types import SimpleNamespace
 
 import pytest
 import yaml
@@ -23,7 +26,7 @@ from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.endpoints import OpenAICompatEndpoint
 from deepreason.llm.repair import SchemaRepairError
-from deepreason.ontology import Interface, Provenance, Ref, Rule
+from deepreason.ontology import Rule
 from deepreason.run_manifest import (
     compile_run_manifest,
     config_from_run_manifest,
@@ -42,6 +45,32 @@ GEMMA_ENDPOINT = "https://gemma.invalid/v1"
 DEEPSEEK_MODEL = "deepseek-v4"
 DEEPSEEK_ENDPOINT = "https://deepseek.invalid/v1"
 STAMP = "2026-07-11T00:00:00Z"
+
+
+@pytest.fixture
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 component coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; these
+    reproductions exercise the pre-transactional compact seat contracts,
+    which v6 dispatch closes (asserted by the r1 regression above).
+    """
+
+    from pathlib import Path
+
+    import deepreason.invariants as invariants_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
 
 
 def _route(model: str, endpoint: str, *, endpoint_id: str, family: str) -> dict:
@@ -129,89 +158,24 @@ def _install_dna_transport(monkeypatch, calls: list[tuple[str, str, str]]) -> No
     monkeypatch.setattr(OpenAICompatEndpoint, "complete", complete)
 
 
-def _install_ordinary_artifact_scheduler(monkeypatch, calls: list[str]) -> None:
-    """Replace only scheduler search; keep canonical registration and checks."""
-    from deepreason import ops
-
-    def run_scheduler(
-        harness,
-        config,
-        cycles,
-        token_budget=None,
-        on_cycle=None,
-        run_manifest=None,
-    ):
-        del cycles, token_budget
-        assert run_manifest is not None
-        problem_id = config.FOCUS_FAMILY
-        problem = harness.state.problems[problem_id]
-        references = []
-        for commitment_id in problem.criteria:
-            commitment = harness.commitments.get(commitment_id)
-            if commitment is None or commitment.eval != "program:lineage_ref":
-                continue
-            references = [
-                Ref(target=target, role="dependence")
-                for target in commitment.budget.extra["endpoints"].split(",")
-            ]
-
-        if problem_id == "pi-plan":
-            content = (
-                "PLAN: pages, content, interactions, acceptance criteria. " * 15
-            )
-        elif problem_id.startswith("pi-comp-"):
-            contract_commitment = next(
-                harness.commitments[item]
-                for item in problem.criteria
-                if harness.commitments[item].eval == "program:component_wf"
-            )
-            specification = json.loads(
-                contract_commitment.budget.extra["spec"]
-            )["component"]
-            exports = "\n".join(
-                f"window.{name} = function () {{}};"
-                for name in specification["js_exports"]
-            )
-            script = f"<script>{exports}</script>" if exports else ""
-            root = specification["element_id"]
-            content = (
-                f'<section id="{root}"><h2>{specification["purpose"]}</h2>'
-                f"<style>#{root} {{ display: block; }}</style>{script}</section>"
-            )
-        else:
-            raise AssertionError(f"compact mode scheduled an unexpected problem: {problem_id}")
-
-        harness.create_artifact(
-            content,
-            interface=Interface(
-                commitments=list(problem.criteria),
-                refs=references,
-            ),
-            provenance=Provenance(role="conjecturer"),
-            problem_id=problem_id,
-        )
-        calls.append(problem_id)
-        if on_cycle is not None:
-            on_cycle(SimpleNamespace(harness=harness))
-        return (
-            {"survivors": 1},
-            None,
-            {
-                "logged_tokens_this_run": 0,
-                "metered_tokens": 0,
-                "delta": 0,
-            },
-        )
-
-    monkeypatch.setattr(ops, "run_scheduler", run_scheduler)
-
-
 def test_r1_persisted_single_model_manifest_makes_decoy_configs_irrelevant(
     tmp_path,
     monkeypatch,
 ):
-    """The original DNA run cannot discover or invoke the DeepSeek decoy."""
+    """The original DNA run cannot discover or invoke the DeepSeek decoy.
+
+    V6-only migration: the public CLI now compiles only schema-version-6
+    manifests, the ``make`` facade is retired, and v6 provider dispatch is
+    transactional.  The decoy-irrelevance theorem is asserted at the current
+    boundaries: compile-time route freezing, runtime input isolation, and
+    fail-closed dispatch before any transport.
+    """
     from deepreason.cli.main import main
+    from deepreason.llm.adapter import WorkflowAuthorizationError
+    from deepreason.llm.firewall import leases_from_manifest
+    from deepreason.ontology import Commitment
+    from deepreason.run_manifest import bind_run_manifest
+    from tests.test_run_input_v6_commitments import _bind_v2, _control
 
     gemma_config = tmp_path / "gemma.yaml"
     deepseek_config = tmp_path / "deepseek.yaml"
@@ -268,6 +232,16 @@ def test_r1_persisted_single_model_manifest_makes_decoy_configs_irrelevant(
         raise AssertionError("runtime model discovery was attempted")
 
     monkeypatch.setattr("deepreason.llm.endpoints.list_models", forbidden_discovery)
+
+    # V6 compile inputs: one frozen run input and one complete control-plane
+    # policy.  The decoy config file remains beside the selected source.
+    run_input = _bind_v2(
+        run_root, Commitment(id="k-r1-dna-run", eval="predicate:True")
+    )
+    policy_path = tmp_path / "control-plane-policy.json"
+    policy_path.write_text(
+        _control(6).model_dump_json(by_alias=True), encoding="utf-8"
+    )
     assert main(
         [
             "--root",
@@ -282,11 +256,18 @@ def test_r1_persisted_single_model_manifest_makes_decoy_configs_irrelevant(
             "compact",
             "--rubric-policy",
             "forbid",
+            "--workload-profile",
+            "website",
+            "--control-plane-policy",
+            str(policy_path),
+            "--run-input-digest",
+            run_input.run_input_digest,
             "--out",
             str(manifest_path),
         ]
     ) == 0
     compiled = load_run_manifest(manifest_path)
+    assert compiled.schema_version == 6
     assert {
         route.model_id
         for routes in compiled.roles.values()
@@ -299,60 +280,66 @@ def test_r1_persisted_single_model_manifest_makes_decoy_configs_irrelevant(
     } == {"gemma-cloud"}
 
     # Once compiled, neither the explicitly supplied decoy source file nor
-    # provider discovery is a runtime input. The bound manifest is the only
-    # route authority seen by both the CLI and easy.make facade.
+    # provider discovery is a runtime input.  The bound manifest is the only
+    # route authority seen by the runtime reconstruction paths.
     def forbidden_source_reload(*_args, **_kwargs):
         raise AssertionError("source/decoy configuration was read after compilation")
 
     monkeypatch.setattr("deepreason.config.load", forbidden_source_reload)
     endpoint_calls: list[tuple[str, str, str]] = []
-    scheduler_calls: list[str] = []
     _install_dna_transport(monkeypatch, endpoint_calls)
-    _install_ordinary_artifact_scheduler(monkeypatch, scheduler_calls)
 
-    assert main(
-        [
-            "--root",
-            str(run_root),
-            "--config",
-            str(deepseek_config),
-            "make",
-            "the wonders of DNA",
-            "--out",
-            str(output),
-            "--cycles",
-            "10",
-            "--token-budget",
-            "100000",
-            "--run-manifest",
-            str(manifest_path),
-        ]
-    ) == 0
-
-    assert scheduler_calls == ["pi-plan", "pi-comp-c1", "pi-comp-c2"]
-    assert endpoint_calls
-    assert {model for model, _endpoint, _prompt in endpoint_calls} == {GEMMA_MODEL}
-    assert all(endpoint == GEMMA_ENDPOINT for _model, endpoint, _ in endpoint_calls)
-    assert discovery_calls == []
-    assert list(output.glob("*.html"))
-
+    bind_run_manifest(compiled, run_root)
     persisted = load_run_manifest(run_root / "run-manifest.json")
     assert persisted.canonical_bytes() == compiled.canonical_bytes()
-    reopened = Harness(run_root)
-    llm_events = [event for event in reopened.log.read() if event.llm is not None]
-    assert llm_events
-    assert {event.llm.model for event in llm_events} == {GEMMA_MODEL}
-    assert {event.llm.endpoint for event in llm_events} == {GEMMA_ENDPOINT}
+
+    # Route authority reconstructed from the persisted manifest alone: every
+    # role seat leases the frozen Gemma route; the decoy has no seat.
+    leases = leases_from_manifest(persisted)
+    assert set(leases) == {
+        role for role, routes in persisted.roles.items() if routes
+    }
     assert {
-        attempt.endpoint_id
-        for event in llm_events
-        for attempt in event.llm.attempt_trace
+        lease.route.endpoint_id
+        for seats in leases.values()
+        for lease in seats
     } == {"gemma-cloud"}
+    assert {
+        lease.route.model_id for seats in leases.values() for lease in seats
+    } == {GEMMA_MODEL}
+
+    harness = Harness(run_root)
+    runtime_config = config_from_run_manifest(persisted)
+    workflow = WebsiteWorkflow(
+        harness,
+        runtime_config,
+        "the wonders of DNA",
+        output,
+        10,
+        100_000,
+        lambda _message: None,
+        run_manifest=persisted,
+    )
+
+    # V6 dispatch fails closed before any transport: without a bound
+    # transaction not even the legitimate frozen route can be invoked, so a
+    # decoy invocation is unreachable a fortiori.
+    with pytest.raises(
+        WorkflowAuthorizationError, match="requires a bound transaction"
+    ):
+        workflow._compact_outline_call("an ordinary adjudicated plan")
+
+    assert endpoint_calls == []
+    assert discovery_calls == []
+    assert [
+        event for event in Harness(run_root).log.read() if event.llm is not None
+    ] == []
 
 
 def test_r2_malicious_control_json_exhausts_locally_and_only_logs_process_drop(
     tmp_path,
     monkeypatch,
+    _below_public_admission,
 ):
     """Authored routing/guard commands cannot mutate or select another seat."""
     gemma = _route(
@@ -485,6 +472,7 @@ def test_r2_malicious_control_json_exhausts_locally_and_only_logs_process_drop(
 def test_r3_concurrent_peer_command_is_inert_and_events_commit_in_alias_order(
     tmp_path,
     monkeypatch,
+    _below_public_admission,
 ):
     """Concurrent endpoint replies cannot create calls or reorder the writer."""
     route = _route(
