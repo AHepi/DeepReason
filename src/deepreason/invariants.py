@@ -518,6 +518,33 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
     # Verify the school receipt through the frozen work preparation and route
     # lease.  The generic school verifier below separately checks that the same
     # receipt resolves to the manifest's frozen route-seat policy.
+    def _prepared_school_id(preparation) -> str | None:
+        """Resolve one preparation's frozen school execution authority.
+
+        Conjecture payloads freeze the executing school as ``school_id`` and
+        criticism payloads as ``critic_school_id``.  Repair work carries no
+        school of its own: it re-dispatches under its parent preparation's
+        frozen route and school, so the parent named by ``parent_work_id``
+        is the durable authority for the repair receipt.
+        """
+
+        seen: set[str] = set()
+        while preparation is not None and preparation.id not in seen:
+            seen.add(preparation.id)
+            payload = preparation.task_payload_value
+            if not hasattr(payload, "get"):
+                return None
+            school_id = payload.get("school_id")
+            if school_id is None:
+                school_id = payload.get("critic_school_id")
+            if school_id is not None:
+                return school_id
+            parent_ref = payload.get("parent_work_id")
+            if not isinstance(parent_ref, str):
+                return None
+            preparation = preparations.get(parent_ref)
+        return None
+
     for source_seq, row in provider_rows.items():
         preparation = preparations.get(row["work_id"])
         authorization = row["authorization"]
@@ -525,8 +552,7 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
         call = row["event"].llm
         if preparation is None or authorization is None or call is None:
             continue
-        payload = preparation.task_payload_value
-        school_id = payload.get("school_id") if hasattr(payload, "get") else None
+        school_id = _prepared_school_id(preparation)
         receipt = call.school_route
         if school_id is not None and receipt is None:
             finding(
@@ -1864,6 +1890,186 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 f"event seq={event.seq}: receipt route hash differs from manifest route",
             )
 
+    def validate_v6_expansion_lineage(event, receipt, prefix: str) -> None:
+        """Prove one v6 expanded call from its durable transaction lineage.
+
+        The transactional continuation path records no conjecture_turn
+        events.  Its grant is the content-addressed
+        ``ConjectureContextContinuationV1`` frozen inside the child work
+        preparation: validation recomputes ``decision_ref`` from the
+        identity payload and re-evaluates eligibility against the frozen
+        policy inputs, so a matching receipt proves the exact deterministic
+        policy evaluation that authorized this expansion.
+        """
+
+        from deepreason.conjecture_turn import ContextRequestV1
+        from deepreason.workflow.context_continuation import (
+            ConjectureContextContinuationV1,
+            ContextContinuationEligibility,
+        )
+
+        call = event.llm
+        child = (
+            h.workflow_state.transaction_work.get(call.work_order_id)
+            if call.work_order_id is not None
+            else None
+        )
+        payload = child.preparation.task_payload_value if child is not None else None
+        binding = None
+        if isinstance(payload, dict) and payload.get("context_continuation") is not None:
+            try:
+                binding = ConjectureContextContinuationV1.model_validate(
+                    payload["context_continuation"]
+                )
+            except Exception:  # noqa: BLE001 - malformed evidence is a finding
+                binding = None
+        if binding is None or binding.decision_ref != receipt.expansion_decision_ref:
+            fail(
+                "conjecture-context",
+                f"{prefix}: expanded context has no durable continuation decision",
+            )
+            return
+
+        control = manifest.control_plane_policy
+        context_policy = control.conjecture_context if control is not None else None
+        if (
+            binding.eligibility != ContextContinuationEligibility.ELIGIBLE
+            or binding.manifest_digest != manifest.sha256
+            or binding.problem_id != receipt.problem_id
+            or binding.school_id != receipt.school_id
+            or binding.request_hash != receipt.expansion_request_hash
+            or binding.expansion_index != receipt.expansion_index
+            or binding.prior_selection_receipt_ref
+            != receipt.prior_selection_receipt_ref
+            or payload.get("context_expansion_index") != binding.expansion_index
+            or context_policy is None
+            or binding.policy_mode != context_policy.mode
+            or binding.maximum_expansions
+            != context_policy.max_context_expansion_requests
+            or binding.maximum_extra_blocks != context_policy.max_extra_blocks
+            or tuple(binding.permitted_retrieval_channels)
+            != tuple(context_policy.permitted_retrieval_channels)
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: expansion lineage differs from its continuation grant",
+            )
+
+        parent = h.workflow_state.transaction_work.get(binding.parent_work_id)
+        provider = (
+            parent.provider_attempts.get(binding.parent_attempt_index)
+            if parent is not None
+            else None
+        )
+        admission = (
+            parent.admissions.get(binding.parent_attempt_index)
+            if parent is not None
+            else None
+        )
+        if (
+            parent is None
+            or parent.terminal is None
+            or parent.terminal.status != "completed"
+            or provider is None
+            or provider.id != binding.parent_provider_attempt_ref
+            or parent.exposure is None
+            or parent.exposure.id != binding.parent_exposure_receipt_ref
+            or admission is None
+            or admission.id != binding.parent_semantic_admission_ref
+            or parent.terminal.provider_attempt_ref != provider.id
+            or parent.terminal.semantic_admission_ref != admission.id
+            or binding.parent_semantic_output_ref not in admission.admitted_refs
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: continuation parent authority is inconsistent",
+            )
+
+        admitted_request = None
+        try:
+            parent_output = json.loads(
+                h.blobs.get(binding.parent_semantic_output_ref).decode("utf-8")
+            )
+            if isinstance(parent_output, dict):
+                admitted_request = ContextRequestV1.model_validate(
+                    parent_output.get("context_request")
+                )
+        except Exception:  # noqa: BLE001 - malformed evidence is a finding
+            admitted_request = None
+        try:
+            frozen_request_bytes = h.blobs.get(binding.request_ref)
+        except Exception:  # noqa: BLE001 - a missing blob is a finding
+            frozen_request_bytes = None
+        if (
+            admitted_request is None
+            or admitted_request.request_hash != binding.request_hash
+            or frozen_request_bytes
+            != canonical_json(
+                admitted_request.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                )
+            )
+            or tuple(binding.desired_retrieval_channels)
+            != tuple(
+                channel.value
+                for channel in admitted_request.desired_retrieval_channels
+            )
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: expansion request was not admitted by its parent",
+            )
+
+        source_event = next(
+            (
+                candidate
+                for candidate in events
+                if candidate.seq == binding.parent_provider_event_seq
+            ),
+            None,
+        )
+        source_call = source_event.llm if source_event is not None else None
+        source_context = (
+            source_call.conjecture_context if source_call is not None else None
+        )
+        if (
+            source_event is None
+            or source_event.seq >= event.seq
+            or source_call is None
+            or source_call.work_order_id != binding.parent_work_id
+            or (
+                provider is not None
+                and source_call.dispatch_authorization_ref
+                != provider.authorization_bundle_ref
+            )
+            or (
+                source_context.selection_receipt_ref
+                if source_context is not None
+                else None
+            )
+            != receipt.prior_selection_receipt_ref
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: parent provider call does not precede the expansion",
+            )
+
+        selection = h.scratch_state.attention_receipts.get(
+            receipt.selection_receipt_ref
+        )
+        order = list(selection.final_order) if selection is not None else None
+        root = list(receipt.root_block_refs or ())
+        if (
+            receipt.root_block_refs is None
+            or order is None
+            or order[: len(root)] != root
+            or len(order) - len(root) > binding.maximum_extra_blocks
+        ):
+            fail(
+                "conjecture-context",
+                f"{prefix}: expanded selection exceeds or loses context",
+            )
+
     def validate_conjecture_context(event) -> None:
         """Prove the exact advisory bytes and their append-only provenance."""
 
@@ -1909,7 +2115,14 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 "conjecture-context",
                 f"{prefix}: school context has no matching route receipt",
             )
-        if receipt.expansion_decision_ref is not None:
+        if receipt.expansion_decision_ref is not None and (
+            manifest is not None and manifest.schema_version == 6
+        ):
+            # V6 records no conjecture_turn events: the grant lives in the
+            # durable transaction history instead.  A receipt matching
+            # neither lineage still fails closed inside the branch.
+            validate_v6_expansion_lineage(event, receipt, prefix)
+        elif receipt.expansion_decision_ref is not None:
             decisions = [
                 candidate
                 for candidate in events

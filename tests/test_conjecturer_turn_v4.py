@@ -943,13 +943,45 @@ def test_one_configured_expansion_records_original_and_expanded_receipts(tmp_pat
     # duplicate the follow-up LLM call.
     register = next(event for event in harness.log.read() if admitted[0].id in event.outputs)
     assert register.llm is None
-    # KNOWN SRC BUG (V6-only migration): verify_root falsely flags legitimate
-    # v6 context expansions because invariants.py:validate_conjecture_context
-    # requires a conjecture_turn decision event for every
-    # expansion_decision_ref, but the v6 transactional continuation path
-    # records continuation decisions, not turn events. See
-    # src/deepreason/invariants.py (~line 1912). Do not weaken this assertion.
     assert verify_root(harness.root)["violations"] == []
+
+
+def test_v6_expansion_lineage_fails_closed_without_durable_request_blob(tmp_path):
+    """An expansion receipt whose continuation evidence decays is a finding.
+
+    The v6 verifier anchors expansion lineage on durable transaction
+    evidence: the content-addressed continuation in the child preparation,
+    the parent's admitted output, and the frozen request blob.  Removing
+    the request blob breaks the admitted-request proof, so verify_root
+    must fail closed instead of trusting the receipt.
+    """
+
+    harness, _service, _problem, config, manifest, *_blocks = _seed_v6_root(
+        tmp_path
+    )
+    adapter, _prompts = _v6_adapter(
+        harness,
+        manifest,
+        [
+            _v6_request("quasar-only"),
+            _v6_candidates("The quasar topology is testable."),
+        ],
+    )
+    _run_v6_turn(harness, config, manifest, adapter)
+    assert verify_root(harness.root)["violations"] == []
+
+    _parent, child = tuple(harness.workflow_state.transaction_work.values())
+    binding = child.preparation.task_payload_value["context_continuation"]
+    request_ref = binding["request_ref"]
+    (harness.root / "blobs" / request_ref[:2] / request_ref).unlink()
+
+    violations = verify_root(harness.root)["violations"]
+    assert violations
+    assert any(
+        item["check"] == "conjecture-context"
+        and "was not admitted by its parent" in item["detail"]
+        for item in violations
+    )
 
 
 def test_pre_v6_expansion_authority_fails_closed_at_admission(tmp_path):
