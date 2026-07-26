@@ -109,6 +109,10 @@ def test_compact_reasoning_contract_rejects_control_fields(harness):
 
 
 def test_reason_cli_dry_run_accepts_bound_v6_manifest(tmp_path, capsys):
+    # The public `reason` parser intentionally carries no manifest authority
+    # under the V6-only contract (see test_v6_only_cli_admission's
+    # test_ordinary_reason_parser_has_no_manifest_authority); the CLI dry-run
+    # surface for a bound v6 manifest is `run --run-manifest ... --dry-run`.
     from deepreason.cli.main import main
     from tests.test_v6_only_cli_admission import _prepared_v6_root
 
@@ -116,8 +120,8 @@ def test_reason_cli_dry_run_accepts_bound_v6_manifest(tmp_path, capsys):
     prepared = _prepared_v6_root(tmp_path / "run", text=text)
     assert main(
         [
-            "--root", str(prepared.root), "reason",
-            "--text", text, "--run-manifest", str(prepared.manifest_path),
+            "--root", str(prepared.root), "run", "--budget", "1",
+            "--run-manifest", str(prepared.manifest_path),
             "--dry-run",
         ]
     ) == 0

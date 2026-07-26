@@ -39,6 +39,34 @@ from deepreason.workflow.reducer import plan_conjecture_batch
 from deepreason.workflow.state import WorkflowProcessStateV1
 
 
+@pytest.fixture(autouse=True)
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 resume-lifecycle coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading; this
+    file's subject is the v4 continuation/resume lifecycle, which is bound
+    to shadow-mode manifests that only exist pre-v6.
+    """
+
+    from pathlib import Path
+
+    import deepreason.invariants as invariants_module
+    import deepreason.runtime.continuation as continuation_module
+    from deepreason.run_manifest import RunManifest
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(continuation_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _manifest(config: Config, policy: StopPolicy):
     control = ControlPlanePolicyV1(
         controller_version="workflow.controller.v1",

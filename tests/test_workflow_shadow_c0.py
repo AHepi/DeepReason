@@ -55,6 +55,30 @@ from deepreason.workflow.state import WorkflowProcessStateV1, state_after_transi
 STAMP = "2026-07-16T00:00:00Z"
 
 
+@pytest.fixture(autouse=True)
+def _below_public_admission(monkeypatch):
+    """Keep pre-v6 shadow-observer coverage below the public V6-only admission.
+
+    Mirrors the committed test_cli_bridge idiom: the raw V6-only loading
+    boundary has its own coverage in test_v6_only_manifest_loading, and the
+    shadow observer is explicitly disabled for schema-6 manifests, so this
+    file's subject -- the C0 diagnostic observer against the authoritative
+    legacy scheduler -- is inherently pre-v6 component coverage.
+    """
+
+    import deepreason.invariants as invariants_module
+
+    def _load(path, **_kwargs):
+        return RunManifest.model_validate_json(Path(path).read_bytes())
+
+    monkeypatch.setattr("deepreason.run_manifest.load_run_manifest", _load)
+    monkeypatch.setattr(invariants_module, "load_run_manifest", _load)
+    monkeypatch.setattr(
+        "deepreason.runtime.launch_policy.require_v6_launch_allowed",
+        lambda _subject, *, operation: None,
+    )
+
+
 def _config(
     *,
     vs_k: int = 1,
