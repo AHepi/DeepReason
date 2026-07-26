@@ -1358,7 +1358,15 @@ def _cmd_qualify(args) -> int:
                 f"maximum expected provider calls: {maximum_calls}."
             )
             print(notice, file=sys.stderr, flush=True)
-            if not args.yes and sys.stdin.isatty():
+            if not args.yes:
+                if not sys.stdin.isatty():
+                    print(
+                        "QUALIFICATION_CONFIRMATION_REQUIRED: qualification "
+                        "spends provider calls; rerun with --yes to confirm "
+                        "noninteractively. No provider calls were made.",
+                        file=sys.stderr,
+                    )
+                    return 1
                 confirmed = input("Proceed with qualification? [y/N]: ").strip().casefold()
                 if confirmed not in {"y", "yes"}:
                     print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)

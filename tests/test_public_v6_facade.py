@@ -127,12 +127,16 @@ def test_qualification_is_explicit_warns_before_fake_dispatch_and_reuses_cache(
     monkeypatch.setattr(
         "deepreason.qualification.default_qualification_executor", execute
     )
-    assert main(["qualify", "--json"]) == 0
+    assert main(["qualify", "--json"]) == 1
+    refused = capsys.readouterr()
+    assert "QUALIFICATION_CONFIRMATION_REQUIRED" in refused.err
+    assert calls == []
+    assert main(["qualify", "--yes", "--json"]) == 0
     first = json.loads(capsys.readouterr().out)
     assert first["cache_reused"] is False
     assert first["maximum_expected_provider_calls"] > 0
     assert len(calls) == 1
-    assert main(["qualify", "--json"]) == 0
+    assert main(["qualify", "--yes", "--json"]) == 0
     second = json.loads(capsys.readouterr().out)
     assert second["cache_reused"] is True
     assert second["maximum_expected_provider_calls"] == 0
@@ -148,7 +152,7 @@ def test_failed_explicit_qualification_publishes_no_reusable_cache(
         "deepreason.qualification.default_qualification_executor",
         lambda _manifest: (_ for _ in ()).throw(RuntimeError("secret provider body")),
     )
-    assert main(["qualify"]) == 1
+    assert main(["qualify", "--yes"]) == 1
     output = capsys.readouterr()
     assert "QUALIFICATION_EXECUTION_FAILED" in output.err
     assert "secret provider body" not in output.err + output.out
