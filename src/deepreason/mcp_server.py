@@ -279,7 +279,9 @@ def _validate_mcp_input(
         if maximum is not None and len(value) > int(maximum):
             raise _MCPInputSchemaError(f"{path or '/'} is too long")
         pattern = schema.get("pattern")
-        if pattern is not None and re.search(pattern, value) is None:
+        # Every advertised pattern is anchored; fullmatch also rejects the
+        # trailing-newline form that "$" alone would let through.
+        if pattern is not None and re.fullmatch(pattern, value) is None:
             raise _MCPInputSchemaError(f"{path or '/'} has an invalid format")
         return
     if expected == "integer":
