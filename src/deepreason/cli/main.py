@@ -1437,6 +1437,13 @@ def _cmd_reason_shallow(args) -> int:
         print(str(error), file=sys.stderr)
         return 1
     print(json.dumps(payload, indent=2, sort_keys=True))
+    if not payload["completed"]:
+        print(
+            "SHALLOW_ENDPOINT_FAILED: the provider endpoint failed before the "
+            "shallow run completed; the printed summary is diagnostic only",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 

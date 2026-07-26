@@ -122,9 +122,13 @@ def run_shallow_question(
         root=root,
         max_cycles=max_cycles,
     )
+    stop = str(summary.get("stop", ""))
     return {
         "schema": SHALLOW_RESULT_SCHEMA,
         "mode": "shallow",
+        # A run that died on the endpoint is a failure even when partial
+        # work was logged; callers must not read it as a shallow answer.
+        "completed": stop != "endpoint-error",
         "disclaimer": SHALLOW_DISCLAIMER,
         "run_id": run_id,
         "question_problem_id": problem_id,

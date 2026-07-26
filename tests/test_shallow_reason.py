@@ -148,6 +148,28 @@ def test_failed_qualification_points_to_shallow_fallback(
     assert "secret provider body" not in err
 
 
+def test_shallow_endpoint_failure_exits_nonzero_with_diagnostic_payload(
+    tmp_path, monkeypatch, capsys
+):
+    _configure(monkeypatch, tmp_path)
+
+    def broken_mini_run(problems, endpoint, budget, root, max_cycles):
+        return {
+            "engine_profile": "mini",
+            "stop": "endpoint-error",
+            "cycles": 1,
+            "tokens": {"total": 0, "calls": 0},
+        }
+
+    monkeypatch.setattr("minireason.loop.run", broken_mini_run, raising=True)
+    assert main(["reason", "dead endpoint?", "--shallow"]) == 1
+    output = capsys.readouterr()
+    payload = json.loads(output.out)
+    assert payload["completed"] is False
+    assert payload["summary"]["stop"] == "endpoint-error"
+    assert "SHALLOW_ENDPOINT_FAILED" in output.err
+
+
 def test_shallow_result_root_is_isolated_per_run(tmp_path, monkeypatch):
     _configure(monkeypatch, tmp_path)
     calls = []
