@@ -61,7 +61,21 @@ def _profile(endpoint: str = "http://127.0.0.1:1/v1"):
 def test_external_provider_satisfies_every_production_qualification_contract():
     manifest = qualification_subject_manifest(_profile())
     pairs = production_contract_pairs(manifest)
-    assert len(pairs) == 4
+    # The engaged public preset qualifies the complete production surface:
+    # conjecture, foreign-school criticism, and the enabled scratch contracts.
+    assert len(pairs) == 10
+    assert {pair.contract_id for pair in pairs} == {
+        "conjecturer.turn.v6",
+        "conjecturer.atomic-candidate.v1",
+        "batch-critic.v2",
+        "critic.atomic-target.v1",
+        "scratch.block.compact.v1",
+        "scratch.block.minimal.v1",
+        "scratch.link.compact.v1",
+        "scratch.link.minimal.v1",
+        "scratch.cluster-guide.compact.v1",
+        "scratch.cluster-guide.minimal.v1",
+    }
     for pair in pairs:
         for case_index in range(20):
             contract, prompt = _production_probe_contract(

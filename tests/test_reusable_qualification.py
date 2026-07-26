@@ -20,7 +20,10 @@ from deepreason.qualification import (
     resolve_completed_qualification,
 )
 from deepreason.run_manifest import compile_run_manifest
-from deepreason.v6_policy import conservative_control_plane_policy_v3
+from deepreason.v6_policy import (
+    engaged_control_plane_policy_v3,
+    engaged_criticism_policy,
+)
 
 
 def _profile(**updates):
@@ -56,7 +59,8 @@ def _manifest(
         "workload_profile": "text",
         "rubric_policy": "forbid",
         "compiled_at": compiled_at,
-        "control_plane_policy": conservative_control_plane_policy_v3(),
+        "control_plane_policy": engaged_control_plane_policy_v3(),
+        "criticism_policy": engaged_criticism_policy(profile.endpoint_id),
         "run_input_digest": run_input.run_input_digest,
     }
     values.update(compile_updates)

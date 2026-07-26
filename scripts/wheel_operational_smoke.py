@@ -1025,6 +1025,16 @@ def response_for_schema(schema: dict, prompt: str) -> dict:
                 for alias in aliases
             ]
         }
+    if title in {"ScratchBlockWireV1", "ScratchBlockMinimalWireV1"}:
+        return {"content": "A provisional advisory thought for the bounded probe."}
+    if title in {"ScratchLinkWireV1", "ScratchLinkMinimalWireV1"}:
+        return {
+            "from_handle": "SCR_001",
+            "to_handle": "SCR_002",
+            "relation_hint": "provisional rivalry",
+        }
+    if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
+        return {"working_focus": "One temporary navigation focus."}
     if title == "AtomicConjectureCandidateWireV1":
         return {
             "candidate": {
@@ -3108,12 +3118,18 @@ def main(argv: list[str] | None = None) -> int:
         notice = re.search(
             r"maximum expected provider calls: ([0-9]+)", qualified.stderr
         )
-        if notice is None or int(notice.group(1)) != 240:
+        # The engaged public preset qualifies 10 route/contract pairs (the
+        # frozen conjecture/criticism four plus six scratch contracts): the
+        # frozen maximum is 10 pairs x 20 cases x 3 provider calls, and one
+        # clean pass makes exactly 10 x 20 = 200 loopback calls.  The six
+        # scratch-pair probes carry their own bounded task text, so only the
+        # original four pairs match the "Qualification case" marker.
+        if notice is None or int(notice.group(1)) != 600:
             raise AssertionError("qualification did not announce the frozen maximum")
         counts = _provider_counts(provider_state_path)
-        if counts != {"qualification_calls": 80, "total_calls": 80}:
+        if counts != {"qualification_calls": 80, "total_calls": 200}:
             raise AssertionError(
-                "qualification did not make exactly 80 loopback calls"
+                "qualification did not make exactly 200 loopback calls"
             )
 
         stage = STAGE_READINESS

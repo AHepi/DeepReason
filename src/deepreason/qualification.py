@@ -34,8 +34,8 @@ from deepreason.cli.doctor import (
 )
 from deepreason.provider_profile import ProviderProfileV1
 from deepreason.run_manifest import RunManifest
-from deepreason.v6_policy import POLICY_PRESET_ID, conservative_policy_digest
-from deepreason.v6_policy import conservative_control_plane_policy_v3
+from deepreason.v6_policy import POLICY_PRESET_ID, engaged_policy_digest
+from deepreason.v6_policy import engaged_control_plane_policy_v3
 
 
 QUALIFICATION_CACHE_SCHEMA = "deepreason-reusable-qualification.v1"
@@ -123,7 +123,7 @@ class ReusableQualificationBundleV1(BaseModel):
     bundle_digest: str = Field(pattern=_DIGEST)
     subject_digest: str = Field(pattern=_DIGEST)
     provider_profile_digest: str = Field(pattern=_DIGEST)
-    policy_preset_id: Literal["deepreason.v6.conservative.v1"] = POLICY_PRESET_ID
+    policy_preset_id: Literal["deepreason.v6.engaged.v1"] = POLICY_PRESET_ID
     policy_preset_digest: str = Field(pattern=_DIGEST)
     pairs: tuple[ReusableQualificationPairV1, ...] = Field(min_length=1)
 
@@ -198,7 +198,7 @@ def qualification_subject_payload(
             "QUALIFICATION_V6_REQUIRED",
             "reusable production qualification accepts only RunManifest schema 6",
         )
-    if manifest.control_plane_policy != conservative_control_plane_policy_v3():
+    if manifest.control_plane_policy != engaged_control_plane_policy_v3():
         raise QualificationError(
             "QUALIFICATION_POLICY_PRESET_MISMATCH",
             "reusable qualification requires the repository-owned V6 policy preset",
@@ -218,7 +218,7 @@ def qualification_subject_payload(
         "provider_profile": profile.identity_payload(),
         "provider_profile_digest": profile.profile_digest,
         "policy_preset_id": POLICY_PRESET_ID,
-        "policy_preset_digest": conservative_policy_digest(),
+        "policy_preset_digest": engaged_policy_digest(),
         "manifest_behavior": behavior,
         "pair_inventory": pairs,
     }
@@ -408,7 +408,7 @@ def completed_bundle_from_report(
     return ReusableQualificationBundleV1.create(
         subject_digest=subject_digest,
         provider_profile_digest=profile.profile_digest,
-        policy_preset_digest=conservative_policy_digest(),
+        policy_preset_digest=engaged_policy_digest(),
         pairs=pairs,
     )
 

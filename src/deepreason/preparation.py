@@ -59,8 +59,10 @@ from deepreason.run_manifest import (
 )
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
-    conservative_control_plane_policy_v3,
-    conservative_policy_digest,
+    engaged_control_plane_policy_v3,
+    engaged_criticism_policy,
+    engaged_policy_digest,
+    engaged_scratchpad_source,
 )
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
@@ -165,7 +167,7 @@ class RunPreparationRecordV1(BaseModel):
     problem_id: str = Field(min_length=1, max_length=512)
     budget: RunBudgetIntentV1
     provider_profile_digest: str = Field(pattern=_DIGEST)
-    policy_preset_id: Literal["deepreason.v6.conservative.v1"] = POLICY_PRESET_ID
+    policy_preset_id: Literal["deepreason.v6.engaged.v1"] = POLICY_PRESET_ID
     policy_preset_digest: str = Field(pattern=_DIGEST)
     qualification_subject_digest: str = Field(pattern=_DIGEST)
     qualification_bundle_digest: str = Field(pattern=_DIGEST)
@@ -240,7 +242,7 @@ def _request_digest(
         "budget": request.budget.model_dump(mode="json", by_alias=True),
         "provider_profile_digest": profile.profile_digest,
         "policy_preset_id": POLICY_PRESET_ID,
-        "policy_preset_digest": conservative_policy_digest(),
+        "policy_preset_digest": engaged_policy_digest(),
     }
     return sha256_hex(_REQUEST_DOMAIN + canonical_json(payload))
 
@@ -250,6 +252,11 @@ def _config_for_profile(profile: ProviderProfileV1) -> Config:
     return Config(
         engine_profile="full",
         model_profile=profile.model_profile,
+        scratchpad=engaged_scratchpad_source(),
+        # The public preset keeps the semantic scratch channel on the
+        # deterministic hashing embedder: no optional neural dependency may
+        # decide public manifest identity.
+        EMBEDDER_MODEL=None,
         roles={role: dict(endpoint) for role in V3_CANONICAL_ROLES},
     )
 
@@ -302,7 +309,8 @@ def build_preparation_manifest(
         workload_profile="text",
         rubric_policy="forbid",
         compiled_at=compiled_at,
-        control_plane_policy=conservative_control_plane_policy_v3(),
+        control_plane_policy=engaged_control_plane_policy_v3(),
+        criticism_policy=engaged_criticism_policy(profile.endpoint_id),
         run_input_digest=run_input.run_input_digest,
     )
 
@@ -518,7 +526,7 @@ class RunPreparationService:
             problem_id=run_input.problem.id,
             budget=request.budget,
             provider_profile_digest=profile.profile_digest,
-            policy_preset_digest=conservative_policy_digest(),
+            policy_preset_digest=engaged_policy_digest(),
             qualification_subject_digest=subject_digest,
             qualification_bundle_digest=bundle.bundle_digest,
             qualification_report_sha256=_qualification_report_sha256(report),

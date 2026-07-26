@@ -253,6 +253,16 @@ def response_for_schema(schema: dict, _prompt: str) -> dict:
                 for alias in aliases
             ]
         }
+    if title in {"ScratchBlockWireV1", "ScratchBlockMinimalWireV1"}:
+        return {"content": "A provisional advisory thought for the bounded probe."}
+    if title in {"ScratchLinkWireV1", "ScratchLinkMinimalWireV1"}:
+        return {
+            "from_handle": "SCR_001",
+            "to_handle": "SCR_002",
+            "relation_hint": "provisional rivalry",
+        }
+    if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
+        return {"working_focus": "One temporary navigation focus."}
     if title == "AtomicConjectureCandidateWireV1":
         return {
             "candidate": {
