@@ -606,7 +606,9 @@ def test_windows_text_translation_cannot_change_terminal_json_bytes(
     )
     raw = (root / "run-result.json").read_bytes()
     expected = (
-        json.dumps(terminal, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        json.dumps(
+            terminal, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
         + b"\n"
     )
 
@@ -654,20 +656,30 @@ def test_windows_text_translation_cannot_change_terminal_json_bytes(
         },
     )
     golden = (
-        b'{"a":[true,null,3,1.25],"z":{"logical_newline":"line1\\nline2",'
-        b'"unicode":"M\\u0101ori\\u2014\\u96ea"}}\n'
-    )
+        '{"a":[true,null,3,1.25],"z":{"logical_newline":"line1\\nline2",'
+        '"unicode":"Māori—雪"}}\n'
+    ).encode("utf-8")
     representative_bytes = representative.read_bytes()
     assert representative_bytes == golden
     assert (
         hashlib.sha256(representative_bytes).hexdigest()
-        == "3d88b7505b375a2b0af1f95aae511436fda72ae8341be812fbda0729e7211c39"
+        == "cc960fc91876b5e4effb06beed4b94f76543b22707f329a4bb1bbb24b42f7845"
     )
     assert representative_bytes.count(b"\n") == 1
     assert b"line1\\nline2" in representative_bytes
     assert not representative_bytes.endswith(b"\r\n")
     assert "wb" in opened_modes
     assert all("b" in mode for mode in opened_modes)
+
+    from deepreason.runtime import terminal_authority
+
+    unicode_root = tmp_path / "unicode-root"
+    unicode_root.mkdir()
+    unicode_payload = {"error": "provider said “nope” — Māori—雪"}
+    progress_module._atomic_json(unicode_root / "run-result.json", unicode_payload)
+    raw_unicode = (unicode_root / "run-result.json").read_bytes()
+    assert raw_unicode == canonical_json(unicode_payload) + b"\n"
+    assert terminal_authority._read_current_result(unicode_root) == unicode_payload
 
 
 def test_failed_post_commit_refresh_leaves_fail_closed_recoverable_result(

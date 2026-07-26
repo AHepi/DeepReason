@@ -11,6 +11,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from deepreason.canonical import canonical_json
+
 
 def _io_path(path: Path) -> Path:
     """Return a Win32 extended path only when the ordinary path is long."""
@@ -63,10 +65,7 @@ def _atomic_json(path: Path, value: dict) -> None:
     path = Path(path)
     io_path = _io_path(path)
     io_path.parent.mkdir(parents=True, exist_ok=True)
-    payload = (
-        json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
-        + b"\n"
-    )
+    payload = canonical_json(value) + b"\n"
     descriptor, temporary_name = tempfile.mkstemp(
         dir=io_path.parent,
         prefix=".atomic.",
@@ -79,6 +78,14 @@ def _atomic_json(path: Path, value: dict) -> None:
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, io_path)
+        if os.name != "nt":
+            # Persist the rename itself; without a directory fsync a power
+            # failure can silently revert the file to its prior version.
+            directory_descriptor = os.open(io_path.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory_descriptor)
+            finally:
+                os.close(directory_descriptor)
     finally:
         if temporary.exists():
             temporary.unlink()
