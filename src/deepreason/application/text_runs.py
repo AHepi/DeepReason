@@ -300,6 +300,8 @@ class TextRunApplicationService:
 
     def __init__(self, registry: TextRunWorkerRegistry | None = None) -> None:
         self.registry = registry or TEXT_RUN_WORKERS
+        self._outstanding_cache: dict[str, tuple[tuple, OutstandingWorkResultV1]] = {}
+        self._outstanding_cache_lock = threading.Lock()
 
     def start(
         self,
@@ -381,8 +383,34 @@ class TextRunApplicationService:
         """Project replayed authority only; never rerun a reducer or scheduler."""
 
         from deepreason.harness import Harness
+        from deepreason.run_manifest import MANIFEST_NAME
 
-        harness = Harness(Path(root).resolve(), read_only=True)
+        resolved = Path(root).resolve()
+        # A full replay per status poll is O(run length) and starves the
+        # worker's own terminalization replays on slow filesystems. The log
+        # is append-only and the projection is a pure function of it, so
+        # identical durable inputs may reuse the previous projection.
+        # (Storage revalidation still happens on every input change and on
+        # every result read; a stale-input cache hit only skips re-raising
+        # for corruption introduced without any input change.)
+        def _identity(name: str) -> tuple | None:
+            try:
+                observed = (resolved / name).stat()
+            except OSError:
+                return None
+            return (observed.st_size, observed.st_mtime_ns, observed.st_ino)
+
+        key = tuple(
+            _identity(name)
+            for name in ("log.jsonl", "workflow-checkpoint.json", MANIFEST_NAME)
+        )
+        cache_id = str(resolved)
+        with self._outstanding_cache_lock:
+            cached = self._outstanding_cache.get(cache_id)
+            if cached is not None and cached[0] == key:
+                return cached[1]
+
+        harness = Harness(resolved, read_only=True)
         workflow = harness.workflow_state
         items = []
         for work_id in workflow.outstanding_work_order_ids:
@@ -454,13 +482,18 @@ class TextRunApplicationService:
                     context_expansions_limit=grant.remaining_context_expansions,
                 )
             )
-        return OutstandingWorkResultV1(
+        projection = OutstandingWorkResultV1(
             process_digest=workflow.digest,
             last_control_seq=(
                 max(workflow.event_seqs) if workflow.event_seqs else -1
             ),
             work=tuple(items),
         )
+        with self._outstanding_cache_lock:
+            while len(self._outstanding_cache) >= 16:
+                self._outstanding_cache.pop(next(iter(self._outstanding_cache)))
+            self._outstanding_cache[cache_id] = (key, projection)
+        return projection
 
     def result(self, intent: InspectTextRunIntentV1) -> TextRunTerminalResultV1:
         intent = InspectTextRunIntentV1.model_validate(intent)
@@ -484,32 +517,40 @@ class TextRunApplicationService:
                         raise ValueError(
                             "RUN_RESULT_NOT_READY: terminalization remains active"
                         )
-                    from deepreason.harness import Harness
+                # Recovery runs outside the registry lock: it replays the
+                # full event log, and holding the process-wide lock for that
+                # long serializes every start/cancel/result for every root
+                # behind one slow reader. Concurrency safety comes from the
+                # durable authority itself — the terminal-commitment lock
+                # plus the epoch-regression guard inside
+                # recover_terminal_result — which also covers workers in
+                # other processes that this registry cannot see.
+                from deepreason.harness import Harness
 
-                    recovered = recover_terminal_result(Harness(root), manifest)
-                    if recovered is not None:
-                        try:
-                            durable = json.loads(target.read_text(encoding="utf-8"))
-                        except (
-                            FileNotFoundError,
-                            OSError,
-                            UnicodeError,
-                            json.JSONDecodeError,
-                        ):
-                            durable = None
-                        if durable != recovered:
-                            _atomic_json(target, recovered)
-                    elif manifest.terminal_commitment_policy is not None:
-                        authority = derive_terminal_authority(
-                            root,
-                            manifest=manifest,
+                recovered = recover_terminal_result(Harness(root), manifest)
+                if recovered is not None:
+                    try:
+                        durable = json.loads(target.read_text(encoding="utf-8"))
+                    except (
+                        FileNotFoundError,
+                        OSError,
+                        UnicodeError,
+                        json.JSONDecodeError,
+                    ):
+                        durable = None
+                    if durable != recovered:
+                        _atomic_json(target, recovered)
+                elif manifest.terminal_commitment_policy is not None:
+                    authority = derive_terminal_authority(
+                        root,
+                        manifest=manifest,
+                    )
+                    if authority.status != "operational_abort":
+                        lifecycle = self.inspect(intent).lifecycle
+                        raise ValueError(
+                            "RUN_RESULT_NOT_READY: current terminalization is "
+                            f"{lifecycle}"
                         )
-                        if authority.status != "operational_abort":
-                            lifecycle = self.inspect(intent).lifecycle
-                            raise ValueError(
-                                "RUN_RESULT_NOT_READY: current terminalization is "
-                                f"{lifecycle}"
-                            )
         if not target.exists():
             load_run_manifest(manifest_path)
             lifecycle = self.inspect(intent).lifecycle

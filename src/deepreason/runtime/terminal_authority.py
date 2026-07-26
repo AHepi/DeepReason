@@ -1320,6 +1320,21 @@ def recover_terminal_result(harness, manifest) -> dict[str, Any] | None:
         commitment = harness.workflow_state.current_terminal_commitment
         if commitment is None:
             return None
+        if harness.workflow_state.current_terminal_epoch > commitment.terminal_epoch:
+            # A successor epoch has opened but not committed: the current
+            # commitment's publication is settled history, not an
+            # interrupted publication. Rebuilding it here would replace a
+            # valid final result with the fail-closed pending projection in
+            # the middle of a live continuation (possibly in another
+            # process). Return the settled publication untouched, or
+            # nothing so the caller reports the run as not ready.
+            settled = _read_current_result(Path(harness.root))
+            if (
+                settled is not None
+                and settled.get("terminal_commitment_ref") == commitment.id
+            ):
+                return settled
+            return None
         _seal_terminal_commitment_checkpoint(harness, manifest, commitment)
         expected, draft = _expected_terminal_result(
             harness,
