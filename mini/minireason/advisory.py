@@ -5,6 +5,17 @@ views are not reduced-engine protocols.  This facade only binds a MiniReason
 run to the parent implementation: canonical replay/storage, immutable scratch
 objects, deterministic attention, and the two-stage bridge all remain owned by
 ``deepreason``.
+
+Since the parent moved to the V6-only manifest loader, an advisory-capable
+mini root is the phase-1 minimal schema-6 mini manifest (see
+``minireason.compat``) with exactly two source policies switched on: the
+advisory scratchpad and the ``grounded_two_stage`` bridge.  Everything else —
+engine profile, the explicit minimal/disabled control plane, the constant
+process-root run input, and the deliberate omission of the transactional-only
+v6 authorities — is identical to the default mini manifest, and both are
+compiled and validated by the parent compiler so mini never grows a second
+manifest dialect.  Legacy pre-v6 advisory roots are never migrated: opening
+one fails closed in the parent loader with ``UNSUPPORTED_RUN_MANIFEST_VERSION``.
 """
 
 from __future__ import annotations
@@ -13,9 +24,22 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from deepreason.config import Config
+from deepreason.evidence import bind_run_input
 from deepreason.harness import Harness
-from deepreason.llm.firewall import EndpointLease, leases_from_manifest
-from deepreason.run_manifest import MANIFEST_NAME, RunManifest, load_run_manifest
+from deepreason.llm.firewall import (
+    EndpointLease,
+    leases_from_manifest,
+    route_from_endpoint,
+)
+from deepreason.llm.profiles import ModelProfile, ProfileSpec, get_profile
+from deepreason.run_manifest import (
+    MANIFEST_NAME,
+    RunManifest,
+    compile_run_manifest,
+    load_run_manifest,
+    persist_run_manifest,
+)
 from deepreason.scratch.attention import (
     AttentionPackV1,
     AttentionPlanner,
@@ -23,18 +47,132 @@ from deepreason.scratch.attention import (
 )
 from deepreason.scratch.service import ScratchService
 
+from minireason import compat
+
+
+# The advisory variant of the mini source policy.  Values stay as small as the
+# reduced loop honestly needs: bounded four-block packs with no cluster
+# guides, keyword/recency retrieval without a semantic embedder, and a
+# review-free two-stage bridge with the minimum one-repair schema budget.
+_ADVISORY_SCRATCHPAD_SOURCE = {
+    "enabled": True,
+    "max_blocks_per_pack": 4,
+    "max_guides_per_pack": 0,
+    "semantic_retrieval": False,
+    "coverage_slot_every_n_packs": 8,
+}
+_ADVISORY_BRIDGE_SOURCE = {
+    "mode": "grounded_two_stage",
+    "grounding_review": False,
+    "max_schema_repair_attempts": 1,
+    "max_grounding_repair_attempts": 0,
+    "output_section_limit": 4,
+}
+
 
 class MiniAdvisoryError(ValueError):
-    """A Mini run is not bound to the shared v3 advisory contract."""
+    """A Mini run is not bound to the shared advisory contract."""
 
     def __init__(self, code: str, message: str) -> None:
         self.code = code
         super().__init__(f"{code}: {message}")
 
 
+def _advisory_manifest(
+    profile: ProfileSpec,
+    lease: EndpointLease,
+    run_input_digest: str,
+) -> RunManifest:
+    """Compile the scratch/bridge-enabled variant of the mini v6 manifest.
+
+    This reuses the exact phase-1 recipe — parent compiler, mini control
+    plane, then the transactional-authority strip — and differs from
+    ``minireason.compat._new_manifest`` only in the two enabled source
+    policies and the two extra bridge roles they require.  The grounded
+    two-stage bridge needs frozen ``summarizer`` and ``thesis`` routes; mini
+    has exactly one endpoint, so every role is seated on the same route.
+    """
+
+    spec = lease.route.endpoint_spec()
+    config = Config(
+        engine_profile=compat.ENGINE_PROFILE,
+        model_profile=profile.name.value,
+        scratchpad=_ADVISORY_SCRATCHPAD_SOURCE,
+        bridge=_ADVISORY_BRIDGE_SOURCE,
+        roles={"conjecturer": spec, "summarizer": spec, "thesis": spec},
+    )
+    compiled = compile_run_manifest(
+        config,
+        engine_profile=compat.ENGINE_PROFILE,
+        model_profile=profile.name.value,
+        rubric_policy="forbid",
+        concurrency=profile.default_concurrency,
+        schema_version=compat.MINI_MANIFEST_SCHEMA_VERSION,
+        workload_profile=compat.MINI_WORKLOAD_PROFILE,
+        control_plane_policy=compat._mini_control_plane_policy(),
+        run_input_digest=run_input_digest,
+    )
+    payload = compiled.model_dump(mode="python", by_alias=False)
+    for field in compat._TRANSACTIONAL_ONLY_FIELDS:
+        payload[field] = None
+    return RunManifest.model_validate(payload)
+
+
+def bind_mini_advisory_root(
+    root: Path | str,
+    endpoint: object,
+    model_profile: str | ModelProfile | ProfileSpec = compat.DEFAULT_MODEL_PROFILE,
+) -> RunManifest:
+    """Bind (or verify) one advisory-capable v6 mini manifest on a run root.
+
+    New roots receive the constant mini process run input and then the
+    compiled schema-6 advisory variant.  Existing v6 roots are verified
+    against the requested route and profile exactly like ``bind_mini_root``
+    and must already carry the advisory policies; legacy pre-v6 roots fail
+    closed in the parent loader with ``UNSUPPORTED_RUN_MANIFEST_VERSION`` and
+    are never rewritten.
+    """
+
+    profile = get_profile(model_profile)
+    lease = EndpointLease(
+        role="conjecturer",
+        seat=0,
+        route=route_from_endpoint(endpoint),
+    )
+    root_path = Path(root)
+    path = root_path / MANIFEST_NAME
+    if path.exists():
+        manifest = load_run_manifest(path)
+        compat._verify_existing(manifest, profile, lease)
+        _require_advisory_policies(manifest)
+        return manifest
+    run_input, dossier = compat.mini_run_input()
+    bind_run_input(run_input, dossier, root_path)
+    manifest = _advisory_manifest(profile, lease, run_input.run_input_digest)
+    persist_run_manifest(manifest, root_path)
+    return manifest
+
+
+def _require_advisory_policies(manifest: RunManifest) -> None:
+    """Reject rebinding an existing root that lacks the advisory policies."""
+
+    scratch = manifest.scratch_policy
+    if scratch is None or not scratch.enabled:
+        raise MiniAdvisoryError(
+            "MINI_ADVISORY_SCRATCH_DISABLED",
+            "the bound manifest does not enable scratchpad access",
+        )
+    bridge = manifest.bridge_policy
+    if bridge is None or bridge.mode != "grounded_two_stage":
+        raise MiniAdvisoryError(
+            "MINI_ADVISORY_BRIDGE_DISABLED",
+            "the bound manifest does not enable the grounded two-stage bridge",
+        )
+
+
 @dataclass(frozen=True, slots=True)
 class MiniAdvisorySession:
-    """Thin MiniReason view over one canonical v3 run root.
+    """Thin MiniReason view over one canonical v6 mini run root.
 
     The facade deliberately has no object store, event writer, replay loader,
     ontology, validator, routing table, or repair loop of its own.  Callers may
@@ -54,7 +192,12 @@ class MiniAdvisorySession:
         *,
         read_only: bool = False,
     ) -> "MiniAdvisorySession":
-        """Open an already-bound MiniReason v3 run without migrating it."""
+        """Open an already-bound MiniReason v6 run without migrating it.
+
+        Legacy pre-v6 roots fail closed inside ``load_run_manifest`` with the
+        parent's ``UNSUPPORTED_RUN_MANIFEST_VERSION``; this facade adds no
+        bypass and never rewrites such a root.
+        """
 
         root_path = Path(root)
         if not root_path.is_dir():
@@ -62,10 +205,10 @@ class MiniAdvisorySession:
                 "MINI_ADVISORY_RUN_NOT_FOUND", "run root must already exist"
             )
         manifest = load_run_manifest(root_path / MANIFEST_NAME)
-        if manifest.schema_version != 3:
+        if manifest.schema_version != compat.MINI_MANIFEST_SCHEMA_VERSION:
             raise MiniAdvisoryError(
-                "MINI_ADVISORY_MANIFEST_V3_REQUIRED",
-                "scratch and grounded bridge access requires RunManifest v3",
+                "MINI_ADVISORY_MANIFEST_V6_REQUIRED",
+                "scratch and grounded bridge access requires RunManifest v6",
             )
         if manifest.engine_profile != "mini":
             raise MiniAdvisoryError(
@@ -245,4 +388,8 @@ class MiniAdvisorySession:
         )
 
 
-__all__ = ["MiniAdvisoryError", "MiniAdvisorySession"]
+__all__ = [
+    "MiniAdvisoryError",
+    "MiniAdvisorySession",
+    "bind_mini_advisory_root",
+]

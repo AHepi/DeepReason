@@ -1,4 +1,12 @@
-"""C12: MiniReason reuses the canonical scratch and bridge protocol."""
+"""C12: MiniReason reuses the canonical scratch and bridge protocol.
+
+The advisory session is a delegation-only facade over one bound v6 mini
+manifest that enables the scratchpad and the grounded two-stage bridge.  The
+forward-compat guarantees pinned here are protocol-level: scratch references
+stay provenance-not-evidence, attention/similarity stays retrieval-only, an
+unknown/partial bridge resolution is a valid success, and legacy pre-v6 mini
+roots fail closed in the parent loader without migration.
+"""
 
 from __future__ import annotations
 
@@ -9,79 +17,50 @@ import pytest
 from deepreason.bridge import BridgeAction, ClaimClass, RenderingMode
 from deepreason.bridge.validate import validate_bridge_output, validate_claim_ledger
 from deepreason.cli.main import main as cli_main
-from deepreason.config import Config
 from deepreason.harness import Harness
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest
 from deepreason.ontology import Problem, ProblemProvenance
-from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
+from deepreason.run_manifest import MANIFEST_NAME, RunManifestError
 from deepreason.scratch.models import ScratchProvenanceV1
-from minireason.advisory import MiniAdvisoryError, MiniAdvisorySession
-from minireason.compat import initialize
+from minireason.advisory import (
+    MiniAdvisoryError,
+    MiniAdvisorySession,
+    bind_mini_advisory_root,
+)
+from minireason.compat import bind_mini_root
 
 
-_STAMP = "2026-07-16T00:00:00Z"
 _ENDPOINT = "mock://mini-advisory"
 _MODEL = "mini-scripted"
 
 
-def _route() -> dict:
-    return {
-        "endpoint_id": "mini-scripted-seat",
-        "endpoint": _ENDPOINT,
-        "model": _MODEL,
-        "provider": "mock",
-        "family": "mini-scripted",
-        "output_mechanism": "json_text",
-    }
+def _endpoint(responses=()) -> MockEndpoint:
+    return MockEndpoint(list(responses), name=_ENDPOINT, model=_MODEL)
 
 
-def _manifest(*, scratch: bool = True, grounded: bool = True):
-    roles = {"summarizer": _route(), "thesis": _route()} if grounded else {}
-    return compile_run_manifest(
-        Config(
-            engine_profile="mini",
-            model_profile="compact",
-            scratchpad={
-                "enabled": scratch,
-                "max_blocks_per_pack": 4,
-                "max_guides_per_pack": 0,
-                "semantic_retrieval": False,
-                "coverage_slot_every_n_packs": 8,
-            },
-            bridge={
-                "mode": "grounded_two_stage" if grounded else "legacy_thesis",
-                "grounding_review": False,
-                "max_schema_repair_attempts": 1,
-                "max_grounding_repair_attempts": 0,
-                "output_section_limit": 4,
-            },
-            roles=roles,
-        ),
-        schema_version=3,
-        workload_profile="text",
-        rubric_policy="forbid",
-        compiled_at=_STAMP,
-    )
-
-
-def _bound_session(tmp_path, **manifest_options) -> MiniAdvisorySession:
-    root = tmp_path / "mini-v3-run"
+def _bound_session(tmp_path) -> MiniAdvisorySession:
+    root = tmp_path / "mini-v6-run"
     root.mkdir()
-    bind_run_manifest(_manifest(**manifest_options), root)
+    bind_mini_advisory_root(root, _endpoint())
     return MiniAdvisorySession.open(root)
 
 
 def _adapter(session: MiniAdvisorySession, *, blob_store=None) -> LLMAdapter:
+    # The manifest's V3 control plane selects the namespaced v2/v3 stage-A
+    # wire dialect: catalog scratch items are SCR_* handles and entry keys are
+    # CLM_*.  Scratch remains provenance-only in every dialect, so the first
+    # scripted attempt (a "fact" grounded only in scratch) must fail wire
+    # validation and be repaired into an honest unknown.
     scratch_fact = json.dumps(
         {
             "entries": [
                 {
-                    "entry_key": "K1",
+                    "entry_key": "CLM_1",
                     "claim_class": "source_fact",
                     "claim": "The scratch idea is an established fact.",
-                    "scratch_handles": ["B1"],
+                    "scratch_handles": ["SCR_1"],
                 }
             ]
         }
@@ -90,28 +69,29 @@ def _adapter(session: MiniAdvisorySession, *, blob_store=None) -> LLMAdapter:
         {
             "entries": [
                 {
-                    "entry_key": "K1",
+                    "entry_key": "CLM_1",
                     "claim_class": "unknown",
                     "claim": "The requested conclusion is not established.",
-                    "scratch_handles": ["B1"],
+                    "scratch_handles": ["SCR_1"],
                 }
             ],
             "uncovered_requirements": [
                 {
                     "requirement": "Grounded evidence for the requested conclusion.",
                     "reason": "Scratch provenance is advisory, not evidence.",
-                    "scratch_handles": ["B1"],
+                    "scratch_handles": ["SCR_1"],
                 }
             ],
         }
     )
+    # The v2 composition dialect never lets the model author rendering_mode;
+    # the compiler derives the weakest mode from the referenced ledger entry.
     unresolved_output = json.dumps(
         {
             "sections": [
                 {
                     "span_id": "S1",
                     "text": "The requested conclusion remains unknown.",
-                    "rendering_mode": "unknown",
                     "ledger_entry_handles": ["E1"],
                 }
             ],
@@ -121,12 +101,8 @@ def _adapter(session: MiniAdvisorySession, *, blob_store=None) -> LLMAdapter:
     )
     return LLMAdapter(
         {
-            "summarizer": MockEndpoint(
-                [scratch_fact, safe_unknown], name=_ENDPOINT, model=_MODEL
-            ),
-            "thesis": MockEndpoint(
-                [unresolved_output], name=_ENDPOINT, model=_MODEL
-            ),
+            "summarizer": _endpoint([scratch_fact, safe_unknown]),
+            "thesis": _endpoint([unresolved_output]),
         },
         blob_store or session.harness.blobs,
         retry_max=1,
@@ -144,10 +120,12 @@ def _files(root):
     }
 
 
-def test_mini_v3_scratch_bridge_replays_in_full_harness_without_migration(
+def test_mini_v6_scratch_bridge_replays_in_full_harness_without_migration(
     tmp_path, capsys
 ):
     session = _bound_session(tmp_path)
+    assert session.manifest.schema_version == 6
+    assert session.manifest.engine_profile == "mini"
     session.harness.register_problem(
         Problem(
             id="problem-mini-advisory",
@@ -248,8 +226,8 @@ def test_advisory_facade_rejects_unbound_routes_and_blob_stores(tmp_path):
     before_seq = session.harness._next_seq
     unbound = LLMAdapter(
         {
-            "summarizer": MockEndpoint([], name=_ENDPOINT, model=_MODEL),
-            "thesis": MockEndpoint([], name=_ENDPOINT, model=_MODEL),
+            "summarizer": MockEndpoint([], name="mock://elsewhere", model="other"),
+            "thesis": MockEndpoint([], name="mock://elsewhere", model="other"),
         },
         session.harness.blobs,
         retry_max=1,
@@ -299,8 +277,16 @@ def test_advisory_facade_rejects_unbound_routes_and_blob_stores(tmp_path):
     assert session.harness._next_seq == before_seq
 
 
-def test_v3_feature_policies_are_enforced_at_the_feature_boundary(tmp_path):
-    session = _bound_session(tmp_path, scratch=False, grounded=False)
+def test_feature_policies_are_enforced_at_the_feature_boundary(tmp_path):
+    """The phase-1 default mini manifest keeps scratch and bridge switched off."""
+
+    root = tmp_path / "mini-v6-default"
+    manifest = bind_mini_root(root, _endpoint())
+    assert manifest.scratch_policy is not None
+    assert not manifest.scratch_policy.enabled
+    assert manifest.bridge_policy is not None
+    assert manifest.bridge_policy.mode != "grounded_two_stage"
+    session = MiniAdvisorySession.open(root)
 
     with pytest.raises(MiniAdvisoryError, match="MINI_ADVISORY_SCRATCH_DISABLED"):
         _ = session.scratch
@@ -315,18 +301,36 @@ def test_v3_feature_policies_are_enforced_at_the_feature_boundary(tmp_path):
     with pytest.raises(MiniAdvisoryError, match="MINI_ADVISORY_BRIDGE_DISABLED"):
         session.build_bridge("missing", "answer", stage_a_adapter=object())
 
+    # The advisory binder never upgrades an existing default root in place.
+    tracked = _files(root)
+    with pytest.raises(MiniAdvisoryError, match="MINI_ADVISORY_SCRATCH_DISABLED"):
+        bind_mini_advisory_root(root, _endpoint())
+    assert _files(root) == tracked
 
-def test_legacy_mini_manifest_remains_v1_and_is_not_migrated(tmp_path):
+
+def test_legacy_pre_v6_advisory_root_fails_closed_without_migration(tmp_path):
+    """A historical v3 advisory root is rejected by the loader, not adapted."""
+
     root = tmp_path / "legacy-mini"
-    kernel = initialize(
-        root,
-        MockEndpoint([], name="mock://legacy-mini", model="legacy-mini"),
+    root.mkdir()
+    (root / MANIFEST_NAME).write_text(
+        json.dumps(
+            {
+                "schema_version": 3,
+                "engine_profile": "mini",
+                "roles": {"summarizer": [], "thesis": []},
+            }
+        ),
+        encoding="utf-8",
     )
     tracked = _files(root)
 
-    assert kernel.manifest.schema_version == 1
-    with pytest.raises(
-        MiniAdvisoryError, match="MINI_ADVISORY_MANIFEST_V3_REQUIRED"
-    ):
+    with pytest.raises(RunManifestError) as raised:
         MiniAdvisorySession.open(root)
+    assert raised.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
+    assert not isinstance(raised.value, MiniAdvisoryError)
+
+    with pytest.raises(RunManifestError) as rebound:
+        bind_mini_advisory_root(root, _endpoint())
+    assert rebound.value.code == "UNSUPPORTED_RUN_MANIFEST_VERSION"
     assert _files(root) == tracked
