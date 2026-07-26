@@ -119,6 +119,10 @@ class DependencyRequest(BaseModel):
         tail = value[1:] if value.startswith("@") else value
         if "@" in tail or any(c in value for c in "*^~<>= "):
             raise ValueError("dependency requests name packages but never versions or ranges")
+        # The npm name grammar also keeps a leading "-" out of npm's argv,
+        # where it would parse as a flag rather than a package.
+        if not re.fullmatch(r"(@[a-z0-9][a-z0-9-._~]*/)?[a-z0-9][a-z0-9-._~]*", value):
+            raise ValueError("dependency requests name packages by the npm name grammar")
         return value
 
     @model_validator(mode="after")

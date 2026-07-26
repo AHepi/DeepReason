@@ -336,7 +336,7 @@ def load_credentials() -> int:
     """Inject stored keys into the environment (existing variables win).
     Returns how many were loaded. Safe to call when nothing is stored."""
     path = credentials_path()
-    if not path.exists():
+    if not path.is_file() or path.is_symlink():
         return 0
     loaded = 0
     for line in path.read_text().splitlines():
@@ -359,8 +359,14 @@ def save_credential(name: str, key: str) -> Path:
         lines = [ln for ln in path.read_text().splitlines()
                  if ln.strip() and not ln.startswith(f"{name}=")]
     lines.append(f"{name}={key}")
-    path.write_text("\n".join(lines) + "\n")
-    path.chmod(stat.S_IRUSR | stat.S_IWUSR)  # 0600
+    # Create owner-only before any key bytes exist; write_text-then-chmod
+    # leaves a umask-default window on first creation.
+    descriptor = os.open(
+        path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, stat.S_IRUSR | stat.S_IWUSR
+    )
+    with os.fdopen(descriptor, "w") as stream:
+        stream.write("\n".join(lines) + "\n")
+    path.chmod(stat.S_IRUSR | stat.S_IWUSR)  # tighten pre-existing files too
     return path
 
 

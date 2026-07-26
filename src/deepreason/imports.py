@@ -256,14 +256,37 @@ class ImportService:
         return requests
 
     def _run(self, argv: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
-        env = {
-            **os.environ,
+        # Allowlist like every other subprocess site: the npm child must not
+        # inherit provider credentials, whose env names are profile-defined.
+        keep = (
+            "PATH",
+            "PATHEXT",
+            "SYSTEMROOT",
+            "WINDIR",
+            "COMSPEC",
+            "TEMP",
+            "TMP",
+            "TMPDIR",
+            "LANG",
+            "LC_ALL",
+            "HTTP_PROXY",
+            "HTTPS_PROXY",
+            "NO_PROXY",
+            "http_proxy",
+            "https_proxy",
+            "no_proxy",
+            "SSL_CERT_FILE",
+            "SSL_CERT_DIR",
+            "NODE_EXTRA_CA_CERTS",
+        )
+        env = {key: os.environ[key] for key in keep if key in os.environ}
+        env.update({
             "HOME": str(cwd),
             "npm_config_cache": str(cwd / ".npm-cache"),
             "npm_config_ignore_scripts": "true",
             "npm_config_audit": "false",
             "npm_config_fund": "false",
-        }
+        })
         try:
             return subprocess.run(
                 argv, cwd=cwd, env=env, text=True, capture_output=True,
