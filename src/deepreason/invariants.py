@@ -33,6 +33,12 @@ class ExpectedCallOutcome(str, Enum):
 
     SUCCESS_REQUIRED = "success_required"
     FAILURE_REQUIRED = "failure_required"
+    # A separately authorized v6 patch-repair step dispatches under the patch
+    # wire contract, so its final attempt may parse valid while the durable
+    # semantic admission still rejects the applied result.  The classification
+    # is granted only from the exact durable chain (preparation payload +
+    # admission diagnostics + typed terminal), never from the call event.
+    SEMANTIC_REJECTION = "semantic_rejection"
     LEGACY_DROPPED = "legacy_dropped"
 
 
@@ -112,6 +118,7 @@ def _expected_call_outcome(
     event,
     legacy_failure_call_seqs: set[int],
     workflow_failure_call_seqs: set[int],
+    semantic_rejection_call_seqs: set[int] = frozenset(),
 ) -> ExpectedCallOutcome:
     if (
         event.seq in legacy_failure_call_seqs
@@ -119,6 +126,8 @@ def _expected_call_outcome(
         or _is_typed_bridge_failure(event)
     ):
         return ExpectedCallOutcome.FAILURE_REQUIRED
+    if event.seq in semantic_rejection_call_seqs:
+        return ExpectedCallOutcome.SEMANTIC_REJECTION
     if any(
         value == "dropped-call"
         or value.endswith("-dropped")
@@ -160,6 +169,7 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
         "provider_events_by_seq": {},
         "transition_by_id": {},
         "failure_call_seqs": set(),
+        "semantic_rejection_call_seqs": set(),
     }
     manifest_path = Path(root) / MANIFEST_NAME
     try:
@@ -171,12 +181,16 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
 
     from deepreason.log.event_log import EventLog
     from deepreason.storage.objects import ObjectStore
+    from deepreason.workflow.models import WorkflowTaskKind
     from deepreason.workflow.transaction import (
+        ContractDecompositionCompletionV1,
+        ContractDecompositionTransitionV1,
         DispatchAuthorizationBundleV1,
         ProviderAttemptV1,
         SemanticAdmissionV1,
         WorkLifecycleTransitionV1,
         WorkPreparationV1,
+        WorkTerminalV1,
         WorkTransitionKind,
     )
 
@@ -192,15 +206,43 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
     authorization_owner: dict[str, str] = {}
     attempt_owner: dict[str, tuple[str, int]] = {}
     admissions: dict[tuple[str, int], list[SemanticAdmissionV1]] = {}
+    terminals: dict[tuple[str, int], WorkTerminalV1] = {}
     provider_rows: dict[int, dict] = {}
+    decomposition_transitions: dict[str, ContractDecompositionTransitionV1] = {}
+    decomposition_completions: list[ContractDecompositionCompletionV1] = []
 
     transaction_actions = {"work_transition", "provider_result"}
+    decomposition_actions = {
+        "contract_decomposition_activated": (
+            "workflow-contract-decomposition-transition-v1",
+            ContractDecompositionTransitionV1,
+        ),
+        "contract_decomposition_completed": (
+            "workflow-contract-decomposition-completion-v1",
+            ContractDecompositionCompletionV1,
+        ),
+    }
     for event in events:
         payload = getattr(event, "control", None)
-        if (
-            getattr(payload, "schema_", None) != "control.event.v3"
-            or getattr(payload, "action", None) not in transaction_actions
-        ):
+        if getattr(payload, "schema_", None) != "control.event.v3":
+            continue
+        action = getattr(payload, "action", None)
+        if action in decomposition_actions:
+            expected_schema, expected_type = decomposition_actions[action]
+            try:
+                record_schema, record = objects.get(payload.decision_ref)
+            except Exception:  # noqa: BLE001, S112 - a corrupt record is replay's finding; absence keeps merges failing closed
+                continue
+            if record_schema != expected_schema or not isinstance(
+                record, expected_type
+            ):
+                continue
+            if action == "contract_decomposition_activated":
+                decomposition_transitions[record.id] = record
+            else:
+                decomposition_completions.append(record)
+            continue
+        if action not in transaction_actions:
             continue
         try:
             transition_schema, transition = objects.get(payload.decision_ref)
@@ -308,6 +350,12 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
                 admissions.setdefault(
                     (transition.work_id, transition.attempt_index), []
                 ).append(record)
+            elif schema == "workflow-work-terminal-v1" and isinstance(
+                record, WorkTerminalV1
+            ):
+                terminals.setdefault(
+                    (transition.work_id, transition.attempt_index), record
+                )
 
         if transition.transition_kind == WorkTransitionKind.PROVIDER_RESULT:
             provider_attempts = [
@@ -452,6 +500,82 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
     # Associate each formal Conj event with the exact provider attempt and the
     # later admission that made its output durable.  The source event may be
     # separated by arbitrary intervening records.
+    def _decomposition_merge_admits(event, source_seq: int, row: dict) -> bool:
+        """Accept a Conj event only through an exact durable decomposition.
+
+        A contract decomposition replaces one schema-exhausted work item with
+        independently transacted atomic children.  Their admitted outputs are
+        merged by one formal Conj event whose durable marker names the LATEST
+        child provider call (the same join the replay validator enforces).
+        This is honored only when the whole chain is durable: the activation
+        transition, each child's ``contract-decomposition-child.v1``
+        preparation bound to that transition, each output admitted by its own
+        child's provider attempt, and the merge completion receipt listing
+        exactly those children and admissions.
+        """
+
+        candidates = [
+            completion
+            for completion in decomposition_completions
+            if row["work_id"] in completion.child_work_ids
+        ]
+        if len(candidates) != 1:
+            return False
+        completion = candidates[0]
+        transition = decomposition_transitions.get(completion.transition_ref)
+        if (
+            transition is None
+            or completion.source_work_id != transition.source_work_id
+            or transition.child_partition != "conjecture_candidate_slot"
+            or len(completion.child_work_ids) > len(transition.child_keys)
+        ):
+            return False
+        child_rows: list[tuple[int, dict]] = []
+        for index, child_work_id in enumerate(completion.child_work_ids):
+            preparation = preparations.get(child_work_id)
+            child_payload = (
+                preparation.task_payload_value if preparation is not None else None
+            )
+            if (
+                preparation is None
+                or not hasattr(child_payload, "get")
+                or child_payload.get("schema") != "contract-decomposition-child.v1"
+                or child_payload.get("decomposition_transition_ref") != transition.id
+            ):
+                return False
+            child_row = next(
+                (
+                    (seq, value)
+                    for seq, value in provider_rows.items()
+                    if value["work_id"] == child_work_id
+                ),
+                None,
+            )
+            if child_row is None:
+                return False
+            child_rows.append(child_row)
+            child_key = (child_work_id, child_row[1]["attempt_index"])
+            admission = next(
+                (
+                    value
+                    for value in admissions.get(child_key, ())
+                    if value.id == completion.child_semantic_admission_refs[index]
+                    and value.provider_attempt_ref == child_row[1]["attempt"].id
+                    and value.outcome == "admitted"
+                ),
+                None,
+            )
+            if admission is None:
+                return False
+        if source_seq != max(seq for seq, _value in child_rows):
+            return False
+        # The children admit candidate objects; the merge receipt is the
+        # durable authority naming the formal artifacts those candidates
+        # became.  Replay separately proves admitted_effect_refs equal the
+        # outputs of the exact marker-bearing events.
+        outputs = set(event.outputs)
+        return bool(outputs) and outputs <= set(completion.admitted_effect_refs)
+
     source_users: dict[int, int] = {}
     admitted_owners: dict[str, set[tuple[str, int]]] = {}
     for key, values in admissions.items():
@@ -503,7 +627,9 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
             if admission.provider_attempt_ref == row["attempt"].id
             and set(event.outputs).issubset(set(admission.admitted_refs))
         ]
-        if len(matching_admissions) != 1:
+        if len(matching_admissions) != 1 and not _decomposition_merge_admits(
+            event, source_seq, row
+        ):
             owners = {
                 owner
                 for output in event.outputs
@@ -575,6 +701,40 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
                 f"event seq={source_seq}: provider route differs from prepared route-seat lease",
             )
 
+    def _is_patch_repair_semantic_rejection(row: dict, admission) -> bool:
+        """Prove from durable records that a wire-valid attempt was rejected.
+
+        A separately authorized patch-repair step dispatches under the patch
+        wire contract, so its raw response can parse valid while applying the
+        patch still fails the parent contract.  Only the exact durable chain
+        authorizes this shape: the work item is a ``repair.semantic-task.v1``
+        patch preparation bound to a durable parent work item, the rejecting
+        admission carries its diagnostics, and the typed terminal binds this
+        exact provider attempt / admission pair.
+        """
+
+        preparation = preparations.get(row["work_id"])
+        terminal = terminals.get((row["work_id"], row["attempt_index"]))
+        if preparation is None or terminal is None:
+            return False
+        payload = preparation.task_payload_value
+        if not hasattr(payload, "get"):
+            return False
+        parent_work_id = payload.get("parent_work_id")
+        return bool(
+            preparation.task_kind == WorkflowTaskKind.REPAIR
+            and payload.get("schema") == "repair.semantic-task.v1"
+            and payload.get("mode") == "patch"
+            and isinstance(parent_work_id, str)
+            and parent_work_id in preparations
+            and parent_work_id != row["work_id"]
+            and admission.outcome in {"rejected", "schema_exhausted"}
+            and admission.diagnostic_refs
+            and terminal.status in {"rejected", "schema_exhausted"}
+            and terminal.provider_attempt_ref == row["attempt"].id
+            and terminal.semantic_admission_ref == admission.id
+        )
+
     for source_seq, row in provider_rows.items():
         key = (row["work_id"], row["attempt_index"])
         admission = next(
@@ -585,10 +745,13 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
             ),
             None,
         )
-        if row["attempt"].outcome == "transport_failure" or (
-            admission is not None and admission.outcome != "admitted"
-        ):
+        if row["attempt"].outcome == "transport_failure":
             context["failure_call_seqs"].add(source_seq)
+        elif admission is not None and admission.outcome != "admitted":
+            if _is_patch_repair_semantic_rejection(row, admission):
+                context["semantic_rejection_call_seqs"].add(source_seq)
+            else:
+                context["failure_call_seqs"].add(source_seq)
     context["provider_events_by_seq"] = {
         seq: row["event"] for seq, row in provider_rows.items()
     }
@@ -642,6 +805,15 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         in {"repair_exhausted", "transport_failed"}
     }
     workflow_failure_call_seqs.update(controller_v3["failure_call_seqs"])
+    # A durable semantic rejection of a wire-valid patch-repair attempt is
+    # weaker than any independent failure evidence: a seq required to fail by
+    # a proposal receipt or legacy chain stays FAILURE_REQUIRED.
+    semantic_rejection_call_seqs = {
+        seq
+        for seq in controller_v3["semantic_rejection_call_seqs"]
+        if seq not in workflow_failure_call_seqs
+        and seq not in legacy_failure_call_seqs
+    }
 
     # Process metadata is replay/audit input only.  Its checks never inspect
     # or alter att, dep, status, warrants, guards, or acceptance.
@@ -2966,6 +3138,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             e,
             legacy_failure_call_seqs,
             workflow_failure_call_seqs,
+            semantic_rejection_call_seqs,
         )
         if trace:
             profile_stats["traced_calls"] += 1
@@ -3017,6 +3190,15 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "attempt-validity",
                     f"event seq={e.seq}: failed call must contain no valid "
                     f"attempt, got {valid_indexes}",
+                )
+            elif (
+                expected_outcome == ExpectedCallOutcome.SEMANTIC_REJECTION
+                and valid_indexes not in ([], [len(trace) - 1])
+            ):
+                fail(
+                    "attempt-validity",
+                    f"event seq={e.seq}: semantically rejected call may carry "
+                    f"at most one final wire-valid attempt, got {valid_indexes}",
                 )
             elif (
                 expected_outcome == ExpectedCallOutcome.SUCCESS_REQUIRED
