@@ -40,6 +40,12 @@ class BridgeOperationStatusV1(BaseModel):
         max_length=128,
         pattern=r"^[A-Za-z_][A-Za-z0-9_.]{0,127}$",
     )
+    error_detail: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=256,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9 _.,:;'()\[\]/=-]{0,255}$",
+    )
     non_epistemic: Literal[True] = True
 
     @model_validator(mode="after")
@@ -69,6 +75,12 @@ class BridgeOperationResultV1(BaseModel):
         min_length=1,
         max_length=128,
         pattern=r"^[A-Za-z_][A-Za-z0-9_.]{0,127}$",
+    )
+    error_detail: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=256,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9 _.,:;'()\[\]/=-]{0,255}$",
     )
     non_epistemic: Literal[True] = True
 
@@ -151,8 +163,31 @@ def write_running(root: Path | str, manifest_sha256: str) -> None:
     _safe_remove(result_path)
 
 
+def _sanitized_detail(detail: str | None) -> str | None:
+    """Bound one worker error message to a single sanitized detail line.
+
+    The detail is process diagnostics, never evidence: only the first line
+    survives, restricted to a fixed benign character set, so provider text,
+    paths outside the run, or credential material cannot ride along.
+    """
+
+    if detail is None:
+        return None
+    first_line = str(detail).strip().splitlines()[0:1]
+    if not first_line:
+        return None
+    cleaned = re.sub(r"[^A-Za-z0-9 _.,:;'()\[\]/=-]", "_", first_line[0])
+    cleaned = cleaned.strip("_ ")[:256].rstrip()
+    if not cleaned or not re.match(r"^[A-Za-z0-9]", cleaned):
+        return None
+    return cleaned
+
+
 def write_failure(
-    root: Path | str, manifest_sha256: str, error_type: str
+    root: Path | str,
+    manifest_sha256: str,
+    error_type: str,
+    detail: str | None = None,
 ) -> BridgeOperationResultV1:
     candidate = str(error_type)[:128]
     bounded_type = (
@@ -160,6 +195,7 @@ def write_failure(
         if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.]{0,127}", candidate)
         else "WorkerFailure"
     )
+    bounded_detail = _sanitized_detail(detail)
     status_path = _path(root, BRIDGE_OPERATION_STATUS_NAME)
     result_path = _path(root, BRIDGE_OPERATION_RESULT_NAME)
     _ensure_write_target(status_path)
@@ -167,6 +203,7 @@ def write_failure(
     result = BridgeOperationResultV1(
         manifest_sha256=manifest_sha256,
         error_type=bounded_type,
+        error_detail=bounded_detail,
     )
     status = BridgeOperationStatusV1(
         state="failed",
@@ -174,6 +211,7 @@ def write_failure(
         process_status="failure",
         error_code="BRIDGE_WORKER_FAILED",
         error_type=bounded_type,
+        error_detail=bounded_detail,
     )
     # Publish the result first; a visible failed status always has its result.
     _atomic_json(

@@ -46,13 +46,37 @@ class CompositionContractError(ValueError):
     ``repair_scope`` only as inert validation metadata.  Giving it the exact
     wire field prevents a parseable repair from reopening the surrounding
     section, resolution, evidence handles, or any other semantic content.
+
+    A constraint that couples two fields of one section (a process
+    observation must be the span's only entry AND its text must reproduce
+    the harness-authored statement byte-identically) cannot converge under
+    a single-leaf grant: repairing one field deterministically produces the
+    other field's violation, and the patch turn no longer sees the ledger
+    claims.  Such raises carry ``authorized_pointers`` bounding the repair
+    to the one violating section, plus ``instruction``/``allowed_detail``
+    giving the exact harness-authored bytes a legal repair needs.
     """
 
     code = "BRIDGE_COMPOSITION_INVALID"
 
-    def __init__(self, *, pointer: str, message: str) -> None:
+    def __init__(
+        self,
+        *,
+        pointer: str,
+        message: str,
+        authorized_pointers: tuple[str, ...] = (),
+        instruction: str | None = None,
+        allowed_detail: str | None = None,
+    ) -> None:
         self.pointer = pointer
-        self.repair_scope = pointer
+        self.authorized_pointers = tuple(authorized_pointers)
+        self.repair_scope = (
+            self.authorized_pointers[0]
+            if len(self.authorized_pointers) == 1
+            else pointer
+        )
+        self.instruction = instruction
+        self.allowed_detail = allowed_detail
         super().__init__(message)
 
 
@@ -452,6 +476,29 @@ class BridgeCompositionWireContract(WireContract[CompositionDraftV1]):
         return CompositionDraftV1(output=output)
 
 
+_MAX_ALLOWED_DETAIL = 1_900
+
+
+def _exact_statement_detail(handles, process_entries) -> str:
+    """Bounded exact-byte guidance a later repair turn cannot reconstruct.
+
+    Patch turns see only the invalid baseline and the diagnostic envelope,
+    never the original ledger pack, so the exact harness-authored statement
+    must ride in the diagnostic for a byte-identical repair to be possible.
+    """
+
+    parts: list[str] = []
+    used = 0
+    for handle, entry in zip(handles, process_entries, strict=True):
+        piece = f"exact standalone text for {handle}: {entry.claim}"
+        if parts and used + len(piece) + 3 > _MAX_ALLOWED_DETAIL:
+            parts.append(f"(+{len(process_entries) - len(parts)} more not shown)")
+            break
+        parts.append(piece[:_MAX_ALLOWED_DETAIL])
+        used += len(parts[-1]) + 3
+    return " | ".join(parts)
+
+
 _RENDERING_PRECEDENCE = (
     RenderingMode.CONFLICT,
     RenderingMode.UNKNOWN,
@@ -552,11 +599,31 @@ class BridgeCompositionWireContractV2(BridgeCompositionWireContract):
                 if entries[entry_id].process_observation_refs
             ]
             if process_entries:
+                process_handles = [
+                    handle
+                    for handle, entry_id in zip(
+                        section.ledger_entry_handles, entry_ids, strict=True
+                    )
+                    if entries[entry_id].process_observation_refs
+                ]
                 if len(entry_ids) != 1 or len(process_entries) != 1:
                     raise CompositionContractError(
                         pointer=f"/sections/{index}/ledger_entry_handles",
                         message=(
                             "process observations must occupy an exact, standalone span"
+                        ),
+                        authorized_pointers=(f"/sections/{index}",),
+                        instruction=(
+                            "Replace this whole section object in one patch: "
+                            "either keep only handles that are not process "
+                            "observations with your own text, or cite exactly "
+                            "one process-observation handle with text "
+                            "byte-identical to its harness-authored claim "
+                            "(exact text in allowed). Process observations may "
+                            "also move to unresolved_items."
+                        ),
+                        allowed_detail=_exact_statement_detail(
+                            process_handles, process_entries
                         ),
                     )
                 if section.text != process_entries[0].claim:
@@ -565,6 +632,19 @@ class BridgeCompositionWireContractV2(BridgeCompositionWireContract):
                         message=(
                             "process-observation spans must reproduce the exact "
                             "harness-authored status statement"
+                        ),
+                        authorized_pointers=(
+                            f"/sections/{index}/ledger_entry_handles",
+                            f"/sections/{index}/text",
+                        ),
+                        instruction=(
+                            "Replace text with the exact harness-authored claim "
+                            "shown in allowed, byte-identical, adding nothing, or "
+                            "replace ledger_entry_handles to drop the "
+                            "process-observation entry."
+                        ),
+                        allowed_detail=_exact_statement_detail(
+                            process_handles[:1], process_entries[:1]
                         ),
                     )
             sections.append(
@@ -642,19 +722,20 @@ def _composition_pack(
     reverse = {canonical: alias for alias, canonical in aliases.aliases.items()}
     entries = []
     for alias, entry in zip(aliases.aliases, ledger.entries, strict=True):
-        entries.append(
-            {
-                "handle": alias,
-                "class": entry.claim_class.value,
-                "claim": entry.claim,
-                "qualification": entry.qualification,
-                "premise_handles": [
-                    reverse[premise]
-                    for premise in entry.premise_refs or []
-                    if premise in reverse
-                ],
-            }
-        )
+        item = {
+            "handle": alias,
+            "class": entry.claim_class.value,
+            "claim": entry.claim,
+            "qualification": entry.qualification,
+            "premise_handles": [
+                reverse[premise]
+                for premise in entry.premise_refs or []
+                if premise in reverse
+            ],
+        }
+        if contract_version == "v2" and entry.process_observation_refs:
+            item["process_observation"] = True
+        entries.append(item)
     uncovered = [
         {"requirement": item.requirement, "reason": item.reason}
         for item in ledger.uncovered_requirements or []
@@ -678,8 +759,12 @@ def _composition_pack(
     if contract_version == "v2":
         rules += (
             " Do not author rendering_mode; the compiler derives the weakest mode "
-            "from every referenced ledger class. Process observations may be used "
-            "only as an exact standalone status statement."
+            "from every referenced ledger class. Entries marked "
+            "process_observation are harness-authored status statements: cite "
+            "one only as a standalone span whose text is byte-identical to its "
+            "claim, or from unresolved_items. Never group several "
+            "process_observation entries into one span, mix them with other "
+            "handles, or reword, summarize, or list their claims."
         )
     return rules + "\n\n" + json.dumps(payload, sort_keys=True, ensure_ascii=False)
 

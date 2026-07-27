@@ -931,14 +931,24 @@ def diagnostic_from_error(
         child_schema = (
             schema_at_pointer(schema, repair_scope) if repair_scope else schema
         )
+        allowed = "valid bridge rendering for the bound claim class"
+        allowed_detail = getattr(error, "allowed_detail", None)
+        if isinstance(allowed_detail, str) and allowed_detail.strip():
+            allowed = f"{allowed_detail}; {allowed}"[:2_048]
+        instruction = getattr(error, "instruction", None)
         return RepairDiagnostic(
             contract=contract,
             path=pointer,
             error=str(error)[:300],
             received=None,
-            allowed="valid bridge rendering for the bound claim class",
+            allowed=allowed,
             repair_scope=repair_scope,
             skeleton=minimal_skeleton(child_schema, schema),
+            instruction=(
+                instruction[:500]
+                if isinstance(instruction, str) and instruction.strip()
+                else None
+            ),
         )
     reference_code = getattr(error, "code", "")
     if reference_code in {
@@ -1156,15 +1166,24 @@ def diagnostic_envelope_from_error(
                     "valid repair; do not invent handles."
                 )
             handle_fields["instruction"] = instruction
+        explicit_instruction = getattr(error, "instruction", None)
+        if isinstance(explicit_instruction, str) and explicit_instruction.strip():
+            handle_fields["instruction"] = explicit_instruction[:500]
+        allowed = "; ".join(
+            filter(None, (_allowed_at_pointer(schema, item) for item in pointers))
+        )
+        allowed_detail = getattr(error, "allowed_detail", None)
+        if isinstance(allowed_detail, str) and allowed_detail.strip():
+            allowed = (
+                f"{allowed_detail}; {allowed}" if allowed else allowed_detail
+            )[:2_048]
         diagnostics.append(
             RepairDiagnosticV2(
                 path=pointer,
                 code=str(getattr(error, "code", "validation_error"))[:128],
                 message=(str(error).strip() or "contract validation failed")[:500],
                 received=None,
-                allowed="; ".join(
-                    filter(None, (_allowed_at_pointer(schema, item) for item in pointers))
-                ),
+                allowed=allowed,
                 **handle_fields,
             )
         )

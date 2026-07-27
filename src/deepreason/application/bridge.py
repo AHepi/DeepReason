@@ -1701,7 +1701,12 @@ class GroundedBridgeApplicationService:
                 except (Exception, SystemExit) as error:
                     from deepreason.bridge.operations import write_failure
 
-                    write_failure(root, manifest.sha256, type(error).__name__)
+                    write_failure(
+                        root,
+                        manifest.sha256,
+                        type(error).__name__,
+                        detail=str(error),
+                    )
                 else:
                     from deepreason.bridge.operations import clear
 
@@ -1729,7 +1734,12 @@ class GroundedBridgeApplicationService:
                 try:
                     from deepreason.bridge.operations import write_failure
 
-                    write_failure(root, manifest.sha256, type(error).__name__)
+                    write_failure(
+                        root,
+                        manifest.sha256,
+                        type(error).__name__,
+                        detail=str(error),
+                    )
                 finally:
                     prepared.locks.release()
                 return _start_result("failed", root, manifest_sha256=manifest.sha256)
