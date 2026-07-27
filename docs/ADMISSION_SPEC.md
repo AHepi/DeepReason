@@ -52,8 +52,11 @@ Stages are strictly ordered; every stage is deterministic.
    note).
 2. **Extract.** A format adapter converts the source into normalized
    UTF-8 text plus a span map back to source bytes (or, for datasets,
-   into a schema/statistics projection — §6). Adapters MUST be pure:
-   no network, no clock, no environment reads.
+   into a schema/statistics projection — §6). Text formats (plain
+   text, markdown, CSV/TSV) are handled by the core parser natively;
+   every other format is handled by a plugin adapter under the
+   adapter contract (§3a). Adapters MUST be pure: no network, no
+   clock, no environment reads — enforced, not attested (§3a.2).
 3. **Segment.** Chunk by structure (headings, paragraph boundaries,
    table boundaries, row groups), bounded by per-block byte ceilings.
    Segmentation parameters are frozen constants of the parser version.
@@ -69,6 +72,40 @@ claim extraction, table narration) is permitted only as a separate,
 clearly derived layer that lands in the `workshop` tier with
 `derived_from` provenance. Derived material MUST Not be able to enter
 the `evidence` tier.
+
+### 3a. The adapter contract (plugins)
+
+Non-text formats are admitted through plugin adapters. The contract is
+strict because adapters mint canonical authority:
+
+1. **Version-bound identity.** Every adapter declares `adapter_id` and
+   `adapter_version`; both bind into the dossier per-source alongside
+   the core `parser_version`. A different adapter or version mints a
+   different dossier digest. Inspecting or reproducing a dossier
+   without the recorded adapter version is a typed refusal
+   (`ADMISSION_ADAPTER_VERSION_UNAVAILABLE`), never silent divergence.
+2. **Sandboxed execution.** Adapters run in the harness's existing
+   sandboxed subprocess regime (seccomp, no network, resource limits):
+   raw bytes in, normalized text + span map (or dataset projection)
+   out, over a closed wire schema. Purity is enforced by the sandbox,
+   not promised by documentation.
+3. **Span fidelity gates tier eligibility.** The `evidence` tier
+   requires byte-span-verifiable extraction — that is what makes
+   quotes checkable and citations attackable. An adapter declares its
+   span fidelity class (`exact_spans`, `approximate`, `none`); blocks
+   from adapters below `exact_spans` are capped at the `workshop`
+   tier. Strict by default, degradable with the degradation recorded.
+4. **Declared registration.** Adapters register through the
+   `deepreason.admission.adapters` entry-point group with a
+   closed-schema adapter manifest: claimed media types (by content
+   signature, not extension), version, span fidelity class, bounded
+   output ceilings. An unadmittable format is a typed refusal naming
+   the adapter that would handle it.
+5. **First-party adapters use the same contract.** PDF and EPUB
+   support ship as first-party plugins behind the `admit` extra, going
+   through the identical registration, sandbox, and version-binding
+   path as third-party adapters. The interface's first consumer is the
+   project itself.
 
 ### Parser version binding
 
@@ -170,18 +207,19 @@ text/markdown/CSV live behind an extra (`deepreason[admit]`), and a
 missing adapter is a typed refusal naming the extra — the graceful
 `toolchain_missing` pattern, not a crash.
 
-## 11. Open decisions (owner)
+## 11. Decisions (owner-resolved 2026-07-27)
 
-1. **v1 format set.** Proposal: text, markdown, CSV/TSV in core; PDF
-   and EPUB behind the `admit` extra; images/OCR deferred.
-2. **Dataset oracle in v1?** The sidecar+program-check interface (§6)
-   is the differentiating feature but is the largest single piece.
-   Proposal: yes for CSV/TSV, bounded to declarative checks.
-3. **Evidence-tier default.** Admit prose blocks as `evidence` by
-   default, or as `workshop` with explicit `--evidence` promotion?
-   Proposal: evidence by default for user-supplied sources (they chose
-   to supply them), workshop for anything derived.
-4. **Amendment placement.** Ship as this standalone spec, or fold into
-   the harness spec as a numbered amendment (with the four v1.7 items
-   already catalogued)? Proposal: standalone now, amendment reference
-   later.
+1. **v1 format set — DECIDED.** Text formats (plain text, markdown,
+   CSV/TSV) are handled by the core parser natively. All other
+   formats go through plugin adapters under the §3a contract; PDF and
+   EPUB ship as first-party plugins behind the `admit` extra.
+   Images/OCR deferred (and would enter as a `none`/`approximate`
+   span-fidelity adapter, workshop-capped, when they do).
+2. **Dataset oracle in v1 — DECIDED: yes.** CSV/TSV sidecar +
+   program-check interface (§6), bounded to declarative checks.
+3. **Evidence-tier default — DECIDED.** User-supplied sources admit
+   as `evidence` by default (subject to §3a.3 span fidelity);
+   anything derived admits as `workshop`.
+4. **Amendment placement — DECIDED.** Standalone spec now; a harness
+   spec amendment references it later (alongside the four catalogued
+   v1.7 items).
