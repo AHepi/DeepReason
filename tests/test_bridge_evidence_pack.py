@@ -312,3 +312,71 @@ def test_pack_budget_is_explicitly_bounded(tmp_path, budget):
     harness, _ids = _record(tmp_path)
     with pytest.raises(ValueError, match="budget_chars"):
         assemble_evidence_pack(harness, "pi-pack", budget_chars=budget)
+
+
+def test_v3_pack_bounds_a_wide_rivalry_without_failing_the_bridge(tmp_path):
+    """Live regression: 30 accepted rivals must not kill catalog assembly.
+
+    The first fully valid engaged live run retained one rivalry among 30
+    accepted positions.  Binding all 30 into a ``ProcessObservationV1``
+    (``related_refs`` bounded at 16) raised a ValidationError inside the
+    bridge worker, so the whole bridge failed closed on fully legal state.
+    The observation now carries the exact leading bounded sample plus the
+    true membership count, and the catalog stays canonical.
+    """
+
+    from deepreason.bridge.ledger import ClaimLedgerWireContractV3
+    from deepreason.bridge.models import MAX_PROCESS_OBSERVATION_RELATED_REFS
+
+    harness = Harness(tmp_path / "run-wide")
+    harness.register_problem(
+        Problem(
+            id="pi-wide",
+            description="Which of many surviving rivals explains the result?",
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}
+            ),
+        )
+    )
+    rivals = [
+        harness.create_artifact(
+            _skeleton(
+                f"rival {index:02d} explains the result",
+                f"rival {index:02d} carries the effect",
+            ),
+            provenance=Provenance(role="conjecturer"),
+            problem_id="pi-wide",
+        ).id
+        for index in range(30)
+    ]
+
+    pack = assemble_evidence_pack(harness, "pi-wide", catalog_version="v3")
+
+    assert len(pack.open_rivals) == 1
+    assert pack.open_rivals[0].rival_refs == rivals
+    rivalry = [
+        record
+        for record in pack.process_observations or ()
+        if record.observation_kind == "rivalry"
+    ]
+    assert len(rivalry) == 1
+    record = rivalry[0]
+    assert list(record.related_refs) == rivals[
+        :MAX_PROCESS_OBSERVATION_RELATED_REFS
+    ]
+    assert record.related_total == 30
+    assert record.statement.endswith(
+        "retained an unresolved rivalry among 30 positions."
+    )
+
+    # The whole downstream Stage A path stays canonical and renderable.
+    catalog = pack.claim_ledger_catalog("answer")
+    assert record in (catalog.process_observations or ())
+    rendered = render_claim_ledger_stage_a_pack(
+        catalog, contract=ClaimLedgerWireContractV3(catalog)
+    )
+    assert "among 30 positions" in rendered
+
+    # Repeatability: the bounded observation is deterministic.
+    again = assemble_evidence_pack(harness, "pi-wide", catalog_version="v3")
+    assert again.id == pack.id

@@ -24,6 +24,7 @@ MAX_BRIDGE_REFS = 2_048
 MAX_LEDGER_ENTRIES = 10_000
 MAX_OUTPUT_SECTIONS = 10_000
 MAX_FINDINGS = 10_000
+MAX_PROCESS_OBSERVATION_RELATED_REFS = 16
 
 BridgeText = str
 
@@ -286,7 +287,15 @@ class ProcessObservationV1(CanonicalBridgeRecord):
     observation_kind: Literal["acceptance", "refutation", "ruling", "rivalry"]
     formal_seq: StrictInt = Field(ge=0)
     subject_ref: OpaqueRef
-    related_refs: list[OpaqueRef] = Field(default_factory=FrozenList, max_length=16)
+    related_refs: list[OpaqueRef] = Field(
+        default_factory=FrozenList,
+        max_length=MAX_PROCESS_OBSERVATION_RELATED_REFS,
+    )
+    # A rivalry among more positions than ``related_refs`` can carry keeps the
+    # true membership count here while ``related_refs`` holds the exact leading
+    # bounded sample.  Absent for every observation that fits its reference
+    # bound, so historical record identities are unchanged.
+    related_total: StrictInt | None = Field(default=None, ge=2)
     statement: BridgeText
 
     @field_validator("related_refs", mode="after")
@@ -306,11 +315,24 @@ class ProcessObservationV1(CanonicalBridgeRecord):
         formal_seq: int,
         subject_ref: str,
         related_refs: list[str] | tuple[str, ...],
+        related_total: int | None = None,
     ) -> str:
         """Render the only substantive scope authorized by this record."""
 
         related = list(related_refs)
-        related_count = len(related)
+        if related_total is not None:
+            if observation_kind != "rivalry":
+                raise ValueError(
+                    "only rivalry process observations carry a related total"
+                )
+            if (
+                len(related) != MAX_PROCESS_OBSERVATION_RELATED_REFS
+                or related_total <= len(related)
+            ):
+                raise ValueError(
+                    "a related total requires the exact bounded related sample"
+                )
+        related_count = related_total if related_total is not None else len(related)
         if observation_kind not in {"acceptance", "refutation", "ruling", "rivalry"}:
             raise ValueError("unknown process observation kind")
         if observation_kind == "acceptance" and related_count:
@@ -338,7 +360,7 @@ class ProcessObservationV1(CanonicalBridgeRecord):
             )
         return (
             f"At formal sequence {formal_seq}, problem {subject_ref} retained "
-            f"an unresolved rivalry among {len(related)} positions."
+            f"an unresolved rivalry among {related_count} positions."
         )
 
     @classmethod
@@ -348,6 +370,7 @@ class ProcessObservationV1(CanonicalBridgeRecord):
             formal_seq=values["formal_seq"],
             subject_ref=values["subject_ref"],
             related_refs=values.get("related_refs", ()),
+            related_total=values.get("related_total"),
         )
         supplied = values.pop("statement", expected)
         if supplied != expected:
@@ -356,20 +379,12 @@ class ProcessObservationV1(CanonicalBridgeRecord):
 
     @model_validator(mode="after")
     def _status_shape_and_statement_match(self):
-        related_count = len(self.related_refs)
-        if self.observation_kind == "acceptance" and related_count:
-            raise ValueError("acceptance process observations have no related refs")
-        if self.observation_kind == "refutation" and related_count > 1:
-            raise ValueError("refutation process observations have at most one attacker")
-        if self.observation_kind == "ruling" and related_count != 2:
-            raise ValueError("ruling process observations require winner and loser refs")
-        if self.observation_kind == "rivalry" and related_count < 2:
-            raise ValueError("rivalry process observations require at least two positions")
         expected = self.render_statement(
             observation_kind=self.observation_kind,
             formal_seq=self.formal_seq,
             subject_ref=self.subject_ref,
             related_refs=self.related_refs,
+            related_total=self.related_total,
         )
         if self.statement != expected:
             raise ValueError("process observation statement must be deterministic")
@@ -681,6 +696,7 @@ __all__ = [
     "GroundingFindingV1",
     "GroundingReviewV1",
     "GroundingStatus",
+    "MAX_PROCESS_OBSERVATION_RELATED_REFS",
     "ProcessObservationV1",
     "RenderingMode",
     "SourceConflictV1",

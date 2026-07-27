@@ -20,6 +20,7 @@ from deepreason.bridge.ledger import (
     ClaimLedgerWireReferenceError,
 )
 from deepreason.bridge.models import (
+    MAX_PROCESS_OBSERVATION_RELATED_REFS,
     BridgeOutputV1,
     ClaimClass,
     ClaimLedgerEntryV1,
@@ -239,6 +240,87 @@ def test_process_observation_statement_is_not_caller_authored():
             subject_ref=_SURVIVOR_REF,
             related_refs=[],
             statement=f"{_SURVIVOR_CLAIM} is true.",
+        )
+
+
+def test_wide_rivalry_observation_keeps_the_true_count_over_a_bounded_sample():
+    """A rivalry wider than the reference bound is bounded, not fail-closed.
+
+    Live regression: an engaged run legally retained a rivalry among 30
+    accepted positions; binding all 30 into ``related_refs`` (bounded at 16)
+    raised a ValidationError that killed the bridge worker.
+    """
+
+    refs = [f"rival-{index:03d}" for index in range(30)]
+    record = ProcessObservationV1.create(
+        observation_kind="rivalry",
+        formal_seq=_FORMAL_SEQ,
+        subject_ref="problem-wide",
+        related_refs=refs[:MAX_PROCESS_OBSERVATION_RELATED_REFS],
+        related_total=30,
+    )
+    assert len(record.related_refs) == MAX_PROCESS_OBSERVATION_RELATED_REFS
+    assert record.related_total == 30
+    assert record.statement == (
+        f"At formal sequence {_FORMAL_SEQ}, problem problem-wide retained "
+        "an unresolved rivalry among 30 positions."
+    )
+
+    # The record bound itself still fails closed on an unbounded reference list.
+    with pytest.raises(ValidationError):
+        ProcessObservationV1.create(
+            observation_kind="rivalry",
+            formal_seq=_FORMAL_SEQ,
+            subject_ref="problem-wide",
+            related_refs=refs,
+        )
+
+
+def test_rivalry_related_total_rejects_every_forged_shape():
+    refs = [f"rival-{index:03d}" for index in range(30)]
+
+    # Only a rivalry may carry a membership total.
+    with pytest.raises(ValueError, match="only rivalry"):
+        ProcessObservationV1.create(
+            observation_kind="acceptance",
+            formal_seq=_FORMAL_SEQ,
+            subject_ref=_SURVIVOR_REF,
+            related_refs=[],
+            related_total=30,
+        )
+
+    # A total that does not exceed the carried sample is redundant authority.
+    with pytest.raises(ValueError, match="exact bounded related sample"):
+        ProcessObservationV1.create(
+            observation_kind="rivalry",
+            formal_seq=_FORMAL_SEQ,
+            subject_ref="problem-wide",
+            related_refs=refs[:MAX_PROCESS_OBSERVATION_RELATED_REFS],
+            related_total=MAX_PROCESS_OBSERVATION_RELATED_REFS,
+        )
+
+    # A total requires the exact full bounded sample, never a shorter one.
+    with pytest.raises(ValueError, match="exact bounded related sample"):
+        ProcessObservationV1.create(
+            observation_kind="rivalry",
+            formal_seq=_FORMAL_SEQ,
+            subject_ref="problem-wide",
+            related_refs=refs[:5],
+            related_total=30,
+        )
+
+    # The statement count remains deterministic against the carried total.
+    with pytest.raises(ValueError, match="must be deterministic"):
+        ProcessObservationV1.create(
+            observation_kind="rivalry",
+            formal_seq=_FORMAL_SEQ,
+            subject_ref="problem-wide",
+            related_refs=refs[:MAX_PROCESS_OBSERVATION_RELATED_REFS],
+            related_total=30,
+            statement=(
+                f"At formal sequence {_FORMAL_SEQ}, problem problem-wide retained "
+                "an unresolved rivalry among 16 positions."
+            ),
         )
 
 

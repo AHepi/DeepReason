@@ -32,6 +32,7 @@ from deepreason.bridge.ledger import (
 from deepreason.bridge.models import (
     CanonicalBridgeRecord,
     BridgeRecord,
+    MAX_PROCESS_OBSERVATION_RELATED_REFS,
     ProcessObservationV1,
 )
 from deepreason.frozen import FrozenList
@@ -537,12 +538,15 @@ def _catalog_items(
             subject_ref: str,
             related_refs: list[str],
             statement: str,
+            *,
+            related_total: int | None = None,
         ) -> None:
             record = ProcessObservationV1.create(
                 observation_kind=kind,
                 formal_seq=formal_seq,
                 subject_ref=subject_ref,
                 related_refs=related_refs,
+                related_total=related_total,
                 statement=statement,
             )
             process_observations.append(record)
@@ -575,12 +579,19 @@ def _catalog_items(
                 f"and loser {ruling.loser_ref}.",
             )
         for rivalry in rivalries:
+            # A fully legal formal state may retain more rival positions than
+            # one bounded observation record can reference.  Keep the exact
+            # leading sample and carry the true membership count explicitly so
+            # a large rivalry never fails the bridge closed.
+            rivals = list(rivalry.rival_refs)
+            sample = rivals[:MAX_PROCESS_OBSERVATION_RELATED_REFS]
             process(
                 "rivalry",
                 rivalry.problem_ref,
-                list(rivalry.rival_refs),
+                sample,
                 f"At formal sequence {formal_seq}, problem {rivalry.problem_ref} "
-                f"retained an unresolved rivalry among {len(rivalry.rival_refs)} positions.",
+                f"retained an unresolved rivalry among {len(rivals)} positions.",
+                related_total=(len(rivals) if len(rivals) > len(sample) else None),
             )
     else:
         for survivor in survivors:
