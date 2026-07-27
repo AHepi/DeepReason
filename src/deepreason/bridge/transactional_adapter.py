@@ -865,8 +865,8 @@ class TransactionalBridgeAdapter:
 
         from deepreason.bridge.ledger import (
             ClaimLedgerBatchWireContractV1,
-            ClaimLedgerInputCatalogV3,
             render_claim_ledger_stage_a_pack,
+            staged_catalog_batches,
         )
         from deepreason.bridge.models import ClaimLedgerV1
         from deepreason.bridge.validate import validate_claim_ledger
@@ -874,38 +874,8 @@ class TransactionalBridgeAdapter:
         source_work_id = getattr(error, "source_work_id", None)
         if not isinstance(source_work_id, str):
             raise error
-        item_chunks = self._chunks(catalog.items)
-        batches = []
-        if item_chunks:
-            for index, items in enumerate(item_chunks):
-                batches.append(
-                    ClaimLedgerInputCatalogV3.create(
-                        problem_ref=catalog.problem_ref,
-                        formal_seq=catalog.formal_seq,
-                        problem_text=catalog.problem_text,
-                        output_target=catalog.output_target,
-                        items=items,
-                        process_observations=(
-                            catalog.process_observations or () if index == 0 else ()
-                        ),
-                        advisory_context_ref=catalog.advisory_context_ref,
-                        retrieval_receipt_ref=catalog.retrieval_receipt_ref,
-                    )
-                )
-        elif catalog.process_observations:
-            batches.append(
-                ClaimLedgerInputCatalogV3.create(
-                    problem_ref=catalog.problem_ref,
-                    formal_seq=catalog.formal_seq,
-                    problem_text=catalog.problem_text,
-                    output_target=catalog.output_target,
-                    items=(),
-                    process_observations=catalog.process_observations,
-                    advisory_context_ref=catalog.advisory_context_ref,
-                    retrieval_receipt_ref=catalog.retrieval_receipt_ref,
-                )
-            )
-        else:
+        batches = staged_catalog_batches(catalog)
+        if not batches:
             raise error
         contracts = tuple(ClaimLedgerBatchWireContractV1(batch) for batch in batches)
         packs = tuple(

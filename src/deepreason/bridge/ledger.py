@@ -457,6 +457,52 @@ class ClaimLedgerInputCatalogV3(ClaimLedgerInputCatalogV1):
 ClaimLedgerCatalog = ClaimLedgerInputCatalogV1 | ClaimLedgerInputCatalogV3
 
 
+STAGED_CATALOG_BATCH_SIZE = 8
+
+
+def staged_catalog_batches(
+    catalog: "ClaimLedgerInputCatalogV3",
+    *,
+    size: int = STAGED_CATALOG_BATCH_SIZE,
+) -> tuple["ClaimLedgerInputCatalogV3", ...]:
+    """Partition one validated V3 catalog into exact per-batch V3 catalogs.
+
+    Each batch is a complete catalog in its own right, so its structured
+    process records must be exactly the records its own items reference.
+    Handing every record to batch zero regardless of where the process
+    items landed failed the catalog validator deterministically whenever a
+    process item fell outside the first chunk (observed live:
+    BRIDGE_STAGE_A_FAILED on the first staged fallback after a
+    strong-ledger exhaustion).
+    """
+
+    items = tuple(catalog.items)
+    records = tuple(catalog.process_observations or ())
+    by_id = {record.id: record for record in records}
+    batches = []
+    for start in range(0, len(items), size):
+        chunk = items[start : start + size]
+        chunk_records = tuple(
+            by_id[item.ref]
+            for item in chunk
+            if item.kind == LedgerCatalogKind.PROCESS_OBSERVATION.value
+            and item.ref in by_id
+        )
+        batches.append(
+            ClaimLedgerInputCatalogV3.create(
+                problem_ref=catalog.problem_ref,
+                formal_seq=catalog.formal_seq,
+                problem_text=catalog.problem_text,
+                output_target=catalog.output_target,
+                items=chunk,
+                process_observations=chunk_records,
+                advisory_context_ref=catalog.advisory_context_ref,
+                retrieval_receipt_ref=catalog.retrieval_receipt_ref,
+            )
+        )
+    return tuple(batches)
+
+
 def _coerce_catalog(value) -> ClaimLedgerCatalog:
     if isinstance(value, ClaimLedgerInputCatalogV3):
         return value
@@ -1994,4 +2040,5 @@ __all__ = [
     "amend_claim_ledger_stage_a",
     "build_claim_ledger_stage_a",
     "render_claim_ledger_stage_a_pack",
+    "staged_catalog_batches",
 ]

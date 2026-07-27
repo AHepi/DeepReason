@@ -256,3 +256,72 @@ def test_replay_rejects_nonchronological_or_unreachable_staged_effect(
             ("effect-ref",),
             completion_event_seq=20,
         )
+
+
+def test_staged_catalog_batches_carry_their_own_process_records():
+    """Live regression: the staged fallback handed every structured process
+    record to batch zero, so any process item outside the first chunk of
+    eight failed the batch catalog validator and Stage A terminated
+    BRIDGE_STAGE_A_FAILED before a single batched provider call."""
+
+    from deepreason.bridge.ledger import (
+        ClaimLedgerCatalogItemV1,
+        ClaimLedgerInputCatalogV3,
+        staged_catalog_batches,
+    )
+    from deepreason.bridge.models import ProcessObservationV1
+
+    records = [
+        ProcessObservationV1.create(
+            observation_kind="acceptance",
+            formal_seq=42,
+            subject_ref=f"artifact-{index:02d}",
+            related_refs=[],
+        )
+        for index in range(3)
+    ]
+    items = [
+        ClaimLedgerCatalogItemV1(
+            handle=f"A{index + 1}",
+            kind="formal_artifact",
+            ref=f"artifact-{index:02d}",
+            excerpt=f"Rendered artifact {index:02d}.",
+        )
+        for index in range(7)
+    ]
+    # One process item lands in chunk zero, two land in chunk one: the shape
+    # that deterministically failed before the fix.
+    items.insert(3, _process_item(records[0], "P1"))
+    items.append(_process_item(records[1], "P2"))
+    items.append(_process_item(records[2], "P3"))
+    catalog = ClaimLedgerInputCatalogV3.create(
+        problem_ref="problem-staged",
+        formal_seq=42,
+        problem_text="What survived?",
+        output_target="answer",
+        items=items,
+        process_observations=records,
+    )
+
+    batches = staged_catalog_batches(catalog)
+
+    assert [len(batch.items) for batch in batches] == [8, 2]
+    for batch in batches:
+        own_refs = {
+            item.ref for item in batch.items if item.kind == "process_observation"
+        }
+        assert {r.id for r in batch.process_observations or ()} == own_refs
+    assert {r.id for batch in batches for r in batch.process_observations or ()} == {
+        record.id for record in records
+    }
+
+
+def _process_item(record, handle):
+    from deepreason.bridge.ledger import ClaimLedgerCatalogItemV1
+
+    return ClaimLedgerCatalogItemV1(
+        handle=handle,
+        kind="process_observation",
+        ref=record.id,
+        excerpt=record.statement,
+    )
