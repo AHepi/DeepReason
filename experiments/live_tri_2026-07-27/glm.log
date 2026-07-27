@@ -58,3 +58,7 @@ qualify_rc=0 qualify_seconds=1
 reason_rc=4 reason_seconds=357
 run_id=run-fe561b61dba1adeeb52e4568b2e805e4 problem_id= state=failed
 === glm LADDER end 2026-07-27T19:08:27Z ===
+=== glm LADDER start 2026-07-27T19:12:12Z ===
+{"cache_reused":true,"maximum_expected_provider_calls":0,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=1
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"glm-5.2","model_revision":"glm-5.2","route_id":"provider-profile-2b0b8d5e80f8ceaf2bdb626e"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
