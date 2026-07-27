@@ -436,6 +436,23 @@ class AtomicConjectureWireContractV1(WireContract[BaseModel]):
                     requested["maxItems"] = 0
         return schema
 
+    def validate_value(self, value: Any) -> BaseModel:
+        # A bare candidate payload (the candidate's inner fields at top
+        # level, no {"candidate": ...} envelope) is an unambiguous slip
+        # observed live: the envelope has no fields besides candidate and
+        # abstention, and no abstention payload shares the candidate's
+        # required marker field, so re-enveloping is lossless.  Anything
+        # containing an envelope key, or missing the marker, is left for
+        # exact validation unchanged.
+        marker = "claim" if self.reasoning else "content"
+        if (
+            isinstance(value, dict)
+            and marker in value
+            and not ({"candidate", "abstention"} & set(value))
+        ):
+            value = {"candidate": value}
+        return super().validate_value(value)
+
     def compile(self, wire: BaseModel) -> BaseModel:
         if wire.abstention is not None:
             model = ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6

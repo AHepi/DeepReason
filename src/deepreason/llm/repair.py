@@ -91,6 +91,15 @@ def tolerant_patch_value(value):
                 inner = inner[0]
             if isinstance(inner, dict):
                 value = inner
+    if (
+        isinstance(value, dict)
+        and "op" not in value
+        and value.get("operation") in {"add", "remove", "replace"}
+    ):
+        # Two distinct models spelled the RFC-6902 field "operation"; the
+        # one-key rename is lossless when "op" is absent and the value is a
+        # legal operation.
+        value = {("op" if key == "operation" else key): item for key, item in value.items()}
     return value
 
 

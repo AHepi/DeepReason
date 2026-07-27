@@ -564,3 +564,44 @@ def test_schema_name_keyed_patch_wrappers_are_tolerated():
     assert tolerant_patch_value({"patch": dict(patch)}) == {"patch": dict(patch)}
     two = {"repair.patch.v1": [dict(patch), dict(patch)]}
     assert tolerant_patch_value(two) == two
+
+
+def test_operation_spelling_alias_is_tolerated_in_patches():
+    """Live regression, seen from two different models: the RFC-6902 field
+    spelled "operation" instead of "op" burned patch turns to exhaustion."""
+
+    from deepreason.llm.repair import RepairPatchV1, tolerant_patch_value
+
+    value = tolerant_patch_value(
+        {"operation": "add", "path": "/mechanism", "value": "m"}
+    )
+    parsed = RepairPatchV1.model_validate(value)
+    assert parsed.op == "add"
+    # Never rename when "op" exists or the operation value is not legal.
+    both = {"op": "add", "operation": "add", "path": "/x", "value": 1}
+    assert tolerant_patch_value(dict(both)) == both
+    weird = {"operation": "merge", "path": "/x", "value": 1}
+    assert tolerant_patch_value(dict(weird)) == weird
+
+
+def test_bare_candidate_payload_is_re_enveloped_for_atomic_calls():
+    """Live regression: an atomic slot answered with the candidate's inner
+    fields at top level and was rejected to exhaustion five times."""
+
+    from deepreason.llm.wire import AliasTable, AtomicConjectureWireContractV1
+
+    contract = AtomicConjectureWireContractV1(AliasTable(), reasoning=False)
+    inner = {
+        "content": "A replay-invariant fetch cost fixes the denomination.",
+        "typicality": 0.4,
+    }
+    wire = contract.validate_value(dict(inner))
+    assert wire.candidate is not None and wire.abstention is None
+    assert wire.candidate.content == inner["content"]
+    # Envelope keys present, or no claim: exact validation applies unchanged.
+    import pytest as _pytest
+
+    with _pytest.raises(Exception):
+        contract.validate_value({"candidate": dict(inner), "content": "smuggle"})
+    with _pytest.raises(Exception):
+        contract.validate_value({"typicality": 0.4})
