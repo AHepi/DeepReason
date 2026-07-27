@@ -396,6 +396,50 @@ def test_scratch_reads_are_bounded_and_physically_read_only(mcp_run):
     assert _tree_digest(mcp_run.root) == before_tree
 
 
+def test_scratch_map_exposes_openable_refs_for_unclustered_blocks(mcp_run):
+    """Durable blocks outside every cluster stay discoverable through the map.
+
+    A run may author admitted scratch blocks without ever forming a cluster;
+    the map must surface those blocks as openable references instead of a
+    bare count with nothing for ``scratch_open``/``scratch_related`` to serve.
+    """
+
+    before_tree = _tree_digest(mcp_run.root)
+    payload = mcp.call_tool("scratch_map", {"root": str(mcp_run.root)})
+
+    # Fixture: blocks 0 and 2 are cluster members; 1 and 3 are unclustered.
+    expected_unclustered = [mcp_run.blocks[1].id, mcp_run.blocks[3].id]
+    assert payload["unclustered_block_count"] == 2
+    assert payload["unclustered_block_ids"] == expected_unclustered
+    assert payload["unclustered_truncated"] is False
+    for reference in expected_unclustered:
+        opened = mcp.call_tool(
+            "scratch_open", {"root": str(mcp_run.root), "block": reference}
+        )
+        assert opened["block"]["id"] == reference
+        assert opened["committed"] is False
+        related = mcp.call_tool(
+            "scratch_related", {"root": str(mcp_run.root), "block": reference}
+        )
+        assert related["focus_block_id"] == reference
+
+    truncated = mcp.call_tool(
+        "scratch_map", {"root": str(mcp_run.root), "limit": 1}
+    )
+    assert truncated["unclustered_block_count"] == 2
+    assert truncated["unclustered_block_ids"] == expected_unclustered[:1]
+    assert truncated["unclustered_truncated"] is True
+
+    from deepreason.scratch.errors import ScratchBlockNotFound
+
+    with pytest.raises(ScratchBlockNotFound) as missing:
+        mcp.call_tool(
+            "scratch_open", {"root": str(mcp_run.root), "block": "f" * 64}
+        )
+    assert missing.value.code == "SCRATCH_BLOCK_NOT_FOUND"
+    assert _tree_digest(mcp_run.root) == before_tree
+
+
 def test_scratch_attention_is_a_pure_uncommitted_plan(mcp_run):
     before_tree = _tree_digest(mcp_run.root)
     state_before = ScratchService(Harness(mcp_run.root, read_only=True)).state

@@ -232,6 +232,8 @@ class ScratchMapResultV1(_ResultBase):
     count: StrictInt = Field(ge=0)
     ordering: Literal["created", "id", "size"]
     unclustered_block_count: StrictInt = Field(ge=0)
+    unclustered_block_ids: tuple[HashRef, ...] = ()
+    unclustered_truncated: bool = False
 
     def presentation_payload(self) -> dict[str, Any]:
         return {
@@ -239,6 +241,8 @@ class ScratchMapResultV1(_ResultBase):
             "count": self.count,
             "ordering": self.ordering,
             "unclustered_block_count": self.unclustered_block_count,
+            "unclustered_block_ids": list(self.unclustered_block_ids),
+            "unclustered_truncated": self.unclustered_truncated,
         }
 
 
@@ -495,12 +499,27 @@ class ScratchQueryApplicationService:
             if service.state.current_memberships
             else set()
         )
+        # Every durable block must remain discoverable through the map: blocks
+        # outside every cluster are listed as openable references (creation
+        # order, bounded by the query limit), never as a bare count alone.
+        unclustered = sorted(
+            (
+                block
+                for block in service.state.blocks.values()
+                if block.id not in clustered
+            ),
+            key=lambda block: (block.instance.seq, block.id),
+        )
         return ScratchMapResultV1(
             identities=_identity_index(service),
             clusters=tuple(items),
             count=len(items),
             ordering=query.ordering,
-            unclustered_block_count=len(set(service.state.blocks) - clustered),
+            unclustered_block_count=len(unclustered),
+            unclustered_block_ids=tuple(
+                block.id for block in unclustered[: query.limit]
+            ),
+            unclustered_truncated=len(unclustered) > query.limit,
         )
 
     @staticmethod
