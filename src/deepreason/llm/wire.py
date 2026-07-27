@@ -57,6 +57,7 @@ from deepreason.llm.repair import (
     RepairPatchV1,
     parse_one_json_value,
     repair_patch_response_schema,
+    tolerant_patch_value,
 )
 from deepreason.scratch.proposals import (
     ScratchProposalV1,
@@ -305,6 +306,12 @@ class RepairPatchWireContract(WireContract[RepairPatchV1]):
 
     def model_json_schema(self) -> dict:
         return repair_patch_response_schema(self.envelope)
+
+    def validate_value(self, value: Any) -> BaseModel:
+        # Keep exact agreement with V6PatchRepairSession.candidate_from_raw:
+        # both boundaries strip the same unambiguous patch wrappers, so a
+        # patch the session applies is never re-rejected at admission.
+        return super().validate_value(tolerant_patch_value(value))
 
     def compile(self, wire: RepairPatchV1) -> RepairPatchV1:
         # The generic identity compiler dumps defaults before revalidation.

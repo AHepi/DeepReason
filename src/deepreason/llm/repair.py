@@ -69,6 +69,32 @@ class SchemaExhaustedError(SchemaRepairError):
         super().__init__(message, spend=spend)
 
 
+def tolerant_patch_value(value):
+    """Strip one unambiguous transport wrapper from a patch payload.
+
+    Observed live: a fully qualified model answered patch turns with
+    ``{"repair.patch.v1": {...}}`` — the schema name from the prompt used
+    as a wrapper key — sometimes with the patch inside a single-element
+    array.  Both wrappers are lossless and unambiguous, the same tolerance
+    class as narrated code fences.  Anything else (several keys, several
+    elements, nested wrappers beyond one of each) is returned unchanged
+    and fails exact validation as before.
+    """
+
+    if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict):
+        value = value[0]
+    if isinstance(value, dict) and len(value) == 1:
+        key = next(iter(value))
+        if key == "repair.patch.v1":
+            inner = value[key]
+            if isinstance(inner, list) and len(inner) == 1 and isinstance(inner[0], dict):
+                inner = inner[0]
+            if isinstance(inner, dict):
+                value = inner
+    return value
+
+
+
 class RepairPatchV1(BaseModel):
     """One RFC-6902-shaped edit at one explicitly authorized JSON pointer.
 
@@ -1401,7 +1427,7 @@ class V6PatchRepairSession:
             return parsed.value
         if not self.invalid_value_parseable or turn.diagnostic_envelope is None:
             raise UnrepairableDiagnosticError("patch turn has no parseable baseline")
-        patch_value = parse_one_json_value(raw).value
+        patch_value = tolerant_patch_value(parse_one_json_value(raw).value)
         patch = RepairPatchV1.model_validate(patch_value)
         candidate = apply_repair_patch(
             self.invalid_value,

@@ -533,3 +533,34 @@ def test_batch_critic_v2_binds_only_assigned_src_targets():
         contract.parse_compile(
             '{"cases":[{"target_alias":"SRC_001","attack":true,"case":"no"}]}'
         )
+
+
+def test_schema_name_keyed_patch_wrappers_are_tolerated():
+    """Live regression: a fully qualified model answered patch turns with
+    {"repair.patch.v1": {...}} and {"repair.patch.v1": [{...}]} — the schema
+    name from the prompt used as a wrapper key — and every patch turn burned
+    until the conjecturer's atomic child terminally failed."""
+
+    from deepreason.llm.repair import RepairPatchV1, tolerant_patch_value
+
+    patch = {"op": "replace", "path": "/candidates/1/optional_refs/0", "value": "SRC_001"}
+    for wrapped in (
+        {"repair.patch.v1": dict(patch)},
+        {"repair.patch.v1": [dict(patch)]},
+        [dict(patch, schema="repair.patch.v1")],
+        dict(patch, schema="repair.patch.v1"),
+    ):
+        value = tolerant_patch_value(wrapped)
+        parsed = RepairPatchV1.model_validate(value)
+        assert parsed.op == "replace"
+        assert parsed.path == "/candidates/1/optional_refs/0"
+
+    # Ambiguity is never tolerated: several keys, several patches, or a
+    # foreign wrapper key still fail exactly as before.
+    assert tolerant_patch_value({"repair.patch.v1": dict(patch), "extra": 1}) == {
+        "repair.patch.v1": dict(patch),
+        "extra": 1,
+    }
+    assert tolerant_patch_value({"patch": dict(patch)}) == {"patch": dict(patch)}
+    two = {"repair.patch.v1": [dict(patch), dict(patch)]}
+    assert tolerant_patch_value(two) == two
