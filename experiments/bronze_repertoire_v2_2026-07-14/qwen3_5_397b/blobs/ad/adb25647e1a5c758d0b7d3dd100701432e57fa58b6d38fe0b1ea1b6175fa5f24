@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claims a 'rapid onset aridification event (300-year drought)' as the mechanism, but the forbidden case specifies 'stable precipitation levels' from paleoclimatic proxies for the exact region and period (Anatolia, 1250–1100 BC). If this evidence exists, the mechanism's causal claim is directly falsified for a core region it purports to cover. The target fails the standard because it does not provide a mechanism that can accommodate or explain away this contradictory observation; it merely asserts a climatic event without specifying how the mechanism would still operate if precipitation levels were stable. The forbidden case is a concrete, datable observation that, if true, severs the link between the proposed mechanism (aridification reducing surplus) and the outcome (bureaucratic collapse) in Anatolia.
+
+TARGET:
+{"claim": "A rapid onset aridification event (300-year drought) reduced agricultural surplus below the threshold required to sustain the specialized bureaucratic class, forcing a devolution to subsistence farming.", "mechanism": "Climate-driven Malthusian collapse of the redistributive surplus.", "scope": {"covers": ["Hittite Anatolia", "Levantine city-states", "Mycenaean Greece"], "excludes": ["Nile Delta regions of Egypt"]}, "forbidden": [{"case": "Paleoclimatic data from speleothems or pollen cores showing stable precipitation levels in Anatolia between 1250-1100 BC", "eval": "rubric:std-hist"}], "prose_notes": "Explains why Egypt survived (Nile flood independence) and why the collapse was regional yet simultaneous; shifts focus from human agency to environmental determinism."}

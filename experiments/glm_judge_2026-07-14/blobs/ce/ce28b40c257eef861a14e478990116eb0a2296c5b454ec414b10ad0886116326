@@ -1,0 +1,1 @@
+{"verdict": "fail", "decisive_point": "A critic flag that removes one candidate from a 3-2 correct majority creates a 2-2 tie (broken), and a critic flag that removes one candidate from a 3-2 wrong majority creates a 2-2 tie (not fixed, just neutralized)."}

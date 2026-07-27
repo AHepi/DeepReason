@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Systemic trade network fragmentation caused by the sudden loss of intermediary maritime hubs.\", \"mechanism\": \"Cascading economic failure where the removal of key nodes (Ugarit, Cyprus) broke just-in-time supply chains for tin and copper, halting bronze production and destabilizing palace economies dependent on prestige goods redistribution.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of continued long-distance tin trade into Mycenaean centers post-1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on A1 empiric stance; vulnerable to A5 critique if rigidity is not proven exclusive to included zones.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A1", "A5"]
+    },
+    {
+      "content": "{\"claim\": \"A revolutionary shift in military technology rendered chariot-based aristocratic warfare obsolete overnight.\", \"mechanism\": \"The widespread adoption of lightweight javelins and round shields by decentralized infantry groups allowed non-state actors to defeat elite chariot corps, leading to the physical destruction of palace centers and the death of the administrative class.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Internal peasant revolts\"]}, \"forbidden\": [{\"case\": \"Survival of major chariot-using states outside the collapse zone without tactical adaptation\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Directly engages A8 regarding Sea Peoples inclusion; challenges the notion that Egypt survived due to tactics rather than geography.\"}",
+      "typicality": 0.65,
+      "neighbours": ["A8", "A6"]
+    },
+    {
+      "content": "{\"claim\": \"A rapid, multi-decadal hyper-arid climate event triggered simultaneous agricultural failure across the region.\", \"mechanism\": \"Persistent drought reduced grain yields below the threshold required to feed centralized bureaucracies and standing armies, forcing mass migration and internal collapse as palaces could no longer guarantee food security.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Levantine city-states\", \"Mycenaean Greece\", \"Cyprus\"], \"excludes\": [\"Nile Delta regions\", \"Mesopotamian irrigation zones\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data showing normal precipitation levels in Anatolia between 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Addresses A11 by explicitly excluding Assyria (which had different water sources) while including Cyprus; contrasts with migratory domino theories.\"}",
+      "typicality": 0.45,
+      "neighbours": ["A11", "A12"]
+    }
+  ]
+}

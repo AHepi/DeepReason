@@ -1,0 +1,25 @@
+{
+  "descriptor_sha256": {
+    "A1.json": "601127e57f8803a8a751c2fffc249da088b92e0805a0f6ecd89d4b4435c7f362",
+    "A2.json": "08c9177a13857bdb7a1fe39b8256af21ef78170d0a142a34dc1ca772806461e4",
+    "A3.json": "1ab20c21f6d5cbaed6156579820e1a9298d251713499ce1fb629465e2b0ce392"
+  },
+  "fixture_kind": "minimized-derived-reproduction",
+  "generated_root_sha256": {
+    "A1": "dd0f5df44d86d4220b2b08af1db999a093db44284de6989e87b15d6d2b661dd6",
+    "A2": "b6c8de91f91a5a0cf191729bce5f54c741963c99ec23bf4e3a0044adfbe23833",
+    "A3": "89313dc7363def6dfa3c56948d7f61d422822dc8991ce772fac6bb6ba3d3402e"
+  },
+  "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
+  "original_archive": {
+    "available_to_fixture_builder": false,
+    "name_from_review": "DeepReason_Test_Results_2026-07-16.tar.gz",
+    "original_root_bytes_included": false
+  },
+  "repository_commit": "056af85e4c6018bcdf44e73c2ada78fabccb4a81",
+  "schema": "deepreason.incident-fixture-provenance.v1",
+  "source_review": {
+    "attachment_name": "pasted-text.txt",
+    "sha256": "2f086397643e439dd711d656611f943a3edbb3327672faf81f16ea40d6ebf282"
+  }
+}

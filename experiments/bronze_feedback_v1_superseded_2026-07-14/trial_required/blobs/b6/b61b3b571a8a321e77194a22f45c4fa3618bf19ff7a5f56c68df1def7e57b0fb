@@ -1,0 +1,14 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM conn:3c884acf0d40
+connect isolated 3c884acf0d40 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+ARTIFACTS TO CONNECT:
+- 3c884acf0d40c517d2516ab9caa870587e529bc45cbd0b8348af39bf3014d607: {"pairwise": {"decisive_point": "Egypt's dispersed irrigation agriculture and private entrepreneurship buffered against monoculture collapse", "loser": "15c9cb544971e9e1956d8b70020314172d1810a28f75ee1
+- 6eecdaad3c9f8bce2453ff0f81e2ee34d8e90d30ece5310f50cec91fc1a83fc9: {"claim":"Systemic interdependence and brittle redistributive economies made palace civilizations vulnerable to cascading failure from climatic-triggered agricultural shortfalls, while Egypt's dispers
+- c3a117d767bb0b38b0b1847231eeff7862e8573efd9a0f2f8225cd4f06537adf: {"claim":"The simultaneous collapse was a contingent conjuncture of heterogeneous local crises lacking unified causal structure, while Egyptian persistence reflects merely stochastic variation in inst
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

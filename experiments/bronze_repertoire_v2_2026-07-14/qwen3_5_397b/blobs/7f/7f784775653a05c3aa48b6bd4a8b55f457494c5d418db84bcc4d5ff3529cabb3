@@ -1,0 +1,21 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target explicitly forbids 'Archaeological evidence showing robust local subsistence economies continuing uninterrupted within palace zones during the transition period.' This forbidden case directly contradicts the target's own mechanism, which claims that 'local communities lacked the autonomy to survive independently' and that the palatial redistribution economy's failure caused a systemic collapse. If robust local subsistence economies continued uninterrupted within palace zones, it demonstrates that local communities did possess the autonomy to survive independently, thereby falsifying the claimed causal mechanism of cascading systemic fragility. The target thus violates the standard by forbidding a concrete, observable archaeological pattern that would constitute a direct counterexample to its central causal claim.
+
+TARGET:
+{"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where hyper-specialization created a single point of failure; when seismic activity or minor trade disruptions broke the supply of critical bronze ingredients, the entire socio-political structure unraveled because local communities lacked the autonomy to survive independently.", "mechanism": "Cascading systemic failure triggered by supply chain interruption in a non-resilient, centralized network.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "independent rural villages"]}, "forbidden": [{"case": "Archaeological evidence showing robust local subsistence economies continuing uninterrupted within palace zones during the transition period.", "eval": "rubric:std-hist"}], "prose_notes": "This candidate leans on the 'complexity collapse' theory, emphasizing internal structural weakness over external shock."}

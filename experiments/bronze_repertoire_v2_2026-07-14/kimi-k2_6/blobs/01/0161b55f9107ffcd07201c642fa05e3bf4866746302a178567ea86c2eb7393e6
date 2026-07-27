@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—'differential military vulnerability based on agricultural resilience and buffer capacity'—is directly falsified by the forbidden case 'Egyptian agricultural system also collapsed; survival due solely to military factors.' If Egypt's agricultural system collapsed, then its survival cannot be attributed to Nile-irrigated surplus or buffer capacity, which are the core of the claimed mechanism. The target's own scope includes 'Egyptian survival' as covered by the mechanism, yet the forbidden case presents a concrete, datable observation (Egyptian agricultural collapse with survival via military means) that contradicts the mechanism's causal pathway. The target fails to state how this observation is incompatible with its claim, thereby violating the standard's requirement that forbidden cases be genuine counterexamples the mechanism cannot accommodate.",
+  "counterexample": [
+    "Egyptian agricultural system also collapsed; survival due solely to military factors"
+  ]
+}

@@ -1,0 +1,20 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"header-root\">\n  <style>\n    #header-root { background: #0A0A12; color: #00F2FF; padding: 64px 16px; text-align: center; font-family: 'Montserrat', sans-serif; overflow: hidden; position: relative; }\n    .c1-title { font-size: 3rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; color: #FF00E5; text-shadow: 0 0 20px rgba(255,0,229,0.5); }\n    .c1-heading { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; color: #00F2FF; opacity: 0.8; }\n    .c1-dna-anchor { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 100%; z-index: -1; pointer-events: none; }\n    .c1-strand { position: absolute; width: 2px; height: 100%; background: linear-gradient(transparent, #00F2FF, transparent); animation: c1-drift 4s infinite ease-in-out; }\n    @keyframes c1-drift { 0%, 100% { transform: translateY(-10%); } 50% { transform: translateY(10%); } }\n  </style>\n  <div class=\"c1-title\">Genomic Wonders</div>\n  <div class=\"c1-heading\">2026 Workshop: Decoding the Blueprint of Life</div>\n  <canvas id=\"header-root-canvas\" class=\"c1-dna-anchor\"></canvas>\n  <script>\n    window.c1_mount = () => {\n      const canvas = document.getElementById('header-root-canvas');\n      if (!canvas) return;\n      const ctx = canvas.getContext('2d');\n      const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n      let frame = 0;\n      const render = () => {\n        if (motionReduced) return;\n        ctx.clearRect(0, 0, canvas.width, canvas.height);\n        ctx.strokeStyle = '#00F2FF';\n        ctx.beginPath();\n        for(let i=0; i<canvas.height; i+=20) {\n          const x = canvas.width/2 + Math.sin(frame/20 + i/50) * 50;\n          ctx.lineTo(x, i);\n        }\n        ctx.stroke();\n        frame++;\n        c1_raf = requestAnimationFrame(render);\n      };\n      c1_raf = requestAnimationFrame(render);\n    };\n    window.c1_initializeHeaderAnimation = () => {};\n    window.c1_destroy = () => { cancelAnimationFrame(c1_raf); };\n  </script>\n</div>",
+      "typicality": 0.9,
+      "neighbours": [
+        "A1"
+      ]
+    },
+    {
+      "content": "<div id=\"header-root\">\n  <style>\n    #header-root { background: #0A0A12; color: #00F2FF; padding: 120px 16px; display: flex; flex-direction: column; align-items: center; font-family: 'Montserrat', sans-serif; }\n    .c1-brand { font-size: 4rem; font-weight: 900; color: #FF00E5; letter-spacing: 0.5rem; margin: 0; }\n    .c1-sub { font-family: 'JetBrains Mono', monospace; color: #00F2FF; margin-top: 16px; }\n    .c1-visual { width: 300px; height: 100px; border: 2px solid #00F2FF; position: relative; margin-top: 40px; overflow: hidden; }\n    .c1-helix-static { width: 100%; height: 100%; background: repeating-linear-gradient(45deg, transparent, transparent 10px, #FF00E5 10px, #FF00E5 11px); }\n  </style>\n  <h1 class=\"c1-brand\">DNA 2026</h1>\n  <p class=\"c1-sub\">Interactive Workshop: The Molecular Architecture</p>\n  <div class=\"c1-visual\" id=\"header-root-visual\">\n    <div class=\"c1-helix-static\"></div>\n  </div>\n  <script>\n    window.c1_mount = () => {\n      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;\n      const el = document.getElementById('header-root-visual');\n      el.style.transition = 'transform 2s ease-in-out';\n      el.style.transform = 'scale(1.05)';\n    };\n    window.c1_initializeHeaderAnimation = () => {};\n    window.c1_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.5,
+      "neighbours": [
+        "A1"
+      ]
+    }
+  ]
+}
+```

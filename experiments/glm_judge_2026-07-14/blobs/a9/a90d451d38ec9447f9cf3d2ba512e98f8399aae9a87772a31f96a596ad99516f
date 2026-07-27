@@ -1,0 +1,3 @@
+```json
+{"winner": "A", "decisive_point": "a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a no-op on the already-correct majority"}
+```

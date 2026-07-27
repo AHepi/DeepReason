@@ -27,7 +27,7 @@ sys.path.insert(0, str(MINI.parent / "src"))
 from minireason import judge  # noqa: E402
 from minireason.call import BudgetExceeded, HttpEndpoint, TokenMeter  # noqa: E402
 from minireason.checks import parse_skeleton  # noqa: E402
-from minireason.gate import normalize  # noqa: E402
+from minireason.analytics import normalize  # noqa: E402
 from minireason.log import BlobStore, replay  # noqa: E402
 from minireason.loop import Session, run  # noqa: E402
 

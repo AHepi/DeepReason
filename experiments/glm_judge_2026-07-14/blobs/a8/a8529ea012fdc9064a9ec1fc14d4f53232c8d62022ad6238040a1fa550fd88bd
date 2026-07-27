@@ -1,0 +1,29 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target violates std-crit-design clause (1) and (2) by smuggling an unmeasurable distributional primitive into both the mechanism and the forbidden cases, and it violates the honesty clause because the proposed threshold sweep is structurally incompatible with the repository's validation harness.
+
+(1) Naming a measurable regime condition: The target's claimed strict-advantage condition is 'the critic's score distribution for wrong-majority sets stochastically dominates its score distribution for right-majority sets.' Stochastic dominance is an infinite-dimensional distributional property, not a point in (base error, precision, recall, k) space. The proposal even concedes this ('not a point... but a curve'). The standard requires naming the specific mechanism/regime in the measurable quantities it enumerates (candidate base error rate, critic precision and recall, ensemble size k). The target instead substitutes an unmeasurable dominance relation, so the core condition under which the harness supposedly beats self-consistency cannot be pinned down by the required metrics.
+
+(2) Forbidden cases that are concrete and measurable by rerunning the repository's harness: Two of the three forbidden cases are KS-test outcomes on critic score distributions. The repository's validation harness scores arms against a held-out answer key and computes quantities like net-fixed-minus-broke; it does not expose a per-question critic score-distribution testing facility. A KS test requires the raw p_veto samples for right-majority vs wrong-majority questions, which is side-channel data the harness does not produce as a scored arm outcome. Forbidden cases that cannot be measured by rerunning this repository's validation harness violate the standard's final sentence. The third forbidden case (binary-veto matching adaptive margin) is measurable, but it is a comparison between two arms, not a refutation bound tied to a pre-registered arm accuracy or precision/recall bound of the adaptive arm itself.
+
+Honesty / pre-registration: The prose_notes specify sweeping tau across {0.5, 0.7, 0.8, 0.9, 0.95} and then confirming FPR<0.1 and recall>0.3 'at high tau.' This is a post-hoc threshold search guided by looking at per-tau FPR/recall, not a single pre-registered threshold committed before the first look. The standard requires thresholds pre-registered before the first look; a 5-point sweep chosen after inspecting which tau works is exactly the forbidden multiple-comparisons pattern.
+
+Net: the regime condition is stated in an unmeasurable dominance relation rather than the required (base error, precision, recall, k) quantities; two forbidden cases rely on KS tests not producible by the repository harness; and the threshold sweep violates pre-registration honesty.
+
+TARGET:
+{"claim": "No fixed precision/recall regime suffices; harness strictly beats self-consistency only when critic confidence is question-adaptive such that the critic vetoes wrong-majority sets at high confidence and abstains on right-majority sets, making the effective per-question FPR near zero while maintaining nonzero recall on wrong sets.","mechanism": "The repository's data show that a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a no-op on the already-correct majority. The causal failure is not the critic's recall but its inability to discriminate which veto signals are reliable. If instead the critic outputs a calibrated confidence p_veto and the harness vetoes only when p_veto > threshold tau, then at high tau the critic abstains on most right-majority questions (FPR -> 0) while still catching wrong-majority questions where the evidence is strong. The strict advantage regime is therefore not a point in (base error, precision, recall, k) space but a curve: for any base error in (0.5-p, 0.5+p) where p scales with 1/sqrt(k), there exists a threshold tau making the expected net-fixed-minus-broke positive if and only if the critic's score distribution for wrong-majority sets stochastically dominates its score distribution for right-majority sets.","scope": {"covers": ["critic outputs calibrated confidence, not binary veto", "thresholded veto policy with tunable tau", "base error 0.40-0.70", "any k >= 5"], "excludes": ["binary veto critic with fixed global precision/recall", "critic score distributions for right and wrong majorities are identical"]},"forbidden": [{"case": "Critic score distributions for right-majority and wrong-majority sets are indistinguishable (KS test p > 0.05) yet thresholded harness strictly beats self-consistency on >= 50% of questions", "eval": "rubric:std-crit-design"}, {"case": "Critic score distr

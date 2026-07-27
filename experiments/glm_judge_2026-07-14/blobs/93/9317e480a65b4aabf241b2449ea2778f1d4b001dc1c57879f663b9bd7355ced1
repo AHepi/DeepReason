@@ -1,0 +1,16 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+{"pairwise": {"decisive_point": "a single global critic decision (veto/allow) with fixed precision 0.125 and recall 1.0 yields zero net benefit because the critic flags everything, so filtering is a no-op on the already-correct majority", "loser": "5b4538abe4a712f8c9c0a33fe17fe62d43ac359f1375d97921d389955ef1f08a", "problem": "disc:pi-criticism", "winner": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b"}}
+
+DIRECTIVE: produce exactly 8 bounded edits.

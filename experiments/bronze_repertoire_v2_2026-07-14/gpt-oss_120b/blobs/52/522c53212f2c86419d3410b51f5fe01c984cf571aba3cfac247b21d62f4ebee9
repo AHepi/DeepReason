@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's 'forbidden' case is a concrete observation that would falsify the claim, but the target fails to provide any positive evidence that the claimed mechanism actually occurred. The mechanism describes a 'network-disruption matrix' involving repurposed trade routes, collapsed gift-exchange, and cult-aligned militias, yet the target cites no specific archaeological or textual evidence—such as destruction layers, administrative tablets, or diplomatic correspondence—that would distinguish this culturally-driven process from the very 'generic Sea Peoples narrative' it purports to replace. Without such evidence, the mechanism remains an untethered narrative, not a historically grounded causal account.
+
+TARGET:
+{"claim": "A wave of charismatic Aegean cultic caravans, carrying new religious ideologies and mercantile networks, spread across the Eastern Mediterranean, destabilising existing political hierarchies and provoking coordinated maritime raids.", "mechanism": "The influx of itinerant priest‑warriors created a network‑disruption matrix: trade routes were repurposed for pilgrimage, elite gift‑exchange collapsed, and local rulers were overthrown by cult‑aligned militias.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Contemporary inscriptions from the period make no mention of new cultic movements or related social upheaval", "eval": "rubric:std-hist"}], "prose_notes": "This model replaces the generic ‘Sea Peoples’ narrative with a culturally driven migration, aligning with comparative case‑study methodology and a network‑analysis framework."}

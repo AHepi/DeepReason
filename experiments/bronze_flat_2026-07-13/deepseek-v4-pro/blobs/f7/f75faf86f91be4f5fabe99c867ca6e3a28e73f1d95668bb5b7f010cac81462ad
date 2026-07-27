@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a systemic failure of the palatial redistributive economy, where interdependent bureaucracies collapsed in a cascade after a primary grain harvest failure in the Anatolian breadbasket.\", \"mechanism\": \"A multi-year drought (attested in paleoclimate proxies) caused sequential crop failures. The Hittite core, dependent on grain imports for its central bureaucracy and army, collapsed first. This severed the trade and diplomatic network, causing downstream economic strangulation in Mycenaean Greece and Ugarit, which relied on that network for bronze and luxury goods to maintain elite cohesion.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data shows a wet, high-yield period in Anatolia precisely during 1250-1150 BC.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Archaeological evidence shows Hittite grain silos were full and their central administration was functioning right up to the destruction of Hattusa.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's annual flood was fed by equatorial monsoon patterns, not Anatolian rainfall. While weakened, the Egyptian granaries and bureaucratic structure were not dependent on the same trade network for caloric survival.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "a5aafc7a335580543dc67807f9790f1067f575f6deee70695f213489a5450d86"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid military revolution where massed infantry (the 'Northern Barbarians' or Sea Peoples) using new slashing swords and javelins overwhelmed the chariot-based aristocratic armies of the palace states.\", \"mechanism\": \"The diffusion of iron-working and new infantry tactics from the Balkans and Illyria rendered the expensive bronze-age chariot corps obsolete. Palace states, with their rigid social hierarchies and elite chariot warriors, could not adapt quickly enough. Egypt survived because its Nile geography and centralized state allowed it to absorb and re-equip these infantry as mercenaries (e.g., the Sherden) and use massed archers in defensible terrain.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"The destruction layers at all major sites show evidence of prolonged siege and chariot warfare, not rapid infantry assaults.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records from the period show they were defeated by the Sea Peoples in a land battle, forcing a retreat to the Nile.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the classic 'military technology' counterexample to the systems collapse theory. It explains the simultaneity through the rapid migration of peoples using a new, disruptive military paradigm that the brittle palace states could not counter.\"}",
+      "typicality": 0.6,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473140a9025c3d07b272b83db40ebd3ebe1443f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a synchronous but independent failure of multiple palace systems due to an internal social contradiction: the increasing extraction of surplus by a non-productive elite led to a demographic collapse as peasants fled the oppressive palatial control.\", \"mechanism\": \"The Linear B tablets show a micromanaging, extractive economy. Over centuries, this stifled rural resilience. A minor climatic fluctuation or external pressure triggered a mass abandonment of the countryside. Without farmers, the palaces starved. This happened independently in each region due to the same internal structural flaw. Egypt survived because its ideology (the Pharaoh as divine guarantor of cosmic order) and its system of regional nomarchs provided a more flexible and legitimate framework for tax collection and labor mobilization.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological surveys show a continuous, dense pattern of rural settlement in Mycenaean Greece right up to the destruction of the palaces.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B tablets from Pylos show a sudden, emergency military conscription of coastal watchers, not a slow rural depopulation.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a Marxist/social-contradiction counterexample. It argues the collapse was not a single event but a synchronous implosion of brittle, over-extractive systems. The simultaneity is explained by the similar structural evolution of the palace economies.\"}",
+      "typicality": 0.4,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "f37338f5e4c3a2c59c4ce1899609d2dcc0d8d95b6f1f9a859454040e33d7958e"
+        }
+      ]
+    }
+  ]
+}

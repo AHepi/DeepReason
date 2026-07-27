@@ -1,0 +1,52 @@
+{
+  "prompt_tokens": 1444672,
+  "completion_tokens": 483707,
+  "calls": 1746,
+  "phases": {
+    "dsflash_critic": {
+      "prompt_tokens": 43493,
+      "completion_tokens": 10898,
+      "calls": 88
+    },
+    "dsflash_defender": {
+      "prompt_tokens": 52108,
+      "completion_tokens": 18109,
+      "calls": 87
+    },
+    "dsflash_seat": {
+      "prompt_tokens": 352125,
+      "completion_tokens": 124845,
+      "calls": 405
+    },
+    "kimi_critic": {
+      "prompt_tokens": 43358,
+      "completion_tokens": 18558,
+      "calls": 85
+    },
+    "kimi_defender": {
+      "prompt_tokens": 58837,
+      "completion_tokens": 20804,
+      "calls": 85
+    },
+    "kimi_seat": {
+      "prompt_tokens": 408982,
+      "completion_tokens": 126124,
+      "calls": 407
+    },
+    "mistral_critic": {
+      "prompt_tokens": 47019,
+      "completion_tokens": 15681,
+      "calls": 91
+    },
+    "mistral_defender": {
+      "prompt_tokens": 55293,
+      "completion_tokens": 19292,
+      "calls": 86
+    },
+    "mistral_seat": {
+      "prompt_tokens": 383457,
+      "completion_tokens": 129396,
+      "calls": 412
+    }
+  }
+}

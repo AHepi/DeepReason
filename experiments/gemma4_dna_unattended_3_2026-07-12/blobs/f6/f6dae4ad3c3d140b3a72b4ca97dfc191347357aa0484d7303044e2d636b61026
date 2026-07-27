@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "Single-file HTML experience focused on the 'artistic' aspect of DNA through high-fidelity SVG animations, scroll-driven depth, and a minimalist dark-mode aesthetic.",
+      "changed_fields": [
+        "Scope"
+      ]
+    },
+    {
+      "content": "- **Parallax Helix Descent**: As the user scrolls, the camera moves 'down' a 3D-simulated DNA strand using CSS transforms.",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **Dynamic Transcription Layer**: A sliding overlay that transforms DNA sequences into mRNA in real-time with color-coded base pair transitions.",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **Scroll-Linked Animation**: The `window.scrollY` value drives the rotation and Z-translation of the double helix.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **The 'Zip' Toggle**: A button that triggers the replication animation, splitting the helix into two identical daughter strands.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **Intro Text**: \"DNA is not just a molecule; it is a biological archive encoding the instructions for every living cell, structured in a timeless spiral.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **Factoids**: \"3 billion base pairs in the human genome\", \"A single cell's DNA can stretch 2 meters if unfolded\", \"The double helix structure was first modeled in 1953.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "5. All text from the Content Inventory is present and legible against the 2026 vibrant high-contrast background.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target claims a 'rapid shift to cooler, wetter climate' caused agricultural collapse via 'flood‑induced soil erosion and reduced yields.' However, the mechanism is specified as a 'hydroclimatic regime shift' — a description of a climate variable, not a concrete institutional, economic, or social process linking precipitation to societal collapse. The standard requires naming a specific causal mechanism (e.g., a particular farming practice, land‑tenure system, or state storage policy that failed under wet conditions), not merely asserting that a climate shift 'caused' collapse. The target's mechanism remains a climatic event, not a historical mechanism, violating clause (1) of the standard.
+
+TARGET:
+{"claim":"A rapid shift to cooler, wetter climate around 1190‑1150 BCE caused agricultural system collapse in the Eastern Mediterranean.","mechanism":"Hydroclimatic regime shift leading to flood‑induced soil erosion and reduced yields.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"If high‑resolution speleothem records from the Aegean show sustained aridity rather than increased precipitation during 1190‑1150 BCE","eval":"rubric:std-hist"}],"prose_notes":"Interdisciplinary synthesis of paleoclimatic proxies (lake cores, pollen) suggests an anomalous wet phase that would stress flood‑prone agriculture, diverging from the drought narrative in neighbouring artefacts."}

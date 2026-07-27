@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+
+TARGET:
+{"claim": "The collapse was caused by a military-social revolution where mobile infantry armed with javelins and swords, recruited from the margins of palatial society, overthrew the chariot-based aristocracies in a synchronized wave of internal rebellion, not external invasion.", "mechanism": "Palace elites monopolized expensive chariots and bronze armor, creating a rigid social hierarchy. Population growth and land pressure produced a disenfranchised class of 'runners' (the Shardana, Lukka, etc. of Egyptian texts). These groups, using terrain and swarm tactics, first raided and then systematically dismantled the palaces from within, burning administrative centers to erase debt and obligation records, which explains the targeted destruction of archives.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Destruction layers uniformly show evidence of siege engines and organized external armies rather than rapid, targeted burning of administrative centers", "eval": "rubric:std-hist"}, {"case": "Linear B and other texts from the final years record a strengthening of the palace system and loyalty to the wanax/king, not social unrest", "eval": "rubric:std-hist"}], "prose_notes": "Egypt survived because its pharaonic state had already integrated 'Libyan' and other mercenary groups into its military structure, co-opting the revolutionary energy, and its grain-based wealth could pay off potential rebels."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

@@ -1,0 +1,304 @@
+{
+  "acquisition": {
+    "completed_calls": 15,
+    "dropped": [],
+    "meter": {
+      "calls": 9,
+      "completion_tokens": 2509,
+      "prompt_tokens": 12968,
+      "total": 15477
+    },
+    "resumed_from_calls": 6,
+    "total_logged_tokens": 24842
+  },
+  "branches": {
+    "J0": {
+      "attacks": 25,
+      "dropped": [],
+      "final_best": 675675,
+      "objective_delta": 0,
+      "post_branch_functionally_novel": 1,
+      "post_branch_valid_admissions": 7,
+      "source_best": 675675,
+      "tokens": {
+        "budget": 35000,
+        "calls": 6,
+        "completion_tokens": 2969,
+        "prompt_tokens": 9445,
+        "reserved": 0,
+        "total": 12414
+      },
+      "total_unique_selections": 17,
+      "verified_progress": false,
+      "verify_root": {
+        "stats": {
+          "accepted": 84,
+          "artifacts": 109,
+          "dropped_calls": 0,
+          "events": 140,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 37256,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 19,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 1,
+                "schema_exhausted": 0,
+                "tokens": 37256,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 25,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 25
+        },
+        "violations": [
+          {
+            "check": "accounting",
+            "detail": "meter says 12414 tokens, log accounts for 37256 (delta -24842)"
+          }
+        ]
+      },
+      "warrants": 25
+    },
+    "J3": {
+      "attacks": 18,
+      "dropped": [],
+      "final_best": 675675,
+      "objective_delta": 0,
+      "post_branch_functionally_novel": 2,
+      "post_branch_valid_admissions": 14,
+      "source_best": 675675,
+      "tokens": {
+        "budget": 35000,
+        "calls": 5,
+        "completion_tokens": 2011,
+        "prompt_tokens": 7680,
+        "reserved": 0,
+        "total": 9691
+      },
+      "total_unique_selections": 18,
+      "verified_progress": false,
+      "verify_root": {
+        "stats": {
+          "accepted": 77,
+          "artifacts": 95,
+          "dropped_calls": 0,
+          "events": 126,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 34533,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 20,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 20,
+                "provider_transport_attempts": 20,
+                "repair_attempts": 0,
+                "schema_exhausted": 0,
+                "tokens": 34533,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 18,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 18
+        },
+        "violations": [
+          {
+            "check": "accounting",
+            "detail": "meter says 9691 tokens, log accounts for 34533 (delta -24842)"
+          }
+        ]
+      },
+      "warrants": 18
+    },
+    "J4": {
+      "attacks": 25,
+      "dropped": [],
+      "final_best": 675675,
+      "objective_delta": 0,
+      "post_branch_functionally_novel": 3,
+      "post_branch_valid_admissions": 7,
+      "source_best": 675675,
+      "tokens": {
+        "budget": 35000,
+        "calls": 6,
+        "completion_tokens": 1511,
+        "prompt_tokens": 8036,
+        "reserved": 0,
+        "total": 9547
+      },
+      "total_unique_selections": 19,
+      "verified_progress": false,
+      "verify_root": {
+        "stats": {
+          "accepted": 84,
+          "artifacts": 109,
+          "dropped_calls": 0,
+          "events": 140,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 34389,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 20,
+                "eventual_valid": 20,
+                "first_pass_valid": 19,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 1,
+                "schema_exhausted": 0,
+                "tokens": 34389,
+                "traced_calls": 20,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 25,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 25
+        },
+        "violations": [
+          {
+            "check": "accounting",
+            "detail": "meter says 9547 tokens, log accounts for 34389 (delta -24842)"
+          }
+        ]
+      },
+      "warrants": 25
+    },
+    "J6": {
+      "attacks": 27,
+      "dropped": [
+        "SchemaRepairError: role conjecturer: no schema-valid output after bounded repair: extra field at /rationale"
+      ],
+      "final_best": 675675,
+      "objective_delta": 0,
+      "post_branch_functionally_novel": 1,
+      "post_branch_valid_admissions": 2,
+      "source_best": 675675,
+      "tokens": {
+        "budget": 35000,
+        "calls": 9,
+        "completion_tokens": 6666,
+        "prompt_tokens": 11189,
+        "reserved": 0,
+        "total": 17855
+      },
+      "total_unique_selections": 17,
+      "verified_progress": false,
+      "verify_root": {
+        "stats": {
+          "accepted": 83,
+          "artifacts": 110,
+          "dropped_calls": 0,
+          "events": 141,
+          "gate_blocks": 0,
+          "interventions": 0,
+          "logged_tokens": 38743,
+          "max_problem_desc_len": 452,
+          "problems": 1,
+          "process": {
+            "engine_profile": "full",
+            "manifest_present": true,
+            "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+            "model_profile": "standard",
+            "profile_totals": {
+              "standard": {
+                "attempts": 21,
+                "calls": 19,
+                "eventual_valid": 19,
+                "first_pass_valid": 17,
+                "provider_transport_attempts": 21,
+                "repair_attempts": 2,
+                "schema_exhausted": 0,
+                "tokens": 38743,
+                "traced_calls": 19,
+                "transport_dropped": 0,
+                "usage_unknown_attempts": 0
+              }
+            }
+          },
+          "refuted": 27,
+          "reseeds": 0,
+          "trial_blocks": 0,
+          "warrants": 27
+        },
+        "violations": [
+          {
+            "check": "accounting",
+            "detail": "meter says 17855 tokens, log accounts for 38743 (delta -20888)"
+          }
+        ]
+      },
+      "warrants": 27
+    }
+  },
+  "estimand_limit": "conditional matched-state pilot; one state, no whole-run or hard-orbit claim",
+  "manifest_sha256": "9fd24620c811eb75e929758785f3890ed4a1e75b2a3942b788512c5dc25bdb91",
+  "model": {
+    "id": "glm-5.2",
+    "reasoning": "none"
+  },
+  "plan_digest": "15b88900bb25e53bfe8e5a57965f017eebdaeb8782a6ea3e59cb849d5a5c5b1b",
+  "preregistration_sha256": "d2a24f0895204d93388e9dff3ee28288ee41c77eb185c3ec2bd0052d0cf3a0d5",
+  "schema": "deepreason-jolt-trigger-glm52-pilot-report-v2",
+  "source_best": 675675,
+  "status": "complete",
+  "trigger": {
+    "digest": "d9975584dba8d10718cbe8ce106ddedffdff49256f63040cf2bb3aed9e536df7",
+    "improvements_in_window": 0,
+    "new_mechanism_classes": [],
+    "schema": "deepreason-functional-soft-trigger-v1",
+    "source_event_seqs": [
+      82,
+      83,
+      89,
+      92,
+      93,
+      99,
+      100,
+      101
+    ],
+    "trigger": true,
+    "valid_admissions": 27,
+    "window": 8
+  }
+}

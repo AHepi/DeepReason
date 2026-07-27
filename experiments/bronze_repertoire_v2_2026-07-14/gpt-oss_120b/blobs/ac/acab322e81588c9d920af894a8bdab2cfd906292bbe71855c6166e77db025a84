@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target proposes a specific mechanism (seaborne raids by disenfranchised Cycladic communities) but fails to provide a concrete forbidden case that would genuinely test this mechanism. The stated forbidden case—'Archaeological layers show no increase in weaponry or fortifications along the affected coasts'—does not logically contradict the mechanism. A coordinated wave of maritime raiders could disrupt trade and cause political fragmentation without necessarily leaving behind increased weaponry or fortifications in the archaeological record of the targeted coasts, especially if the raids were swift, successful, and did not provoke a uniform defensive building response. The forbidden case must be an observation that would actually falsify the mechanism, not a loosely related archaeological pattern that could coexist with the proposed causal process.
+
+TARGET:
+{"claim": "A coordinated wave of maritime raiders—originating from disenfranchised Cycladic communities—disrupted trade routes and precipitated political fragmentation.", "mechanism": "external demographic pressure through seaborne raids", "scope": {"covers": ["Mycenaean trade networks", "Hittite coastal ports", "Ugaritic harbor cities"], "excludes": ["Inland Hittite heartland", "Egypt"]}, "forbidden": [{"case": "Archaeological layers show no increase in weaponry or fortifications along the affected coasts", "eval": "rubric:std-hist"}], "prose_notes": "Matrix compares raid intensity, trade volume loss, and subsequent administrative breakdown for each polity."}

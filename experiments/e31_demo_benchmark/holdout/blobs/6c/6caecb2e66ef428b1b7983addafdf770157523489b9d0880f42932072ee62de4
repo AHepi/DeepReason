@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""E3.1 trusted checker for e31-constr-003 (family sidon_residue).
+
+Sealed holdout artifact (harness-spec-v1.3 SS10.5): withheld from any
+run loop, revealed only post-hoc.  Exit 0 iff the candidate passes."""
+import json
+
+PARAMS = json.loads("{\"m\": 20, \"n\": 6, \"q\": 5, \"r\": 2}")
+
+def check_sidon_residue(params, candidate):
+    n, m = params["n"], params["m"]
+    q, r = params["q"], params["r"]
+    if not isinstance(candidate, list) or len(candidate) != n:
+        return False, f"candidate must be a list of exactly {n} integers"
+    if any(not isinstance(item, int) or isinstance(item, bool) for item in candidate):
+        return False, "candidate entries must be integers"
+    if len(set(candidate)) != n:
+        return False, "entries must be distinct"
+    if any(item < 1 or item > m for item in candidate):
+        return False, f"entries must lie in [1, {m}]"
+    sums = [a + b for i, a in enumerate(candidate) for b in candidate[i + 1:]]
+    if len(sums) != len(set(sums)):
+        return False, "pairwise sums must be distinct (Sidon property)"
+    if sum(candidate) % q != r:
+        return False, f"sum must be congruent to {r} mod {q}"
+    return True, "all properties satisfied"
+
+
+def main():
+    import sys
+    path = sys.argv[1] if len(sys.argv) > 1 else "candidate.json"
+    with open(path, encoding="utf-8") as handle:
+        candidate = json.load(handle)
+    ok, reason = check_sidon_residue(PARAMS, candidate)
+    print(("PASS: " if ok else "FAIL: ") + reason)
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

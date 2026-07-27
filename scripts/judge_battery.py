@@ -10,7 +10,11 @@ reasoning {provider default, off}: the config keeps judge reasoning ON
 "pending audit data" — this battery IS that audit (judge spend was 50% of
 the criticism run, 22% of its calls truncated by reasoning length).
 
-Usage: DEEPSEEK_API_KEY=... python scripts/judge_battery.py [--budget 160000]
+This is a normative audit battery: every reported ruling is produced by an
+explicit cross-family ensemble.  Both credentials are required by default.
+
+Usage: DEEPSEEK_API_KEY=... POOLSIDE_API_KEY=... \
+       python scripts/judge_battery.py [--budget 160000]
 """
 
 import argparse
@@ -27,6 +31,7 @@ from deepreason.informal.audits import bias_probes, planted_flaw_calibration  # 
 from deepreason.llm.adapter import LLMAdapter  # noqa: E402
 from deepreason.llm.budget import TokenBudgetExceeded, TokenMeter  # noqa: E402
 from deepreason.llm.endpoints import EndpointError, OpenAICompatEndpoint  # noqa: E402
+from deepreason.llm.firewall import JudgeEnsemblePolicyError  # noqa: E402
 
 RUBRIC = (
     "An argument violates this standard iff its stated reasoning contains a "
@@ -142,15 +147,28 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--budget", type=int, default=160_000)
     parser.add_argument("--base-url", default="https://api.deepseek.com")
+    parser.add_argument(
+        "--second-base-url", default="https://inference.poolside.ai/v1"
+    )
+    parser.add_argument("--second-model", default="poolside/laguna-m.1")
+    parser.add_argument("--second-key-env", default="POOLSIDE_API_KEY")
     parser.add_argument("--root", default="runs/judge_battery")
     parser.add_argument("--only", default="",
-                        help="substring filter on config names (e.g. 'laguna')")
+                        help="substring filter on primary config names (e.g. 'v4-pro')")
     parser.add_argument("--tag", default="",
                         help="suffix for the report filename")
     args = parser.parse_args()
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     if not api_key:
         print("DEEPSEEK_API_KEY not set", file=sys.stderr)
+        return 1
+    second_key = os.environ.get(args.second_key_env)
+    if not second_key:
+        print(
+            f"{args.second_key_env} not set; judge_battery requires an explicit "
+            "cross-family second judge",
+            file=sys.stderr,
+        )
         return 1
 
     harness = Harness(Path(args.root))
@@ -165,21 +183,28 @@ def main() -> int:
         ("v4-flash/reasoning-default", args.base_url, api_key, "deepseek-v4-flash", None),
         ("v4-flash/reasoning-off", args.base_url, api_key, "deepseek-v4-flash", "none"),
     ]
-    poolside_key = os.environ.get("POOLSIDE_API_KEY")
-    if poolside_key:
-        # Cross-family seat (§9): calibrate before it judges anything.
-        configs.append(("laguna-m.1/default", "https://inference.poolside.ai/v1",
-                        poolside_key, "poolside/laguna-m.1", None))
     if args.only:
         configs = [c for c in configs if args.only in c[0]]
     try:
         for name, base_url, key, model, reasoning in configs:
-            endpoint = OpenAICompatEndpoint(
+            primary = OpenAICompatEndpoint(
                 base_url, model, api_key=key, temperature=0.0,
                 max_tokens=2400, json_mode=True, reasoning=reasoning,
             )
-            adapter = LLMAdapter({"judge": endpoint}, harness.blobs,
-                                 retry_max=2, meter=meter)
+            second = OpenAICompatEndpoint(
+                args.second_base_url,
+                args.second_model,
+                api_key=second_key,
+                temperature=0.0,
+                max_tokens=2400,
+                json_mode=True,
+            )
+            adapter = LLMAdapter(
+                {"judge": [primary, second]},
+                harness.blobs,
+                retry_max=2,
+                meter=meter,
+            )
             before = meter.total
             rate = planted_flaw_calibration(harness, adapter, config, CALIBRATION, RUBRIC)
             flaw_tokens = meter.total - before
@@ -187,23 +212,33 @@ def main() -> int:
             bias = bias_probes(harness, adapter, config,
                                verbosity_pairs=VERBOSITY_PAIRS)
             report["configs"][name] = {
-                "planted_flaw_error_rate": round(rate, 4),
-                "passes_JUDGE_ERR_MAX_0.25": rate <= 0.25,
+                "judge_ensemble": [model, args.second_model],
+                "planted_flaw_error_rate": (
+                    round(rate, 4) if rate is not None else None
+                ),
+                "passes_JUDGE_ERR_MAX_0.25": (
+                    rate is not None and rate <= 0.25
+                ),
                 "verbosity_bias_rate": bias["verbosity"],
                 "tokens": {"planted_flaw": flaw_tokens,
                            "bias_probes": meter.total - before},
             }
-            print(f"{name}: error_rate={rate:.3f} "
+            rate_text = f"{rate:.3f}" if rate is not None else "ensemble-split"
+            print(f"{name}: error_rate={rate_text} "
                   f"verbosity_bias={bias['verbosity']} "
                   f"spent={meter.total}", flush=True)
     except TokenBudgetExceeded:
         print("budget exhausted — reporting completed configs")
     except EndpointError as e:
         print(f"endpoint error: {e} — reporting completed configs")
+    except JudgeEnsemblePolicyError as e:
+        print(f"invalid judge ensemble: {e}", file=sys.stderr)
+        return 2
 
     report["tokens"] = meter.snapshot()
     suffix = f"_{args.tag}" if args.tag else ""
     out = Path(f"experiments/results/judge_battery_report{suffix}.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(json.dumps(report["configs"], indent=2, sort_keys=True))
     return 0

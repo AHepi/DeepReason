@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's mechanism fails to satisfy std-hist clause (2) because it does not state a forbidden case that is a concrete observation which could realistically have obtained. The forbidden case 'Egyptian agricultural records show no drought stress during 1250-1150 BC and the Nile flood levels remained stable' is explicitly excluded from the scope (Egypt is not covered), so it is not a genuine test of the mechanism. The other two forbidden cases are also problematic: 'Palace economies showed continued surplus storage capacity without administrative contraction before destruction layers' is vague and not tied to a specific time or place, and 'The Sea Peoples are attested as organized polities with territorial ambitions in contemporary texts predating the collapses' is a plausible observation but the mechanism does not actually forbid it—it only claims the Sea Peoples were displaced populations, not that they lacked organization or ambition. Thus the target does not provide a proper forbidden case that would falsify the mechanism, violating the standard.",
+  "counterexample": null
+}

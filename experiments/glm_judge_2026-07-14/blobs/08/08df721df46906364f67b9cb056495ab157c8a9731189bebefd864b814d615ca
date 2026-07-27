@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "\"The second forbidden case ('Critic confidence c(q) shows no correlation with majority-margin (|rho| < 0.15) yet adaptive harness beats SC') is a post‑hoc observation that cannot falsify the proposal by rerunning the repository's validation harness... violating std‑crit‑design clause (2) ... and clause (3)\""
+}

@@ -152,7 +152,7 @@ def test_gate_block_is_persisted_to_the_log(harness):
     )
 
 
-def test_argumentative_critic_attack_registers(harness):
+def test_argumentative_critic_attack_is_observe_only(harness):
     _setup(harness)
     config = Config(VS_K=1)
     attack_case = json.dumps(
@@ -160,6 +160,8 @@ def test_argumentative_critic_attack_registers(harness):
     )
     adapter = _adapter(harness, [_vs("the moon resonance moon")], [attack_case])
     result = run_problem(harness, "pi-tides", adapter, config, cycles=1)
-    assert result["survivors"] == []  # argumentative attack stands unanswered
+    assert len(result["survivors"]) == 1
     (target,) = [a for a, p in harness.state.addr if p == "pi-tides"]
-    assert harness.state.status[target] == Status.REFUTED
+    assert harness.state.status[target] == Status.ACCEPTED
+    assert not harness.warrants
+    assert any(event.inputs[:2] == ["scrutiny", target] for event in harness.log.read())

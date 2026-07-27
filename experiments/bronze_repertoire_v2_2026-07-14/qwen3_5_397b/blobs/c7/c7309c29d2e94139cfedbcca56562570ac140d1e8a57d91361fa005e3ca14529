@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete observation that could realistically have obtained, but rather a hypothetical contrary finding that contradicts the mechanism's core premise.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case—'Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC'—is not a concrete observation that exists in the historical or scientific record. It is a hypothetical null result (the absence of the drought signal) that, if it had obtained, would falsify the mechanism. The standard explicitly distinguishes between a mechanism's falsifiability and the requirement that forbidden cases be realistic, obtainable observations. A stable-precipitation sediment core from that exact window is not a datable pattern that realistically could have been found, given the overwhelming proxy evidence for the 3.2ka event; it is a logical contrary, not a concrete historical case.
+cites: {"claim": "The collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the palace economies.", "mechanism": "A multi-decadal mega-drought reduced agricultural yields below the threshold required to support the hyper-specialized, non-food-producing palace elites and standing armies, triggering internal revolt and mass migration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the 3.2ka BP aridification event; explains Egypt's survival via its reliance on Nile irrigation rather than rainfall."}
+
+TARGET:
+{"claim": "The collapse resulted from a synchronized climatic shock (the 3.2ka event) that specifically targeted the rain-fed agricultural hinterlands of the palace economies.", "mechanism": "A multi-decadal mega-drought reduced agricultural yields below the threshold required to support the hyper-specialized, non-food-producing palace elites and standing armies, triggering internal revolt and mass migration.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Paleoclimatic data from Eastern Mediterranean sediment cores showing stable precipitation levels between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "Relies on the 3.2ka BP aridification event; explains Egypt's survival via its reliance on Nile irrigation rather than rainfall."}

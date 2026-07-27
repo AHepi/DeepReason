@@ -1,0 +1,13 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+contradicts: The drought hypothesis (58e798a0) posits agricultural collapse as the primary trigger, but the copper-production collapse hypothesis (dacf8df8) refutes this by asserting that the economic engine of trade-dependent palace societies was already severed before the drought's peak effects, making the drought a secondary stressor rather than the decisive cause. REFUTED IF evidence shows copper production ceased only after widespread crop failures documented in 58e798a0.
+
+BATTERY THE EDITS WILL FACE:
+- program:lineage_ref
+- predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+DIRECTIVE: produce exactly 8 bounded edits.

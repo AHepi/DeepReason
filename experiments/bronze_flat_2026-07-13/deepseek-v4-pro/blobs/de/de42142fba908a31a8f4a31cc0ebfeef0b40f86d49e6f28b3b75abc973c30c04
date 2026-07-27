@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism claims that new infantry tactics rendered chariot armies obsolete, leading to swift and decisive military defeat. The forbidden case under trial states: 'Textual evidence shows the palatial chariot armies successfully adapted to and defeated the new infantry tactics in multiple major engagements.' If such textual evidence exists, it directly contradicts the claim that the military shift was uniformly decisive and that chariot forces were incapable of adapting. The target's own prose_notes concede that Egypt adapted by incorporating mercenaries familiar with infantry tactics, demonstrating that adaptation was possible. The mechanism therefore fails to account for cases where chariot-based states could and did counter the new tactics, violating the requirement that the mechanism be a specific causal process rather than an overgeneralized inevitability.",
+  "counterexample": [
+    "Textual evidence from the Battle of the Delta (c. 1175 BCE) records that Ramesses III's Egyptian forces, which included chariotry, successfully defeated the Sea Peoples' infantry-based attacks by adapting tactics and using combined arms, demonstrating that chariot armies were not rendered universally obsolete by the new infantry tactics."
+  ]
+}

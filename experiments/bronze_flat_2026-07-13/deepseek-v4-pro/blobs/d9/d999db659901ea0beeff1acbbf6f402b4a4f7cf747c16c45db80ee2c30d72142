@@ -1,0 +1,52 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+A9
+A10
+A11
+A12
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM succ:65e69166cab4
+supersede refuted candidate 65e69166cab4 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.85): counterexample first
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: nu: argumentative case d0be824c4387a9df against A2 is sound
+- A3: The account claims the collapse was caused by a systemic failure of the palatial trade and diplomacy network, yet it excludes Egypt from the scope of collapse w
+- A4: nu: argumentative case d5e4b4340079de3d against A5 is sound
+- A6: The account claims the collapse was driven by a rapid shift to massed mobile infantry rendering chariot-based armies obsolete, but it excludes Egypt from the sc
+- A7: nu: argumentative case 5037e5a87238d3e4 against A8 is sound
+- A9: The account posits a pandemic sweeping through densely populated palatial centers as the primary cause of collapse, yet it excludes Egypt on the grounds of its 
+- A10: nu: verdict of skeleton-wf on A11 is sound and relevant
+- A12: critic: skeleton-wf failed on 65e69166cab4
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.

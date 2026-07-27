@@ -1,0 +1,230 @@
+{
+  "schema": "deepreason-judge-liability-v1",
+  "prereg": "experiments/judge_liability_index_prereg.yaml",
+  "generated_at": "2026-07-13T09:30:07.775609+00:00",
+  "program": "scripts/judge_liability.py (pure replay; 0 LLM tokens)",
+  "instrument": {
+    "decay_constant_per_clean_scrutinized_ruling": 0.95,
+    "exposure_floor": 10,
+    "event_order": "per-seat append order in judgments.jsonl",
+    "signals": [
+      "cross-instrument contradiction (critic on toothless; any-other-seat flag on flawed batteries)",
+      "exposure (scrutinized-ruling count)",
+      "decay on subsequent clean scrutinized rulings"
+    ]
+  },
+  "seats": {
+    "named": {
+      "gpt-oss-seat-A": "same-A",
+      "gpt-oss-seat-B": "same-B",
+      "qwen-seat": "cross-B"
+    },
+    "appendix": {
+      "gpt-oss-seat-A-cross-dup": "cross-A"
+    }
+  },
+  "per_seat_table": {
+    "gpt-oss-seat-A": {
+      "rulings_total": 120,
+      "exposure_scrutinized_rulings": 112,
+      "exhibited_errors_raw": 16,
+      "decayed_error_mass": 5.3998,
+      "status": "CALIBRATED",
+      "liability_index": 0.0482,
+      "raw_seat": "same-A",
+      "model": "gpt-oss:120b",
+      "true_unknown_fn_rate_validation_only": 0.325
+    },
+    "gpt-oss-seat-B": {
+      "rulings_total": 120,
+      "exposure_scrutinized_rulings": 112,
+      "exhibited_errors_raw": 19,
+      "decayed_error_mass": 5.2631,
+      "status": "CALIBRATED",
+      "liability_index": 0.047,
+      "raw_seat": "same-B",
+      "model": "gpt-oss:120b",
+      "true_unknown_fn_rate_validation_only": 0.425
+    },
+    "qwen-seat": {
+      "rulings_total": 120,
+      "exposure_scrutinized_rulings": 111,
+      "exhibited_errors_raw": 56,
+      "decayed_error_mass": 22.6745,
+      "status": "CALIBRATED",
+      "liability_index": 0.2043,
+      "raw_seat": "cross-B",
+      "model": "qwen3-coder:480b",
+      "true_unknown_fn_rate_validation_only": 0.825
+    },
+    "gpt-oss-seat-A-cross-dup": {
+      "rulings_total": 120,
+      "exposure_scrutinized_rulings": 108,
+      "exhibited_errors_raw": 11,
+      "decayed_error_mass": 4.6121,
+      "status": "CALIBRATED",
+      "liability_index": 0.0427,
+      "raw_seat": "cross-A",
+      "model": "gpt-oss:120b",
+      "true_unknown_fn_rate_validation_only": 0.25
+    }
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "REFUTED",
+      "statement": "index (computed without ground truth) ranks the three seat configurations exactly as their true unknown-flaw false-negative rates",
+      "measured": {
+        "index_rank_worst_first": [
+          "qwen-seat",
+          "gpt-oss-seat-A",
+          "gpt-oss-seat-B"
+        ],
+        "truth_rank_worst_first": [
+          "qwen-seat",
+          "gpt-oss-seat-B",
+          "gpt-oss-seat-A"
+        ]
+      }
+    },
+    "P2": {
+      "verdict": "CONFIRMED",
+      "statement": "weakest/strongest index score ratio >= 2x",
+      "measured": {
+        "ratio": 4.3468
+      }
+    },
+    "P3": {
+      "verdict": "CONFIRMED",
+      "statement": "every seat's exposure reported; zero-scrutiny seat is UNCALIBRATED, never clean",
+      "measured": {
+        "exposures_reported": true,
+        "synthetic_zero_scrutiny_seat": {
+          "rulings_total": 0,
+          "exposure_scrutinized_rulings": 0,
+          "exhibited_errors_raw": 0,
+          "decayed_error_mass": 0.0,
+          "status": "UNCALIBRATED",
+          "liability_index": null
+        }
+      }
+    }
+  },
+  "decay_sensitivity_sweep": {
+    "1.0": {
+      "scores": {
+        "gpt-oss-seat-A": 0.1429,
+        "gpt-oss-seat-B": 0.1696,
+        "qwen-seat": 0.5045
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-B",
+        "gpt-oss-seat-A"
+      ],
+      "rank_matches_truth": true
+    },
+    "0.999": {
+      "scores": {
+        "gpt-oss-seat-A": 0.1381,
+        "gpt-oss-seat-B": 0.162,
+        "qwen-seat": 0.4908
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-B",
+        "gpt-oss-seat-A"
+      ],
+      "rank_matches_truth": true
+    },
+    "0.99": {
+      "scores": {
+        "gpt-oss-seat-A": 0.1049,
+        "gpt-oss-seat-B": 0.1119,
+        "qwen-seat": 0.3907
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-B",
+        "gpt-oss-seat-A"
+      ],
+      "rank_matches_truth": true
+    },
+    "0.98": {
+      "scores": {
+        "gpt-oss-seat-A": 0.0817,
+        "gpt-oss-seat-B": 0.0815,
+        "qwen-seat": 0.3158
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-A",
+        "gpt-oss-seat-B"
+      ],
+      "rank_matches_truth": false
+    },
+    "0.95": {
+      "scores": {
+        "gpt-oss-seat-A": 0.0482,
+        "gpt-oss-seat-B": 0.047,
+        "qwen-seat": 0.2043
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-A",
+        "gpt-oss-seat-B"
+      ],
+      "rank_matches_truth": false
+    },
+    "0.9": {
+      "scores": {
+        "gpt-oss-seat-A": 0.0273,
+        "gpt-oss-seat-B": 0.031,
+        "qwen-seat": 0.1365
+      },
+      "rank_worst_first": [
+        "qwen-seat",
+        "gpt-oss-seat-B",
+        "gpt-oss-seat-A"
+      ],
+      "rank_matches_truth": true
+    }
+  },
+  "sensitivity_with_t2_clean_events": {
+    "population": "tranche-1 events + tranche-2 clean-item events (same signal rules; other-seat flags on clean items are themselves errors \u2014 see caveats)",
+    "per_seat": {
+      "gpt-oss-seat-A": {
+        "liability_index": 0.0263,
+        "exposure_scrutinized_rulings": 140,
+        "status": "CALIBRATED"
+      },
+      "gpt-oss-seat-B": {
+        "liability_index": 0.0376,
+        "exposure_scrutinized_rulings": 140,
+        "status": "CALIBRATED"
+      },
+      "qwen-seat": {
+        "liability_index": 0.3302,
+        "exposure_scrutinized_rulings": 140,
+        "status": "CALIBRATED"
+      }
+    },
+    "rank_worst_first": [
+      "qwen-seat",
+      "gpt-oss-seat-B",
+      "gpt-oss-seat-A"
+    ],
+    "rank_matches_primary": false
+  },
+  "llm_tokens_spent": 0,
+  "caveats": [
+    "Single validation tranche (the committed tranche-1 corpus); no out-of-tranche replication yet.",
+    "Critic-as-oracle assumption: for toothless items the argumentative critic's outcome is treated as the stronger layer; the critic is itself an imperfect instrument (here it failed all 40 envelopes, which the corpus construction says is correct, but that agreement is not guaranteed in general).",
+    "n=3 seats: exact rank agreement has a 1-in-6 chance under a random ranking, so P1 alone is weak evidence; P2's separation requirement is the stronger check.",
+    "On unknown/known-flaw items, scrutiny comes from other seats' flags; because every item in those sub-batteries is flawed by construction, a flagging seat is always right on this fixture. On live mixed traffic that assumption fails for sound items \u2014 see the sensitivity variant, where tranche-2 clean items make other-seat flags themselves errors and exhibited-error attribution can penalize a correct lenient seat.",
+    "Raw seat cross-A is a fourth ruling stream with the same configuration as the gpt-oss seats; it is excluded from the n=3 validation (duplicate configuration) and reported as an appendix row.",
+    "The prereg's paraphrase/order-variation disagreement signal is absent from the tranche-1 data (no paraphrase arms were run); the index here uses only cross-instrument contradiction + exposure + decay.",
+    "Decay constant 0.95 and exposure floor 10 were coded before the first data run but the prereg left the constant free; it is an untuned choice, recorded here, attention-style, never a status input. The decay_sensitivity_sweep shows the verdict-bearing rank is SENSITIVE to this choice for the two near-tied gpt-oss seats: the primary constant was NOT revised after seeing outcomes.",
+    "Event order in this replay is the per-seat append order of judgments.jsonl, i.e. thread-pool completion order over a static corpus; it carries no live temporal meaning, so decay interacts with an essentially arbitrary ordering (roughly corpus order: unknown, known, toothless). In live operation the order would be real ruling time.",
+    "Ground truth (hidden annotations; unknown-flaw items flawed by construction) was used ONLY to compute the validation columns and verdicts, never as an index input."
+  ]
+}

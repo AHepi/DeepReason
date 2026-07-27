@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\":\"A systemic failure of the interconnected palatial trade and diplomacy network caused the collapse, as a shock to one node cascaded through the entire system.\",\"mechanism\":\"Breakdown of reciprocal gift-exchange and trade networks led to resource shortages, loss of elite legitimacy, and eventual administrative collapse in all interconnected polities.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Egyptian records show a complete cessation of trade with the Levant and Aegean prior to the collapse of those regions\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This account explains the simultaneity of collapse through network effects, but must explain why Egypt survived despite being part of the same network. The forbidden case would refute the claim that Egypt remained connected to the network while others collapsed.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A1", "A5"]
+    },
+    {
+      "content": "{\"claim\":\"A rapid military revolution in infantry tactics, specifically the adoption of massed, mobile infantry (like the \u2018Sea Peoples\u2019), rendered chariot-based palatial armies obsolete.\",\"mechanism\":\"Chariot elites were militarily and politically dominant; cheap, massed infantry with javelins and long swords overwhelmed chariot forces, destroying the military basis of palatial power and leading to state collapse.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Archaeological evidence shows a gradual transition in military technology across the Eastern Mediterranean over two centuries, with no sudden shift in weaponry or armor around 1200 BC\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This account explains the military defeats and destruction layers. It excludes Egypt by arguing Egypt successfully adopted or countered these tactics (e.g., at the Battle of the Delta). The forbidden case would refute the sudden technological determinism.\"}",
+      "typicality": 0.75,
+      "neighbours": ["A8"]
+    },
+    {
+      "content": "{\"claim\":\"A virulent pandemic, possibly the bubonic plague, swept through the densely populated palatial centers, causing massive depopulation and administrative collapse.\",\"mechanism\":\"High population density and established trade routes facilitated rapid disease transmission, leading to a demographic crash that undermined the economic and military foundations of the palatial system.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Bioarchaeological analysis of human remains from destruction layers across the affected regions consistently tests negative for Yersinia pestis or other pandemic pathogens\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This account explains the widespread and rapid nature of the collapse. Egypt\u2019s survival is attributed to its more dispersed settlement pattern along the Nile and natural quarantine advantages. The forbidden case would directly refute the biological mechanism.\"}",
+      "typicality": 0.4,
+      "neighbours": ["A11"]
+    }
+  ]
+}

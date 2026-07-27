@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which broke the trust required for long-distance trade.\", \"mechanism\": \"Environmental stressors (drought, earthquakes) reduced agricultural surplus, triggering a feedback loop where centralized authorities could no longer guarantee food or luxury goods, leading to internal revolt and the abandonment of literacy/administration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing continuous grain storage and uninterrupted administrative tablet production in Ugarit during the final decades.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, relying on the interdependence of the Late Bronze Age trade network.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c5da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven by the rapid diffusion of inexpensive iron weaponry and new infantry tactics that rendered the chariot-based aristocratic military monopoly obsolete.\", \"mechanism\": \"Technological democratization allowed marginalized groups and sea-borne raiders to field effective infantry forces that defeated elite chariot corps, destabilizing the political hierarchy reliant on military exclusivity.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Sea Peoples as a unified polity\"]}, \"forbidden\": [{\"case\": \"Evidence that iron smelting was not scalable or militarily significant until after 1100 BC in the Levant.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic but increasingly criticized explanation; included for its historical prominence despite archaeological challenges regarding the timing of iron adoption.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a specific institutional failure of the 'Great King' diplomatic club, where the loss of one key node (Hatti) triggered a cascading loss of legitimacy and mutual defense pacts among peer polities.\", \"mechanism\": \"Sociopolitical contagion: The Hittite collapse removed the balancing power against Assyria and emboldened peripheral actors; without the Hittite buffer, the psychological and contractual framework holding the Mycenaean and Levantine courts together dissolved into preemptive fragmentation.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Mycenaean Greece\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Non-palatial rural settlements\"]}, \"forbidden\": [{\"case\": \"Diplomatic correspondence indicating active, functioning mutual defense treaties between Mycenae and Ugarit after the fall of Hattusa.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, network-theory focused approach that prioritizes diplomatic psychology over material causes like climate or migration.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "dependence",
+          "target": "f06b3cabf9fc833417c5ceb4f0c88a7f9d49b36e10e668a2f23abf58c48c4115"
+        }
+      ],
+      "typicality": 0.28
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's mechanism is not a specific, evidenced institution or process but an untestable epidemiological conjecture. The 'forbidden' cases are not met: the first forbidden case demands 'mass graves from the period show a normal demographic profile with clear evidence of death by violence,' yet the target's own prose_notes reinterpret the primary evidence of violence (the 'Sea Peoples' conflict) as desperate refugees, not conquerors, thereby insulating the disease hypothesis from the very military evidence that would falsify it. The second forbidden case cites Egyptian records of repelling armed 'Sea Peoples' as indicating military conflict, not a pandemic. The target's prose_notes explicitly co-opts this evidence by redefining the 'Sea Peoples' as uninfected refugees fleeing the disease, meaning the observation of armed conflict is not treated as a genuine counterexample but is absorbed into the disease narrative. The mechanism thus fails the standard's requirement for a concrete, falsifiable process by rendering the key observable patterns (destruction layers, Egyptian battle records) consistent with the hypothesis through ad hoc auxiliary assumptions, leaving no realistic forbidden case that could actually obtain and refute it.",
+  "counterexample": [
+    "Mass graves from the period show a normal demographic profile with clear evidence of death by violence (weapon trauma, unburied bodies in destruction layers) rather than disease.",
+    "Egyptian records from the reign of Ramesses III describe repelling waves of armed 'Sea Peoples' migrating with their families and livestock, indicating a military conflict, not a pandemic."
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "\"near-zero falseflag on stable-majority questions (precision→1) while setting high recall on fragile-majority questions\" and \"strict benefit is positive whenever the question distribution mixes stable and fragile majorities\""
+}

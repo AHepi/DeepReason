@@ -1,0 +1,21 @@
+/* DeepReason vendored option "layout" — layout primitives.
+   Selectable via the design manifest (libs: ["layout"]). Composable
+   utilities so components declare structure instead of re-deriving
+   flex/grid boilerplate. Prefixed lo- (the catalog owns this namespace). */
+.lo-stack > * + * { margin-block-start: var(--lo-gap, 1rem); }
+.lo-row { display: flex; flex-wrap: wrap; gap: var(--lo-gap, 1rem); align-items: center; }
+.lo-cluster { display: flex; flex-wrap: wrap; gap: var(--lo-gap, 0.5rem); }
+.lo-grid {
+  display: grid;
+  gap: var(--lo-gap, 1rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--lo-min, 14rem)), 1fr));
+}
+.lo-center { display: grid; place-items: center; }
+.lo-between { display: flex; flex-wrap: wrap; gap: var(--lo-gap, 1rem);
+              justify-content: space-between; align-items: center; }
+.lo-wide { max-width: none; }
+.lo-pad { padding: var(--lo-pad, 1rem); }
+.lo-sticky-top { position: sticky; top: 0; z-index: 10; }
+@media (max-width: 40rem) {
+  .lo-row, .lo-between { flex-direction: column; align-items: stretch; }
+}

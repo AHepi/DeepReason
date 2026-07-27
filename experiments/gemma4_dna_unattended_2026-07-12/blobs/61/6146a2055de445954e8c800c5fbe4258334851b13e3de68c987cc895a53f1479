@@ -1,0 +1,30 @@
+```json
+{
+  "components": [
+    {
+      "alias": "C1",
+      "purpose": "Cyber-Organic header with the title 'The DNA Archive: Digitalized Life'"
+    },
+    {
+      "alias": "C2",
+      "purpose": "Parallax-driven background layers for depth and visual atmosphere"
+    },
+    {
+      "alias": "C3",
+      "purpose": "Nucleotide sequence data-grid for viewing base pairs"
+    },
+    {
+      "alias": "C4",
+      "purpose": "Interactive transcription simulator with sequence scrubbing slider"
+    },
+    {
+      "alias": "C5",
+      "purpose": "Visual guide explaining semi-conservative DNA replication"
+    },
+    {
+      "alias": "C6",
+      "purpose": "Informational section for mRNA transcription and genetic factoids"
+    }
+  ]
+}
+```

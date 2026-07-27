@@ -9,40 +9,267 @@ spot-checks; capture detection with hysteresis feeding the response ladder
 (§11.4). The frontier persists across sessions because the log does.
 """
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
+import json
 
+from deepreason.authority import AuthoritySurface, TrialAuthority, trial_authority_for
 from deepreason.capture import detection, ladder, schools
 from deepreason.capture.pareto import frontier
-from deepreason.llm.adapter import SchemaRepairError
+from deepreason.llm.adapter import SchemaRepairError, WorkflowAuthorizationError
+from deepreason.llm.budget import TokenBudgetExceeded
 from deepreason.llm.endpoints import EndpointError
+from deepreason.llm.firewall import (
+    RouteFirewallError,
+    resolve_school_role_lease,
+    route_fingerprint,
+)
 from deepreason.llm.embedder import HashingEmbedder
 from deepreason.measures.hv import hv_spot_check, is_hv_floor, run_hv_floor
 from deepreason.measures.reach import reach_sweep
-from deepreason.ontology import SpawnTrigger, Status
+from deepreason.ontology import Rule, SpawnTrigger, Status
+from deepreason.workflow.models import WorkflowTaskKind
 from deepreason.rules.conj import conj
-from deepreason.rules.crit import crit_argumentative_batch, crit_program
+from deepreason.rules.crit import crit_argumentative_batch, crit_fuzz, crit_program
 from deepreason.rules.spawn import scan_spawns
 from deepreason.rules.synth import synthesize
+from deepreason.workflow.transaction import WorkBudgetDenied
+from deepreason.workloads.models import MandatoryInterface, MandatoryRef
 
 _INTEGRATION_TRIGGERS = (SpawnTrigger.CONNECTION, SpawnTrigger.INTEGRATION)
+# Reflexive theory-building work: problems ABOUT the run's own artifacts
+# (unification layer). All of it draws from ONE shared budget so it can
+# steer attention but never consume the inquiry (Bronze Age postmortem: the
+# meta-economy ate ~40/48 artifacts because debt problems were budgeted as
+# ordinary work and their successors escaped entirely).
+_REFLEXIVE_TRIGGERS = (
+    SpawnTrigger.CONNECTION,
+    SpawnTrigger.INTEGRATION,
+    SpawnTrigger.EXPLANATION_DEBT,
+    SpawnTrigger.REMOVE_ARBITRARINESS,
+)
+
+
+def reflexive_problems(state) -> set[str]:
+    """The reflexive set FOLLOWS LINEAGE: a problem is reflexive if its
+    trigger is, or if every provenance root it descends from is reflexive —
+    so a successor of a debt problem keeps drawing from the reflexive
+    budget instead of laundering itself into ordinary work. Lineage returns
+    to independence only through an independently originating problem."""
+    out = {p.id for p in state.problems.values() if p.provenance.trigger in _REFLEXIVE_TRIGGERS}
+    addressed: dict[str, set[str]] = {}
+    for aid, pid in state.addr:
+        addressed.setdefault(aid, set()).add(pid)
+    changed = True
+    while changed:
+        changed = False
+        for pid, problem in state.problems.items():
+            if pid in out or not problem.provenance.from_:
+                continue
+            reflexive_parent = False
+            independent_parent = False
+            for fid in problem.provenance.from_:
+                if fid in state.problems:
+                    if fid in out:
+                        reflexive_parent = True
+                    else:
+                        independent_parent = True
+                elif fid in addressed:
+                    if addressed[fid] & out:
+                        reflexive_parent = True
+                    if addressed[fid] - out:
+                        independent_parent = True
+            if reflexive_parent and not independent_parent:
+                out.add(pid)
+                changed = True
+    return out
+
+
+def problem_family(state, root_pid: str) -> set[str]:
+    """The problem plus everything spawned (transitively) from it or from
+    artifacts addressing a family problem — successors, discriminations,
+    lineage/debt problems, research. Deterministic fixpoint over provenance
+    (`from_` entries are problem ids OR artifact ids; artifacts join via
+    their addr edges). Used by FOCUS_FAMILY (attention only) and by
+    easy.py's staged pipeline for tickers and survivor picks."""
+    if root_pid not in state.problems:
+        return set()
+    addressed: dict[str, set[str]] = {}
+    for aid, pid in state.addr:
+        addressed.setdefault(aid, set()).add(pid)
+    family = {root_pid}
+    changed = True
+    while changed:
+        changed = False
+        for pid, problem in state.problems.items():
+            if pid in family:
+                continue
+            for fid in problem.provenance.from_:
+                if fid in family or addressed.get(fid, set()) & family:
+                    family.add(pid)
+                    changed = True
+                    break
+    return family
+
+
+def problem_family_key(state, problem_id: str) -> str:
+    """Return the stable provenance-root identity of a problem family.
+
+    Successor problem ids are fresh attention objects.  Using them directly
+    as anti-relapse domains lets a refuted approach re-enter unchanged on its
+    next successor.  This walk follows problem and addressed-artifact
+    provenance back to independently seeded roots without changing ontology.
+    """
+    addressed: dict[str, set[str]] = {}
+    for artifact_id, pid in state.addr:
+        addressed.setdefault(artifact_id, set()).add(pid)
+
+    def roots(pid: str, visiting: frozenset[str]) -> set[str]:
+        if pid in visiting or pid not in state.problems:
+            return {pid}
+        problem = state.problems[pid]
+        parents: set[str] = set()
+        for source in problem.provenance.from_:
+            if source in state.problems:
+                parents.add(source)
+            else:
+                parents.update(addressed.get(source, ()))
+        if not parents:
+            return {pid}
+        found: set[str] = set()
+        for parent in sorted(parents):
+            found.update(roots(parent, visiting | {pid}))
+        return found or {pid}
+
+    return "|".join(sorted(roots(problem_id, frozenset())))
+
+
+def lineage_endpoints(problem, commitments, state) -> tuple[str, ...]:
+    """Registered endpoints frozen by structural lineage commitments."""
+    endpoints: list[str] = []
+    for commitment_id in problem.criteria:
+        commitment = commitments.get(commitment_id)
+        if commitment is None or commitment.eval != "program:lineage_ref":
+            continue
+        for endpoint in str(commitment.budget.extra.get("endpoints", "")).split(","):
+            if endpoint in state.artifacts and endpoint not in endpoints:
+                endpoints.append(endpoint)
+    return tuple(endpoints)
+
+
+def stable_component_spec(problem, endpoints: tuple[str, ...]) -> str:
+    """Frozen input-side component identity; never candidate output bytes."""
+    return json.dumps(
+        {
+            "problem": problem.id,
+            "description": problem.description,
+            "criteria": list(problem.criteria),
+            "lineage_endpoints": list(endpoints),
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
 
 
 class Scheduler:
-    def __init__(self, harness, adapter, config, embedder=None, research_backend=None,
-                 controller=None) -> None:
+    def __init__(
+        self,
+        harness,
+        adapter,
+        config,
+        embedder=None,
+        research_backend=None,
+        controller=None,
+        browser_backend=None,
+        workload_profile: str | None = None,
+        stop_controller=None,
+        progress_sink=None,
+        capture_responses: bool = True,
+        generation_context: str | None = None,
+        suppressed_exemplars: tuple[str, ...] = (),
+        run_manifest=None,
+    ) -> None:
         self.harness = harness
         self.adapter = adapter
         self.config = config
+        if (
+            run_manifest is not None
+            and run_manifest.schema_version == 6
+            and not getattr(adapter, "transaction_authority_required", False)
+        ):
+            raise WorkflowAuthorizationError(
+                "RunManifest v6 scheduler requires the global transaction dispatch guard"
+            )
+        if run_manifest is not None and run_manifest.schema_version == 6:
+            adapter.bind_v6_authority(harness, run_manifest)
         self.embedder = embedder or HashingEmbedder()
-        self.research_backend = research_backend
+        # Research service (§12; research/backends.py). Accepts a
+        # ResearchService, a bare duck-typed backend (legacy tests: wrapped
+        # as an internal-fetcher service), or None (mode "off").
+        from deepreason.research.backends import ResearchService
+
+        if research_backend is None:
+            self.research = ResearchService("off")
+        elif isinstance(research_backend, ResearchService):
+            self.research = research_backend
+        else:
+            self.research = ResearchService(
+                getattr(research_backend, "name", "custom"), research_backend
+            )
+        self._research_episode: str | None = None  # awaiting/off dedup state
+        # Browser oracle backend (rules/act.py, duck-typed like research
+        # backends). None = feature off; set to None on BrowserUnavailable.
+        self.browser_backend = browser_backend
+        self._vision_done: set[str] = set()  # attention-only: one look per target
         # Self-calibration controller (controller.py) — optional; None means
         # fixed knobs (legacy). It reads process signals and tunes generator
         # caps; it cannot touch a status (§0 preserved structurally).
         self.controller = controller
+        # None preserves the pre-workload behavior for direct legacy callers.
+        # Shared production operations always set an explicit profile before
+        # run(), while reasoning-envelope problems self-identify inside Conj.
+        self.workload_profile = workload_profile
+        # Operational completion is optional and evaluated only after a full
+        # cycle.  Neither collaborator participates in adjudication.
+        self.stop_controller = stop_controller
+        self.progress_sink = progress_sink
+        # Controlled experiments may observe the replay-derived capture flags
+        # while holding the production response ladder inactive. Defaults retain
+        # production behavior. The generation overlay is presentation only and
+        # is empty for every ordinary caller.
+        self.capture_responses = capture_responses
+        self.generation_context = generation_context
+        self.suppressed_exemplars = tuple(suppressed_exemplars)
+        self.run_manifest = run_manifest
+        # The pure owned planner has no harness/store handle. Shadow mode uses
+        # it diagnostically; active_conjecture uses its ticket to create the
+        # durable control trace that must authorize provider dispatch.
+        self.workflow_shadow_observations = []
+        self.workflow_shadow_observer = None
+        self._workflow_recovery_done = False
+        try:
+            from deepreason.workflow.shadow import ConjectureShadowObserver
+
+            self.workflow_shadow_observer = (
+                None
+                if run_manifest is not None and run_manifest.schema_version == 6
+                else ConjectureShadowObserver.from_manifest(run_manifest)
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block startup
+            self.workflow_shadow_observer = None
+            if self._active_conjecture_mode():
+                raise
+            self._record_workflow_shadow_error(
+                problem_ref="workflow-shadow-initialization",
+                school_id=None,
+                event_start_seq=max(0, self.harness._next_seq),
+                error=error,
+            )
+        self.last_stop_decision = None
+        self._last_stop_model_signal_refs: tuple[str, ...] = ()
+        self._stop_resume_rehydrated = False
+        self._stop_cycle_offset = 0
         self._problem_worked: dict[str, int] = {}  # pid -> last cycle selected (liveness)
-        self.schools = (
-            schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
-        )
+        self.schools = schools.init_schools(harness, config) if config.N_SCHOOLS > 0 else {}
         self.diagnostics: list[dict] = []
         # Ladder state (§11.4) — attention only. An intervention is active for a
         # bounded window (CAPTURE_W cycles) after the ladder fires, then clears;
@@ -52,8 +279,140 @@ class Scheduler:
         self._cycles = 0
         self._integration_cycles = 0
         self._arg_crit_this_cycle = 0
+        self._advisory_trials_this_cycle = 0
+        self._recrit_cursor = 0  # round-robin over standing survivors (§14)
+        self._fuzz_clean: set[str] = set()  # fuzz-passed ids (deterministic => cacheable)
+        self._hv_skipped: set[str] = set()  # oversize hv skips, logged once each
+        # Discrimination futility tracking (§14 attention only): pid -> attempt
+        # count / last-attempt cycle. A pairwise trial that blocks (order-swap
+        # deadlock) or rules 'neither' leaves the problem unsolved, and
+        # unsolved-first selection would re-feed it judge calls forever — the
+        # run-3 starvation (18 blocked trials, one conjecturer call).
+        self._disc_attempts: dict[str, int] = {}
+        self._disc_last: dict[str, int] = {}
         self._flag_streak: dict[str, int] = {}
         self._cooldown: dict[str, int] = {}
+        self._embedder_stamped = False  # geometry identity, logged once per run
+
+    def _recover_workflow_prefixes(self) -> None:
+        """Close crash-interrupted work before authorizing a new scheduler cycle."""
+
+        if self._workflow_recovery_done:
+            return
+        outstanding = self.harness.workflow_state.outstanding_work_order_ids
+        manifest = self.run_manifest
+        admitted_effect_candidates = {}
+        if manifest is not None and manifest.schema_version == 6:
+            for item in self.harness.workflow_state.transaction_work.values():
+                attempt_index = item.preparation.attempt_index
+                provider_attempt = item.provider_attempts.get(attempt_index)
+                admission = item.admissions.get(attempt_index)
+                if (
+                    item.preparation.task_kind
+                    in {WorkflowTaskKind.CRITICISM, WorkflowTaskKind.SCRATCH_AUTHORING}
+                    and provider_attempt is not None
+                    and provider_attempt.outcome == "provider_result"
+                    and admission is not None
+                    and admission.outcome == "admitted"
+                ):
+                    admitted_effect_candidates[provider_attempt.id] = provider_attempt
+        if not outstanding and not admitted_effect_candidates:
+            self._workflow_recovery_done = True
+            return
+        if manifest is not None and manifest.schema_version == 6:
+            from deepreason.workflow.transaction_service import (
+                InquiryTransactionService,
+            )
+
+            meter = getattr(self.adapter, "meter", None)
+            if meter is None:
+                raise RuntimeError("transaction recovery requires the original provider meter")
+            transaction_service = InquiryTransactionService(
+                self.harness,
+                manifest,
+                meter,
+            )
+            pending_admission = list(transaction_service.recover_incomplete())
+            recovery_by_id = {attempt.id: attempt for attempt in pending_admission}
+            # Criticism admits its durable output before applying the
+            # caller-owned effect; scratch can crash between its effect and
+            # admission. Rechecking both canonical paths is safe and closes
+            # either exact-once crash window.
+            recovery_by_id.update(admitted_effect_candidates)
+            for provider_attempt in recovery_by_id.values():
+                item = self.harness.workflow_state.transaction_work[provider_attempt.work_id]
+                if item.preparation.task_kind == WorkflowTaskKind.CONJECTURE:
+                    from deepreason.workflow.conjecture_recovery import (
+                        recover_conjecture_admission,
+                    )
+
+                    recover_conjecture_admission(
+                        self.harness,
+                        manifest,
+                        meter,
+                        provider_attempt,
+                        embedder=self.embedder,
+                    )
+                else:
+                    from deepreason.workflow.nonconjecture_recovery import (
+                        recover_nonconjecture_admission,
+                    )
+
+                    recover_nonconjecture_admission(
+                        self.harness,
+                        manifest,
+                        meter,
+                        provider_attempt,
+                    )
+            if self.harness.workflow_state.outstanding_work_order_ids:
+                raise RuntimeError("transaction recovery left unfinished authority")
+            self.harness.write_workflow_checkpoint()
+            self._workflow_recovery_done = True
+            return
+        if (
+            manifest is None
+            or manifest.schema_version not in {4, 5}
+            or manifest.control_plane_policy is None
+            or manifest.control_plane_policy.mode
+            not in {"shadow", "active_conjecture", "active_inquiry"}
+        ):
+            raise RuntimeError("unfinished workflow authority requires its original v4 manifest")
+
+        from deepreason.workflow.events import WorkflowSignalKind, WorkflowSignalV1
+        from deepreason.workflow.reducer import reduce_conjecture
+
+        for work_id in tuple(outstanding):
+            work = self.harness.workflow_state.work_orders[work_id]
+            if (
+                work.manifest_digest != manifest.sha256
+                or work.workflow_profile != manifest.control_plane_policy.workflow_profile
+            ):
+                raise RuntimeError("unfinished workflow authority belongs to another manifest")
+            branch_id = self.harness.workflow_state.work_to_branch[work_id]
+            durable_state = self.harness.workflow_state.branches[branch_id].process_state
+            recovered = reduce_conjecture(
+                durable_state,
+                WorkflowSignalV1(
+                    kind=WorkflowSignalKind.WORK_ABANDONED,
+                    work_order=work,
+                    trigger_ref=f"recovery:startup:{self.harness._next_seq}",
+                ),
+            )
+            self.harness.record_control_transition(recovered.decisions[0])
+        self.harness.write_workflow_checkpoint()
+        self._workflow_recovery_done = True
+
+    def _embedder_fingerprint(self) -> dict:
+        """fingerprint() when the embedder provides it; a minimal identity
+        otherwise (duck-typed test embedders keep working)."""
+        fp = getattr(self.embedder, "fingerprint", None)
+        if callable(fp):
+            return fp()
+        return {
+            "model": getattr(self.embedder, "model", type(self.embedder).__name__),
+            "version": getattr(self.embedder, "version", "?"),
+            "sentinel": "-",
+        }
 
     # -------------------------------------------------------------- #
     # Response-ladder interventions (§11.4): derived, time-bounded flags.     #
@@ -92,10 +451,376 @@ class Scheduler:
 
     def _drop(self, e: Exception) -> None:
         """A dropped call still spent tokens: persist its spend record (the
-        adapter attaches one to SchemaRepairError/EndpointError), then log
-        the drop reason in diagnostics."""
-        self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
+        adapter attaches one to SchemaRepairError/EndpointError) WITH the
+        drop reason — the log must answer 'why was this dropped' without the
+        in-memory diagnostics (which die with the process)."""
+        spend = getattr(e, "spend", None)
+        if spend is not None:
+            self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])
+        else:
+            # No tokens were spent, but the drop itself must still be on the
+            # record for a log-follower.
+            self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
         self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+
+    def _workflow_meter_snapshot(self):
+        """Read accounting for a shadow comparison without owning the meter."""
+
+        meter = getattr(self.adapter, "meter", None)
+        snapshot = getattr(meter, "snapshot", None)
+        return snapshot() if callable(snapshot) else None
+
+    def _active_conjecture_mode(self) -> bool:
+        manifest = self.run_manifest
+        return bool(
+            manifest is not None
+            and manifest.schema_version in {4, 5}
+            and manifest.control_plane_policy is not None
+            and manifest.control_plane_policy.mode in {"active_conjecture", "active_inquiry"}
+        )
+
+    def _defer_untransactional_v6_phase(
+        self,
+        phase: str,
+        role: str,
+        target_ref: str | None = None,
+        obligation_ref: str | None = None,
+    ) -> bool:
+        """Defer a legacy model phase that has no v6 transaction contract.
+
+        RunManifest v6 makes the adapter fail closed on every unbound provider
+        dispatch. Optional legacy scheduler phases must therefore become
+        visible completion debt instead of tripping that global guard and
+        failing the whole root. The marker is append-only and deduplicated by
+        its complete authority/obligation tuple, including across resume.
+
+        Return True only for v6, so historical schedulers retain their
+        byte-for-byte call paths and behavior.
+        """
+
+        manifest = self.run_manifest
+        if manifest is None or manifest.schema_version != 6:
+            return False
+
+        bounded = tuple(
+            (str(value)[:160] if value is not None and str(value) else "-")
+            for value in (phase, role, target_ref, obligation_ref)
+        )
+        marker = "v6-model-phase-deferred.v1"
+        seen = getattr(self, "_v6_deferred_model_phases", None)
+        if seen is None:
+            seen = {
+                tuple(event.inputs[1:5])
+                for event in self.harness.log.read()
+                if event.inputs
+                and event.inputs[0] == marker
+                and len(event.inputs) == 6
+            }
+            self._v6_deferred_model_phases = seen
+        if bounded not in seen:
+            self.harness.record_measure(
+                inputs=[
+                    marker,
+                    *bounded,
+                    "transaction-contract-unavailable",
+                ]
+            )
+            seen.add(bounded)
+            self.diagnostics.append(
+                {
+                    "cycle": self._cycles,
+                    "deferred_model_phase": bounded[0],
+                    "role": bounded[1],
+                    "target_ref": bounded[2],
+                    "obligation_ref": bounded[3],
+                }
+            )
+        return True
+
+    def _rehydrate_resumed_stop_controller(self) -> None:
+        """Restore the exact deterministic stop window authorized by RESUMED."""
+
+        if self._stop_resume_rehydrated:
+            return
+        resume = self.harness.workflow_state.current_resume_decision
+        if resume is None:
+            self._stop_resume_rehydrated = True
+            return
+        if self.stop_controller is None:
+            raise WorkflowAuthorizationError(
+                "resumed workflow requires its bound deterministic stop controller"
+            )
+        manifest = self.run_manifest
+        control = (
+            manifest.control_plane_policy
+            if manifest is not None and manifest.schema_version in {4, 5, 6}
+            else None
+        )
+        if (
+            control is None
+            or resume.manifest_digest != manifest.sha256
+            or resume.controller_version != control.controller_version
+            or resume.workflow_profile != control.workflow_profile
+        ):
+            raise WorkflowAuthorizationError(
+                "resumed stop-controller state belongs to another manifest"
+            )
+        try:
+            self.stop_controller.restore(resume.controller_state)
+        except ValueError as error:
+            raise WorkflowAuthorizationError(
+                "resumed stop-controller state differs from frozen stop policy"
+            ) from error
+        self._stop_cycle_offset = resume.controller_state.last_cycle or 0
+        self._stop_resume_rehydrated = True
+
+    def _workflow_conjecturer_contract_id(self, problem) -> str:
+        """Predict the exact wire contract selected by the unchanged call."""
+
+        if self._active_conjecture_mode():
+            planner = self.workflow_shadow_observer
+            if planner is None or planner.profile.shadow:
+                raise WorkflowAuthorizationError("active conjecture has no owned workflow profile")
+            return planner.profile.conjecturer_contract_id
+
+        from deepreason.llm.contracts import ConjecturerOutput
+        from deepreason.llm.wire import (
+            AliasTable,
+            DirectWireContract,
+            wire_contract_for,
+        )
+        from deepreason.workloads.text import ReasoningConjecturerOutput
+
+        reasoning = any(
+            self.harness.commitments[commitment_id].eval == "program:reasoning-envelope-wf"
+            for commitment_id in problem.criteria
+            if commitment_id in self.harness.commitments
+        )
+        output_model = ReasoningConjecturerOutput if reasoning else ConjecturerOutput
+        profile = self.adapter.profile_for("conjecturer")
+        contract = (
+            DirectWireContract(output_model)
+            if profile is None
+            else wire_contract_for(
+                "conjecturer",
+                output_model,
+                profile,
+                AliasTable(),
+            )
+        )
+        return contract.contract_id
+
+    def _record_workflow_shadow_error(
+        self,
+        *,
+        problem_ref: str,
+        school_id: str | None,
+        event_start_seq: int,
+        error: Exception,
+        work_order_id: str | None = None,
+    ) -> None:
+        """Contain observer failures on the non-authoritative side channel."""
+
+        try:
+            from deepreason.workflow.shadow import ShadowComparisonV1
+
+            comparison = ShadowComparisonV1.observer_error(
+                problem_ref=problem_ref,
+                school_id=school_id,
+                event_start_seq=event_start_seq,
+                event_end_seq=self.harness._next_seq - 1,
+                error=error,
+                work_order_id=work_order_id,
+            )
+            self.workflow_shadow_observations.append(comparison)
+        except Exception:  # noqa: BLE001 - diagnostics must never block actuation
+            return
+
+    def _begin_workflow_shadow(self, problem, school_id, context_plan):
+        """Derive one owned work order immediately before dispatch."""
+
+        observer = self.workflow_shadow_observer
+        if observer is None:
+            return None
+        event_start_seq = self.harness._next_seq
+        try:
+            from deepreason.workflow.profiles import resolve_conjecture_route
+
+            _, route = resolve_conjecture_route(
+                self.run_manifest,
+                self.adapter.leases,
+                school_id=school_id,
+            )
+            default_fence = max(0, event_start_seq - 1)
+            return observer.begin_conjecture(
+                problem_ref=problem.id,
+                canonical_problem_refs=tuple(sorted(self.harness.state.problems)),
+                school_id=school_id,
+                route_lease=route,
+                contract_id=self._workflow_conjecturer_contract_id(problem),
+                formal_fence_seq=getattr(context_plan, "formal_fence_seq", default_fence),
+                scratch_fence_seq=getattr(context_plan, "scratch_fence_seq", default_fence),
+                event_start_seq=event_start_seq,
+                meter_before=self._workflow_meter_snapshot(),
+                advisory_context_ref=getattr(
+                    getattr(context_plan, "advisory_context", None), "id", None
+                ),
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block actuation
+            if self._active_conjecture_mode():
+                raise
+            self._record_workflow_shadow_error(
+                problem_ref=problem.id,
+                school_id=school_id,
+                event_start_seq=event_start_seq,
+                error=error,
+            )
+            return None
+
+    def _workflow_shadow_candidate_sink(self):
+        """Collect exact code-authored Conj dispositions outside durable state."""
+
+        if self.workflow_shadow_observer is None:
+            return [], None
+        from deepreason.workflow.models import (
+            GuardFindingCode,
+            GuardFindingOutcome,
+            GuardFindingV1,
+        )
+
+        findings = []
+        occurrences: dict[str, int] = {}
+
+        def observe(candidate_ref: str, outcome: str, reason: str) -> None:
+            occurrences[candidate_ref] = occurrences.get(candidate_ref, 0) + 1
+            occurrence = occurrences[candidate_ref]
+            # Proposal payloads may repeat semantically identical candidates.
+            # Preserve the artifact ref for the first occurrence (so admitted
+            # output correlation stays exact) and name later occurrences
+            # independently so GuardResultV1 can explain each one once.
+            disposition_ref = (
+                candidate_ref if occurrence == 1 else f"{candidate_ref}#occurrence-{occurrence}"
+            )
+            disposition = GuardFindingOutcome(outcome)
+            code = (
+                GuardFindingCode.PASSED
+                if disposition == GuardFindingOutcome.ADMIT
+                else GuardFindingCode.CONTENT_DUPLICATE
+                if disposition == GuardFindingOutcome.DEDUPLICATE
+                else GuardFindingCode.BATTERY_EQUIVALENT
+                if "battery-equivalent" in reason
+                else GuardFindingCode.REFUTED_EQUIVALENT
+                if reason.startswith("hash:")
+                else GuardFindingCode.INTERFACE_INVALID
+            )
+            finding = GuardFindingV1(
+                candidate_ref=disposition_ref,
+                outcome=disposition,
+                code=code,
+                related_refs=(candidate_ref,),
+            )
+            findings.append(finding)
+            return finding
+
+        return findings, observe
+
+    def _workflow_control_trace(self, ticket):
+        """Create the C1 persistence seam for one owned workflow ticket."""
+
+        if ticket is None:
+            return None
+        try:
+            from deepreason.workflow.trace import ConjectureControlTrace
+
+            return ConjectureControlTrace(
+                self.harness,
+                ticket,
+                authoritative=self._active_conjecture_mode(),
+                error_sink=lambda error: self._record_workflow_shadow_error(
+                    problem_ref=ticket.work_order.problem_ref,
+                    school_id=ticket.work_order.school_id,
+                    event_start_seq=ticket.event_start_seq,
+                    error=error,
+                    work_order_id=ticket.work_order.id,
+                ),
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+            if self._active_conjecture_mode():
+                raise
+            self._record_workflow_shadow_error(
+                problem_ref=ticket.work_order.problem_ref,
+                school_id=ticket.work_order.school_id,
+                event_start_seq=ticket.event_start_seq,
+                error=error,
+                work_order_id=ticket.work_order.id,
+            )
+            return None
+
+    def _finish_workflow_shadow(
+        self,
+        ticket,
+        admitted,
+        *,
+        actual_problem_ref: str | None,
+        candidate_dispositions=(),
+        terminal_error: Exception | None = None,
+        control_trace=None,
+    ) -> None:
+        """Compare an already-completed legacy call without mutating it."""
+
+        observer = self.workflow_shadow_observer
+        if observer is None or ticket is None:
+            return
+        comparison_ticket = (
+            control_trace.ticket
+            if control_trace is not None and control_trace.dispatch_authorized
+            else ticket
+        )
+        try:
+            termination_kind = None
+            if isinstance(terminal_error, TokenBudgetExceeded):
+                from deepreason.workflow.shadow import ShadowTerminationKind
+
+                termination_kind = ShadowTerminationKind.TOKEN_BUDGET_EXCEEDED
+            comparison = observer.finish_conjecture(
+                comparison_ticket,
+                actual_problem_ref=actual_problem_ref,
+                events=tuple(self.harness._events_since(ticket.event_start_seq)),
+                admitted_refs=tuple(artifact.id for artifact in admitted),
+                candidate_dispositions=tuple(candidate_dispositions),
+                meter_after=self._workflow_meter_snapshot(),
+                termination_kind=termination_kind,
+            )
+        except Exception as error:  # noqa: BLE001 - shadow cannot block actuation
+            self._record_workflow_shadow_error(
+                problem_ref=ticket.work_order.problem_ref,
+                school_id=ticket.work_order.school_id,
+                event_start_seq=ticket.event_start_seq,
+                error=error,
+                work_order_id=ticket.work_order.id,
+            )
+            if control_trace is not None:
+                control_trace.seal()
+            return
+        self.workflow_shadow_observations.append(comparison)
+        if control_trace is not None:
+            control_trace.finalize(comparison)
+
+    def _disc_paused(self, problem) -> bool:
+        """Futility backoff for discrimination problems (§14 attention only):
+        each attempt — resolved, 'neither', or blocked — starts a cooldown of
+        DISC_COOLDOWN cycles, and after DISC_ATTEMPTS_MAX attempts the problem
+        is paused permanently (a rivalry the judges cannot presently resolve
+        is recorded as unresolved, not retried into starvation; new evidence
+        arrives through new artifacts, not identical re-rulings). Pausing
+        never touches a status — selection only."""
+        if problem.provenance.trigger != SpawnTrigger.DISCRIMINATION:
+            return False
+        attempts = self._disc_attempts.get(problem.id, 0)
+        if self.config.DISC_ATTEMPTS_MAX is not None and attempts >= self.config.DISC_ATTEMPTS_MAX:
+            return True
+        last = self._disc_last.get(problem.id)
+        return last is not None and self._cycles - last < self.config.DISC_COOLDOWN
 
     def _select_problem(self):
         state = self.harness.state
@@ -105,17 +830,25 @@ class Scheduler:
         for aid, pid in state.addr:
             if state.status.get(aid) == Status.ACCEPTED:
                 survivors_by_problem[pid] = survivors_by_problem.get(pid, 0) + 1
-        integration_allowed = (
+        integration_allowed = self.config.INTEGRATION_BUDGET_SHARE > 0 and (
             self._cycles == 0
             or self._integration_cycles / self._cycles < self.config.INTEGRATION_BUDGET_SHARE
         )
+        reflexive = reflexive_problems(state)
         candidates = [
             p
             for p in state.problems.values()
             # Research problems are worked by backends, not gamma (§12).
             if p.provenance.trigger != SpawnTrigger.RESEARCH
-            and (integration_allowed or p.provenance.trigger not in _INTEGRATION_TRIGGERS)
+            and (integration_allowed or p.id not in reflexive)
+            and not self._disc_paused(p)
         ]
+        if self.config.FOCUS_FAMILY is not None:
+            # Stage isolation (attention only): without it, an earlier
+            # stage's unsolved successor leftovers out-age this stage's
+            # seed under the liveness queue and the stage bleeds backward.
+            family = problem_family(state, self.config.FOCUS_FAMILY)
+            candidates = [p for p in candidates if p.id in family]
         if not candidates:
             return None
         if self.config.LIVENESS_QUEUE:
@@ -144,43 +877,162 @@ class Scheduler:
             "id": school_id,
             "stance_text": schools.STANCE_LIBRARY.get(policy["stance"], policy["stance"]),
             "weight": schools.stance_weight(self.harness, school_id, self.config),
+            # Forced cross-school crossover after a convergence reseed (§11.4);
+            # empty unless the school's policy names a crossover_from.
+            "crossover": schools.crossover_exemplars(self.harness, school_id),
         }
+
+    def _plan_conjecture_context(self, problem, school_id: str | None):
+        manifest = self.run_manifest
+        if manifest is None or manifest.schema_version not in {4, 5, 6}:
+            return None
+        control = manifest.control_plane_policy
+        scratch = manifest.scratch_policy
+        if (
+            control is None
+            or control.mode not in {"active_conjecture", "active_inquiry"}
+            or control.conjecture_context.mode == "disabled"
+            or scratch is None
+            or not scratch.enabled
+        ):
+            return None
+        from deepreason.scratch.conjecture import plan_conjecture_context
+        from deepreason.scratch.service import ScratchService
+
+        fence = self.harness._next_seq - 1
+        return plan_conjecture_context(
+            ScratchService(self.harness),
+            problem=problem,
+            school_id=school_id,
+            manifest_digest=manifest.sha256,
+            scratch_policy=scratch,
+            context_policy=control.conjecture_context,
+            formal_fence_seq=fence,
+            scratch_fence_seq=fence,
+        )
 
     def _criticize(self, artifact) -> None:
         harness, config = self.harness, self.config
         crit_program(harness, artifact.id)
+        if harness.state.status.get(artifact.id) == Status.ACCEPTED:
+            # Passed its declared oracles on the frozen inputs: the fuzz pass
+            # (deterministic enumeration, no LLM) probes BEYOND them before
+            # anything more expensive runs.
+            crit_fuzz(harness, artifact.id, config)
         trials = 0
         for cid in artifact.interface.commitments:
             kappa = harness.commitments.get(cid)
             if kappa is None:
                 continue
             if is_hv_floor(kappa):
-                run_hv_floor(harness, self.adapter, artifact.id, kappa, self.embedder)
-            elif kappa.eval.startswith("rubric:") and self.adapter.has_role("judge"):
+                if not self._defer_untransactional_v6_phase(
+                    "hv-floor",
+                    "variator",
+                    artifact.id,
+                    kappa.id,
+                ):
+                    run_hv_floor(harness, self.adapter, artifact.id, kappa, self.embedder)
+            elif kappa.eval.startswith("rubric:"):
+                if self._defer_untransactional_v6_phase(
+                    "rubric-trial",
+                    "judge",
+                    artifact.id,
+                    kappa.id,
+                ):
+                    continue
+                if not self.adapter.has_role("judge"):
+                    continue
                 from deepreason.informal.trial import run_trial
 
                 if harness.state.status.get(artifact.id) != Status.ACCEPTED:
                     continue  # budget triage: already felled
+                authority = trial_authority_for(
+                    config, self.workload_profile, AuthoritySurface.RUBRIC
+                )
+                if authority == TrialAuthority.OBSERVE_ONLY:
+                    if self._advisory_trials_this_cycle >= config.ADVISORY_TRIALS_PER_CYCLE:
+                        continue
                 if (
                     config.RUBRIC_TRIALS_PER_ARTIFACT is not None
                     and trials >= config.RUBRIC_TRIALS_PER_ARTIFACT
                 ):
                     continue  # budget triage (§14): remaining trials next cycle
                 trials += 1
+                if authority == TrialAuthority.OBSERVE_ONLY:
+                    self._advisory_trials_this_cycle += 1
                 try:
                     run_trial(
-                        harness, artifact.id, kappa, self.adapter, self.config,
-                        self.diagnostics, embedder=self.embedder,
+                        harness,
+                        artifact.id,
+                        kappa,
+                        self.adapter,
+                        self.config,
+                        self.diagnostics,
+                        embedder=self.embedder,
+                        authority=authority,
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
+
+    def _standing_recrit_pool(self) -> list[str]:
+        """Standing survivors eligible for re-criticism (§14 attention only):
+        ACCEPTED candidate-role artifacts with NO warrant on record against
+        them — accepted-by-neglect is untested acceptance, not corroboration.
+        Seed infrastructure (standards, stance policies) is excluded (RC6):
+        infrastructure is attackable only through the explicit
+        ops.review_infrastructure trial path, never the ordinary sweep.
+        Execution-oracle carriers order first: a passing oracle is the
+        strongest standing claim on the graph, and a Goodhart survivor (right
+        on the frozen inputs, wrong in general) can hide nowhere else.
+        Deterministic: state insertion order within each group."""
+        from deepreason.oracle import EXEC_PROGRAMS
+
+        harness = self.harness
+        execution_evals = {f"program:{p}" for p in EXEC_PROGRAMS}
+        attacked = {w.target for w in harness.warrants.values()}
+        backed: list[str] = []
+        rest: list[str] = []
+        for aid, artifact in harness.state.artifacts.items():
+            if harness.state.status.get(aid) != Status.ACCEPTED or aid in attacked:
+                continue
+            # ACTIVE conjectured properties are CRITERIA with kill authority
+            # and must face the same rotation (intervals/boot postmortem: a
+            # buggy checker "survived criticism" for 80+ events because no
+            # criticism ever visited it — accepted-by-neglect on the criteria
+            # side). Candidates by role; properties by codec.
+            role = artifact.provenance.role if artifact.provenance else ""
+            if role not in ("conjecturer", "synthesizer") and artifact.codec != "code:python-prop":
+                continue
+            carries = any(
+                (kappa := harness.commitments.get(cid)) is not None
+                and kappa.eval in execution_evals
+                for cid in artifact.interface.commitments
+            )
+            (backed if carries else rest).append(aid)
+        return backed + rest
+
     def _arg_crit(self, admitted_ids: list[str]) -> None:
         """Argumentative pass over the admitted-and-still-accepted targets.
         With CRIT_BATCH_K set, up to K targets share one call (angle 3 of
         docs/TOKEN_ECONOMY.md); warrants stay per-target inside the rule.
-        ARG_CRIT_PER_CYCLE caps targets, batched or not."""
+        ARG_CRIT_PER_CYCLE caps targets, batched or not. Unused slots go to
+        STANDING survivors (round-robin): without this, an artifact was only
+        ever criticized in the cycle it was admitted, so anything accepted
+        early was never attacked again (accepted-by-neglect). Seed
+        infrastructure never enters the pool (RC6: ops.review_infrastructure
+        is the only route by which it can be attacked)."""
         harness, config = self.harness, self.config
+        criticism_policy = (
+            self.run_manifest.criticism_policy
+            if self.run_manifest is not None and self.run_manifest.schema_version in {4, 5, 6}
+            else None
+        )
         if not self.adapter.has_role("argumentative_critic"):
+            if criticism_policy is not None:
+                raise RuntimeError("manifest foreign criticism has no runtime critic role")
+            return
+        if criticism_policy is not None:
+            self._foreign_arg_crit()
             return
         eligible: list[str] = []
         for aid in admitted_ids:
@@ -193,49 +1045,678 @@ class Scheduler:
                 break
             self._arg_crit_this_cycle += 1
             eligible.append(aid)
+        if config.RECRIT_STANDING:
+            # Leftover capacity sweeps the standing pool; a bounded default
+            # (2) when ARG_CRIT_PER_CYCLE is None keeps the sweep from
+            # scaling with population size.
+            remaining = (
+                config.ARG_CRIT_PER_CYCLE - self._arg_crit_this_cycle
+                if config.ARG_CRIT_PER_CYCLE is not None
+                else 2
+            )
+            pool = [x for x in self._standing_recrit_pool() if x not in set(eligible)]
+            if pool and remaining > 0:
+                start = self._recrit_cursor % len(pool)
+                for aid in (pool[start:] + pool[:start])[:remaining]:
+                    self._recrit_cursor += 1
+                    # Machine experimentation first: if the deterministic fuzz
+                    # pass fells the standing survivor, the LLM call is saved.
+                    if aid not in self._fuzz_clean:
+                        crit_fuzz(harness, aid, config)
+                        if harness.state.status.get(aid) != Status.ACCEPTED:
+                            continue
+                        self._fuzz_clean.add(aid)  # cache: fuzz is deterministic
+                    eligible.append(aid)
+                    self._arg_crit_this_cycle += 1
         size = config.CRIT_BATCH_K or 1
         for i in range(0, len(eligible), size):
+            batch = eligible[i : i + size]
+            if (
+                self.run_manifest is not None
+                and self.run_manifest.schema_version == 6
+            ):
+                for target_id in batch:
+                    self._defer_untransactional_v6_phase(
+                        "argumentative-criticism",
+                        "argumentative_critic",
+                        target_id,
+                    )
+                continue
             try:
-                crit_argumentative_batch(
-                    harness, eligible[i : i + size], self.adapter, config
-                )
+                crit_argumentative_batch(harness, batch, self.adapter, config)
             except (SchemaRepairError, EndpointError) as e:
                 self._drop(e)
+
+    def _foreign_criticism_coverage(self) -> dict[str, set[str]]:
+        """Reconstruct completed foreign-school exposure from durable receipts."""
+
+        coverage: dict[str, set[str]] = {}
+        for event in self.harness.log.read():
+            for object_id in event.outputs:
+                try:
+                    schema, record = self.harness.objects.get(object_id)
+                except (FileNotFoundError, ValueError):
+                    continue
+                if (
+                    schema == "criticism-attempt-v1"
+                    and record.outcome == "completed"
+                    and record.coverage_completed
+                ):
+                    coverage.setdefault(record.target_id, set()).add(record.critic_school_id)
+            if (
+                event.rule != Rule.MEASURE
+                or len(event.inputs) != 6
+                or event.inputs[0] != "foreign-criticism-coverage.v1"
+                or not event.inputs[3].startswith("critic:")
+            ):
+                continue
+            target_id = event.inputs[1]
+            critic_school_id = event.inputs[3].removeprefix("critic:")
+            coverage.setdefault(target_id, set()).add(critic_school_id)
+        return coverage
+
+    def _foreign_arg_crit(self) -> None:
+        """Enact one complete manifest-owned foreign criticism plan.
+
+        Every route is resolved before the first provider boundary. Coverage
+        is counted by foreign school identity, while each durable receipt also
+        names the exact source call and route so shared models remain visible.
+        """
+
+        manifest = self.run_manifest
+        assert manifest is not None and manifest.criticism_policy is not None
+        policy = manifest.criticism_policy
+        from deepreason.workflow.criticism import (
+            CoverageDebtV1,
+            CriticismAttemptV1,
+            ForeignCriticismTargetV1,
+            compile_criticism_assignments,
+            plan_foreign_criticism,
+            record_completed_criticism_attempt,
+        )
+
+        completed = self._foreign_criticism_coverage()
+        targets = []
+        owner_by_target: dict[str, str] = {}
+        for target_id, artifact in sorted(self.harness.state.artifacts.items()):
+            provenance = artifact.provenance
+            owner_school_id = provenance.school if provenance is not None else None
+            role = provenance.role if provenance is not None else None
+            if (
+                self.harness.state.status.get(target_id) != Status.ACCEPTED
+                or owner_school_id is None
+                or role not in {"conjecturer", "synthesizer"}
+            ):
+                continue
+            owner_by_target[target_id] = owner_school_id
+            targets.append(
+                ForeignCriticismTargetV1(
+                    target_id=target_id,
+                    owner_school_id=owner_school_id,
+                    completed_critic_school_ids=tuple(sorted(completed.get(target_id, set()))),
+                )
+            )
+        plan = plan_foreign_criticism(manifest, tuple(targets))
+        transactional_v6 = manifest.schema_version == 6
+        assignments = compile_criticism_assignments(manifest, plan) if transactional_v6 else ()
+        assignment_by_target_school = {
+            (assignment.target_id, assignment.critic_school_id): assignment
+            for assignment in assignments
+        }
+        attempt_refs_by_target: dict[str, list[str]] = {}
+        budget_stopped_targets: set[str] = set()
+        if transactional_v6:
+            for assignment in assignments:
+                try:
+                    self.harness.objects.get(assignment.id)
+                except KeyError:
+                    self.harness.record_criticism_obligation(assignment)
+
+        # Resolve the whole batch first. One bad binding therefore leaves no
+        # partial provider spend or misleading coverage receipt.
+        resolved_batches = []
+        for batch in plan.batches:
+            lease = resolve_school_role_lease(
+                manifest,
+                self.adapter.leases,
+                school_id=batch.critic_school_id,
+                role="argumentative_critic",
+            )
+            if (
+                lease.seat != batch.seat
+                or lease.route.endpoint_id != batch.endpoint_id
+                or route_fingerprint(lease.route) != batch.route_sha256
+            ):
+                raise RouteFirewallError(
+                    "foreign criticism plan differs from its resolved route lease"
+                )
+            resolved_batches.append((batch, lease))
+
+        for batch, lease in resolved_batches:
+            expected = set(batch.target_ids)
+            observed: set[str] = set()
+            attempt_index = 0
+
+            def record_coverage(target_id: str, source_call_seq: int) -> None:
+                if target_id not in expected or target_id in observed:
+                    raise RuntimeError("foreign criticism reported non-canonical target coverage")
+                if transactional_v6:
+                    assignment = assignment_by_target_school[(target_id, batch.critic_school_id)]
+                    attempt_record = record_completed_criticism_attempt(
+                        self.harness,
+                        assignment,
+                        attempt_index=attempt_index,
+                        source_call_seq=source_call_seq,
+                    )
+                    attempt_refs_by_target.setdefault(target_id, []).append(attempt_record.id)
+                else:
+                    self.harness.record_measure(
+                        inputs=[
+                            "foreign-criticism-coverage.v1",
+                            target_id,
+                            f"owner:{owner_by_target[target_id]}",
+                            f"critic:{batch.critic_school_id}",
+                            f"source:{source_call_seq}",
+                            f"route:{batch.route_sha256}",
+                        ]
+                    )
+                observed.add(target_id)
+
+            maximum_attempts = (
+                max(
+                    assignment_by_target_school[
+                        (target_id, batch.critic_school_id)
+                    ].maximum_attempts
+                    for target_id in expected
+                )
+                if transactional_v6
+                else 1
+            )
+            for attempt_index in range(maximum_attempts):
+                remaining = tuple(sorted(expected - observed))
+                if not remaining:
+                    break
+                try:
+                    crit_argumentative_batch(
+                        self.harness,
+                        remaining,
+                        self.adapter,
+                        self.config,
+                        endpoint_lease=lease,
+                        critic_school_id=batch.critic_school_id,
+                        critic_school_context=self._school_dict(batch.critic_school_id),
+                        argumentative_authority=policy.authority,
+                        coverage_observer=record_coverage,
+                        run_manifest=(manifest if transactional_v6 else None),
+                        transaction_attempt_index=attempt_index,
+                        transaction_assignment_refs=(
+                            tuple(
+                                assignment_by_target_school[(target_id, batch.critic_school_id)].id
+                                for target_id in remaining
+                            )
+                            if transactional_v6
+                            else ()
+                        ),
+                        transaction_trigger_ref=(
+                            f"foreign-criticism:{batch.critic_school_id}:{batch.route_sha256}"
+                        ),
+                    )
+                except (
+                    SchemaRepairError,
+                    EndpointError,
+                    TokenBudgetExceeded,
+                    WorkBudgetDenied,
+                ) as error:
+                    if getattr(error, "transaction_terminalized", False):
+                        self.diagnostics.append({"dropped": str(error)})
+                    else:
+                        self._drop(error)
+                    if not transactional_v6:
+                        raise
+                    outcome = (
+                        "budget_denied"
+                        if isinstance(error, (TokenBudgetExceeded, WorkBudgetDenied))
+                        else "transport_failure"
+                        if isinstance(error, EndpointError)
+                        else "schema_failure"
+                    )
+                    diagnostic_ref = self.harness.blobs.put(
+                        json.dumps(
+                            {
+                                "outcome": outcome,
+                                "error_type": type(error).__name__,
+                                "message": str(error)[:500],
+                            },
+                            sort_keys=True,
+                        ).encode("utf-8")
+                    )
+                    for target_id in sorted(expected - observed):
+                        assignment = assignment_by_target_school[
+                            (target_id, batch.critic_school_id)
+                        ]
+                        attempt_record = CriticismAttemptV1.create(
+                            assignment_ref=assignment.id,
+                            target_id=target_id,
+                            critic_school_id=batch.critic_school_id,
+                            attempt_index=attempt_index,
+                            outcome=outcome,
+                            coverage_completed=False,
+                            diagnostic_ref=diagnostic_ref,
+                        )
+                        self.harness.record_criticism_obligation(attempt_record)
+                        attempt_refs_by_target.setdefault(target_id, []).append(attempt_record.id)
+                        if outcome == "budget_denied":
+                            budget_stopped_targets.add(target_id)
+                    if outcome == "budget_denied":
+                        break
+                    continue
+                if observed != expected:
+                    # A provider success that cannot produce exact target
+                    # receipts is an integrity failure, not ordinary debt.
+                    raise RuntimeError(
+                        "foreign criticism call did not durably cover every assigned target"
+                    )
+            self._arg_crit_this_cycle += len(observed)
+
+        if transactional_v6:
+            completed_now = self._foreign_criticism_coverage()
+            for target in plan.targets:
+                completed_schools = tuple(sorted(completed_now.get(target.target_id, set())))
+                assigned_schools = {
+                    assignment.critic_school_id for assignment in target.assignments
+                }
+                outstanding = tuple(sorted(assigned_schools - set(completed_schools)))
+                complete = len(completed_schools) >= policy.minimum_foreign_school_coverage
+                debt = CoverageDebtV1.create(
+                    target_id=target.target_id,
+                    owner_school_id=target.owner_school_id,
+                    required_school_coverage=policy.minimum_foreign_school_coverage,
+                    completed_school_ids=completed_schools,
+                    outstanding_school_ids=(() if complete else outstanding),
+                    attempt_refs=tuple(attempt_refs_by_target.get(target.target_id, ())),
+                    termination_reason=(
+                        "coverage_complete"
+                        if complete
+                        else "budget_exhausted"
+                        if target.target_id in budget_stopped_targets
+                        else "attempts_exhausted"
+                    ),
+                )
+                self.harness.record_criticism_obligation(debt)
+
+    def _v6_simulation_result_follow_up(
+        self,
+        controller,
+        package,
+        proposal,
+    ) -> bool:
+        """Expose one result through fresh controller-v3 work, then consume it."""
+
+        manifest = self.run_manifest
+        assert manifest is not None and manifest.schema_version == 6
+        origin = controller.require_transactional_origin(proposal)
+        preparation = origin.preparation
+        payload = preparation.task_payload_value
+        if not isinstance(payload, Mapping):
+            raise WorkflowAuthorizationError(
+                "v6 simulation origin has no immutable semantic payload"
+            )
+        problem_ref = payload.get("problem_ref")
+        school_id = payload.get("school_id")
+        if not isinstance(problem_ref, str) or (
+            school_id is not None and not isinstance(school_id, str)
+        ):
+            raise WorkflowAuthorizationError(
+                "v6 simulation origin has malformed problem or school authority"
+            )
+
+        from deepreason.llm.firewall import select_lease
+
+        lease = (
+            resolve_school_role_lease(
+                manifest,
+                self.adapter.leases,
+                school_id=school_id,
+                role="conjecturer",
+            )
+            if school_id is not None
+            else select_lease(
+                self.adapter.leases,
+                "conjecturer",
+                preparation.route_lease.seat,
+            )
+        )
+        if (
+            lease.route.endpoint_id != preparation.route_lease.endpoint_id
+            or lease.seat != preparation.route_lease.seat
+            or route_fingerprint(lease.route) != preparation.route_lease.route_sha256
+        ):
+            raise WorkflowAuthorizationError(
+                "simulation result follow-up route differs from transaction origin"
+            )
+
+        before_work = set(self.harness.workflow_state.transaction_work)
+        self.harness.record_measure(
+            inputs=["cycle", str(self._cycles), f"simulation-result:{package.id}"]
+        )
+        try:
+            conj(
+                self.harness,
+                problem_ref,
+                self.adapter,
+                self.config,
+                self.diagnostics,
+                school=(self._school_dict(school_id) if school_id is not None else None),
+                embedder=self.embedder,
+                workload_profile=self.workload_profile,
+                endpoint_lease=lease if school_id is not None else None,
+                execution_school_id=school_id,
+                run_manifest=manifest,
+                _capability_result_context=controller.result_context(package),
+                _capability_result_package_ref=package.id,
+                _capability_result_context_ref=package.result_context_ref,
+                _simulation_follow_up_index=1,
+            )
+        except (SchemaRepairError, EndpointError, WorkBudgetDenied) as error:
+            self._drop(error)
+            return True
+
+        new_work_ids = set(self.harness.workflow_state.transaction_work) - before_work
+        matching = []
+        for work_id in new_work_ids:
+            item = self.harness.workflow_state.transaction_work[work_id]
+            work_payload = item.preparation.task_payload_value
+            if (
+                isinstance(work_payload, Mapping)
+                and work_payload.get("capability_result_package_ref") == package.id
+                and work_payload.get("capability_result_context_ref") == package.result_context_ref
+            ):
+                matching.append(item)
+        if len(matching) != 1:
+            raise WorkflowAuthorizationError(
+                "simulation result did not create exactly one fresh bound transaction"
+            )
+        follow_up = matching[0]
+        if follow_up.terminal is None or follow_up.terminal.status != "completed":
+            return True
+        controller.consume_transactional(
+            package,
+            follow_up_work_ref=follow_up.preparation.id,
+        )
+        return True
+
+    def _simulation_capability_step(self) -> bool:
+        """Execute or consume at most one replay-derived capability item."""
+
+        manifest = self.run_manifest
+        if (
+            manifest is None
+            or manifest.schema_version not in {5, 6}
+            or manifest.control_plane_policy is None
+            or manifest.control_plane_policy.mode != "active_inquiry"
+            or manifest.inquiry_capability_policy is None
+        ):
+            return False
+
+        from deepreason.capabilities.enums import CapabilityLifecycle
+        from deepreason.capabilities.simulation import SimulationCapabilityController
+
+        controller = SimulationCapabilityController(self.harness, manifest)
+        state = self.harness.capability_state
+        consumed_packages = {item.result_package_ref for item in state.consumptions.values()}
+        available_packages = [
+            package
+            for package in state.result_packages.values()
+            if package.id not in consumed_packages
+            and state.transitions[
+                state.current_transition_by_request[package.proposal_ref]
+            ].lifecycle
+            == CapabilityLifecycle.RESULT_PACKAGED
+        ]
+        if available_packages:
+            package = min(
+                available_packages,
+                key=lambda item: (
+                    state.proposals[item.proposal_ref].source_call_seq,
+                    state.proposals[item.proposal_ref].proposal_index,
+                    item.id,
+                ),
+            )
+            proposal = state.proposals[package.proposal_ref]
+            if manifest.schema_version == 6:
+                return self._v6_simulation_result_follow_up(controller, package, proposal)
+            parent = self.harness.workflow_state.work_orders.get(
+                proposal.originating_work_order_ref
+            )
+            if parent is None:
+                raise WorkflowAuthorizationError(
+                    "simulation result has no durable originating work order"
+                )
+            if parent.run_input_digest != manifest.run_input_digest:
+                raise WorkflowAuthorizationError(
+                    "simulation result parent belongs to another run input"
+                )
+            from deepreason.llm.firewall import (
+                resolve_school_role_lease,
+                route_fingerprint,
+                select_lease,
+            )
+
+            lease = (
+                resolve_school_role_lease(
+                    manifest,
+                    self.adapter.leases,
+                    school_id=parent.school_id,
+                    role="conjecturer",
+                )
+                if parent.school_id is not None
+                else select_lease(self.adapter.leases, "conjecturer", parent.route_lease.seat)
+            )
+            if (
+                lease.route.endpoint_id != parent.route_lease.endpoint_id
+                or route_fingerprint(lease.route) != parent.route_lease.route_sha256
+            ):
+                raise WorkflowAuthorizationError(
+                    "simulation result follow-up route differs from parent work"
+                )
+            from deepreason.workflow.trace import build_capability_follow_up_trace
+
+            fence = max(0, self.harness._next_seq - 1)
+            trace = build_capability_follow_up_trace(
+                self.harness,
+                parent,
+                result_package_ref=package.id,
+                result_context_ref=package.result_context_ref,
+                formal_fence_seq=fence,
+                scratch_fence_seq=fence,
+                authoritative=True,
+                error_sink=lambda error: self._record_workflow_shadow_error(
+                    problem_ref=parent.problem_ref,
+                    school_id=parent.school_id,
+                    event_start_seq=self.harness._next_seq,
+                    error=error,
+                    work_order_id=parent.id,
+                ),
+            )
+            self.harness.record_measure(
+                inputs=["cycle", str(self._cycles), f"simulation-result:{package.id}"]
+            )
+            try:
+                conj(
+                    self.harness,
+                    parent.problem_ref,
+                    self.adapter,
+                    self.config,
+                    self.diagnostics,
+                    school=(
+                        self._school_dict(parent.school_id)
+                        if parent.school_id is not None
+                        else None
+                    ),
+                    embedder=self.embedder,
+                    workload_profile=self.workload_profile,
+                    endpoint_lease=lease if parent.school_id is not None else None,
+                    execution_school_id=parent.school_id,
+                    run_manifest=manifest,
+                    workflow_control_trace=trace,
+                    _capability_result_context=controller.result_context(package),
+                    _simulation_follow_up_index=1,
+                )
+            except (SchemaRepairError, EndpointError) as error:
+                self._drop(error)
+                trace.abandon(f"simulation-result-provider-failure:{package.id}")
+            if trace.dispatch_authorized:
+                proposal_transition = state.transitions[
+                    state.current_transition_by_request[proposal.id]
+                ]
+                controller.consume(
+                    package,
+                    follow_up_work_order_ref=trace.ticket.work_order.id,
+                    formal_fence_seq=proposal_transition.formal_fence_seq,
+                    scratch_fence_seq=proposal_transition.scratch_fence_seq,
+                )
+            return True
+
+        interrupted = [
+            proposal
+            for proposal in state.proposals.values()
+            if state.transitions[state.current_transition_by_request[proposal.id]].lifecycle
+            == CapabilityLifecycle.DISPATCHED
+        ]
+        if interrupted:
+            proposal = min(
+                interrupted,
+                key=lambda item: (
+                    item.source_call_seq,
+                    item.proposal_index,
+                    item.id,
+                ),
+            )
+            if manifest.schema_version == 6:
+                controller.require_transactional_origin(proposal)
+            self.harness.record_measure(
+                inputs=[
+                    "cycle",
+                    str(self._cycles),
+                    f"simulation-interrupted:{proposal.id}",
+                ]
+            )
+            controller.recover_interrupted(proposal)
+            return True
+
+        pending = [
+            proposal
+            for proposal in state.proposals.values()
+            if state.transitions[state.current_transition_by_request[proposal.id]].lifecycle
+            == CapabilityLifecycle.PROPOSED
+        ]
+        if not pending:
+            return False
+        proposal = min(
+            pending,
+            key=lambda item: (item.source_call_seq, item.proposal_index, item.id),
+        )
+        if manifest.schema_version == 6:
+            controller.require_transactional_origin(proposal)
+        self.harness.record_measure(
+            inputs=["cycle", str(self._cycles), f"simulation-request:{proposal.id}"]
+        )
+        controller.execute(proposal)
+        return True
 
     def step(self) -> None:
         harness, config = self.harness, self.config
         self._arg_crit_this_cycle = 0
+        self._advisory_trials_this_cycle = 0
+        if not self._embedder_stamped:
+            # Geometry identity on the record (§11.5/§17, adjudicated in
+            # runs/embedder_design): model + library versions + sentinel-
+            # embedding hash. Two runs' school geometry / atlas distances are
+            # comparable iff their stamps match — cross-environment drift is
+            # DETECTED here, never assumed away. Once per scheduler, before
+            # the first heartbeat: a pre-run provenance record, like Register.
+            self._embedder_stamped = True
+            fp = self._embedder_fingerprint()
+            harness.record_measure(inputs=["embedder", fp["model"], fp["version"], fp["sentinel"]])
         if self.controller is not None:
             self.controller.step()  # calibrate generator knobs from process signals
+        if self._simulation_capability_step():
+            self._cycles += 1
+            return
         scan_spawns(harness, config)
         problem = self._select_problem()
+        # Heartbeat: every event that follows (by seq) until the next
+        # heartbeat belongs to this cycle — the log segments itself, live
+        # progress is tail-able, and stalls become diagnosable post hoc.
+        harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
         if problem is None:
             self._cycles += 1
             return
-        if problem.provenance.trigger in _INTEGRATION_TRIGGERS:
+        if problem.id in reflexive_problems(harness.state):
             self._integration_cycles += 1
 
         # Discrimination in informal mode resolves comparatively (§10.2):
         # a pairwise ruling, not more conjectures.
-        if (
-            problem.provenance.trigger == SpawnTrigger.DISCRIMINATION
-            and self.adapter.has_role("judge")
+        if problem.provenance.trigger == SpawnTrigger.DISCRIMINATION and self.adapter.has_role(
+            "judge"
         ):
             from deepreason.informal.trial import pairwise_discriminate
 
+            # Futility tracking: every selection is an attempt — resolved,
+            # 'neither', blocked, or rivals-missing alike (each burned the
+            # cycle). Cooldown + attempt cap keep an unresolvable rivalry
+            # from starving the rest of the run (_disc_paused). EXCEPTION:
+            # a transport-dropped ruling is no verdict at all — it must not
+            # count toward the PERMANENT cap (the cooldown still applies via
+            # _disc_last; only the epistemic attempt is preserved).
+            self._disc_last[problem.id] = self._cycles
+            transport_deferred = False
             rivals = [
-                i for i in problem.provenance.from_
+                i
+                for i in problem.provenance.from_
                 if harness.state.status.get(i) == Status.ACCEPTED
             ][:2]
             if len(rivals) == 2:
                 try:
-                    pairwise_discriminate(
-                        harness, problem, rivals[0], rivals[1],
-                        self.adapter, config, self.diagnostics,
+                    authority = trial_authority_for(
+                        config, self.workload_profile, AuthoritySurface.PAIRWISE
                     )
+                    run_pairwise = authority != TrialAuthority.OBSERVE_ONLY
+                    if (
+                        authority == TrialAuthority.OBSERVE_ONLY
+                        and self._advisory_trials_this_cycle < config.ADVISORY_TRIALS_PER_CYCLE
+                    ):
+                        self._advisory_trials_this_cycle += 1
+                        run_pairwise = True
+                    if run_pairwise and self._defer_untransactional_v6_phase(
+                        "pairwise-discrimination",
+                        "judge",
+                        problem.id,
+                        f"{rivals[0]}|{rivals[1]}",
+                    ):
+                        run_pairwise = False
+                    if run_pairwise:
+                        pairwise_discriminate(
+                            harness,
+                            problem,
+                            rivals[0],
+                            rivals[1],
+                            self.adapter,
+                            config,
+                            self.diagnostics,
+                            authority=authority,
+                        )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
-            reach_sweep(harness)
+                    if isinstance(e, EndpointError):
+                        transport_deferred = True
+                        harness.record_measure(inputs=["disc-transport-deferred", problem.id])
+            if not transport_deferred:
+                self._disc_attempts[problem.id] = self._disc_attempts.get(problem.id, 0) + 1
+                if self._disc_attempts[problem.id] == self.config.DISC_ATTEMPTS_MAX:
+                    # Observability: from here on, selection skips this problem.
+                    harness.record_measure(inputs=["disc-attempts-exhausted", problem.id])
+            reach_sweep(harness, coverage_min=config.REACH_COVERAGE_MIN)
             self._capture_step()
             self._cycles += 1
             return
@@ -246,11 +1727,40 @@ class Scheduler:
         if not assigned:
             assigned = [None]
 
+        uses_conjecturer = not (
+            problem.provenance.trigger in _INTEGRATION_TRIGGERS
+            and self.adapter.has_role("synthesizer")
+            and not (self.run_manifest is not None and self.run_manifest.schema_version == 6)
+        )
+        school_leases = {}
+        if (
+            uses_conjecturer
+            and self.run_manifest is not None
+            and self.run_manifest.schema_version in {4, 5, 6}
+        ):
+            # Resolve the entire school batch before shared spec generation,
+            # reservation, or provider dispatch. One bad assignment therefore
+            # cannot leave partial spend from an otherwise valid school.
+            school_leases = {
+                school_id: resolve_school_role_lease(
+                    self.run_manifest,
+                    self.adapter.leases,
+                    school_id=school_id,
+                    role="conjecturer",
+                )
+                for school_id in assigned
+                if school_id is not None
+            }
+
         # Level-2 diversity injection: one spec call per step, shared across
         # schools (inter-school diversity comes from stances; specs fight
         # intra-call stem collapse). Logged so tokens and replay both see it.
         specs = None
-        if self.spec_injection and problem.provenance.trigger not in _INTEGRATION_TRIGGERS:
+        if (
+            self.spec_injection
+            and problem.provenance.trigger not in _INTEGRATION_TRIGGERS
+            and not (self.run_manifest is not None and self.run_manifest.schema_version == 6)
+        ):
             from deepreason.llm.specs import generate_specs
 
             try:
@@ -261,26 +1771,191 @@ class Scheduler:
 
         for school_id in assigned:
             school = self._school_dict(school_id) if school_id else None
+            shadow_ticket = None
+            workflow_control_trace = None
+            shadow_dispositions = []
+            candidate_observer = None
+            workflow_trace_ready = False
+            try:
+                shadow_dispositions, candidate_observer = self._workflow_shadow_candidate_sink()
+                workflow_trace_ready = candidate_observer is not None
+            except Exception as error:  # noqa: BLE001 - shadow cannot block Conj
+                if self._active_conjecture_mode():
+                    raise
+                self._record_workflow_shadow_error(
+                    problem_ref=problem.id,
+                    school_id=(school_id if school_id in school_leases else None),
+                    event_start_seq=self.harness._next_seq,
+                    error=error,
+                )
             try:
                 if (
                     problem.provenance.trigger in _INTEGRATION_TRIGGERS
                     and self.adapter.has_role("synthesizer")
+                    and not (
+                        self.run_manifest is not None and self.run_manifest.schema_version == 6
+                    )
                 ):
                     relation = synthesize(
-                        harness, problem, self.adapter, config,
-                        school_id=school_id, embedder=self.embedder,
+                        harness,
+                        problem,
+                        self.adapter,
+                        config,
+                        school_id=school_id,
+                        embedder=self.embedder,
                     )
                     admitted = [relation] if relation else []
                 else:
-                    admitted = conj(
-                        harness, problem.id, self.adapter, config, self.diagnostics,
-                        school=school, tail_weighted=self.tail_weighted,
-                        complement=self.complement, specs=specs,
-                        embedder=self.embedder,
+                    endpoints = lineage_endpoints(problem, harness.commitments, harness.state)
+                    mandatory = MandatoryInterface(
+                        refs=tuple(
+                            MandatoryRef(target=endpoint, role="dependence")
+                            for endpoint in endpoints
+                        )
+                        if self.workload_profile is not None
+                        else ()
                     )
-            except (SchemaRepairError, EndpointError) as e:
-                self._drop(e)
+                    component_spec = (
+                        stable_component_spec(problem, endpoints)
+                        if self.workload_profile in {"code", "website"}
+                        else None
+                    )
+                    theorem_interface = (
+                        stable_component_spec(problem, endpoints)
+                        if self.workload_profile == "formal"
+                        else None
+                    )
+                    from deepreason.scratch.conjecture import ConjectureContextStale
+
+                    context_plan = self._plan_conjecture_context(problem, school_id)
+                    if self.run_manifest is not None and self.run_manifest.schema_version == 6:
+                        # Controller-v3 persists preparation before its pure
+                        # planners; Conj owns that ordered transaction.
+                        context_plan = None
+                    shadow_ticket = self._begin_workflow_shadow(
+                        problem,
+                        school_id if school_id in school_leases else None,
+                        context_plan,
+                    )
+                    if workflow_trace_ready:
+                        workflow_control_trace = self._workflow_control_trace(shadow_ticket)
+                    if self._active_conjecture_mode() and (
+                        shadow_ticket is None or workflow_control_trace is None
+                    ):
+                        raise WorkflowAuthorizationError(
+                            "active conjecture control trace is unavailable"
+                        )
+                    for context_attempt in range(2):
+                        try:
+                            admitted = conj(
+                                harness,
+                                problem.id,
+                                self.adapter,
+                                config,
+                                self.diagnostics,
+                                school=school,
+                                tail_weighted=self.tail_weighted,
+                                complement=self.complement,
+                                specs=specs,
+                                embedder=self.embedder,
+                                mandatory_interface=mandatory,
+                                workload_profile=self.workload_profile,
+                                contract_id=(
+                                    f"scheduler.conjecturer.{self.workload_profile}.v1"
+                                    if self.workload_profile is not None
+                                    else "conjecturer.direct.v1"
+                                ),
+                                component_spec=component_spec,
+                                theorem_interface=theorem_interface,
+                                generation_context=self.generation_context,
+                                suppressed_exemplars=self.suppressed_exemplars,
+                                endpoint_lease=school_leases.get(school_id),
+                                execution_school_id=(
+                                    school_id if school_id in school_leases else None
+                                ),
+                                conjecture_context_plan=context_plan,
+                                candidate_observer=candidate_observer,
+                                workflow_control_trace=workflow_control_trace,
+                                run_manifest=(
+                                    self.run_manifest
+                                    if self.run_manifest is not None
+                                    and self.run_manifest.schema_version in {4, 5, 6}
+                                    and self.run_manifest.control_plane_policy is not None
+                                    and self.run_manifest.control_plane_policy.mode
+                                    in {"active_conjecture", "active_inquiry"}
+                                    else None
+                                ),
+                            )
+                            break
+                        except ConjectureContextStale:
+                            if context_attempt:
+                                raise
+                            context_plan = self._plan_conjecture_context(problem, school_id)
+                            shadow_ticket = self._begin_workflow_shadow(
+                                problem,
+                                (school_id if school_id in school_leases else None),
+                                context_plan,
+                            )
+                            workflow_control_trace = (
+                                self._workflow_control_trace(shadow_ticket)
+                                if workflow_trace_ready
+                                else None
+                            )
+            except WorkBudgetDenied as error:
+                self.diagnostics.append(
+                    {
+                        "cycle": self._cycles,
+                        "budget_denied": error.terminal.work_id,
+                    }
+                )
+                self._finish_workflow_shadow(
+                    shadow_ticket,
+                    (),
+                    actual_problem_ref=problem.id,
+                    candidate_dispositions=shadow_dispositions,
+                    control_trace=workflow_control_trace,
+                )
                 continue
+            except (SchemaRepairError, EndpointError) as e:
+                if getattr(e, "transaction_terminalized", False):
+                    self.diagnostics.append({"cycle": self._cycles, "dropped": str(e)})
+                else:
+                    self._drop(e)
+                spend = getattr(e, "spend", None)
+                if workflow_control_trace is not None and spend is not None:
+                    workflow_control_trace.record_provider_result(
+                        source_call_seq=self.harness._next_seq - 1,
+                        llm_call=spend,
+                        candidate_refs=(),
+                    )
+                self._finish_workflow_shadow(
+                    shadow_ticket,
+                    (),
+                    actual_problem_ref=problem.id,
+                    candidate_dispositions=shadow_dispositions,
+                    control_trace=workflow_control_trace,
+                )
+                continue
+            except (
+                RouteFirewallError,
+                TokenBudgetExceeded,
+                WorkflowAuthorizationError,
+            ) as error:
+                # These remain fail-closed scheduler exits.  Carry only the
+                # in-memory ticket upward so run() can log any attached spend
+                # first and let the observer compare the completed event span.
+                error.workflow_shadow_ticket = shadow_ticket
+                error.workflow_shadow_problem_ref = problem.id
+                error.workflow_shadow_candidate_dispositions = tuple(shadow_dispositions)
+                error.workflow_control_trace = workflow_control_trace
+                raise
+            self._finish_workflow_shadow(
+                shadow_ticket,
+                admitted,
+                actual_problem_ref=problem.id,
+                candidate_dispositions=shadow_dispositions,
+                control_trace=workflow_control_trace,
+            )
             for artifact in admitted:
                 self._criticize(artifact)
             # Argumentative criticism runs after the cheap per-target passes
@@ -288,8 +1963,15 @@ class Scheduler:
             # can share one (CRIT_BATCH_K).
             self._arg_crit([a.id for a in admitted])
 
-        reach_sweep(harness)  # hits recorded; debt problems spawn on the next scan
+        reach_sweep(
+            harness, coverage_min=config.REACH_COVERAGE_MIN
+        )  # hits recorded; debt spawns next scan
         self._lazy_hv()
+        self._experiment_step()
+        self._property_step()
+        self._fuzz_sweep()  # after design steps: new probes/oracles apply NOW
+        self._browser_step()
+        self._vision_step()  # after browser: judges freshly recorded renders
         self._research_step()
         self._audit_step()
         self._capture_step()
@@ -304,6 +1986,17 @@ class Scheduler:
             or not self.adapter.has_role("variator")
         ):
             return
+        if self._defer_untransactional_v6_phase(
+            "paraphrase-audit-variation",
+            "variator",
+            "run",
+        ):
+            self._defer_untransactional_v6_phase(
+                "paraphrase-audit-judgment",
+                "judge",
+                "run",
+            )
+            return
         from deepreason.informal.audits import paraphrase_invariance_audit
 
         try:
@@ -311,43 +2004,336 @@ class Scheduler:
         except (SchemaRepairError, EndpointError) as e:
             self._drop(e)
 
-    def _research_step(self) -> None:
-        """Standing exogenous schedule (§12): work one uncovered research
-        problem every RESEARCH_PERIOD cycles — every cycle under the
-        grounding brake (§11.4)."""
-        if self.research_backend is None:
+    def _fuzz_sweep(self) -> None:
+        """Deterministic criticism is never rationed (§14): LLM criticism
+        queues behind ARG_CRIT_PER_CYCLE because calls cost tokens, but fuzz
+        costs sandbox steps only — so every cycle, re-probe EVERY standing
+        accepted candidate whose fuzz-clean bit is unset. The bit clears when
+        the generator pool grows (surviving yesterday's experiments is not
+        surviving today's). Without this, a target was only re-fuzzed when
+        the arg-crit sweep had leftover slots — a token-economy constraint
+        wrongly imposed on free criticism."""
+        config = self.config
+        if config.FUZZ_N <= 0:
             return
-        due = self.research_priority or self._cycles % self.config.RESEARCH_PERIOD == 0
-        if not due:
+        from deepreason.oracle import PROPERTY_PROGRAM
+
+        harness = self.harness
+        property_eval = f"program:{PROPERTY_PROGRAM}"
+        for aid, artifact in list(harness.state.artifacts.items()):
+            if aid in self._fuzz_clean:
+                continue
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if (artifact.provenance.role if artifact.provenance else "") not in (
+                "conjecturer",
+                "synthesizer",
+                "seed",
+            ):
+                continue
+            if not any(
+                (kappa := harness.commitments.get(cid)) is not None and kappa.eval == property_eval
+                for cid in artifact.interface.commitments
+            ):
+                continue
+            from deepreason.rules.crit import QUARANTINE_TICK
+
+            tick = QUARANTINE_TICK[0]
+            crit_fuzz(harness, aid, config)
+            if (
+                harness.state.status.get(aid) == Status.ACCEPTED
+                and QUARANTINE_TICK[0] == tick  # no verdict pending population
+            ):
+                self._fuzz_clean.add(aid)
+
+    def _experiment_step(self) -> None:
+        """Experiment design (rules/experiment.py): every GEN_PROPOSE_PERIOD
+        cycles, ONE experimenter call for the first property oracle among the
+        registered problems' criteria that still has fewer than GEN_MAX
+        accepted generators. New accepted generators invalidate the fuzz-clean
+        cache — a target that survived yesterday's experiments has not
+        survived today's."""
+        config = self.config
+        if (
+            config.GEN_PROPOSE_PERIOD <= 0
+            or config.FUZZ_N <= 0
+            or self._cycles % config.GEN_PROPOSE_PERIOD != 0
+            or not self.adapter.has_role("conjecturer")
+        ):
             return
-        from deepreason.research.backends import pending, run_research
+        from deepreason.oracle import PROPERTY_PROGRAM
+        from deepreason.rules.experiment import accepted_generators, propose_generators
 
         for problem in self.harness.state.problems.values():
-            if problem.provenance.trigger != SpawnTrigger.RESEARCH:
-                continue
-            if pending(self.harness, problem.id):
-                continue
-            if run_research(self.harness, problem, self.research_backend) is not None:
-                return  # one fetch per due cycle (budgeted)
-
-    def _lazy_hv(self) -> None:
-        """One spot-check per cycle on an accepted, unmeasured artifact."""
-        if not self.adapter.has_role("variator"):
-            return
-        addressed = {aid for aid, _ in self.harness.state.addr}
-        for aid, status in self.harness.state.status.items():
-            if (
-                status == Status.ACCEPTED
-                and aid in addressed
-                and aid not in self.harness.state.hv
-            ):
+            for cid in problem.criteria:
+                base = self.harness.commitments.get(cid)
+                if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+                    continue
+                if len(accepted_generators(self.harness, cid)) >= config.GEN_MAX:
+                    continue
+                if self._defer_untransactional_v6_phase(
+                    "experiment-generator-authoring",
+                    "conjecturer",
+                    problem.id,
+                    cid,
+                ):
+                    return
                 try:
-                    hv_spot_check(
-                        self.harness, self.adapter, aid, self.config.HV_K, self.embedder
+                    survivors = propose_generators(self.harness, base, self.adapter, config)
+                except (SchemaRepairError, EndpointError) as e:
+                    self._drop(e)
+                    return
+                if survivors:
+                    self._fuzz_clean.clear()  # new experiments: re-probe everyone
+                return  # one design call per due cycle (budgeted)
+
+    def _property_step(self) -> None:
+        """Property conjecture (rules/experiment.py): every PROP_PROPOSE_PERIOD
+        cycles, ONE property-designer call for the first property oracle whose
+        active-property count is below PROP_MAX. Requires the judge ensemble
+        (the relevance trial is part of admission — no judges, no proposals:
+        fail closed). Activation clears the fuzz-clean cache: a stronger
+        oracle re-probes everything."""
+        config = self.config
+        if (
+            config.PROP_PROPOSE_PERIOD <= 0
+            or config.FUZZ_N <= 0
+            or self._cycles % config.PROP_PROPOSE_PERIOD != 0
+            or not self.adapter.has_role("property_designer")
+            or not self.adapter.has_role("judge")
+        ):
+            return
+        from deepreason.oracle import PROPERTY_PROGRAM
+        from deepreason.rules.experiment import active_properties, propose_properties
+
+        for problem in self.harness.state.problems.values():
+            for cid in problem.criteria:
+                base = self.harness.commitments.get(cid)
+                if base is None or base.eval != f"program:{PROPERTY_PROGRAM}":
+                    continue
+                if len(active_properties(self.harness, cid)) >= config.PROP_MAX:
+                    continue
+                if self._defer_untransactional_v6_phase(
+                    "property-design",
+                    "property_designer",
+                    problem.id,
+                    cid,
+                ):
+                    self._defer_untransactional_v6_phase(
+                        "property-relevance-trial",
+                        "judge",
+                        problem.id,
+                        cid,
+                    )
+                    return
+                try:
+                    activated = propose_properties(
+                        self.harness, base, problem, self.adapter, config
                     )
                 except (SchemaRepairError, EndpointError) as e:
                     self._drop(e)
+                    return
+                if activated:
+                    self._fuzz_clean.clear()  # stronger oracle: re-probe everyone
+                return  # one design call per due cycle (budgeted)
+
+    def _browser_step(self) -> None:
+        """Browser evidence (rules/act.py): render + drive app candidates
+        that carry browser commitments and lack recorded evidence — at most
+        BROWSER_PER_CYCLE new runs per cycle. Exogenous like research: each
+        run happens once and its outcome is materialized; a missing
+        playwright disables the feature for the run (fail closed)."""
+        config = self.config
+        if self.browser_backend is None or config.BROWSER_PER_CYCLE <= 0:
+            return
+        from deepreason.browser import BrowserUnavailable
+        from deepreason.rules.act import needs_browser_run, run_browser_evidence
+
+        harness = self.harness
+        runs = 0
+        for aid, artifact in list(harness.state.artifacts.items()):
+            if runs >= config.BROWSER_PER_CYCLE:
+                break
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if (artifact.provenance.role if artifact.provenance else "") not in (
+                "conjecturer",
+                "synthesizer",
+                "seed",
+            ):
+                continue
+            if not needs_browser_run(harness, aid):
+                continue
+            try:
+                run_browser_evidence(harness, aid, self.browser_backend, config)
+            except BrowserUnavailable as e:
+                self.browser_backend = None  # optional dep missing: feature off
+                self.diagnostics.append({"cycle": self._cycles, "browser": str(e)})
                 return
+            runs += 1
+
+    def _vision_step(self) -> None:
+        """Vision criticism (rules/vision.py): one look per target with
+        recorded screenshots, at most VISION_CRIT_PER_CYCLE calls per cycle.
+        Attention-only cache — screenshots are recorded once per candidate,
+        so one look is complete coverage."""
+        config = self.config
+        if config.VISION_CRIT_PER_CYCLE <= 0 or not self.adapter.has_role("vision_critic"):
+            return
+        from deepreason.rules.act import browser_evidence
+        from deepreason.rules.vision import crit_vision
+
+        harness = self.harness
+        calls = 0
+        for aid in list(harness.state.artifacts):
+            if calls >= config.VISION_CRIT_PER_CYCLE:
+                break
+            if aid in self._vision_done:
+                continue
+            if harness.state.status.get(aid) != Status.ACCEPTED:
+                continue
+            if not browser_evidence(harness, aid):
+                continue
+            if not self._defer_untransactional_v6_phase(
+                "vision-criticism",
+                "vision_critic",
+                aid,
+            ):
+                try:
+                    crit_vision(harness, aid, self.adapter, config)
+                except (SchemaRepairError, EndpointError) as e:
+                    self._drop(e)
+            self._vision_done.add(aid)
+            calls += 1
+
+    def _research_signal(self, signal: str | None, *extra: str) -> None:
+        """Episode-deduplicated research state signal: emit only on a state
+        TRANSITION (None <-> off/awaiting), never per cycle — the log shows
+        each continuous unavailable/waiting episode exactly once. A new
+        episode after recovery logs a new event."""
+        if signal == self._research_episode:
+            return
+        self._research_episode = signal
+        if signal is not None:
+            self.harness.record_measure(inputs=[signal, *extra])
+
+    def _research_step(self) -> None:
+        """Standing exogenous schedule (§12): at most ONE eligible internal
+        retrieval attempt per due cycle, problems in deterministic order,
+        failures logged and bounded (cooldown + per-strategy attempt cap,
+        both reconstructed from the log), backend exceptions caught at this
+        boundary. In "agent" mode there is no internal fetcher: uncovered
+        requests wait in ops.research_docket for the operating agent —
+        that is the ordinary waiting state, not research being off."""
+        from deepreason.ops import _research_events, open_research_problems
+        from deepreason.research.backends import pending, run_research
+
+        open_problems = open_research_problems(self.harness)
+        if not open_problems:
+            self._research_signal(None)
+            return
+        if self.research.mode == "off":
+            # Research deliberately disabled while requests go unmet: the
+            # record must say so honestly (once per episode) — the §11.4
+            # exogenous brake has no actuator here and must not spin.
+            self._research_signal("research-off")
+            return
+        if not self.research.internal:
+            # "agent" mode (or unattended ask-user): the docket is live and
+            # the agent may submit at any time. Silence is NOT evidence of
+            # absence — without a heartbeat protocol the harness cannot
+            # distinguish absent, delayed, or mid-search. Never research-off.
+            self._research_signal("research-awaiting-agent", *[p.id for p in open_problems[:8]])
+            return
+        self._research_signal(None)
+
+        due = self.research_priority or self._cycles % self.config.RESEARCH_PERIOD == 0
+        if not due:
+            return
+        attempts = _research_events(self.harness)
+        for problem in open_problems:  # deterministic order (sorted ids)
+            if pending(self.harness, problem.id):
+                continue  # sealed holdout: scheduled-pending, not failed
+            state = attempts.get(problem.id, {"attempts": 0, "last_cycle": -1})
+            if state["attempts"] >= self.config.RESEARCH_ATTEMPTS_MAX:
+                continue  # internal strategy exhausted (already logged)
+            if (
+                state["last_cycle"] >= 0
+                and self._cycles - state["last_cycle"] < self.config.RESEARCH_COOLDOWN
+            ):
+                continue  # cooling down after a failed attempt
+            try:
+                result = run_research(self.harness, problem, self.research.fetcher)
+            except Exception as e:  # noqa: BLE001 - retrieval must never kill the cycle
+                result = None
+                self._log_research_failure(problem.id, type(e).__name__, str(e))
+            else:
+                if result is None:
+                    self._log_research_failure(problem.id, "no-result", "backend returned nothing")
+            return  # exactly one internal attempt per due cycle, hit or miss
+
+    def _log_research_failure(self, pid: str, category: str, reason: str) -> None:
+        """research-fetch-failed carries [pid, cycle, strategy, ...] so the
+        cooldown/attempt state is a pure function of the log (replay-safe),
+        and the exhaustion transition is logged exactly once."""
+        from deepreason.ops import _research_events
+
+        self.harness.record_measure(
+            inputs=[
+                "research-fetch-failed",
+                pid,
+                str(self._cycles),
+                self.research.mode,
+                category,
+                reason[:200],
+            ]
+        )
+        state = _research_events(self.harness).get(pid, {"attempts": 0})
+        if state["attempts"] == self.config.RESEARCH_ATTEMPTS_MAX:
+            # Attention only: internal fetching pauses; the problem stays
+            # open and the agent channel can still cover it at any time.
+            self.harness.record_measure(
+                inputs=["research-fetch-exhausted", pid, self.research.mode]
+            )
+
+    def _lazy_hv(self) -> None:
+        """One spot-check per cycle on an accepted, unmeasured artifact.
+        Oversized content is skipped (HV_CONTENT_MAX_CHARS): the variator
+        cannot emit K whole-document edits of a multi-KB app inside its
+        completion window — every attempt was a guaranteed length-limit drop
+        (observed live). Attention-only machinery, so skipping is legal."""
+        if not self.adapter.has_role("variator"):
+            return
+        from deepreason.programs import content_text
+
+        addressed = {aid for aid, _ in self.harness.state.addr}
+        limit = self.config.HV_CONTENT_MAX_CHARS
+        for aid, status in self.harness.state.status.items():
+            if (
+                status != Status.ACCEPTED
+                or aid not in addressed
+                or aid in self.harness.state.hv
+                or aid in self._hv_skipped
+            ):
+                continue
+            if limit is not None:
+                text = content_text(self.harness.state.artifacts[aid], self.harness.blobs)
+                if len(text) > limit:
+                    self._hv_skipped.add(aid)
+                    self.harness.record_measure(inputs=["hv-skip-oversize", aid, str(len(text))])
+                    continue  # keep scanning: the cycle's slot is not spent
+            if self._defer_untransactional_v6_phase(
+                "hv-spot-check",
+                "variator",
+                aid,
+            ):
+                self._hv_skipped.add(aid)
+                continue
+            try:
+                hv_spot_check(self.harness, self.adapter, aid, self.config.HV_K, self.embedder)
+            except (SchemaRepairError, EndpointError) as e:
+                self._drop(e)
+            return
 
     def _capture_step(self) -> None:
         """Detection + hysteresis (raw flag sustained 2 checks) + ladder,
@@ -356,12 +2342,19 @@ class Scheduler:
         active: dict[str, bool] = {}
         for flag, is_raised in raw.items():
             self._flag_streak[flag] = self._flag_streak.get(flag, 0) + 1 if is_raised else 0
-            if (
-                self._flag_streak[flag] >= 2
-                and self._cycles >= self._cooldown.get(flag, 0)
-            ):
+            if self._flag_streak[flag] >= 2 and self._cycles >= self._cooldown.get(flag, 0):
                 active[flag] = True
         if active:
+            if not self.capture_responses:
+                self.diagnostics.append(
+                    {
+                        "cycle": self._cycles,
+                        "flags": sorted(active),
+                        "responses": [],
+                        "observed_only": True,
+                    }
+                )
+                return
             applied = ladder.respond(self, active)
             for flag in active:
                 self._cooldown[flag] = self._cycles + self.config.CAPTURE_W
@@ -372,20 +2365,286 @@ class Scheduler:
 
     # -------------------------------------------------------------- #
 
-    def run(self, cycles: int) -> dict:
-        from deepreason.llm.budget import TokenBudgetExceeded
+    def _stop_snapshot(self) -> dict:
+        report = self.report()
+        state = self.harness.state
+        accepted = {
+            artifact_id
+            for artifact_id, _ in state.addr
+            if state.status.get(artifact_id) == Status.ACCEPTED
+        }
+        return {
+            "frontier": frozenset(report["frontier"]),
+            "statuses": dict(state.status),
+            "problems": frozenset(state.problems),
+            "admissions": frozenset(accepted),
+            "event_seq": self.harness._next_seq,
+        }
 
+    def _stop_metrics(self, before: dict, diagnostic_start: int):
+        """Compile process-only convergence inputs at a safe cycle boundary."""
+        from deepreason.ops import open_research_problems
+        from deepreason.runtime.stop import StopMetrics
+
+        after = self._stop_snapshot()
+        status_ids = set(before["statuses"]) | set(after["statuses"])
+        status_churn = sum(
+            before["statuses"].get(artifact_id) != after["statuses"].get(artifact_id)
+            for artifact_id in status_ids
+        )
+        recent_diagnostics = self.diagnostics[diagnostic_start:]
+        stuck_signal = any(item.get("search_signal") == "stuck" for item in recent_diagnostics)
+        gate_orbit = any(
+            str(item.get("gate", "")).startswith(("battery-equivalent", "hash:"))
+            for item in recent_diagnostics
+        )
+        repair_exhausted = any(
+            "schema" in str(item.get("dropped", "")).casefold()
+            or "repair" in str(item.get("dropped", "")).casefold()
+            for item in recent_diagnostics
+        )
+        self._last_stop_model_signal_refs = (
+            tuple(
+                sorted(
+                    {
+                        event.llm.raw_ref
+                        for event in self.harness._events_since(before["event_seq"])
+                        if event.llm is not None and len(event.llm.raw_ref) == 64
+                    }
+                )
+            )
+            if stuck_signal
+            else ()
+        )
+        debt = detection.adjudicator_metrics(self.harness, self.config.CAPTURE_W)["criticism_debt"]
+        metrics = StopMetrics(
+            cycle=self._stop_cycle_offset + self._cycles,
+            frontier_delta=len(before["frontier"] ^ after["frontier"]),
+            status_churn=status_churn,
+            new_problems=len(after["problems"] - before["problems"]),
+            new_admissions=len(after["admissions"] - before["admissions"]),
+            # Deterministic checks run synchronously in _criticize before this
+            # boundary; no hidden worker queue exists in this scheduler.
+            pending_deterministic_checks=0,
+            criticism_debt=debt,
+            open_research=len(open_research_problems(self.harness)),
+            stuck_signal=stuck_signal,
+            gate_orbit=gate_orbit,
+            repair_exhausted=repair_exhausted,
+        )
+        return metrics, after
+
+    def _emit_progress(self, metrics, decision) -> None:
+        if self.progress_sink is None:
+            return
+        from deepreason.status_display import display_status_counts
+
+        state = self.harness.state
+        counts = {"accepted": 0, "refuted": 0, "suspended": 0}
+        for status in state.status.values():
+            if status == Status.ACCEPTED:
+                counts["accepted"] += 1
+            elif status == Status.REFUTED:
+                counts["refuted"] += 1
+            else:
+                counts["suspended"] += 1
+        stopped = decision is not None and decision.stop
+        self.progress_sink.emit(
+            state="completed" if stopped else "running",
+            phase="convergence",
+            activity=(
+                f"stop: {decision.reason}"
+                if stopped
+                else (
+                    f"escape: {decision.escape_action}"
+                    if decision is not None and decision.escape_action
+                    else "cycle evaluated"
+                )
+            ),
+            cycle=metrics.cycle,
+            frontier_size=len(self.report()["frontier"]),
+            accepted=counts["accepted"],
+            refuted=counts["refuted"],
+            suspended=counts["suspended"],
+            display_status_counts=display_status_counts(
+                self.harness, workload_profile=self.workload_profile
+            ),
+            queued_checks=metrics.pending_deterministic_checks,
+            determinate=False,
+            stop_reason=decision.reason if stopped else None,
+        )
+
+    def _record_stop(self, decision, metrics, controller_state_before=None) -> None:
+        from deepreason.runtime.stop import (
+            build_stop_record,
+            persist_stop_record,
+            write_stop_record,
+        )
+
+        self.harness.record_measure(
+            inputs=[
+                "scheduler-stop",
+                str(decision.reason),
+                self.stop_controller.policy.digest,
+            ]
+        )
+        manifest = self.run_manifest
+        control = (
+            getattr(manifest, "control_plane_policy", None)
+            if manifest is not None and getattr(manifest, "schema_version", 1) in {4, 5, 6}
+            else None
+        )
+        if (
+            control is None
+            or control.controller_version
+            not in {
+                "workflow.controller.v1",
+                "workflow.controller.v2",
+                "workflow.controller.v3",
+            }
+            or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
+        ):
+            write_stop_record(
+                self.harness.root,
+                reason=decision.reason,
+                policy=self.stop_controller.policy,
+                metrics=metrics,
+                event_seq=max(0, self.harness._next_seq - 1),
+            )
+            return
+
+        from deepreason.workflow.lifecycle import build_stopped_lifecycle
+
+        stop_event_seq = self.harness._next_seq
+        stop_record = build_stop_record(
+            reason=decision.reason,
+            policy=self.stop_controller.policy,
+            metrics=metrics,
+            event_seq=stop_event_seq,
+        )
+        if controller_state_before is None:
+            raise ValueError("v4 lifecycle requires pre-evaluation controller state")
+        observation, snapshot, lifecycle = build_stopped_lifecycle(
+            self.harness.workflow_state,
+            manifest_digest=manifest.sha256,
+            controller_version=control.controller_version,
+            workflow_profile=control.workflow_profile,
+            policy=self.stop_controller.policy,
+            metrics=metrics,
+            deterministic_decision=decision,
+            controller_state_before=controller_state_before,
+            controller_state_after=self.stop_controller.snapshot(),
+            stop_event_seq=stop_event_seq,
+            stop_record_digest=stop_record["digest"],
+            model_signal_blob_refs=self._last_stop_model_signal_refs,
+        )
+        event = self.harness.record_lifecycle_transition(
+            observation,
+            snapshot,
+            lifecycle,
+        )
+        if event.seq != stop_event_seq:
+            raise RuntimeError("lifecycle Control event crossed its stop fence")
+        persist_stop_record(self.harness.root, stop_record)
+        self.harness.write_workflow_checkpoint()
+
+    def run(self, cycles: int, on_cycle=None) -> dict:
+        """on_cycle(self) fires after every completed cycle — a read-only
+        progress hook (easy.make's friendly ticker); it must not register.
+        A truthy return stops the run early (staged pipelines stop a stage
+        on its first survivor without rebuilding the Scheduler, which would
+        wipe the attention caches)."""
+        self._recover_workflow_prefixes()
+        self._rehydrate_resumed_stop_controller()
+        stop_snapshot = self._stop_snapshot() if self.stop_controller is not None else None
         for _ in range(cycles):
             try:
+                diagnostic_start = len(self.diagnostics)
                 self.step()
+                if on_cycle is not None and on_cycle(self):
+                    break
+                if self.stop_controller is not None and stop_snapshot is not None:
+                    metrics, stop_snapshot = self._stop_metrics(stop_snapshot, diagnostic_start)
+                    controller_state_before = self.stop_controller.snapshot()
+                    decision = self.stop_controller.evaluate(metrics)
+                    self.last_stop_decision = decision
+                    if decision.escape_action:
+                        self.harness.record_measure(
+                            inputs=[
+                                "stop-escape",
+                                decision.escape_action,
+                                str(metrics.cycle),
+                            ]
+                        )
+                    self._emit_progress(metrics, decision)
+                    if decision.stop:
+                        self._record_stop(
+                            decision,
+                            metrics,
+                            controller_state_before,
+                        )
+                        break
+            except WorkflowAuthorizationError as e:
+                # Active control-plane failures are terminal. Preserve any
+                # provider attempt attached by the adapter, close a durable
+                # issuance prefix, and never resume through the legacy path.
+                self._drop(e)
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon("runtime:workflow_authorization_error")
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
+                    control_trace=control_trace,
+                )
+                raise
+            except RouteFirewallError as e:
+                # A leased route changing during a run is a fail-closed
+                # security/configuration error, not an ordinary model or
+                # transport failure. Preserve any already-spent attempts on
+                # the append-only process record, then stop the run loudly so
+                # the scheduler cannot continue against the mutated endpoint.
+                self._drop(e)
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon("runtime:route_firewall_error")
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
+                    control_trace=control_trace,
+                )
+                raise
             except TokenBudgetExceeded as e:
                 # Budget exhaustion is a logged stop, never a crash: state is
                 # consistent (Adj runs inside every registration). Mid-retry
-                # exhaustion carries the spent-but-uncarried attempts.
-                self.harness.record_llm_calls([getattr(e, "spend", None)], "dropped-call")
+                # exhaustion carries the spent-but-uncarried attempts — and the
+                # stop REASON goes into the log for the post-hoc reader.
+                spend = getattr(e, "spend", None)
+                if spend is not None:
+                    self.harness.record_llm_calls([spend], "dropped-call", str(e)[:120])
+                else:
+                    self.harness.record_measure(inputs=["dropped-call", str(e)[:120]])
                 self.diagnostics.append({"cycle": self._cycles, "stopped": str(e)})
+                control_trace = getattr(e, "workflow_control_trace", None)
+                if control_trace is not None:
+                    control_trace.abandon("runtime:token_budget_exceeded")
+                self._finish_workflow_shadow(
+                    getattr(e, "workflow_shadow_ticket", None),
+                    (),
+                    actual_problem_ref=getattr(e, "workflow_shadow_problem_ref", None),
+                    candidate_dispositions=getattr(e, "workflow_shadow_candidate_dispositions", ()),
+                    terminal_error=e,
+                    control_trace=control_trace,
+                )
                 break
-        return self.report()
+        report = self.report()
+        if self.last_stop_decision is not None and self.last_stop_decision.stop:
+            report["stop_reason"] = self.last_stop_decision.reason
+        return report
 
     def report(self) -> dict:
         """Pareto retention (§11.7): focus/reporting keeps the frontier over
@@ -399,9 +2658,9 @@ class Scheduler:
         scored = []
         for aid in survivors:
             commitments = [
-                c for c in state.artifacts[aid].interface.commitments
-                if c in self.harness.commitments
-                and programs.evaluable(self.harness.commitments[c])
+                c
+                for c in state.artifacts[aid].interface.commitments
+                if c in self.harness.commitments and programs.evaluable(self.harness.commitments[c])
             ]
             coverage = (
                 sum(
@@ -409,7 +2668,8 @@ class Scheduler:
                     for c in commitments
                     if programs.evaluate(
                         self.harness.commitments[c], state.artifacts[aid], self.harness.blobs
-                    )[0] == programs.PASS
+                    )[0]
+                    == programs.PASS
                 )
                 / len(commitments)
                 if commitments

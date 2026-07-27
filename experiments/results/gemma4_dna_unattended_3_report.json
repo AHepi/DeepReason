@@ -1,0 +1,367 @@
+{
+  "attack_validity_rate": 1.0,
+  "audits": {
+    "hits": 0,
+    "planted_flaw_error_rate": null,
+    "self_preference": null,
+    "verbosity_bias": null
+  },
+  "capture": {
+    "adjudicator": {
+      "attack_target_entropy": null,
+      "criticism_debt": 0.0,
+      "g_churn": 1,
+      "n_attacks": 1,
+      "refutations": 1,
+      "reinstatement_rate": 0.0,
+      "validity_attack_rate": 0.0
+    },
+    "evidence_lambda": null,
+    "generator": {
+      "dist_slope": 0.021029146914840258,
+      "inter_school_dist_ratio": 0.7571003322488874,
+      "inter_school_min_dist": 0.5916089577986888,
+      "mean_pairwise_dist": 0.7814142097142874,
+      "mean_token_surprisal": null,
+      "stream_len": 10,
+      "surprisal_slope": null
+    },
+    "lambda": 1.0
+  },
+  "interventions": [],
+  "llm": {
+    "argumentative_critic": {
+      "attempts": 7,
+      "calls": 7,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "argumentative_critic.compact.v1": 7
+      },
+      "eventual_valid": 7,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 7,
+      "first_pass_valid_rate": 1.0,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 7,
+      "schema_exhausted": 0,
+      "tokens": 6480,
+      "total_ms": 28452,
+      "trace_coverage": 1.0,
+      "traced_calls": 7,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 7
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 1.0
+    },
+    "conjecturer": {
+      "attempts": 20,
+      "calls": 20,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "component_contract.compact.v1": 6,
+        "conjecturer.compact.v1": 12,
+        "website_art_direction.compact.v1": 1,
+        "website_outline.compact.v1": 1
+      },
+      "eventual_valid": 20,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 20,
+      "first_pass_valid_rate": 1.0,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 20,
+      "schema_exhausted": 0,
+      "tokens": 47447,
+      "total_ms": 396977,
+      "trace_coverage": 1.0,
+      "traced_calls": 20,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 20
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 1.0
+    },
+    "variator": {
+      "attempts": 3,
+      "calls": 3,
+      "compact_recovery_calls": 0,
+      "contract_counts": {
+        "variator.compact.v1": 3
+      },
+      "eventual_valid": 3,
+      "eventual_valid_rate": 1.0,
+      "first_pass_valid": 3,
+      "first_pass_valid_rate": 1.0,
+      "mean_surprisal": null,
+      "provider_transport_attempts": 3,
+      "schema_exhausted": 0,
+      "tokens": 4155,
+      "total_ms": 30077,
+      "trace_coverage": 1.0,
+      "traced_calls": 3,
+      "transport_dropped": 0,
+      "transport_profiles": {
+        "compact": 3
+      },
+      "usage_unknown_attempts": 0,
+      "valid_json_rate": 1.0
+    }
+  },
+  "process": {
+    "engine_profile": "full",
+    "frozen_routes": [
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "argumentative_critic",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "conjecturer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "defender",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "judge",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "property_designer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "summarizer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "synthesizer",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "thesis",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "variator",
+        "seat": 0,
+        "temperature": 0.9
+      },
+      {
+        "base_url": "https://ollama.com/v1",
+        "endpoint_id": "ollama:d115cae79af69d9d",
+        "family": "gemma",
+        "model_id": "gemma4:31b",
+        "output_mechanism": "json_text",
+        "output_mode": "json_object",
+        "provider": "ollama",
+        "reasoning": "none",
+        "role": "vision_critic",
+        "seat": 0,
+        "temperature": 0.9
+      }
+    ],
+    "manifest_error": "",
+    "manifest_present": true,
+    "manifest_sha256": "ff87020d28a19d1d05ee1d8c6d8a108daff9b6bccba08d4b1f6ef3ea83951418",
+    "manifest_valid": true,
+    "model_profile": "compact",
+    "note": "process/reporting metadata only; excluded from artifacts, warrants, graph labels, and acceptance",
+    "output_profile": "compact",
+    "pack_profile": "compact",
+    "profile_totals": {
+      "compact": {
+        "attempt_distribution": {
+          "1": 30
+        },
+        "attempts": 30,
+        "calls": 30,
+        "eventual_valid": 30,
+        "eventual_valid_rate": 1.0,
+        "first_pass_valid": 30,
+        "first_pass_valid_rate": 1.0,
+        "provider_transport_attempts": 30,
+        "repair_attempts": 0,
+        "repaired_calls": 0,
+        "schema_exhausted": 0,
+        "tokens": 58082,
+        "trace_coverage": 1.0,
+        "traced_calls": 30,
+        "transport_dropped": 0,
+        "truncated_calls": 0,
+        "usage_unknown_attempts": 0
+      }
+    },
+    "transport_totals": {
+      "compact_recovery_calls": 0,
+      "contracts": {
+        "argumentative_critic.compact.v1": 7,
+        "component_contract.compact.v1": 6,
+        "conjecturer.compact.v1": 12,
+        "variator.compact.v1": 3,
+        "website_art_direction.compact.v1": 1,
+        "website_outline.compact.v1": 1
+      },
+      "profiles": {
+        "compact": 30
+      }
+    }
+  },
+  "research": {
+    "note": "",
+    "problems": 0,
+    "uncovered": 0
+  },
+  "schools": {
+    "reseeds": 0,
+    "roster": {
+      "school-0": {
+        "lineage": 6,
+        "novelty_contribution": 0.6952389626031898,
+        "stance": "mechanist",
+        "stance_weight": 0.7
+      },
+      "school-1": {
+        "lineage": 2,
+        "novelty_contribution": 0.7200698380044079,
+        "stance": "skeptic",
+        "stance_weight": 0.9
+      },
+      "school-2": {
+        "lineage": 1,
+        "novelty_contribution": 0.6764415455372093,
+        "stance": "unifier",
+        "stance_weight": 0.95
+      },
+      "school-3": {
+        "lineage": 0,
+        "novelty_contribution": null,
+        "stance": "empiric",
+        "stance_weight": 1.0
+      }
+    }
+  },
+  "signals": {
+    "arg-crit": 6,
+    "conj-noregister": 7,
+    "cycle": 3,
+    "embedder": 3,
+    "gate:*": 23,
+    "hv": 3,
+    "reach": 2,
+    "stage-pick": 3,
+    "website-compact-call": 8,
+    "website-stage": 6,
+    "website-terminal": 1
+  },
+  "spec_transmission": {
+    "n": 0
+  },
+  "survivor_hv": {
+    "max": 1.0,
+    "mean": 0.8333333333333334,
+    "min": 0.625,
+    "n": 3
+  },
+  "survivor_reach": {
+    "max": 2.0,
+    "mean": 1.6666666666666667,
+    "min": 1.0,
+    "n": 3
+  },
+  "totals": {
+    "artifacts": 22,
+    "events": 103,
+    "llm_tokens": 58082,
+    "problems": 13,
+    "survivors": 6,
+    "warrants": 4
+  },
+  "trial_guard": {
+    "blocked": {},
+    "rubric_warrants": 0,
+    "survival_rate": null
+  }
+}

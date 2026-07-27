@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, base error 0.30, critic precision 0.35, critic recall 0.70, harness accuracy is not strictly less than self-consistency by at least 0.03 (false-flag erosion)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:1503972fcd72","observation_valued":false},"id":"fc:1503972fcd72","schema":"commitment"}

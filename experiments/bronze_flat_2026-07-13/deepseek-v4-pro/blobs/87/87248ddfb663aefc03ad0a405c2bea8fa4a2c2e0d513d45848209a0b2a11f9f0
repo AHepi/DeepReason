@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a rapid shift to massed mobile infantry tactics, rendering chariot-based palatial armies obsolete.\", \"mechanism\": \"Military-technological obsolescence: the development of the Naue II slashing sword and javelin-armed skirmishing infantry allowed numerically superior, less-trained forces to overwhelm elite chariot corps, destroying the military basis of palatial authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt successfully repelled the Sea Peoples using infantry-based tactics and mercenaries during the same period, without undergoing a palatial collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is explained by its rapid adoption of similar infantry tactics and use of foreign mercenaries, allowing it to adapt while the brittle chariot-palaces shattered.\"}",
+      "typicality": 0.2,
+      "neighbours": ["A9"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistributive economy, triggered by a prolonged drought that shattered the agricultural base.\", \"mechanism\": \"Climatic-agronomic cascade: a multi-century megadrought (supported by paleoclimatic proxies) caused repeated harvest failures, eroding the surplus needed to sustain palatial administrators, artisans, and long-distance trade. Famine led to elite delegitimization and internal revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt, which relied on the same Mediterranean climate system, experienced equivalent or worse agricultural disruption and famine during the same period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's flood regime is driven by Ethiopian monsoon rains, not local Mediterranean precipitation, buffering it from the specific drought pattern that devastated its northern neighbors.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A6"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading consequence of the breakdown of the palatial gift-exchange and diplomatic network, initiated by the loss of a key trade node.\", \"mechanism\": \"Network cascade failure: the destruction of a single critical hub (likely Ugarit) severed the flow of prestige goods, raw materials (tin, copper), and diplomatic communication. This caused a rapid, domino-effect loss of elite legitimacy and economic coherence across the interdependent palatial system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt maintained its own complex diplomatic and trade networks with the same collapsed states and experienced equivalent economic and political isolation.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its economy was more autarkic, based on the Nile's internal redistributive system, and less critically dependent on the specific northern trade network that failed.\"}",
+      "typicality": 0.6,
+      "neighbours": ["A6"]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The forbidden case fixes only a marginal precision-on-fragile of 0.7 and does not establish that the critic's question-conditional net signal is positive. Positive precision-on-fragile is not identical to positive question-conditional net signal: the latter depends on the joint alignment of critic flags with the slim-margin wrong candidate versus the right alternative across the fragile set, not merely on marginal precision."}
+```

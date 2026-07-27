@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The repository harness scores candidate answers against a held-out answer key; it does not expose or log the internal plurality split (e.g., 4/5, 3/2, 2-2-1) per question, nor does it expose the critic's tie-break-correct probability as a separate quantity."}

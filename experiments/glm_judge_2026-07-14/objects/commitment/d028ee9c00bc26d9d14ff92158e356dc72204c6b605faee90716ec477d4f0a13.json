@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=7, e≈0.25, P>0.25, R>0.75: harness accuracy exceeds SC by >5pp with p<0.01 across 200 questions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:614ecf5a31f8","observation_valued":false},"id":"fc:614ecf5a31f8","schema":"commitment"}

@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\":\"A severe multi-year drought disrupted the agricultural base of the interconnected palatial economies, triggering famine, migration, and state collapse.\",\"mechanism\":\"Climate change caused a prolonged drought across the Eastern Mediterranean, leading to crop failures that undermined the redistributive economies of the palaces, causing internal rebellions and population movements (the 'Sea Peoples') that shattered the fragile network.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Egyptian grain yields show no decline and Nile flood records indicate normal levels throughout the period 1200-1150 BC.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This is the classic climate-catastrophe unifier. It explains the systemic nature of the collapse through a shared environmental stressor, while Egypt's survival is attributed to the Nile's unique, less rain-dependent hydrology.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A1", "A5"]
+    },
+    {
+      "content": "{\"claim\":\"The collapse was caused by a sudden, network-wide loss of faith in the palatial elite's ability to mediate with the gods, leading to a systemic crisis of legitimacy and administrative abandonment.\",\"mechanism\":\"A series of natural disasters (earthquakes, eclipses) and military setbacks were interpreted as divine disfavor. This triggered a cascading ideological collapse where subjects and lesser administrators rejected the extractive palatial system, causing it to implode from within before any external invasion.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Archaeological evidence shows widespread violent destruction and conflagration layers at all major palatial sites, with no evidence of prior administrative abandonment.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This is an atypical, ideologically-driven candidate. It shifts the cause from materialist (trade, military) to cognitive/religious, arguing the system's legitimacy was its single point of failure. Egypt's divine kingship was more resilient to such shocks.\"}",
+      "typicality": 0.25,
+      "neighbours": ["A3", "A4"]
+    },
+    {
+      "content": "{\"claim\":\"A rapid, network-propagated collapse in the supply of tin, essential for bronze production, shattered the military and economic foundations of the palatial states.\",\"mechanism\":\"Disruption of long-distance trade routes from Central Asia cut off the supply of tin. Without bronze for weapons, armor, and high-status gift exchange, the chariot-based military elite lost their power, and the economic basis for palatial control dissolved, leading to rapid state failure.\",\"scope\":{\"covers\":[\"Mycenaean Greece\",\"Hittite Anatolia\",\"Ugarit\",\"Levantine city-states\"],\"excludes\":[\"Egypt\"]},\"forbidden\":[{\"case\":\"Archaeological metallurgical analysis shows no shortage of tin in the destruction layers, with bronze weapons and tools remaining abundant and tin ingots present in shipwrecks from the period.\",\"eval\":\"rubric:std-hist\"}],\"prose_notes\":\"This candidate proposes a specific material bottleneck as the unifying cause. It is a systems-collapse argument focused on a critical resource. Egypt's survival is explained by its direct access to Nubian gold, which allowed it to purchase or substitute for tin more effectively.\"}",
+      "typicality": 0.55,
+      "neighbours": ["A7", "A8"]
+    }
+  ]
+}

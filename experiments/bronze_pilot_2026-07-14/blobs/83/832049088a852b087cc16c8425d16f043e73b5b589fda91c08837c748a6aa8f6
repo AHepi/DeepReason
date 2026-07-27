@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The mechanism claims that drought-induced famine 'forced mass migrations' and 'triggered large-scale, armed population movements (the Sea Peoples) seeking arable land and food stores.' However, the second forbidden case explicitly states: 'Egyptian records detail the Sea Peoples as a well-organized, long-standing confederation with a fixed homeland, not as famine-driven refugees.' The target's own mechanism—portraying the Sea Peoples as desperate, famine-driven migrants—is directly falsified if this forbidden case obtains, because a well-organized, long-standing confederation with a fixed homeland contradicts the causal narrative of cascading crop failures producing ad hoc armed migrations. The mechanism therefore fails the standard's requirement to state forbidden cases that are concrete observations which could realistically have obtained, because the target's causal story cannot accommodate the evidence specified in its own forbidden case without collapsing.",
+  "counterexample": [
+    "Egyptian records detail the Sea Peoples as a well-organized, long-standing confederation with a fixed homeland, not as famine-driven refugees."
+  ]
+}

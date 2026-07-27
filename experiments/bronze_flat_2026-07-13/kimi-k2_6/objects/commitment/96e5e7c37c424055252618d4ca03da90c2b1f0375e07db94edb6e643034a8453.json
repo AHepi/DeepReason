@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Collapse sequence shows single synchronous failure rather than staged propagation from peripheral to central nodes"},"steps":100000,"time_ms":2000},"eval":"rubric:std-hist","id":"fc:8645d6e71729","observation_valued":false},"id":"fc:8645d6e71729","schema":"commitment"}

@@ -1,0 +1,26 @@
+```json
+{
+  "alias": "C4",
+  "content_requirements": [
+    "DNA sequence scrubbing slider",
+    "Real-time transcription visualization",
+    "Base pair to mRNA mapping display"
+  ],
+  "depends_on": [
+    "C3"
+  ],
+  "exports": [
+    "updateTranscriptionState",
+    "scrubSequence"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "transcription-sim-root",
+    "transcription-slider",
+    "mrna-output-display"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

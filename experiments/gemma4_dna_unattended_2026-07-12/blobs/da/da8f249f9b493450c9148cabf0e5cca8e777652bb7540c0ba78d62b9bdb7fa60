@@ -1,0 +1,65 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-plan) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Write a PRODUCT PLAN for this website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational 
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- plan-doc@e5c72fde8cc0: predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Product Plan: Molecular Minimalism (The Abstract Approach)
+
+## Pages
+One ultra-minimalist page using white-space and bold typography.
+
+## Feature List
+- SVG-based vector animations of DNA strands.
+- Scroll-triggered text reveals.
+- A 'Reduced Motion' manual toggle that overrides system settings (but respects them by default).
+- High-contrast 2026 'Acid Graphic' aesthetic.
+
+## Key Interactions
+- **The Unfold**: The page starts as a single dot. Scrolling 'unfolds' the DNA sequence linearly.
+- **The Mechanism**: A causal loop animation showing the energy cycle (ATP) powering the replication process, moving from energy source to physical strand movement.
+- **System Logic**: JS check for `window.matchMedia('(prefers-reduced-motion: reduce)')` is performed before the animation engine initializes.
+
+## Content Inventory
+- **Main Title**: "GENOME"
+- **The Core Truth**: "Adenine pairs with Thymine. Cytosine pairs with Guanine."
+- **The Process (Replication)**: "Step 1: Unzipping. Step 2: Pairing. Step 3: Joining."
+- **The Process (Transcription)**: "DNA is the blueprint; RNA is the messenger. The messenger carries the instructions to the ribosome."
+- **Closing Statement**: "Information is the only currency of biology."
+
+## Acceptance Criteria
+1. [ ] Single local HTML file.
+2. [ ] Vector DNA expands based on scroll depth.
+3. [ ] Transcription process is depicted as a linear causal sequence of events.
+4. [ ] `prefers-reduced-motion` prevents the 'Unfold' animation from occurring.
+5. [ ] Typography follows 2026 experimental brutalist trends.
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

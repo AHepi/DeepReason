@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete, datable observation but a counterfactual hypothetical, violating the standard's requirement that forbidden cases be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).'
+The standard requires forbidden cases to be concrete observations (e.g., a record, an event, a datable pattern). The target's forbidden case—'Evidence that iron production remained strictly under palatial monopoly until after 1100 BC'—is a vague, hypothetical state of affairs ('Evidence that...') rather than a specific, datable observation. It does not cite an actual archaeological find, a specific site, a dated inscription, or a concrete pattern that could realistically be observed. It merely gestures at a type of evidence without specifying what that evidence would be, making it unfalsifiable in practice and thus failing the standard's requirement for a concrete, observable forbidden case.
+cites: {"claim": "The collapse was an endogenous political revolution where subject populations, empowered by the diffusion of iron-working technology which bypassed palatial control of bronze, deliberately dismantled the bureaucratic apparatus to escape tribute obligations, with the 'Sea Peoples' representing displaced refugees of this internal fracturing rather than an external invading army.", "mechanism": "Technological democratization enabling class warfare and bureaucratic dissolution", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Evidence that iron production remained strictly under palatial monopoly until after 1100 BC", "eval": "rubric:std-hist"}], "prose_notes": "A more atypical synthesis combining internal class struggle with the technological shift to iron, reinterpreting the Sea Peoples as a symptom rather than the primary cause."}
+
+TARGET:
+{"claim": "The collapse was an endogenous political revolution where subject populations, empowered by the diffusion of iron-working technology which bypassed palatial control of bronze, deliberately dismantled the bureaucratic apparatus to escape tribute obligations, with the 'Sea Peoples' representing displaced refugees of this internal fracturing rather than an external invading army.", "mechanism": "Technological democratization enabling class warfare and bureaucratic dissolution", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt", "Assyria"]}, "forbidden": [{"case": "Evidence that iron production remained strictly under palatial monopoly until after 1100 BC", "eval": "rubric:std-hist"}], "prose_notes": "A more atypical synthesis combining internal class struggle with the technological shift to iron, reinterpreting the Sea Peoples as a symptom rather than the primary cause."}

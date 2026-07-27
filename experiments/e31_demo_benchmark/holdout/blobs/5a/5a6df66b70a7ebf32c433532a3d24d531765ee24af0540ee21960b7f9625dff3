@@ -1,0 +1,36 @@
+{
+  "attempt": 0,
+  "brute_force": {
+    "candidates_enumerated": 40320,
+    "cap_hit": false,
+    "enumeration_cap": 2000000,
+    "enumeration_steps": 40320,
+    "search_space_note": "8! permutations of 0..7",
+    "search_space_size": 40320,
+    "solutions_found": 44,
+    "witness": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+    ]
+  },
+  "family": "displaced_permutation",
+  "generator_version": "e31-constructions-v1",
+  "id": "e31-constr-005",
+  "parameters": {
+    "banned_displacements": [
+      1,
+      2
+    ],
+    "n": 8,
+    "q": 3,
+    "r": 0
+  },
+  "schema": "e31-construction-certificate-v1",
+  "seed": "20260713"
+}

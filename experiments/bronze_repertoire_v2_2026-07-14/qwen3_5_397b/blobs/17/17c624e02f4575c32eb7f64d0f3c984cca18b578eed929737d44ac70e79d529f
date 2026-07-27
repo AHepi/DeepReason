@@ -1,0 +1,35 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+## problem-context
+PROBLEM CONTEXT (pi-bronze) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## target-commitments
+TARGET COMMITMENTS (the target's declared attack surface):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:109cf089560c: rubric:std-hist
+
+## machine-evaluation-boundary
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+## target
+TARGET A1
+{"claim": "The collapse was caused by a systemic failure of the palatial redistribution economy due to seismic disruption of trade routes and agricultural surplus.", "mechanism": "Cascading resource starvation triggered by earthquake damage to port infrastructure and grain stores, breaking the feedback loop between central authority and peripheral producers.", "scope": {"covers": ["Mycenaean Greece", "Ugarit", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Archaeological evidence showing intact grain silos and port facilities in Ugarit immediately prior to destruction layers.", "eval": "rubric:std-hist"}], "prose_notes": "This is the modal 'Systems Collapse' theory, attributing the event to fragility in interconnected supply chains exacerbated by natural disaster."}
+
+## output-contract
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

@@ -1,0 +1,21 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim assumes the cryptographic commitment binds *all* state necessary for replay, but the mechanism does not guarantee inclusion of non-deterministic elements (e.g., timestamps, random seeds, or external inputs) in the committed log. If these are omitted, silent divergence can occur without violating the cryptographic binding, as the replay may produce a different but valid state under the same deterministic constraints. The countercondition requiring the log to include 'all state necessary for replay' is not inherently satisfied by the cryptographic commitment itself, leaving a causal gap in the mechanism."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The social contract mechanism relies on external enforcement (e.g., legal penalties) to deter retroactive alterations, but this enforcement is not a *durable binding* of the log itself. The contradiction arises only if the contract is actively enforced, which is contingent on external factors (e.g., institutional integrity, legal processes). Without a technical guarantee of immutability, the contract alone cannot *causally* prevent silent divergence—it merely shifts the problem to a social layer where violations may go undetected or unpunished."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The formal specification mechanism assumes the specification is both *complete* and *immutable*, but neither is guaranteed by the mechanism itself. If the specification is incomplete (e.g., omits non-deterministic transitions or external inputs), silent divergence can occur without violating the specification. Further, if the specification is retroactively altered (e.g., to accommodate new edge cases), the contradiction is dissolved. The claim thus conflates the *definition* of validity with a *durable binding* of the log's state."
+    }
+  ]
+}
+```

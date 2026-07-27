@@ -1,0 +1,37 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of interdependent palatial redistribution networks triggered by a prolonged drought that exposed the brittleness of their specialized agricultural and administrative systems.\", \"mechanism\": \"Drought reduced agricultural yields, starving the palace storage and rationing systems. As each palace hoarded or failed to deliver reciprocal goods, the tightly coupled trade and diplomatic network unraveled: ships stopped sailing, scribes stopped writing, and dependent specialists (soldiers, artisans) defected or rebelled, creating a domino effect across the Eastern Mediterranean.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Evidence of sustained, region-wide above-average rainfall during the 13th-12th centuries BC\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Archaeological evidence that palatial storage facilities were full and trade continued uninterrupted through the collapse horizon\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's annual flood was buffered against Mediterranean rainfall patterns, and its more centralized, non-palatial redistribution system could absorb the shock without systemic failure.\"}",
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "278429cb6eef5cd184e71c353b7a878c2af9fa2b3af0d41d245c191d40c7b2b0"
+        },
+        {
+          "role": "mention",
+          "target": "334434dd2495ef31e848412c95fbc9e5a015552cddd01b3d9ffc707b75e417c6"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a military-social revolution where mobile infantry armed with javelins and swords, recruited from the margins of palatial society, overthrew the chariot-based aristocracies in a synchronized wave of internal rebellion, not external invasion.\", \"mechanism\": \"Palace elites monopolized expensive chariots and bronze armor, creating a rigid social hierarchy. Population growth and land pressure produced a disenfranchised class of 'runners' (the Shardana, Lukka, etc. of Egyptian texts). These groups, using terrain and swarm tactics, first raided and then systematically dismantled the palaces from within, burning administrative centers to erase debt and obligation records, which explains the targeted destruction of archives.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Destruction layers uniformly show evidence of siege engines and organized external armies rather than rapid, targeted burning of administrative centers\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Linear B and other texts from the final years record a strengthening of the palace system and loyalty to the wanax/king, not social unrest\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its pharaonic state had already integrated 'Libyan' and other mercenary groups into its military structure, co-opting the revolutionary energy, and its grain-based wealth could pay off potential rebels.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "79d71b90998ffc09d3b9f8ffc2218cd101447afcba09997a906741dfcb580710"
+        },
+        {
+          "role": "mention",
+          "target": "1493b54210399b2eea060771fbb4bd2dd6b4ef03e5e9288a3b71eedcceb5ad0e"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a network epidemic of 'institutional despair' triggered by a series of earthquakes that shattered the perceived divine mandate of the palace elites, leading to a rapid, voluntary abandonment of the palatial way of life.\", \"mechanism\": \"A cluster of severe earthquakes (archaeologically attested at Mycenae, Tiryns, and Hattusa) was interpreted across the culturally interconnected region as a sign that the gods had withdrawn favor from the palaces. This triggered a crisis of legitimacy: the complex, extractive palatial system, which required immense ideological buy-in, collapsed when subjects and lower-tier administrators simply walked away, ceasing to plant, pay taxes, or serve. The 'Sea Peoples' were a symptom—refugees fleeing the ideological vacuum.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Contemporary texts and archaeological evidence show rapid reconstruction and reinforcement of palatial structures after earthquake damage, indicating resilience, not despair\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The earthquake cluster is precisely dated to a period 100 years before the final collapse horizon, with clear evidence of full recovery in between\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its pharaoh was himself a living god, not a mortal administrator. The Nile's cyclical renewal was a daily proof of divine order (Ma'at) that was earthquake-proof, making the ideological system robust to seismic omens.\"}",
+      "typicality": 0.4,
+      "refs": []
+    }
+  ]
+}

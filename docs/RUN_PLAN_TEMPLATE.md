@@ -30,14 +30,13 @@ a candidate answer, stop here and use a plain LLM call instead.
 
 ## 1. Where MiniReason fits (read once, then use throughout)
 
-MiniReason (`mini/`, ~900 lines) is the measured core of the full harness:
-generate → refuted-relapse gate → mechanical checks → stance rotation →
-append-only log. It runs a full generate-and-filter pass for roughly 8% of
-the full harness's cost, and — critically — **its log is the contract: a
-MiniReason root is a valid DeepReason root.** The full harness opens a mini
-root with no conversion (`Harness("runs/<root>")`), replays it, and keeps
-going; `mini/tests/test_graduation.py` holds this guarantee. That makes
-Mini safe to use liberally: nothing done in Mini is throwaway.
+MiniReason (`mini/`) is the measured reduced engine profile: generate →
+shared anti-relapse guard → canonical program checks → stance rotation.
+It writes through the same Harness, ontology, grounded/support adjudicator,
+warrant plumbing, and append-only log as full DeepReason. The full harness
+opens a Mini root with no conversion (`Harness("runs/<root>")`) and keeps
+going; `mini/tests/test_graduation.py` holds this guarantee. That makes Mini
+safe to use liberally: nothing done in Mini is throwaway.
 
 Use it in three places in this plan:
 
@@ -61,9 +60,9 @@ Use it in three places in this plan:
    across model families.
 
 Graduate from Mini to the full harness when (from `mini/README.md`): base
-error is measurably high (trial filtering then has something to filter),
-reinstatement semantics start to matter, or policy demands multi-family
-judge ensembles.
+error is measurably high (trial filtering then has something to filter), or
+the workload needs research, informal trials, websites, capture control,
+long-horizon scheduling, or a normative cross-family judge ensemble.
 
 ---
 

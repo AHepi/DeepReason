@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the interdependent trade networks.\", \"mechanism\": \"Climate-induced agricultural failure led to the inability of centralized bureaucracies to feed populations and maintain mercenary forces, triggering internal revolt and external migration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust grain storage facilities in Hattusa or Pylos immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' view, heavily relying on paleoclimatic data (e.g., pollen cores) suggesting a 300-year dry period.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the rapid diffusion of inexpensive iron weaponry and new infantry tactics that rendered the bronze-dependent chariot aristocracy militarily obsolete.\", \"mechanism\": \"Decentralized groups equipped with iron swords and javelins overwhelmed the rigid, expensive chariot-based armies of the palace states, leading to rapid military defeat and elite decapitation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician coastal enclaves\"]}, \"forbidden\": [{\"case\": \"Evidence that iron weaponry was widespread and tactically dominant in the Levant prior to 1200 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic technological determinist argument; often criticized because iron adoption was gradual, but posits a sudden tactical shift in specific mercenary groups.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A cascading earthquake storm (seismic sequence) physically destroyed key palace centers simultaneously, creating a power vacuum exploited by opportunistic raiders.\", \"mechanism\": \"Tectonic activity along the North Anatolian Fault and Hellenic Arc caused clustered seismic events over 50 years, destroying infrastructure and disrupting administration beyond repair.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Troy\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Inland Assyria\"]}, \"forbidden\": [{\"case\": \"Destruction layers at major sites like Hattusa or Mycenae lacking characteristic seismic indicators (e.g., tilted walls, crushed skeletons) or showing signs of human burning instead.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical geological hypothesis that explains the simultaneity and geographic clustering but struggles to account for the social dimension of the 'Sea Peoples'.\"}",
+      "typicality": 0.28,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    }
+  ]
+}

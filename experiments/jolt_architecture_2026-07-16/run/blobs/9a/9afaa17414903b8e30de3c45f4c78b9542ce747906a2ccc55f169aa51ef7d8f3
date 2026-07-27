@@ -1,0 +1,7 @@
+Repair only the JSON value at /entries/4/event_handles/0 for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+"O1"
+
+DIAGNOSTIC:
+{"allowed": "one supplied call-local handle", "contract": "bridge.claim-ledger.compact.v1", "error": "BRIDGE_WIRE_REFERENCE_INVALID", "path": "/entries/4/event_handles/0", "repair_scope": "/entries/4/event_handles/0"}

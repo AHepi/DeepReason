@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"\"Harness strictly beats SC iff base error e is in the majority-fragile zone 1/(k+1) < e < 1/2 AND critic precision P > 1/2 AND recall R > 0\""}

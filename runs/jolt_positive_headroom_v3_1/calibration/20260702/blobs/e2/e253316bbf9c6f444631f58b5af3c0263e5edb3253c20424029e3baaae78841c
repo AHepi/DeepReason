@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{"candidates":[{"content":"{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\",\"8\",\"12\"],\"rationale\":\"nearest-neighbour sweep through the left cluster, lower-left cluster, bottom chain, then jump to the right/mid cluster; matches modal 356-ish pattern\"}","neighbours":["call-13-candidate-01","call-12-candidate-01","call-10-candidate-02"],"typicality":0.9},{"content":"{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"11\",\"13\",\"8\",\"12\",\"7\",\"6\"],\"rationale\":\"visits the long 6-7 chain at the end, forcing a large return-to-0 leg; deliberately criticizable ordering of the far vertical pair\"}","neighbours":["call-12-candidate-02","call-10-candidate-01","call-09-candidate-02"],"typicality":0.25},{"content":"{\"tour\":[\"0\",\"8\",\"12\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\"],\"rationale\":\"opens by jumping to the right cluster first, then left cluster, then south cluster; unusual sequencing likely to increase edge lengths\"}","neighbours":["call-10-candidate-01","call-12-candidate-02","call-13-candidate-00"],"typicality":0.12}]}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "conjecturer.compact.v1", "error": "unknown local alias 'call-13-candidate-01'", "path": "", "repair_scope": "", "skeleton": {"candidates": [{"content": "x", "typicality": 0.0}]}}

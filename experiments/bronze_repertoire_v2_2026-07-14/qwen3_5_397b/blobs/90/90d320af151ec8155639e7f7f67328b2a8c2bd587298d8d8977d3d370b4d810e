@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete observation that could realistically have obtained under the target's own mechanism.
+The target's mechanism posits that interruption of tin imports caused a cascading loss of military and agricultural tool efficacy, leading to collapse. Under this mechanism, abundant bronze stockpiles in destruction layers are not a forbidden case; they are a predicted consequence. If tin imports ceased, existing bronze would be hoarded, recycled, and concentrated in elite or military contexts, exactly where destruction layers are found. The presence of bronze in destruction layers is fully consistent with the mechanism and does not falsify it. A proper forbidden case would be evidence of uninterrupted tin imports or continued production of new bronze tools during the collapse period.
+cites: {"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where hyper-specialization created a single point of failure; the interruption of critical tin imports via maritime routes caused a cascading loss of military and agricultural tool efficacy, rendering the states unable to suppress internal unrest or external raids.", "mechanism": "Supply chain cascade failure leading to institutional paralysis", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "Mesopotamia"]}, "forbidden": [{"case": "Archaeological evidence of abundant bronze stockpiles in destroyed layers post-1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Synthesizes the bronze supply chain hypothesis with systemic fragility models, relying on the interdependence of the neighborhood artifacts regarding economic collapse."}
+
+TARGET:
+{"claim": "The collapse was driven by a systemic fragility in the palatial redistribution economy where hyper-specialization created a single point of failure; the interruption of critical tin imports via maritime routes caused a cascading loss of military and agricultural tool efficacy, rendering the states unable to suppress internal unrest or external raids.", "mechanism": "Supply chain cascade failure leading to institutional paralysis", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Cyprus", "Mesopotamia"]}, "forbidden": [{"case": "Archaeological evidence of abundant bronze stockpiles in destroyed layers post-1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Synthesizes the bronze supply chain hypothesis with systemic fragility models, relying on the interdependence of the neighborhood artifacts regarding economic collapse."}

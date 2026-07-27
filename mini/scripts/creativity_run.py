@@ -8,7 +8,7 @@ sustained self-conditioning, and why structural interventions restore it
 where adversarial criticism does not. The mini generates skeleton
 explanations (claim + mechanism + falsifiable forbidden cases); its own
 compiled checks refute the ones that forbid nothing or fail their own
-predicates. The survivors are what the mini "believes" — the explanations
+canonical programs. The survivors are what the mini "believes" — the explanations
 it could not kill.
 
 Usage: DEEPSEEK_API_KEY=... python mini/scripts/creativity_run.py [--budget 45000]

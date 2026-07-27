@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "d7530696e958aae4319247c71e6c9d6c38fa5332661ad27d780d764f1bc9085f",
+      "attack": true,
+      "case": "The claim attributes collapse to 'systematic attacks' by Sea Peoples raiding fleets, but the mechanism 'external demographic pressure leading to maritime raider incursions' fails to explain why these raiders would systematically bypass Egypt—the wealthiest and most agriculturally productive state in the region—to attack only the other four polities. The scope excludes Egypt from the collapse but provides no account of how raiding fleets supposedly driven by demographic pressure would selectively spare the Nile Delta while devastating Ugarit and the Levantine coast. Without a mechanism explaining this selectivity, the account is incomplete against the problem's demand to explain both the simultaneous collapse of the four AND Egypt's differential survival.",
+      "counterexample": null
+    },
+    {
+      "target": "38d47784e0fa429e62a147678262d63df2d5486fab1a9f2d4e76b57a6a929dbf",
+      "attack": true,
+      "case": "The forbidden case is temporally misaligned with the problem's collapse window. It specifies 'sustained surplus production and balanced budgets after 1150 BCE' as the refuting observation, but the collapse is dated to 1200–1150 BCE. Evidence of recovery after 1150 BCE does not refute an account of fiscal overstretch causing collapse during 1200–1150 BCE; it is entirely consistent with collapse followed by later stabilization. The forbidden case therefore fails to function as a genuine refutation condition, violating the requirement that forbidden cases be historical observations that 'would have refuted the account had they obtained.'",
+      "counterexample": null
+    },
+    {
+      "target": "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440",
+      "attack": true,
+      "case": "The claim attributes collapse to a prolonged drought from c.1220–1160 BCE but excludes Egypt from the scope without explaining how Egypt—which depended on the same Nile hydrology and was subject to the same regional climatic shifts—survived diminished. The problem explicitly asks why Egypt survived while the others collapsed, yet the drought mechanism applies uniformly across the eastern Mediterranean. The account provides no Egypt-specific mitigating factor (e.g., Nile flood management, grain storage, or the river's buffering capacity against rainfall-dependent agriculture) to justify the scope exclusion, leaving the differential outcome unexplained.",
+      "counterexample": null
+    }
+  ]
+}

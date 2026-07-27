@@ -1,0 +1,320 @@
+schema: deepreason-jolt-trigger-prereg-v1
+title: Matched-state pilot of replay-derived convergence diagnoses and status-neutral jolts
+baseline_commit: 835096578f72ddbc88f69e67c05130f058d359c7
+preregistration_state: draft_uncommitted
+live_execution_allowed: false
+live_execution_gate: >-
+  This preregistration and its bound specifications must receive separate review,
+  acquire exact workload and verifier receipts, and be committed before any
+  experimental model call. The current uncommitted state is intentionally
+  non-executable.
+live_model_calls_during_design: 0
+
+primary_question: >-
+  Which observable run-time signals predict that continued generation has
+  become unproductive, and which matched intervention most efficiently restores
+  verifier-backed progress without causing excessive false-trigger harm?
+
+scope:
+  experiment_type: feasibility_and_identifiability_pilot
+  permitted_changes:
+    - generator prompt context
+    - displayed exemplars
+    - branch-local stance text
+    - problem focus under a fixed return schedule
+    - operational representation
+  forbidden_changes:
+    - status
+    - warrants
+    - attack or dependence edges
+    - criticism authority
+    - judge thresholds
+    - anti-relapse thresholds or semantics
+    - verifier thresholds or outcomes
+    - acceptance or survivor rules
+    - outcome-adaptive novelty thresholds
+  authority_policy: unchanged_from_baseline
+  prose_judge_calls: 0
+  argumentative_critic_calls: 0
+  synthesizer_calls: 0
+  pairwise_calls: 0
+
+falsification_findings:
+  - id: F1
+    finding: >-
+      A matched continuation experiment estimates jolt effects conditional on a
+      trigger state; it does not identify the whole-run effect of adaptive versus
+      fixed scheduling.
+    consequence: >-
+      The pilot tests trigger predictive validity and conditional jolt efficacy.
+      A cluster-randomised run-level policy comparison is deferred.
+  - id: F2
+    finding: >-
+      Provider sampling is nondeterministic even when state, prompt, route, and
+      nominal seed match.
+    consequence: >-
+      Branches are matched blocks, not exact counterfactual replays. Branch order
+      is randomised and state blocks are replicated.
+  - id: F3
+    finding: >-
+      Existing capture responses bundle multiple treatments; school reseed and
+      process-controller actions also create accepted policy artifacts.
+    consequence: >-
+      Automatic capture responses and the process controller are inactive in
+      experimental branches. Diagnostics remain observable. Stance rotation is
+      a branch-local prompt overlay rather than capture.schools.reseed.
+  - id: F4
+    finding: >-
+      External evidence registration changes the information set, support graph,
+      and status; specification injection spends an extra stochastic model call.
+    consequence: >-
+      External-information injection, temperature changes, and specification
+      injection are excluded from this pilot.
+  - id: F5
+    finding: >-
+      Verifier magnitude and functional novelty are workload-specific and no
+      common replay receipt currently exists.
+    consequence: >-
+      Evaluators must emit deterministic functional-observation receipts.
+      Cross-domain pooling is limited to a binary verified-improvement endpoint.
+  - id: F6
+    finding: >-
+      Problem turnover changes opportunity and task difficulty.
+    consequence: >-
+      Turnover is eligible only when a related problem already exists at the
+      branch point, lasts exactly two calls, and primary progress is evaluated on
+      the frozen original problem over the full five-call horizon.
+  - id: F7
+    finding: >-
+      Withheld-test details in a verifier-directed prompt would leak the outcome.
+    consequence: >-
+      Verifier-directed challenges may contain only predeclared public failure
+      classes. Hidden-test identities, inputs, excerpts, and counts are forbidden.
+  - id: F8
+    finding: >-
+      The repository does not yet contain a frozen, receipt-bound four-problem
+      two-domain pilot corpus with common functional evaluators.
+    consequence: >-
+      Implementation can be reviewed and replay-tested, but live execution stays
+      blocked until exact task and evaluator receipts are added without changing
+      these estimands or budgets.
+  - id: F9
+    finding: >-
+      The append-only root does not persist every live scheduler field, including
+      liveness ages, cooldowns, and pending sandbox availability. Copying a root
+      therefore proves persistent-state equality but not equality to every item
+      in the acquisition process's memory.
+    consequence: >-
+      The branch freezer hashes the event log, object and blob stores, manifest,
+      checkpoint, continuation metadata, and anti-relapse operational log. Live
+      matched execution nevertheless remains blocked until a typed scheduler
+      checkpoint is captured and deterministically rehydrated by a reviewed
+      experiment runner.
+
+estimands:
+  trigger_predictive_validity:
+    unit: trigger_state_block
+    definition: >-
+      Probability that the J0 continuation produces no new verifier-backed
+      improvement in the next five conjecturer calls, separately for hard-orbit
+      and soft-exhaustion diagnoses.
+  conditional_jolt_effect:
+    unit: matched_branch_within_trigger_state
+    definition: >-
+      Within-block difference from J0 in probability of any new verifier-backed
+      improvement within five conjecturer calls, separately by diagnosis.
+  false_trigger_harm:
+    unit: matched_branch_at_healthy_state
+    definition: >-
+      Within-block probability that a jolt harms a state at which neither
+      preregistered trigger fired.
+  deferred_estimand:
+    name: adaptive_vs_fixed_vs_never_whole_run_policy
+    reason: >-
+      Requires run-level randomisation and must include acquisition cost,
+      repeated-trigger carry-over, and policy-level stopping. It is not identified
+      by this conditional pilot.
+
+pilot_population:
+  exact_workloads: pending_receipt_and_separate_review
+  selection_rule:
+    problems: 4
+    domains: 2
+    domain_classes:
+      - code_with_deterministic_public_and_withheld_tests
+      - finite_combinatorics_or_simulation_with_exhaustive_deterministic_score
+    model_families: 2
+    state_seeds_per_model_problem_cell: 3
+    maximum_acquisition_roots: 24
+  exclusion_rules:
+    - no deterministic incremental verifier metric
+    - verifier result cannot be mapped to a positive-is-improvement delta
+    - hidden evaluation details are present in generator context
+    - required embedder fingerprint unavailable or mismatched
+    - no immutable schema-v2 run manifest
+    - controller or automatic capture response is active
+    - any prose judge, argumentative critic, synthesizer, or pairwise route is configured
+  generalisation_limit: >-
+    Pilot conclusions apply only to the frozen problems, verifier metrics, and
+    model families. Four problems and two domains do not support a general claim
+    across all LLM search tasks.
+
+signal_policy:
+  evidence_mode_embedder:
+    model: nomic-ai/nomic-embed-text-v1.5
+    version: fastembed-0.8.0+onnxruntime-1.27.0
+    sentinel: d6e3599ce0377000
+    fallback_allowed: false
+  hard_orbit:
+    window: 10 completed conjecturer calls
+    candidate_thresholds:
+      minimum_gate_blocks: 5
+      minimum_block_concentration: 0.60
+      verifier_improvements_allowed: 0
+    conjunction:
+      - minimum gate blocks reached
+      - maximum of target, lineage, or problem-family block concentration reached
+      - a concentrated target is presently refuted
+      - no verifier-backed improvement in the window
+    interpretation: candidate threshold for pilot calibration, not production policy
+  soft_exhaustion:
+    early_baseline: first 8 non-null within-family nearest-prior novelty values
+    recent_window: latest 8 admitted candidates after the non-overlapping baseline
+    candidate_thresholds:
+      recent_over_early_median_max: 0.85
+      recent_gate_blocks_max: 1
+    conjunction:
+      - recent to early median semantic-novelty ratio is at most 0.85
+      - no new deterministic mechanism class in the recent window
+      - no new executable commitment in the recent window
+      - no verifier-backed improvement in the recent window
+      - at most one gate block in the recent window
+    interpretation: within-run candidate threshold for pilot calibration; no raw embedding distance threshold is used
+  overlap_rule: >-
+    A state satisfying both diagnoses is labelled ambiguous and is ineligible for
+    the primary efficacy analysis. It is retained for descriptive analysis.
+
+treatments:
+  hard_orbit:
+    arms: [J0_no_intervention, J6_generic_complement, J1_stance_rotation, J2_problem_turnover]
+  soft_exhaustion:
+    arms: [J0_no_intervention, J6_generic_complement, J3_representation_reset, J4_verifier_directed_challenge]
+  deferred:
+    - J5_external_information_injection
+    - J7_temperature_increase
+  carry_over_control: one jolt at branch start and no second jolt during the five-call outcome horizon
+
+matched_branching:
+  branch_point: quiescent completed-conjecturer-call boundary
+  equality_requirements:
+    - persistent epistemic and operational state digest
+    - append-only log digest and event sequence
+    - object, commitment, and warrant digest
+    - run-manifest digest
+    - role-route matrix digest
+    - verifier and evaluator fingerprints
+    - embedder fingerprint
+    - original problem id
+    - five conjecturer calls remaining
+    - equal aggregate prompt and completion token caps
+    - identical stop policy
+  branch_order: seeded permutation recorded before any post-trigger call
+  no_jolt_required: true
+  exact_counterfactual_replay_claimed: false
+  provider_nondeterminism_handling: matched-state replication plus randomised branch execution order
+  unresolved_live_state_requirement: typed scheduler checkpoint and deterministic rehydration
+
+healthy_state_sampling:
+  eligibility: >-
+    At least ten completed conjecturer calls, neither diagnosis fires, and at
+    least one verifier improvement occurred in the previous five calls.
+  sampling: seeded reservoir over eligible quiescent states
+  maximum_blocks_per_diagnosis_arm_set: 3
+  purpose: estimate interruption and malformed-output harm, not trigger prevalence
+
+outcomes:
+  primary:
+    O1_verified_progress_within_5_calls:
+      type: binary
+      definition: >-
+        At least one positive deterministic verifier delta on the frozen original
+        problem in the next five conjecturer calls.
+  secondary:
+    - O2_problem_specific_verifier_delta
+    - O3_no_repeat_block_against_original_attractor_within_5_calls
+    - O4_tokens_to_next_admitted_functionally_novel_verifier_contact
+    - O5_jolt_harm
+    - O6_functional_novelty_gain
+    - semantic_novelty_descriptive_only
+  jolt_harm_components:
+    - lower frozen-problem verifier result than J0
+    - interruption of a productive healthy trajectory
+    - increased gate blocks or no-register calls relative to J0
+    - malformed or transport-failed output
+    - entire horizon spent without functional novelty
+
+replication_and_stopping:
+  target_trigger_blocks_per_diagnosis: 5
+  maximum_trigger_blocks_per_diagnosis: 8
+  minimum_for_efficacy_summary: 5
+  acquisition_call_cap_per_root: 24
+  post_trigger_calls_per_branch: 5
+  stop_when: >-
+    Stop acquisition when both diagnoses reach eight eligible independent blocks,
+    or all 24 acquisition roots spend 24 conjecturer calls, whichever occurs first.
+    Trigger scarcity is a result and is not repaired by changing thresholds.
+  repeated_state_rule: one enrolled trigger block per source root
+
+failure_and_missing_data:
+  single_branch_provider_failure: retain under intention-to-treat as no verified progress and a harm event
+  block_wide_outage: >-
+    If every branch fails before any valid completion for the same provider-wide
+    transport reason, retain the forensic record but exclude the block from the
+    efficacy denominator under a blinded operational rule.
+  malformed_output: no verified progress and harm
+  missing_verifier_receipt: no verified progress, protocol violation, and harm
+  imputation: none
+  threshold_changes_after_outcomes: forbidden
+
+analysis:
+  strata: [hard_orbit, soft_exhaustion]
+  primary_comparisons:
+    hard_orbit:
+      - J1_stance_rotation_vs_J0
+      - J2_problem_turnover_vs_J0
+      - J6_generic_complement_vs_J0
+    soft_exhaustion:
+      - J3_representation_reset_vs_J0
+      - J4_verifier_directed_challenge_vs_J0
+      - J6_generic_complement_vs_J0
+  effect_reports:
+    - absolute paired verified-progress difference
+    - relative verified-progress difference when J0 risk is nonzero
+    - block-cluster bootstrap interval labelled exploratory
+    - tokens per verified improvement
+    - false-trigger harm
+    - problem and model interaction tables without pooled claims when sparse
+  multiple_comparisons: Holm correction within each diagnosis family
+  retrospective_oracle: analysis_only_and_never_dispatches_a_jolt
+  production_gate_not_testable_by_pilot: true
+
+budget:
+  judge_tokens: 0
+  advisory_judge_budget: 0
+  maximum_conjecturer_calls: 1016
+  maximum_prompt_tokens_per_call: 5000
+  maximum_completion_tokens_per_call: 2000
+  aggregate_hard_token_cap: 7112000
+  planning_estimate_tokens: 4064000
+  estimate_assumptions: 1016 calls at mean 2800 prompt plus 1200 completion tokens
+
+required_pre_live_receipts:
+  - committed_preregistration_digest
+  - exact_problem_corpus_digest
+  - per_problem_verifier_and_functional_evaluator_fingerprint
+  - role_route_matrix_digest
+  - model_availability_preflight_without_generation
+  - exact_embedder_fingerprint
+  - branch_manifest_digest
+  - zero_judge_route_assertion
+  - scheduler_checkpoint_and_rehydration_test

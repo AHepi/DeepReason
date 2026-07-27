@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry (the 'Infantry Revolution') rendering chariot-based palatial armies obsolete.\", \"mechanism\": \"New iron weapons and massed infantry tactics allowed swifter, more numerous forces to overwhelm the expensive chariot corps that underpinned palatial power, leading to military defeat and internal collapse of the palace system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt successfully repelled the Sea Peoples using its traditional chariot forces at the Battle of the Delta c.1175 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to its ability to adopt infantry tactics quickly while retaining a core chariot force, or simply being the first target to successfully adapt. The account struggles to explain why the infantry revolution would fell the Hittites, who had ample iron and infantry, but not Egypt.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A6"]
+    },
+    {
+      "content": "{\"claim\": \"A pandemic, possibly the earliest known outbreak of bubonic plague or a similar hemorrhagic fever, swept through the densely populated palatial centers, causing demographic and administrative collapse.\", \"mechanism\": \"High population density and extensive trade networks facilitated rapid disease transmission, decimating the bureaucratic and military elites housed in the palaces, leading to a systemic breakdown of the redistributive economy and social order.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records from the reign of Ramesses III describe a plague devastating their own population centers simultaneously with the northern collapses\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to its more dispersed settlement pattern along the Nile and a less total reliance on a single palace complex for economic redistribution, granting it greater epidemiological resilience. This relies on a speculative pathogen with a specific transmission profile.\"}",
+      "typicality": 0.5,
+      "neighbours": ["A9"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a cascading failure of the inter-palatial trade and diplomatic network, where the fall of one major node caused a systemic supply-chain and legitimacy crisis for all others.\", \"mechanism\": \"Palaces were economically interdependent for prestige goods and strategic materials (like tin for bronze). The destruction of a key hub (e.g., Ugarit) severed these links, depriving other palaces of the resources needed to reward elites and maintain military power, causing a domino effect of internal rebellions and external attacks.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records show a complete and simultaneous cessation of all diplomatic correspondence and trade with the Aegean and Anatolia before the military invasions began\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is explained by its relative economic self-sufficiency in grain and gold, and its less centralized, non-palatial trade structure, making it a less vulnerable node in the network. The account must explain why the network was so brittle that it could not reroute or adapt.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A3"]
+    }
+  ]
+}

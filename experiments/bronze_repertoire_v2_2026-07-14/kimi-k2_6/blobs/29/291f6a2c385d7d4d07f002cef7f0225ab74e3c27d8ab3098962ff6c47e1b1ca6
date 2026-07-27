@@ -1,0 +1,13 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "attack": true,
+  "case": "The target's mechanism relies on 'synchronized audit cycles' producing simultaneous collapse, yet it explicitly lists as a forbidden case that 'Palace economies showed asynchronous collapse with 50+ year stagger rather than near-simultaneity.' This is a direct contradiction: the mechanism predicts near-simultaneous failure, but the forbidden case describes a staggered collapse spanning half a century. If the actual archaeological record shows a 50+ year stagger (as the forbidden case implies is a realistic possibility), the mechanism's core causal claim—that isomorphic administrative systems produced temporal correlation—is falsified. The target cannot simultaneously claim synchronized collapse as its mechanism and treat asynchrony as a forbidden counterexample without violating basic logical consistency.",
+  "counterexample": [
+    "The destruction of the Mycenaean palace at Pylos is dated to circa 1180 BCE, while the Hittite capital Hattusa fell around 1200 BCE, and Ugarit was destroyed circa 1185 BCE—a spread of approximately 20 years, not the 50+ year stagger the forbidden case describes. However, the target's own forbidden case accepts that a 50+ year stagger would refute the mechanism, meaning the mechanism's validity hinges entirely on the empirical tightness of the dating, which remains contested and could realistically resolve to a multi-decade spread inconsistent with 'synchronized audit cycles' operating as a tight causal trigger."
+  }
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "argumentativecritic.direct.v1", "error": "no complete top-level JSON value at offset 0", "path": "", "repair_scope": "", "skeleton": {"attack": false}}

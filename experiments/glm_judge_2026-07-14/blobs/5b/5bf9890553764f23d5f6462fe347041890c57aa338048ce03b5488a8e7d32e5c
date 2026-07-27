@@ -1,0 +1,4 @@
+{
+  "verdict": "fail",
+  "decisive_point": "The forbidden case 'The improvement at k=7 is fully explained by base-error change alone with no interaction effect from critic precision on bare-majority sets' is framed as a causal-explanation condition, not a concrete measurable outcome of running the experiment. It does not specify any measurable quantity (an arm accuracy, a precision/recall bound, or a net fixed-minus-broke count) that would refute the proposal."
+}

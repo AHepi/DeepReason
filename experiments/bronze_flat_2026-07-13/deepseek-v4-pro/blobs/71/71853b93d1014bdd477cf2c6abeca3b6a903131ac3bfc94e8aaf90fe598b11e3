@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The mechanism is specified as a 'rapid and decisive' military defeat caused by a tactical shift (massed infantry vs. chariots). However, the first forbidden case requires that the mechanism be falsifiable by evidence of 'prolonged siege or a weapon system effective against fortifications.' The target's mechanism does not logically exclude prolonged sieges; a tactical shift to infantry could still involve prolonged sieges as part of the campaign to sack administrative centers. The claim that the mechanism is 'swift' and 'decisive' is an assertion about tempo, not a necessary implication of the infantry-over-chariot mechanism itself. Therefore, the forbidden case does not genuinely test the mechanism, violating the standard's requirement that forbidden cases be concrete observations that could realistically obtain and directly contradict the proposed causal process.",
+  "counterexample": [
+    "A scenario where massed infantry armies, after defeating chariot forces in the field, then lay prolonged sieges to fortified palatial centers, using siege works and blockade tactics, before finally sacking them. This would still be consistent with the core mechanism (infantry rendering chariots obsolete) but would contradict the 'rapid and decisive' tempo asserted in the claim, yet the claim presents the tempo as an integral part of the mechanism."
+  ]
+}

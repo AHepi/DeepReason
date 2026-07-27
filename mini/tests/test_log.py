@@ -11,11 +11,16 @@ from minireason.loop import Session
 def _seeded(tmp_path):
     s = Session(tmp_path / "run")
     s.spawn_problem("pi-0", "why did X happen?")
-    s.register_commitments([{"id": "skeleton-wf", "eval": "program:skeleton_wf",
-                             "observation_valued": False, "budget": {"extra": {}}}])
+    commitment_ids = s.register_commitments(
+        [{"id": "skeleton-wf", "eval": "program:skeleton_wf",
+          "observation_valued": False, "budget": {"extra": {}}}]
+    )
+    artifact = s.build_candidate(
+        '{"claim": "c", "mechanism": "m"}', commitment_ids, "mechanist"
+    )
     s.register_candidates(
-        [("a" * 64, '{"claim": "c", "mechanism": "m"}',
-          [{"id": "skeleton-wf"}])], "pi-0", "mechanist", None)
+        [(artifact, [])], "pi-0", None
+    )
     return s
 
 
@@ -33,8 +38,8 @@ def test_seq_must_be_consecutive(tmp_path):
     log.append(Event(seq=0, ts="t", rule="Measure"))
     with pytest.raises(SeqError):
         log.append(Event(seq=2, ts="t", rule="Measure"))
-    with pytest.raises(SeqError):
-        log.append(Event(seq=1, ts="t", rule="NotARule"))
+    with pytest.raises(ValueError):
+        Event(seq=1, ts="t", rule="NotARule")
 
 
 def test_torn_final_line_dropped_with_warning(tmp_path):

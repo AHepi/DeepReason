@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.05, P=1.0, R=1.0, n=100: SC and harness tie at 1.00 (no broken-majority event occurs, contradicting the predicted 1.2% event rate)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:1b313a030a45","observation_valued":false},"id":"fc:1b313a030a45","schema":"commitment"}

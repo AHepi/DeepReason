@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target's mechanism is stated as a chain reaction ('Loss of copper exports led to loss of elite revenues, reduced ability to fund military and monument projects, and triggered internal unrest'), but it fails to specify the concrete institutional or processual links that constitute a genuine causal mechanism under the standard. It does not identify which specific institutions collected copper revenues, how those revenues were distributed to military or monumental projects, or what precise process turned reduced funding into 'internal unrest.' The phrase 'triggered internal unrest' is a black box that substitutes a vague outcome for a specified process, resembling the kind of mood or inevitability claim the standard forbids. Furthermore, the single forbidden case ('continued receipt of copper shipments at Hattusa after 1150 BC') is insufficient to test the mechanism: the mechanism claims that loss of copper exports caused collapse via elite revenue loss, so a proper forbidden case would need to specify observable evidence that elite revenues, military funding, or monument construction continued despite the loss of copper exports, or that internal unrest preceded rather than followed the copper disruption. The provided forbidden case only tests the premise (copper shipments stopped), not the causal chain itself.",
+  "counterexample": [
+    "A record from Ugarit showing that elite revenues from non-copper trade remained stable or increased after Cypriot copper exports ceased, with no corresponding internal unrest.",
+    "Archaeological evidence from Mycenaean palace sites showing continued monumental construction funded by alternative resources after the copper trade collapse."
+  ]
+}

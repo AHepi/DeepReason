@@ -1,0 +1,20 @@
+You are the judge, ruling under the trial protocol. Answer ONLY the narrow question the pack poses — never a holistic quality verdict. Your decisive_point MUST quote a specific span of the exchange; a ruling whose grounds cannot be located is invalid.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "Trial ruling (\u00a73 guard): decisive_point MUST resolve to an actual\nelement of the exchange \u2014 program-checked (referential integrity).", "properties": {"decisive_point": {"minLength": 1, "title": "Decisive Point", "type": "string"}, "verdict": {"enum": ["fail", "pass"], "title": "Verdict", "type": "string"}}, "required": ["verdict", "decisive_point"], "title": "JudgeRuling", "type": "object"}
+
+STANDARD std-hist (mode: absolute):
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+TARGET:
+{"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eastern Mediterranean.", "mechanism": "environmental stress via volcanic winter", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution ice‑core and dendrochronological records show no significant temperature drop in 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Sequence: eruption → ash fallout → reduced solar insolation → crop failures → societal strain → collapse."}
+
+QUESTION: does the case establish that the target violates the cited clause? verdict=fail iff it does.
+
+THE CASE FOR FAIL:
+The target claims a volcanic eruption caused short-term climatic cooling via reduced solar insolation, but its own forbidden case states that high-resolution ice-core and dendrochronological records show no significant temperature drop in 1200 BC. Under the std-hist rubric, a valid mechanism must be consistent with concrete, datable observations. The specified proxy records directly contradict the posited cooling event, meaning the mechanism lacks the required empirical support and the forbidden case is not adequately excluded—it instead falsifies the central causal step. The target therefore fails to meet clause (2) of the standard, which demands that forbidden cases be concrete observations that could realistically have obtained and that the mechanism withstands them.
+
+THE DEFENCE:
+The critic misreads the forbidden case. The case states that high-resolution ice-core and dendrochronological records show no significant temperature drop in 1200 BC. This does not falsify the mechanism, because the target’s mechanism posits a short-term climatic cooling driven by reduced solar insolation from volcanic aerosols, not necessarily a prolonged or globally uniform temperature drop that would register as a 'significant' signal in every high-resolution proxy at the exact single year 1200 BC. Short-term volcanic cooling can be regionally and seasonally heterogeneous, and dendrochronological records often reflect growing-season conditions rather than mean annual temperature, while ice-core records primarily capture depositional events and chemical markers, not direct temperature. The forbidden case is therefore not a concrete observation that realistically excludes the mechanism: it is an overly precise demand for a uniform temperature signal in proxies that may not resolve a brief, regionally focused cooling episode. The mechanism withstands this case because the absence of a clear temperature drop in those specific records does not contradict the occurrence of a volcanic winter sufficient to cause successive harvest failures in the Eastern Mediterranean.
+
+Rule on the exchange; decisive_point MUST quote a span of it.

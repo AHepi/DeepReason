@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The proposal deliberately selects a coarse, easily-testable threshold over a margin-dependent refinement precisely because the latter 'reduces falsifiability.' The mechanism does state a measurable regime condition: the three-part conjunction (e in (1/(k+1), 1/2), P >= 1/2, R > 0) is fully measurable by the harness and defines the regime under which harness is conjectured to diverge from SC."}
+```

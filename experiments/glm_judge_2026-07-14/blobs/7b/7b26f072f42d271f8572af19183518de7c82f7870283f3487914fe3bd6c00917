@@ -1,0 +1,4 @@
+{
+  "decisive_point": "In Case 1 (p=0.4, r=0.6), the criticism's own binomial calculation uses the population ratio F_broke/F_fixed ≈ 1/3, but a finite-run arm at e=0.25, k=7 can exhibit fragile-correct outnumbering fragile-wrong ... due to sampling variance and finite-question budgets, yielding net harm — an outcome the population threshold does not rule impossible. ... Thus the cases are not self-defeating ... satisfying std-crit-design clause (2).",
+  "verdict": "pass"
+}

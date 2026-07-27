@@ -1,0 +1,73 @@
+{
+  "expected": {
+    "capability_executions": 0,
+    "capability_requests": 1,
+    "completion_checks": [
+      "foreign-criticism",
+      "capability-lifecycle"
+    ],
+    "completion_satisfied": false,
+    "epistemic_checks": [],
+    "integrity_checks": [],
+    "integrity_valid": true,
+    "operational_checks": [
+      "run-terminal"
+    ],
+    "operational_checks_passed": false,
+    "security_checks": [],
+    "security_valid": true,
+    "valid": true
+  },
+  "fixture_id": "A3",
+  "fixture_kind": "minimized-derived-reproduction",
+  "incident_id": "DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A",
+  "manifest_schema_version": 5,
+  "original_root_bytes_included": false,
+  "problem": {
+    "description": "Minimized A3 criticism failure with a proposed-only simulation.",
+    "id": "incident-wave-a-A3"
+  },
+  "repository_commit": "056af85e4c6018bcdf44e73c2ada78fabccb4a81",
+  "reproductions": {
+    "accepted_survivor": {
+      "claim": "A3 survivor requiring incomplete foreign criticism.",
+      "owner_school_id": "school-0"
+    },
+    "criticism_minimum_foreign_school_coverage": 2,
+    "simulation_proposal": {
+      "declared_assumptions": [
+        "This is a minimized incident-derived proposal."
+      ],
+      "discriminating_purpose": "Record a capability request that remains proposed at termination.",
+      "hypothesis": "One proposed simulation might discriminate the rival mechanisms.",
+      "interpretation_conditions": [
+        "x is only a synthetic discriminator."
+      ],
+      "model_source": "{\"observables\": {\"x\": {\"input\": \"parameters.x\"}}, \"schema\": \"declarative-numeric.v1\"}",
+      "parameter_definitions": [
+        {
+          "name": "one",
+          "values_json": "{\"x\":1}"
+        }
+      ],
+      "request_identifier": "a3-unexecuted",
+      "requested_observables": [
+        "x"
+      ],
+      "rival_predictions": [
+        "first rival",
+        "second rival"
+      ],
+      "simulation_mode": "declarative_numeric_v1"
+    },
+    "terminal": {
+      "error": "argumentative critic exhausted schema repair while capability remained proposed",
+      "error_type": "SchemaRepairError",
+      "schema": "deepreason-run-result-v1",
+      "state": "failed",
+      "workload": "text"
+    }
+  },
+  "schema": "deepreason.incident-derived-fixture.v1",
+  "source_review_sha256": "2f086397643e439dd711d656611f943a3edbb3327672faf81f16ea40d6ebf282"
+}

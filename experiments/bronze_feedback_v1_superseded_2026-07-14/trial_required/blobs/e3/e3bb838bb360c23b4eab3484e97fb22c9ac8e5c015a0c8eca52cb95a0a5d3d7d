@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target's third forbidden case—'paleoclimatic reconstruction showing 1200-1150 BC as unremarkable climatically in Eastern Mediterranean core zones'—is a concrete observation that, if true, would directly falsify the claim that climatic-triggered agricultural shortfalls caused cascading failure. The target's mechanism depends on a specific climatic trigger, yet the forbidden case posits a period of unremarkable climate. The target does not provide any evidence or argument to rule out this possibility; it merely asserts the mechanism without addressing the counterfactual. This violates the standard's requirement that the account 'state forbidden cases that are concrete observations which could realistically have obtained' and that the mechanism be testable against such cases. The target's failure to engage with this specific, realistic counterexample makes the account non-robust and insufficiently specified.",
+  "counterexample": ["paleoclimatic reconstruction showing 1200-1150 BC as unremarkable climatically in Eastern Mediterranean core zones"]
+}

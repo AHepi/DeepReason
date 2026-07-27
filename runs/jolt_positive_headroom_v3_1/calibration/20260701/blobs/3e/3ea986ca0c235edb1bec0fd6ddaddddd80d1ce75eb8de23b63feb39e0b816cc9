@@ -1,0 +1,9 @@
+The diagnostic says there's an error with the alias "greedy-nn-sweep" in the neighbours list. I need to remove it while preserving everything else.
+
+Looking at the structure:
+- The first candidate has `"neighbours":["greedy-nn-sweep","cluster-then-chain"]`
+- I need to remove the unknown alias "greedy-nn-sweep" and keep "cluster-then-chain"
+
+Let me construct the corrected JSON:</think>```json
+{"candidates":[{"content":"{\"tour\":[\"0\",\"6\",\"2\",\"8\",\"13\",\"3\",\"1\",\"7\",\"4\",\"11\",\"9\",\"5\",\"10\",\"12\"],\"rationale\":\"Greedy nearest-neighbor style cluster sweep on coordinates\"}","typicality":0.7,"neighbours":["cluster-then-chain"]},{"content":"{\"tour\":[\"0\",\"3\",\"13\",\"8\",\"2\",\"6\",\"1\",\"7\",\"4\",\"9\",\"11\",\"5\",\"10\",\"12\"],\"rationale\":\"Alternate high-low latitude zig-zag to test critic sensitivity to poor edges\"}","typicality":0.25,"neighbours":["latitude-zigzag","bad-edge-stress"]},{"content":"{\"tour\":[\"0\",\"7\",\"1\",\"3\",\"13\",\"8\",\"2\",\"6\",\"4\",\"11\",\"9\",\"5\",\"10\",\"12\"],\"rationale\":\"Mirror reverse order experiment to exploit symmetry in city layout\"}","typicality":0.1,"neighbours":["reverse-mirror","permutation-antipode"]}]}
+```

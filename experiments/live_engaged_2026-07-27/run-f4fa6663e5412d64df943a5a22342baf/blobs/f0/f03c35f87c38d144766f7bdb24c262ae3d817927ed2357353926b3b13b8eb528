@@ -1,0 +1,25 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim of 'temporal binding equivalence' between SRC_001, SRC_002, and SRC_005 is undermined by the lack of a demonstrated causal mechanism for how silent divergence is *detectably* turned into a contradiction. While the proposal asserts that cryptographic commitments and self-certifying logs enforce irrevocable state fixation, it does not address whether an adversary could *simulate* a valid log state (e.g., via preimage attacks or hidden state channels) that appears consistent with the commitment but diverges from the true history. The 'refuted if' conditions only cover retroactive alteration or bypassable integrity checks, but not the possibility of undetectable forks that satisfy all cryptographic checks yet violate the intended temporal binding."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The contradiction with SRC_004 (trusted timestamping) in legal-evidence contexts is overstated. The argument assumes timestamping's reliance on 'external trust' inherently weakens non-repudiability, but this ignores hybrid systems where timestamping services *embed* cryptographic commitments (e.g., blockchain-based timestamping with on-chain hashes). The 'refuted if' condition (1) acknowledges this possibility but dismisses it without addressing how such hybrids could achieve non-repudiability parity with pure cryptographic commitments. The relation fails to specify a causal mechanism for why legal enforceability would *necessarily* favor cryptographic commitments over timestamping in all cases, especially where timestamping is augmented with cryptographic proofs."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The abstraction of SRC_001 and SRC_005 into a higher-order 'immutability guarantee' is circular. The claim that *any* binding mechanism turning silent divergence into a contradiction must rely on immutability conflates the *property* (immutability) with the *mechanism* (binding). The 'refuted if' condition (1) admits the existence of binding mechanisms lacking immutability (e.g., social consensus), but the abstraction does not explain how such mechanisms could still satisfy the contradiction requirement. The relation thus fails to provide a causal link between the abstracted principle and the concrete endpoints, as it does not demonstrate that immutability is *necessary* for the contradiction, only that it is sufficient."
+    },
+    {
+      "target_alias": "SRC_004",
+      "attack": false
+    }
+  ]
+}
+```

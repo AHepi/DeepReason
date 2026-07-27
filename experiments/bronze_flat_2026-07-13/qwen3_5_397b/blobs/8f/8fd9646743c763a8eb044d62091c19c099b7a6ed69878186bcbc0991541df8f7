@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy when confronted with simultaneous multi-front disruptions, whereas Egypt survived due to its geographic buffer and centralized grain reserves.\", \"mechanism\": \"Cascading supply chain rupture: The highly specialized, interdependent palace economies relied on long-distance trade for bronze and luxury goods. When seismic events, drought, and migratory pressures simultaneously severed these links, the rigid bureaucratic systems could not reconfigure, leading to internal revolt and abandonment. Egypt's survival is attributed to the Nile's predictable agriculture and the desert barriers that slowed the momentum of invading groups, allowing time for military adaptation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local subsistence farming continuing uninterrupted in Mycenaean citadels during the destruction layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, emphasizing economic fragility over pure military defeat.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was primarily caused by a rapid technological shift in warfare where decentralized infantry tactics employing new weaponry rendered the chariot-based aristocratic military obsolete.\", \"mechanism\": \"Tactical obsolescence: The rise of light infantry equipped with javelins, long swords, and improved shields allowed smaller, mobile groups to defeat the expensive, terrain-dependent chariot corps that formed the backbone of palace power. This democratization of violence empowered mercenaries and marginalized groups to overthrow central authorities. Egypt survived because it successfully integrated these new tactics and mercenary groups into its own standing army earlier than its neighbors.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot units remained the decisive factor in battles recorded during the final decades of the Hittite empire\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate focuses on military innovation as the primary driver, a bold but often criticized single-factor explanation.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The simultaneous collapse was an illusion created by modern chronological synchronization errors; in reality, the failures were staggered over a century, caused by distinct local climatic events rather than a unified historical phenomenon.\", \"mechanism\": \"Chronological decoupling: High-precision radiocarbon dating reveals that the destruction layers previously grouped into a single '1200 BC event' actually span from 1250 to 1100 BC. Each civilization fell due to independent, localized megadroughts or earthquakes, with no causal link between them. Egypt appears to have 'survived' only because its decline was gradual and administrative rather than marked by sudden violent destruction layers, fitting a different trajectory entirely.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Egypt\"], \"excludes\": []}, \"forbidden\": [{\"case\": \"Dendrochronological data confirming a synchronized pan-Mediterranean drought window strictly between 1190-1170 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate that challenges the premise of simultaneity itself, relying on methodological critique of the historical record.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        },
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.15
+    }
+  ]
+}

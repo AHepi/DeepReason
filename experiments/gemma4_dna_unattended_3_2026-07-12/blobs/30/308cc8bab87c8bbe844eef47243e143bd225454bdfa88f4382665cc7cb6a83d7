@@ -1,0 +1,26 @@
+```json
+{
+  "alias": "C4",
+  "content_requirements": [
+    "Parallel visual representation of DNA and mRNA strands",
+    "Highlighting of base pair differences (Thymine vs Uracil)",
+    "Visual linkage between complementary sequences",
+    "Comparison labels for coding vs non-coding strands"
+  ],
+  "depends_on": [],
+  "exports": [
+    "syncStrandScroll",
+    "highlightBaseDifference"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "dna-mrna-comparator-root",
+    "dna-strand-track",
+    "mrna-strand-track",
+    "comparison-connector-overlay"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

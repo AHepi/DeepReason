@@ -1,0 +1,18 @@
+# Canonical run artifacts and content-addressed stores are byte sequences.
+# Never let checkout line-ending conversion rewrite their authoritative bytes.
+**/blobs/** -text
+**/objects/** -text
+**/checkpoints/** -text
+**/indexes/** -text
+**/log.jsonl -text
+**/events.jsonl -text
+**/relapse.log.jsonl -text
+**/run-manifest* -text
+**/.run-manifest* -text
+**/run-result.json -text
+**/bridge-result.json -text
+**/bridge-status.json -text
+**/checkpoint.json -text
+**/website-checkpoint.json -text
+**/website-terminal.json -text
+**/holdout/manifest.json -text

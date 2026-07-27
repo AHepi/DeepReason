@@ -1,0 +1,23 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target's forbidden case is not a concrete, datable observation that could realistically have obtained, but a hypothetical scenario phrased as a conditional expectation.
+The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case — 'Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation' — is not a specific, cited archaeological finding from a named site. It is a generic description of a type of evidence that, if found, would contradict the claim. The standard demands an actual record or event (e.g., 'The Pylos Ta tablets inventorying 500 bronze swords in 1180 BCE'), not a placeholder for potential evidence. This violates clause (2) of the standard.
+cites: {"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source (e.g., from Afghanistan or Central Asia) caused a bronze shortage that delegitimized warrior elites whose power depended on monopoly access to metal weaponry, triggering internal revolts.", "mechanism": "Resource bottleneck leading to legitimacy crisis: the inability to produce bronze arms broke the social contract between the palace and the military caste, allowing marginalized groups to overthrow the hierarchy.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Iron-working peripheral groups"]}, "forbidden": [{"case": "Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain hypothesis found in 83eb... by specifying the political mechanism of elite delegitimization rather than just economic contraction."}
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a critical threshold breach in the international tin-copper supply chain; the loss of a single, obscure tin source (e.g., from Afghanistan or Central Asia) caused a bronze shortage that delegitimized warrior elites whose power depended on monopoly access to metal weaponry, triggering internal revolts.", "mechanism": "Resource bottleneck leading to legitimacy crisis: the inability to produce bronze arms broke the social contract between the palace and the military caste, allowing marginalized groups to overthrow the hierarchy.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit"], "excludes": ["Egypt", "Iron-working peripheral groups"]}, "forbidden": [{"case": "Evidence of abundant bronze stockpiles in destroyed palace layers dating to the final decade of occupation", "eval": "rubric:std-hist"}], "prose_notes": "Extends the supply chain hypothesis found in 83eb... by specifying the political mechanism of elite delegitimization rather than just economic contraction."}

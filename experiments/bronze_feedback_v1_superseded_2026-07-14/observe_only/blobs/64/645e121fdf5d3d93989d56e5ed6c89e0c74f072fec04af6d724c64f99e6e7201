@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The target violates std-hist clause (2) because it fails to state a forbidden case that is a concrete observation which could realistically have obtained. The forbidden case 'Ugarit archives show no debt-crisis correspondence between regions contemporaneous with collapse' is not a concrete observation; it is a negative claim about absence of evidence, not a positive, datable event or record. The standard requires 'concrete observations that are concrete observations which could realistically have obtained (a record, an event, a datable pattern).' A claim that archives 'show no' correspondence is a statement about what is not found, not a specific, falsifiable event. Moreover, the target's mechanism relies on 'debt-bond relations (documented in Ugarit archives)' but the forbidden case directly contradicts that by asserting no such correspondence exists. The target thus fails to provide a genuine, testable counterexample; it instead offers a non-observation that cannot be realistically verified as having obtained, violating the standard's requirement for concrete, datable patterns.",
+"counterexample": null
+}

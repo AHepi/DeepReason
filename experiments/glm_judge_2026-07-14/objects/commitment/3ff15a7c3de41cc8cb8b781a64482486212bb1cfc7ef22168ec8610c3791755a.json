@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At p=0.15, psi=0.1, k=5, harness accuracy is NOT at least 3 percentage points below SC accuracy, with at least 2 right-to-wrong flips from false flags"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:3cb63d82e43c","observation_valued":false},"id":"fc:3cb63d82e43c","schema":"commitment"}

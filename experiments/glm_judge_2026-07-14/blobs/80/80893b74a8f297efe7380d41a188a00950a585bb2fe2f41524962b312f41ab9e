@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The repository's validation harness natively scores per-question candidate correctness, critic verdicts, and majority-vote vs. filtered-vote accuracy. It does not natively emit the decomposition into recall_wrong, p_wrong_majority, FPR_right, and p_right_majority as a single measured quantity whose sign is a pass/fail test outcome."}
+```

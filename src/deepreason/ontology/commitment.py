@@ -7,8 +7,11 @@ content is formal/numeric/code.
 """
 
 from enum import Enum
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import Field, field_validator
+
+from deepreason.ontology.frozen import FrozenDict, FrozenRecord
 
 
 class Verdict(str, Enum):
@@ -17,7 +20,7 @@ class Verdict(str, Enum):
     OVERRUN = "overrun"
 
 
-class Budget(BaseModel):
+class Budget(FrozenRecord):
     """Structured budget interpreted by the test program tau_kappa.
 
     Canonical keys: steps, time_ms. Program evals may declare extended
@@ -27,10 +30,15 @@ class Budget(BaseModel):
 
     steps: int | None = 100_000
     time_ms: int | None = 2_000
-    extra: dict[str, int | str] = Field(default_factory=dict)
+    extra: Mapping[str, int | str] = Field(default_factory=FrozenDict)
+
+    @field_validator("extra", mode="after")
+    @classmethod
+    def _freeze_extra(cls, value):
+        return FrozenDict(value)
 
 
-class Commitment(BaseModel):
+class Commitment(FrozenRecord):
     id: str
     # "program:<ref>" | "rubric:<spec-id>" | "predicate:<expr>"
     # rubric <spec-id> MUST resolve to a registered standard artifact (§10.3).

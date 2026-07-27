@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=7, e∈[1/7,3/7), critic R>0.5 and P>0.43, harness accuracy - SC accuracy ≤ 0 with upper 95% CI < 0.03"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:1071ba44c9b1","observation_valued":false},"id":"fc:1071ba44c9b1","schema":"commitment"}

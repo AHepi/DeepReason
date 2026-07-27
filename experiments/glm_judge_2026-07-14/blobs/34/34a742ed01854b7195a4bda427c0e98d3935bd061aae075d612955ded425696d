@@ -1,0 +1,3 @@
+```json
+{"winner": "B", "decisive_point": "2d711b2eb5ff sharpens 7811dbda8316 by adding two hard gates that 7811dbda8316 omits: (1) restricting to odd k≥7 (supplying the upper bound k/(k+2) > e as a sufficient beat-condition), and (2) requiring the critic to achieve precision P > e and recall R > 1−e on the candidate subset, so that the harness gain is provably strict rather than merely possible."}
+```

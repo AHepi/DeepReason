@@ -1,0 +1,5 @@
+{
+    "attack": true,
+    "case": "The target's mechanism fails to satisfy the standard's requirement to 'state forbidden cases that are concrete observations which could realistically have obtained.' The second forbidden case—'Cyprus and Levantine centers show uninterrupted palace continuity through 1200-1150 BCE despite technology diffusion'—is a concrete observation that, if true, would directly contradict the claim that simultaneous diffusion of iron and naval technologies enabled non-palace actors to bypass or overwhelm palace monopolies. The target does not address this case or provide any mechanism that would accommodate such continuity; instead it asserts a phase transition that depends on peripheral actors gaining autonomy, which would be impossible if palaces remained uninterrupted. Since the target's mechanism cannot survive this realistic counterexample, it violates the standard.",
+    "counterexample": ["Cyprus and Levantine centers show uninterrupted palace continuity through 1200-1150 BCE despite technology diffusion"]
+}

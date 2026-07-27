@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "edc14bbd1ae6e3cc76eea0f6db2966a0dbe1446bf6b7655bbafce61f46750f45",
+      "attack": true,
+      "case": "The target's loss-regime mechanism is mathematically self-defeating. It defines the loss regime as p < p_min, where false flags on correct answers exceed saved votes. However, its own p_min formula is a strictly increasing function of critic recall r. This means that as the critic improves at finding bad candidates (higher r), p_min increases, making the loss regime p < p_min strictly *larger*. Thus, the model predicts a better critic is more likely to cause a loss—a direct contradiction of the mechanism's stated requirement that benefit demands 'FP removal rate < TP removal rate scaled by majority-margin', as higher recall increases TP removal without changing the FP rate, which should strictly *shrink* the loss regime, not expand it. The target fails to provide a coherent mechanism for how filtering loses when false flags erode correct majorities.",
+      "counterexample": null
+    },
+    {
+      "target": "88f00f0d4243bf6a2e3c1acf713d99a20e752bd30cafb420aaf8f8a523da604d",
+      "attack": true,
+      "case": "The target's core claim that strict advantage arises iff I(C;B) > I(C;M_wrong) is a non-sequitur for this problem's loss regime. The problem explicitly demands an account of how filtering can LOSE when false flags erode correct majorities. The target's information-theoretic inequality I(C;B) > I(C;M_wrong) provides no mechanism for the loss case: if I(C;B) is high (flags perfectly track individual badness), the inequality holds, but if the critic still produces false positives on correct candidates in a 3/2 correct majority, filtering can still erode the majority and cause a loss. The global inequality ignores the per-question majority margin mechanics required to predict the loss regime, failing the problem's explicit requirement to model the loss condition.",
+      "counterexample": null
+    },
+    {
+      "target": "c9386a6c7b3038d7ebaf9f80aed2b6bfd17ad2be03ed64556d0173f0d0085495",
+      "attack": true,
+      "case": "The target's mechanism for per-question strict advantage imposes a mathematically impossible condition. It states harness strictly beats SC on question q iff 'r_w(q) * n_wrong(q) > n_wrong(q) - n_correct(q)'. For a standard majority vote with k=5, if SC is wrong, n_correct must be 2 and n_wrong must be 3. The condition becomes r_w(q) * 3 > 3 - 2, or r_w(q) > 1/3. However, to actually flip the majority, filtering must remove enough wrong candidates so that correct candidates become the majority. If r_w(q) = 0.4 (satisfying the target's >1/3 inequality), only 1.2 wrong candidates are removed on average, leaving 1.8 wrong vs 2 correct—a fragile 1-vote margin easily eroded by any false flags on the correct candidates. The target's inequality is a necessary but grossly insufficient condition for strict advantage, as it completely ignores the simultaneous false positive removal rate on correct candidates required to evaluate whether the majority actually flips without breaking.",
+      "counterexample": null
+    }
+  ]
+}

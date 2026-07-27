@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=7, e≈0.33 (mid-zone), critic recall_wrong=0.6 and falseflag_rate_correct=0.1: harness accuracy is LOWER than or EQUAL to self-consistency despite recall > falseflag rate"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:da0a270133a7","observation_valued":false},"id":"fc:da0a270133a7","schema":"commitment"}

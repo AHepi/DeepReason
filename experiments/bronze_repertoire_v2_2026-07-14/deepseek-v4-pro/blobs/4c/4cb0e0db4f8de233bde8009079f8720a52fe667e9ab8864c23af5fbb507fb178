@@ -1,0 +1,26 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "cases": [
+    {
+      "target": "3c7682352d46c2ca599823a18905abac1ce03f0b6becf1ff10fb8ea06050a3d7",
+      "attack": true,
+      "case": "The relation claims the two models are contradictory because they posit mutually exclusive transmission substrates (psychological despair vs. biological pathogen). However, the models are not logically exclusive: a biological epidemic could itself cause institutional despair as a downstream effect, or both contagions could spread simultaneously along the same networks, one physical and one social. The stated 'refuted if' conditions do not actually force a choice between the models—evidence of mass mortality from a biological agent does not refute the despair model if despair was a consequence of the epidemic, and absence of disease markers does not refute the biological model if the pathogen left no skeletal traces (as with many hemorrhagic fevers). The contradiction is therefore asserted but not substantiated.",
+      "counterexample": null
+    },
+    {
+      "target": "5a8f4c9dee938d8322ad0cb6b173c297ad0591ae376c0348fa6c8b0581668cca",
+      "attack": true,
+      "case": "The account claims Egypt survived because it was a 'net grain exporter and core member, not a dependent,' yet the mechanism describes the collapse as triggered by disruption of the great powers' gift-exchange network when 'the Hittite-Egyptian rivalry ended with the peace treaty' and 'internal Hittite succession crises severed the flow of prestige goods and emergency grain shipments.' If the network's stabilizing function depended on competitive reciprocity among great powers, Egypt's survival as a core member requires explanation: why did the same network breakdown that supposedly crippled Hatti not equally destabilize Egypt's own administrative and economic structures? The account provides no mechanism by which Egypt was insulated from the very network failure it posits as the cause of collapse elsewhere.",
+    },
+    {
+      "target": "6c4d61f10411ec3d03ef895d2583ddee16714857dfe5f3f5f59ba38eab969b3a",
+      "attack": true,
+      "case": "The mechanism claims a pandemic or poor harvests 'disproportionately affected the elite due to their reliance on stored, rat-infested grain, while simultaneously increasing labor demands on the surviving underclass,' sparking a coordinated multi-regional uprising. This causal sequence is internally inconsistent: if the elite were disproportionately killed by disease from stored grain, they would be weakened and less able to increase extraction from the underclass, not more. The account needs the elite to simultaneously be decimated by disease AND intensify labor demands to provoke revolt, but the former undermines the capacity for the latter. The trigger and the revolt mechanism thus work at cross-purposes.",
+    }
+  ]
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "batchcritic.direct.v1", "error": "multiple top-level JSON values or trailing content", "path": "", "repair_scope": "", "skeleton": {}}

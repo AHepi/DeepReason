@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the resource flows necessary to maintain centralized authority.\", \"mechanism\": \"Climate-induced agricultural collapse led to food shortages, triggering internal revolts and the abandonment of palace centers that could no longer feed their populations or pay retainers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed palace layers dated to 1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with the dominant climate-change hypothesis (e.g., Kaniewski et al.), explaining the simultaneity via a regional weather event while excluding Egypt due to its reliance on the predictable Nile flood.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a disruptive shift in military technology and tactics, specifically the rise of inexpensive infantry equipped with javelins and long swords defeating expensive chariot-based aristocracies.\", \"mechanism\": \"Decentralized groups utilizing new infantry tactics overwhelmed the rigid, chariot-dependent military structures of the palace states, leading to rapid political disintegration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot warfare remained the dominant and successful military paradigm in the region after 1175 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military-revolution hypothesis (e.g., Drews). It is slightly less typical now due to nuanced views on Sea Peoples, but remains a strong contender for the mechanism of destruction. Excludes Egypt as it successfully adapted its military mix.\"}",
+      "typicality": 0.75,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading systemic failure triggered by the interruption of long-distance trade networks, causing a liquidity crisis and inability to procure essential bronze tin, leading to social unraveling.\", \"mechanism\": \"Hyper-specialized palatial economies depended on fragile international trade; the loss of a single node (e.g., Cyprus or Ugarit) caused a domino effect of economic insolvency and loss of elite legitimacy across the network.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Inland Anatolia\"]}, \"forbidden\": [{\"case\": \"Discovery of continuous, uninterrupted tin-bronze production in Mycenaean workshops throughout the 12th century BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical but plausible 'complexity collapse' model focusing on economic interdependence rather than direct violence or climate. It explains the speed of collapse via network theory. Excludes Egypt and Assyria as they had more internal resources or alternative trade routes.\"}",
+      "typicality": 0.45,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The criticism correctly identifies an inconsistency in the worked example, but the underlying divergence condition is stated as a coherent, measurable expression. The threshold formula R·(1 - SC_majority_margin) > (1-P)·SC_majority_rate is a direct function of the named measurables: R (critic recall), P (critic precision), and the SC majority statistics, which are themselves deterministic functions of the base error rate e and sample size k."}
+```

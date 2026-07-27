@@ -1,0 +1,31 @@
+schema: deepreason-jolt-trigger-glm52-pilot-v2
+title: Sequential GLM-5.2 matched continuation pilot after v1 trigger scarcity
+preregistered_at: 2026-07-15
+predecessor: experiments/jolt_trigger_glm52_pilot_prereg.yaml
+reason_for_new_version: >-
+  V1 stopped as registered after eight calls because its last eight valid
+  admissions still contained two objective improvements and one new mechanism
+  class. V2 retains the trigger unchanged and independently repeats acquisition
+  on a fresh root, checking after each call from call 8 through call 16.
+
+model: {provider: ollama, id: glm-5.2, reasoning: none, temperature: 1.0, roles: [conjecturer]}
+workload: {id: pi-jolt-finite-selection-v1, verifier: deterministic-finite-product-v1}
+trigger:
+  window_valid_admissions: 8
+  requirements:
+    - zero running-best objective improvements in the window
+    - zero mechanism classes absent from earlier valid admissions
+  first_eligible_state_only: true
+  threshold_changed_from_v1: false
+acquisition: {minimum_calls: 8, maximum_calls: 16, token_cap: 112000}
+matched_branches:
+  calls_per_branch: 5
+  token_cap_per_branch: 35000
+  arms: [J0_no_intervention, J6_generic_complement, J3_representation_reset, J4_verifier_directed_challenge]
+primary_outcome: any deterministic objective improvement over frozen source best within five calls
+authority:
+  active_roles: [conjecturer]
+  rubric_policy: forbid
+  judge_critic_pairwise_synthesis_calls: 0
+  status_sources: [deterministic_predicate]
+interpretation: exploratory conditional one-state pilot; no whole-run, model-family, or hard-orbit claim

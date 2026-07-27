@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e≤0.15 (low-zone, observed): harness accuracy strictly exceeds self-consistency"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:c74f796fc212","observation_valued":false},"id":"fc:c74f796fc212","schema":"commitment"}

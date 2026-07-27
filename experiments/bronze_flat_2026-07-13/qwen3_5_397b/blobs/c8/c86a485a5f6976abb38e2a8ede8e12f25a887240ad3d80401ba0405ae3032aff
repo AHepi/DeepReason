@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which severed the fragile supply chains essential for bronze production.\", \"mechanism\": \"Cascading resource scarcity triggered by climate change (drought) and earthquake storms disrupted the specialized, centralized grain-for-metal exchange networks, leading to famine, loss of elite legitimacy, and inability to pay mercenaries.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust grain storage or alternative trade routes sustaining these specific cities through the drought period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' view, integrating environmental stressors with economic fragility. It explains the simultaneity via shared ecological zones and trade dependence.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics, specifically the rise of loose-order infantry with javelins and long swords defeating rigid chariot-based aristocracies.\", \"mechanism\": \"The democratization of warfare allowed decentralized groups (Sea Peoples, highland raiders) to penetrate and dismantle the static defense systems of palace states, which relied on expensive, terrain-limited chariot corps.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot forces successfully defeated infantry-heavy invaders in open battle during the critical 1200-1150 BC window in these regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A military-determinist view. It struggles slightly with why Egypt survived (they also used chariots but adapted), hence the exclusion. It posits a sudden tactical obsolescence.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an internal sociopolitical implosion caused by the over-complexity of palatial bureaucracies, which became brittle targets for internal revolt by disenfranchised lower classes and subordinate elites when central authority faltered.\", \"mechanism\": \"Hyper-centralization created a single point of failure; when external shocks (minor raids or bad harvests) occurred, the internal social contract broke, leading to civil war and the burning of archives/palaces by insiders rather than external conquest.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Forensic analysis of destruction layers indicating exclusive external weaponry or mass graves of foreign combatants rather than mixed civilian/elite internal violence.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, internalist focus. It argues the 'Sea Peoples' were often a symptom (refugees) rather than the cause, and that the real killer was class warfare enabled by structural brittleness.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "dependence",
+          "target": "22c6e6564ec36c58b8f2206b610d4f88e41b7093b7e450b970271feb53df6cba"
+        }
+      ],
+      "typicality": 0.38
+    }
+  ]
+}

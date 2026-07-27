@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The critic’s demand for additional forbidden clauses is misplaced: the target’s single forbidden case already tests the core empirical claim that tin imports were disrupted. If tin imports demonstrably continued uninterrupted, the mechanism is falsified."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Measured error correlation between same-family critic and candidate pool is ≤ 0 (non-positive), contradicting the shared-blind-spot assumption — if so, the causal story is wrong"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:ce27a78c3d5e","observation_valued":false},"id":"fc:ce27a78c3d5e","schema":"commitment"}

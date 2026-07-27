@@ -1,0 +1,7 @@
+{
+  "relation": "contradicts: 4eddb3b3804aac532a4d6c85d82259d25c079da7abdf7a445bf3768433f76ce1 posits that hyper-specialization eliminated local resilience, making the system vulnerable to any shock, whereas 1a50596e47ff7d0a2982e8b98d58ed20a806dd9ccba5b62d9b61c20766e5a654 posits a specific climatic shock (3.2ka event) that targeted rain-fed agriculture, implying the system would have survived absent that specific shock. REFUTED IF: the palatial labor specialization described in 4eddb3b3804a was itself a direct consequence of the rain-fed agricultural model targeted by the 3.2ka event, making the two claims complementary rather than contradictory.",
+  "connects": [
+    "4eddb3b3804aac532a4d6c85d82259d25c079da7abdf7a445bf3768433f76ce1",
+    "1a50596e47ff7d0a2982b8e98d58ed20a806dd9ccba5b62d9b61c20766e5a654"
+  ]
+}

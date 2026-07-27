@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"the fragility window is 1/(k+1) < e < k/(k+2) and critic precision p satisfies p > (1-r) * F_broke / (r * F_fixed)"}

@@ -1,0 +1,1 @@
+{"contract":"variator.direct.v1","path":"","error":"multiple top-level JSON values or trailing content","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"edits":[{"content":""}]}}

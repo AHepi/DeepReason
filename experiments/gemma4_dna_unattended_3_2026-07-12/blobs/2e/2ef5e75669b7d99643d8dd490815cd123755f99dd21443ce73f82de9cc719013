@@ -1,0 +1,54 @@
+```json
+{
+  "edits": [
+    {
+      "content": "# Product Plan: DNA Blueprint (Educational/Tool-based Focus)\n\n## Scope\nAn interactive educational workbench where users simulate molecular biology processes like DNA replication and transcription through a series of specialized tools.",
+      "changed_fields": [
+        "Scope"
+      ]
+    },
+    {
+      "content": "- **The Sequence Builder**: An interactive area for snapping complementary base pairs together.\n- **Process Simulator**: An animation of RNA polymerase transcribing a DNA strand, controlled by a playback interface.\n- **Comparison View**: A side-by-side visual analysis of DNA and mRNA sequences.\n- **Motion Compliance**: Disables simulations if `prefers-reduced-motion` is active, replacing them with static 'Before/After' state snapshots.",
+      "changed_fields": [
+        "Feature List"
+      ]
+    },
+    {
+      "content": "- **Drag-and-Drop**: Users place specific nucleotides into complementary positions on the template.\n- **Step-Through**: A granular control button that advances transcription one base at a time.\n- **Zoom-In**: A deep-dive view into the double helix to visualize hydrogen bonding patterns.",
+      "changed_fields": [
+        "Key Interactions"
+      ]
+    },
+    {
+      "content": "- **Header**: \"DNA Interactive Workshop: Molecular Synthesis\"\n- **Instruction**: \"Drag the matching nucleotide to pair with the template strand accurately.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **Replication Guide**: \"Step 1: Helical Unwinding. Step 2: Nucleotide Pairing. Step 3: Ligation/Joining.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **Transcription Guide**: \"The DNA template is transcribed; mRNA is synthesized. Note the critical substitution of Uracil for Thymine in the RNA strand.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "- **Glossary**: \"Nucleotide: The monomeric building block of nucleic acids. Polymerase: The catalytic enzyme responsible for strand synthesis.\"",
+      "changed_fields": [
+        "Content Inventory"
+      ]
+    },
+    {
+      "content": "1. Entire application delivered as a single-file HTML/CSS/JS bundle.\n2. Drag-and-drop logic validates correct base pairing (A-T, C-G).\n3. Accessibility: Simulation replaces animations with static frames via `prefers-reduced-motion`.\n4. mRNA output logic replaces Thymine (T) with Uracil (U).\n5. Zoom-In mechanism reveals high-resolution chemical bond visualization.",
+      "changed_fields": [
+        "Acceptance Criteria"
+      ]
+    }
+  ]
+}
+```

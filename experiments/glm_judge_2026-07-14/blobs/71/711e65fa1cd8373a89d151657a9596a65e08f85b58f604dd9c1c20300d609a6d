@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "Forbidden case #3 sits at p=0.15, k=5, which is inside the excluded null zone, so it is outside the proposed strict-win/strict-loss regime and cannot refute the mechanism. Its 2-pp threshold is a generic std-crit-design bound, not the proposal's measurable mechanism condition (which is discrete question flips, not a continuous pp gap), so it does not target the stated win/loss logic. Forbidden case #1 at p=0.55, k=5 is inside the covered regime (0.55 > 1-1/5=0.8 is false, so it is actually in the excluded SC-correct zone as well)"}
+```

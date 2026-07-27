@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The Late Bronze Age collapse was caused by a rapid shift to massed mobile infantry (the 'Infantry Revolution') that rendered chariot-based palatial armies obsolete.\", \"mechanism\": \"Cheap iron weapons and new infantry tactics allowed large numbers of lightly armed soldiers to overwhelm small elite chariot corps, destroying the military basis of palace authority.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records show no adoption of massed infantry or iron weapons during this period, and their chariot-based army successfully repelled the Sea Peoples.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Explains why palace-centered states dependent on chariot elites collapsed while Egypt, which adapted its military differently, survived. The mechanism is a specific military-technological shift rather than vague 'invasions'.\"}",
+      "typicality": 0.3,
+      "neighbours": ["A9", "A10"]
+    },
+    {
+      "content": "{\"claim\": \"The Late Bronze Age collapse resulted from a cascading failure of the interconnected palatial trade and diplomacy network, where the fall of one major node triggered a domino effect through the entire Eastern Mediterranean system.\", \"mechanism\": \"Palaces were economically specialized and interdependent for strategic goods (tin, copper, grain). When one major center failed, supply chains broke, causing famine and political instability in dependent regions, which in turn collapsed and propagated the crisis.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that trade between surviving and collapsed regions continued uninterrupted, with no disruption to supply chains.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because it was less trade-dependent for essential goods, had greater agricultural self-sufficiency via the Nile, and could absorb refugees without systemic breakdown.\"}",
+      "typicality": 0.85,
+      "neighbours": ["A6"]
+    },
+    {
+      "content": "{\"claim\": \"The palatial civilizations collapsed due to a prolonged drought and climate shift that caused widespread famine, which in turn triggered internal revolts against the ruling elites who could no longer deliver prosperity.\", \"mechanism\": \"A 300-year megadrought reduced agricultural yields across the Eastern Mediterranean. Palaces depended on surplus extraction for redistribution and luxury trade. When harvests failed repeatedly, the social contract broke: peasants and urban workers revolted, and the administrative system collapsed from below.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatological data shows no significant climate anomaly in the period 1200-1150 BC, and grain prices remained stable throughout the collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's annual flood was less dependent on local rainfall, buffering it against the drought that devastated rain-fed agricultural systems elsewhere.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A1", "A2"]
+    }
+  ]
+}

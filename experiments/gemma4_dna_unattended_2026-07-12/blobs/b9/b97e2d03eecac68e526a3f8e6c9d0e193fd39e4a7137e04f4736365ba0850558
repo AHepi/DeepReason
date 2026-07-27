@@ -1,0 +1,16 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { font-family: 'JetBrains Mono', 'Roboto Mono', monospace; color: #39FF14; background: #050A0C; padding: 2rem; border: 1px solid #B026FF; border-radius: 8px; }\n    .c3-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; }\n    .c3-base { padding: 8px 0; text-align: center; border: 1px solid #050A0C; transition: all 0.3s ease; cursor: pointer; background: rgba(57, 255, 20, 0.05); }\n    .c3-base:hover { background: #39FF14; color: #050A0C; box-shadow: 0 0 15px #39FF14; }\n    .c3-base.highlight { background: #B026FF; color: #fff; box-shadow: 0 0 20px #B026FF; }\n    .c3-label { font-size: 0.8rem; margin-bottom: 1rem; color: #B026FF; letter-spacing: 2px; }\n  </style>\n  <div class=\"c3-label\">NUCLEOTIDE SEQUENCE DATA-GRID</div>\n  <div id=\"dna-grid-root-container\" class=\"c3-grid\"></div>\n  <script>\n    window.c3_mount = () => {\n      const container = document.getElementById('dna-grid-root-container');\n      c3_updateSequence('ATGCGATCGTAGCTAGCTAGCTAG');\n    };\n    window.c3_updateSequence = (seq) => {\n      const container = document.getElementById('dna-grid-root-container');\n      container.innerHTML = seq.split('').map((b, i) => `<div class=\"c3-base\" data-idx=\"${i}\">${b}</div>`).join('');\n    };\n    window.c3_highlightBasePair = (idx) => {\n      document.querySelectorAll('.c3-base').forEach((el, i) => el.classList.toggle('highlight', i === idx));\n    };\n    window.c3_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.8,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { font-family: monospace; background: #050A0C; color: #39FF14; padding: 3rem; }\n    .c3-row { display: flex; gap: 10px; overflow-x: auto; padding: 1rem 0; }\n    .c3-cell { min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid #39FF14; }\n    .c3-cell.glow { background: #39FF14; color: #050A0C; box-shadow: 0 0 10px #39FF14; }\n    .c3-cell.active { background: #B026FF; color: white; }\n    .c3-static { border: 2px solid #B026FF; padding: 10px; color: #B026FF; }\n  </style>\n  <div id=\"dna-grid-root-view\"></div>\n  <script>\n    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n    window.c3_mount = () => {\n      const view = document.getElementById('dna-grid-root-view');\n      if (reducedMotion) {\n        view.innerHTML = '<div class=\"c3-static\">Flat Data-Dashboard: Fixed layout with high-contrast borders.</div>';\n      } else {\n        c3_updateSequence('GATTACA');\n      }\n    };\n    window.c3_updateSequence = (seq) => {\n      if (reducedMotion) return;\n      const view = document.getElementById('dna-grid-root-view');\n      view.innerHTML = `<div class=\"c3-row\">${seq.split('').map((b,i)=>`<div class=\"c3-cell\" id=\"dna-grid-root-b${i}\">${b}</div>`).join('')}</div>`;\n    };\n    window.c3_highlightBasePair = (idx) => {\n      const el = document.getElementById(`dna-grid-root-b${idx}`);\n      if (el) el.classList.add('active');\n    };\n    window.c3_destroy = () => {};\n  </script>\n</div>",
+      "typicality": 0.6,
+      "neighbours": []
+    }
+  ]
+}
+```

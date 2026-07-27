@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target": "5b4538abe4a712f8c9c0a33fe17fe62d43ac359f1375d97921d389955ef1f08a",
+      "attack": true,
+      "case": "The target's claim is self-contradictory and its forbidden case is trivially satisfiable. The claim demands 'critic precision >= 0.5' and 'critic recall >= 0.5' for strict benefit. But the mechanism's net benefit formula (recall_wrong * p_wrong_majority - FPR_right * p_right_majority) uses FPR_right = 1 - precision, and then states strict improvement requires the first term to dominate. If precision >= 0.5, FPR_right <= 0.5. If recall_wrong >= 0.5 and p_wrong_majority is large (e.g. 0.6), the first term is 0.3. If p_right_majority is 0.4, the second term is at most 0.2. The net is positive REGARDLESS of the mechanism's stated 'intermediate regime' selectivity constraint—the condition is automatically satisfied. This makes the claim's stated selectivity requirement ('critic selectivity high enough') mathematically redundant and misleading. Furthermore, the second forbidden case ('base error 0.40-0.55 and critic precision < 0.5 shows harness accuracy >= self-consistency accuracy on >= 50% of questions') is trivially triggered by the measured repository data: at base error ~0.5, p_right_majority and p_wrong_majority are both ~0.5; if precision < 0.5 (e.g. 0.4, FPR=0.6) and recall=1.0, net = 1.0*0.5 - 0.6*0.5 = 0.2 > 0, so harness beats SC on aggregate. The target forbids the very outcome its own model predicts.",
+      "counterexample": null
+    },
+    {
+      "target": "30e483eb494067d8323a796b7e319a77a3abce4c45ba08a487df2b6838e5082b",
+      "attack": true,
+      "case": "The target's mechanism conflates the critic's role with that of a scoring oracle, misdiagnosing the repository's null result. It claims the critic's failure is 'inability to discriminate which veto signals are reliable' and proposes a confidence-thresholded veto. But the repository's hard-set data show critic recall=1.0 and precision=0.125 with base error 0.01: the critic correctly flags the single wrong candidate in every wrong-minority set, but because 4/5 majority is already correct, filtering changes nothing. The null result is caused by p_right_majority ~1 (nothing to fix), NOT by the critic flagging everything indiscriminately. The target's claim that 'the critic flags everything, so filtering is a no-op' is factually wrong: at base error 0.01, the critic flags very little (only the rare wrong candidate), and the no-op arises because the majority was already right. The proposed confidence-thresholded fix addresses a discrimination failure that the data do not exhibit.",
+      "counterexample": null
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+Answer each named criticism clause directly using its local alias.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"ResponseClause": {"additionalProperties": false, "properties": {"item_alias": {"title": "Item Alias", "type": "string"}, "response": {"minLength": 1, "title": "Response", "type": "string"}}, "required": ["item_alias", "response"], "title": "ResponseClause", "type": "object"}}, "additionalProperties": false, "properties": {"clauses": {"items": {"$ref": "#/$defs/ResponseClause"}, "minItems": 1, "title": "Clauses", "type": "array"}}, "required": ["clauses"], "title": "CompactDefender", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+K1
+
+ONE SYNTAX EXAMPLE:
+
+{"clauses":[{"item_alias":"","response":"x"}]}
+
+INPUT:
+
+THE CASE AGAINST THE TARGET:
+[K1] The target claims a 'synchronized climatic shock' caused collapse across multiple regions, but the single forbidden case it provides ('Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC') is insufficient to meet the standard's requirement for 'forbidden cases that are concrete observations which could realistically have obtained.' The mechanism is specified as 'exogenous climatic forcing causing agricultural failure,' yet the target fails to state forbidden cases for each region it claims to cover. Specifically, it does not specify what concrete archaeological or textual evidence from Hittite Anatolia, Ugarit, or Mycenaean Greece would falsify the claim—such as evidence of stable grain storage levels, absence of mass burial sites indicative of famine, or continuous administrative records in those specific locales during the alleged crisis period. By only offering a general paleoclimatic counterexample without region-specific observable implications, the target violates clause (2) of the standard.
+
+TARGET:
+{"claim": "The simultaneous collapse resulted from a synchronized climatic shock (the 3.2ka event) causing prolonged drought that specifically devastated the rain-fed agricultural hinterlands of the Northern Levant and Anatolia, leading to mass migration and famine that overwhelmed the static palatial storage systems, while Egypt survived due to its reliance on predictable Nile flooding.", "mechanism": "Exogenous climatic forcing causing agricultural failure and subsequent demographic pressure/migration.", "scope": {"covers": ["Hittite Anatolia", "Ugarit", "Levantine city-states", "Mycenaean Greece"], "excludes": ["Egypt", "Mesopotamia"]}, "forbidden": [{"case": "Paleoclimatic data indicating normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC.", "eval": "rubric:std-hist"}], "prose_notes": "A high-typicality environmental determinist explanation focusing on the specific vulnerability of rain-fed vs. irrigation-based agriculture."}

@@ -1,0 +1,362 @@
+[
+  {
+    "id": "kf-fix-00",
+    "sub_battery": "known_flaw",
+    "flaw_class": "circularity",
+    "seed": 258760961740663,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "The Bible is true because it is the word of God, and we know it is the word of God because the Bible itself says so.",
+    "hidden_annotation": "Planted-flaw battery fixture #0: circularity (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-01",
+    "sub_battery": "known_flaw",
+    "flaw_class": "equivocation",
+    "seed": 4462716688567,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "A feather is light. Whatever is light cannot be dark. Therefore a feather cannot be dark.",
+    "hidden_annotation": "Planted-flaw battery fixture #1: equivocation (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-02",
+    "sub_battery": "known_flaw",
+    "flaw_class": "affirming_the_consequent",
+    "seed": 87115554384440,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "If it rains, the street gets wet. The street is wet. Therefore it rained.",
+    "hidden_annotation": "Planted-flaw battery fixture #2: affirming the consequent (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-03",
+    "sub_battery": "known_flaw",
+    "flaw_class": "denying_the_antecedent",
+    "seed": 110477626522597,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "If a creature is a fish, it can swim. A dolphin is not a fish. Therefore a dolphin cannot swim.",
+    "hidden_annotation": "Planted-flaw battery fixture #3: denying the antecedent (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-04",
+    "sub_battery": "known_flaw",
+    "flaw_class": "false_arithmetic_premise",
+    "seed": 124123511136964,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "Since 7 times 8 equals 54, and 54 is even, the product of 7 and 8 is even.",
+    "hidden_annotation": "Planted-flaw battery fixture #4: false arithmetic premise (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-05",
+    "sub_battery": "known_flaw",
+    "flaw_class": "base_rate_neglect",
+    "seed": 3174729776048,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "A disease affects 1 in 10,000 people. The test for it is 99% accurate. Maria tested positive, so it is 99% certain she has the disease.",
+    "hidden_annotation": "Planted-flaw battery fixture #5: base rate neglect (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-06",
+    "sub_battery": "known_flaw",
+    "flaw_class": "composition",
+    "seed": 35830488170569,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "Every member of the committee is efficient. Therefore the committee as a whole must be efficient.",
+    "hidden_annotation": "Planted-flaw battery fixture #6: composition (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-07",
+    "sub_battery": "known_flaw",
+    "flaw_class": "post_hoc_causation",
+    "seed": 161609789317708,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "The rooster crows immediately before sunrise. Therefore the rooster's crowing causes the sun to rise.",
+    "hidden_annotation": "Planted-flaw battery fixture #7: post hoc causation (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-08",
+    "sub_battery": "known_flaw",
+    "flaw_class": "hasty_generalization",
+    "seed": 51442786727089,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "Both times I visited that city it rained. So it must rain there most days.",
+    "hidden_annotation": "Planted-flaw battery fixture #8: hasty generalization (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-09",
+    "sub_battery": "known_flaw",
+    "flaw_class": "dormitive_vacuity",
+    "seed": 113383452711998,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "Opium induces sleep because it possesses a dormitive virtue \u2014 that is, a power whose nature is to induce sleep.",
+    "hidden_annotation": "Planted-flaw battery fixture #9: dormitive vacuity (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-10",
+    "sub_battery": "known_flaw",
+    "flaw_class": "arithmetic_resource_error",
+    "seed": 111599168612791,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "The recipe needs 3 eggs per cake and we have 10 eggs, so we can bake 4 whole cakes.",
+    "hidden_annotation": "Planted-flaw battery fixture #10: arithmetic resource error (ground truth by construction)."
+  },
+  {
+    "id": "kf-fix-11",
+    "sub_battery": "known_flaw",
+    "flaw_class": "conjunction_fallacy",
+    "seed": 192947879841041,
+    "source": "scripts/judge_battery.py FLAWED fixture",
+    "judged_text": "Linda is outspoken and majored in philosophy. It is therefore more probable that Linda is a bank teller who is active in the feminist movement than that she is a bank teller.",
+    "hidden_annotation": "Planted-flaw battery fixture #11: conjunction fallacy (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-00",
+    "sub_battery": "known_flaw",
+    "flaw_class": "base_rate_neglect",
+    "seed": 280548631913349,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "A condition affects 1 in 20,000 people. The screening test is 99.5% accurate. Lena tested positive, so it is 99.5% certain that Lena has the condition.",
+    "hidden_annotation": "Deterministic template variant: base rate neglect (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-01",
+    "sub_battery": "known_flaw",
+    "flaw_class": "circularity",
+    "seed": 180452177363853,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "We should trust Professor Hale's method because it is endorsed by experts, and we know it is endorsed by experts because experts trained solely in Hale's method assures us of it.",
+    "hidden_annotation": "Deterministic template variant: circularity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-02",
+    "sub_battery": "known_flaw",
+    "flaw_class": "circularity",
+    "seed": 50525832404334,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "We should trust the almanac because it has never been shown to err, and we know it has never been shown to err because the almanac's own preface assures us of it.",
+    "hidden_annotation": "Deterministic template variant: circularity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-03",
+    "sub_battery": "known_flaw",
+    "flaw_class": "equivocation",
+    "seed": 258738581111903,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Discipline builds character. The army is full of discipline cases. Therefore the army is full of character-building.",
+    "hidden_annotation": "Deterministic template variant: equivocation (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-04",
+    "sub_battery": "known_flaw",
+    "flaw_class": "denying_the_antecedent",
+    "seed": 45731181743932,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "If a worker is on the day shift, they use the main entrance. Priya is not on the day shift. Therefore it cannot use the main entrance.",
+    "hidden_annotation": "Deterministic template variant: denying the antecedent (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-05",
+    "sub_battery": "known_flaw",
+    "flaw_class": "circularity",
+    "seed": 197786191615348,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "We should trust the oracle's ledger because its records are authoritative, and we know its records are authoritative because an entry in the ledger itself assures us of it.",
+    "hidden_annotation": "Deterministic template variant: circularity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-06",
+    "sub_battery": "known_flaw",
+    "flaw_class": "false_arithmetic_premise",
+    "seed": 151745595687436,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Since 17 times 4 equals 72, and 72 is divisible by 8, the product of 17 and 4 is divisible by 8.",
+    "hidden_annotation": "Deterministic template variant: false arithmetic premise (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-07",
+    "sub_battery": "known_flaw",
+    "flaw_class": "base_rate_neglect",
+    "seed": 192942945723060,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "A condition affects 1 in 8,000 people. The screening test is 97% accurate. Ravi tested positive, so it is 97% certain that Ravi has the condition.",
+    "hidden_annotation": "Deterministic template variant: base rate neglect (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-08",
+    "sub_battery": "known_flaw",
+    "flaw_class": "post_hoc_causation",
+    "seed": 63155066993136,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "I wore the green jersey right before we won both games. Therefore the jersey caused the wins.",
+    "hidden_annotation": "Deterministic template variant: post hoc causation (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-09",
+    "sub_battery": "known_flaw",
+    "flaw_class": "dormitive_vacuity",
+    "seed": 52800435608597,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Glue bonds surfaces because it possesses an adhesive capacity \u2014 a power whose nature is to make things stick.",
+    "hidden_annotation": "Deterministic template variant: dormitive vacuity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-10",
+    "sub_battery": "known_flaw",
+    "flaw_class": "composition",
+    "seed": 91014907619548,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Every brick in the wall is light, so the wall as a whole must be light.",
+    "hidden_annotation": "Deterministic template variant: composition (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-11",
+    "sub_battery": "known_flaw",
+    "flaw_class": "dormitive_vacuity",
+    "seed": 156545322906818,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "The sedative calms patients because of its tranquilizing property, that is, a disposition whose essence is to produce calm.",
+    "hidden_annotation": "Deterministic template variant: dormitive vacuity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-12",
+    "sub_battery": "known_flaw",
+    "flaw_class": "circularity",
+    "seed": 98573627058446,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "We should trust the ratings agency because its ratings are accurate, and we know its ratings are accurate because the agency's self-assessment report assures us of it.",
+    "hidden_annotation": "Deterministic template variant: circularity (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-13",
+    "sub_battery": "known_flaw",
+    "flaw_class": "false_arithmetic_premise",
+    "seed": 3937591326913,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Since 13 plus 28 equals 42, and 42 is divisible by 7, the sum of 13 and 28 is divisible by 7.",
+    "hidden_annotation": "Deterministic template variant: false arithmetic premise (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-14",
+    "sub_battery": "known_flaw",
+    "flaw_class": "denying_the_antecedent",
+    "seed": 118079527577633,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "If a metal is iron, it conducts electricity. Copper is not iron. Therefore it cannot conduct electricity.",
+    "hidden_annotation": "Deterministic template variant: denying the antecedent (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-15",
+    "sub_battery": "known_flaw",
+    "flaw_class": "equivocation",
+    "seed": 79588679258629,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Only man is rational. No woman is a man. Therefore no woman is rational.",
+    "hidden_annotation": "Deterministic template variant: equivocation (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-16",
+    "sub_battery": "known_flaw",
+    "flaw_class": "affirming_the_consequent",
+    "seed": 66779895885086,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "If the server overheats, requests time out. Requests are timing out. Therefore the server overheated.",
+    "hidden_annotation": "Deterministic template variant: affirming the consequent (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-17",
+    "sub_battery": "known_flaw",
+    "flaw_class": "denying_the_antecedent",
+    "seed": 262910861311825,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "If a plant is a cactus, it can store water. This succulent is not a cactus. Therefore it cannot store water.",
+    "hidden_annotation": "Deterministic template variant: denying the antecedent (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-18",
+    "sub_battery": "known_flaw",
+    "flaw_class": "false_arithmetic_premise",
+    "seed": 26577439638009,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Since 6 times 9 equals 52, and 52 is even, the product of 6 and 9 is even.",
+    "hidden_annotation": "Deterministic template variant: false arithmetic premise (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-19",
+    "sub_battery": "known_flaw",
+    "flaw_class": "post_hoc_causation",
+    "seed": 47075956359143,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "The new manager arrived immediately before sales fell. Therefore the manager's arrival caused the fall in sales.",
+    "hidden_annotation": "Deterministic template variant: post hoc causation (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-20",
+    "sub_battery": "known_flaw",
+    "flaw_class": "conjunction_fallacy",
+    "seed": 52056097302138,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Marta is a quiet chess champion. It is therefore more probable that Marta is a librarian who plays chess on weekends than that she is a librarian.",
+    "hidden_annotation": "Deterministic template variant: conjunction fallacy (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-21",
+    "sub_battery": "known_flaw",
+    "flaw_class": "base_rate_neglect",
+    "seed": 91611795876920,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "A condition affects 1 in 5,000 people. The screening test is 98% accurate. Omar tested positive, so it is 98% certain that Omar has the condition.",
+    "hidden_annotation": "Deterministic template variant: base rate neglect (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-22",
+    "sub_battery": "known_flaw",
+    "flaw_class": "equivocation",
+    "seed": 248907857553909,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "A plan with no flaws is a perfect plan. This plan is nothing, and nothing is without flaws. Therefore this plan is perfect.",
+    "hidden_annotation": "Deterministic template variant: equivocation (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-23",
+    "sub_battery": "known_flaw",
+    "flaw_class": "hasty_generalization",
+    "seed": 57168449602639,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "The first two reviewers liked the draft. So nearly all readers will like it.",
+    "hidden_annotation": "Deterministic template variant: hasty generalization (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-24",
+    "sub_battery": "known_flaw",
+    "flaw_class": "arithmetic_resource_error",
+    "seed": 277865084066085,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Each tent sleeps 3 campers and we have 11 campers, so 3 tents are enough for everyone.",
+    "hidden_annotation": "Deterministic template variant: arithmetic resource error (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-25",
+    "sub_battery": "known_flaw",
+    "flaw_class": "composition",
+    "seed": 227306059926257,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "Each committee member is impartial individually, so the committee's joint report must be impartial.",
+    "hidden_annotation": "Deterministic template variant: composition (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-26",
+    "sub_battery": "known_flaw",
+    "flaw_class": "denying_the_antecedent",
+    "seed": 38534614907119,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "If a book is a dictionary, it contains definitions. This encyclopedia is not a dictionary. Therefore it cannot contain definitions.",
+    "hidden_annotation": "Deterministic template variant: denying the antecedent (ground truth by construction)."
+  },
+  {
+    "id": "kf-var-27",
+    "sub_battery": "known_flaw",
+    "flaw_class": "post_hoc_causation",
+    "seed": 161525268514400,
+    "source": "deterministic template variant of battery taxonomy",
+    "judged_text": "The streetlights come on just before the evening traffic jam. Therefore the streetlights cause the jam.",
+    "hidden_annotation": "Deterministic template variant: post hoc causation (ground truth by construction)."
+  }
+]

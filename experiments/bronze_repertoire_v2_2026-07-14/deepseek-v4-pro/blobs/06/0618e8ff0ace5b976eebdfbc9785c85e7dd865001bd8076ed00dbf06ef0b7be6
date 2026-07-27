@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "278429cb6eef5cd184e71c353b7a878c2af9fa2b3af0d41d245c191d40c7b2b0",
+      "attack": true,
+      "case": "The account claims the collapse was triggered by a synchronous systems collapse of palace redistributive economies due to a common vulnerability to drought. However, the scope explicitly excludes Egypt, which was also a highly centralized, grain-redistributing palatial economy dependent on Nile flood levels and demonstrably vulnerable to drought. The account provides no mechanism explaining why Egypt's similarly brittle administrative structure survived the same multi-year drought that allegedly caused the synchronous collapse of all other palace systems. This differential outcome undermines the claim that a common structural vulnerability to drought was the primary cause.",
+      "counterexample": null
+    },
+    {
+      "target": "79d71b90998ffc09d3b9f8ffc2218cd101447afcba09997a906741dfcb580710",
+      "attack": true,
+      "case": "The account's mechanism depends on the rapid diffusion of iron weaponry enabling peripheral groups to overwhelm bronze-age chariot aristocracies. However, the scope excludes Egypt, which also relied on a chariot-based military aristocracy and was a primary target of the Sea Peoples. The account fails to explain why Egypt's bronze-age chariot forces successfully repelled these same iron-armed, swarm-tactics infantry groups while all other palace civilizations were annihilated. This selective survival contradicts the claimed military-technological determinism.",
+      "counterexample": null
+    },
+    {
+      "target": "44a9051de10499f50f341b85859a415a0c4c47509c3de8e5e0b88bd784b92d3d",
+      "attack": true,
+      "case": "The account claims a pandemic selectively devastated densely populated palatial centers and their administrative classes, leaving a power vacuum. Yet the scope excludes Egypt, which possessed the most densely populated urban and palatial-administrative centers in the Eastern Mediterranean (e.g., Memphis, Pi-Ramesses) and was deeply integrated into the same trade networks. The account offers no mechanism for why a pathogen traveling via these trade routes would bypass Egypt's equally dense and interconnected administrative centers while devastating all others, making the selective survival claim inconsistent with the proposed epidemiological mechanism.",
+      "counterexample": null
+    }
+  ]
+}

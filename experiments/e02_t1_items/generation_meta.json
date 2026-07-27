@@ -1,0 +1,27 @@
+{
+  "schema": "deepreason-e02-t1-items-meta-v1",
+  "prereg": "experiments/e02_judge_redteam_prereg.yaml",
+  "adversary_model": "deepseek-v4-pro",
+  "adversary_temperature": 1.0,
+  "adversary_reasoning": "none (cost control; matches config/ollama-live.yaml precedent)",
+  "endpoint": "https://ollama.com/v1",
+  "determinism_note": "Item ids, seeds, topics, modes and prompts are deterministic functions of the item id (sha256). Provider-side sampling at temperature 1.0 is NOT seedable via the OpenAI-compatible surface, so re-running regenerates different texts for missing items only; committed items are the frozen corpus. Items generated after the tranche-1 restart draw topics from SAFE_TOPICS (operational topic constraint); earlier items keep their original TOPICS assignment.",
+  "known_flaw_source": "12 FLAWED fixtures from scripts/judge_battery.py plus 28 deterministic template variants over the same taxonomy",
+  "tokens": {
+    "prompt_tokens": 43753,
+    "completion_tokens": 57707,
+    "calls": 129,
+    "phases": {
+      "adversary-unknown": {
+        "prompt_tokens": 28049,
+        "completion_tokens": 39185,
+        "calls": 86
+      },
+      "adversary-toothless": {
+        "prompt_tokens": 15704,
+        "completion_tokens": 18522,
+        "calls": 43
+      }
+    }
+  }
+}

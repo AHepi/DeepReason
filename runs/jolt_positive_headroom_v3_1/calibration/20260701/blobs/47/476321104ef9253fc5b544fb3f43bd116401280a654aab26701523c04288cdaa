@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"tour\":[\"0\",\"5\",\"10\",\"12\",\"9\",\"11\",\"7\",\"4\",\"1\",\"3\",\"2\",\"13\",\"8\",\"6\"],\"rationale\":\"Modal cluster: 440-distance tour preserved; connects right-side cluster 5-10-12-9-11, then 7-4-1-3-2-13-8-6 on return.\"}",
+      "typicality": 0.95,
+      "neighbours": []
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"6\",\"8\",\"13\",\"2\",\"3\",\"1\",\"4\",\"7\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Reverse-mirror cluster: 486-distance tour; starts via left-side cluster 6-8-13-2-3-1-4-7 then 11-5-10-12-9 back to 0.\"}",
+      "typicality": 0.7,
+      "neighbours": []
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"2\",\"6\",\"8\",\"13\",\"3\",\"1\",\"4\",\"7\",\"11\",\"9\",\"12\",\"10\",\"5\"],\"rationale\":\"Atypical permutation: swaps 2/6 ordering and routes 9-12-10 instead of 10-12-9; 476-distance, defies dominant pattern.\"}",
+      "typicality": 0.2,
+      "neighbours": []
+    }
+  ]
+}

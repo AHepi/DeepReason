@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates the std-hist rubric because its forbidden case (tin ingot stockpiles found in palatial storerooms dating 1180-1150 BC comparable to pre-crisis levels) is a concrete observation that, if true, would directly falsify the claim that a trans-regional bronze procurement crisis severed supply chains. The mechanism depends on the collapse of tin supply, yet the forbidden case posits stockpiles at pre-crisis levels during the crisis period. The target does not provide any countervailing mechanism (e.g., stockpiles being unusable due to piracy or administrative collapse) that would reconcile this evidence with the claimed crisis. Therefore, the target fails to satisfy the standard's requirement that forbidden cases be concrete observations which could realistically have obtained and that the mechanism must be consistent with them.",
+  "counterexample": null
+}

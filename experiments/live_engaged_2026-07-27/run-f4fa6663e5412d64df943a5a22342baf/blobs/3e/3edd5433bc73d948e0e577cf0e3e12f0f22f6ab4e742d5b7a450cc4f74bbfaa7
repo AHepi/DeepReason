@@ -1,0 +1,7 @@
+```json
+{
+  "op": "replace",
+  "path": "/sections/0/ledger_entry_handles",
+  "value": ["E1"]
+}
+```

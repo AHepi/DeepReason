@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which shattered the social contract between the wanax and the populace.\", \"mechanism\": \"Climate-induced agricultural failure led to the inability of centralized bureaucracies to provision dependent populations and maintain military forces, triggering internal revolts and mass migration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed layers of Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal climate-systems view, heavily supported by pollen data and sediment cores indicating aridification.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a specific technological shift where loose infantry formations utilizing javelins and long swords rendered the chariot-based aristocratic military monopoly obsolete.\", \"mechanism\": \"Democratization of warfare allowed non-elite groups (Sea Peoples, highland tribes) to defeat professional chariot corps, leading to the decapitation of the warrior-kings who held the palace systems together.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Nubia\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot units remained the decisive battlefield force in major conflicts post-1200 BC in the Levant\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A military-determinist view; challenges include explaining why Egypt, which also used chariots, survived by adapting tactics earlier.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of international trade networks caused by the piracy of intermediate maritime actors, severing the supply of essential bronze tin and luxury goods required to sustain elite legitimacy.\", \"mechanism\": \"Disruption of the Cyprus-mediated tin trade crippled the production of bronze weaponry and ritual objects, causing a loss of prestige for rulers and fracturing the diplomatic alliance system (the 'Club of Great Powers').\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Inland Assyria\"]}, \"forbidden\": [{\"case\": \"Discovery of uninterrupted large-scale tin ingot shipments dating to 1190-1150 BC in shipwrecks off the Turkish coast\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An economic-network hypothesis; it struggles to explain the total destruction of inland capitals like Hattusa which were less dependent on immediate maritime contact than coastal Ugarit.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.48
+    }
+  ]
+}

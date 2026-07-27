@@ -1,0 +1,51 @@
+{
+  "schema": "deepreason-jolt-trigger-glm52-pilot-v2-forensic-addendum-v1",
+  "report": "experiments/results/jolt_trigger_glm52_pilot_v2_report.json",
+  "finding": "TRIGGER_FALSE_POSITIVE_AT_KNOWN_OPTIMUM",
+  "finite_domain": {
+    "method": "exhaustive enumeration of all 6-element subsets of integers 1..20",
+    "constraints": "sum=60 and every adjacent sorted difference >=2",
+    "objective": "maximum integer product",
+    "global_optimum": 675675,
+    "unique_witness": [5, 7, 9, 11, 13, 15]
+  },
+  "trigger_state": {
+    "source_best": 675675,
+    "remaining_objective_headroom": 0,
+    "registered_trigger": true,
+    "trigger_window_valid_admissions": 8,
+    "objective_improvements_in_window": 0,
+    "new_mechanism_classes_in_window": 0
+  },
+  "causal_interpretation": {
+    "jolt_efficacy_identified": false,
+    "reason": "No branch could improve the primary objective because the source state was already globally optimal. Non-improvement was healthy convergence, not unproductive stagnation.",
+    "whole_run_policy_effect_identified": false,
+    "hard_orbit_effect_identified": false
+  },
+  "branch_descriptives": {
+    "J0": {"verified_progress": false, "valid_admissions": 7, "functionally_novel": 1, "post_branch_tokens": 12414},
+    "J3": {"verified_progress": false, "valid_admissions": 14, "functionally_novel": 2, "post_branch_tokens": 9691},
+    "J4": {"verified_progress": false, "valid_admissions": 7, "functionally_novel": 3, "post_branch_tokens": 9547},
+    "J6": {"verified_progress": false, "valid_admissions": 2, "functionally_novel": 1, "post_branch_tokens": 17855, "schema_failures": 1}
+  },
+  "retained_root_verification": {
+    "source": {"violations": 0, "logged_tokens": 24842, "conjecturer_calls": 15},
+    "J3": {"violations": 0, "logged_tokens": 34533, "conjecturer_calls": 20},
+    "J0": {"violations": 0, "logged_tokens": 37256, "conjecturer_calls": 20},
+    "J4": {"violations": 0, "logged_tokens": 34389, "conjecturer_calls": 20},
+    "J6": {"violations": 0, "logged_tokens": 38743, "conjecturer_calls": 19}
+  },
+  "authority_check": {
+    "active_llm_roles": ["conjecturer"],
+    "reasoning": "none",
+    "judge_calls": 0,
+    "critic_calls": 0,
+    "pairwise_calls": 0,
+    "synthesizer_calls": 0,
+    "status_source": "deterministic predicate",
+    "jolt_created_warrants": 0,
+    "jolt_created_attack_edges": 0
+  },
+  "required_design_correction": "On finite domains with a known optimum, a soft-stagnation trigger must require positive verifier headroom. A no-improvement window at zero headroom is healthy convergence and is ineligible for jolt-efficacy analysis."
+}

@@ -1,0 +1,66 @@
+```json
+{
+  "edits": [
+    {
+      "content": "<div id=\"parallax-bg-root\" style=\"position:fixed; inset:0; background:#020508; z-index:-1; overflow:hidden\">",
+      "changed_fields": [
+        "background"
+      ]
+    },
+    {
+      "content": ".c2-blob { position:absolute; filter:blur(80px); opacity:0.3; border-radius:50%; }",
+      "changed_fields": [
+        "filter",
+        "opacity"
+      ]
+    },
+    {
+      "content": ".c2-glass { position:absolute; background:rgba(255,255,255,0.03); backdrop-filter:blur(20px); border:1px solid rgba(0,255,150,0.2); border-radius:24px; }",
+      "changed_fields": [
+        "background",
+        "backdrop-filter",
+        "border",
+        "border-radius"
+      ]
+    },
+    {
+      "content": "<div id=\"parallax-bg-root-L1\" class=\"c2-blob\" style=\"width:50vw; height:50vw; background:#7B2CFF; top:-15%; left:-5%\"></div>",
+      "changed_fields": [
+        "width",
+        "height",
+        "background",
+        "top",
+        "left"
+      ]
+    },
+    {
+      "content": "<div id=\"parallax-bg-root-L2\" class=\"c2-blob\" style=\"width:35vw; height:35vw; background:#00FFC2; bottom:-10%; right:-10%\"></div>",
+      "changed_fields": [
+        "width",
+        "height",
+        "background",
+        "bottom",
+        "right"
+      ]
+    },
+    {
+      "content": "document.getElementById('parallax-bg-root-L1').style.transform = `translateY(${o * -0.2}px)`;",
+      "changed_fields": [
+        "transform"
+      ]
+    },
+    {
+      "content": "document.getElementById('parallax-bg-root-L2').style.transform = `translateY(${o * -0.4}px)`;",
+      "changed_fields": [
+        "transform"
+      ]
+    },
+    {
+      "content": "document.getElementById('parallax-bg-root-L3').style.marginTop = `${Math.cos(t)*25}px`;",
+      "changed_fields": [
+        "marginTop"
+      ]
+    }
+  ]
+}
+```

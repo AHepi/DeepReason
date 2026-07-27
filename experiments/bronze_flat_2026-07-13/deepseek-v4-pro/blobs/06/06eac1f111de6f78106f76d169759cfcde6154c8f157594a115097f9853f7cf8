@@ -1,0 +1,36 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The collapse was triggered by a rapid, disruptive change in infantry tactics and weaponry (the 'Infantry Revolution') that rendered the elite chariot-based armies of the Mycenaean, Hittite, and Levantine palaces obsolete, while Egypt's survival is explained by its successful and rapid adoption of these new mercenary tactics.",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473a140902a5c3d07b272b3db40eb3dbe144f3d"
+        }
+      ]
+    },
+    {
+      "content": "The collapse was a cascading failure of a specialized, interdependent 'palace economy' network triggered by a prolonged drought that caused a primary grain shortage, leading to famine, elite delegitimization, and a domino effect of trade disruption and refugee movement that Egypt survived only because of the Nile's unique, predictable, and non-rain-dependent floodplain agriculture.",
+      "typicality": 0.9,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "a5aafc7a335580543dc82007f9790f1067f575f6deee70695f213489a5450d86"
+        }
+      ]
+    },
+    {
+      "content": "The collapse was a synchronized, elite-driven dismantling of the palatial system, a 'Systemic Revolt' by subordinate social groups (merchants, mercenaries, rural producers) who had grown in power and resented the extractive, rigid palatial hierarchy, while Egypt's survival is explained by its pharaonic state's ability to violently suppress this internal revolt and re-centralize power.",
+      "typicality": 0.5,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "74fde5320d6c79520ea82d2a3e2c25a5ecc8e0cb50c7053198c5a3b0ecd284b"
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, B=0.30, ambiguity rate = 0 (all unique pluralities), but harness strictly beats SC by > 0.02 (would refute: ties are necessary for improvement)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b1288691ea94","observation_valued":false},"id":"fc:b1288691ea94","schema":"commitment"}

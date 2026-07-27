@@ -1,0 +1,9 @@
+{
+  "relation": "REFUTED IF: The military resilience of Egypt (3544632a92cf) is not a specific instance of the general mechanism in 263738c8259b (complexity mismatch producing legitimation crises), but rather a separate mechanism (ritual delegation of military authority) that independently explains survival without requiring the complexity mismatch variable.",
+  "connects": [
+    "33b607e2ce02c00ba7631524ea3907b9830d39d465d3c7c3a40742bee07d1c45",
+    "c28f7164035b9dfa2dc6450d13b0da256745deca11feee65bb5caa163b8009b6",
+    "3544632a92cf7a50db302d9eb58b5864f9a4985d45faf911b478bcfe0de5f651",
+    "263738c8259bc4148e6f6816368a395fe17891165db7892347d95082bf955461"
+  ]
+}

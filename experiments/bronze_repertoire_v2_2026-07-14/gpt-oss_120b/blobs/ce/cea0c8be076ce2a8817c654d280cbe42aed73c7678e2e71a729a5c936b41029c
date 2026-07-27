@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target claims a mechanism of 'failure of succession mechanisms' and 'internal elite competition' causing collapse in Mycenaean Greece, yet explicitly lists as a forbidden case 'Evidence of continued stable royal succession in Mycenaean palaces until 1100 BCE.' This is a direct contradiction: if stable royal succession demonstrably continued until 1100 BCE, then the claimed mechanism of succession failure cannot be the cause of collapse in that region. The standard requires that forbidden cases be concrete observations that could realistically have obtained and that would falsify the mechanism; by stipulating this case as forbidden, the target concedes that its own mechanism is empirically falsifiable by a specific, datable pattern of stable succession. The target provides no account of how systemic collapse via succession failure is compatible with evidence of continued stable succession, thus the mechanism fails the standard's requirement to name a causal process that is testable against the forbidden case without self-contradiction.",
+  "counterexample": [
+    "Evidence of continued stable royal succession in Mycenaean palaces until 1100 BCE"
+  ]
+}

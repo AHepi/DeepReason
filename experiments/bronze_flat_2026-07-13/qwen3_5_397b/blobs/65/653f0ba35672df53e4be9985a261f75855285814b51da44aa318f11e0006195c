@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) regarding 'forbidden cases'. The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern)'. The target's forbidden case ('Evidence demonstrates that Mycenaean or Hittite armies successfully adopted light infantry tactics...') is a meta-statement about the existence of evidence rather than a concrete historical observation itself. A valid forbidden case under std-hist would be a specific counterfactual event, such as 'Hittite records from 1190 BCE describe the successful deployment of native light infantry units against raiders.' By framing the constraint as the presence of 'evidence' rather than the occurrence of the event, the target fails to define a concrete, datable pattern that could have obtained, rendering the falsification condition abstract rather than observational.",
+  "counterexample": null
+}

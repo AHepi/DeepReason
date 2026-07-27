@@ -1,0 +1,148 @@
+{
+  "candidates": [
+    {
+      "claim": "The primary failure is a missing school-to-route binding in the scheduler, enabling prompt-delegated control over which model serves which reasoning role, violating C1 (code/immutable-policy control) and C5 (prose cannot alter routes).",
+      "mechanism": "The scheduler (src/deepreason/scheduler/scheduler.py:410-520) iterates schools as prompt/provenance conditioning but does not enforce a deterministic, manifest-frozen mapping from each school to a specific configured route. This allows a model's output prose to influence subsequent routing decisions (e.g., a 'critic' school could emit text that causes the harness to route a 'conjecturer' call to a different model). The fix is a school-route binding table in the immutable manifest, enforced by the adapter's route-lease verification (src/deepreason/llm/adapter.py:300-430).",
+      "counterconditions": [
+        "If the scheduler already has a hardcoded mapping from school name to route name that is not overridable by model output, this failure is not present.",
+        "If the manifest's role routes are already per-school and the scheduler uses them as a strict lookup, the binding is already deterministic.",
+        "If the adapter's route lease check already includes school identity and rejects mismatches, the control is already in the harness."
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "5cd28b507a81b9472fc2110237d7e3d06791b980f0bde986add9ae797e643c3",
+          "f1f1461eefbbba50ea2f9d6f87e9aed22230fa4538fe1c22fddbc15aaeec0b83",
+          "60444e409c4b9e3a7269895ef335ec245a64d1d1c430a1518588546331c66"
+        ],
+        "shared_structure": [
+          "Both the documented manifest and the scheduler define role routes.",
+          "Both the adapter and the scheduler interact with the concept of a 'school' as a conditioning context.",
+          "Both the manifest and the adapter are designed to enforce deterministic routing."
+        ],
+        "disanalogies": [
+          "The manifest freezes role routes but does not explicitly freeze school-to-role bindings.",
+          "The adapter verifies route leases but may not verify that the school context matches the route.",
+          "The scheduler's school conditioning is for prompt/provenance, not necessarily for route selection."
+        ],
+        "transfer_claims": [
+          "The manifest should contain an explicit, immutable school-to-route mapping.",
+          "The scheduler must use this mapping to select the route, not derive it from model output.",
+          "The adapter must verify that the school identity in the call context matches the route's bound school."
+        ],
+        "overturn_conditions": [
+          "Evidence that the scheduler already uses a hardcoded school-to-route mapping from the manifest.",
+          "Evidence that the adapter's route lease verification already includes school identity.",
+          "A demonstration that model output cannot influence routing decisions under any code path."
+        ]
+      },
+      "typicality": 0.85,
+      "optional_refs": [
+        "bf5974338a81b50d98c6410ff596dd329ecaded0",
+        "60444e409c4b9e3a7269895ef335ec245a64d1d1c430a1518588546331c66"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "scheduler-route-binding",
+          "adapter-school-verification"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The critic role's output is recorded as non-authoritative 'scrutiny' without a formal epistemic status transition, violating C9 (formal epistemic status canonical) and enabling hidden controller behaviour through unverified criticism that can influence subsequent reasoning without audit trail.",
+      "mechanism": "The critic rule (src/deepreason/rules/crit.py:31-69) records prose criticism as 'scrutiny' but does not produce a formal epistemic status change (e.g., 'challenge-issued', 'warrant-required') in the canonical state. This means a compromised or prompt-injected critic could emit text that appears to be mere observation but actually steers subsequent reasoning steps (via scratch attention) without leaving a verifiable, replayable state transition. The repair is a deterministic critic-to-status mapping: the harness parses the critic's structured output (not prose) and transitions formal epistemic status accordingly.",
+      "counterconditions": [
+        "If the critic's output is already parsed into a formal status transition by deterministic harness code, this failure is not present.",
+        "If the bridge or adjudicator already ignores critic prose and only acts on formal status, the attack surface is mitigated.",
+        "If the scratch attention mechanism only uses formal status, not critic prose, to select evidence, the hidden influence path is blocked."
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "b5f7cb1f66a4325cbb69a9eaf559d87401852b207dd3fbb7bcb88b67ce358950",
+          "731938a568fa4a6200024c0bcf743cf46f14b0ead5088c5e33ef1ac2c558d5b1",
+          "5cd28b5078a81b9472fc2110237d7e3d06791b980f0bde986add9ae797e643c3"
+        ],
+        "shared_structure": [
+          "Both the amendment and the harness define scratch as non-authoritative.",
+          "Both the critic and the bridge interact with the concept of evidence and formal state.",
+          "Both the amendment and the harness require formal epistemic status to be canonical."
+        ],
+        "disanalogies": [
+          "The amendment defines scratch as separate; the critic's output may be stored in scratch, not formal state.",
+          "The bridge assembles evidence from formal state; critic prose may not be considered evidence.",
+          "The harness replays formal state separately; critic prose may not be replayed into formal state."
+        ],
+        "transfer_claims": [
+          "The critic must produce a structured, typed output that the harness parses into a formal epistemic status transition.",
+          "The harness must reject critic outputs that do not conform to the expected status transition schema.",
+          "The scratch attention mechanism must only use formal epistemic status, not critic prose, to select evidence."
+        ],
+        "overturn_conditions": [
+          "Evidence that the critic already produces a structured status transition that is parsed by the harness.",
+          "Evidence that the bridge/adjudicator ignores critic prose and only uses formal status.",
+          "A demonstration that critic prose cannot influence subsequent reasoning steps in any code path."
+        ]
+      },
+      "typicality": 0.75,
+      "optional_refs": [
+        "bf5974338a81b50d98c6410ff596dd329ecaded0",
+        "b5f7cb1f66a4325cbb69a9eaf559d87401852b207dd3fbb7bcb88b67ce358950"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "critic-formal-status",
+          "epistemic-transition-schema"
+        ],
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The grounded bridge's two-stage workflow (src/deepreason/bridge/harness.py:286-457) freezes formal state and asserts it is unchanged, but does not cryptographically commit to the frozen state hash before the model call, enabling a TOCTOU (time-of-check-time-of-use) attack where a concurrent or re-entrant harness operation modifies formal state between freeze and assertion, violating C2 (consequential transitions logged) and C3 (canonical replay).",
+      "mechanism": "The bridge freezes formal state by taking a snapshot, then runs a model call, then asserts the state is unchanged. However, if the harness allows concurrent operations (e.g., via async schools or repair workflows), another operation could modify formal state after the freeze but before the assertion. The assertion would then fail, but the model call already consumed the frozen state, leading to an inconsistent evidence base. The repair is a cryptographic commitment: the bridge computes a hash of the frozen state, includes it in the model call context, and the assertion verifies the hash; any concurrent modification is detected and the bridge aborts with a replayable event.",
+      "counterconditions": [
+        "If the harness enforces a global lock during bridge execution, preventing concurrent state modifications, this TOCTOU is not possible.",
+        "If the bridge's state freeze is implemented as a copy-on-write snapshot that is immune to subsequent modifications, the assertion is redundant but safe.",
+        "If the model call is purely functional and does not depend on the exact state hash, the inconsistency may not lead to incorrect reasoning."
+      ],
+      "analogy": {
+        "source_memory_refs": [
+          "731938a568fa4a6200024c0bcf743cf46f14b0ead5088c5e33ef1ac2c558d5b1",
+          "7e8d35aabffc101bab4fd5da9c2db5ff619e57b70233f140c703335e45d58213",
+          "5cd28b5078a81b9472fc2110237d7e3d06791b980f0bde986add9ae797e643c3"
+        ],
+        "shared_structure": [
+          "Both the harness and the bridge manage formal state with append-only events.",
+          "Both the amendment and the bridge require canonical replay.",
+          "Both the harness and the bridge interact with the concept of state freezing for evidence assembly."
+        ],
+        "disanalogies": [
+          "The harness replays state into separate structures; the bridge operates on live state.",
+          "The amendment requires a two-stage ledger-before-composition bridge; the current implementation may not fully separate the stages.",
+          "The harness's event commit is append-only; the bridge's freeze is a read operation."
+        ],
+        "transfer_claims": [
+          "The bridge must compute a cryptographic hash of the frozen state before the model call.",
+          "The model call context must include this hash, and the model must be instructed to reference it.",
+          "The post-call assertion must verify the hash, not just structural equality."
+        ],
+        "overturn_conditions": [
+          "Evidence that the harness enforces a global lock during bridge execution.",
+          "Evidence that the bridge uses a copy-on-write snapshot that is immune to concurrent modification.",
+          "A demonstration that concurrent state modification during bridge execution is impossible in the current architecture."
+        ]
+      },
+      "typicality": 0.6,
+      "optional_refs": [
+        "bf5974338a81b50d98c6410ff596dd329ecaded0",
+        "731938a568fa4a6200024c0bcf743cf46f14b0ead5088c5e33ef1ac2c558d5b1"
+      ],
+      "sidecar": {
+        "requested_context_aliases": [
+          "bridge-state-freeze",
+          "concurrent-modification-vector"
+        ],
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

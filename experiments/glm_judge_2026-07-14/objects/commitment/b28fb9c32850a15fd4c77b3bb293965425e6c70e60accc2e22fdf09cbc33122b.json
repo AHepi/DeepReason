@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=5, e=0.30, P=0.7, R=0.8: harness accuracy equals SC accuracy (tie, no strict gain) despite being inside the predicted winning zone"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:2fc7cc952610","observation_valued":false},"id":"fc:2fc7cc952610","schema":"commitment"}

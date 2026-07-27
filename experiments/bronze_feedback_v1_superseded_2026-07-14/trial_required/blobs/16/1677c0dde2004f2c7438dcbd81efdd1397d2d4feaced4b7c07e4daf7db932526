@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (conn:3c884acf0d40) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 3c884acf0d40 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+PROBLEM CONTEXT (succ:15c9cb544971) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate 15c9cb544971 on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@bc33509b58ee: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:c711086dfa05: rubric:std-hist
+- fc:31734c6c244f: rubric:std-hist
+- fc:fd52ae8b8624: rubric:std-hist
+- fc:38994bfbf89f: rubric:std-hist
+- fc:801c2ab85542: rubric:std-hist
+- fc:7ba2589d406b: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET 9781fce4dfd97189194b0f2430b0e55e872a840a5dbcc2e2fa4a8a4ec0b4610f
+contradicts: 3c884acf0d40 attributes Egypt's persistence to a specific structural buffer (dispersed irrigation/private entrepreneurship), while c3a117d0bb0b attributes it to stochastic variation without causal structure. The former is refuted if the latter's null model (random survival) cannot be rejected.
+commitments: hv-floor@2a45b7988522, lineage-ref@bc33509b58ee, relation-form@578e42df713e
+
+TARGET 0bba8e2b69407f3a1b6f1f6316400b53409e30547e4ab30e77078fea9c16a193
+{"claim": "Sea Peoples invasions caused direct military destruction of palace centers, while Egypt's geographic depth and fortified Nile corridor enabled absorption of refugee waves and raiding parties without systemic disintegration", "mechanism": "Military invasion differential: linear coastal geography of palatial states enabled rapid sequential destruction, whereas Egypt's compact riparian geography with unified command allowed defensive in-depth attrition", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Egyptian survival"], "excludes": ["Mesopotamian continuities", "Iranian plateau developments", "Cyprus intermediary role"]}, "forbidden": [{"case": "Archaeological evidence shows Sea Peoples destruction layers post-date administrative collapse and abandonment at major sites", "eval": "rubric:std-hist"}, {"case": "Egyptian records describe Sea Peoples as settled mercenaries integrated into military rather than repelled invaders", "eval": "rubric:std-hist"}, {"case": "Hittite capital Hattusa shows no destruction layer but gradual abandonment", "eval": "rubric:std-hist"}], "prose_notes": "Reinventional of traditional invasion hypothesis with geographic framing; vulnerable to criticism that it reverses cause and effect if collapse preceded invasions"}
+commitments: skeleton-wf, kappa-hist, fc:c711086dfa05, fc:31734c6c244f, fc:fd52ae8b8624
+
+TARGET e8282b4c3acdcd3a94f390e85537fe4b5c9d6e082c22ab9d6c5a78f259ec7e7a
+{"claim": "Earthquake storms ('seismic storm' c. 1225-1175 BCE) sequentially destroyed centralized storage and administrative infrastructure, but Egyptian bureaucratic decentralization into nomarchic provisioning permitted reconstruction at lower scale", "mechanism": "Tectonic-cum-institutional fragility: palace economies required intact central granaries and scriptoria; Egyptian redundancy through multiple Nile harbor storage and local temple treasuries enabled post-seismic fiscal recombination", "scope": {"covers": ["Mycenaean citadel destructions", "Hittite capital relocation", "Ugarit harbor ruin", "Egyptian Theban/Memphis resilience"], "excludes": ["Climate systems", "Metallurgical trade disruption", "Post-collapse Greek recovery patterns"]}, "forbidden": [{"case": "Paleoseismic dating shows major Eastern Mediterranean earthquakes cluster 50-100 years before collapse horizon", "eval": "rubric:std-hist"}, {"case": "Egyptian temple-building programs show uninterrupted scaling 1250-1150 despite alleged seismic disruption", "eval": "rubric:std-hist"}, {"case": "Linear B archives from Pylos document continued central planning immediately before destruction without seismic preparation", "eval": "rubric:std-hist"}], "prose_notes": "Geological determinism with institutional modifier; unusual in privileging physical trigger over social response"}
+commitments: skeleton-wf, kappa-hist, fc:38994bfbf89f, fc:801c2ab85542, fc:7ba2589d406b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

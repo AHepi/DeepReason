@@ -1,0 +1,78 @@
+# Court calibration v1 - PRE-REGISTERED, committed with the frozen corpus
+# BEFORE any live call. The domain-specific sensitivity/specificity
+# measurement the record has never had: matched Bronze-style pairs, one
+# planted mechanical defect per corrupted twin, known labels by
+# construction. This is gate 2 of bronze_feedback_v2_prereg.yaml.
+
+corpus: experiments/court_calibration_items/pairs_v1.json - 42 pairs
+  (84 singles), 7 per defect class, built deterministically by
+  scripts/court_calibration_corpus.py from the frozen court-cross pool.
+  Defect classes: chronology-error, unsupported-comparison,
+  scope-contradiction, vacuous-forbidden-case, evidence-misquotation,
+  causal-non-sequitur. Every defect's identity and location is recorded.
+
+court_under_calibration: the exact configuration feedback v2 would use -
+  critic deepseek-v4-flash, defender deepseek-v4-pro, seats
+  [deepseek-v4-pro, gpt-oss:120b], order-split protocol, temp 0.
+  Conviction = concurring sustain (the harness's only status-changing
+  outcome under trial_required).
+
+design: all 84 items judged independently and blind (clean and corrupted
+  presented identically, order interleaved by pair id); per-item full
+  defended protocol; checkpoints append-only.
+
+metrics:
+  sensitivity: convicted corrupted / 42
+  false_conviction: convicted clean / 42
+  per_class_sensitivity: reported for all six classes
+  critic_objection_rates: on clean and corrupted separately
+
+predictions:
+  P1_the_gate:
+    statement: sensitivity >= 0.80 AND false_conviction <= 0.15
+    consequence_if_confirmed: active authority is granted for feedback v2
+    falsifier: either bound missed - the gate fails, feedback v2's active
+      arm is cancelled, and observe-only becomes the standing criticism
+      policy for text workloads (the original repair plan's stop condition)
+  P2:
+    statement: the scope-contradiction class has sensitivity >= the mean
+      of the other five classes (the court's measured scope obsession
+      should at least catch REAL formal contradictions)
+  P3:
+    statement: critic objection rate >= 0.90 on BOTH clean and corrupted
+      items - prosecution is unconditional here too, so any discrimination
+      the system shows lives in the court, not the critic
+
+decision_rules: report experiments/results/court_calibration_v1_report.json;
+  index line appended
+budget: {llm_tokens: <= 700000, max 3 in flight, launched only after the
+  schema comparator releases the concurrency slots}
+
+# --- appended after the run (verdicts against the prereg as written) ---
+result:
+  report: experiments/results/court_calibration_v1_report.json
+  verdicts: {P1_the_gate: REFUTED, P2: REFUTED, P3: CONFIRMED}
+  measured:
+    sensitivity: 0.119    # bound 0.80 - the gate fails decisively
+    false_conviction: 0.0 # bound 0.15 - perfect specificity, by inertness
+    per_class: {causal-non-sequitur: 5/7, chronology-error: 0/7,
+      evidence-misquotation: 0/7, scope-contradiction: 0/7,
+      unsupported-comparison: 0/7, vacuous-forbidden-case: 0/7}
+    critic_objection_rate: 1.0 on clean AND corrupted
+  headline_readings:
+    - the defended court is perfectly specific because it is nearly inert -
+      it missed 88 percent of provable planted defects, including ALL seven
+      genuine formal scope contradictions, while the same court grounds
+      three quarters of its objections in scope formalism. The scope
+      obsession is performative - it does not track real scope defects
+    - the only caught class is the blatant causal non sequitur - the court
+      convicts only what contradicts itself inside one sentence
+    - with known labels the full criticism-layer picture is now measured:
+      bare critic 67.5 percent false conviction (critic_specificity),
+      prose trials rescue half the guilty (defended_trial_v1), defended
+      court catches 12 percent of the guilty (here). No configuration
+      tested can EARN status authority on informal text
+  standing_policy_adopted: observe-only for text workloads (the code
+    default since the repair; now empirically forced rather than
+    precautionary). Feedback v2's active arm is cancelled per its gate 2;
+    the study does not run.

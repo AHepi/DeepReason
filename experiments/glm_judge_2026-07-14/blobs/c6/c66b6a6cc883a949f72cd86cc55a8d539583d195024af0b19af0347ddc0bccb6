@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The criticism conflates the stated critic thresholds (P > e, R > 1-e) with the exact net-benefit boundary R·0.29 > (1-P)·0.71, treating the bounds as if they were claimed to be the tight algebraic solution. They are not: P > e and R > 1-e are sufficient regime guards, not the minimal satisfying point. Because the net-benefit inequality is monotone increasing in both R and P, it is enough that the critic operates strictly above those floors; the boundary case R = 1-e, P = e is explicitly excluded by the strict inequalities."}
+```

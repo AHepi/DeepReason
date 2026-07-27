@@ -1,0 +1,16 @@
+{
+  "candidates": [
+    {
+      "content": "The simultaneous collapse was driven primarily by coordinated Sea Peoples invasions that overwhelmed palace economies.",
+      "typicality": 0.85
+    },
+    {
+      "content": "A prolonged megadrought around 1200 BC caused severe agricultural shortfalls, undermining palace economies.",
+      "typicality": 0.6
+    },
+    {
+      "content": "The depletion of bronze ore and the ensuing transition to iron technology destabilized elite control over weaponry and trade.",
+      "typicality": 0.3
+    }
+  ]
+}

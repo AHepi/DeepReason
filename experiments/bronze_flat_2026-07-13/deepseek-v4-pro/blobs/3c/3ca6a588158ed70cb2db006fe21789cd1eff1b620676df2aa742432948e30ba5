@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The Late Bronze Age collapse was caused by a systemic failure of the palatial redistributive economy, triggered by a cascade of disruptions in the trans-Mediterranean trade network for tin and copper, which made bronze production unsustainable and unraveled the interdependent elite structures.\", \"mechanism\": \"Palatial centers depended on tightly coupled long-distance exchange of bulk metals (especially tin from Central Asia/Iberia and copper from Cyprus) to produce bronze for weapons, tools, and prestige goods. A disruption in this network—possibly due to piracy, climate shifts affecting overland routes, or political instability in intermediary zones—caused a critical shortage of tin. Without bronze, palatial elites could not reward retainers, maintain military superiority, or produce agricultural surplus, leading to rapid internal delegitimization, elite flight, and systemic collapse across interconnected states.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows uninterrupted tin imports and stable bronze production in Mycenaean and Hittite centers through 1200 BC.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Written records from Ugarit and Hattusa document abundant tin reserves and active metal workshops immediately prior to their destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because it controlled its own gold sources and could trade gold for tin via Red Sea routes bypassing the disrupted northern networks, and its grain-based redistributive economy was less dependent on bronze for agricultural surplus.\"}",
+      "typicality": 0.85,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84539cf366e0b6e0106eec674c04c07231357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd368e7604b8176a2ad5ea50e120cc5c4e6c0a75dfed48"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid military revolution—the shift from chariot-based aristocratic warfare to massed infantry using new iron weapons and tactics—which overthrew the palatial elites who had monopolized bronze weaponry and chariotry.\", \"mechanism\": \"Iron smelting technology, previously known but uneconomical, became viable due to disruptions in tin supply or innovations in carburization. Simultaneously, new infantry formations (like the 'Sea Peoples' depicted at Medinet Habu) employing javelins, long swords, and massed shock tactics rendered chariot forces obsolete. Palatial states, whose legitimacy and power rested on chariot-riding warrior aristocracies, were militarily defeated by these mobile infantry groups, leading to the destruction of their citadels.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Destruction layers at Mycenaean and Hittite sites show no evidence of iron weapons or military assault, only fire and abandonment.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Contemporary Egyptian records and reliefs depict the Sea Peoples using exclusively bronze weapons and chariots, not iron or massed infantry.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because it successfully adapted its military to counter massed infantry (as recorded in Ramesses III's land and sea battles) and had the centralized resources to hire mercenaries and rapidly re-equip, while the brittle chariot-elites of other states could not.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "d7dfc6e3935c95235ab0dd94a473140a9025c3d8b272b27db40d3ebe3df4f"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a pandemic of a highly virulent, zoonotic disease that spread along trade routes, causing acute depopulation and social disintegration specifically in densely populated palatial centers, while Egypt's geographic isolation and quarantine practices limited its impact.\", \"mechanism\": \"A pathogen (e.g., an early hemorrhagic fever or plague strain) entered the Eastern Mediterranean via the flourishing trade networks, possibly from Central Asia. The palatial economies, characterized by high population density in administrative centers, large-scale grain storage attracting disease vectors, and constant movement of people and goods, became super-spreader environments. Massive, rapid mortality among the administrative and artisan classes caused systemic collapse of economic and political structures, leading survivors to abandon the centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Mass graves with evidence of violent trauma, not disease, are the primary archaeological feature of the period's destruction layers.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian records from the period describe widespread plague and mass mortality within Egypt itself, matching the severity in other regions.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived due to lower population density along the Nile compared to urbanized palatial centers, natural quarantine provided by the surrounding deserts, and a robust public health response possibly documented in the 'Plague Prayers of Mursili' being adopted as Egyptian policy. This is atypical because it minimizes the role of human agency and military conflict.\"}",
+      "typicality": 0.35,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84539cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ]
+    }
+  ]
+}

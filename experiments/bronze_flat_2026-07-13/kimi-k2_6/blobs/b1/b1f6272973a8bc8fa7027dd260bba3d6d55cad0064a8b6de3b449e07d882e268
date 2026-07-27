@@ -1,0 +1,9 @@
+```json
+{
+  "specs": [
+    "{\"claim\": \"Climate-triggered systems collapse\", \"mechanism\": \"Centennial mega-drought and famine\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimate proxies show stable or pluvial conditions 1250-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Narrowly materialist; Mediterranean-wide aridity\"; \"}",
+    "{\"claim\": \"Seaborne invasion cascade\", \"mechanism\": \"Maritime raider disruption of trade networks\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Hittite Anatolia\"]}, \"forbidden\": [{\"case\": \"Linear B records show no defensive mobilization against external threat\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Actor-centered; voluntarist violence\"; \"}",
+    "{\"claim\": \"Internal legitimation crisis\", \"mechanism\": \"Ritual-political authority fragmentation\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Mycenaean Greece\"], \"excludes\": [\"Ugarit\", \"Levantine city-states\", \"Egypt\"]}, \"forbidden\": [{\"case\": \"Continuity of central palace cult and king-lists through 1100 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Ideational; endogenous institution decay\"; \"}"
+  ]
+}
+```

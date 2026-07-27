@@ -1,0 +1,16 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism assumes that cryptographic proofs (e.g., zk-SNARKs) can guarantee consistency with *all prior entries* without addressing the fundamental problem of initial state commitment. If the published result does not include a binding to the *original* state from which the log began, silent divergence can occur by replaying a log that is internally consistent but diverges from the true initial state. The contradiction only arises if the initial state is durably bound, which this proposal does not explicitly require, leaving a gap where the log's self-certification fails to cover the starting point of the replay."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The social contract mechanism relies on the assumption that 'undetectable divergence is impossible without collusion,' but this ignores the possibility of *asymmetric information* or *verification latency*. Stakeholders may lack the capacity to replay the log in real time, and divergence could persist undetected until after critical dependencies (e.g., downstream systems, irreversible actions) have already relied on the published result. The contradiction is not immediate or inevitable; it is contingent on post-hoc discovery, which does not satisfy the problem's requirement for a *durable* binding that turns divergence into a contradiction *at the moment of replay*."
+    }
+  ]
+}
+```

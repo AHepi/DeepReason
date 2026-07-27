@@ -1,0 +1,10 @@
+You are the defender: answer the critic's case on behalf of the target artifact, addressing its specific clauses. Concede nothing that is not actually established; never invent facts.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"answer": {"minLength": 1, "title": "Answer", "type": "string"}}, "required": ["answer"], "title": "DefenderOutput", "type": "object"}
+
+THE CASE AGAINST THE TARGET:
+The target's mechanism predicts a specific, observable physical signature: increased flood-derived deposits in eastern Mediterranean sediment cores during 1220–1180 BC. The forbidden case explicitly states that no such increase is observed in high-resolution lake sediment cores from this region and period. This directly contradicts the mechanism's necessary empirical consequence, violating the standard's requirement that a historical-mechanism account must be falsifiable by concrete, datable observations. The absence of predicted flood layers undermines the claim that a hydro-climatic regime shift caused recurrent, unprecedented winter storm surges across the specified regions.
+
+TARGET:
+{"claim": "A series of unprecedented winter storm surges between 1220‑1180 BC inundated coastal lowlands, salinizing soils and destroying agricultural productivity across Mycenaean Greece, Hittite Anatolia, Ugarit, and Levantine city‑states.", "mechanism": "Hydro‑climatic regime shift toward more intense cyclonic activity caused recurrent flooding and salt‑water intrusion, leading to crop failure and famine.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution lake sediment cores from the eastern Mediterranean show no increase in flood‑derived deposits during 1220‑1180 BC.", "eval": "rubric:std-hist"}], "prose_notes": "This hypothesis predicts a temporal correlation between storm‑derived sediment layers and archaeological signs of abrupt abandonment; it diverges from hyper‑arid drought models by emphasizing excess water rather than scarcity."}

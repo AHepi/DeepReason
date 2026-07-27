@@ -1,0 +1,14 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"claim": "Increased pressure from displaced populations across the eastern Mediterranean generated Sea Peoples raiding fleets that systematically attacked Mycenaean, Hittite, Ugaritic and Levantine coastal centers, precipitating their collapse.", "mechanism": "external demographic pressure leading to maritime raider incursions", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Archaeological layers at major coastal sites lack evidence of widespread destruction or foreign weaponry dating to 1200–1150 BCE", "eval": "rubric:std-hist"}], "prose_notes": "Analytical matrix compares timing, intensity and geographic spread of raids across the four societies."}
+
+BATTERY THE EDITS WILL FACE:
+- program:skeleton_wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

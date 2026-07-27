@@ -1,0 +1,15 @@
+{
+  "evidence_class": "offline_mock",
+  "metrics": {
+    "candidate_family_count": 2,
+    "executable_test_yield": 1.0,
+    "repair_rate": 0.5,
+    "tokens_per_admitted_useful_candidate": 567.0,
+    "unique_candidate_bodies": 2,
+    "valid_first_attempt_rate": 0.5,
+    "verifier_backed_success_rate": 1.0
+  },
+  "note": "Characterization diagnostics only; never an admission, status, routing, stop, or adjudication input.",
+  "schema": "deepreason.semantic-freedom-baseline.v1",
+  "status_input": false
+}

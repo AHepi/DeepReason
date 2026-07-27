@@ -1,0 +1,24 @@
+```json
+{
+  "cases": [
+    {
+      "target": "1a806ed092b1ca847d1ff312f104346f808532292343939bd8c2eb4448f81222",
+      "attack": true,
+      "case": "The mechanism claims that Egypt survived because 'Nubian gold substituted for trade income,' but this contradicts the scope's explicit exclusion of 'Egypt proper.' The account cannot simultaneously exclude Egypt from its explanatory scope and then invoke Egypt's internal economic adaptations as part of the explanatory mechanism for why the palace civilizations collapsed while Egypt survived. The scope excludes Egypt proper, yet the mechanism requires explaining Egypt's survival—creating a structural incoherence where the claimed scope is narrower than the actual explanatory burden the theory undertakes. If Egypt's survival is explained by factors internal to Egypt (Nile corridor, Nubian gold), those are precisely factors within 'Egypt proper' that the scope forbids itself from covering.",
+      "counterexample": null
+    },
+    {
+      "target": "6903360868d259b3d16cdc95a7e0b9b123b3bbe6b85e6b396e66e02baa8a3a3d",
+      "attack": true,
+      "case": "The mechanism asserts that palaces 'prioritized elite maintenance over grain distribution, triggering peasant flight to pastoralism or highland refuge,' but this assumes a degree of peasant mobility and alternative livelihood availability that is historically questionable for the tightly-controlled palace economies of Mycenaean Greece specifically. The Linear B records show extensive palace control over land tenure, craft production, and labor obligations; 'flight to pastoralism' implies access to uncontrolled grazing lands and freedom from corvée obligations that the palace system was designed to prevent. The mechanism treats Hittite Anatolia and Mycenaean Greece as institutionally homogeneous 'extractive tributary economies,' but the Mycenaean palaces lacked the Hittite state's territorial depth and administrative hierarchy; peasant flight was structurally more constrained in Greece's narrow plains and palace-controlled harbor zones. The claim homogenizes distinct political economies under 'Douglass North institutional economics' without establishing that Mycenaean peasants actually had the exit options the mechanism requires.",
+      "counterexample": null
+    },
+    {
+      "target": "6480735f5f7a6d84ccdb89d1c898f13f31a53b675041b4e6113b49ba7bae986f",
+      "attack": true,
+      "case": "The mechanism claims ironworking 'democratized military capability' and eliminated the material basis for palatial redistribution, but this requires iron technology to have diffused widely enough to arm significant non-palatial forces before or during the collapse period (1200-1150 BC). Archaeometallurgical evidence shows iron remained rare and primarily ceremonial in this period; the 'men of iron' Hittite text (KUB XXXI 4) dates to the 13th century and refers to a specific status group, not widespread iron weaponry. The mechanism compresses a gradual technological transition (iron becoming dominant c. 900-700 BC) into a sudden causal trigger for 1200 BC collapse. Moreover, if iron's 'military inferiority against Egyptian composite bow/chariot tactics delayed transition' in Egypt, the same inferiority should have preserved bronze-based palace systems elsewhere—yet the claim says iron democratization caused collapse. This creates a selective asymmetry: iron's inferiority preserves Egypt but destroys others, without explaining why non-Egyptian elites couldn't similarly exploit bronze's tactical advantages against iron-armed opponents.",
+      "counterexample": null
+    }
+  ]
+}
+```

@@ -1,0 +1,72 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+<div id="header-root" class="c1-container">
+  <style>
+    #header-root {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem 2rem;
+      background: #050A0C;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Inter', 'Montserrat', sans-serif;
+    }
+    .c1-title {
+      color: #39FF14;
+      font-size: clamp(2rem, 5vw, 4rem);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
+      z-index: 10;
+      transition: text-shadow 0.3s ease;
+    }
+    .c1-glow-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 255, 255, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+  </style>
+  <div class="c1-glow-overlay" id="header-root-glow"></div>
+  <h1 class="c1-title">The DNA Archive: Digitalized Life</h1>
+  <script>
+    let rafId;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.c1_mount = () => {
+      if (reducedMotion) return;
+      const glow = document.getElementById('header-root-glow');
+      const update = (e) => {
+        const rect = glow.getBoundingClientRect();
+        glow.style.setProperty('--x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+        glow.style.setProperty('--y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+        rafId = requestAnimationFrame(() => {});
+      };
+      window.addEventListener('mousemove', update);
+      window.c1_updateHeaderGlow = update;
+    };
+    window.c1_destroy = () => {
+      window.removeEventListener('mousemove', window.c1_updateHeaderGlow);
+      cancelAnimationFrame(rafId);
+    };
+    window.c1_updateHeaderGlow = () => {};
+  </script>
+</div>
+
+BATTERY THE EDITS WILL FACE:
+- program:component_wf
+- program:lineage_ref
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy when confronted with prolonged drought and seismic activity, which broke the just-in-time supply chains essential for elite legitimacy.\", \"mechanism\": \"Ecological stress (drought/earthquakes) triggered a negative feedback loop in centralized bureaucracies that lacked buffer stocks, leading to rapid delegitimization and internal revolt.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of significant grain stockpiles surviving intact in destroyed palaces\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Aligns with the climate-change consensus while emphasizing the specific vulnerability of the interconnected palace structure noted in neighborhood artifact 7e3426b9.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the obsolescence of chariot-based aristocratic warfare against decentralized, flexible infantry tactics employed by marginalized groups and Sea Peoples.\", \"mechanism\": \"Military technological shift where low-cost, high-mobility infantry overwhelmed the expensive, rigid chariot corps that formed the backbone of palatial power projection.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that Sea Peoples or rebel groups primarily utilized chariots rather than light infantry in decisive battles\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Addresses the military dimension but must carefully exclude Egypt which successfully adapted its forces, referencing the critique in 2af0caa0 regarding scope consistency.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"A cascading failure of international trade networks caused by piracy and the loss of key nodal ports led to a sudden deprivation of critical bronze tin, causing economic paralysis and social fragmentation.\", \"mechanism\": \"Network theory collapse: the removal of highly connected nodes (major ports like Ugarit) due to raiding severed the long-distance supply lines for tin, rendering the bronze-dependent warrior elites powerless.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Inland Anatolia\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Discovery of abundant tin reserves or alternative bronze production centers operating normally during the destruction layers\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical focus on supply chain fragility rather than direct invasion or climate, leveraging the interconnectedness mentioned in the problem statement and avoiding the sequential migration error noted in 44cbb9bc.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Repair only the JSON value at /candidates/0/neighbours/0 for the contract error below. Return ONLY the replacement JSON value for that field or subtree, not the surrounding object.
+
+CURRENT JSON:
+["0", "5", "10", "12", "9", "11", "6", "8", "13", "2", "3", "1", "4", "7"]
+
+DIAGNOSTIC:
+{"allowed": "type='string'", "contract": "conjecturer.compact.v1", "error": "Input should be a valid string", "path": "/candidates/0/neighbours/0", "received": ["0", "5", "10", "12", "9", "11", "6", "8", "13", "2", "3", "1", "4", "7"], "repair_scope": "/candidates/0/neighbours/0", "skeleton": ""}

@@ -1,0 +1,22 @@
+{
+  "prompt_tokens": 30275,
+  "completion_tokens": 17492,
+  "calls": 121,
+  "phases": {
+    "generate": {
+      "prompt_tokens": 6567,
+      "completion_tokens": 6770,
+      "calls": 40
+    },
+    "critic_flawed": {
+      "prompt_tokens": 8928,
+      "completion_tokens": 4180,
+      "calls": 40
+    },
+    "critic_sound": {
+      "prompt_tokens": 14780,
+      "completion_tokens": 6542,
+      "calls": 41
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the palatial redistribution economy when faced with concurrent climatic drought and seismic activity, which broke the just-in-time supply chains essential for elite legitimacy.\", \"mechanism\": \"Cascading resource starvation leading to internal revolt and loss of central authority, exacerbated by the inability of rigid bureaucracies to pivot to local subsistence.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in Mycenaean citadels at the moment of destruction\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating climate data (drought) with socio-economic fragility. It aligns with the neighbourhood critique regarding rigid bureaucracies (34521c...) by specifying the mechanism as supply chain failure rather than mere administrative stubbornness.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a specific military technological shift where loose infantry formations utilizing javelins and long swords neutralized the chariot-based aristocratic monopoly on violence.\", \"mechanism\": \"Tactical obsolescence of the chariot corps allowed decentralized raiders (Sea Peoples) and internal dissidents to breach fortified centers that were designed only to withstand siege or chariot combat.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Destruction layers showing no evidence of infantry weaponry or mass graves indicative of close-quarters infantry combat\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate focuses on the military dimension often cited in Sea Peoples narratives. It addresses the neighbourhood concern (2af0caa0...) about scope consistency by explicitly excluding Cyprus if the tactical shift did not apply there, and distinguishes Egypt's survival via its ability to adapt tactics earlier.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"The simultaneous collapse was an illusion caused by the synchronization of maritime trade route disruptions, where the loss of tin and copper imports paralyzed bronze-dependent states, while iron-working peripheries rose to fill the vacuum.\", \"mechanism\": \"Strategic material embargo effect: The interruption of long-distance trade networks caused a rapid de-legitimization of elites who could no longer provide bronze weapons or prestige goods, triggering immediate fragmentation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Hittite Anatolia\", \"Egypt\", \"Inland Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence of continued robust tin trade into Ugarit or Mycenae post-1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical candidate that challenges the 'simultaneity' premise by focusing on supply chain fragility specifically regarding bronze. It deliberately excludes Hittite Anatolia to test the hypothesis that inland states with different resource profiles failed for different reasons, countering the 'domino effect' critique (44cbb9bc...).\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

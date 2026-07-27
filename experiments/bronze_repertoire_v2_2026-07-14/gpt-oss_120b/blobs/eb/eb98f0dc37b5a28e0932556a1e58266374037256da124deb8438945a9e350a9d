@@ -1,0 +1,14 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"claim": "A massive volcanic eruption (likely Thera) around 1200 BC caused a short‑term climatic cooling, leading to successive harvest failures across the Eastern Mediterranean.", "mechanism": "environmental stress via volcanic winter", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city‑states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "High‑resolution ice‑core and dendrochronological records show no significant temperature drop in 1200 BC", "eval": "rubric:std-hist"}], "prose_notes": "Sequence: eruption → ash fallout → reduced solar insolation → crop failures → societal strain → collapse."}
+
+BATTERY THE EDITS WILL FACE:
+- program:skeleton_wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

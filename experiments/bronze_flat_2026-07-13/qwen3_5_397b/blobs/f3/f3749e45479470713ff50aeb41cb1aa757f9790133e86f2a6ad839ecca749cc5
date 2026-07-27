@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which shattered the social contract between the wanax and the populace.\", \"mechanism\": \"Climate-induced agricultural failure led to the inability of centralized bureaucracies to provision dependent populations and maintain military forces, triggering internal revolt and abandonment of urban centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of continuous grain storage or successful harvests in Hattusa during the final decades of the empire.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with the dominant climate-change hypothesis (e.g., Kaniewski et al.), focusing on environmental stress as the primary driver that exposed structural fragility.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics, specifically the rise of inexpensive infantry capable of defeating elite chariot corps, coupled with the proliferation of iron weaponry.\", \"mechanism\": \"The democratization of warfare allowed decentralized groups (Sea Peoples, highland raiders) to overwhelm the expensive, rigid chariot-based armies of the palace states, rendering the central military monopoly obsolete.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot warfare remained tactically dominant and decisive in battles recorded during the 1180s BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A moderately typical candidate focusing on military history (e.g., Drews), but often criticized for not fully explaining the simultaneous economic breakdown or why Egypt survived despite facing the same tactical threats.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading systemic failure triggered by the disruption of long-distance maritime trade networks essential for bronze production, causing an immediate industrial and logistical paralysis.\", \"mechanism\": \"The interdependence of the Late Bronze Age economies meant that the loss of a single nodal point (e.g., Cyprus or Ugarit) severed the supply of tin and copper, halting weapon and tool production and causing a rapid domino effect of political disintegration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Iran\"]}, \"forbidden\": [{\"case\": \"Archaeological proof of robust local tin sources or stockpiles sufficient to sustain military campaigns for decades in Mycenaean citadels.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical but rigorous candidate emphasizing 'complexity theory' and network fragility (e.g., Cline) rather than a single external shock; it posits that the system's strength (interconnectivity) became its fatal weakness.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        },
+        {
+          "role": "mention",
+          "target": "622df8284c8cfbb2440fbd47810355121576722b77c5d114d04f0faf4889b22a"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of international trade networks due to seismic activity disrupting port infrastructure.\", \"mechanism\": \"Cascading economic depression triggered by natural disaster-induced supply chain rupture.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Hittite Anatolia interior\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows Ugarit's ports were functional immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Relies on the 'Earthquake Storm' hypothesis but narrows scope to coastal traders.\"}",
+      "typicality": 0.75,
+      "neighbours": ["A1", "A3"]
+    },
+    {
+      "content": "{\"claim\": \"Internal class warfare by disenfranchised infantry groups overthrew the chariot-riding elite.\", \"mechanism\": \"Social revolution driven by military technological shifts and resource scarcity.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\"], \"excludes\": [\"Sea Peoples as external invaders\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Linear B tablets indicate palace redistribution systems were operating normally in the final year.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Inverts the external invasion narrative to focus on internal sociopolitical fracture.\"}",
+      "typicality": 0.45,
+      "neighbours": ["A4", "A6", "A9"]
+    },
+    {
+      "content": "{\"claim\": \"A hyper-virulent, vector-borne pathogen introduced via trade routes decimated urban populations below critical sustainability thresholds.\", \"mechanism\": \"Epidemiological collapse leading to labor shortages and administrative paralysis.\", \"scope\": {\"covers\": [\"All interconnected palace centers\"], \"excludes\": [\"Rural hinterlands\", \"Nomadic groups\"]}, \"forbidden\": [{\"case\": \"Bioarchaeological data from mass graves shows no signs of rapid, simultaneous mortality events.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical 'germ theory' application to Bronze Age collapse, often excluded due to lack of direct DNA evidence.\"}",
+      "typicality": 0.15,
+      "neighbours": ["A7", "A10", "A12"]
+    }
+  ]
+}

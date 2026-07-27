@@ -1,0 +1,1 @@
+{"verdict":"pass","decisive_point":"The second forbidden case is \"At k=5, e≤0.15 (low-zone, observed): harness accuracy strictly exceeds self-consistency\" which is a concrete, measurable outcome that would refute the proposal's claim that harness does not beat self‑consistency in the low‑zone, satisfying std-crit-design clause (2)."}

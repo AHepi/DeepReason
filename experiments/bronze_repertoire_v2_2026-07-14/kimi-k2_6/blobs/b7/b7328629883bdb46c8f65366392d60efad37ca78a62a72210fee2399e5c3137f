@@ -1,0 +1,41 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (pi-bronze) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+PROBLEM CONTEXT (conn:3544632a92cf) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 3544632a92cf to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@30cdbec08937: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:eaaa0105b14d: rubric:std-hist
+- fc:ed7275cd915a: rubric:std-hist
+- fc:f7a93b257d43: rubric:std-hist
+- fc:846bc00899c8: rubric:std-hist
+- fc:2ab082abe07a: rubric:std-hist
+- fc:349224c4a0c0: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET 33b607e2ce02c00ba7631524ea3907b9830d39d465d3c7c3a40742bee07d1c45
+The military resilience of Egypt (3544632a92cf) is a specific instance of the general mechanism in 263738c8259b: a state's survival during the Late Bronze Age collapse depended on whether its administrative-military organization could absorb ironworking diffusion without triggering recursive legitimation crises. Egypt's temple-subsidized archer-based army was structurally compatible with iron adoption, unlike chariot-aristocracy-dependent states. REFUTED IF: Egypt's military organization was actually chariot-aristocracy dependent, or if iron adoption in Egypt did trigger a legitimation crisis comparable to other palace economies.
+commitments: hv-floor@2a45b7988522, lineage-ref@30cdbec08937, relation-form@578e42df713e
+
+TARGET bcbb521e047ea78a268601db3c09ebe4e7e692beb6793ec95b267cc25b4e8dbb
+{"claim": "Systems collapse triggered by earthquake storms destroying regional storage and redistribution infrastructure", "mechanism": "Tectonic clustering in the North Anatolian Fault and Aegean arc generated sequential seismic events (c.1225-1175 BC) that shattered palatial centers' administrative buildings, collapsed storerooms, and severed the centralized redistribution networks upon which Mycenaean, Hittite, and Ugaritic political economies depended; Egypt survived because its grain-storage was decentralized across the Nile valley and its political economy relied on temple-based rather than palace-based redistribution", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt proper", "Mesopotamian interior", "Iranian plateau"]}, "forbidden": [{"case": "Archaeological evidence shows no seismic destruction layers at major palatial sites contemporaneously dated to collapse horizon", "eval": "rubric:std-hist"}, {"case": "Hittite capital moved successfully after earthquake without political fragmentation", "eval": "rubric:std-hist"}, {"case": "Egyptian New Kingdom palatial economy was centrally redistributive in same manner as Hittite/Mycenaean systems", "eval": "rubric:std-hist"}], "prose_notes": "Amos Nur's earthquake storm hypothesis; distinguishes palace-based vs temple-based redistribution as structural vulnerability"}
+commitments: skeleton-wf, kappa-hist, fc:eaaa0105b14d, fc:ed7275cd915a, fc:f7a93b257d43
+
+TARGET e7aacdcad8c8bd163e82aa9665cf3449d394e5768372109678d7422d7c2cc7a4
+{"claim": "Maritime raider disruption of bronze supply chains caused political-military spirals in metal-dependent states", "mechanism": "The Sea Peoples and analogous groups disrupted Cypriot copper and tin trade routes; states with bronze-dependent military hierarchies (Mycenaean, Hittite, Ugaritic) faced recursive crises as inability to equip chariot forces undermined extraction capabilities, leading to internal rebellion and fragmentation; Egypt's bronze dependency was mitigated by Nubian gold-for-copper trade alternatives and by its ability to absorb raiders into existing military structure", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Mesopotamia (bronze-independent military)"]}, "forbidden": [{"case": "Hittite army was not chariot-based bronze military but iron-equipped mass infantry", "eval": "rubric:std-hist"}, {"case": "Cyprus copper production uninterrupted throughout 1200-1150 BC with no trade route disruption evidence", "eval": "rubric:std-hist"}, {"case": "Egypt suffered equivalent political fragmentation from same supply disruption", "eval": "rubric:std-hist"}], "prose_notes": "Economic interdependence vulnerability; Susan Sherratt's 'consumption crisis' variant; emphasizes systemic feedback rather than single invasion"}
+commitments: skeleton-wf, kappa-hist, fc:846bc00899c8, fc:2ab082abe07a, fc:349224c4a0c0
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

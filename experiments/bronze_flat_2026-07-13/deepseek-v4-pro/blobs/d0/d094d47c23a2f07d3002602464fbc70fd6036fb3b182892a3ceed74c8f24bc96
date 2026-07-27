@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift in military technology—massed infantry with javelins and long swords—that rendered chariot elites obsolete.\", \"mechanism\": \"Disaffected lower-class mercenaries and migrating tribes adopted cheap, disruptive infantry tactics, overwhelming chariot-based palace armies in Greece, Anatolia, and the Levant.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egyptian records describe decisive victories against Sea Peoples using only chariot forces without infantry support\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because it adapted quickly, integrating infantry mercenaries and using its centralized state to mass-produce weapons and armor, as depicted at Medinet Habu.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A6", "A7", "A8"]
+    },
+    {
+      "content": "{\"claim\": \"A prolonged drought triggered agricultural collapse, leading to famine, mass migration, and the violent breakdown of palatial economies.\", \"mechanism\": \"Reduced precipitation over several decades caused crop failures, forcing populations to abandon palace centers and either migrate or turn to raiding, overwhelming existing political structures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Paleoclimatological data from the Nile Delta shows a severe drought equal to or worse than that in Anatolia and the Levant precisely during 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's annual inundation, fed by monsoon rains in the Ethiopian highlands, provided a buffer against the regional drought, allowing grain surpluses to persist.\"}",
+      "typicality": 0.9,
+      "neighbours": []
+    },
+    {
+      "content": "{\"claim\": \"A general systems collapse triggered by cascading failures in the interdependent palatial trade and diplomatic network, where the fall of one node destabilized the entire Eastern Mediterranean system.\", \"mechanism\": \"Palaces were specialized nodes in a complex network exchanging prestige goods, raw materials, and information. A shock to one major node disrupted the entire system, causing economic and political disintegration as each palace lost its essential external inputs and elite legitimacy.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that trade in luxury goods and raw materials continued uninterrupted at pre-collapse volumes throughout the crisis period\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because its economy was less specialized and more autarkic, relying on the Nile's internally integrated agricultural base rather than a fragile network of long-distance palatial exchanges.\"}",
+      "typicality": 0.8,
+      "neighbours": ["A1", "A2", "A3"]
+    }
+  ]
+}

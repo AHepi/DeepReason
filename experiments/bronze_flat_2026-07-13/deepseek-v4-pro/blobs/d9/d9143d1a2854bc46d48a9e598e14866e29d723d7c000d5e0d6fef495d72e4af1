@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's first forbidden case states that archaeological evidence of destruction by prolonged siege or anti-fortification weapon systems would falsify the claim. However, the target's own mechanism describes a swift, decisive military defeat by massed mobile infantry overwhelming chariot forces, which implies field battles and direct assaults on administrative centers. The target does not account for the fact that many of the destruction layers at sites within its scope (e.g., Mycenaean citadels, Hittite Hattusa, Ugarit) are heavily fortified, cyclopean-walled complexes where a 'prolonged siege' or specialized siege weaponry would be the expected mode of destruction, not open-field infantry maneuvers. By failing to explain how massed javelin-throwers and swordsmen could rapidly sack massive fortifications without siegecraft, the target's mechanism is inconsistent with the very archaeological record it purports to explain, and the forbidden case is therefore not a genuine test of the theory but a description of the actual evidence the theory cannot accommodate.",
+  "counterexample": [
+    "The citadel of Mycenae and the walls of Hattusa are massive fortifications; the target's mechanism of mobile infantry armed with Naue II swords and javelins provides no account of how such forces would overcome these fortifications swiftly, yet the forbidden case correctly identifies that archaeological evidence points to prolonged siege or specialized siege weaponry as the cause of destruction."
+  ]
+}

@@ -1,0 +1,14 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"claim": "The collapse was an endogenous political revolution where subject populations deliberately dismantled the palatial bureaucracy to escape tribute obligations during a period of climate-induced stress.", "mechanism": "Social contract rupture: localized revolts against extractive institutions became contagious across the network as the cost of rebellion dropped below the cost of submission.", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt"]}, "forbidden": [{"case": "Settlement patterns showing continuous occupation of palace sites by the same elite class immediately following the destruction horizon without cultural break.", "eval": "rubric:std-hist"}], "prose_notes": "An atypical, internalist explanation framing the event not as a catastrophe inflicted from outside or nature, but as a successful class struggle against the palace system itself."}
+
+BATTERY THE EDITS WILL FACE:
+- program:skeleton_wf
+
+KERNEL mu_struct (§10.7): the target is a skeleton — substitute at role level. Swap the mechanism, the causal link, the scope. Each edit must be a complete valid skeleton JSON. Do NOT merely reword.
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,101 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "claim": "The simultaneous collapse was driven primarily by coordinated Sea Peoples invasions that overwhelmed palace economies.",
+        "mechanism": "External militarized pressure disrupted trade routes and precipitated the loss of elite control over resources, leading to palace abandonment.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city‑states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "If archaeological layers show continuity of elite palatial structures after 1200 BC in any of these regions",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Matches the sudden destruction layers and textual references to Sea Peoples; Egypt's survival attributed to its more secure Nile system."
+      },
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.85
+    },
+    {
+      "content": {
+        "claim": "A prolonged megadrought around 1200 BC caused severe agricultural shortfalls, undermining palace economies.",
+        "mechanism": "Climatic aridity reduced grain harvests, leading to famine, internal revolts, and the collapse of centralized administration.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city‑states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "If high-resolution paleoclimate proxies from the eastern Mediterranean show no significant drought during 1250‑1150 BC",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Explains simultaneous timing via a shared environmental shock; Egypt's reliance on Nile floods insulated it."
+      },
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.6
+    },
+    {
+      "content": {
+        "claim": "The depletion of bronze ore and the ensuing transition to iron technology destabilized elite control over weaponry and trade.",
+        "mechanism": "Loss of access to bronze forced a rapid shift to iron, disrupting established trade networks and diminishing the prestige of bronze‑dependent palatial elites.",
+        "scope": {
+          "covers": [
+            "Mycenaean Greece",
+            "Hittite Anatolia",
+            "Ugarit",
+            "Levantine city‑states"
+          ],
+          "excludes": [
+            "Egypt"
+          ]
+        },
+        "forbidden": [
+          {
+            "case": "If inventories of bronze artefacts continue to increase after 1150 BC in these regions",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Offers an economic‑technological trigger; Egypt's early adoption of iron and larger resource base mitigated impact."
+      },
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ],
+      "typicality": 0.3
+    }
+  ]
+}

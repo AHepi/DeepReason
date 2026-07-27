@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Systemic fragility arising from hyper-specialized interdependence caused a cascading failure when key nodes were disrupted.\", \"mechanism\": \"The palace economies operated as a tightly coupled network with minimal redundancy; the disruption of trade routes or a single major hub (like Ugarit) triggered a domino effect of resource starvation and administrative collapse across the region.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence showing robust local subsistence agriculture independent of palace redistribution in collapsed regions during the crisis years.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' theory, emphasizing network topology over external shock.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"A revolutionary shift in military technology and tactics rendered the existing socio-political order obsolete.\", \"mechanism\": \"The widespread adoption of inexpensive infantry weaponry (long swords, javelins) and new tactics allowed decentralized groups to overwhelm the expensive, elite chariot-based armies that underpinned palace authority, leading to rapid regime change.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that collapsed states successfully integrated new infantry tactics into their standing armies prior to their fall.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on the 'Sea Peoples' not as a migrating nation but as a symptom of tactical democratization of violence.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"A multi-decadal megadrought induced mass migration and internal revolt, which only states with buffer zones survived.\", \"mechanism\": \"Persistent climate failure reduced agricultural yields below the threshold required to sustain centralized bureaucracies and standing armies, forcing population displacement (Sea Peoples) and triggering civil wars over shrinking resources.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Nile Delta Egypt\", \"Inland Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data indicating normal or above-average precipitation levels in the Eastern Mediterranean between 1200-1150 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical emphasis on climate as the sole primary driver, treating human agents as reactive rather than proactive.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

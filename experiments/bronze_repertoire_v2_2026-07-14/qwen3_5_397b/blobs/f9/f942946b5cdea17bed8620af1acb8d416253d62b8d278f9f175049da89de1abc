@@ -1,0 +1,10 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "decision": "pass",
+  "decisive_point": "The target identifies a specific causal mechanism: the deliberate introduction of a 'memetic ideological virus rejecting divine kingship' by rival powers, which operates through the concrete incentive structure of mass refusal of labor tribute. This is not a mere mood but a datable, agent-driven process—rival powers actively disseminated anti-kingship ideology to paralyze palatial economies dependent on corvée and tribute."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "judgeruling.direct.v1", "error": "extra field at /decision", "path": "", "repair_scope": "", "skeleton": {"decisive_point": "x", "verdict": "fail"}}

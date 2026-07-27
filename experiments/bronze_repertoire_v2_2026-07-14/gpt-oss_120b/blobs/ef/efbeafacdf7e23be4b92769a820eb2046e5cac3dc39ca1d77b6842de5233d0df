@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism ('Sharp decrease in precipitation leading to drought, crop failure, population stress, and eventual societal collapse') is stated as a general causal chain, but the target fails to specify a concrete historical mechanism linking the climate event to the specific societal collapses in the covered regions. It does not identify the institutions, economic structures, or decision-making processes that translated the drought into collapse, nor does it account for why some societies within the covered region might have survived. The forbidden case—'Paleo‑hydrological data from speleothems in Anatolia showing no significant drought at 1200 BC'—is a direct empirical test of the climate event itself, but the standard requires a mechanism, not just a climate signal. By omitting the specific institutional or adaptive mechanisms that failed, the target reduces the explanation to a climatic inevitability, which violates the requirement to name a specific causal mechanism rather than an external force.",
+  "counterexample": [
+    "A valid mechanism would specify, for example, that the Hittite state's centralized grain redistribution system failed because it depended on surplus from a single drought-sensitive region, whereas Egypt's multi-basin Nile flood management and grain storage network provided resilience. The target provides no such institutional specificity."
+  ]
+}

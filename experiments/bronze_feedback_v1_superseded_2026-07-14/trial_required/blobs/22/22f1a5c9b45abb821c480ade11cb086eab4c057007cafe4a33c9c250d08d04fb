@@ -1,0 +1,9 @@
+You are the variator (mu): produce bounded edits of the target content. If the content is a JSON skeleton, substitute at role level — swap the mechanism, the causal link, the scope (mu_struct) — never merely reword. For prose, make substantive local edits that change what the claim forbids. Each edit must remain a complete, coherent candidate.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"VariatorEdit": {"additionalProperties": false, "properties": {"content": {"title": "Content", "type": "string"}}, "required": ["content"], "title": "VariatorEdit", "type": "object"}}, "additionalProperties": false, "description": "Bounded edits under mu / mu_struct (\u00a76): role-level substitutions\n(mechanism, scope, causal link) for skeleton content, substantive local\nedits otherwise \u2014 never mere rewordings.", "properties": {"edits": {"items": {"$ref": "#/$defs/VariatorEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "VariatorOutput", "type": "object"}
+
+TARGET CONTENT:
+{"pairwise": {"decisive_point": "Egypt's dispersed irrigation agriculture and private entrepreneurship buffered against monoculture collapse", "loser": "15c9cb544971e9e1956d8b70020314172d1810a28f75ee19f956a2eab4d6e177", "problem": "disc:pi-bronze", "winner": "6eecdaad3c9f8bce2453ff0f81e2ee34d8e90d30ece5310f50cec91fc1a83fc9"}}
+
+DIRECTIVE: produce exactly 8 bounded edits.

@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"The improvement at k=7 is fully explained by base-error change alone with no interaction effect from critic precision on bare-majority sets"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:7016629b13b9","observation_valued":false},"id":"fc:7016629b13b9","schema":"commitment"}

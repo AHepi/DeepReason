@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was a synchronous institutional failure caused by the breakdown of the 'gift-exchange' diplomatic network that stabilized the Late Bronze Age great powers' club, leaving peripheral palace-states unable to manage subsistence crises.\", \"mechanism\": \"The great powers (Hatti, Egypt, Mitanni, Babylon) maintained stability through a system of reciprocal gift-giving, dynastic marriage, and managed trade that trickled down to vassal states. When the Hittite-Egyptian rivalry ended with the peace treaty, the system's competitive drive faltered. Subsequent disruption of this elite network by internal Hittite succession crises severed the flow of prestige goods and emergency grain shipments to dependent peripheries like Ugarit and Mycenaean Greece. Without these buffers, localized harvest failures triggered elite infighting, administrative collapse, and eventual abandonment.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Babylon\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows that Mycenaean and Ugaritic granaries were full and trade in bulk commodities continued unabated until the final destruction.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The Hittite state collapsed before Ugarit, and Ugarit's final texts show it was still receiving Hittite directives and military support.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This account shifts causality from materialist factors (drought, iron) to the fragility of an international political economy. It explains why Egypt survived (it was a net grain exporter and core member, not a dependent periphery) and why the collapse was simultaneous (the network was tightly coupled). It is vulnerable to evidence that the peripheries were more autarkic than assumed.\"}",
+      "typicality": 0.7,
+      "refs": [
+        {
+          "target": "278429cb6eef5cd184e71c353b7a878c2af9fa2b3af0d41d245c191d40c7b2b0",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a demographic and social revolution driven by a 'barbarian' labor revolt within the palace economies, not an external invasion.\", \"mechanism\": \"The palace redistributive system relied on a large, disenfranchised class of corvée laborers, captives, and semi-free peasants (the 'Apiru, Shardana, and other groups mentioned in texts). The intensification of the palace system in the 13th century BC led to increased extraction. A pandemic or series of poor harvests (the trigger) disproportionately affected the elite due to their reliance on stored, rat-infested grain, while simultaneously increasing labor demands on the surviving underclass. This sparked a coordinated, multi-regional uprising of these marginalized groups who burned the palaces, not as external 'Sea Peoples' invaders, but as internal rebels who then formed the post-collapse 'Sea Peoples' societies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"The destruction layers at all major sites show a uniform pattern of sudden, violent conflagration with no evidence of preceding internal unrest or selective targeting of elite storage areas.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"Egyptian mortuary texts and temple reliefs at Medinet Habu explicitly describe the Sea Peoples as foreign invaders from islands and the north, with women and children in ox-carts, not as internal rebels.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This conjecture inverts the standard 'invasion' narrative. It explains the simultaneity (shared social structures), the ferocity of destruction (class hatred), and Egypt's survival (Ramesses III crushed a genuine external migration of the already-successful rebels, not the initial uprising). It's a high-risk, high-reward theory that reframes the iconic Medinet Habu reliefs as propaganda against a social revolution.\"}",
+      "typicality": 0.3,
+      "refs": [
+        {
+          "target": "44a9051de10499f50f341b85859a415a0c4c47509c3de8e5e0b88bd784b92d3d",
+          "role": "dependence"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was an ecological-commercial cascade where the exhaustion of Cypriot copper mines and the deforestation of the Levantine coast destroyed the economic basis for the entire Eastern Mediterranean trade web, leading to systemic state failure.\", \"mechanism\": \"The entire palace system was underwritten by the bronze trade, which required copper (primarily from Cyprus) and tin. By 1200 BC, the easily accessible, fuel-rich copper ores of Cyprus were depleted, requiring deeper mining and massive deforestation for smelting fuel, which in turn caused soil erosion and agricultural decline on the island. This supply shock made bronze prohibitively expensive. Simultaneously, the shipbuilding industry, which depended on Levantine cedars, collapsed due to over-logging. The loss of cheap bronze and ships dismantled the military (chariot hardware, weapons) and commercial (merchant vessels) foundations of the palaces, making them brittle and easily shattered by minor stresses.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Archaeometallurgical surveys of Cyprus show that copper production peaked in the 12th century BC, not declined, and that the island's forests were still extensive.\", \"eval\": \"rubric:std-hist\"}, {\"case\": \"The widespread appearance of iron tools and weapons in the 12th century BC was a consequence of the collapse, not a cause, as ironworking technology was already known but not economically viable until bronze became scarce.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a deeply materialist, almost geological explanation. It elegantly explains the transition to the Iron Age not as a cause of collapse but as a technological adaptation to the collapse of the bronze supply chain. Egypt survived because it controlled its own copper and gold sources in the Sinai and Nubia and could still source tin via Red Sea routes, decoupling it from the Cypriot-Levantine axis.\"}",
+      "typicality": 0.5,
+      "refs": [
+        {
+          "target": "79d71b90998ffc09d3b9f8ffc2218cd101447afcba09997a906741dfcb580710",
+          "role": "mention"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Cyprus copper production uninterrupted throughout 1200-1150 BC with no trade route disruption evidence
+TARGET:
+{"claim": "Maritime raider disruption of bronze supply chains caused political-military spirals in metal-dependent states", "mechanism": "The Sea Peoples and analogous groups disrupted Cypriot copper and tin trade routes; states with bronze-dependent military hierarchies (Mycenaean, Hittite, Ugaritic) faced recursive crises as inability to equip chariot forces undermined extraction capabilities, leading to internal rebellion and fragmentation; Egypt's bronze dependency was mitigated by Nubian gold-for-copper trade alternatives and by its ability to absorb raiders into existing military structure", "scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states"], "excludes": ["Egypt", "Mesopotamia (bronze-independent military)"]}, "forbidden": [{"case": "Hittite army was not chariot-based bronze military but iron-equipped mass infantry", "eval": "rubric:std-hist"}, {"case": "Cyprus copper production uninterrupted throughout 1200-1150 BC with no trade route disruption evidence", "eval": "rubric:std-hist"}, {"case": "Egypt suffered equivalent political fragmentation from same supply disruption", "eval": "rubric:std-hist"}], "prose_notes": "Economic interdependence vulnerability; Susan Sherratt's 'consumption crisis' variant; emphasizes systemic feedback rather than single invasion"}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

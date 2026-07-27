@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Harness improvement is uncorrelated with the fraction of fragile-majority pools in the sample (Spearman ρ < 0.3, p > 0.05)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:6c9de88c2dcb","observation_valued":false},"id":"fc:6c9de88c2dcb","schema":"commitment"}

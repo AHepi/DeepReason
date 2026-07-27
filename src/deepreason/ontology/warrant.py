@@ -9,7 +9,7 @@ standard attack the nu (see adjudication/edges.py).
 
 from enum import Enum
 
-from pydantic import BaseModel
+from deepreason.ontology.frozen import FrozenRecord
 
 
 class WarrantType(str, Enum):
@@ -17,7 +17,7 @@ class WarrantType(str, Enum):
     ARGUMENTATIVE = "argumentative"
 
 
-class Warrant(BaseModel):
+class Warrant(FrozenRecord):
     id: str
     target: str  # artifact id under attack
     type: WarrantType

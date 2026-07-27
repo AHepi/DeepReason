@@ -1,0 +1,8 @@
+{
+  "attack": true,
+  "case": "The target claims that elite over-expansion caused systemic economic failure across multiple regions, but it explicitly forbids the case where 'Contemporary accounts and inventories indicate sustained surplus production and balanced budgets after 1150 BCE.' This forbidden case is a concrete, datable observation that could realistically have obtained—specifically, administrative records and archaeological inventories from the post-1150 BCE period showing continued surplus and fiscal balance. By forbidding this observable state of affairs, the target renders its mechanism unfalsifiable: if the mechanism genuinely operated, we should be able to specify what evidence would contradict it, yet the target rules out precisely the kind of documentary and material evidence that would constitute a counterexample. The standard requires that a historical-mechanism account state forbidden cases that are concrete observations which could realistically have obtained; a case showing sustained surplus and balanced budgets after the claimed collapse date is exactly such an observation, and forbidding it violates the requirement that the mechanism be testable against specific evidence.",
+  "counterexample": [
+    "Linear B tablets from Pylos showing grain surplus distributions dated after 1150 BCE",
+    "Ugaritic administrative texts recording balanced temple and palace accounts post-1150 BCE"
+  ]
+}

@@ -1,0 +1,65 @@
+Assess the named target. Give the strongest specific fault, grounded in the input aliases, or set attack to false.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "cited_input_aliases": {"items": {"type": "string"}, "title": "Cited Input Aliases", "type": "array"}, "claim": {"default": "", "title": "Claim", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "grounds": {"default": "", "title": "Grounds", "type": "string"}, "target_alias": {"const": "A1", "title": "Target Alias", "type": "string"}}, "required": ["attack", "target_alias"], "title": "BoundCompactCritic", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+
+ONE SYNTAX EXAMPLE:
+
+{"attack":false,"target_alias":"A1"}
+
+INPUT:
+
+PROBLEM CONTEXT (pi-plan) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Write a PRODUCT PLAN for this website: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+
+Each candidate's `content` MUST be one plan document in plain prose or
+markdown — NOT code, NOT HTML. It must cover: the pages, the feature list,
+the key interactions, a content inventory (what text/data actually appears),
+and concrete acceptance criteria a reviewer could check one by one. Be
+specific enough that a designer could work from the plan alone. The content
+inventory must supply the actual headings, labels, explanatory copy, facts,
+and data the page will display—not placeholders or descriptions such as
+"educational 
+
+TARGET COMMITMENTS (the target's declared attack surface):
+- plan-doc@e5c72fde8cc0: predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET A1
+# Product Plan: The Molecular Ballet (Cinematic Focus)
+
+## Scope
+Single-file HTML experience focused on the 'artistic' aspect of DNA through high-fidelity SVG animations and scroll-driven depth.
+
+## Feature List
+- **Parallax Helix Descent**: As the user scrolls, the camera moves 'down' a 3D-simulated DNA strand.
+- **Dynamic Transcription Layer**: A sliding overlay that transforms DNA sequences into mRNA in real-time.
+- **Kinetic Typography**: Headings that assemble themselves from nucleotide-like fragments.
+- **Accessibility Guard**: Strict CSS `@media (prefers-reduced-motion: reduce)` override that replaces all transforms with static fades.
+
+## Key Interactions
+- **Scroll-Linked Animation**: The `window.scrollY` value drives the rotation of the double helix.
+- **Hover-Reveal**: Hovering over base pairs reveals their chemical names (Adenine, Thymine, Cytosine, Guanine).
+- **The 'Zip' Toggle**: A button that triggers the replication animation, splitting the helix into two.
+
+## Content Inventory
+- **Hero Heading**: "The Blueprint of Life"
+- **Intro Text**: "DNA is not just a molecule; it is a biological archive encoding the instructions for every living cell."
+- **Replication Section**: Heading: "The Great Unzipping". Copy: "Helicase breaks the hydrogen bonds, allowing DNA Polymerase to build complementary strands."
+- **Transcription Section**: Heading: "From Code to Action". Copy: "RNA Polymerase reads the DNA template to create messenger RNA (mRNA), the bridge to protein synthesis."
+- **Factoids**: "3 billion base pairs in the human genome", "A single cell's DNA can stretch 2 meters if unfolded."
+
+## Acceptance Criteria
+1. The page is a single .html file with no external JS dependencies.
+2. Scrolling causes a visual shift in the Z-axis of the DNA helix.
+3. `prefers-reduced-motion: reduce` disables all parallax and sliding transitions immediately.
+4. The transcription animation correctly swaps T for U (Uracil) in the visual mRNA strand.
+5. All text from the Content Inventory is present and legible against the 2026 vibrant background.
+
+DIRECTIVE: mount the strongest NEW specific case against the target, or attack=false if you find no genuine fault.

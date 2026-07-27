@@ -5,6 +5,12 @@ crash injection, live gauntlets. Numbers come from the committed reports
 (`experiments/results/mini_chaos_report.json`, `mini_gauntlet_report.json`)
 and the regression tests that pin each finding.*
 
+*Historical scope: this campaign predates MiniReason's shared-kernel
+consolidation. The measurements remain reports of those committed runs, but
+descriptions of the old Mini-only state materializer, token-equivalence gate,
+predicate evaluator, and replay timing are not claims about current code.
+Current compatibility status is in `docs/SMALL_MODEL_COMPATIBILITY.md`.*
+
 ## What was thrown at it
 
 1. **Chaos campaign** (`mini/scripts/chaos.py`): 400 seeded runs against an
@@ -62,6 +68,12 @@ fork state — so the parent is deliberately left alone (its own budget
 machinery is the right fix there).
 Test: `test_chaos.py::test_predicate_bomb_is_bounded`.
 
+This finding describes the historical Mini-only evaluator. Current
+model-authored forbidden cases use the parent's skeleton contract, which
+rejects inline `predicate:` expressions. Trusted workload predicates use
+`deepreason.programs` and its canonical AST guard; Mini has no separate
+predicate evaluator or timeout semantics.
+
 ### F4 — the 1M run: dedupe-swallowed trial rulings (parent, found LIVE)
 The full-harness 1M arrow-of-time run was the first run of the session to
 FAIL an invariant: `verify_root` reported meter 1,000,214 vs log 990,192
@@ -97,6 +109,10 @@ Tests: `tests/test_trial_accounting.py` (both classes).
 
 ## Scale numbers
 
+These timings are retained as historical measurements of the pre-consolidation
+Mini materializer. Current `minireason.log.replay` opens the canonical Harness,
+so there is no independent Mini replay implementation to compare.
+
 | metric | 2.5k-cycle root |
 |---|---|
 | events / artifacts | ~5.5k / ~2.5k |
@@ -110,9 +126,10 @@ is a coffee break, not a blink; the mini's own replay stays linear.
 
 ## Documented edges (choices, not surprises)
 
-- Symbol-only contents normalize to the empty token set, so one refuted
-  symbol-only prior blocks all others. Harmless in v0 (skeleton-wf refutes
-  such content anyway); pinned by test.
+- Historical gate only: symbol-only contents once shared an empty normalized
+  token set. Current admission delegates to the canonical anti-relapse
+  battery-equivalence guard; text normalization remains process analytics and
+  cannot admit or block an artifact.
 - Budget overshoot: the attempt that crosses the ceiling completes (the
   gauntlet's hard 25k ended at 25,987). Documented meter semantics, not a
   leak — the overshoot is on the log.

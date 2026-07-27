@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"A critic with marginal phi=0.7, psi=0.7 at B=0.3, k=5 but uniform question-level flag rates produces harness improvement > 0.03 over SC (would refute: marginal stats are insufficient)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:5881a859240e","observation_valued":false},"id":"fc:5881a859240e","schema":"commitment"}

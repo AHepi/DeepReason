@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism requires a multi-decadal drought that specifically reduced yields in the dry-farming zones of Central Anatolia and the Peloponnese below a critical threshold. The forbidden case directly contradicts this necessary causal condition by presenting paleoclimatic evidence of normal or above-average precipitation in precisely those regions during the critical collapse window (1200-1150 BC). If precipitation was normal or above-average, the claimed mechanism—drought-induced yield failure in dry-farming hinterlands—could not have operated as stated. The target therefore fails the standard's requirement that a mechanism be consistent with concrete, datable observations that could realistically have obtained.",
+  "counterexample": [
+    "Paleoclimatic data (pollen cores, speleothems) indicates normal or above-average precipitation in Central Anatolia and the Peloponnese between 1200-1150 BC."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "7a40e40d5b75ceb000e7639583b3dbf24d551b65fefa5e52eaa8870a9ae71e53",
+      "attack": true,
+      "case": "The claim restricts its scope to Mycenaean Greece and Hittite Anatolia, yet the problem asks why Ugarit and the Levantine city-states also collapsed. By explicitly excluding Ugarit and the Levantine city-states from its covers, the account fails to address the simultaneous collapse of those interconnected palace civilizations, leaving a core part of the problem unexplained.",
+      "counterexample": null
+    },
+    {
+      "target": "fee8511a09bf954e5e5dfbf79cffe9cd1b91cce2aa9f2d6badb0f02c391bc917",
+      "attack": true,
+      "case": "The mechanism attributes collapse to disruption of maritime commerce in essential commodities like tin and oil, but Hittite Anatolia—which the account excludes from its scope—was a landlocked, inland empire that did not depend on maritime trade for its economic or political stability. The account offers no reason why the same maritime disruption would not have affected Hittite Anatolia, yet it excludes that civilization without justification, undermining the mechanism's explanatory power for the broader collapse pattern.",
+      "counterexample": null
+    },
+    {
+      "target": "8a5d193d64afb25268ce253d1f789ac9349d43e42d4a48b0a9244efd7c0c02c9",
+      "attack": true,
+      "case": "The claim posits an abrupt climate shift causing early-season frosts that destroyed cereal yields, but Egypt—which the account excludes—was equally dependent on cereal agriculture (the Nile inundation-based grain harvest) and would have been similarly vulnerable to a regional temperature drop. The account provides no mechanism explaining why Egypt alone survived diminished when the same climatic event would have impacted its agricultural base, thus failing to account for the differential survival that the problem explicitly highlights.",
+      "counterexample": null
+    }
+  ]
+}

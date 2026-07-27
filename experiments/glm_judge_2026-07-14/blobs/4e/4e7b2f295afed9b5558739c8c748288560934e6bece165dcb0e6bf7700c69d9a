@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The target violates std-crit-design clause (1): the proposed mechanism does not state the divergence condition in the required measurable quantities as a coherent, self-consistent model."}

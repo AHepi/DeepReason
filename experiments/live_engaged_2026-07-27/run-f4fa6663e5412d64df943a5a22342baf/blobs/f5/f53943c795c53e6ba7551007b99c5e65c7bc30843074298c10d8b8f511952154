@@ -1,0 +1,17 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism relies on a trusted third-party timestamping service, but the problem context demands a *durable binding* that turns silent divergence into a contradiction *alone*. The timestamping service is an external dependency, not an inherent property of the log or its replay mechanism. Thus, the binding is not self-contained and fails to satisfy the 'alone' requirement of the problem, as it requires ongoing trust in the third party to maintain the contradiction (e.g., if the timestamping service ceases to exist or is compromised, the contradiction evaporates).",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": ""
+    }
+  ]
+}
+```

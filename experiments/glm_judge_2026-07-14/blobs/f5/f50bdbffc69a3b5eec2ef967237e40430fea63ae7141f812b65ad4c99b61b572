@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The harness scores candidate pools against a held-out answer key and measures arm accuracy; it does not compute Spearman correlation between a critic's internal confidence signal and majority margin."}
+```

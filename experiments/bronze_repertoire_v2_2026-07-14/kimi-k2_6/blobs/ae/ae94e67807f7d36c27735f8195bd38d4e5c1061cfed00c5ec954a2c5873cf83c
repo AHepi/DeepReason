@@ -1,0 +1,9 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{
+  "evaluation": "The critic's case fails because it mischaracterizes both the target's mechanism and the nature of the forbidden case. The target does not concede the absence of seismic destruction layers; rather, it lists as a forbidden case the proposition that 'Archaeological evidence shows no seismic destruction layers at major palatial sites contemporaneously dated to collapse horizon.' This is a hypothetical scenario that, if true, would undermine the mechanism—but the target does not stipulate that this scenario is actually the case. The forbidden clause is a conditional falsification test, not an admission of fact. Furthermore, the mechanism's primary empirical signature is not limited to destruction layers at palatial centers alone; the mechanism specifies that earthquake storms severed centralized redistribution networks, which could occur through damage to storage facilities, transport routes, and administrative infrastructure beyond just palatial buildings. The absence of contemporaneous destruction layers at some major palatial sites does not falsify the mechanism, as seismic damage can be archaeologically invisible (e.g., post-earthquake clearing and rebuilding, fireless collapses, or damage to outlying storage and road networks not excavated). The critic's demand for a specific type of evidence ignores the complexity of archaeological preservation and the multi-causal nature of systems collapse, where earthquake damage could trigger cascading failures without leaving the exact stratigraphic signature the critic insists upon."
+}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "defender.direct.v1", "error": "extra field at /evaluation", "path": "", "repair_scope": "", "skeleton": {"answer": "x"}}

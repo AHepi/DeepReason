@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target explicitly lists as a forbidden case: 'The Naue II sword and javelin types are found exclusively in elite warrior graves, not in lower-class or mercenary contexts.' The mechanism's core causal claim is that these specific weapons (Naue II swords and javelins) enabled a military-social revolution by arming 'semi-nomadic and lower-class groups excluded from palatial wealth.' If the archaeological record shows these weapon types are found exclusively in elite warrior graves, this directly contradicts the mechanism's necessary material precondition—that these weapons were cheap, diffused, and accessible to non-elite, lower-class warbands. The mechanism fails the standard's requirement to state forbidden cases that are concrete observations which could realistically have obtained, because the target itself identifies this archaeological pattern as a forbidden case, yet the mechanism provides no account of how lower-class groups could have wielded weapons that only appear in elite burials.",
+  "counterexample": [
+    "Naue II swords and javelins are found exclusively in elite warrior graves, not in lower-class or mercenary contexts"
+  ]
+}

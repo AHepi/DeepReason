@@ -47,6 +47,19 @@ def _openai_reasoning(value) -> dict:
     return {"reasoning_effort": effort}
 
 
+def _ollama_reasoning(value) -> dict:
+    # Ollama's OpenAI-compatible surface takes reasoning_effort with the SAME
+    # vocabulary as the neutral knob (none/low/medium/high/max), so pass it
+    # straight through. This is what makes `reasoning: none` actually disable
+    # thinking on Ollama (the dominant cost lever) instead of being silently
+    # dropped by the generic no-op. An int budget collapses to a coarse effort.
+    if value is None:
+        return {}
+    if isinstance(value, int):
+        value = "low" if value <= 2000 else "high"
+    return {"reasoning_effort": str(value)}
+
+
 def _no_reasoning_knob(value) -> dict:
     return {}
 
@@ -54,6 +67,7 @@ def _no_reasoning_knob(value) -> dict:
 REASONING_ADAPTERS = {
     "deepseek": _deepseek_reasoning,
     "openai": _openai_reasoning,
+    "ollama": _ollama_reasoning,
     "generic": _no_reasoning_knob,
 }
 
@@ -64,6 +78,11 @@ def infer_provider(base_url: str) -> str:
         return "deepseek"
     if "openai" in url:
         return "openai"
+    # ollama.com (cloud) — its reasoning_effort takes the neutral vocabulary
+    # natively. Local ollama at localhost:11434 has no "ollama" in the host, so
+    # it stays generic unless the role sets provider: ollama explicitly.
+    if "ollama" in url:
+        return "ollama"
     return "generic"
 
 

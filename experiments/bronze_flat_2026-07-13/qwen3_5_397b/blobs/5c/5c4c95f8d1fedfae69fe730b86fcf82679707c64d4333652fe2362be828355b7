@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"Systemic fragility due to hyper-specialization and interdependence caused a cascading failure.\", \"mechanism\": \"The highly centralized palace economies relied on complex, long-distance trade networks for essential resources (tin, copper, grain). When a single node or route was disrupted by localized shocks, the lack of redundancy prevented adaptation, leading to a domino-effect collapse across the interconnected system.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows Ugarit maintained robust local agricultural surplus and independent craft production immediately prior to destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the modal 'systems collapse' theory, emphasizing network topology over external agents.\"}",
+      "typicality": 0.92,
+      "neighbours": [
+        "A3",
+        "A9"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A revolutionary shift in military technology and tactics rendered the existing aristocratic order obsolete.\", \"mechanism\": \"The widespread adoption of inexpensive iron weaponry and new infantry tactics (such as loose-order skirmishing) allowed decentralized groups to overwhelm the expensive, rigid chariot-based armies of the palace states. The state's monopoly on violence was broken not by migration, but by internal or peripheral military innovation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician city-states\"]}, \"forbidden\": [{\"case\": \"Forensic analysis of mass graves at Mycenaean sites reveals no significant increase in trauma patterns consistent with new infantry tactics versus traditional chariot warfare.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on the 'military revolution' hypothesis, often linked to the Sea Peoples but reinterpreted as a tactical shift rather than a migratory wave.\"}",
+      "typicality": 0.65,
+      "neighbours": [
+        "A6",
+        "A1"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A rapid, multi-decadal megadrought triggered simultaneous agrarian failure and social unrest across the region.\", \"mechanism\": \"Paleoclimatic data indicates a severe aridification event around 1200 BC. This climate shock drastically reduced agricultural yields in rain-fed dependent societies, leading to famine, depopulation, and the inability of central authorities to redistribute goods, causing legitimacy crises and abandonment of palaces.\", \"scope\": {\"covers\": [\"Hittite Anatolia\", \"Mycenaean Greece\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Sediment cores from the Eastern Mediterranean show stable precipitation levels and normal Nile flood cycles throughout the period 1250-1100 BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An environmental determinist approach; atypical in its exclusion of human agency as the primary driver, relying instead on exogenous climate forcing.\"}",
+      "typicality": 0.45,
+      "neighbours": [
+        "A12",
+        "A4"
+      ]
+    }
+  ]
+}

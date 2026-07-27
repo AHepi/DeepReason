@@ -1,0 +1,999 @@
+{
+  "schema": "deepreason-e02-t3-report-v1",
+  "prereg": "experiments/e02_t3_judge_zoo_prereg.yaml",
+  "generated_at": "2026-07-13T11:53:47Z",
+  "design": {
+    "corpus": "frozen tranche-1/2 items: 40 known-flaw + 40 unknown-flaw (experiments/e02_t1_items/) + 40 clean (experiments/e02_t2_items/clean_items.json); zero generation spend",
+    "seats": "single seats, temperature 0, reasoning none, judged individually; strict-JSON verdict prompt identical to tranches 1/2",
+    "reasoning_arm": "deepseek-v4-flash, gpt-oss:120b, kimi-k2.6 re-judge all 120 items at reasoning low",
+    "aggregation": "none baked into collection; raw per-seat verdicts only"
+  },
+  "roster": {
+    "requested": [
+      "gpt-oss:120b",
+      "qwen3-coder:480b",
+      "deepseek-v4-flash",
+      "deepseek-v4-pro",
+      "glm-5.2",
+      "kimi-k2.6",
+      "minimax-m2.7",
+      "mistral-large-3:675b",
+      "nemotron-3-ultra",
+      "qwen3.5:397b",
+      "gemma3:27b"
+    ],
+    "as_run": [
+      "gpt-oss:120b",
+      "qwen3-coder:480b",
+      "deepseek-v4-flash",
+      "deepseek-v4-pro",
+      "glm-5.2",
+      "kimi-k2.6",
+      "minimax-m2.7",
+      "mistral-large-3:675b",
+      "nemotron-3-ultra",
+      "qwen3.5:397b",
+      "gemma3:27b"
+    ],
+    "substitutions": [],
+    "probe": "2026-07-13T10:20:56Z"
+  },
+  "volumes": {
+    "items": 120,
+    "zoo_seats": 11,
+    "reasoning_arm_seats": 3,
+    "judgments": 1561,
+    "incomplete_seats": {
+      "rlow:kimi-k2.6": 1
+    }
+  },
+  "per_seat_table": {
+    "zoo:deepseek-v4-flash": {
+      "n_judgments": 120,
+      "known_catch": 0.975,
+      "unknown_catch": 0.625,
+      "clean_fp": 0.35,
+      "generalization_ratio": 0.641
+    },
+    "zoo:deepseek-v4-pro": {
+      "n_judgments": 120,
+      "known_catch": 1.0,
+      "unknown_catch": 0.475,
+      "clean_fp": 0.125,
+      "generalization_ratio": 0.475
+    },
+    "zoo:gemma3:27b": {
+      "n_judgments": 120,
+      "known_catch": 0.95,
+      "unknown_catch": 0.325,
+      "clean_fp": 0.075,
+      "generalization_ratio": 0.3421
+    },
+    "zoo:glm-5.2": {
+      "n_judgments": 120,
+      "known_catch": 0.925,
+      "unknown_catch": 0.575,
+      "clean_fp": 0.275,
+      "generalization_ratio": 0.6216
+    },
+    "zoo:gpt-oss:120b": {
+      "n_judgments": 120,
+      "known_catch": 0.975,
+      "unknown_catch": 0.7,
+      "clean_fp": 0.6,
+      "generalization_ratio": 0.7179
+    },
+    "zoo:kimi-k2.6": {
+      "n_judgments": 120,
+      "known_catch": 0.95,
+      "unknown_catch": 0.9,
+      "clean_fp": 0.8,
+      "generalization_ratio": 0.9474
+    },
+    "zoo:minimax-m2.7": {
+      "n_judgments": 120,
+      "known_catch": 0.95,
+      "unknown_catch": 0.15,
+      "clean_fp": 0.075,
+      "generalization_ratio": 0.1579
+    },
+    "zoo:mistral-large-3:675b": {
+      "n_judgments": 120,
+      "known_catch": 0.975,
+      "unknown_catch": 0.25,
+      "clean_fp": 0.0,
+      "generalization_ratio": 0.2564
+    },
+    "zoo:nemotron-3-ultra": {
+      "n_judgments": 120,
+      "known_catch": 0.975,
+      "unknown_catch": 0.325,
+      "clean_fp": 0.15,
+      "generalization_ratio": 0.3333
+    },
+    "zoo:qwen3-coder:480b": {
+      "n_judgments": 120,
+      "known_catch": 0.95,
+      "unknown_catch": 0.225,
+      "clean_fp": 0.075,
+      "generalization_ratio": 0.2368
+    },
+    "zoo:qwen3.5:397b": {
+      "n_judgments": 120,
+      "known_catch": 1.0,
+      "unknown_catch": 0.6,
+      "clean_fp": 0.325,
+      "generalization_ratio": 0.6
+    },
+    "rlow:deepseek-v4-flash": {
+      "n_judgments": 120,
+      "known_catch": 0.975,
+      "unknown_catch": 0.4,
+      "clean_fp": 0.3,
+      "generalization_ratio": 0.4103
+    },
+    "rlow:gpt-oss:120b": {
+      "n_judgments": 120,
+      "known_catch": 0.95,
+      "unknown_catch": 0.575,
+      "clean_fp": 0.5,
+      "generalization_ratio": 0.6053
+    },
+    "rlow:kimi-k2.6": {
+      "n_judgments": 1,
+      "known_catch": 1.0,
+      "unknown_catch": NaN,
+      "clean_fp": NaN,
+      "generalization_ratio": NaN
+    }
+  },
+  "verdicts": {
+    "P1": {
+      "statement": "median unknown/known catch ratio across all seats < 0.8",
+      "median_generalization_ratio": 0.475,
+      "n_seats": 11,
+      "threshold": 0.8,
+      "verdict": "CONFIRMED"
+    },
+    "P2": {
+      "statement": "clean FP rates span >= 30 percentage points across seats",
+      "clean_fp_min": 0.0,
+      "clean_fp_max": 0.8,
+      "span_pp": 80.0,
+      "threshold_pp": 30.0,
+      "verdict": "CONFIRMED"
+    },
+    "P3": {
+      "statement": "at least one seat reaches unknown catch >= 0.5 AND clean FP <= 0.15",
+      "qualifying_seats": {},
+      "verdict": "REFUTED"
+    },
+    "P4": {
+      "statement": "reasoning low lifts unknown catch by >= 10pp on >= 2 of 3 arm models without a larger clean-FP rise",
+      "rule": "counts iff unknown_lift >= 10pp AND clean_fp_rise <= unknown_lift",
+      "per_model": {
+        "deepseek-v4-flash": {
+          "unknown_catch_none": 0.625,
+          "unknown_catch_low": 0.4,
+          "unknown_lift_pp": -22.5,
+          "clean_fp_none": 0.35,
+          "clean_fp_low": 0.3,
+          "clean_fp_rise_pp": -5.0,
+          "counts": false
+        },
+        "gpt-oss:120b": {
+          "unknown_catch_none": 0.7,
+          "unknown_catch_low": 0.575,
+          "unknown_lift_pp": -12.5,
+          "clean_fp_none": 0.6,
+          "clean_fp_low": 0.5,
+          "clean_fp_rise_pp": -10.0,
+          "counts": false
+        },
+        "kimi-k2.6": {
+          "unknown_catch_none": 0.9,
+          "unknown_catch_low": NaN,
+          "unknown_lift_pp": NaN,
+          "clean_fp_none": 0.8,
+          "clean_fp_low": NaN,
+          "clean_fp_rise_pp": NaN,
+          "counts": false
+        }
+      },
+      "models_counting": 0,
+      "threshold_models": 2,
+      "verdict": "REFUTED"
+    }
+  },
+  "exploratory": {
+    "NON_VERDICT_BEARING": true,
+    "note": "recorded per prereg exploratory_observables; hypothesis generation only, no verdict rests on anything below",
+    "wire_discipline": {
+      "zoo:deepseek-v4-flash": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:deepseek-v4-pro": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:gemma3:27b": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:glm-5.2": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:gpt-oss:120b": {
+        "parse_failures": 0,
+        "json_retries": 16,
+        "transport_retries": 0
+      },
+      "zoo:kimi-k2.6": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:minimax-m2.7": {
+        "parse_failures": 64,
+        "json_retries": 354,
+        "transport_retries": 0
+      },
+      "zoo:mistral-large-3:675b": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:nemotron-3-ultra": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:qwen3-coder:480b": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "zoo:qwen3.5:397b": {
+        "parse_failures": 0,
+        "json_retries": 1,
+        "transport_retries": 0
+      },
+      "rlow:deepseek-v4-flash": {
+        "parse_failures": 0,
+        "json_retries": 5,
+        "transport_retries": 0
+      },
+      "rlow:gpt-oss:120b": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      },
+      "rlow:kimi-k2.6": {
+        "parse_failures": 0,
+        "json_retries": 0,
+        "transport_retries": 0
+      }
+    },
+    "latency_cost": {
+      "zoo:deepseek-v4-flash": {
+        "latency_median_s": 1.034,
+        "latency_p90_s": 2.203,
+        "mean_prompt_tokens": 402.7,
+        "mean_completion_tokens": 17.2,
+        "phase_total_tokens": 50394,
+        "tokens_per_120_items": 50394
+      },
+      "zoo:deepseek-v4-pro": {
+        "latency_median_s": 1.32,
+        "latency_p90_s": 2.576,
+        "mean_prompt_tokens": 402.7,
+        "mean_completion_tokens": 16.6,
+        "phase_total_tokens": 50317,
+        "tokens_per_120_items": 50317
+      },
+      "zoo:gemma3:27b": {
+        "latency_median_s": 1.355,
+        "latency_p90_s": 2.859,
+        "mean_prompt_tokens": 410.6,
+        "mean_completion_tokens": 16.4,
+        "phase_total_tokens": 51237,
+        "tokens_per_120_items": 51237
+      },
+      "zoo:glm-5.2": {
+        "latency_median_s": 1.518,
+        "latency_p90_s": 2.577,
+        "mean_prompt_tokens": 406.1,
+        "mean_completion_tokens": 17.1,
+        "phase_total_tokens": 50791,
+        "tokens_per_120_items": 50791
+      },
+      "zoo:gpt-oss:120b": {
+        "latency_median_s": 8.428,
+        "latency_p90_s": 16.232,
+        "mean_prompt_tokens": 459.2,
+        "mean_completion_tokens": 624.2,
+        "phase_total_tokens": 154196,
+        "tokens_per_120_items": 154196
+      },
+      "zoo:kimi-k2.6": {
+        "latency_median_s": 1.427,
+        "latency_p90_s": 2.779,
+        "mean_prompt_tokens": 407.5,
+        "mean_completion_tokens": 16.4,
+        "phase_total_tokens": 50869,
+        "tokens_per_120_items": 50869
+      },
+      "zoo:minimax-m2.7": {
+        "latency_median_s": 23.377,
+        "latency_p90_s": 26.951,
+        "mean_prompt_tokens": 432.5,
+        "mean_completion_tokens": 972.1,
+        "phase_total_tokens": 676178,
+        "tokens_per_120_items": 676178
+      },
+      "zoo:mistral-large-3:675b": {
+        "latency_median_s": 1.193,
+        "latency_p90_s": 1.594,
+        "mean_prompt_tokens": 413.7,
+        "mean_completion_tokens": 19.4,
+        "phase_total_tokens": 51962,
+        "tokens_per_120_items": 51962
+      },
+      "zoo:nemotron-3-ultra": {
+        "latency_median_s": 1.296,
+        "latency_p90_s": 13.731,
+        "mean_prompt_tokens": 427.7,
+        "mean_completion_tokens": 16.4,
+        "phase_total_tokens": 53286,
+        "tokens_per_120_items": 53286
+      },
+      "zoo:qwen3-coder:480b": {
+        "latency_median_s": 1.684,
+        "latency_p90_s": 2.921,
+        "mean_prompt_tokens": 412.9,
+        "mean_completion_tokens": 15.5,
+        "phase_total_tokens": 51411,
+        "tokens_per_120_items": 51411
+      },
+      "zoo:qwen3.5:397b": {
+        "latency_median_s": 0.954,
+        "latency_p90_s": 1.412,
+        "mean_prompt_tokens": 418.0,
+        "mean_completion_tokens": 31.1,
+        "phase_total_tokens": 54405,
+        "tokens_per_120_items": 54405
+      },
+      "rlow:deepseek-v4-flash": {
+        "latency_median_s": 2.619,
+        "latency_p90_s": 9.443,
+        "mean_prompt_tokens": 402.7,
+        "mean_completion_tokens": 645.4,
+        "phase_total_tokens": 136234,
+        "tokens_per_120_items": 136234
+      },
+      "rlow:gpt-oss:120b": {
+        "latency_median_s": 2.019,
+        "latency_p90_s": 3.731,
+        "mean_prompt_tokens": 464.2,
+        "mean_completion_tokens": 118.6,
+        "phase_total_tokens": 69932,
+        "tokens_per_120_items": 69932
+      },
+      "rlow:kimi-k2.6": {
+        "latency_median_s": 5.847,
+        "latency_p90_s": 5.847,
+        "mean_prompt_tokens": 199.0,
+        "mean_completion_tokens": 246.0,
+        "phase_total_tokens": 445,
+        "tokens_per_120_items": 445
+      }
+    },
+    "response_length_vs_verdict_point_biserial": {
+      "zoo:deepseek-v4-flash": {
+        "r_response_chars": 0.8482,
+        "r_completion_tokens": 0.8055
+      },
+      "zoo:deepseek-v4-pro": {
+        "r_response_chars": 0.782,
+        "r_completion_tokens": 0.7412
+      },
+      "zoo:gemma3:27b": {
+        "r_response_chars": 0.934,
+        "r_completion_tokens": 0.8569
+      },
+      "zoo:glm-5.2": {
+        "r_response_chars": 0.8712,
+        "r_completion_tokens": 0.8326
+      },
+      "zoo:gpt-oss:120b": {
+        "r_response_chars": 0.4974,
+        "r_completion_tokens": -0.2069
+      },
+      "zoo:kimi-k2.6": {
+        "r_response_chars": 0.6996,
+        "r_completion_tokens": 0.6011
+      },
+      "zoo:minimax-m2.7": {
+        "r_response_chars": 0.508,
+        "r_completion_tokens": -0.4442
+      },
+      "zoo:mistral-large-3:675b": {
+        "r_response_chars": 0.9018,
+        "r_completion_tokens": 0.8829
+      },
+      "zoo:nemotron-3-ultra": {
+        "r_response_chars": 0.8966,
+        "r_completion_tokens": 0.8615
+      },
+      "zoo:qwen3-coder:480b": {
+        "r_response_chars": 0.8634,
+        "r_completion_tokens": 0.866
+      },
+      "zoo:qwen3.5:397b": {
+        "r_response_chars": 0.8174,
+        "r_completion_tokens": -0.1001
+      },
+      "rlow:deepseek-v4-flash": {
+        "r_response_chars": 0.6732,
+        "r_completion_tokens": -0.0856
+      },
+      "rlow:gpt-oss:120b": {
+        "r_response_chars": 0.8317,
+        "r_completion_tokens": 0.0857
+      },
+      "rlow:kimi-k2.6": {
+        "r_response_chars": null,
+        "r_completion_tokens": null
+      },
+      "POOLED_all_seats": {
+        "r_response_chars": 0.7129,
+        "r_completion_tokens": 0.0374
+      }
+    },
+    "inter_seat_agreement": {
+      "zoo:deepseek-v4-flash": {
+        "zoo:deepseek-v4-flash": 1.0,
+        "zoo:deepseek-v4-pro": 0.8167,
+        "zoo:gemma3:27b": 0.75,
+        "zoo:glm-5.2": 0.8083,
+        "zoo:gpt-oss:120b": 0.7583,
+        "zoo:kimi-k2.6": 0.75,
+        "zoo:minimax-m2.7": 0.7083,
+        "zoo:mistral-large-3:675b": 0.7417,
+        "zoo:nemotron-3-ultra": 0.8,
+        "zoo:qwen3-coder:480b": 0.7667,
+        "zoo:qwen3.5:397b": 0.8083
+      },
+      "zoo:deepseek-v4-pro": {
+        "zoo:deepseek-v4-flash": 0.8167,
+        "zoo:deepseek-v4-pro": 1.0,
+        "zoo:gemma3:27b": 0.8167,
+        "zoo:glm-5.2": 0.8083,
+        "zoo:gpt-oss:120b": 0.7083,
+        "zoo:kimi-k2.6": 0.6167,
+        "zoo:minimax-m2.7": 0.825,
+        "zoo:mistral-large-3:675b": 0.8417,
+        "zoo:nemotron-3-ultra": 0.8333,
+        "zoo:qwen3-coder:480b": 0.8667,
+        "zoo:qwen3.5:397b": 0.825
+      },
+      "zoo:gemma3:27b": {
+        "zoo:deepseek-v4-flash": 0.75,
+        "zoo:deepseek-v4-pro": 0.8167,
+        "zoo:gemma3:27b": 1.0,
+        "zoo:glm-5.2": 0.7583,
+        "zoo:gpt-oss:120b": 0.5917,
+        "zoo:kimi-k2.6": 0.5333,
+        "zoo:minimax-m2.7": 0.8583,
+        "zoo:mistral-large-3:675b": 0.875,
+        "zoo:nemotron-3-ultra": 0.85,
+        "zoo:qwen3-coder:480b": 0.8167,
+        "zoo:qwen3.5:397b": 0.7417
+      },
+      "zoo:glm-5.2": {
+        "zoo:deepseek-v4-flash": 0.8083,
+        "zoo:deepseek-v4-pro": 0.8083,
+        "zoo:gemma3:27b": 0.7583,
+        "zoo:glm-5.2": 1.0,
+        "zoo:gpt-oss:120b": 0.75,
+        "zoo:kimi-k2.6": 0.675,
+        "zoo:minimax-m2.7": 0.7667,
+        "zoo:mistral-large-3:675b": 0.7667,
+        "zoo:nemotron-3-ultra": 0.8083,
+        "zoo:qwen3-coder:480b": 0.775,
+        "zoo:qwen3.5:397b": 0.8167
+      },
+      "zoo:gpt-oss:120b": {
+        "zoo:deepseek-v4-flash": 0.7583,
+        "zoo:deepseek-v4-pro": 0.7083,
+        "zoo:gemma3:27b": 0.5917,
+        "zoo:glm-5.2": 0.75,
+        "zoo:gpt-oss:120b": 1.0,
+        "zoo:kimi-k2.6": 0.7917,
+        "zoo:minimax-m2.7": 0.6333,
+        "zoo:mistral-large-3:675b": 0.6,
+        "zoo:nemotron-3-ultra": 0.7083,
+        "zoo:qwen3-coder:480b": 0.625,
+        "zoo:qwen3.5:397b": 0.7833
+      },
+      "zoo:kimi-k2.6": {
+        "zoo:deepseek-v4-flash": 0.75,
+        "zoo:deepseek-v4-pro": 0.6167,
+        "zoo:gemma3:27b": 0.5333,
+        "zoo:glm-5.2": 0.675,
+        "zoo:gpt-oss:120b": 0.7917,
+        "zoo:kimi-k2.6": 1.0,
+        "zoo:minimax-m2.7": 0.475,
+        "zoo:mistral-large-3:675b": 0.4917,
+        "zoo:nemotron-3-ultra": 0.5667,
+        "zoo:qwen3-coder:480b": 0.5167,
+        "zoo:qwen3.5:397b": 0.725
+      },
+      "zoo:minimax-m2.7": {
+        "zoo:deepseek-v4-flash": 0.7083,
+        "zoo:deepseek-v4-pro": 0.825,
+        "zoo:gemma3:27b": 0.8583,
+        "zoo:glm-5.2": 0.7667,
+        "zoo:gpt-oss:120b": 0.6333,
+        "zoo:kimi-k2.6": 0.475,
+        "zoo:minimax-m2.7": 1.0,
+        "zoo:mistral-large-3:675b": 0.8833,
+        "zoo:nemotron-3-ultra": 0.825,
+        "zoo:qwen3-coder:480b": 0.875,
+        "zoo:qwen3.5:397b": 0.7333
+      },
+      "zoo:mistral-large-3:675b": {
+        "zoo:deepseek-v4-flash": 0.7417,
+        "zoo:deepseek-v4-pro": 0.8417,
+        "zoo:gemma3:27b": 0.875,
+        "zoo:glm-5.2": 0.7667,
+        "zoo:gpt-oss:120b": 0.6,
+        "zoo:kimi-k2.6": 0.4917,
+        "zoo:minimax-m2.7": 0.8833,
+        "zoo:mistral-large-3:675b": 1.0,
+        "zoo:nemotron-3-ultra": 0.875,
+        "zoo:qwen3-coder:480b": 0.925,
+        "zoo:qwen3.5:397b": 0.7333
+      },
+      "zoo:nemotron-3-ultra": {
+        "zoo:deepseek-v4-flash": 0.8,
+        "zoo:deepseek-v4-pro": 0.8333,
+        "zoo:gemma3:27b": 0.85,
+        "zoo:glm-5.2": 0.8083,
+        "zoo:gpt-oss:120b": 0.7083,
+        "zoo:kimi-k2.6": 0.5667,
+        "zoo:minimax-m2.7": 0.825,
+        "zoo:mistral-large-3:675b": 0.875,
+        "zoo:nemotron-3-ultra": 1.0,
+        "zoo:qwen3-coder:480b": 0.85,
+        "zoo:qwen3.5:397b": 0.8083
+      },
+      "zoo:qwen3-coder:480b": {
+        "zoo:deepseek-v4-flash": 0.7667,
+        "zoo:deepseek-v4-pro": 0.8667,
+        "zoo:gemma3:27b": 0.8167,
+        "zoo:glm-5.2": 0.775,
+        "zoo:gpt-oss:120b": 0.625,
+        "zoo:kimi-k2.6": 0.5167,
+        "zoo:minimax-m2.7": 0.875,
+        "zoo:mistral-large-3:675b": 0.925,
+        "zoo:nemotron-3-ultra": 0.85,
+        "zoo:qwen3-coder:480b": 1.0,
+        "zoo:qwen3.5:397b": 0.7417
+      },
+      "zoo:qwen3.5:397b": {
+        "zoo:deepseek-v4-flash": 0.8083,
+        "zoo:deepseek-v4-pro": 0.825,
+        "zoo:gemma3:27b": 0.7417,
+        "zoo:glm-5.2": 0.8167,
+        "zoo:gpt-oss:120b": 0.7833,
+        "zoo:kimi-k2.6": 0.725,
+        "zoo:minimax-m2.7": 0.7333,
+        "zoo:mistral-large-3:675b": 0.7333,
+        "zoo:nemotron-3-ultra": 0.8083,
+        "zoo:qwen3-coder:480b": 0.7417,
+        "zoo:qwen3.5:397b": 1.0
+      }
+    },
+    "family_clustering": {
+      "same_family_pairs": 2,
+      "same_family_mean_agreement": 0.7792,
+      "cross_family_pairs": 53,
+      "cross_family_mean_agreement": 0.7517,
+      "most_agreeing_pair": [
+        "zoo:mistral-large-3:675b",
+        "zoo:qwen3-coder:480b",
+        0.925
+      ],
+      "least_agreeing_pair": [
+        "zoo:kimi-k2.6",
+        "zoo:minimax-m2.7",
+        0.475
+      ]
+    },
+    "deepseek_self_family": {
+      "note": "all 40 unknown-flaw items were authored by deepseek-v4-pro",
+      "deepseek_seats": {
+        "zoo:deepseek-v4-flash": 0.625,
+        "zoo:deepseek-v4-pro": 0.475
+      },
+      "deepseek_mean_unknown_catch": 0.55,
+      "other_seats_mean_unknown_catch": 0.45
+    },
+    "per_flaw_class": {
+      "affirming_the_consequent": {
+        "battery": "known",
+        "n_items": 2,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "arithmetic_resource_error": {
+        "battery": "known",
+        "n_items": 2,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "base_rate_neglect": {
+        "battery": "known",
+        "n_items": 4,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "circular_support": {
+        "battery": "unknown",
+        "n_items": 10,
+        "mean_catch_across_seats": 0.1727,
+        "min_seat": "zoo:gemma3:27b",
+        "min_catch": 0.0,
+        "max_seat": "zoo:gpt-oss:120b",
+        "max_catch": 0.7,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 0.1,
+          "zoo:deepseek-v4-pro": 0.2,
+          "zoo:gemma3:27b": 0.0,
+          "zoo:glm-5.2": 0.1,
+          "zoo:gpt-oss:120b": 0.7,
+          "zoo:kimi-k2.6": 0.6,
+          "zoo:minimax-m2.7": 0.0,
+          "zoo:mistral-large-3:675b": 0.0,
+          "zoo:nemotron-3-ultra": 0.0,
+          "zoo:qwen3-coder:480b": 0.0,
+          "zoo:qwen3.5:397b": 0.2
+        }
+      },
+      "circularity": {
+        "battery": "known",
+        "n_items": 5,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "composition": {
+        "battery": "known",
+        "n_items": 3,
+        "mean_catch_across_seats": 0.9697,
+        "min_seat": "zoo:kimi-k2.6",
+        "min_catch": 0.6667,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 0.6667,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "conjunction_fallacy": {
+        "battery": "known",
+        "n_items": 2,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "denying_the_antecedent": {
+        "battery": "known",
+        "n_items": 5,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "dormitive_vacuity": {
+        "battery": "known",
+        "n_items": 3,
+        "mean_catch_across_seats": 0.9697,
+        "min_seat": "zoo:qwen3-coder:480b",
+        "min_catch": 0.6667,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 0.6667,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "equivocation": {
+        "battery": "known",
+        "n_items": 4,
+        "mean_catch_across_seats": 0.8409,
+        "min_seat": "zoo:glm-5.2",
+        "min_catch": 0.5,
+        "max_seat": "zoo:deepseek-v4-pro",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 0.75,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 0.5,
+          "zoo:gpt-oss:120b": 0.75,
+          "zoo:kimi-k2.6": 0.75,
+          "zoo:minimax-m2.7": 0.75,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 0.75,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "false_arithmetic_premise": {
+        "battery": "known",
+        "n_items": 4,
+        "mean_catch_across_seats": 0.8636,
+        "min_seat": "zoo:gemma3:27b",
+        "min_catch": 0.5,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 0.5,
+          "zoo:glm-5.2": 0.75,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 0.75,
+          "zoo:mistral-large-3:675b": 0.75,
+          "zoo:nemotron-3-ultra": 0.75,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "hasty_generalization": {
+        "battery": "known",
+        "n_items": 2,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "post_hoc_causation": {
+        "battery": "known",
+        "n_items": 4,
+        "mean_catch_across_seats": 1.0,
+        "min_seat": "zoo:deepseek-v4-flash",
+        "min_catch": 1.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 1.0,
+          "zoo:gemma3:27b": 1.0,
+          "zoo:glm-5.2": 1.0,
+          "zoo:gpt-oss:120b": 1.0,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 1.0,
+          "zoo:mistral-large-3:675b": 1.0,
+          "zoo:nemotron-3-ultra": 1.0,
+          "zoo:qwen3-coder:480b": 1.0,
+          "zoo:qwen3.5:397b": 1.0
+        }
+      },
+      "subtle_unit_error": {
+        "battery": "unknown",
+        "n_items": 10,
+        "mean_catch_across_seats": 0.6091,
+        "min_seat": "zoo:gemma3:27b",
+        "min_catch": 0.3,
+        "max_seat": "zoo:kimi-k2.6",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 0.9,
+          "zoo:deepseek-v4-pro": 0.7,
+          "zoo:gemma3:27b": 0.3,
+          "zoo:glm-5.2": 0.6,
+          "zoo:gpt-oss:120b": 0.7,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 0.3,
+          "zoo:mistral-large-3:675b": 0.5,
+          "zoo:nemotron-3-ultra": 0.4,
+          "zoo:qwen3-coder:480b": 0.6,
+          "zoo:qwen3.5:397b": 0.7
+        }
+      },
+      "vacuous_generality": {
+        "battery": "unknown",
+        "n_items": 10,
+        "mean_catch_across_seats": 0.4909,
+        "min_seat": "zoo:gemma3:27b",
+        "min_catch": 0.2,
+        "max_seat": "zoo:kimi-k2.6",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 0.5,
+          "zoo:deepseek-v4-pro": 0.6,
+          "zoo:gemma3:27b": 0.2,
+          "zoo:glm-5.2": 0.8,
+          "zoo:gpt-oss:120b": 0.7,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 0.3,
+          "zoo:mistral-large-3:675b": 0.2,
+          "zoo:nemotron-3-ultra": 0.2,
+          "zoo:qwen3-coder:480b": 0.2,
+          "zoo:qwen3.5:397b": 0.7
+        }
+      },
+      "verifier_shaped_but_wrong": {
+        "battery": "unknown",
+        "n_items": 10,
+        "mean_catch_across_seats": 0.6,
+        "min_seat": "zoo:minimax-m2.7",
+        "min_catch": 0.0,
+        "max_seat": "zoo:deepseek-v4-flash",
+        "max_catch": 1.0,
+        "per_seat": {
+          "zoo:deepseek-v4-flash": 1.0,
+          "zoo:deepseek-v4-pro": 0.4,
+          "zoo:gemma3:27b": 0.8,
+          "zoo:glm-5.2": 0.8,
+          "zoo:gpt-oss:120b": 0.7,
+          "zoo:kimi-k2.6": 1.0,
+          "zoo:minimax-m2.7": 0.0,
+          "zoo:mistral-large-3:675b": 0.3,
+          "zoo:nemotron-3-ultra": 0.7,
+          "zoo:qwen3-coder:480b": 0.1,
+          "zoo:qwen3.5:397b": 0.8
+        }
+      }
+    }
+  },
+  "token_spend": {
+    "prompt_tokens": 831645,
+    "completion_tokens": 670012,
+    "total": 1501657,
+    "calls": 1873,
+    "ceiling": 1500000
+  },
+  "caveats": [
+    "40 items per cell; per-seat rates have ~\u00b10.08 binomial SE near 0.5",
+    "all unknown-flaw and clean items were authored by a single adversary (deepseek-v4-pro); family effects on those batteries are confounded with the author family",
+    "parse failures count as flawed=false (conservative against the judge), as in tranches 1/2",
+    "P1's 'all seats' is read as the 11 zoo seats at reasoning none; the reasoning arm bears only on P4",
+    "reasoning-arm seats ran with max_tokens 3000 (vs 1200 for zoo seats) so thinking could not truncate the verdict JSON; latency/cost rows are therefore not cap-matched across arms",
+    "single provider (Ollama Cloud); latency observables reflect one day's provider load"
+  ]
+}

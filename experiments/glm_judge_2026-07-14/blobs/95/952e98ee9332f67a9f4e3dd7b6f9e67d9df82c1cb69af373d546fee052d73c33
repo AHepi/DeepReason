@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The target does state a specific, measurable condition: P >= 1/2. The forbidden case corresponding to P < 1/2 is therefore valid: it tests exactly the condition the mechanism actually asserts, not an admitted proxy for an unstated function."}
+```

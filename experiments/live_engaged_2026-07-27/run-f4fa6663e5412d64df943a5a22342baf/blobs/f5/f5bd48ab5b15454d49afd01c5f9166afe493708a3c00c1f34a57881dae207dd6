@@ -1,0 +1,11 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The claim asserts that temporal consistency (e.g., trusted timestamping) is the *sole* durable binding that turns silent divergence into a contradiction, but this ignores cryptographic commitments (e.g., digital signatures or hash chains) that also achieve this by binding the log's state immutably. The analogy's 'shared structure' with cryptographic commitments is acknowledged, yet the claim arbitrarily excludes them as alternatives, violating the problem's requirement for a *durable binding* that *alone* creates the contradiction. The counterconditions do not address this exclusivity flaw, as they focus only on timestamping failures rather than the existence of equally valid bindings."
+    }
+  ]
+}
+```

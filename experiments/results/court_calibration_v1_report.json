@@ -1,0 +1,55 @@
+{
+ "consequence": "per this prereg and bronze_feedback_v2_prereg gate 2: active authority is NOT granted; feedback v2's active arm is cancelled; observe-only is adopted as the STANDING criticism policy for text workloads (already the code default). The defended court's mercy is now quantified with known labels: perfect specificity, 11.9 percent sensitivity - it almost never convicts, including when a provable defect is planted in front of it. The only defect class it catches is the blatant causal non sequitur (5/7).",
+ "corpus": "experiments/court_calibration_items/pairs_v1.json (42 pairs, labels by construction)",
+ "measured": {
+  "critic_objection_rate": {
+   "clean": 1.0,
+   "corrupted": 1.0
+  },
+  "false_conviction": 0.0,
+  "outcomes_all_84": {
+   "abstain": 45,
+   "overrule": 34,
+   "sustain": 5
+  },
+  "per_class_sensitivity": {
+   "causal-non-sequitur": {
+    "caught": 5,
+    "of": 7
+   },
+   "chronology-error": {
+    "caught": 0,
+    "of": 7
+   },
+   "evidence-misquotation": {
+    "caught": 0,
+    "of": 7
+   },
+   "scope-contradiction": {
+    "caught": 0,
+    "of": 7
+   },
+   "unsupported-comparison": {
+    "caught": 0,
+    "of": 7
+   },
+   "vacuous-forbidden-case": {
+    "caught": 0,
+    "of": 7
+   }
+  },
+  "sensitivity": 0.119
+ },
+ "prereg": "experiments/court_calibration_v1_prereg.yaml",
+ "schema": "deepreason-court-calibration-v1",
+ "tokens": {
+  "calls": 529,
+  "completion_tokens": 131399,
+  "prompt_tokens": 415132
+ },
+ "verdicts": {
+  "P1_the_gate": "REFUTED - sensitivity 0.119 vs bound 0.80 (false conviction 0.0 vs bound 0.15); the gate FAILS",
+  "P2": "REFUTED - the scope-obsessed court caught 0/7 planted GENUINE scope contradictions while grounding most objections in scope formalism",
+  "P3": "CONFIRMED - critic objection rate 1.0 on clean and corrupted alike; all discrimination (what little exists) lives in the court"
+ }
+}

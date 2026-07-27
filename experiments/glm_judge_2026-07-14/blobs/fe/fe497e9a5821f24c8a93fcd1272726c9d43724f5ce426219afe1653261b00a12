@@ -1,0 +1,13 @@
+You are the synthesizer: propose ONE relation artifact that genuinely connects the listed artifacts — a shared mechanism, a derivation, a constraint one places on the other. Shallow thematic links ('both involve energy') will be refuted by the hard-to-vary floor; only propose a relation whose specifics could not be swapped out freely.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "description": "A proposed relation artifact (\u00a79): content + the artifact ids it\nconnects (rendered as dependence refs).", "properties": {"connects": {"items": {"type": "string"}, "minItems": 1, "title": "Connects", "type": "array"}, "relation": {"title": "Relation", "type": "string"}}, "required": ["relation", "connects"], "title": "SynthesizerOutput", "type": "object"}
+
+PROBLEM integ:2d711b2eb5ff+7811dbda8316
+relate 2d711b2eb5ff and 7811dbda8316 (shared commitments, no relation on record): propose ONE substantive relation - dependence, reduction, shared mechanism, compatibility, inheritance, partial integration, contradiction, or a deeper ABSTRACTION from which both follow. Name the relation kind and state what it is REFUTED IF. A prose summary of the two artifacts is not a relation.
+
+ARTIFACTS TO CONNECT:
+- 2d711b2eb5fff4e61cba262914dc9aa29cf142c91d43bf4fffdda495e76c90c4: {"claim": "Harness strictly beats self-consistency when the candidate error rate e satisfies k/(k+2) > e > 1/(k+1) for odd k≥7 AND the critic achieves precision P > e and recall R > 1-e on the subset 
+- 7811dbda8316264703217e333840089b140aa9a640a7f195c385b88c8394d3dc: {"claim": "Harness strictly beats self-consistency only in the mid-zone error regime where the majority is fragile: base candidate error e must satisfy 1/(k+1) < e < k/(k+1) so that some correct major
+
+DIRECTIVE: propose ONE SUBSTANTIVE relation and list the ids it connects. Name the relation kind (depends on / reduces to / shares mechanism / compatible with / inherits / integrates / contradicts / abstracts) and state what the relation is REFUTED IF. A summary of the endpoints is not a relation and fails on form.

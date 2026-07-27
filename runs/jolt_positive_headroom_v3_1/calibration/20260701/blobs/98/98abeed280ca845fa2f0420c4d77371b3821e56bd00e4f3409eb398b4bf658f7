@@ -1,0 +1,28 @@
+{
+  "candidates": [
+    {
+      "content": "{\"tour\":[\"0\",\"5\",\"10\",\"12\",\"9\",\"11\",\"7\",\"4\",\"1\",\"3\",\"2\",\"13\",\"8\",\"6\"],\"rationale\":\"Mirror the modal 440-distance tour: sweep the eastern cluster (5,10,12,9,11) then bridge west via 7,4,1,3,2,13,8,6 to close near 0.\"}",
+      "typicality": 0.95,
+      "neighbours": [
+        "0,5,10,12,9,11,7,4,1,3,2,13,8,6",
+        "0,5,10,12,9,11,7,4,1,3,2,8,13,6"
+      ]
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"6\",\"8\",\"13\",\"2\",\"3\",\"1\",\"4\",\"7\",\"11\",\"5\",\"10\",\"12\",\"9\"],\"rationale\":\"Reverse-oriented variant of prior valid 486-distance tour: start through the 6-8-13-2-3 western spine, then jump to 1-4-7 and exit via 11-5-10-12-9.\"}",
+      "typicality": 0.6,
+      "neighbours": [
+        "0,6,8,13,2,3,1,4,7,11,5,10,12,9",
+        "0,6,8,2,13,3,1,4,7,11,5,10,12,9"
+      ]
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"2\",\"6\",\"8\",\"13\",\"3\",\"1\",\"4\",\"7\",\"11\",\"9\",\"12\",\"10\",\"5\"],\"rationale\":\"Atypical: reorder the western spine (2-6-8-13-3) before the 1-4-7 mid-section, and pair 9-12-10-5 on the return to stress criticizability of segment orientation.\"}",
+      "typicality": 0.2,
+      "neighbours": [
+        "0,2,6,8,13,3,1,4,7,11,9,12,10,5",
+        "0,2,13,8,6,3,1,4,7,11,9,12,10,5"
+      ]
+    }
+  ]
+}

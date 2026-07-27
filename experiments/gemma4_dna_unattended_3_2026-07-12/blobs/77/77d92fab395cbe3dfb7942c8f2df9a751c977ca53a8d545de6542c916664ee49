@@ -1,0 +1,47 @@
+Make bounded substantive edits. Name which local fields each edit changes.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactEdit": {"additionalProperties": false, "properties": {"changed_fields": {"items": {"type": "string"}, "minItems": 1, "title": "Changed Fields", "type": "array"}, "content": {"minLength": 1, "title": "Content", "type": "string"}}, "required": ["content", "changed_fields"], "title": "CompactEdit", "type": "object"}}, "additionalProperties": false, "properties": {"edits": {"items": {"$ref": "#/$defs/CompactEdit"}, "minItems": 1, "title": "Edits", "type": "array"}}, "required": ["edits"], "title": "CompactVariator", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"edits":[{"content":"x","changed_fields":[""]}]}
+
+INPUT:
+
+TARGET CONTENT:
+# Product Plan: The Molecular Ballet (Cinematic Focus)
+
+## Scope
+Single-file HTML experience focused on the 'artistic' aspect of DNA through high-fidelity SVG animations and scroll-driven depth.
+
+## Feature List
+- **Parallax Helix Descent**: As the user scrolls, the camera moves 'down' a 3D-simulated DNA strand.
+- **Dynamic Transcription Layer**: A sliding overlay that transforms DNA sequences into mRNA in real-time.
+- **Kinetic Typography**: Headings that assemble themselves from nucleotide-like fragments.
+- **Accessibility Guard**: Strict CSS `@media (prefers-reduced-motion: reduce)` override that replaces all transforms with static fades.
+
+## Key Interactions
+- **Scroll-Linked Animation**: The `window.scrollY` value drives the rotation of the double helix.
+- **Hover-Reveal**: Hovering over base pairs reveals their chemical names (Adenine, Thymine, Cytosine, Guanine).
+- **The 'Zip' Toggle**: A button that triggers the replication animation, splitting the helix into two.
+
+## Content Inventory
+- **Hero Heading**: "The Blueprint of Life"
+- **Intro Text**: "DNA is not just a molecule; it is a biological archive encoding the instructions for every living cell."
+- **Replication Section**: Heading: "The Great Unzipping". Copy: "Helicase breaks the hydrogen bonds, allowing DNA Polymerase to build complementary strands."
+- **Transcription Section**: Heading: "From Code to Action". Copy: "RNA Polymerase reads the DNA template to create messenger RNA (mRNA), the bridge to protein synthesis."
+- **Factoids**: "3 billion base pairs in the human genome", "A single cell's DNA can stretch 2 meters if unfolded."
+
+## Acceptance Criteria
+1. The page is a single .html file with no external JS dependencies.
+2. Scrolling causes a visual shift in the Z-axis of the DNA helix.
+3. `prefers-reduced-motion: reduce` disables all parallax and sliding transitions immediately.
+4. The transcription animation correctly swaps T for U (Uracil) in the visual mRNA strand.
+5. All text from the Content Inventory is present and legible against the 2026 vibrant background.
+
+BATTERY THE EDITS WILL FACE:
+- predicate:len(content) > 400 and 'doctype' not in content.lower()[:200]
+
+DIRECTIVE: produce exactly 8 bounded edits.

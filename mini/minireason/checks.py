@@ -1,209 +1,110 @@
-"""M1 — skeleton contract + program checks (MINI_PLAN §3.4).
+"""Canonical skeleton commitments and deterministic program checks.
 
-Free criticism is the only criticism that measured cost-positive at low
-base error: in the basin arms, mechanical checks refuted candidates with
-zero judge tokens. Each candidate's OWN falsifiability claims (forbidden
-cases with ``predicate:``/``program:`` evals) compile into runnable checks;
-a failed check is the only refutation source in v0. ``rubric:`` cases are
-carried on the interface but never judged in the loop — that is the
-offline instrument's job (judge.py).
-
-Commitment ids and eval semantics are the parent's exactly, so a mini log
-replays under the parent with identical verdicts (G6).
+MiniReason owns no skeleton parser, commitment constructor, predicate guard,
+or program registry. It retains only the reduced policy of immediately
+executing model-visible program commitments and turning failures into the
+shared fail-warrant plumbing in :mod:`minireason.loop`.
 """
 
-import ast
-import contextlib
-import json
-import re
-import signal
+from deepreason import programs
+from deepreason.informal.skeleton import (
+    SKELETON_WF_ID,
+    ForbiddenCase,
+    Scope,
+    Skeleton,
+    forbidden_commitment,
+    parse_skeleton,
+    skeleton_wf_commitment,
+)
+from deepreason.ontology import Artifact, Commitment, Interface, Provenance
 
-from pydantic import BaseModel, Field, ValidationError
-
-from minireason.log import canonical_json, sha256_hex
-
-SKELETON_WF_ID = "skeleton-wf"
-PREDICATE_TIMEOUT_S = 2  # wall bound on hostile predicates (e.g. 10**10**8)
-
-
-class UnsafePredicate(ValueError):
-    """A predicate reaches dunder internals (the object-subclasses sandbox-
-    escape surface) or exponentiates (integer bomb)."""
-
-
-def _validate_predicate(expr: str) -> None:
-    """SECURITY: the mini evals ``predicate:`` forbidden cases from UNTRUSTED
-    skeleton content — its free-criticism mechanism — so it cannot ban
-    predicates like the parent; it must make them safe. eval() with
-    __builtins__={} is escapable via ``().__class__.__base__.__subclasses__()``
-    (verified live), and every such escape needs a dunder/underscore
-    attribute or name. Reject any Attribute/Name touching an underscore-
-    prefixed identifier — this blocks the whole escape family while leaving
-    every legitimate predicate (len(content) > 10, 'x' in content.lower(),
-    comprehensions over content.split()) untouched. ** is only useful here
-    as an integer bomb. Parse errors are unsafe by default."""
-    try:
-        tree = ast.parse(expr, mode="eval")
-    except SyntaxError as e:
-        raise UnsafePredicate(f"unparseable predicate: {e}") from e
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
-            raise UnsafePredicate(f"dunder attribute access: .{node.attr}")
-        if isinstance(node, ast.Name) and node.id.startswith("_"):
-            raise UnsafePredicate(f"underscore name: {node.id}")
-        if isinstance(node, ast.Pow):
-            raise UnsafePredicate("exponentiation not allowed in a predicate")
+# Historical Mini imports remain valid, but their implementations are the
+# canonical ones. They are useful for direct trusted predicate diagnostics;
+# model-authored Skeleton.forbidden values reject ``predicate:`` upstream.
+UnsafePredicate = programs.UnsafePredicate
+_validate_predicate = programs._validate_predicate
+PROGRAMS = programs.PROGRAMS
 
 
-@contextlib.contextmanager
-def _deadline(seconds: int):
-    """Bound a predicate's wall time (POSIX main thread; elsewhere it runs
-    unbounded, as the parent does). Safe for determinism: verdicts are
-    logged as warrants and replay never re-evaluates, so a timeout can
-    only shape the live run, never fork the log."""
-    if hasattr(signal, "SIGALRM") and signal.getsignal(signal.SIGALRM) in (
-            signal.SIG_DFL, signal.default_int_handler, None):
-        def _raise(signum, frame):
-            raise TimeoutError(f"predicate exceeded {seconds}s")
-
-        old = signal.signal(signal.SIGALRM, _raise)
-        signal.alarm(seconds)
-        try:
-            yield
-        finally:
-            signal.alarm(0)
-            signal.signal(signal.SIGALRM, old)
-    else:
-        yield
-
-
-class ForbiddenCase(BaseModel):
-    case: str = Field(min_length=1)
-    eval: str  # "predicate:<expr>" | "program:<ref>" | "rubric:<spec-id>"
-    observation_valued: bool = False
-
-
-class Scope(BaseModel):
-    covers: list[str] = Field(default_factory=list)
-    excludes: list[str] = Field(default_factory=list)
-
-
-class Skeleton(BaseModel):
-    claim: str
-    mechanism: str
-    scope: Scope = Field(default_factory=Scope)
-    forbidden: list[ForbiddenCase] = Field(default_factory=list)
-    prose_notes: str | None = None  # rendered, never adjudicated
-
-
-def parse_skeleton(text: str) -> Skeleton | None:
-    try:
-        data = json.loads(text)
-    except (ValueError, TypeError):
-        return None
-    if not isinstance(data, dict) or "claim" not in data or "mechanism" not in data:
-        return None
-    try:
-        return Skeleton.model_validate(data)
-    except ValidationError:
-        return None
-
-
-# --- eval machinery (parent programs.py, ported) ----------------------------
-
-_SAFE_NAMES = {
-    "len": len, "any": any, "all": all, "min": min, "max": max, "abs": abs,
-    "sum": sum, "str": str, "int": int, "float": float, "sorted": sorted,
-    "re": re, "json": json,
-}
-
-
-def _json_wf(text: str) -> tuple[str, dict]:
-    try:
-        json.loads(text)
-        return "pass", {"parsed": True}
-    except Exception as e:  # noqa: BLE001 - verdicts must not crash the loop
-        return "fail", {"error": str(e)}
-
-
-def _skeleton_wf(text: str) -> tuple[str, dict]:
-    """Parses as a skeleton AND forbids at least one case — forbid nothing
-    => refuted by a program: demarcation made real."""
-    skeleton = parse_skeleton(text)
-    if skeleton is None:
-        return "fail", {"error": "content does not parse as a skeleton"}
-    if not skeleton.forbidden:
-        return "fail", {"error": "forbids nothing: empty attack surface (§6)"}
-    return "pass", {"forbidden_cases": len(skeleton.forbidden)}
-
-
-PROGRAMS = {"json-wf": _json_wf, "skeleton_wf": _skeleton_wf}
+def _artifact(text: str, commitments: list[str], codec: str = "utf8") -> Artifact:
+    interface = Interface(commitments=commitments)
+    content_ref = f"inline:{text}"
+    return Artifact(
+        id=Artifact.compute_id(content_ref, codec, interface),
+        content_ref=content_ref,
+        codec=codec,
+        interface=interface,
+        provenance=Provenance(role="user"),
+    )
 
 
 def evaluable(eval_spec: str) -> bool:
-    kind, _, arg = eval_spec.partition(":")
-    return kind == "predicate" or (kind == "program" and arg in PROGRAMS)
+    """Compatibility wrapper around the canonical registry predicate."""
+    return programs.evaluable(Commitment(id="mini-eval", eval=eval_spec))
 
 
 def evaluate(eval_spec: str, text: str, codec: str = "utf8") -> tuple[str, dict]:
-    """Run the check on the candidate's real bytes; (verdict, trace). A
-    verdict is a pure function of content — no wall-clock ever enters."""
-    kind, _, arg = eval_spec.partition(":")
-    if kind == "predicate":
-        # SECURITY: AST-gate before eval — untrusted content cannot reach the
-        # object-subclasses sandbox escape (a rejected predicate is a failed
-        # verdict, not an execution). Safe names go in GLOBALS: comprehensions
-        # inside eval resolve free names via globals (parent bug, kept fixed).
-        try:
-            _validate_predicate(arg)
-        except UnsafePredicate as e:
-            return "fail", {"error": str(e)[:200]}
-        namespace = {"__builtins__": {}, **_SAFE_NAMES, "content": text, "codec": codec}
-        try:
-            with _deadline(PREDICATE_TIMEOUT_S):
-                return ("pass" if bool(eval(arg, namespace)) else "fail"), {}
-        except BaseException as e:  # noqa: BLE001 - incl. TimeoutError: a bomb is a failed verdict
-            if isinstance(e, (KeyboardInterrupt, SystemExit)):
-                raise
-            return "fail", {"error": str(e)[:200]}
-    if kind == "program" and arg in PROGRAMS:
-        return PROGRAMS[arg](text)
-    raise ValueError(f"not evaluable in the loop: {eval_spec}")
+    """Evaluate through ``deepreason.programs`` while preserving Mini's API."""
+    commitment = Commitment(id="mini-eval", eval=eval_spec)
+    verdict, trace = programs.evaluate(
+        commitment,
+        _artifact(text, [commitment.id], codec),
+        blobs=None,
+    )
+    detail = {
+        key: value
+        for key, value in trace.items()
+        if key not in {"commitment", "eval", "verdict"}
+    }
+    return verdict, detail
 
-
-# --- compilation -------------------------------------------------------------
 
 def forbidden_commitment_id(case: ForbiddenCase) -> str:
-    """The parent's deterministic id — same skeleton, same interface."""
-    return "fc:" + sha256_hex(canonical_json({
-        "case": case.case, "eval": case.eval,
-        "observation_valued": case.observation_valued,
-    }))[:12]
+    """Delegate deterministic identity to the canonical constructor."""
+    return forbidden_commitment(case).id
 
 
 def compile_checks(text: str) -> list[dict]:
-    """All commitments a candidate's content compiles to, parent-record
-    shape: skeleton-wf plus one per forbidden case (rubric cases included —
-    carried on the interface, judged only offline)."""
-    out = [{"id": SKELETON_WF_ID, "eval": "program:skeleton_wf",
-            "observation_valued": False, "budget": {"extra": {}}}]
+    """Compile canonical commitments without registering them.
+
+    Rubric cases remain in the returned records so Session can apply the
+    manifest preflight and drop the complete candidate before registration.
+    """
+    commitments = [skeleton_wf_commitment()]
     skeleton = parse_skeleton(text)
-    for case in skeleton.forbidden if skeleton else []:
-        out.append({"id": forbidden_commitment_id(case), "eval": case.eval,
-                    "observation_valued": case.observation_valued,
-                    "budget": {"extra": {"case": case.case}}})
-    return out
+    if skeleton is not None:
+        commitments.extend(forbidden_commitment(case) for case in skeleton.forbidden)
+    return [
+        commitment.model_dump(mode="json", by_alias=True)
+        for commitment in commitments
+    ]
 
 
 def run_checks(text: str, checks: list[dict], codec: str = "utf8") -> list[dict]:
-    """Evaluate every loop-evaluable check; returns failure traces only.
-    Any failure refutes (the only refutation source in v0)."""
-    failures = []
-    for c in checks:
-        if not evaluable(c["eval"]):
+    """Execute canonical program/predicate semantics and return fail traces."""
+    commitments = [Commitment.model_validate(check) for check in checks]
+    artifact = _artifact(text, [commitment.id for commitment in commitments], codec)
+    failures: list[dict] = []
+    for commitment in commitments:
+        if not programs.evaluable(commitment):
             continue
-        verdict, detail = evaluate(c["eval"], text, codec)
-        if verdict == "fail":
-            failures.append({"commitment": c["id"], "eval": c["eval"],
-                             "verdict": verdict, **detail})
+        verdict, trace = programs.evaluate(commitment, artifact, blobs=None)
+        if verdict == programs.FAIL:
+            failures.append(trace)
     return failures
+
+
+__all__ = [
+    "ForbiddenCase",
+    "PROGRAMS",
+    "SKELETON_WF_ID",
+    "Scope",
+    "Skeleton",
+    "UnsafePredicate",
+    "compile_checks",
+    "evaluable",
+    "evaluate",
+    "forbidden_commitment_id",
+    "parse_skeleton",
+    "run_checks",
+]

@@ -1,0 +1,45 @@
+Design only the component outline requested in the input. Name local component aliases and one concrete purpose each. Do not emit HTML, a manifest, workflow instructions, routes, or implementation details.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactOutlineComponent": {"additionalProperties": false, "description": "One deliberately small design-outline item.", "properties": {"alias": {"pattern": "^C[1-9][0-9]*$", "title": "Alias", "type": "string"}, "purpose": {"maxLength": 500, "minLength": 1, "title": "Purpose", "type": "string"}}, "required": ["alias", "purpose"], "title": "CompactOutlineComponent", "type": "object"}}, "additionalProperties": false, "description": "The complete model-visible output for ``DESIGN_OUTLINE``.", "properties": {"components": {"items": {"$ref": "#/$defs/CompactOutlineComponent"}, "maxItems": 12, "minItems": 1, "title": "Components", "type": "array"}}, "required": ["components"], "title": "CompactDesignOutline", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{"components":[{"alias":"","purpose":"x"}]}
+
+INPUT:
+
+WEBSITE DESIGN OUTLINE
+Task: Create a single self-contained webpage about the wonders of DNA. Make it eye-catching, modern and artistic, with rich motion, parallax-like depth, animated scrolling effects, replication and transcription explained visually, and a vibrant 2026 visual design. It must respect prefers-reduced-motion and work as a local HTML file.
+Return 2 to 8 components in page order. Use aliases C1, C2, ... without gaps. Give only each component's purpose.
+ADJUDICATED PLAN:
+# Product Plan: The Bio-Digital Archive (Data-Centric)
+
+## Pages
+A single-page dashboard layout with embedded interactive modules.
+
+## Feature List
+- A data-grid showing nucleotide sequences.
+- A 'Live Simulation' window for transcription.
+- Parallax depth created via CSS transforms on data-cards.
+- 2026 'Cyber-Organic' visual design (deep greens, iridescent purples).
+
+## Key Interactions
+- **Sequence Scrubbing**: Dragging a slider moves a 'reading head' across a DNA sequence, causing the corresponding mRNA bases to appear in real-time (Causal link: Slider position -> Index lookup -> Visual render).
+- **Layered Depth**: Background elements move at 0.2x speed, midground at 0.5x, and foreground at 1.0x relative to scroll.
+- **Motion Control**: Global `isMotionEnabled` variable set via `prefers-reduced-motion` query; if false, parallax offsets are set to 0.
+
+## Content Inventory
+- **Header**: "The DNA Archive: Digitalized Life"
+- **Data Table**: "Sequence: ATGC... | Complement: TACG..."
+- **Replication Guide**: "DNA replication is semi-conservative; each new helix contains one old strand and one new strand."
+- **Transcription Guide**: "Transcription converts DNA into mRNA in the nucleus. This allows the original code to remain protected."
+- **Factoid**: "Human DNA contains approximately 3 billion base pairs."
+
+## Acceptance Criteria
+1. [ ] Single local HTML file.
+2. [ ] Slider accurately simulates transcription base-pairing.
+3. [ ] Parallax depth is visible on scroll.
+4. [ ] `prefers-reduced-motion` removes all parallax and sliding effects.
+5. [ ] Color palette matches the 'Cyber-Organic' 2026 specification.

@@ -1,0 +1,3 @@
+```json
+{"verdict": "fail", "decisive_point": "The forbidden case therefore asserts a refuting outcome (harness strictly exceeds SC accuracy) that is mathematically impossible under the proposal's own model — it cannot be a concrete outcome of running the experiment. A forbidden case that is unreachable by any run of the repository's validation harness cannot be measured by rerunning it, so it fails the honesty/measurability requirement of std-crit-design."}
+```

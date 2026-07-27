@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"A systemic collapse of international trade networks caused by the sudden disappearance of key maritime intermediaries triggered a cascading economic failure across palace economies.\", \"mechanism\": \"Network topology failure where the removal of high-degree nodes (intermediary ports) fragments the graph, preventing resource flow essential for centralized redistribution.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\", \"Hittite Anatolia\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Mesopotamia proper\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence shows continuous local pottery production and non-palatial trade continuing uninterrupted during the transition period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Focuses on the fragility of just-in-time bronze supply chains rather than military defeat.\"}",
+      "typicality": 0.85,
+      "neighbours": [
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was driven primarily by internal peasant revolts against exploitative palace extraction rates, exacerbated by multi-decade drought conditions.\", \"mechanism\": \"Socio-ecological feedback loop where climate stress reduces agricultural surplus, leading to increased extraction attempts by elites, triggering violent internal upheaval that destroys administrative centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Sea Peoples as external invaders\", \"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Linear B tablets indicate a significant decrease in palace grain requisitions immediately prior to destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Reframes 'Sea Peoples' as displaced refugees resulting from collapse rather than the cause; aligns with climate proxy data.\"}",
+      "typicality": 0.65,
+      "neighbours": [
+        "A4",
+        "A6",
+        "A9"
+      ]
+    },
+    {
+      "content": "{\"claim\": \"A rapid technological paradigm shift in metallurgy (transition from bronze to iron) rendered the specialized bronze-smithing guilds and their patron palaces economically obsolete overnight.\", \"mechanism\": \"Disruptive innovation where decentralized iron production undermines the monopoly on violence and wealth held by bronze-controlling aristocracies, causing immediate loss of legitimacy and power.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"regions without accessible iron ore\", \"naval powers reliant solely on bronze weapons\"]}, \"forbidden\": [{\"case\": \"Radiocarbon dating places the widespread adoption of effective iron weaponry at least two centuries after the initial destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Highly atypical economic determinism; argues that the 'collapse' was actually a rapid, voluntary dissolution of inefficient structures.\"}",
+      "typicality": 0.15,
+      "neighbours": [
+        "A7",
+        "A10",
+        "A12"
+      ]
+    }
+  ]
+}

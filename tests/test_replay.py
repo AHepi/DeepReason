@@ -1,6 +1,8 @@
 """P0 acceptance: replay-from-log reproduces state byte-for-byte; time-travel
 via truncated replay (spec §1, §16)."""
 
+import json
+
 from deepreason.harness import Harness
 from deepreason.ontology import (
     Commitment,
@@ -78,6 +80,29 @@ def test_replay_reproduces_state_byte_for_byte(tmp_path):
     assert reopened.state.model_dump_json() == snapshot
     assert reopened.commitments == live.commitments
     assert reopened.warrants == live.warrants
+
+
+def test_legacy_embedded_warrants_materialize_explicit_carriage(tmp_path):
+    """Old events have no carry+ field; Artifact.warrants remains readable."""
+    root = tmp_path / "legacy"
+    live = Harness(root)
+    target = art(live, "legacy target")
+    critic, _ = attack(live, target.id, "legacy attack")
+
+    records = []
+    for line in live.log.path.read_text().splitlines():
+        record = json.loads(line)
+        record.get("state_diff", {}).pop("carry+", None)
+        records.append(record)
+    live.log.path.write_text(
+        "".join(json.dumps(record, separators=(",", ":")) + "\n" for record in records)
+    )
+
+    reopened = Harness(root)
+    carried = reopened.carried_warrant_ids(critic.id)
+    assert len(carried) == 1
+    assert reopened.warrants[carried[0]].target == target.id
+    assert reopened.state.status[target.id] == Status.REFUTED
 
 
 def test_time_travel_truncated_replay(tmp_path):

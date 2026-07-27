@@ -1,0 +1,96 @@
+```json
+{
+  "candidates": [
+    {
+      "content": {
+        "claim": "The Sea Peoples were not merely raiders but state-formation refugees from climate-collapse zones who destabilized palace economies through asymmetric warfare and demographic substitution",
+        "mechanism": "Climate anomaly (volcanic winter/MEGAPACIFIC oscillation) → agricultural failure in Aegean/Anatolian periphery → displaced warrior bands with naval mobility → raiding-coordination against centralized palace redistribution systems lacking defensive depth → systemic collapse of redistributive command economies; Egypt survived due to Nile flood predictability buffer and narrower coastal exposure enabling defensive concentration at Delta",
+        "scope": {
+          "covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Egyptian survival"],
+          "excludes": ["Mesopotamian Kassite durability", "Assyrian expansion timing", "Minoan earlier collapse"]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeological evidence shows Sea Peoples arrived only after palace destruction layers already formed at major sites",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Palace Linear B archives show continuous agricultural surplus through 1180 BC with no famine indicators",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian records describe Sea Peoples as purely mercantile traders with no military engagement",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Dependence on mechanist school via ba687c5f; integrates climate-systemic mechanism with political-military vulnerability differential. Marries textual Sea Peoples references to archaeological destruction horizons."
+      },
+      "typicality": 0.92,
+      "refs": [
+        {"role": "dependence", "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"},
+        {"role": "dependence", "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"}
+      ]
+    },
+    {
+      "content": {
+        "claim": "Palace economies collapsed through endogenous fragility of state-run bronze procurement networks when Cypriot copper trade was disrupted by unpredictable tin shortage from distant Afghan/British sources",
+        "mechanism": "Bronze Age political legitimacy required military-administrative elites to monopolize bronze weapons/tools → palace systems centralized copper-tin procurement through long-distance gift-exchange diplomacy → tin supply concentration at single source (Afghanistan/Britain) created systemic brittleness → supply interruption broke bronze circulation → elite legitimacy collapsed → administrative literacy (Linear B, Hittite cuneiform) abandoned as irrelevant → 'dark age'; Egypt survived as self-sufficient copper-gold economy with less bronze-dependent military (chariot archery composite)",
+        "scope": {
+          "covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "script extinction correlation"],
+          "excludes": ["Iron adoption causation", "demographic collapse magnitude", "religious transformation"]
+        },
+        "forbidden": [
+          {
+            "case": "Archaeometric analysis shows tin bronze continued in ordinary use uninterrupted after palace destructions",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian military inventories reveal bronze dependency equal to or exceeding Hittite levels",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Ugarit archives document diversified tin sources with no supply anxiety before destruction",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Atypical 'materialist systems' mechanism emphasizing network topology over climate or invasion; inspired by school-0 mechanism demand but diverging from climate/Sea Peoples orthodoxy. Introduces source-critical skepticism about tin provenance."
+      },
+      "typicality": 0.45,
+      "refs": [
+        {"role": "dependence", "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"},
+        {"role": "dependence", "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845}
+      ]
+    },
+    {
+      "content": {
+        "claim": "The collapse was a coordinated revolutionary uprising by mercenary dependents and peasant cultivators against palace extraction systems, masked in elite propaganda as 'Sea Peoples' invasion",
+        "mechanism": "Palace redistributive economies intensified surplus extraction through debt-bondage and corvée labor over centuries → internal class tensions accumulated inarticulately → systemic crisis (any trigger: minor crop failure, dynastic dispute) enabled coordinated internal rebellion → palace centers burned by their own populations → elite flight and administrative abandonment → historiographical misdirection through surviving Egyptian victory inscriptions projecting external causation; Egypt survived because its ideological/theocratic integration (pharaonic divine intermediation) suppressed equivalent class consciousness",
+        "scope": {
+          "covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Egyptian survival", "script abandonment"],
+          "excludes": ["Central Anatolian plateau Hittite rural continuity", "Phoenician city-state emergence", "Greek Dark Age oral poetry transmission"]
+        },
+        "forbidden": [
+          {
+            "case": "Osteological evidence from destruction layers shows predominantly young male combat deaths consistent with external warfare not communal massacre",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Linear B tablets document significant palace concessions to dependent labor reducing extraction rates pre-collapse",
+            "eval": "rubric:std-hist"
+          },
+          {
+            "case": "Egyptian reliefs at Medinet Habu show Sea Peoples captives with ethnically distinct material culture confirmed by independent archaeology",
+            "eval": "rubric:std-hist"
+          }
+        ],
+        "prose_notes": "Deliberately atypical: inverts dominant narrative through skeptic school stance (74fde532), proposing elite-source bias as primary evidentiary problem. Requires accepting epistemic limitations of surviving record."
+      },
+      "typicality": 0.18,
+      "refs": [
+        {"role": "dependence", "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845"},
+        {"role": "dependence", "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"}
+      ]
+    }
+  ]
+}
+```

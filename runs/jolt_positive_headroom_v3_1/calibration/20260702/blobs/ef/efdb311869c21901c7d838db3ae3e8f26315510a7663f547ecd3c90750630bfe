@@ -1,0 +1,1 @@
+{"commitment":"tsp14-valid-tour-20260702","eval":"program:tsp14_tour_wf","reason":"invalid 14-city tour schema or permutation","verdict":"fail"}

@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Paleoseismic dating shows major Eastern Mediterranean earthquakes cluster 50-100 years before collapse horizon
+TARGET:
+{"claim": "Earthquake storms ('seismic storm' c. 1225-1175 BCE) sequentially destroyed centralized storage and administrative infrastructure, but Egyptian bureaucratic decentralization into nomarchic provisioning permitted reconstruction at lower scale", "mechanism": "Tectonic-cum-institutional fragility: palace economies required intact central granaries and scriptoria; Egyptian redundancy through multiple Nile harbor storage and local temple treasuries enabled post-seismic fiscal recombination", "scope": {"covers": ["Mycenaean citadel destructions", "Hittite capital relocation", "Ugarit harbor ruin", "Egyptian Theban/Memphis resilience"], "excludes": ["Climate systems", "Metallurgical trade disruption", "Post-collapse Greek recovery patterns"]}, "forbidden": [{"case": "Paleoseismic dating shows major Eastern Mediterranean earthquakes cluster 50-100 years before collapse horizon", "eval": "rubric:std-hist"}, {"case": "Egyptian temple-building programs show uninterrupted scaling 1250-1150 despite alleged seismic disruption", "eval": "rubric:std-hist"}, {"case": "Linear B archives from Pylos document continued central planning immediately before destruction without seismic preparation", "eval": "rubric:std-hist"}], "prose_notes": "Geological determinism with institutional modifier; unusual in privileging physical trigger over social response"}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

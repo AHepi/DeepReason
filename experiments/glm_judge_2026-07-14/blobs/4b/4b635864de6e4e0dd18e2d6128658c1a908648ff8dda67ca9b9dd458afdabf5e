@@ -1,0 +1,1 @@
+{"verdict":"fail","decisive_point":"The claim's iff statement contains no precision > 0.5 threshold — it requires E[P(SC_right | C) - P(SC_right | !C)] > 0 (positive question-conditional net signal), which is a different quantity from precision-on-fragile."}

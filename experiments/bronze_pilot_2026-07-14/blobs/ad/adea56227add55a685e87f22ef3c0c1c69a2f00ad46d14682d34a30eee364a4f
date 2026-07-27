@@ -1,0 +1,7 @@
+{
+  "attack": true,
+  "case": "The target's mechanism—a pandemic selectively killing the literate administrative class—is directly contradicted by the forbidden case 'Contemporary texts from multiple sites describe a prolonged famine and enemy invasion, with no mention of a plague affecting the ruling class.' Under the std-hist rubric, a valid historical-mechanism account must state forbidden cases that are concrete observations which could realistically have obtained. This forbidden case is precisely such an observation: if a pandemic decimated the scribal elite, contemporary texts from multiple sites would be expected to mention a plague affecting the ruling class, not merely famine and invasion. The absence of any such mention in the textual record constitutes a specific, datable pattern that the target's mechanism cannot accommodate, as the mechanism predicts the very thing the record lacks—textual attestation of elite-targeting disease. The target's prose_notes attempt to explain 'silence in the archaeological record' regarding rebuilding, but this does not address the positive textual evidence of famine and invasion without plague, which the mechanism fails to explain.",
+  "counterexample": [
+    "Contemporary texts from multiple sites describe a prolonged famine and enemy invasion, with no mention of a plague affecting the ruling class."
+  ]
+}

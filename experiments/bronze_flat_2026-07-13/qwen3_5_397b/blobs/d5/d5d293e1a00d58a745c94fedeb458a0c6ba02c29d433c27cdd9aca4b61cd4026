@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the resource flows necessary to maintain centralized authority.\", \"mechanism\": \"Climate-induced agricultural collapse leading to the breakdown of tribute and ration systems, causing internal revolt and abandonment of centers.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in destroyed palaces dated to the final destruction layer.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with the dominant climate-change hypothesis (e.g., drought records from pollen cores). It explains the simultaneity via a regional climate event but struggles slightly with why Egypt's Nile-dependent agriculture held while others failed, hence the exclusion.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from the obsolescence of the chariot-based military aristocracy in the face of new, flexible infantry tactics and weaponry (Naue II swords) employed by decentralized raiders.\", \"mechanism\": \"Military technological shift where light infantry could outmaneuver and defeat expensive, rigid chariot forces, leading to the rapid decapitation of palace elites.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot forces successfully defeated infantry-only armies in major battles during the 12th century BC.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A moderately typical candidate focusing on military history. It addresses the 'Sea Peoples' phenomenon as a symptom of this tactical shift. The exclusion of Egypt is critical here, as Egypt successfully adapted its military or utilized geography to survive, whereas the inland/narrow-coastal states did not.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.75
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading failure of international trade networks triggered by the sudden loss of a single critical node (e.g., Ugarit or Cyprus), causing a domino effect that starved dependent economies of essential bronze and luxury goods.\", \"mechanism\": \"Complex system fragility: hyper-specialized palace economies lacked redundancy; the disruption of one key hub caused immediate supply chain collapse across the interconnected region.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Historical records showing that affected states maintained robust local production of bronze and essentials independent of long-distance trade during the collapse period.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical but bold candidate emphasizing economic interdependence over environmental or military causes. It posits that the very strength of the network (interconnection) was its weakness. Egypt is excluded because its economy was more autarkic and less reliant on the specific copper/tin routes that bound the others.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        },
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

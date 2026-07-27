@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{"K1": "The target's forbidden case is a concrete observation that could realistically have obtained under the target's own mechanism. If tin imports ceased, the mechanism predicts that existing bronze would be hoarded, recycled, and concentrated in elite or military contexts. Therefore, abundant bronze stockpiles in destruction layers are a predicted consequence, not a forbidden case. A proper forbidden case would be evidence of uninterrupted tin imports or continued production of new bronze tools during the collapse period."}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "defender.compact.v1", "error": "extra field at /K1", "path": "", "repair_scope": "", "skeleton": {"clauses": [{"item_alias": "", "response": "x"}]}}

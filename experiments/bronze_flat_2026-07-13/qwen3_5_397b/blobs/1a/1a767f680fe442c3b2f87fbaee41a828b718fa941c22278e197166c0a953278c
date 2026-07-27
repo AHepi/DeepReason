@@ -1,0 +1,33 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and seismic activity, which broke the just-in-time grain supply chains essential for maintaining mercenary forces.\", \"mechanism\": \"Environmental stressors (drought/earthquakes) triggered a negative feedback loop in centralized bureaucracies that lacked buffer stocks, leading to internal revolt and the inability to pay or feed specialized military castes.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of full granaries at the moment of destruction in Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality synthesis of the 'Systems Collapse' theory, integrating climate data with economic fragility. It relies on the interdependence of the artifacts noted in the neighbourhood regarding rigid bureaucracies.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "dependence",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a specific technological shift where loose infantry formations utilizing javelins and long swords rendered the chariot-based aristocratic military monopoly obsolete, empowering decentralized raiders.\", \"mechanism\": \"Tactical obsolescence: The high-cost chariot corps could not be replenished or effectively deployed against agile, low-cost infantry bands (Sea Peoples), causing a rapid loss of state monopoly on violence.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Phoenician coastal enclaves\"]}, \"forbidden\": [{\"case\": \"Evidence that chariot units successfully defeated Sea Peoples' infantry in open field battles during the critical 1180s BC window\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate focuses on military technology and social structure rather than environment. It is moderately typical but faces the counterexample challenge regarding Egypt's successful use of chariots against the same foes.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ],
+      "typicality": 0.65
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a deliberate, coordinated insurrection by subaltern classes (serfs, slaves, and displaced pastoralists) who exploited the distraction of inter-imperial rivalry to burn the administrative centers that oppressed them.\", \"mechanism\": \"Class warfare/Internal revolt: The complexity of the palace system created a large, disenfranchised underclass that, when triggered by minor external pressure, actively dismantled the recording and storage infrastructure to erase debt and obligation.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Hittite Anatolia\", \"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Linear B or Ugaritic tablets indicating rising wages or improved status for lower classes in the decades prior to 1200 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"An atypical, sociopolitical explanation that rejects external 'Sea Peoples' as the primary cause, viewing them instead as a symptom or opportunistic beneficiaries. It challenges the standard narrative of external invasion.\"}",
+      "refs": [],
+      "typicality": 0.28
+    }
+  ]
+}

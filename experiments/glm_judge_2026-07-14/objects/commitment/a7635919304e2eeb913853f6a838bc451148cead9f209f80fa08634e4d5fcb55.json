@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"The measured critic precision-recall frontier is not stable across two independent hard-set replications within 0.05"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:b7415f4adaf0","observation_valued":false},"id":"fc:b7415f4adaf0","schema":"commitment"}

@@ -1,11 +1,14 @@
 # MiniReason — construction plan
 
-*Branch: `claude/mini-harness`. Status: BUILT AND LIVE-VERIFIED — see
-`mini/`. M0–M4 done; M2 smoke PASS (meter==log, zero orbit windows,
+*Original build status: BUILT AND LIVE-VERIFIED — see `mini/`. M0–M4 done;
+the original M2 smoke PASS (meter==log, zero orbit windows,
 novelty late/early 1.01 vs 0.846 baseline, parent ingest clean:
 `experiments/results/mini_smoke_report.json`); all three judge seats
 certified at 0.0 planted-flaw error
 (`experiments/results/mini_seat_certification.json`).*
+*The later shared-kernel compatibility refactor is locally verified, but its
+live Gemma/frontier acceptance thresholds remain uncollected; see
+`docs/SMALL_MODEL_COMPATIBILITY.md`.*
 *Every inclusion/exclusion below cites a measurement from the parent
 system's experiment record (see `experiments/results/INDEX_2026-07-05.md`,
 `docs/BASIN_REPORT.md`). Nothing is kept on faith.*
@@ -13,12 +16,12 @@ system's experiment record (see `experiments/results/INDEX_2026-07-05.md`,
 ## 1. Thesis
 
 DeepReason's measured value lives in its **bookkeeping and gates**, not
-(at strong-generator regimes) in its adversarial filtering. A ~800-line
-harness that keeps the five components that earned their keep — and
-nothing else — should deliver essentially all demonstrated value at a
-fraction of the complexity and token cost, and remain log-compatible so
-a run can graduate to the full system if the high-base-error regime
-(where criticism should pay) is ever reached.
+(at strong-generator regimes) in its adversarial filtering. MiniReason keeps
+a reduced scheduler and rule surface while importing the canonical Harness,
+ontology, grounded adjudicator, anti-relapse guard, warrant plumbing, route
+firewall, wire contracts, repair kernel, and persistence. Its roots are full
+DeepReason roots from the first event, so a high-base-error workload can
+graduate to the full scheduler without conversion.
 
 ## 2. Goals / non-goals
 
@@ -32,8 +35,8 @@ Goals:
   candidate's own falsifiability claims.
 - G5: evaluation only through a calibrated instrument (naive pairwise
   judging measured unusable: 8/9 votes discarded to position bias).
-- G6: log subset-compatible with the parent (an event stream MiniReason
-  writes is ingestible by DeepReason's replay).
+- G6: one canonical root: MiniReason writes the parent's Event/object schemas
+  through the parent's Harness, so full DeepReason opens it without migration.
 
 Non-goals (all measured, none vibes):
 - No 2-judge trial protocol, paraphrase screens, appellate machinery —
@@ -44,9 +47,10 @@ Non-goals (all measured, none vibes):
 - No complement directive — measured placebo (lowest echo 0.49x chance,
   zero novelty gain).
 - No learned/self-calibrating controller — out of scope for mini.
-- No Dung adjudication graph in v0 — status is {live, blocked,
-  refuted-by-check}; reinstatement semantics are the first thing to
-  graduate INTO the parent for, not to reimplement.
+- No duplicate adjudicator, status vocabulary, ontology, guard, or warrant
+  implementation. Mini uses the parent's grounded/support labels, including
+  attacks on validity nodes and reinstatement; only its scheduling surface is
+  reduced.
 
 ## 3. Architecture
 
@@ -54,10 +58,11 @@ Non-goals (all measured, none vibes):
 mini/
   minireason/
     __init__.py
-    log.py        # M0  append-only events + content-addressed blobs
-    call.py       # M0  schema-validated pure LLM calls + spend accounting
-    gate.py       # M1  dedupe + battery-equivalence vs refuted + orbit counter
-    checks.py     # M1  skeleton parse + program evals from forbidden cases
+    log.py        # M0  compatibility view over canonical Harness state/replay
+    call.py       # M0  shared bounded repair + Mini spend accounting facade
+    gate.py       # M1  process-only gate/orbit analytics (shared guard admits)
+    analytics.py  # process-only text normalization for offline reports
+    checks.py     # M1  canonical skeleton/commitment/program adapters
     rotate.py     # M2  stance rotation + problem turnover policy
     judge.py      # M3  the calibrated instrument (criterion forced choice)
     loop.py       # M2  driver: propose -> gate -> check -> rotate
@@ -65,52 +70,60 @@ mini/
   README.md
 ```
 
-Line budget: ~800 source lines total. If a module wants to exceed its
-budget below, the addition must cite a measurement or get cut.
+The original line budget motivated the reduced feature surface; it is no
+longer a source-size claim. Shared compatibility and replay adapters are kept
+where they prevent Mini from becoming a second normative implementation.
 
-### 3.1 `log.py` (~120 lines) — M0
-- `Event`: `{seq, rule, inputs, outputs, llm: {role, model, tokens,
-  prompt_ref, raw_ref, attempts} | None}` — a strict subset of the
-  parent's event shape (G6).
-- Append-only JSONL, fsync on write, strictly consecutive seqs;
-  content-addressed blob store for prompts/raws (sha256 files).
-- `replay(root) -> State` and the invariant: two replays byte-equal.
+### 3.1 `log.py` — M0
+- `Event`, `LLMCall`, `BlobStore`, `ObjectStore`, and replay are the parent's
+  implementations. Mini's `State` is a read-only dictionary-shaped projection
+  of canonical Harness state, not a second materializer or status calculator.
+- Append-only JSONL, strictly consecutive sequences, content-addressed blobs,
+  grounded status, attack/support edges, and replay therefore have one code
+  path in both engines.
 - Why kept: the accounting layer caught three real bugs in the parent
   (invisible trial spend 85%, retry-exhausted spend 8.4%, mid-retry
   budget death delta=833).
 
-### 3.2 `call.py` (~150 lines) — M0
+### 3.2 `call.py` — M0
 - One function: `call(endpoint, prompt, schema, meter) -> (obj, spend)`.
-- Repair loop (error fed back, bounded retries), length-truncation
-  compression hint, `_usage_tokens` normalization (partial provider
-  usage blocks must not count as zero — parent bug).
+- The bounded repair state machine, transport mechanism selection, route lease,
+  wire contract, and per-attempt trace come from shared DeepReason modules.
+  Mini retains endpoint normalization and its hard `TokenMeter` facade.
 - EVERY exit path carries spend: success returns it; SchemaError /
   EndpointError / BudgetExceeded all carry `.spend` for the caller to
   log (the parent's exception-spend family, ported verbatim).
 - Hard `TokenMeter` with check-before-spend documented as approximate
   (the known overshoot semantics — document, don't pretend).
 
-### 3.3 `gate.py` (~80 lines) — M1
-- Content-address dedupe (exact) + battery-equivalence vs refuted
-  candidates (normalized-content match; NO embeddings in v0).
+### 3.3 `gate.py` — M1
+- Admission delegates to the parent's canonical hash/battery-equivalence
+  anti-relapse guard. Mini constructs one canonical Artifact/Interface before
+  that check and registers the same object; it carries no forked guard logic.
+- Mini has no embedder, so its configured `NEAR_DUP_EPS=None` takes the shared
+  guard's exact fallback: battery-check every refuted prior.
 - Gate refusals are logged measures: `gate:<reason>` (parent format,
   so the orbit counter and parent tooling both read them).
 - `orbit(events, window=20, floor=5) -> school | None` — the gate-rate
   detector. Justification: perfect separation across all 15 parent
   roots (healthy: 0 blocks ever; orbiting: 7-14 per window).
 
-### 3.4 `checks.py` (~100 lines) — M1
+### 3.4 `checks.py` — M1
 - `parse_skeleton(text)` — the parent's JSON skeleton contract
   (claim/mechanism/scope/forbidden/prose_notes).
-- Compile forbidden cases with `predicate:`/`program:` evals into
-  runnable checks; a failed check refutes (the only refutation source
-  in v0). Rubric-eval forbidden cases are carried but NOT judged in
-  the loop (that's the instrument's job, offline).
+- Model-authored forbidden cases use the parent's skeleton contract. Inline
+  `predicate:` expressions are rejected at that boundary; known `program:`
+  commitments compile through the parent's pure constructor and execute via
+  `deepreason.programs`.
+- Mini's frozen `rubric_policy=forbid` means a rubric-bearing candidate is
+  process-logged and dropped before any commitment or artifact registration.
+  The offline `judge.py` instrument is reporting only and does not turn that
+  candidate into epistemic state.
 - Why kept: in the basin arms, mechanical checks refuted candidates
   with zero judge tokens — free criticism is the only criticism that
   measured cost-positive at low base error.
 
-### 3.5 `rotate.py` (~80 lines) — M2
+### 3.5 `rotate.py` — M2
 - Stance library (parent's 8) + rotation policy: rotate a stance when
   (a) the orbit detector names its school, or (b) stance age exceeds
   STANCE_DECAY conjectures. Default decay LOW (5) — fast rotation
@@ -121,7 +134,7 @@ budget below, the addition must cite a measurement or get cut.
   next problem in the queue. Justification: turnover is the strongest
   anti-basin force measured (the only run whose novelty ROSE, 1.12).
 
-### 3.6 `judge.py` (~120 lines) — M3
+### 3.6 `judge.py` — M3
 - The validated instrument, ported: criterion-level forced choice
   (schema-enforced completeness), both presentation orders, verbosity
   penalty `min(0.3, 0.1*(ratio-1))`, degraded-control validity gate
@@ -132,7 +145,7 @@ budget below, the addition must cite a measurement or get cut.
   ON a finished log, not a step that gates registration (§0 of the
   parent constitution, kept).
 
-### 3.7 `loop.py` (~100 lines) — M2
+### 3.7 `loop.py` — M2
 - The driver: `run(problem_queue, endpoint, budget)`:
   propose (VS_K candidates, stance-conditioned) -> gate -> checks ->
   log -> rotate-if-flagged -> next.
@@ -147,7 +160,7 @@ budget below, the addition must cite a measurement or get cut.
 
 | id | deliverable | verification (all mechanical) |
 |---|---|---|
-| M0 | log.py + call.py | unit: replay determinism, meter==log under schema storms and budget death (port the parent's chaos tests); fixture: parse 2 committed parent roots with the subset reader |
+| M0 | log.py + call.py | unit: replay determinism, meter==log under schema storms and budget death; canonical Harness reopens every generated root |
 | M1 | gate.py + checks.py | fixture: replay `runs/basin/C-decay-off` events through `orbit()` -> fires at the same window; `runs/basin/A-control` -> never; skeleton checks refute a malformed corpus |
 | M2 | rotate.py + loop.py | live smoke (~30k tokens): 2 problems x 20 cycles on the cheap provider; assert zero orbit windows, novelty late/early >= control-arm baseline, meter==log |
 | M3 | judge.py | rerun the committed instrument report inputs -> byte-identical scores; control-pair gate passes on the committed pairs |
@@ -160,19 +173,22 @@ again here.
 
 ## 5. Graduation path (mini -> full)
 
-The log subset (G6) is the contract. A team outgrows the mini when:
+The canonical root (G6) is the contract. A team outgrows the reduced engine
+when:
 - base error is measurably high (validate.py-style probe > ~0.15) —
   then the trial protocol has something to filter, or
-- reinstatement semantics matter (attacks on attacks), or
-- multi-family judge ensembles are required by policy.
+- the workload needs research, informal trials, websites, capture control,
+  long-horizon scheduling, or a normative cross-family judge ensemble.
 Migration = point DeepReason at the mini's root. No data conversion.
 
 ## 6. Risks
 
-- Battery-equivalence without embeddings may under-block paraphrase
-  orbiting (parent uses `~=_B` with embedder support). Mitigation:
-  normalized-token-set equivalence first; if M2 smoke shows orbiting
-  slipping the gate, add the parent's equivalence check behind a flag.
+- Mini supplies no embedder to the shared anti-relapse guard, so the guard
+  battery-checks every refuted prior instead of using an embedding index to
+  narrow the set. This preserves the canonical decision rule but costs more
+  and can be coarse when the active battery is weak. Gate-rate/orbit analysis
+  remains process-only and never substitutes a token-equivalence admission
+  rule.
 - The instrument's seat calibration is provider-specific; judge.py must
   ship with the planted-flaw battery (a trimmed judge_battery.py) so
   new deployments re-certify seats before trusting scores.

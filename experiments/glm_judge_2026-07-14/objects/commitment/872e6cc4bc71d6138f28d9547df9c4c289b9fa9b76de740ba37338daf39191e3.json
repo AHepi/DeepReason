@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"At k=7 with base error 0.55-0.65, critic precision on bare-majority wrong sets < 0.4, and harness accuracy still exceeds self-consistency on >= 50% of questions"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:e8ddd3148e7e","observation_valued":false},"id":"fc:e8ddd3148e7e","schema":"commitment"}

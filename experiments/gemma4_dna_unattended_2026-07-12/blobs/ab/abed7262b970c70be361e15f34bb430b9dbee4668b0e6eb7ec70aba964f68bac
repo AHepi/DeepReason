@@ -1,0 +1,21 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; padding: 2rem; background: #050A0C; color: #39FF14; font-family: 'JetBrains Mono', 'Roboto Mono', monospace; }\n    .c3-cell { border: 1px solid #39FF14; padding: 1rem; text-align: center; transition: all 0.3s ease; cursor: pointer; font-weight: bold; }\n    .c3-cell:hover { background: #39FF14; color: #050A0C; box-shadow: 0 0 15px #39FF14; }\n    .c3-cell.highlight { background: #B026FF; color: #fff; border-color: #B026FF; box-shadow: 0 0 20px #B026FF; }\n  </style>\n  <div id=\"dna-grid-root-container\" class=\"c3-grid\"></div>\n  <script>\n    window.c3_mount = () => {\n      const container = document.getElementById('dna-grid-root-container');\n      c3_updateSequence('ATGCGTACGTTAGC');\n    };\n    window.c3_updateSequence = (seq) => {\n      const container = document.getElementById('dna-grid-root-container');\n      container.innerHTML = seq.split('').map((b, i) => `<div class=\"c3-cell\" data-index=\"${i}\">${b}</div>`).join('');\n    };\n    window.c3_highlightBasePair = (index) => {\n      document.querySelectorAll('.c3-cell').forEach((el, i) => el.classList.toggle('highlight', i === index));\n    };\n    window.c3_destroy = () => { document.getElementById('dna-grid-root-container').innerHTML = ''; };\n  </script>\n</div>",
+      "typicality": 0.8,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { padding: 4rem; background: #050A0C; font-family: monospace; }\n    .c3-grid { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }\n    .c3-base { width: 40px; height: 60px; border: 1px solid #00FFFF; display: flex; align-items: center; justify-content: center; color: #00FFFF; transition: transform 0.2s; }\n    .c3-base:hover { background: #39FF14; color: #050A0C; transform: scale(1.1); }\n    .c3-active { background: #B026FF !important; color: white !important; }\n  </style>\n  <div id=\"dna-grid-root-grid\" class=\"c3-grid\"></div>\n  <script>\n    let isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n    window.c3_mount = () => { c3_updateSequence('GATTACA'); };\n    window.c3_updateSequence = (seq) => {\n      const grid = document.getElementById('dna-grid-root-grid');\n      grid.innerHTML = seq.split('').map(b => `<div class=\"c3-base\">${b}</div>`).join('');\n    };\n    window.c3_highlightBasePair = (idx) => {\n      const cells = document.querySelectorAll('.c3-base');\n      cells.forEach((c, i) => c.classList.toggle('c3-active', i === idx));\n    };\n    window.c3_destroy = () => { document.getElementById('dna-grid-root-grid').innerHTML = ''; };\n  </script>\n</div>",
+      "typicality": 0.6,
+      "neighbours": []
+    },
+    {
+      "content": "<div id=\"dna-grid-root\">\n  <style>\n    #dna-grid-root { display: flex; flex-direction: column; align-items: center; padding: 3rem; background: #050A0C; color: #39FF14; font-family: 'Roboto Mono', monospace; }\n    .c3-row { display: flex; gap: 10px; margin-bottom: 10px; }\n    .c3-unit { padding: 10px 20px; border: 2px solid #39FF14; text-transform: uppercase; transition: background 0.3s; }\n    .c3-unit:hover { background: #39FF14; color: #050A0C; }\n    .c3-unit.selected { border-color: #B026FF; color: #B026FF; }\n  </style>\n  <div id=\"dna-grid-root-view\"></div>\n  <script>\n    window.c3_mount = () => { c3_updateSequence('ATGC'); };\n    window.c3_updateSequence = (seq) => {\n      document.getElementById('dna-grid-root-view').innerHTML = `<div class=\"c3-row\">${seq.split('').map(b => `<div class=\"c3-unit\">${b}</div>`).join('')}</div>`;\n    };\n    window.c3_highlightBasePair = (idx) => {\n      const units = document.querySelectorAll('.c3-unit');\n      units.forEach((u, i) => u.classList.toggle('selected', i === idx));\n    };\n    window.c3_destroy = () => { document.getElementById('dna-grid-root-view').innerHTML = ''; };\n  </script>\n</div>",
+      "typicality": 0.4,
+      "neighbours": []
+    }
+  ]
+}
+```

@@ -1,0 +1,1 @@
+{"contract":"conjecturer.compact.v1","path":"","error":"unknown local alias '{\"tour\":[\"0\",\"13\",\"8\",\"2\",\"6\",\"3\",\"7\",\"1\",\"4\",\"11\",\"5\",\"10\",\"12\",\"9\"]}'","received":null,"allowed":"complete JSON value","repair_scope":"","skeleton":{"candidates":[{"content":"x","typicality":0.0}]}}

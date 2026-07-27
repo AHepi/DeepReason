@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCase": {"additionalProperties": false, "description": "One target's entry in a batched criticism pass (\u00a714 batching): the\nCALL is shared across targets, the case never is \u2014 each attacking entry\nbecomes an ordinary per-target argumentative warrant with its own nu.", "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target": {"title": "Target", "type": "string"}}, "required": ["target", "attack"], "title": "BatchCase", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCase"}, "title": "Cases", "type": "array"}}, "title": "BatchCriticOutput", "type": "object"}
+
+PROBLEM CONTEXT (succ:38d47784e0fa) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+supersede refuted candidate 38d47784e0fa on succ:7a2649135d88. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+- fc:242a67c5ea53: rubric:std-hist
+- fc:a31f369895a0: rubric:std-hist
+- fc:567fa4758aa3: rubric:std-hist
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET bf338f675839fc938175d6842fd725cd9fe540cf412579b9a1cbd63d44ad407e
+{"claim":"An overproduction of elite warrior class coupled with ideological erosion eroded legitimacy, causing systemic sociopolitical collapse.","mechanism":"Systemic sociopolitical instability via internal elite competition, loss of cultic authority, and failure of succession mechanisms.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"Evidence of continued stable royal succession in Mycenaean palaces until 1100 BCE.","eval":"rubric:std-hist"}],"prose_notes":"Critical historiographical essay interrogating elite recruitment patterns and religious texts."}
+commitments: skeleton-wf, kappa-hist, fc:242a67c5ea53
+
+TARGET abd00968ede0dff11d75c81bf4e81fe25946d6f6a5cb364b37f948f2bd5629c7
+{"claim":"Prolonged megadrought between 1220‑1160 BCE triggered agricultural collapse across the Eastern Mediterranean.","mechanism":"Ecological‑economic resource depletion leading to famine, loss of state revenue, and breakdown of elite redistribution.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"Archaeobotanical pollen data from the period showing stable moisture levels in Anatolia.","eval":"rubric:std-hist"}],"prose_notes":"Formal abstract summarizing climate proxy series and economic models."}
+commitments: skeleton-wf, kappa-hist, fc:a31f369895a0
+
+TARGET 39f756df083202fe336d5a5e42fbf2de48348228cf0c2d99d4c7d35179b0af86
+{"claim":"Mass migrations of displaced coastal populations coalesced into the Sea Peoples, whose coordinated naval raids destabilized the political order of the eastern Mediterranean.","mechanism":"Geopolitical‑military destabilization through destruction of trade routes and forcing defensive overextension.","scope":{"covers":["Mycenaean Greece","Hittite Anatolia","Ugarit","Levantine city‑states"],"excludes":["Egypt"]},"forbidden":[{"case":"Contemporary Egyptian inscriptions lacking any mention of Sea Peoples before 1175 BCE.","eval":"rubric:std-hist"}],"prose_notes":"Analytic report comparing documented raids at Mycenaean citadels, Hittite annals, and Ugaritic tablets."}
+commitments: skeleton-wf, kappa-hist, fc:567fa4758aa3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

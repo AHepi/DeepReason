@@ -1,0 +1,5 @@
+{
+  "attack": true,
+  "case": "The target violates std-hist clause (2) because the specified forbidden case ('Archaeological evidence shows continuous palace administration...') is logically incompatible with the proposed mechanism. The mechanism explicitly claims that earthquakes 'destroyed key palace centers' and caused 'abandonment.' If administration continued immediately after the seismic window, it proves the centers were not destroyed to the point of functional collapse and were not abandoned. Therefore, the occurrence of the forbidden case does not just weaken the theory; it demonstrates that the specific causal chain (destruction -> loss of surplus -> abandonment) did not happen as described. The target fails to define a forbidden case that allows for nuance (e.g., damaged but functioning palaces) and instead sets a binary condition where any continuity of administration falsifies the core claim of destruction and abandonment, making the historical account brittle and potentially unfalsifiable if such evidence exists.",
+  "counterexample": null
+}

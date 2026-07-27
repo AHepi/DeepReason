@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the resource flows necessary to maintain centralized authority.\", \"mechanism\": \"Climate-induced agricultural failure leading to the breakdown of the command economy and subsequent civil unrest.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of abundant grain stores in Mycenaean palaces dated to the final destruction layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with current paleoclimatic consensus (e.g., drought records) but relies on the specific vulnerability of the rigid palatial system compared to Egypt's more flexible Nile-based agriculture.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics, specifically the rise of decentralized infantry wielding javelins and long swords that rendered the elite chariot corps obsolete.\", \"mechanism\": \"Military obsolescence of the chariot aristocracy allowing lightly armed, mobile groups (Sea Peoples) to dismantle centralized defense networks.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Cyprus\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Evidence that Hittite or Mycenaean armies successfully integrated mass infantry tactics prior to their destruction.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A classic military-determinist explanation. It is atypical in its strict exclusion of Cyprus (often linked to Sea Peoples) and requires explaining why Egypt, which also used chariots, survived by adapting faster or leveraging geography.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "mention",
+          "target": "44cbb9bc22a93bf86745dc0ffe514215c5213162e7cbc5d639d46a0162e6e26b"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was triggered by a contagious ideological contagion where the perceived invincibility of the god-kings shattered following a single major natural disaster, causing immediate delegitimization and fracturing of the social contract.\", \"mechanism\": \"Sociological loss of legitimacy leading to internal revolt and the abandonment of palatial centers without significant external invasion.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Phoenicia\", \"Neo-Hittite states\"]}, \"forbidden\": [{\"case\": \"Inscriptions from Ugarit or Pylos describing fierce external battles or sieges immediately preceding the fire layers.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a highly atypical, sociological/ideological candidate. It posits that the 'Sea Peoples' were largely a symptom or later migration into a power vacuum created by internal psychological collapse, rather than the primary cause. It struggles with the archaeological evidence of widespread burning but offers a distinct causal pathway.\"}",
+      "typicality": 0.28,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "622df8284c8cfbb2440fbd47810355121576722b77c5d114d04f0faf4889b22a"
+        }
+      ]
+    }
+  ]
+}

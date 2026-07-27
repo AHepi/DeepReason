@@ -1,0 +1,1482 @@
+{
+  "schema": "deepreason-circularity-v1",
+  "prereg": "experiments/circularity_verifier_prereg.yaml",
+  "generated_at": "2026-07-13T12:27:56.170253+00:00",
+  "instrument": {
+    "script": "scripts/circularity_check.py",
+    "segmentation": "regex sentence split, bullets as boundaries",
+    "conclusion_markers": "therefore/thus/hence/so/consequently/accordingly/it follows/we conclude/this shows-proves-establishes-confirms-demonstrates-means/in conclusion/which is why; because-inversions give (claim, support) clause pairs",
+    "flag_rule": "support unit within duplicate radius of a conclusion (cosine), or stated derivation references form a cycle",
+    "thesis_rule": "opening sentence's main clause excluded from the support pool (committed pre-scoring)"
+  },
+  "calibration": {
+    "radius": 0.4675,
+    "rule": "midpoint of gap between positive max and negative p10 when separable, else positive max",
+    "separable": false,
+    "positive_pairs": {
+      "planted": 3,
+      "e01_paraphrase": 60,
+      "distances": {
+        "n": 63,
+        "min": 0.083,
+        "p10": 0.284,
+        "median": 0.3516,
+        "p90": 0.4061,
+        "max": 0.4675
+      }
+    },
+    "negative_pairs": {
+      "construction": "e01 a_i vs b_(i+k), k in (1,7,13)",
+      "n": 180,
+      "distances": {
+        "n": 180,
+        "min": 0.2697,
+        "p10": 0.4143,
+        "median": 0.5105,
+        "p90": 0.5703,
+        "max": 0.6247
+      }
+    },
+    "embedder": {
+      "name": "neural",
+      "model": "nomic-ai/nomic-embed-text-v1.5"
+    }
+  },
+  "radius": 0.4675,
+  "volumes": {
+    "circular": 10,
+    "other_unknown_flaw": 30,
+    "clean": 40
+  },
+  "rates": {
+    "circular_catch": 0.8,
+    "clean_fp": 0.6,
+    "other_unknown_flag_rate": 0.8
+  },
+  "zoo_circular_baseline": {
+    "per_seat": {
+      "zoo:deepseek-v4-flash": {
+        "caught": 1,
+        "n": 10,
+        "rate": 0.1
+      },
+      "zoo:deepseek-v4-pro": {
+        "caught": 2,
+        "n": 10,
+        "rate": 0.2
+      },
+      "zoo:gemma3:27b": {
+        "caught": 0,
+        "n": 10,
+        "rate": 0.0
+      },
+      "zoo:glm-5.2": {
+        "caught": 1,
+        "n": 10,
+        "rate": 0.1
+      },
+      "zoo:gpt-oss:120b": {
+        "caught": 7,
+        "n": 10,
+        "rate": 0.7
+      },
+      "zoo:kimi-k2.6": {
+        "caught": 6,
+        "n": 10,
+        "rate": 0.6
+      },
+      "zoo:minimax-m2.7": {
+        "caught": 0,
+        "n": 10,
+        "rate": 0.0
+      },
+      "zoo:mistral-large-3:675b": {
+        "caught": 0,
+        "n": 10,
+        "rate": 0.0
+      },
+      "zoo:nemotron-3-ultra": {
+        "caught": 0,
+        "n": 10,
+        "rate": 0.0
+      },
+      "zoo:qwen3-coder:480b": {
+        "caught": 0,
+        "n": 10,
+        "rate": 0.0
+      },
+      "zoo:qwen3.5:397b": {
+        "caught": 2,
+        "n": 10,
+        "rate": 0.2
+      }
+    },
+    "best_seat": "zoo:gpt-oss:120b",
+    "best_rate": 0.7
+  },
+  "verdicts": {
+    "P1": {
+      "verdict": "CONFIRMED",
+      "measured": {
+        "circular_flagged": 8,
+        "of": 10,
+        "catch_rate": 0.8,
+        "flagged_ids": [
+          "uf-circ-00",
+          "uf-circ-02",
+          "uf-circ-03",
+          "uf-circ-04",
+          "uf-circ-05",
+          "uf-circ-06",
+          "uf-circ-08",
+          "uf-circ-09"
+        ]
+      },
+      "threshold": ">= 7 of 10"
+    },
+    "P2": {
+      "verdict": "REFUTED",
+      "measured": {
+        "clean_flagged": 24,
+        "of": 40,
+        "fp_rate": 0.6,
+        "flagged_ids": [
+          "cl-00",
+          "cl-02",
+          "cl-05",
+          "cl-06",
+          "cl-07",
+          "cl-08",
+          "cl-10",
+          "cl-13",
+          "cl-15",
+          "cl-17",
+          "cl-18",
+          "cl-20",
+          "cl-21",
+          "cl-23",
+          "cl-24",
+          "cl-26",
+          "cl-29",
+          "cl-30",
+          "cl-31",
+          "cl-34",
+          "cl-35",
+          "cl-36",
+          "cl-37",
+          "cl-39"
+        ]
+      },
+      "threshold": "<= 2 of 40"
+    },
+    "P3": {
+      "verdict": "REFUTED",
+      "measured": {
+        "screen_catch": 0.8,
+        "best_zoo_seat": "zoo:gpt-oss:120b",
+        "best_zoo_seat_catch": 0.7,
+        "margin_pp": 10.0
+      },
+      "threshold": ">= 30 pp over best single zoo seat"
+    }
+  },
+  "exploratory": {
+    "NON_VERDICT_BEARING": true,
+    "note": "computed after the committed-radius scoring pass; no number here feeds any verdict",
+    "radius_sweep_summary": {
+      "jointly_satisfiable_P1_and_P2": false,
+      "max_circular_catch_with_clean_fp_le_2_of_40": 1,
+      "reading": "the per-item minimum support-conclusion distances of clean items overlap those of circular items across the whole range: NO radius passes P1 and P2 together on this corpus, so the failure is the embedding arm's geometry on same-topic prose, not the fallback calibration rule"
+    },
+    "min_distance_quantiles": {
+      "circular": {
+        "n_with_pairs": 8,
+        "min": 0.1819,
+        "median": 0.2935,
+        "max": 0.3291
+      },
+      "other_unknown": {
+        "n_with_pairs": 24,
+        "min": 0.1405,
+        "median": 0.2188,
+        "max": 0.3418
+      },
+      "clean": {
+        "n_with_pairs": 24,
+        "min": 0.1608,
+        "median": 0.2707,
+        "max": 0.4635
+      }
+    },
+    "reference_cycle_arm_fires": 0,
+    "items_without_conclusion_support_pairs": [
+      "cl-01",
+      "cl-03",
+      "cl-04",
+      "cl-09",
+      "cl-11",
+      "cl-12",
+      "cl-14",
+      "cl-16",
+      "cl-19",
+      "cl-22",
+      "cl-25",
+      "cl-27",
+      "cl-28",
+      "cl-32",
+      "cl-33",
+      "cl-38",
+      "uf-circ-01",
+      "uf-circ-07",
+      "uf-unit-00",
+      "uf-unit-03",
+      "uf-unit-09",
+      "uf-vac-04",
+      "uf-vac-09",
+      "uf-vsw-03"
+    ]
+  },
+  "per_item": {
+    "cl-00": {
+      "n_sentences": 10,
+      "n_conclusions": 1,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.2961,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 8,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-01": {
+      "n_sentences": 10,
+      "n_conclusions": 0,
+      "n_supports": 9,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-02": {
+      "n_sentences": 8,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.1686,
+      "closest_pair": {
+        "conclusion_sentence": 2,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-03": {
+      "n_sentences": 13,
+      "n_conclusions": 0,
+      "n_supports": 12,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-04": {
+      "n_sentences": 11,
+      "n_conclusions": 0,
+      "n_supports": 10,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-05": {
+      "n_sentences": 7,
+      "n_conclusions": 2,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2559,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-06": {
+      "n_sentences": 8,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2529,
+      "closest_pair": {
+        "conclusion_sentence": 2,
+        "support_sentence": 7,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-07": {
+      "n_sentences": 8,
+      "n_conclusions": 1,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.1922,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-08": {
+      "n_sentences": 9,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2612,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 8,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-09": {
+      "n_sentences": 10,
+      "n_conclusions": 0,
+      "n_supports": 9,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-10": {
+      "n_sentences": 9,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.227,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 8,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-11": {
+      "n_sentences": 11,
+      "n_conclusions": 0,
+      "n_supports": 10,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-12": {
+      "n_sentences": 10,
+      "n_conclusions": 0,
+      "n_supports": 9,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-13": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2727,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-14": {
+      "n_sentences": 7,
+      "n_conclusions": 0,
+      "n_supports": 6,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-15": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2252,
+      "closest_pair": {
+        "conclusion_sentence": 4,
+        "support_sentence": 7,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-16": {
+      "n_sentences": 12,
+      "n_conclusions": 0,
+      "n_supports": 11,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-17": {
+      "n_sentences": 6,
+      "n_conclusions": 1,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2936,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-18": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.2788,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-19": {
+      "n_sentences": 8,
+      "n_conclusions": 0,
+      "n_supports": 7,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-20": {
+      "n_sentences": 9,
+      "n_conclusions": 2,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.3015,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 8,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-21": {
+      "n_sentences": 9,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2707,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 0,
+        "support_kind": "because-clause"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-22": {
+      "n_sentences": 11,
+      "n_conclusions": 0,
+      "n_supports": 10,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-23": {
+      "n_sentences": 13,
+      "n_conclusions": 2,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.1608,
+      "closest_pair": {
+        "conclusion_sentence": 4,
+        "support_sentence": 2,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-24": {
+      "n_sentences": 13,
+      "n_conclusions": 1,
+      "n_supports": 13,
+      "min_support_conclusion_distance": 0.2843,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-25": {
+      "n_sentences": 9,
+      "n_conclusions": 0,
+      "n_supports": 8,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-26": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2853,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-27": {
+      "n_sentences": 10,
+      "n_conclusions": 0,
+      "n_supports": 9,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-28": {
+      "n_sentences": 10,
+      "n_conclusions": 0,
+      "n_supports": 9,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-29": {
+      "n_sentences": 11,
+      "n_conclusions": 2,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.3293,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 8,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-30": {
+      "n_sentences": 6,
+      "n_conclusions": 1,
+      "n_supports": 5,
+      "min_support_conclusion_distance": 0.4635,
+      "closest_pair": {
+        "conclusion_sentence": 3,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-31": {
+      "n_sentences": 8,
+      "n_conclusions": 2,
+      "n_supports": 8,
+      "min_support_conclusion_distance": 0.2663,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-32": {
+      "n_sentences": 9,
+      "n_conclusions": 0,
+      "n_supports": 8,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-33": {
+      "n_sentences": 9,
+      "n_conclusions": 0,
+      "n_supports": 8,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-34": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.3071,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-35": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.3019,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-36": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2443,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-37": {
+      "n_sentences": 12,
+      "n_conclusions": 2,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.2205,
+      "closest_pair": {
+        "conclusion_sentence": 10,
+        "support_sentence": 11,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "cl-38": {
+      "n_sentences": 12,
+      "n_conclusions": 0,
+      "n_supports": 11,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "clean"
+    },
+    "cl-39": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.2378,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "clean"
+    },
+    "uf-circ-00": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.3138,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-01": {
+      "n_sentences": 8,
+      "n_conclusions": 0,
+      "n_supports": 7,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-02": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.1819,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-03": {
+      "n_sentences": 9,
+      "n_conclusions": 1,
+      "n_supports": 8,
+      "min_support_conclusion_distance": 0.3291,
+      "closest_pair": {
+        "conclusion_sentence": 4,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-04": {
+      "n_sentences": 7,
+      "n_conclusions": 2,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2277,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "because-clause"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-05": {
+      "n_sentences": 8,
+      "n_conclusions": 3,
+      "n_supports": 5,
+      "min_support_conclusion_distance": 0.2695,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-06": {
+      "n_sentences": 9,
+      "n_conclusions": 2,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2943,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 2,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-07": {
+      "n_sentences": 9,
+      "n_conclusions": 0,
+      "n_supports": 8,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-08": {
+      "n_sentences": 8,
+      "n_conclusions": 3,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2382,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-circ-09": {
+      "n_sentences": 8,
+      "n_conclusions": 1,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2935,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "circular",
+      "flaw_class": "circular_support"
+    },
+    "uf-unit-00": {
+      "n_sentences": 14,
+      "n_conclusions": 0,
+      "n_supports": 13,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-01": {
+      "n_sentences": 12,
+      "n_conclusions": 1,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.282,
+      "closest_pair": {
+        "conclusion_sentence": 8,
+        "support_sentence": 9,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-02": {
+      "n_sentences": 10,
+      "n_conclusions": 2,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2269,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-03": {
+      "n_sentences": 11,
+      "n_conclusions": 0,
+      "n_supports": 10,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-04": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.269,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 3,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-05": {
+      "n_sentences": 10,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2779,
+      "closest_pair": {
+        "conclusion_sentence": 6,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-06": {
+      "n_sentences": 10,
+      "n_conclusions": 2,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2581,
+      "closest_pair": {
+        "conclusion_sentence": 4,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-07": {
+      "n_sentences": 13,
+      "n_conclusions": 1,
+      "n_supports": 12,
+      "min_support_conclusion_distance": 0.3229,
+      "closest_pair": {
+        "conclusion_sentence": 11,
+        "support_sentence": 12,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-08": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.1841,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 9,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-unit-09": {
+      "n_sentences": 9,
+      "n_conclusions": 0,
+      "n_supports": 8,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "subtle_unit_error"
+    },
+    "uf-vac-00": {
+      "n_sentences": 6,
+      "n_conclusions": 2,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.3418,
+      "closest_pair": {
+        "conclusion_sentence": 5,
+        "support_sentence": 4,
+        "support_kind": "because-clause"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-01": {
+      "n_sentences": 7,
+      "n_conclusions": 1,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.3259,
+      "closest_pair": {
+        "conclusion_sentence": 3,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-02": {
+      "n_sentences": 9,
+      "n_conclusions": 1,
+      "n_supports": 7,
+      "min_support_conclusion_distance": 0.2188,
+      "closest_pair": {
+        "conclusion_sentence": 8,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-03": {
+      "n_sentences": 8,
+      "n_conclusions": 3,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.1906,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-04": {
+      "n_sentences": 6,
+      "n_conclusions": 0,
+      "n_supports": 5,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-05": {
+      "n_sentences": 8,
+      "n_conclusions": 1,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2111,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-06": {
+      "n_sentences": 7,
+      "n_conclusions": 2,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2569,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 6,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-07": {
+      "n_sentences": 7,
+      "n_conclusions": 2,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.2514,
+      "closest_pair": {
+        "conclusion_sentence": 6,
+        "support_sentence": 6,
+        "support_kind": "because-clause"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-08": {
+      "n_sentences": 7,
+      "n_conclusions": 2,
+      "n_supports": 6,
+      "min_support_conclusion_distance": 0.1991,
+      "closest_pair": {
+        "conclusion_sentence": 0,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vac-09": {
+      "n_sentences": 7,
+      "n_conclusions": 0,
+      "n_supports": 6,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "vacuous_generality"
+    },
+    "uf-vsw-00": {
+      "n_sentences": 10,
+      "n_conclusions": 2,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.1648,
+      "closest_pair": {
+        "conclusion_sentence": 9,
+        "support_sentence": 7,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-01": {
+      "n_sentences": 12,
+      "n_conclusions": 3,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.1756,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 11,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-02": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.2092,
+      "closest_pair": {
+        "conclusion_sentence": 10,
+        "support_sentence": 9,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-03": {
+      "n_sentences": 13,
+      "n_conclusions": 0,
+      "n_supports": 12,
+      "min_support_conclusion_distance": null,
+      "closest_pair": null,
+      "embedding_hit": false,
+      "reference_cycle": null,
+      "flagged": false,
+      "reason": null,
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-04": {
+      "n_sentences": 12,
+      "n_conclusions": 2,
+      "n_supports": 10,
+      "min_support_conclusion_distance": 0.1405,
+      "closest_pair": {
+        "conclusion_sentence": 11,
+        "support_sentence": 10,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-05": {
+      "n_sentences": 11,
+      "n_conclusions": 1,
+      "n_supports": 9,
+      "min_support_conclusion_distance": 0.2372,
+      "closest_pair": {
+        "conclusion_sentence": 10,
+        "support_sentence": 1,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-06": {
+      "n_sentences": 13,
+      "n_conclusions": 1,
+      "n_supports": 11,
+      "min_support_conclusion_distance": 0.1691,
+      "closest_pair": {
+        "conclusion_sentence": 10,
+        "support_sentence": 4,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-07": {
+      "n_sentences": 11,
+      "n_conclusions": 2,
+      "n_supports": 8,
+      "min_support_conclusion_distance": 0.1574,
+      "closest_pair": {
+        "conclusion_sentence": 9,
+        "support_sentence": 10,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-08": {
+      "n_sentences": 14,
+      "n_conclusions": 1,
+      "n_supports": 13,
+      "min_support_conclusion_distance": 0.2018,
+      "closest_pair": {
+        "conclusion_sentence": 7,
+        "support_sentence": 3,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    },
+    "uf-vsw-09": {
+      "n_sentences": 10,
+      "n_conclusions": 1,
+      "n_supports": 8,
+      "min_support_conclusion_distance": 0.2116,
+      "closest_pair": {
+        "conclusion_sentence": 8,
+        "support_sentence": 5,
+        "support_kind": "plain"
+      },
+      "embedding_hit": true,
+      "reference_cycle": null,
+      "flagged": true,
+      "reason": "embedding",
+      "battery": "other_unknown",
+      "flaw_class": "verifier_shaped_but_wrong"
+    }
+  },
+  "token_spend": {
+    "llm_tokens": 0,
+    "note": "local embedder + regex only, per prereg budget"
+  },
+  "caveats": [
+    "Prototype screen over PROSE, not an ontology verifier; graduation requires a follow-up per the prereg's instrument note.",
+    "The calibration classes did NOT separate on the committed pairs (positive max 0.4675 > negative p10 0.4143), so the committed fallback rule (positive maximum) fixed a radius at same-topic rather than near-identical scale; per the basin doctrine a non-separable gate is itself a flagged condition, and it is recorded here, not hidden.",
+    "The exploratory sweep (NON_VERDICT_BEARING) shows no radius passes P1 and P2 together on this corpus: clean items' closest support-conclusion distances overlap circular items' across the whole range, so the embedding arm's premise \u2014 that circular restatement is geometrically closer than honest same-topic support \u2014 fails at this embedder's geometry on this corpus.",
+    "The reference-cycle arm never fired on this corpus (no item states labelled derivation references); it is validated only in the negative here.",
+    "Two circular items produced no conclusion-support pair under the marker parser and are unflaggable by construction (parse-level recall ceiling 8/10; both are the P1 misses).",
+    "Single corpus, and every circular item was authored by one adversary model (deepseek-v4-pro) under one prompt family; the measured catch is for adversary-authored circulars of that style only and does not generalize without new corpora.",
+    "The duplicate radius was calibrated only on committed paraphrase pairs from the harness's own jargon domain; corpus items are popular-science prose, so the radius transfers across domains untested.",
+    "Design choice committed before scoring: the opening sentence's main clause is treated as a thesis announcement, not support (its because-clause still counts); without this rule ordinary summary prose ('thesis ... therefore thesis') would be flagged.",
+    "The clean battery is the ORIGINAL 40-item t2 set (uncorrected), keeping this tranche independent of t2b; any genuinely defective clean item can only inflate the measured false-positive rate.",
+    "The other-unknown-flaw flag rate is reported as context, not a verdict: a flag there is off-target for the screen's class but not necessarily wrong about the item.",
+    "Zero LLM tokens: local neural embedder (nomic) plus regex parsing only; the P3 baseline is recomputed from the committed t3 judgments at zero new cost."
+  ]
+}

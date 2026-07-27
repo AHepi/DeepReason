@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Egypt was equally trade-dependent on Levantine timber and incense, and records show no substitution or domestic provision
+TARGET:
+{"claim": "The collapse was epiphenomenal to a hyperconnectivity crisis in an early 'globalized' trade network that amplified local shocks into systemic failure","mechanism": "The Uluburun shipwreck model of interdependence created systemic coupling: Aegean silver, Anatolian copper, Levantine grain, and Cypriot copper were nodally specialized; a shock in any region propagated through debt-bond relations ( documented in Ugarit archives ) causing simultaneous insolvency cascades, while Egypt's semi-autarkic grain production decoupled it from network failure","scope": {"covers": ["Mycenaean Greece", "Hittite Anatolia", "Ugarit", "Levantine city-states", "Cyprus"], "excludes": ["Egypt", "Mesopotamia"]}, "forbidden": [{"case": "Ugarit archives show no debt-crisis correspondence between regions contemporaneous with collapse", "eval": "rubric:std-hist"}, {"case": "Material culture shows regional autarky rather than specialization in the decades before collapse", "eval": "rubric:std-hist"}, {"case": "Egypt was equally trade-dependent on Levantine timber and incense, and records show no substitution or domestic provision", "eval": "rubric:std-hist"}], "prose_notes": "Atypical network-systems candidate applying modern financial-crisis analogies to pre-monetary exchange; deliberately provocative anachronism."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

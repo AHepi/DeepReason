@@ -13,7 +13,7 @@ def _skeleton(i: int, extra: str = "") -> str:
     return json.dumps({
         "claim": f"claim {i}{extra}", "mechanism": f"mechanism {i}",
         "forbidden": [{"case": "must state a mechanism",
-                       "eval": "predicate:'mechanism' in content"}]})
+                       "eval": "program:json-wf"}]})
 
 
 def _conj(*contents: str) -> str:
@@ -46,8 +46,8 @@ def test_healthy_run_no_orbit_and_replayable(tmp_path):
 def test_orbiting_run_blocks_and_rotates(tmp_path):
     doomed = json.dumps({
         "claim": "doomed", "mechanism": "wrong",
-        "forbidden": [{"case": "must mention the striped animal",
-                       "eval": "predicate:'ze'+'bra' in content"}]})
+        "forbidden": [{"case": "must be a website manifest",
+                       "eval": "program:manifest_wf"}]})
 
     summary = run([("pi-0", "why?")], MockEndpoint(lambda p: _conj(doomed)),
                   budget=200_000, root=tmp_path / "run", vs_k=1,

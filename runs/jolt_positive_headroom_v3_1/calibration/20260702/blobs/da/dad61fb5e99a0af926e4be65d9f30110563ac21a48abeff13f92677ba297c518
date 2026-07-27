@@ -1,0 +1,16 @@
+{
+  "candidates": [
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\",\"8\",\"12\"],\"rationale\":\"Reproduces the recent 356-distance modal tour: chain the dense lower-left cluster, then 6-7-11, then 13-8-12 before returning to 0.\"}",
+      "typicality": 0.95
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"12\",\"8\",\"1\",\"3\",\"10\",\"9\",\"2\",\"5\",\"4\",\"6\",\"7\",\"11\",\"13\"],\"rationale\":\"Starts via 12-8 to cluster the right/upper cities later; a previous 410-distance variant, criticizable for the long 13-0 return.\"}",
+      "typicality": 0.25
+    },
+    {
+      "content": "{\"tour\":[\"0\",\"1\",\"8\",\"12\",\"13\",\"11\",\"7\",\"6\",\"4\",\"5\",\"2\",\"9\",\"10\",\"3\"],\"rationale\":\"Upper-right chain first via 8-12-13, then reverse through the lower-left cluster; a previous 368-distance tour with a longer final 3-0 edge.\"}",
+      "typicality": 0.2
+    }
+  ]
+}

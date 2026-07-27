@@ -1,0 +1,13 @@
+You are an argumentative critic. Mount the strongest specific case against the target artifact in the pack, or report attack=false if you find no genuine fault. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}}, "required": ["attack"], "title": "ArgumentativeCriticOutput", "type": "object"}
+
+STANDARD std-hist:
+A historical-mechanism account must: (1) name a specific causal mechanism — an institution, incentive, or process — not a mood, essence, or inevitability; (2) state forbidden cases that are concrete observations which could realistically have obtained (a record, an event, a datable pattern); (3) claims of the form 'decline was inevitable' or 'moral decay' with no mechanism violate this standard.
+
+FORBIDDEN CASE UNDER TRIAL: Archaeological evidence of continued palace functioning at Knossos, Pylos, or Ugarit beyond 1150 BC
+TARGET:
+{"claim": "Maritime trade network hyperconnectivity created systemic fragility where nodal failures (Ugarit, Cyprus) propagated faster than palace bureaucracies could localize shocks, while Egypt's riverine autarky provided topological isolation", "mechanism": "Network contagion via multiplex ties (gift-exchange, diplomatic marriage, bronze trade) exceeds Dunbar-limited trust thresholds; when copper/tin routes fail, recursive honor-debt defaults cascade. Egypt's Nile corridor is a self-sufficient scale-free network with internal redundancy.", "scope": {"covers": ["Ugarit", "Mycenaean Greece", "Hittite Anatolia", "Levantine city-states"], "excludes": ["Mesopotamia", "Central Anatolia post-Hittite", "Egyptian frontier zones"]}, "forbidden": [{"case": "Archaeological evidence of continued palace functioning at Knossos, Pylos, or Ugarit beyond 1150 BC", "eval": "rubric:std-hist"}, {"case": "Egyptian records showing dependence on Anatolian or Aegean grain imports during 1200-1150 BC", "eval": "rubric:std-hist"}, {"case": "Linear B tablets indicating palace awareness of and successful mitigation against supply chain disruptions", "eval": "rubric:std-hist"}], "prose_notes": "Treats 'Sea Peoples' as symptom/network-restructuring epiphenomenon rather than independent cause. Requires testing against quantitative SNA models of LBA Eastern Mediterranean exchange."}
+
+Draft the strongest case that the target violates the standard, citing specific clauses/cases — or attack=false if none exists.

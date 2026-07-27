@@ -1,0 +1,19 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a rapid shift to massed mobile infantry rendering chariot-based armies obsolete.\", \"mechanism\": \"Ironworking and new infantry tactics allowed larger, cheaper armies to overwhelm chariot elites, destroying the military basis of palatial states.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt also relied on chariot-based elites and would have fallen to the same infantry revolution had it occurred.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because it adapted infantry tactics and had a more unified command structure, but the account must explain why Egypt alone managed this transition.\"}",
+      "typicality": 0.7,
+      "neighbours": ["A6"]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a cascading failure of the palatial trade and diplomacy network after a prolonged drought triggered famine and elite competition.\", \"mechanism\": \"Drought reduced agricultural surplus, causing palatial elites to hoard resources and break reciprocal trade obligations, which shattered the trust-based diplomatic network and led to systemic collapse.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt, being part of the same trade and diplomatic network, would have been equally vulnerable to its collapse.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt survived because the Nile's predictable flooding buffered it against drought, allowing it to maintain central authority while the network crumbled around it.\"}",
+      "typicality": 0.9,
+      "neighbours": ["A3"]
+    },
+    {
+      "content": "{\"claim\": \"A pandemic swept through densely populated palatial centers, causing administrative collapse and social disintegration.\", \"mechanism\": \"A virulent pathogen spread along trade routes, hitting urbanized palace complexes hardest and leaving survivors unable to maintain complex economic and political structures.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\"]}, \"forbidden\": [{\"case\": \"Egypt's dense Nile delta population and trade connections would have made it equally susceptible to a pandemic spreading along the same routes.\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Egypt's survival is attributed to its more dispersed rural population along the Nile and superior medical knowledge, though this is a weak exclusion.\"}",
+      "typicality": 0.4,
+      "neighbours": ["A9"]
+    }
+  ]
+}

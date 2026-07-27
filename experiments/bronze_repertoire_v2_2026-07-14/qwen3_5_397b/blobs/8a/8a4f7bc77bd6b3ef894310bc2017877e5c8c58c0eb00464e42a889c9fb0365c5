@@ -1,0 +1,7 @@
+The JSON value below is invalid for this output contract. Correct only the reported contract error and preserve every unrelated value. Return ONLY the complete corrected JSON value.
+
+INVALID JSON:
+{"attack":true,"cited_input_aliases":["std-hist"],"claim":"The target violates the historical-mechanism standard by failing to state forbidden cases that are concrete observations which could realistically have obtained.","counterexample":null,"grounds":"The standard requires forbidden cases to be 'concrete observations which could realistically have obtained (a record, an event, a datable pattern).' The target's forbidden case—'Evidence of continued large-scale bronze weapon production and chariot deployment in collapsed regions after 1200 BC'—is not a concrete, realistically obtainable observation. It is a vague, theory-laden description of evidence rather than a specific record, event, or datable pattern (e.g., 'A Linear B tablet from Pylos dated to 1190 BC recording the manufacture of 50 bronze-tipped arrows' or 'A burial at Hattusa from 1180 BC containing an intact chariot with bronze fittings'). The formulation merely restates the negation of the claim in evidentiary terms without specifying what actual archaeological or textual find would count.","target_alias":"A1"}
+
+DIAGNOSTIC:
+{"allowed": "complete JSON value", "contract": "argumentative_critic.compact.v1", "error": "unknown local alias 'std-hist'", "path": "", "repair_scope": "", "skeleton": {"attack": false, "target_alias": "A1"}}

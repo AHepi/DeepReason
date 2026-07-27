@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"The observed harness improvement at k=7 is fully attributable to changed base error alone (SC accuracy at the same e without filtering matches harness accuracy ±2pp)"},"steps":100000,"time_ms":2000},"eval":"rubric:std-crit-design","id":"fc:4d86b4a848b0","observation_valued":false},"id":"fc:4d86b4a848b0","schema":"commitment"}

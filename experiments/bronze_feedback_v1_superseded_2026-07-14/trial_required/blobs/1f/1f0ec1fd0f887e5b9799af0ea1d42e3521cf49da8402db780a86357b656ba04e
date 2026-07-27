@@ -1,0 +1,5 @@
+{
+"attack": true,
+"case": "The mechanism fails to name a specific causal institution or process, instead invoking a diffuse 'elite ideological closure' and 'competitive gift-exchange systems' without identifying a concrete institutional arrangement (e.g., a particular palace bureaucracy, a specific tribute schedule, or a defined gift-exchange protocol). The claim that 'elite demographic expansion' created a 'structural contradiction' is a vague, essence-like inevitability rather than a precise causal mechanism. Moreover, the forbidden case 'Linear B tablets show stable or declining palace production quotas through 1200 BCE, not intensification' directly contradicts the mechanism's premise of 'ever-larger' flows, yet the target does not address this concrete counterexample. The standard requires that the mechanism be a specific institution, incentive, or process, and that forbidden cases be acknowledged or refuted; the target fails on both counts.",
+"counterexample": ["Linear B tablets show stable or declining palace craft production quotas through 1200 BCE, not intensification"]
+}

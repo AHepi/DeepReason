@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672",
+      "attack": true,
+      "case": "The target asserts a 'mechanist' stance for 'school-0' without providing any supporting commitments, evidence, or reasoning. A mechanist worldview typically requires explicit justification regarding the sufficiency of physical laws to explain phenomena; asserting this stance as a bare policy declaration renders the position dogmatic rather than argumentative, failing to engage with the burden of proof inherent in such a strong metaphysical claim."
+    },
+    {
+      "target": "74fde5320d6c79520ea82d22a3e0c25a5ecc8e0cb50c3197058c5a3b0ecd2845",
+      "attack": true,
+      "case": "The target adopts a 'skeptic' stance for 'school-1' but lists no commitments. Skepticism, when presented as a policy without specific criteria for doubt or areas of inquiry, devolves into universal suspension of judgment which is practically incoherent. Without defining the scope or method of its skepticism (e.g., Pyrrhonian vs. Academic), the stance is an empty label that precludes any constructive dialogue or policy formation, effectively paralyzing the school's ability to function."
+    },
+    {
+      "target": "f37338f5e4c3a2c59c4ce1899609d2dcc0d8d95b6f1f9a859454040e33d7958e",
+      "attack": true,
+      "case": "This target claims to be a 'reseed' of a 'mechanist' school (ba68...) but immediately adopts a 'skeptic' stance without explaining the transition or resolution of the inherent tension between mechanism and skepticism. By inheriting the identity of a mechanist school while rejecting its core stance without argument, the target creates a contradictory policy framework that lacks internal consistency, making it impossible to determine whether the school operates on mechanistic principles or skeptical suspension."
+    }
+  ]
+}

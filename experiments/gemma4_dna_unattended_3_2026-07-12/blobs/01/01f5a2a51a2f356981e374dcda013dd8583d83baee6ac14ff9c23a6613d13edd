@@ -1,0 +1,24 @@
+```json
+{
+  "alias": "C5",
+  "content_requirements": [
+    "High-resolution visualization of hydrogen bonds",
+    "Detailed nucleotide base pairing (A-T, G-C)",
+    "Chemical bond annotations"
+  ],
+  "depends_on": [],
+  "exports": [
+    "zoomToBond",
+    "highlightPair"
+  ],
+  "motion_requirement": "full",
+  "owned_dom_ids": [
+    "dna-zoom-viewer",
+    "bond-canvas-overlay",
+    "molecular-detail-panel"
+  ],
+  "slots": [
+    "root"
+  ]
+}
+```

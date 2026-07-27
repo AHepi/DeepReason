@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target": "be8b603ecb572b2a54eb0bdb9cffa6a28ddb09103f350067787789c0938968c4",
+      "attack": true,
+      "case": "The relation claims the drought is a necessary precondition for the copper collapse to trigger systemic failure, but the stated refutation condition ('REFUTED IF evidence shows the Cypriot copper industry collapsed independently before or without the regional drought's impact') only tests temporal independence, not necessity. A necessary precondition relation is refuted if the systemic collapse can occur via the copper shock even when the drought is absent—regardless of whether the copper shock itself was caused by the drought. The refutation condition is therefore too narrow and fails to capture the actual vulnerability of the claimed dependence relation.",
+      "counterexample": null
+    },
+    {
+      "target": "58e798a0a712c209e6ff4491e0c4971cd428642d42289ada69cf2731f2d51440",
+      "attack": true,
+      "case": "The claim attributes collapse to drought undermining the agricultural base, yet the scope explicitly excludes Egypt. The problem asks why Egypt survived diminished while the others collapsed. By excluding Egypt from the mechanism's scope without explaining why the same prolonged regional drought did not cause equivalent agricultural collapse there, the account fails to address the differential outcome that is central to the problem. The Nile's agricultural resilience is a candidate explanation, but the skeleton provides no mechanism for why Egypt was exempt—it merely asserts the exclusion.",
+      "counterexample": null
+    },
+    {
+      "target": "db957f299ed6b9709390cb9d2168ba43325f5d3a60be9123f6f08eb3cba01bfb",
+      "attack": true,
+      "case": "The claim attributes the collapse to maritime raiders disrupting trade routes, yet the scope excludes the inland Hittite heartland. The problem states that Hittite Anatolia collapsed, and the Hittite capital Hattusa was far inland. If the raiders only affected coastal ports and trade networks, the account does not explain the collapse of the inland Hittite state, which was a core part of the simultaneous civilizational collapse the problem asks about. The exclusion undermines the claim's adequacy as an answer to the problem.",
+      "counterexample": null
+    }
+  ]
+}

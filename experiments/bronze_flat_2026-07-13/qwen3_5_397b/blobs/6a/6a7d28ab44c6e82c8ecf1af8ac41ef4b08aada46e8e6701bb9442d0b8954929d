@@ -1,0 +1,42 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was driven by a systemic failure of the bronze supply chain, where the disruption of tin imports from distant sources (Afghanistan/Central Asia) paralyzed the production of weapons and tools, causing a cascading economic crash in palace-dependent economies.\", \"mechanism\": \"Critical resource dependency: The palatial economies were hyper-specialized and lacked the redundancy to substitute bronze with iron quickly enough or source alternative tin routes before military and agricultural capacity collapsed.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence of robust local tin stockpiles in destroyed layers of Pylos or Hattusa\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is a high-typicality candidate aligning with the 'systems collapse' theory, focusing on the fragility of long-distance trade networks essential for bronze age warfare and agriculture.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ],
+      "typicality": 0.88
+    },
+    {
+      "content": "{\"claim\": \"A rapid climatic shift (the 3.2ka event) caused a multi-decade megadrought that led to mass famine, depopulation, and internal social unrest, rendering the centralized palaces unable to feed their populations or maintain armies.\", \"mechanism\": \"Ecological shock: Persistent drought reduced agricultural yields below the threshold required to sustain the dense, non-agricultural populations concentrated in palace centers, triggering migration and civil strife.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Paleoclimatic data showing normal precipitation levels in the Eastern Mediterranean between 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"Another modal candidate, heavily supported by pollen records and sediment cores, positing environmental determinism as the primary driver that made societies vulnerable to secondary shocks.\"}",
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.92
+    },
+    {
+      "content": "{\"claim\": \"The collapse was precipitated by the sudden proliferation of inexpensive iron weaponry among marginalized groups and mercenaries, which democratized violence and allowed numerically superior but previously inferior infantry to overwhelm the elite chariot-based aristocracies.\", \"mechanism\": \"Military technological disruption: The shift from expensive, state-controlled bronze armaments to locally smeltable iron broke the monopoly on violence held by palace elites, enabling decentralized rebel groups and sea-borne raiders to defeat professional armies.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Assyria\", \"Elam\"]}, \"forbidden\": [{\"case\": \"Metallurgical analysis proving iron artifacts in destruction layers were ceremonial or rare imports rather than mass-produced weapons\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This candidate challenges the traditional 'Sea Peoples' invasion narrative by focusing on internal class warfare enabled by technology, though it risks anachronism regarding the scale of iron production at this specific transition moment.\"}",
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        },
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        }
+      ],
+      "typicality": 0.45
+    }
+  ]
+}

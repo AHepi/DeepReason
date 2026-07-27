@@ -31,8 +31,14 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
             sorted(current),
             key=lambda s: (novelty.get(s, -1.0), s),  # deterministic tiebreak
         )
+        # Force crossover with the MOST DISTANT school (§11.4): rotating the
+        # stance alone leaves the reseeded school echoing its own lineage.
+        foreign = detection.most_distant_school(
+            harness, scheduler.embedder, config.CAPTURE_W, of=laggard
+        )
         new_policy = schools.reseed(
-            harness, laggard, current[laggard], reason="school-convergence"
+            harness, laggard, current[laggard],
+            reason="school-convergence", crossover_from=foreign,
         )
         # Refresh the live roster the scheduler renders packs from — otherwise
         # the reseed is a logged no-op: _school_dict keeps serving the old
@@ -82,9 +88,25 @@ def respond(scheduler, active_flags: dict[str, bool]) -> list[str]:
             applied.append("orbit-rotate")
 
     if active_flags.get("grounding_decay"):
-        # Exogenous brake: research machinery is P4; the intervention and the
-        # priority raise are logged now so the ladder is complete and audited.
+        # Exogenous brake (§11.4): raise uncovered research problems to
+        # maximum priority. Eligibility still honors cooldowns, attempt
+        # caps, and backend availability (_research_step) — the brake never
+        # hammers a failed source or spins. In "agent" mode the actuator is
+        # the OPERATOR: log research-agent-requested with the escalated
+        # problem ids so external retrieval becomes the visible
+        # highest-priority grounding task (a capture-response intervention,
+        # distinct from the ordinary research-awaiting-agent state).
         scheduler.activate_interventions(["research_priority"])
         harness.record_measure(inputs=["intervention:exogenous-brake"])
         applied.append("exogenous-brake")
+        research = getattr(scheduler, "research", None)
+        if research is not None and research.mode == "agent":
+            from deepreason.ops import open_research_problems
+
+            escalated = [p.id for p in open_research_problems(harness)][:8]
+            if escalated:
+                harness.record_measure(inputs=[
+                    "research-agent-requested", "flag:grounding_decay",
+                    *escalated,
+                ])
     return applied

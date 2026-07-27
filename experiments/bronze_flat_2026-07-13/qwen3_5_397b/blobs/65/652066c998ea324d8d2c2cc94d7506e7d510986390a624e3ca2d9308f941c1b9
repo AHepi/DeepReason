@@ -1,0 +1,38 @@
+{
+  "candidates": [
+    {
+      "content": "{\"claim\": \"The collapse was caused by a systemic failure of the palatial redistribution economy due to prolonged drought and famine, which severed the supply chains holding the interconnected states together.\", \"mechanism\": \"Climate-induced agricultural failure led to the inability of central palaces to feed dependent populations and maintain military forces, triggering internal revolts and mass migration.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\"], \"excludes\": [\"Egypt\", \"Mesopotamia\", \"Cyprus\"]}, \"forbidden\": [{\"case\": \"Paleoclimate data showing normal rainfall levels in the Eastern Mediterranean between 1200-1150 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"This is the dominant climatic determinism model, relying on the synchronization of environmental stress across the region.\"}",
+      "typicality": 0.92,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "ba687c5f145e404c53a84549cf366e0b6e0106eec67404c07231357fed09e672"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse resulted from a revolutionary shift in military technology and tactics, specifically the rise of loose-order infantry with javelins and long swords defeating rigid chariot-based aristocracies.\", \"mechanism\": \"New infantry tactics rendered the expensive, state-sponsored chariot corps obsolete, allowing decentralized bands of warriors (Sea Peoples) to dismantle centralized palace defenses.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Sea Peoples\"], \"excludes\": [\"Egypt\", \"Assyria\"]}, \"forbidden\": [{\"case\": \"Archaeological evidence demonstrating that chariot warfare remained tactically dominant in battlefield contexts after 1175 BC\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A technological determinism approach; it struggles to explain why Egypt, which faced the same tactics, survived, hence the exclusion.\"}",
+      "typicality": 0.78,
+      "refs": [
+        {
+          "role": "mention",
+          "target": "2af0caa0fbfc6f0c5a0c315b008275c74bbdeb963e2271b2f2e8f560cdc4a2db"
+        }
+      ]
+    },
+    {
+      "content": "{\"claim\": \"The collapse was a cascading systemic failure triggered by the disruption of long-distance trade networks (specifically tin and copper), causing economic hyper-fragmentation rather than a single external shock.\", \"mechanism\": \"The extreme specialization of palatial economies made them brittle; the interruption of critical raw material imports by piracy or localized conflicts caused a domino effect of industrial and administrative paralysis.\", \"scope\": {\"covers\": [\"Mycenaean Greece\", \"Hittite Anatolia\", \"Ugarit\", \"Levantine city-states\", \"Cyprus\"], \"excludes\": [\"Egypt\", \"Internal Mesopotamia\"]}, \"forbidden\": [{\"case\": \"Evidence that bronze production levels remained stable or increased in Ugarit and Mycenae during the final decades of the Late Bronze Age\", \"eval\": \"rubric:std-hist\"}], \"prose_notes\": \"A complex systems theory approach focusing on interdependence fragility; distinct from simple drought models by emphasizing trade topology.\"}",
+      "typicality": 0.65,
+      "refs": [
+        {
+          "role": "dependence",
+          "target": "7e3426b9a7159f0bbbd3686e7604b8176a2ad5ea50e120cc5c4e6c0a75dfad48"
+        },
+        {
+          "role": "mention",
+          "target": "34521c4699ac05718d51cd3e3838b25115c6da9f573c38dcf113ddc59dba13f9"
+        }
+      ]
+    }
+  ]
+}

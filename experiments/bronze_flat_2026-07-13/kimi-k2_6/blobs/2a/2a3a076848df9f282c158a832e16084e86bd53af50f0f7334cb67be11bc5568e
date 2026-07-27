@@ -1,0 +1,60 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"CompactConjectureCandidate": {"additionalProperties": false, "properties": {"content": {"minLength": 1, "title": "Content", "type": "string"}, "neighbours": {"items": {"type": "string"}, "title": "Neighbours", "type": "array"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["content", "typicality"], "title": "CompactConjectureCandidate", "type": "object"}}, "additionalProperties": false, "properties": {"candidates": {"items": {"$ref": "#/$defs/CompactConjectureCandidate"}, "minItems": 1, "title": "Candidates", "type": "array"}}, "required": ["candidates"], "title": "CompactConjecturer", "type": "object"}
+
+LOCAL REFERENCES (copy aliases, not identifiers):
+
+A1
+A2
+A3
+A4
+A5
+A6
+A7
+A8
+A9
+A10
+A11
+
+ONE SYNTAX EXAMPLE:
+
+{"candidates":[{"content":"x","typicality":0.0}]}
+
+INPUT:
+
+## problem
+PROBLEM succ:6480735f5f7a
+supersede refuted candidate 6480735f5f7a on pi-bronze. Original problem: Why did the interconnected palace civilizations of the Eastern Mediterranean — Mycenaean Greece, Hittite Anatolia, Ugarit and the Levantine city-states — collapse nearly simultaneously around 1200-1150 BC after centuries of stability, while Egypt survived diminished? Each candidate's content MUST be a JSON skeleton object, exactly this shape: {"claim": str, "mechanism": str, "scope": {"covers": [str], "excludes": [str]}, "forbidden": [{"case": str, "eval": "rubric:std-hist"}], "prose_notes": str}. The forbidden cases must be historical observations that would have refuted the account had they obtained.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- skeleton-wf: program:skeleton_wf
+- kappa-hist: rubric:std-hist
+
+## school-stance
+SCHOOL STANCE (weight 0.85): demand a causal mechanism
+
+## neighbourhood
+NEIGHBOURHOOD (accepted artifacts; carry dependence refs where natural):
+- A1: {"school_policy": {"school": "school-0", "stance": "mechanist"}}
+- A2: {"standard": {"mode": "absolute", "rubric": "A historical-mechanism account must: (1) name a specific causal mechanism \u2014 an institution, incentive, or proc
+- A3: {"school_policy": {"school": "school-1", "stance": "skeptic"}}
+- A4: nu: argumentative case 5aa38b9764e37ce3 against A5 is sound
+- A6: The mechanism claims that Egypt survived because 'Nubian gold substituted for trade income,' but this contradicts the scope's explicit exclusion of 'Egypt prope
+- A7: nu: argumentative case 2d6adcaaf4f6df6b against A8 is sound
+- A9: The mechanism asserts that palaces 'prioritized elite maintenance over grain distribution, triggering peasant flight to pastoralism or highland refuge,' but thi
+- A10: nu: argumentative case 9078550ddd6562f1 against A11 is sound
+
+## complement-directive
+COMPLEMENT DIRECTIVE: produce the attempt these summaries make least likely — avoid the modal continuation of the neighbourhood.
+
+## diversity-specifications
+DIVERSITY SPECIFICATIONS (binding — candidate k MUST realize spec k):
+  spec 1: {"claim": " systemic maritime trade network fragmentation via pirate/privateer disruption of copper-tin supply chains ", "mechanism": " resource-network cascade; Bronze Age equivalent of supply chain shock", "scope": {"covers": [" Ugarit", " Mycenaean palace economies", " Levantine emporia"], "excludes": [" Hittite Anatolian highlands", " Egyptian self-sufficiency"]}, "forbidden": [{"case": " tin-bronze ratios remain stable in palace workshops post-1180 BC", "eval": "rubric:std-hist"}, {"case": " Mycenaean Linear B records show copper surplus not shortage in final palatial phase", "eval": "rubric:std-hist"}], "prose_notes": " angle: economic network topology; mechanism family: supply-chain/network cascade; structure: distributed systemic failure; register: cliometric/quantitative "}
+  spec 2: {"claim": " solar minimum-induced Northern Hemisphere megadrought triggered pastoral migration pressure against sedentary polities", "mechanism": " climate-forced migration ethno genesis with feedback violence", "scope": {"covers": [" Hittite Anatolia", " Levantine city-states", " Mycenaean peripheries"], "excludes": [" Nile Valley flood agriculture", " Mycenaean citadel cores"]}, "forbidden": [{"case": " speleothem records show normal precipitation 1220-1150 BC in Anatolia-Levant corridor", "eval": "rubric:std-hist"}, {"case": " Sea Peoples identifiably emerge from non-steppe/non-pastoral social formations in contemporaneous texts", "eval": "rubric:std-hist"}], "prose_notes": " angle: paleoclimatological forcing; mechanism family: environmentally-forced migration; structure: exogenous shock propagation; register: natural-science/historical-materialist "}
+  spec 3: {"claim": " competitive emulation of palace chariot aristocracies created unsustainable military-ideological extraction spirals", "mechanism": " peer-polity internal contradiction/arms race with fiscal overextension", "scope": {"covers": [" Mycenaean Greece", " Hittite Anatolia", " Ugarit"], "excludes": [" Egypt (military reformed to mercenary-infantry base)", " non-palatial Levantine polities"]}, "forbidden": [{"case": " Linear B records show declining chariot-corps expenditure in final palatial phase", "eval": "rubric:std-hist"}, {"case": " Hittite texts report fiscal surplus, not strain, in final century", "eval": "rubric:std-hist"}, {"case": " Egyptian New Kingdom maintains chariot aristocracy without comparable crisis", "eval": "rubric:std-hist"}], "prose_notes": " angle: political-military institutional pathology; mechanism family: endogenous state-failure/extraction crisis; structure: competitive isomorphism collapse; register: neo-Weberian historical sociology "}
+
+## output-contract
+DIRECTIVE: return exactly 3 diverse candidates with typicality estimates. Include atypical candidates, not just the modal answer.
