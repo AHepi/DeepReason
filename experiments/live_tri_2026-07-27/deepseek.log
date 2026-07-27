@@ -37,3 +37,5 @@ qualify_rc=0 qualify_seconds=2454
 reason_rc=1 reason_seconds=1
 run_id= problem_id= state=
 === deepseek LADDER end 2026-07-27T17:49:35Z ===
+=== deepseek LADDER start 2026-07-27T18:02:10Z ===
+Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.

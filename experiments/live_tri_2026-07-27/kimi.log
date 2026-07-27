@@ -15,3 +15,10 @@ qualify_rc=0 qualify_seconds=7905
 reason_rc=4 reason_seconds=629
 run_id=run-142212b0de35178d2ec455b21935bc89 problem_id= state=failed
 === kimi end 2026-07-27T17:53:36Z ===
+=== kimi LADDER start 2026-07-27T18:02:08Z ===
+{"cache_reused":true,"maximum_expected_provider_calls":0,"model_id":"kimi-k2.6","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"42d05ab73949cfc58e2420cfe0afd6c46a7e591251d49b26460f920dd32cb866","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=2
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"kimi-k2.6","model_revision":"kimi-k2.6","route_id":"provider-profile-1393406b822b5300f88c878d"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
+reason_rc=1 reason_seconds=6
+run_id= problem_id= state=
+=== kimi LADDER end 2026-07-27T18:02:17Z ===
