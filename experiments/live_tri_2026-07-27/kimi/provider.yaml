@@ -9,9 +9,9 @@ model_profile: standard
 model_revision: kimi-k2.6
 output_mechanism: json_text
 output_mode: json_object
-profile_digest: 1393406b822b5300f88c878d6f6c1ac6faab343a8367f94813b42e155120960e
+profile_digest: 44718c699a47d0cd1b83f5036ec5b6aa4844faa7ed7c34717861ce323b817ce0
 provider: ollama
-reasoning: null
+reasoning: none
 schema: deepreason-provider-profile.v1
 temperature: null
 timeout_s: 120

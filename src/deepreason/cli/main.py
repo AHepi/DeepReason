@@ -44,6 +44,14 @@ def build_parser() -> argparse.ArgumentParser:
     setup_cmd.add_argument("--context-window-tokens", type=int, default=None)
     setup_cmd.add_argument("--maximum-completion-tokens", type=int, default=None)
     setup_cmd.add_argument("--credential-env", default=None)
+    setup_cmd.add_argument(
+        "--reasoning",
+        default=None,
+        help=(
+            "neutral reasoning knob realized per provider "
+            "(e.g. none, low, medium, high, or a numeric effort)"
+        ),
+    )
     qualify_cmd = sub.add_parser(
         "qualify", help="explicitly qualify the configured V6 provider contract"
     )
@@ -447,6 +455,11 @@ def _main(argv: list[str] | None = None) -> int:
                 context_window_tokens=args.context_window_tokens,
                 maximum_completion_tokens=args.maximum_completion_tokens,
                 credential_env=args.credential_env,
+                reasoning=(
+                    int(args.reasoning)
+                    if args.reasoning is not None and args.reasoning.isdigit()
+                    else args.reasoning
+                ),
             )
         except ValueError as error:
             print(str(error), file=sys.stderr)

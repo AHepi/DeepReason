@@ -350,3 +350,26 @@ def test_website_script_passes_a_real_page_and_fails_a_blank_one():
     assert len(good.screenshots) == 2
     blank = browser.run("<!doctype html><html><head></head><body></body></html>", spec)
     assert blank.verdict == "fail"
+
+
+def test_setup_wizard_reasoning_knob_binds_into_the_profile(monkeypatch):
+    monkeypatch.setenv("EXISTING_KEY", "already-set")
+    common = dict(
+        input_fn=lambda _prompt: pytest.fail("explicit setup should not prompt"),
+        getpass_fn=lambda _prompt: pytest.fail("credential already available"),
+        provider="custom",
+        endpoint="https://ollama.com/v1",
+        model="thinking-model",
+        context_window_tokens=131072,
+        maximum_completion_tokens=8192,
+        credential_env="EXISTING_KEY",
+    )
+    default = load_provider_profile(easy.setup_wizard(**common))
+    assert default.reasoning is None
+    disabled = load_provider_profile(
+        easy.setup_wizard(**common, reasoning="none")
+    )
+    assert disabled.reasoning == "none"
+    # The knob is behavior: a different reasoning setting is a different
+    # qualification subject, never a silent reuse of prior evidence.
+    assert disabled.profile_digest != default.profile_digest

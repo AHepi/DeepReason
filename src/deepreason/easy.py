@@ -403,6 +403,7 @@ def setup_wizard(
     context_window_tokens: int | None = None,
     maximum_completion_tokens: int | None = None,
     credential_env: str | None = None,
+    reasoning: str | int | None = None,
 ) -> Path:
     """Write one strict setup provider profile, interactively or explicitly."""
     getpass_fn = getpass_fn or getpass.getpass
@@ -464,6 +465,12 @@ def setup_wizard(
         context_window_tokens=context_window_tokens,
         maximum_completion_tokens=maximum_completion_tokens,
         credential_env=credential_env,
+        # The neutral reasoning knob, realized per provider at request time.
+        # Hosted thinking models can spend the entire completion budget on
+        # hidden reasoning and return empty content (observed live: a
+        # full-tier model failing engaged runs with zero-byte responses);
+        # "none" disables thinking where the provider supports it.
+        reasoning=reasoning,
     )
     path = write_provider_profile(profile, setup_provider_profile_path())
     already_available = bool(os.environ.get(credential_env, "").strip()) or (
