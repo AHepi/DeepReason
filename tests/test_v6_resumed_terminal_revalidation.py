@@ -1150,7 +1150,10 @@ def test_open_epoch_rejects_missing_or_broken_child_commitment(
     assert scheduler_calls == [None]
 
 
-def test_budget_exhausted_terminal_remains_non_resumable(tmp_path, monkeypatch):
+def test_budget_exhausted_terminal_is_a_typed_resumable_stop(tmp_path, monkeypatch):
+    """Owner decision 4a: a budget-exhausted public run carries a typed
+    STOPPED lifecycle receipt and can be continued with a fresh budget."""
+
     root = tmp_path / "budget-terminal"
     commitment = _commitment()
     frozen = _bind_v2(root, commitment)
@@ -1189,15 +1192,24 @@ def test_budget_exhausted_terminal_remains_non_resumable(tmp_path, monkeypatch):
     ).payload
     assert terminal["stop"]["reason"] == "budget_exhausted"
     assert terminal["verification"]["valid"] is True
-    assert Harness(root).workflow_state.terminal_lifecycle_decision is None
+    stopped = Harness(root).workflow_state.terminal_lifecycle_decision
+    assert stopped is not None
+    assert stopped.deterministic_decision.reason == "budget_exhausted"
 
-    with pytest.raises(ValueError, match="^CONTINUE_TYPED_STOP_REQUIRED$"):
-        service.continue_run(
-            ContinueTextRunIntentV1(
-                root=str(root),
-                budget=RunBudgetIntentV1(cycles=1, token_budget="unlimited"),
-                expected_manifest_digest=manifest.sha256,
-            ),
-            credential_checker=lambda _manifest: [],
-        )
-    assert scheduler_calls == [None]
+    continued = service.continue_run(
+        ContinueTextRunIntentV1(
+            root=str(root),
+            budget=RunBudgetIntentV1(cycles=1, token_budget="unlimited"),
+            expected_manifest_digest=manifest.sha256,
+        ),
+        credential_checker=lambda _manifest: [],
+    )
+    service.wait(continued.root, timeout=15)
+    resumed_terminal = service.result(
+        InspectTextRunIntentV1(root=continued.root)
+    ).payload
+    assert resumed_terminal["verification"]["valid"] is True
+    assert len(scheduler_calls) == 2
+    state = Harness(root).workflow_state
+    assert state.current_terminal_epoch == 1
+    assert len(state.terminal_commitments_by_epoch) == 2

@@ -56,3 +56,15 @@ reason_rc=0
 run_id=run-faa5feae126bc2558ea9c6d8d200a90c problem_id=question-c55fa4496986e41d5a6b014c4fc37eb5 state=completed
 === kimi DEEP start 2026-07-27T23:04:12Z ===
 === kimi DEEP start 2026-07-27T23:19:19Z ===
+reason_rc=0 reason_seconds=1511
+run_id=run-c5ab654afd1b4aa131aede83bdca0f03 problem_id=question-209e3154673cd752fd6dc26d2ddbbf90 state=completed
+bridge_rc=1 bridge_seconds=446
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+PASS  bridge_status(terminal)  | state=completed detail={"formal_seq": 471, "process_status": "success", "resolution": "underdetermined", "run_id": "run-c5ab654afd1b4aa131aede83bdca0f03", "schema": "deepreason-bridge-status-v1", "source_terminal_commitment
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+PASS  bridge_claims  | ok
+=== 4/5 passed ===
+=== kimi DEEP end 2026-07-27T23:51:56Z ===

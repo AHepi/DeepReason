@@ -187,6 +187,71 @@ def _v6_run_result(
     )
 
 
+def _record_exhaustion_lifecycle_stop(harness, manifest, *, policy, metrics):
+    """Record a typed, continuable STOPPED receipt for a budget-exhausted run.
+
+    Returns the persisted stop record, or ``None`` when this root cannot
+    carry the receipt (no owned control plane, or the workflow holds
+    unfinished authority) — the caller then keeps the bare stop record and
+    the terminal stays non-resumable, exactly as before.
+    """
+
+    from deepreason.runtime.stop import (
+        StopControllerStateV1,
+        StopDecision,
+        build_stop_record,
+        persist_stop_record,
+    )
+    from deepreason.workflow.lifecycle import build_stopped_lifecycle
+
+    control = (
+        getattr(manifest, "control_plane_policy", None)
+        if manifest is not None and getattr(manifest, "schema_version", 1) in {4, 5, 6}
+        else None
+    )
+    if (
+        control is None
+        or control.controller_version
+        not in {
+            "workflow.controller.v1",
+            "workflow.controller.v2",
+            "workflow.controller.v3",
+        }
+        or control.mode not in {"shadow", "active_conjecture", "active_inquiry"}
+    ):
+        return None
+    stop_event_seq = harness._next_seq
+    record = build_stop_record(
+        reason="budget_exhausted",
+        policy=policy,
+        metrics=metrics,
+        event_seq=stop_event_seq,
+    )
+    idle = StopControllerStateV1(policy_digest=policy.digest)
+    try:
+        observation, snapshot, lifecycle = build_stopped_lifecycle(
+            harness.workflow_state,
+            manifest_digest=manifest.sha256,
+            controller_version=control.controller_version,
+            workflow_profile=control.workflow_profile,
+            policy=policy,
+            metrics=metrics,
+            deterministic_decision=StopDecision(stop=True, reason="budget_exhausted"),
+            controller_state_before=idle,
+            controller_state_after=idle,
+            stop_event_seq=stop_event_seq,
+            stop_record_digest=record["digest"],
+        )
+    except ValueError:
+        return None
+    event = harness.record_lifecycle_transition(observation, snapshot, lifecycle)
+    if event.seq != stop_event_seq:
+        raise RuntimeError("lifecycle Control event crossed its stop fence")
+    stop = persist_stop_record(harness.root, record)
+    harness.write_workflow_checkpoint()
+    return stop
+
+
 def missing_manifest_credentials(manifest) -> list[str]:
     return sorted(
         {
@@ -941,22 +1006,33 @@ class TextRunApplicationService:
             else:
                 policy = StopPolicy()
                 metrics = StopMetrics(cycle=latest_cycle)
-                harness.record_measure(
-                    inputs=[
-                        "run-stop",
-                        policy.digest,
-                        json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
-                        stop_reason,
-                        str(harness._next_seq),
-                    ]
-                )
-                stop = write_stop_record(
-                    root,
-                    reason=stop_reason,
-                    policy=policy,
-                    metrics=metrics,
-                    event_seq=max(0, harness._next_seq - 1),
-                )
+                stop = None
+                if stop_reason == "budget_exhausted":
+                    # A typed STOPPED lifecycle receipt makes the exhaustion
+                    # a continuable terminal (owner decision: budget stops
+                    # on public runs are resumable).  A root that cannot
+                    # take the receipt (no owned control plane, unfinished
+                    # workflow authority) keeps the bare fail-closed stop.
+                    stop = _record_exhaustion_lifecycle_stop(
+                        harness, manifest, policy=policy, metrics=metrics
+                    )
+                if stop is None:
+                    harness.record_measure(
+                        inputs=[
+                            "run-stop",
+                            policy.digest,
+                            json.dumps(metrics.model_dump(mode="json"), sort_keys=True),
+                            stop_reason,
+                            str(harness._next_seq),
+                        ]
+                    )
+                    stop = write_stop_record(
+                        root,
+                        reason=stop_reason,
+                        policy=policy,
+                        metrics=metrics,
+                        event_seq=max(0, harness._next_seq - 1),
+                    )
             _atomic_json(
                 root / "checkpoint.json",
                 {

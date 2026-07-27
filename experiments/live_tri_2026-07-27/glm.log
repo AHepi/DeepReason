@@ -76,3 +76,15 @@ PASS  bridge_claims  | ok
 === glm LADDER end 2026-07-27T19:27:47Z ===
 === glm DEEP start 2026-07-27T23:04:10Z ===
 === glm DEEP start 2026-07-27T23:19:17Z ===
+reason_rc=0 reason_seconds=1299
+run_id=run-15a53aca8a6fc66a39f382fc688c5346 problem_id=question-2da717017468d2da3c501dd1dc4ce3cd state=completed
+bridge_rc=1 bridge_seconds=474
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+FAIL  bridge_status(terminal)  | state=failed detail={"error_code": "BRIDGE_STAGE_A_FAILED", "formal_seq": 939, "process_status": "failure", "run_id": "run-15a53aca8a6fc66a39f382fc688c5346", "schema": "deepreason-bridge-status-v1", "source_terminal_comm
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+FAIL  bridge_claims  | ValueError: BRIDGE_RESULT_HAS_NO_LEDGER
+=== 2/5 passed ===
+=== glm DEEP end 2026-07-27T23:48:50Z ===

@@ -22,7 +22,10 @@ from deepreason.workflow.models import (
 )
 
 
-RESUMABLE_STOP_REASONS = frozenset({"converged"})
+# Owner decision 4a (2026-07-27): a budget-exhausted public run is a typed,
+# quiescent stop and continues under a fresh explicit budget, exactly like a
+# converged one.  Failure terminals stay non-resumable.
+RESUMABLE_STOP_REASONS = frozenset({"converged", "budget_exhausted"})
 
 
 def outstanding_work_snapshot(
@@ -123,6 +126,16 @@ def outstanding_work_snapshot(
     )
 
 
+def _is_runtime_exhaustion(decision: StopDecision) -> bool:
+    """True for the one stop the runtime, not the controller, decides."""
+
+    return (
+        decision.stop
+        and decision.reason == "budget_exhausted"
+        and decision.escape_action is None
+    )
+
+
 def build_stopped_lifecycle(
     workflow_state: Any,
     *,
@@ -164,14 +177,27 @@ def build_stopped_lifecycle(
     controller_state_after = StopControllerStateV1.model_validate(
         controller_state_after.model_dump(mode="python", by_alias=True)
     )
-    verifier = StopController(policy, state=controller_state_before)
-    expected_decision = verifier.evaluate(metrics)
-    if expected_decision != deterministic_decision:
-        raise ValueError("lifecycle stop differs from deterministic StopController")
-    if verifier.snapshot() != controller_state_after:
-        raise ValueError("lifecycle controller state does not replay exactly")
     if not deterministic_decision.stop or deterministic_decision.reason is None:
         raise ValueError("only a deterministic terminal decision may emit STOPPED")
+    if _is_runtime_exhaustion(deterministic_decision):
+        # Budget exhaustion is decided by the runtime cycle loop and token
+        # meter, not by the deterministic StopController, so there is no
+        # controller evaluation to replay.  The receipt instead declares
+        # that no controller authority was consumed (identical before and
+        # after states); the stop-record digest binding and the quiescent
+        # outstanding-work snapshot below still carry the resumption
+        # safety properties.
+        if controller_state_before != controller_state_after:
+            raise ValueError(
+                "exhaustion STOPPED requires unchanged controller state"
+            )
+    else:
+        verifier = StopController(policy, state=controller_state_before)
+        expected_decision = verifier.evaluate(metrics)
+        if expected_decision != deterministic_decision:
+            raise ValueError("lifecycle stop differs from deterministic StopController")
+        if verifier.snapshot() != controller_state_after:
+            raise ValueError("lifecycle controller state does not replay exactly")
     expected_record = build_stop_record(
         reason=deterministic_decision.reason,
         policy=policy,

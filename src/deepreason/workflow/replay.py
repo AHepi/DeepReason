@@ -2119,14 +2119,27 @@ class WorkflowReplayState:
             raise ValueError("lifecycle outstanding-work snapshot does not replay")
         if snapshot.outstanding_work or snapshot.unconsumed_bound_call_seqs:
             raise ValueError("STOPPED cannot forget unfinished workflow authority")
-        verifier = StopController(
-            observation.stop_policy,
-            state=observation.controller_state_before,
-        )
-        if verifier.evaluate(observation.metrics) != decision.deterministic_decision:
-            raise ValueError("lifecycle decision differs from deterministic stop policy")
-        if verifier.snapshot() != observation.controller_state_after:
-            raise ValueError("lifecycle controller state does not replay")
+        from deepreason.workflow.lifecycle import _is_runtime_exhaustion
+
+        if _is_runtime_exhaustion(decision.deterministic_decision):
+            # Runtime exhaustion consumes no controller authority; the
+            # receipt must declare exactly that (see build_stopped_lifecycle).
+            if (
+                observation.controller_state_before
+                != observation.controller_state_after
+            ):
+                raise ValueError(
+                    "exhaustion lifecycle requires unchanged controller state"
+                )
+        else:
+            verifier = StopController(
+                observation.stop_policy,
+                state=observation.controller_state_before,
+            )
+            if verifier.evaluate(observation.metrics) != decision.deterministic_decision:
+                raise ValueError("lifecycle decision differs from deterministic stop policy")
+            if verifier.snapshot() != observation.controller_state_after:
+                raise ValueError("lifecycle controller state does not replay")
         stop_record = build_stop_record(
             reason=decision.deterministic_decision.reason,
             policy=observation.stop_policy,
