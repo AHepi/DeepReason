@@ -60,14 +60,18 @@ failure does not refute the motivating hypothesis.
 No provider call is required:
 
 ```bash
-.venv/bin/pytest -q tests/test_autonomous_capability_preflight.py
 .venv/bin/pytest -q tests/test_run_manifest_v5_inquiry.py
 .venv/bin/pytest -q tests/test_evidence_dossier.py tests/test_evidence_dossier_replay.py
 .venv/bin/pytest -q tests/test_simulation_compiler.py tests/test_simulation_capability_v5.py
 .venv/bin/pytest -q
 ```
 
-The suites cover pure preflight refusal, historical manifest stability,
+(The historical v5-pinned `capabilities/preflight.py` module and its
+`tests/test_autonomous_capability_preflight.py` regression were retired once
+V6-only admission made the check dead code; V6 admission now owns the
+equivalent refusal.)
+
+The suites cover historical manifest stability,
 immutable input binding, bounded evidence packing, forbidden authority fields,
 proposal/execution separation, grant, denial, exhaustion, unavailable runner,
 duplicate dispatch, deterministic success, operational failure, immutable

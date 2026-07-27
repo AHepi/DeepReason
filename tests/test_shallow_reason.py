@@ -133,19 +133,39 @@ def test_shallow_fails_closed_without_credential_or_profile(
     assert "SHALLOW_PROFILE_UNAVAILABLE" in capsys.readouterr().err
 
 
-def test_failed_qualification_points_to_shallow_fallback(
+def test_failed_qualification_falls_to_the_shallow_fitness_battery(
     tmp_path, monkeypatch, capsys
 ):
+    """Full-battery failure no longer dead-ends: the tier ladder concludes."""
+
+    from deepreason.qualification import ShallowFitnessCaseResultV1
+
     _configure(monkeypatch, tmp_path)
     monkeypatch.setattr(
         "deepreason.qualification.default_qualification_executor",
         lambda _manifest: (_ for _ in ()).throw(RuntimeError("secret provider body")),
     )
-    assert main(["qualify", "--yes"]) == 1
-    err = capsys.readouterr().err
-    assert "QUALIFICATION_EXECUTION_FAILED" in err
-    assert 'deepreason reason --shallow "YOUR QUESTION"' in err
-    assert "secret provider body" not in err
+    monkeypatch.setattr(
+        "deepreason.shallow_fitness.run_shallow_fitness_battery",
+        lambda _profile: tuple(
+            ShallowFitnessCaseResultV1(
+                case_id=f"case-{index + 1:03d}",
+                first_pass_valid=True,
+                eventual_valid=True,
+                repair_count=0,
+            )
+            for index in range(6)
+        ),
+    )
+    assert main(["qualify", "--yes", "--json"]) == 0
+    output = capsys.readouterr()
+    assert "QUALIFICATION_EXECUTION_FAILED" in output.err
+    assert "shallow-fitness battery" in output.err
+    assert "secret provider body" not in output.err + output.out
+    payload = json.loads(output.out)
+    assert payload["tier"] == "shallow"
+    assert payload["qualification_state"] == "ready_shallow"
+    assert payload["next_action"] == 'deepreason reason --shallow "YOUR QUESTION"'
 
 
 def test_shallow_endpoint_failure_exits_nonzero_with_diagnostic_payload(

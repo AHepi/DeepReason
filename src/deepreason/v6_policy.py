@@ -9,16 +9,25 @@ Two presets live here:
   advisory scratchpad and bounded conjecture-context requests are ON
   (designed to relieve pressure and prevent models from hallucinating),
   manifest-owned foreign-school semantic criticism is ON in its
-  observe-only, single-provider form, and the grounded two-stage bridge is
+  observe-only, single-provider form, the grounded two-stage bridge is
   ON in its review-free single-route form so completed public runs can
-  produce grounded final views.  Every allowance stays finite and modest so
+  produce grounded final views, and the deterministic local simulation
+  capability is ON in its declarative-numeric-only form with one frozen
+  local no-network toolchain.  Every allowance stays finite and modest so
   the preset fits the fixed public 6-cycle/100k-token envelope.
 """
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
+from deepreason.capabilities.policy import (
+    InquiryCapabilityPolicyV1,
+    SimulationCapabilityPolicyV1,
+)
 from deepreason.run_manifest import (
     ConjectureContextPolicyV1,
     ContractVersionPolicyV3,
@@ -27,6 +36,7 @@ from deepreason.run_manifest import (
     SchoolExecutionPolicyV1,
     SchoolRoleBindingV1,
     ScratchAuthoringPolicyV1,
+    ToolchainEntry,
 )
 
 
@@ -195,6 +205,79 @@ def engaged_criticism_policy(endpoint_id: str) -> CriticismPolicyV1:
     )
 
 
+# One fixed public identity for the single frozen local simulation
+# toolchain.  The identity string is machine-neutral (it participates in the
+# preset digest); the executable binding it names is derived per machine at
+# manifest compile time by ``engaged_local_simulation_toolchain``.
+PUBLIC_SIMULATION_TOOLCHAIN_ID = "python@deepreason-public-local.v1"
+
+
+def engaged_simulation_policy() -> SimulationCapabilityPolicyV1:
+    """Return the modest declarative-numeric-only public simulation authority.
+
+    Only the trusted declarative-numeric compiler path is reachable: the
+    runner profile is ``simulation.declarative.v1`` and the controller
+    refuses ``sandboxed_python_v1`` proposals outright, so no model-authored
+    Python ever reaches the local subprocess backend.  Every bound is small
+    enough that a worst-case run stays inside the fixed public envelope.
+    """
+
+    return SimulationCapabilityPolicyV1(
+        enabled=True,
+        runner_profile="simulation.declarative.v1",
+        python_toolchain_identity=PUBLIC_SIMULATION_TOOLCHAIN_ID,
+        maximum_simulation_requests=2,
+        maximum_simulation_executions=2,
+        maximum_proposals_per_turn=1,
+        maximum_generated_code_bytes=16_384,
+        maximum_input_bytes=16_384,
+        maximum_output_bytes=16_384,
+        maximum_wall_ms=10_000,
+        maximum_memory_bytes=256 * 1024 * 1024,
+        maximum_steps=50_000,
+        maximum_samples=32,
+        deterministic_seed_policy="fixed_manifest",
+        fixed_seed_set=(7,),
+        maximum_follow_up_reasoning_turns=2,
+        # Public preparation is question-only: there is no sealed input
+        # catalog, so proposals parameterize their declarative programs
+        # through bounded parameter definitions alone.
+        input_catalog=(),
+    )
+
+
+def engaged_inquiry_capability_policy() -> InquiryCapabilityPolicyV1:
+    """Return the engaged Tranche-A topology: simulation ON, all else OFF."""
+
+    return InquiryCapabilityPolicyV1(
+        capability_profile="inquiry-capabilities.v2",
+        simulation=engaged_simulation_policy(),
+    )
+
+
+def engaged_local_simulation_toolchain() -> ToolchainEntry:
+    """Freeze the current interpreter as the one public local toolchain.
+
+    The wheel runs on end-user interpreters, so the executable path and the
+    version fingerprint are derived here — at manifest compile time on the
+    machine that will execute the run — never hardcoded.  A changed
+    interpreter path or version changes the manifest behavior subject, which
+    fails closed into requalification instead of silently running simulations
+    on an unqualified toolchain.
+    """
+
+    version = (
+        f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
+    return ToolchainEntry(
+        id=PUBLIC_SIMULATION_TOOLCHAIN_ID,
+        runner="local",
+        executable=str(Path(sys.executable).resolve()),
+        version_output_sha256=sha256_hex(version.encode("utf-8")),
+        network=False,
+    )
+
+
 def engaged_policy_digest() -> str:
     """Digest the complete engaged preset in a provider-neutral form."""
 
@@ -213,6 +296,12 @@ def engaged_policy_digest() -> str:
                 ),
                 "scratchpad_source": engaged_scratchpad_source(),
                 "bridge_source": engaged_bridge_source(),
+                # Machine-neutral by construction: the policy names the fixed
+                # toolchain identity string; the per-machine executable pin
+                # lives only in the compiled manifest.
+                "simulation_policy": engaged_simulation_policy().model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
             }
         )
     )
@@ -221,11 +310,15 @@ def engaged_policy_digest() -> str:
 __all__ = [
     "POLICY_PRESET_ID",
     "PUBLIC_SCHOOL_COUNT",
+    "PUBLIC_SIMULATION_TOOLCHAIN_ID",
     "conservative_control_plane_policy_v3",
     "conservative_policy_digest",
     "engaged_bridge_source",
     "engaged_control_plane_policy_v3",
     "engaged_criticism_policy",
+    "engaged_inquiry_capability_policy",
+    "engaged_local_simulation_toolchain",
     "engaged_policy_digest",
     "engaged_scratchpad_source",
+    "engaged_simulation_policy",
 ]

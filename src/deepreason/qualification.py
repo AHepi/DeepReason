@@ -39,12 +39,28 @@ from deepreason.v6_policy import engaged_control_plane_policy_v3
 
 
 QUALIFICATION_CACHE_SCHEMA = "deepreason-reusable-qualification.v1"
+QUALIFICATION_TIER_SCHEMA = "deepreason-qualification-tier.v1"
 _SUBJECT_DOMAIN = b"deepreason.qualification-subject.v1\x00"
 _PAIR_DOMAIN = b"deepreason.qualification-pair-subject.v1\x00"
 _BUNDLE_DOMAIN = b"deepreason.reusable-qualification.v1\x00"
+_TIER_DOMAIN = b"deepreason.qualification-tier.v1\x00"
 _DIGEST = r"^[0-9a-f]{64}$"
 _ROUTE_DIGEST = r"^[0-9a-f]{64}$"
 _MAX_CACHE_BYTES = 16 * 1024 * 1024
+
+# The qualification tier ladder.  ``full`` is proven by a completed reusable
+# bundle (every frozen route/contract pair qualified); ``shallow`` is proven
+# by a durable tier record whose small shallow-fitness battery passed against
+# the MiniReason compact wire contract; ``unqualified`` is the floor.
+QualificationTier = Literal["full", "shallow", "unqualified"]
+
+SHALLOW_FITNESS_CASES = 6
+SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM = 5
+# Mini's own bounded-repair protocol: one initial generation plus at most a
+# whole-object correction and one local subtree repair.
+SHALLOW_FITNESS_MAX_REPAIRS = 2
+SHALLOW_FITNESS_CONTRACT_ID = "conjecturer.compact.reference_free.v1"
+SHALLOW_NEXT_ACTION = 'deepreason reason --shallow "YOUR QUESTION"'
 
 
 class QualificationError(ValueError):
@@ -383,6 +399,233 @@ def write_completed_qualification(
     return path
 
 
+class ShallowFitnessCaseResultV1(BaseModel):
+    """Sanitized outcome for one shallow-fitness case; never provider content."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    case_id: str = Field(pattern=r"^case-[0-9]{3}$")
+    first_pass_valid: bool
+    eventual_valid: bool
+    repair_count: StrictInt = Field(ge=0, le=SHALLOW_FITNESS_MAX_REPAIRS)
+    failure_code: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Z][A-Z0-9_]*$",
+    )
+
+    @model_validator(mode="after")
+    def _consistent(self):
+        if self.first_pass_valid and (not self.eventual_valid or self.repair_count):
+            raise ValueError("first-pass validity requires zero repairs")
+        if self.eventual_valid and self.failure_code is not None:
+            raise ValueError("valid shallow cases cannot carry a failure code")
+        if not self.eventual_valid and self.failure_code is None:
+            raise ValueError("invalid shallow cases require a sanitized failure code")
+        return self
+
+
+class QualificationTierRecordV1(BaseModel):
+    """One durable non-full tier conclusion for an exact behavior subject.
+
+    A completed :class:`ReusableQualificationBundleV1` is itself the durable
+    ``full`` tier assignment; this record persists only the two lower rungs.
+    It is keyed by the same subject digest as the full bundle, so the same
+    subject changes invalidate it, and it carries only sanitized shallow
+    battery outcomes — no provider response content.
+    """
+
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        populate_by_name=True,
+        serialize_by_alias=True,
+    )
+
+    schema_: Literal["deepreason-qualification-tier.v1"] = Field(
+        QUALIFICATION_TIER_SCHEMA, alias="schema"
+    )
+    record_digest: str = Field(pattern=_DIGEST)
+    subject_digest: str = Field(pattern=_DIGEST)
+    provider_profile_digest: str = Field(pattern=_DIGEST)
+    policy_preset_id: Literal["deepreason.v6.engaged.v1"] = POLICY_PRESET_ID
+    policy_preset_digest: str = Field(pattern=_DIGEST)
+    tier: Literal["shallow", "unqualified"]
+    shallow_contract_id: Literal["conjecturer.compact.reference_free.v1"] = (
+        SHALLOW_FITNESS_CONTRACT_ID
+    )
+    cases: tuple[ShallowFitnessCaseResultV1, ...] = Field(
+        min_length=SHALLOW_FITNESS_CASES,
+        max_length=SHALLOW_FITNESS_CASES,
+    )
+
+    def identity_payload(self) -> dict:
+        return self.model_dump(mode="json", by_alias=True, exclude={"record_digest"})
+
+    @classmethod
+    def create(cls, **values) -> "QualificationTierRecordV1":
+        provisional = cls.model_construct(record_digest="0" * 64, **values)
+        payload = provisional.model_dump(
+            mode="json", by_alias=True, exclude={"record_digest"}
+        )
+        return cls(
+            record_digest=sha256_hex(_TIER_DOMAIN + canonical_json(payload)),
+            **values,
+        )
+
+    @model_validator(mode="after")
+    def _identity_and_gate(self):
+        expected = sha256_hex(_TIER_DOMAIN + canonical_json(self.identity_payload()))
+        if self.record_digest != expected:
+            raise ValueError("qualification tier record digest is inconsistent")
+        expected_ids = tuple(
+            f"case-{index:03d}" for index in range(1, SHALLOW_FITNESS_CASES + 1)
+        )
+        if tuple(case.case_id for case in self.cases) != expected_ids:
+            raise ValueError("tier record does not contain one complete shallow case set")
+        eventual = sum(case.eventual_valid for case in self.cases)
+        expected_tier = (
+            "shallow"
+            if eventual >= SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM
+            else "unqualified"
+        )
+        if self.tier != expected_tier:
+            raise ValueError("tier assignment does not match the shallow-fitness gate")
+        return self
+
+
+def shallow_tier_record_from_cases(
+    cases,
+    *,
+    subject_digest: str,
+    profile: ProviderProfileV1,
+) -> QualificationTierRecordV1:
+    """Derive the durable tier conclusion from completed shallow cases."""
+
+    cases = tuple(ShallowFitnessCaseResultV1.model_validate(case) for case in cases)
+    eventual = sum(case.eventual_valid for case in cases)
+    tier = (
+        "shallow"
+        if eventual >= SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM
+        else "unqualified"
+    )
+    return QualificationTierRecordV1.create(
+        subject_digest=subject_digest,
+        provider_profile_digest=profile.profile_digest,
+        policy_preset_digest=engaged_policy_digest(),
+        tier=tier,
+        cases=cases,
+    )
+
+
+def qualification_tier_path(cache_dir: Path | str, subject_digest: str) -> Path:
+    base = qualification_cache_path(cache_dir, subject_digest)
+    return base.with_name(f"{subject_digest}.tier.json")
+
+
+def load_qualification_tier(
+    cache_dir: Path | str,
+    subject_digest: str,
+) -> QualificationTierRecordV1:
+    """Load one strict, canonical durable tier record for this exact subject."""
+
+    path = qualification_tier_path(cache_dir, subject_digest)
+
+    def reject_duplicates(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise _DuplicateCacheKey
+            value[key] = item
+        return value
+
+    try:
+        payload = _read_cache(path)
+    except QualificationError as error:
+        if error.code == "QUALIFICATION_NOT_CONFIGURED":
+            raise QualificationError(
+                "QUALIFICATION_TIER_NOT_RECORDED",
+                "no durable qualification tier exists for this exact subject",
+            ) from None
+        raise
+    try:
+        decoded = json.loads(payload, object_pairs_hook=reject_duplicates)
+        record = QualificationTierRecordV1.model_validate(decoded)
+    except (
+        _DuplicateCacheKey,
+        json.JSONDecodeError,
+        UnicodeDecodeError,
+        RecursionError,
+        ValidationError,
+        TypeError,
+    ):
+        raise QualificationError(
+            "QUALIFICATION_TIER_INVALID",
+            "qualification tier record is invalid or incomplete",
+        ) from None
+    canonical = canonical_json(record.model_dump(mode="json", by_alias=True)) + b"\n"
+    if payload != canonical:
+        raise QualificationError(
+            "QUALIFICATION_TIER_NONCANONICAL",
+            "qualification tier record is not in canonical form",
+        )
+    if record.subject_digest != subject_digest:
+        raise QualificationError(
+            "QUALIFICATION_TIER_SUBJECT_MISMATCH",
+            "qualification tier record belongs to another behavior subject",
+        )
+    return record
+
+
+def write_qualification_tier(
+    record: QualificationTierRecordV1,
+    cache_dir: Path | str,
+) -> Path:
+    """Persist one tier conclusion atomically.
+
+    Unlike completed full evidence — which is write-once — a tier record is
+    a replaceable conclusion: an explicit ``deepreason qualify`` rerun may
+    lawfully move a subject between ``shallow`` and ``unqualified``, and a
+    later full pass supersedes it entirely through the bundle store.
+    """
+
+    record = QualificationTierRecordV1.model_validate(record)
+    path = qualification_tier_path(cache_dir, record.subject_digest)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = canonical_json(record.model_dump(mode="json", by_alias=True)) + b"\n"
+    temporary = path.with_name(f".{path.name}.tmp.{os.getpid()}.{uuid.uuid4().hex}")
+    try:
+        temporary.write_bytes(payload)
+        os.replace(temporary, path)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+    return path
+
+
+def resolve_qualification_tier(
+    cache_dir: Path | str,
+    subject_digest: str,
+) -> QualificationTier:
+    """Return the durable tier for one subject, failing closed on bad caches."""
+
+    try:
+        load_completed_qualification(cache_dir, subject_digest)
+        return "full"
+    except QualificationError as error:
+        if error.code != "QUALIFICATION_NOT_CONFIGURED":
+            raise
+    try:
+        return load_qualification_tier(cache_dir, subject_digest).tier
+    except QualificationError as error:
+        if error.code != "QUALIFICATION_TIER_NOT_RECORDED":
+            raise
+    return "unqualified"
+
+
 def _reusable_pair(report: ProductionContractPairReportV1) -> ReusableQualificationPairV1:
     payload = _pair_payload(report.pair)
     return ReusableQualificationPairV1(
@@ -512,8 +755,29 @@ def resolve_completed_qualification(
     try:
         return load_completed_qualification(cache_dir, subject_digest)
     except QualificationError as error:
-        if error.code != "QUALIFICATION_NOT_CONFIGURED" or executor is None:
+        if error.code != "QUALIFICATION_NOT_CONFIGURED":
             raise
+        if executor is None:
+            # No completed full evidence exists.  A durable lower-tier
+            # conclusion turns the missing-cache failure into a truthful,
+            # typed refusal instead of a silent degrade.
+            try:
+                record = load_qualification_tier(cache_dir, subject_digest)
+            except QualificationError as tier_error:
+                if tier_error.code != "QUALIFICATION_TIER_NOT_RECORDED":
+                    raise
+                raise error from None
+            if record.tier == "shallow":
+                raise QualificationError(
+                    "QUALIFICATION_TIER_SHALLOW",
+                    'this provider/model is qualified at tier "shallow" only; '
+                    "full V6 reasoning is refused. Use: " + SHALLOW_NEXT_ACTION,
+                ) from None
+            raise QualificationError(
+                "QUALIFICATION_TIER_UNQUALIFIED",
+                'this provider/model concluded qualification at tier '
+                '"unqualified"; rerun deepreason qualify',
+            ) from None
     try:
         executed = executor(manifest)
     except Exception:
@@ -535,18 +799,32 @@ def resolve_completed_qualification(
 
 __all__ = [
     "QUALIFICATION_CACHE_SCHEMA",
+    "QUALIFICATION_TIER_SCHEMA",
+    "SHALLOW_FITNESS_CASES",
+    "SHALLOW_FITNESS_CONTRACT_ID",
+    "SHALLOW_FITNESS_EVENTUAL_VALID_MINIMUM",
+    "SHALLOW_FITNESS_MAX_REPAIRS",
+    "SHALLOW_NEXT_ACTION",
     "QualificationError",
     "QualificationExecutor",
+    "QualificationTier",
+    "QualificationTierRecordV1",
     "ReusableQualificationBundleV1",
     "ReusableQualificationPairV1",
+    "ShallowFitnessCaseResultV1",
     "completed_bundle_from_report",
     "default_qualification_executor",
     "load_completed_qualification",
+    "load_qualification_tier",
     "project_qualification_report",
     "production_qualification_maximum_provider_calls",
     "qualification_cache_path",
     "qualification_subject_digest",
     "qualification_subject_payload",
+    "qualification_tier_path",
     "resolve_completed_qualification",
+    "resolve_qualification_tier",
+    "shallow_tier_record_from_cases",
     "write_completed_qualification",
+    "write_qualification_tier",
 ]

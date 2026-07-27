@@ -1,26 +1,34 @@
-"""The engaged public preset: scratch, criticism, and the grounded bridge run.
+"""The engaged public preset: scratch, criticism, bridge, and simulation run.
 
-Four seams are pinned here:
+The pinned seams:
 
 1. The compiled public manifest (`build_preparation_manifest`) enables the
    advisory scratchpad, carries a complete foreign-school criticism policy
-   binding every seeded public school to the single provider seat, and
-   compiles the review-free grounded two-stage bridge with both frozen
-   bridge roles seated on the single provider endpoint.
+   binding every seeded public school to the single provider seat, compiles
+   the review-free grounded two-stage bridge with both frozen bridge roles
+   seated on the single provider endpoint, and enables declarative-numeric
+   local simulation on one frozen interpreter-derived toolchain.
 2. Behavior-level, with mock endpoints: a public-preset v6 run dispatches at
    least one school-routed criticism work order and records durable coverage.
 3. Behavior-level: the public preset's scratch-authoring authority admits a
    bounded advisory proposal without touching formal state.
 4. Behavior-level, with mock endpoints: a public-preset run root accepts MCP
    ``start_bridge`` and reaches the completed bridge terminal.
+5. Behavior-level, with mock endpoints: a public-preset run stages one
+   simulation proposal, executes it locally, and consumes its result in one
+   fresh follow-up conjecture turn.
 """
 
 from __future__ import annotations
 
 import json
+import sys
+from pathlib import Path
 
 from deepreason import mcp_scratch_bridge as mcp
 from deepreason.bridge.events import BridgeAction
+from deepreason.capabilities.enums import CapabilityLifecycle
+from deepreason.capabilities.simulation import SimulationCapabilityController
 from deepreason.config import Config
 from deepreason.evidence import bind_run_input
 from deepreason.harness import Harness
@@ -29,9 +37,10 @@ from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest
-from deepreason.ontology import Problem, ProblemProvenance, Provenance, Status
+from deepreason.ontology import Commitment, Problem, ProblemProvenance, Provenance, Status
 from deepreason.preparation import _records_for_question, build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
+from deepreason.rules.conj import conj
 from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.scratch.authoring import ScratchAuthoringService
@@ -47,6 +56,9 @@ from deepreason.v6_policy import (
     engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
+    engaged_inquiry_capability_policy,
+    engaged_local_simulation_toolchain,
+    engaged_simulation_policy,
 )
 from tests.test_cli_production_doctor_v6 import _admitted_case
 from deepreason.cli.doctor import run_production_contract_doctor
@@ -188,6 +200,39 @@ def test_public_manifest_grants_conjecture_family_multi_pointer_repairs():
     assert production_qualification_maximum_provider_calls(manifest) == 840
 
 
+def test_public_manifest_enables_declarative_local_simulation():
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Can the public preset run one bounded local simulation?",
+        compiled_at=STAMP,
+    )
+
+    capabilities = manifest.inquiry_capability_policy
+    assert capabilities is not None
+    assert capabilities.capability_profile == "inquiry-capabilities.v2"
+    assert capabilities == engaged_inquiry_capability_policy()
+    simulation = capabilities.simulation
+    assert simulation == engaged_simulation_policy()
+    assert simulation.enabled is True
+    # Declarative-numeric only, one bounded proposal per turn, no sealed
+    # inputs in question-only public preparation.
+    assert simulation.runner_profile == "simulation.declarative.v1"
+    assert simulation.maximum_proposals_per_turn == 1
+    assert simulation.input_catalog == ()
+    # Every other Tranche-A capability stays OFF (research is ON HOLD).
+    assert capabilities.attached_evidence.enabled is False
+    assert capabilities.formalization.enabled is False
+    assert capabilities.research.enabled is False
+    # One frozen local no-network toolchain, pinned to the preparing
+    # interpreter rather than any hardcoded path.
+    (toolchain,) = manifest.toolchains
+    assert toolchain.id == simulation.python_toolchain_identity
+    assert toolchain.runner == "local"
+    assert toolchain.network is False
+    assert toolchain.executable == str(Path(sys.executable).resolve())
+
+
 def _route(endpoint_id: str, seat: int = 0) -> dict:
     return {
         "endpoint_id": endpoint_id,
@@ -224,7 +269,9 @@ def _public_preset_mock_manifest():
         compiled_at=STAMP,
         control_plane_policy=engaged_control_plane_policy_v3(),
         criticism_policy=engaged_criticism_policy("critic-route-0"),
+        inquiry_capability_policy=engaged_inquiry_capability_policy(),
         run_input_digest="f" * 64,
+        toolchains=(engaged_local_simulation_toolchain(),),
     )
     return config, manifest
 
@@ -365,6 +412,164 @@ def test_public_preset_permits_bounded_scratch_authoring(tmp_path):
     assert len(service.state.links) == 1
     # Advisory only: nothing leaked into formal ontology state.
     assert service.harness.state.model_dump(mode="json") == formal_before
+
+
+def test_public_preset_mock_run_stages_and_consumes_one_simulation_proposal(
+    tmp_path,
+):
+    """The engaged preset carries one proposal through its whole lifecycle.
+
+    Wire: a mock conjecture turn proposes one declarative-numeric simulation.
+    Staging: the transactional conjecture admits it as a durable proposal.
+    Execute: the first scheduler capability step compiles and runs it on the
+    frozen local toolchain and packages the bounded result. Consume: the
+    second capability step dispatches one fresh follow-up conjecture turn
+    that sees the recorded result and records the consumption.
+    """
+
+    config, manifest = _public_preset_mock_manifest()
+    harness = ScratchService(tmp_path / "public-simulation").harness
+    harness.register_commitment(
+        Commitment(id="k-public-sim", eval="predicate:len(content) > 0")
+    )
+    harness.register_problem(
+        Problem(
+            id="pi-public-sim",
+            description="Does the bounded transfer stay below ten units?",
+            criteria=["k-public-sim"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}
+            ),
+        )
+    )
+    source = json.dumps(
+        {
+            "schema": "declarative-numeric.v1",
+            "observables": {
+                "x": {
+                    "op": "div",
+                    "args": [
+                        {"input": "parameters.weight_bytes"},
+                        {"const": 2},
+                    ],
+                }
+            },
+        }
+    )
+    simulation_turn = {
+        "candidates": [
+            {
+                "content": "A bounded mechanism awaiting one discriminating simulation.",
+                "typicality": 0.31,
+            }
+        ],
+        # The public preset has no sealed input catalog, so the proposal
+        # names no input aliases and parameterizes its program directly.
+        "simulation_proposals": [
+            {
+                "request_identifier": "public-preset-discriminator",
+                "hypothesis": "The bounded transfer stays below ten units.",
+                "rival_predictions": ["x is below 10", "x is at least 10"],
+                "discriminating_purpose": "Separate the two bounded rivals.",
+                "declared_assumptions": ["The schedule is synthetic."],
+                "parameter_definitions": [
+                    {"name": "one", "values_json": '{"weight_bytes":12}'}
+                ],
+                "requested_seed_set": [],
+                "simulation_mode": "declarative_numeric_v1",
+                "model_source": source,
+                "requested_observables": ["x"],
+                "interpretation_conditions": ["x below 10 favors the first rival."],
+            }
+        ],
+    }
+    prompts: list[str] = []
+
+    def respond(prompt: str) -> str:
+        prompts.append(prompt)
+        if len(prompts) == 1:
+            return json.dumps(simulation_turn)
+        assert "recorded simulation result" in prompt
+        return json.dumps(
+            {
+                "candidates": [
+                    {
+                        "content": (
+                            "A fresh formal proposal stated after the recorded "
+                            "simulation."
+                        ),
+                        "typicality": 0.2,
+                    }
+                ]
+            }
+        )
+
+    route = manifest.roles["conjecturer"][0]
+    endpoint = MockEndpoint(
+        respond,
+        name=route.base_url,
+        model=route.model_id,
+        max_tokens=route.max_tokens,
+    )
+    adapter = LLMAdapter(
+        {"conjecturer": endpoint},
+        harness.blobs,
+        retry_max=0,
+        meter=TokenMeter(100_000),
+        model_profile=manifest.model_profile,
+        leases=leases_from_manifest(manifest),
+        transaction_authority_required=True,
+    )
+    _bind_classification(harness, manifest)
+    adapter.bind_v6_authority(harness, manifest)
+
+    conj(
+        harness,
+        "pi-public-sim",
+        adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
+    )
+
+    # Staged: one durable transactional proposal bound to its provider work.
+    (proposal,) = harness.capability_state.proposals.values()
+    assert proposal.simulation_mode == "declarative_numeric_v1"
+    assert proposal.input_aliases == ()
+    controller = SimulationCapabilityController(harness, manifest)
+    controller.require_transactional_origin(proposal)
+
+    scheduler = Scheduler(
+        harness,
+        adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
+    )
+    scheduler.step()
+
+    # Executed on the frozen local toolchain and packaged, never denied.
+    state = harness.capability_state
+    (package,) = state.result_packages.values()
+    transition = state.transitions[state.current_transition_by_request[proposal.id]]
+    assert transition.lifecycle == CapabilityLifecycle.RESULT_PACKAGED
+    assert not any(
+        item.lifecycle == CapabilityLifecycle.DENIED
+        for item in state.transitions.values()
+    )
+    (receipt,) = state.receipts.values()
+    assert receipt.operational_status == "succeeded"
+
+    scheduler.step()
+
+    # Consumed by one fresh follow-up conjecture work item.
+    transition = state.transitions[state.current_transition_by_request[proposal.id]]
+    assert transition.lifecycle == CapabilityLifecycle.CONSUMED
+    (consumption,) = state.consumptions.values()
+    assert consumption.result_package_ref == package.id
+    assert consumption.follow_up_work_order_ref != proposal.originating_work_order_ref
+    assert len(prompts) == 2
+    assert "recorded simulation result" in prompts[1]
 
 
 def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(

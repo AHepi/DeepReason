@@ -1,14 +1,21 @@
+import sys
+from pathlib import Path
+
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     PUBLIC_SCHOOL_COUNT,
+    PUBLIC_SIMULATION_TOOLCHAIN_ID,
     conservative_control_plane_policy_v3,
     conservative_policy_digest,
     engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
+    engaged_inquiry_capability_policy,
+    engaged_local_simulation_toolchain,
     engaged_policy_digest,
     engaged_scratchpad_source,
+    engaged_simulation_policy,
 )
 
 
@@ -93,6 +100,83 @@ def test_engaged_policy_digest_reflects_the_bridge_source():
     # The digest is bound to the bridge source content, not merely its name:
     # the pre-bridge payload no longer reproduces the preset digest.
     assert engaged_policy_digest() != without_bridge
+
+
+def test_engaged_simulation_policy_is_declarative_local_and_modest():
+    policy = engaged_simulation_policy()
+
+    assert policy.enabled is True
+    # Declarative-numeric only: no model-authored Python can reach the
+    # local subprocess backend under this runner profile.
+    assert policy.runner_profile == "simulation.declarative.v1"
+    assert policy.python_toolchain_identity == PUBLIC_SIMULATION_TOOLCHAIN_ID
+    assert policy.maximum_simulation_requests == 2
+    assert policy.maximum_simulation_executions == 2
+    assert policy.maximum_proposals_per_turn == 1
+    assert policy.maximum_generated_code_bytes == 16_384
+    assert policy.maximum_input_bytes == 16_384
+    assert policy.maximum_output_bytes == 16_384
+    assert policy.maximum_wall_ms == 10_000
+    assert policy.maximum_memory_bytes == 256 * 1024 * 1024
+    assert policy.maximum_steps == 50_000
+    assert policy.maximum_samples == 32
+    assert policy.deterministic_seed_policy == "fixed_manifest"
+    assert policy.fixed_seed_set == (7,)
+    assert policy.maximum_follow_up_reasoning_turns == 2
+    assert policy.network_policy == "forbidden"
+    assert policy.filesystem_policy == "isolated_no_filesystem"
+    assert policy.failure_policy == "record_and_continue"
+    assert policy.input_catalog == ()
+
+    topology = engaged_inquiry_capability_policy()
+    assert topology.capability_profile == "inquiry-capabilities.v2"
+    assert topology.simulation == policy
+    assert topology.attached_evidence.enabled is False
+    assert topology.formalization.enabled is False
+    assert topology.research.enabled is False
+
+
+def test_engaged_simulation_toolchain_pin_is_derived_not_hardcoded():
+    toolchain = engaged_local_simulation_toolchain()
+
+    assert toolchain.id == PUBLIC_SIMULATION_TOOLCHAIN_ID
+    assert toolchain.runner == "local"
+    assert toolchain.network is False
+    # Derived from the executing interpreter at compile time — the portable
+    # pin the wheel needs on end-user machines.
+    assert toolchain.executable == str(Path(sys.executable).resolve())
+    version = (
+        f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
+    assert toolchain.version_output_sha256 == sha256_hex(version.encode("utf-8"))
+
+
+def test_engaged_policy_digest_reflects_the_simulation_policy():
+    policy = engaged_control_plane_policy_v3()
+    criticism = engaged_criticism_policy("preset-endpoint-template")
+    without_simulation = sha256_hex(
+        b"deepreason.v6-policy-preset.v2\x00"
+        + canonical_json(
+            {
+                "preset": POLICY_PRESET_ID,
+                "control_plane_policy": policy.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
+                "criticism_policy_template": criticism.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
+                "scratchpad_source": engaged_scratchpad_source(),
+                "bridge_source": engaged_bridge_source(),
+            }
+        )
+    )
+    # The digest is bound to the simulation policy content, not merely its
+    # name: the pre-simulation payload no longer reproduces the preset digest.
+    assert engaged_policy_digest() != without_simulation
+    # And the digest itself stays machine-neutral: it must not move with the
+    # local interpreter pin.
+    payload = engaged_simulation_policy().model_dump(mode="json")
+    assert sys.executable not in canonical_json(payload).decode("utf-8")
 
 
 def test_engaged_criticism_policy_binds_every_public_school_observe_only():

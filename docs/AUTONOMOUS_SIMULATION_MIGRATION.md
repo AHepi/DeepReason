@@ -4,13 +4,15 @@
 
 Versions 1 through 4 cannot express the complete authority needed for a model
 to propose a test, have the harness execute it, and reason from the immutable
-result. They remain unchanged. A run that requires that topology must fail
-preflight with `AUTONOMOUS_CAPABILITY_TOPOLOGY_UNAVAILABLE` unless it selects
-v5.
+result. They remain unchanged. Historically a run requiring that topology
+failed a pure pre-bind check with
+`AUTONOMOUS_CAPABILITY_TOPOLOGY_UNAVAILABLE` unless it selected v5; that
+v5-pinned check (`deepreason.capabilities.preflight`) is now retired dead
+code — the installed product is V6-only and V6 admission owns the refusal.
 
 The stopped 2026-07-16 preflight is preserved under
-`experiments/autonomous_inquiry_preflight_2026-07-16/` as an offline regression
-fixture. Preflight performs no manifest binding, run-root creation, provider
+`experiments/autonomous_inquiry_preflight_2026-07-16/` as historical material
+only. Preflight performed no manifest binding, run-root creation, provider
 call, or executor call.
 
 ## Preparing a v5 run

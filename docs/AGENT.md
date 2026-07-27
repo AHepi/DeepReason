@@ -34,16 +34,48 @@ setup-managed credential store. Never put credential values in profiles,
 manifests, MCP payloads, logs, prompts, or examples.
 
 Qualification is explicit and reusable. `deepreason qualify` announces the
-provider, model, and maximum expected provider-call count before dispatch and
+provider, model, and maximum expected provider-call counts before dispatch and
 asks for confirmation on an interactive terminal. `deepreason qualify --yes`
 is the supported noninteractive confirmation form. Add `--json` when
-machine-readable qualification output is required. A valid cached
-qualification for the same subject is reused.
+machine-readable qualification output is required; the payload names the
+concluded `tier`. A valid cached qualification for the same subject is reused.
+
+Qualification concludes on a tier ladder, and the conclusion is durable:
+
+- `full` — every frozen V6 route/contract pair passed the production battery
+  (announced ceiling: at most 840 provider calls under the current engaged
+  preset). `deepreason reason "..."` is available.
+- `shallow` — the full battery failed, but a small shallow-fitness battery
+  passed: 6 live cases against the MiniReason compact wire contract with
+  mini's bounded repair protocol (announced ceiling: at most 18 further
+  calls; at least 5 of 6 cases must be schema-valid). Use
+  `deepreason reason --shallow "YOUR QUESTION"`.
+- `unqualified` — both batteries failed; the next action stays
+  `deepreason qualify`, and an explicit rerun retries the ladder.
+
+Tier records are keyed by the same qualification-subject digest as full
+evidence, so profile, preset, or contract changes invalidate them identically.
+Full `reason` on a shallow-tier subject is refused with the typed
+`QUALIFICATION_TIER_SHALLOW` error naming the recorded tier and the shallow
+command; nothing silently degrades. A transport outage during the
+shallow-fitness battery records no tier at all
+(`QUALIFICATION_SHALLOW_EXECUTION_FAILED`).
 
 `deepreason status` is the human-readable readiness boundary;
 `deepreason status --json` is its machine-readable form. A ready result means
 the profile is valid, the referenced credential is present, and a reusable
-qualification exists for the current subject.
+full-tier qualification exists for the current subject. A shallow-tier
+subject reports `qualification_state: ready_shallow` with the shallow command
+as its one next action; MCP `start_run` stays closed until the full tier.
+
+`deepreason reason --shallow "question"` runs the MiniReason reduced engine
+(generate/check/rotate) against the configured profile. MiniReason ships in
+the wheel with two declared purposes: an explicit low-cost option for any
+user, and the supported fallback for small models that cannot complete full
+production qualification. Shallow mode requires only a valid profile and a
+present credential, never touches the qualification cache, works for both
+`shallow`- and `full`-tier subjects, and always labels its result as shallow
+(no V6 qualification, transactions, or terminal commitment authority).
 
 `deepreason reason "question"` accepts an optional `--cycles` and
 `--token-budget`. The implemented defaults are 6 cycles and 100,000 tokens,
@@ -123,6 +155,27 @@ Bridge status is operational rather than epistemic. Partial,
 `underdetermined`, `insufficient_evidence`, conflicting, and outside-scope
 grounded results can be valid outcomes rather than tool failures.
 
+## The engaged public preset
+
+Public preparation compiles the repository-owned `deepreason.v6.engaged.v1`
+preset. Its capabilities are all finite and modest:
+
+- **Advisory scratch**: bounded scratch authoring and bounded
+  model-requestable scratch context on the deterministic hashing embedder.
+- **Foreign-school criticism**: all four seeded public schools bound to the
+  single provider critic seat, observe-only, minimum one foreign school of
+  coverage per accepted school artifact.
+- **Grounded two-stage bridge**: review-free single-route shape — a frozen
+  summarizer route builds the claim ledger and a frozen thesis route composes
+  at most four grounded output sections.
+- **Local simulation**: declarative-numeric proposals only (at most one per
+  turn, two executions per run) on one frozen local no-network toolchain.
+  The toolchain pin is derived from the preparing interpreter at manifest
+  compile time, so the wheel stays portable across end-user machines; a
+  changed interpreter changes the behavior subject and requires
+  requalification. Model-authored Python never reaches the local runner.
+- **Research**: OFF (on hold). Formalization and attached evidence: OFF.
+
 ## Authority and replay invariants
 
 V6 prepares a typed immutable input, evidence dossier, conservative policy,
@@ -157,7 +210,8 @@ RunManifest versions 1 through 5 are historical and unsupported. Direct
 caller-owned roots, manifest paths, source YAML routing, and manual manifest
 preparation are not the normal or supported public start workflow.
 
-MiniReason is not part of the supported installed wheel or public workflow.
+MiniReason ships inside the wheel only as the engine behind
+`deepreason reason --shallow`; it has no separate public entry point.
 Website construction and chunked website operation are not exposed. There are
 no public website MCP tools.
 

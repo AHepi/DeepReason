@@ -62,6 +62,8 @@ from deepreason.v6_policy import (
     engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
+    engaged_inquiry_capability_policy,
+    engaged_local_simulation_toolchain,
     engaged_policy_digest,
     engaged_scratchpad_source,
 )
@@ -315,7 +317,12 @@ def build_preparation_manifest(
         compiled_at=compiled_at,
         control_plane_policy=engaged_control_plane_policy_v3(),
         criticism_policy=engaged_criticism_policy(profile.endpoint_id),
+        inquiry_capability_policy=engaged_inquiry_capability_policy(),
         run_input_digest=run_input.run_input_digest,
+        # The one frozen local simulation toolchain is derived from the
+        # executing interpreter at preparation time so the wheel stays
+        # portable across end-user machines.
+        toolchains=(engaged_local_simulation_toolchain(),),
     )
 
 

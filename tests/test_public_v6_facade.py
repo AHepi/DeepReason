@@ -147,14 +147,29 @@ def test_qualification_is_explicit_warns_before_fake_dispatch_and_reuses_cache(
 def test_failed_explicit_qualification_publishes_no_reusable_cache(
     tmp_path, monkeypatch, capsys
 ):
+    from deepreason.qualification import QualificationError
+
     state, _profile_value = _configure(monkeypatch, tmp_path)
     monkeypatch.setattr(
         "deepreason.qualification.default_qualification_executor",
         lambda _manifest: (_ for _ in ()).throw(RuntimeError("secret provider body")),
     )
+    # The shallow-fitness battery aborts on transport failure: an outage is
+    # not evidence, so no durable tier may be concluded from it.
+    monkeypatch.setattr(
+        "deepreason.shallow_fitness.run_shallow_fitness_battery",
+        lambda _profile: (_ for _ in ()).throw(
+            QualificationError(
+                "QUALIFICATION_SHALLOW_EXECUTION_FAILED",
+                "the shallow-fitness battery did not complete; "
+                "no qualification tier was recorded",
+            )
+        ),
+    )
     assert main(["qualify", "--yes"]) == 1
     output = capsys.readouterr()
     assert "QUALIFICATION_EXECUTION_FAILED" in output.err
+    assert "QUALIFICATION_SHALLOW_EXECUTION_FAILED" in output.err
     assert "secret provider body" not in output.err + output.out
     cache_dir = state / "qualification-cache"
     assert not cache_dir.exists() or not list(cache_dir.iterdir())

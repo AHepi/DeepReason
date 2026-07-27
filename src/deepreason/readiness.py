@@ -19,7 +19,9 @@ from deepreason.provider_profile import (
 )
 from deepreason.qualification import (
     QualificationError,
+    SHALLOW_NEXT_ACTION,
     load_completed_qualification,
+    load_qualification_tier,
     qualification_subject_digest,
 )
 
@@ -39,7 +41,12 @@ class ReadinessV1(BaseModel):
     route_identity: dict[str, str | None] | None
     credential_present: bool
     qualification_state: Literal[
-        "profile_missing", "profile_invalid", "credential_missing", "unqualified", "ready"
+        "profile_missing",
+        "profile_invalid",
+        "credential_missing",
+        "unqualified",
+        "ready_shallow",
+        "ready",
     ]
     next_action: str
 
@@ -119,6 +126,24 @@ def get_readiness(
     try:
         load_completed_qualification(cache_dir, subject)
     except QualificationError:
+        # No usable full-tier evidence.  A durable shallow-tier record makes
+        # the projection truthful: the reduced engine is ready even though a
+        # full V6 inquiry may not start.
+        tier = None
+        try:
+            tier = load_qualification_tier(cache_dir, subject).tier
+        except QualificationError:
+            tier = None
+        if tier == "shallow":
+            return ReadinessV1(
+                package_version=package_version(),
+                ready=False,
+                profile_source=resolved.source,
+                route_identity=route,
+                credential_present=True,
+                qualification_state="ready_shallow",
+                next_action=SHALLOW_NEXT_ACTION,
+            )
         return ReadinessV1(
             package_version=package_version(),
             ready=False,

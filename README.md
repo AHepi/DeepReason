@@ -41,16 +41,46 @@ placed in manifests, MCP payloads, logs, or documentation examples.
 
 `deepreason qualify` is a separate, explicit action. Before any qualification
 dispatch it identifies the configured provider and model and announces the
-maximum expected provider-call count. Interactive use asks for confirmation.
-For noninteractive use, `deepreason qualify --yes` is the supported explicit
-confirmation form; `--json` may be added for machine-readable output. A
-completed qualification for the same qualification subject is reused, so
-ordinary questions do not repeat it.
+maximum expected provider-call counts for both batteries. Interactive use asks
+for confirmation. For noninteractive use, `deepreason qualify --yes` is the
+supported explicit confirmation form; `--json` may be added for
+machine-readable output (the payload names the concluded `tier`). A completed
+qualification for the same qualification subject is reused, so ordinary
+questions do not repeat it.
+
+### The qualification tier ladder
+
+The whole point of qualification is to return the largest package the
+configured model can actually serve. `deepreason qualify` therefore always
+concludes with one durable tier for the exact behavior subject:
+
+1. **`full`** — every frozen V6 route/contract pair passed the production
+   battery (announced ceiling: at most 840 provider calls under the current
+   engaged preset). Full `deepreason reason` is available.
+2. **`shallow`** — the model failed the full battery but passed a small
+   shallow-fitness battery: 6 live cases against the MiniReason compact wire
+   contract with mini's own bounded repair protocol (announced ceiling: at
+   most 18 further provider calls; at least 5 of 6 cases must produce
+   schema-valid output). The reduced engine is available:
+   `deepreason reason --shallow "YOUR QUESTION"`.
+3. **`unqualified`** — the model failed both batteries. The next action stays
+   `deepreason qualify` (an explicit rerun retries the ladder from the top).
+
+Tier conclusions are durable and reusable exactly like full evidence: they
+are keyed by the same qualification-subject digest, so any change to the
+provider profile, preset, or contract surface invalidates them and requires
+requalification. Full `deepreason reason` on a shallow-tier subject is
+refused with a typed error (`QUALIFICATION_TIER_SHALLOW`) that names the
+recorded tier and the shallow command — it never silently degrades. A
+transport outage during the shallow battery records nothing
+(`QUALIFICATION_SHALLOW_EXECUTION_FAILED`): an outage is not evidence.
 
 `deepreason status` reports provider and V6 qualification readiness as text.
 `deepreason status --json` reports the same readiness through the stable
 machine-readable boundary. Both expose credential presence only as a boolean
-and return one next action.
+and return one next action. A shallow-tier subject reports
+`qualification_state: ready_shallow` with the shallow command as its next
+action; `ready` (and MCP `start_run`) remains reserved for the full tier.
 
 `deepreason reason "question"` prepares and runs one managed V6 text inquiry.
 The optional `--cycles` and `--token-budget` arguments narrow or select a
@@ -66,6 +96,42 @@ It freezes the question, constructs and binds the V6 manifest, projects the
 reusable qualification, allocates managed storage, launches through the
 application service, and returns a terminal JSON result with an opaque
 `run_id`.
+
+### Shallow (reduced-engine) mode
+
+```bash
+deepreason reason --shallow "Why does this failure recur?"
+```
+
+`--shallow` runs the MiniReason reduced engine (generate/check/rotate) against
+the configured provider profile. MiniReason ships inside the wheel and has two
+declared purposes: an explicit low-cost option for any user, and the supported
+fallback for small models that cannot complete full production qualification
+(the `shallow` tier above). Shallow mode needs only a valid profile and a
+present credential — it never consults or writes the qualification cache, and
+works for both `shallow`- and `full`-tier subjects. Its result is always
+labeled shallow: no V6 qualification, transactions, or terminal commitment
+authority.
+
+### The engaged public preset
+
+Public preparation compiles one repository-owned policy preset
+(`deepreason.v6.engaged.v1`). Its capabilities, all finite and modest:
+
+- **Advisory scratch** — bounded scratch authoring and bounded
+  model-requestable scratch context, with the deterministic hashing embedder.
+- **Foreign-school criticism** — every seeded public school bound to the
+  single provider critic seat, observe-only, minimum one foreign school per
+  accepted school artifact.
+- **Grounded two-stage bridge** — review-free single-route shape: a frozen
+  summarizer builds the claim ledger, a frozen thesis route composes at most
+  four grounded output sections.
+- **Local simulation** — declarative-numeric proposals only, at most one
+  proposal per turn and two executions per run, executed on one frozen local
+  no-network toolchain pinned to the preparing interpreter at manifest
+  compile time (never a hardcoded path). Model-authored Python never reaches
+  the local runner; an operational failure is recorded, not treated as
+  refutation. Research capability remains OFF (on hold).
 
 The installed module entry point uses the same parser:
 
@@ -171,12 +237,16 @@ public start authority. Source files for legacy workflows may remain in the
 repository for preservation or internal migration work, but their physical
 presence does not make them supported.
 
-MiniReason is not included in the supported wheel and is not a public starting
-workflow. Website construction and chunked website workflows are retired from
-the public surface, and website MCP tools are not exposed.
+MiniReason ships in the wheel solely as the engine behind
+`deepreason reason --shallow`; it exposes no public entry point of its own and
+is not a separate starting workflow. Website construction and chunked website
+workflows are retired from the public surface, and website MCP tools are not
+exposed.
 
 The removed `make`, `prove`, `check-proof`, `code`, `simulate`, `focus`,
-`expand`, `attack`, and `step` commands are not supported public operations.
+`expand`, `attack`, and `step` commands are not supported public operations
+(the engaged preset's bounded simulation capability is manifest-owned and is
+not a CLI command).
 Examples or reports in historical repository material must not be interpreted
 as installed-wheel instructions.
 

@@ -1507,7 +1507,7 @@ def test_bridge_runtime_uses_contract_grant_not_bridge_policy_ceiling(
         grant.contract_id: grant.maximum_schema_repairs
         for grant in manifest.contract_schema_repair_policy.grants
     }
-    assert grants["conjecturer.turn.v6"] == 2
+    assert grants["conjecturer.turn.v6"] == 4
     assert grants[contract.contract_id] == 1
     harness = Harness(tmp_path / f"bridge-grant-{role}")
     route = manifest.roles[role][0]
