@@ -1770,8 +1770,25 @@ def conj(
             transition = harness.activate_contract_decomposition(
                 run_manifest,
                 source_work_id,
+                # Every child sees the full turn pack for context, but the
+                # atomic contract wants exactly one candidate.  Without an
+                # explicit slot preamble a model that just failed the full
+                # turn answers each child with its complete candidate array
+                # (observed live: six-element arrays exhausting the smallest
+                # contract), so the single-object requirement leads the pack.
                 child_contexts=tuple(
-                    (f"candidate-slot-{index:03d}", pack)
+                    (
+                        f"candidate-slot-{index:03d}",
+                        (
+                            "ATOMIC SINGLE-CANDIDATE CALL: this is candidate "
+                            f"slot {index + 1} of "
+                            f"{decomposition_grant.maximum_children}. Return "
+                            "exactly one JSON object holding one candidate "
+                            "(or one abstention) per the response schema. "
+                            "Never return an array or any other slot's "
+                            "content.\n\n" + pack
+                        ),
+                    )
                     for index in range(decomposition_grant.maximum_children)
                 ),
             )
