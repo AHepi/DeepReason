@@ -19,3 +19,13 @@ run_id= problem_id= state=
 === deepseek end 2026-07-27T16:09:02Z ===
 === deepseek RETRY start 2026-07-27T16:24:56Z ===
 Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+DOCTOR_REPORT_PAIR_UNQUALIFIED at /pairs/13/qualified: production-contract doctor report contains an unqualified pair
+Full-battery qualification failed; running the shallow-fitness battery (at most 18 provider calls).
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=2603
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":false,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"deepseek-v4-pro","model_revision":"deepseek-v4-pro","route_id":"provider-profile-f1868494ebfc59c794599dd2"},"credential_present":true,"qualification_state":"ready_shallow","next_action":"deepreason reason --shallow \"YOUR QUESTION\""}
+reason_rc=1 reason_seconds=2
+run_id= problem_id= state=
+=== deepseek RETRY end 2026-07-27T17:08:22Z ===
+=== deepseek LADDER start 2026-07-27T17:08:38Z ===
+Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
