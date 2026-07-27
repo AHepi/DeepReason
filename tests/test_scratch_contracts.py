@@ -252,3 +252,37 @@ def test_wire_schemas_are_closed_and_prompt_instructions_preserve_uncertainty():
         "A guide is a temporary navigation aid.",
     ):
         assert sentence in SCRATCH_CONTRACT_INSTRUCTIONS
+
+
+def test_all_null_endpoints_report_every_violation_in_one_message():
+    """Live regression: a model emitting every reference field null received
+    a diagnostic naming only the first violated endpoint, patched it, and
+    exhausted its two-repair budget on the undisclosed second violation."""
+
+    with pytest.raises(ValidationError) as captured:
+        ScratchLinkWireV1.model_validate({"relation_hint": "may relate"})
+    message = str(captured.value)
+    assert "from_index or from_handle" in message
+    assert "to_index or to_handle" in message
+
+
+def test_single_element_array_wrapper_is_tolerated_like_a_fence():
+    """Live regression: a fully qualified model wrapped one valid object in
+    a JSON array and the object-wide extra-field error terminally exhausted
+    the route seat's smallest contract."""
+
+    contract = ScratchLinkWireContract(
+        handles={"B_left": _hash("a"), "B_right": _hash("b")}
+    )
+    payload = {
+        "from_handle": "B_left",
+        "to_handle": "B_right",
+        "relation_hint": "rhymes unexpectedly with",
+    }
+    wire = contract.validate_value([payload])
+    assert contract.compile(wire).from_ == _hash("a")
+
+    with pytest.raises(ValueError):
+        contract.validate_value([payload, payload])
+    with pytest.raises(ValueError):
+        contract.validate_value([[payload]])

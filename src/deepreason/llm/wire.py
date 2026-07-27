@@ -256,6 +256,15 @@ class WireContract(Generic[CanonicalOutput]):
         _reject_unknown_fields(value, schema, schema)
 
     def validate_value(self, value: Any) -> BaseModel:
+        if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict):
+            # An unambiguous single-element array wrapping the one expected
+            # object is transport noise, tolerated exactly like a narrated
+            # code fence.  Observed live: a fully qualified model wrapped a
+            # valid atomic candidate in [] and the resulting object-wide
+            # extra-field error had no finite repair, terminally exhausting
+            # the route seat's smallest contract.  Multiple elements or
+            # nested wrappers still fail exact validation unchanged.
+            value = value[0]
         self._preflight_value(value)
         return self.wire_model.model_validate(value)
 

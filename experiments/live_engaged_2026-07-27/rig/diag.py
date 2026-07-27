@@ -38,6 +38,13 @@ def deep_case(manifest, pair, case_index):
         schema=schema,
         initial_request=request,
         retry_max=grant.maximum_schema_repairs,
+        # Mirror the production battery exactly: without explicit root
+        # authority a cross-field violation is unrepairable at zero
+        # attempts here while the real battery grants field patches,
+        # and the diagnosis diverges from production behavior.
+        root_authorized_pointers=tuple(
+            sorted("/" + name for name in (schema.get("properties") or {}))
+        ),
     )
     lease = EndpointLease(role=pair.role, seat=pair.seat, route=route)
     attempts = []

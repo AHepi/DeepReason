@@ -9,3 +9,9 @@ Provider configuration saved. Qualification remains an explicit action.
 Next action: deepreason qualify
 setup_rc=0
 Qualification will test ollama/kimi-k2.6; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"kimi-k2.6","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"42d05ab73949cfc58e2420cfe0afd6c46a7e591251d49b26460f920dd32cb866","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=7905
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"kimi-k2.6","model_revision":"kimi-k2.6","route_id":"provider-profile-1393406b822b5300f88c878d"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
+reason_rc=4 reason_seconds=629
+run_id=run-142212b0de35178d2ec455b21935bc89 problem_id= state=failed
+=== kimi end 2026-07-27T17:53:36Z ===

@@ -1,0 +1,39 @@
+tri-run summary 2026-07-27T17:53:36Z
+== glm ==
+Let's set DeepReason up (one time, ~30 seconds).
+setup_rc=0
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"glm-5.2","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=1565
+reason_rc=1 reason_seconds=2
+run_id= problem_id= state=
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"glm-5.2","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=1896
+reason_rc=1 reason_seconds=1
+run_id= problem_id= state=
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":1100,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"full"}
+== kimi ==
+Let's set DeepReason up (one time, ~30 seconds).
+setup_rc=0
+Qualification will test ollama/kimi-k2.6; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"kimi-k2.6","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"42d05ab73949cfc58e2420cfe0afd6c46a7e591251d49b26460f920dd32cb866","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=7905
+reason_rc=4 reason_seconds=629
+run_id=run-142212b0de35178d2ec455b21935bc89 problem_id= state=failed
+== deepseek ==
+Let's set DeepReason up (one time, ~30 seconds).
+setup_rc=0
+Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=2258
+reason_rc=1 reason_seconds=1
+run_id= problem_id= state=
+Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=2603
+reason_rc=1 reason_seconds=2
+run_id= problem_id= state=
+Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":1100,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}

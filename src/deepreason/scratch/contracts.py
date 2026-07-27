@@ -83,6 +83,34 @@ class ScratchBlockWireV1(ScratchWireModel):
         return _nonblank(value)
 
 
+def _require_one_reference_per_endpoint(link) -> None:
+    """Report every violated endpoint in one message, not just the first.
+
+    Both endpoints can be wrong in one response (observed live: a model
+    emitting every reference field null).  The repair loop grants one
+    field patch per turn under a two-repair budget, so a diagnostic that
+    names only the first violated endpoint leaves the model unable to
+    plan the second patch and the case exhausts.  Naming every violation
+    once makes the two-patch chain convergent.
+    """
+
+    problems = []
+    if (link.from_index is None) == (link.from_handle is None):
+        problems.append(
+            "set exactly one of from_index or from_handle and leave the "
+            "other null"
+        )
+    if (link.to_index is None) == (link.to_handle is None):
+        problems.append(
+            "set exactly one of to_index or to_handle and leave the "
+            "other null"
+        )
+    if problems:
+        raise ValueError(
+            "link endpoint references are invalid: " + "; ".join(problems)
+        )
+
+
 class ScratchBlockMinimalWireV1(ScratchWireModel):
     """Smallest separately qualified scratch block: one advisory thought."""
 
@@ -124,10 +152,7 @@ class ScratchLinkWireV1(ScratchWireModel):
 
     @model_validator(mode="after")
     def _one_reference_per_endpoint(self):
-        if (self.from_index is None) == (self.from_handle is None):
-            raise ValueError("provide exactly one of from_index or from_handle")
-        if (self.to_index is None) == (self.to_handle is None):
-            raise ValueError("provide exactly one of to_index or to_handle")
+        _require_one_reference_per_endpoint(self)
         return self
 
 
@@ -152,10 +177,7 @@ class ScratchLinkMinimalWireV1(ScratchWireModel):
 
     @model_validator(mode="after")
     def _one_reference_per_endpoint(self):
-        if (self.from_index is None) == (self.from_handle is None):
-            raise ValueError("provide exactly one of from_index or from_handle")
-        if (self.to_index is None) == (self.to_handle is None):
-            raise ValueError("provide exactly one of to_index or to_handle")
+        _require_one_reference_per_endpoint(self)
         return self
 
 
