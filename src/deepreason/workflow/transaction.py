@@ -558,9 +558,9 @@ class RouteSeatInsufficientCapabilityV1(IdentifiedWorkflowRecord):
     classification_binding_ref: str = Field(pattern=_ID)
     qualification_evidence_sha256: str = Field(pattern=_DIGEST)
     behavioral_grant_sha256: str = Field(pattern=_DIGEST)
-    maximum_schema_repairs: int = Field(ge=0, le=2)
-    maximum_provider_calls: int = Field(ge=1, le=3)
-    observed_provider_calls: int = Field(ge=1, le=3)
+    maximum_schema_repairs: int = Field(ge=0, le=4)
+    maximum_provider_calls: int = Field(ge=1, le=5)
+    observed_provider_calls: int = Field(ge=1, le=5)
     retry_failed_work: Literal[False] = False
 
     @field_validator(

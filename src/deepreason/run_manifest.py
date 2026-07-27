@@ -831,8 +831,11 @@ class ContractSchemaRepairGrantV1(BaseModel):
         max_length=128,
         pattern=r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
     )
-    maximum_schema_repairs: int = Field(ge=0, le=2, strict=True)
-    maximum_provider_calls: int = Field(ge=1, le=3, strict=True)
+    # The schema bound admits the conjecture family's multi-pointer ceiling
+    # (one single-pointer patch per diagnostic, at most four observed live);
+    # compilation grants most contracts the smaller shared ceiling.
+    maximum_schema_repairs: int = Field(ge=0, le=4, strict=True)
+    maximum_provider_calls: int = Field(ge=1, le=5, strict=True)
     repair_execution: Literal["fresh_transaction_per_repair"] = (
         "fresh_transaction_per_repair"
     )
@@ -2428,6 +2431,17 @@ def _compile_bridge_policy(source, *, model_profile: str):
     return BridgePolicy(**values)
 
 
+# One v6 patch repairs exactly one authorized pointer, so a conjecture turn
+# with several independent field failures needs one repair per pointer.  The
+# first live engaged run (mistral-large-3:675b) made four such mistakes in a
+# single semantically sound conjecturer.turn.v6 output and was structurally
+# doomed under the shared two-repair ceiling.  The conjecture family (the
+# strong turn and its atomic decomposition child) therefore gets double the
+# shared ceiling, capped at this explicit bound; RETRY_MAX=0 still disables
+# repairs entirely.
+CONJECTURE_SCHEMA_REPAIR_CEILING = 4
+
+
 def _compile_contract_schema_repair_policy(
     *,
     source_config: dict[str, Any],
@@ -2437,12 +2451,15 @@ def _compile_contract_schema_repair_policy(
     """Freeze current schema-repair authority per model-facing v6 contract."""
 
     shared_ceiling = min(2, max(0, int(source_config.get("RETRY_MAX", 2))))
+    conjecture_ceiling = min(
+        CONJECTURE_SCHEMA_REPAIR_CEILING, 2 * shared_ceiling
+    )
     bridge_ceiling = min(2, max(0, bridge_policy.max_schema_repair_attempts))
     ceilings = {
         "batch-critic.v2": shared_ceiling,
         "critic.atomic-target.v1": shared_ceiling,
-        "conjecturer.atomic-candidate.v1": shared_ceiling,
-        "conjecturer.turn.v6": shared_ceiling,
+        "conjecturer.atomic-candidate.v1": conjecture_ceiling,
+        "conjecturer.turn.v6": conjecture_ceiling,
     }
     if control_plane_policy.scratch_authoring.enabled:
         ceilings.update(

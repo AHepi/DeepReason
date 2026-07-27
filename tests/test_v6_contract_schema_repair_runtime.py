@@ -32,6 +32,12 @@ from tests.test_v6_live_repair_transactions import (
 )
 
 
+def _conjecture_grant(retry_max: int) -> int:
+    """The conjecture family doubles the shared ceiling, capped at four."""
+
+    return min(4, 2 * max(0, retry_max))
+
+
 def _manifest(repairs: int) -> RunManifest:
     config = _config()
     config.RETRY_MAX = repairs
@@ -98,10 +104,11 @@ def _run_invalid_chain(tmp_path, repairs: int):
             "value": "not an authorized repair",
         }
     )
+    granted = _conjecture_grant(repairs)
     adapter, _endpoint = _conjecture_adapter(
         harness,
         manifest,
-        [_invalid_candidate(), *([unrelated_patch] * repairs)],
+        [_invalid_candidate(), *([unrelated_patch] * granted)],
         meter=meter,
     )
 
@@ -114,6 +121,7 @@ def _run_invalid_chain(tmp_path, repairs: int):
 @pytest.mark.parametrize("repairs", (0, 1, 2))
 def test_manifest_grant_is_the_exact_provider_call_ceiling(tmp_path, repairs):
     manifest, harness, adapter, error = _run_invalid_chain(tmp_path, repairs)
+    granted = _conjecture_grant(repairs)
     work = tuple(harness.workflow_state.transaction_work.values())
     calls = tuple(event.llm for event in harness.log.read() if event.llm is not None)
     grant = next(
@@ -122,18 +130,18 @@ def test_manifest_grant_is_the_exact_provider_call_ceiling(tmp_path, repairs):
         if grant.contract_id == "conjecturer.turn.v6"
     )
 
-    assert grant.maximum_schema_repairs == repairs
-    assert grant.maximum_provider_calls == repairs + 1
-    assert len(work) == len(calls) == adapter.meter.calls == repairs + 1
+    assert grant.maximum_schema_repairs == granted
+    assert grant.maximum_provider_calls == granted + 1
+    assert len(work) == len(calls) == adapter.meter.calls == granted + 1
     assert [item.preparation.task_kind for item in work] == [
         WorkflowTaskKind.CONJECTURE,
-        *([WorkflowTaskKind.REPAIR] * repairs),
+        *([WorkflowTaskKind.REPAIR] * granted),
     ]
     assert [item.terminal.status for item in work] == [
-        *(["rejected"] * repairs),
+        *(["rejected"] * granted),
         "schema_exhausted",
     ]
-    assert len({item.preparation.id for item in work}) == repairs + 1
+    assert len({item.preparation.id for item in work}) == granted + 1
     assert all(
         item.preparation.route_lease == work[0].preparation.route_lease
         for item in work

@@ -241,11 +241,71 @@ _FENCE = re.compile(
     re.DOTALL,
 )
 
+_FENCED_BLOCK = re.compile(
+    r"```(?:json|JSON)?[ \t]*\r?\n(?P<body>.*?)\r?\n[ \t]*```",
+    re.DOTALL,
+)
+
 
 def strip_json_fence(raw: str) -> str:
     """Remove one surrounding markdown fence and nothing inside it."""
     match = _FENCE.match(raw)
     return match.group("body") if match else raw.strip()
+
+
+def _contains_json_value(segment: str) -> bool:
+    """True when prose around a fence itself carries a complete JSON value."""
+
+    decoder = json.JSONDecoder()
+    stripped = segment.strip()
+    if stripped:
+        try:
+            _, end = decoder.raw_decode(stripped)
+        except json.JSONDecodeError:
+            pass
+        else:
+            if not stripped[end:].strip():
+                return True
+    for start, char in enumerate(segment):
+        if char not in "{[":
+            continue
+        try:
+            decoder.raw_decode(segment, start)
+        except json.JSONDecodeError:
+            continue
+        return True
+    return False
+
+
+def _sole_fenced_json_value(text: str) -> ParsedJSON | None:
+    """Extract the one fenced JSON value when nothing competes with it.
+
+    Live providers wrap the actual value in one markdown fence between
+    explanation prose ("Here's the corrected JSON ... ```json {...} ``` ...").
+    The fence is authoritative only when it is unambiguous: exactly one
+    well-formed fenced block, whose body is exactly one complete JSON value,
+    with no complete JSON value anywhere in the surrounding text.  Two fenced
+    blocks, a fence plus a bare top-level value elsewhere, or surrounding
+    content that itself parses as JSON all stay rejected.
+    """
+
+    if text.count("```") != 2:
+        return None
+    blocks = tuple(_FENCED_BLOCK.finditer(text))
+    if len(blocks) != 1:
+        return None
+    body = blocks[0].group("body").strip()
+    decoder = json.JSONDecoder()
+    try:
+        value, end = decoder.raw_decode(body)
+    except json.JSONDecodeError:
+        return None
+    if body[end:].strip():
+        return None
+    outside = text[: blocks[0].start()] + text[blocks[0].end() :]
+    if _contains_json_value(outside):
+        return None
+    return ParsedJSON(body[:end], value)
 
 
 def parse_one_json_value(raw: str) -> ParsedJSON:
@@ -273,6 +333,7 @@ def parse_one_json_value(raw: str) -> ParsedJSON:
 
     # A provider may prefix prose. Role contracts are objects/arrays, so find
     # the first complete structured value. This cannot invent or coerce data.
+    trailing_content = False
     for start, char in enumerate(text):
         if char not in "{[":
             continue
@@ -281,8 +342,17 @@ def parse_one_json_value(raw: str) -> ParsedJSON:
         except json.JSONDecodeError:
             continue
         if text[end:].strip():
-            raise ValueError("multiple top-level JSON values or trailing content")
+            trailing_content = True
+            break
         return ParsedJSON(text[start:end], value)
+
+    # Prose may also follow the value.  That is a transport wrapper only when
+    # one markdown fence unambiguously marks which value is authoritative.
+    fenced = _sole_fenced_json_value(text)
+    if fenced is not None:
+        return fenced
+    if trailing_content:
+        raise ValueError("multiple top-level JSON values or trailing content")
     raise ValueError(f"no complete top-level JSON value at offset {offset}")
 
 
@@ -997,7 +1067,9 @@ def patch_repair_prompt(
     return (
         "Return exactly one repair.patch.v1 JSON object. Choose one authorized "
         "path and one add, remove, or replace operation. Do not return the "
-        "surrounding object. Frozen subtree hashes are immutable.\n\n"
+        "surrounding object. Frozen subtree hashes are immutable. If several "
+        "diagnostics are listed, repair only one now; separate later attempts "
+        "will address the remaining diagnostics.\n\n"
         f"CURRENT JSON:\n{json.dumps(baseline, sort_keys=True, ensure_ascii=False)}\n\n"
         "DIAGNOSTIC ENVELOPE:\n"
         f"{json.dumps(payload, sort_keys=True, ensure_ascii=False)}"
@@ -1048,13 +1120,23 @@ class V6RepairTurn:
     validation_path: str = ""
 
 
+# A v6 patch edits exactly one authorized pointer, so a turn with several
+# independent field failures needs one repair per pointer.  Four covers the
+# multi-pointer failures observed live (four handle-pattern mistakes in one
+# conjecturer.turn.v6 output) while staying finite; each contract's manifest
+# grant sets the actual, usually smaller, ceiling.
+V6_PATCH_REPAIR_CEILING = 4
+
+
 class V6PatchRepairSession:
-    """Initial call plus at most two independent, exact JSON patch repairs.
+    """Initial call plus a finite run of independent, exact JSON patch repairs.
 
     A parseable response is never regenerated wholesale. The sole complete
     object retry is available only when no JSON baseline could be parsed; as
     soon as a baseline exists, every remaining turn returns one
-    :class:`RepairPatchV1` and the harness applies it deterministically.
+    :class:`RepairPatchV1` and the harness applies it deterministically.  The
+    manifest grant supplies ``retry_max``; :data:`V6_PATCH_REPAIR_CEILING`
+    bounds it here.
     """
 
     def __init__(
@@ -1069,7 +1151,7 @@ class V6PatchRepairSession:
         self.contract = contract
         self.schema = copy.deepcopy(schema)
         self.initial_request = initial_request
-        self.max_attempt = min(max(0, int(retry_max)), 2)
+        self.max_attempt = min(max(0, int(retry_max)), V6_PATCH_REPAIR_CEILING)
         self.root_authorized_pointers = tuple(
             sorted(set(root_authorized_pointers))
         )

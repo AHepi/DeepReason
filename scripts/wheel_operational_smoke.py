@@ -3137,14 +3137,16 @@ def main(argv: list[str] | None = None) -> int:
         )
         # The engaged public preset qualifies 14 route/contract pairs (the
         # frozen conjecture/criticism four, six scratch contracts, and the
-        # four grounded-bridge contracts): the frozen maximum is 10 pairs x
-        # 20 cases x 3 provider calls plus 4 bridge pairs x 20 cases x 2
-        # provider calls (the bridge grants one schema repair), and one
-        # clean pass makes exactly 14 x 20 = 280 loopback calls.  The
+        # four grounded-bridge contracts): the frozen maximum is 2 conjecture
+        # pairs x 20 cases x 5 provider calls (the conjecture family grants
+        # four single-pointer repairs for multi-pointer failures) plus
+        # 8 pairs x 20 cases x 3 provider calls plus 4 bridge pairs x
+        # 20 cases x 2 provider calls (the bridge grants one schema repair),
+        # and one clean pass makes exactly 14 x 20 = 280 loopback calls.  The
         # scratch- and bridge-pair probes carry their own bounded task text,
         # so only the original four pairs match the "Qualification case"
         # marker.
-        if notice is None or int(notice.group(1)) != 760:
+        if notice is None or int(notice.group(1)) != 840:
             raise AssertionError("qualification did not announce the frozen maximum")
         counts = _provider_counts(provider_state_path)
         if counts != {"qualification_calls": 80, "total_calls": 280}:

@@ -138,8 +138,11 @@ def _engaged_root(tmp_path: Path) -> Path:
                 ]
             }
         ),
-        # Both repair steps return wire-VALID patches whose application is
-        # rejected: repair_step_rejected, then schema_exhausted.
+        # All four granted repair steps (the conjecture family's explicit
+        # multi-pointer ceiling) return wire-VALID patches whose application
+        # is rejected: repair_step_rejected x3, then schema_exhausted.
+        unrelated_patch,
+        unrelated_patch,
         unrelated_patch,
         unrelated_patch,
         # The decomposition transacts six atomic children, all admitted.
@@ -182,9 +185,11 @@ def _engaged_root(tmp_path: Path) -> Path:
     work = list(harness.workflow_state.transaction_work.values())
     assert [
         (item.preparation.task_kind, item.terminal.status, item.terminal.reason_code)
-        for item in work[:3]
+        for item in work[:5]
     ] == [
         (WorkflowTaskKind.CONJECTURE, "rejected", "conjecture_repair_requested"),
+        (WorkflowTaskKind.REPAIR, "rejected", "conjecture_repair_step_rejected"),
+        (WorkflowTaskKind.REPAIR, "rejected", "conjecture_repair_step_rejected"),
         (WorkflowTaskKind.REPAIR, "rejected", "conjecture_repair_step_rejected"),
         (WorkflowTaskKind.REPAIR, "schema_exhausted", "conjecture_schema_exhausted"),
     ]
@@ -246,12 +251,12 @@ def test_rejected_wire_valid_patches_and_merge_conj_verify_clean(engaged_root):
 def test_rejected_patch_calls_keep_their_wire_valid_final_attempt(engaged_root):
     rows = _log_rows(engaged_root)
     providers = _provider_rows(rows)
-    # parent turn, patch step 1, patch step 2, six atomic children
-    assert len(providers) == 9
+    # parent turn, four patch steps, six atomic children
+    assert len(providers) == 11
     assert [attempt["valid"] for attempt in providers[0]["llm"]["attempt_trace"]] == [
         False
     ]
-    for patch_call in providers[1:3]:
+    for patch_call in providers[1:5]:
         assert [
             attempt["valid"] for attempt in patch_call["llm"]["attempt_trace"]
         ] == [True]
@@ -272,7 +277,7 @@ def test_fabricated_valid_attempt_on_wire_invalid_turn_fails_closed(
 def test_merge_conj_bound_to_non_latest_child_fails_closed(engaged_root, tmp_path):
     root = _copy_root(engaged_root, tmp_path, "non-latest-child-merge")
     rows = _log_rows(root)
-    child_seqs = [row["seq"] for row in _provider_rows(rows)[3:]]
+    child_seqs = [row["seq"] for row in _provider_rows(rows)[5:]]
     merge_conj = next(
         row
         for row in rows
@@ -294,7 +299,7 @@ def test_merge_conj_bound_to_non_child_work_fails_closed(engaged_root, tmp_path)
     root = _copy_root(engaged_root, tmp_path, "non-child-merge")
     rows = _log_rows(root)
     providers = _provider_rows(rows)
-    child_seqs = [row["seq"] for row in providers[3:]]
+    child_seqs = [row["seq"] for row in providers[5:]]
     rejected_patch_seq = providers[1]["seq"]
     merge_conj = next(
         row

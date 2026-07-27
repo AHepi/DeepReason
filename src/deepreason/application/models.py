@@ -404,7 +404,7 @@ class AtomicWorkAttemptProjectionV1(_StrictModel):
     contract_id: str = Field(min_length=1, max_length=128)
     child_key: str = Field(min_length=1, max_length=512)
     child_index: StrictInt = Field(ge=0, le=255)
-    repair_index: StrictInt = Field(ge=0, le=2)
+    repair_index: StrictInt = Field(ge=0, le=4)
     work_kind: Literal["atomic_child", "schema_repair"]
     parent_work_id: str | None = Field(
         default=None, pattern=r"^sha256:[0-9a-f]{64}$"
@@ -585,9 +585,9 @@ class RouteSeatInsufficientCapabilityProjectionV1(_StrictModel):
     classification_binding_ref: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     qualification_evidence_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     behavioral_grant_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    maximum_schema_repairs: StrictInt = Field(ge=0, le=2)
-    maximum_provider_calls: StrictInt = Field(ge=1, le=3)
-    observed_provider_calls: StrictInt = Field(ge=1, le=3)
+    maximum_schema_repairs: StrictInt = Field(ge=0, le=4)
+    maximum_provider_calls: StrictInt = Field(ge=1, le=5)
+    observed_provider_calls: StrictInt = Field(ge=1, le=5)
     retry_failed_work: Literal[False] = False
 
     @field_validator(

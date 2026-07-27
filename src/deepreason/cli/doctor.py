@@ -84,9 +84,9 @@ class ProductionContractCaseResultV1(_DoctorRecord):
     case_id: str = Field(pattern=r"^case-[0-9]{3}$")
     first_pass_valid: bool
     eventual_valid: bool
-    repair_count: int = Field(ge=0, le=2)
-    alias_failures: int = Field(default=0, ge=0, le=3)
-    scope_violations: int = Field(default=0, ge=0, le=3)
+    repair_count: int = Field(ge=0, le=4)
+    alias_failures: int = Field(default=0, ge=0, le=5)
+    scope_violations: int = Field(default=0, ge=0, le=5)
     semantic_admission: bool
     failure_code: str | None = Field(
         default=None,

@@ -38,6 +38,18 @@ CORE_CONTRACTS = (
     "conjecturer.turn.v6",
     "critic.atomic-target.v1",
 )
+# One patch repairs one pointer; the conjecture family (strong turn plus its
+# atomic decomposition child) is granted double the shared ceiling, capped at
+# four, so live multi-pointer failures stay repairable.
+CONJECTURE_CONTRACTS = (
+    "conjecturer.atomic-candidate.v1",
+    "conjecturer.turn.v6",
+)
+SHARED_CEILING_CORE_CONTRACTS = tuple(
+    contract_id
+    for contract_id in CORE_CONTRACTS
+    if contract_id not in CONJECTURE_CONTRACTS
+)
 SCRATCH_CONTRACTS = (
     "scratch.block.compact.v1",
     "scratch.block.minimal.v1",
@@ -178,8 +190,12 @@ def test_new_v6_manifest_freezes_typed_core_contract_grants():
     assert manifest.contract_schema_repair_policy.schema_ == (
         "contract-schema-repair-policy.v1"
     )
-    assert all(grant.maximum_schema_repairs == 2 for grant in grants.values())
-    assert all(grant.maximum_provider_calls == 3 for grant in grants.values())
+    for contract_id in SHARED_CEILING_CORE_CONTRACTS:
+        assert grants[contract_id].maximum_schema_repairs == 2
+        assert grants[contract_id].maximum_provider_calls == 3
+    for contract_id in CONJECTURE_CONTRACTS:
+        assert grants[contract_id].maximum_schema_repairs == 4
+        assert grants[contract_id].maximum_provider_calls == 5
     assert all(
         grant.repair_execution == "fresh_transaction_per_repair"
         and grant.route_scope == "same_route_seat"
@@ -189,15 +205,22 @@ def test_new_v6_manifest_freezes_typed_core_contract_grants():
 
 
 @pytest.mark.parametrize(
-    ("configured", "expected"),
-    ((-7, 0), (0, 0), (1, 1), (2, 2), (9, 2)),
+    ("configured", "expected", "expected_conjecture"),
+    ((-7, 0, 0), (0, 0, 0), (1, 1, 2), (2, 2, 4), (9, 2, 4)),
 )
-def test_shared_retry_ceiling_is_clamped_for_core_and_scratch(configured, expected):
+def test_shared_retry_ceiling_is_clamped_for_core_and_scratch(
+    configured, expected, expected_conjecture
+):
     grants = _grant_map(_compile_v6(retry_max=configured, scratch_authoring=True))
 
-    for contract_id in (*CORE_CONTRACTS, *SCRATCH_CONTRACTS):
+    for contract_id in (*SHARED_CEILING_CORE_CONTRACTS, *SCRATCH_CONTRACTS):
         assert grants[contract_id].maximum_schema_repairs == expected
         assert grants[contract_id].maximum_provider_calls == expected + 1
+    # The conjecture family doubles the shared ceiling, capped at four, and
+    # a zero shared ceiling still disables its repairs entirely.
+    for contract_id in CONJECTURE_CONTRACTS:
+        assert grants[contract_id].maximum_schema_repairs == expected_conjecture
+        assert grants[contract_id].maximum_provider_calls == expected_conjecture + 1
 
 
 def test_enabled_scratch_authoring_adds_exactly_six_strong_and_minimal_contracts():
@@ -276,8 +299,8 @@ def test_grants_are_immutable_unique_and_lexicographically_sorted():
         _policy_payload(
             {
                 **_grant_payload(repairs=2),
-                "maximum_schema_repairs": 3,
-                "maximum_provider_calls": 4,
+                "maximum_schema_repairs": 5,
+                "maximum_provider_calls": 6,
             }
         ),
     ),

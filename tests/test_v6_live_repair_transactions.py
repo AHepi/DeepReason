@@ -193,7 +193,9 @@ def test_conjecture_patch_is_a_distinct_authorized_work_item(tmp_path):
     )
 
     assert len(artifacts) == 1
-    assert conjecture_grant.maximum_schema_repairs == 2
+    # The conjecture family grants one single-pointer patch per realistic
+    # multi-pointer diagnostic (four observed live).
+    assert conjecture_grant.maximum_schema_repairs == 4
     assert artifacts[0].content_ref == "inline:preserve this mechanism"
     work = list(harness.workflow_state.transaction_work.values())
     assert [item.preparation.task_kind for item in work] == [

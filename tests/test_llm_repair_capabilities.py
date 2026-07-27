@@ -32,10 +32,33 @@ def test_normalization_removes_only_transport_wrappers():
 @pytest.mark.parametrize(
     "raw",
     [
+        # One well-formed fence is the authoritative transport wrapper even
+        # when non-JSON prose precedes or follows it (observed live).
+        '```json\n{"x":1}\n``` trailing prose',
+        'Here is the corrected JSON:\n```json\n{"x":1}\n```\nAll fixed now.',
+        '```\n{"x":1}\n```\nexplanation',
+    ],
+)
+def test_normalization_accepts_one_fenced_value_between_prose(raw):
+    parsed = parse_one_json_value(raw)
+    assert parsed.value == {"x": 1}
+    assert parsed.text == '{"x":1}'
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
         '{"x":1} {"y":2}',
         'prefix: {"x":1} {"y":2}',
         '{"x":1} trailing prose',
-        '```json\n{"x":1}\n``` trailing prose',
+        # Two fenced blocks: no fence is authoritative.
+        '```json\n{"x":1}\n```\nmid\n```json\n{"y":2}\n```',
+        # A fence plus a bare top-level value elsewhere is ambiguous.
+        '{"x":1}\n```json\n{"y":2}\n```',
+        'prose {"x":1} prose\n```json\n{"y":2}\n```',
+        # Trailing content that itself parses as JSON is ambiguous.
+        '```json\n{"x":1}\n```\n{"y":2}',
+        '```json\n{"x":1}\n```\ntrue',
     ],
 )
 def test_normalization_rejects_multiple_values_and_trailing_content(raw):

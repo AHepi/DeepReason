@@ -155,6 +155,39 @@ def test_public_manifest_compiles_the_grounded_two_stage_bridge():
         assert grants[contract_id].maximum_provider_calls == 2
 
 
+def test_public_manifest_grants_conjecture_family_multi_pointer_repairs():
+    """One patch repairs one pointer; four covers live multi-pointer failures.
+
+    The first live engaged run made four independent handle-pattern mistakes
+    in one semantically sound conjecturer.turn.v6 output and was structurally
+    doomed under the shared two-repair ceiling.  The public preset therefore
+    grants the conjecture family (strong turn plus its atomic decomposition
+    child) four repairs / five provider calls, keeps every other non-bridge
+    contract at two repairs, and announces the recomputed qualification
+    maximum: 2 conjecture pairs x 20 cases x 5 calls + 8 pairs x 20 x 3 +
+    4 bridge pairs x 20 x 2 = 840.
+    """
+
+    from deepreason.preparation import qualification_subject_manifest
+    from deepreason.qualification import (
+        production_qualification_maximum_provider_calls,
+    )
+
+    manifest = qualification_subject_manifest(_profile())
+    repair_policy = manifest.contract_schema_repair_policy
+    assert repair_policy is not None
+    grants = {grant.contract_id: grant for grant in repair_policy.grants}
+    for contract_id in ("conjecturer.turn.v6", "conjecturer.atomic-candidate.v1"):
+        assert grants[contract_id].maximum_schema_repairs == 4
+        assert grants[contract_id].maximum_provider_calls == 5
+    for contract_id in sorted(grants):
+        if contract_id.startswith(("bridge.", "conjecturer.")):
+            continue
+        assert grants[contract_id].maximum_schema_repairs == 2
+        assert grants[contract_id].maximum_provider_calls == 3
+    assert production_qualification_maximum_provider_calls(manifest) == 840
+
+
 def _route(endpoint_id: str, seat: int = 0) -> dict:
     return {
         "endpoint_id": endpoint_id,

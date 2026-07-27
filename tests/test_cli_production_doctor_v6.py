@@ -402,8 +402,10 @@ def test_doctor_preserves_different_contract_grants_in_one_manifest():
         "bridge.composition.v2": 0,
         "bridge.ledger-batch.v1": 0,
         "bridge.ledger.v3": 0,
-        "conjecturer.atomic-candidate.v1": 2,
-        "conjecturer.turn.v6": 2,
+        # The conjecture family carries the explicit multi-pointer ceiling
+        # (double the shared two-repair ceiling, capped at four).
+        "conjecturer.atomic-candidate.v1": 4,
+        "conjecturer.turn.v6": 4,
         "critic.atomic-target.v1": 2,
         "groundingrepairwirev1.direct.v1": 0,
         "groundingverdictwirev1.direct.v1": 1,
