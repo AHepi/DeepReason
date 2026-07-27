@@ -33,7 +33,7 @@ from deepreason.cli.doctor import (
     validate_production_contract_qualification,
 )
 from deepreason.provider_profile import ProviderProfileV1
-from deepreason.run_manifest import RunManifest
+from deepreason.run_manifest import RunManifest, RunManifestError
 from deepreason.v6_policy import POLICY_PRESET_ID, engaged_policy_digest
 from deepreason.v6_policy import engaged_control_plane_policy_v3
 
@@ -174,15 +174,28 @@ QualificationExecutor = Callable[[RunManifest], ProductionContractDoctorReportV1
 
 
 def production_qualification_maximum_provider_calls(manifest: RunManifest) -> int:
-    """Return the frozen worst-case call count before qualification dispatch."""
+    """Return the frozen worst-case call count before qualification dispatch.
 
-    from deepreason.cli.doctor import _contract_schema_repair_grant
+    The bound covers every pair's twenty-case block plus the bounded
+    re-exercise allowance: up to ``PRODUCTION_PAIR_RE_EXERCISE_LIMIT``
+    failing pairs may each draw one fresh block, so the worst case adds
+    that many of the most expensive per-pair blocks.
+    """
 
-    return sum(
+    from deepreason.cli.doctor import (
+        PRODUCTION_PAIR_RE_EXERCISE_LIMIT,
+        _contract_schema_repair_grant,
+    )
+
+    block_costs = tuple(
         PRODUCTION_CASES_PER_PAIR
         * _contract_schema_repair_grant(manifest, pair).maximum_provider_calls
         for pair in production_contract_pairs(manifest)
     )
+    re_exercise_allowance = sum(
+        sorted(block_costs, reverse=True)[:PRODUCTION_PAIR_RE_EXERCISE_LIMIT]
+    )
+    return sum(block_costs) + re_exercise_allowance
 
 
 def default_qualification_executor(
@@ -792,9 +805,38 @@ def resolve_completed_qualification(
             "QUALIFICATION_EXECUTION_INVALID",
             "injected qualification execution returned invalid sanitized evidence",
         ) from None
-    bundle = completed_bundle_from_report(report, manifest, profile)
+    try:
+        bundle = completed_bundle_from_report(report, manifest, profile)
+    except RunManifestError:
+        # Preserve the sanitized failing evidence beside the tier cache so
+        # diagnosing an unqualified battery never requires re-spending it.
+        _write_unqualified_report(report, cache_dir, subject_digest)
+        raise
     write_completed_qualification(bundle, cache_dir)
     return bundle
+
+
+def unqualified_report_path(cache_dir: Path | str, subject_digest: str) -> Path:
+    return qualification_cache_path(cache_dir, subject_digest).with_suffix(
+        ".unqualified-doctor.json"
+    )
+
+
+def _write_unqualified_report(
+    report: ProductionContractDoctorReportV1,
+    cache_dir: Path | str,
+    subject_digest: str,
+) -> None:
+    from deepreason.cli.doctor import write_production_contract_report
+
+    try:
+        write_production_contract_report(
+            report, unqualified_report_path(cache_dir, subject_digest)
+        )
+    except OSError:
+        # Diagnostic persistence is best-effort; the typed qualification
+        # failure itself is the authoritative outcome.
+        pass
 
 
 __all__ = [
@@ -825,6 +867,7 @@ __all__ = [
     "resolve_completed_qualification",
     "resolve_qualification_tier",
     "shallow_tier_record_from_cases",
+    "unqualified_report_path",
     "write_completed_qualification",
     "write_qualification_tier",
 ]

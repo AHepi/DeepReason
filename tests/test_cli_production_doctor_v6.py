@@ -1302,3 +1302,115 @@ def test_doctor_case_repairs_root_cross_field_violation_within_grant(monkeypatch
     assert case.repair_count == 1
     assert case.semantic_admission is True
     assert case.failure_code is None
+
+
+# --- Bounded flake re-exercise (live regression, tri-model battery 2026-07-27) ---
+#
+# GLM 5.2 and DeepSeek V4 Pro each failed one 840-call battery on a single
+# stochastic pair (a one-off failure that passed on immediate reproduction)
+# and were durably tiered shallow.  A pair whose block fails the unchanged
+# release gate now redraws one fresh twenty-case block, bounded battery-wide;
+# persistent incapacity still fails closed on two consecutive failing draws.
+
+
+def _flaky_executor(flaky_pair_ids, *, recover=True, flaky_index=1):
+    """Fail one case (an alias slip) on each flaky pair's first draw."""
+
+    draws_seen = set()
+
+    def execute(_manifest, pair, case_index):
+        if pair.pair_id in flaky_pair_ids and case_index == flaky_index:
+            key = (pair.pair_id, case_index)
+            first_draw = key not in draws_seen
+            draws_seen.add(key)
+            if first_draw or not recover:
+                return _case(flaky_index, alias_failure=True)
+        return _admitted_case(case_index)
+
+    return execute
+
+
+def test_doctor_re_exercises_a_flaky_pair_once_and_qualifies():
+    manifest = _manifest()
+    flaky = production_contract_pairs(manifest)[0]
+    report = run_production_contract_doctor(
+        manifest, case_executor=_flaky_executor({flaky.pair_id})
+    )
+
+    assert report.summary.qualified is True
+    assert report.summary.re_exercised_pair_count == 1
+    flaky_report = next(
+        item for item in report.pairs if item.pair.pair_id == flaky.pair_id
+    )
+    assert flaky_report.qualified is True
+    assert flaky_report.first_draw_cases is not None
+    assert sum(c.alias_failures for c in flaky_report.first_draw_cases) == 1
+    assert all(
+        item.first_draw_cases is None
+        for item in report.pairs
+        if item.pair.pair_id != flaky.pair_id
+    )
+    validate_production_contract_qualification(report, manifest)
+
+
+def test_doctor_pair_failing_both_draws_stays_unqualified():
+    manifest = _manifest()
+    broken = production_contract_pairs(manifest)[0]
+    report = run_production_contract_doctor(
+        manifest, case_executor=_flaky_executor({broken.pair_id}, recover=False)
+    )
+
+    assert report.summary.qualified is False
+    assert report.summary.re_exercised_pair_count == 1
+    broken_report = next(
+        item for item in report.pairs if item.pair.pair_id == broken.pair_id
+    )
+    assert broken_report.qualified is False
+    assert broken_report.first_draw_cases is not None
+    with pytest.raises(RunManifestError) as captured:
+        validate_production_contract_qualification(report, manifest)
+    assert "DOCTOR_REPORT_PAIR_UNQUALIFIED" in str(captured.value)
+
+
+def test_doctor_re_exercise_budget_is_bounded_battery_wide():
+    manifest = _manifest()
+    pairs = production_contract_pairs(manifest)
+    assert len(pairs) >= 5
+    flaky_ids = {pair.pair_id for pair in pairs[:4]}
+    report = run_production_contract_doctor(
+        manifest, case_executor=_flaky_executor(flaky_ids)
+    )
+
+    # Three flaky pairs recover through the bounded allowance; the fourth
+    # finds the budget exhausted and fails closed on its single draw.
+    assert report.summary.re_exercised_pair_count == 3
+    assert report.summary.qualified is False
+    outcomes = {
+        item.pair.pair_id: (item.qualified, item.first_draw_cases is not None)
+        for item in report.pairs
+        if item.pair.pair_id in flaky_ids
+    }
+    assert sum(qualified for qualified, _ in outcomes.values()) == 3
+    assert sum(re_exercised for _, re_exercised in outcomes.values()) == 3
+
+
+def test_re_exercised_pair_requires_a_failing_first_draw():
+    manifest = _manifest()
+    pair = production_contract_pairs(manifest)[0]
+    passing_block = tuple(_admitted_case(index) for index in range(20))
+    with pytest.raises(ValueError, match="first draw that failed"):
+        _pair_report(pair, passing_block, first_draw_cases=passing_block)
+
+
+def test_reports_without_re_exercise_fields_stay_readable():
+    manifest = _manifest()
+    report = run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: _admitted_case(index),
+    )
+    payload = json.loads(report.model_dump_json(by_alias=True, exclude_none=True))
+    payload.pop("pair_re_exercise_limit")
+    payload["summary"].pop("re_exercised_pair_count")
+    restored = ProductionContractDoctorReportV1.model_validate(payload)
+    assert restored.summary.re_exercised_pair_count == 0
+    assert all(item.first_draw_cases is None for item in restored.pairs)

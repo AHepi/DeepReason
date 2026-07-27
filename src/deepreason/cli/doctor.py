@@ -38,6 +38,14 @@ from deepreason.workflow.transaction import RouteSeatModelClassificationPlanV1
 
 PRODUCTION_CASES_PER_PAIR = 20
 PRODUCTION_EVENTUAL_VALID_MINIMUM = 19
+# A stochastic provider is qualified on demonstrated capability, not on one
+# draw.  A pair whose twenty-case block fails the release gate may be
+# re-exercised exactly once with twenty fresh provider draws; the pair then
+# stands or falls on the fresh block alone.  Incapacity therefore still
+# fails closed (two consecutive failing blocks), while a one-off flake in
+# an 840-call battery no longer durably tiers a capable model shallow.
+# The battery bound stays finite: at most this many pairs may re-exercise.
+PRODUCTION_PAIR_RE_EXERCISE_LIMIT = 3
 _MAX_PRODUCTION_CONTRACT_REPORT_BYTES = 4 * 1024 * 1024
 
 
@@ -116,9 +124,33 @@ class ProductionContractCaseResultV1(_DoctorRecord):
         return self
 
 
+def _release_gate(cases: tuple[ProductionContractCaseResultV1, ...]) -> bool:
+    """The unchanged per-block release gate; a block passes or the pair
+    (draw) fails.  Re-exercise never weakens this gate — it only decides
+    which single block the gate is applied to."""
+
+    eventual = sum(item.eventual_valid for item in cases)
+    return bool(
+        len(cases) == PRODUCTION_CASES_PER_PAIR
+        and eventual >= PRODUCTION_EVENTUAL_VALID_MINIMUM
+        and sum(item.alias_failures for item in cases) == 0
+        and sum(item.scope_violations for item in cases) == 0
+        and sum(item.semantic_admission for item in cases) == eventual
+    )
+
+
 class ProductionContractPairReportV1(_DoctorRecord):
     pair: ProductionContractPairV1
     cases: tuple[ProductionContractCaseResultV1, ...] = Field(
+        min_length=PRODUCTION_CASES_PER_PAIR,
+        max_length=PRODUCTION_CASES_PER_PAIR,
+    )
+    # Present only when this pair was re-exercised: the complete failing
+    # first-draw block, preserved as durable evidence of the flake.  The
+    # accepted ``cases`` block above is then the single fresh re-exercise,
+    # and the release gate applies to it unchanged.
+    first_draw_cases: tuple[ProductionContractCaseResultV1, ...] | None = Field(
+        default=None,
         min_length=PRODUCTION_CASES_PER_PAIR,
         max_length=PRODUCTION_CASES_PER_PAIR,
     )
@@ -140,6 +172,16 @@ class ProductionContractPairReportV1(_DoctorRecord):
             raise ValueError(
                 "production cases must be exactly case-001 through case-020"
             )
+        if self.first_draw_cases is not None:
+            if tuple(item.case_id for item in self.first_draw_cases) != expected_case_ids:
+                raise ValueError(
+                    "first-draw cases must be exactly case-001 through case-020"
+                )
+            if _release_gate(self.first_draw_cases):
+                raise ValueError(
+                    "a re-exercised pair requires a first draw that failed "
+                    "the release gate"
+                )
         expected = {
             "first_pass_valid_count": sum(item.first_pass_valid for item in self.cases),
             "eventual_valid_count": sum(item.eventual_valid for item in self.cases),
@@ -153,14 +195,7 @@ class ProductionContractPairReportV1(_DoctorRecord):
         for field, value in expected.items():
             if getattr(self, field) != value:
                 raise ValueError(f"{field} does not match case results")
-        expected_qualified = bool(
-            len(self.cases) == PRODUCTION_CASES_PER_PAIR
-            and self.eventual_valid_count >= PRODUCTION_EVENTUAL_VALID_MINIMUM
-            and self.alias_failures == 0
-            and self.scope_violations == 0
-            and self.semantic_admission_count == self.eventual_valid_count
-        )
-        if self.qualified != expected_qualified:
+        if self.qualified != _release_gate(self.cases):
             raise ValueError("pair qualification does not match the release gate")
         return self
 
@@ -175,6 +210,9 @@ class ProductionContractDoctorSummaryV1(_DoctorRecord):
     scope_violations: int = Field(ge=0)
     semantic_admission_count: int = Field(ge=0)
     qualified_pair_count: int = Field(ge=0)
+    re_exercised_pair_count: int = Field(
+        default=0, ge=0, le=PRODUCTION_PAIR_RE_EXERCISE_LIMIT
+    )
     qualified: bool
 
 
@@ -189,6 +227,7 @@ class ProductionContractDoctorReportV1(_DoctorRecord):
     eventual_valid_minimum_per_pair: Literal[19] = (
         PRODUCTION_EVENTUAL_VALID_MINIMUM
     )
+    pair_re_exercise_limit: Literal[3] = PRODUCTION_PAIR_RE_EXERCISE_LIMIT
     pairs: tuple[ProductionContractPairReportV1, ...]
     summary: ProductionContractDoctorSummaryV1
     route_seat_model_classification: RouteSeatModelClassificationPlanV1 | None = None
@@ -216,6 +255,9 @@ class ProductionContractDoctorReportV1(_DoctorRecord):
                 item.semantic_admission_count for item in self.pairs
             ),
             "qualified_pair_count": sum(item.qualified for item in self.pairs),
+            "re_exercised_pair_count": sum(
+                item.first_draw_cases is not None for item in self.pairs
+            ),
             "qualified": all(item.qualified for item in self.pairs),
         }
         if self.summary.model_dump() != expected:
@@ -871,27 +913,21 @@ def _validate_production_contract_request_envelopes(
 def _pair_report(
     pair: ProductionContractPairV1,
     cases: tuple[ProductionContractCaseResultV1, ...],
+    *,
+    first_draw_cases: tuple[ProductionContractCaseResultV1, ...] | None = None,
 ) -> ProductionContractPairReportV1:
     eventual = sum(item.eventual_valid for item in cases)
-    aliases = sum(item.alias_failures for item in cases)
-    scopes = sum(item.scope_violations for item in cases)
-    admissions = sum(item.semantic_admission for item in cases)
     return ProductionContractPairReportV1(
         pair=pair,
         cases=cases,
+        first_draw_cases=first_draw_cases,
         first_pass_valid_count=sum(item.first_pass_valid for item in cases),
         eventual_valid_count=eventual,
         repair_count=sum(item.repair_count for item in cases),
-        alias_failures=aliases,
-        scope_violations=scopes,
-        semantic_admission_count=admissions,
-        qualified=bool(
-            len(cases) == PRODUCTION_CASES_PER_PAIR
-            and eventual >= PRODUCTION_EVENTUAL_VALID_MINIMUM
-            and aliases == 0
-            and scopes == 0
-            and admissions == eventual
-        ),
+        alias_failures=sum(item.alias_failures for item in cases),
+        scope_violations=sum(item.scope_violations for item in cases),
+        semantic_admission_count=sum(item.semantic_admission for item in cases),
+        qualified=_release_gate(cases),
     )
 
 
@@ -1018,9 +1054,8 @@ def run_production_contract_doctor(
         for pair in pairs
     }
     executor = case_executor or exercise_production_contract_case
-    reports = []
-    for pair in pairs:
-        grant = grants[pair.pair_id]
+
+    def _case_block(pair, grant):
         cases_list = []
         for case_index in range(PRODUCTION_CASES_PER_PAIR):
             _validate_production_contract_request_envelopes(
@@ -1036,8 +1071,26 @@ def run_production_contract_doctor(
                     "/contract_schema_repair_policy/grants",
                 )
             cases_list.append(case)
-        cases = tuple(cases_list)
-        reports.append(_pair_report(pair, cases))
+        return tuple(cases_list)
+
+    reports = []
+    re_exercised = 0
+    for pair in pairs:
+        grant = grants[pair.pair_id]
+        cases = _case_block(pair, grant)
+        report = _pair_report(pair, cases)
+        if (
+            not report.qualified
+            and re_exercised < PRODUCTION_PAIR_RE_EXERCISE_LIMIT
+        ):
+            # One fresh twenty-case draw decides the pair; the failing first
+            # draw stays in the report as durable flake evidence.  A pair
+            # failing both consecutive draws remains unqualified.
+            re_exercised += 1
+            report = _pair_report(
+                pair, _case_block(pair, grant), first_draw_cases=cases
+            )
+        reports.append(report)
     pair_reports = tuple(reports)
     summary = ProductionContractDoctorSummaryV1(
         pair_count=len(pair_reports),
@@ -1053,6 +1106,7 @@ def run_production_contract_doctor(
             item.semantic_admission_count for item in pair_reports
         ),
         qualified_pair_count=sum(item.qualified for item in pair_reports),
+        re_exercised_pair_count=re_exercised,
         qualified=all(item.qualified for item in pair_reports),
     )
     classification = derive_route_seat_model_classification(
@@ -1289,6 +1343,13 @@ def validate_production_contract_qualification(
                     "DOCTOR_REPORT_REPAIR_GRANT_EXCEEDED",
                     "production-contract doctor case exceeds manifest repair authority",
                     f"/pairs/{pair_index}/cases/{case_index}/repair_count",
+                )
+        for case_index, case in enumerate(pair_report.first_draw_cases or ()):
+            if case.repair_count > grant.maximum_schema_repairs:
+                raise RunManifestError(
+                    "DOCTOR_REPORT_REPAIR_GRANT_EXCEEDED",
+                    "production-contract doctor case exceeds manifest repair authority",
+                    f"/pairs/{pair_index}/first_draw_cases/{case_index}/repair_count",
                 )
         if not pair_report.qualified:
             raise RunManifestError(

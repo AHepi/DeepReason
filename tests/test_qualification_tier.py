@@ -259,7 +259,9 @@ def test_qualify_announces_both_battery_ceilings(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr("sys.stdin", type("NoTty", (), {"isatty": staticmethod(lambda: False)})())
     assert main(["qualify"]) == 1
     err = capsys.readouterr().err
-    assert "maximum expected provider calls: 840." in err
+    # 840 base calls plus the bounded flake re-exercise allowance: the three
+    # most expensive pair blocks may each be redrawn once.
+    assert "maximum expected provider calls: 1100." in err
     assert f"at most {SHALLOW_FITNESS_MAX_PROVIDER_CALLS} further calls" in err
     assert shallow_fitness_maximum_provider_calls() == 18
 

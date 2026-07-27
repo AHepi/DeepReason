@@ -197,7 +197,9 @@ def test_public_manifest_grants_conjecture_family_multi_pointer_repairs():
             continue
         assert grants[contract_id].maximum_schema_repairs == 2
         assert grants[contract_id].maximum_provider_calls == 3
-    assert production_qualification_maximum_provider_calls(manifest) == 840
+    # 840 base battery calls plus the bounded flake re-exercise allowance
+    # (the three most expensive pair blocks may each be redrawn once).
+    assert production_qualification_maximum_provider_calls(manifest) == 1100
 
 
 def test_public_manifest_enables_declarative_local_simulation():

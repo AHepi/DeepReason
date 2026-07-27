@@ -287,3 +287,38 @@ def test_injected_executor_failure_redacts_provider_exception(tmp_path):
     assert secret not in str(caught.value)
     assert secret not in repr(caught.value)
     assert caught.value.__cause__ is None
+
+
+def test_unqualified_battery_persists_its_sanitized_report_for_diagnosis(tmp_path):
+    from deepreason.cli.doctor import load_production_contract_report
+    from deepreason.qualification import unqualified_report_path
+
+    profile = _profile()
+    manifest = _manifest(profile)
+
+    def failing_case(_manifest, _pair, index):
+        eventual = index < 18
+        return ProductionContractCaseResultV1(
+            case_id=f"case-{index + 1:03d}",
+            first_pass_valid=eventual,
+            eventual_valid=eventual,
+            repair_count=0,
+            semantic_admission=eventual,
+            failure_code=None if eventual else "SCHEMA_EXHAUSTED",
+        )
+
+    def execute(bound):
+        return run_production_contract_doctor(bound, case_executor=failing_case)
+
+    with pytest.raises(ValueError, match="DOCTOR_REPORT_PAIR_UNQUALIFIED"):
+        resolve_completed_qualification(
+            manifest, profile, cache_dir=tmp_path, executor=execute
+        )
+
+    subject = qualification_subject_digest(manifest, profile)
+    stored_path = unqualified_report_path(tmp_path, subject)
+    stored = load_production_contract_report(stored_path)
+    assert stored.summary.qualified is False
+    # Every pair fails both draws (two eventual failures per block) and the
+    # bounded allowance re-exercised the first three before exhausting.
+    assert stored.summary.re_exercised_pair_count == 3
