@@ -2396,7 +2396,14 @@ def conj(
             parent_work_id=transaction_preparation.id,
             parent_attempt_index=transaction_provider_attempt.attempt_index,
             parent_provider_attempt_ref=transaction_provider_attempt.id,
-            parent_exposure_receipt_ref=(transaction_context_authorization.exposure_receipt.id),
+            # The parent authority chain must stay within the ONE completed
+            # transaction that admitted this request.  After a schema repair
+            # that is the repair work item, whose own durable exposure receipt
+            # differs from the pre-repair conjecture exposure held by
+            # ``transaction_context_authorization`` (first observed live in
+            # run-89a60a8b: binding the pre-repair exposure made the child
+            # validation reject a legitimate durable sequence).
+            parent_exposure_receipt_ref=transaction_authorization.exposure_receipt.id,
             parent_semantic_admission_ref=admission.id,
             parent_semantic_output_ref=semantic_output_ref,
             parent_provider_event_seq=source_call_seq,

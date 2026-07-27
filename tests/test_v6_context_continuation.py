@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json
 from deepreason.capabilities.policy import InquiryCapabilityPolicyV1
@@ -441,6 +443,198 @@ def test_child_request_envelope_overflow_is_unissued_and_scratch_clean(tmp_path)
     assert adapter.meter.snapshot()["reserved"] == 0
 
 
+def _invalid_request_turn(query: str) -> dict:
+    """A wire-invalid turn whose repaired form still carries the request."""
+
+    return {
+        "candidates": [
+            {"content": "preserve this mechanism", "typicality": 2.0}
+        ],
+        **_request(query),
+    }
+
+
+def _unrelated_patch() -> dict:
+    return {
+        "schema": "repair.patch.v1",
+        "op": "replace",
+        "path": "/candidates/0/content",
+        "value": "laundered replacement",
+    }
+
+
+def _typicality_patch() -> dict:
+    return {
+        "schema": "repair.patch.v1",
+        "op": "replace",
+        "path": "/candidates/0/typicality",
+        "value": 0.5,
+    }
+
+
+def test_repaired_parent_grants_and_dispatches_continuation(tmp_path):
+    """Mirror live run-89a60a8b: the admitting parent is a repair work item.
+
+    The live engaged run terminated its first conjecture transaction as
+    ``rejected``/``conjecture_repair_requested``, rejected one separately
+    authorized patch step, then completed a second repair step whose admitted
+    output carried a context request.  The continuation must bind that
+    completed repair transaction's own durable authority (exposure receipt
+    included), not the pre-repair work's exposure.
+    """
+
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+        bind_run_input,
+    )
+    from deepreason.invariants import verify_root
+    from deepreason.run_manifest import bind_run_manifest
+
+    root = tmp_path / "repaired-parent"
+    commitment = Commitment(
+        id="k-v6-context", eval="predicate:len(content) > 0"
+    )
+    dossier = EvidenceDossierV1.create(
+        problem_ref="pi-v6-context",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="repaired continuation fixture",
+            acquisition_method="pre-freeze construction",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id="pi-v6-context",
+            description="Stretch a delayed-feedback mechanism imaginatively.",
+            criteria=(commitment,),
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    config = _config()
+    # The live manifest froze the conjecture family's repair ceiling of 4;
+    # RETRY_MAX=0 would compile a zero-repair grant and never reach repair.
+    config = config.model_copy(update={"RETRY_MAX": 2})
+    context = ConjectureContextPolicyV1(
+        mode="harness_plus_model_request",
+        initial_max_blocks=1,
+        initial_max_guides=0,
+        max_context_expansion_requests=1,
+        max_extra_blocks=1,
+        permitted_retrieval_channels=("focus", "keyword"),
+        coverage_slot_mandatory=False,
+        exploration_slot_mandatory=False,
+    )
+    control = ControlPlanePolicyV3(
+        school_execution=SchoolExecutionPolicyV1(
+            mode="conditioning_only",
+            bindings=(),
+            allow_shared=True,
+            require_distinct_models=False,
+            require_distinct_families=False,
+        ),
+        conjecture_context=context,
+        workflow_retry=WorkflowRetryPolicyV1(),
+        contract_versions=ContractVersionPolicyV3(),
+    )
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=control,
+        inquiry_capability_policy=InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2"
+        ),
+        run_input_digest=run_input.run_input_digest,
+    )
+    bind_run_manifest(manifest, root)
+    harness = Harness(root)
+    _problem, focus, expansion, _tertiary = _seed(harness)
+    adapter, prompts = _adapter(
+        harness,
+        manifest,
+        [
+            _invalid_request_turn("quasar-only"),
+            _unrelated_patch(),
+            _typicality_patch(),
+            _abstention(),
+        ],
+    )
+
+    artifacts = _run(harness, manifest, config, adapter)
+
+    assert [artifact.content_ref for artifact in artifacts] == [
+        "inline:preserve this mechanism"
+    ]
+    assert len(prompts) == 4
+    turn, repair_one, repair_two, child = tuple(
+        harness.workflow_state.transaction_work.values()
+    )
+    assert [
+        (item.preparation.task_kind, item.terminal.status, item.terminal.reason_code)
+        for item in (turn, repair_one, repair_two, child)
+    ] == [
+        (WorkflowTaskKind.CONJECTURE, "rejected", "conjecture_repair_requested"),
+        (WorkflowTaskKind.REPAIR, "rejected", "conjecture_repair_step_rejected"),
+        (WorkflowTaskKind.REPAIR, "completed", "semantic_admission_complete"),
+        (WorkflowTaskKind.CONJECTURE, "completed", "semantic_admission_complete"),
+    ]
+    binding = child.preparation.task_payload_value["context_continuation"]
+    # Every parent_* field binds the ONE completed repair transaction.
+    assert binding["parent_work_id"] == repair_two.preparation.id
+    assert binding["parent_attempt_index"] == 2
+    assert binding["parent_attempt_index"] == repair_two.preparation.attempt_index
+    assert (
+        binding["parent_provider_attempt_ref"]
+        == repair_two.provider_attempts[2].id
+        == repair_two.terminal.provider_attempt_ref
+    )
+    assert binding["parent_exposure_receipt_ref"] == repair_two.exposure.id
+    assert binding["parent_exposure_receipt_ref"] != turn.exposure.id
+    assert (
+        binding["parent_semantic_admission_ref"]
+        == repair_two.admissions[2].id
+        == repair_two.terminal.semantic_admission_ref
+    )
+    assert (
+        binding["parent_semantic_output_ref"]
+        in repair_two.admissions[2].admitted_refs
+    )
+    assert binding["eligibility"] == "eligible"
+    # The child still expands the ORIGINAL advisory context by one block.
+    calls = [event.llm for event in harness.log.read() if event.llm is not None]
+    assert [call.work_order_id for call in calls] == [
+        turn.preparation.id,
+        repair_one.preparation.id,
+        repair_two.preparation.id,
+        child.preparation.id,
+    ]
+    turn_context = calls[0].conjecture_context
+    child_context = calls[3].conjecture_context
+    assert calls[1].conjecture_context is None
+    assert calls[2].conjecture_context is None
+    assert turn_context is not None and child_context is not None
+    assert child_context.prior_selection_receipt_ref == (
+        turn_context.selection_receipt_ref
+    )
+    assert binding["prior_selection_receipt_ref"] == (
+        turn_context.selection_receipt_ref
+    )
+    assert child_context.expansion_decision_ref == binding["decision_ref"]
+    assert child_context.root_block_refs == [focus.id]
+    assert child_context.added_block_refs == [expansion.id]
+    # The durable chain replays and independently verifies clean.
+    reopened = Harness(harness.root)
+    assert len(reopened.workflow_state.transaction_work) == 4
+    assert verify_root(root)["violations"] == []
+
+
 def _route_lease(manifest) -> RouteLeaseRefV1:
     route = manifest.roles["conjecturer"][0]
     return RouteLeaseRefV1(
@@ -520,6 +714,72 @@ def _manual_completed_parent(harness, manifest, request, meter):
         admission=admission,
     )
     return preparation, authorized, provider, admission, semantic_output_ref, source_seq
+
+
+def test_foreign_exposure_receipt_in_binding_still_fails_closed(tmp_path):
+    """A continuation citing another work's exposure stays rejected."""
+
+    config = _config()
+    manifest = _manifest(config)
+    harness = Harness(tmp_path / "foreign-exposure")
+    _seed(harness)
+    meter = TokenMeter(100_000)
+    request = ContextRequestV1(
+        query="quasar-only",
+        desired_retrieval_channels=(RetrievalChannel.KEYWORD,),
+        purpose="Exercise the parent authority backstop.",
+    )
+    (
+        parent,
+        _authorized,
+        provider,
+        admission,
+        semantic_output_ref,
+        source_seq,
+    ) = _manual_completed_parent(harness, manifest, request, meter)
+    request_ref = harness.blobs.put(
+        canonical_json(
+            request.model_dump(mode="json", by_alias=True, exclude_none=True)
+        )
+    )
+    binding = ConjectureContextContinuationV1.create(
+        manifest_digest=manifest.sha256,
+        problem_id="pi-v6-context",
+        parent_work_id=parent.id,
+        parent_attempt_index=provider.attempt_index,
+        parent_provider_attempt_ref=provider.id,
+        # Fabricated: not the completed parent transaction's own exposure.
+        parent_exposure_receipt_ref="sha256:" + "a" * 64,
+        parent_semantic_admission_ref=admission.id,
+        parent_semantic_output_ref=semantic_output_ref,
+        parent_provider_event_seq=source_seq,
+        request_hash=request.request_hash,
+        request_ref=request_ref,
+        expansion_index=1,
+        maximum_expansions=1,
+        maximum_extra_blocks=1,
+        policy_mode="harness_plus_model_request",
+        permitted_retrieval_channels=("focus", "keyword"),
+        desired_retrieval_channels=("keyword",),
+    )
+    assert binding.eligibility == ContextContinuationEligibility.ELIGIBLE
+    adapter, prompts = _adapter(harness, manifest, [], meter=meter)
+
+    with pytest.raises(
+        ValueError, match="parent authority is inconsistent"
+    ):
+        conj(
+            harness,
+            "pi-v6-context",
+            adapter,
+            config,
+            workload_profile="text",
+            run_manifest=manifest,
+            _context_expansion_index=1,
+            _v6_context_continuation=binding,
+            _v6_context_request=request,
+        )
+    assert prompts == []
 
 
 def test_unpermitted_channel_is_typed_denied_without_child_dispatch(tmp_path):

@@ -2204,6 +2204,40 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
         source_context = (
             source_call.conjecture_context if source_call is not None else None
         )
+        context_source = source_context
+        if source_context is None and parent is not None:
+            # A repaired parent admits its output from a separately
+            # authorized patch dispatch that carries no advisory-context
+            # receipt (first observed live in run-89a60a8b).  Prior-selection
+            # continuity is then anchored on the origin conjecture work
+            # frozen in the repair preparation's durable payload: ITS
+            # provider call must have exposed exactly the prior selection.
+            # Everything else still fails closed below.
+            from deepreason.workflow.models import WorkflowTaskKind
+
+            payload = parent.preparation.task_payload_value
+            origin_work_id = (
+                payload.get("parent_work_id") if hasattr(payload, "get") else None
+            )
+            origin = (
+                h.workflow_state.transaction_work.get(origin_work_id)
+                if parent.preparation.task_kind == WorkflowTaskKind.REPAIR
+                and hasattr(payload, "get")
+                and payload.get("schema") == "repair.semantic-task.v1"
+                and isinstance(origin_work_id, str)
+                and origin_work_id != binding.parent_work_id
+                else None
+            )
+            origin_call = (
+                origin.provider_calls.get(origin.preparation.attempt_index)
+                if origin is not None
+                else None
+            )
+            context_source = (
+                origin_call.conjecture_context
+                if origin_call is not None
+                else None
+            )
         if (
             source_event is None
             or source_event.seq >= event.seq
@@ -2215,8 +2249,8 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 != provider.authorization_bundle_ref
             )
             or (
-                source_context.selection_receipt_ref
-                if source_context is not None
+                context_source.selection_receipt_ref
+                if context_source is not None
                 else None
             )
             != receipt.prior_selection_receipt_ref
