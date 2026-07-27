@@ -223,9 +223,24 @@ class ClusterGuideDraftV1(FrozenRecord):
 
 
 class ScratchWireReferenceError(ValueError):
-    def __init__(self, message: str, pointer: str) -> None:
+    def __init__(
+        self,
+        message: str,
+        pointer: str,
+        *,
+        rejected_handle: str | None = None,
+        observed_kind: str | None = None,
+        required_kinds: Sequence[str] = (),
+        legal_handles: Sequence[str] = (),
+        omission_allowed: bool | None = None,
+    ) -> None:
         self.code = "SCRATCH_WIRE_REFERENCE_INVALID"
         self.pointer = pointer
+        self.rejected_handle = rejected_handle
+        self.observed_kind = observed_kind
+        self.required_kinds = tuple(required_kinds)
+        self.legal_handles = tuple(legal_handles[:32])
+        self.omission_allowed = omission_allowed
         super().__init__(f"{self.code} at {pointer}: {message}")
 
 
@@ -275,18 +290,35 @@ class _ReferenceCompiler:
         handle: str | None,
         pointer: str,
     ) -> str:
+        # Entry-point handles live in an optional array a repair may simply
+        # drop; link endpoints are required within their entry.
+        omission_allowed = pointer.startswith("/entry_points/")
+        legal = tuple(self.handles.aliases)
         if index is not None:
             try:
                 return self.indexed_block_ids[index]
             except IndexError as error:
                 raise ScratchWireReferenceError(
-                    f"index {index} is outside the rendered block list", pointer
+                    f"index {index} is outside the rendered block list",
+                    pointer,
+                    observed_kind="rendered_list_index",
+                    required_kinds=("rendered_list_index", "local_handle"),
+                    legal_handles=legal,
+                    omission_allowed=omission_allowed,
                 ) from error
         assert handle is not None  # enforced by the wire model
         try:
             return self.handles.resolve(handle)
         except ValueError as error:
-            raise ScratchWireReferenceError(str(error), pointer) from error
+            raise ScratchWireReferenceError(
+                str(error),
+                pointer,
+                rejected_handle=handle,
+                observed_kind="unknown",
+                required_kinds=("local_handle",),
+                legal_handles=legal,
+                omission_allowed=omission_allowed,
+            ) from error
 
 
 class ScratchLinkWireContract(_ReferenceCompiler, WireContract[ScratchLinkBodyV1]):

@@ -119,6 +119,17 @@ class RepairDiagnosticV2(BaseModel):
     message: str = Field(min_length=1, max_length=500)
     received: Any = None
     allowed: str = Field(default="", max_length=2_048)
+    # Handle-aware guidance, populated only for reference-field failures so
+    # a repair can pick a legal handle (or a legal omission) instead of
+    # regex-guessing new invalid handles.  Absent fields serialize away.
+    rejected_handle: str | None = Field(default=None, max_length=128)
+    observed_handle_kind: str | None = Field(default=None, max_length=64)
+    required_handle_kinds: tuple[str, ...] | None = Field(
+        default=None, max_length=16
+    )
+    legal_handles: tuple[str, ...] | None = Field(default=None, max_length=64)
+    omission_or_unknown_legal: bool | None = None
+    instruction: str | None = Field(default=None, max_length=500)
 
     @field_validator("path")
     @classmethod
@@ -770,6 +781,119 @@ def minimal_skeleton(schema: dict, _root: dict | None = None) -> Any:
     return None
 
 
+_SCRATCH_REFERENCE_HANDLE = re.compile(r"^(?:SCR|NEW)_[0-9]{3,}$")
+_SCRATCH_SCALAR_REFERENCE_POINTER = re.compile(
+    r"^/scratch_proposal/(?:links/[0-9]+/(?:from_ref|to_ref)"
+    r"|revisions/[0-9]+/target_alias)$"
+)
+_SCRATCH_ARRAY_REFERENCE_POINTER = re.compile(
+    r"^/scratch_proposal/(?:unresolved_questions/[0-9]+/related_refs"
+    r"|cluster_suggestions/[0-9]+/member_refs)(?:/[0-9]+)?$"
+)
+_MAX_DIAGNOSTIC_LEGAL_HANDLES = 32
+
+
+def _scratch_handle_kind(handle: str) -> str:
+    if handle.startswith("SCR_"):
+        return "scratch_block_handle"
+    if handle.startswith("NEW_"):
+        return "new_block_key"
+    return "unknown"
+
+
+def _handle_fields_from_error(error: Exception) -> dict[str, Any]:
+    """Mirror a reference error's handle attributes into diagnostic fields.
+
+    Reference errors that carry no handle state (or plain validation errors)
+    contribute nothing; fields stay absent rather than inventing guidance.
+    """
+
+    rejected = getattr(error, "rejected_handle", None)
+    observed = getattr(error, "observed_kind", None)
+    required = tuple(getattr(error, "required_kinds", ()))
+    legal = tuple(getattr(error, "legal_handles", ()))
+    omission = getattr(error, "omission_allowed", None)
+    return {
+        "rejected_handle": rejected if isinstance(rejected, str) else None,
+        "observed_handle_kind": observed if isinstance(observed, str) else None,
+        "required_handle_kinds": required or None,
+        "legal_handles": legal[:_MAX_DIAGNOSTIC_LEGAL_HANDLES] or None,
+        "omission_or_unknown_legal": None if omission is None else bool(omission),
+    }
+
+
+def _scratch_reference_guidance(
+    error: Exception,
+    pointer: str,
+    received: Any,
+) -> dict[str, Any] | None:
+    """Handle-aware guidance for one scratch-proposal reference failure.
+
+    The v6 wire contract attaches its durable legal-handle state
+    (``scratch_reference_context``: the visible SCR catalog plus the
+    proposal's own NEW keys) to the validation error it re-raises.  Validity
+    is decided entirely by the validators that raised ``error``; this only
+    completes the diagnostic so a repair can use a legal handle or a legal
+    omission instead of regex-guessing new invalid handles.
+    """
+
+    context = getattr(error, "scratch_reference_context", None)
+    if not isinstance(context, dict):
+        return None
+    array_field = bool(_SCRATCH_ARRAY_REFERENCE_POINTER.fullmatch(pointer))
+    scalar_field = bool(_SCRATCH_SCALAR_REFERENCE_POINTER.fullmatch(pointer))
+    proposal_root = pointer == "/scratch_proposal"
+    if not (array_field or scalar_field or proposal_root):
+        return None
+    new_keys = tuple(
+        key for key in context.get("new_block_keys", ()) if isinstance(key, str)
+    )
+    scratch_handles = tuple(
+        key for key in context.get("scratch_handles", ()) if isinstance(key, str)
+    )
+    revision_target = pointer.endswith("/target_alias")
+    legal = scratch_handles if revision_target else (*new_keys, *scratch_handles)
+    legal = tuple(dict.fromkeys(legal))[:_MAX_DIAGNOSTIC_LEGAL_HANDLES]
+    required = (
+        ("scratch_block_handle",)
+        if revision_target
+        else ("new_block_key", "scratch_block_handle")
+    )
+    rejected: str | None = None
+    items = tuple(received) if isinstance(received, (list, tuple)) else (received,)
+    for item in items:
+        if not isinstance(item, str):
+            continue
+        if _SCRATCH_REFERENCE_HANDLE.fullmatch(item) is None or (
+            item.startswith("NEW_") and item not in new_keys
+        ):
+            rejected = item[:128]
+            break
+    omission_legal = bool(array_field or proposal_root)
+    if legal:
+        instruction = "Use only a listed legal handle for this reference field."
+    else:
+        instruction = (
+            "No legal handle exists for this reference field; do not invent one."
+        )
+    if omission_legal:
+        instruction += (
+            " Omission is legal: a remove operation at this path, or a replace "
+            "that drops the offending entry, is a valid repair; never invent a "
+            "handle to fill an optional reference."
+        )
+    return {
+        "rejected_handle": rejected,
+        "observed_handle_kind": (
+            None if rejected is None else _scratch_handle_kind(rejected)
+        ),
+        "required_handle_kinds": required,
+        "legal_handles": legal,
+        "omission_or_unknown_legal": omission_legal,
+        "instruction": instruction,
+    }
+
+
 def diagnostic_from_error(
     contract: str,
     error: Exception,
@@ -828,22 +952,10 @@ def diagnostic_from_error(
         )
         rejected_handle = getattr(error, "rejected_handle", None)
         is_bridge_reference = reference_code == "BRIDGE_WIRE_REFERENCE_INVALID"
-        required_kinds = (
-            tuple(getattr(error, "required_kinds", ()))
-            if is_bridge_reference
-            else None
-        )
-        legal_handles = (
-            tuple(getattr(error, "legal_handles", ()))
-            if is_bridge_reference
-            else None
-        )
-        omission_allowed = (
-            bool(getattr(error, "omission_allowed", False))
-            if is_bridge_reference
-            else None
-        )
-        if reference_code == "BRIDGE_WIRE_REFERENCE_INVALID":
+        if is_bridge_reference:
+            required_kinds = tuple(getattr(error, "required_kinds", ()))
+            legal_handles = tuple(getattr(error, "legal_handles", ()))
+            omission_allowed = bool(getattr(error, "omission_allowed", False))
             allowed = (
                 f"one of {list(legal_handles)!r}"
                 if legal_handles
@@ -856,8 +968,29 @@ def diagnostic_from_error(
                     "do not invent evidence."
                 )
         else:
-            allowed = "one supplied call-local handle or rendered-list index"
-            instruction = None
+            # Scratch reference errors carry the same handle attributes when
+            # their raiser knows the legal set; absent attributes stay absent
+            # instead of degrading to a bare pattern diagnostic.
+            required_kinds = tuple(getattr(error, "required_kinds", ())) or None
+            legal_handles = (
+                tuple(getattr(error, "legal_handles", ()))[
+                    :_MAX_DIAGNOSTIC_LEGAL_HANDLES
+                ]
+                or None
+            )
+            omission = getattr(error, "omission_allowed", None)
+            omission_allowed = None if omission is None else bool(omission)
+            if legal_handles:
+                allowed = f"one of {list(legal_handles)!r}"
+                instruction = "Use only a listed legal handle for this field."
+                if omission_allowed:
+                    instruction += (
+                        " Omission is legal: removing the optional reference is "
+                        "a valid repair; do not invent handles."
+                    )
+            else:
+                allowed = "one supplied call-local handle or rendered-list index"
+                instruction = None
         return RepairDiagnostic(
             contract=contract,
             path=pointer,
@@ -885,6 +1018,7 @@ def diagnostic_from_error(
         for key in ("type", "enum", "const", "pattern", "minimum", "maximum"):
             if key in child_schema:
                 allowed_bits.append(f"{key}={child_schema[key]!r}")
+        guidance = _scratch_reference_guidance(error, path, detail.get("input"))
         return RepairDiagnostic(
             contract=contract,
             path=path,
@@ -893,6 +1027,7 @@ def diagnostic_from_error(
             allowed=", ".join(allowed_bits),
             repair_scope=json_pointer(scope_loc),
             skeleton=minimal_skeleton(child_schema),
+            **(guidance or {}),
         )
     return RepairDiagnostic(
         contract=contract,
@@ -902,6 +1037,7 @@ def diagnostic_from_error(
         allowed="complete JSON value",
         repair_scope="",
         skeleton=minimal_skeleton(schema),
+        **_handle_fields_from_error(error),
     )
 
 
@@ -977,6 +1113,9 @@ def diagnostic_envelope_from_error(
                 if code == "missing"
                 else "replace"
             )
+            guidance = _scratch_reference_guidance(
+                error, pointer, detail.get("input")
+            )
             diagnostics.append(
                 RepairDiagnosticV2(
                     path=pointer,
@@ -991,6 +1130,7 @@ def diagnostic_envelope_from_error(
                             else ""
                         )
                     ),
+                    **(guidance or {}),
                 )
             )
     else:
@@ -1007,6 +1147,15 @@ def diagnostic_envelope_from_error(
         for item in pointers:
             _validate_json_pointer(item, allow_root=False)
         authorized.update(pointers)
+        handle_fields = _handle_fields_from_error(error)
+        if handle_fields["legal_handles"]:
+            instruction = "Use only a listed legal handle for this field."
+            if handle_fields["omission_or_unknown_legal"]:
+                instruction += (
+                    " Omission is legal: removing the optional reference is a "
+                    "valid repair; do not invent handles."
+                )
+            handle_fields["instruction"] = instruction
         diagnostics.append(
             RepairDiagnosticV2(
                 path=pointer,
@@ -1016,6 +1165,7 @@ def diagnostic_envelope_from_error(
                 allowed="; ".join(
                     filter(None, (_allowed_at_pointer(schema, item) for item in pointers))
                 ),
+                **handle_fields,
             )
         )
 

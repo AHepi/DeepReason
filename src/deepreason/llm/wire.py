@@ -17,6 +17,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    ValidationError,
     create_model,
     field_validator,
     model_validator,
@@ -1287,6 +1288,38 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         self._preflight_v6_references(value)
         super()._preflight_value(value)
 
+    def _attach_scratch_reference_context(
+        self, error: Exception, value: Any
+    ) -> None:
+        """Attach the durable legal-handle state to a validation failure.
+
+        Scratch-proposal reference fields (link endpoints, related_refs,
+        member_refs, revision targets) are validated by pattern plus a closed
+        local namespace, so their rejections would otherwise carry only a bare
+        pattern diagnostic.  The legal set at this point is durable state the
+        contract already holds: the run's visible SCR catalog plus the
+        proposal's own NEW keys.  The diagnostic compiler uses this context
+        for guidance only; validity is unchanged.
+        """
+
+        if not self.scratch_authoring_enabled:
+            return
+        new_keys: tuple[str, ...] = ()
+        scratch = value.get("scratch_proposal") if isinstance(value, dict) else None
+        if isinstance(scratch, dict):
+            blocks = scratch.get("new_blocks")
+            if isinstance(blocks, (list, tuple)):
+                new_keys = tuple(
+                    block.get("local_key")
+                    for block in blocks
+                    if isinstance(block, dict)
+                    and isinstance(block.get("local_key"), str)
+                )
+        error.scratch_reference_context = {
+            "scratch_handles": tuple(sorted(self.scratch_aliases)),
+            "new_block_keys": new_keys,
+        }
+
     def validate_value(self, value: Any) -> BaseModel:
         # The strict proposal records intentionally use immutable tuples.
         # Validate through Pydantic's JSON boundary so JSON arrays are accepted
@@ -1298,7 +1331,11 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             separators=(",", ":"),
             ensure_ascii=False,
         )
-        return self.wire_model.model_validate_json(raw)
+        try:
+            return self.wire_model.model_validate_json(raw)
+        except ValidationError as error:
+            self._attach_scratch_reference_context(error, value)
+            raise
 
     def compile(self, wire: BaseModel) -> BaseModel:
         # Defence in depth for callers compiling a constructed wire model

@@ -24,10 +24,18 @@ import json
 
 import pytest
 
+from pydantic import ValidationError
+
 from deepreason.harness import Harness
-from deepreason.llm.repair import parse_one_json_value
+from deepreason.llm.repair import (
+    V6PatchRepairSession,
+    diagnostic_from_error,
+    parse_one_json_value,
+)
+from deepreason.llm.wire import AliasTable, ConjecturerTurnWireContractV6
 from deepreason.rules.conj import conj
 from deepreason.run_manifest import ScratchAuthoringPolicyV1
+from deepreason.scratch.contracts import ScratchLinkWireContract
 from deepreason.scratch.service import ScratchService
 from deepreason.workflow.models import WorkflowTaskKind
 from tests.test_v6_transaction_qualification import (
@@ -236,3 +244,142 @@ def test_four_handle_pattern_failures_converge_within_the_grant(tmp_path):
         *(["rejected"] * 4),
         "completed",
     ]
+
+
+def _scratch_contract() -> ConjecturerTurnWireContractV6:
+    return ConjecturerTurnWireContractV6(
+        reasoning=False,
+        aliases=AliasTable(),
+        scratch_aliases={"SCR_001": "scratch-one", "SCR_002": "scratch-two"},
+        scratch_authoring_policy=_scratch_policy(),
+    )
+
+
+def _related_refs_failure_turn() -> dict:
+    """The second live shape: every granted repair burned on one pointer.
+
+    A later engaged run rejected attempts 1-4 on the same pointer
+    ``/scratch_proposal/unresolved_questions/1/related_refs`` because the
+    diagnostic carried only the bare pattern, so the model regex-guessed new
+    invalid handles instead of using a legal one or the legal omission.
+    """
+
+    return {
+        "candidates": [
+            {"content": "A semantically sound mechanism.", "typicality": 0.4}
+        ],
+        "scratch_proposal": {
+            "new_blocks": [_block("NEW_001", "speculative mechanism sketch")],
+            "unresolved_questions": [
+                {"question": "Does the gap survive replays?", "related_refs": []},
+                {
+                    "question": "Which fence closes first?",
+                    "related_refs": ["SCR_003", "candidates[5]"],
+                },
+            ],
+        },
+    }
+
+
+def test_scratch_reference_rejection_enumerates_legal_handles_and_omission():
+    contract = _scratch_contract()
+    invalid = _related_refs_failure_turn()
+    session = V6PatchRepairSession(
+        contract=contract.contract_id,
+        schema=contract.model_json_schema(),
+        initial_request="initial",
+    )
+    turn = session.turn(0)
+    raw = json.dumps(invalid)
+    session.candidate_from_raw(turn, raw)
+    with pytest.raises(ValidationError) as raised:
+        contract.validate_value(invalid)
+    envelope = session.note_invalid(turn, raw, raised.value)
+
+    pointer = "/scratch_proposal/unresolved_questions/1/related_refs"
+    assert envelope.authorized_pointers == (pointer,)
+    (diagnostic,) = envelope.diagnostics
+    assert diagnostic.path == pointer
+    # The guidance is complete: the legal set is the proposal's own NEW keys
+    # plus the run's visible SCR catalog, omission is explicitly legal, and
+    # the first illegal handle is named.  Fail-closed is unchanged.
+    assert diagnostic.legal_handles == ("NEW_001", "SCR_001", "SCR_002")
+    assert diagnostic.rejected_handle == "candidates[5]"
+    assert diagnostic.observed_handle_kind == "unknown"
+    assert diagnostic.required_handle_kinds == (
+        "new_block_key",
+        "scratch_block_handle",
+    )
+    assert diagnostic.omission_or_unknown_legal is True
+    assert "remove" in diagnostic.instruction
+    # The model-facing payload renders the guidance (absent fields drop away).
+    payload = envelope.model_dump(mode="json", by_alias=True, exclude_none=True)
+    assert payload["diagnostics"][0]["legal_handles"] == [
+        "NEW_001",
+        "SCR_001",
+        "SCR_002",
+    ]
+
+
+@pytest.mark.parametrize(
+    "patch_raw",
+    [
+        # The legal omission: drop the optional reference array outright.
+        json.dumps(
+            {
+                "schema": "repair.patch.v1",
+                "op": "remove",
+                "path": "/scratch_proposal/unresolved_questions/1/related_refs",
+            }
+        ),
+        # Or replace with a listed legal handle.
+        _patch(
+            "/scratch_proposal/unresolved_questions/1/related_refs", ["NEW_001"]
+        ),
+    ],
+)
+def test_scripted_scratch_reference_repair_converges_in_one_patch(patch_raw):
+    contract = _scratch_contract()
+    invalid = _related_refs_failure_turn()
+    session = V6PatchRepairSession(
+        contract=contract.contract_id,
+        schema=contract.model_json_schema(),
+        initial_request="initial",
+    )
+    turn = session.turn(0)
+    raw = json.dumps(invalid)
+    session.candidate_from_raw(turn, raw)
+    with pytest.raises(ValidationError) as raised:
+        contract.validate_value(invalid)
+    session.note_invalid(turn, raw, raised.value)
+
+    patch_turn = session.turn(1)
+    assert patch_turn.mode == "patch"
+    candidate = session.candidate_from_raw(patch_turn, patch_raw)
+    compiled = contract.compile(contract.validate_value(candidate))
+    questions = compiled.scratch_proposal.unresolved_questions
+    assert questions[1].related_refs in ((), ("NEW_001",))
+
+
+def test_scratch_authoring_link_rejection_carries_legal_handles():
+    contract = ScratchLinkWireContract(
+        handles={"SCR_001": "scratch-one", "SCR_002": "scratch-two"}
+    )
+    with pytest.raises(ValueError) as raised:
+        contract.parse_compile(
+            json.dumps(
+                {
+                    "from_handle": "SCR_001",
+                    "to_handle": "SCR_009",
+                    "relation_hint": "supports",
+                }
+            )
+        )
+    assert getattr(raised.value, "code", "") == "SCRATCH_WIRE_REFERENCE_INVALID"
+    diagnostic = diagnostic_from_error(
+        contract.contract_id, raised.value, contract.model_json_schema()
+    )
+    assert diagnostic.rejected_handle == "SCR_009"
+    assert diagnostic.legal_handles == ("SCR_001", "SCR_002")
+    assert diagnostic.omission_or_unknown_legal is False
+    assert "one of" in diagnostic.allowed
