@@ -9,3 +9,13 @@ Provider configuration saved. Qualification remains an explicit action.
 Next action: deepreason qualify
 setup_rc=0
 Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+DOCTOR_REPORT_PAIR_UNQUALIFIED at /pairs/3/qualified: production-contract doctor report contains an unqualified pair
+Full-battery qualification failed; running the shallow-fitness battery (at most 18 provider calls).
+{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"glm-5.2","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+qualify_rc=0 qualify_seconds=1565
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":false,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"glm-5.2","model_revision":"glm-5.2","route_id":"provider-profile-2b0b8d5e80f8ceaf2bdb626e"},"credential_present":true,"qualification_state":"ready_shallow","next_action":"deepreason reason --shallow \"YOUR QUESTION\""}
+reason_rc=1 reason_seconds=2
+run_id= problem_id= state=
+=== glm end 2026-07-27T15:57:29Z ===
+=== glm RETRY start 2026-07-27T16:24:56Z ===
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
