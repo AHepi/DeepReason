@@ -41,3 +41,13 @@ run_id= problem_id= state=
 === kimi LADDER end 2026-07-27T18:33:20Z ===
 === kimi LADDER start 2026-07-27T18:47:43Z ===
 Qualification will test ollama/kimi-k2.6; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+{"cache_reused":false,"maximum_expected_provider_calls":1100,"model_id":"kimi-k2.6","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"87eb4bcc29f38bb7a103b6d8fb399f8880a95d0470cae81d1ceeda5aae2b5f33","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=7937
+{"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"kimi-k2.6","model_revision":"kimi-k2.6","route_id":"provider-profile-3cb92ff4986f4786fc8ad2f6"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
+reason_rc=4 reason_seconds=1086
+run_id=run-d648ed914af6d65ce81cbd7998309307 problem_id= state=failed
+=== kimi LADDER end 2026-07-27T21:18:07Z ===
+=== kimi BUDGETED start 2026-07-27T21:19:31Z ===
+reason_rc=1
+run_id= problem_id= state=
+=== kimi BUDGETED end 2026-07-27T21:19:32Z ===
