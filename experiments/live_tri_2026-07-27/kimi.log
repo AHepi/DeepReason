@@ -1,0 +1,11 @@
+=== kimi (kimi-k2.6) start 2026-07-27T15:31:19Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_tri_2026-07-27/kimi/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+Qualification will test ollama/kimi-k2.6; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.

@@ -1,0 +1,17 @@
+context_window_tokens: 131072
+credential_env: OLLAMA_API_KEY
+endpoint: https://ollama.com/v1
+family: kimi
+logprobs: false
+maximum_completion_tokens: 8192
+model_id: kimi-k2.6
+model_profile: standard
+model_revision: kimi-k2.6
+output_mechanism: json_text
+output_mode: json_object
+profile_digest: 1393406b822b5300f88c878d6f6c1ac6faab343a8367f94813b42e155120960e
+provider: ollama
+reasoning: null
+schema: deepreason-provider-profile.v1
+temperature: null
+timeout_s: 120

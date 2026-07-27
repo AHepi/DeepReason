@@ -27,3 +27,6 @@ runs/
 
 # Transient validation-study checkpoint (durable output is validation_report.json)
 experiments/results/validation_checkpoint*.json
+
+# Live-rig credential env files (never committed)
+experiments/live_tri_2026-07-27/env
