@@ -808,6 +808,20 @@ class LLMAdapter:
                 example=minimal_example(wire_contract),
                 aliases=alias_labels,
             )
+        if conjecture_context is not None:
+            # The committed receipt promises these exact bytes reach the
+            # provider exactly once; any transform that cuts or duplicates
+            # them (e.g. a presentation clip re-applied to an allocated
+            # pack) must fail here, before dispatch, not post-hoc in
+            # verification.
+            advisory_text = self.blobs.get(
+                conjecture_context.rendered_context_ref
+            ).decode("utf-8")
+            if prompt.count(advisory_text) != 1:
+                raise ValueError(
+                    "rendered provider request must contain the exact "
+                    "advisory context once"
+                )
         _enforce_request_envelope(role, prompt, lease)
         return prompt, wire_contract, lease, endpoint, profile
 

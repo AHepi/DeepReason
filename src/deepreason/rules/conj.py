@@ -35,7 +35,7 @@ from deepreason.llm.adapter import RequestEnvelopeExceeded, WorkflowAuthorizatio
 from deepreason.llm.contracts import CandidateRef, ConjectureCandidate, ConjecturerOutput
 from deepreason.llm.endpoints import EndpointError
 from deepreason.llm.firewall import EndpointLease, RouteFirewallError
-from deepreason.llm.packs import aliases_for_pack, render_conj_pack
+from deepreason.llm.packs import AllocatedPack, aliases_for_pack, render_conj_pack
 from deepreason.llm.repair import SchemaRepairError
 from deepreason.llm.wire import (
     AliasTable,
@@ -1277,7 +1277,16 @@ def conj(
                 raise ValueError(
                     "v6 Conj pack must contain canonical scratch context once"
                 )
-            pack = pack.replace(canonical_scratch_text, v6_scratch_rendered_text, 1)
+            # str operations demote the AllocatedPack marker; without it the
+            # adapter re-applies the profile's aggregate prefix clip to a pack
+            # PackIR already budgeted section-by-section, silently cutting the
+            # sealed advisory context mid-JSON out of the dispatched prompt.
+            # Every post-allocation insertion below is deliberate, separately
+            # byte-accounted in its transaction context plan, and bounded by
+            # the request envelope, so the allocation marker must survive.
+            pack = AllocatedPack(
+                pack.replace(canonical_scratch_text, v6_scratch_rendered_text, 1)
+            )
         except Exception:
             abandon_v6_context_preissue()
             raise
@@ -1298,9 +1307,9 @@ def conj(
                     f"{alias}: {item.description}\n" + canonical_json(item.value).decode("utf-8")
                 )
             v6_simulation_rendered_text = "\n".join(sealed_lines)
-            pack += v6_simulation_rendered_text
+            pack = AllocatedPack(pack + v6_simulation_rendered_text)
         if control.scratch_authoring.enabled:
-            pack += "\n\n" + V6_SCRATCH_WORKSHOP_PROMPT
+            pack = AllocatedPack(pack + "\n\n" + V6_SCRATCH_WORKSHOP_PROMPT)
         source_values = list(harness.state.artifacts)
         if dossier_receipt is not None:
             source_values.extend(dossier_receipt.selected_source_ids)

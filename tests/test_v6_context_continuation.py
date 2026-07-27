@@ -635,6 +635,154 @@ def test_repaired_parent_grants_and_dispatches_continuation(tmp_path):
     assert verify_root(root)["violations"] == []
 
 
+_WIDE_DESCRIPTION = (
+    "Stretch a delayed-feedback mechanism imaginatively. "
+    + "An imaginative delayed-feedback resonance corridor keeps stretching. "
+    * 200
+)
+
+
+def _seed_wide(harness: Harness):
+    """Seed like _seed but with a problem wide enough to exceed the clip.
+
+    The standard profile's presentation clip is pack_tokens_max * 4 chars;
+    a non-droppable, non-compressible problem section larger than that
+    pushes every later pack section (the sealed advisory context included)
+    past the clip boundary.
+    """
+
+    harness.register_commitment(
+        Commitment(id="k-v6-context", eval="predicate:len(content) > 0")
+    )
+    problem = harness.register_problem(
+        Problem(
+            id="pi-v6-context",
+            description=_WIDE_DESCRIPTION,
+            criteria=["k-v6-context"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}
+            ),
+        )
+    )
+    scratch = ScratchService(harness)
+    provenance = ScratchProvenanceV1(actor="user", origin="v6-context-test")
+    focus = scratch.create_block(
+        {"content": "Delayed feedback is the root imaginative fragment."},
+        provenance.model_copy(update={"formal_artifact_refs": [problem.id]}),
+    )
+    return problem, focus
+
+
+def test_wide_allocated_pack_dispatches_advisory_context_intact(tmp_path):
+    """Mirror live run-646f41b8 seq 565: the v6 post-allocation pack edits
+    (model-facing context replace, sealed appends) demoted the AllocatedPack
+    marker to plain str, so the adapter re-applied the standard profile's
+    aggregate prefix clip to a pack PackIR had already budgeted and cut the
+    sealed advisory context mid-JSON out of the actually dispatched prompt.
+    """
+
+    from deepreason.evidence import (
+        AttachedSourceProvenanceV1,
+        EvidenceDossierV1,
+        RunInputManifestV2,
+        RunInputProblemV2,
+        bind_run_input,
+    )
+    from deepreason.invariants import verify_root
+    from deepreason.llm.profiles import PROFILES, ModelProfile
+    from deepreason.run_manifest import bind_run_manifest
+
+    root = tmp_path / "wide-pack"
+    commitment = Commitment(
+        id="k-v6-context", eval="predicate:len(content) > 0"
+    )
+    dossier = EvidenceDossierV1.create(
+        problem_ref="pi-v6-context",
+        sources=(),
+        total_byte_count=0,
+        creation_provenance=AttachedSourceProvenanceV1(
+            supplied_by="wide pack fixture",
+            acquisition_method="pre-freeze construction",
+        ),
+    )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2.from_commitments(
+            id="pi-v6-context",
+            description=_WIDE_DESCRIPTION,
+            criteria=(commitment,),
+        ),
+        evidence_dossier_digest=dossier.dossier_digest,
+    )
+    bind_run_input(run_input, dossier, root)
+    config = _config()
+    manifest = _manifest(config)
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=manifest.control_plane_policy,
+        inquiry_capability_policy=InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2"
+        ),
+        run_input_digest=run_input.run_input_digest,
+    )
+    bind_run_manifest(manifest, root)
+    harness = Harness(root)
+    _seed_wide(harness)
+    adapter, prompts = _adapter(harness, manifest, [_abstention()])
+
+    assert _run(harness, manifest, config, adapter) == []
+
+    (call,) = [
+        event.llm for event in harness.log.read() if event.llm is not None
+    ]
+    context = call.conjecture_context
+    assert context is not None
+    rendered = harness.blobs.get(context.rendered_context_ref).decode("utf-8")
+    clip_chars = PROFILES[ModelProfile.STANDARD].pack_tokens_max * 4
+    # The scenario is only probative when the clip would have bitten.
+    assert len(prompts[0]) > clip_chars + len(rendered)
+    assert prompts[0].count(rendered) == 1
+    durable_prompt = harness.blobs.get(
+        call.attempt_trace[0].prompt_ref
+    ).decode("utf-8")
+    assert durable_prompt == prompts[0]
+    assert verify_root(root)["violations"] == []
+
+
+def test_demoted_pack_with_advisory_context_fails_closed_before_dispatch(
+    tmp_path, monkeypatch
+):
+    """If the allocation marker is ever lost again, the adapter must refuse
+    to dispatch a prompt whose sealed advisory context was cut or duplicated
+    by the re-applied presentation clip, instead of recording a corrupted
+    dispatch for post-hoc verification to find."""
+
+    config = _config()
+    manifest = _manifest(config)
+    harness = Harness(tmp_path / "demoted")
+    _seed_wide(harness)
+    adapter, prompts = _adapter(harness, manifest, [])
+
+    class _NeverAllocated(str):
+        pass
+
+    monkeypatch.setattr(
+        "deepreason.llm.adapter.AllocatedPack", _NeverAllocated
+    )
+
+    with pytest.raises(ValueError, match="exact advisory context once"):
+        _run(harness, manifest, config, adapter)
+    assert prompts == []
+    assert all(
+        item.provider_attempts == {}
+        for item in harness.workflow_state.transaction_work.values()
+    )
+    Harness(harness.root)
+
+
 def _route_lease(manifest) -> RouteLeaseRefV1:
     route = manifest.roles["conjecturer"][0]
     return RouteLeaseRefV1(
