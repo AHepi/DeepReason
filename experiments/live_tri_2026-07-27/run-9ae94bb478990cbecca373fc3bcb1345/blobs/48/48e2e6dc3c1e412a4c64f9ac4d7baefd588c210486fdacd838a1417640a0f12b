@@ -1,0 +1,48 @@
+{
+  "candidate": {
+    "claim": "The fetch budget should be denominated in both requests and bytes, with exhaustion recorded as a typed auditable terminal state via a non-bypassable guard in the fetch loop.",
+    "mechanism": "Implement a dual-counter budget (request count and total bytes received) that is decremented synchronously after each fetch. The fetch loop is wrapped in a guard that checks both counters before each fetch; if either counter is zero, the agent transitions to a terminal state with a unique type identifier and logs the budget parameters and causal trigger. The log is append-only and records exact bytes received per fetch to ensure deterministic replay.",
+    "counterconditions": [
+      "If the agent can make requests with unpredictable byte costs, a pure request-count budget may be insufficient to prevent resource exhaustion.",
+      "If the agent compresses or transforms fetched data, byte counting may diverge across replays unless raw bytes are logged.",
+      "If the agent has write access to its own code or budget counters, the guard may be bypassed.",
+      "If the environment provides asynchronous fetch APIs, synchronous budget enforcement may be impossible."
+    ],
+    "typicality": 0.8,
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "shared_structure": [
+        "Both involve a finite resource that must be monitored",
+        "Both require a clear terminal state upon exhaustion",
+        "Both need to prevent silent degradation"
+      ],
+      "disanalogies": [
+        "Fuel is physical; fetch budget is logical",
+        "Fuel consumption is continuous; fetch budget is discrete"
+      ],
+      "transfer_claims": [
+        "A typed terminal state is analogous to a fuel warning light",
+        "Budget counters are analogous to fuel level sensors"
+      ],
+      "overturn_conditions": [
+        "If the agent can operate safely in a degraded mode without breaking replayability",
+        "If the cost of logging exceeds the cost of fetches"
+      ]
+    },
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  },
+  "abstention": null
+}

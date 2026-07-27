@@ -1,0 +1,19 @@
+{
+  "abstention": null,
+  "candidate": {
+    "claim": "The fetch budget must be denominated in both requests and bytes, and exhaustion must be recorded as a typed terminal state in the agent's log, enforced by a non-bypassable guard in the fetch loop.",
+    "mechanism": "A dual-counter system tracks request count and total bytes received. Before each fetch, a guard checks both counters against their limits; if either limit is exceeded, the agent transitions to a 'BUDGET_EXHAUSTED' terminal state, logging the counter values and the triggering fetch. The terminal state halts all further actions and emits an auditable event. During replay, the logged byte counts are used instead of re-fetching to ensure determinism.",
+    "counterconditions": [
+      "If the agent can modify its own code or counters, the guard may be circumvented.",
+      "If responses are compressed and byte counts vary due to compression algorithms, replay may diverge unless the exact bytes received are logged and used for budget accounting.",
+      "If the agent uses a cache, the policy must specify whether cache hits count against the budget; otherwise, the agent could silently degrade by relying on stale cache."
+    ],
+    "typicality": 0.7,
+    "optional_refs": ["SRC_001", "SRC_002"],
+    "analogy": null,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": ["SRC_001", "SRC_002"]
+    }
+  }
+}

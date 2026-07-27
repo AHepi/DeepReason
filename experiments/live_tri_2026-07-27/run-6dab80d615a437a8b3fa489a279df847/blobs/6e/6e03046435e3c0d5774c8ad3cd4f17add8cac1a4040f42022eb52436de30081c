@@ -1,0 +1,37 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-198b501b3048f670ba991818c4f4c854) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A reasoning system halts a run when its token budget is exhausted. State the precise conditions under which such a halted run can later be resumed without corrupting the append-only identity of its recorded events, and the cases in which resumption must stay refused.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@c1c350f086d348cec88d0e15: program:reasoning_observation_pending
+- reason-counter@ec20fe9ef206a04cb40fc6f1: program:reasoning_observation_pending
+- reason-counter@bc64b81e9cd127f1db176cef: program:reasoning_observation_pending
+- reason-counter@d0446fdb8f4a291a8173216f: program:reasoning_observation_pending
+- reason-counter@d696f33b86664f204b8c2d75: program:reasoning_observation_pending
+- reason-counter@fc515a8f3dc1d7c1c035f35d: program:reasoning_observation_pending
+- reason-counter@ad6e55eaa4cbfa161fddceb0: program:reasoning_observation_pending
+- reason-counter@bf262715cf0ec6b747e21d9b: program:reasoning_observation_pending
+- reason-counter@08f979eca159c52946a41f81: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is always safe when the system follows pure event sourcing: all state is derivable by replaying the append-only log, the last event is complete, and a write-budget guard prevented initiating any event that could not be completed within remaining tokens. Resumption is refused when the write-budget guard was absent, failed, or when the last event is incomplete.","counterconditions":[{"case":"The write-budget guard was not implemented or was bypassed.","eval":"observation"},{"case":"An event write was initiated with insufficient tokens and partially persisted.","eval":"observation"},{"case":"The replay function is non-deterministic (depends on wall-clock time, external APIs, or randomness not captured in the log).","eval":"observation"},{"case":"The log format is not self-describing, so replay cannot determine where the last complete event ends.","eval":"observation"},{"case":"External side effects (network calls, file writes) occurred during the original run and cannot be re-derived on replay.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"In event sourcing, the log IS the state. A write-budget guard checks remaining tokens before beginning an event write and halts cleanly if insufficient, guaranteeing no partial writes. Replay reconstructs state deterministically from the complete log. Resumption simply continues from the replayed state, appending with the next identity. The guard is the causal mechanism that makes clean halts guaranteed rather than accidental.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c1c350f086d348cec88d0e15, reason-counter@ec20fe9ef206a04cb40fc6f1, reason-counter@bc64b81e9cd127f1db176cef, reason-counter@d0446fdb8f4a291a8173216f, reason-counter@d696f33b86664f204b8c2d75
+
+TARGET SRC_002
+{"analogy":null,"claim":"Resumption safety depends on the distinction between budget-exhaustion halts and all other halt causes. Budget-exhaustion halts are resumable iff the event log maintains a monotonic, content-addressed identity chain (each event's ID is a hash of its content plus the prior event's ID) and the halt did not interrupt a write. Any halt caused by crash, power loss, or process kill\u2014rather than graceful budget exhaustion\u2014must be refused resumption pending a full integrity audit, because the causal mechanism of the halt differs.","counterconditions":[{"case":"The system claims graceful budget exhaustion but actually crashed due to OOM while checking the budget (mechanism mismatch).","eval":"observation"},{"case":"The content-addressed chain is valid but an event was silently dropped (valid chain over incomplete data).","eval":"observation"},{"case":"A crash occurred but the storage layer guarantees atomic writes (e.g., WAL with fsync), making the crash halt equivalent to a clean halt.","eval":"observation"},{"case":"The budget-exhaustion halt path itself has a bug that can leave partial writes.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A content-addressed identity chain makes append-only integrity verifiable: tampering with any event breaks the chain. Graceful budget exhaustion is a controlled stop that can guarantee no in-progress write. Crash halts lack this guarantee because the process may have been mid-write. The distinction matters because the causal mechanism of the halt determines whether the log tail is a trusted boundary. Budget exhaustion is a planned stop; crashes are unplanned and require audit before trust can be restored.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@fc515a8f3dc1d7c1c035f35d, reason-counter@ad6e55eaa4cbfa161fddceb0, reason-counter@bf262715cf0ec6b747e21d9b, reason-counter@08f979eca159c52946a41f81
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

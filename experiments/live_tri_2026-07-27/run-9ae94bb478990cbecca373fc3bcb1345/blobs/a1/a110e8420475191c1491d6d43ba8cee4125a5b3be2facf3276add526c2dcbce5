@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-df6321576d53a2bc2a125f369b7c1845) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should the fetch budget of a replayable autonomous research agent be denominated in requests, bytes, or both, and how must exhaustion be recorded so it remains a typed auditable terminal instead of a silent degradation?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@30809a54ab8b3b9f8b5c7ed8: program:reasoning_observation_pending
+- reason-counter@406930c29fa249ae253c7417: program:reasoning_observation_pending
+- reason-counter@283eaf84793fdcba7c7ed384: program:reasoning_observation_pending
+- reason-counter@ba8f9aaea25fd71294bff4ad: program:reasoning_observation_pending
+- reason-counter@59bb1172d3f59b4f4446586f: program:reasoning_observation_pending
+- reason-counter@83cca1f1049675d941f62304: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget should be denominated solely in requests, because requests are the atomic unit of agent action and the simplest to audit; exhaustion must be recorded as a typed terminal with a request counter and a signed budget policy.","counterconditions":[{"case":"If the cost per request varies wildly (e.g., some requests return megabytes, others bytes), a request-only budget fails to cap total resource consumption, leading to potential abuse or cost overruns.","eval":"observation"},{"case":"If the agent can split a logical fetch into multiple smaller requests to circumvent the budget, the request count becomes a poor proxy for actual work.","eval":"observation"},{"case":"If the environment introduces non-deterministic request failures that consume budget without progress, the terminal state may be reached without useful work, undermining the budget's purpose.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Each fetch is a discrete, countable event. A request budget sets a hard limit N. The agent increments a counter on each fetch; when counter == N, the agent enters a terminal state and logs the counter value, the policy that set N, and a hash of the policy for integrity. This causal mechanism ensures that exhaustion is a direct consequence of the agent's own action count, making it trivially replayable: given the same initial policy and environment, the agent will always exhaust at the same step. Silent degradation is avoided because the agent cannot make a fetch without decrementing a remaining budget that is checked atomically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@30809a54ab8b3b9f8b5c7ed8, reason-counter@406930c29fa249ae253c7417, reason-counter@283eaf84793fdcba7c7ed384
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be replaced by a time budget, as wall-clock time is the ultimate scarce resource; exhaustion must be recorded as a typed terminal with a timestamp and a causal log of all fetches, ensuring replayability through deterministic timeouts.","counterconditions":[{"case":"If network latency varies across replays, a time budget leads to non-deterministic behavior unless the clock is virtualized and logged, adding complexity.","eval":"observation"},{"case":"If the agent can parallelize fetches, a time budget may allow unbounded total bytes/requests, making cost hard to predict.","eval":"observation"},{"case":"If the agent's internal computation time is significant, a time budget may penalize thoughtful analysis, incentivizing rushed, low-quality fetches.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A time budget T limits the total wall-clock duration of the agent's fetch phase. The agent checks elapsed time before each fetch; if elapsed >= T, it transitions to a terminal state and logs the timestamp, the timeout policy, and the sequence of fetches with their durations. Because the agent's policy and environment responses are replayable, and the time checks are based on a monotonic clock that can be simulated or recorded, the exhaustion event is deterministic in replay (by using logged timestamps or a simulated clock). This prevents silent degradation by forcing a hard deadline, after which no further fetches are possible.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ba8f9aaea25fd71294bff4ad, reason-counter@59bb1172d3f59b4f4446586f, reason-counter@83cca1f1049675d941f62304
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

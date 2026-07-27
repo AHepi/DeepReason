@@ -1,0 +1,134 @@
+{
+  "abstention": null,
+  "candidates": [
+    {
+      "claim": "The fetch budget must be denominated in both requests and bytes, with a dual cap that triggers a typed terminal on either dimension's exhaustion, and the exhaustion event must be recorded as a deterministic, replayable state transition in the agent's audit log.",
+      "mechanism": "A dual budget creates a hard causal boundary: the agent's fetch loop checks two monotonic counters (request count and bytes received) against fixed caps before each fetch. When either counter reaches its cap, the agent transitions to a terminal 'BUDGET_EXHAUSTED' state, writing a structured record (timestamp, cap values, final counters, and the causal chain of the last fetch attempt) to the replay log. Because the caps are fixed and the counters are deterministic functions of the agent's policy and environment responses, exhaustion is a typed, auditable event that can be exactly replayed. This prevents silent degradation by making the failure mode explicit and non-negotiable.",
+      "counterconditions": [
+        "If the overhead of tracking both dimensions introduces non-determinism (e.g., byte counting depends on compression that varies across runs), the replayability guarantee breaks.",
+        "If one dimension is always the binding constraint in practice, the dual budget adds unnecessary complexity without improving safety.",
+        "If the agent can influence the byte count of responses (e.g., by requesting different encodings), the budget becomes gameable and loses its terminal property."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated solely in requests, because requests are the atomic unit of agent action and the simplest to audit; exhaustion must be recorded as a typed terminal with a request counter and a signed budget policy.",
+      "mechanism": "Each fetch is a discrete, countable event. A request budget sets a hard limit N. The agent increments a counter on each fetch; when counter == N, the agent enters a terminal state and logs the counter value, the policy that set N, and a hash of the policy for integrity. This causal mechanism ensures that exhaustion is a direct consequence of the agent's own action count, making it trivially replayable: given the same initial policy and environment, the agent will always exhaust at the same step. Silent degradation is avoided because the agent cannot make a fetch without decrementing a remaining budget that is checked atomically.",
+      "counterconditions": [
+        "If the cost per request varies wildly (e.g., some requests return megabytes, others bytes), a request-only budget fails to cap total resource consumption, leading to potential abuse or cost overruns.",
+        "If the agent can split a logical fetch into multiple smaller requests to circumvent the budget, the request count becomes a poor proxy for actual work.",
+        "If the environment introduces non-deterministic request failures that consume budget without progress, the terminal state may be reached without useful work, undermining the budget's purpose."
+      ],
+      "typicality": 0.8,
+      "optional_refs": ["SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in bytes only, as bytes directly measure the information transfer cost; exhaustion must be recorded as a typed terminal with a byte counter and a causal link to the budget policy, ensuring replayability through deterministic byte accounting.",
+      "mechanism": "Bytes are the fundamental resource consumed in network I/O. A byte budget sets a cap B. The agent sums the byte length of each response body (or a deterministic function thereof) and halts when the cumulative sum reaches B. The terminal state records the final byte count, the cap, and the sequence of response sizes. Because response sizes are determined by the environment and the agent's requests (which are part of the replayable policy), the byte counter is deterministic across replays. This prevents silent degradation by making the budget a hard physical limit that cannot be exceeded without triggering a visible, auditable stop.",
+      "counterconditions": [
+        "If per-request overhead (e.g., TLS handshake, connection setup) dominates cost, a byte budget may allow an unbounded number of requests, leading to denial-of-service or cost surprises.",
+        "If the agent can request compressed vs. uncompressed responses, byte counting becomes ambiguous unless the counting rule is fixed and environment-independent.",
+        "If the environment introduces variable metadata sizes that are not captured by a simple byte count, the budget may be inconsistent across replays."
+      ],
+      "typicality": 0.7,
+      "optional_refs": ["SRC_004"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be a dynamic cost budget that combines requests and bytes via a learned or specified cost model, and exhaustion must be recorded as a typed terminal with a full transaction history and the cost model parameters, enabling causal audit and replay.",
+      "mechanism": "A cost function C(req, bytes) maps each fetch to a scalar cost. The agent has a total cost budget K. Before each fetch, the agent estimates the cost and checks if the remaining budget suffices; if not, it enters a terminal state. The terminal record includes the sequence of actual costs incurred, the cost model, and the remaining budget. Because the cost model is part of the agent's policy and the costs are computed deterministically from request and response properties, the exhaustion point is replayable. This mechanism unifies the two dimensions and can adapt to different resource profiles, while still providing a hard, auditable stop.",
+      "counterconditions": [
+        "If the cost model is inaccurate or can be gamed by the agent (e.g., by crafting requests that appear cheap but are expensive), the budget fails to constrain real resource usage.",
+        "If the cost model parameters are not fixed at the start of a run, the budget becomes non-deterministic and unreplayable.",
+        "If the cost model is too complex, the audit trail becomes opaque, defeating the purpose of a typed terminal."
+      ],
+      "typicality": 0.5,
+      "optional_refs": ["SRC_001", "SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be replaced by a time budget, as wall-clock time is the ultimate scarce resource; exhaustion must be recorded as a typed terminal with a timestamp and a causal log of all fetches, ensuring replayability through deterministic timeouts.",
+      "mechanism": "A time budget T limits the total wall-clock duration of the agent's fetch phase. The agent checks elapsed time before each fetch; if elapsed >= T, it transitions to a terminal state and logs the timestamp, the timeout policy, and the sequence of fetches with their durations. Because the agent's policy and environment responses are replayable, and the time checks are based on a monotonic clock that can be simulated or recorded, the exhaustion event is deterministic in replay (by using logged timestamps or a simulated clock). This prevents silent degradation by forcing a hard deadline, after which no further fetches are possible.",
+      "counterconditions": [
+        "If network latency varies across replays, a time budget leads to non-deterministic behavior unless the clock is virtualized and logged, adding complexity.",
+        "If the agent can parallelize fetches, a time budget may allow unbounded total bytes/requests, making cost hard to predict.",
+        "If the agent's internal computation time is significant, a time budget may penalize thoughtful analysis, incentivizing rushed, low-quality fetches."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in expected information gain units, where each fetch must justify its cost in terms of reducing uncertainty about the task; exhaustion is recorded as a typed terminal when the cumulative expected gain falls below a threshold, with a full audit trail of gain estimates.",
+      "mechanism": "The agent maintains a Bayesian belief state over task-relevant variables. Before each fetch, it computes the expected information gain (e.g., reduction in entropy) of the prospective response. A budget of total information gain G is set. The agent subtracts the actual gain (or a lower bound) after each fetch. When the remaining gain budget is insufficient to justify any available fetch, the agent enters a terminal state and logs the belief state, gain estimates, and budget policy. Because the gain estimates are computed by a deterministic function of the agent's current knowledge and the fetch specification, the exhaustion point is replayable given the same initial knowledge and environment. This aligns the budget with the agent's epistemic goals, preventing silent degradation by making the stopping criterion explicit and value-driven.",
+      "counterconditions": [
+        "If the information gain estimates are poorly calibrated, the agent may exhaust its budget prematurely or continue fetching with negligible value.",
+        "If the environment can adversarially manipulate the apparent gain (e.g., by providing responses that seem informative but are not), the budget becomes gameable.",
+        "If the computational cost of estimating gain is high, the budget mechanism itself may consume significant resources, undermining its purpose."
+      ],
+      "typicality": 0.2,
+      "optional_refs": ["SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "context_request": null,
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Silent degradation occurs when an agent continues to operate after its fetch budget is exhausted but does so in a degraded mode (e.g., using stale cache, making cheaper but less informative requests) without signaling the budget violation. This is dangerous because it breaks the replayability contract: the agent's behavior diverges from the budgeted policy without an auditable event. A typed terminal is a hard state transition that is recorded in the log with a unique type identifier, the budget parameters, and the causal trigger. To guarantee this, the budget check must be a non-bypassable guard in the fetch loop, and the terminal state must be the only exit from that loop when the guard fails.",
+          "possible_next_move": "Explore how to enforce non-bypassability in a Turing-complete agent policy language.",
+          "unfinished": "Need to consider how the agent might learn to circumvent the guard if it has write access to its own code.",
+          "why_keep_this": "Core distinction between silent degradation and typed terminal."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Replayable audit trail requires that the exhaustion event be a deterministic function of the initial policy and the environment responses. This means the budget counters must be updated synchronously with fetch completion, and their values must be logged as part of the state. If the agent can fetch asynchronously or if the byte count depends on non-deterministic compression, the replay may diverge. One solution: log the exact bytes received on each fetch, and during replay, use those logged values instead of re-fetching. This turns the audit trail into a 'record-and-replay' system where the terminal state is simply a marker in the log.",
+          "possible_next_move": "Design a log format that captures budget counters and terminal markers in a way that is both human-auditable and machine-verifiable.",
+          "unfinished": null,
+          "why_keep_this": "Essential for the 'typed auditable terminal' requirement."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_002",
+        "relation_hint": "requires",
+        "because": "A typed terminal is only auditable if the audit trail is replayable.",
+        "direction": "directed"
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "How can we measure the 'true' cost of a fetch in a way that is invariant across network conditions and replay environments?",
+        "related_refs": ["NEW_001"]
+      },
+      {
+        "question": "What cryptographic commitments can ensure that the budget policy has not been tampered with during a run?",
+        "related_refs": ["NEW_002"]
+      }
+    ],
+    "cluster_suggestions": [],
+    "revisions": []
+  },
+  "simulation_proposals": []
+}

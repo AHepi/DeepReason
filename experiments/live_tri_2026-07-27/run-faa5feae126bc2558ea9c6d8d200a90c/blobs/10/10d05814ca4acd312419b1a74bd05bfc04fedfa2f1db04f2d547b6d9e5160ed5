@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@a619d3e9e0ccc643160efba5: program:reasoning_observation_pending
+- reason-counter@f82421a3c1f8e0088ee83a7b: program:reasoning_observation_pending
+- reason-counter@3f9c7a39126bf3f7c1f375d3: program:reasoning_observation_pending
+- reason-counter@a2d619e6a47945a34c6c3a28: program:reasoning_observation_pending
+- reason-counter@132e09a1e44d9ccae5866f38: program:reasoning_observation_pending
+- reason-counter@f65f3a8053316bc23a7cd311: program:reasoning_observation_pending
+- reason-counter@575bfa8aa4c0d496cdaa418b: program:reasoning_observation_pending
+- reason-counter@9d451cf66a4560b33deaa46f: program:reasoning_observation_pending
+- reason-counter@ef09f6faffd91c1ca10a106c: program:reasoning_observation_pending
+- reason-counter@bb97f00ec426ff23d27b98ed: program:reasoning_observation_pending
+- reason-counter@47e1369003fdfbcb40252c4e: program:reasoning_observation_pending
+- reason-counter@525a4d1dd70b7530effd4091: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest protocol is an epistemic tombstone with monotonic evidence generations that forbids reclamation from ever writing into a generation that has produced evidence; it must durably record a generation registry and cryptographic commitments to each generation's output.","counterconditions":[{"case":"Generation counter overflow or exhaustion.","eval":"observation"},{"case":"Storage exhaustion because completed generations cannot be reclaimed even when their evidence is long obsolete.","eval":"observation"},{"case":"Registry corruption causes generation aliasing, permitting write-after-reclaim displacement.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Evidence is tagged with a monotonic generation counter (problem-id, gen, causal-hash). Reclamation may allocate new generations but may never reclaim storage occupied by a generation that produced at least one evidence artifact. The protocol durably records a generation registry mapping problem-ids to current generations and completed-evidence counts per generation. This transforms silent displacement from an overwrite risk into an explicit allocation failure, because the address space of 
+commitments: reasoning-envelope-wf, reason-counter@a619d3e9e0ccc643160efba5, reason-counter@f82421a3c1f8e0088ee83a7b, reason-counter@3f9c7a39126bf3f7c1f375d3
+
+TARGET SRC_002
+{"analogy":null,"claim":"The safest protocol is a consensus-backed session lease with a mandatory linearizable proof-of-absence query against the evidence namespace; it must durably record the lease token, the bound nameset, and the causal timestamp of the absence query.","counterconditions":[{"case":"Consensus unavailability indefinitely blocks reclamation.","eval":"observation"},{"case":"Clock skew between lease holder and consensus cluster causes premature expiry.","eval":"observation"},{"case":"A delayed network partition allows a zombie workspace holder to commit evidence after proof-of-absence is issued.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The workspace holder maintains a renewable session lease in a consensus-backed lease store. The lease records the exact set of evidence names the workspace may modify. Reclamation is authorized only after a linearizable proof-of-absence query confirms no committed evidence exists for those names under the current lease generation. The protocol durably records the lease grant, the nameset, and the causal timestamp of the proof-of-absence query. Because reclamation cannot proceed without consensus-validated absence,
+commitments: reasoning-envelope-wf, reason-counter@a2d619e6a47945a34c6c3a28, reason-counter@132e09a1e44d9ccae5866f38, reason-counter@f65f3a8053316bc23a7cd311
+
+TARGET SRC_003
+{"analogy":null,"claim":"The safest protocol treats the workspace as a Merkle-DAG of pending side effects with content-addressed evidence nodes; it must durably record the root hash of the problem-specific DAG and the set of merged evidence nodes.","counterconditions":[{"case":"The DAG storage layer permits node mutation rather than strict append-only behavior.","eval":"observation"},{"case":"Garbage collection is not reachability-safe and may prune evidence nodes that lack active references.","eval":"observation"},{"case":"The merge function for unmaterialized effects is non-deterministic across reclamation attempts.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Instead of a mutable workspace, all pending mutations are unmerged leaves in a Merkle-DAG. Completed evidence is a node in this DAG with a stable cryptographic address. Reclamation never overwrites; it simply garbage-collects orphaned unmerged leaves that are not ancestors of any evidence node. Because evidence is content-addressed, there is no file path or mutable slot to displace. The protocol durably records the root hash of the problem-specific DAG and the set of merged evidence nodes at the time of an
+commitments: reasoning-envelope-wf, reason-counter@575bfa8aa4c0d496cdaa418b, reason-counter@9d451cf66a4560b33deaa46f, reason-counter@ef09f6faffd91c1ca10a106c
+
+TARGET SRC_004
+{"analogy":null,"claim":"The safest protocol is a deterministic replay barrier combined with an exhaustive oracle-boundary audit log; it must durably record the replay barrier state and a total-ordered log of all non-deterministic inputs.","counterconditions":[{"case":"The oracle audit log is incomplete due to implicit non-determinism such as interrupt timing or memory layout variations.","eval":"observation"},{"case":"Replay cost from the barrier exceeds operational time bounds, making recomputation infeasible.","eval":"observation"},{"case":"The workspace depends on external state that changed between the original computation and replay.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Since the workspace is deterministic per-problem, completed evidence is theoretically reproducible. The danger of silent displacement arises only if the workspace ingested non-reproducible oracle inputs (wall-clock time, hardware randomness, external sensory data). The protocol durably records a deterministic replay barrier (the exact problem input state) plus an exhaustive audit log of all oracle interactions. Reclamation rebuilds the workspace by replaying from the barrier using the
+commitments: reasoning-envelope-wf, reason-counter@bb97f00ec426ff23d27b98ed, reason-counter@47e1369003fdfbcb40252c4e, reason-counter@525a4d1dd70b7530effd4091
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

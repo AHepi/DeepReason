@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-c55fa4496986e41d5a6b014c4fc37eb5) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A process crashes while holding a deterministic per-problem workspace and leaves no terminal record. Which reclamation protocol is safest, guaranteed never to silently displace completed evidence, and what exactly must that protocol durably record?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@b963abb5e4d95b41d0c5ecee: program:reasoning_observation_pending
+- reason-counter@d8697afaa138a46b6c634427: program:reasoning_observation_pending
+- reason-counter@a77ff595c1d4f21e827782dc: program:reasoning_observation_pending
+- reason-counter@9108b465a61326c2fa974928: program:reasoning_observation_pending
+- reason-counter@a28e27f5441a24d0d45667ce: program:reasoning_observation_pending
+- reason-counter@48008b531c88b677701d0e30: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The safest protocol is an epoch-versioned intent log with an immutable, epoch-partitioned evidence store; it must durably record per problem ID the workspace epoch, the evidence destination binding, and a commit or abandon marker.","counterconditions":[{"case":"The durable log experiences a split-brain or replication lag, causing reclamation to miss a recently committed intent.","eval":"observation"},{"case":"The process writes evidence to the immutable store but crashes before logging the intent, creating orphaned evidence that a later epoch might redundantly regenerate but not silently displace.","eval":"observation"},{"case":"Log compaction truncates in-flight intents before they are resolved.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Causally, silent displacement is prevented because the evidence store is append-only and keyed by (problem ID, epoch). Before writing evidence, the process appends an 'intent' record to a linearizable log. Reclamation reads the log for that problem ID: if the latest record is an uncommitted intent or absent, the protocol appends an 'abandon' marker and only then reassigns the workspace to a new epoch. If a commit marker exists, reclamation is forbidden. Because the storage keyspace is epoch-partitioned, a new process cannot overwrite previously committed evidence; the log acts as the ground-truth causal ledger of what was durably completed.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b963abb5e4d95b41d0c5ecee, reason-counter@d8697afaa138a46b6c634427, reason-counter@a77ff595c1d4f21e827782dc
+
+TARGET SRC_002
+{"analogy":null,"claim":"The safest protocol is a write-ahead undo-log with reference-counted staging directories and deterministic workspace replay; it must durably record the problem ID, sequence number, staging directory handle, pristine workspace checksum, and the promotion record.","counterconditions":[{"case":"The underlying filesystem allows partial or non-atomic promotion, exposing incomplete evidence.","eval":"observation"},{"case":"Reference count corruption causes premature staging deletion while a valid promote record exists.","eval":"observation"},{"case":"Deterministic replay from the pristine checksum fails due to undetected workspace bit-rot.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The deterministic workspace is treated as a transaction. Before mutation, the process writes an undo-log entry that captures the pristine workspace checksum. Evidence is accumulated in a staging directory. To commit, the process writes a 'promote' record linking the staging handle to the final evidence path. If a crash leaves no terminal record, reclamation reads the undo-log: a 'promote' record causes the protocol to finalize the atomic rename/ref-bind even post-crash; absent that, the staging directory is discarded and the workspace is rolled back to the pristine checksum via replay. Silent displacement is impossible because the evidence path is never written in-place; it is only exposed via the durable promotion record, so a later workspace assignment cannot collide with completed evidence.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@9108b465a61326c2fa974928, reason-counter@a28e27f5441a24d0d45667ce, reason-counter@48008b531c88b677701d0e30
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

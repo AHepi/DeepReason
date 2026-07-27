@@ -1,0 +1,9 @@
+```json
+{
+  "repair.patch.v1": {
+    "pointer": "/scratch_proposal/unresolved_questions/0/related_refs",
+    "op": "replace",
+    "value": ["SCR_002"]
+  }
+}
+```

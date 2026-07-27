@@ -1,0 +1,36 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-198b501b3048f670ba991818c4f4c854) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A reasoning system halts a run when its token budget is exhausted. State the precise conditions under which such a halted run can later be resumed without corrupting the append-only identity of its recorded events, and the cases in which resumption must stay refused.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@682537490a2c956c2c5d192e: program:reasoning_observation_pending
+- reason-counter@6ff08365d37b7a933b3f0601: program:reasoning_observation_pending
+- reason-counter@394b727f358b098149dcca83: program:reasoning_observation_pending
+- reason-counter@d925b75eaf15ff9b9a7fdf93: program:reasoning_observation_pending
+- reason-counter@c1b5b0236db8b5195c81ca7d: program:reasoning_observation_pending
+- reason-counter@e95e25244da67e693e939d65: program:reasoning_observation_pending
+- reason-counter@0d485ee577e515cdde239b92: program:reasoning_observation_pending
+- reason-counter@1f58197bb0303719b59734b6: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption should always be refused; instead, a new run must be spawned that explicitly references the halted run's event log as prior context. This eliminates all corruption risk by never mutating the original log's causal stream.","counterconditions":[{"case":"The use case requires strict run-level continuity (e.g., regulatory audit trails that demand a single run identity).","eval":"observation"},{"case":"The new run cannot access the prior log as structured input, losing causal context.","eval":"observation"},{"case":"The overhead of spawning a new run is prohibitive for the workload.","eval":"observation"},{"case":"The system's identity model does not support cross-run references.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Even with clean halts and checkpoints, resumption conflates two causal episodes (pre-halt and post-halt) under a single run identity, risking subtle corruption from environmental drift, configuration changes, or non-determinism accumulated during the pause. A new run with a fresh identity that cites the prior log as input preserves the original log's append-only identity absolutely, while the new log's identity is independently clean. The cost is losing run-level continuity, but the benefit is eliminating an entire class of corruption modes.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@682537490a2c956c2c5d192e, reason-counter@6ff08365d37b7a933b3f0601, reason-counter@394b727f358b098149dcca83, reason-counter@d925b75eaf15ff9b9a7fdf93
+
+TARGET SRC_002
+{"analogy":null,"claim":"Resumption is safe iff the halt was triggered by a pre-write token-reservation check (the system verified sufficient tokens before starting each event write) AND the resuming process validates the log tail integrity (checksum/hash chain) before appending. Resumption is refused if the halt was triggered by a mid-write exhaustion (the reservation check failed or was absent) or if tail integrity validation fails.","counterconditions":[{"case":"The reservation check uses an estimated token cost that can be exceeded by actual write cost (estimate error).","eval":"observation"},{"case":"The hash chain uses a weak algorithm vulnerable to collision during the pause window.","eval":"observation"},{"case":"The integrity check validates structure but not semantic consistency (events are well-formed but causally disconnected).","eval":"observation"},{"case":"The reservation check was present but the system also performed non-event writes (e.g., temporary files) that were interrupted.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A pre-write reservation check creates a causal guarantee: the system never enters a state where an event write is in progress at exhaustion. This makes every halt point a safe resumption boundary by construction. Tail integrity validation on resumption detects any corruption that occurred during the pause (storage decay, external mutation). Together, these two mechanisms form a sufficient condition: the former guarantees no partial writes at halt, the latter detects post-halt corruption. Without either, the guarantee collapses.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@c1b5b0236db8b5195c81ca7d, reason-counter@e95e25244da67e693e939d65, reason-counter@0d485ee577e515cdde239b92, reason-counter@1f58197bb0303719b59734b6
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

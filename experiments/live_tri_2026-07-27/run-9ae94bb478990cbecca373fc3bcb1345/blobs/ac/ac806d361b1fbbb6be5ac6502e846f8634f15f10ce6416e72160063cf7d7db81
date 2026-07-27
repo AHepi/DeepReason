@@ -1,0 +1,20 @@
+{
+  "abstention": null,
+  "candidate": {
+    "claim": "The fetch budget must be denominated in both requests and bytes, and exhaustion must be recorded as a typed terminal event in the log with a non-bypassable guard, ensuring replayability and auditability.",
+    "mechanism": "A dual counter tracks both request count and total bytes fetched. Before each fetch, the agent checks if either counter would exceed its limit; if so, it transitions to a terminal state, logging the event with a unique type identifier, the budget parameters, and the causal fetch attempt. The fetch loop is the only exit point, and the guard is implemented in the interpreter, not in the agent's policy, preventing circumvention.",
+    "counterconditions": [
+      "If the agent can modify its own code or budget counters, the guard can be bypassed.",
+      "If the environment provides non-deterministic byte counts (e.g., due to compression), replay may diverge unless exact bytes are logged.",
+      "If the agent can perform useful work without fetching (e.g., using cached data), a hard terminal may be too restrictive, leading to unnecessary halting."
+    ],
+    "typicality": 0.8,
+    "optional_refs": [
+      "SRC_002",
+      "SRC_003"
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}

@@ -1,39 +1,87 @@
-tri-run summary 2026-07-27T17:53:36Z
-== glm ==
-Let's set DeepReason up (one time, ~30 seconds).
-setup_rc=0
-Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"glm-5.2","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"shallow"}
-qualify_rc=0 qualify_seconds=1565
-reason_rc=1 reason_seconds=2
-run_id= problem_id= state=
-Qualification will test ollama/glm-5.2; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"glm-5.2","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"shallow"}
-qualify_rc=0 qualify_seconds=1896
-reason_rc=1 reason_seconds=1
-run_id= problem_id= state=
-Qualification will test ollama/glm-5.2; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":1100,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"0dbf99501156f1c30ed89cee935281aad5b41e80c9840aa5b9c2d3c264a84c4f","schema":"deepreason-qualification-result.v1","tier":"full"}
-== kimi ==
-Let's set DeepReason up (one time, ~30 seconds).
-setup_rc=0
-Qualification will test ollama/kimi-k2.6; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"kimi-k2.6","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"42d05ab73949cfc58e2420cfe0afd6c46a7e591251d49b26460f920dd32cb866","schema":"deepreason-qualification-result.v1","tier":"full"}
-qualify_rc=0 qualify_seconds=7905
-reason_rc=4 reason_seconds=629
-run_id=run-142212b0de35178d2ec455b21935bc89 problem_id= state=failed
-== deepseek ==
-Let's set DeepReason up (one time, ~30 seconds).
-setup_rc=0
-Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
-qualify_rc=0 qualify_seconds=2258
-reason_rc=1 reason_seconds=1
-run_id= problem_id= state=
-Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 840. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":840,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
-qualify_rc=0 qualify_seconds=2603
-reason_rc=1 reason_seconds=2
-run_id= problem_id= state=
-Qualification will test ollama/deepseek-v4-pro; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
-{"cache_reused":false,"maximum_expected_provider_calls":1100,"model_id":"deepseek-v4-pro","next_action":"deepreason reason --shallow \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready_shallow","qualification_subject_digest":"e84965ead1882b19c307a67f587a6ecfe28032dae636464a7118741684c279de","schema":"deepreason-qualification-result.v1","tier":"shallow"}
+Tri-model live run — 2026-07-27
+================================
+
+Three frontier Ollama Cloud models, three harness-design problems drawn
+from the handover's parked owner decisions, run fully concurrently (one
+single-threaded root per model under the account's three-request cap).
+Per model: setup -> qualification ladder -> engaged reason -> bridge trio.
+Every claim below is backed by durable records in this directory; the
+committed run roots are the three run-*/ trees (key-scanned clean).
+
+Final outcomes
+--------------
+deepseek-v4-pro  Question: fetch budget denomination for replayable research.
+                 Tier: FULL (4th battery; first three shallow verdicts were
+                 two zero-tolerance stochastic failures plus one genuine
+                 twice-failing pair). Reason: completed
+                 (run-9ae94bb478990cbecca373fc3bcb1345). Bridge: SUCCESS,
+                 resolution conflicting_evidence — twelve accepted artifacts
+                 propose requests-only, bytes-only, both, dynamic-cost,
+                 time, and information-gain denominations; the record
+                 honestly refuses to pick a winner.
+
+glm-5.2          Question: resumable budget-exhaustion halts.
+                 Tier: FULL (3rd battery, first under the redesigned
+                 re-exercise gate). Reason: completed
+                 (run-6dab80d615a437a8b3fa489a279df847). Bridge: SUCCESS,
+                 resolution conflicting_evidence — surviving conjectures
+                 give rival resumption criteria (committed-prefix +
+                 reconstructible state + fresh budget vs atomic
+                 checkpoint-boundary pairing vs always-refuse-and-fork).
+
+kimi-k2.6        Question: crashed-workspace reclamation protocol.
+                 Tier: FULL twice (strict battery with thinking; again at a
+                 16384-token completion budget after empty-content
+                 diagnosis; the reasoning-none experiment was decisively
+                 negative and stays recorded). Reason: completed at the
+                 200k public budget ceiling
+                 (run-faa5feae126bc2558ea9c6d8d200a90c) with 24 surviving
+                 positions (generation-tracked consensus leases with
+                 proof-of-absence; conservative two-phase reclamation
+                 commitment; determinism-makes-displacement-harmless).
+                 Bridge: NOT BUILT — the operator kill interrupted the
+                 bridge worker mid-append and v6 verification now
+                 fail-closes the root (integrity_valid false), which is
+                 itself a live demonstration of this model's assigned
+                 question. The reason-run evidence stands.
+
+Harness fixes surfaced by this run (all committed with regression tests)
+------------------------------------------------------------------------
+1. Stage B composition repair convergence + process-observation marking
+   in the composition pack (from the prior session's open defect; proven
+   live by both successful bridges here).
+2. Qualification battery re-exercise: a pair failing its twenty-case
+   block redraws one fresh block (bounded at three pairs battery-wide);
+   zero-tolerance flakes no longer durably tier capable models shallow,
+   and unqualified batteries persist their sanitized doctor report.
+3. Single-element array wrapper tolerance at wire validation.
+4. Link-endpoint validation reports every violated endpoint in one
+   message, making the two-patch chain plannable.
+5. deepreason setup --reasoning exposes the neutral reasoning knob;
+   the knob binds into the qualification subject.
+6. Staged Stage A catalog batches carry their own process records
+   (batch-zero aggregation failed the fallback deterministically).
+7. Schema-name-keyed patch wrapper tolerance on repair turns.
+8. Atomic candidate child packs open with a single-slot preamble.
+
+Design evidence for the parked owner decisions
+----------------------------------------------
+- Resumption/reclamation (decisions 4a/4b): the deterministic-root
+  refusals (RUN_ALREADY_STARTED, CONTINUE_TYPED_STOP_REQUIRED), the
+  budget_denied atomic child, the 200k ceiling refusal, and the
+  fail-closed kimi bridge root are all live datapoints; the GLM and
+  kimi outputs argue for commit-boundary-anchored resumption with
+  explicit refusal otherwise, and intent-record two-phase reclamation.
+- Research fetch budgets (decision 1): deepseek's grounded output frames
+  request/byte/both as genuinely conflicting positions and isolates two
+  outside-scope questions (replay-invariant fetch cost; tamper-evident
+  budget commitments).
+
+Operational notes
+-----------------
+- The OLLAMA_API_KEY used lives only in the gitignored env file and was
+  pasted in chat; rotate it when the test period ends.
+- glm/kimi/deepseek home dirs keep provider profiles (secret-free),
+  qualification caches (including persisted unqualified doctor reports),
+  and the failed-run roots under runs/ (gitignored; the three key run
+  roots are committed as run-*/ at this directory's top level).

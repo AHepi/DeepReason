@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-df6321576d53a2bc2a125f369b7c1845) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should the fetch budget of a replayable autonomous research agent be denominated in requests, bytes, or both, and how must exhaustion be recorded so it remains a typed auditable terminal instead of a silent degradation?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@04173e17010e386230d68097: program:reasoning_observation_pending
+- reason-counter@f8b51e6fbc010398c5e55554: program:reasoning_observation_pending
+- reason-counter@5878f403fa7b128fa59ae920: program:reasoning_observation_pending
+- reason-counter@508fdadc710e23e4226837d2: program:reasoning_observation_pending
+- reason-counter@9f541474424d3e301bbd6846: program:reasoning_observation_pending
+- reason-counter@bc2d19c479809aa407cc0c02: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget should be denominated in bytes only, as bytes directly measure the information transfer cost; exhaustion must be recorded as a typed terminal with a byte counter and a causal link to the budget policy, ensuring replayability through deterministic byte accounting.","counterconditions":[{"case":"If per-request overhead (e.g., TLS handshake, connection setup) dominates cost, a byte budget may allow an unbounded number of requests, leading to denial-of-service or cost surprises.","eval":"observation"},{"case":"If the agent can request compressed vs. uncompressed responses, byte counting becomes ambiguous unless the counting rule is fixed and environment-independent.","eval":"observation"},{"case":"If the environment introduces variable metadata sizes that are not captured by a simple byte count, the budget may be inconsistent across replays.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Bytes are the fundamental resource consumed in network I/O. A byte budget sets a cap B. The agent sums the byte length of each response body (or a deterministic function thereof) and halts when the cumulative sum reaches B. The terminal state records the final byte count, the cap, and the sequence of response sizes. Because response sizes are determined by the environment and the agent's requests (which are part of the replayable policy), the byte counter is deterministic across replays. This prevents silent degradation by making the budget a hard physical limit that cannot be exceeded without triggering a visible, auditable stop.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@04173e17010e386230d68097, reason-counter@f8b51e6fbc010398c5e55554, reason-counter@5878f403fa7b128fa59ae920
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be a dynamic cost budget that combines requests and bytes via a learned or specified cost model, and exhaustion must be recorded as a typed terminal with a full transaction history and the cost model parameters, enabling causal audit and replay.","counterconditions":[{"case":"If the cost model is inaccurate or can be gamed by the agent (e.g., by crafting requests that appear cheap but are expensive), the budget fails to constrain real resource usage.","eval":"observation"},{"case":"If the cost model parameters are not fixed at the start of a run, the budget becomes non-deterministic and unreplayable.","eval":"observation"},{"case":"If the cost model is too complex, the audit trail becomes opaque, defeating the purpose of a typed terminal.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A cost function C(req, bytes) maps each fetch to a scalar cost. The agent has a total cost budget K. Before each fetch, the agent estimates the cost and checks if the remaining budget suffices; if not, it enters a terminal state. The terminal record includes the sequence of actual costs incurred, the cost model, and the remaining budget. Because the cost model is part of the agent's policy and the costs are computed deterministically from request and response properties, the exhaustion point is replayable. This mechanism unifies the two dimensions and can adapt to different resource profiles, while still providing a hard, auditable stop.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@508fdadc710e23e4226837d2, reason-counter@9f541474424d3e301bbd6846, reason-counter@bc2d19c479809aa407cc0c02
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

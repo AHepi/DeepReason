@@ -1,0 +1,35 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-df6321576d53a2bc2a125f369b7c1845) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Should the fetch budget of a replayable autonomous research agent be denominated in requests, bytes, or both, and how must exhaustion be recorded so it remains a typed auditable terminal instead of a silent degradation?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@09da746ede83312d1c37e906: program:reasoning_observation_pending
+- reason-counter@07d0fbe21969b63586f05e31: program:reasoning_observation_pending
+- reason-counter@523e190447bd9459fbc3675b: program:reasoning_observation_pending
+- reason-counter@f09b49e61fa833443fb664e8: program:reasoning_observation_pending
+- reason-counter@50c588d6abef226921a0c182: program:reasoning_observation_pending
+- reason-counter@f93896ee9b4444d1cbcfed27: program:reasoning_observation_pending
+- reason-counter@aa692fb3353dd03d2a76a17a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget must be denominated in both requests and bytes, and exhaustion must be recorded as a typed terminal event that transitions the agent to a non-fetching state, ensuring auditability and preventing silent degradation.","counterconditions":[{"case":"If the agent can perform useful work without fetching (e.g., using cached data or local computation), then a hard terminal on budget exhaustion may be too strict and cause unnecessary termination, suggesting a soft degradation with a warning might be preferable.","eval":"observation"},{"case":"If byte counting is non-deterministic due to compression or network variability, then replayability may be compromised, requiring logging of exact bytes received rather than relying on budget counters alone.","eval":"observation"},{"case":"If the agent can modify its own code to bypass the guard, then the typed terminal may not be enforced, necessitating hardware-level or OS-level resource limits.","eval":"observation"},{"case":"If the budget policy is complex (e.g., time-of-day limits, per-domain quotas), a simple two-counter guard may be insufficient, requiring a more expressive policy language.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent maintains two atomic counters: request_count and byte_count. Before each fetch, a guard checks if the next fetch would exceed either budget limit. If so, it writes a terminal event to the log containing the budget limits, current counters, and the trigger (request or byte). The agent then enters a terminal state where all fetch operations are disabled. During replay, the log's recorded fetch responses and terminal event are used to deterministically reproduce the run without re-fetching.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@09da746ede83312d1c37e906, reason-counter@07d0fbe21969b63586f05e31, reason-counter@523e190447bd9459fbc3675b, reason-counter@f09b49e61fa833443fb664e8
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget must be denominated in both requests and bytes, and exhaustion must be recorded as a typed terminal event in the log with a non-bypassable guard, ensuring replayability and auditability.","counterconditions":[{"case":"If the agent can modify its own code or budget counters, the guard can be bypassed.","eval":"observation"},{"case":"If the environment provides non-deterministic byte counts (e.g., due to compression), replay may diverge unless exact bytes are logged.","eval":"observation"},{"case":"If the agent can perform useful work without fetching (e.g., using cached data), a hard terminal may be too restrictive, leading to unnecessary halting.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A dual counter tracks both request count and total bytes fetched. Before each fetch, the agent checks if either counter would exceed its limit; if so, it transitions to a terminal state, logging the event with a unique type identifier, the budget parameters, and the causal fetch attempt. The fetch loop is the only exit point, and the guard is implemented in the interpreter, not in the agent's policy, preventing circumvention.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@50c588d6abef226921a0c182, reason-counter@f93896ee9b4444d1cbcfed27, reason-counter@aa692fb3353dd03d2a76a17a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

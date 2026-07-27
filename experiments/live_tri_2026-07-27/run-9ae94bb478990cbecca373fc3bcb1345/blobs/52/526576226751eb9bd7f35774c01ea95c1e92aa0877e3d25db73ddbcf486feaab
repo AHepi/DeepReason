@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposal to denominate the budget in bytes only fails to account for per-request overhead (e.g., TLS handshakes, connection setup), which can dominate cost in many environments. A byte budget allows an unbounded number of requests as long as total bytes remain under the cap, leading to denial-of-service or cost surprises that silently degrade the agent's resource usage rather than providing a hard, auditable terminal. The target acknowledges this as a countercondition but does not incorporate it into the budget mechanism, leaving the solution incomplete and vulnerable to the very silent degradation the problem seeks to prevent.",
+      "counterexample": [
+        "An agent repeatedly fetching tiny 1-byte resources over expensive TLS connections could exhaust a monetary budget while the byte counter shows minimal usage, causing a cost overrun that is not captured by the byte-only terminal."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The proposal relies on a cost model that may be learned, but does not specify how to ensure the model parameters are fixed and deterministic at the start of a run. If the model is learned from data that varies between runs, the budget becomes non-deterministic, breaking replayability. The target acknowledges this risk but offers no mechanism to guarantee parameter fixation, thus failing to provide a fully replayable typed terminal.",
+      "counterexample": [
+        "An agent that learns a cost model from previous runs; on replay, the learned model differs, causing the exhaustion point to shift, so the terminal is not auditable across replays."
+      ]
+    }
+  ]
+}

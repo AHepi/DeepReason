@@ -1,0 +1,42 @@
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "conflict",
+      "claim": "The fetch budget denomination and exhaustion recording method remain unresolved, with 12 accepted formal artifacts proposing conflicting approaches: requests only (ART_2), bytes only (ART_3), both requests and bytes (ART_1, ART_7-12), dynamic cost (ART_4), time (ART_5), and expected information gain (ART_6). No single approach is determined by the record.",
+      "conflict_handles": [
+        "ART_1",
+        "ART_2",
+        "ART_3",
+        "ART_4",
+        "ART_5",
+        "ART_6",
+        "ART_7",
+        "ART_8",
+        "ART_9",
+        "ART_10",
+        "ART_11",
+        "ART_12"
+      ],
+      "scratch_handles": [
+        "SCR_1",
+        "SCR_2"
+      ]
+    }
+  ],
+  "source_conflicts": [],
+  "uncovered_requirements": [
+    {
+      "requirement": "How can we measure the 'true' cost of a fetch in a way that is invariant across network conditions and replay environments?",
+      "scratch_handles": [
+        "SCR_3"
+      ]
+    },
+    {
+      "requirement": "What cryptographic commitments can ensure that the budget policy has not been tampered with during a run?",
+      "scratch_handles": [
+        "SCR_4"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "The safest protocol is an epoch-versioned intent log with an immutable, epoch-partitioned evidence store; it must durably record per problem ID the workspace epoch, the evidence destination binding, and a commit or abandon marker.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "The safest protocol is a consensus-backed session lease with a mandatory linearizable proof-of-absence query against the evidence namespace; it must durably record the lease grant (term, problem ID, process binding), the last heartbeat timestamp, and any evidence digest upon promotion.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "The safest protocol is a write-ahead undo-log with reference-counted staging directories and deterministic workspace replay; it must durably record the problem ID, sequence number, staging directory handle, pristine workspace checksum, and the promotion record.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "The safest protocol is a monotonic per-problem state machine with a durable checkpoint journal; it must durably record each state transition entry comprising problem ID, from-state, to-state, timestamp, and process nonce.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "conflict",
+      "claim": "The bounded record contains conflicting conjectures about the safest reclamation protocol and the exact durable records it must record.",
+      "source_conflict_keys": ["CNF_1"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "unknown",
+      "claim": "The safest reclamation protocol guaranteed never to silently displace completed evidence, and the exact durable records it must durably record, are unknown based on the bounded record."
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_1", "ART_2", "ART_3", "ART_4"],
+      "description": "Formal artifacts ART_1, ART_2, ART_3, and ART_4 propose mutually exclusive safest reclamation protocols and conflicting sets of required durable records."
+    }
+  ],
+  "uncovered_requirements": [
+    {
+      "requirement": "External evidence or evaluation criteria are required to determine which proposed protocol is safest and guaranteed never to silently displace completed evidence, and to establish the exact durable records required.",
+      "related_entry_keys": ["CLM_6"]
+    }
+  ]
+}
+```
