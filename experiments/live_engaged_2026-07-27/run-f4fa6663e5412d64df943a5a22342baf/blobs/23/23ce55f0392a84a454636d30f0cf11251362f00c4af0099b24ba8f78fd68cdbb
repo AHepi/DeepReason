@@ -1,0 +1,82 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "unknown",
+      "claim": "The durable binding that alone turns silent divergence between a published result and its replayed log from a possibility into a contradiction is not uniquely determined by the supplied artifacts.",
+      "qualification": "The bounded record contains multiple surviving formal artifacts (e.g., ART_1, ART_7, ART_13, ART_19, ART_24, ART_30, ART_34) that propose cryptographic commitment as the sole durable binding, but also artifacts proposing formal specification (ART_2, ART_8, ART_14, ART_20, ART_31), trusted timestamping (ART_3, ART_11, ART_15, ART_23, ART_32), deterministic replay (ART_12, ART_18, ART_21), and social contracts (ART_4, ART_10, ART_16, ART_22, ART_33). The trace handle TRC_1 reports a 'fail' verdict for a relation-form commitment that depends on shared mechanisms, but does not resolve the rivalry among the 30 positions noted in PRC_37 and PRC_38.",
+      "scratch_handles": ["SCR_1", "SCR_3"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Cryptographic commitment to the log's state at publication time is the sole durable binding that turns silent divergence into a contradiction.",
+      "formal_artifact_handles": ["ART_1", "ART_7", "ART_13", "ART_19", "ART_30"],
+      "scratch_handles": ["SCR_1"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Formal specification of the log's valid transitions is the sole durable binding that turns silent divergence into a contradiction.",
+      "formal_artifact_handles": ["ART_2", "ART_8", "ART_14", "ART_20", "ART_31"],
+      "scratch_handles": ["SCR_1"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "Trusted timestamping is the sole durable binding that turns silent divergence into a contradiction.",
+      "formal_artifact_handles": ["ART_3", "ART_11", "ART_15", "ART_23", "ART_32"],
+      "scratch_handles": ["SCR_3"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "surviving_conjecture",
+      "claim": "Deterministic replay with a fixed initial state is the sole durable binding that turns silent divergence into a contradiction.",
+      "formal_artifact_handles": ["ART_12", "ART_18", "ART_21"],
+      "scratch_handles": ["SCR_1"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "surviving_conjecture",
+      "claim": "A social contract is the sole durable binding that turns silent divergence into a contradiction.",
+      "formal_artifact_handles": ["ART_4", "ART_10", "ART_16", "ART_22", "ART_33"],
+      "scratch_handles": ["SCR_5"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "conflict",
+      "claim": "The durable binding that alone turns silent divergence into a contradiction is contested among cryptographic commitment, formal specification, trusted timestamping, deterministic replay, and social contract mechanisms.",
+      "conflict_handles": ["ART_1", "ART_2", "ART_3", "ART_7", "ART_8", "ART_12", "ART_13", "ART_14", "ART_18", "ART_19", "ART_20", "ART_21", "ART_22", "ART_23", "ART_30", "ART_31", "ART_32", "ART_33"],
+      "trace_handles": ["TRC_1"],
+      "scratch_handles": ["SCR_3"]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "unknown",
+      "claim": "The bounded record does not supply a trace, evidence, or formal observation handle to ground a recorded observation that would resolve the rivalry among the 30 positions noted in PRC_37 and PRC_38.",
+      "qualification": "Process observations (e.g., PRC_1 to PRC_35) report 'accepted' status for artifacts but do not provide substantive grounding for any claim class other than surviving_conjecture."
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_1", "ART_2", "ART_3", "ART_7", "ART_8", "ART_12", "ART_13", "ART_14", "ART_18", "ART_19", "ART_20", "ART_21", "ART_22", "ART_23", "ART_30", "ART_31", "ART_32", "ART_33"],
+      "description": "The artifacts propose mutually exclusive 'sole' durable bindings for turning silent divergence into a contradiction, with no supplied trace, evidence, or formal observation to resolve the rivalry.",
+      "scratch_handles": ["SCR_1", "SCR_3"]
+    }
+  ],
+  "uncovered_requirements": [
+    {
+      "requirement": "A trace, evidence, or formal observation handle is required to ground a recorded observation that could resolve the rivalry among the 30 positions noted in PRC_37 and PRC_38.",
+      "related_entry_keys": ["CLM_1", "CLM_7", "CLM_8"],
+      "scratch_handles": ["SCR_3"]
+    },
+    {
+      "requirement": "A premise key or earlier entry_key is required to support an inference that would classify one of the surviving conjectures as a supported_inference.",
+      "related_entry_keys": ["CLM_2", "CLM_3", "CLM_4", "CLM_5", "CLM_6"],
+      "scratch_handles": ["SCR_1"]
+    }
+  ]
+}
+```

@@ -1,0 +1,28 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-3ee6e1c8fb111609cf76492962d56f70) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Which durable binding, alone, turns silent divergence between a published result and its replayed log from a possibility into a contradiction?
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@0fe888a600a29204ef82cf58: program:reasoning_observation_pending
+- reason-counter@1382aa6ba4dea9f7058c05db: program:reasoning_observation_pending
+- reason-counter@da61dbcec61b253ce8480ea6: program:reasoning_observation_pending
+- reason-counter@4adbf76f821924a4de98f799: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The durable binding is **immutable storage of the log's raw data**, where silent divergence becomes a contradiction because the replayed log must match the stored data exactly, and any deviation is a violation of the storage's immutability.","counterconditions":[{"case":"The storage medium must be truly immutable (e.g., no backdoors or administrative overrides).","eval":"observation"},{"case":"The log's state must be fully captured in the stored data (e.g., no external dependencies).","eval":"observation"},{"case":"The replay mechanism must be able to access and verify the stored data without tampering.","eval":"observation"},{"case":"The storage system must be resistant to physical or logical attacks (e.g., data corruption, deletion).","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Immutable storage (e.g., write-once-read-many media or blockchain-based storage) binds the log's state by preventing retroactive alterations. If the replayed log diverges from the stored data, the divergence is a contradiction because the log cannot simultaneously match the stored data and diverge from it.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0fe888a600a29204ef82cf58, reason-counter@1382aa6ba4dea9f7058c05db, reason-counter@da61dbcec61b253ce8480ea6, reason-counter@4adbf76f821924a4de98f799
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

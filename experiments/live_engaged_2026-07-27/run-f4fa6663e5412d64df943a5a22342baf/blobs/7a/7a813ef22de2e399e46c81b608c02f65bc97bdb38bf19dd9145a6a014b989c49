@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-3ee6e1c8fb111609cf76492962d56f70) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Which durable binding, alone, turns silent divergence between a published result and its replayed log from a possibility into a contradiction?
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2f652f4fcf0098fc4e620fe3: program:reasoning_observation_pending
+- reason-counter@0e0782c6bd8b8e282fcc1df2: program:reasoning_observation_pending
+- reason-counter@8a305fe40e78fd5a560ba1da: program:reasoning_observation_pending
+- reason-counter@16d224b8fcd37fb7736c304a: program:reasoning_observation_pending
+- reason-counter@028b69f232976cb94acffd16: program:reasoning_observation_pending
+- reason-counter@fa44279aa0da95fdfd0cc9fb: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Assumes the log is complete and self-contained.","Ignores non-deterministic elements (e.g., timestamps, randomness)."],"overturn_conditions":["Evidence that the log includes non-deterministic elements.","Demonstration that the replay mechanism differs from the original execution environment."],"shared_structure":["Deterministic systems produce identical outputs for identical inputs.","Divergence implies a flaw in the system."],"source_memory_refs":["SRC_008"],"transfer_claims":["If deterministic replay is possible, silent divergence becomes a contradiction."]},"claim":"Deterministic replay with a fixed initial state alone turns silent divergence into a contradiction, because any divergence implies the log or replay mechanism is flawed.","counterconditions":[{"case":"The log must be complete (no hidden external inputs).","eval":"observation"},{"case":"The replay mechanism must be identical to the original execution environment.","eval":"observation"},{"case":"The initial state must be fixed and immutable.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the log and replay mechanism are deterministic, any divergence between the published result and replayed log must be due to an error in the log or replay process, thus a contradiction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@2f652f4fcf0098fc4e620fe3, reason-counter@0e0782c6bd8b8e282fcc1df2, reason-counter@8a305fe40e78fd5a560ba1da
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Relies on external trust in the timestamping service.","May not account for non-deterministic elements in the log."],"overturn_conditions":["Evidence that the timestamping service is untrustworthy or compromised.","Demonstration that the log's state was incomplete at the time of timestamping."],"shared_structure":["Immutable binding of a state at a point in time.","Detectability of retroactive changes."],"source_memory_refs":["SRC_004"],"transfer_claims":["If a timestamping service can bind the log's state immutably, it can turn silent divergence into a contradiction."]},"claim":"A trusted third-party timestamping service alone turns silent divergence into a contradiction, because the timestamp provides an immutable anchor for the log's state at publication time.","counterconditions":[{"case":"The timestamping service must be trusted and tamper-evident.","eval":"observation"},{"case":"The log must be complete at the time of timestamping.","eval":"observation"},{"case":"The timestamp must be stored in a way that prevents retroactive modification.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The timestamping service records the log's state at publication, creating a durable reference. If the replayed log diverges from this reference, the divergence is a contradiction.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@16d224b8fcd37fb7736c304a, reason-counter@028b69f232976cb94acffd16, reason-counter@fa44279aa0da95fdfd0cc9fb
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,12 @@
+```json
+{
+  "sections": [
+    {
+      "span_id": "S1",
+      "text": "At formal sequence 787, the following artifacts had formal status accepted: d63e7d240e3ec32b01d8b4e50195aed4bee42f5c9949437b1172fb6dacdf3d9c, 07197e004fa7b5a7e4866f41cd54174b960d90eb9ea241baf8cd1197349068f6, 67df74e18b40e991a2e3eb58f3a68dde58ddbd04b8fbb3726cf3fcd56907e8cd, d2773b384d9b9167dca3ce4819c42cef60282c38d777c9e4a855289c5eefe1a0, 9b3320f4cccc0002f700714bc5984bfc274fbebb32d6c874b4e475063e3d3d21, 4a9ebc8a529fd3fa3b0e7ab7d23bc047f45a9056006c7bed72be8a82ba6052d5, 76b148ad585322e82b9eabdcdadd76044c8c6ac97d4a7a5d328a1f3539d1ea47, and b7f2d8ada12cde6d8d39490c2691bbe3fee5bacb82d173cb219d63d519f13f25.",
+      "ledger_entry_handles": ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"]
+    }
+  ],
+  "resolution": "answered"
+}
+```

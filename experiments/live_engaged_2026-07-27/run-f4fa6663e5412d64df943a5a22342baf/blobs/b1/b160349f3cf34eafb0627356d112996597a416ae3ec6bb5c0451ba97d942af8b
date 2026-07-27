@@ -1,0 +1,21 @@
+```json
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism claims that a deterministic replay environment alone turns divergence into a contradiction, but it fails to establish a *causal* link between determinism and contradiction. Determinism merely ensures reproducibility; it does not inherently detect or contradict divergence unless paired with an explicit comparison (e.g., a cryptographic commitment or formal specification). The countercondition 'The log's initial conditions are not fully captured' (eval: observation) undermines the claim, as determinism alone cannot guarantee contradiction without full state capture, which the mechanism does not enforce as a binding requirement."
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The mechanism posits that a cryptographic commitment is the *sole* durable binding, but it does not rule out hybrid systems (e.g., deterministic replay + commitment) that could also turn divergence into a contradiction. The claim's exclusivity is unsupported: the countercondition 'The replay environment does not enforce verification of the commitment' (eval: observation) shows the commitment alone is insufficient without enforcement, implying other bindings (e.g., replay determinism) could complement it. The causal mechanism is thus under-specified."
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The mechanism relies on the secure enclave's cryptographic signature to create a contradiction, but this is functionally equivalent to a cryptographic commitment (SRC_002) with added hardware isolation. The claim of exclusivity ('sole durable binding') is invalid because the enclave's signature is a subset of cryptographic commitments, not a distinct binding. The countercondition 'The log's state is not fully captured within the enclave' (eval: observation) further exposes redundancy: the enclave's role collapses into SRC_002's failure mode if state capture is incomplete."
+    }
+  ]
+}
+```
