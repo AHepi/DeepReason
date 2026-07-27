@@ -1436,7 +1436,7 @@ class _AdvancingClock:
         self.value += seconds
 
 
-def test_continuation_poll_profile_domain_and_canonical_default_are_exact():
+def test_continuation_poll_profile_domain_and_normal_default_are_exact():
     assert OPERATIONAL.ALLOWED_CONTINUATION_POLL_PROFILES == {
         "normal",
         "sparse",
@@ -1453,12 +1453,6 @@ def test_continuation_poll_profile_domain_and_canonical_default_are_exact():
         .default
         == "normal"
     )
-    source = Path(OPERATIONAL.__file__).read_text(encoding="utf-8")
-    assert (
-        "default=CONTINUATION_POLL_PROFILE_SPARSE,\n"
-        "    )\n"
-        "    args = parser.parse_args(argv)"
-    ) in source
 
 
 def test_normal_profile_polls_immediately_and_uses_acceptance_deadline():
@@ -4111,7 +4105,7 @@ def test_every_operational_mcp_child_uses_tracked_construction():
     assert "mcp_clients=mcp_clients" in source
 
 
-def test_wheel_workflow_uses_canonical_sparse_default_on_exact_matrix():
+def test_wheel_workflow_preserves_normal_matrix_and_adds_one_sparse_arm():
     workflow_path = ROOT / ".github" / "workflows" / "wheel-smoke.yml"
     workflow_text = workflow_path.read_text(encoding="utf-8")
     workflow = yaml.load(workflow_text, Loader=yaml.BaseLoader)
@@ -4119,9 +4113,13 @@ def test_wheel_workflow_uses_canonical_sparse_default_on_exact_matrix():
     assert set(workflow["on"]) == {"push", "pull_request"}
     assert "workflow_dispatch" not in workflow["on"]
     assert workflow["permissions"] == {"contents": "read"}
-    assert set(workflow["jobs"]) == {"wheel-smoke"}
+    assert set(workflow["jobs"]) == {
+        "wheel-smoke",
+        "wheel-smoke-sparse-windows",
+    }
 
     normal = workflow["jobs"]["wheel-smoke"]
+    sparse = workflow["jobs"]["wheel-smoke-sparse-windows"]
     assert set(normal) == {"name", "runs-on", "strategy", "steps"}
     assert normal["name"] == "${{ matrix.os }} / Python 3.11"
     assert normal["runs-on"] == "${{ matrix.os }}"
@@ -4135,9 +4133,18 @@ def test_wheel_workflow_uses_canonical_sparse_default_on_exact_matrix():
             ]
         },
     }
+    assert set(sparse) == {"name", "runs-on", "steps"}
+    assert (
+        sparse["name"]
+        == "windows-latest / Python 3.11 / sparse continuation polling"
+    )
+    assert sparse["runs-on"] == "windows-latest"
+    assert "needs" not in sparse
     assert "needs" not in normal
 
     assert len(normal["steps"]) == 4
+    assert len(sparse["steps"]) == 4
+    assert normal["steps"][:3] == sparse["steps"][:3]
     assert normal["steps"][0] == {"uses": "actions/checkout@v4"}
     assert normal["steps"][1] == {
         "uses": "actions/setup-python@v5",
@@ -4151,14 +4158,21 @@ def test_wheel_workflow_uses_canonical_sparse_default_on_exact_matrix():
         "name": "Qualify and operate installed wheel",
         "run": "python -u scripts/wheel_operational_smoke.py",
     }
-    assert normal.get("env") is None
-    assert normal["steps"][3].get("env") is None
+    assert sparse["steps"][3] == {
+        "name": "Qualify and operate installed wheel",
+        "run": (
+            "python -u scripts/wheel_operational_smoke.py "
+            "--continuation-poll-profile sparse"
+        ),
+    }
+    assert normal.get("env") == sparse.get("env") is None
+    assert normal["steps"][3].get("env") == sparse["steps"][3].get("env")
 
     encoded = json.dumps(workflow, sort_keys=True)
     assert "continue-on-error" not in encoded
     assert "actions/upload-artifact" not in encoded
     assert "cache" not in normal["steps"][1]["with"]
-    assert "--continuation-poll-profile" not in encoded
+    assert "cache" not in sparse["steps"][1]["with"]
 
 
 def test_package_layout_ships_shallow_engine_and_excludes_smoke_fixture():
