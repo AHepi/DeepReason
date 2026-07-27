@@ -62,8 +62,9 @@ def test_external_provider_satisfies_every_production_qualification_contract():
     manifest = qualification_subject_manifest(_profile())
     pairs = production_contract_pairs(manifest)
     # The engaged public preset qualifies the complete production surface:
-    # conjecture, foreign-school criticism, and the enabled scratch contracts.
-    assert len(pairs) == 10
+    # conjecture, foreign-school criticism, the enabled scratch contracts,
+    # and the grounded two-stage bridge contracts.
+    assert len(pairs) == 14
     assert {pair.contract_id for pair in pairs} == {
         "conjecturer.turn.v6",
         "conjecturer.atomic-candidate.v1",
@@ -75,6 +76,10 @@ def test_external_provider_satisfies_every_production_qualification_contract():
         "scratch.link.minimal.v1",
         "scratch.cluster-guide.compact.v1",
         "scratch.cluster-guide.minimal.v1",
+        "bridge.ledger.v3",
+        "bridge.ledger-batch.v1",
+        "bridge.composition.v2",
+        "bridge.composition-batch.v1",
     }
     for pair in pairs:
         for case_index in range(20):

@@ -1035,6 +1035,23 @@ def response_for_schema(schema: dict, prompt: str) -> dict:
         }
     if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
         return {"working_focus": "One temporary navigation focus."}
+    if title == "BoundBridgeCompositionWireV2":
+        # Stage-B composition binds every span to one of the ledger handles
+        # frozen in the advertised schema; ``answered`` requires at least one
+        # mapped output span.
+        span_schema = schema["$defs"]["BoundCompositionSpanWireV2"]
+        handle_items = span_schema["properties"]["ledger_entry_handles"]["items"]
+        handle = handle_items.get("const") or (handle_items.get("enum") or ["E1"])[0]
+        return {
+            "sections": [
+                {
+                    "span_id": "S1",
+                    "text": "The bounded record supports one conservative conclusion.",
+                    "ledger_entry_handles": [handle],
+                }
+            ],
+            "resolution": "answered",
+        }
     if title == "AtomicConjectureCandidateWireV1":
         return {
             "candidate": {
@@ -3118,18 +3135,21 @@ def main(argv: list[str] | None = None) -> int:
         notice = re.search(
             r"maximum expected provider calls: ([0-9]+)", qualified.stderr
         )
-        # The engaged public preset qualifies 10 route/contract pairs (the
-        # frozen conjecture/criticism four plus six scratch contracts): the
-        # frozen maximum is 10 pairs x 20 cases x 3 provider calls, and one
-        # clean pass makes exactly 10 x 20 = 200 loopback calls.  The six
-        # scratch-pair probes carry their own bounded task text, so only the
-        # original four pairs match the "Qualification case" marker.
-        if notice is None or int(notice.group(1)) != 600:
+        # The engaged public preset qualifies 14 route/contract pairs (the
+        # frozen conjecture/criticism four, six scratch contracts, and the
+        # four grounded-bridge contracts): the frozen maximum is 10 pairs x
+        # 20 cases x 3 provider calls plus 4 bridge pairs x 20 cases x 2
+        # provider calls (the bridge grants one schema repair), and one
+        # clean pass makes exactly 14 x 20 = 280 loopback calls.  The
+        # scratch- and bridge-pair probes carry their own bounded task text,
+        # so only the original four pairs match the "Qualification case"
+        # marker.
+        if notice is None or int(notice.group(1)) != 760:
             raise AssertionError("qualification did not announce the frozen maximum")
         counts = _provider_counts(provider_state_path)
-        if counts != {"qualification_calls": 80, "total_calls": 200}:
+        if counts != {"qualification_calls": 80, "total_calls": 280}:
             raise AssertionError(
-                "qualification did not make exactly 200 loopback calls"
+                "qualification did not make exactly 280 loopback calls"
             )
 
         stage = STAGE_READINESS

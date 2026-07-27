@@ -7,10 +7,12 @@ Two presets live here:
   verbatim so replay, comparison, and older fixtures remain exact.
 * ``engaged`` — the public default compiled by run preparation.  The
   advisory scratchpad and bounded conjecture-context requests are ON
-  (designed to relieve pressure and prevent models from hallucinating), and
+  (designed to relieve pressure and prevent models from hallucinating),
   manifest-owned foreign-school semantic criticism is ON in its
-  observe-only, single-provider form.  Every allowance stays finite and
-  modest so the preset fits the fixed public 6-cycle/100k-token envelope.
+  observe-only, single-provider form, and the grounded two-stage bridge is
+  ON in its review-free single-route form so completed public runs can
+  produce grounded final views.  Every allowance stays finite and modest so
+  the preset fits the fixed public 6-cycle/100k-token envelope.
 """
 
 from __future__ import annotations
@@ -144,6 +146,26 @@ def engaged_scratchpad_source() -> dict:
     return {"enabled": True}
 
 
+def engaged_bridge_source() -> dict:
+    """Typed-Config source enabling the grounded two-stage bridge.
+
+    This is the audited review-free shape: Stage A (claim ledger, frozen
+    ``summarizer`` route) and Stage B (composition, frozen ``thesis`` route)
+    with the minimum one-repair schema budget, no grounding-review stream,
+    and a small bounded four-section output.  Public preparation seats every
+    canonical role on the single provider endpoint, so both frozen bridge
+    roles ride the one public route.
+    """
+
+    return {
+        "mode": "grounded_two_stage",
+        "grounding_review": False,
+        "max_schema_repair_attempts": 1,
+        "max_grounding_repair_attempts": 0,
+        "output_section_limit": 4,
+    }
+
+
 def engaged_criticism_policy(endpoint_id: str) -> CriticismPolicyV1:
     """Bind every seeded public school to the single provider critic seat.
 
@@ -190,6 +212,7 @@ def engaged_policy_digest() -> str:
                     mode="json", by_alias=True, exclude_none=True
                 ),
                 "scratchpad_source": engaged_scratchpad_source(),
+                "bridge_source": engaged_bridge_source(),
             }
         )
     )
@@ -200,6 +223,7 @@ __all__ = [
     "PUBLIC_SCHOOL_COUNT",
     "conservative_control_plane_policy_v3",
     "conservative_policy_digest",
+    "engaged_bridge_source",
     "engaged_control_plane_policy_v3",
     "engaged_criticism_policy",
     "engaged_policy_digest",

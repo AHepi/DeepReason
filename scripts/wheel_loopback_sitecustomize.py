@@ -263,6 +263,23 @@ def response_for_schema(schema: dict, _prompt: str) -> dict:
         }
     if title in {"ClusterGuideWireV1", "ClusterGuideMinimalWireV1"}:
         return {"working_focus": "One temporary navigation focus."}
+    if title == "BoundBridgeCompositionWireV2":
+        # Stage-B composition binds every span to one of the ledger handles
+        # frozen in the advertised schema; ``answered`` requires at least one
+        # mapped output span.
+        span_schema = schema["$defs"]["BoundCompositionSpanWireV2"]
+        handle_items = span_schema["properties"]["ledger_entry_handles"]["items"]
+        handle = handle_items.get("const") or (handle_items.get("enum") or ["E1"])[0]
+        return {
+            "sections": [
+                {
+                    "span_id": "S1",
+                    "text": "The bounded record supports one conservative conclusion.",
+                    "ledger_entry_handles": [handle],
+                }
+            ],
+            "resolution": "answered",
+        }
     if title == "AtomicConjectureCandidateWireV1":
         return {
             "candidate": {

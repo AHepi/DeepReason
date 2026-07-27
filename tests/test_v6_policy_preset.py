@@ -1,8 +1,10 @@
+from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
     PUBLIC_SCHOOL_COUNT,
     conservative_control_plane_policy_v3,
     conservative_policy_digest,
+    engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
     engaged_policy_digest,
@@ -53,6 +55,44 @@ def test_engaged_policy_enables_bounded_scratch_and_context():
     assert engaged_scratchpad_source() == {"enabled": True}
     assert engaged_policy_digest() == engaged_policy_digest()
     assert len(engaged_policy_digest()) == 64
+
+
+def test_engaged_bridge_source_enables_the_review_free_grounded_bridge():
+    source = engaged_bridge_source()
+
+    # The audited review-free single-route shape: Stage A on the frozen
+    # summarizer route, Stage B on the frozen thesis route, one schema
+    # repair, no grounding-review stream, four bounded output sections.
+    assert source == {
+        "mode": "grounded_two_stage",
+        "grounding_review": False,
+        "max_schema_repair_attempts": 1,
+        "max_grounding_repair_attempts": 0,
+        "output_section_limit": 4,
+    }
+
+
+def test_engaged_policy_digest_reflects_the_bridge_source():
+    policy = engaged_control_plane_policy_v3()
+    criticism = engaged_criticism_policy("preset-endpoint-template")
+    without_bridge = sha256_hex(
+        b"deepreason.v6-policy-preset.v2\x00"
+        + canonical_json(
+            {
+                "preset": POLICY_PRESET_ID,
+                "control_plane_policy": policy.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
+                "criticism_policy_template": criticism.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
+                "scratchpad_source": engaged_scratchpad_source(),
+            }
+        )
+    )
+    # The digest is bound to the bridge source content, not merely its name:
+    # the pre-bridge payload no longer reproduces the preset digest.
+    assert engaged_policy_digest() != without_bridge
 
 
 def test_engaged_criticism_policy_binds_every_public_school_observe_only():

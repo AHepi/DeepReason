@@ -1,30 +1,38 @@
-"""The engaged public preset: scratch ON and semantic criticism actually runs.
+"""The engaged public preset: scratch, criticism, and the grounded bridge run.
 
-Three seams are pinned here:
+Four seams are pinned here:
 
 1. The compiled public manifest (`build_preparation_manifest`) enables the
-   advisory scratchpad and carries a complete foreign-school criticism
-   policy binding every seeded public school to the single provider seat.
+   advisory scratchpad, carries a complete foreign-school criticism policy
+   binding every seeded public school to the single provider seat, and
+   compiles the review-free grounded two-stage bridge with both frozen
+   bridge roles seated on the single provider endpoint.
 2. Behavior-level, with mock endpoints: a public-preset v6 run dispatches at
    least one school-routed criticism work order and records durable coverage.
 3. Behavior-level: the public preset's scratch-authoring authority admits a
    bounded advisory proposal without touching formal state.
+4. Behavior-level, with mock endpoints: a public-preset run root accepts MCP
+   ``start_bridge`` and reaches the completed bridge terminal.
 """
 
 from __future__ import annotations
 
 import json
 
+from deepreason import mcp_scratch_bridge as mcp
+from deepreason.bridge.events import BridgeAction
 from deepreason.config import Config
+from deepreason.evidence import bind_run_input
 from deepreason.harness import Harness
+from deepreason.llm import adapter as adapter_module
 from deepreason.llm.adapter import LLMAdapter
 from deepreason.llm.budget import TokenMeter
 from deepreason.llm.endpoints import MockEndpoint
 from deepreason.llm.firewall import leases_from_manifest
-from deepreason.ontology import Provenance, Status
-from deepreason.preparation import build_preparation_manifest
+from deepreason.ontology import Problem, ProblemProvenance, Provenance, Status
+from deepreason.preparation import _records_for_question, build_preparation_manifest
 from deepreason.provider_profile import ProviderProfileV1
-from deepreason.run_manifest import compile_run_manifest
+from deepreason.run_manifest import bind_run_manifest, compile_run_manifest
 from deepreason.scheduler.scheduler import Scheduler
 from deepreason.scratch.authoring import ScratchAuthoringService
 from deepreason.scratch.proposals import (
@@ -36,6 +44,7 @@ from deepreason.scratch.proposals import (
 from deepreason.scratch.service import ScratchService
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
+    engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
 )
@@ -106,6 +115,46 @@ def test_public_manifest_enables_scratch_and_binds_all_four_schools():
     assert engine["N_SCHOOLS"] == len(criticism.bindings) == 4
 
 
+def test_public_manifest_compiles_the_grounded_two_stage_bridge():
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Can the public preset build a grounded final view?",
+        compiled_at=STAMP,
+    )
+
+    bridge = manifest.bridge_policy
+    assert bridge is not None
+    assert bridge.mode == "grounded_two_stage"
+    # The audited review-free single-route shape from the engaged preset.
+    assert bridge.grounding_review is False
+    assert bridge.max_schema_repair_attempts == 1
+    assert bridge.max_grounding_repair_attempts == 0
+    assert bridge.output_section_limit == 4
+    assert bridge.ledger_role == "summarizer"
+    assert bridge.composer_role == "thesis"
+    assert bridge.allow_partial is True
+    assert bridge.allow_abstention is True
+    assert bridge.require_claim_ledger is True
+    assert bridge.require_claim_uses is True
+    # Both frozen bridge roles are seated on the single public endpoint.
+    for role in ("summarizer", "thesis"):
+        (route,) = manifest.roles[role]
+        assert route.endpoint_id == profile.endpoint_id
+    # Frozen schema-repair authority covers the four bridge wire contracts.
+    repair_policy = manifest.contract_schema_repair_policy
+    assert repair_policy is not None
+    grants = {grant.contract_id: grant for grant in repair_policy.grants}
+    for contract_id in (
+        "bridge.ledger.v3",
+        "bridge.ledger-batch.v1",
+        "bridge.composition.v2",
+        "bridge.composition-batch.v1",
+    ):
+        assert grants[contract_id].maximum_schema_repairs == 1
+        assert grants[contract_id].maximum_provider_calls == 2
+
+
 def _route(endpoint_id: str, seat: int = 0) -> dict:
     return {
         "endpoint_id": endpoint_id,
@@ -124,12 +173,14 @@ def _public_preset_mock_manifest():
     config = Config(
         N_SCHOOLS=4,
         scratchpad={"enabled": True},
+        bridge=engaged_bridge_source(),
         EMBEDDER_MODEL=None,
         roles={
             "conjecturer": [_route("conjecturer-route")],
             "argumentative_critic": [_route("critic-route-0")],
             "synthesizer": [_route("synthesizer-route")],
             "summarizer": [_route("summarizer-route")],
+            "thesis": [_route("thesis-route")],
         },
     )
     manifest = compile_run_manifest(
@@ -281,3 +332,129 @@ def test_public_preset_permits_bounded_scratch_authoring(tmp_path):
     assert len(service.state.links) == 1
     # Advisory only: nothing leaked into formal ontology state.
     assert service.harness.state.model_dump(mode="json") == formal_before
+
+
+def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
+    tmp_path, monkeypatch
+):
+    """MCP ``start_bridge`` completes on a real public-preset run root.
+
+    The root is prepared exactly as the public boundary leaves it: the
+    question-derived run input, the compiled engaged-preset manifest, the
+    qualification report, the bound model classification, and an eligible
+    completed ``run-result.json``.  Provider transport is mocked at
+    ``_endpoint_from_spec``; everything else is the production path.
+    """
+
+    from tests.test_v6_bridge_transactions import (
+        _write_bridge_qualification,
+        _write_eligible_v6_run_result,
+    )
+
+    question = "Which surviving public idea should be presented?"
+    profile = _profile()
+    root = tmp_path / "public-bridge-run"
+    dossier, run_input, _workload = _records_for_question(question)
+    bind_run_input(run_input, dossier, root)
+    manifest = build_preparation_manifest(
+        profile, question=question, compiled_at=STAMP
+    )
+    assert manifest.run_input_digest == run_input.run_input_digest
+    bind_run_manifest(manifest, root)
+    harness = Harness(root)
+    problem_id = run_input.problem.id
+    harness.register_problem(
+        Problem(
+            id=problem_id,
+            description=question,
+            provenance=ProblemProvenance(trigger="seed", **{"from": []}),
+        )
+    )
+    harness.create_artifact(
+        "A genuinely novel surviving conjecture.",
+        provenance=Provenance(role="conjecturer"),
+        problem_id=problem_id,
+    )
+    _write_bridge_qualification(harness, manifest)
+    _write_eligible_v6_run_result(root, manifest)
+
+    # The review-free public bridge makes exactly two provider calls: the
+    # frozen summarizer builds the claim ledger, then the frozen thesis
+    # route composes the grounded output.  Every canonical role rides one
+    # endpoint, so a single ordered script serves both dispatches.
+    responses = [
+        json.dumps(
+            {
+                "entries": [
+                    {
+                        "entry_key": "CLM_1",
+                        "claim_class": "surviving_conjecture",
+                        "claim": "A novel conjecture survives the formal record.",
+                        "formal_artifact_handles": ["ART_1"],
+                    }
+                ]
+            }
+        ),
+        json.dumps(
+            {
+                "sections": [
+                    {
+                        "span_id": "S1",
+                        "text": (
+                            "Conjecture: the surviving idea may explain the result."
+                        ),
+                        "ledger_entry_handles": ["E2"],
+                    }
+                ],
+                "resolution": "partially_answered",
+                "resolution_reason": "The record supports a conjecture, not a fact.",
+            }
+        ),
+    ]
+    dispatched = []
+    route = manifest.roles["summarizer"][0]
+
+    def endpoint_factory(spec):
+        assert spec["endpoint_id"] == profile.endpoint_id
+
+        def dispatch(_prompt):
+            dispatched.append(spec["endpoint_id"])
+            assert responses, "the public bridge dispatched unscripted provider work"
+            return responses.pop(0)
+
+        return MockEndpoint(
+            dispatch,
+            name=route.base_url,
+            model=route.model_id,
+            max_tokens=route.max_tokens,
+        )
+
+    monkeypatch.setattr(adapter_module, "_endpoint_from_spec", endpoint_factory)
+    run_id = root.name
+    monkeypatch.setattr(mcp, "_managed_root", lambda value: {run_id: root}[value])
+
+    started = mcp.call_tool(
+        "start_bridge",
+        {"run_id": run_id, "problem": problem_id, "target": "answer"},
+    )
+    assert started["state"] == "running"
+    assert started["run_id"] == run_id
+    worker = mcp._BRIDGE_THREADS[str(root.resolve())]
+    worker.join(timeout=10)
+    assert not worker.is_alive()
+
+    status = mcp.call_tool("bridge_status", {"run_id": run_id})
+    assert status["state"] == "completed"
+    assert status["process_status"] == "success"
+    result = mcp.call_tool("bridge_result", {"run_id": run_id, "limit": 5})
+    assert result["terminal"]["process_status"] == "success"
+    assert result["output"]["resolution"] == "partially_answered"
+    # Review-free means exactly the two scripted stage calls, no more.
+    assert dispatched == [profile.endpoint_id, profile.endpoint_id]
+    assert responses == []
+    actions = [
+        event.bridge.action
+        for event in Harness(root, read_only=True).log.read()
+        if event.bridge is not None
+    ]
+    assert actions[-1] == BridgeAction.COMPLETED

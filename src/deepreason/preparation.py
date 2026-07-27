@@ -59,6 +59,7 @@ from deepreason.run_manifest import (
 )
 from deepreason.v6_policy import (
     POLICY_PRESET_ID,
+    engaged_bridge_source,
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
     engaged_policy_digest,
@@ -253,6 +254,9 @@ def _config_for_profile(profile: ProviderProfileV1) -> Config:
         engine_profile="full",
         model_profile=profile.model_profile,
         scratchpad=engaged_scratchpad_source(),
+        # The grounded two-stage bridge rides the same single endpoint: the
+        # frozen summarizer and thesis routes below satisfy its validator.
+        bridge=engaged_bridge_source(),
         # The public preset keeps the semantic scratch channel on the
         # deterministic hashing embedder: no optional neural dependency may
         # decide public manifest identity.
