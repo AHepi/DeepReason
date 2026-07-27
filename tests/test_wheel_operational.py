@@ -1450,7 +1450,7 @@ def test_continuation_poll_profile_domain_and_normal_default_are_exact():
     assert OPERATIONAL.CONTINUATION_POLL_PROFILE_SPARSE == "sparse"
     assert OPERATIONAL.SPARSE_CONTINUATION_QUIET_SECONDS == 360
     assert OPERATIONAL.SPARSE_CONTINUATION_POLL_INTERVAL_SECONDS == 30
-    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 600
+    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 1200
     assert OPERATIONAL.POLL_INTERVAL_SECONDS == 0.05
     assert (
         inspect.signature(OPERATIONAL._poll_terminal)
@@ -1474,7 +1474,7 @@ def test_normal_profile_polls_immediately_and_uses_acceptance_deadline():
     def expire_after_normal_sleep(seconds):
         assert seconds == 0.05
         clock.sleeps.append(seconds)
-        clock.value = 600.0
+        clock.value = 1200.0
 
     with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
         OPERATIONAL._poll_terminal(
@@ -1495,7 +1495,7 @@ def test_normal_profile_polls_immediately_and_uses_acceptance_deadline():
         )
     ]
     assert clock.sleeps == [0.05]
-    assert observations.continuation_elapsed_ms == 600000
+    assert observations.continuation_elapsed_ms == 1200000
 
 
 def test_sparse_profile_quiet_period_and_absolute_schedule_are_exact():
@@ -1596,18 +1596,11 @@ def test_sparse_profile_never_observes_at_or_after_the_deadline():
         )
     assert raised.value.timeout is True
     assert [observed_at for _name, _arguments, observed_at in calls] == [
-        360.0,
-        390.0,
-        420.0,
-        450.0,
-        480.0,
-        510.0,
-        540.0,
-        570.0,
+        360.0 + 30.0 * step for step in range(28)
     ]
     assert all(name == "run_status" for name, _arguments, _time in calls)
-    assert observations.status_observation_count == 8
-    assert observations.continuation_elapsed_ms == 600000
+    assert observations.status_observation_count == 28
+    assert observations.continuation_elapsed_ms == 1200000
     record = json.loads(
         str(
             OPERATIONAL.OperationalSmokeFailure(
@@ -1633,7 +1626,7 @@ def test_sparse_slow_call_cannot_reset_or_extend_the_deadline():
         def tool(self, name, arguments, **_kwargs):
             calls.append((name, arguments, clock()))
             assert name == "run_status"
-            clock.advance(241.0)
+            clock.advance(841.0)
             return {"state": "completed", "phase": "stop", "seq": 5}
 
     with pytest.raises(OPERATIONAL.OperationalSmokeFailure) as raised:
@@ -1655,12 +1648,12 @@ def test_sparse_slow_call_cannot_reset_or_extend_the_deadline():
             360.0,
         )
     ]
-    assert observations.continuation_elapsed_ms == 601000
+    assert observations.continuation_elapsed_ms == 1201000
     assert observations.mcp_status_timing == {
         **OPERATIONAL._empty_mcp_timing(),
         "call_count": 1,
-        "total_ms": 241000,
-        "maximum_ms": 241000,
+        "total_ms": 841000,
+        "maximum_ms": 841000,
     }
     assert observations.mcp_result_timing == OPERATIONAL._empty_mcp_timing()
 
@@ -1834,7 +1827,7 @@ def test_continuation_deadline_and_fixed_running_observations_are_exact():
             _sleep=sleeps.append,
             _timer=lambda: 0.0,
         )
-    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 600
+    assert OPERATIONAL.CONTINUATION_DEADLINE_SECONDS == 1200
     assert OPERATIONAL.POLL_INTERVAL_SECONDS == 0.05
     assert raised.value.failure_kind == OPERATIONAL.FAILURE_TIMEOUT
     assert raised.value.timeout is True
@@ -1847,7 +1840,7 @@ def test_continuation_deadline_and_fixed_running_observations_are_exact():
         "status_observation_count": 3,
             "last_progress_sequence": 17,
             "last_progress_phase": "reasoning",
-            "continuation_elapsed_ms": 600000,
+            "continuation_elapsed_ms": 1200000,
             "mcp_status_timing": {
                 **OPERATIONAL._empty_mcp_timing(),
                 "call_count": 3,

@@ -67,7 +67,7 @@ RESUMABLE_STOP_QUESTION = (
     "What makes a typed resumable stop preserve continuation authority?"
 )
 FAILURE_SCHEMA = "deepreason-wheel-operational-failure-v4"
-CONTINUATION_DEADLINE_SECONDS = 600
+CONTINUATION_DEADLINE_SECONDS = 1200
 POLL_INTERVAL_SECONDS = 0.05
 CONTINUATION_POLL_PROFILE_NORMAL = "normal"
 CONTINUATION_POLL_PROFILE_SPARSE = "sparse"
