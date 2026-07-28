@@ -1098,6 +1098,35 @@ class WorkflowReplayState:
             raise ValueError("compact recovery provider trace differs from its route seat")
         return compact.route_seat_key
 
+    def _post_terminal_composition_call(self, call: Any) -> bool:
+        """Grounded composition stays legitimate after an orderly typed stop.
+
+        A STOPPED lifecycle decision with a resumable reason (converged,
+        budget_exhausted) freezes the reasoning: continuing it requires
+        typed RESUMED authority, and ordinary work-bound calls after the
+        stop remain forbidden.  The bridge is different by construction —
+        its work orders are prepared against the source run's terminal
+        commitment (``source_terminal_commitment_ref``) and compose FROM
+        the frozen record rather than extending it.  Refusing those calls
+        would make every budget-bounded public run uncomposable, which
+        live evidence shows is the product's most common terminal shape.
+        """
+
+        decision = self.lifecycle_decisions.get(self.terminal_decision_id)
+        reason = getattr(
+            getattr(decision, "deterministic_decision", None), "reason", None
+        )
+        from deepreason.workflow.lifecycle import RESUMABLE_STOP_REASONS
+
+        if reason not in RESUMABLE_STOP_REASONS:
+            return False
+        transaction = self.transaction_work.get(call.work_order_id)
+        preparation = getattr(transaction, "preparation", None)
+        return (
+            getattr(preparation, "source_terminal_commitment_ref", None)
+            is not None
+        )
+
     def observe_event(self, event: Any) -> None:
         """Index a preceding work-bound provider call without mutating authority."""
 
@@ -1111,7 +1140,9 @@ class WorkflowReplayState:
             self.event_outputs_by_seq[seq] = tuple(getattr(event, "outputs", ()))
         if call is None or seq is None or getattr(call, "work_order_id", None) is None:
             return
-        if self.terminal_decision_id is not None:
+        if self.terminal_decision_id is not None and not (
+            self._post_terminal_composition_call(call)
+        ):
             raise ValueError("work-bound provider call follows terminal lifecycle state")
         if seq in self.calls_by_seq:
             raise ValueError("workflow provider-call sequence appears more than once")

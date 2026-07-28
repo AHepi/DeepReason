@@ -15,3 +15,13 @@ qualify_rc=0 qualify_seconds=603
 {"schema":"deepreason-readiness.v1","package_version":"0.1.0","product_mode":"v6-only","ready":true,"profile_source":"setup","route_identity":{"provider":"ollama","model_id":"glm-5.2","model_revision":"glm-5.2","route_id":"provider-profile-2b0b8d5e80f8ceaf2bdb626e"},"credential_present":true,"qualification_state":"ready","next_action":"deepreason reason \"YOUR QUESTION\""}
 reason_rc=0 reason_seconds=692
 run_id=run-889fa5110b88329aa71409e4ea97dc5e problem_id=question-02bb9a5f6cd9ab3593d969957ab384f4 state=completed
+bridge_rc=1 bridge_seconds=189
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+FAIL  bridge_status(terminal)  | state=failed detail={"error_code": "BRIDGE_STAGE_A_FAILED", "formal_seq": 330, "process_status": "failure", "run_id": "run-889fa5110b88329aa71409e4ea97dc5e", "schema": "deepreason-bridge-status-v1", "source_terminal_comm
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+FAIL  bridge_claims  | ValueError: BRIDGE_RESULT_HAS_NO_LEDGER
+=== 2/5 passed ===
+=== glm end 2026-07-28T08:12:19Z ===
