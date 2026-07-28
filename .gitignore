@@ -15,7 +15,7 @@ venv/
 .coverage
 
 # Runtime state (event logs / blob stores are per-run, git-native saves are explicit)
-runs/
+/runs/
 .deepreason/
 *.local.yaml
 

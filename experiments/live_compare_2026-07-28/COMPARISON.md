@@ -77,3 +77,87 @@ records — how sure it is.
 Raw records: `*-native.json`, per-model homes (`glm2/`, `kimi/`,
 `deepseek/` — `glm/` is the preserved bridge-dead root), committed run
 roots with logs, qualification reports, and bridge outputs.
+
+## Expanded analysis (added after the run)
+
+### The natives agree with each other — and can't know it
+
+With the full texts side by side, the three native answers are close to
+one another in inventory and in verdict. All three enumerate the same
+criteria families (syntactic/canonical-form identity, extensional vs
+intensional equivalence, mutual entailment, provenance/derivation
+identity, contextual substitutability), all three name proof-path
+collapse and retraction fragility as the eager-merge risk and
+combinatorial bloat as the reluctant-merge risk, and all three close
+with essentially the same architecture, stated as settled: merge to a
+canonical claim node, keep multiple provenance edges (GLM: "canonical,
+unified representation ... with multiple provenance paths"; Kimi: "the
+node stores the content; the incoming edges store the derivations";
+DeepSeek: "syntactic merging ... provenance tracking to keep
+justifications distinct"). Three independently generated conclusions
+that appear to agree — the question's own scenario — and nothing in any
+of the three can say whether they are the same claim, three overlapping
+claims, or rivals. Each model resolved the question by editorial fiat
+and none flagged that the resolution was fiat.
+
+### What the harness did with the same material
+
+The harness runs contained the same conceptual inventory — as rival
+artifacts that had to survive criticism. The native answers'
+consensus architecture appears inside the runs as one rival among
+several, and it did not survive as a settled conclusion, because
+nothing in the bounded record adjudicated it against the alternatives.
+GLM's run ended with four accepted formal artifacts proposing mutually
+incompatible criteria (causal-trace isomorphism, counterfactual
+robustness, equivalence-proof admission, mutual entailment) and
+composed a typed conflict; Kimi's run ended with a twelve-way rivalry —
+including tail positions no native answer volunteered (thermodynamic
+stability of agreement under perturbation, Kolmogorov-auditability
+trade-offs, structural-equation automorphism symmetry) — and a typed
+reason for refusing to adjudicate. Where the native answers converge on
+the conservative center, the harness funded the atypical tail and then
+declined to pretend the center had won.
+
+### The differences, named
+
+1. **Where confidence comes from.** Native confidence is a property of
+   the prose. Harness confidence is a property of the record: a section
+   is rendered `observation` only when grounded in ledger entries of
+   that class, `conjecture` when it survived but was never grounded,
+   `conflict`/`unknown` when that is what the record holds. Every
+   composed sentence carries its epistemic class and its ledger refs.
+2. **The unit of output.** A native answer is one artifact with one
+   implicit author-voice. A grounded answer is a resolution + typed
+   sections + a claim ledger + a validation report, each
+   content-addressed — "why do you say S2?" has a mechanical answer.
+3. **Model discrimination.** The three native answers are
+   indistinguishable in reliability signals. The harness gave the same
+   three models different institutional outcomes, and DeepSeek's
+   repeated repair-scope violations — invisible in its polished native
+   answer — are now a durable, replayable report.
+4. **Reproducibility.** The one-shots are unrepeatable samples. The
+   harness answers are digest-bound: frozen question, manifest, and
+   run identity, replayable end to end.
+5. **Failure is a first-class object.** A native answer cannot fail;
+   it can only be wrong fluently. The harness failed visibly twice in
+   this campaign (both bridge defects), and both failures were
+   diagnosed entirely from durable records — the same auditability the
+   answers themselves get.
+6. **What natives are better at.** Speed (30–40s vs ~20–60 min
+   end-to-end), coverage, and pedagogy. The native answers are good
+   tutorials. The grounded answers are findings. Different products:
+   one tells you what is thought about the question, the other tells
+   you what this bounded record can and cannot support.
+
+### Honest limits
+
+The two full-tier grounded answers say "unresolved" about a 6-cycle,
+100k-token record — a statement about that bounded record, not an
+eternal truth; more cycles or admitted evidence could adjudicate the
+rivalry. And an archival loss: the kimi and glm2 run roots (full
+ledgers and section texts) were reclaimed with the container before
+being committed — a bare `runs/` gitignore pattern silently excluded
+every per-home `<slug>/runs/` directory (now scoped to `/runs/`).
+Resolutions, resolution reasons, section extracts, logs, qualification
+records, and both DeepSeek battery reports survive in this directory
+and in the session record.
