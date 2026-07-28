@@ -226,6 +226,26 @@ def _validate_authority(
         == policy.maximum_proposals_per_turn,
         "simulation authority differs from manifest",
     )
+    research = payload.get("research_authority")
+    research_policy = manifest.inquiry_capability_policy.research
+    if research is not None or research_policy.enabled:
+        # Pre-research payloads carry no block; that is only acceptable
+        # while the manifest keeps research disabled.
+        from deepreason.capabilities.research import (
+            MAXIMUM_PROPOSALS_PER_TURN as _RESEARCH_TURN_MAXIMUM,
+        )
+
+        _authority(
+            isinstance(research, Mapping),
+            "research authority is missing",
+        )
+        _authority(
+            bool(research.get("enabled")) == research_policy.enabled
+            and research.get("policy_digest") == research_policy.digest
+            and research.get("maximum_proposals_per_turn")
+            == (_RESEARCH_TURN_MAXIMUM if research_policy.enabled else 0),
+            "research authority differs from manifest",
+        )
     source_call_seq, call = _source_call(harness, provider)
     prompt = harness.blobs.get(call.prompt_ref)
     prompt_sha256 = hashlib.sha256(prompt).hexdigest()
@@ -288,7 +308,12 @@ def _wire_output(
     )
     control = manifest.control_plane_policy
     _authority(control is not None, "v6 manifest has no control plane")
+    from deepreason.capabilities.research import (
+        MAXIMUM_PROPOSALS_PER_TURN as _RESEARCH_TURN_MAXIMUM,
+    )
+
     simulation_policy = manifest.inquiry_capability_policy.simulation
+    research_policy = manifest.inquiry_capability_policy.research
     contract = ConjecturerTurnWireContractV6(
         reasoning=reasoning,
         aliases=AliasTable(source_aliases),
@@ -304,6 +329,10 @@ def _wire_output(
         ),
         simulation_input_aliases=simulation_aliases,
         scratch_authoring_policy=control.scratch_authoring,
+        research_enabled=research_policy.enabled,
+        maximum_research_proposals=(
+            _RESEARCH_TURN_MAXIMUM if research_policy.enabled else 0
+        ),
     )
     _authority(
         contract.contract_id == item.preparation.contract_id,
@@ -745,6 +774,54 @@ def recover_conjecture_admission(
                 provider_attempt=provider,
                 source_call_seq=source_call_seq,
             )
+        research_refs: tuple[str, ...] = ()
+        if getattr(output, "research_proposals", ()):
+            from deepreason.capabilities.enums import CapabilityLifecycle
+            from deepreason.capabilities.research import (
+                ResearchCapabilityController,
+            )
+
+            research_controller = ResearchCapabilityController(
+                harness, manifest
+            )
+            research_refs = research_controller.materialize_transactional_proposals(
+                tuple(output.research_proposals),
+                preparation=item.preparation,
+                provider_attempt=provider,
+                source_call_seq=source_call_seq,
+            )
+            for research_ref in research_refs:
+                # Complete only fetches the crashed process never started:
+                # any durable progress beyond PROPOSED (validation, denial,
+                # receipt, consumption) is owned by the replayed record.
+                current_ref = (
+                    harness.capability_state.current_transition_by_request.get(
+                        research_ref
+                    )
+                )
+                current = (
+                    harness.capability_state.transitions.get(current_ref)
+                    if current_ref
+                    else None
+                )
+                if current is None or current.lifecycle != CapabilityLifecycle.PROPOSED:
+                    continue
+                research_proposal = harness.capability_state.proposals[
+                    research_ref
+                ]
+                research_package = research_controller.execute(
+                    research_proposal,
+                    formal_fence_seq=item.preparation.formal_fence_seq,
+                    scratch_fence_seq=item.preparation.scratch_fence_seq,
+                )
+                if research_package is not None and research_package.items:
+                    research_controller.consume(
+                        research_proposal,
+                        research_package,
+                        problem,
+                        formal_fence_seq=item.preparation.formal_fence_seq,
+                        scratch_fence_seq=item.preparation.scratch_fence_seq,
+                    )
     except (
         ScratchAuthoringError,
         ConjectureRecoverySemanticError,
@@ -779,6 +856,7 @@ def recover_conjecture_admission(
                 *artifact_refs,
                 *scratch_refs,
                 *simulation_refs,
+                *research_refs,
             )
         )
     )

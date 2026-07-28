@@ -119,6 +119,28 @@ class ResearchCapabilityController:
         self._current[proposal.id] = transition
         return transition
 
+    def _previous_transition(self, proposal_id: str) -> CapabilityTransitionV1:
+        """This controller's own last transition, or the replayed current one.
+
+        Recovery constructs a fresh controller over replayed state, so the
+        chain must resume from the durable record rather than requiring the
+        in-memory transition that the crashed process held."""
+
+        transition = self._current.get(proposal_id)
+        if transition is not None:
+            return transition
+        transition_ref = self.harness.capability_state.current_transition_by_request.get(
+            proposal_id
+        )
+        transition = (
+            self.harness.capability_state.transitions.get(transition_ref)
+            if transition_ref
+            else None
+        )
+        if transition is None:
+            raise KeyError(f"research proposal has no recorded transition: {proposal_id}")
+        return transition
+
     # -- budget derivation (replayed state is the only authority) ---------
 
     def _requests_already_used(self) -> int:
@@ -385,7 +407,7 @@ class ResearchCapabilityController:
             "formal_fence_seq": formal_fence_seq,
             "scratch_fence_seq": scratch_fence_seq,
         }
-        previous = self._current[proposal.id]
+        previous = self._previous_transition(proposal.id)
         previous = self._transition(
             proposal,
             CapabilityLifecycle.VALIDATED,
@@ -609,7 +631,7 @@ class ResearchCapabilityController:
         self._transition(
             proposal,
             CapabilityLifecycle.CONSUMED,
-            previous=self._current[proposal.id],
+            previous=self._previous_transition(proposal.id),
             phase_record=consumption,
             reason_code="evidence_registered",
             formal_fence_seq=formal_fence_seq,
