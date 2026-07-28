@@ -1,0 +1,17 @@
+context_window_tokens: 131072
+credential_env: OLLAMA_API_KEY
+endpoint: https://ollama.com/v1
+family: deepseek
+logprobs: false
+maximum_completion_tokens: 8192
+model_id: deepseek-v4-pro
+model_profile: standard
+model_revision: deepseek-v4-pro
+output_mechanism: json_text
+output_mode: json_object
+profile_digest: f1868494ebfc59c794599dd2721373c04b45fdb4a133e8bc7c6011447b440668
+provider: ollama
+reasoning: null
+schema: deepreason-provider-profile.v1
+temperature: null
+timeout_s: 120
