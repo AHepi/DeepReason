@@ -554,6 +554,26 @@ def _validate_post_terminal_descendants(harness, commitment) -> None:
             if event.bridge is None:
                 raise ValueError("TERMINAL_POST_HORIZON_BRIDGE_INVALID")
             continue
+        if event.rule == Rule.SCRATCH:
+            # Bridge evidence-pack construction records harness-actor
+            # advisory scratch bookkeeping (attention pack rendered,
+            # advisory context created, coverage cycle progress).  Scratch
+            # is advisory_non_grounding by construction and process events
+            # cannot mutate formal StateDiff, so authorizing it here
+            # extends no reasoning authority past the horizon — but only
+            # inside a commitment-bound bridge episode; a root with
+            # post-horizon scratch and no bridge work stays invalid.
+            payload = getattr(event, "scratch", None)
+            if (
+                payload is not None
+                and getattr(payload, "actor", None) == "harness"
+                and any(
+                    commitment_bound_bridge_work(item)
+                    for item in transaction_work.values()
+                )
+            ):
+                continue
+            raise ValueError("TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED")
         if event.rule == Rule.CONTROL:
             matching = [
                 item

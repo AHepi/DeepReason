@@ -71,3 +71,28 @@ def test_composition_after_a_non_resumable_stop_stays_forbidden():
     )
     with pytest.raises(ValueError, match="follows terminal lifecycle state"):
         state.observe_event(event)
+
+
+def test_bridged_roots_stay_verifiable_after_composition():
+    """Live finding: every bridge writes harness-actor advisory scratch
+    bookkeeping past the reasoning horizon, and re-verification of any
+    bridged root failed TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED — the
+    committed campaign roots are the durable evidence.  A bridged root
+    must remain verifiable forever."""
+
+    from pathlib import Path
+
+    import pytest as _pytest
+
+    from deepreason.verification.report import verify_root_report
+
+    root = (
+        Path(__file__).parent.parent
+        / "experiments"
+        / "live_tri_2026-07-27"
+        / "run-ac1836b6237b6e9d80b3b0cb492b39f5"
+    )
+    if not root.is_dir():
+        _pytest.skip("committed campaign evidence root not present")
+    report = verify_root_report(root)
+    assert report.integrity_valid and report.security_valid
