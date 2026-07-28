@@ -216,22 +216,56 @@ def _v6_scratch_effect_refs(harness, context_ref: str) -> tuple[str, ...]:
     )
 
 
+def _v6_capability_effect_refs(
+    harness,
+    *,
+    work_id: str,
+    provider_attempt_ref: str,
+    proposal_model: type,
+) -> tuple[str, ...]:
+    proposals = sorted(
+        (
+            proposal
+            for proposal in harness.capability_state.proposals.values()
+            if isinstance(proposal, proposal_model)
+            and proposal.originating_work_order_ref == work_id
+            and proposal.originating_provider_attempt_ref == provider_attempt_ref
+        ),
+        key=lambda proposal: (proposal.proposal_index, proposal.id),
+    )
+    return tuple(proposal.id for proposal in proposals)
+
+
 def _v6_simulation_effect_refs(
     harness,
     *,
     work_id: str,
     provider_attempt_ref: str,
 ) -> tuple[str, ...]:
-    proposals = sorted(
-        (
-            proposal
-            for proposal in harness.capability_state.proposals.values()
-            if proposal.originating_work_order_ref == work_id
-            and proposal.originating_provider_attempt_ref == provider_attempt_ref
-        ),
-        key=lambda proposal: (proposal.proposal_index, proposal.id),
+    from deepreason.capabilities.models import SimulationProposalV1
+
+    return _v6_capability_effect_refs(
+        harness,
+        work_id=work_id,
+        provider_attempt_ref=provider_attempt_ref,
+        proposal_model=SimulationProposalV1,
     )
-    return tuple(proposal.id for proposal in proposals)
+
+
+def _v6_research_effect_refs(
+    harness,
+    *,
+    work_id: str,
+    provider_attempt_ref: str,
+) -> tuple[str, ...]:
+    from deepreason.capabilities.models import ResearchFetchProposalV1
+
+    return _v6_capability_effect_refs(
+        harness,
+        work_id=work_id,
+        provider_attempt_ref=provider_attempt_ref,
+        proposal_model=ResearchFetchProposalV1,
+    )
 
 
 def _validate_v6_context_continuation(
@@ -756,6 +790,11 @@ def conj(
         if control.scratch_authoring.enabled:
             allowed_outcomes.append(CapabilityOutcome.SCRATCH_PROPOSAL)
         simulation_policy = run_manifest.inquiry_capability_policy.simulation
+        research_policy = run_manifest.inquiry_capability_policy.research
+        from deepreason.capabilities.research import (
+            MAXIMUM_PROPOSALS_PER_TURN as RESEARCH_MAXIMUM_PROPOSALS_PER_TURN,
+        )
+
         transaction_simulation_aliases = {
             f"SIM_{index:03d}": item.alias
             for index, item in enumerate(simulation_policy.input_catalog, 1)
@@ -812,6 +851,15 @@ def conj(
                 "policy_digest": simulation_policy.digest,
                 "maximum_proposals_per_turn": (simulation_policy.maximum_proposals_per_turn),
                 "input_aliases": sorted(transaction_simulation_aliases),
+            },
+            "research_authority": {
+                "enabled": research_policy.enabled,
+                "policy_digest": research_policy.digest,
+                "maximum_proposals_per_turn": (
+                    RESEARCH_MAXIMUM_PROPOSALS_PER_TURN
+                    if research_policy.enabled
+                    else 0
+                ),
             },
             "scratch_authoring_enabled": control.scratch_authoring.enabled,
             "context_expansion_index": _context_expansion_index,
@@ -1355,7 +1403,12 @@ def conj(
             attention_policy=conjecture_context_plan.attention_policy,
         )
     if active_v6:
+        from deepreason.capabilities.research import (
+            MAXIMUM_PROPOSALS_PER_TURN as _RESEARCH_TURN_MAXIMUM,
+        )
+
         simulation_policy = run_manifest.inquiry_capability_policy.simulation
+        v6_research_policy = run_manifest.inquiry_capability_policy.research
         turn_contract = ConjecturerTurnWireContractV6(
             reasoning=reasoning,
             aliases=aliases,
@@ -1367,6 +1420,10 @@ def conj(
             ),
             simulation_input_aliases=transaction_simulation_aliases,
             scratch_authoring_policy=control.scratch_authoring,
+            research_enabled=v6_research_policy.enabled,
+            maximum_research_proposals=(
+                _RESEARCH_TURN_MAXIMUM if v6_research_policy.enabled else 0
+            ),
         )
     elif active_v4:
         turn_contract = (
@@ -1853,6 +1910,7 @@ def conj(
     request = output.context_request if active_v4 or active_v6 else None
     abstention = output.abstention if active_v4 or active_v6 else None
     simulation_drafts = output.simulation_proposals if active_v5 or active_v6 else ()
+    research_drafts = getattr(output, "research_proposals", ()) if active_v6 else ()
     request_ref = (
         harness.blobs.put(canonical_json(request.model_dump(mode="json", exclude_none=True)))
         if request is not None
@@ -2218,6 +2276,8 @@ def conj(
     scratch_author = None
     simulation_controller = None
     staged_simulation_refs: tuple[str, ...] = ()
+    research_controller = None
+    staged_research_refs: tuple[str, ...] = ()
     if active_v6:
         exposure_ref = transaction_context_authorization.exposure_receipt.id
         scratch_proposal = getattr(output, "scratch_proposal", None)
@@ -2286,6 +2346,52 @@ def conj(
                     attempt_index=transaction_preparation.attempt_index,
                     status="rejected",
                     reason_code="simulation_semantic_rejected",
+                    usage_status="exact",
+                    prompt_tokens=llm_call.prompt_tokens,
+                    completion_tokens=llm_call.completion_tokens,
+                    provider_attempt=transaction_provider_attempt,
+                    admission=admission,
+                )
+                return []
+
+        if research_drafts:
+            from deepreason.capabilities.research import (
+                ResearchCapabilityController,
+            )
+
+            research_controller = ResearchCapabilityController(
+                harness,
+                run_manifest,
+            )
+            try:
+                staged_research = research_controller.stage_transactional_proposals(
+                    tuple(research_drafts),
+                    preparation=transaction_preparation,
+                    provider_attempt=transaction_provider_attempt,
+                    source_call_seq=source_call_seq,
+                )
+                staged_research_refs = tuple(
+                    proposal.id for proposal in staged_research
+                )
+            except Exception as error:
+                diagnostic_ref = _v6_component_diagnostic(
+                    harness,
+                    component="research",
+                    phase="semantic_validation",
+                    error=error,
+                )
+                admission = transaction_service.record_semantic_admission(
+                    transaction_provider_attempt,
+                    outcome="rejected",
+                    diagnostic_refs=tuple(
+                        dict.fromkeys((*component_diagnostic_refs, diagnostic_ref))
+                    ),
+                )
+                transaction_service.terminate(
+                    work_id=transaction_preparation.id,
+                    attempt_index=transaction_preparation.attempt_index,
+                    status="rejected",
+                    reason_code="research_semantic_rejected",
                     usage_status="exact",
                     prompt_tokens=llm_call.prompt_tokens,
                     completion_tokens=llm_call.completion_tokens,
@@ -2390,6 +2496,56 @@ def conj(
                     )
                 )
 
+        research_output_refs = ()
+        if research_drafts:
+            assert research_controller is not None
+            try:
+                research_output_refs = research_controller.materialize_transactional_proposals(
+                    tuple(research_drafts),
+                    preparation=transaction_preparation,
+                    provider_attempt=transaction_provider_attempt,
+                    source_call_seq=source_call_seq,
+                )
+                if research_output_refs != staged_research_refs:
+                    raise ValueError("research materialization differs from its staged batch")
+                # Unlike simulation (whose execution is provider-mediated
+                # follow-up work), a granted fetch completes inside this
+                # cycle: consumed material becomes citable blocks before the
+                # next turn's citation checks. Denials are typed transitions
+                # returned as None — never exceptions, never silence.
+                for research_proposal_ref in research_output_refs:
+                    research_proposal = harness.capability_state.proposals[
+                        research_proposal_ref
+                    ]
+                    research_package = research_controller.execute(
+                        research_proposal,
+                        formal_fence_seq=transaction_preparation.formal_fence_seq,
+                        scratch_fence_seq=transaction_preparation.scratch_fence_seq,
+                    )
+                    if research_package is not None and research_package.items:
+                        research_controller.consume(
+                            research_proposal,
+                            research_package,
+                            problem,
+                            formal_fence_seq=transaction_preparation.formal_fence_seq,
+                            scratch_fence_seq=transaction_preparation.scratch_fence_seq,
+                        )
+            except Exception as error:
+                research_output_refs = _v6_research_effect_refs(
+                    harness,
+                    work_id=transaction_preparation.id,
+                    provider_attempt_ref=transaction_provider_attempt.id,
+                )
+                component_diagnostic_refs.append(
+                    _v6_component_diagnostic(
+                        harness,
+                        component="research",
+                        phase="materialization",
+                        error=error,
+                        partial_refs=research_output_refs,
+                    )
+                )
+
         semantic_output_ref = harness.blobs.put(
             canonical_json(
                 output.model_dump(
@@ -2406,6 +2562,7 @@ def conj(
                     *(artifact.id for artifact in registered),
                     *scratch_output_refs,
                     *simulation_output_refs,
+                    *research_output_refs,
                 )
             )
         )

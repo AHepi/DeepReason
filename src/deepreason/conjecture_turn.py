@@ -7,7 +7,10 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json, sha256_hex
-from deepreason.capabilities.models import SimulationProposalDraftV1
+from deepreason.capabilities.models import (
+    ResearchFetchProposalDraftV1,
+    SimulationProposalDraftV1,
+)
 from deepreason.llm.contracts import ConjectureCandidate
 from deepreason.run_manifest import ConjectureContextPolicyV1, ScratchPolicy
 from deepreason.scratch.models import RetrievalChannel
@@ -176,6 +179,11 @@ class ConjectureTurnV6(_TurnRecord):
         default=(), max_length=32
     )
     scratch_proposal: ScratchProposalV1 | None = None
+    # Digest-stable growth: a research-free turn dumps byte-identically to
+    # its pre-research form, so stored semantic outputs never shift.
+    research_proposals: tuple[ResearchFetchProposalDraftV1, ...] = Field(
+        default=(), max_length=2, exclude_if=lambda value: value == ()
+    )
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
@@ -185,10 +193,14 @@ class ConjectureTurnV6(_TurnRecord):
             or self.abstention
             or self.simulation_proposals
             or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
         if self.abstention is not None and (
-            self.candidates or self.simulation_proposals or self.scratch_proposal
+            self.candidates
+            or self.simulation_proposals
+            or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("abstention cannot accompany semantic proposals")
         return self
@@ -204,6 +216,9 @@ class ReasoningConjecturerTurnV6(_TurnRecord):
         default=(), max_length=32
     )
     scratch_proposal: ScratchProposalV1 | None = None
+    research_proposals: tuple[ResearchFetchProposalDraftV1, ...] = Field(
+        default=(), max_length=2, exclude_if=lambda value: value == ()
+    )
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
@@ -213,10 +228,14 @@ class ReasoningConjecturerTurnV6(_TurnRecord):
             or self.abstention
             or self.simulation_proposals
             or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
         if self.abstention is not None and (
-            self.candidates or self.simulation_proposals or self.scratch_proposal
+            self.candidates
+            or self.simulation_proposals
+            or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("abstention cannot accompany semantic proposals")
         return self

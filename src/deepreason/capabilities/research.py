@@ -15,6 +15,7 @@ typed exhaustion receipts carrying count and limit.
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Mapping
 
 from deepreason.capabilities.enums import CapabilityLifecycle
 from deepreason.capabilities.models import (
@@ -34,6 +35,13 @@ from deepreason.capabilities.models import (
 )
 
 BACKEND_IDENTITY = "web.contained.v1"
+
+# The per-turn proposal ceiling is a fixed wire-contract constant, not a
+# policy field: growing the policy schema would perturb frozen manifest
+# digests, while the run-total budgets (requests, sources) already live in
+# the policy. Two directed proposals per turn matches the three-URL bound
+# per proposal without inviting fan-out.
+MAXIMUM_PROPOSALS_PER_TURN = 2
 
 
 class ResearchCapabilityController:
@@ -178,6 +186,182 @@ class ResearchCapabilityController:
             scratch_fence_seq=scratch_fence_seq,
         )
         return proposal
+
+    def _stage_transactional_proposal(
+        self,
+        draft: ResearchFetchProposalDraftV1,
+        *,
+        proposal_index: int,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> ResearchFetchProposalV1:
+        """Build and validate a v6 proposal without appending any event.
+
+        Mirrors the simulation staging seam: the preparation fixes the
+        problem, run input, route, contract, and research authority; the
+        provider-result event proves which authorized result supplied the
+        semantic content. The returned immutable proposal is preparation
+        data only — nothing durable happens here.
+        """
+
+        from deepreason.workflow.models import CapabilityOutcome, WorkflowTaskKind
+        from deepreason.workflow.transaction import (
+            ProviderAttemptV1,
+            WorkPreparationV1,
+        )
+
+        if self.manifest.schema_version != 6:
+            raise ValueError("transactional research proposals require RunManifest v6")
+        preparation = WorkPreparationV1.model_validate(
+            preparation.model_dump(mode="python", by_alias=True)
+        )
+        provider_attempt = ProviderAttemptV1.model_validate(
+            provider_attempt.model_dump(mode="python", by_alias=True)
+        )
+        item = self.harness.workflow_state.transaction_work.get(preparation.id)
+        if (
+            item is None
+            or item.preparation != preparation
+            or provider_attempt.work_id != preparation.id
+            or item.provider_attempts.get(provider_attempt.attempt_index) != provider_attempt
+            or preparation.task_kind != WorkflowTaskKind.CONJECTURE
+            or preparation.contract_id != "conjecturer.turn.v6"
+        ):
+            raise ValueError("research proposal lacks its durable v6 provider work")
+        payload = preparation.task_payload_value
+        if not isinstance(payload, Mapping):
+            raise ValueError("v6 conjecture preparation has no semantic task payload")
+        research_authority = payload.get("research_authority")
+        allowed_outcomes = payload.get("allowed_outcomes")
+        if (
+            not isinstance(research_authority, Mapping)
+            or research_authority.get("enabled") is not True
+            or research_authority.get("policy_digest") != self.policy.digest
+            or research_authority.get("maximum_proposals_per_turn")
+            != MAXIMUM_PROPOSALS_PER_TURN
+            or not isinstance(allowed_outcomes, (tuple, list))
+            or CapabilityOutcome.RESEARCH_REQUEST.value not in allowed_outcomes
+            or proposal_index >= MAXIMUM_PROPOSALS_PER_TURN
+        ):
+            raise ValueError("v6 preparation does not authorize this research proposal")
+        source = next(
+            (
+                event
+                for event in self.harness._events_since(source_call_seq)
+                if event.seq == source_call_seq
+            ),
+            None,
+        )
+        if (
+            source is None
+            or source.llm is None
+            or source.llm.work_order_id != preparation.id
+            or source.llm.dispatch_authorization_ref != provider_attempt.authorization_bundle_ref
+            or provider_attempt.id not in source.outputs
+        ):
+            raise ValueError("research proposal source is not its provider-result event")
+        problem_ref = payload.get("problem_ref")
+        if not isinstance(problem_ref, str) or not problem_ref:
+            raise ValueError("v6 research authority has no problem reference")
+
+        proposal = ResearchFetchProposalV1.create(
+            **draft.model_dump(mode="python"),
+            proposal_index=proposal_index,
+            originating_work_order_ref=preparation.id,
+            originating_provider_attempt_ref=provider_attempt.id,
+            source_call_seq=source_call_seq,
+            problem_ref=problem_ref,
+            run_input_digest=self.manifest.run_input_digest,
+        )
+        existing = self.harness.capability_state.proposals.get(proposal.id)
+        if existing is not None:
+            if existing != proposal:
+                raise ValueError("transactional research proposal identity conflict")
+            return existing
+        return proposal
+
+    def stage_transactional_proposals(
+        self,
+        drafts: tuple[ResearchFetchProposalDraftV1, ...],
+        *,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> tuple[ResearchFetchProposalV1, ...]:
+        """Purely validate a complete proposal batch before semantic mutation."""
+
+        if len(drafts) > MAXIMUM_PROPOSALS_PER_TURN:
+            raise ValueError("research proposal batch exceeds frozen turn authority")
+        proposals = tuple(
+            self._stage_transactional_proposal(
+                draft,
+                proposal_index=index,
+                preparation=preparation,
+                provider_attempt=provider_attempt,
+                source_call_seq=source_call_seq,
+            )
+            for index, draft in enumerate(drafts)
+        )
+        if len({proposal.id for proposal in proposals}) != len(proposals):
+            raise ValueError("transactional research proposal batch contains duplicates")
+        return proposals
+
+    def propose_transactional(
+        self,
+        draft: ResearchFetchProposalDraftV1,
+        *,
+        proposal_index: int,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> ResearchFetchProposalV1:
+        """Bind one staged v6 proposal to its durable provider transaction."""
+
+        proposal = self._stage_transactional_proposal(
+            draft,
+            proposal_index=proposal_index,
+            preparation=preparation,
+            provider_attempt=provider_attempt,
+            source_call_seq=source_call_seq,
+        )
+        existing = self.harness.capability_state.proposals.get(proposal.id)
+        if existing is not None:
+            return existing
+        item = self.harness.workflow_state.transaction_work[proposal.originating_work_order_ref]
+        self._transition(
+            proposal,
+            CapabilityLifecycle.PROPOSED,
+            previous=None,
+            phase_record=proposal,
+            reason_code="transaction_semantic_proposal",
+            formal_fence_seq=item.preparation.formal_fence_seq,
+            scratch_fence_seq=item.preparation.scratch_fence_seq,
+        )
+        return proposal
+
+    def materialize_transactional_proposals(
+        self,
+        drafts: tuple[ResearchFetchProposalDraftV1, ...],
+        *,
+        preparation,
+        provider_attempt,
+        source_call_seq: int,
+    ) -> tuple[str, ...]:
+        """Return deterministic proposal IDs, reusing replayed records on recovery."""
+
+        if len(drafts) > MAXIMUM_PROPOSALS_PER_TURN:
+            raise ValueError("research proposal batch exceeds frozen turn authority")
+        return tuple(
+            self.propose_transactional(
+                draft,
+                proposal_index=index,
+                preparation=preparation,
+                provider_attempt=provider_attempt,
+                source_call_seq=source_call_seq,
+            ).id
+            for index, draft in enumerate(drafts)
+        )
 
     def execute(
         self,
@@ -492,6 +676,7 @@ def consumed_research_blocks(harness):
 
 __all__ = [
     "BACKEND_IDENTITY",
+    "MAXIMUM_PROPOSALS_PER_TURN",
     "ResearchCapabilityController",
     "blocks_for_fetched_text",
     "consumed_research_blocks",

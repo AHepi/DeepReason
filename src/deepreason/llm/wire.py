@@ -34,6 +34,7 @@ from deepreason.conjecture_turn import (
     ReasoningConjecturerTurnV6,
 )
 from deepreason.capabilities.models import (
+    ResearchFetchProposalDraftV1,
     SimulationParameterSetV1,
     SimulationProposalDraftV1,
 )
@@ -840,6 +841,19 @@ class SimulationProposalWireV1(StrictWireModel):
     interpretation_conditions: list[str] = Field(min_length=1, max_length=64)
 
 
+class ResearchFetchProposalWireV1(StrictWireModel):
+    """Directed-fetch intent on the v6 wire: explicit https URLs only.
+
+    The model proposes sources; the harness alone validates them against
+    the frozen domain allowlist and executes them under containment. The
+    wire shape mirrors ResearchFetchProposalDraftV1 exactly.
+    """
+
+    request_identifier: str = Field(min_length=1, max_length=128)
+    purpose: str = Field(min_length=1, max_length=2_000)
+    urls: list[str] = Field(min_length=1, max_length=3)
+
+
 class ConjecturerTurnWireV5(ConjecturerTurnWireV4):
     simulation_proposals: list[SimulationProposalWireV1] = Field(
         default_factory=list, max_length=32
@@ -885,6 +899,9 @@ class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
 class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
     context_request: ContextRequestWireV2 | None = None
     scratch_proposal: ScratchProposalV1 | None = None
+    research_proposals: list[ResearchFetchProposalWireV1] = Field(
+        default_factory=list, max_length=2
+    )
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
@@ -901,10 +918,14 @@ class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
             or self.abstention
             or self.simulation_proposals
             or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
         if self.abstention is not None and (
-            self.candidates or self.simulation_proposals or self.scratch_proposal
+            self.candidates
+            or self.simulation_proposals
+            or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("abstention cannot accompany semantic proposals")
         return self
@@ -913,6 +934,9 @@ class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
 class ReasoningConjecturerTurnWireV6(ReasoningConjecturerTurnWireV5):
     context_request: ContextRequestWireV2 | None = None
     scratch_proposal: ScratchProposalV1 | None = None
+    research_proposals: list[ResearchFetchProposalWireV1] = Field(
+        default_factory=list, max_length=2
+    )
 
     @model_validator(mode="after")
     def _meaningful_outcome(self):
@@ -929,10 +953,14 @@ class ReasoningConjecturerTurnWireV6(ReasoningConjecturerTurnWireV5):
             or self.abstention
             or self.simulation_proposals
             or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("a conjecture turn requires at least one meaningful outcome")
         if self.abstention is not None and (
-            self.candidates or self.simulation_proposals or self.scratch_proposal
+            self.candidates
+            or self.simulation_proposals
+            or self.scratch_proposal
+            or self.research_proposals
         ):
             raise ValueError("abstention cannot accompany semantic proposals")
         return self
@@ -1034,6 +1062,8 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
         maximum_simulation_proposals: int = 0,
         simulation_input_aliases: Mapping[str, str] | tuple[str, ...] = (),
         scratch_authoring_policy: Any | None = None,
+        research_enabled: bool = False,
+        maximum_research_proposals: int = 0,
     ) -> None:
         formal = tuple(aliases.aliases)
         scratch = tuple((scratch_aliases or {}).keys())
@@ -1056,7 +1086,16 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
                 )
         elif maximum_simulation_proposals != 0:
             raise ValueError("disabled simulation must have a zero proposal maximum")
+        if research_enabled:
+            if not 1 <= maximum_research_proposals <= 2:
+                raise ValueError(
+                    "enabled research requires a per-turn maximum in 1..2"
+                )
+        elif maximum_research_proposals != 0:
+            raise ValueError("disabled research must have a zero proposal maximum")
 
+        self.research_enabled = bool(research_enabled)
+        self.maximum_research_proposals = maximum_research_proposals
         self.simulation_enabled = bool(simulation_enabled)
         self.simulation_input_aliases = tuple(sorted(simulation_inputs))
         self.visible_context_aliases = tuple(sorted((*formal, *scratch)))
@@ -1122,6 +1161,11 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             proposals["maxItems"] = self.maximum_simulation_proposals
         if not self.scratch_authoring_enabled:
             self._omit_property(schema, "scratch_proposal")
+        if not self.research_enabled:
+            self._omit_property(schema, "research_proposals")
+        else:
+            research = properties.get("research_proposals", {})
+            research["maxItems"] = self.maximum_research_proposals
 
         definitions = schema.get("$defs", {})
         if self.scratch_authoring_enabled:
@@ -1204,6 +1248,20 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
                         f"scratch {field} exceeds frozen per-turn authority",
                         pointer=f"/scratch_proposal/{field}/{maximum}",
                     )
+        research = value.get("research_proposals")
+        if "research_proposals" in value and not self.research_enabled:
+            raise V6WireReferenceError(
+                "research_proposals is absent when research is disabled",
+                pointer="/research_proposals",
+            )
+        if isinstance(research, list) and len(research) > self.maximum_research_proposals:
+            raise V6WireReferenceError(
+                "research proposal count exceeds frozen per-turn authority",
+                pointer=(
+                    "/research_proposals/"
+                    f"{self.maximum_research_proposals}"
+                ),
+            )
         proposals = value.get("simulation_proposals")
         if "simulation_proposals" in value and not self.simulation_enabled:
             raise V6WireReferenceError(
@@ -1388,12 +1446,18 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             wire.model_dump(mode="python", exclude_unset=True)
         )
         scratch = getattr(wire, "scratch_proposal", None)
+        research_wire = tuple(getattr(wire, "research_proposals", ()))
+        if len(research_wire) > self.maximum_research_proposals:
+            raise ValueError("research proposal count exceeds frozen per-turn authority")
         if not (
             wire.candidates
             or wire.context_request
             or wire.abstention
             or wire.simulation_proposals
-        ) and scratch is not None:
+        ) and (scratch is not None or research_wire):
+            # V5 intentionally rejects an empty ordinary outcome. A
+            # scratch-only or research-only v6 response is valid and binds
+            # no hidden candidate merely to satisfy the older schema.
             values = {
                 "candidates": (),
                 "context_request": None,
@@ -1404,6 +1468,14 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
             compiled = ConjecturerTurnWireContractV5.compile(self, wire)
             values = compiled.model_dump(mode="python")
         values["scratch_proposal"] = scratch
+        values["research_proposals"] = tuple(
+            ResearchFetchProposalDraftV1(
+                request_identifier=item.request_identifier,
+                purpose=item.purpose,
+                urls=tuple(item.urls),
+            )
+            for item in research_wire
+        )
         model = ReasoningConjecturerTurnV6 if self.reasoning else ConjectureTurnV6
         return model.model_validate(values)
 

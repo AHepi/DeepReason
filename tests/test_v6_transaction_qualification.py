@@ -160,14 +160,18 @@ def _manifest(
     critics: bool = False,
     scratch_authoring: ScratchAuthoringPolicyV1 | None = None,
     simulation: SimulationCapabilityPolicyV1 | None = None,
+    research=None,
 ):
     toolchains = ()
     capabilities = None
-    if simulation is not None:
-        capabilities = InquiryCapabilityPolicyV1(
-            capability_profile="inquiry-capabilities.v2", simulation=simulation
-        )
-        if simulation.enabled:
+    if simulation is not None or research is not None:
+        capability_kwargs = {"capability_profile": "inquiry-capabilities.v2"}
+        if simulation is not None:
+            capability_kwargs["simulation"] = simulation
+        if research is not None:
+            capability_kwargs["research"] = research
+        capabilities = InquiryCapabilityPolicyV1(**capability_kwargs)
+        if simulation is not None and simulation.enabled:
             version = (
                 f"{sys.version_info.major}.{sys.version_info.minor}."
                 f"{sys.version_info.micro}"

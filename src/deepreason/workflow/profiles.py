@@ -86,6 +86,7 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
         default=None, pattern=r"^[0-9a-f]{64}$"
     )
     simulation_enabled: bool = False
+    research_enabled: bool = False
     model_profile: Literal["compact", "standard", "frontier"]
     workload_profile: Literal["text", "code", "formal", "website"]
     max_candidates: StrictInt = Field(gt=0, le=256)
@@ -114,6 +115,8 @@ class ConjectureWorkflowProfileV1(FrozenRecord):
             outcomes.append(CapabilityOutcome.ABSTENTION)
         if self.mode == "active_inquiry" and self.simulation_enabled:
             outcomes.append(CapabilityOutcome.SIMULATION_REQUEST)
+        if self.mode == "active_inquiry" and self.research_enabled:
+            outcomes.append(CapabilityOutcome.RESEARCH_REQUEST)
         outcomes = [item for item in CapabilityOutcome if item in outcomes]
         return CapabilityGrantV1.create(
             profile_id=self.capability_profile,
@@ -246,6 +249,10 @@ def compile_workflow_profile(manifest: RunManifest) -> ConjectureWorkflowProfile
         simulation_enabled=bool(
             manifest.inquiry_capability_policy is not None
             and manifest.inquiry_capability_policy.simulation.enabled
+        ),
+        research_enabled=bool(
+            manifest.inquiry_capability_policy is not None
+            and manifest.inquiry_capability_policy.research.enabled
         ),
         model_profile=manifest.model_profile,
         workload_profile=manifest.workload_profile,
