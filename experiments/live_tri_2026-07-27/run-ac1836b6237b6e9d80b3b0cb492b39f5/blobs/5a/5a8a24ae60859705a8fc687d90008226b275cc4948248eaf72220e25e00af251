@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to eliminate weaker rival denominations as required by the problem. It proposes a composite cost metric but does not discuss or provide evidence against requests-only or bytes-only budgets, leaving the decision unsupported. The problem explicitly requires elimination of weaker rivals where evidence allows, and this omission means the answer does not meet that standard.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target fails to eliminate weaker rival denominations; it chooses requests-only but lists counterconditions that highlight its inability to control data volume or cost, which are strengths of rival denominations (bytes or composite). This undermines its own decision and does not satisfy the requirement to eliminate weaker rivals based on evidence.",
+      "counterexample": null
+    }
+  ]
+}

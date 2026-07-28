@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@055ac6fd69f46d9d2cf50a48: program:reasoning_observation_pending
+- reason-counter@9ba5b7180d148b89d1a6bb12: program:reasoning_observation_pending
+- reason-counter@17c55ad87b9e51720cfaf32f: program:reasoning_observation_pending
+- reason-counter@ef544c3b9fb008c91cbdd023: program:reasoning_observation_pending
+- reason-counter@96745b9509286507685e0669: program:reasoning_observation_pending
+- reason-counter@866a46c50ef6a57242f68045: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget should be denominated in wall-clock time, because time is the ultimate resource constraint for autonomous agents. Requests and bytes are proxies that can be eliminated: a time budget directly bounds the agent's activity and is easily auditable. Exhaustion is recorded as a typed terminal 'time_budget_exhausted' with elapsed time.","counterconditions":[{"case":"Time-based budgets can be non-deterministic due to network latency, but recording actual times and using them in replay mitigates this.","eval":"observation"},{"case":"If the agent runs on different hardware, the time budget may not be comparable; however, the problem focuses on replayability, not cross-platform consistency.","eval":"observation"},{"case":"A time budget does not directly limit the number of requests or bytes, which could lead to excessive resource usage within the time window, but this can be addressed by combining with other limits if needed.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a maximum runtime T. A timer starts when the agent begins. Before each fetch, the agent checks if the elapsed time plus a conservative estimate of the fetch duration would exceed T. If so, it terminates with 'time_budget_exhausted', recording the elapsed time and the budget T. To ensure replayability, the agent records the actual time taken for each fetch in its state log, and during replay, it simulates the same timing by waiting or using recorded timestamps.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@055ac6fd69f46d9d2cf50a48, reason-counter@9ba5b7180d148b89d1a6bb12, reason-counter@17c55ad87b9e51720cfaf32f
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be derived deterministically from the agent's configuration hash, ensuring that any replay with the same configuration has an identical budget. The denomination (requests or bytes) is part of the configuration. This eliminates ambiguity and makes the budget an intrinsic, auditable property of the agent's state.","counterconditions":[{"case":"This approach does not allow explicit budget setting by the user, which may be a requirement; however, the problem asks for specification, not user control.","eval":"observation"},{"case":"The hash function must be collision-resistant and deterministic across platforms.","eval":"observation"},{"case":"If the configuration includes time-dependent parameters, the hash must exclude them to maintain replayability.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent's initial state includes a hash of all non-budget configuration parameters. The budget is computed as a function of that hash, e.g., budget = hash mod N, where N is a predefined maximum. The denomination is specified in the configuration. Exhaustion is recorded as a typed terminal state 'budget_exhausted' with the configuration hash, the denomination, the budget limit, and the consumed amount. This ensures that the budget is fixed for a given configuration and cannot be tampered with.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ef544c3b9fb008c91cbdd023, reason-counter@96745b9509286507685e0669, reason-counter@866a46c50ef6a57242f68045
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

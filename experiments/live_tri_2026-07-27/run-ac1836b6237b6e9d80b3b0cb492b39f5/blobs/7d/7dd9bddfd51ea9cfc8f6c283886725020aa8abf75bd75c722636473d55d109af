@@ -1,0 +1,122 @@
+{
+  "candidates": [
+    {
+      "claim": "The fetch budget must be denominated in both requests and bytes, because each captures a distinct resource dimension that the other cannot; exhaustion is recorded as a typed terminal with separate counters and a reason enum.",
+      "mechanism": "Before each fetch, the agent atomically checks remaining request count and byte allowance. If either would be exceeded, the fetch is denied and the terminal state is set with exhaustion_reason ∈ {request_limit, byte_limit, both}, along with requests_used, bytes_used, and a full audit log of each fetch's actual bytes received. This ensures reproducibility because the decision is based on actual bytes, not estimates, and the log is deterministic if fetch ordering is deterministic (e.g., sequential or with deterministic parallel scheduling).",
+      "counterconditions": [
+        "If the agent can make requests that return variable-length responses, the byte budget may be exhausted unpredictably, harming replayability unless the response sizes are deterministic or the budget is large enough to absorb variance.",
+        "If parallel fetches are allowed, a race condition could cause overshoot; this is mitigated by requiring a global lock or atomic CAS on budget counters."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_005", "SRC_006", "SRC_008"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A single cost budget that combines requests and bytes via a linear cost function eliminates the need for two separate limits and provides a covering principle; exhaustion is recorded as cost_used reaching cost_limit with a typed terminal.",
+      "mechanism": "Each fetch is assigned a cost = α * 1 + β * bytes_received, where α and β are fixed at agent initialization. The agent maintains a cost_used counter. Before a fetch, it estimates the cost using expected bytes; if cost_used + estimated_cost > cost_limit, the fetch is denied and terminal state records exhaustion with reason 'cost_limit', actual cost_used, and the cost function parameters. The actual bytes received are added to cost_used after the fetch, and the audit log records the actual cost. This unifies the two dimensions and allows tuning the trade-off.",
+      "counterconditions": [
+        "If the weights are poorly chosen, the budget may be too permissive in one dimension.",
+        "The cost function must be part of the agent's state hash for reproducibility.",
+        "The estimation step introduces a potential discrepancy if actual bytes differ from estimate; using post-fetch actual cost for exhaustion check would allow one over-limit fetch, breaking strict budget enforcement."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The only true scarce resource is bytes transferred; requests are merely a proxy for rate limiting, which should be enforced by a separate throttle, not a budget. Exhaustion is recorded as bytes_used reaching byte_limit, with a typed terminal, while request rate limiting is logged as non-terminal events.",
+      "mechanism": "The agent has a byte budget. Before each fetch, it checks if bytes_used + estimated_bytes > byte_limit; if so, exhaustion with reason 'byte_limit'. Additionally, a token bucket rate limiter ensures that requests are not sent faster than a configurable rate, but exceeding the rate merely delays the request, not exhausts the budget. The terminal state includes bytes_used, byte_limit, and the rate limiter parameters. This eliminates the request budget as a weaker rival because bytes are the fundamental resource; request counts are irrelevant if each response is small.",
+      "counterconditions": [
+        "If the agent's task requires a large number of small requests (e.g., probing many endpoints), a byte budget alone may be insufficient to prevent excessive server load, which could be considered a resource abuse.",
+        "The rate throttle mitigates this but does not cap total requests.",
+        "If the environment has a hard request limit (e.g., API quota), this approach fails to enforce it."
+      ],
+      "typicality": 0.4,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A request budget is sufficient if each response is bounded by a maximum size; bytes are then a derived quantity that cannot exceed request_limit * max_response_size. Exhaustion is recorded as requests_used reaching request_limit, with a typed terminal.",
+      "mechanism": "The agent is configured with a maximum number of requests and a maximum response size per request. Before each fetch, it checks requests_used < request_limit. If not, exhaustion with reason 'request_limit'. The response is truncated or rejected if it exceeds max_response_size, and that event is logged. The terminal state records requests_used, request_limit, and the number of truncated responses. This ensures that the total bytes transferred is bounded by request_limit * max_response_size, making a separate byte budget redundant.",
+      "counterconditions": [
+        "If the agent can make requests with no size limit (e.g., streaming), this fails.",
+        "If the max_response_size is set too high, the byte bound may be too loose.",
+        "The truncation of responses may alter the agent's behavior, harming reproducibility if the truncation is non-deterministic (e.g., based on network chunk boundaries). The truncation must be deterministic, e.g., always taking the first N bytes."
+      ],
+      "typicality": 0.7,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "A token bucket that refills request tokens and byte tokens at configurable rates provides a flexible, burst-tolerant budget; exhaustion is recorded as a typed terminal when the bucket is empty and a fetch cannot be satisfied, with the bucket level history for audit.",
+      "mechanism": "The agent maintains two token buckets: one for requests (capacity C_r, refill rate R_r requests per second) and one for bytes (capacity C_b, refill rate R_b bytes per second). Before a fetch, the agent attempts to consume 1 request token and estimated_bytes byte tokens. If either bucket has insufficient tokens, the fetch is denied and exhaustion is recorded with reason 'token_bucket_exhausted', along with the current token counts and the refill schedule. The refill is based on a deterministic simulated clock that advances with each fetch or wall-clock time, ensuring reproducibility. The terminal state includes the full token bucket history.",
+      "counterconditions": [
+        "The simulated clock must be part of the agent's state hash.",
+        "If the agent's fetch pattern is bursty, the bucket may frequently exhaust, causing many denied fetches, which could be misinterpreted.",
+        "The token bucket adds complexity and may not be necessary if simple limits suffice.",
+        "The refill rates must be chosen carefully to avoid starvation or excessive bursts."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_001", "SRC_002"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in terms of allowed domains and per-domain quotas (requests and/or bytes), because the true resource is access to specific services; exhaustion is recorded per domain as a typed terminal when a domain's quota is reached.",
+      "mechanism": "The agent's budget is a set of (domain, max_requests, max_bytes) tuples. Before a fetch, the agent checks the target domain's remaining quota. If either requests or bytes would be exceeded, the fetch is denied and the terminal state records exhaustion with reason 'domain_quota_exhausted' and the domain. The agent may continue fetching from other domains. The terminal state includes the quota usage per domain. This covers the principle that different domains have different costs and limits.",
+      "counterconditions": [
+        "If the agent encounters a new domain not in the budget, it must either deny the fetch or have a default quota, which could be exploited.",
+        "The budget specification becomes complex.",
+        "Reproducibility requires that the domain set is fixed and the quotas are part of the state hash.",
+        "This approach may be overkill for a simple research agent."
+      ],
+      "typicality": 0.2,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Caching and retry interaction with budget: If the agent caches responses, a cache hit should not consume budget, but the cache state must be part of the agent's state hash to ensure reproducibility. Otherwise, a warm-cache replay could bypass exhaustion. For retries, each attempt should count against the request budget to prevent infinite retries, but the terminal state should record retry_count separately to distinguish legitimate exhaustion from flakiness. A possible mechanism: the budget includes a retry_allowance that is consumed first; once exhausted, further retries are denied and the terminal records 'retry_limit_exhausted'.",
+          "possible_next_move": "Integrate retry allowance into the typed terminal specification.",
+          "unfinished": "How to handle partial responses that are cached but later found to be invalid?",
+          "why_keep_this": "Addresses unresolved questions from SCR_003, SCR_004, SCR_006, SCR_008."
+        }
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_003",
+        "relation_hint": "extends retry handling with a retry allowance budget"
+      },
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "SCR_004",
+        "relation_hint": "addresses caching interaction by requiring cache state in state hash"
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Should the retry allowance be a separate budget or part of the request budget?",
+        "related_refs": ["SCR_003", "SCR_006"]
+      },
+      {
+        "question": "How to handle byte budget accounting when a response is compressed (Content-Encoding) vs uncompressed?",
+        "related_refs": ["SCR_008"]
+      }
+    ]
+  }
+}

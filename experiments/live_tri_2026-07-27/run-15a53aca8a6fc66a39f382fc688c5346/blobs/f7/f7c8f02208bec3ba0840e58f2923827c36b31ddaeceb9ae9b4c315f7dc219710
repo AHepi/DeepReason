@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@fe1e1e989a6b65e942f03136: program:reasoning_observation_pending
+- reason-counter@4bc86695306694c4a2dc8059: program:reasoning_observation_pending
+- reason-counter@7eb7947bcdb32f124955037e: program:reasoning_observation_pending
+- reason-counter@bae15616b2f029c56e3e401b: program:reasoning_observation_pending
+- reason-counter@ce54819c61c6dc123f782d48: program:reasoning_observation_pending
+- reason-counter@d3dbf569c3b1971960e2fb30: program:reasoning_observation_pending
+- reason-counter@c713c6516b635442f4b045f8: program:reasoning_observation_pending
+- reason-counter@ed044d270d43b2dff7947e19: program:reasoning_observation_pending
+- reason-counter@a3f41635b845fdffbea95818: program:reasoning_observation_pending
+- reason-counter@ed54d5cabbcfa59ced997192: program:reasoning_observation_pending
+- reason-counter@b29690c24350f558ff8acc9c: program:reasoning_observation_pending
+- reason-counter@6610398922059ce5b71d3824: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is permitted if and only if the event framing protocol deterministically identifies trailing bytes from budget exhaustion as an incomplete, uncommitted fragment (a non-event), and is refused if such trailing bytes are indistinguishable from a corrupted complete event.","counterconditions":[{"case":"The framing protocol uses length-prefixing alone without end-markers, making a partial event indistinguishable from a complete one and corrupting causal continuity upon resumption.","eval":"observation"},{"case":"Budget exhaustion occurs between an event's data write and a subsequent mandatory commit record, leaving a structurally complete but logically uncommitted event that naive framing would incorrectly validate.","eval":"observation"},{"case":"The resumption protocol attempts to overwrite or garbage-collect the trailing partial bytes in place, violating the physical append-only integrity of the log.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Self-delimiting framing with checksums causes the resumption protocol to recognize trailing bytes lacking a valid end-marker as non-events. Since non-events lack event identity, they were ne
+commitments: reasoning-envelope-wf, reason-counter@fe1e1e989a6b65e942f03136, reason-counter@4bc86695306694c4a2dc8059, reason-counter@7eb7947bcdb32f124955037e
+
+TARGET SRC_002
+{"analogy":{"adopted_commitment_refs":[],"disanalogies":["Database Write-Ahead Logs use explicit checkpoint records, whereas token-budget exhaustion leaves implicit unframed fragments.","Database recovery explicitly replays and re-applies transactions, whereas reasoning resumption simply matches fingerprints and skips non-events."],"overturn_conditions":["If event framing is proven non-deterministic even with checksums, the quarantine mechanism fails and resumption must be refused.","If causal fingerprints are found to be computationally indistinguishable for divergent event streams, logical continuity verification fails."],"shared_structure":["Two-level decomposition of integrity into physical append-only integrity and logical causal continuity.","Quarantine of incomplete records to preserve causal identity without violating append-only semantics."],"source_memory_refs":["SRC_001","SRC_002"],"transfer_claims":["The quarantine mechanism for partial logs in physical systems applies directly to reasoning event streams: partial data is skipped without violating integrity.","Causal fingerprint matching from distributed systems applies to logical causal continuity verification in reasoning runs."]},"claim":"Resumption
+commitments: reasoning-envelope-wf, reason-counter@bae15616b2f029c56e3e401b, reason-counter@ce54819c61c6dc123f782d48, reason-counter@d3dbf569c3b1971960e2fb30
+
+TARGET SRC_003
+{"analogy":null,"claim":"Resumption is permitted when the event framing protocol can deterministically quarantine the truncated bytes of a partial event, treating them as non-events, thereby preserving physical append-only integrity; resumption must be refused if the framing protocol lacks the delimiters or checksums to deterministically distinguish a complete event from a partial one.","counterconditions":[{"case":"If the framing protocol relies solely on length-prefixing without integrity checks, a partially written length field could cause the resumption protocol to misinterpret a partial event as a complete one, necessitating refusal.","eval":"observation"},{"case":"If the framing protocol cannot deterministically delimit events, resumption is impossible without risking logical causal discontinuity.","eval":"observation"},{"case":"If the resumption protocol attempts to garbage-collect or overwrite the partial trailing bytes instead of simply ignoring them, it violates physical append-only integrity and must be refused.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Token-budget exhaustion may leave a partial byte sequence at the tail of the log. If the reasoning 
+commitments: reasoning-envelope-wf, reason-counter@c713c6516b635442f4b045f8, reason-counter@ed044d270d43b2dff7947e19, reason-counter@a3f41635b845fdffbea95818
+
+TARGET SRC_004
+{"analogy":null,"claim":"Resumption may proceed if and only if the event framing protocol provides deterministic delimiters that allow trailing partial bytes to be classified as non-events; resumption must be refused when framing is ambiguous and cannot distinguish a complete event from a partial fragment.","counterconditions":[{"case":"If the framing protocol relies solely on external length-prefixing without end-markers or checksums, trailing bytes cannot be deterministically classified as non-events, requiring refusal of resumption.","eval":"observation"},{"case":"If the resumption protocol attempts to garbage-collect or rewrite the partial bytes rather than ignoring them, it modifies the append-only log and must be refused.","eval":"observation"},{"case":"If no complete event was framed before exhaustion, resumption cannot anchor causal continuity and must be refused until a complete event is available.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A partial byte sequence left by mid-stream exhaustion lacks event identity under proper framing. The resumption protocol simply ignores trailing bytes after the last framed complete event. No append-only violation occ
+commitments: reasoning-envelope-wf, reason-counter@ed54d5cabbcfa59ced997192, reason-counter@b29690c24350f558ff8acc9c, reason-counter@6610398922059ce5b71d3824
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

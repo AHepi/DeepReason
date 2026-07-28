@@ -85,3 +85,43 @@ Operational notes
   qualification caches (including persisted unqualified doctor reports),
   and the failed-run roots under runs/ (gitignored; the three key run
   roots are committed as run-*/ at this directory's top level).
+
+Deep passes — 2026-07-27/28 (12 cycles, 200k tokens, decision-forcing prompts)
+------------------------------------------------------------------------------
+An earlier deep-pass attempt was killed by a container restart, leaving
+three crashed pre-terminal roots (run-39d03fd8*, run-7cf71713*,
+run-dc407f7d*) preserved in the model homes as further decision-4b
+evidence. The relaunched passes below all completed their reason runs.
+
+deepseek-v4-pro  run-ac1836b6237b6e9d80b3b0cb492b39f5 — bridge SUCCESS,
+                 resolution ANSWERED: "the fetch budget should be
+                 denominated solely in requests, and when it is exhausted
+                 a typed terminal event must be recorded that contains the
+                 request count and the limit" (rendered as the surviving
+                 conjecture). Round 1's leading both-requests-and-bytes
+                 cluster lost to requests-only under adversarial deepening.
+                 Two more wire dialects were fixed en route: the
+                 "operation" spelling of the patch op field, and bare
+                 candidate payloads without their envelope.
+
+kimi-k2.6        run-c5ab654afd1b4aa131aede83bdca0f03 — bridge SUCCESS,
+                 resolution UNDETERMINED, and honestly so: the record
+                 retained an unresolved rivalry among 18 accepted
+                 reclamation positions. Kimi's first full pipeline
+                 completion (thinking enabled, 16k completions).
+
+glm-5.2          run-15a53aca8a6fc66a39f382fc688c5346 — reason completed
+                 (939 events); bridge Stage A failed: a truncation retry
+                 consumed the single engaged repair, then the model cited
+                 an invented conflict key (CNF_1) with none available and
+                 no budget left to drop it. The diagnostics were correct;
+                 the one-repair engaged budget is the squeeze. Owner knob:
+                 raising engaged bridge max_schema_repair_attempts 1 -> 2
+                 (the config ceiling) would absorb truncation+slip chains,
+                 at the cost of a preset-digest change that invalidates
+                 all cached qualifications.
+
+Owner decision 4a is now implemented: budget-exhausted public runs record
+a typed STOPPED lifecycle receipt and continue under a fresh explicit
+budget (deepreason continue), opening a new terminal epoch. Runs
+terminalized before the change predate the receipt and stay as recorded.

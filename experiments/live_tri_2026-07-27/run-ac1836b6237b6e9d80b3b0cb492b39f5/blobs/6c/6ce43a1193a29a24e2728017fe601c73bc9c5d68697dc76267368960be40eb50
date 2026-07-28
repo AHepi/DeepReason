@@ -1,0 +1,118 @@
+{
+  "candidates": [
+    {
+      "claim": "The fetch budget must be denominated solely in requests, because request count is the only deterministic, replayable unit that is immune to content negotiation, compression variability, and caching side-effects. Exhaustion is recorded as a typed terminal event `fetch_budget_exhausted` with a monotonic request counter, the limit, and a hash of the agent's pre-fetch state, ensuring full auditability.",
+      "mechanism": "The agent maintains a monotonically increasing `fetch_count` initialized to 0. Before each fetch, the agent checks if `fetch_count < REQUEST_LIMIT`. If not, it transitions to a terminal state `TERMINAL_FETCH_BUDGET_EXHAUSTED` and writes an audit record containing: `terminal_type`, `fetch_count`, `request_limit`, `agent_state_hash` (excluding budget counters), and a timestamp. The fetch is only attempted if the check passes; on completion (success or failure), `fetch_count` is incremented atomically. Retries are counted as separate requests to prevent infinite loops. The agent's state hash is computed over all non-budget state (knowledge base, plan, cache keys) to ensure replayability: given the same initial state and the same sequence of external responses, the agent will hit exhaustion at the exact same fetch count.",
+      "counterconditions": [
+        "If the agent can vary the size of responses (e.g., by requesting different byte ranges), a request-only budget may allow excessive data transfer, violating resource constraints.",
+        "If the environment introduces non-deterministic response sizes (e.g., dynamic content), replayability may break because the agent's subsequent decisions could depend on the content, not just the request count.",
+        "If the agent uses a cache, a warm cache could reduce the number of actual network requests, making exhaustion non-reproducible across cold-start and warm-start runs unless the cache state is included in the state hash."
+      ],
+      "typicality": 0.85,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget must be denominated in bytes transferred, because bytes directly measure resource consumption and cost, and are more faithful to real-world constraints than request count. Exhaustion is recorded as a typed terminal event `byte_budget_exhausted` with the cumulative bytes received, the byte limit, and a hash of the agent's pre-fetch state, ensuring auditability and replayability when response sizes are deterministic.",
+      "mechanism": "The agent tracks `total_bytes_fetched` (sum of response body lengths in bytes, as reported by the HTTP Content-Length header or actual body size). Before each fetch, the agent checks if `total_bytes_fetched + expected_bytes <= BYTE_LIMIT`, where `expected_bytes` is a conservative estimate or the Content-Length from a HEAD request. If the check fails, the agent enters terminal state `TERMINAL_BYTE_BUDGET_EXHAUSTED` and records: `terminal_type`, `total_bytes_fetched`, `byte_limit`, `agent_state_hash`. To ensure replayability, the agent must use deterministic request headers (Accept-Encoding: identity, fixed User-Agent) and must not rely on chunked transfer encoding without a known total. Cached responses are counted as if they were fetched (virtual bytes) to maintain consistency across runs. The state hash includes the cache content keys but not the byte counter.",
+      "counterconditions": [
+        "If the agent fetches resources with non-deterministic sizes (e.g., dynamically generated pages, time-sensitive data), the byte budget may be exhausted at different points across runs, breaking replayability.",
+        "Counting bytes requires accurate Content-Length; if a server omits it or uses chunked encoding, the agent must buffer and count, adding complexity and potential for divergence.",
+        "A byte-only budget could allow an unbounded number of tiny requests, leading to excessive connection overhead and latency, which may violate operational constraints."
+      ],
+      "typicality": 0.75,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget must be dual-denominated in both requests and bytes, with exhaustion triggered by whichever limit is hit first. This eliminates the weaknesses of single-denomination rivals by preventing both request-flooding and data-flooding. Exhaustion is recorded as a typed terminal event `dual_budget_exhausted` that includes both counters, the limit that was breached, and a state hash, providing a complete auditable terminal.",
+      "mechanism": "The agent maintains two monotonic counters: `request_count` and `byte_count`. Before each fetch, it checks `request_count < REQUEST_LIMIT` and `byte_count + expected_bytes <= BYTE_LIMIT`. If either condition fails, the agent enters terminal state `TERMINAL_DUAL_BUDGET_EXHAUSTED` and records: `terminal_type`, `request_count`, `request_limit`, `byte_count`, `byte_limit`, `breached_limit` (either 'requests' or 'bytes'), and `agent_state_hash`. The check is atomic to prevent race conditions in parallel fetches. Retries increment the request counter. Cached responses are treated as virtual bytes to ensure deterministic exhaustion across runs. The state hash covers all non-budget state, including cache keys and plan, but not the budget counters themselves.",
+      "counterconditions": [
+        "Dual budgets introduce two parameters that must be tuned together; a poorly chosen pair could lead to premature exhaustion on one dimension while the other is underutilized, complicating configuration.",
+        "If the environment provides non-deterministic response sizes, the byte limit may be hit at different points across runs, harming replayability even if the request limit is deterministic.",
+        "The atomic check for parallel fetches requires a locking mechanism or careful ordering, adding implementation complexity that could introduce bugs."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_008"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in abstract 'cost units' derived from a deterministic cost function that combines requests and bytes with configurable weights, because this directly models the economic constraint on research agents. Exhaustion is recorded as a typed terminal event `cost_budget_exhausted` with cumulative cost, cost limit, and a breakdown of request and byte contributions, ensuring auditability and allowing the elimination of single-factor rivals by showing they are special cases of the cost model.",
+      "mechanism": "Define a cost function C(req, bytes) = α * req + β * bytes, with α, β ≥ 0 and at least one > 0. The agent maintains `cumulative_cost` initialized to 0. Before each fetch, it computes the expected cost of the fetch (using expected bytes) and checks if `cumulative_cost + expected_cost <= COST_LIMIT`. If not, it enters terminal state `TERMINAL_COST_BUDGET_EXHAUSTED` and records: `terminal_type`, `cumulative_cost`, `cost_limit`, `request_count`, `byte_count`, `alpha`, `beta`, and `agent_state_hash`. This subsumes requests-only (β=0) and bytes-only (α=0) as degenerate cases, and the choice of weights can be justified by empirical measurement of resource consumption. Replayability is ensured by fixing α, β, and the expected byte estimation method.",
+      "counterconditions": [
+        "The cost function introduces two additional hyperparameters (α, β) that must be calibrated, increasing the configuration burden and the risk of mis-specification.",
+        "If the cost function is not grounded in real resource costs, it may be arbitrary and fail to prevent actual resource exhaustion (e.g., a high β but low α could still allow request floods that saturate connections).",
+        "The expected byte estimation may be inaccurate, causing the agent to overshoot the cost limit if actual bytes exceed the estimate, requiring a post-fetch adjustment that complicates the terminal condition."
+      ],
+      "typicality": 0.4,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in 'fetch time' (cumulative wall-clock or simulated time spent waiting for responses), because time is the ultimate scarce resource for a research agent and directly bounds the agent's progress. Exhaustion is recorded as a typed terminal event `time_budget_exhausted` with total fetch duration, time limit, and a state hash, ensuring auditability. This eliminates request and byte denominations by showing they are imperfect proxies for the true constraint.",
+      "mechanism": "The agent tracks `total_fetch_time` (sum of round-trip times for each fetch, measured from request dispatch to response completion). Before each fetch, it checks if `total_fetch_time + estimated_fetch_time <= TIME_LIMIT`. If not, it enters terminal state `TERMINAL_TIME_BUDGET_EXHAUSTED` and records: `terminal_type`, `total_fetch_time`, `time_limit`, `agent_state_hash`. To ensure replayability, the agent must use a deterministic clock (e.g., simulated time based on a fixed latency model or recorded historical timings) rather than real wall-clock time. The state hash includes the time model parameters. This approach naturally bounds both request count and bytes, as more or larger fetches take more time.",
+      "counterconditions": [
+        "Network latency is highly non-deterministic in real-world settings; using simulated time sacrifices fidelity to actual execution, and using real time breaks replayability.",
+        "Estimating fetch time before making a request is error-prone; an underestimate could cause the agent to exceed the time budget, while an overestimate could cause premature termination.",
+        "A time budget does not directly limit data transfer or request count, so a fast network could allow excessive resource consumption within the time limit, violating operational constraints."
+      ],
+      "typicality": 0.3,
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget must be denominated in requests, but with a mandatory byte cap as a safety valve, where the byte cap is not a budget limit but a hard cutoff that triggers an immediate terminal state `byte_cap_exceeded` distinct from `request_budget_exhausted`. This hybrid approach preserves the replayability of request counting while preventing catastrophic data overconsumption, and it eliminates pure bytes and dual budgets by demonstrating that bytes are only needed as a safety net, not a primary budget.",
+      "mechanism": "The agent primarily tracks `request_count` against `REQUEST_LIMIT`. Additionally, it monitors `total_bytes_fetched` against a `BYTE_CAP` (set high, e.g., 10x the expected maximum). Before each fetch, it checks `request_count < REQUEST_LIMIT`; if that fails, it enters `TERMINAL_REQUEST_BUDGET_EXHAUSTED`. After each fetch, it checks if `total_bytes_fetched > BYTE_CAP`; if so, it enters `TERMINAL_BYTE_CAP_EXCEEDED`. Both terminal types are recorded with full counters and state hash. The byte cap is not a budget—it is an emergency stop to prevent runaway data consumption in pathological cases. This eliminates the need for a dual budget because the byte cap is rarely hit and does not affect normal replayability; it only guards against anomalies.",
+      "counterconditions": [
+        "If the byte cap is set too low, it could trigger non-deterministically across runs if response sizes vary, harming replayability.",
+        "The byte cap adds a second parameter that must be configured, and if it is never hit, it may be seen as unnecessary complexity.",
+        "A malicious or buggy agent could still exhaust resources by making many requests just under the byte cap, so the request budget remains the primary defense, and the byte cap does not fully address data-flooding attacks."
+      ],
+      "typicality": 0.6,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Consider a case where the agent must fetch a large dataset split across multiple paginated requests. A request-only budget would count each page as one request, but the total bytes could vary if the page size is configurable. To make this deterministic, the agent could fix the page size in its configuration, making bytes per request constant. Then request count becomes a proxy for bytes, and a request-only budget suffices. This case supports eliminating bytes-only by showing that with proper configuration, request count can control data volume.",
+          "possible_next_move": "Use this case to argue that request-only is sufficient when the agent's fetch patterns are well-specified.",
+          "unfinished": "Need to consider if all research agents can constrain their fetch patterns this way.",
+          "why_keep_this": "Provides a concrete case that strengthens the request-only argument."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: If the agent uses a bytes-only budget and fetches a resource with Content-Encoding: gzip, the byte count could differ from the uncompressed size. If the agent's decision depends on the content, the point of exhaustion could shift between runs if the server changes compression. This breaks replayability. Thus, bytes-only is weaker than request-only for replayability. This directly addresses the elimination requirement.",
+          "possible_next_move": "Incorporate this into the request-only candidate's argument against bytes.",
+          "unfinished": null,
+          "why_keep_this": "Provides evidence for eliminating bytes-only."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "How should the agent handle fetch retries when a request fails due to transient errors? Should retries count against the request budget?",
+        "related_refs": ["SCR_006"]
+      },
+      {
+        "question": "If the agent uses caching, should cached responses count against the byte budget?",
+        "related_refs": ["SCR_008"]
+      }
+    ]
+  }
+}

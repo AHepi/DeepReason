@@ -1,0 +1,81 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe if and only if the last recorded event in the log is well-formed and complete, and the causal preconditions (program, inputs, model-state checkpoint) are demonstrably unchanged at resumption time. The append-only identity is preserved because new events extend the same causal chain without rewriting any prior event.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption must be refused whenever token-budget exhaustion interrupts mid-event, because the partial event either has no well-defined identity (cannot be referenced as a causal parent) or must be rewritten to become complete (violating append-only). There is no safe recovery path for mid-event interruption under strict append-only semantics.",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "surviving_conjecture",
+      "claim": "Append-only identity is never corrupted by resumption per se; corruption only occurs if the resumption re-evaluates or rewrites already-committed events. Therefore resumption is always permissible as long as the continuation starts strictly after the last committed event, regardless of whether the logical reasoning unit was complete.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "surviving_conjecture",
+      "claim": "Resumption is safe only if the system emitted an explicit 'barrier' or 'suspend' event before or at the point of token-budget exhaustion. Without a barrier, even well-formed events may be part of an incomplete logical unit (e.g., a multi-event inference step), and resumption could produce events that semantically depend on context that was never written to the log.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "conflict",
+      "claim": "ART_1 and ART_3 present rival criteria for safe resumption: ART_1 requires a well-formed and complete last event plus unchanged causal preconditions, while ART_3 asserts resumption is always permissible after the last committed event regardless of logical completeness.",
+      "conflict_handles": ["ART_1", "ART_3"],
+      "source_conflict_keys": ["CNF_1"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "conflict",
+      "claim": "ART_1 and ART_4 present rival criteria: ART_1 permits resumption without a barrier given well-formed events and unchanged preconditions, while ART_4 requires an explicit barrier or suspend event for safe resumption.",
+      "conflict_handles": ["ART_1", "ART_4"],
+      "source_conflict_keys": ["CNF_2"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "conflict",
+      "claim": "ART_3 and ART_4 present rival criteria: ART_3 asserts resumption is always permissible after the last committed event regardless of logical completeness, while ART_4 asserts resumption is safe only if an explicit barrier or suspend event was emitted.",
+      "conflict_handles": ["ART_3", "ART_4"],
+      "source_conflict_keys": ["CNF_3"]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "conflict",
+      "claim": "ART_2 and ART_3 present rival criteria: ART_2 states there is no safe recovery path for mid-event interruption under strict append-only semantics, while ART_3 asserts resumption is always permissible as long as the continuation starts strictly after the last committed event.",
+      "conflict_handles": ["ART_2", "ART_3"],
+      "source_conflict_keys": ["CNF_4"]
+    },
+    {
+      "entry_key": "CLM_9",
+      "claim_class": "unknown",
+      "claim": "Adjudication between the rival resumption criteria from ART_1, ART_2, ART_3, and ART_4 cannot be determined from the bounded record: no source, evidence, event, trace, or formal observation handles are supplied to establish which criterion is authoritative."
+    }
+  ],
+  "source_conflicts": [
+    {
+      "conflict_key": "CNF_1",
+      "conflicting_handles": ["ART_1", "ART_3"]
+    },
+    {
+      "conflict_key": "CNF_2",
+      "conflicting_handles": ["ART_1", "ART_4"]
+    },
+    {
+      "conflict_key": "CNF_3",
+      "conflicting_handles": ["ART_3", "ART_4"]
+    },
+    {
+      "conflict_key": "CNF_4",
+      "conflicting_handles": ["ART_2", "ART_3"]
+    }
+  ]
+}
+```

@@ -1,0 +1,16 @@
+{
+  "candidate": {
+    "claim": "Resumption may safely proceed if the event framing protocol uses self-delimiting records with integrity checks, allowing the trailing partial bytes of a token-budget exhaustion crash to be quarantined as non-events; resumption must be refused if framing lacks such delimiters, making the partial fragment ambiguous and risking physical append-only corruption upon re-evaluation.",
+    "mechanism": "Self-delimiting event records with end-markers and checksums enable deterministic framing-quarantine. The resumption protocol parses the log to locate the last complete event by verifying integrity checks. Trailing bytes left by mid-stream exhaustion are deterministically identified as non-events and simply ignored. No committed event is modified or deleted, preserving the physical append-only invariant.",
+    "counterconditions": [
+      "The protocol uses length-prefixing alone without trailing end-markers or checksums, making a truncated length-prefix indistinguishable from a complete event.",
+      "The resumption protocol attempts to resume parsing from the partial fragment instead of the last verified complete event.",
+      "The trailing partial bytes are not skipped but instead overwritten or deleted by the resumption process."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "typicality": 0.75
+  }
+}

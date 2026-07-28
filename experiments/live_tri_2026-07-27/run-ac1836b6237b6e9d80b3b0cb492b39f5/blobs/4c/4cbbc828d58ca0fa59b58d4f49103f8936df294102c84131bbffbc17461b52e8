@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The proposal does not specify a single fetch budget for the agent; it defines per-domain quotas. Exhaustion of one domain's quota does not terminate the agent's fetching, so the required typed auditable terminal state for the agent's fetch budget is never reached. The problem asks for a budget that, when exhausted, stops all fetching and records a terminal state, but this design allows the agent to continue fetching from other domains indefinitely.",
+      "counterexample": [
+        "Suppose the agent has a quota of 10 requests for domain A and 10 for domain B. After exhausting domain A's quota, the agent continues fetching from domain B. The agent never enters a terminal state due to budget exhaustion, so the 'typed auditable terminal' requirement is not satisfied."
+      ]
+    }
+  ]
+}

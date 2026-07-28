@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:02f430369393) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 02f430369393 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@13af8a029d4c: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+ABSTRACTION: The problem of safe resumption after token-budget exhaustion abstracts the five foundation artifacts into a single decision predicate R = (L1 ∧ L2), where L1 = no committed event was modified or deleted (trivially preserved by append-only framing) and L2 = the resumed stream produces the same event sequence as uninterrupted execution. Each SRC artifact is a partial specialization: SRC_001 contributes the barrier as a sufficient L2 mechanism, SRC_002 contributes downstream-projection divergence as an L2 failure mode, SRC_004 contributes causally-atomic-step interruption as another L2 failure mode, and SRC_005 contributes side-channel leakage as the general L2 failure mode that subsumes SRC_002 and SRC_004. The isolated problem inherits this unified predicate. REFUTED IF: the causal fingerprint cannot be decomposed into independently verifiable L1 and L2 components—e.g., if the fingerprint is embedded in event payloads and a partial fragment corrupts the payload of the last complete event, making L1 and L2 observationally inseparable.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+TARGET SRC_002
+REDUCTION: SRC_004's refusal condition—exhaustion inside a causally atomic reasoning step whose internal state was partially flushed—reduces to SRC_005's side-channel leakage condition. The 'partially flushed internal state' in SRC_004 is a specific instance of 'partial fragment has leaked causal state into a side channel' in SRC_005: the flush target (scratchpad, cache, attention state) IS the side channel. Thus SRC_004's independent refusal criterion is not novel; it is a constructive specialization of SRC_005's general principle. The isolated problem depends on recognizing this reduction to avoid double-counting failure modes. REFUTED IF: one can exhibit a case where a causally atomic step was interrupted (SRC_004 triggers) but no state leaked to any side channel the resumed stream would read (SRC_005 does not trigger), proving the conditions are logically independent.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+TARGET SRC_003
+SHARED MECHANISM: SRC_002 and SRC_005 share the mechanism of causal-fingerprint-based divergence detection, but apply it to different corruption loci. SRC_002 detects divergence in downstream consumer state projections (a consumer read the partial fragment and advanced derived state). SRC_005 detects divergence via side-channel leakage (the partial fragment's residue influences resumed computation). Both share mechanism: the causal fingerprint must encode enough information to detect that the resumption point is causally consistent with the committed log. The isolated problem depends on this shared mechanism because both failure modes require the same fingerprint infrastructure to diagnose. REFUTED IF: the causal fingerprint encodes only event identities and not consumer acknowledgments (SRC_002 countercondition), making the two mechanisms operate on disjoint information and thus not share a common mechanism at all.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,28 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@905c04b175eefa41f2568ec7: program:reasoning_observation_pending
+- reason-counter@838fe78da8bfa45e0f1e2526: program:reasoning_observation_pending
+- reason-counter@6defe81fb37384baf6c85a88: program:reasoning_observation_pending
+- reason-counter@cede9dac0e884971a4836110: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A synthetic barrier/suspend event injected before predictable token-budget exhaustion satisfies the causal fingerprint requirement and makes resumption safe, resolving SRC_002's internal inconsistency: the categorical refusal is wrong because its own acknowledged countercondition (budget-exhaustion warning) is precisely the trigger for safe barrier injection.","counterconditions":[{"case":"If token-budget exhaustion is not predictable (sudden hard cutoff), there is no window to emit the barrier, and the partial-fragment analysis from the primary candidate applies.","eval":"observation"},{"case":"If the SuspendEvent itself is only partially written (budget exhausted mid-emission of the barrier), the barrier is just another partial fragment and does not help.","eval":"observation"},{"case":"If the continuation state captured by the fingerprint is insufficient to deterministically resume (e.g., it captures sequence position but not intermediate variable bindings), resumption could produce a different event stream, violating causal identity.","eval":"observation"},{"case":"If another process writes between the SuspendEvent and resumption, the fingerprint check fails and resumption is refused.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"When the reasoning envelope detects approaching budget exhaustion (e.g., 90% threshold), it emits a synthetic SuspendEvent with a causal fingerprint capturing the full continuation state. This event is complete and framed before the budget is fully consumed. On resumption, the protocol verifies the SuspendEvent's fingerprint and continues. The append-only log contains only complete events: the prior reasoning events plus the SuspendEvent. No partial fragment exists because the envelope proactively closed the stream before exhaustion forced a truncation.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@905c04b175eefa41f2568ec7, reason-counter@838fe78da8bfa45e0f1e2526, reason-counter@6defe81fb37384baf6c85a88, reason-counter@cede9dac0e884971a4836110
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

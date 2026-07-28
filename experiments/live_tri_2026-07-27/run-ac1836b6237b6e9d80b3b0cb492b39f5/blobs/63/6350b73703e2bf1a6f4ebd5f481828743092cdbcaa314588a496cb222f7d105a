@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target does not connect the isolated node 03740a66e3a4 to its neighbourhood; it proposes a compatibility relation between SRC_004 and SRC_002, neither of which is 03740a66e3a4. The problem explicitly requires a relation involving 03740a66e3a4.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target does not connect the isolated node 03740a66e3a4 to its neighbourhood; it proposes a dependence relation between SRC_004 and SRC_003, neither of which is 03740a66e3a4. The problem explicitly requires a relation involving 03740a66e3a4.",
+      "counterexample": null
+    }
+  ]
+}

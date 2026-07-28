@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The problem explicitly asks to decide the denomination among requests, bytes, or both. SRC_001 proposes expected information gain, which is not one of the allowed denominations, thus failing to address the requirement.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The problem requires eliminating weaker rival denominations where the evidence allows. SRC_002 merely describes a combined token bucket without providing any argument or evidence to eliminate the single-denomination alternatives (requests-only or bytes-only), leaving the decision unjustified.",
+      "counterexample": null
+    }
+  ]
+}

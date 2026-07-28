@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e201e649a3b366b5d49bfbb5: program:reasoning_observation_pending
+- reason-counter@5950e2165c52bd8df38befe8: program:reasoning_observation_pending
+- reason-counter@ca5edd745c3a8e4488fc7400: program:reasoning_observation_pending
+- reason-counter@ef26e0943ef91b9e4801cc38: program:reasoning_observation_pending
+- reason-counter@ee6b924e11f120e5a87abfea: program:reasoning_observation_pending
+- reason-counter@d4a24e9ef6c36d3f6b729ff9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A content-addressed derivation cache with durable provenance anchors achieves equivalent safety without requiring a global log, because evidence identity is decoupled from workspace location; the exact durable record is the (problem_id, input_hash, output_hash) provenance anchor.","counterconditions":[{"case":"Requires perfect determinism; any nondeterminism breaks the equivalence and can cause silent evidence loss","eval":"observation"},{"case":"Input data must remain available for recomputation","eval":"observation"},{"case":"The anchor record must be written atomically with respect to the evidence consumer","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The deterministic workspace implies reproducibility. The protocol durably records a provenance anchor mapping problem_id to (input_hash, output_hash) before declaring evidence complete. The actual workspace directory is treated as ephemeral scratch. Reclamation is always safe because there is no completed evidence in the workspace\u2014only a cache that can be rebuilt. Displacement of the workspace is therefore never displacement of evidence. The causal mechanism is the cryptographic commitment in the provenance anchor, which binds the evidence to its causal history independent of storage location. Adjudication: this dominates log-based protocols when input data is immutable and recomputation is cheaper than log coordination, but loses when determinism is imperfect.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e201e649a3b366b5d49bfbb5, reason-counter@5950e2165c52bd8df38befe8, reason-counter@ca5edd745c3a8e4488fc7400
+
+TARGET SRC_002
+{"analogy":null,"claim":"The safest protocol is an append-only intent-and-seal log with epoch fencing; it dominates lease-based alternatives because it records causality directly rather than inferring it from timeouts, and the exact durable records are the intent entry and the seal entry.","counterconditions":[{"case":"The log is subject to unbounded growth if seal records are never compacted","eval":"observation"},{"case":"If the log service is partitioned, the protocol stalls rather than reclaims","eval":"observation"},{"case":"A process that writes an intent but crashes before touching the workspace creates a phantom reclamation candidate that wastes space until TTL","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Before acquiring the workspace, the process appends an intent record (problem_id, epoch, workspace_path, process_id) to a durable append-only log. Upon completion, it appends a seal record containing the output evidence hash. Reclamation performs a log-scan: any workspace with an intent but no matching seal, whose holding process has been confirmed dead by a liveness oracle, is reclaimed. The causal mechanism is that the log provides a recoverable total order of intent and seal events, so displacement is always preceded by a visible gap (intent without seal), never silent. Adjudication against lease protocols: where the evidence shows lease expiry can race with seal writes, the log protocol wins because seal visibility is immediate to readers of the log, whereas lease expiry is a timeout inference.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ef26e0943ef91b9e4801cc38, reason-counter@ee6b924e11f120e5a87abfea, reason-counter@d4a24e9ef6c36d3f6b729ff9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "content": "SRC_004 contradicts SRC_003: SRC_004 claims the fetch budget should be solely in bytes, while SRC_003 claims it should be solely in requests. These are mutually exclusive design choices. Refuted if: there exists a scenario where both a bytes-only budget and a requests-only budget can be simultaneously satisfied without conflict, e.g., if all responses have identical size, making bytes and requests proportional, so the budgets are effectively equivalent and not contradictory.",
+      "typicality": 0.9,
+      "neighbours": ["SRC_004", "SRC_003"]
+    },
+    {
+      "content": "SRC_004 is compatible with SRC_002: both denominate the budget in bytes and record exhaustion as a terminal event. SRC_004 extends SRC_002 by adding a state hash for auditability, which does not conflict with the core bytes-only mechanism. Refuted if: the addition of a state hash in SRC_004 introduces a requirement that is incompatible with SRC_002's simpler mechanism, e.g., if computing the state hash requires additional requests that would violate the bytes-only budget or if the state hash cannot be computed without altering the budget tracking.",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004", "SRC_002"]
+    },
+    {
+      "content": "SRC_004 abstracts SRC_002: SRC_004 generalizes the bytes-only budget with a typed terminal state that includes a state hash, making it a more abstract specification that can be instantiated with or without the hash. SRC_002 is a concrete instance where the state hash is omitted. Refuted if: SRC_004 is not a proper abstraction because it adds a specific requirement (state hash) that is not present in SRC_002, making it a refinement rather than an abstraction; or if SRC_002 cannot be derived as a special case of SRC_004 by simply dropping the state hash.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_004", "SRC_002"]
+    },
+    {
+      "content": "SRC_004 depends on SRC_003: SRC_004 incorporates the idea of including a state hash in the terminal state, which was introduced in SRC_003 for request-based budgets. SRC_004 adapts this to a bytes-based budget. Refuted if: SRC_004's state hash is independently motivated and not derived from SRC_003, e.g., if the state hash is a standard practice in all budget proposals and SRC_003 is not the origin.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_004", "SRC_003"]
+    },
+    {
+      "content": "SRC_004 integrates SRC_002 and SRC_003: it combines the bytes-only denomination from SRC_002 with the state hash recording from SRC_003, creating a hybrid that tracks data volume and agent state for reproducibility. Refuted if: SRC_004 does not actually combine elements from both; e.g., it only uses bytes from SRC_002 and ignores the request count from SRC_003, so it is not an integration but a selection, or if the state hash in SRC_004 is fundamentally different from that in SRC_003.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_004", "SRC_002", "SRC_003"]
+    },
+    {
+      "content": "SRC_004 reduces to SRC_002: SRC_004's claim is essentially SRC_002's bytes-only budget with an additional state hash for auditability. The core mechanism of tracking bytes and terminating is identical; the state hash is an orthogonal logging detail. Refuted if: the state hash requirement in SRC_004 alters the termination condition or budget tracking in a way that cannot be ignored, e.g., if computing the hash requires additional fetches that consume bytes, making the budget behavior different from SRC_002.",
+      "typicality": 0.7,
+      "neighbours": ["SRC_004", "SRC_002"]
+    }
+  ]
+}

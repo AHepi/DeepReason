@@ -1,0 +1,44 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8e4d126451b16d8df384e85c: program:reasoning_observation_pending
+- reason-counter@1f59798cd2d562300c2783c3: program:reasoning_observation_pending
+- reason-counter@0c4d96223eba2c45ce2cde02: program:reasoning_observation_pending
+- reason-counter@1b4ff8c7e2157f9400b8deff: program:reasoning_observation_pending
+- reason-counter@16123c19d98abc36dad65d50: program:reasoning_observation_pending
+- reason-counter@d74944b2c2935ca829764ed4: program:reasoning_observation_pending
+- reason-counter@ce67258093ef3954c6389f35: program:reasoning_observation_pending
+- reason-counter@bfb6e3539ca2b48903e5cda3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is always safe at any point of exhaustion if the reasoning step is decomposed into idempotent, purely functional state transitions.","counterconditions":[{"case":"If the reasoning step has side effects, external API calls, or non-deterministic randomness, idempotency fails and resumption risks branching outputs.","eval":"observation"},{"case":"If the functional state transition itself relies on reading the partial event left by mid-stream exhaustion, which by definition lacks a complete state representation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because each step is purely functional and idempotent, re-running or resuming from any point yields the exact same output. Append-only integrity is preserved because no prior event is mutated; resumption simply appends new identical events or continues deterministically.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@8e4d126451b16d8df384e85c, reason-counter@1f59798cd2d562300c2783c3
+
+TARGET SRC_002
+{"analogy":null,"claim":"Append-only identity is preserved by treating resumption as a new derived branch rather than a continuation, making resumption always permissible.","counterconditions":[{"case":"If downstream consumers are not aware of the new branch identity and assume linear continuation, logical causal continuity is violated for those consumers.","eval":"observation"},{"case":"If the system does not explicitly record the branch relationship, the causal history becomes fragmented and unintelligible.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The original exhausted run remains untouched in the append-only log. The 'resumed' run is just a new run initialized with the state of the exhausted one, effectively creating a branch. No append-only violation occurs because the original stream is immutable.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0c4d96223eba2c45ce2cde02, reason-counter@1b4ff8c7e2157f9400b8deff
+
+TARGET SRC_003
+{"analogy":null,"claim":"Resumption is safe if and only if the exact causal fingerprint (program_hash, input_hash, model_checkpoint_hash) at resumption matches the run start, preventing logical divergence.","counterconditions":[{"case":"If the system state changes between exhaustion and resumption (e.g., model updates, time-dependent inputs, or external state mutation), the fingerprint will mismatch and resumption is refused.","eval":"observation"},{"case":"If the causal fingerprint cannot be computed because the system was interrupted mid-computation of the fingerprint itself.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Resumption requires deterministic verification of the environment and inputs. If the causal fingerprint matches, the resumed stream matches the uninterrupted stream, satisfying logical causal continuity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@16123c19d98abc36dad65d50, reason-counter@d74944b2c2935ca829764ed4
+
+TARGET SRC_004
+{"analogy":null,"claim":"Resumption must always be refused after token-budget exhaustion; only a fresh re-execution from the last globally committed event is valid.","counterconditions":[{"case":"If the system is strictly deterministic, stateless at the exhaustion point, and supports deterministic replay, resumption is logically indistinguishable from re-execution, though practically refused for safety.","eval":"observation"},{"case":"If re-execution is impossible due to loss of original input state, this criterion implies the reasoning run is permanently lost.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Any attempt to resume risks subtle state corruption that cannot be proven safe without a complete restart. The append-only log guarantees the history of the failed run, but a new run starts fresh from the last known good state.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ce67258093ef3954c6389f35, reason-counter@bfb6e3539ca2b48903e5cda3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

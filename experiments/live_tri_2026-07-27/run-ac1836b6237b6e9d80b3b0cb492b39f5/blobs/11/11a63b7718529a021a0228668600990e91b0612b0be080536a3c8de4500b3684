@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@d34677d35f6a89a76e215e67: program:reasoning_observation_pending
+- reason-counter@1b58c83c1ee00adcbef7255c: program:reasoning_observation_pending
+- reason-counter@91bdcc53a7600b908b5b5c11: program:reasoning_observation_pending
+- reason-counter@6ec13db8372c548feea01d49: program:reasoning_observation_pending
+- reason-counter@4772849eed694c8b2c01e275: program:reasoning_observation_pending
+- reason-counter@f9ddfeabaaeabec2e506fcee: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A request budget is sufficient if each response is bounded by a maximum size; bytes are then a derived quantity that cannot exceed request_limit * max_response_size. Exhaustion is recorded as requests_used reaching request_limit, with a typed terminal.","counterconditions":[{"case":"If the agent can make requests with no size limit (e.g., streaming), this fails.","eval":"observation"},{"case":"If the max_response_size is set too high, the byte bound may be too loose.","eval":"observation"},{"case":"The truncation of responses may alter the agent's behavior, harming reproducibility if the truncation is non-deterministic (e.g., based on network chunk boundaries). The truncation must be deterministic, e.g., always taking the first N bytes.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a maximum number of requests and a maximum response size per request. Before each fetch, it checks requests_used < request_limit. If not, exhaustion with reason 'request_limit'. The response is truncated or rejected if it exceeds max_response_size, and that event is logged. The terminal state records requests_used, request_limit, and the number of truncated responses. This ensures that the total bytes transferred is bounded by request_limit * max_response_size, making a separate byte budget redundant.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@d34677d35f6a89a76e215e67, reason-counter@1b58c83c1ee00adcbef7255c, reason-counter@91bdcc53a7600b908b5b5c11
+
+TARGET SRC_002
+{"analogy":null,"claim":"The only true scarce resource is bytes transferred; requests are merely a proxy for rate limiting, which should be enforced by a separate throttle, not a budget. Exhaustion is recorded as bytes_used reaching byte_limit, with a typed terminal, while request rate limiting is logged as non-terminal events.","counterconditions":[{"case":"If the agent's task requires a large number of small requests (e.g., probing many endpoints), a byte budget alone may be insufficient to prevent excessive server load, which could be considered a resource abuse.","eval":"observation"},{"case":"The rate throttle mitigates this but does not cap total requests.","eval":"observation"},{"case":"If the environment has a hard request limit (e.g., API quota), this approach fails to enforce it.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent has a byte budget. Before each fetch, it checks if bytes_used + estimated_bytes > byte_limit; if so, exhaustion with reason 'byte_limit'. Additionally, a token bucket rate limiter ensures that requests are not sent faster than a configurable rate, but exceeding the rate merely delays the request, not exhausts the budget. The terminal state includes bytes_used, byte_limit, and the rate limiter parameters. This eliminates the request budget as a weaker rival because bytes are the fundamental resource; request counts are irrelevant if each response is small.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6ec13db8372c548feea01d49, reason-counter@4772849eed694c8b2c01e275, reason-counter@f9ddfeabaaeabec2e506fcee
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

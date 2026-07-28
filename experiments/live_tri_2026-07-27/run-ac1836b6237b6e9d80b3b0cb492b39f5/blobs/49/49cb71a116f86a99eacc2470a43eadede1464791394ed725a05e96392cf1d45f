@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism bounds only response bodies via max_response_size, but ignores request headers and response headers, which also consume bytes. The claimed derived byte bound request_limit * max_response_size is therefore not a true upper bound on total bytes transferred, undermining the argument that a separate byte budget is redundant. A replayable agent could exceed expected byte consumption due to header overhead, breaking auditability.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The exhaustion check relies on estimated_bytes before each fetch, but no mechanism is provided to estimate the size of a response prior to retrieval. Without a reliable estimate, the agent may overshoot the byte_limit, causing the terminal state to record exhaustion after the budget is already exceeded, violating the requirement for a precise typed auditable terminal.",
+      "counterexample": null
+    }
+  ]
+}

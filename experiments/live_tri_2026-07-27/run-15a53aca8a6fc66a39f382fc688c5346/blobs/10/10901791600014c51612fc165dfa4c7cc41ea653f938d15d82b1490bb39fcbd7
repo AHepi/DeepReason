@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@30f564232af031659cd9129c: program:reasoning_observation_pending
+- reason-counter@3f53c8e1194cf9178dbca782: program:reasoning_observation_pending
+- reason-counter@10fd1f6ecb4a6336ff112ebf: program:reasoning_observation_pending
+- reason-counter@8197ecd3b932b2cc0d9e62e9: program:reasoning_observation_pending
+- reason-counter@1117733f31b891bc1dfb59de: program:reasoning_observation_pending
+- reason-counter@21a9adcb7622e04942298f9b: program:reasoning_observation_pending
+- reason-counter@c9bfe4d787d33e87beaff3e9: program:reasoning_observation_pending
+- reason-counter@7feea24c69b9229d646a4afb: program:reasoning_observation_pending
+- reason-counter@052a7edef61294ba43ce4fd9: program:reasoning_observation_pending
+- reason-counter@18cbd9795722a1ff2427c879: program:reasoning_observation_pending
+- reason-counter@2750d82b7c855586511eda34: program:reasoning_observation_pending
+- reason-counter@8fced288e61151bc712aacd3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is governed by case-matched evidence: the permissibility depends on which of four exhaustive cases the exhaustion falls into\u2014(A) inter-event boundary, (B) intra-event but extra-checksum-verified, (C) intra-event with ambiguous framing, (D) intra-event with detected corruption\u2014and only cases A and B permit resumption while C and D require refusal.","counterconditions":[{"case":"The four cases are not exhaustive\u2014there exists a fifth case, e.g., exhaustion at a framing boundary where the boundary marker itself is corrupted, bridging C and D.","eval":"observation"},{"case":"Case B is impossible in practice because checksums always cover complete records only, so a truncated record's checksum is never verifiable.","eval":"observation"},{"case":"The distinction between C and D collapses when the framing protocol provides no integrity check at all, making corruption undetectable and all intra-event truncations look like case C.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Anchoring in cases: Case A is the trivial safe case\u2014the truncation falls on a clean record boundary, resumption appends next events, both invarian
+commitments: reasoning-envelope-wf, reason-counter@30f564232af031659cd9129c, reason-counter@3f53c8e1194cf9178dbca782, reason-counter@10fd1f6ecb4a6336ff112ebf
+
+TARGET SRC_002
+{"analogy":null,"claim":"Resumption must be refused when token-budget exhaustion occurs inside a causally atomic reasoning step whose internal state was only partially flushed, because re-entering that step from the outside produces a different causal history than uninterrupted execution would have\u2014even though no committed event was modified or deleted.","counterconditions":[{"case":"All reasoning-envelope operations are individually idempotent and deterministic given the same input, making recomputation causally equivalent.","eval":"observation"},{"case":"The step boundary is recoverable from the log itself via self-delimiting framing, making the truncation point an inter-step boundary by construction.","eval":"observation"},{"case":"The causal fingerprint includes only committed events, not internal intermediate states, so recomputation is invisible to the fingerprint.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Some reasoning-envelope operations are causally atomic: they emit a single event that summarizes a multi-token internal computation. If exhaustion interrupts the internal computation before the summarizing event is emitted, the resumption protocol 
+commitments: reasoning-envelope-wf, reason-counter@8197ecd3b932b2cc0d9e62e9, reason-counter@1117733f31b891bc1dfb59de, reason-counter@21a9adcb7622e04942298f9b
+
+TARGET SRC_003
+{"analogy":null,"claim":"Resumption is always permissible because the reasoning envelope proactively closes the event stream before budget exhaustion forces truncation, leaving no partial fragment; the only refusal condition is an implementation defect where the proactive-close mechanism fails to fire.","counterconditions":[{"case":"The proactive-close mechanism fails to fire before exhaustion, leaving a partial fragment with no clean terminal marker.","eval":"observation"},{"case":"The budget monitor and the event stream share no synchronization, so exhaustion can race ahead of the close signal.","eval":"observation"},{"case":"The terminal close marker itself is truncated, making it indistinguishable from a partial data record.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If the envelope monitors remaining budget and, upon reaching a pre-exhaustion threshold, flushes all pending state into a complete terminal event and closes the stream cleanly, then no partial fragment ever exists. The append-only log contains only complete events. Resumption is simply appending new events after the terminal close marker. The problem's demand for a refusal condition is satisfied
+commitments: reasoning-envelope-wf, reason-counter@c9bfe4d787d33e87beaff3e9, reason-counter@7feea24c69b9229d646a4afb, reason-counter@052a7edef61294ba43ce4fd9
+
+TARGET SRC_004
+{"analogy":null,"claim":"Resumption criteria cannot be adjudicated from the available evidence because the reasoning-envelope-wf specification does not specify whether the event framing protocol is self-delimiting; the entire question reduces to this unresolved property, and without it both 'always permissible' and 'sometimes refuse' are underdetermined.","counterconditions":[{"case":"The reasoning-envelope-wf specification implicitly guarantees self-delimiting framing by its definition of 'event,' making the property inferrable.","eval":"observation"},{"case":"The append-only identity invariant does not actually depend on framing properties\u2014any partial fragment can be safely quarantined regardless of framing, because append-only refers to write-ordering not read-back interpretation.","eval":"observation"},{"case":"Empirical testing of the envelope (SRC_004's empiric stance) could resolve the framing question without specification, making abstention unnecessary.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The problem asks to adjudicate between rival criteria 'wherever the evidence allows.' But the key disambiguating fact\u2014whether the framing protocol use
+commitments: reasoning-envelope-wf, reason-counter@18cbd9795722a1ff2427c879, reason-counter@2750d82b7c855586511eda34, reason-counter@8fced288e61151bc712aacd3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

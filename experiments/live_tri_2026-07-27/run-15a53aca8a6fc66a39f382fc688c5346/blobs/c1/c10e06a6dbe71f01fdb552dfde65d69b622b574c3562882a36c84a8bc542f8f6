@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (conn:02f430369393) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 02f430369393 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@13af8a029d4c: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+INTEGRATION: The isolated problem's resolution integrates SRC_001's barrier, SRC_002's consumer-projection quarantine, and SRC_005's side-channel analysis into a complete resumption decision procedure: resumption is safe iff (barrier present at truncation point) OR (no consumer read the partial fragment AND no side-channel state leaked AND the causal fingerprint of the last complete event matches the continuation). This integration is non-trivial because each condition addresses a different layer: SRC_001 addresses logical-unit boundaries, SRC_002 addresses downstream state, SRC_005 addresses the computation's internal channels. The three conditions are disjunctive in the barrier (barrier subsumes the others) but conjunctive in its absence. REFUTED IF: a barrier event is shown to be insufficient for safety—e.g., a barrier marks the continuation point but a consumer still read the partial fragment before the barrier was emitted—making the disjunction invalid and requiring the conjunction to hold even with barriers present.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+TARGET SRC_002
+CONTRADICTION: SRC_001 claims resumption is unsafe without an explicit barrier because resumed events may depend on lost causal context (working memory, attention state). This contradicts SRC_005's claim that resumption is safe whenever the partial fragment is causally inert and the resumed stream depends solely on committed events. Specifically, if the reasoning envelope has no side channels (SRC_005 countercondition), then the 'lost causal context' SRC_001 worries about was never durable and never influences the resumed stream—so resumption is safe without a barrier. The isolated problem must adjudicate this contradiction: either barriers are always necessary (SRC_001) or only necessary when side channels exist (SRC_005). REFUTED IF: stateless reasoning is shown to be impossible in practice (every reasoning step intrinsically relies on non-committed internal state that persists across interruption), which would make SRC_005's countercondition unreachable and dissolve the contradiction.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+TARGET SRC_003
+DEPENDS ON: The isolated problem—determining whether resumption after token-budget exhaustion is safe—depends on SRC_003's two-level invariant as its adjudicating framework, because SRC_003 explicitly identifies that SRC_001 conflates log-level append-only integrity (L1) with stream-level causal continuity (L2). Without this separation, the problem is ill-posed: one cannot distinguish 'was anything corrupted in the log?' (always no, by append-only construction) from 'will the resumed stream diverge from the canonical stream?' (conditionally yes). The problem's resolution inherits this decomposition and depends on the causal fingerprint being deterministically computable from the committed log alone. REFUTED IF: the causal fingerprint depends on non-deterministic system state (thread scheduling, memory layout, cache eviction order) that is not captured by committed events, making L2 unverifiable and reducing the two-level invariant to a vacuous statement where refusal is the only safe option regardless of L1.
+commitments: hv-floor@2a45b7988522, lineage-ref@13af8a029d4c, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6d9acac3b7c6a020130605f1: program:reasoning_observation_pending
+- reason-counter@225d6139ee41a56df84e9eb6: program:reasoning_observation_pending
+- reason-counter@69ffcc702aeaee727d529d8a: program:reasoning_observation_pending
+- reason-counter@04ca50b8ae5c86d575a5b1c7: program:reasoning_observation_pending
+- reason-counter@8c9fef387c4eda0fe1f5eae9: program:reasoning_observation_pending
+- reason-counter@8a4a49923cf5852a3b89e99a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"An epistemic, data-centric protocol using a distributed Merkle witness tree shifts safety from process liveness to content acknowledgment; the exact durable records are Merkle roots and inclusion proofs.","counterconditions":[{"case":"Requires a distributed witness layer with its own fault assumptions","eval":"observation"},{"case":"Inclusion proof generation latency may delay completion indefinitely","eval":"observation"},{"case":"Without witnesses, no evidence can ever be declared complete, causing workspace accumulation","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Rather than tracking process liveness, the protocol requires that any completed evidence be hashed and that hash inserted into a Merkle tree witnessed by multiple observers. Reclamation performs a 'corpse examination': it hashes the orphaned workspace and checks inclusion in the Merkle tree. If present, evidence is completed and must not be displaced. If absent, reclamation proceeds. The causal mechanism shifts from process-centric to data-centric: a workspace is safe not because its creator is alive but because its content is globally acknowledged. Adjudication: where evidence shows observer crash rates are lower than process crash rates, this is safer than lease protocols; where observers are unavailable, it degrades to no reclamation, analogous to the log protocol's stall but with stronger tamper evidence.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6d9acac3b7c6a020130605f1, reason-counter@225d6139ee41a56df84e9eb6, reason-counter@69ffcc702aeaee727d529d8a
+
+TARGET SRC_002
+{"analogy":null,"claim":"Crash-only software with resurrection logs: safety is achieved by never distinguishing between crash and restart; the durable record is a birth certificate that enables idempotent workspace reconstruction rather than hazardous reclamation.","counterconditions":[{"case":"Deterministic replay must be total; any external I/O or nondeterminism invalidates the guarantee","eval":"observation"},{"case":"Log replay cost may be prohibitive for large workspaces","eval":"observation"},{"case":"Requires the workspace storage to be content-addressed or journaled to avoid corruption between incarnations","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"On every startup, the process writes a birth certificate (problem_id, deterministic_seed, workspace_path, incarnation_number) to durable storage. All writes to the workspace are idempotent and logged in a redo log. 'Reclamation' is simply a new process incarnation reading the birth certificate and replaying the log to determine if evidence was already completed. If completed, the workspace is re-adopted; if not, it is reconstructed. The causal mechanism is deterministic replay: the workspace is not a resource to reclaim but a function of the durable birth certificate and log. This protocol never displaces evidence because there is no separate reclamation step\u2014only continuation. Adjudication: this dominates both log and lease protocols when determinism holds, by eliminating the orphan-detection problem entirely.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@04ca50b8ae5c86d575a5b1c7, reason-counter@8c9fef387c4eda0fe1f5eae9, reason-counter@8a4a49923cf5852a3b89e99a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

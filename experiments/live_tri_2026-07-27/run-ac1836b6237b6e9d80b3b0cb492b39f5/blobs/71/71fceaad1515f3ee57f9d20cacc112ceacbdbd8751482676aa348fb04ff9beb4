@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The specification claims that the full audit log ensures complete reproducibility, but in parallel fetch scenarios the ordering of log entries may be non-deterministic due to race conditions. The mechanism does not provide a deterministic serialization strategy for concurrent fetches, so the log itself may not be reproducible, violating the requirement for a typed auditable terminal state.",
+      "counterexample": null,
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "The mechanism uses estimated_bytes for the pre-fetch budget check, while the terminal state records bytes_used. The exhaustion decision is based on an unrecorded estimate, not on actual bytes consumed. This makes the terminal state non-auditable with respect to the true exhaustion condition, and if the estimation method is non-deterministic or unspecified, the point of exhaustion is not reproducible.",
+      "counterexample": null,
+      "target_alias": "SRC_002"
+    }
+  ]
+}

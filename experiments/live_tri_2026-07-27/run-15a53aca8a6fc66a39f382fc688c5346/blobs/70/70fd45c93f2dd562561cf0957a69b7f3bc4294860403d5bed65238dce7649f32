@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@01433a371bbb93efb566a9b7: program:reasoning_observation_pending
+- reason-counter@c090a40951a00f3dcd60e2ee: program:reasoning_observation_pending
+- reason-counter@52cce5922a0963e01b82e83e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is permissible if and only if the resumption protocol can reconstruct the causal fingerprint from the committed log alone without reference to the partial fragment, because the partial fragment is causally inert; resumption must be refused when the partial fragment has leaked causal state into a side channel that the resumed stream would read.","counterconditions":[{"case":"The reasoning envelope has no side channels\u2014all causal state is captured in the committed event log, making the partial fragment truly inert.","eval":"observation"},{"case":"The side channel is write-only from the reasoning process's perspective and never read on resumption, making leaked state causally inert.","eval":"observation"},{"case":"The side channel is checkpointed atomically with each committed event, so its state always corresponds to the last committed event regardless of truncation.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The causal fingerprint is a function of the committed event sequence. A partial fragment, being a non-event, does not enter the fingerprint. Therefore resumption is safe whenever the resumed stream's observable output depends solely on committed events. However, if the reasoning envelope writes intermediate state to a side channel (e.g., a scratchpad, cache, or environment variable) that the resumed stream reads, then the partial fragment's side-channel residue is causally potent\u2014it influences the resumed computation even though it was never a committed event. This creates a divergence between the resumed stream's fingerprint and an uninterrupted run's fingerprint. Resumption must be refused until the side channel is reconciled to the state corresponding to the last committed event.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@01433a371bbb93efb566a9b7, reason-counter@c090a40951a00f3dcd60e2ee, reason-counter@52cce5922a0963e01b82e83e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

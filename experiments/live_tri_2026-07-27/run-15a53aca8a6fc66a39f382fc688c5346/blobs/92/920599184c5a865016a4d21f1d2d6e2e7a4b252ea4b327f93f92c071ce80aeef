@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "Resumption is permitted when the event framing protocol can deterministically quarantine the truncated bytes of a partial event, treating them as non-events, thereby preserving physical append-only integrity; resumption must be refused if the framing protocol lacks the delimiters or checksums to deterministically distinguish a complete event from a partial one.",
+    "mechanism": "Token-budget exhaustion may leave a partial byte sequence at the tail of the log. If the reasoning envelope's framing protocol uses self-delimiting records with end-markers or integrity checks, the resumption protocol can deterministically identify the last complete event. The trailing bytes lack event identity and are skipped, avoiding any modification or deletion of committed events. Thus, physical append-only integrity is preserved by framing-quarantine, and logical causal continuity is preserved by resuming exactly after the last valid event.",
+    "counterconditions": [
+      "If the framing protocol relies solely on length-prefixing without integrity checks, a partially written length field could cause the resumption protocol to misinterpret a partial event as a complete one, necessitating refusal.",
+      "If the framing protocol cannot deterministically delimit events, resumption is impossible without risking logical causal discontinuity.",
+      "If the resumption protocol attempts to garbage-collect or overwrite the partial trailing bytes instead of simply ignoring them, it violates physical append-only integrity and must be refused."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_002"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_002"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.8
+  }
+}

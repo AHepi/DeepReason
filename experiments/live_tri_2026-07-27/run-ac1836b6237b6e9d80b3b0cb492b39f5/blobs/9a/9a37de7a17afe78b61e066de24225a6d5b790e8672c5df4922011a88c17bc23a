@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target claims both denominations are necessary but provides no causal mechanism for why a single denomination (requests) is insufficient for replayability. It acknowledges counterconditions where a single denomination could suffice, yet fails to eliminate those weaker rivals as required. Without a mechanism linking dual denomination to auditability, the claim is unjustified.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": false,
+      "case": "",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target adds a state hash to the exhaustion record, but this hash is causally unnecessary for auditability: a deterministic replay from the initial state using the same budget counters will naturally reach the same exhaustion point. The hash introduces overhead without improving reproducibility, and the target's own counterconditions acknowledge its cost. The mechanism fails to eliminate the simpler rival (counters-only) because it does not demonstrate that the hash is required for a typed auditable terminal.",
+      "counterexample": null
+    }
+  ]
+}

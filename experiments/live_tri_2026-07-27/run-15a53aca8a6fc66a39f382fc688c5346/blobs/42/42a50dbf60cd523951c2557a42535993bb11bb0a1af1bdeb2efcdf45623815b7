@@ -1,0 +1,33 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-2da717017468d2da3c501dd1dc4ce3cd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a bounded reasoning run stops on token-budget exhaustion. Determine exactly when it may later be resumed without corrupting the append-only identity of the recorded events, and when resumption must stay refused; adjudicate between rival criteria wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@0405310ae5c2d723f7ff320a: program:reasoning_observation_pending
+- reason-counter@a44b59f3e5d0ff43ebbfd461: program:reasoning_observation_pending
+- reason-counter@815884802afe2e3963de934f: program:reasoning_observation_pending
+- reason-counter@5030b81255e8d09302393a59: program:reasoning_observation_pending
+- reason-counter@cc33e90bb225dbd8ee52192a: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"Resumption is permissible if and only if the system emitted an explicit barrier/suspend event prior to token-budget exhaustion, and the exact causal fingerprint (program, input, checkpoint) matches at resumption; otherwise, it must be refused.","counterconditions":[{"case":"Token exhaustion occurs mid-event without a preceding explicit barrier","eval":"observation"},{"case":"Causal fingerprint at resumption diverges from run start due to model updates or differing inputs","eval":"observation"},{"case":"The barrier event itself was only partially persisted before exhaustion","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Token-budget exhaustion is an asynchronous, non-logical interrupt. If it occurs mid-event, the partial event lacks a well-defined identity and must be discarded to prevent log corruption. If an explicit barrier was emitted, the event log up to that point is complete and well-defined. Resuming from this barrier requires an exact match of the causal fingerprint to guarantee deterministic continuation, preserving the append-only identity of subsequent events.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@0405310ae5c2d723f7ff320a, reason-counter@a44b59f3e5d0ff43ebbfd461, reason-counter@815884802afe2e3963de934f
+
+TARGET SRC_002
+{"analogy":null,"claim":"Resumption must always be refused after token-budget exhaustion; only a fresh re-execution from the last globally committed event is valid, effectively treating the exhausted run as a failed transaction.","counterconditions":[{"case":"A system explicitly emits a 'budget exhausted' marker as part of its logical event stream, transforming the environmental interrupt into a logical one","eval":"observation"},{"case":"The run is strictly idempotent such that resuming is mathematically indistinguishable from re-executing from the last known state","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Because token-budget exhaustion is an environment-level truncation, it cannot be reliably mapped to a logical suspend event in the reasoning trace. Any attempt to resume implicitly injects an assumption about the exact state at exhaustion, violating the deterministic causal chain required by the append-only log. The only way to preserve event identity is to roll back to the last committed state and start a new bounded run with a new identity.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@5030b81255e8d09302393a59, reason-counter@cc33e90bb225dbd8ee52192a
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to eliminate weaker rival denominations as required by the problem. It proposes a composite time-based metric but does not argue why pure request-count or byte-count budgets are insufficient for a replayable research agent, nor does it provide evidence that they would fail. The problem explicitly asks to 'eliminate weaker rival denominations where the evidence allows,' and this omission leaves the proposal incomplete.",
+      "counterexample": [
+        "A requests-only budget with a fixed maximum response size enforced by the execution environment could guarantee replayability without the complexity of a virtual clock, yet the target does not address this possibility."
+      ]
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target does not eliminate weaker rival denominations as required. It presents a composite 'fetch-credits' metric but does not argue against requests-only or bytes-only budgets, nor does it provide evidence that those simpler denominations would be insufficient for replayability. The problem demands elimination of weaker rivals, and this target merely asserts a composite without comparative justification.",
+      "counterexample": [
+        "A bytes-only budget with a hard limit on the number of requests (e.g., via a separate counter) could be simpler and equally auditable, yet the target does not explain why its max-based composite is superior or why the single-dimension alternatives fail."
+      ]
+    },
+    {
+      "target_alias": "SRC_003",
+      "attack": true,
+      "case": "The target fails to decide a denomination and specify how exhaustion must be recorded, as required by the problem. It only argues that single-denomination budgets are insufficient, but it does not propose a concrete budget specification (e.g., requests, bytes, or both) nor does it define a typed auditable terminal for exhaustion. The problem asks for a decision and a recording mechanism, not merely a critique of alternatives.",
+      "counterexample": [
+        "The problem statement: 'Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal' — the target provides no such decision or specification, only a negative argument."
+      ]
+    }
+  ]
+}

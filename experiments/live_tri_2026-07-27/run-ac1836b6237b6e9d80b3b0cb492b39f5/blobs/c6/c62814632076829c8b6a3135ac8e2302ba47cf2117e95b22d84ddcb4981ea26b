@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@703b0692cadfcf1b439a2709: program:reasoning_observation_pending
+- reason-counter@f1638565ffbc4089e066b8db: program:reasoning_observation_pending
+- reason-counter@ab8c528fe74542b79a3b2b9a: program:reasoning_observation_pending
+- reason-counter@4d34b42804d6872fb4fb9f5b: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget must be denominated in both requests and bytes, with exhaustion recorded as a typed terminal state containing the exhaustion cause, remaining counts, and a deterministic state hash.","counterconditions":[{"case":"If the agent operates in an environment where per-request side effects are negligible and rate limits are absent, a bytes-only budget could suffice, but this is not general.","eval":"observation"},{"case":"If the agent's tasks are purely request-bound and data size is irrelevant, a requests-only budget might be adequate, but that would fail for data-intensive tasks.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A dual token bucket with atomic check-and-update: before each fetch, the agent atomically checks if both request and byte buckets have sufficient tokens; if not, it records a typed terminal event with the exhausted bucket, remaining tokens, and a hash of the agent's state (excluding budget counters) to ensure auditability and replayability. This prevents overshoot in parallel fetches via compare-and-swap on a shared budget structure.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@703b0692cadfcf1b439a2709, reason-counter@f1638565ffbc4089e066b8db
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget should be denominated solely in requests, with exhaustion recorded as a typed terminal event containing the request count and a hash of the request sequence.","counterconditions":[{"case":"If the agent's tasks involve large data downloads, a request-only budget would allow unbounded byte consumption, making it unsuitable.","eval":"observation"},{"case":"If the environment imposes byte-based rate limits, a request-only budget would not prevent throttling or overage charges.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A simple request counter that decrements on each fetch attempt (including retries). When the counter reaches zero, the agent emits a typed terminal event with the total requests made and a hash of the ordered list of request URLs and outcomes, enabling audit. This mechanism is simple and deterministic, but fails to account for data volume.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@ab8c528fe74542b79a3b2b9a, reason-counter@4d34b42804d6872fb4fb9f5b
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

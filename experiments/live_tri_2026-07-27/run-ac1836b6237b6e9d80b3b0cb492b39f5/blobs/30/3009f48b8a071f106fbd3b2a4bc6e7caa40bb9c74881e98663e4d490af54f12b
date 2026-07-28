@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "claim": "The fetch budget must be denominated in both requests and bytes, with exhaustion recorded as a typed terminal state containing the exhaustion cause, remaining counts, and a deterministic state hash.",
+      "mechanism": "A dual token bucket with atomic check-and-update: before each fetch, the agent atomically checks if both request and byte buckets have sufficient tokens; if not, it records a typed terminal event with the exhausted bucket, remaining tokens, and a hash of the agent's state (excluding budget counters) to ensure auditability and replayability. This prevents overshoot in parallel fetches via compare-and-swap on a shared budget structure.",
+      "counterconditions": [
+        "If the agent operates in an environment where per-request side effects are negligible and rate limits are absent, a bytes-only budget could suffice, but this is not general.",
+        "If the agent's tasks are purely request-bound and data size is irrelevant, a requests-only budget might be adequate, but that would fail for data-intensive tasks."
+      ],
+      "typicality": 0.9,
+      "optional_refs": ["SRC_002", "SRC_008"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated solely in requests, with exhaustion recorded as a typed terminal event containing the request count and a hash of the request sequence.",
+      "mechanism": "A simple request counter that decrements on each fetch attempt (including retries). When the counter reaches zero, the agent emits a typed terminal event with the total requests made and a hash of the ordered list of request URLs and outcomes, enabling audit. This mechanism is simple and deterministic, but fails to account for data volume.",
+      "counterconditions": [
+        "If the agent's tasks involve large data downloads, a request-only budget would allow unbounded byte consumption, making it unsuitable.",
+        "If the environment imposes byte-based rate limits, a request-only budget would not prevent throttling or overage charges."
+      ],
+      "typicality": 0.5,
+      "optional_refs": ["SRC_003"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in a composite cost metric (weighted sum of requests and bytes), with exhaustion recorded as a typed terminal event containing the composite cost breakdown.",
+      "mechanism": "A cost function C = α * requests + β * bytes, with α,β set by the operator. The agent maintains a running total and terminates with a typed record when C exceeds a threshold. This allows flexible trade-offs but introduces parameter sensitivity; reproducibility requires fixed α,β and deterministic cost accumulation.",
+      "counterconditions": [
+        "If the operator cannot reliably set α and β to reflect true resource costs, the composite metric may misallocate budget, making it inferior to separate request and byte budgets.",
+        "If the environment's cost structure changes over time, the fixed parameters become invalid, breaking the budget's relevance."
+      ],
+      "typicality": 0.3,
+      "optional_refs": ["SRC_005"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in wall-clock time, with exhaustion recorded as a typed terminal event containing the elapsed time and a timestamp.",
+      "mechanism": "A timer starts when the agent begins execution. The agent periodically checks elapsed time; when it exceeds the budget, it records a typed terminal event with the elapsed time and a timestamp. This is simple but non-deterministic due to variable network latency and system load, making replay impossible.",
+      "counterconditions": [
+        "If the agent's environment provides a deterministic simulated clock and all network responses are replayed from a log, time-based budgeting could be made reproducible, but this requires extensive infrastructure."
+      ],
+      "typicality": 0.1,
+      "optional_refs": ["SRC_006"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    },
+    {
+      "claim": "The fetch budget should be denominated in both requests and bytes, but exhaustion should be recorded as a simple boolean flag in the agent's terminal state, without detailed counts.",
+      "mechanism": "A dual counter that sets a boolean exhausted flag when either limit is reached. The agent then stops fetching. This is lightweight but lacks auditability: it does not record which budget was exhausted or remaining counts, making post-hoc analysis impossible.",
+      "counterconditions": [
+        "If auditability is not required and only a hard stop is needed, a boolean flag might suffice, but for a research agent, typed auditable terminal is essential."
+      ],
+      "typicality": 0.2,
+      "optional_refs": ["SRC_007"],
+      "sidecar": {
+        "search_signal": "productive"
+      }
+    }
+  ]
+}

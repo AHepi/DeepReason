@@ -60,3 +60,15 @@ reason_rc=4 reason_seconds=704
 run_id=run-94eeae677d83faf8530d972678571675 problem_id= state=failed
 === deepseek DEEP end 2026-07-27T23:31:05Z ===
 === deepseek DEEP start 2026-07-27T23:35:00Z ===
+reason_rc=0 reason_seconds=1173
+run_id=run-ac1836b6237b6e9d80b3b0cb492b39f5 problem_id=question-f0fa5acd89b3c97ad7d49c476c36e1b9 state=completed
+bridge_rc=1 bridge_seconds=413
+
+=== BRIDGE TRIO RESULTS ===
+PASS  start_bridge  | ok
+PASS  bridge_status(terminal)  | state=completed detail={"formal_seq": 1183, "process_status": "success", "resolution": "answered", "run_id": "run-ac1836b6237b6e9d80b3b0cb492b39f5", "schema": "deepreason-bridge-status-v1", "source_terminal_commitment_ref":
+PASS  bridge_result  | ok
+FAIL  bridge_result has resolution  | resolution=None
+PASS  bridge_claims  | ok
+=== 4/5 passed ===
+=== deepseek DEEP end 2026-07-28T00:01:26Z ===

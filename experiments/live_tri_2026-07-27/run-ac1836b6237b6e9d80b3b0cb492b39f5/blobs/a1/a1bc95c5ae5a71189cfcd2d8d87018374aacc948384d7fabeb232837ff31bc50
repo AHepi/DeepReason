@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to eliminate weaker rival denominations as required by the problem. It merely lists counterconditions where a single denomination (requests or bytes) would suffice, but does not argue why those conditions are unrealistic or why the dual budget is strictly necessary. The problem demands a decisive elimination of weaker alternatives, not a neutral observation that they could work under certain circumstances.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target proposes wall-clock time as the denomination, which directly violates the replayability requirement of the problem. The target's own counterconditions concede that time budgets break reproducibility across different hardware or network conditions. A replayable agent must produce identical outcomes given identical inputs; a time-based budget makes that impossible.",
+      "counterexample": null
+    }
+  ]
+}

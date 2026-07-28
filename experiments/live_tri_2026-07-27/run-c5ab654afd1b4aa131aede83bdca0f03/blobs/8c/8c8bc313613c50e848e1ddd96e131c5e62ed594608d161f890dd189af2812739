@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-209e3154673cd752fd6dc26d2ddbbf90) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass two: a process crashes while holding a deterministic per-problem workspace, leaving no terminal record behind. Determine the safest reclamation protocol that can never silently displace completed evidence and specify exactly what it must durably record; adjudicate between rival protocols wherever the evidence allows.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@b6727a1619a3fb87c11b7eb6: program:reasoning_observation_pending
+- reason-counter@ad08696e371167bf0fe3e05d: program:reasoning_observation_pending
+- reason-counter@4c6e72f118cee535157f7d55: program:reasoning_observation_pending
+- reason-counter@66f5490d5f42bb71103041de: program:reasoning_observation_pending
+- reason-counter@c682cdb9035d49add2c7b2bb: program:reasoning_observation_pending
+- reason-counter@02fa9f202105fef5d2bb8628: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A content-addressed derivation cache with durable provenance anchors achieves equivalent safety without a global log, provided the anchor record includes the full dependency closure, a tombstone-resistant witness attestation, and a seal-of-derivation signed by the workspace holder.","counterconditions":[{"case":"The anchor store experiences split-brain where a valid anchor is invisible to the reclaimer but visible to readers, permitting silent displacement.","eval":"observation"},{"case":"Hash collisions in the content-addressed store allow distinct evidence to share an identifier.","eval":"observation"},{"case":"The witness attestation relies on synchronized clocks and suffers skew-induced false negatives as in SRC_008.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Completed evidence is externalized as a content-addressed object. The holder writes a provenance anchor to a durable, replicated key-value store keyed by problem-id, containing (content-hash, input-hashes, timestamp-witness, holder-epoch). Reclamation only proceeds if a causal cut shows no anchor for the problem-id and the holder's heartbeat lease has expired. Because the evidence is content-addressed, displacement is detectable: recompute yields the same hash, revealing a silent displacement after the fact.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b6727a1619a3fb87c11b7eb6, reason-counter@ad08696e371167bf0fe3e05d, reason-counter@4c6e72f118cee535157f7d55
+
+TARGET SRC_002
+{"analogy":null,"claim":"Because the workspace is deterministic per-problem, the safest reclamation protocol is to treat reclamation as a recompute-then-compare operation rather than a metadata check; the exact durable record required is simply the problem identifier and the content-addressed expectation of the output, and adjudication must favor protocols that validate evidence by reproduction over protocols that infer state from holder liveness.","counterconditions":[{"case":"Computation is too expensive to recompute during reclamation, violating timeliness assumptions.","eval":"observation"},{"case":"The deterministic property is weakened by hardware nondeterminism (e.g., floating-point widths, thread scheduling) that varies across recomputations.","eval":"observation"},{"case":"The protocol displaces intermediate scratch state that is not recoverable by pure recomputation, even if the final evidence is recoverable.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The reclaimer recomputes the problem in a fresh workspace and compares the result to any cached evidence; if they match, the original workspace is dispensable and any displacement is harmless because the evidence is recoverable. If they do not match, the workspace is retained. This shifts the safety burden from crash detection to determinism verification. The required durable record is (problem-id, deterministic-function-hash, expected-output-hash), recorded at problem-dispatch time, making the protocol immune to process-level crashes because evidence is defined by the function, not by process state.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@66f5490d5f42bb71103041de, reason-counter@c682cdb9035d49add2c7b2bb, reason-counter@02fa9f202105fef5d2bb8628
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

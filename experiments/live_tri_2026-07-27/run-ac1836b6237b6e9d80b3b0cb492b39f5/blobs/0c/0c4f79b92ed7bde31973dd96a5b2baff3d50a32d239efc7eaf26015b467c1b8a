@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The target fails to eliminate weaker rival denominations as required; it merely asserts bytes without providing evidence or argument against requests or a combined budget.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target explicitly rejects a typed auditable terminal, recording exhaustion as a simple boolean flag, which fails the requirement that exhaustion must be recorded as a typed auditable terminal.",
+      "counterexample": null
+    }
+  ]
+}

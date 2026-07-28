@@ -1,0 +1,24 @@
+{
+  "sections": [
+    {
+      "span_id": "S1",
+      "text": "The fetch budget should be denominated solely in requests, and when it is exhausted, a typed terminal event must be recorded that contains the request count and the limit.",
+      "ledger_entry_handles": ["E34"]
+    }
+  ],
+  "resolution": "answered",
+  "resolution_reason": "The composition presents the surviving conjecture as the answer; process observations are recorded as unresolved items.",
+  "unresolved_items": [
+    {
+      "description": "Process observations of artifact acceptance at formal sequence 1183",
+      "ledger_entry_handles": [
+        "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10",
+        "E11", "E12", "E13", "E14", "E15", "E16", "E17", "E18", "E19", "E20",
+        "E21", "E22", "E23", "E24", "E25", "E26", "E27", "E28", "E29", "E30",
+        "E31", "E32", "E33"
+      ],
+      "reason": null
+    }
+  ],
+  "ledger_amendment_request": null
+}

@@ -1,0 +1,1 @@
+{"component":"scratch","disposition":"omitted","error_code":"SCRATCH_ALIAS_UNKNOWN","error_type":"ScratchAuthoringError","message":"SCRATCH_ALIAS_UNKNOWN: unknown scratch proposal reference(s): SCR_001, SCR_002, SCR_004","partial_refs":[],"phase":"semantic_validation","schema":"conjecture-component-diagnostic.v1"}

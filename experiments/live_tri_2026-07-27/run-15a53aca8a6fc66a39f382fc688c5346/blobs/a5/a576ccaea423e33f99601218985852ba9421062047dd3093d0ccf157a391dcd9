@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "claim": "Resumption is permissible if and only if the event framing protocol deterministically isolates partial events as non-events, preserving physical append-only integrity while ignoring trailing bytes.",
+      "mechanism": "The system relies on self-delimiting records or integrity checks to quarantine and skip partial trailing bytes after token-budget exhaustion. The append-only log is physically unchanged, satisfying the physical append-only integrity invariant.",
+      "counterconditions": [
+        "If framing relies solely on length-prefixing without end-markers or checksums, partial events cannot be deterministically skipped, risking logical causal corruption.",
+        "If the resumption protocol actively mutates or deletes the partial trailing bytes to 'clean up' the log, physical append-only integrity is violated."
+      ],
+      "optional_refs": ["SRC_002", "SRC_008"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.7
+    },
+    {
+      "claim": "Resumption is safe if and only if the exact causal fingerprint (program_hash, input_hash, model_checkpoint_hash) at resumption matches the run start, preventing logical divergence.",
+      "mechanism": "Resumption requires deterministic verification of the environment and inputs. If the causal fingerprint matches, the resumed stream matches the uninterrupted stream, satisfying logical causal continuity.",
+      "counterconditions": [
+        "If the system state changes between exhaustion and resumption (e.g., model updates, time-dependent inputs, or external state mutation), the fingerprint will mismatch and resumption is refused.",
+        "If the causal fingerprint cannot be computed because the system was interrupted mid-computation of the fingerprint itself."
+      ],
+      "optional_refs": ["SRC_003"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.6
+    },
+    {
+      "claim": "If token-budget exhaustion is predictable, resumption is safe provided the system injects a synthetic barrier event before the forced crash.",
+      "mechanism": "A warning threshold (e.g., 90% budget) triggers a controlled suspension, emitting a synthetic barrier event that cleanly delimits the committed log up to that point.",
+      "counterconditions": [
+        "If exhaustion is abrupt and unpredictable (e.g., a hard kill or OOM), no synthetic barrier can be injected, and resumption must be refused.",
+        "If the synthetic barrier itself is corrupted because the warning was triggered too late, leaving the barrier event partial."
+      ],
+      "optional_refs": ["SRC_004"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.5
+    },
+    {
+      "claim": "Resumption must always be refused after token-budget exhaustion; only a fresh re-execution from the last globally committed event is valid.",
+      "mechanism": "Any attempt to resume risks subtle state corruption that cannot be proven safe without a complete restart. The append-only log guarantees the history of the failed run, but a new run starts fresh from the last known good state.",
+      "counterconditions": [
+        "If the system is strictly deterministic, stateless at the exhaustion point, and supports deterministic replay, resumption is logically indistinguishable from re-execution, though practically refused for safety.",
+        "If re-execution is impossible due to loss of original input state, this criterion implies the reasoning run is permanently lost."
+      ],
+      "optional_refs": ["SRC_005", "SRC_001"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.8
+    },
+    {
+      "claim": "Append-only identity is preserved by treating resumption as a new derived branch rather than a continuation, making resumption always permissible.",
+      "mechanism": "The original exhausted run remains untouched in the append-only log. The 'resumed' run is just a new run initialized with the state of the exhausted one, effectively creating a branch. No append-only violation occurs because the original stream is immutable.",
+      "counterconditions": [
+        "If downstream consumers are not aware of the new branch identity and assume linear continuation, logical causal continuity is violated for those consumers.",
+        "If the system does not explicitly record the branch relationship, the causal history becomes fragmented and unintelligible."
+      ],
+      "optional_refs": ["SRC_006"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.4
+    },
+    {
+      "claim": "Resumption is always safe at any point of exhaustion if the reasoning step is decomposed into idempotent, purely functional state transitions.",
+      "mechanism": "Because each step is purely functional and idempotent, re-running or resuming from any point yields the exact same output. Append-only integrity is preserved because no prior event is mutated; resumption simply appends new identical events or continues deterministically.",
+      "counterconditions": [
+        "If the reasoning step has side effects, external API calls, or non-deterministic randomness, idempotency fails and resumption risks branching outputs.",
+        "If the functional state transition itself relies on reading the partial event left by mid-stream exhaustion, which by definition lacks a complete state representation."
+      ],
+      "optional_refs": ["SRC_007"],
+      "sidecar": {"search_signal": "productive"},
+      "typicality": 0.3
+    }
+  ]
+}

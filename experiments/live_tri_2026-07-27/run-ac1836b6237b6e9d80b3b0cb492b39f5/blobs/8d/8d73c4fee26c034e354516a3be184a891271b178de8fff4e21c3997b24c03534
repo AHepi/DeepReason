@@ -1,0 +1,48 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-f0fa5acd89b3c97ad7d49c476c36e1b9) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deep pass three: a replayable autonomous research agent needs its fetch budget specified. Decide the denomination (requests, bytes, or both) and specify exactly how exhaustion must be recorded so it stays a typed auditable terminal; eliminate weaker rival denominations where the evidence allows.
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@8497f69fcc6627b447b175eb: program:reasoning_observation_pending
+- reason-counter@b993c6c597ffc9383f0e2d73: program:reasoning_observation_pending
+- reason-counter@6a61ac5075d19f8bc3d49d22: program:reasoning_observation_pending
+- reason-counter@ffd271977017e0716daedcc9: program:reasoning_observation_pending
+- reason-counter@dab9ff4dc377244083ff7bd6: program:reasoning_observation_pending
+- reason-counter@3385c0ab1c548227b3211755: program:reasoning_observation_pending
+- reason-counter@78502fdc8612191e2821723b: program:reasoning_observation_pending
+- reason-counter@26f76961da6e11f636955a2b: program:reasoning_observation_pending
+- reason-counter@58baa909890a67808fe1210a: program:reasoning_observation_pending
+- reason-counter@31c586be4decb1584dfed186: program:reasoning_observation_pending
+- reason-counter@2f0d55388edf91ac6ca4bbf4: program:reasoning_observation_pending
+- reason-counter@2d580a9c2e4b9f8ffcf68b2f: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The fetch budget must be denominated in bytes transferred, because bytes directly measure resource consumption and cost, and are more fundamental than requests. Requests are eliminated as a weaker rival because a single request could download gigabytes while many small requests could be cheap, making request count a poor proxy for actual usage.","counterconditions":[{"case":"If the agent uses streaming or chunked transfer encoding, the byte count must be defined as the sum of all chunk bodies, excluding headers.","eval":"observation"},{"case":"If the agent caches responses, cache hits must be counted as 'virtual bytes' equal to the original response size to maintain consistent exhaustion across cold and warm starts.","eval":"observation"},{"case":"If the agent makes parallel requests, the byte budget must be checked atomically to prevent overshoot.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a byte budget B. Each fetch's response body size (as reported by Content-Length or actual bytes received, with a deterministic rule for compressed responses) is subtracted from the budget. Before a fetch, the agent checks i
+commitments: reasoning-envelope-wf, reason-counter@8497f69fcc6627b447b175eb, reason-counter@b993c6c597ffc9383f0e2d73, reason-counter@6a61ac5075d19f8bc3d49d22
+
+TARGET SRC_002
+{"analogy":null,"claim":"The fetch budget must be denominated solely in requests, because request count is the only deterministic, replayable unit that is immune to content-length variability and caching effects. Bytes are eliminated as a weaker rival because response sizes can vary across replays due to compression, server state, or dynamic content, breaking auditability.","counterconditions":[{"case":"If the agent can make requests of vastly different sizes, a request budget may allow excessive data transfer, but this can be mitigated by a separate data cap if needed; however, for replayability, requests are deterministic.","eval":"observation"},{"case":"If the agent uses caching, cache hits must not count as requests, but the cache state must be part of the agent's deterministic state hash to ensure replay consistency.","eval":"observation"},{"case":"If the agent makes parallel requests, atomicity of the counter must be ensured via a lock or atomic operations.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a maximum request count N. Each fetch attempt (including retries for transient errors) decrements a counter. Before any fetch, the 
+commitments: reasoning-envelope-wf, reason-counter@ffd271977017e0716daedcc9, reason-counter@dab9ff4dc377244083ff7bd6, reason-counter@3385c0ab1c548227b3211755
+
+TARGET SRC_003
+{"analogy":null,"claim":"The fetch budget should be a single composite cost metric, e.g., cost = \u03b1 * requests + \u03b2 * bytes, with a single budget limit. This unifies the two dimensions into one auditable number, eliminating the need for dual limits and allowing flexible tuning. Pure requests or bytes are special cases with one coefficient zero, but they are weaker because they ignore the other dimension.","counterconditions":[{"case":"The coefficients must be chosen carefully to reflect real-world costs; if misconfigured, the budget may still allow excessive requests or bytes.","eval":"observation"},{"case":"The cost function must be deterministic: response_size must be measured consistently (e.g., uncompressed body bytes).","eval":"observation"},{"case":"If the agent uses caching, cache hits must be assigned a cost (e.g., \u03b1 for the request, \u03b2 * cached_size) to maintain consistency.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a cost budget C and coefficients \u03b1, \u03b2. Each fetch computes its cost as \u03b1 * 1 + \u03b2 * response_size. The agent accumulates total_cost. Before a fetch, it checks if total_cost + e
+commitments: reasoning-envelope-wf, reason-counter@78502fdc8612191e2821723b, reason-counter@26f76961da6e11f636955a2b, reason-counter@58baa909890a67808fe1210a
+
+TARGET SRC_004
+{"analogy":null,"claim":"The fetch budget must be dual-denominated in both requests and bytes, with exhaustion triggered by whichever limit is hit first. This eliminates the weaknesses of single-denomination approaches: a requests-only budget fails to control data volume, and a bytes-only budget fails to control API call frequency. Only a dual budget provides complete resource control and auditability.","counterconditions":[{"case":"The dual budget adds complexity, but it is necessary to cover both dimensions of resource consumption.","eval":"observation"},{"case":"If the agent uses caching, cache hits must be accounted for in both dimensions: a cache hit counts as a request (if it would have been a fetch) and as virtual bytes equal to the cached response size.","eval":"observation"},{"case":"The atomicity of the dual check must be ensured, e.g., via a mutex or compare-and-swap.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The agent is configured with a request limit R and a byte limit B. It maintains two counters: requests_made and bytes_transferred. Before each fetch, it checks if requests_made + 1 > R or if bytes_transferred + estimated_fetch_size > B (using a c
+commitments: reasoning-envelope-wf, reason-counter@31c586be4decb1584dfed186, reason-counter@2f0d55388edf91ac6ca4bbf4, reason-counter@2d580a9c2e4b9f8ffcf68b2f
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

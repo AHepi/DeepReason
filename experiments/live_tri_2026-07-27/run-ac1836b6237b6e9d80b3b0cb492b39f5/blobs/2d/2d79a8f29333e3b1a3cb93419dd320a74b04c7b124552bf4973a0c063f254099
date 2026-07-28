@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "target_alias": "SRC_001",
+      "attack": true,
+      "case": "The mechanism relies on an unspecified pre-fetch cost estimate to trigger exhaustion, making the exhaustion condition non-deterministic and not strictly auditable; the terminal event records total_cost based on estimates, not actual consumption, so replayability is compromised and the exact exhaustion specification is incomplete.",
+      "counterexample": null
+    },
+    {
+      "target_alias": "SRC_002",
+      "attack": true,
+      "case": "The target fails to eliminate the request budget as a weaker denomination because it acknowledges (in its own countercondition) that in environments with per-request pricing, requests are a scarce resource and a dual budget is required, so the answer is not a definitive elimination and does not satisfy the problem's demand to eliminate weaker rival denominations where evidence allows.",
+      "counterexample": null
+    }
+  ]
+}
