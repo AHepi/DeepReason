@@ -1,0 +1,12 @@
+=== glm2 (glm-5.2, fresh root after bridge-dead glm) start 2026-07-28T09:27:09Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_compare_2026-07-28/glm2/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 1100. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/280qualification cases: 2/280qualification cases: 3/280qualification cases: 4/280qualification cases: 5/280qualification cases: 6/280qualification cases: 7/280qualification cases: 8/280qualification cases: 9/280qualification cases: 10/280qualification cases: 11/280qualification cases: 12/280
