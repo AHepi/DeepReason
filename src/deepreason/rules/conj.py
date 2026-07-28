@@ -2179,11 +2179,19 @@ def conj(
             # admitted block is resolved and byte-checked deterministically.
             # Like gate decisions, each outcome is persisted as a Measure —
             # attention/diagnostic, never a status — so criticism can attack
-            # a citation from the durable record.
+            # a citation from the durable record.  The citable universe is
+            # the run-bound dossier plus blocks admitted mid-run through
+            # consumed research fetches (re-derived from replayed state).
+            from deepreason.capabilities.research import (
+                consumed_research_blocks,
+            )
             from deepreason.evidence.citations import check_candidate_citations
 
             for citation_check in check_candidate_citations(
-                tuple(candidate.evidence_refs), bound_dossier, harness.blobs
+                tuple(candidate.evidence_refs),
+                bound_dossier,
+                harness.blobs,
+                extra_blocks=consumed_research_blocks(harness),
             ):
                 harness.record_measure(
                     inputs=[

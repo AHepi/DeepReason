@@ -383,7 +383,13 @@ class ResearchCapabilityController:
         scratch_fence_seq: int,
     ) -> tuple[str, ...]:
         """Register packaged material as candidate evidence, bounded by the
-        policy's maximum_sources across the whole run."""
+        policy's maximum_sources across the whole run.
+
+        Each consumed document is also deterministically segmented into
+        admission blocks (increment C): the block ids land on the
+        attackable reliability node — visible in packs — and the §4
+        citation checker resolves them, so fetched material is citable
+        and byte-checkable exactly like an attached dossier."""
 
         from deepreason.research.backends import register_evidence
 
@@ -395,6 +401,7 @@ class ResearchCapabilityController:
         evidence_refs = []
         for item in package.items[:headroom]:
             text = self.harness.blobs.get(item.text_sha256).decode("utf-8")
+            blocks = blocks_for_fetched_text(text)
             evidence = register_evidence(
                 self.harness,
                 problem,
@@ -405,6 +412,7 @@ class ResearchCapabilityController:
                     "url": item.url,
                     "content_sha256": item.content_sha256,
                     "result_package_ref": package.id,
+                    "citable_blocks": [block.id[:16] for block in blocks],
                 },
             )
             evidence_refs.append(evidence.id)
@@ -432,4 +440,59 @@ def _host(url: str) -> str:
     return (urlparse(url).hostname or "").lower()
 
 
-__all__ = ["BACKEND_IDENTITY", "ResearchCapabilityController"]
+def blocks_for_fetched_text(text: str):
+    """Deterministically segment one fetched document into admission blocks.
+
+    The core admission parser is the single canonical segmenter: the same
+    text bytes mint the same block ids forever (parser-version-bound), and
+    span blocks reference the text bytes — which consume() stores
+    content-addressed in blobs — so quote byte-checks resolve through the
+    same path as attached-dossier blocks.
+    """
+
+    from deepreason.admission import AdmissionInput, admit_sources
+    from deepreason.evidence.models import AttachedSourceProvenanceV1
+
+    dossier, _report = admit_sources(
+        [AdmissionInput(locator="research-fetch", data=text.encode("utf-8"))],
+        problem_ref="research-consumption",
+        provenance=AttachedSourceProvenanceV1(
+            supplied_by="deepreason.research",
+            acquisition_method="contained directed fetch",
+            note=None,
+        ),
+    )
+    return tuple(dossier.blocks)
+
+
+def consumed_research_blocks(harness):
+    """Re-derive every consumed document's citable blocks from replayed
+    state and content-addressed blobs alone — never a stored listing."""
+
+    blocks = []
+    packages = {
+        package.id: package
+        for package in harness.capability_state.result_packages.values()
+        if isinstance(package, ResearchResultPackageV1)
+    }
+    for consumption in harness.capability_state.consumptions.values():
+        if not isinstance(consumption, ResearchConsumptionV1):
+            continue
+        package = packages.get(consumption.result_package_ref)
+        if package is None:
+            continue
+        for item in package.items:
+            try:
+                text = harness.blobs.get(item.text_sha256).decode("utf-8")
+            except KeyError:
+                continue
+            blocks.extend(blocks_for_fetched_text(text))
+    return tuple(blocks)
+
+
+__all__ = [
+    "BACKEND_IDENTITY",
+    "ResearchCapabilityController",
+    "blocks_for_fetched_text",
+    "consumed_research_blocks",
+]

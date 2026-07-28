@@ -353,3 +353,75 @@ def test_v6_manifest_gate_accepts_only_the_contained_backend():
     )
     with pytest.raises(ValueError, match="V6_RESEARCH_UNAVAILABLE"):
         _validate_v6_capability_policy(foreign)
+
+
+def test_consumed_fetches_become_citable_byte_checked_blocks(tmp_path):
+    """Increment C: fetched material is segmented by the canonical admission
+    parser, its block ids surface on the attackable reliability node, and
+    the §4 citation checker byte-verifies quotes against the exact fetched
+    text — same discipline as an attached dossier."""
+
+    from deepreason.capabilities.research import consumed_research_blocks
+    from deepreason.evidence.citations import (
+        EVIDENCE_CITATION_VERIFIED,
+        EVIDENCE_QUOTE_MISMATCH,
+        check_candidate_citations,
+    )
+    from deepreason.llm.contracts import EvidenceRefClaimV1
+
+    transport = _transport(
+        {"https://example.org/tides": (200, "text/html", None, PAGE)}
+    )
+    harness, problem, controller = _controller(tmp_path, _policy(), transport)
+    proposal = controller.propose(
+        _draft(),
+        proposal_index=0,
+        work_order=_work_order(),
+        source_call_seq=1,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    package = controller.execute(
+        proposal, formal_fence_seq=4, scratch_fence_seq=4
+    )
+    evidence_refs = controller.consume(
+        proposal, package, problem, formal_fence_seq=4, scratch_fence_seq=4
+    )
+
+    blocks = consumed_research_blocks(harness)
+    assert blocks, "consumed fetches must mint citable blocks"
+    block = blocks[0]
+
+    # The reliability node advertises the citable block ids in packs.
+    evidence = harness.state.artifacts[evidence_refs[0]]
+    reliability_ref = next(
+        ref.target for ref in evidence.interface.refs if ref.role == "dependence"
+    )
+    reliability = harness.state.artifacts[reliability_ref]
+    assert block.id[:16] in reliability.content_ref
+
+    # Quote byte-checks resolve through the content-addressed text blob.
+    canonical = harness.blobs.get(block.source_sha256).decode("utf-8")[
+        block.span_start : block.span_end
+    ]
+    verified = check_candidate_citations(
+        (EvidenceRefClaimV1(block=block.id, quote=canonical),),
+        None,
+        harness.blobs,
+        extra_blocks=blocks,
+    )
+    assert [c.code for c in verified] == [EVIDENCE_CITATION_VERIFIED]
+
+    reworded = check_candidate_citations(
+        (EvidenceRefClaimV1(block=block.id, quote=canonical + " reworded"),),
+        None,
+        harness.blobs,
+        extra_blocks=blocks,
+    )
+    assert [c.code for c in reworded] == [EVIDENCE_QUOTE_MISMATCH]
+
+    # Determinism: re-derivation from a fresh replay mints identical ids.
+    reloaded = Harness(tmp_path / "run")
+    assert [b.id for b in consumed_research_blocks(reloaded)] == [
+        b.id for b in blocks
+    ]

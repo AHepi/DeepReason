@@ -96,20 +96,26 @@ def _resolve(
 
 
 def check_candidate_citations(
-    refs, dossier: EvidenceDossier | None, blobs
+    refs, dossier: EvidenceDossier | None, blobs, *, extra_blocks=()
 ) -> tuple[EvidenceCitationCheckV1, ...]:
     """Check every claimed citation of one candidate; one outcome per claim.
 
     ``refs`` are ``EvidenceRefClaimV1`` values from an admitted candidate;
     ``dossier`` is the run-bound dossier (or None when no dossier is bound);
-    ``blobs`` resolves admitted source bytes by content digest.
+    ``blobs`` resolves admitted source bytes by content digest;
+    ``extra_blocks`` extends the citable universe with blocks admitted
+    mid-run under capability authority (consumed research fetches) — the
+    same content-addressed identity and quote byte-checks apply.
     """
 
     checks: list[EvidenceCitationCheckV1] = []
-    blocks = tuple(getattr(dossier, "blocks", ()) if dossier is not None else ())
+    blocks = (
+        tuple(getattr(dossier, "blocks", ()) if dossier is not None else ())
+        + tuple(extra_blocks)
+    )
     for ref in refs:
         quoted = ref.quote is not None
-        if dossier is None:
+        if dossier is None and not extra_blocks:
             checks.append(
                 EvidenceCitationCheckV1(
                     code=EVIDENCE_REFS_UNBOUND,
