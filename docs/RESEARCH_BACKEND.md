@@ -1,0 +1,72 @@
+# The research backend (owner decisions resolved 2026-07-28)
+
+Status: tranche 1 IMPLEMENTED — the contained fetcher and the directed
+`web:` backend (`src/deepreason/research/fetch.py`,
+`tests/test_research_web.py`). V6 in-run enablement remains gated
+(`V6_RESEARCH_UNAVAILABLE`) and is tranche 2.
+
+## The two parked decisions, and how they were resolved
+
+The 2026-07-27 handover parked autonomous research on two questions.
+
+1. **Open web vs per-run domain allowlist → allowlist.** Decided from
+   the harness's own doctrine: where a run may look is part of what the
+   run *is*. The allowlist is a frozen containment authority (bare
+   lowercase hostnames, subdomains implied, https only, every redirect
+   hop re-validated before dispatch). Open web would make runs
+   non-replayable in intent and unbounded in prompt-injection surface.
+2. **Fetch budget semantics → requests-denominated, typed exhaustion.**
+   Decided by the campaign's grounded evidence: the deepseek-v4-pro
+   deep run on exactly this question ended ANSWERED with a
+   requests-only budget whose exhaustion is recorded as a typed,
+   auditable terminal carrying the count and the limit. That is the
+   implemented shape: every dispatched round-trip (redirect hops and
+   failures included) spends one request; validation refusals spend
+   nothing; `RESEARCH_BUDGET_EXHAUSTED` receipts always carry
+   `requests_used` and `requests_limit`. The per-response byte ceiling
+   is containment, not a budget — it bounds any single response without
+   changing the denomination.
+
+## Tranche 1 (implemented)
+
+- `ContainedFetcher`: allowlist + budget + receipts. Every fetch
+  attempt — success, refusal, failure, exhaustion — mints a
+  `FetchReceiptV1` with a content digest for fetched bytes.
+- `WebBackend` (`RESEARCH_BACKEND: "web:<config.yaml>"`): **directed**
+  retrieval — explicit https URLs in the research problem description
+  are fetched (bounded per problem); the backend never searches.
+  Choosing sources is the director's act; executing them safely is the
+  harness's.
+- Evidence enters through the one canonical `register_evidence` shape:
+  the source-reliability node carries the fetch provenance claim (url,
+  content sha256, receipt seq) — attackable, on the record.
+- `run_research` persists every receipt as a `research-fetch:` Measure,
+  so no fetch ever vanishes from the append-only log.
+- Config file shape:
+
+      domain_allowlist: [example.org, data.example.net]
+      maximum_requests: 25
+      maximum_response_bytes: 2097152   # optional, per-fetch containment
+      timeout_seconds: 30               # optional
+
+## Tranche 2 (open): V6 in-run enablement
+
+`ResearchCapabilityPolicyV1` gains `domain_allowlist` and the
+requests-denominated budget, binding both into the manifest digest
+(this drifts the engaged preset digest and therefore invalidates cached
+qualifications — schedule it with a requalification window). The
+conjecture turn gains a bounded research-proposal contract (the model
+proposes allowlisted URLs; the transactional service executes them
+through the same `ContainedFetcher`), fetched material flows through
+admission (§ADMISSION_SPEC) so it becomes citable blocks rather than
+raw prompt text, and replay validates the receipt arithmetic. Until
+then `V6_RESEARCH_UNAVAILABLE` stands, exactly as before.
+
+## Injection posture
+
+Fetched text is untrusted data under the same normative rules as
+admitted documents (ADMISSION_SPEC §5): quoted material, never
+instructions, no special status for rubric-bearing content. Tranche 1
+surfaces fetched text only through the evidence artifact path, which
+already frames it as attackable candidate material resting on an
+attackable reliability node.

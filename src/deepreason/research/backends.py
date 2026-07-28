@@ -61,6 +61,50 @@ class AskUserBackend:
         return None
 
 
+_URL_IN_QUERY = None  # compiled lazily; see WebBackend
+
+
+class WebBackend:
+    """Directed web retrieval under frozen containment (research/fetch.py).
+
+    Directed means the research problem itself names where to look: the
+    backend extracts explicit https URLs from the problem description and
+    fetches them — allowlisted, budgeted, receipted — returning the first
+    hop that yields nonempty text. It never searches; choosing sources is
+    the director's act (the problem author, an operator, or a future
+    model-proposal contract), executing them safely is the harness's.
+    """
+
+    name = "web"
+    _MAX_URLS_PER_QUERY = 3
+
+    def __init__(self, config, *, transport=None) -> None:
+        from deepreason.research.fetch import ContainedFetcher
+
+        self.fetcher = ContainedFetcher(config, transport=transport)
+        self.last_receipt = None
+
+    @staticmethod
+    def _urls(query: str) -> list[str]:
+        global _URL_IN_QUERY
+        if _URL_IN_QUERY is None:
+            import re
+
+            _URL_IN_QUERY = re.compile(r"https://[^\s)\]}>\"']+")
+        return _URL_IN_QUERY.findall(query)
+
+    def drain_receipts(self):
+        return self.fetcher.drain_receipts()
+
+    def fetch(self, query: str) -> tuple[str, str] | None:
+        for url in self._urls(query)[: self._MAX_URLS_PER_QUERY]:
+            outcome = self.fetcher.fetch(url)
+            self.last_receipt = outcome.receipt
+            if outcome.text:
+                return outcome.text, outcome.final_url or url
+        return None
+
+
 class ResearchService:
     """The configured research mode plus (optionally) an internal fetcher.
 
@@ -78,7 +122,7 @@ class ResearchService:
         return self.fetcher is not None
 
 
-VALID_MODES = ("agent", "ask-user", "static:<file>", "null (disabled)")
+VALID_MODES = ("agent", "ask-user", "static:<file>", "web:<config-file>", "null (disabled)")
 
 
 def load_static_corpus(path: str) -> dict[str, tuple[str, str]]:
@@ -121,6 +165,12 @@ def build_service(config) -> ResearchService:
     if isinstance(mode, str) and mode.startswith("static:"):
         return ResearchService(
             "static", StaticBackend(load_static_corpus(mode[len("static:"):]))
+        )
+    if isinstance(mode, str) and mode.startswith("web:"):
+        from deepreason.research.fetch import load_web_config
+
+        return ResearchService(
+            "web", WebBackend(load_web_config(mode[len("web:"):]))
         )
     raise ValueError(
         f"unknown RESEARCH_BACKEND {mode!r}; valid modes: {VALID_MODES}"
@@ -223,15 +273,47 @@ def register_evidence(
     )
 
 
+def _record_fetch_receipts(harness, problem_id: str, backend) -> None:
+    """Persist every fetch attempt as a Measure — attention/diagnostic,
+    never a status. Successes, refusals, failures, and the typed
+    budget-exhaustion record (count and limit together, the grounded
+    shape) all reach the append-only log; no fetch vanishes."""
+
+    drain = getattr(backend, "drain_receipts", None)
+    if drain is None:
+        return
+    for receipt in drain():
+        harness.record_measure(
+            inputs=[
+                f"research-fetch:{receipt.outcome}",
+                receipt.host or receipt.url[:120],
+                f"requests:{receipt.requests_used}/{receipt.requests_limit}",
+                problem_id,
+            ]
+        )
+
+
 def run_research(harness, problem, backend) -> Artifact | None:
     """Fetch evidence for a research problem and register it (internal
     backends). Returns None on a miss — the CALLER logs the failure; a
     miss must never vanish without trace."""
     result = backend.fetch(problem.description)
     if result is None:
+        _record_fetch_receipts(harness, problem.id, backend)
         return None
     content, source = result
-    return register_evidence(
+    metadata = None
+    receipt = getattr(backend, "last_receipt", None)
+    if receipt is not None and receipt.outcome == "FETCHED":
+        metadata = {
+            "url": receipt.url,
+            "content_sha256": receipt.content_sha256,
+            "fetch_seq": receipt.seq,
+        }
+    evidence = register_evidence(
         harness, problem, content, source,
         via=getattr(backend, "name", "backend"),
+        metadata=metadata,
     )
+    _record_fetch_receipts(harness, problem.id, backend)
+    return evidence
