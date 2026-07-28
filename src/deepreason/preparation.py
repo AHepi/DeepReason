@@ -114,6 +114,9 @@ class RunPreparationRequestV1(BaseModel):
     )
     profile_path: str | None = Field(default=None, min_length=1, max_length=4_096)
     managed_run_id: str | None = Field(default=None, min_length=1, max_length=128)
+    # An admitted-dossier digest binds attached evidence into the run
+    # identity; absent, preparation mints the empty question-only dossier.
+    dossier_digest: str | None = Field(default=None, pattern=_DIGEST)
 
     @field_validator("question")
     @classmethod
@@ -247,6 +250,10 @@ def _request_digest(
         "policy_preset_id": POLICY_PRESET_ID,
         "policy_preset_digest": engaged_policy_digest(),
     }
+    if request.dossier_digest is not None:
+        # Only dossier-bearing requests carry the key, so question-only
+        # request digests remain byte-identical to their historical values.
+        payload["dossier_digest"] = request.dossier_digest
     return sha256_hex(_REQUEST_DOMAIN + canonical_json(payload))
 
 
@@ -300,15 +307,49 @@ def _records_for_question(
     return dossier, run_input, workload
 
 
+def _records_for_admitted_dossier(
+    question: str,
+    stored,
+) -> tuple[Any, RunInputManifestV2, ReasoningWorkloadSpec]:
+    """Bind one stored admission dossier into the question's run identity."""
+
+    question_hash = _question_digest(question)
+    problem_id = f"question-{question_hash[:32]}"
+    if stored.problem_ref != problem_id:
+        raise RunPreparationError(
+            "ADMISSION_PROBLEM_MISMATCH",
+            "the stored dossier was admitted for a different question; "
+            "re-run deepreason admit with this exact question as --problem",
+        )
+    run_input = RunInputManifestV2.create(
+        problem=RunInputProblemV2(
+            id=problem_id,
+            description=question,
+            criteria=(),
+        ),
+        evidence_dossier_digest=stored.dossier_digest,
+        brain_snapshot_digest=None,
+    )
+    workload = ReasoningWorkloadSpec(
+        problem=WorkloadProblem(id=problem_id, description=question),
+        criteria=(),
+        sources=(),
+    )
+    return stored, run_input, workload
+
+
 def build_preparation_manifest(
     profile: ProviderProfileV1,
     *,
     question: str,
     compiled_at: str,
+    run_input_digest: str | None = None,
 ):
     """Build the in-memory V6 manifest used by qualification and preparation."""
 
-    _dossier, run_input, _workload = _records_for_question(question)
+    if run_input_digest is None:
+        _dossier, run_input, _workload = _records_for_question(question)
+        run_input_digest = run_input.run_input_digest
     return compile_run_manifest(
         _config_for_profile(profile),
         schema_version=6,
@@ -318,7 +359,7 @@ def build_preparation_manifest(
         control_plane_policy=engaged_control_plane_policy_v3(),
         criticism_policy=engaged_criticism_policy(profile.endpoint_id),
         inquiry_capability_policy=engaged_inquiry_capability_policy(),
-        run_input_digest=run_input.run_input_digest,
+        run_input_digest=run_input_digest,
         # The one frozen local simulation toolchain is derived from the
         # executing interpreter at preparation time so the wheel stays
         # portable across end-user machines.
@@ -507,11 +548,26 @@ class RunPreparationService:
 
         request_digest = _request_digest(request, profile)
         managed_id = request.managed_run_id or f"run-{request_digest[:32]}"
-        dossier, run_input, workload = _records_for_question(request.question)
+        source_contents: dict[str, bytes] = {}
+        if request.dossier_digest is not None:
+            from deepreason.admission.store import AdmissionStore, AdmissionStoreError
+
+            store = AdmissionStore()
+            try:
+                stored = store.load(request.dossier_digest)
+                source_contents = store.source_bytes(stored)
+            except AdmissionStoreError as error:
+                raise RunPreparationError(error.code, str(error)) from error
+            dossier, run_input, workload = _records_for_admitted_dossier(
+                request.question, stored
+            )
+        else:
+            dossier, run_input, workload = _records_for_question(request.question)
         manifest = build_preparation_manifest(
             profile,
             question=request.question,
             compiled_at=_compiled_at(self._clock),
+            run_input_digest=run_input.run_input_digest,
         )
         bundle = resolve_completed_qualification(
             manifest,
@@ -566,6 +622,12 @@ class RunPreparationService:
                 f".{managed_id}.preparing.{uuid.uuid4().hex}"
             )
             try:
+                if source_contents:
+                    from deepreason.storage.blobs import BlobStore
+
+                    staged = BlobStore(temporary / "blobs")
+                    for body in source_contents.values():
+                        staged.put(body)
                 bind_run_input(run_input, dossier, temporary)
                 bind_run_manifest(manifest, temporary)
                 policy = manifest.production_qualification_policy

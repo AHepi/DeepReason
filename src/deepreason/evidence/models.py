@@ -150,6 +150,158 @@ class EvidenceDossierV1(_InputRecord):
         return self
 
 
+class AdmissionBlockV1(_InputRecord):
+    """One canonical, content-addressed unit admitted from a source.
+
+    Span blocks (``section``/``paragraph``/``table``/``csv_sample``) never
+    inline their text: the canonical text is the exact byte slice
+    ``source_bytes[span_start:span_end]`` decoded as UTF-8, recoverable
+    deterministically from the content-addressed source, and pinned here by
+    ``text_sha256``.  Projection blocks (``csv_schema``/``csv_stats``) are
+    deterministic computations over the whole source, so their bounded text
+    is inlined; their span covers the entire source they project.
+    """
+
+    schema_: Literal["admission-block.v1"] = Field(
+        "admission-block.v1", alias="schema"
+    )
+    id: str = Field(pattern=_DIGEST)
+    source_sha256: str = Field(pattern=_DIGEST)
+    kind: Literal[
+        "section",
+        "paragraph",
+        "table",
+        "csv_schema",
+        "csv_stats",
+        "csv_sample",
+    ]
+    tier: Literal["evidence", "workshop", "memory"]
+    span_start: StrictInt = Field(ge=0)
+    span_end: StrictInt = Field(ge=1)
+    text_sha256: str = Field(pattern=_DIGEST)
+    text: str | None = Field(default=None, min_length=1, max_length=8_192)
+    title: str | None = Field(default=None, min_length=1, max_length=256)
+
+    IDENTITY_DOMAIN: ClassVar[str] = "admission-block.v1"
+
+    @classmethod
+    def create(cls, *, parser_version: str, **values) -> "AdmissionBlockV1":
+        provisional = cls.model_construct(id="0" * 64, **values)
+        payload = {
+            "parser_version": parser_version,
+            **provisional.model_dump(
+                mode="json", by_alias=True, exclude={"id", "text", "title"}
+            ),
+        }
+        return cls(id=_canonical_digest(cls.IDENTITY_DOMAIN, payload), **values)
+
+    @model_validator(mode="after")
+    def _span_and_projection_shape(self):
+        if self.span_end <= self.span_start:
+            raise ValueError("admission block span must be non-empty")
+        projection = self.kind in {"csv_schema", "csv_stats"}
+        if projection != (self.text is not None):
+            raise ValueError(
+                "projection blocks inline their text; span blocks never do"
+            )
+        if self.text is not None and sha256_hex(
+            self.text.encode("utf-8")
+        ) != self.text_sha256:
+            raise ValueError("inlined block text does not match its digest")
+        return self
+
+
+class AdmissionRefusalV1(_InputRecord):
+    """A typed, durable reason content did not enter the dossier."""
+
+    schema_: Literal["admission-refusal.v1"] = Field(
+        "admission-refusal.v1", alias="schema"
+    )
+    code: Literal[
+        "ADMISSION_SOURCE_EMPTY",
+        "ADMISSION_SOURCE_TOO_LARGE",
+        "ADMISSION_TOTAL_TOO_LARGE",
+        "ADMISSION_SOURCE_UNREADABLE",
+        "ADMISSION_MEDIA_UNSUPPORTED",
+        "ADMISSION_BLOCK_BUDGET_EXCEEDED",
+    ]
+    detail: str = Field(min_length=1, max_length=2_048)
+    source_sha256: str | None = Field(default=None, pattern=_DIGEST)
+    source_locator: str | None = Field(default=None, max_length=4_096)
+
+
+class EvidenceDossierV2(_InputRecord):
+    """Admission-era dossier: sources plus their canonical admission blocks.
+
+    The digest covers the parser version, every block identity, and every
+    refusal, so a different parser version — or any difference in what was
+    admitted or refused — mints a different dossier digest and therefore a
+    different run identity.  Improvement is never silent mutation.
+    """
+
+    schema_: Literal["evidence-dossier.v2"] = Field(
+        "evidence-dossier.v2", alias="schema"
+    )
+    dossier_digest: str = Field(pattern=_DIGEST)
+    problem_ref: str = Field(min_length=1, max_length=512)
+    parser_version: str = Field(min_length=1, max_length=128)
+    sources: tuple[AttachedSourceV1, ...] = Field(max_length=1_000)
+    blocks: tuple[AdmissionBlockV1, ...] = Field(default=(), max_length=4_000)
+    refusals: tuple[AdmissionRefusalV1, ...] = Field(default=(), max_length=1_000)
+    total_byte_count: StrictInt = Field(ge=0, le=64 * 1024 * 1024)
+    creation_provenance: AttachedSourceProvenanceV1
+
+    IDENTITY_DOMAIN: ClassVar[str] = "evidence-dossier.v2"
+
+    @classmethod
+    def create(cls, **values) -> "EvidenceDossierV2":
+        provisional = cls.model_construct(dossier_digest="0" * 64, **values)
+        payload = provisional.model_dump(
+            mode="json", by_alias=True, exclude={"dossier_digest"}
+        )
+        return cls(
+            dossier_digest=_canonical_digest(cls.IDENTITY_DOMAIN, payload),
+            **values,
+        )
+
+    def identity_payload(self) -> dict:
+        return self.model_dump(
+            mode="json", by_alias=True, exclude={"dossier_digest"}
+        )
+
+    @field_validator("sources")
+    @classmethod
+    def _canonical_sources(cls, value):
+        ids = tuple(source.id for source in value)
+        if ids != tuple(sorted(ids)) or len(ids) != len(set(ids)):
+            raise ValueError("dossier sources must be ID-unique and sorted")
+        return tuple(value)
+
+    @field_validator("blocks")
+    @classmethod
+    def _canonical_blocks(cls, value):
+        ids = tuple(block.id for block in value)
+        if ids != tuple(sorted(ids)) or len(ids) != len(set(ids)):
+            raise ValueError("dossier blocks must be ID-unique and sorted")
+        return tuple(value)
+
+    @model_validator(mode="after")
+    def _identity_size_and_references(self):
+        if self.total_byte_count != sum(source.byte_count for source in self.sources):
+            raise ValueError("dossier total byte count does not match its sources")
+        known = {source.content_sha256 for source in self.sources}
+        for block in self.blocks:
+            if block.source_sha256 not in known:
+                raise ValueError("admission block references an unknown source")
+        expected = _canonical_digest(self.IDENTITY_DOMAIN, self.identity_payload())
+        if self.dossier_digest != expected:
+            raise ValueError("dossier digest does not match its canonical payload")
+        return self
+
+
+EvidenceDossier = EvidenceDossierV1 | EvidenceDossierV2
+
+
 class RunInputProblemV1(_InputRecord):
     id: str = Field(min_length=1, max_length=512)
     description: str = Field(min_length=1, max_length=262_144)
@@ -378,11 +530,15 @@ class DossierPackReceiptV1(_InputRecord):
 
 
 __all__ = [
+    "AdmissionBlockV1",
+    "AdmissionRefusalV1",
     "AttachedSourceProvenanceV1",
     "AttachedSourceV1",
     "DossierExcerptV1",
     "DossierPackReceiptV1",
+    "EvidenceDossier",
     "EvidenceDossierV1",
+    "EvidenceDossierV2",
     "RunInputBudgetV1",
     "RunInputCommitmentV1",
     "RunInputManifest",

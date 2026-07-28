@@ -14,7 +14,9 @@ import tempfile
 from deepreason.evidence.models import (
     AttachedSourceProvenanceV1,
     AttachedSourceV1,
+    EvidenceDossier,
     EvidenceDossierV1,
+    EvidenceDossierV2,
     RunInputManifest,
     RunInputManifestV1,
     RunInputManifestV2,
@@ -171,7 +173,7 @@ def _input_lock(root: Path):
         yield
 
 
-def _check_source_blobs(root: Path, dossier: EvidenceDossierV1) -> None:
+def _check_source_blobs(root: Path, dossier: EvidenceDossier) -> None:
     store = BlobStore(root / "blobs", read_only=True)
     for source in dossier.sources:
         try:
@@ -203,7 +205,7 @@ def _bind_record(target: Path, sidecar: Path, payload: bytes, digest: str) -> No
 
 def bind_run_input(
     run_input: RunInputManifest,
-    dossier: EvidenceDossierV1,
+    dossier: EvidenceDossier,
     root: Path | str,
 ) -> tuple[Path, Path]:
     """Bind one immutable dossier and run input after verifying all blobs."""
@@ -273,12 +275,19 @@ def load_run_input(path: Path | str, *, verify_hash: bool = True) -> RunInputMan
 
 def load_evidence_dossier(
     path: Path | str, *, verify_hash: bool = True
-) -> EvidenceDossierV1:
+) -> EvidenceDossier:
     target = _resolve_record_path(path, EVIDENCE_DOSSIER_NAME)
     payload = _read_regular(target, _MAX_RECORD_BYTES)
     assert payload is not None
     try:
-        value = EvidenceDossierV1.model_validate_json(payload)
+        header = json.loads(payload)
+        model = (
+            EvidenceDossierV2
+            if isinstance(header, dict)
+            and header.get("schema") == "evidence-dossier.v2"
+            else EvidenceDossierV1
+        )
+        value = model.model_validate_json(payload)
     except ValueError as error:
         raise RunInputError("EVIDENCE_DOSSIER_INVALID", "dossier schema is invalid") from error
     if verify_hash:

@@ -163,6 +163,40 @@ def build_parser() -> argparse.ArgumentParser:
             "inquiry; no qualification required, result is labeled shallow"
         ),
     )
+    reason_cmd.add_argument(
+        "--dossier",
+        default=None,
+        metavar="SHA256",
+        help=(
+            "bind a stored admission dossier (from deepreason admit) into "
+            "the run identity; the dossier must have been admitted for this "
+            "exact question"
+        ),
+    )
+    admit_cmd = sub.add_parser(
+        "admit",
+        help="admit documents into a frozen evidence dossier, or inspect one",
+    )
+    admit_cmd.add_argument(
+        "paths", nargs="*", help="files or directories to admit"
+    )
+    admit_cmd.add_argument(
+        "--problem",
+        default=None,
+        help="the exact question this evidence is admitted for",
+    )
+    admit_cmd.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="admit bounded prefixes when a block budget is exceeded",
+    )
+    admit_cmd.add_argument(
+        "--inspect",
+        default=None,
+        metavar="SHA256",
+        help="list sources, blocks, tiers, and refusals for a stored dossier",
+    )
+    admit_cmd.add_argument("--json", action="store_true")
     sub.add_parser(
         "mcp-registration",
         help="print generic secret-free MCP stdio registration JSON",
@@ -593,6 +627,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "reason":
         return _cmd_reason(args)
+
+    if args.command == "admit":
+        return _cmd_admit(args)
 
     if args.command == "skills":
         return _cmd_skills(args)
@@ -1535,6 +1572,135 @@ def _cmd_reason_shallow(args) -> int:
     return 0
 
 
+def _cmd_admit(args) -> int:
+    """Admit documents into a frozen dossier, or inspect a stored one."""
+
+    from deepreason.admission import (
+        AdmissionError,
+        AdmissionInput,
+        admission_store,
+        admit_sources,
+    )
+    from deepreason.admission.store import AdmissionStoreError
+    from deepreason.evidence.models import AttachedSourceProvenanceV1
+    from deepreason.preparation import _question_digest
+
+    store = admission_store()
+    if args.inspect is not None:
+        try:
+            dossier = store.load(args.inspect)
+        except AdmissionStoreError as error:
+            print(str(error), file=sys.stderr)
+            return 1
+        payload = {
+            "dossier_digest": dossier.dossier_digest,
+            "problem_ref": dossier.problem_ref,
+            "parser_version": dossier.parser_version,
+            "total_byte_count": dossier.total_byte_count,
+            "sources": [
+                {
+                    "id": source.id,
+                    "title": source.title,
+                    "media_type": source.media_type,
+                    "byte_count": source.byte_count,
+                }
+                for source in dossier.sources
+            ],
+            "blocks": len(dossier.blocks),
+            "block_kinds": {
+                kind: sum(1 for block in dossier.blocks if block.kind == kind)
+                for kind in sorted({block.kind for block in dossier.blocks})
+            },
+            "tiers": {
+                tier: sum(1 for block in dossier.blocks if block.tier == tier)
+                for tier in sorted({block.tier for block in dossier.blocks})
+            },
+            "refusals": [
+                refusal.model_dump(mode="json", by_alias=True, exclude_none=True)
+                for refusal in dossier.refusals
+            ],
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    if not args.paths:
+        print("ADMISSION_NO_SOURCES: supply files or directories", file=sys.stderr)
+        return 1
+    if not args.problem or not args.problem.strip():
+        print(
+            "ADMISSION_PROBLEM_REQUIRED: pass --problem with the exact "
+            "question this evidence is for",
+            file=sys.stderr,
+        )
+        return 1
+
+    inputs: list = []
+    for supplied in args.paths:
+        path = Path(supplied)
+        if path.is_dir():
+            candidates = sorted(
+                item for item in path.rglob("*") if item.is_file()
+            )
+        elif path.is_file():
+            candidates = [path]
+        else:
+            print(f"ADMISSION_PATH_UNAVAILABLE: {supplied}", file=sys.stderr)
+            return 1
+        for item in candidates:
+            try:
+                inputs.append(AdmissionInput(locator=str(item), data=item.read_bytes()))
+            except OSError as error:
+                print(
+                    f"ADMISSION_PATH_UNAVAILABLE: {item}: {error}", file=sys.stderr
+                )
+                return 1
+
+    problem_ref = f"question-{_question_digest(args.problem)[:32]}"
+    provenance = AttachedSourceProvenanceV1(
+        supplied_by="deepreason.admit",
+        acquisition_method="operator-supplied local files",
+        note=None,
+    )
+    try:
+        dossier, report = admit_sources(
+            inputs,
+            problem_ref=problem_ref,
+            provenance=provenance,
+            allow_partial=bool(args.allow_partial),
+        )
+    except AdmissionError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    import hashlib as _hashlib
+
+    by_digest = {
+        _hashlib.sha256(item.data).hexdigest(): item.data
+        for item in inputs
+        if item.data
+    }
+    store.save(
+        dossier,
+        {
+            source.content_sha256: by_digest[source.content_sha256]
+            for source in dossier.sources
+        },
+    )
+    payload = {
+        "dossier_digest": dossier.dossier_digest,
+        "problem_ref": dossier.problem_ref,
+        "parser_version": dossier.parser_version,
+        "sources": report.source_count,
+        "blocks": report.block_counts,
+        "tiers": report.tier_counts,
+        "refusals": report.refusals,
+        "next_action": (
+            f'deepreason reason "..." --dossier {dossier.dossier_digest}'
+        ),
+    }
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
 def _cmd_reason(args) -> int:
     """Prepare one question and execute it through the shared V6 application."""
 
@@ -1560,11 +1726,15 @@ def _cmd_reason(args) -> int:
         else PUBLIC_DEFAULT_TOKEN_BUDGET
     )
     try:
+        dossier_digest = getattr(args, "dossier", None)
+        if dossier_digest is not None:
+            dossier_digest = dossier_digest.removeprefix("sha256:").strip()
         prepared = RunPreparationService().prepare(
             RunPreparationRequestV1(
                 question=args.question,
                 budget={"cycles": cycles, "token_budget": tokens},
                 profile_path=args.provider_profile,
+                dossier_digest=dossier_digest,
             )
         )
         accepted = TEXT_RUN_SERVICE.start(

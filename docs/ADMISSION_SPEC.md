@@ -1,6 +1,14 @@
 # Evidence Admission (draft for review)
 
-Status: DRAFT v0.1 — for owner review before any implementation.
+Status: v1 CORE IMPLEMENTED (2026-07-28) — the deterministic text parser
+(plain text, markdown, CSV/TSV projections), `EvidenceDossierV2` with
+admission blocks and typed refusals, the managed admission store, the
+`deepreason admit` / `admit --inspect` CLI, and `reason --dossier` run
+binding are built and tested (`src/deepreason/admission/`,
+`tests/test_admission.py`). Admitted sources reach runs through the
+existing dossier retrieval exposure. Remaining per the decided build
+order: the first-party PDF/EPUB adapters proving the §3a plugin contract,
+and the §6 dataset oracle sidecar interface.
 Scope: how a body of user-supplied input (a study, a book, a dataset, a
 mixed corpus) becomes durable material a DeepReason run may reason over.
 
