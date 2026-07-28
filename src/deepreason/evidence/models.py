@@ -174,6 +174,9 @@ class AdmissionBlockV1(_InputRecord):
         "csv_schema",
         "csv_stats",
         "csv_sample",
+        # Adapter-extracted text without byte-span fidelity: inlined,
+        # tier-capped by the adapter's declared span fidelity class.
+        "extracted",
     ]
     tier: Literal["evidence", "workshop", "memory"]
     span_start: StrictInt = Field(ge=0)
@@ -199,10 +202,15 @@ class AdmissionBlockV1(_InputRecord):
     def _span_and_projection_shape(self):
         if self.span_end <= self.span_start:
             raise ValueError("admission block span must be non-empty")
-        projection = self.kind in {"csv_schema", "csv_stats"}
-        if projection != (self.text is not None):
+        inlined = self.kind in {"csv_schema", "csv_stats", "extracted"}
+        if inlined != (self.text is not None):
             raise ValueError(
                 "projection blocks inline their text; span blocks never do"
+            )
+        if self.kind == "extracted" and self.tier == "evidence":
+            raise ValueError(
+                "extracted blocks lack byte-span fidelity and cannot enter "
+                "the evidence tier"
             )
         if self.text is not None and sha256_hex(
             self.text.encode("utf-8")
@@ -230,6 +238,24 @@ class AdmissionRefusalV1(_InputRecord):
     source_locator: str | None = Field(default=None, max_length=4_096)
 
 
+class SourceAdapterBindingV1(_InputRecord):
+    """Version-bound identity of the adapter that admitted one source.
+
+    Binding into the dossier digest means a different adapter or adapter
+    version mints a different dossier — inspecting or reproducing a dossier
+    without the recorded adapter version is a typed refusal, never silent
+    divergence.
+    """
+
+    schema_: Literal["source-adapter-binding.v1"] = Field(
+        "source-adapter-binding.v1", alias="schema"
+    )
+    source_sha256: str = Field(pattern=_DIGEST)
+    adapter_id: str = Field(min_length=1, max_length=64)
+    adapter_version: str = Field(min_length=1, max_length=64)
+    span_fidelity: Literal["exact_spans", "approximate", "none"]
+
+
 class EvidenceDossierV2(_InputRecord):
     """Admission-era dossier: sources plus their canonical admission blocks.
 
@@ -248,6 +274,9 @@ class EvidenceDossierV2(_InputRecord):
     sources: tuple[AttachedSourceV1, ...] = Field(max_length=1_000)
     blocks: tuple[AdmissionBlockV1, ...] = Field(default=(), max_length=4_000)
     refusals: tuple[AdmissionRefusalV1, ...] = Field(default=(), max_length=1_000)
+    adapters: tuple[SourceAdapterBindingV1, ...] = Field(
+        default=(), max_length=1_000
+    )
     total_byte_count: StrictInt = Field(ge=0, le=64 * 1024 * 1024)
     creation_provenance: AttachedSourceProvenanceV1
 
@@ -293,6 +322,12 @@ class EvidenceDossierV2(_InputRecord):
         for block in self.blocks:
             if block.source_sha256 not in known:
                 raise ValueError("admission block references an unknown source")
+        bound = [binding.source_sha256 for binding in self.adapters]
+        if len(bound) != len(set(bound)):
+            raise ValueError("a source binds at most one admitting adapter")
+        for binding in self.adapters:
+            if binding.source_sha256 not in known:
+                raise ValueError("adapter binding references an unknown source")
         expected = _canonical_digest(self.IDENTITY_DOMAIN, self.identity_payload())
         if self.dossier_digest != expected:
             raise ValueError("dossier digest does not match its canonical payload")
@@ -546,4 +581,5 @@ __all__ = [
     "RunInputManifestV2",
     "RunInputProblemV1",
     "RunInputProblemV2",
+    "SourceAdapterBindingV1",
 ]

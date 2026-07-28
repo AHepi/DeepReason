@@ -42,9 +42,9 @@ CSV_SAMPLE_ROWS = 10
 _HEADING = re.compile(r"^(#{1,6})[ \t]+(?P<title>.+?)[ \t]*#*[ \t]*$")
 _TABLE_ROW = re.compile(r"^[ \t]*\|.*\|[ \t]*$")
 
-# Content signatures for formats that belong to plugin adapters.  The
-# refusal names the adapter and the extra so an unadmittable format is a
-# typed pointer, not a dead end.
+# Content signatures for adapter-claimed formats with no registered or
+# runnable adapter.  The refusal names the adapter and the extra so an
+# unadmittable format is a typed pointer, not a dead end.
 _ADAPTER_SIGNATURES: tuple[tuple[bytes, str, str], ...] = (
     (b"%PDF-", "application/pdf", "pdf (install deepreason[admit])"),
     (b"PK\x03\x04", "application/zip-container", "epub (install deepreason[admit])"),
@@ -367,12 +367,44 @@ def _first_heading(data: bytes) -> str | None:
     return None
 
 
+def _adapter_blocks(
+    manifest,
+    data: bytes,
+    digest: str,
+) -> list[AdmissionBlockV1]:
+    """Run one registered adapter in its sandbox and mint tier-capped blocks."""
+
+    from deepreason.admission.adapters import run_adapter
+
+    result = run_adapter(manifest, data)
+    blocks: list[AdmissionBlockV1] = []
+    for wire in result.blocks:
+        blocks.append(
+            AdmissionBlockV1.create(
+                parser_version=PARSER_VERSION,
+                source_sha256=digest,
+                kind="extracted",
+                # §3a.3: only exact_spans admits to the evidence tier; the
+                # extracted kind itself refuses evidence, so any adapter
+                # below exact fidelity lands here, capped at workshop.
+                tier="workshop",
+                span_start=0,
+                span_end=len(data),
+                text_sha256=sha256_hex(wire.text.encode("utf-8")),
+                text=wire.text,
+                title=wire.title,
+            )
+        )
+    return blocks
+
+
 def admit_sources(
     inputs: list[AdmissionInput],
     *,
     problem_ref: str,
     provenance: AttachedSourceProvenanceV1,
     allow_partial: bool = False,
+    adapters: tuple = (),
 ) -> tuple[EvidenceDossierV2, AdmissionReport]:
     """Run the full pipeline and compile one frozen EvidenceDossierV2.
 
@@ -393,6 +425,7 @@ def admit_sources(
     sources: dict[str, AttachedSourceV1] = {}
     blocks: list[AdmissionBlockV1] = []
     refusals: list[AdmissionRefusalV1] = []
+    adapter_bindings: list = []
     admitted_bytes = 0
 
     def refuse(code: str, detail: str, *, digest: str | None, locator: str) -> None:
@@ -435,8 +468,25 @@ def admit_sources(
                 locator=item.locator,
             )
             continue
+        from deepreason.admission.adapters import AdapterError, adapter_for
+
         media_type, adapter_hint = sniff_media_type(data)
-        if adapter_hint is not None:
+        adapter_binding = None
+        manifest = adapter_for(data, injected=tuple(adapters))
+        if manifest is not None:
+            try:
+                source_blocks = _adapter_blocks(manifest, data, digest)
+            except AdapterError as error:
+                refuse(
+                    "ADMISSION_MEDIA_UNSUPPORTED",
+                    str(error),
+                    digest=digest,
+                    locator=item.locator,
+                )
+                continue
+            media_type = manifest.media_type
+            adapter_binding = manifest
+        elif adapter_hint is not None:
             refuse(
                 "ADMISSION_MEDIA_UNSUPPORTED",
                 f"{media_type} requires the {adapter_hint} adapter",
@@ -444,7 +494,7 @@ def admit_sources(
                 locator=item.locator,
             )
             continue
-        if media_type == "application/octet-stream":
+        elif media_type == "application/octet-stream":
             refuse(
                 "ADMISSION_SOURCE_UNREADABLE",
                 "bytes are not strict UTF-8 and no adapter claims them",
@@ -453,7 +503,9 @@ def admit_sources(
             )
             continue
 
-        if media_type in {"text/csv", "text/tab-separated-values"}:
+        if adapter_binding is not None:
+            pass
+        elif media_type in {"text/csv", "text/tab-separated-values"}:
             delimiter = "\t" if media_type == "text/tab-separated-values" else ","
             source_blocks = _csv_projections(data, digest, delimiter)
         else:
@@ -497,6 +549,17 @@ def admit_sources(
             byte_count=len(data),
             provenance=provenance,
         )
+        if adapter_binding is not None:
+            from deepreason.evidence.models import SourceAdapterBindingV1
+
+            adapter_bindings.append(
+                SourceAdapterBindingV1(
+                    source_sha256=digest,
+                    adapter_id=adapter_binding.adapter_id,
+                    adapter_version=adapter_binding.adapter_version,
+                    span_fidelity=adapter_binding.span_fidelity,
+                )
+            )
         blocks.extend(source_blocks)
         admitted_bytes += len(data)
 
@@ -513,6 +576,9 @@ def admit_sources(
         sources=tuple(sorted(sources.values(), key=lambda source: source.id)),
         blocks=tuple(sorted(blocks, key=lambda block: block.id)),
         refusals=tuple(refusals),
+        adapters=tuple(
+            sorted(adapter_bindings, key=lambda item: item.source_sha256)
+        ),
         total_byte_count=admitted_bytes,
         creation_provenance=provenance,
     )

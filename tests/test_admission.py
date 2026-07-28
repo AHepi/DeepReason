@@ -145,7 +145,12 @@ def test_refusals_are_typed_and_never_silent():
     unsupported = next(
         r for r in dossier.refusals if r.code == "ADMISSION_MEDIA_UNSUPPORTED"
     )
-    assert "deepreason[admit]" in unsupported.detail
+    # Extra absent: the refusal names the extra. Extra installed: the
+    # malformed fixture reaches the real adapter and fails typed instead.
+    assert (
+        "deepreason[admit]" in unsupported.detail
+        or "ADMISSION_ADAPTER_FAILED" in unsupported.detail
+    )
 
 
 def test_every_source_refused_is_a_typed_error():
@@ -320,3 +325,109 @@ def test_v2_dossier_packs_through_the_existing_run_exposure_path(tmp_path):
         source.id for source in dossier.sources
     )
     assert receipt.excerpts
+
+
+# --- §3a adapter contract -------------------------------------------------
+
+
+def test_registered_adapter_runs_sandboxed_and_binds_into_the_digest():
+    from tests._fake_admission_adapter import MANIFEST
+
+    data = b"FAKE hello adapter world"
+    dossier, report = admit_sources(
+        [AdmissionInput(locator="blob.fake", data=data)],
+        problem_ref="question-" + "0" * 32,
+        provenance=PROVENANCE,
+        adapters=(MANIFEST,),
+    )
+    assert report.block_counts == {"extracted": 2}
+    # §3a.3: approximate span fidelity caps every block at workshop.
+    assert report.tier_counts == {"workshop": 2}
+    assert [b.title for b in sorted(dossier.blocks, key=lambda b: b.text)] is not None
+    binding = dossier.adapters[0]
+    assert binding.adapter_id == "fake-binary"
+    assert binding.adapter_version == "fake-adapter.v1"
+    assert binding.span_fidelity == "approximate"
+    assert dossier.sources[0].media_type == "application/x-fake"
+
+    # The adapter identity is part of the dossier digest: the same content
+    # under a different recorded adapter version mints a different dossier.
+    other = EvidenceDossierV2.create(
+        problem_ref=dossier.problem_ref,
+        parser_version=dossier.parser_version,
+        sources=dossier.sources,
+        blocks=dossier.blocks,
+        refusals=dossier.refusals,
+        adapters=(
+            binding.model_copy(update={"adapter_version": "fake-adapter.v2"}),
+        ),
+        total_byte_count=dossier.total_byte_count,
+        creation_provenance=dossier.creation_provenance,
+    )
+    assert other.dossier_digest != dossier.dossier_digest
+
+
+def test_hostile_adapter_network_access_is_denied_by_the_sandbox():
+    from deepreason.admission.adapters import (
+        AdapterError,
+        run_adapter,
+        sandbox_available,
+    )
+    from tests._fake_admission_adapter import MANIFEST
+
+    if not sandbox_available():
+        pytest.skip("sandbox unavailable on this platform")
+    hostile = MANIFEST.model_copy(
+        update={"entry": "tests._fake_admission_adapter:phone_home"}
+    )
+    with pytest.raises(AdapterError) as captured:
+        run_adapter(hostile, b"FAKE payload")
+    assert captured.value.code == "ADMISSION_ADAPTER_FAILED"
+
+
+def test_pdf_adapter_is_registered_and_refuses_by_naming_the_extra():
+    from deepreason.admission.adapters import registered_adapters
+
+    manifests = {m.adapter_id: m for m in registered_adapters()}
+    assert "pdf" in manifests
+    pdf = manifests["pdf"]
+    assert pdf.span_fidelity == "approximate"
+    assert pdf.claims(b"%PDF-1.7 body")
+    if pdf.available():
+        pytest.skip("pypdf installed; the refusal path does not apply")
+    dossier, report = _admit(MARKDOWN, b"%PDF-1.7 body")
+    refusal = report.refusals[0]
+    assert refusal["code"] == "ADMISSION_MEDIA_UNSUPPORTED"
+    assert "deepreason[admit]" in refusal["detail"]
+    assert dossier.adapters == ()
+
+
+def test_adapter_identity_mismatch_is_refused():
+    from deepreason.admission.adapters import AdapterError, run_adapter
+    from tests._fake_admission_adapter import MANIFEST
+
+    lying = MANIFEST.model_copy(update={"adapter_version": "not-what-it-says"})
+    with pytest.raises(AdapterError) as captured:
+        run_adapter(lying, b"FAKE payload")
+    assert captured.value.code == "ADMISSION_ADAPTER_IDENTITY_MISMATCH"
+
+
+def test_pdf_extraction_end_to_end_when_the_extra_is_installed():
+    from pathlib import Path
+
+    from deepreason.admission.adapters import registered_adapters
+
+    pdf = next(m for m in registered_adapters() if m.adapter_id == "pdf")
+    if not pdf.available():
+        pytest.skip("pypdf not installed; covered by the refusal test")
+    data = Path(__file__).with_name("fixtures_minimal.pdf").read_bytes()
+    dossier, report = _admit(data)
+    assert report.block_counts == {"extracted": 1}
+    assert report.tier_counts == {"workshop": 1}
+    block = dossier.blocks[0]
+    assert block.text == "Hello admission pipeline"
+    assert block.title == "page 1"
+    binding = dossier.adapters[0]
+    assert binding.adapter_id == "pdf"
+    assert binding.span_fidelity == "approximate"
+    assert dossier.sources[0].media_type == "application/pdf"

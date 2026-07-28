@@ -31,6 +31,15 @@ browser = [
 embed = [
     "fastembed>=0.3",
 ]
+# Evidence admission adapters (docs/ADMISSION_SPEC.md §3a): first-party
+# PDF extraction behind the same plugin contract third parties use. A
+# missing extra is a typed admission refusal naming deepreason[admit].
+admit = [
+    "pypdf>=4.0",
+]
+
+[project.entry-points."deepreason.admission.adapters"]
+pdf = "deepreason.admission.adapters_pdf:MANIFEST"
 
 [project.scripts]
 deepreason = "deepreason.cli.main:main"
