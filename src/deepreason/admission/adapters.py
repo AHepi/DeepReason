@@ -84,10 +84,29 @@ class AdapterError(ValueError):
         super().__init__(f"{code}: {message}")
 
 
+def _first_party_manifests() -> tuple[AdapterManifestV1, ...]:
+    """The shipped adapters, resolved by import rather than metadata.
+
+    First-party adapters must never depend on installation metadata: a
+    wheel installed before an adapter's entry point existed (or any
+    packaging drift) would otherwise silently lose PDF/EPUB admission.
+    Entry points remain the third-party registration surface.
+    """
+
+    from deepreason.admission.adapters_epub import MANIFEST as epub_manifest
+    from deepreason.admission.adapters_pdf import MANIFEST as pdf_manifest
+
+    return (pdf_manifest, epub_manifest)
+
+
 def registered_adapters(
     *, injected: tuple[AdapterManifestV1, ...] = ()
 ) -> tuple[AdapterManifestV1, ...]:
-    """Entry-point-registered adapters plus explicitly injected ones (tests)."""
+    """Injected (tests), entry-point-registered, then first-party adapters.
+
+    First match per adapter_id wins, so an entry point may pin a specific
+    first-party adapter version but the shipped set is always present.
+    """
 
     manifests: list[AdapterManifestV1] = list(injected)
     try:
@@ -101,6 +120,7 @@ def registered_adapters(
             continue
         if isinstance(candidate, AdapterManifestV1):
             manifests.append(candidate)
+    manifests.extend(_first_party_manifests())
     unique: dict[str, AdapterManifestV1] = {}
     for manifest in manifests:
         unique.setdefault(manifest.adapter_id, manifest)
