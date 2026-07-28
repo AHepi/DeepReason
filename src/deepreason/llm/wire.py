@@ -44,6 +44,7 @@ from deepreason.llm.contracts import (
     CandidateRef,
     ConjectureCandidate,
     ConjecturerOutput,
+    EvidenceRefClaimV1,
     DefenderOutput,
     JudgeRuling,
     PairwiseRuling,
@@ -324,6 +325,10 @@ class CompactConjectureCandidate(StrictWireModel):
     content: str = Field(min_length=1)
     typicality: float = Field(ge=0.0, le=1.0)
     neighbours: list[str] = Field(default_factory=list)
+    # Optional claimed groundings in admitted evidence blocks (admission §4).
+    # The claim model is already strict and frozen, so it serves as its own
+    # wire shape; citations are byte-checked after admission, never trusted.
+    evidence_refs: list[EvidenceRefClaimV1] = Field(default_factory=list, max_length=8)
 
 
 class CompactConjecturer(StrictWireModel):
@@ -347,6 +352,7 @@ class ConjecturerWireContract(WireContract[ConjecturerOutput]):
                     content=item.content,
                     typicality=item.typicality,
                     refs=[CandidateRef(target=self.aliases.resolve(a)) for a in item.neighbours],
+                    evidence_refs=list(item.evidence_refs),
                 )
                 for item in wire.candidates
             ]
@@ -475,6 +481,7 @@ class AtomicConjectureWireContractV1(WireContract[BaseModel]):
                             self.aliases.resolve(alias)
                             for alias in candidate.optional_refs
                         ),
+                        evidence_refs=candidate.evidence_refs,
                         analogy=candidate.analogy,
                         sidecar=OperationalSidecar(
                             search_signal=candidate.sidecar.search_signal,
@@ -492,6 +499,7 @@ class AtomicConjectureWireContractV1(WireContract[BaseModel]):
                         CandidateRef(target=self.aliases.resolve(alias))
                         for alias in candidate.neighbours
                     ),
+                    evidence_refs=list(candidate.evidence_refs),
                 ),
             )
         )
@@ -565,6 +573,7 @@ class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput])
                     counterconditions=candidate.counterconditions,
                     typicality=candidate.typicality,
                     optional_refs=optional_refs,
+                    evidence_refs=candidate.evidence_refs,
                     sidecar=OperationalSidecar(
                         search_signal=candidate.sidecar.search_signal,
                         requested_context_aliases=requested,
@@ -744,6 +753,7 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
                             CandidateRef(target=self.aliases.resolve(alias))
                             for alias in item.neighbours
                         ],
+                        evidence_refs=list(item.evidence_refs),
                     )
                     for item in wire.candidates
                 ),
@@ -769,6 +779,7 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
                     counterconditions=candidate.counterconditions,
                     typicality=candidate.typicality,
                     optional_refs=optional_refs,
+                    evidence_refs=candidate.evidence_refs,
                     analogy=AnalogyClaim.model_validate(candidate.analogy)
                     if candidate.analogy is not None
                     else None,

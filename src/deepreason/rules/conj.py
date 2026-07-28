@@ -1186,6 +1186,7 @@ def conj(
     frozen_evidence_context = None
     dossier_receipt = None
     dossier_maximum_bytes = 0
+    bound_dossier = None
     if active_v5 or active_v6:
         from deepreason.evidence import (
             commit_dossier_pack_receipt,
@@ -1203,6 +1204,7 @@ def conj(
             if bound_input.run_input_digest != run_manifest.run_input_digest:
                 raise ValueError("conjecture evidence belongs to another run input")
             if dossier.problem_ref == problem.id:
+                bound_dossier = dossier
                 dossier_maximum_bytes = min(
                     evidence_policy.maximum_total_bytes,
                     evidence_policy.maximum_sources_per_pack
@@ -1905,6 +1907,7 @@ def conj(
                             CandidateRef(target=target, role="mention")
                             for target in proposal.optional_refs
                         ],
+                        evidence_refs=list(proposal.evidence_refs),
                     ),
                     compiled,
                     proposal.sidecar.search_signal,
@@ -2171,6 +2174,25 @@ def conj(
         observe_candidate(artifact.id, "admit", "passed")
         if domain is not None:
             candidate_domains[artifact.id] = domain
+        if candidate.evidence_refs:
+            # Citation checks (admission §4): every claimed grounding in an
+            # admitted block is resolved and byte-checked deterministically.
+            # Like gate decisions, each outcome is persisted as a Measure —
+            # attention/diagnostic, never a status — so criticism can attack
+            # a citation from the durable record.
+            from deepreason.evidence.citations import check_candidate_citations
+
+            for citation_check in check_candidate_citations(
+                tuple(candidate.evidence_refs), bound_dossier, harness.blobs
+            ):
+                harness.record_measure(
+                    inputs=[
+                        f"evidence-citation:{citation_check.code}",
+                        citation_check.block_id or citation_check.block_ref,
+                        artifact.id,
+                        problem_id,
+                    ]
+                )
 
     # Persist the code-authored disposition before any commitment or artifact
     # becomes formal.  A crash can therefore never leave a semantic admission

@@ -8,12 +8,28 @@ distribution with stated typicality estimates, never a single point.
 import json
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class CandidateRef(BaseModel):
     target: str
     role: Literal["dependence", "mention"] = "dependence"
+
+
+class EvidenceRefClaimV1(BaseModel):
+    """One claimed grounding in an admitted dossier block (admission §4).
+
+    ``block`` names a dossier block by id or by a unique hex prefix of at
+    least 12 characters. ``quote``, when present, must reproduce a
+    contiguous byte span of the block's canonical text exactly — the
+    citation checker byte-verifies it and a mismatch is a durable finding,
+    never a silent pass.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    block: str = Field(pattern=r"^[0-9a-f]{12,64}$")
+    quote: str | None = Field(default=None, min_length=1, max_length=2_000)
 
 
 class ConjectureCandidate(BaseModel):
@@ -22,6 +38,9 @@ class ConjectureCandidate(BaseModel):
     typicality: float = Field(ge=0.0, le=1.0)
     # Born-connected (§7 L1): refs to neighbourhood artifacts where natural.
     refs: list[CandidateRef] = Field(default_factory=list)
+    # Claimed groundings in admitted evidence blocks (admission §4); checked
+    # deterministically after admission, never trusted on arrival.
+    evidence_refs: list[EvidenceRefClaimV1] = Field(default_factory=list, max_length=8)
 
     @field_validator("content", mode="before")
     @classmethod

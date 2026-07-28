@@ -18,6 +18,9 @@ _NOTICE = (
 )
 
 
+_MAX_LISTED_BLOCKS_PER_SOURCE = 16
+
+
 def render_dossier_pack(
     *,
     blobs,
@@ -25,7 +28,21 @@ def render_dossier_pack(
     receipt: DossierPackReceiptV1,
 ) -> str:
     by_id = {source.id: source for source in dossier.sources}
+    # Admission-era dossiers (v2) carry canonical blocks; listing their ids
+    # is what makes citations possible — a candidate's evidence_refs can only
+    # name blocks, never free-text quotes alone (admission §4).
+    citable_by_source: dict[str, list] = {}
+    for block in getattr(dossier, "blocks", ()):
+        if block.tier == "evidence":
+            citable_by_source.setdefault(block.source_sha256, []).append(block)
     lines = [_NOTICE, f"pack_receipt={receipt.receipt_digest}"]
+    if citable_by_source:
+        lines.append(
+            "Citable admitted blocks are listed per source. To ground a "
+            "candidate in one, put its block id in that candidate's "
+            "evidence_refs; an optional quote must reproduce the block's "
+            "text exactly (byte-checked)."
+        )
     for excerpt in receipt.excerpts:
         source = by_id[excerpt.source_id]
         body = blobs.get(excerpt.excerpt_ref)
@@ -38,6 +55,21 @@ def render_dossier_pack(
                     f"source_sha256={source.content_sha256}; "
                     f"excerpt_sha256={excerpt.excerpt_sha256}"
                 ),
+            )
+        )
+        citable = citable_by_source.get(source.content_sha256, [])
+        if citable:
+            listed = citable[:_MAX_LISTED_BLOCKS_PER_SOURCE]
+            lines.append("citable_blocks:")
+            for block in listed:
+                title = f" title={block.title}" if block.title else ""
+                lines.append(f"  block={block.id[:16]} kind={block.kind}{title}")
+            if len(citable) > len(listed):
+                lines.append(
+                    f"  (+{len(citable) - len(listed)} more admitted blocks not listed)"
+                )
+        lines.extend(
+            (
                 "BEGIN UNTRUSTED SOURCE DATA",
                 rendered,
                 "END UNTRUSTED SOURCE DATA",

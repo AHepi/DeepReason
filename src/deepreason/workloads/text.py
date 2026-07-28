@@ -9,6 +9,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
+from deepreason.llm.contracts import EvidenceRefClaimV1
 from deepreason.ontology import Commitment, Problem, ProblemProvenance
 
 
@@ -136,6 +137,9 @@ class ReasoningCandidateProposal(BaseModel):
     )
     typicality: float = Field(ge=0.0, le=1.0)
     optional_refs: tuple[str, ...] = ()
+    # Claimed groundings in admitted evidence blocks (admission §4); checked
+    # deterministically after admission, never trusted on arrival.
+    evidence_refs: tuple[EvidenceRefClaimV1, ...] = Field(default=(), max_length=8)
     analogy: AnalogyClaim | None = None
     sidecar: OperationalSidecar = Field(default_factory=OperationalSidecar)
 

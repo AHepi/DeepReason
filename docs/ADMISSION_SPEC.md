@@ -17,8 +17,20 @@ live and tested:
    step-bound + fresh-subprocess oracle regime, registered as
    `program:dataset_oracle` with the sidecar digest frozen into the
    commitment identity (`tests/test_dataset_oracle.py`).
-Remaining beyond v1: the §4 citation wire fields (`evidence_refs`,
-quote byte-checks) and coverage-channel wiring, and the EPUB adapter.
+4. The §4 citation wire contract (2026-07-28): conjecture candidates
+   (compact, atomic, and reasoning-envelope alike) carry a bounded
+   optional `evidence_refs` field naming admitted block ids with
+   optional quotes; the rendered evidence pack lists citable block ids;
+   after gate admission every claimed citation is resolved and
+   byte-checked against the frozen dossier, and each outcome — verified
+   or typed failure (`EVIDENCE_QUOTE_MISMATCH`,
+   `EVIDENCE_REF_UNKNOWN_BLOCK`, tier-ineligible, unrecoverable,
+   unbound) — is persisted as a Measure so criticism can attack the
+   citation from the durable record
+   (`src/deepreason/evidence/citations.py`,
+   `tests/test_evidence_citations.py`).
+Remaining beyond v1: coverage-channel wiring (dossier blocks feeding
+the scratch `coverage`/`underexposed` slots) and the EPUB adapter.
 Scope: how a body of user-supplied input (a study, a book, a dataset, a
 mixed corpus) becomes durable material a DeepReason run may reason over.
 

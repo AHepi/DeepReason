@@ -14,6 +14,11 @@ from deepreason.evidence.models import (
     RunInputProblemV1,
     RunInputProblemV2,
 )
+from deepreason.evidence.citations import (
+    EvidenceCitationCheckV1,
+    canonical_block_text,
+    check_candidate_citations,
+)
 from deepreason.evidence.state import (
     bind_run_input,
     load_evidence_dossier,
@@ -33,6 +38,7 @@ __all__ = [
     "AttachedSourceV1",
     "DossierExcerptV1",
     "DossierPackReceiptV1",
+    "EvidenceCitationCheckV1",
     "EvidenceDossierV1",
     "RunInputBudgetV1",
     "RunInputCommitmentV1",
@@ -42,6 +48,8 @@ __all__ = [
     "RunInputProblemV1",
     "RunInputProblemV2",
     "bind_run_input",
+    "canonical_block_text",
+    "check_candidate_citations",
     "commit_dossier_pack_receipt",
     "dossier_exposure_counts",
     "attach_bound_evidence",
