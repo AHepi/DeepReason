@@ -298,6 +298,20 @@ def external_toolchains() -> dict[str, tuple[str, ...]]:
     return {toolchain: tuple(names) for toolchain, names in sorted(grouped.items())}
 
 
+def _dataset_oracle(text: str, budget, artifact, blobs) -> tuple[str, dict]:
+    from deepreason.oracle import dataset_from_spec
+
+    return dataset_from_spec(text, budget, artifact, blobs)
+
+
+# Programs that additionally receive the blob store: their frozen commitment
+# spec names durable content-addressed inputs.  Additive to PROGRAMS — no
+# existing program signature changes.
+BLOB_PROGRAMS: dict = {
+    "dataset_oracle": _dataset_oracle,
+}
+
+
 def program_class(commitment: Commitment) -> ProgramClass | None:
     """Process classification of one evaluable commitment (never a verdict).
 
@@ -316,7 +330,9 @@ def program_class(commitment: Commitment) -> ProgramClass | None:
 
 def evaluable(commitment: Commitment) -> bool:
     kind, _, arg = commitment.eval.partition(":")
-    return kind == "predicate" or (kind == "program" and arg in PROGRAMS)
+    return kind == "predicate" or (
+        kind == "program" and (arg in PROGRAMS or arg in BLOB_PROGRAMS)
+    )
 
 
 def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, dict]:
@@ -339,6 +355,10 @@ def evaluate(commitment: Commitment, artifact: Artifact, blobs) -> tuple[str, di
             detail: dict = {}
         except Exception as e:  # noqa: BLE001 - a predicate error is a failed verdict
             verdict, detail = FAIL, {"error": str(e)}
+    elif kind == "program" and arg in BLOB_PROGRAMS:
+        # Blob-aware programs run against durable content their frozen spec
+        # names (the admitted dataset sidecar), never a copy in the artifact.
+        verdict, detail = BLOB_PROGRAMS[arg](text, commitment.budget, artifact, blobs)
     elif kind == "program":
         fn = PROGRAMS.get(arg)
         if fn is None:

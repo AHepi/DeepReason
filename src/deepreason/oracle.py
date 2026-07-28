@@ -48,7 +48,7 @@ PROPERTY_PROGRAM = "property_oracle"
 # Every program whose verdict comes from RUNNING the candidate. warrants.
 # execution_backed treats a passing verdict from any of these as a warrant
 # from reality that mere argument cannot override.
-EXEC_PROGRAMS = frozenset({EXEC_PROGRAM, PROPERTY_PROGRAM})
+EXEC_PROGRAMS = frozenset({EXEC_PROGRAM, PROPERTY_PROGRAM, "dataset_oracle"})
 _STEP_LIMIT_DEFAULT = 100_000
 _INT_LITERAL_CAP = 1_000_000  # forbid range()/collection bombs the step bound can't see
 
@@ -860,7 +860,130 @@ def generator_wf_commitment(
 
 # Worker dispatch deliberately names only internal implementations: public
 # wrappers spawn; worker-local functions never do.
+# ---------------------------------------------------------------------------
+# Dataset oracle (docs/ADMISSION_SPEC.md §6): claims about admitted tabular
+# data become falsifiable rather than argued.  A model-authored `def
+# check(rows)` runs against the ADMITTED sidecar bytes — never a copy the
+# model supplied — under the same AST guard, whitelist builtins, step bound,
+# and fresh-subprocess containment as every other oracle.  The commitment
+# freezes the source digest, delimiter, and step limit into its identity, so
+# a verdict is a pure replayable function of (dataset bytes, check source).
+# ---------------------------------------------------------------------------
+
+DATASET_PROGRAM = "dataset_oracle"
+_DATASET_MAX_ROWS = 100_000
+_DATASET_MAX_COLUMNS = 256
+# The parsed-row payload crosses the sandbox IPC boundary (8 MiB cap); keep
+# a margin for JSON framing.
+_DATASET_MAX_PAYLOAD_BYTES = 6 * 1024 * 1024
+
+
+def _run_dataset_local(check: str, rows: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+    """Worker-side dataset claim check: `check(rows)` decides the verdict."""
+
+    with _step_budget(step_limit) as steps:
+        fn, err = _compile(check, "check")
+        if err:
+            return FAIL, {"error": f"check: {err}"}
+        try:
+            outcome = fn(rows)
+        except _StepExceeded:
+            return FAIL, {"error": "step limit exceeded", "step_limit": step_limit}
+        except MemoryError:
+            raise
+        except Exception as e:  # noqa: BLE001 - a raising check is a failed claim
+            return FAIL, {"error": f"check raised {type(e).__name__}: {e}"}
+    if bool(outcome):
+        return PASS, {"rows": len(rows), "steps": steps[0]}
+    return FAIL, {"rows": len(rows), "claim_holds": False}
+
+
+def dataset_rows(data: bytes, delimiter: str) -> list:
+    """Deterministically parse sidecar bytes into bounded header-keyed rows."""
+
+    import csv as _csv
+    import io as _io
+
+    if delimiter not in {",", "\t"}:
+        raise ValueError("dataset delimiter must be comma or tab")
+    text = data.decode("utf-8", errors="strict")
+    reader = _csv.reader(_io.StringIO(text), delimiter=delimiter)
+    parsed = list(reader)
+    if not parsed:
+        return []
+    header = parsed[0]
+    if len(header) > _DATASET_MAX_COLUMNS:
+        raise ValueError("dataset exceeds the frozen column ceiling")
+    if len(parsed) - 1 > _DATASET_MAX_ROWS:
+        raise ValueError("dataset exceeds the frozen row ceiling")
+    return [
+        {
+            header[index]: (row[index] if index < len(row) else "")
+            for index in range(len(header))
+        }
+        for row in parsed[1:]
+    ]
+
+
+def run_dataset(check: str, rows: list, step_limit: int = _STEP_LIMIT_DEFAULT):
+    """Execute one dataset claim check in a fresh subprocess."""
+
+    payload = {"check": check, "rows": rows, "step_limit": step_limit}
+    if len(canonical_json(payload)) > _DATASET_MAX_PAYLOAD_BYTES:
+        return OVERRUN, {"error": "dataset exceeds the oracle payload bound"}
+    try:
+        return _run_isolated("dataset", payload, step_limit=step_limit)
+    except OracleSandboxAborted as e:
+        return _sandbox_abort_verdict(e)
+
+
+def dataset_oracle_commitment(
+    source_sha256: str,
+    delimiter: str,
+    step_limit: int = _STEP_LIMIT_DEFAULT,
+) -> Commitment:
+    """Content-addressed falsification commitment against one admitted sidecar."""
+
+    spec = {
+        "source_sha256": source_sha256,
+        "delimiter": delimiter,
+        "step_limit": step_limit,
+    }
+    digest = sha256_hex(canonical_json(spec))[:12]
+    return Commitment(
+        id=f"dataset-oracle@{digest}",
+        eval=f"program:{DATASET_PROGRAM}",
+        budget=Budget(extra={"spec": json.dumps(spec, sort_keys=True)}),
+    )
+
+
+def dataset_from_spec(source: str, budget, artifact, blobs) -> tuple:
+    """programs.py entry point: the artifact text is the model-authored check;
+    the frozen spec names the admitted sidecar the check runs against."""
+
+    spec = _load_spec(budget)
+    source_sha256 = spec.get("source_sha256")
+    delimiter = spec.get("delimiter")
+    if not source_sha256 or delimiter not in {",", "\t"}:
+        return OVERRUN, {"error": "dataset-oracle spec missing sidecar identity"}
+    try:
+        data = blobs.get(source_sha256)
+    except KeyError:
+        return OVERRUN, {"error": "admitted dataset sidecar is unavailable"}
+    if sha256_hex(data) != source_sha256:
+        return OVERRUN, {"error": "dataset sidecar bytes do not match their digest"}
+    try:
+        rows = dataset_rows(data, delimiter)
+    except (UnicodeDecodeError, ValueError) as e:
+        return OVERRUN, {"error": f"dataset sidecar unparseable: {e}"}
+    verdict, detail = run_dataset(
+        source, rows, int(spec.get("step_limit", _STEP_LIMIT_DEFAULT))
+    )
+    return verdict, {**detail, "source_sha256": source_sha256}
+
+
 _LOCAL_OPERATIONS = {
+    "dataset": _run_dataset_local,
     "run": _run_local,
     "property": _run_property_local,
     "gate": _gate_local,

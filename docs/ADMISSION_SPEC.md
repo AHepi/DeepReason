@@ -1,14 +1,24 @@
 # Evidence Admission (draft for review)
 
-Status: v1 CORE IMPLEMENTED (2026-07-28) — the deterministic text parser
-(plain text, markdown, CSV/TSV projections), `EvidenceDossierV2` with
-admission blocks and typed refusals, the managed admission store, the
-`deepreason admit` / `admit --inspect` CLI, and `reason --dossier` run
-binding are built and tested (`src/deepreason/admission/`,
-`tests/test_admission.py`). Admitted sources reach runs through the
-existing dossier retrieval exposure. Remaining per the decided build
-order: the first-party PDF/EPUB adapters proving the §3a plugin contract,
-and the §6 dataset oracle sidecar interface.
+Status: v1 IMPLEMENTED (2026-07-28) — all three decided build items are
+live and tested:
+1. Core parser + dossier + CLI: deterministic text/markdown/CSV-TSV
+   parsing with exact byte spans, `EvidenceDossierV2` with admission
+   blocks and typed refusals, the managed admission store, `deepreason
+   admit` / `admit --inspect`, and `reason --dossier` run-identity
+   binding (`src/deepreason/admission/`, `tests/test_admission.py`).
+2. The §3a adapter contract with the first-party PDF adapter behind
+   `deepreason[admit]`: entry-point registration, sandboxed execution
+   (rlimits + seccomp network denial), span-fidelity tier capping, and
+   per-source adapter version binding into the dossier digest. EPUB
+   remains open behind the same contract.
+3. The §6 dataset oracle: model-authored `def check(rows)` claims run
+   against the admitted sidecar bytes under the existing AST-guard +
+   step-bound + fresh-subprocess oracle regime, registered as
+   `program:dataset_oracle` with the sidecar digest frozen into the
+   commitment identity (`tests/test_dataset_oracle.py`).
+Remaining beyond v1: the §4 citation wire fields (`evidence_refs`,
+quote byte-checks) and coverage-channel wiring, and the EPUB adapter.
 Scope: how a body of user-supplied input (a study, a book, a dataset, a
 mixed corpus) becomes durable material a DeepReason run may reason over.
 
