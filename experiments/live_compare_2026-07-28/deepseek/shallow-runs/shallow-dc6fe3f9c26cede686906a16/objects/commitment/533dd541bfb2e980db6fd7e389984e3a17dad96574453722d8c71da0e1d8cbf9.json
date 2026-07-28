@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Two conclusions map to the same compressed node but make divergent predictions in a novel context, revealing they were not truly identical."},"steps":100000,"time_ms":2000},"eval":"program:check_compression_divergence","id":"fc:dc84d2b34e4e","observation_valued":false},"id":"fc:dc84d2b34e4e","schema":"commitment"}

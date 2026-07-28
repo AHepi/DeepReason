@@ -1,0 +1,1 @@
+{"data":{"budget":{"extra":{"case":"Two conclusions with identical ancestry tags are treated as distinct"},"steps":100000,"time_ms":2000},"eval":"program:causal_ancestry_check","id":"fc:92fc46d5b90c","observation_valued":false},"id":"fc:92fc46d5b90c","schema":"commitment"}
