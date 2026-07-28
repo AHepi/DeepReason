@@ -70,3 +70,30 @@ instructions, no special status for rubric-bearing content. Tranche 1
 surfaces fetched text only through the evidence artifact path, which
 already frames it as attackable candidate material resting on an
 attackable reliability node.
+
+## Increment B build map (approved; next)
+
+Template: `capabilities/simulation.py` over the generic capability
+transition machinery (`capabilities/models.py`): lifecycle
+PROPOSED→GRANTED→COMPILED→DISPATCHED→SUCCEEDED/FAILED→RESULT_PACKAGED→
+CONSUMED, budget deltas (requests/executions/result_follow_ups),
+chained process digests.
+
+1. `capabilities/research.py`: ResearchCapabilityController. Proposal =
+   ResearchFetchProposalV1 (bounded https URL list ≤3, validated against
+   the frozen policy allowlist at admission AND dispatch). requests
+   budget = policy maximum_requests; executions = dispatched fetches;
+   maximum_sources caps CONSUMED evidence. execute() runs
+   ContainedFetcher under the policy's allowlist/ceilings; every
+   FetchReceiptV1 lands in the DISPATCHED phase record;
+   RESEARCH_BUDGET_EXHAUSTED maps to typed FAILED carrying count+limit.
+2. Conjecture wire: ConjecturerTurnWireV6 gains bounded
+   `research_proposals`, schema-visible only when the manifest enables
+   research (same gating idiom as simulation_proposals).
+3. run_manifest.py: the V6 gate accepts research.enabled iff
+   backend_identity == "web.contained.v1"; V5/Tranche A keeps refusing;
+   the engaged public preset keeps research disabled (no digest drift).
+4. Replay/verifier: validate the transition chain and the receipts'
+   requests arithmetic against the frozen limit.
+5. Increment C: CONSUMED routes fetched text through admission so it
+   enters as citable blocks joining the §4 citation contract.
