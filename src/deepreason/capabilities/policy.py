@@ -294,6 +294,16 @@ class FormalizationCapabilityPolicyV1(_PolicyModel):
 
 
 class ResearchCapabilityPolicyV1(_PolicyModel):
+    """Frozen research authority (owner decisions 2026-07-28).
+
+    ``domain_allowlist`` realizes the allowlist-over-open-web decision and
+    ``maximum_requests`` is the requests-denominated fetch budget whose
+    exhaustion is a typed record carrying count and limit (the campaign's
+    grounded shape). Both new fields serialize only when set, so every
+    existing disabled-research policy keeps its exact bytes — and
+    therefore its manifest digest and cached qualifications.
+    """
+
     schema_: Literal["research-capability-policy.v1"] = Field(
         "research-capability-policy.v1", alias="schema"
     )
@@ -301,16 +311,53 @@ class ResearchCapabilityPolicyV1(_PolicyModel):
     backend_identity: str = Field(default="disabled", min_length=1, max_length=128)
     maximum_requests: int = Field(default=0, ge=0, le=10_000)
     maximum_sources: int = Field(default=0, ge=0, le=10_000)
+    domain_allowlist: tuple[str, ...] = Field(
+        default=(),
+        max_length=64,
+        exclude_if=lambda value: value == (),
+    )
+    maximum_response_bytes: int = Field(
+        default=0,
+        ge=0,
+        le=16 * 1024 * 1024,
+        exclude_if=lambda value: value == 0,
+    )
 
     @model_validator(mode="after")
     def _finite_shape(self):
+        for domain in self.domain_allowlist:
+            if (
+                not domain
+                or domain != domain.strip().lower()
+                or domain.startswith(".")
+                or "/" in domain
+                or ":" in domain
+                or "*" in domain
+            ):
+                raise ValueError(
+                    "research allowlist entries must be bare lowercase "
+                    "hostnames (subdomains implied; no schemes, ports, or "
+                    "wildcards)"
+                )
         if self.enabled:
             if self.backend_identity == "disabled" or not all(
                 (self.maximum_requests, self.maximum_sources)
             ):
                 raise ValueError("enabled research requires a backend and finite bounds")
-        elif self.backend_identity != "disabled" or any(
-            (self.maximum_requests, self.maximum_sources)
+            if not self.domain_allowlist:
+                raise ValueError(
+                    "enabled research requires a frozen domain allowlist — "
+                    "open-web research is not a supported authority"
+                )
+            if not self.maximum_response_bytes:
+                raise ValueError(
+                    "enabled research requires a finite per-response byte ceiling"
+                )
+        elif (
+            self.backend_identity != "disabled"
+            or any((self.maximum_requests, self.maximum_sources))
+            or self.domain_allowlist
+            or self.maximum_response_bytes
         ):
             raise ValueError("disabled research cannot bind authority")
         return self

@@ -212,9 +212,11 @@ def test_simulation_runner_profile_must_match_exact_frozen_toolchain(tmp_path):
         InquiryCapabilityPolicyV1(
             research=ResearchCapabilityPolicyV1(
                 enabled=True,
-                backend_identity="search@future",
+                backend_identity="web.contained.v1",
                 maximum_requests=1,
                 maximum_sources=1,
+                domain_allowlist=("example.org",),
+                maximum_response_bytes=1_048_576,
             )
         ),
     ],
@@ -228,3 +230,54 @@ def test_tranche_a_rejects_unimplemented_capabilities(capabilities, tmp_path):
 def test_attached_evidence_policy_has_finite_bounds():
     with pytest.raises(ValidationError):
         AttachedEvidencePolicyV1(enabled=True)
+
+
+def test_research_policy_fields_are_digest_stable_and_allowlist_gated():
+    """Tranche-2 policy fields (owner decisions 2026-07-28): the new
+    allowlist and byte-ceiling fields serialize only when set, so every
+    existing disabled-research policy keeps its exact bytes — manifest
+    digests and cached qualifications survive the schema growth. Enabled
+    research requires the frozen allowlist: open web is not an authority."""
+
+    from deepreason.canonical import canonical_json
+    from deepreason.capabilities.policy import ResearchCapabilityPolicyV1
+
+    disabled = canonical_json(
+        ResearchCapabilityPolicyV1().model_dump(mode="json", by_alias=True)
+    )
+    assert disabled == (
+        b'{"backend_identity":"disabled","enabled":false,'
+        b'"maximum_requests":0,"maximum_sources":0,'
+        b'"schema":"research-capability-policy.v1"}'
+    )
+
+    enabled = ResearchCapabilityPolicyV1(
+        enabled=True,
+        backend_identity="web.contained.v1",
+        maximum_requests=25,
+        maximum_sources=10,
+        domain_allowlist=("example.org",),
+        maximum_response_bytes=2 * 1024 * 1024,
+    )
+    payload = canonical_json(enabled.model_dump(mode="json", by_alias=True))
+    assert b"example.org" in payload and b"maximum_response_bytes" in payload
+
+    with pytest.raises(ValueError, match="allowlist"):
+        ResearchCapabilityPolicyV1(
+            enabled=True,
+            backend_identity="web.contained.v1",
+            maximum_requests=25,
+            maximum_sources=10,
+            maximum_response_bytes=2 * 1024 * 1024,
+        )
+    with pytest.raises(ValueError, match="wildcards"):
+        ResearchCapabilityPolicyV1(
+            enabled=True,
+            backend_identity="web.contained.v1",
+            maximum_requests=25,
+            maximum_sources=10,
+            domain_allowlist=("*.example.org",),
+            maximum_response_bytes=2 * 1024 * 1024,
+        )
+    with pytest.raises(ValueError, match="cannot bind authority"):
+        ResearchCapabilityPolicyV1(domain_allowlist=("example.org",))
