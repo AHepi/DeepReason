@@ -30,3 +30,4 @@ experiments/results/validation_checkpoint*.json
 
 # Live-rig credential env files (never committed)
 experiments/live_tri_2026-07-27/env
+experiments/live_compare_2026-07-28/env
