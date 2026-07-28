@@ -190,6 +190,24 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="admit bounded prefixes when an attachment exceeds a block budget",
     )
+    web_cmd = sub.add_parser(
+        "web",
+        help=(
+            "open the local DeepReason web page: ask questions and attach "
+            "documents from a browser, no terminal knowledge needed"
+        ),
+    )
+    web_cmd.add_argument("--port", type=int, default=8710)
+    web_cmd.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="loopback only; the novice web app never serves the network",
+    )
+    web_cmd.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="do not open the page automatically",
+    )
     admit_cmd = sub.add_parser(
         "admit",
         help="admit documents into a frozen evidence dossier, or inspect one",
@@ -523,6 +541,17 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "qualify":
         return _cmd_qualify(args)
+
+    if args.command == "web":
+        from deepreason.webapp import serve
+
+        try:
+            return serve(
+                args.host, args.port, open_browser=not args.no_browser
+            )
+        except (OSError, ValueError) as error:
+            print(str(error), file=sys.stderr)
+            return 1
 
     if args.command == "mcp-registration":
         from deepreason.mcp_registration import MCPRegistrationError, registration_json

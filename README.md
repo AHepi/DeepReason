@@ -97,6 +97,35 @@ reusable qualification, allocates managed storage, launches through the
 application service, and returns a terminal JSON result with an opaque
 `run_id`.
 
+### Reasoning over documents
+
+```bash
+deepreason reason "What does this study conclude?" --attach study.pdf
+```
+
+`--attach` (repeatable; files or directories) admits documents as frozen
+evidence for exactly this question and binds them into the run identity in
+one step, printing the minted evidence dossier digest so the run stays
+reproducible. Plain text, markdown, and CSV/TSV are parsed natively; PDF and
+EPUB go through the built-in sandboxed adapters. A document that cannot be
+admitted is refused with a typed reason, never silently skipped. The
+two-step form remains available for parse-once/reason-many workflows:
+`deepreason admit FILES --problem "question"` followed by
+`deepreason reason "question" --dossier DIGEST`.
+
+### The local web page
+
+```bash
+deepreason web
+```
+
+`deepreason web` opens a local browser page for people who never use a
+terminal beyond this one command: type a question, optionally attach
+documents, watch progress, and read the result with its uncertainty intact.
+The page is served on loopback only, requires a per-process API token, and
+is a thin shim over the same closed MCP tool surface — it can do nothing
+the validated facade cannot.
+
 ### Shallow (reduced-engine) mode
 
 ```bash
@@ -159,7 +188,7 @@ closed and bounded.
 | Tool | Public authority |
 |---|---|
 | `get_readiness` | Read secret-free provider and qualification readiness. |
-| `start_run` | Prepare and start one normal question with an optional bounded budget. |
+| `start_run` | Prepare and start one normal question with an optional bounded budget and optional local document attachments admitted as frozen evidence. |
 | `run_status` | Read current lifecycle and append-only progress for an opaque managed run ID. |
 | `run_result` | Read the fixed terminal result for an opaque managed run ID. |
 | `continue_run` | Request bounded continuation of the same managed run when durable lifecycle authority permits it. |
@@ -178,10 +207,15 @@ closed and bounded.
 | `get_request_requirements` | Read the information required by a supported operation. |
 
 `get_readiness` must report ready before `start_run` may prepare or execute
-anything. `start_run` accepts only a nonblank question and an optional budget
-whose cycles and token budget remain within the public ceilings. It returns an
-opaque `run_id`; lifecycle, scratch, and bridge operations resolve that ID
-inside host-managed storage.
+anything, and its response carries plain-language guidance naming the one
+next terminal command so a host model can walk a first-time user through
+setup without assuming they know what an endpoint or an API key is.
+`start_run` accepts only a nonblank question, an optional budget whose
+cycles and token budget remain within the public ceilings, and optional
+bounded local document paths admitted as frozen evidence for exactly that
+question (the response reports the minted dossier digest and any typed
+refusals). It returns an opaque `run_id`; lifecycle, scratch, and bridge
+operations resolve that ID inside host-managed storage.
 
 MCP callers cannot supply filesystem roots, manifest paths or references,
 provider selection, routes, provider-profile paths, credential references,
