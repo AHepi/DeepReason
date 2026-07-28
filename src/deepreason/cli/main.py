@@ -173,6 +173,23 @@ def build_parser() -> argparse.ArgumentParser:
             "exact question"
         ),
     )
+    reason_cmd.add_argument(
+        "--attach",
+        action="append",
+        default=None,
+        metavar="FILE",
+        help=(
+            "admit a document (text, markdown, CSV/TSV, PDF, EPUB) or a "
+            "directory of documents as evidence for this question and bind "
+            "it into the run in one step; repeatable; prints the minted "
+            "dossier digest so the run stays reproducible"
+        ),
+    )
+    reason_cmd.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="admit bounded prefixes when an attachment exceeds a block budget",
+    )
     admit_cmd = sub.add_parser(
         "admit",
         help="admit documents into a frozen evidence dossier, or inspect one",
@@ -1575,15 +1592,8 @@ def _cmd_reason_shallow(args) -> int:
 def _cmd_admit(args) -> int:
     """Admit documents into a frozen dossier, or inspect a stored one."""
 
-    from deepreason.admission import (
-        AdmissionError,
-        AdmissionInput,
-        admission_store,
-        admit_sources,
-    )
+    from deepreason.admission import AdmissionError, admission_store
     from deepreason.admission.store import AdmissionStoreError
-    from deepreason.evidence.models import AttachedSourceProvenanceV1
-    from deepreason.preparation import _question_digest
 
     store = admission_store()
     if args.inspect is not None:
@@ -1634,57 +1644,19 @@ def _cmd_admit(args) -> int:
         )
         return 1
 
-    inputs: list = []
-    for supplied in args.paths:
-        path = Path(supplied)
-        if path.is_dir():
-            candidates = sorted(
-                item for item in path.rglob("*") if item.is_file()
-            )
-        elif path.is_file():
-            candidates = [path]
-        else:
-            print(f"ADMISSION_PATH_UNAVAILABLE: {supplied}", file=sys.stderr)
-            return 1
-        for item in candidates:
-            try:
-                inputs.append(AdmissionInput(locator=str(item), data=item.read_bytes()))
-            except OSError as error:
-                print(
-                    f"ADMISSION_PATH_UNAVAILABLE: {item}: {error}", file=sys.stderr
-                )
-                return 1
+    from deepreason.admission.attach import admit_attachment_paths
 
-    problem_ref = f"question-{_question_digest(args.problem)[:32]}"
-    provenance = AttachedSourceProvenanceV1(
-        supplied_by="deepreason.admit",
-        acquisition_method="operator-supplied local files",
-        note=None,
-    )
     try:
-        dossier, report = admit_sources(
-            inputs,
-            problem_ref=problem_ref,
-            provenance=provenance,
+        admitted = admit_attachment_paths(
+            args.problem,
+            args.paths,
+            supplied_by="deepreason.admit",
             allow_partial=bool(args.allow_partial),
         )
     except AdmissionError as error:
         print(str(error), file=sys.stderr)
         return 1
-    import hashlib as _hashlib
-
-    by_digest = {
-        _hashlib.sha256(item.data).hexdigest(): item.data
-        for item in inputs
-        if item.data
-    }
-    store.save(
-        dossier,
-        {
-            source.content_sha256: by_digest[source.content_sha256]
-            for source in dossier.sources
-        },
-    )
+    dossier, report = admitted.dossier, admitted.report
     payload = {
         "dossier_digest": dossier.dossier_digest,
         "problem_ref": dossier.problem_ref,
@@ -1729,6 +1701,31 @@ def _cmd_reason(args) -> int:
         dossier_digest = getattr(args, "dossier", None)
         if dossier_digest is not None:
             dossier_digest = dossier_digest.removeprefix("sha256:").strip()
+        attachments = getattr(args, "attach", None)
+        if attachments:
+            if dossier_digest is not None:
+                print(
+                    "ATTACH_DOSSIER_CONFLICT: pass --attach or --dossier, not both",
+                    file=sys.stderr,
+                )
+                return 1
+            from deepreason.admission.attach import admit_attachment_paths
+
+            admitted = admit_attachment_paths(
+                args.question,
+                attachments,
+                supplied_by="deepreason.reason.attach",
+                allow_partial=bool(getattr(args, "allow_partial", False)),
+            )
+            dossier_digest = admitted.dossier_digest
+            # Spec §9: the one-step convenience MUST print the minted dossier
+            # digest so the run remains reproducible via reason --dossier.
+            print(
+                json.dumps(
+                    {"evidence": admitted.summary()}, indent=2, sort_keys=True
+                ),
+                file=sys.stderr,
+            )
         prepared = RunPreparationService().prepare(
             RunPreparationRequestV1(
                 question=args.question,
@@ -1755,6 +1752,8 @@ def _cmd_reason(args) -> int:
         return 6 if str(error).startswith(("RUN_RESULT_INVALID", "RUN_RESULT_NOT_READY")) else 1
     payload = terminal.presentation_payload()
     payload["run_id"] = prepared.managed_run_id
+    if dossier_digest is not None:
+        payload["evidence_dossier_digest"] = dossier_digest
     print(json.dumps(payload, indent=2, sort_keys=True))
     return terminal.exit_code()
 

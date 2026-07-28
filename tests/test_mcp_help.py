@@ -21,6 +21,7 @@ HELP_TOPICS = (
     "overview",
     "examples",
     "creating_a_run",
+    "attachments",
     "epistemic_outcomes",
     "scratchpad",
     "grounded_bridge",

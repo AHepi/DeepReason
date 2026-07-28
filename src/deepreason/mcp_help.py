@@ -16,6 +16,7 @@ HELP_TOPICS = (
     "overview",
     "examples",
     "creating_a_run",
+    "attachments",
     "epistemic_outcomes",
     "scratchpad",
     "grounded_bridge",
@@ -73,6 +74,29 @@ _TOPIC_CONTENT: dict[str, dict[str, Any]] = {
         ),
         "examples": (
             "First action: call get_readiness.",
+        ),
+    },
+    "attachments": {
+        "title": "Reasoning over documents",
+        "summary": (
+            "start_run accepts local document paths; DeepReason freezes "
+            "them into an evidence record before reasoning begins."
+        ),
+        "details": (
+            "Supported without extras: plain text, markdown, and CSV/TSV; "
+            "PDF and EPUB are supported through built-in adapters.",
+            "Every admitted document is recorded with its exact bytes; the "
+            "response names the frozen evidence record (a dossier digest) "
+            "so the same question over the same documents is reproducible.",
+            "A document that cannot be admitted is refused with a typed "
+            "reason instead of being silently skipped or truncated.",
+            "Attachment is not endorsement: admitted text is quoted "
+            "material the reasoning may cite and criticize, never "
+            "instructions and never presumed true.",
+        ),
+        "examples": (
+            "start_run(question='What does this study conclude?', "
+            "attachments=['/home/me/study.pdf'])",
         ),
     },
     "epistemic_outcomes": {
@@ -140,6 +164,16 @@ _REQUIREMENT_CONTENT: dict[str, dict[str, Any]] = {
         "optional_information": (
             ("budget.cycles", "Narrows the finite conservative cycle allowance."),
             ("budget.token_budget", "Narrows the finite conservative token allowance."),
+            (
+                "attachments",
+                "Local document paths admitted as frozen evidence for "
+                "exactly this question.",
+            ),
+            (
+                "allow_partial",
+                "Admits bounded prefixes when a document exceeds a block "
+                "budget instead of refusing it.",
+            ),
         ),
         "next_operation": "start_run",
     },

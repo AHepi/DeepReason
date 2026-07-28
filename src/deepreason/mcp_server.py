@@ -61,7 +61,12 @@ def _run_tools() -> list[dict]:
         {
             "name": "start_run",
             "description": (
-                "Prepare and start one normal question using host-owned V6 authority."
+                "Prepare and start one normal question using host-owned V6 "
+                "authority. Optional attachments (paths to local text, "
+                "markdown, CSV/TSV, PDF, or EPUB files, or directories of "
+                "them) are admitted as frozen evidence for exactly this "
+                "question before the run starts; the response reports the "
+                "minted evidence dossier digest and any typed refusals."
             ),
             "inputSchema": {
                 "type": "object",
@@ -73,6 +78,29 @@ def _run_tools() -> list[dict]:
                         "pattern": "^[^\\x00]+$",
                     },
                     "budget": budget,
+                    "attachments": {
+                        "type": "array",
+                        "description": (
+                            "local file or directory paths to admit as "
+                            "evidence for this question"
+                        ),
+                        "minItems": 1,
+                        "maxItems": 16,
+                        "uniqueItems": True,
+                        "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 4096,
+                            "pattern": "^[^\\x00]+$",
+                        },
+                    },
+                    "allow_partial": {
+                        "type": "boolean",
+                        "description": (
+                            "admit bounded prefixes when an attachment "
+                            "exceeds a block budget instead of refusing it"
+                        ),
+                    },
                 },
                 "required": ["question"],
                 "additionalProperties": False,
@@ -333,6 +361,51 @@ def _public_budget(arguments: dict):
     )
 
 
+def _plain_readiness_guidance(readiness) -> str:
+    """Explain the one next step in words a first-time user can act on.
+
+    The reader may not know what an LLM, endpoint, or qualification is;
+    every branch names the exact terminal command and what it does.
+    """
+
+    if readiness.ready:
+        return (
+            "DeepReason is ready. Ask a question with start_run; you can "
+            "also attach documents (PDF, EPUB, text, CSV) for it to reason "
+            "over."
+        )
+    state = readiness.qualification_state
+    if state in ("profile_missing", "profile_invalid", "credential_missing"):
+        return (
+            "DeepReason is not connected to an AI service yet. In a "
+            "terminal, run: deepreason setup — it asks which AI service "
+            "you use (a numbered list; picking one fills in everything "
+            "technical), then asks you to paste that service's API key. "
+            "An API key is a password-like code from the service's "
+            "website; the setup screen keeps it hidden and stores it so "
+            "only your user account can read it. This takes about 30 "
+            "seconds and is needed once."
+        )
+    if state == "unqualified":
+        return (
+            "DeepReason is connected to your AI service but has not yet "
+            "verified that the configured model can do this kind of "
+            "reasoning reliably. In a terminal, run: deepreason qualify — "
+            "a one-time automated check (it can take a while and uses "
+            "some of your AI service quota). When it finishes, questions "
+            "can start."
+        )
+    if state == "ready_shallow":
+        return (
+            "The configured model passed only the reduced check, so full "
+            "reasoning runs cannot start. You can still ask questions "
+            "with: deepreason reason \"...\" --shallow (clearly labeled "
+            "reduced mode), or configure a more capable model with: "
+            "deepreason setup."
+        )
+    return f"Next step: {readiness.next_action}"
+
+
 def _require_readiness():
     from deepreason.readiness import get_readiness
 
@@ -373,8 +446,27 @@ def _start_run(
         _require_readiness()
         from deepreason.preparation import RunPreparationRequestV1
 
+        evidence = None
+        if arguments.get("attachments"):
+            from deepreason.admission.attach import admit_attachment_paths
+
+            admitted = admit_attachment_paths(
+                arguments["question"],
+                arguments["attachments"],
+                supplied_by="deepreason.mcp",
+                allow_partial=bool(arguments.get("allow_partial", False)),
+            )
+            evidence = admitted.summary()
         prepared = _preparation_service().prepare(
-            RunPreparationRequestV1(question=arguments["question"], budget=budget)
+            RunPreparationRequestV1(
+                question=arguments["question"],
+                budget=budget,
+                dossier_digest=(
+                    evidence["evidence_dossier_digest"]
+                    if evidence is not None
+                    else None
+                ),
+            )
         )
         accepted = TEXT_RUN_SERVICE.start(
             start_text_run_intent(
@@ -387,12 +479,15 @@ def _start_run(
             progress_callback=progress_callback,
             credential_checker=_missing_manifest_credentials,
         )
-        return {
+        response = {
             "state": accepted.lifecycle,
             "run_id": prepared.managed_run_id,
             "status_operation": "run_status",
             "result_operation": "run_result",
         }
+        if evidence is not None:
+            response["evidence"] = evidence
+        return response
     return {
         "state": accepted.lifecycle,
         "run_id": arguments["run_id"],
@@ -495,7 +590,10 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
     if name == "get_readiness":
         from deepreason.readiness import get_readiness
 
-        return get_readiness().model_dump_json(by_alias=True)
+        readiness = get_readiness()
+        payload = json.loads(readiness.model_dump_json(by_alias=True))
+        payload["guidance"] = _plain_readiness_guidance(readiness)
+        return json.dumps(payload, sort_keys=True, separators=(",", ":"))
 
     if name == "start_run":
         return json.dumps(
