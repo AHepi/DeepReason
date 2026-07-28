@@ -14,6 +14,7 @@ import os
 import stat
 import uuid
 from collections.abc import Callable
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Literal
 
@@ -198,6 +199,30 @@ def production_qualification_maximum_provider_calls(manifest: RunManifest) -> in
     return sum(block_costs) + re_exercise_allowance
 
 
+# Dispatch options for the live executor, set by surfaces (CLI, web) that
+# want bounded concurrency or progress reporting.  Kept out of the executor
+# signature so the seam callers monkeypatch — this exact module attribute —
+# stays a pure RunManifest -> report function.
+_EXECUTOR_OPTIONS: dict = {}
+
+
+@contextmanager
+def qualification_executor_options(
+    *, concurrency: int | None = None, progress_callback=None
+):
+    """Scope live-dispatch options for default_qualification_executor."""
+
+    previous = dict(_EXECUTOR_OPTIONS)
+    _EXECUTOR_OPTIONS.update(
+        concurrency=concurrency, progress_callback=progress_callback
+    )
+    try:
+        yield
+    finally:
+        _EXECUTOR_OPTIONS.clear()
+        _EXECUTOR_OPTIONS.update(previous)
+
+
 def default_qualification_executor(
     manifest: RunManifest,
 ) -> ProductionContractDoctorReportV1:
@@ -205,7 +230,11 @@ def default_qualification_executor(
 
     from deepreason.cli.doctor import run_production_contract_doctor
 
-    return run_production_contract_doctor(manifest)
+    return run_production_contract_doctor(
+        manifest,
+        concurrency=_EXECUTOR_OPTIONS.get("concurrency"),
+        progress_callback=_EXECUTOR_OPTIONS.get("progress_callback"),
+    )
 
 
 def _pair_payload(pair: ProductionContractPairV1) -> dict:

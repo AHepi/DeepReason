@@ -1523,34 +1523,38 @@ def _cmd_qualify(args) -> int:
                         print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)
                         return 1
                 try:
-                    def _battery_executor(manifest_value):
-                        from deepreason.cli.doctor import (
-                            run_production_contract_doctor,
+                    # Route through the deepreason.qualification module
+                    # attribute so offline harnesses that monkeypatch
+                    # default_qualification_executor keep intercepting
+                    # dispatch; the options only affect the live executor.
+                    from deepreason import qualification as qualification_module
+
+                    def report_progress(completed, total):
+                        print(
+                            f"\rqualification cases: {completed}/{total}",
+                            end="",
+                            file=sys.stderr,
+                            flush=True,
                         )
 
-                        def report_progress(completed, total):
-                            print(
-                                f"\rqualification cases: {completed}/{total}",
-                                end="",
-                                file=sys.stderr,
-                                flush=True,
-                            )
-
+                    def _battery_executor(manifest_value):
                         try:
-                            return run_production_contract_doctor(
-                                manifest_value,
-                                concurrency=getattr(args, "concurrency", None),
-                                progress_callback=report_progress,
+                            return qualification_module.default_qualification_executor(
+                                manifest_value
                             )
                         finally:
                             print(file=sys.stderr, flush=True)
 
-                    resolve_completed_qualification(
-                        manifest,
-                        profile,
-                        cache_dir=cache_dir,
-                        executor=_battery_executor,
-                    )
+                    with qualification_module.qualification_executor_options(
+                        concurrency=getattr(args, "concurrency", None),
+                        progress_callback=report_progress,
+                    ):
+                        resolve_completed_qualification(
+                            manifest,
+                            profile,
+                            cache_dir=cache_dir,
+                            executor=_battery_executor,
+                        )
                     tier = "full"
                     reused = False
                 except ValueError as full_error:
