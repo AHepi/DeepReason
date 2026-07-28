@@ -71,7 +71,7 @@ surfaces fetched text only through the evidence artifact path, which
 already frames it as attackable candidate material resting on an
 attackable reliability node.
 
-## Increment B build map (approved; next)
+## Increment B build map (IMPLEMENTED except item 2)
 
 Template: `capabilities/simulation.py` over the generic capability
 transition machinery (`capabilities/models.py`): lifecycle
@@ -97,3 +97,20 @@ chained process digests.
    requests arithmetic against the frozen limit.
 5. Increment C: CONSUMED routes fetched text through admission so it
    enters as citable blocks joining the §4 citation contract.
+
+## Status after 2026-07-28 session
+
+- Increment A (policy fields, digest-stable): DONE, gated.
+- Increment B (transactional runtime): DONE, gated — controller chain,
+  kind-checked phase records, replay-derived cumulative budget, typed
+  exhaustion receipts, V6 gate lifted for web.contained.v1
+  (tests/test_research_capability.py).
+- Increment C1 (citable blocks): DONE — consumed fetches segmented by the
+  canonical admission parser; block ids on the reliability node; §4
+  checker universe = bound dossier + replay-derived research blocks.
+- Remaining (C2): the bounded `research_proposals` field on
+  ConjecturerTurnWireV6, schema-visible only when the manifest enables
+  research (simulation_proposals gating idiom), compiled to
+  ResearchFetchProposalDraftV1 and staged through the controller in
+  rules/conj.py's transactional flow. Until C2, research runs under
+  harness/workflow direction rather than model proposal.
