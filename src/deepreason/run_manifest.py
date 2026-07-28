@@ -2829,7 +2829,11 @@ def _validate_v6_capability_policy(manifest: RunManifest) -> None:
         raise ValueError("V6_CAPABILITY_PROFILE_MISMATCH")
     if capabilities.formalization.enabled:
         raise ValueError("V6_FORMALIZATION_UNAVAILABLE")
-    if capabilities.research.enabled:
+    if capabilities.research.enabled and (
+        capabilities.research.backend_identity != "web.contained.v1"
+    ):
+        # The contained directed-fetch runtime is the only implemented
+        # research authority; any other backend identity stays refused.
         raise ValueError("V6_RESEARCH_UNAVAILABLE")
     if (
         manifest.criticism_policy is not None

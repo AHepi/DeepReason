@@ -13,7 +13,14 @@ from pydantic import BaseModel
 
 from deepreason.capabilities.models import (
     CapabilityTransitionV1,
+    CompiledResearchFetchV1,
     CompiledSimulationV1,
+    ResearchConsumptionV1,
+    ResearchExecutionReceiptV1,
+    ResearchFetchProposalV1,
+    ResearchGrantV1,
+    ResearchResultPackageV1,
+    ResearchWorkOrderV1,
     SimulationConsumptionV1,
     SimulationExecutionReceiptV1,
     SimulationGrantV1,
@@ -188,6 +195,13 @@ SCHEMAS: dict[str, type[BaseModel]] = {
     "capability-simulation-receipt": SimulationExecutionReceiptV1,
     "capability-simulation-result-package": SimulationResultPackageV1,
     "capability-simulation-consumption": SimulationConsumptionV1,
+    "capability-research-proposal": ResearchFetchProposalV1,
+    "capability-research-grant": ResearchGrantV1,
+    "capability-compiled-research-fetch": CompiledResearchFetchV1,
+    "capability-research-work-order": ResearchWorkOrderV1,
+    "capability-research-receipt": ResearchExecutionReceiptV1,
+    "capability-research-result-package": ResearchResultPackageV1,
+    "capability-research-consumption": ResearchConsumptionV1,
     "dossier-pack-receipt": DossierPackReceiptV1,
 }
 

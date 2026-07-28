@@ -163,6 +163,7 @@ class CapabilityOutcome(str, Enum):
     CANDIDATE_PROPOSAL = "candidate_proposal"
     CONTEXT_REQUEST = "context_request"
     SIMULATION_REQUEST = "simulation_request"
+    RESEARCH_REQUEST = "research_request"
     ABSTENTION = "abstention"
     SCRATCH_PROPOSAL = "scratch_proposal"
 

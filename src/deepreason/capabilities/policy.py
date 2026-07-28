@@ -362,6 +362,12 @@ class ResearchCapabilityPolicyV1(_PolicyModel):
             raise ValueError("disabled research cannot bind authority")
         return self
 
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(
+            canonical_json(self.model_dump(mode="json", by_alias=True))
+        ).hexdigest()
+
 
 class InquiryCapabilityPolicyV1(_PolicyModel):
     """The complete, opt-in A-tranche capability topology."""

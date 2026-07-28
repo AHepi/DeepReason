@@ -493,12 +493,203 @@ class SimulationConsumptionV1(_IdentifiedCapabilityRecord):
     )
 
 
+_HTTPS_URL = r"^https://[^\s]{1,2048}$"
+
+
+class ResearchFetchProposalDraftV1(_FrozenModel):
+    """Model-authored directed-fetch intent before harness authority attaches.
+
+    Directed research: the proposal names explicit https URLs. Choosing
+    sources is the proposer's act; validating them against the frozen
+    allowlist and executing them safely is the harness's.
+    """
+
+    request_identifier: str = Field(min_length=1, max_length=128)
+    purpose: str = Field(min_length=1, max_length=2_000)
+    urls: tuple[str, ...] = Field(min_length=1, max_length=3)
+
+    @field_validator("urls")
+    @classmethod
+    def _https_and_unique(cls, value):
+        if len(value) != len(set(value)):
+            raise ValueError("research proposal urls must not contain duplicates")
+        if any(re.fullmatch(_HTTPS_URL, url) is None for url in value):
+            raise ValueError("research proposal urls must be bounded https URLs")
+        return tuple(value)
+
+
+class ResearchFetchProposalV1(ResearchFetchProposalDraftV1, _IdentifiedCapabilityRecord):
+    """Semantic fetch proposal; this record conveys no fetch authority."""
+
+    _identity_domain = "capability.research-proposal.v1"
+
+    schema_: Literal["capability.research-proposal.v1"] = Field(
+        "capability.research-proposal.v1", alias="schema"
+    )
+    originating_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
+    originating_provider_attempt_ref: str | None = Field(
+        default=None, pattern=_WORKFLOW_ID
+    )
+    source_call_seq: int = Field(ge=0)
+    proposal_index: int = Field(ge=0, le=31)
+    problem_ref: str = Field(min_length=1, max_length=512)
+    run_input_digest: str = Field(pattern=_DIGEST)
+
+
+class ResearchGrantV1(_IdentifiedCapabilityRecord):
+    """Harness-validated fetch authority: every URL matched the frozen
+    allowlist and the requests budget still had headroom at grant time."""
+
+    _identity_domain = "capability.research-grant.v1"
+
+    schema_: Literal["capability.research-grant.v1"] = Field(
+        "capability.research-grant.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    manifest_digest: str = Field(pattern=_DIGEST)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    policy_digest: str = Field(pattern=_DIGEST)
+    backend_identity: str = Field(min_length=1, max_length=128)
+    granted_urls: tuple[str, ...] = Field(min_length=1, max_length=3)
+    requests_limit: int = Field(ge=1, le=10_000)
+    maximum_response_bytes: int = Field(ge=1_024, le=16 * 1024 * 1024)
+
+
+class CompiledResearchFetchV1(_IdentifiedCapabilityRecord):
+    """The frozen fetch plan: exactly what will be dispatched, nothing else."""
+
+    _identity_domain = "capability.compiled-research-fetch.v1"
+
+    schema_: Literal["capability.compiled-research-fetch.v1"] = Field(
+        "capability.compiled-research-fetch.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    grant_ref: str = Field(pattern=_WORKFLOW_ID)
+    urls: tuple[str, ...] = Field(min_length=1, max_length=3)
+    domain_allowlist: tuple[str, ...] = Field(min_length=1, max_length=64)
+    requests_limit: int = Field(ge=1, le=10_000)
+    maximum_response_bytes: int = Field(ge=1_024, le=16 * 1024 * 1024)
+    timeout_seconds: int = Field(ge=1, le=300)
+
+
+class ResearchWorkOrderV1(_IdentifiedCapabilityRecord):
+    """Durable operational fetch authority compiled entirely by the harness."""
+
+    _identity_domain = "capability.research-work-order.v1"
+
+    schema_: Literal["capability.research-work-order.v1"] = Field(
+        "capability.research-work-order.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    grant_ref: str = Field(pattern=_WORKFLOW_ID)
+    compiled_research_ref: str = Field(pattern=_WORKFLOW_ID)
+    manifest_digest: str = Field(pattern=_DIGEST)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    policy_digest: str = Field(pattern=_DIGEST)
+    backend_identity: Literal["web.contained.v1"] = "web.contained.v1"
+    requests_limit: int = Field(ge=1, le=10_000)
+    maximum_response_bytes: int = Field(ge=1_024, le=16 * 1024 * 1024)
+
+
+class ResearchFetchAttemptV1(_FrozenModel):
+    """One sanitized fetch attempt inside an execution receipt.
+
+    The requests arithmetic is replay-validated: ``requests_used`` after
+    each attempt never exceeds ``requests_limit`` on the receipt, and the
+    typed budget-exhaustion outcome always carries both (the grounded
+    shape from the 2026-07-27 campaign)."""
+
+    seq: int = Field(ge=1)
+    url: str = Field(min_length=1, max_length=4_096)
+    host: str = Field(default="", max_length=1_024)
+    outcome: str = Field(min_length=1, max_length=64, pattern=r"^[A-Z][A-Z0-9_]*$")
+    http_status: int | None = Field(default=None, ge=100, le=599)
+    byte_count: int = Field(default=0, ge=0)
+    content_sha256: str | None = Field(default=None, pattern=_DIGEST)
+    requests_used: int = Field(ge=0)
+
+
+class ResearchExecutionReceiptV1(_IdentifiedCapabilityRecord):
+    _identity_domain = "capability.research-execution-receipt.v1"
+
+    schema_: Literal["capability.research-execution-receipt.v1"] = Field(
+        "capability.research-execution-receipt.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    research_work_order_ref: str = Field(pattern=_WORKFLOW_ID)
+    compiled_specification_ref: str = Field(pattern=_WORKFLOW_ID)
+    attempts: tuple[ResearchFetchAttemptV1, ...] = Field(min_length=1, max_length=32)
+    requests_used_total: int = Field(ge=0)
+    requests_limit: int = Field(ge=1, le=10_000)
+    outcome: Literal["fetched", "nothing_fetched", "budget_exhausted"]
+
+    @model_validator(mode="after")
+    def _receipt_arithmetic(self):
+        used = [attempt.requests_used for attempt in self.attempts]
+        if used != sorted(used):
+            raise ValueError("research receipt attempts must be budget-ordered")
+        if self.requests_used_total != used[-1]:
+            raise ValueError("research receipt total differs from its attempts")
+        if self.requests_used_total > self.requests_limit:
+            raise ValueError("research receipt spends beyond its frozen limit")
+        if (self.outcome == "budget_exhausted") != any(
+            attempt.outcome == "RESEARCH_BUDGET_EXHAUSTED"
+            for attempt in self.attempts
+        ):
+            raise ValueError(
+                "budget exhaustion and its typed attempt record must agree"
+            )
+        return self
+
+
+class ResearchFetchedItemV1(_FrozenModel):
+    url: str = Field(min_length=1, max_length=4_096)
+    content_sha256: str = Field(pattern=_DIGEST)
+    byte_count: int = Field(ge=0)
+    text_sha256: str = Field(pattern=_DIGEST)
+
+
+class ResearchResultPackageV1(_IdentifiedCapabilityRecord):
+    _identity_domain = "capability.research-result-package.v1"
+
+    schema_: Literal["capability.research-result-package.v1"] = Field(
+        "capability.research-result-package.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    execution_receipt_ref: str = Field(pattern=_WORKFLOW_ID)
+    items: tuple[ResearchFetchedItemV1, ...] = Field(default=(), max_length=3)
+
+
+class ResearchConsumptionV1(_IdentifiedCapabilityRecord):
+    _identity_domain = "capability.research-consumption.v1"
+
+    schema_: Literal["capability.research-consumption.v1"] = Field(
+        "capability.research-consumption.v1", alias="schema"
+    )
+    proposal_ref: str = Field(pattern=_WORKFLOW_ID)
+    run_input_digest: str = Field(pattern=_DIGEST)
+    result_package_ref: str = Field(pattern=_WORKFLOW_ID)
+    evidence_refs: tuple[str, ...] = Field(min_length=1, max_length=3)
+
+
 __all__ = [
     "CapabilityBudgetDeltaV1",
     "CapabilityLifecycle",
     "CapabilityTransitionV1",
+    "CompiledResearchFetchV1",
     "CompiledSimulationV1",
     "CompiledSimulationSpecV1",
+    "ResearchConsumptionV1",
+    "ResearchExecutionReceiptV1",
+    "ResearchFetchAttemptV1",
+    "ResearchFetchProposalDraftV1",
+    "ResearchFetchProposalV1",
+    "ResearchFetchedItemV1",
+    "ResearchGrantV1",
+    "ResearchResultPackageV1",
+    "ResearchWorkOrderV1",
     "SimulationAttemptV1",
     "SimulationConsumptionV1",
     "SimulationExecutionReceiptV1",

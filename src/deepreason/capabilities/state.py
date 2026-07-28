@@ -10,7 +10,14 @@ from deepreason.canonical import canonical_json
 from deepreason.capabilities.models import (
     CapabilityLifecycle,
     CapabilityTransitionV1,
+    CompiledResearchFetchV1,
     CompiledSimulationV1,
+    ResearchConsumptionV1,
+    ResearchExecutionReceiptV1,
+    ResearchFetchProposalV1,
+    ResearchGrantV1,
+    ResearchResultPackageV1,
+    ResearchWorkOrderV1,
     SimulationConsumptionV1,
     SimulationExecutionReceiptV1,
     SimulationGrantV1,
@@ -38,16 +45,40 @@ _ALLOWED_PREVIOUS = {
     CapabilityLifecycle.CONSUMED: {CapabilityLifecycle.RESULT_PACKAGED},
 }
 
+# One capability chain per proposal KIND: simulation and research records
+# never mix within a chain (checked against the proposal's type below).
 _PHASE_MODELS = {
-    CapabilityLifecycle.PROPOSED: SimulationProposalV1,
-    CapabilityLifecycle.GRANTED: SimulationGrantV1,
-    CapabilityLifecycle.COMPILED: CompiledSimulationV1,
-    CapabilityLifecycle.DISPATCHED: SimulationWorkOrderV1,
-    CapabilityLifecycle.SUCCEEDED: SimulationExecutionReceiptV1,
-    CapabilityLifecycle.FAILED: SimulationExecutionReceiptV1,
-    CapabilityLifecycle.RESULT_PACKAGED: SimulationResultPackageV1,
-    CapabilityLifecycle.CONSUMED: SimulationConsumptionV1,
+    CapabilityLifecycle.PROPOSED: (SimulationProposalV1, ResearchFetchProposalV1),
+    CapabilityLifecycle.GRANTED: (SimulationGrantV1, ResearchGrantV1),
+    CapabilityLifecycle.COMPILED: (CompiledSimulationV1, CompiledResearchFetchV1),
+    CapabilityLifecycle.DISPATCHED: (SimulationWorkOrderV1, ResearchWorkOrderV1),
+    CapabilityLifecycle.SUCCEEDED: (
+        SimulationExecutionReceiptV1,
+        ResearchExecutionReceiptV1,
+    ),
+    CapabilityLifecycle.FAILED: (
+        SimulationExecutionReceiptV1,
+        ResearchExecutionReceiptV1,
+    ),
+    CapabilityLifecycle.RESULT_PACKAGED: (
+        SimulationResultPackageV1,
+        ResearchResultPackageV1,
+    ),
+    CapabilityLifecycle.CONSUMED: (
+        SimulationConsumptionV1,
+        ResearchConsumptionV1,
+    ),
 }
+
+_RESEARCH_PHASE_MODELS = (
+    ResearchFetchProposalV1,
+    ResearchGrantV1,
+    CompiledResearchFetchV1,
+    ResearchWorkOrderV1,
+    ResearchExecutionReceiptV1,
+    ResearchResultPackageV1,
+    ResearchConsumptionV1,
+)
 
 
 @dataclass
@@ -177,8 +208,16 @@ class CapabilityReplayState:
             if transition.lifecycle == CapabilityLifecycle.PROPOSED
             else self.proposals.get(transition.request_ref)
         )
-        if not isinstance(proposal, SimulationProposalV1):
+        if not isinstance(
+            proposal, (SimulationProposalV1, ResearchFetchProposalV1)
+        ):
             raise ValueError("capability transition has no canonical proposal")
+        if phase_record is not None and isinstance(
+            phase_record, _RESEARCH_PHASE_MODELS
+        ) != isinstance(proposal, ResearchFetchProposalV1):
+            raise ValueError(
+                "capability chain cannot mix simulation and research records"
+            )
         if (
             proposal.id != transition.request_ref
             or proposal.originating_work_order_ref
@@ -243,6 +282,91 @@ class CapabilityReplayState:
                 for item in self.consumptions.values()
             ):
                 raise ValueError("simulation result package was consumed more than once")
+            self.consumptions[phase_record.id] = phase_record
+        elif isinstance(phase_record, ResearchGrantV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("research grant names another proposal")
+            if phase_record.run_input_digest != proposal.run_input_digest:
+                raise ValueError("research grant names another run input")
+            if not set(phase_record.granted_urls) <= set(proposal.urls):
+                raise ValueError("research grant widens the proposed urls")
+            self.grants[phase_record.id] = phase_record
+        elif isinstance(phase_record, CompiledResearchFetchV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("compiled research fetch names another proposal")
+            grant = self.grants.get(phase_record.grant_ref)
+            if (
+                not isinstance(grant, ResearchGrantV1)
+                or grant.proposal_ref != proposal.id
+                or tuple(phase_record.urls) != tuple(grant.granted_urls)
+                or phase_record.requests_limit != grant.requests_limit
+                or phase_record.maximum_response_bytes
+                != grant.maximum_response_bytes
+            ):
+                raise ValueError("compiled research fetch differs from its grant")
+            self.compiled[phase_record.id] = phase_record
+        elif isinstance(phase_record, ResearchWorkOrderV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("research work order names another proposal")
+            if phase_record.run_input_digest != proposal.run_input_digest:
+                raise ValueError("research work order names another run input")
+            compiled = self.compiled.get(phase_record.compiled_research_ref)
+            if (
+                not isinstance(compiled, CompiledResearchFetchV1)
+                or compiled.proposal_ref != proposal.id
+                or compiled.grant_ref != phase_record.grant_ref
+                or compiled.requests_limit != phase_record.requests_limit
+            ):
+                raise ValueError("research work order has no matching compilation")
+            self.work_orders[phase_record.id] = phase_record
+        elif isinstance(phase_record, ResearchExecutionReceiptV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("research receipt names another proposal")
+            if phase_record.run_input_digest != proposal.run_input_digest:
+                raise ValueError("research receipt names another run input")
+            work_order = self.work_orders.get(phase_record.research_work_order_ref)
+            if (
+                not isinstance(work_order, ResearchWorkOrderV1)
+                or work_order.proposal_ref != proposal.id
+                or work_order.compiled_research_ref
+                != phase_record.compiled_specification_ref
+            ):
+                raise ValueError("research receipt has no matching work order")
+            # The replay-validated budget arithmetic: the receipt's frozen
+            # limit is the work order's, and the receipt model has already
+            # proven its attempts never spend beyond it.
+            if phase_record.requests_limit != work_order.requests_limit:
+                raise ValueError("research receipt differs from its frozen limit")
+            self.receipts[phase_record.id] = phase_record
+        elif isinstance(phase_record, ResearchResultPackageV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("research package names another proposal")
+            if phase_record.run_input_digest != proposal.run_input_digest:
+                raise ValueError("research package names another run input")
+            receipt = self.receipts.get(phase_record.execution_receipt_ref)
+            if (
+                not isinstance(receipt, ResearchExecutionReceiptV1)
+                or receipt.proposal_ref != proposal.id
+            ):
+                raise ValueError("research package has no matching receipt")
+            fetched = {
+                attempt.content_sha256
+                for attempt in receipt.attempts
+                if attempt.outcome == "FETCHED" and attempt.content_sha256
+            }
+            if any(item.content_sha256 not in fetched for item in phase_record.items):
+                raise ValueError("research package carries unreceipted content")
+            self.result_packages[phase_record.id] = phase_record
+        elif isinstance(phase_record, ResearchConsumptionV1):
+            if phase_record.proposal_ref != proposal.id:
+                raise ValueError("research consumption names another proposal")
+            if phase_record.run_input_digest != proposal.run_input_digest:
+                raise ValueError("research consumption names another run input")
+            if any(
+                item.result_package_ref == phase_record.result_package_ref
+                for item in self.consumptions.values()
+            ):
+                raise ValueError("research result package was consumed more than once")
             self.consumptions[phase_record.id] = phase_record
 
         self.transitions[transition.id] = transition

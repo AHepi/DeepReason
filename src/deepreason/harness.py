@@ -1430,7 +1430,14 @@ class Harness:
         from deepreason.capabilities.models import (
             CapabilityLifecycle,
             CapabilityTransitionV1,
+            CompiledResearchFetchV1,
             CompiledSimulationV1,
+            ResearchConsumptionV1,
+            ResearchExecutionReceiptV1,
+            ResearchFetchProposalV1,
+            ResearchGrantV1,
+            ResearchResultPackageV1,
+            ResearchWorkOrderV1,
             SimulationConsumptionV1,
             SimulationExecutionReceiptV1,
             SimulationGrantV1,
@@ -1443,38 +1450,40 @@ class Harness:
         transition = CapabilityTransitionV1.model_validate(
             transition.model_dump(mode="python", by_alias=True)
         )
+        # One (schema, model) pair per capability kind per lifecycle; the
+        # supplied phase record's type selects its kind.
         expected = {
             CapabilityLifecycle.PROPOSED: (
-                "capability-simulation-proposal",
-                SimulationProposalV1,
+                ("capability-simulation-proposal", SimulationProposalV1),
+                ("capability-research-proposal", ResearchFetchProposalV1),
             ),
             CapabilityLifecycle.GRANTED: (
-                "capability-simulation-grant",
-                SimulationGrantV1,
+                ("capability-simulation-grant", SimulationGrantV1),
+                ("capability-research-grant", ResearchGrantV1),
             ),
             CapabilityLifecycle.COMPILED: (
-                "capability-compiled-simulation",
-                CompiledSimulationV1,
+                ("capability-compiled-simulation", CompiledSimulationV1),
+                ("capability-compiled-research-fetch", CompiledResearchFetchV1),
             ),
             CapabilityLifecycle.DISPATCHED: (
-                "capability-simulation-work-order",
-                SimulationWorkOrderV1,
+                ("capability-simulation-work-order", SimulationWorkOrderV1),
+                ("capability-research-work-order", ResearchWorkOrderV1),
             ),
             CapabilityLifecycle.SUCCEEDED: (
-                "capability-simulation-receipt",
-                SimulationExecutionReceiptV1,
+                ("capability-simulation-receipt", SimulationExecutionReceiptV1),
+                ("capability-research-receipt", ResearchExecutionReceiptV1),
             ),
             CapabilityLifecycle.FAILED: (
-                "capability-simulation-receipt",
-                SimulationExecutionReceiptV1,
+                ("capability-simulation-receipt", SimulationExecutionReceiptV1),
+                ("capability-research-receipt", ResearchExecutionReceiptV1),
             ),
             CapabilityLifecycle.RESULT_PACKAGED: (
-                "capability-simulation-result-package",
-                SimulationResultPackageV1,
+                ("capability-simulation-result-package", SimulationResultPackageV1),
+                ("capability-research-result-package", ResearchResultPackageV1),
             ),
             CapabilityLifecycle.CONSUMED: (
-                "capability-simulation-consumption",
-                SimulationConsumptionV1,
+                ("capability-simulation-consumption", SimulationConsumptionV1),
+                ("capability-research-consumption", ResearchConsumptionV1),
             ),
         }.get(transition.lifecycle)
         if expected is None:
@@ -1484,7 +1493,17 @@ class Harness:
         else:
             if phase_record is None:
                 raise ValueError("capability transition requires its phase record")
-            schema, model = expected
+            matched = next(
+                (
+                    (schema, model)
+                    for schema, model in expected
+                    if isinstance(phase_record, model)
+                ),
+                None,
+            )
+            if matched is None:
+                raise ValueError("capability phase record has the wrong type")
+            schema, model = matched
             phase_record = model.model_validate(
                 phase_record.model_dump(mode="python", by_alias=True)
             )
