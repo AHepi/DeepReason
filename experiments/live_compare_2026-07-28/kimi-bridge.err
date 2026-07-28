@@ -1,0 +1,2 @@
+start_bridge args: {"run_id": "run-4f7501795bd3f9e22004ff7c9a8aa19f", "problem": "question-02bb9a5f6cd9ab3593d969957ab384f4"}
+started: {"manifest_sha256": "036235dee20f843b12fcf37df420e0ce0c6224f0bd5e1443ec791ca595d9255b", "result_operation": "bridge_result", "run_id": "run-4f7501795bd3f9e22004ff7c9a8aa19f", "schema": "deepreason-mcp-bridge-start-v1", "state": "running", "status_operation": "bridge_status"}
