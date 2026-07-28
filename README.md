@@ -39,7 +39,12 @@ credential is already available in the environment or the separate
 setup-managed credential store, setup reuses it. Credentials must never be
 placed in manifests, MCP payloads, logs, or documentation examples.
 
-`deepreason qualify` is a separate, explicit action. Before any qualification
+`deepreason qualify` is a separate, explicit action. Qualification cases
+dispatch concurrently (default 4 workers; `--concurrency` or
+`DEEPREASON_QUALIFY_CONCURRENCY` adjusts it, and 1 restores strictly
+sequential dispatch for rate-limited providers) — the persisted report is
+byte-identical at any worker count because assembly is canonical
+(pair, case) order. Before any qualification
 dispatch it identifies the configured provider and model and announces the
 maximum expected provider-call counts for both batteries. Interactive use asks
 for confirmation. For noninteractive use, `deepreason qualify --yes` is the

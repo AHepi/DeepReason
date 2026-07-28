@@ -54,7 +54,9 @@ def test_load_credentials_without_file_is_quiet():
 
 def test_setup_wizard_writes_config_without_the_key(monkeypatch, capsys):
     monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
-    answers = iter(["1", "262144", "4096"])  # provider and finite capacities
+    # A preset answers every capacity question itself: a first-time user
+    # picks a number from a list and pastes a key, nothing more.
+    answers = iter(["1"])
     path = easy.setup_wizard(
         input_fn=lambda _: next(answers),
         getpass_fn=lambda _: "sk-super-secret",
@@ -64,8 +66,11 @@ def test_setup_wizard_writes_config_without_the_key(monkeypatch, capsys):
     assert "credential_env: DEEPSEEK_API_KEY" in text
     profile = load_provider_profile(path)
     assert profile.provider == "deepseek"
-    assert profile.context_window_tokens == 262144
-    assert profile.maximum_completion_tokens == 4096
+    assert profile.context_window_tokens == easy.PROVIDERS["deepseek"]["context"]
+    assert (
+        profile.maximum_completion_tokens
+        == easy.PROVIDERS["deepseek"]["completion"]
+    )
     assert "DEEPSEEK_API_KEY=sk-super-secret" in easy.credentials_path().read_text()
     output = capsys.readouterr().out
     assert "sk-super-secret" not in output

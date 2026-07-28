@@ -46,6 +46,7 @@ PRODUCTION_EVENTUAL_VALID_MINIMUM = 19
 # an 840-call battery no longer durably tiers a capable model shallow.
 # The battery bound stays finite: at most this many pairs may re-exercise.
 PRODUCTION_PAIR_RE_EXERCISE_LIMIT = 3
+DEFAULT_QUALIFICATION_CONCURRENCY = 4
 _MAX_PRODUCTION_CONTRACT_REPORT_BYTES = 4 * 1024 * 1024
 
 
@@ -1041,12 +1042,38 @@ def derive_route_seat_model_classification(
     )
 
 
+def _qualification_concurrency(explicit: int | None = None) -> int:
+    """Resolve the bounded worker count for live qualification cases.
+
+    Cases are independent probes with per-case endpoints and sessions, so
+    they parallelize safely; the bound exists for provider rate limits,
+    not correctness. 1 preserves strictly sequential dispatch.
+    """
+
+    if explicit is not None:
+        value = int(explicit)
+    else:
+        raw = os.environ.get("DEEPREASON_QUALIFY_CONCURRENCY", "").strip()
+        value = int(raw) if raw.isdigit() else DEFAULT_QUALIFICATION_CONCURRENCY
+    return max(1, min(value, 16))
+
+
 def run_production_contract_doctor(
     manifest: RunManifest,
     *,
     case_executor: CaseExecutor | None = None,
+    concurrency: int | None = None,
+    progress_callback=None,
 ) -> ProductionContractDoctorReportV1:
-    """Execute and summarize all exact v6 production route/contract pairs."""
+    """Execute and summarize all exact v6 production route/contract pairs.
+
+    The twenty cases of one block dispatch through a bounded worker pool
+    (sequential when the resolved concurrency is 1); block assembly is in
+    canonical case order regardless of completion order, so the persisted
+    report is identical at any worker count. Pair-level control — the
+    release gate and the bounded re-exercise decision — stays strictly
+    sequential because a re-exercise depends on its first draw's outcome.
+    """
 
     pairs = production_contract_pairs(manifest)
     grants = {
@@ -1054,24 +1081,70 @@ def run_production_contract_doctor(
         for pair in pairs
     }
     executor = case_executor or exercise_production_contract_case
+    if concurrency is not None:
+        workers = _qualification_concurrency(concurrency)
+    elif case_executor is not None:
+        # A supplied executor (offline/scripted qualification) may be
+        # order-sensitive; only the live battery parallelizes by default.
+        workers = 1
+    else:
+        workers = _qualification_concurrency(None)
+    progress = {"done": 0, "total": len(pairs) * PRODUCTION_CASES_PER_PAIR}
+
+    def _advance() -> None:
+        progress["done"] += 1
+        if progress_callback is not None:
+            progress_callback(progress["done"], progress["total"])
+
+    def _validated(pair, grant, raw) -> ProductionContractCaseResultV1:
+        # Checked on arrival so a grant overclaim fails fast instead of
+        # spending the remainder of the battery's provider calls.
+        case = ProductionContractCaseResultV1.model_validate(raw)
+        if case.repair_count > grant.maximum_schema_repairs:
+            raise RunManifestError(
+                "DOCTOR_CONTRACT_REPAIR_GRANT_EXCEEDED",
+                f"case for {pair.contract_id} exceeds its frozen repair grant",
+                "/contract_schema_repair_policy/grants",
+            )
+        return case
 
     def _case_block(pair, grant):
-        cases_list = []
         for case_index in range(PRODUCTION_CASES_PER_PAIR):
             _validate_production_contract_request_envelopes(
                 manifest, pair, case_index
             )
-            case = ProductionContractCaseResultV1.model_validate(
-                executor(manifest, pair, case_index)
-            )
-            if case.repair_count > grant.maximum_schema_repairs:
-                raise RunManifestError(
-                    "DOCTOR_CONTRACT_REPAIR_GRANT_EXCEEDED",
-                    f"case for {pair.contract_id} exceeds its frozen repair grant",
-                    "/contract_schema_repair_policy/grants",
+        if workers <= 1:
+            cases_list = []
+            for case_index in range(PRODUCTION_CASES_PER_PAIR):
+                cases_list.append(
+                    _validated(pair, grant, executor(manifest, pair, case_index))
                 )
-            cases_list.append(case)
-        return tuple(cases_list)
+                _advance()
+            return tuple(cases_list)
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        results: dict[int, ProductionContractCaseResultV1] = {}
+        with ThreadPoolExecutor(
+            max_workers=min(workers, PRODUCTION_CASES_PER_PAIR),
+            thread_name_prefix="deepreason-qualify",
+        ) as pool:
+            futures = {
+                pool.submit(executor, manifest, pair, case_index): case_index
+                for case_index in range(PRODUCTION_CASES_PER_PAIR)
+            }
+            try:
+                for future in as_completed(futures):
+                    results[futures[future]] = _validated(
+                        pair, grant, future.result()
+                    )
+                    _advance()
+            except BaseException:
+                pool.shutdown(wait=True, cancel_futures=True)
+                raise
+        return tuple(
+            results[case_index]
+            for case_index in range(PRODUCTION_CASES_PER_PAIR)
+        )
 
     reports = []
     re_exercised = 0
@@ -1087,6 +1160,7 @@ def run_production_contract_doctor(
             # draw stays in the report as durable flake evidence.  A pair
             # failing both consecutive draws remains unqualified.
             re_exercised += 1
+            progress["total"] += PRODUCTION_CASES_PER_PAIR
             report = _pair_report(
                 pair, _case_block(pair, grant), first_draw_cases=cases
             )

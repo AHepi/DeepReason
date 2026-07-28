@@ -594,6 +594,54 @@ def test_doctor_requires_complete_route_envelope_before_scripted_case():
     assert calls == []
 
 
+def test_battery_parallelism_changes_wall_clock_never_the_report(monkeypatch):
+    import threading
+    import time
+
+    manifest = _manifest()
+    lock = threading.Lock()
+    active = {"now": 0, "peak": 0}
+    progress = []
+
+    def concurrent_case(_manifest, _pair, case_index):
+        with lock:
+            active["now"] += 1
+            active["peak"] = max(active["peak"], active["now"])
+        try:
+            time.sleep(0.005)
+            return _case(case_index)
+        finally:
+            with lock:
+                active["now"] -= 1
+
+    parallel = run_production_contract_doctor(
+        manifest,
+        case_executor=concurrent_case,
+        concurrency=8,
+        progress_callback=lambda done, total: progress.append((done, total)),
+    )
+    sequential = run_production_contract_doctor(
+        manifest,
+        case_executor=lambda _manifest, _pair, index: _case(index),
+        concurrency=1,
+    )
+    assert active["peak"] > 1  # cases genuinely overlapped
+    # Canonical (pair, case) assembly: any worker count, identical report.
+    assert parallel.model_dump(mode="json") == sequential.model_dump(mode="json")
+    total = parallel.summary.case_count
+    assert len(progress) == total and progress[-1] == (total, total)
+    assert [done for done, _ in progress] == sorted(done for done, _ in progress)
+
+    from deepreason.cli.doctor import _qualification_concurrency
+
+    assert _qualification_concurrency(0) == 1
+    assert _qualification_concurrency(99) == 16
+    monkeypatch.setenv("DEEPREASON_QUALIFY_CONCURRENCY", "7")
+    assert _qualification_concurrency() == 7
+    monkeypatch.setenv("DEEPREASON_QUALIFY_CONCURRENCY", "junk")
+    assert _qualification_concurrency() == 4
+
+
 def test_report_computes_19_of_20_gate_and_all_metrics():
     manifest = _manifest()
     report = run_production_contract_doctor(

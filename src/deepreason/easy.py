@@ -226,6 +226,11 @@ PROVIDERS = {
         "label": "DeepSeek (api.deepseek.com)",
         "env": "DEEPSEEK_API_KEY",
         "vision": False,
+        # Conservative published capacities; a preset must never make a
+        # first-time user answer capacity questions they cannot know.
+        "context": 131_072,
+        "completion": 8_192,
+        "key_hint": "platform.deepseek.com → API keys",
         "roles": lambda base, model, env: {
             "conjecturer": _seat(base, model, env, 1.0, 6000, reasoning="none",
                                  logprobs=True),
@@ -241,6 +246,9 @@ PROVIDERS = {
         "label": "Ollama Cloud (ollama.com)",
         "env": "OLLAMA_API_KEY",
         "vision": True,
+        "context": 131_072,
+        "completion": 8_192,
+        "key_hint": "ollama.com → settings → API keys",
         "roles": lambda base, model, env: {
             "conjecturer": _seat(base, "qwen3-coder:480b", env, 0.9, 7000,
                                  logprobs=False),
@@ -259,6 +267,9 @@ PROVIDERS = {
         "label": "Other (any OpenAI-compatible URL)",
         "env": "LLM_API_KEY",
         "vision": False,
+        "context": None,
+        "completion": None,
+        "key_hint": "your provider's account page",
         "roles": lambda base, model, env: {
             "conjecturer": _seat(base, model, env, 1.0, 6000, logprobs=False),
             "variator": _seat(base, model, env, 1.0, 6000),
@@ -277,6 +288,9 @@ PROVIDERS = {
         "label": "Ollama Cloud — Gemma 4 31B everywhere",
         "env": "OLLAMA_API_KEY",
         "vision": True,
+        "context": 131_072,
+        "completion": 8_192,
+        "key_hint": "ollama.com → settings → API keys",
         "roles": lambda base, model, env: {
             "conjecturer": _seat(base, model, env, 0.9, 7000,
                                  provider="ollama", reasoning="none", logprobs=False),
@@ -434,6 +448,12 @@ def setup_wizard(
         model = input_fn("Model name: ").strip()
     if credential_env is None:
         credential_env = input_fn("Credential environment variable name: ").strip()
+    # Presets carry known capacities so a first-time user is never asked a
+    # question they cannot answer; only the custom path still prompts.
+    if context_window_tokens is None and preset is not None:
+        context_window_tokens = preset.get("context")
+    if maximum_completion_tokens is None and preset is not None:
+        maximum_completion_tokens = preset.get("completion")
     if context_window_tokens is None:
         context_window_tokens = _positive_capacity(
             input_fn("Finite model context-window tokens: ").strip(),
@@ -488,6 +508,90 @@ def setup_wizard(
     else:
         print(f"Credential stored: {credentials_path()} (only your user can read it)")
     print("\nProvider configuration saved. Qualification remains an explicit action.")
+    return path
+
+
+def setup_options() -> list[dict]:
+    """Secret-free provider choices for non-terminal setup surfaces."""
+
+    options = []
+    for key, preset in PROVIDERS.items():
+        options.append(
+            {
+                "id": key,
+                "label": preset["label"],
+                "default_model": preset.get("model"),
+                "needs_endpoint": preset.get("base") is None,
+                "needs_model": preset.get("model") is None,
+                "needs_capacities": preset.get("context") is None,
+                "key_hint": preset.get("key_hint", "your provider's account page"),
+            }
+        )
+    return options
+
+
+def apply_setup(
+    *,
+    provider: str,
+    api_key: str | None = None,
+    endpoint: str | None = None,
+    model: str | None = None,
+    context_window_tokens: int | None = None,
+    maximum_completion_tokens: int | None = None,
+    reasoning: str | int | None = None,
+) -> Path:
+    """Write one strict setup profile without prompting — the wizard's
+    non-interactive twin for local surfaces such as the web app.
+
+    Every missing value is a typed error, never a hidden prompt; the
+    credential is stored through the same user-only file the wizard uses
+    and is never echoed back.
+    """
+
+    preset = PROVIDERS.get(provider)
+    endpoint = endpoint or (preset and preset.get("base"))
+    model = model or (preset and preset.get("model"))
+    credential_env = (preset and preset.get("env")) or "LLM_API_KEY"
+    if context_window_tokens is None and preset is not None:
+        context_window_tokens = preset.get("context")
+    if maximum_completion_tokens is None and preset is not None:
+        maximum_completion_tokens = preset.get("completion")
+    if not endpoint or not str(endpoint).strip():
+        raise ValueError("SETUP_ENDPOINT_REQUIRED: an endpoint URL is required")
+    if not model or not str(model).strip():
+        raise ValueError("SETUP_MODEL_REQUIRED: a model name is required")
+    if context_window_tokens is None or maximum_completion_tokens is None:
+        raise ValueError(
+            "SETUP_CAPACITY_REQUIRED: context-window and completion capacities "
+            "are required for a custom provider"
+        )
+    provider_kind = infer_provider(endpoint) if preset is not None else provider
+    if provider_kind is None:
+        provider_kind = infer_provider(endpoint)
+    profile = ProviderProfileV1.create(
+        provider=provider_kind,
+        endpoint=str(endpoint).strip(),
+        model_id=str(model).strip(),
+        family=infer_model_family(str(model).strip(), provider_kind),
+        context_window_tokens=_positive_capacity(
+            context_window_tokens, label="context-window capacity"
+        ),
+        maximum_completion_tokens=_positive_capacity(
+            maximum_completion_tokens, label="maximum completion capacity"
+        ),
+        credential_env=credential_env,
+        reasoning=reasoning,
+    )
+    already_available = bool(os.environ.get(credential_env, "").strip()) or (
+        _stored_credential_present(credential_env)
+    )
+    if (api_key is None or not api_key.strip()) and not already_available:
+        raise ValueError(
+            "SETUP_KEY_REQUIRED: an API key is required for this provider"
+        )
+    path = write_provider_profile(profile, setup_provider_profile_path())
+    if api_key is not None and api_key.strip():
+        save_credential(credential_env, api_key.strip())
     return path
 
 

@@ -61,6 +61,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="confirm the provider/model and announced maximum call count",
     )
     qualify_cmd.add_argument("--json", action="store_true")
+    qualify_cmd.add_argument(
+        "--concurrency",
+        type=int,
+        default=None,
+        help=(
+            "parallel qualification cases (default 4, max 16; or set "
+            "DEEPREASON_QUALIFY_CONCURRENCY); lower it if your provider "
+            "rate-limits concurrent requests"
+        ),
+    )
     status_cmd = sub.add_parser("status", help="show provider and V6 qualification readiness")
     status_cmd.add_argument("--json", action="store_true")
     config_cmd = sub.add_parser(
@@ -1433,7 +1443,6 @@ def _cmd_qualify(args) -> int:
     from deepreason.qualification import (
         QualificationError,
         SHALLOW_NEXT_ACTION,
-        default_qualification_executor,
         load_completed_qualification,
         load_qualification_tier,
         production_qualification_maximum_provider_calls,
@@ -1514,11 +1523,33 @@ def _cmd_qualify(args) -> int:
                         print("QUALIFICATION_CANCELLED: no provider calls were made", file=sys.stderr)
                         return 1
                 try:
+                    def _battery_executor(manifest_value):
+                        from deepreason.cli.doctor import (
+                            run_production_contract_doctor,
+                        )
+
+                        def report_progress(completed, total):
+                            print(
+                                f"\rqualification cases: {completed}/{total}",
+                                end="",
+                                file=sys.stderr,
+                                flush=True,
+                            )
+
+                        try:
+                            return run_production_contract_doctor(
+                                manifest_value,
+                                concurrency=getattr(args, "concurrency", None),
+                                progress_callback=report_progress,
+                            )
+                        finally:
+                            print(file=sys.stderr, flush=True)
+
                     resolve_completed_qualification(
                         manifest,
                         profile,
                         cache_dir=cache_dir,
-                        executor=default_qualification_executor,
+                        executor=_battery_executor,
                     )
                     tier = "full"
                     reused = False

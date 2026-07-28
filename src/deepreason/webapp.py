@@ -154,6 +154,16 @@ class _Handler(BaseHTTPRequestHandler):
         if path == "/api/readiness":
             self._tool("get_readiness", {})
             return
+        if path == "/api/setup/options":
+            from deepreason.easy import setup_options
+
+            self._json(200, {"ok": True, "data": {"providers": setup_options()}})
+            return
+        if path == "/api/qualify/status":
+            self._json(
+                200, {"ok": True, "data": self.server.qualification.status()}
+            )
+            return
         if path == "/api/status":
             arguments = {"run_id": params.get("run_id", "")}
             if params.get("since_seq"):
@@ -171,7 +181,19 @@ class _Handler(BaseHTTPRequestHandler):
         if not self._authorized():
             return
         try:
+            if self.path == "/api/qualify":
+                # An explicit start with an empty body: qualification spends
+                # provider quota, so it never begins as a side effect.
+                self.rfile.read(int(self.headers.get("Content-Length") or 0))
+                self._json(
+                    200,
+                    {"ok": True, "data": self.server.qualification.start()},
+                )
+                return
             body = self._read_json_body()
+            if self.path == "/api/setup":
+                self._setup(body)
+                return
             if self.path == "/api/ask":
                 self._ask(body)
                 return
@@ -190,6 +212,59 @@ class _Handler(BaseHTTPRequestHandler):
             self._json(404, {"ok": False, "error": "not found"})
         except WebAppError as error:
             self._json(error.status, {"ok": False, "error": str(error)})
+
+    def _setup(self, body: dict) -> None:
+        """Configure the AI service from the local page — never through MCP.
+
+        The key transits one loopback request guarded by the page token,
+        lands in the same user-only credential store the terminal wizard
+        uses, and is never echoed back in any response.
+        """
+
+        from deepreason.easy import apply_setup, load_credentials
+
+        provider = body.get("provider")
+        if not isinstance(provider, str) or not provider.strip():
+            raise WebAppError(400, "choose an AI service")
+
+        def bounded_int(name):
+            value = body.get(name)
+            if value is None:
+                return None
+            if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+                raise WebAppError(400, f"{name} must be a positive whole number")
+            return value
+
+        try:
+            apply_setup(
+                provider=provider.strip(),
+                api_key=(
+                    body["api_key"]
+                    if isinstance(body.get("api_key"), str)
+                    else None
+                ),
+                endpoint=(
+                    body["endpoint"].strip()
+                    if isinstance(body.get("endpoint"), str)
+                    else None
+                ),
+                model=(
+                    body["model"].strip()
+                    if isinstance(body.get("model"), str)
+                    else None
+                ),
+                context_window_tokens=bounded_int("context_window_tokens"),
+                maximum_completion_tokens=bounded_int(
+                    "maximum_completion_tokens"
+                ),
+            )
+        except ValueError as error:
+            self._json(200, {"ok": False, "error": str(error)})
+            return
+        # Make the stored key visible to this already-running process so the
+        # first question does not require a restart.
+        load_credentials()
+        self._json(200, {"ok": True, "data": {"configured": True}})
 
     def _ask(self, body: dict) -> None:
         question = body.get("question")
@@ -222,6 +297,112 @@ class _Handler(BaseHTTPRequestHandler):
         self._json(200, outcome)
 
 
+class QualificationRunner:
+    """One background qualification at a time, with bounded live progress.
+
+    Qualification spends provider calls, so the page must start it with an
+    explicit click, watch real progress, and land on the same durable tier
+    record the CLI produces — this runner wraps the exact CLI ladder.
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._thread: threading.Thread | None = None
+        self._status: dict = {"state": "idle", "completed": 0, "total": 0}
+
+    def status(self) -> dict:
+        with self._lock:
+            return dict(self._status)
+
+    def _update(self, **fields) -> None:
+        with self._lock:
+            self._status.update(fields)
+
+    def start(self) -> dict:
+        with self._lock:
+            if self._thread is not None and self._thread.is_alive():
+                return dict(self._status)
+            self._status = {"state": "running", "completed": 0, "total": 0}
+            self._thread = threading.Thread(target=self._run, daemon=True)
+            self._thread.start()
+            return dict(self._status)
+
+    def _run(self) -> None:
+        try:
+            from deepreason.cli.doctor import run_production_contract_doctor
+            from deepreason.preparation import qualification_subject_manifest
+            from deepreason.provider_profile import (
+                credential_present,
+                provider_state_dir,
+                resolve_provider_profile,
+            )
+            from deepreason.qualification import (
+                QualificationError,
+                load_completed_qualification,
+                qualification_subject_digest,
+                resolve_completed_qualification,
+                shallow_tier_record_from_cases,
+                write_qualification_tier,
+            )
+            from deepreason.shallow_fitness import run_shallow_fitness_battery
+
+            profile = resolve_provider_profile(None).profile
+            if not credential_present(profile):
+                raise QualificationError(
+                    "PROVIDER_CREDENTIAL_MISSING",
+                    "configured provider credential is absent",
+                )
+            manifest = qualification_subject_manifest(profile)
+            cache_dir = provider_state_dir() / "qualification-cache"
+            subject = qualification_subject_digest(manifest, profile)
+            try:
+                load_completed_qualification(cache_dir, subject)
+                self._update(state="passed", tier="full", reused=True)
+                return
+            except QualificationError as error:
+                if error.code != "QUALIFICATION_NOT_CONFIGURED":
+                    raise
+
+            def executor(manifest_value):
+                return run_production_contract_doctor(
+                    manifest_value,
+                    progress_callback=lambda completed, total: self._update(
+                        completed=completed, total=total
+                    ),
+                )
+
+            try:
+                resolve_completed_qualification(
+                    manifest, profile, cache_dir=cache_dir, executor=executor
+                )
+                self._update(state="passed", tier="full", reused=False)
+            except ValueError as full_error:
+                if not str(full_error).startswith(
+                    (
+                        "QUALIFICATION_EXECUTION_FAILED",
+                        "QUALIFICATION_EXECUTION_INVALID",
+                        "DOCTOR_",
+                    )
+                ):
+                    raise
+                self._update(phase="shallow_fitness")
+                cases = run_shallow_fitness_battery(profile)
+                record = shallow_tier_record_from_cases(
+                    cases, subject_digest=subject, profile=profile
+                )
+                write_qualification_tier(record, cache_dir)
+                if record.tier == "shallow":
+                    self._update(state="passed", tier="shallow", reused=False)
+                else:
+                    self._update(
+                        state="failed",
+                        tier=record.tier,
+                        error=str(full_error)[:500],
+                    )
+        except Exception as error:  # noqa: BLE001 - surfaced to the local page
+            self._update(state="failed", error=str(error)[:500])
+
+
 class DeepReasonWebServer(ThreadingHTTPServer):
     daemon_threads = True
 
@@ -229,6 +410,7 @@ class DeepReasonWebServer(ThreadingHTTPServer):
         super().__init__((host, port), _Handler)
         self.api_token = secrets.token_urlsafe(32)
         self.tool = tool
+        self.qualification = QualificationRunner()
 
     @property
     def url(self) -> str:
@@ -341,6 +523,44 @@ pre.raw { overflow-x: auto; font-size: 0.78rem; background: var(--bg);
     <p id="banner-text"></p>
   </div>
 
+  <div id="setup" class="card" style="display:none">
+    <h2>Connect an AI service</h2>
+    <p class="status-line">DeepReason uses an AI service you have an account
+       with. Pick yours, paste its API key, and you're done — the key is
+       stored on this computer only, readable only by your user account.</p>
+    <div id="provider-list"></div>
+    <div id="custom-fields" style="display:none">
+      <p><input id="setup-endpoint" type="text" size="40"
+         placeholder="Service URL, e.g. https://api.example.com/v1"></p>
+      <p><input id="setup-model" type="text" size="40"
+         placeholder="Model name, e.g. my-model-v2"></p>
+      <p>
+        <label>Context window <input id="setup-context" type="number"
+          min="1" placeholder="32768"></label>
+        <label>Max completion <input id="setup-completion" type="number"
+          min="1" placeholder="4096"></label>
+      </p>
+    </div>
+    <p><span id="key-hint" class="status-line"></span></p>
+    <p><input id="setup-key" type="password" size="40"
+       placeholder="Paste your API key"></p>
+    <p><button id="setup-save">Save</button></p>
+    <p id="setup-error" class="err"></p>
+  </div>
+
+  <div id="qualify" class="card" style="display:none">
+    <h2>One-time model check</h2>
+    <p class="status-line">Before full reasoning, DeepReason verifies your
+       model can do this work reliably. The check runs a few hundred small
+       test calls against your AI service (it uses some of your quota) and
+       is remembered afterwards.</p>
+    <p>
+      <button id="qualify-start">Run the check</button>
+      <span id="qualify-progress" class="status-line"></span>
+    </p>
+    <p id="qualify-error" class="err"></p>
+  </div>
+
   <div class="card">
     <textarea id="question" placeholder="What would you like to understand?"></textarea>
     <div class="filerow">
@@ -387,22 +607,132 @@ async function api(path, options) {
   return response.json();
 }
 
+let setupOptionsLoaded = false;
+
 async function refreshReadiness() {
   const banner = $("banner");
   try {
     const reply = await api("/api/readiness");
     if (!reply.ok) throw new Error(reply.error);
     const r = reply.data;
+    const state = r.qualification_state || "";
+    const needsSetup = ["profile_missing", "profile_invalid",
+                        "credential_missing"].includes(state);
+    const needsQualify = ["unqualified", "ready_shallow"].includes(state);
     banner.style.display = "block";
     banner.classList.toggle("ready", !!r.ready);
     $("banner-title").textContent = r.ready
-      ? "Ready" : "One-time setup needed";
-    $("banner-text").textContent = r.guidance || r.next_action || "";
+      ? "Ready" : needsSetup ? "Let's get set up"
+      : needsQualify ? "Almost there" : "One-time setup needed";
+    $("banner-text").textContent = r.ready
+      ? "" : needsSetup
+      ? "Two quick steps: connect your AI service, then run a one-time check."
+      : (r.guidance || r.next_action || "");
+    $("setup").style.display = needsSetup ? "block" : "none";
+    $("qualify").style.display = needsQualify ? "block" : "none";
     $("ask").disabled = !r.ready;
+    if (needsSetup && !setupOptionsLoaded) await loadSetupOptions();
   } catch (e) {
     banner.style.display = "block";
     $("banner-title").textContent = "Cannot reach DeepReason";
     $("banner-text").textContent = String(e);
+  }
+}
+
+let providerOptions = [];
+
+async function loadSetupOptions() {
+  const reply = await api("/api/setup/options");
+  if (!reply.ok) return;
+  providerOptions = reply.data.providers;
+  setupOptionsLoaded = true;
+  const list = $("provider-list");
+  list.innerHTML = "";
+  for (const option of providerOptions) {
+    const label = document.createElement("label");
+    label.style.display = "block";
+    const radio = document.createElement("input");
+    radio.type = "radio"; radio.name = "provider"; radio.value = option.id;
+    radio.addEventListener("change", () => selectProvider(option));
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(" " + option.label));
+    list.appendChild(label);
+  }
+}
+
+function selectProvider(option) {
+  $("custom-fields").style.display = option.needs_endpoint ? "block" : "none";
+  $("key-hint").textContent = "Your API key comes from: " + option.key_hint;
+}
+
+$("setup-save").addEventListener("click", async () => {
+  $("setup-error").textContent = "";
+  const chosen = document.querySelector('input[name="provider"]:checked');
+  if (!chosen) { $("setup-error").textContent = "Pick an AI service first."; return; }
+  const body = {provider: chosen.value, api_key: $("setup-key").value};
+  const option = providerOptions.find((item) => item.id === chosen.value);
+  if (option && option.needs_endpoint) {
+    body.endpoint = $("setup-endpoint").value;
+    body.model = $("setup-model").value;
+    if ($("setup-context").value)
+      body.context_window_tokens = Number($("setup-context").value);
+    if ($("setup-completion").value)
+      body.maximum_completion_tokens = Number($("setup-completion").value);
+  }
+  $("setup-save").disabled = true;
+  try {
+    const reply = await api("/api/setup", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body),
+    });
+    if (!reply.ok) throw new Error(reply.error);
+    $("setup-key").value = "";
+    await refreshReadiness();
+  } catch (e) {
+    $("setup-error").textContent = String(e.message || e);
+  } finally {
+    $("setup-save").disabled = false;
+  }
+});
+
+let qualifyTimer = null;
+
+$("qualify-start").addEventListener("click", async () => {
+  $("qualify-error").textContent = "";
+  $("qualify-start").disabled = true;
+  const reply = await api("/api/qualify", {method: "POST"});
+  if (!reply.ok) {
+    $("qualify-error").textContent = reply.error;
+    $("qualify-start").disabled = false;
+    return;
+  }
+  qualifyTimer = setInterval(pollQualification, 2000);
+});
+
+async function pollQualification() {
+  const reply = await api("/api/qualify/status");
+  if (!reply.ok) return;
+  const status = reply.data;
+  if (status.state === "running") {
+    $("qualify-progress").textContent = status.phase === "shallow_fitness"
+      ? "full check did not pass; trying the reduced check…"
+      : status.total
+      ? "checking… " + status.completed + " of " + status.total + " test calls"
+      : "starting…";
+    return;
+  }
+  clearInterval(qualifyTimer); qualifyTimer = null;
+  $("qualify-start").disabled = false;
+  if (status.state === "passed") {
+    $("qualify-progress").textContent = status.tier === "full"
+      ? "Passed — you're ready to ask questions."
+      : "Passed the reduced check only; answers use the reduced engine.";
+    await refreshReadiness();
+  } else {
+    $("qualify-progress").textContent = "";
+    $("qualify-error").textContent = status.error ||
+      "The check did not complete. You can run it again.";
   }
 }
 

@@ -391,9 +391,11 @@ def _plain_readiness_guidance(readiness) -> str:
             "DeepReason is connected to your AI service but has not yet "
             "verified that the configured model can do this kind of "
             "reasoning reliably. In a terminal, run: deepreason qualify — "
-            "a one-time automated check (it can take a while and uses "
-            "some of your AI service quota). When it finishes, questions "
-            "can start."
+            "a one-time automated check that runs a few hundred small test "
+            "calls (typically minutes, not hours; it uses some of your AI "
+            "service quota). The local web page (deepreason web) can run "
+            "the same check with a progress bar. When it finishes, "
+            "questions can start."
         )
     if state == "ready_shallow":
         return (
