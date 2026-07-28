@@ -267,6 +267,12 @@ SIGNALS: dict[str, str] = {
 }
 
 PREFIXES: dict[str, str] = {
+    "evidence-citation:": "one deterministic check of a candidate's claimed "
+                          "grounding in an admitted dossier block (suffix = "
+                          "typed outcome code, verified or failed; inputs: "
+                          "[signal, block id or claimed ref, candidate "
+                          "artifact id, problem id]); attention and "
+                          "diagnostics for criticism, never a status",
     "gate:": "conjecture admission gate rejected a candidate (suffix = reason)",
     "spec-transmission:": "measured fraction of diversity specs realized "
                           "(suffix = score)",

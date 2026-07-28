@@ -34,9 +34,9 @@ def test_llmcall_records_tokens(tmp_path):
 def test_budget_hard_stop_before_spending(tmp_path):
     # Reserve-settle semantics (llm/budget.py): a dispatch is admitted only
     # when spent + reserved + its conservative bound fits the ceiling.  The
-    # first call's bound is ~994 tokens here (chars/3 prompt estimate + the
-    # mock's 512 completion cap), so 1100 admits exactly one call.
-    meter = TokenMeter(budget=1100)
+    # first call's bound is ~1284 tokens here (chars/3 prompt estimate + the
+    # mock's 512 completion cap), so 1500 admits exactly one call.
+    meter = TokenMeter(budget=1500)
     adapter = LLMAdapter(
         {"conjecturer": MockEndpoint([GOOD, GOOD])}, BlobStore(tmp_path / "b"),
         retry_max=2, meter=meter,

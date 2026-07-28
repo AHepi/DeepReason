@@ -138,9 +138,9 @@ def test_partial_usage_dict_trips_budget(tmp_path):
             self.last_usage = {"total_tokens": 1000}  # partial shape
             return out
 
-    # 1100 admits the first dispatch's reserved bound (~994: chars/3 prompt
+    # 1500 admits the first dispatch's reserved bound (~1284: chars/3 prompt
     # estimate + the mock's 512 completion cap) under reserve-settle.
-    meter = TokenMeter(budget=1100)
+    meter = TokenMeter(budget=1500)
     adapter = LLMAdapter(
         {"conjecturer": PartialUsageEndpoint([GOOD, GOOD])},
         BlobStore(tmp_path / "b"), retry_max=2, meter=meter,
