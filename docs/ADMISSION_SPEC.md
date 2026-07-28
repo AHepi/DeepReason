@@ -10,8 +10,12 @@ live and tested:
 2. The §3a adapter contract with the first-party PDF adapter behind
    `deepreason[admit]`: entry-point registration, sandboxed execution
    (rlimits + seccomp network denial), span-fidelity tier capping, and
-   per-source adapter version binding into the dossier digest. EPUB
-   remains open behind the same contract.
+   per-source adapter version binding into the dossier digest. The
+   first-party EPUB adapter (2026-07-28) ships under the identical
+   contract — stdlib-only extraction (OCF mimetype check, OPF spine
+   reading order, script/style-stripped XHTML text), `approximate`
+   span fidelity, workshop-capped
+   (`src/deepreason/admission/adapters_epub.py`).
 3. The §6 dataset oracle: model-authored `def check(rows)` claims run
    against the admitted sidecar bytes under the existing AST-guard +
    step-bound + fresh-subprocess oracle regime, registered as
@@ -30,7 +34,7 @@ live and tested:
    (`src/deepreason/evidence/citations.py`,
    `tests/test_evidence_citations.py`).
 Remaining beyond v1: coverage-channel wiring (dossier blocks feeding
-the scratch `coverage`/`underexposed` slots) and the EPUB adapter.
+the scratch `coverage`/`underexposed` slots).
 Scope: how a body of user-supplied input (a study, a book, a dataset, a
 mixed corpus) becomes durable material a DeepReason run may reason over.
 

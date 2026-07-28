@@ -39,6 +39,7 @@ admit = [
 ]
 
 [project.entry-points."deepreason.admission.adapters"]
+epub = "deepreason.admission.adapters_epub:MANIFEST"
 pdf = "deepreason.admission.adapters_pdf:MANIFEST"
 
 [project.scripts]

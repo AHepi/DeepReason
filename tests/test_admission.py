@@ -431,3 +431,94 @@ def test_pdf_extraction_end_to_end_when_the_extra_is_installed():
     assert binding.adapter_id == "pdf"
     assert binding.span_fidelity == "approximate"
     assert dossier.sources[0].media_type == "application/pdf"
+
+
+def _minimal_epub() -> bytes:
+    import io
+    import zipfile
+
+    container = (
+        '<?xml version="1.0"?>\n'
+        '<container version="1.0" '
+        'xmlns="urn:oasis:names:tc:opendocument:xmlns:container">\n'
+        '  <rootfiles><rootfile full-path="OEBPS/content.opf" '
+        'media-type="application/oebps-package+xml"/></rootfiles>\n'
+        "</container>\n"
+    )
+    opf = (
+        '<?xml version="1.0"?>\n'
+        '<package xmlns="http://www.idpf.org/2007/opf" version="3.0">\n'
+        "  <metadata/>\n"
+        "  <manifest>\n"
+        '    <item id="c1" href="late.xhtml" media-type="application/xhtml+xml"/>\n'
+        '    <item id="c2" href="alpha.xhtml" media-type="application/xhtml+xml"/>\n'
+        "  </manifest>\n"
+        '  <spine><itemref idref="c1"/><itemref idref="c2"/></spine>\n'
+        "</package>\n"
+    )
+    late = (
+        "<html><body><h1>The Late Chapter</h1>"
+        "<p>Widgets consist of interchangeable parts.</p>"
+        "<script>network()</script></body></html>"
+    )
+    alpha = (
+        "<html><body><h1>The Alpha Chapter</h1>"
+        "<p>Assembly follows disassembly.</p></body></html>"
+    )
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        # The OCF mimetype entry must be first and stored uncompressed.
+        archive.writestr(zipfile.ZipInfo("mimetype"), "application/epub+zip")
+        archive.writestr(zipfile.ZipInfo("META-INF/container.xml"), container)
+        archive.writestr(zipfile.ZipInfo("OEBPS/content.opf"), opf)
+        archive.writestr(zipfile.ZipInfo("OEBPS/late.xhtml"), late)
+        archive.writestr(zipfile.ZipInfo("OEBPS/alpha.xhtml"), alpha)
+    return buffer.getvalue()
+
+
+def test_epub_extraction_follows_the_spine_and_stays_workshop_capped():
+    from deepreason.admission.adapters import registered_adapters
+
+    epub = next(m for m in registered_adapters() if m.adapter_id == "epub")
+    # Stdlib-only extraction: there is no dependency to miss, and the
+    # adapter still runs under the identical sandbox contract.
+    assert epub.available() and epub.requires is None
+    assert epub.claims(b"PK\x03\x04rest")
+
+    data = _minimal_epub()
+    # The OPF spine puts late.xhtml before alpha.xhtml despite name order;
+    # dossier blocks are canonically ID-sorted, so reading order is asserted
+    # on the adapter result itself.
+    from deepreason.admission.adapters_epub import extract
+
+    result = extract(data)
+    assert [block.title for block in result.blocks] == [
+        "The Late Chapter",
+        "The Alpha Chapter",
+    ]
+
+    dossier, report = _admit(data)
+    assert report.block_counts == {"extracted": 2}
+    assert report.tier_counts == {"workshop": 2}
+    texts = {block.title: block.text for block in dossier.blocks}
+    assert set(texts) == {"The Late Chapter", "The Alpha Chapter"}
+    assert "interchangeable parts" in texts["The Late Chapter"]
+    assert "network()" not in texts["The Late Chapter"]
+    binding = dossier.adapters[0]
+    assert binding.adapter_id == "epub"
+    assert binding.span_fidelity == "approximate"
+    assert dossier.sources[0].media_type == "application/epub+zip"
+
+
+def test_plain_zip_without_epub_mimetype_is_a_typed_refusal():
+    import io
+    import zipfile
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        archive.writestr(zipfile.ZipInfo("notes.txt"), "just an archive")
+    dossier, report = _admit(MARKDOWN, buffer.getvalue())
+    assert len(dossier.sources) == 1
+    refusal = report.refusals[0]
+    assert refusal["code"] == "ADMISSION_MEDIA_UNSUPPORTED"
+    assert "epub" in refusal["detail"]
