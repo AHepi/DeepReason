@@ -145,3 +145,29 @@ wire, mirroring how `simulation_proposals` works end to end:
    typed rejection path; `execute()` and `consume()` then run inside the
    cycle so consumed fetches become citable blocks (C1) before the next
    gate-loop citation check.
+
+## Status after C2 (2026-07-28, second session)
+
+Increment C2 is implemented and gated (full suite: 3059 passed, 7 skipped):
+
+- `research_authority` block in every v6 conjecture task payload;
+  `research_request` in the capability grant for research-enabled
+  active-inquiry manifests only.
+- `research_proposals` on the v6 wire (≤2/turn, https-only), schema-visible
+  only when the manifest enables research; a disabled manifest treats the
+  field as a schema violation entering the ordinary repair ladder.
+- `ResearchCapabilityController.stage_transactional_proposals` /
+  `materialize_transactional_proposals` mirror the simulation staging seam;
+  execute + consume run inside the same admission cycle, so fetched
+  material is citable before the next turn's §4 citation checks.
+- Digest stability: a research-free `ConjectureTurnV6` dumps
+  byte-identically to its pre-research form (`exclude_if` on the field).
+- Crash-recovery parity: `conjecture_recovery` reconstructs the same
+  research-specialized contract, validates the payload authority block
+  (pre-research payloads acceptable only while the policy is disabled),
+  and completes only fetches whose durable progress never passed PROPOSED.
+
+Tranche 2 (A, B, C1, C2) is complete. Remaining research-backend work is
+operational rather than structural: a live web run against a real
+allowlisted domain, and any owner decision on result-follow-up reasoning
+turns for fetched material.
