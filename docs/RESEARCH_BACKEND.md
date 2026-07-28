@@ -114,3 +114,34 @@ chained process digests.
   ResearchFetchProposalDraftV1 and staged through the controller in
   rules/conj.py's transactional flow. Until C2, research runs under
   harness/workflow direction rather than model proposal.
+
+## C2 design notes (from reading the simulation staging seam)
+
+C2 makes research proposals a model-visible capability on the conjecture
+wire, mirroring how `simulation_proposals` works end to end:
+
+1. **Task-payload authority block.** The transaction service's conjecture
+   task payload must embed a `research_authority` block alongside
+   `simulation_authority`: `{enabled, policy_digest, per-turn cap}`, and
+   the work order's `allowed_outcomes` must include `"research_request"`
+   when the manifest enables research. Grep `simulation_authority` in the
+   payload builder to find the seam.
+2. **Wire field.** `research_proposals` on `ConjecturerTurnWireV6` and
+   `ConjectureTurnV6` — bounded (≤2 per turn), additive, default-empty.
+   Schema-visible only when the manifest enables research, using the same
+   `_omit_property` idiom that gates `scratch_proposal` /
+   `simulation_proposals`. Wire entries compile to
+   `ResearchFetchProposalDraftV1`.
+3. **Controller staging.** `ResearchCapabilityController` gains
+   `stage_transactional_proposals(drafts, *, preparation, provider_attempt,
+   source_call_seq)` validating durable provider work before accepting a
+   proposal: the transaction work item and provider attempt exist,
+   `task_kind` is CONJECTURE, contract is `conjecturer.turn.v6`, the task
+   payload's `research_authority` block matches the live policy digest, and
+   the source call is the provider-result event. Mirror
+   `_stage_transactional_proposal` in `capabilities/simulation.py`.
+4. **conj.py mirror.** `rules/conj.py` stages research drafts through the
+   controller exactly where it stages `simulation_drafts`, with the same
+   typed rejection path; `execute()` and `consume()` then run inside the
+   cycle so consumed fetches become citable blocks (C1) before the next
+   gate-loop citation check.
