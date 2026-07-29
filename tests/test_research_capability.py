@@ -425,3 +425,148 @@ def test_consumed_fetches_become_citable_byte_checked_blocks(tmp_path):
     assert [b.id for b in consumed_research_blocks(reloaded)] == [
         b.id for b in blocks
     ]
+
+
+def test_waste_tightening_denies_grants_and_citation_restores_them(tmp_path):
+    """Consumed-but-uncited sources shrink the working allowance (typed
+    requests_allowance_exhausted, never silence) while the frozen cap keeps
+    headroom; a byte-verified citation of a fetched block restores it."""
+
+    from deepreason.capabilities.research import (
+        consumed_research_blocks,
+        dynamic_research_allowance,
+    )
+    from deepreason.evidence.citations import EVIDENCE_CITATION_VERIFIED
+
+    transport = _transport(
+        {
+            "https://example.org/a": (200, "text/plain", None, b"alpha body"),
+            "https://example.org/b": (200, "text/plain", None, b"beta body"),
+            "https://example.org/c": (200, "text/plain", None, b"gamma body"),
+        }
+    )
+    harness, problem, controller = _controller(
+        tmp_path, _policy(maximum_requests=4, maximum_sources=3), transport
+    )
+    work_order = _work_order()
+    first = controller.propose(
+        _draft("https://example.org/a", "https://example.org/b"),
+        proposal_index=0,
+        work_order=work_order,
+        source_call_seq=1,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    package = controller.execute(first, formal_fence_seq=4, scratch_fence_seq=4)
+    controller.consume(
+        first, package, problem, formal_fence_seq=4, scratch_fence_seq=4
+    )
+
+    # Two consumed, zero cited: allowance = cap(4) - 2 = 2 <= used(2).
+    allowance, readings = dynamic_research_allowance(harness, controller.policy)
+    assert (allowance, readings["uncited_sources"]) == (2, 2)
+    second = controller.propose(
+        _draft("https://example.org/c"),
+        proposal_index=1,
+        work_order=work_order,
+        source_call_seq=2,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    assert (
+        controller.execute(second, formal_fence_seq=4, scratch_fence_seq=4)
+        is None
+    )
+    denials = [
+        t
+        for t in harness.capability_state.transitions.values()
+        if t.reason_code == "requests_allowance_exhausted"
+    ]
+    assert len(denials) == 1  # budget headroom remained: tuning, not cap
+
+    # A verified citation of any fetched block un-wastes its source.
+    block = consumed_research_blocks(harness)[0]
+    harness.record_measure(
+        inputs=[
+            f"evidence-citation:{EVIDENCE_CITATION_VERIFIED}",
+            block.id,
+            "artifact-x",
+            problem.id,
+        ]
+    )
+    allowance, readings = dynamic_research_allowance(harness, controller.policy)
+    assert readings["uncited_sources"] == 0
+    assert allowance == 4
+    third = controller.propose(
+        _draft("https://example.org/c"),
+        proposal_index=2,
+        work_order=work_order,
+        source_call_seq=3,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    restored = controller.execute(third, formal_fence_seq=4, scratch_fence_seq=4)
+    assert restored is not None and len(restored.items) == 1
+
+
+def test_refusal_streak_tightens_the_allowance(tmp_path):
+    from deepreason.capabilities.research import dynamic_research_allowance
+
+    oversized = b"x" * 4096
+    transport = _transport(
+        {
+            "https://example.org/big-a": (200, "text/plain", None, oversized),
+            "https://example.org/big-b": (200, "text/plain", None, oversized),
+        }
+    )
+    harness, _problem, controller = _controller(
+        tmp_path,
+        _policy(maximum_requests=6, maximum_response_bytes=2048),
+        transport,
+    )
+    proposal = controller.propose(
+        _draft("https://example.org/big-a", "https://example.org/big-b"),
+        proposal_index=0,
+        work_order=_work_order(),
+        source_call_seq=1,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    controller.execute(proposal, formal_fence_seq=4, scratch_fence_seq=4)
+
+    allowance, readings = dynamic_research_allowance(harness, controller.policy)
+    assert readings["refusal_streak"] == 2
+    assert allowance == 4  # cap(6) - streak(2)
+
+
+def test_stagnation_widens_the_allowance_to_the_cap(tmp_path):
+    from deepreason.capabilities.research import dynamic_research_allowance
+
+    transport = _transport(
+        {"https://example.org/tides": (200, "text/html", None, PAGE)}
+    )
+    harness, problem, controller = _controller(
+        tmp_path, _policy(maximum_requests=6, maximum_sources=3), transport
+    )
+    proposal = controller.propose(
+        _draft(),
+        proposal_index=0,
+        work_order=_work_order(),
+        source_call_seq=1,
+        formal_fence_seq=4,
+        scratch_fence_seq=4,
+    )
+    package = controller.execute(proposal, formal_fence_seq=4, scratch_fence_seq=4)
+    controller.consume(
+        proposal, package, problem, formal_fence_seq=4, scratch_fence_seq=4
+    )
+    allowance, readings = dynamic_research_allowance(harness, controller.policy)
+    assert allowance == 5  # cap(6) - 1 uncited source
+
+    # Two cycle heartbeats with no formal admission between them: the run
+    # is stagnating, and evidence becomes worth more than conjecture.
+    harness.record_measure(inputs=["cycle", "1", problem.id])
+    harness.record_measure(inputs=["cycle", "2", problem.id])
+    allowance, readings = dynamic_research_allowance(harness, controller.policy)
+    assert readings["stagnating"] is True
+    assert allowance == 6  # stagnation forgives waste; evidence prioritized

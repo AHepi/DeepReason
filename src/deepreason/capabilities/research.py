@@ -36,6 +36,110 @@ from deepreason.capabilities.models import (
 
 BACKEND_IDENTITY = "web.contained.v1"
 
+
+def dynamic_research_allowance(harness, policy) -> tuple[int, dict]:
+    """Derive the working research allowance from replayed state alone.
+
+    The frozen policy cap is authority — what the run may EVER spend — and
+    never moves. The allowance is tuning: how much of that cap is currently
+    grantable, a pure function of the replayed record, so replay re-derives
+    every decision. Three signals, per the owner's config philosophy
+    (tokens flow where they are currently useful):
+
+    - waste tightening: consumed sources whose citable blocks no candidate
+      has byte-verified a citation against shrink the allowance one step
+      each — fetching that nobody uses is spend in the wrong place;
+    - refusal tightening: a trailing streak (>= 2) of non-FETCHED attempts
+      shrinks the allowance — the budget is being burned on fetches that
+      structurally cannot land;
+    - stagnation widening: a completed cycle that admitted no new formal
+      artifact forgives waste tightening — stagnation with open questions
+      is exactly when evidence is worth more than conjecture. It never
+      forgives refusal tightening: stagnating harder does not make a fetch
+      that structurally cannot land start landing.
+
+    With no signals the allowance equals the cap: tuning only ever bites
+    on evidence, never by default.
+    """
+
+    from deepreason.evidence.citations import EVIDENCE_CITATION_VERIFIED
+
+    cap = policy.maximum_requests
+    state = harness.capability_state
+    events = list(harness.log.read())
+
+    verified_signal = f"evidence-citation:{EVIDENCE_CITATION_VERIFIED}"
+    cited_refs = {
+        event.inputs[1]
+        for event in events
+        if len(event.inputs) >= 2 and event.inputs[0] == verified_signal
+    }
+    packages = {
+        package.id: package
+        for package in state.result_packages.values()
+        if isinstance(package, ResearchResultPackageV1)
+    }
+    consumed_sources = 0
+    uncited_sources = 0
+    for consumption in state.consumptions.values():
+        if not isinstance(consumption, ResearchConsumptionV1):
+            continue
+        consumed_sources += len(consumption.evidence_refs)
+        package = packages.get(consumption.result_package_ref)
+        block_ids: set[str] = set()
+        for item in (package.items if package is not None else ()):
+            try:
+                text = harness.blobs.get(item.text_sha256).decode("utf-8")
+            except KeyError:
+                continue
+            block_ids.update(
+                block.id for block in blocks_for_fetched_text(text)
+            )
+        if not (block_ids & cited_refs):
+            uncited_sources += len(consumption.evidence_refs)
+
+    attempts = [
+        attempt
+        for receipt in sorted(
+            (
+                receipt
+                for receipt in state.receipts.values()
+                if isinstance(receipt, ResearchExecutionReceiptV1)
+            ),
+            key=lambda receipt: receipt.requests_used_total,
+        )
+        for attempt in receipt.attempts
+    ]
+    refusal_streak = 0
+    for attempt in reversed(attempts):
+        if attempt.outcome == "FETCHED":
+            break
+        refusal_streak += 1
+
+    cycle_seqs = [
+        event.seq
+        for event in events
+        if event.inputs and event.inputs[0] == "cycle"
+    ]
+    stagnating = False
+    if len(cycle_seqs) >= 2:
+        window_start, window_end = cycle_seqs[-2], cycle_seqs[-1]
+        stagnating = not any(
+            window_start < artifact.provenance.event_seq <= window_end
+            for artifact in harness.state.artifacts.values()
+        )
+
+    streak_penalty = refusal_streak if refusal_streak >= 2 else 0
+    waste_penalty = 0 if stagnating else uncited_sources
+    allowance = max(0, min(cap, cap - waste_penalty - streak_penalty))
+    readings = {
+        "consumed_sources": consumed_sources,
+        "uncited_sources": uncited_sources,
+        "refusal_streak": refusal_streak,
+        "stagnating": stagnating,
+    }
+    return allowance, readings
+
 # The per-turn proposal ceiling is a fixed wire-contract constant, not a
 # policy field: growing the policy schema would perturb frozen manifest
 # digests, while the run-total budgets (requests, sources) already live in
@@ -513,6 +617,24 @@ class ResearchCapabilityController:
         if already_used >= self.policy.maximum_requests:
             denied("requests_budget_exhausted")
             return None
+        allowance, readings = dynamic_research_allowance(
+            self.harness, self.policy
+        )
+        self.harness.record_measure(
+            inputs=[
+                f"research-allowance:{allowance}/{self.policy.maximum_requests}",
+                (
+                    "waste:"
+                    f"{readings['uncited_sources']}/{readings['consumed_sources']}"
+                ),
+                f"refusal-streak:{readings['refusal_streak']}",
+                f"stagnation:{int(readings['stagnating'])}",
+                proposal.problem_ref,
+            ]
+        )
+        if already_used >= allowance:
+            denied("requests_allowance_exhausted")
+            return None
 
         grant = ResearchGrantV1.create(
             proposal_ref=proposal.id,
@@ -772,4 +894,5 @@ __all__ = [
     "ResearchCapabilityController",
     "blocks_for_fetched_text",
     "consumed_research_blocks",
+    "dynamic_research_allowance",
 ]

@@ -280,6 +280,14 @@ PREFIXES: dict[str, str] = {
                        "requests:used/limit, problem id]); every attempt "
                        "reaches the log — successes, refusals, and the "
                        "typed budget-exhaustion record alike",
+    "research-allowance:": "replay-derived working allowance for contained "
+                           "research grants inside the frozen envelope "
+                           "(suffix = allowance/cap; inputs: [signal, "
+                           "waste:uncited/consumed, refusal-streak:n, "
+                           "stagnation:0|1, problem id]); recorded before "
+                           "every grant decision so each tightening or "
+                           "widening of where tokens flow is attackable in "
+                           "the log — the frozen cap itself never moves",
     "spec-transmission:": "measured fraction of diversity specs realized "
                           "(suffix = score)",
     "trial-blocked:": "a trial ruling was screened out by a guard (suffix = "
