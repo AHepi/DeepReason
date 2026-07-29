@@ -337,31 +337,32 @@ def _find_bridge_execution_snapshot(
             raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_MISSING")
     if not v2_items:
         return None
-    execution_ids = {payload.get("execution_id") for _item, payload in v2_items}
-    snapshot_refs = {
-        payload.get("execution_snapshot_ref") for _item, payload in v2_items
-    }
-    if (
-        len(execution_ids) != 1
-        or len(snapshot_refs) != 1
-        or not isinstance(next(iter(execution_ids)), str)
-        or not isinstance(next(iter(snapshot_refs)), str)
-    ):
-        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AMBIGUOUS")
-    execution_id = next(iter(execution_ids))
-    snapshot_ref = next(iter(snapshot_refs))
-    snapshot = _load_bridge_execution_snapshot(
-        harness,
-        snapshot_ref,
-        manifest_digest=manifest_digest,
-    )
-    if (
-        execution_id != snapshot.execution_id
-        or snapshot.source_terminal_commitment_ref
-        != source_terminal_commitment_ref
-    ):
-        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+    groups: dict[tuple[str, str], list] = {}
     for item, payload in v2_items:
+        key = (payload["execution_id"], payload["execution_snapshot_ref"])
+        groups.setdefault(key, []).append((item, payload))
+    candidates = []
+    for (execution_id, snapshot_ref), members in groups.items():
+        snapshot = _load_bridge_execution_snapshot(
+            harness,
+            snapshot_ref,
+            manifest_digest=manifest_digest,
+        )
+        if execution_id != snapshot.execution_id:
+            raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AUTHORITY_MISMATCH")
+        if snapshot.source_terminal_commitment_ref != source_terminal_commitment_ref:
+            # A superseded epoch's execution is history: its bridge already
+            # terminalized under its own commitment, and this launch belongs
+            # to the current one. Only same-commitment executions are
+            # crash-recovery candidates.
+            continue
+        candidates.append((snapshot, members))
+    if not candidates:
+        return None
+    if len(candidates) > 1:
+        raise _snapshot_error("BRIDGE_RECOVERY_SNAPSHOT_AMBIGUOUS")
+    snapshot, members = candidates[0]
+    for item, payload in members:
         if (
             item.preparation.manifest_digest != manifest_digest
             or item.preparation.formal_fence_seq != snapshot.formal_seq
