@@ -381,13 +381,21 @@ def build_preparation_manifest(
     )
 
 
-def qualification_subject_manifest(profile: ProviderProfileV1):
-    """Return a stable per-profile manifest whose reusable subject is question-neutral."""
+def qualification_subject_manifest(
+    profile: ProviderProfileV1, *, attached_evidence: bool = False
+):
+    """Return a stable per-profile manifest whose reusable subject is question-neutral.
+
+    ``attached_evidence`` warms the subject that ``reason --attach`` runs
+    bind (the fixed attached-evidence envelope); the default subject stays
+    byte-identical to the historical question-only preset.
+    """
 
     return build_preparation_manifest(
         profile,
         question=_QUALIFICATION_QUESTION,
         compiled_at=_QUALIFICATION_COMPILED_AT,
+        attached_evidence=attached_evidence,
     )
 
 
@@ -584,12 +592,25 @@ class RunPreparationService:
             run_input_digest=run_input.run_input_digest,
             attached_evidence=request.dossier_digest is not None,
         )
-        bundle = resolve_completed_qualification(
-            manifest,
-            profile,
-            cache_dir=self._cache_dir,
-            executor=self._executor,
-        )
+        try:
+            bundle = resolve_completed_qualification(
+                manifest,
+                profile,
+                cache_dir=self._cache_dir,
+                executor=self._executor,
+            )
+        except ValueError as error:
+            if (
+                request.dossier_digest is not None
+                and getattr(error, "code", "") == "QUALIFICATION_NOT_CONFIGURED"
+            ):
+                raise RunPreparationError(
+                    "QUALIFICATION_NOT_CONFIGURED",
+                    "attached-evidence runs bind their own frozen evidence "
+                    "envelope, which is a distinct qualification subject; "
+                    "run `deepreason qualify --attached-evidence` first",
+                ) from error
+            raise
         report = project_qualification_report(bundle, manifest, profile)
         subject_digest = qualification_subject_digest(manifest, profile)
         root = self._runs_dir / managed_id

@@ -30,7 +30,7 @@ mkdir -p "$DEEPREASON_HOME"
     --credential-env OLLAMA_API_KEY
   echo "setup_rc=$?"
   q0=$SECONDS
-  timeout 14400 deepreason qualify --yes --json --concurrency 3
+  timeout 14400 deepreason qualify --yes --json --concurrency 3 --attached-evidence
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
   r0=$SECONDS
   timeout 14400 deepreason reason --token-budget 200000 \

@@ -71,6 +71,15 @@ def build_parser() -> argparse.ArgumentParser:
             "rate-limits concurrent requests"
         ),
     )
+    qualify_cmd.add_argument(
+        "--attached-evidence",
+        action="store_true",
+        help=(
+            "qualify the attached-evidence subject that reason --attach runs "
+            "bind (the fixed evidence envelope is part of the frozen behavior "
+            "subject, so it qualifies separately from question-only runs)"
+        ),
+    )
     status_cmd = sub.add_parser("status", help="show provider and V6 qualification readiness")
     status_cmd.add_argument("--json", action="store_true")
     config_cmd = sub.add_parser(
@@ -1473,7 +1482,10 @@ def _cmd_qualify(args) -> int:
             raise QualificationError(
                 "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
             )
-        manifest = qualification_subject_manifest(profile)
+        manifest = qualification_subject_manifest(
+            profile,
+            attached_evidence=bool(getattr(args, "attached_evidence", False)),
+        )
         cache_dir = provider_state_dir() / "qualification-cache"
         subject = qualification_subject_digest(manifest, profile)
         try:
