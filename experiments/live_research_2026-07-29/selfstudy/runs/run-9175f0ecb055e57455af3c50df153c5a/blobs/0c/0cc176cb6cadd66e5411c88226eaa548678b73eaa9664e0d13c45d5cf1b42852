@@ -1,0 +1,15 @@
+```json
+{
+  "candidate": {
+    "content": "Artifact 0e26d6be54fd (STATE_OF_THE_THEORY.md) abstracts the detailed failure-mode and optimization analyses from 0f99efbab8a4 (BASIN_REPORT.md) and 30354428 (TOKEN_ECONOMY.md) into a unified account of the machine's current epistemic holdings. This abstraction is refuted if the state document merely concatenates or re-describes the specific claims of those reports without lifting them to a higher organizational level, or if it omits central findings such as repertoire exhaustion, refuted-attractor dynamics, or token-burn tradeoffs that the reports establish.",
+    "typicality": 0.72,
+    "evidence_refs": [
+      {"block": "0e26d6be54fd5324acb6729e", "quote": null},
+      {"block": "0f99efbab8a4c4bd449d193", "quote": null},
+      {"block": "30354428394d64ce3251f4d8", "quote": null}
+    ],
+    "neighbours": ["SRC_002", "SRC_003", "SRC_004"]
+  },
+  "abstention": null
+}
+```

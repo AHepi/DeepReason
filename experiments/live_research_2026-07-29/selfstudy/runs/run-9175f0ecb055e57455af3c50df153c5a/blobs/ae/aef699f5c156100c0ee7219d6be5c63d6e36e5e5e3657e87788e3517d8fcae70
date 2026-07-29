@@ -1,0 +1,42 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "0e26d6be54fd depends on SRC_004 (harness spec v1.5 amendment): the problem's demand that every proposed relation name its kind, state a substantive connection, and carry a 'refuted if' clause directly inherits the harness's conjecture-criticism protocol, which requires candidates to be falsifiable and adjudicable. The problem is an application of the harness norm to the meta-task of connection-building itself. REFUTED IF the problem's relation-form and refutation requirements can be fully derived from a source other than the harness specification (e.g., from the theory's internal logic alone), or if the harness spec prescribes a different adjudication structure than the one the problem enacts (e.g., no falsifiability gate on proposed relations).",
+      "typicality": 0.85,
+      "neighbours": ["SRC_004", "SRC_005", "SRC_009", "SRC_010", "SRC_011"],
+      "evidence_refs": []
+    },
+    {
+      "content": "0e26d6be54fd shares mechanism with SRC_007 (basin report on conjecture circles and repertoire exhaustion): both encode the same anti-circularity escape — the basin report diagnoses how conjecture circles collapse when repertoire exhausts without genuine criticism, while the problem demands that proposed connections be substantive and carry explicit refutation conditions, enforcing the same falsifiability-driven exit from self-referential closure. The shared mechanism is: falsifiability as the discriminator between a genuine connection and a decorative one. REFUTED IF either the problem or the basin report can successfully operate without falsifiability conditions on proposed connections — i.e., if non-falsifiable connections (pure summaries, self-referential integrations) are adjudicated as acceptable by the harness.",
+      "typicality": 0.72,
+      "neighbours": ["SRC_007", "SRC_006", "SRC_009", "SRC_011"],
+      "evidence_refs": []
+    },
+    {
+      "content": "0e26d6be54fd abstracts SRC_009, SRC_010, and SRC_011: the problem generalizes from three specific failed neighbourhood connection attempts — self-referential integration (SRC_009), mischaracterized reduction grounded in wrong source content (SRC_010), and mischaracterized contradiction from misreading the problem's own framing (SRC_011) — into a meta-requirement that all future connections be substantive, correctly grounded, and carry refutation conditions. The problem is the covering principle extracted from those failures. REFUTED IF the problem's formulation is independent of those specific prior failures (i.e., it would have the same form without them), or if it prescribes a connection protocol that fails to address the failure modes SRC_009, SRC_010, and SRC_011 identify (self-reference, source mischaracterization, framing mischaracterization).",
+      "typicality": 0.58,
+      "neighbours": ["SRC_009", "SRC_010", "SRC_011", "SRC_006", "SRC_004"],
+      "evidence_refs": []
+    },
+    {
+      "content": "0e26d6be54fd contradicts SRC_008 (unifier school policy): the problem demands that every proposed relation be falsifiable via an explicit 'refuted if' condition, while the unifier stance seeks integration as its terminal value — integration without inherent refutability. The problem's falsifiability requirement and the unifier's integration-first stance are in tension because a relation that is accepted solely for unifying purposes (without a refutation condition) would satisfy the unifier but fail the problem's criteria. REFUTED IF the unifier school's integration policy already requires or includes falsifiability conditions on proposed connections, making the two compatible rather than contradictory.",
+      "typicality": 0.35,
+      "neighbours": ["SRC_008", "SRC_004", "SRC_007", "SRC_009"],
+      "evidence_refs": []
+    },
+    {
+      "content": "0e26d6be54fd reduces to SRC_006 (state of the theory): the problem of connecting an isolated artifact to its neighbourhood is reducible to the theory's own self-description of what it currently holds, because the state document defines the epistemic landscape — what artifacts exist, what they claim, and what relations are meaningful — from which substantive connections must be derived. Connection-building is an operation on the theory's declared state. REFUTED IF the state document is purely descriptive (a snapshot with no normative force on what connections are permissible), or if connections can be validly proposed using information entirely outside what the state document records.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_006", "SRC_007", "SRC_001", "SRC_003"],
+      "evidence_refs": []
+    },
+    {
+      "content": "0e26d6be54fd compatible with SRC_001 (token economy): the problem's requirement for substantive, concise relations (not mere summaries) is compatible with the token-economy document's core thesis that epistemic rigor can be maintained while reducing token waste — because demanding falsifiable, substantive connections rather than verbose summaries is itself a token-economy strategy that preserves epistemic quality. Both enforce brevity-with-substance as a design principle. REFUTED IF the token-economy document's proposed mechanisms for reducing token burn actively conflict with the problem's requirement for explicit refutation conditions (e.g., if token reduction requires dropping 'refuted if' clauses), or if the problem's relation requirements are token-neutral and derive no structural support from token-economy constraints.",
+      "typicality": 0.20,
+      "neighbours": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"],
+      "evidence_refs": []
+    }
+  ]
+}
+```
