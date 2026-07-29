@@ -1633,12 +1633,16 @@ class Harness:
             encoded_checkpoint + b"\r\n",
         }:
             raise ValueError("generic checkpoint bytes are not canonical")
+        checkpoint_seq = run_checkpoint.get("event_seq")
         if (
             sha256_hex(run_checkpoint_bytes) != decision.run_checkpoint_digest
             or run_checkpoint.get("schema") != "deepreason-checkpoint-v1"
             or run_checkpoint.get("manifest_digest") != decision.manifest_digest
             or run_checkpoint.get("stop_digest") != decision.prior_stop_digest
-            or run_checkpoint.get("event_seq") != decision.resume_event_seq
+            # The checkpoint records the stop fence; a bridged run resumes
+            # past it (validated commitment-bound drift), never before it.
+            or type(checkpoint_seq) is not int
+            or checkpoint_seq > decision.resume_event_seq
         ):
             raise ValueError("resume decision differs from generic checkpoint bytes")
         records = (

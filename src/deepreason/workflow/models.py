@@ -974,11 +974,13 @@ class WorkflowResumeDecisionV1(IdentifiedWorkflowRecord):
 
     @model_validator(mode="after")
     def _resume_shape(self):
-        if not (
-            self.prior_process_digest
-            == self.previous_process_digest
-            == self.next_process_digest
-        ):
+        # The resume itself must rewrite nothing: previous == next. The
+        # prior (stop-time) digest may legitimately differ from previous —
+        # a bridged run drifts by its commitment-bound bridge transactions
+        # before resuming. Replay validation still binds prior to the
+        # terminal decision and previous to the replayed digest at the
+        # resume event, so both ends stay independently pinned.
+        if self.previous_process_digest != self.next_process_digest:
             raise ValueError("resuming cannot rewrite terminal workflow process state")
         if (self.prior_terminal_commitment_ref is None) != (
             self.opened_terminal_epoch is None

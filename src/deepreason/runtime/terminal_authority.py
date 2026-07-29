@@ -611,6 +611,22 @@ def _validate_post_terminal_descendants(harness, commitment) -> None:
                     source = transaction_work.get(completions[0].source_work_id)
                     if source is not None and commitment_bound_bridge_work(source):
                         continue
+        if event.rule == Rule.MEASURE:
+            # A staged bridge child records its admitted effect as an
+            # attention-only decomposition marker. Measures never mutate
+            # formal StateDiff; this one is authorized exactly when the
+            # transition it names decomposes commitment-bound bridge work.
+            inputs = tuple(event.inputs)
+            if len(inputs) >= 2 and inputs[0] == "contract-decomposition-effect":
+                transitions = [
+                    transition
+                    for transition in harness.workflow_state.contract_decomposition_by_source_work.values()
+                    if transition.id == inputs[1]
+                ]
+                if len(transitions) == 1:
+                    source = transaction_work.get(transitions[0].source_work_id)
+                    if source is not None and commitment_bound_bridge_work(source):
+                        continue
         raise ValueError("TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED")
 
 

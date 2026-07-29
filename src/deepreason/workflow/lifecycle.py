@@ -261,6 +261,7 @@ def build_resumed_lifecycle(
     requested_cycles: Limit,
     requested_tokens: Limit,
     resume_event_seq: int,
+    validated_post_terminal_drift: bool = False,
 ) -> tuple[WorkflowLifecycleSnapshotV1, WorkflowResumeDecisionV1]:
     """Authorize one real RESUMED transition from a quiescent typed stop."""
 
@@ -280,7 +281,13 @@ def build_resumed_lifecycle(
     if (
         terminal_snapshot.process_digest != workflow_state.digest
         or terminal.next_process_digest != workflow_state.digest
-    ):
+    ) and not validated_post_terminal_drift:
+        # A bridged run's workflow state legitimately drifts past its stop
+        # checkpoint (commitment-bound bridge transactions). The caller
+        # asserts that drift was validated by current terminal authority;
+        # the resume decision still binds to the CURRENT replayed digest,
+        # and the fresh outstanding-work snapshot below still refuses any
+        # unfinished authority.
         raise ValueError("terminal process digest differs from current replay")
     if terminal_snapshot.outstanding_work or terminal_snapshot.unconsumed_bound_call_seqs:
         raise ValueError("terminal checkpoint contains unfinished provider work")

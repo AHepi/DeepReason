@@ -201,12 +201,33 @@ def _prepare_owned_v4_continuation(
         if (
             stop_digest != terminal.stop_record_digest
             or stop.get("event_seq") != terminal.stop_event_seq
-            or fence.get("event_seq") != harness._next_seq
             or terminal.manifest_digest != manifest.sha256
             or terminal.controller_version != control.controller_version
             or terminal.workflow_profile != control.workflow_profile
         ):
             raise ValueError("CONTINUE_TYPED_STOP_MISMATCH")
+        validated_post_terminal_drift = False
+        if fence.get("event_seq") != harness._next_seq:
+            # A bridged run carries authorized post-stop history (bridge
+            # events and receipts) beyond the checkpoint fence. That never
+            # finalizes the run: continuation is legal exactly when the
+            # current terminal authority validates the whole post-horizon
+            # tail — anything else fails closed as before.
+            from deepreason.runtime.terminal_authority import (
+                derive_terminal_authority,
+            )
+
+            fence_seq = fence.get("event_seq")
+            if (
+                type(fence_seq) is not int
+                or fence_seq > harness._next_seq
+                or manifest.schema_version != 6
+                or not derive_terminal_authority(
+                    root, manifest=manifest
+                ).current_valid
+            ):
+                raise ValueError("CONTINUE_TYPED_STOP_MISMATCH")
+            validated_post_terminal_drift = True
         if len(records) != len(harness.workflow_state.resume_decisions):
             raise ValueError("CONTINUE_HISTORY_AUTHORITY_MISMATCH")
         resume_event_seq = harness._next_seq
@@ -222,6 +243,7 @@ def _prepare_owned_v4_continuation(
                 requested_cycles=request.cycles,
                 requested_tokens=request.tokens,
                 resume_event_seq=resume_event_seq,
+                validated_post_terminal_drift=validated_post_terminal_drift,
             )
             terminal_policy = getattr(
                 manifest, "terminal_commitment_policy", None
