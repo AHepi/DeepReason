@@ -420,6 +420,78 @@ def test_recovered_malformed_referee_output_terminalizes_without_advice(tmp_path
     assert _critique_events(reopened) == []
 
 
+def test_budget_denied_referee_terminates_typed_without_second_transition(tmp_path):
+    """Live regression (run-e542c3c1): WorkBudgetDenied inside issue must not
+    be followed by an abandon transition — the service's typed budget-denied
+    termination is the complete durable outcome."""
+
+    from deepreason.harness import Harness
+    from deepreason.llm.budget import TokenMeter
+    from deepreason.llm.firewall import leases_from_manifest
+    from deepreason.referee import run_config_referee
+    from deepreason.run_manifest import write_run_manifest
+    from deepreason.workflow.transaction import WorkBudgetDenied
+    from tests.test_v6_compact_recovery_transition import _bind_classification
+
+    _config_unused, manifest = _referee_manifest()
+    root = tmp_path / "referee-budget"
+    harness = Harness(root)
+    write_run_manifest(manifest, harness.root / "run-manifest.json")
+    _bind_classification(harness, manifest)
+    harness.record_measure(inputs=["cycle", "1", "-"])
+
+    class _Adapter:
+        leases = leases_from_manifest(manifest)
+        meter = TokenMeter(10)
+
+        def preview_request(self, role, pack, model, **kwargs):
+            return "referee prompt", kwargs["wire_contract"], kwargs["endpoint_lease"], 8_192
+
+    with pytest.raises(WorkBudgetDenied):
+        run_config_referee(
+            harness,
+            _Adapter(),
+            manifest,
+            trigger_ref="config-referee-cycle:2",
+        )
+    items = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.contract_id == "config-referee.v1"
+    ]
+    assert len(items) == 1
+    assert items[0].terminal is not None
+    assert items[0].terminal.status == "budget_denied"
+    assert _critique_events(harness) == []
+    # The log stayed well-formed: reopening replays without error.
+    reopened = Harness(root)
+    assert reopened.workflow_state.transaction_work[items[0].preparation.id].terminal
+
+
+def test_scheduler_absorbs_budget_denied_referee(monkeypatch):
+    from types import SimpleNamespace
+
+    from deepreason.scheduler.scheduler import Scheduler
+    from deepreason.workflow.transaction import WorkBudgetDenied
+
+    _config_unused, manifest = _referee_manifest()
+
+    from types import SimpleNamespace as _NS
+
+    def deny(*args, **kwargs):
+        raise WorkBudgetDenied(_NS(work_id="sha256:" + "0" * 17))
+
+    monkeypatch.setattr("deepreason.referee.run_config_referee", deny)
+    fake = SimpleNamespace(
+        run_manifest=manifest,
+        adapter=SimpleNamespace(has_role=lambda role: True),
+        harness=object(),
+        _cycles=4,
+        _drop=lambda error: None,
+    )
+    Scheduler._maybe_config_referee(fake)  # must not raise
+
+
 def test_scheduler_fires_referee_only_on_the_frozen_cadence(monkeypatch):
     from types import SimpleNamespace
 

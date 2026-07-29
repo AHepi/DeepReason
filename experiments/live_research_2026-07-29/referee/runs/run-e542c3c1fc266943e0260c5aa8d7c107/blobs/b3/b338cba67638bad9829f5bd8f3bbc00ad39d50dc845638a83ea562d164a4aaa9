@@ -1,0 +1,21 @@
+```json
+{
+  "candidate": {
+    "claim": "Idempotency and safety are orthogonal properties: an idempotent operation satisfies f(f(x)) = f(x) so that repetition converges to the same outcome, while a safe operation is one that cannot drive the system into an invalid state regardless of invocation count or ordering. A counter-increment is safe but not idempotent; 'delete entire database' is idempotent but not safe. For an append-only event log surviving at-least-once delivery, what is actually required of writers is idempotency (achievable via content-addressable keys or deduplication identifiers), not safety alone — because a safe append that nonetheless records duplicate entries on retry can still violate downstream replay invariants even though the log's own structural integrity is preserved.",
+    "mechanism": "At-least-once delivery guarantees that a message will be delivered one or more times, meaning retried writes will reach the log. If appends are merely safe (i.e., they don't corrupt existing entries), duplicates may still be recorded. Deterministic replay over such a log would then re-execute duplicated events, producing non-deterministic accumulated effects. By making each append idempotent — e.g., keying entries by a content hash or a unique operation id so that a second append of the same content is a no-op — the log collapses repeated delivery into a single recorded effect, preserving replay fidelity. Safety alone doesn't prevent the harmful downstream consequence of duplicates; idempotency does.",
+    "counterconditions": [
+      "If the replay system is designed to tolerate and filter duplicate log entries downstream (e.g., via consumer-side deduplication), then safety alone suffices for the log writers and idempotency is not strictly required at the write boundary.",
+      "If the append-only log treats every append as a distinct historical event (i.e., duplicates are semantically meaningful as evidence of retry attempts), then neither idempotency nor safety-as-deduplication is the correct requirement — the system needs a different invariant such as causality tracking or exactly-once semantics at a higher layer.",
+      "If content-addressable storage is used but two logically distinct operations happen to produce identical content, content-hash deduplication would incorrectly suppress the second operation, showing that naive content-based idempotency can be unsafe."
+    ],
+    "typicality": 0.72,
+    "evidence_refs": [],
+    "optional_refs": [],
+    "sidecar": {
+      "search_signal": "need_context",
+      "requested_context_aliases": ["SRC_001", "SRC_002", "SRC_003"]
+    }
+  },
+  "abstention": null
+}
+```

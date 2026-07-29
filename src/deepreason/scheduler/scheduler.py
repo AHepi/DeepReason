@@ -568,6 +568,10 @@ class Scheduler:
                 manifest,
                 trigger_ref=f"config-referee-cycle:{self._cycles}",
             )
+        except WorkBudgetDenied:
+            # The typed budget-denied termination is already durable; a
+            # skipped advisory review never stalls the cycle.
+            return
         except (SchemaRepairError, EndpointError) as error:
             self._drop(error)
 

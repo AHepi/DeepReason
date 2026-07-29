@@ -420,6 +420,7 @@ def run_config_referee(
     from deepreason.workflow.transaction import (
         ContextNamespace,
         VisibleContextItemV1,
+        WorkBudgetDenied,
     )
     from deepreason.workflow.transaction_service import InquiryTransactionService
 
@@ -557,6 +558,11 @@ def run_config_referee(
             prompt=prompt,
             max_tokens=maximum_tokens,
         )
+    except WorkBudgetDenied:
+        # The service already terminalized this work with its typed
+        # budget-denied record; any further transition would be a second
+        # write after termination.
+        raise
     except Exception:
         abandon(issued=False, reason_code="config_referee_preissue_failure")
         raise

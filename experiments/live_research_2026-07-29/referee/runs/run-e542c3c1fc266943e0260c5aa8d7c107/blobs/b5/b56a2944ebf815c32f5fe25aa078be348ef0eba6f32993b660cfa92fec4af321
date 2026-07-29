@@ -1,0 +1,53 @@
+Propose diverse, criticizable candidates for the input. Give content, typicality from 0 to 1, and relevant local neighbour aliases.
+
+Return ONLY one JSON value matching this closed schema:
+
+{"$defs": {"AnalogyClaim": {"additionalProperties": false, "properties": {"adopted_commitment_refs": {"default": [], "items": {"type": "string"}, "title": "Adopted Commitment Refs", "type": "array"}, "disanalogies": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Disanalogies", "type": "array"}, "overturn_conditions": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Overturn Conditions", "type": "array"}, "shared_structure": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Shared Structure", "type": "array"}, "source_memory_refs": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Source Memory Refs", "type": "array"}, "transfer_claims": {"items": {"type": "string"}, "maxItems": 32, "minItems": 1, "title": "Transfer Claims", "type": "array"}}, "required": ["source_memory_refs", "shared_structure", "disanalogies", "transfer_claims", "overturn_conditions"], "title": "AnalogyClaim", "type": "object"}, "ConjectureAbstentionV1": {"additionalProperties": false, "description": "A responsible no-proposal signal using the existing search vocabulary.", "properties": {"note": {"anyOf": [{"maxLength": 8192, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Note"}, "search_signal": {"default": "stuck", "enum": ["need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "ConjectureAbstentionV1", "type": "object"}, "EvidenceRefClaimV1": {"additionalProperties": false, "description": "One claimed grounding in an admitted dossier block (admission \u00a74).\n\n``block`` names a dossier block by id or by a unique hex prefix of at\nleast 12 characters. ``quote``, when present, must reproduce a\ncontiguous byte span of the block's canonical text exactly \u2014 the\ncitation checker byte-verifies it and a mismatch is a durable finding,\nnever a silent pass.", "properties": {"block": {"pattern": "^[0-9a-f]{12,64}$", "title": "Block", "type": "string"}, "quote": {"anyOf": [{"maxLength": 2000, "minLength": 1, "type": "string"}, {"type": "null"}], "default": null, "title": "Quote"}}, "required": ["block"], "title": "EvidenceRefClaimV1", "type": "object"}, "OperationalSidecar": {"additionalProperties": false, "properties": {"requested_context_aliases": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Requested Context Aliases", "type": "array"}, "search_signal": {"default": "productive", "enum": ["productive", "need_context", "stuck", "capability_mismatch"], "title": "Search Signal", "type": "string"}}, "title": "OperationalSidecar", "type": "object"}, "ReasoningCandidateProposal": {"additionalProperties": false, "description": "Gemma-safe semantic proposal; mandatory interfaces are absent by design.", "properties": {"analogy": {"anyOf": [{"$ref": "#/$defs/AnalogyClaim"}, {"type": "null"}], "default": null}, "claim": {"minLength": 1, "title": "Claim", "type": "string"}, "counterconditions": {"items": {"minLength": 1, "type": "string"}, "maxItems": 32, "minItems": 1, "title": "Counterconditions", "type": "array"}, "evidence_refs": {"default": [], "items": {"$ref": "#/$defs/EvidenceRefClaimV1"}, "maxItems": 8, "title": "Evidence Refs", "type": "array"}, "mechanism": {"minLength": 1, "title": "Mechanism", "type": "string"}, "optional_refs": {"default": [], "items": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SRC_006", "SRC_007", "SRC_008"], "type": "string"}, "title": "Optional Refs", "type": "array"}, "sidecar": {"$ref": "#/$defs/OperationalSidecar"}, "typicality": {"maximum": 1.0, "minimum": 0.0, "title": "Typicality", "type": "number"}}, "required": ["claim", "mechanism", "counterconditions", "typicality"], "title": "ReasoningCandidateProposal", "type": "object"}}, "additionalProperties": false, "description": "One bounded reasoning-envelope candidate or honest abstention.", "properties": {"abstention": {"anyOf": [{"$ref": "#/$defs/ConjectureAbstentionV1"}, {"type": "null"}], "default": null}, "candidate": {"anyOf": [{"$ref": "#/$defs/ReasoningCandidateProposal"}, {"type": "null"}], "default": null}}, "title": "AtomicReasoningConjectureCandidateWireV1", "type": "object"}
+
+ONE SYNTAX EXAMPLE:
+
+{}
+
+INPUT:
+
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 1 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-cb41fdd97adcf822023cc9701097984e
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run's frozen domain allowlist permits only docs.python.org. Fetched pages become citable evidence blocks.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[011770c0009fd66a] versatile features like __slots__, descriptors, properties, __getattribute__(), class methods, and static methods. non-deterministic¶Behavior where the outcome 
+[04a73f83c2c52cdc] Glossary — Python 3.14.6 documentation Theme Auto Light Dark Previous topic Deprecations Next topic About this documentation This page Report a bug Improve this
+[2ff7b4cae4284960] join/await dependencies. Deadlocks can be avoided by always acquiring multiple locks in a consistent order. See also lock and reentrant. decorator¶A function re
+[3e2e2379a5ae879b] where it gradually releases all allocated resources, such as modules and various critical internal structures. It also makes several calls to the garbage collec
+[409e14999b7b2762] PEP 3155. For top-level functions and classes, the qualified name is the same as the object’s name: >>> class C: ... class D: ... def meth(self): ... pass ... >
+[5ed738c1465b1652] and handles the text encoding automatically. Examples of text files are files opened in text mode ('r' or 'w'), sys.stdin, sys.stdout, and instances of io.Strin
+[6fcc0494b7c231e7] processes on different CPU cores at the same time (see parallelism). concurrent modification¶When multiple threads modify shared data at the same time. Concurre
+[73e8c572775ed908] the EAFP approach and is characterized by the presence of many if statements. In a multi-threaded environment, the LBYL approach can risk introducing a race con
+[85e9c1a0856afe9e] reference. The Py_NewRef() function can be used to create a new strong reference. bytes-like object¶An object that supports the Buffer Protocol and can export a
+[91a7f7052365bd40] directs the compiler to compile the current module using syntax or semantics that will become standard in a future release of Python. The __future__ module docu
+[9558e4745f954120] per-object lock¶A lock associated with an individual object instance rather than a global lock shared across all objects. In free-threaded Python, built-in type
+[ab0bb9105fc1756b] series of values usable in an async for loop. See PEP 525. An asynchronous generator function may contain await expressions as well as async for, and async with
+[b1782e053233ba45] value. In contrast to many other languages, not all language constructs are expressions. There are also statements which cannot be used as expressions, such as 
+[b950e2ec5b4f8075] type hints: for example this variable is expected to take int values: count: int = 0 Variable annotation syntax is explained in section Annotated assignment sta
+[d1a25e3290810609] of an instance of that class, the method will get the instance object as its first argument (which is usually called self). See function and nested scope. metho
+[d6ca9f81f813c78d] variables, class variables, or C static variables in extension modules. In multi-threaded programs, global state shared between threads typically requires synch
+[dcb468c9fd74ad09] single dispatch¶A form of generic function dispatch where the implementation is chosen based on the type of a single argument. slice¶An object of type slice, us
+
+## school-stance
+SCHOOL STANCE (weight 1.00): anchor in cases
+
+## scratch-advisory-context
+SCRATCH_ADVISORY_CONTEXT_V1
+{"blocks":[{"content":"Could an append-only log enforce idempotent appends via content-addressable storage (hash of event content as the key), making append idempotent by construction? If so, does this collapse the distinction between safety and idempotency for this specific data structure?","handle":"SCR_001","unfinished":"Unresolved question"},{"content":"In
