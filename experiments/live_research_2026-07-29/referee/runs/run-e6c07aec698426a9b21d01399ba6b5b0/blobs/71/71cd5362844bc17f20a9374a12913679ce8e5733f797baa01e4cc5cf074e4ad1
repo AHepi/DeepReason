@@ -1,0 +1,23 @@
+```json
+{
+  "candidate": {
+    "content": "Artifact 18174034ea0c contradicts artifact 2f8f85328fae on the locus of the correctness obligation for deterministic replay in an append-only log: 18174034ea0c asserts the writer must be idempotent, while 2f8f85328fae asserts the writer need only append and the consumer's fold operation must be commutative (duplicate-suppressing). They share a mechanism—duplicate suppression—but allocate it to different components. The contradiction is sharpened by 3fc33b3603be's formal definition of idempotency as f(f(x))=f(x), which 18174034ea0c applies to the writer while 2f8f85328fae effectively relocates to the fold. This is refuted if the two positions are equivalent reformulations rather than competing allocations—i.e., if writer-level idempotency and consumer-level fold commutativity always co-occur as jointly necessary and sufficient conditions, making the disagreement merely notational rather than substantive.",
+    "typicality": 0.62,
+    "evidence_refs": [
+      {
+        "block": "18174034ea0c22d5",
+        "quote": "For deterministic replay in an append-only log, the required property is idempotency because the log's determinism is an outcome property, not merely a harm-avoidance property."
+      },
+      {
+        "block": "2f8f85328fae446",
+        "quote": "An append-only event log requires neither idempotence nor safety from its writers in the conventional sense; it requires commutativity of the fold operation over the event stream."
+      },
+      {
+        "block": "3fc33b3603be432",
+        "quote": "An idempotent operation satisfies f(f(x))=f(x): repeated application yields the same result as a single application."
+      }
+    ],
+    "neighbours": ["SRC_002", "SRC_003"]
+  }
+}
+```

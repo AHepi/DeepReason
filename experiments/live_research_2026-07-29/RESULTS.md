@@ -152,3 +152,45 @@ bridge at fence 1131. Honest scorecard:
   be capped at partially_answered when the window is known-truncated).
   Filed as the next defect; FINDINGS.md still tells the full story (60
   rival positions, preserved).
+
+## Segment 4 (2026-07-29): the config referee goes live
+
+The referee — an observe-only critic that reviews whether the dynamic
+token-steering configuration is doing its job — shipped in three stages
+(deterministic view/verdict core, manifest-frozen authority, transactional
+dispatch on the frozen critic seat) and was proven across three fresh
+ladders (glm-5.2, docs.python.org allowlist, DEEPREASON_CONFIG_REFEREE=2,
+each a distinct requalified subject):
+
+- **Attempt 1 (run-e542c3c1): first grounded critique, then a real bug.**
+  The cycle-2 review completed as a live config-referee.v1 transaction:
+  verdict config_effective / no_change, citing three recorded observation
+  seqs. The cycle-4 review was token-budget-denied inside issue — and the
+  dispatch code followed the typed budget_denied terminal with an abandon
+  transition, which the harness correctly refused (WellFormednessError),
+  failing the run. Fail-closed did its job; fixed in 03758d61 with
+  regression tests at both the transaction and scheduler layers.
+- **Attempt 2 (run-d17935a4): typed denial, graceful cycle.** With the
+  fix, both cadence firings terminated as typed budget_denied work items
+  (default token budget too tight for reviews); the run completed with a
+  typed stop and replay violations limited to the pre-existing
+  foreign-criticism coverage-debt class (same class as the accepted
+  three-epoch narrow root).
+- **Attempt 3 (run-e6c07aec, --token-budget 200000): the full loop,
+  replay-clean.** Two completed referee transactions, two grounded
+  critiques (seqs 436 and 452), and verify_root returns ZERO violations.
+  The criticism is substantively right: the referee independently spotted
+  the sustained EVIDENCE_REFS_UNBOUND run at seqs 342–356 ("the
+  consumed-source/uncited condition the dynamic steering should react to
+  by tightening"), observed no tightening response followed, judged the
+  config mistuned, and recommended research_allowance_step_tighten — the
+  exact intervention that condition calls for, derived from the signals
+  alone. The second critique cites the first (seq 436): earlier advice is
+  itself a citable observation, so the referee can see whether its advice
+  corresponded to any change.
+
+Containment held everywhere: citations outside the shown window are
+rejected as unfounded (offline-tested), recommendations came only from
+the frozen menu, and no budget, status, or policy byte moved because the
+referee spoke — the critiques are attention on the record, available to
+the operator and to any criticism-weighted continuation.

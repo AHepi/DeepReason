@@ -1,0 +1,3 @@
+```json
+{"repair.patch.v1": [{"op": "add", "path": "/candidates/4/analogy/overturn_conditions", "value": ["If HTTP safety is defined purely in terms of client-observable effects while event-log safety is defined in terms of infrastructure integrity, the two frameworks use 'safe' for different concepts and the analogy breaks down.", "If the relevant published definitions come from distributed-systems literature rather than HTTP semantics, the HTTP-based distinction between safe and idempotent may not map cleanly onto event-log terminology."]}]}
+```

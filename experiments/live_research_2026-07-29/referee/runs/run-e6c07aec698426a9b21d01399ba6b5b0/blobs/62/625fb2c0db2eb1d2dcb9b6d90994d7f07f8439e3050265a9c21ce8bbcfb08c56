@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (conn:18174034ea0c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 18174034ea0c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@5c994091d34a: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The assertion that an append-only log requires commutativity of the fold operation contradicts the claim that writer idempotency is strictly necessary for deterministic replay, relocating the deduplication burden from the writer to the consumer. This contradiction is refuted if the log's determinism depends on the writer appending a canonical sequence rather than the downstream consumer's ability to suppress duplicate events during replay.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c994091d34a, relation-form@578e42df713e
+
+TARGET SRC_002
+Artifact 18174034ea0c contradicts 2f8f85328fae on where the determinism obligation for append-only-log replay resides: 18174034ea0c assigns it to the writer (idempotency ensures the log is identical regardless of retry count, because a safe-but-non-idempotent write produces duplicates that are 'fatal to deterministic replay'), whereas 2f8f85328fae assigns it to the consumer's fold operation (the log merely stores facts; correctness under at-least-once delivery depends on the fold being commutative and duplicate-aware, so the writer's only obligation is to append). The contradiction is genuine because each framework declares the other's locus insufficient: 18174034ea0c calls writer-level safety 'necessary but not sufficient,' while 2f8f85328fae calls writer-level idempotency unnecessary. This relation is refuted if the two obligations are complementary rather than contradictory—i.e., if writer idempotency for log-level determinism and fold commutativity for consumer-level tolerance are jointly and independently required, so that each artifact addresses a distinct layer without precluding the other.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c994091d34a, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

@@ -1,0 +1,30 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:18174034ea0c) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 18174034ea0c to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@5c994091d34a: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Artifact 18174034ea0c contradicts artifact 2f8f85328fae on the locus of the replay-correctness obligation: 18174034ea0c places the requirement on the writer (idempotency ensures the log is identical regardless of retry count, so deterministic replay sees one canonical stream), while 2f8f85328fae relocates it entirely to the consumer's fold operation (commutativity of the fold tolerates duplicates, so the writer need only append). The contradiction is substantive because the two views prescribe incompatible system designs—writer-side deduplication keys versus consumer-side duplicate suppression—and disagree on whether a safe-but-non-idempotent writer is acceptable for deterministic replay. Refuted if the fold's commutativity is merely a structural relocation of writer idempotency, such that both prescriptions collapse to the same invariant (no duplicate effects survive to final state), making the two views compatible rather than contradictory. This abstention from contradiction would be forced when 2f8f85328fae's own counterconditions hold: if the fold is not commutative or events lack deduplication metadata, then writer idempotency becomes necessary after all, vindicating 18174034ea0c and confirming the contradiction rather than dissolving it.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c994091d34a, relation-form@578e42df713e
+
+TARGET SRC_002
+Artifact 18174034ea0c contradicts the neighbouring position (2f8f85328fae) that commutativity of the consumer's fold operation—not writer-level idempotency—is the necessary property for deterministic replay under at-least-once delivery. The contradiction is substantive, not verbal: 18174034ea0c locates the correctness obligation at the writer (idempotent append ensures the log is identical regardless of retry count), while 2f8f85328fae locates it at the consumer (a commutative, duplicate-suppressing fold tolerates duplicate appends). Both cannot be the uniquely necessary property under a single shared system model. It is refuted if the two properties are shown to be interderivable or equivalent under a common model of at-least-once delivery and append-only replay, or if one is a strict generalization of the other (e.g., writer idempotency is merely a special case of fold commutativity where the fold is identity-with-dedup), collapsing the layer-level disagreement into a reformulation.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c994091d34a, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
