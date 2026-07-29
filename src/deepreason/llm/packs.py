@@ -291,6 +291,7 @@ def render_conj_pack(
     suppressed_exemplars: tuple[str, ...] = (),
     scratch_context=None,
     frozen_evidence_context: str | None = None,
+    citable_evidence_context: str | None = None,
     capability_result_context: str | None = None,
     allow_no_candidate_outcome: bool = False,
 ) -> str:
@@ -411,6 +412,17 @@ def render_conj_pack(
             _pack_section(
                 "frozen-evidence-context",
                 frozen_evidence_context,
+                4,
+                droppable=True,
+                compressible=True,
+                min_tokens=64,
+            )
+        )
+    if citable_evidence_context:
+        sections.append(
+            _pack_section(
+                "citable-evidence-blocks",
+                citable_evidence_context,
                 4,
                 droppable=True,
                 compressible=True,

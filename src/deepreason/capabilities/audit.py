@@ -469,6 +469,12 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     target = root / "REPLAY_VALIDATION.json"
     _atomic_write(target, canonical_json(replay_validation))
     written[target.name] = str(target)
+
+    from deepreason.findings import write_findings_report
+
+    findings = write_findings_report(root)
+    if findings is not None:
+        written[findings.name] = str(findings)
     return written
 
 

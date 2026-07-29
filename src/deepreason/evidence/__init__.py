@@ -31,7 +31,11 @@ from deepreason.evidence.dossier import (
     dossier_exposure_counts,
     pack_dossier,
 )
-from deepreason.evidence.render import attach_bound_evidence, render_dossier_pack
+from deepreason.evidence.render import (
+    attach_bound_evidence,
+    render_citable_blocks,
+    render_dossier_pack,
+)
 
 __all__ = [
     "AttachedSourceProvenanceV1",
@@ -56,6 +60,7 @@ __all__ = [
     "load_evidence_dossier",
     "load_run_input",
     "pack_dossier",
+    "render_citable_blocks",
     "render_dossier_pack",
     "stage_attached_source",
     "verify_run_input",

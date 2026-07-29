@@ -160,3 +160,54 @@ def attach_bound_evidence(
 
 
 __all__ = ["attach_bound_evidence", "render_dossier_pack"]
+
+
+def render_citable_blocks(
+    blocks,
+    blobs,
+    *,
+    maximum_blocks: int = 32,
+    excerpt_chars: int = 160,
+) -> str | None:
+    """Render the run's citable evidence blocks for a conjecture pack.
+
+    The model can only byte-check-cite ids it can see. This legend lists
+    the exact universe the §4 checker resolves against — bound-dossier
+    blocks plus consumed research blocks — with a short excerpt each.
+    Presentation only: visibility never creates support, and the checker
+    remains the sole authority on what a citation establishes.
+    """
+
+    from deepreason.evidence.citations import canonical_block_text
+
+    blocks = tuple(blocks)
+    if not blocks:
+        return None
+    lines = [
+        "CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted",
+        "evidence, name these block ids in its evidence_refs (optionally",
+        "with an exact quote from the block; quotes are byte-checked",
+        "against the recorded bytes). Only ids from this list resolve —",
+        "artifact hashes and any other handles are rejected as unknown.",
+        "",
+    ]
+    shown = 0
+    for block in blocks:
+        if shown >= maximum_blocks:
+            break
+        try:
+            source = b"" if block.text is not None else blobs.get(block.source_sha256)
+            text = canonical_block_text(block, source)
+        except Exception:  # noqa: BLE001 - presentation never fails the pack
+            continue
+        excerpt = " ".join(text.split())[:excerpt_chars]
+        if not excerpt:
+            continue
+        lines.append(f"[{block.id[:16]}] {excerpt}")
+        shown += 1
+    if shown == 0:
+        return None
+    remainder = len(blocks) - shown
+    if remainder > 0:
+        lines.append(f"(+{remainder} further citable blocks not shown)")
+    return "\n".join(lines)

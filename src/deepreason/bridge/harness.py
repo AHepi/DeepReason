@@ -1305,6 +1305,9 @@ def build_grounded_bridge(
             "error_code": terminal.error_code,
         },
     )
+    from deepreason.findings import write_findings_report
+
+    write_findings_report(harness.root)
     return terminal
 
 

@@ -1290,6 +1290,20 @@ def conj(
                     dossier=dossier,
                     receipt=dossier_receipt,
                 )
+    citable_evidence_context = None
+    if active_v5 or active_v6:
+        from deepreason.capabilities.research import consumed_research_blocks
+        from deepreason.evidence import render_citable_blocks
+
+        citable_evidence_context = render_citable_blocks(
+            (
+                tuple(getattr(bound_dossier, "blocks", ()) or ())
+                if bound_dossier is not None
+                else ()
+            )
+            + consumed_research_blocks(harness),
+            harness.blobs,
+        )
     pack = render_conj_pack(
         problem,
         harness.state,
@@ -1309,6 +1323,7 @@ def conj(
             else None
         ),
         frozen_evidence_context=frozen_evidence_context,
+        citable_evidence_context=citable_evidence_context,
         capability_result_context=v6_capability_result_context,
         allow_no_candidate_outcome=active_v4 or active_v6,
     )
