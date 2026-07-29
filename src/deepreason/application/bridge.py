@@ -1665,6 +1665,8 @@ class GroundedBridgeApplicationService:
         clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
         preflight_focus(preflight, manifest, blocks, clusters)
 
+        launch_supersedes = {"stale_views": False}
+
         def _terminal_disposition(existing):
             """Serve, retry, supersede, or refuse one already-terminal root.
 
@@ -1682,6 +1684,7 @@ class GroundedBridgeApplicationService:
                 != terminal_authority.terminal_commitment_ref
             )
             if superseded:
+                launch_supersedes["stale_views"] = True
                 return None
             if existing is None:
                 if intent.retry_failed_terminal:
@@ -1729,6 +1732,35 @@ class GroundedBridgeApplicationService:
                     locks,
                 )
                 write_running(root, manifest.sha256)
+                if launch_supersedes["stale_views"]:
+                    # A superseded episode leaves the prior epoch's derived
+                    # status and result views on disk; pollers must not
+                    # read the old answer as this launch's outcome. Both
+                    # are derived projections (the append-only log keeps
+                    # every terminal), so the fresh episode replaces them
+                    # with a running marker. Same-fence retry launches keep
+                    # their files: the retry worker reads the stored failed
+                    # terminal as its authority to continue the chain.
+                    from deepreason.bridge.harness import (
+                        BRIDGE_RESULT_NAME as _RESULT_NAME,
+                        BRIDGE_STATUS_NAME as _STATUS_NAME,
+                    )
+                    from deepreason.runtime.progress import _atomic_json
+
+                    _atomic_json(
+                        root / _STATUS_NAME,
+                        {
+                            "schema": "deepreason-bridge-status-v1",
+                            "state": "running",
+                            "process_status": None,
+                            "formal_seq": None,
+                            "terminal_event_seq": None,
+                            "source_terminal_commitment_ref": None,
+                            "resolution": None,
+                            "error_code": None,
+                        },
+                    )
+                    (root / _RESULT_NAME).unlink(missing_ok=True)
             except BaseException:
                 locks.release()
                 raise
