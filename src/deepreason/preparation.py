@@ -347,8 +347,15 @@ def build_preparation_manifest(
     question: str,
     compiled_at: str,
     run_input_digest: str | None = None,
+    attached_evidence: bool = False,
 ):
-    """Build the in-memory V6 manifest used by qualification and preparation."""
+    """Build the in-memory V6 manifest used by qualification and preparation.
+
+    ``attached_evidence`` opts the manifest into the fixed finite
+    attached-evidence envelope; question-only preparation (and the
+    question-neutral qualification subject) keeps the historical disabled
+    policy byte-identical.
+    """
 
     if run_input_digest is None:
         _dossier, run_input, _workload = _records_for_question(question)
@@ -361,7 +368,9 @@ def build_preparation_manifest(
         compiled_at=compiled_at,
         control_plane_policy=engaged_control_plane_policy_v3(),
         criticism_policy=engaged_criticism_policy(profile.endpoint_id),
-        inquiry_capability_policy=engaged_inquiry_capability_policy(),
+        inquiry_capability_policy=engaged_inquiry_capability_policy(
+            attached_evidence=attached_evidence
+        ),
         run_input_digest=run_input_digest,
         # The one frozen simulation toolchain is derived from the executing
         # interpreter at preparation time so the wheel stays portable across
@@ -573,6 +582,7 @@ class RunPreparationService:
             question=request.question,
             compiled_at=_compiled_at(self._clock),
             run_input_digest=run_input.run_input_digest,
+            attached_evidence=request.dossier_digest is not None,
         )
         bundle = resolve_completed_qualification(
             manifest,

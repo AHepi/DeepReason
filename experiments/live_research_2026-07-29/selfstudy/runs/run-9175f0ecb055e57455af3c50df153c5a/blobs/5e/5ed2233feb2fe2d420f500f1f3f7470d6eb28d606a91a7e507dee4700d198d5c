@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "content": "Artifact 0e26d6be54fd inherits the skepticism stance (SRC_010) and the repertoire exhaustion models from the basin report. This relation is REFUTED IF artifact 0e26d6be54fd operates completely independently of the refuted-attractor mechanisms described in SRC_009.",
+      "neighbours": ["SRC_009", "SRC_010"],
+      "typicality": 0.8
+    },
+    {
+      "content": "Artifact 0e26d6be54fd depends on the formal build spec (SRC_007) for its conjecture-criticism harness integration. This relation is REFUTED IF 0e26d6be54fd can function correctly without adhering to the v1.3 harness spec constraints.",
+      "neighbours": ["SRC_007"],
+      "typicality": 0.7
+    },
+    {
+      "content": "Artifact 0e26d6be54fd integrates the current state of the theory (SRC_008) with the v1.5 normative amendments (SRC_004). This relation is REFUTED IF 0e26d6be54fd remains compatible with outdated harness behaviors that were explicitly replaced by v1.5 norms.",
+      "neighbours": ["SRC_004", "SRC_008"],
+      "typicality": 0.6
+    },
+    {
+      "content": "Artifact 0e26d6be54fd abstracts the token economy principles found in SRC_001 to optimize resource usage during conjecture. This relation is REFUTED IF 0e26d6be54fd's operational behavior contradicts or ignores the token burn reduction strategies documented in the neighbourhood.",
+      "neighbours": ["SRC_001"],
+      "typicality": 0.4
+    },
+    {
+      "content": "Artifact 0e26d6be54fd contradicts the refuted-attractor dynamics from the basin report (SRC_009) by breaking out of repertoire exhaustion. This relation is REFUTED IF 0e26d6be54fd merely repeats the same conjecture attractors and depends on prior failed lineage paths.",
+      "neighbours": ["SRC_009"],
+      "typicality": 0.2
+    }
+  ]
+}

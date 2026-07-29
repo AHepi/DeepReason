@@ -1,0 +1,29 @@
+```json
+{
+  "candidate": {
+    "claim": "The batch criticism mechanism fails to retire rival positions because batched warrants apply aggregate coverage debt rather than per-position falsification, causing debt saturation without convergence. Optimisation: Replace batch criticism with a falsification-weighted ensemble pruning protocol where criticism attention scales with per-position coverage debt, isolating and retiring the most indebted positions first.",
+    "mechanism": "In the current system, schools generate rival positions but batch criticism distributes attention broadly, accumulating coverage debt across the batch without isolating specific positions for retirement. By shifting to a falsification-weighted ensemble pruning approach, criticism acts as an ensemble method: rival positions are weak learners, and criticism-weighted attention prunes the ensemble by retiring positions that accumulate critical debt beyond a threshold, driving convergence.",
+    "counterconditions": [
+      "If per-position coverage debt is uniformly distributed, ensemble pruning will not isolate specific positions and retirement will still stall.",
+      "If rival positions are complementary rather than mutually exclusive, pruning them reduces ensemble diversity without improving convergence.",
+      "If the cost of computing per-position warrants exceeds the batch cost, the optimization may degrade system throughput."
+    ],
+    "typicality": 0.75,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_004",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_004",
+        "SRC_007",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
+```

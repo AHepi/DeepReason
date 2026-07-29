@@ -26,6 +26,7 @@ from pathlib import Path
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.policy import (
+    AttachedEvidencePolicyV1,
     ConfigRefereePolicyV1,
     InquiryCapabilityPolicyV1,
     ResearchCapabilityPolicyV1,
@@ -355,11 +356,40 @@ def engaged_config_referee_policy(environ=None) -> ConfigRefereePolicyV1 | None:
     )
 
 
-def engaged_inquiry_capability_policy(environ=None) -> InquiryCapabilityPolicyV1:
+def engaged_attached_evidence_policy(
+    *, attached: bool = False
+) -> AttachedEvidencePolicyV1:
+    """Return the attached-evidence authority for this preparation.
+
+    Question-only runs keep the historical disabled policy byte-identical.
+    Attaching an admitted dossier is the operator's explicit opt-in gesture,
+    and it freezes one fixed finite packing/citation envelope — the same
+    subject-changing discipline as the research allowlist and the contained
+    simulation runner: a different authority is a different qualification
+    subject.
+    """
+
+    if not attached:
+        return AttachedEvidencePolicyV1()
+    return AttachedEvidencePolicyV1(
+        enabled=True,
+        maximum_sources=16,
+        maximum_total_bytes=8 * 1024 * 1024,
+        maximum_excerpt_bytes_per_source=262_144,
+        maximum_sources_per_pack=8,
+    )
+
+
+def engaged_inquiry_capability_policy(
+    environ=None, *, attached_evidence: bool = False
+) -> InquiryCapabilityPolicyV1:
     """Return the engaged topology: simulation ON, research operator-opted."""
 
     return InquiryCapabilityPolicyV1(
         capability_profile="inquiry-capabilities.v2",
+        attached_evidence=engaged_attached_evidence_policy(
+            attached=attached_evidence
+        ),
         simulation=engaged_simulation_policy(environ),
         research=engaged_research_policy(environ),
         config_referee=engaged_config_referee_policy(environ),
@@ -455,6 +485,7 @@ __all__ = [
     "PUBLIC_SIMULATION_TOOLCHAIN_ID",
     "conservative_control_plane_policy_v3",
     "conservative_policy_digest",
+    "engaged_attached_evidence_policy",
     "engaged_bridge_source",
     "engaged_config_referee_policy",
     "engaged_control_plane_policy_v3",

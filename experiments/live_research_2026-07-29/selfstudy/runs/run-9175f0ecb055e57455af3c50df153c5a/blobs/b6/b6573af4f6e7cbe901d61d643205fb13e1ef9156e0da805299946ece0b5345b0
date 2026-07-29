@@ -1,0 +1,59 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated problem 0e26d6be54fd depends on the basin-report mechanism (SRC_009): repertoire exhaustion and refuted-attractor dynamics explain WHY an artifact becomes isolated — the conjecture operator repeatedly proposes candidates that are refuted, collapsing into a basin where no surviving candidate bridges the artifact to its neighbourhood. The isolation is not a property of the artifact itself but of the conjecture-criticism loop's trajectory through candidate space. REFUTED IF: isolated artifacts can be connected without any change to the conjecture repertoire or candidate-generation strategy (i.e., the isolation is purely a retrieval/indexing failure, not a generative-attractor failure).",
+      "evidence_refs": [],
+      "neighbours": ["SRC_009", "SRC_008", "SRC_007"],
+      "typicality": 0.85
+    },
+    {
+      "content": "The isolated problem 0e26d6be54fd reduces to a token-economy constraint (SRC_001): the failure to connect is a downstream symptom of token-budget exhaustion during neighbourhood exploration. When the operator's token budget is consumed by repeated refutations or verbose candidate generation, it cannot sustain the depth of exploration needed to discover a substantive relation to neighbourhood artifacts. The isolation is thus an economic phenomenon, not an epistemological one. REFUTED IF: increasing the token budget alone does not improve connection success, or if artifacts remain isolated even under generous token allocations — indicating the bottleneck is in candidate quality or mechanism understanding rather than resource scarcity.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_001", "SRC_003", "SRC_009"],
+      "typicality": 0.72
+    },
+    {
+      "content": "The isolated problem 0e26d6be54fd shares mechanism with the harness spec v1.5 amendment (SRC_004): the conjecture-criticism loop's normative design creates a structural tendency toward isolation when the covering principle (school-2 unifier stance) is not enforced. The harness adjudicates candidates against criteria like hv-floor and lineage-ref, but without explicit integration mandates, refuted candidates accumulate and the artifact drifts from its neighbourhood. The isolation is an emergent property of the harness's own criticism dynamics. REFUTED IF: the v1.5 amendment already contains an explicit integration mandate that should prevent isolation, or if isolation occurs at the same rate under any harness configuration — suggesting the mechanism is external to the harness design.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_004", "SRC_006", "SRC_007"],
+      "typicality": 0.78
+    },
+    {
+      "content": "The isolated problem 0e26d6be54fd contradicts the state-of-the-theory record (SRC_008): if the machine's current holdings were complete and properly indexed, no artifact would remain isolated — isolation implies that the machine's self-model of what it holds is incomplete or that the lineage-tracking mechanism has a gap. The existence of an isolated artifact is a counterexample to the claim that the theory's grounding is self-consistent. REFUTED IF: the state-of-the-theory record explicitly acknowledges and accounts for isolated artifacts as a known class, or if the isolation is by design (e.g., the artifact was never admitted into the dossier and thus the theory's completeness claim is not violated).",
+      "evidence_refs": [],
+      "neighbours": ["SRC_008", "SRC_009"],
+      "typicality": 0.68
+    },
+    {
+      "content": "The isolated problem 0e26d6be54fd abstracts from the formal build spec (SRC_007): the spec defines the wire protocols, adjudication rules, and dependency-graph mechanics that govern artifact connection. The isolation phenomenon is an abstraction over a specific failure mode in these mechanics — either the dependency-graph traversal cannot reach the artifact, or the adjudication criteria filter all candidate relations before they survive. The covering principle is that isolation is always a spec-level failure, not a content-level mystery. REFUTED IF: the formal spec contains a mechanism that guarantees connection for any admitted artifact (making isolation impossible by construction), or if isolation arises from content that lies outside the spec's scope entirely.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_007", "SRC_004", "SRC_010"],
+      "typicality": 0.80
+    },
+    {
+      "content": "The isolated problem 0e26d6be54fd integrates with the school-2 unifier policy (SRC_010) by requiring that the covering principle be applied as a connection heuristic: the unifier stance demands that every isolated artifact be brought under a shared mechanism with its neighbourhood. This integration proposes that isolation is not a terminal state but a trigger for the unifier policy to actively seek the deepest covering principle that subsumes both the artifact and its neighbours. The mechanism is: isolation -> unifier activation -> covering-principle search -> substantive relation. REFUTED IF: the unifier policy has no operational effect on connection success (it is decorative rather than functional), or if applying the unifier stance produces worse connections than a pluralist stance that tolerates isolation.",
+      "evidence_refs": [],
+      "neighbours": ["SRC_010", "SRC_008", "SRC_009"],
+      "typicality": 0.55
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "body": {
+          "content": "Speculative: isolation may be a signal, not a defect. If the conjecture-criticism loop is working correctly, an isolated artifact might indicate that the neighbourhood lacks the right kind of artifact to connect to — i.e., the isolation is epistemically informative because it reveals a gap in the theory's coverage. Under this view, the correct response is not to force a connection but to use the isolation as a diagnostic: what is the neighbourhood missing?",
+          "why_keep_this": "This reframing could explain why some isolation persists despite repeated connection attempts — the problem may be in the neighbourhood, not the artifact."
+        },
+        "local_key": "NEW_001"
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Is artifact 0e26d6be54fd a problem statement, a conjecture, an evidence block, or a source record? Its nature determines which relation types are even coherent.",
+        "related_refs": ["SRC_008", "SRC_007"]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,19 @@
+```json
+{
+  "candidate": {
+    "claim": "DeepReason's per-target warrants (SRC_008) create non-linear coverage debt that prevents criticism from retiring rival positions as they grow from 18 to 60; transitioning to ensemble-based class criticism could retire clusters of rivals simultaneously and reduce coverage debt.",
+    "mechanism": "Currently, each accepted rival requires an isolated warrant, meaning the criticism effort scales poorly. The system lacks a mechanism to group similar rivals and criticize their shared structural flaws, so as rivals increase, the required warrants outpace batch criticism capacity. A sandboxed Python simulation (simulation_mode sandboxed_python_v1) could model coverage debt growth, comparing O(N^2) coverage debt for per-target warrants against an O(N log N) clustering approach for ensemble-based criticism. A directed research fetch to https://en.wikipedia.org/wiki/Ensemble_learning would provide theoretical grounding for clustering and retiring entire classes of rival positions based on shared vulnerabilities.",
+    "counterconditions": [
+      "If the batch criticism mechanism (SRC_008) can be trivially scaled to handle 60+ rival positions without structural changes, coverage debt is not the bottleneck.",
+      "If the 60 rival positions do not actually share common structural flaws, class-level (ensemble) criticism will be too blunt to retire them and may lead to false dismissals.",
+      "If per-target warrants are computationally cheap and the debt is purely an attention-weighting issue (SRC_001), ensemble criticism would not resolve the underlying attention saturation."
+    ],
+    "optional_refs": ["SRC_001", "SRC_004", "SRC_007", "SRC_008"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_004", "SRC_007", "SRC_008"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.65
+  }
+}
+```

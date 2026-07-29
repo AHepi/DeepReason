@@ -1,0 +1,45 @@
+```json
+{
+  "abstention": null,
+  "candidate": {
+    "analogy": {
+      "adopted_commitment_refs": [],
+      "disanalogies": [
+        "In test coverage, the codebase is static between test-writing cycles, whereas rival positions may mutate or spawn new positions during criticism cycles",
+        "Test coverage targets line/branch coverage which is well-defined, while criticism coverage depends on the contested notion of what constitutes a sufficient warrant",
+        "Ensemble diversity is a design feature; rival-position diversity in the school may be a symptom of insufficient constraint rather than deliberate design"
+      ],
+      "overturn_conditions": [
+        "If criticism capacity is dynamically scaled with rivalry size, the debt ratio stabilizes and the mechanism is not broken",
+        "If most rival positions are semantically redundant, effective rivalry is far below nominal and the O(n^2) argument doesn't bind",
+        "If criticism relevance-ranking is efficient, targeted criticism need not be exhaustive and the combinatorial ceiling is not reached"
+      ],
+      "shared_structure": [
+        "Coverage debt: a finite budget of criticism actions against a growing set of targets leaves an increasing fraction unaddressed",
+        "Superlinear growth of relevant interactions: pairwise or combinatorial target space grows faster than linear processing capacity",
+        "Dilution of attention: criticism-weighted attention spreads thinner as more positions compete for the same critical scrutiny"
+      ],
+      "source_memory_refs": ["SRC_001", "SRC_007", "SRC_008"],
+      "transfer_claims": [
+        "Just as ensemble methods manage diversity by clustering correlated learners rather than treating each independently, the school should cluster rival positions by semantic similarity and criticize clusters rather than individuals",
+        "As with test coverage debt, the school should publish a coverage metric (fraction of rival positions with active warrants) and set a minimum threshold to halt new position admission when debt exceeds it"
+      ]
+    },
+    "claim": "The batch criticism mechanism fails to retire rival positions because coverage debt grows superlinearly with rivalry size while criticism capacity scales only linearly, creating an expanding gap that makes retirement increasingly improbable as the school grows from 18 to 60+ accepted positions.",
+    "counterconditions": [
+      "If criticism capacity is dynamically scaled with rivalry size (e.g., batch size proportional to position count), the debt ratio stabilizes and the retirement failure is not caused by the batch mechanism itself",
+      "If most of the 60 rival positions are semantically redundant, effective rivalry is far below nominal and the O(n^2) combinatorial argument does not bind",
+      "If criticism is guided by an efficient relevance-ranking that prioritizes high-impact targets, the combinatorial ceiling is never reached and the mechanism is adequate",
+      "If the retirement threshold is set too conservatively (requiring overwhelming warrant strength), the failure is in the retirement policy, not the criticism throughput"
+    ],
+    "evidence_refs": [],
+    "mechanism": "Each accepted rival position requires per-target warrants for criticism. As rivalry grows from 18 to 60, the number of positions requiring criticism grows linearly, but the combinatorial space of potentially relevant pairwise interactions (where one position might undermine another) grows as O(n^2). SRC_001's token-economy analysis shows that budget pressure creates selection pressure; here, the criticism budget is consumed by per-target warrants that each require fixed token cost, so total criticism capacity is O(batch_size * cycles) = O(n_linear). Meanwhile, the coverage requirement—the number of positions that must be criticized to maintain a given retirement rate—scales with the full rival set. SRC_007's formal harness specification implies that criticism operates on admitted positions with per-target warrants, meaning each warrant is independently costly. SRC_008's state-of-the-theory likely records the 18-to-60 growth pattern. The result: criticism-weighted attention dilutes across more targets per cycle, each target receives less scrutiny, and the probability that any single position accumulates sufficient warrant-strength to be retired drops. This is structurally identical to coverage debt in software test suites: as the target surface grows, the fixed-capacity critic covers a shrinking fraction. A sandboxed Python simulation could model this by varying batch criticism capacity against position-growth rate and measuring retirement probability as a function of rivalry size.",
+    "optional_refs": ["SRC_001", "SRC_007", "SRC_008"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001", "SRC_007", "SRC_008"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.72
+  }
+}
+```

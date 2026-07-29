@@ -38,3 +38,7 @@ Next action: deepreason qualify
 setup_rc=0
 {"cache_reused":true,"maximum_expected_provider_calls":0,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"d3067fb88ac19129c958ee9de9766b25f6cdec7e66b67c94e3709dc07c5c3ead","schema":"deepreason-qualification-result.v1","tier":"full"}
 qualify_rc=0 qualify_seconds=1
+reason_rc=5 reason_seconds=590
+run_id=run-9175f0ecb055e57455af3c50df153c5a state=failed
+audit_rc=0
+=== selfstudy ladder end 2026-07-29T17:47:09Z ===

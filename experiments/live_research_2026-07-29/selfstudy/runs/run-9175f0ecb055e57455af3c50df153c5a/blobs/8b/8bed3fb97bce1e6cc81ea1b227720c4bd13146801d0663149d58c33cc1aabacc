@@ -1,0 +1,23 @@
+{
+  "candidate": {
+    "claim": "The batch criticism mechanism fails to retire rival positions because coverage debt grows superlinearly (O(N^2)) with the number of accepted rivals, exhausting the criticism token budget. An optimization utilizing ensemble methods (directed research: https://en.wikipedia.org/wiki/Ensemble_learning) to weight and prioritize disanalogies would reduce coverage debt to near-linear growth and restore retirement dynamics.",
+    "mechanism": "Per SRC_001's budget-pressure causal loop, as accepted rivals grow from 18 to 60, the requirement to generate per-target warrants for every pair creates a combinatorial explosion of coverage debt. The criticism-weighted attention becomes saturated and fails to retire positions. By treating each criticism as a weak learner in an ensemble method that votes on the retirement of specific rivals, the limited attention budget is concentrated on the most vulnerable rivals, overcoming the coverage bottleneck.",
+    "counterconditions": [
+      "If the accepted rivals are highly redundant, the combinatorial explosion is illusory and simple linear coverage would suffice.",
+      "If ensemble criticism fails to satisfy the normative dependence-ref requirements of SRC_004, it may be rejected by the formal harness (SRC_007).",
+      "If the failure to retire rivals is due to a lack of ground truth rather than budget exhaustion, ensemble voting will not identify the correct rivals to retire."
+    ],
+    "typicality": 0.65,
+    "optional_refs": [
+      "SRC_001",
+      "SRC_008"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001",
+        "SRC_008"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

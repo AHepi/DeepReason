@@ -1,0 +1,3 @@
+```json
+{"cases": [{"attack": false, "target_alias": "SRC_001"}, {"attack": true, "case": "The relation claims inheritance from SRC_010 and 'the basin report,' but the refutation condition tests independence from SRC_009's refuted-attractor mechanisms—a source not named as an endpoint of the inheritance. If the artifact can operate independently of SRC_009 yet still inherits the skepticism stance from SRC_010, the refutation condition would trigger falsity even though the inheritance relation (from SRC_010/basin report) holds. The refutation criterion is mismatched to the relation's stated endpoints, making the 'refuted if' clause fail to genuinely test the claimed inheritance.", "target_alias": "SRC_002"}]}
+```

@@ -1,0 +1,20 @@
+```json
+{
+  "candidate": {
+    "claim": "Implementing a dynamic coverage-debt attention multiplier—where attention scales exponentially with the duration a rival position has remained uncriticized—will force the criticism mechanism to retire a higher proportion of existing rival positions, preventing the unbounded growth of rivalry (e.g., the observed 18 to 60 expansion) and establishing a stable equilibrium.",
+    "mechanism": "The current criticism mechanism exhibits a causal loop where coverage debt grows without inducing sufficient selection pressure to retire divergent artifacts. By introducing a time-decay multiplier on coverage debt, older unchecked rival positions accumulate a disproportionately large attention penalty. This forces the criticism subsystem to prioritize resolving the oldest, most divergent artifacts before admitting new conjectures, thereby breaking the degenerate lineage cycle described in the formal specification and state-of-the-theory reports.",
+    "counterconditions": [
+      "The overall attention budget is too constrained, causing the system to entirely starve the generation of new rival positions by locking focus on the oldest uncriticized ones.",
+      "The exponential decay function on coverage debt leads to pathological oscillation, where the system alternately abandons all new generation to retire a backlog, and then swings back to unchecked generation.",
+      "The rivalry size of 60 is actually an optimal ensemble state, and forcing retirements via attention manipulation degrades the overall ensemble's representational diversity."
+    ],
+    "optional_refs": [
+      "SRC_001",
+      "SRC_007",
+      "SRC_008"
+    ],
+    "typicality": 0.75
+  },
+  "abstention": null
+}
+```

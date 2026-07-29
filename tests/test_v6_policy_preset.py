@@ -267,3 +267,55 @@ def test_engaged_research_policy_is_operator_opted_and_default_silent():
 
     # The preset factory embeds the same operator decision.
     assert engaged_inquiry_capability_policy().research == engaged_research_policy()
+
+
+def test_attached_evidence_default_stays_disabled_and_attach_opts_in():
+    from deepreason.capabilities.policy import AttachedEvidencePolicyV1
+    from deepreason.v6_policy import (
+        engaged_attached_evidence_policy,
+        engaged_inquiry_capability_policy,
+    )
+
+    assert engaged_attached_evidence_policy() == AttachedEvidencePolicyV1()
+    envelope = engaged_attached_evidence_policy(attached=True)
+    assert envelope.enabled is True
+    assert envelope.maximum_sources == 16
+    assert envelope.maximum_total_bytes == 8 * 1024 * 1024
+    assert envelope.maximum_excerpt_bytes_per_source == 262_144
+    assert envelope.maximum_sources_per_pack == 8
+    topology = engaged_inquiry_capability_policy(attached_evidence=True)
+    assert topology.attached_evidence == envelope
+    # The opt-in changes only the evidence authority, nothing else.
+    default = engaged_inquiry_capability_policy()
+    assert topology.simulation == default.simulation
+    assert topology.research == default.research
+    assert topology.config_referee == default.config_referee
+
+
+def test_atomic_child_budget_denial_propagates_as_budget_signal():
+    """Live regression (run-9175f0ec): a budget-denied atomic child must
+    surface as WorkBudgetDenied for the typed-stop path, and any other
+    non-completed terminal stays a hard recovery error."""
+
+    from types import SimpleNamespace
+
+    import pytest as _pytest
+
+    from deepreason.workflow.atomic_recovery import recover_atomic_child_output
+    from deepreason.workflow.transaction import WorkBudgetDenied
+
+    def item(status):
+        return SimpleNamespace(
+            preparation=SimpleNamespace(id="sha256:" + "a" * 17, attempt_index=0),
+            terminal=SimpleNamespace(status=status, work_id="sha256:" + "a" * 17),
+        )
+
+    harness = SimpleNamespace(
+        workflow_state=SimpleNamespace(transaction_work={})
+    )
+    with _pytest.raises(WorkBudgetDenied):
+        recover_atomic_child_output(
+            harness, None, None, item("budget_denied"), None
+        )
+    with _pytest.raises(ValueError, match="terminally failed"):
+        recover_atomic_child_output(harness, None, None, item("abandoned"), None)

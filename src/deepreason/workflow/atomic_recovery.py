@@ -30,6 +30,13 @@ def recover_atomic_child_output(harness, manifest, service, root_item, contract)
     descendants.sort(key=lambda item: item.preparation.attempt_index)
     selected = descendants[-1] if descendants else root_item
     if selected.terminal is not None and selected.terminal.status != "completed":
+        if selected.terminal.status == "budget_denied":
+            # The durable typed budget denial is the complete outcome for
+            # this child; re-raise it as the budget signal so the standard
+            # typed-stop path handles it instead of failing the run.
+            from deepreason.workflow.transaction import WorkBudgetDenied
+
+            raise WorkBudgetDenied(selected.terminal)
         raise ValueError("atomic child is terminally failed")
     provider = selected.provider_attempts.get(selected.preparation.attempt_index)
     if provider is None or provider.raw_ref is None:
