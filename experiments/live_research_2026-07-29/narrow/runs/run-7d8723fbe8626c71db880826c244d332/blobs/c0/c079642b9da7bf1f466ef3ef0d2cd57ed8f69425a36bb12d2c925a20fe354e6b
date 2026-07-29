@@ -1,0 +1,76 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "An idempotent operation is one where repeated application yields the same state as a single application (f(f(x))=f(x)), whereas a safe operation has no side effects (per published definitions like RFC 9110). An append-only event log requires idempotent writers to survive at-least-once delivery.",
+      "mechanism": "At-least-once delivery implies operations may be retried. If an operation is safe but not idempotent (e.g., appends a random UUID), a retry will mutate the log with a different UUID, breaking deterministic replay. Thus, idempotency, not merely safety, is required for state convergence during replay.",
+      "counterconditions": [
+        "If the append-only log uses a unique key to deduplicate retries, then the writer operation itself could be safe but not idempotent, and the log deduplicates it.",
+        "If safety is defined to include deterministic side effects in this specific system context."
+      ],
+      "typicality": 0.9,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_005",
+        "SRC_006"
+      ]
+    },
+    {
+      "claim": "The distinction between idempotent and safe operations is a category error in the context of append-only logs; the log itself is merely a data structure, but the writers must be idempotent, while safety is irrelevant because writing to the log is inherently a side effect.",
+      "mechanism": "An append-only log mutates state by definition, so writing to it cannot be considered 'safe' in the strict sense of having no side effects. Therefore, requiring safety is a contradiction. To survive at-least-once delivery, the writer must produce the exact same event bytes upon retry, satisfying idempotency.",
+      "counterconditions": [
+        "If safety is defined in a local transactional sense rather than the strict HTTP sense.",
+        "If the writer's side effect is considered external to the system's boundary."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The distinction is best understood by counterexample: a writer appending a random UUID is safe (it does not destroy or alter existing data) but not idempotent. A writer appending a deterministic hash of the payload is both safe and idempotent. The log requires the latter.",
+      "mechanism": "A random UUID writer does not overwrite previous entries (thus safe in the broader sense), but a retry produces a new UUID, changing the log contents. An idempotent writer produces the same bytes on retry, ensuring deterministic replay despite at-least-once delivery semantics.",
+      "counterconditions": [
+        "If the log infrastructure itself attaches the UUID, the writer's operation could be idempotent while the system is not.",
+        "If the replay engine can deterministically generate the UUID from a seed."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The append-only log actually requires 'safe' operations rather than 'idempotent' ones if 'safe' is redefined to mean 'non-destructive', as append-only logs only add data and never modify or delete existing data.",
+      "mechanism": "If an operation only appends and does not overwrite, it is 'safe' from corrupting past states. Idempotency in this context is achieved by the log's deterministic replay engine ignoring duplicate message IDs, rather than the writer being inherently idempotent.",
+      "counterconditions": [
+        "If deterministic replay requires byte-for-byte log identity without a deduplication engine.",
+        "If the definition of safety strictly means zero side effects."
+      ],
+      "typicality": 0.2,
+      "optional_refs": [
+        "SRC_003"
+      ]
+    },
+    {
+      "claim": "The log requires neither idempotency nor safety from its writers, but rather deterministic dependency: writers must only depend on the current log state, and the replay engine must account for network retries by providing a transactional interface.",
+      "mechanism": "If writers interact with the log via a transactional context manager, they can ensure that at-least-once delivery is handled by the commit/rollback logic of the database, making the conceptual distinction between idempotency and safety moot at the writer level.",
+      "counterconditions": [
+        "If the log is a simple flat file without a transactional manager.",
+        "If the replay engine cannot distinguish retried transactions from original ones."
+      ],
+      "typicality": 0.1,
+      "optional_refs": [
+        "SRC_001",
+        "SRC_002"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "If an idempotent writer produces the same event bytes on retry, how does the replay engine distinguish between a genuinely new identical event and a retried duplicate? Does it need to?"
+      }
+    ]
+  }
+}
+```

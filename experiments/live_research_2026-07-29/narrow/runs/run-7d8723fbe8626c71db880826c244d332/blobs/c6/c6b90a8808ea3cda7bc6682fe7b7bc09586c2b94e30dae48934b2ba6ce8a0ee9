@@ -1,0 +1,43 @@
+{
+  "candidates": [
+    {
+      "claim": "An idempotent operation guarantees the resulting system state is identical after one or multiple executions (f(f(x)) = f(x)), whereas a safe operation merely guarantees no harmful side effects or corruption on retry, potentially leaving the system in an altered, though benign, state. To survive at-least-once delivery and ensure deterministic replay, an append-only event log fundamentally requires its writers to be idempotent, either inherently or by enforcing content-defined deduplication.",
+      "mechanism": "At-least-once delivery means a writer's request may be executed multiple times. If the operation is merely safe (e.g., appending a random UUID), the log accumulates multiple distinct entries, violating deterministic replay. Idempotency ensures that repeated appends of the exact same event yield a single logical entry, making the replayed state perfectly match the primary path.",
+      "counterconditions": [
+        "The log could survive at-least-once delivery without writer idempotency if the log infrastructure itself assigns sequence numbers and deduplicates network-level retries before the append event reaches the log's total order.",
+        "If the definition of 'safe' is interpreted to inherently include state convergence (making safe a superset of idempotent), the distinction collapses."
+      ],
+      "typicality": 0.8,
+      "optional_refs": [
+        "SRC_002",
+        "SRC_005",
+        "SRC_007"
+      ]
+    },
+    {
+      "claim": "The append-only event log only requires writers to be safe, not idempotent. Idempotency is a stronger property that applies to the application of an event to state, not the act of appending the event itself. The log preserves the total order of appends, and as long as retried appends do not corrupt the log (i.e., they are safe), deterministic replay is achieved by the consumer applying idempotent logic or sequence-based deduplication to the stream.",
+      "mechanism": "A writer appending an event to a log might safely append duplicates if the log assigns an append position and a producer ID, allowing downstream consumers to deterministically ignore duplicates during replay. The writer's job is just to persist the event safely.",
+      "counterconditions": [
+        "If a safe operation appends events with distinct, randomly generated contents upon retry (e.g., different timestamps or UUIDs), the log will contain divergent events, breaking deterministic replay regardless of consumer logic."
+      ],
+      "typicality": 0.6,
+      "optional_refs": [
+        "SRC_004",
+        "SRC_008"
+      ]
+    },
+    {
+      "claim": "The distinction between safe and idempotent is a false dichotomy for append-only logs. The log requires exactly-once semantics at the protocol level, which is achieved by making the network request itself safe to retry (safe at the transport layer) while the payload carries an idempotency key (idempotent payload). Thus, the property required is a composite: safe transport, idempotent payload.",
+      "mechanism": "At-least-once delivery relies on retries. To make retries harmless, the transport operation must be safe. To make the log deterministic, the payload must carry an idempotency key so the log can collapse the retried safe operations into a single entry. Neither property alone is sufficient.",
+      "counterconditions": [
+        "If the system lacks an idempotency key but the writer is a pure function of state, a safe retry might still inject duplicates.",
+        "If the transport layer provides exactly-once guarantees natively, the writers need neither to be safe nor idempotent in their payload."
+      ],
+      "typicality": 0.5,
+      "optional_refs": [
+        "SRC_006",
+        "SRC_003"
+      ]
+    }
+  ]
+}

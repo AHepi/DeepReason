@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-27633c5a9c5c7a55f009bf27b0b8c744) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits only docs.python.org. Proposals to any other host will be recorded and denied by the harness. Fetched pages become citable evidence blocks.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@dde4de7b40a961fd2c51523c: program:reasoning_observation_pending
+- reason-counter@57609cee63174232f8ef7c6c: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction between safe and idempotent is a false dichotomy for append-only logs. The log requires exactly-once semantics at the protocol level, which is achieved by making the network request itself safe to retry (safe at the transport layer) while the payload carries an idempotency key (idempotent payload). Thus, the property required is a composite: safe transport, idempotent payload.","counterconditions":[{"case":"If the system lacks an idempotency key but the writer is a pure function of state, a safe retry might still inject duplicates.","eval":"observation"},{"case":"If the transport layer provides exactly-once guarantees natively, the writers need neither to be safe nor idempotent in their payload.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"At-least-once delivery relies on retries. To make retries harmless, the transport operation must be safe. To make the log deterministic, the payload must carry an idempotency key so the log can collapse the retried safe operations into a single entry. Neither property alone is sufficient.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@dde4de7b40a961fd2c51523c, reason-counter@57609cee63174232f8ef7c6c
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

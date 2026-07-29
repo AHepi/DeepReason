@@ -1,0 +1,37 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-27633c5a9c5c7a55f009bf27b0b8c744) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits only docs.python.org. Proposals to any other host will be recorded and denied by the harness. Fetched pages become citable evidence blocks.
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@089d5a90c71552a8b61c735d: program:reasoning_observation_pending
+- reason-counter@b345bbac67679659bd95e239: program:reasoning_observation_pending
+- reason-counter@f42e219a62733e04d449f2c7: program:reasoning_observation_pending
+- reason-counter@26e32df521339f8128d3d062: program:reasoning_observation_pending
+- reason-counter@85900ee60d58487e3be1be98: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The problem's phrasing 'safe to repeat' conflates the distributed systems concept of 'safety' (meaning no harm or corruption) with the HTTP/RFC concept of 'safe' (no side effects). The append-only log requires writers to be 'idempotent' to survive at-least-once delivery, ensuring repeated messages don't corrupt the log.","counterconditions":[{"case":"If the system uses a different definition of 'safe' (e.g., type-safe or thread-safe), the conclusion might vary, but under published HTTP/distributed systems definitions, idempotency is the fit.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"At-least-once delivery implies retries. The operation must tolerate retries. Idempotency tolerates retries by ensuring the end state is the same. 'Safe' in the no-side-effect sense fails because appending is the side effect. Thus, idempotency is the required property.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@089d5a90c71552a8b61c735d
+
+TARGET SRC_002
+{"analogy":null,"claim":"An idempotent operation yields the same result after repeated execution as after a single execution, whereas a safe operation produces no side effects on the system state. To survive at-least-once delivery, an append-only event log requires its writers to be idempotent, not safe, because appending to the log is inherently a side effect.","counterconditions":[{"case":"If the log does not support deduplication via unique IDs, the writers cannot guarantee idempotency, and at-least-once delivery would lead to duplicate logs.","eval":"observation"},{"case":"If the system relies on a non-standard definition of 'safe', the distinction may not hold.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"If a writer sends an append request and it times out, at-least-once delivery guarantees the writer will retry. If the operation is safe (no side effects), it couldn't append to the log at all. If it is idempotent, the log can identify the duplicate request via a unique event ID and ignore subsequent duplicates, ensuring the log's state is identical to the state if it had been appended exactly once.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@b345bbac67679659bd95e239, reason-counter@f42e219a62733e04d449f2c7
+
+TARGET SRC_003
+{"analogy":null,"claim":"The append-only event log itself does not require the writers' operations to be idempotent; rather, it requires the log ingestion to be idempotent. Writers merely need to provide a stable unique identifier with each event they retry.","counterconditions":[{"case":"If the writer generates a new unique ID for each retry, the log ingestion cannot deduplicate, violating idempotency.","eval":"observation"},{"case":"If the log does not persist deduplication keys long enough, a delayed retry might bypass the idempotency check.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"The log acts as an idempotent receiver: it checks the unique ID of the incoming event. If the ID is already in the log, it acknowledges the write without appending a duplicate. This satisfies at-least-once delivery deterministically without requiring the writer's broader operation to be idempotent, shifting the burden from the writer to the log.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@26e32df521339f8128d3d062, reason-counter@85900ee60d58487e3be1be98
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

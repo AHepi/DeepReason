@@ -1,0 +1,139 @@
+```json
+{
+  "entries": [
+    {
+      "entry_key": "CLM_1",
+      "claim_class": "source_fact",
+      "claim": "SRC_1 attests that https://docs.python.org/3/library/logging.handlers.html is a sound source for evidence on the question, with citable blocks and a content hash.",
+      "source_handles": ["SRC_1"]
+    },
+    {
+      "entry_key": "CLM_2",
+      "claim_class": "source_fact",
+      "claim": "SRC_2 attests that https://docs.python.org/3/library/sqlite3.html is a sound source for evidence on the question, with citable blocks and a content hash.",
+      "source_handles": ["SRC_2"]
+    },
+    {
+      "entry_key": "CLM_3",
+      "claim_class": "source_fact",
+      "claim": "SRC_3 attests that https://docs.python.org/3/library/logging.html is a sound source for evidence on the question, with citable blocks and a content hash.",
+      "source_handles": ["SRC_3"]
+    },
+    {
+      "entry_key": "CLM_4",
+      "claim_class": "recorded_observation",
+      "claim": "EVD_1 contains the Python 3.14.6 logging.handlers module documentation describing StreamHandler, FileHandler, NullHandler, WatchedFileHandler, and rotating handler classes and their emit/flush/close methods.",
+      "evidence_handles": ["EVD_1"]
+    },
+    {
+      "entry_key": "CLM_5",
+      "claim_class": "recorded_observation",
+      "claim": "EVD_2 contains the Python 3.14.6 sqlite3 module documentation describing the DB-API 2.0 interface, connection objects, cursors, transactions, and the tutorial for creating and querying SQLite databases.",
+      "evidence_handles": ["EVD_2"]
+    },
+    {
+      "entry_key": "CLM_6",
+      "claim_class": "recorded_observation",
+      "claim": "EVD_3 contains the Python 3.14.6 logging module documentation describing Logger objects, handler objects, formatter objects, filter objects, LogRecord attributes, and module-level functions for event logging.",
+      "evidence_handles": ["EVD_3"]
+    },
+    {
+      "entry_key": "CLM_7",
+      "claim_class": "surviving_conjecture",
+      "claim": "An idempotent operation satisfies f(f(x))=f(x) where repeated application converges to the same state as a single application. A safe operation merely guarantees that retries do not violate system invariants without necessarily producing identical state. An append-only event log requires safety of its writers, not idempotency, because appending is inherently non-idempotent; the log survives at-least-once delivery via deterministic operation identifiers or deduplication keys.",
+      "formal_artifact_handles": ["ART_1"]
+    },
+    {
+      "entry_key": "CLM_8",
+      "claim_class": "surviving_conjecture",
+      "claim": "The idempotent-vs-safe distinction is best understood through counterexample: a random-UUID writer is neither idempotent nor safe under retry; a deterministic-hash writer is safe but not idempotent; a check-then-append writer is idempotent in effect but requires a read path that contradicts append-only discipline. The log requires the safe-but-non-idempotent writer (property b).",
+      "formal_artifact_handles": ["ART_2"]
+    },
+    {
+      "entry_key": "CLM_9",
+      "claim_class": "surviving_conjecture",
+      "claim": "Both properties are required but at different architectural layers: the writer must be safe (retry attempts are harmless or detectably redundant) and the replay/deduplication layer must be idempotent in its effect on derived state. The append-only log requires safety of writers and idempotency of readers, not idempotency of writers.",
+      "formal_artifact_handles": ["ART_3"]
+    },
+    {
+      "entry_key": "CLM_10",
+      "claim_class": "surviving_conjecture",
+      "claim": "The append-only log actually requires idempotency of writers, not merely safety, because deterministic replay demands that the replayed state be exactly identical to the state produced without retries. A safe-but-not-idempotent writer could produce divergent log states under retry, breaking byte-for-byte replay determinism.",
+      "formal_artifact_handles": ["ART_4"]
+    },
+    {
+      "entry_key": "CLM_11",
+      "claim_class": "surviving_conjecture",
+      "claim": "The distinction between idempotent and safe is a false dichotomy for append-only logs. The log actually requires commutativity with respect to the deduplication function: the deduplication function D applied to the log is a monotonically increasing fixed point where D(log + [E]) = D(log + [E, E]). The relevant property is neither idempotency nor safety but that writers' operations commute under D.",
+      "formal_artifact_handles": ["ART_5"]
+    },
+    {
+      "entry_key": "CLM_12",
+      "claim_class": "surviving_conjecture",
+      "claim": "In practice, append-only event logs like Apache Kafka achieve at-least-once delivery safety through idempotent producers at the protocol level, but this is a misnomer: the producer's idempotency is actually safety via sequence numbers and transactional IDs allowing broker deduplication. The log requires safety of the writer-broker protocol, and idempotency is an emergent property of the consumer's state machine.",
+      "formal_artifact_handles": ["ART_6"]
+    },
+    {
+      "entry_key": "CLM_13",
+      "claim_class": "surviving_conjecture",
+      "claim": "Idempotent operations satisfy f(f(x))=f(x) while safe operations merely cause no corruption when repeated but may produce different state. An append-only event log requires only that its writers be safe—retried appends produce duplicate entries but no corruption—while idempotency is deferred to the replay processor which deduplicates via sequence numbers, idempotency keys, or hash-based collapsing.",
+      "formal_artifact_handles": ["ART_7"]
+    },
+    {
+      "entry_key": "CLM_14",
+      "claim_class": "surviving_conjecture",
+      "claim": "Per RFC 9110 §9.2.1, 'safe' means the operation has no side effects at all (semantically read-only) and 'idempotent' means repeated identical invocations have the same effect as a single one (side effects permitted). An append-only log's writers are neither safe nor idempotent in this strict sense; the log actually requires a weaker informal 'retry-safe' property that neither RFC term captures.",
+      "formal_artifact_handles": ["ART_8"]
+    },
+    {
+      "entry_key": "CLM_15",
+      "claim_class": "surviving_conjecture",
+      "claim": "The append-only log requires idempotent writers, not merely safe ones, because deterministic replay demands that the replayed system state match the original state. Retried appends producing duplicate entries that the original did not produce make replay non-deterministic. Idempotency keys at the write layer ensure the replayed log is semantically identical to the original.",
+      "formal_artifact_handles": ["ART_9"]
+    },
+    {
+      "entry_key": "CLM_16",
+      "claim_class": "surviving_conjecture",
+      "claim": "Through counterexample: a random-UUID writer is safe but not idempotent; a deterministic-hash writer is both safe and idempotent (deduplicatable); a global-counter writer is neither. The append-only log requires the safe-and-non-idempotent writer at minimum but prefers the safe-and-idempotent writer for robust deterministic replay.",
+      "formal_artifact_handles": ["ART_10"]
+    },
+    {
+      "entry_key": "CLM_17",
+      "claim_class": "surviving_conjecture",
+      "claim": "The distinction between idempotent and safe is a category error in the context of append-only logs. The log requires a property of the delivery protocol—namely, that retried writes are distinguishable from original writes by the replay layer via metadata (delivery IDs, producer epochs, sequence numbers). This distinguishability is neither idempotency nor safety; writers need only attach metadata.",
+      "formal_artifact_handles": ["ART_11"]
+    },
+    {
+      "entry_key": "CLM_18",
+      "claim_class": "surviving_conjecture",
+      "claim": "What the append-only log requires is 'commutative idempotency' of the processing function, not of the writers. Writers need only be safe (retries don't corrupt), while the processing function during replay must be both idempotent and commutative so that duplicate and reordered entries converge to the same replayed state. The replay function must be a semilattice fold.",
+      "formal_artifact_handles": ["ART_12"]
+    },
+    {
+      "entry_key": "CLM_19",
+      "claim_class": "surviving_conjecture",
+      "claim": "Idempotency is f(f(x))=f(x) where single and repeated application converge to identical state. Safety is the systems property that retried operations do not violate correctness invariants—duplicates may occur but are tolerated or deduplicated. An append-only event log requires safe writers, not idempotent ones, because appending is intrinsically non-idempotent yet the system survives at-least-once delivery if duplicate entries are detectable and harmless during replay.",
+      "formal_artifact_handles": ["ART_13"]
+    },
+    {
+      "entry_key": "CLM_20",
+      "claim_class": "surviving_conjecture",
+      "claim": "Idempotency constrains the operation's effect on state, while safety constrains the operation's effect on correctness under retries. An append-only event log requires safety: writers must ensure that duplicate appends—inevitable under at-least-once delivery—do not corrupt deterministic replay, achievable via content-addressable or sequence-numbered appends that make duplicates detectable even though the raw append remains non-idempotent.",
+      "formal_artifact_handles": ["ART_14"]
+    },
+    {
+      "entry_key": "CLM_21",
+      "claim_class": "surviving_conjecture",
+      "claim": "Through the safety-vs-liveness lens from distributed systems theory: a safety property asserts that 'something bad never happens' (no incorrect state is reached), while idempotency is a specific structural guarantee (f(f(x))=f(x)). An append-only log requires the safety property: corrupted replay never arises from duplicate appends. It does not require idempotency because duplicate entries are not a correctness violation if the replay engine filters them.",
+      "formal_artifact_handles": ["ART_15"]
+    },
+    {
+      "entry_key": "CLM_22",
+      "claim_class": "surviving_conjecture",
+      "claim": "An append-only event log requires 'effectively idempotent' writers—writers that attach deterministic identity to each event so that the composite operation 'ensure-this-event-is-in-the-log' is idempotent even though the primitive 'append-bytes' is not. The published distinction maps to the difference between primitive and composite operations, and the log needs the composite to be idempotent.",
+      "formal_artifact_handles": ["ART_16"]
+    },
+    {
+      "entry_key": "CLM_23",
+      "claim_class": "surviving_conjecture",
+      "claim": "Idempotency is a property of an operation applied to the same input state (does doing it twice from the original state equal once?), while safety is a property of an operation applied after its own prior execution (does doing it again after already having done it cause harm?). For an

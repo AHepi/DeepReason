@@ -1,0 +1,388 @@
+{
+  "claim_ledger": {
+    "advisory_context_ref": "sha256:6980b7b7086e03a6c0b398e2e40e470c0c51fe8132fbf313e4f7f5bae08df797",
+    "entries": [
+      {
+        "claim": "At formal sequence 1131, artifact 838a109b88e648ad4caa1bf218773db4ed671231b7903024ce4604ed284ed981 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:66e538286354529c82427de01b6702fbf14e09de47b99874c0ae741b85933966",
+        "process_observation_refs": [
+          "sha256:25983883e2b99d100b77977d8c1201275f810539cfb7789cab4d6765504e29af"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 8dc9accbe33c01455bd7856e48500c286bfd5ef85e5cc340126606384acaa4d3 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:42a872b4d27af80f4876ed86ea5d3f075ac187b2fbf8b44849e40bdd99d181b8",
+        "process_observation_refs": [
+          "sha256:d290b5dd50932da5f9f3f98522ef5efe1186a7b1e2110685ca829bfb4b3d611e"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:557fcb574935b196cb4e12932c8e4b1b5ce342f158e3031ed8cc3f1af3831312",
+        "process_observation_refs": [
+          "sha256:6fb7e4df72a3094dcc2ef3f4466203d206e58f4201d354d3b5c26e3e02fc1a9e"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 932ef2e29b90a34c8e295817772b6cd454e37e0788b5783dde887e63b31cbc03 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:b87e41a575b0e8583f99848a5c66985a47ea7662a8fedc2c8cb17c631bec2d46",
+        "process_observation_refs": [
+          "sha256:0db9fb517edd1742b8fc21dc390ec223464ebc75c73b9135de062e705128cacb"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 2dcb167045a9b1728b55af32bad6d3ce8c3684655905b666bcbfec473bceea99 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:c2b4f86586c19088967b54470f1419a70ecc8ae1a1715bb20429aa576a871a9a",
+        "process_observation_refs": [
+          "sha256:084645f15bc851ef59528d52d719f5c7d782355ab22e213fa48f6d8da5cfe2f4"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact f3cb5758ff25b3fb5bb425826a0cd5a81381f08da1ab2f9387f12748f085b724 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:1db99b77ddc5f0c9c19fd3434fd5ecea1bd3b3711a3ba0a1baaa927b6045f5d2",
+        "process_observation_refs": [
+          "sha256:b9340aaa5c11bd0b3afc0486b7f4417cdbf6750deb5f123ebef65342652d7fc9"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 2e61be98723fdac80c0b6d76c7159a4d4c029ecdfc8b7b97d6ebf92fb9a574fe had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:ce0b4137719dd02cf12c73d21c4b37df1ddf6d7a37e06588d10309765289d591",
+        "process_observation_refs": [
+          "sha256:d35a510381d4431bebc3be685260dcbde5e62151aa3e13bcb03cfb4e0a8a0057"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact bbf87d372e3f8753b8171e01fb95408cb4cea21b43bf6209bf8e72c436cdfc69 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:779f37c121bf4a3138ba52fdc915db0b0a9a984a1529b346890d46e90ff136be",
+        "process_observation_refs": [
+          "sha256:8cb7c54da20920b904b365595551ad8ce5ce9c6efcd5b46ba5ef9f1f76ef855e"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 7db46860ddab8a6597ca6a6e47747dd5e7e88ba63427959f25485af2c868fb59 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:f73d03b65a6c6d6a4e629e6ff38034eb5956333dfaed0fdb08e52a66b30e1da6",
+        "process_observation_refs": [
+          "sha256:12b09c01936f18d968165b9348190007883f7cb4d0ac2a37a9291bd3c9c3c666"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact d3d4e3525751db298c73db50cf310be14e4f9a9783fdfe98c15a9b011b67591c had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:177c4344672d48483baadeda8c7201c809993a0655be72d0a3751ea330dab3cc",
+        "process_observation_refs": [
+          "sha256:834505c8578f15065861c0e183385d429b452262ec7f72e0b638f9552f609e62"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 14e084ed5ca745f165af78ba87bacf022eb02009f568e890426876a57e039e0e had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:920b74c7e18a23a0cc26d529475e03e92fdd035c885b54646e0b680d488f6fbe",
+        "process_observation_refs": [
+          "sha256:9704b748d0d38b15a7dcf425ac14f7b3655549f66c803fb31ec60db420515d71"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 2b3bc662bc6e060fd386f567372e84344a95ac6437590dbf6ff5ff639a133710 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:c39c6222b15769e70e8999ecb0af9a3396cf1ca1debefc3f8e38b6c4bcf92024",
+        "process_observation_refs": [
+          "sha256:a7178a1fb56abb73d3f9c91a185d75c06fb6219716c8d1557b30b9399e1e1714"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact b5164be7cdd67d07a0068b92fde7104efe5e1ea51d512a94ac8fe192943ef2ed had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:0cfd094225fe3debf5a4430e2426aec60cf66e47e48bde2f37d7a26acee5745f",
+        "process_observation_refs": [
+          "sha256:6d7181ed1526dd37214be346631f69b8aa87a116c8789769deb9854b37eccc1a"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact a81e30ae284bb4cc0fd947a10392dbbbf32bd8a0dff18a617249a48f8c6a66a2 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:dc299577a942c8f8e19a0a6f3571c385f513cbb756f68a07393fd311c7115bf3",
+        "process_observation_refs": [
+          "sha256:cf84c9fe7ba087edf7dfeda3a97eed2a0f75c05507921a004131735e30109095"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact d4e817a5c3144ad71f059f5fd1ebde925b898105e17e5645232be57716f30858 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:08e3bc235e51e8c06065a1bc8bcf50e4457d5c2bfeb38b43fe766ce0ea280499",
+        "process_observation_refs": [
+          "sha256:2d86f578ea3c782fc1ec6f5c07aea526a4d2bedef96ab3c9f7a3c36c674b9ab6"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact e9c1886802e47b71f4e8c19b9907416f0fe5e7c53688249273b1190d1da1e2f4 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:a0c98c53fa00964e20354d2e109de67acc376675da6ac050b4bf9b1186f1c975",
+        "process_observation_refs": [
+          "sha256:91717a12d73f11a8d71db495e5755d2b59c19c0c0bf9c735f703d82aff0d2099"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 15769cf44a857862dbb4eb441ad47f0f8480c52d4858d5bad5f410615b2198f9 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:b895a674740bd3afce70e5772f807ec603603e4b04d862c03a8a34773da531cc",
+        "process_observation_refs": [
+          "sha256:90e8b6885f73d9ca74988c80f337621712aa97afe5b83057a4765e0ecc461c9e"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact b465123c455302a6836ead3857a27c015433974a1138ba1bf8047ddc18a0c27d had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:640ff3e6825da05022d6d25b3879ec43e24178e8e8402a1ed1e69030bec3419f",
+        "process_observation_refs": [
+          "sha256:47fb5dc50307db72c86a7ae14c5f4de8b73526c6f83572fac259183c747e7395"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact d47d24d7fce16c23d4accf6d911ba23f817a9b5ee3482b2cce93a6e39618470b had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:3ac587caedcdea4094612e3d6d1dfa8a198112a0be052cba3e1f7c31ce00c3de",
+        "process_observation_refs": [
+          "sha256:91c22f036eca2bf5d484b778a1f2a2f3079a7a225d9fb5601e2c42d0157e5b18"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 7ee34869f3b73ab76ba92fcb019cd97ed97db6cfc4e977d78ebb575baa88791c had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:9a821dacb9b5755dea332b3612abe49e225ef3da063a1b0478a1a6f122c58fff",
+        "process_observation_refs": [
+          "sha256:8f6ae98379335c3ece58f87f6d7b23ade1d566d45c7b3faa6de56653e6eafd3d"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 222160523bbe21b6ec9216c97bbe0ccd5fa989020e95cfa3a40c49b41c47b83d had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:dd2a3963cb2eb8e5eb4051e06623bc6e8299572fc152e16822620418aabcb832",
+        "process_observation_refs": [
+          "sha256:df17a569f8767cda1a1a1e1bfee89da394a9d75f9abfa3e999495eb5958d0989"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact ffd82244bb3b47c8bc4ea66b3440c9c6f7263cded40d76a5b64e084bd5915c18 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:0e22e50b15fa0521be2096746b86861f35829aa0a6e495f7401d8f8f423e100d",
+        "process_observation_refs": [
+          "sha256:fdf1363b51bc26da7f49eaeb64409cd90aa7a2c1d1313cc1e71cb935687f2378"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 9658e67c25dfd750dee47f11ffe1fb8d44bdc947d6937414ba339698f700a1ac had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:18b14e2e63f9513a36e6e578ea9251629060ca2606f0695683cb26fad5f7e7bb",
+        "process_observation_refs": [
+          "sha256:4ce2863f0ed86018d4557964310feea58b90515e1f76c56c641fc817c06f6b27"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 6eb20d67fcb125e5d9fd75a59e96b20372e2fddb26d975279261f35bebe93219 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:e1d047a64c062c984a31d559f6c19352c4230c9d5bba40829030ebd3db9b184a",
+        "process_observation_refs": [
+          "sha256:96d720ecddb016c24d8c42990068b32eba37ca444a9dd4189aaafc6761b0b492"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      },
+      {
+        "claim": "At formal sequence 1131, artifact 72bf73b80feacfc99dc7bd04f15f8a23196056ae4429d2dc4f0e19d5e33660c7 had formal status accepted.",
+        "claim_class": "recorded_observation",
+        "id": "sha256:73a0ba599f9fde5dca545aa6f7db4def73480310f7686f9084c19ec82919b0ab",
+        "process_observation_refs": [
+          "sha256:94999b01416408271fc1084886787dcf05f97809ec15c2edc869173fa1a05bc4"
+        ],
+        "schema": "bridge.claim-ledger.entry.v1"
+      }
+    ],
+    "formal_seq": 1131,
+    "id": "sha256:5b5b15e5d7bc9d2ef1edb6ed61e96fb963595a98d07c493df0a9b7c0da5e22e7",
+    "output_target": "answer",
+    "problem_ref": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+    "retrieval_receipt_ref": "sha256:6fc544ebd12c41b7b94926f0f5b5df801a008da58dda54d2360312b90a84113d",
+    "schema": "bridge.claim-ledger.v1"
+  },
+  "failure": null,
+  "grounded_review": null,
+  "output": {
+    "claim_ledger_id": "sha256:5b5b15e5d7bc9d2ef1edb6ed61e96fb963595a98d07c493df0a9b7c0da5e22e7",
+    "id": "sha256:0618cf501825f3874f041c4861865b38286064fcbf05f89644b6d20702d4ee6a",
+    "resolution": "answered",
+    "schema": "bridge.output.v1",
+    "sections": [
+      {
+        "id": "sha256:e34b54a6b4d5ec9a99f936519c088ac8f276f9249058b3499db6f22c400e96d7",
+        "ledger_entry_ids": [
+          "sha256:66e538286354529c82427de01b6702fbf14e09de47b99874c0ae741b85933966"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S1",
+        "text": "At formal sequence 1131, artifact 838a109b88e648ad4caa1bf218773db4ed671231b7903024ce4604ed284ed981 had formal status accepted."
+      },
+      {
+        "id": "sha256:d3d13271caa96996df0a0d778b79b416688118ba959e3fdf7c0ccdd564c19765",
+        "ledger_entry_ids": [
+          "sha256:42a872b4d27af80f4876ed86ea5d3f075ac187b2fbf8b44849e40bdd99d181b8"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S2",
+        "text": "At formal sequence 1131, artifact 8dc9accbe33c01455bd7856e48500c286bfd5ef85e5cc340126606384acaa4d3 had formal status accepted."
+      },
+      {
+        "id": "sha256:3de436a38393f9b023a36e9d3a1e46ab16a8dfa8d3c6c51b7f4604f8adb70b5e",
+        "ledger_entry_ids": [
+          "sha256:557fcb574935b196cb4e12932c8e4b1b5ce342f158e3031ed8cc3f1af3831312"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S3",
+        "text": "At formal sequence 1131, artifact 2edd20cc5e66fc9a101c6281776b2f87205d239a7fa43391655c3ae100ba4e1b had formal status accepted."
+      },
+      {
+        "id": "sha256:ef524a724a8d0e65baa65ddc732aea82905e4dc0a67b618a2570010f7ce16789",
+        "ledger_entry_ids": [
+          "sha256:b87e41a575b0e8583f99848a5c66985a47ea7662a8fedc2c8cb17c631bec2d46"
+        ],
+        "rendering_mode": "observation",
+        "schema": "bridge.claim-use.v1",
+        "span_id": "S4",
+        "text": "At formal sequence 1131, artifact 932ef2e29b90a34c8e295817772b6cd454e37e0788b5783dde887e63b31cbc03 had formal status accepted."
+      }
+    ]
+  },
+  "pagination": {
+    "collections": [
+      {
+        "has_more": true,
+        "limit": 25,
+        "next_offset": 25,
+        "offset": 0,
+        "pointer": "/claim_ledger/entries",
+        "returned": 25,
+        "total": 50
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/claim_ledger/uncovered_requirements",
+        "returned": 0,
+        "total": 0
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/claim_ledger/source_conflicts",
+        "returned": 0,
+        "total": 0
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/output/sections",
+        "returned": 4,
+        "total": 4
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/output/unresolved_items",
+        "returned": 0,
+        "total": 0
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/validation_report/findings",
+        "returned": 0,
+        "total": 0
+      },
+      {
+        "has_more": false,
+        "limit": 25,
+        "next_offset": null,
+        "offset": 0,
+        "pointer": "/grounded_review/findings",
+        "returned": 0,
+        "total": 0
+      }
+    ],
+    "limit": 25,
+    "offset": 0
+  },
+  "schema": "deepreason-cli-bridge-result-v1",
+  "terminal": {
+    "bridge_output_id": "sha256:0618cf501825f3874f041c4861865b38286064fcbf05f89644b6d20702d4ee6a",
+    "claim_ledger_id": "sha256:5b5b15e5d7bc9d2ef1edb6ed61e96fb963595a98d07c493df0a9b7c0da5e22e7",
+    "evidence_pack_id": "sha256:1eb03010113a3574c2805393443bf88b074d1924d743beb2397ae777bbf0b94d",
+    "formal_seq": 1131,
+    "output_paths": [],
+    "problem_id": "question-27633c5a9c5c7a55f009bf27b0b8c744",
+    "process_status": "success",
+    "resolution": "answered",
+    "run_manifest_digest": "acfa496ccc1745c76f03275ad2b3b3f638d4cc5cb16e6a2d9d4ba48122e055ff",
+    "schema": "deepreason-bridge-result-v1",
+    "source_terminal_commitment_ref": "sha256:a2b2178ed974c7179030a3771425053def5b3cc84c8ffbbd3e10115f5ce23d1a",
+    "target": "answer",
+    "terminal_event_seq": 1154,
+    "validation_report_id": "sha256:8aee7e79e38ea0b83c96c3b6c22006e970234db3c96e08478cf580025cd6d9df"
+  },
+  "truncation": {
+    "array_limit_items": 100,
+    "fields": [],
+    "text_limit_chars": 16384,
+    "truncated": false
+  },
+  "validation_report": {
+    "bridge_output_id": "sha256:0618cf501825f3874f041c4861865b38286064fcbf05f89644b6d20702d4ee6a",
+    "claim_ledger_id": "sha256:5b5b15e5d7bc9d2ef1edb6ed61e96fb963595a98d07c493df0a9b7c0da5e22e7",
+    "findings": [],
+    "id": "sha256:8aee7e79e38ea0b83c96c3b6c22006e970234db3c96e08478cf580025cd6d9df",
+    "schema": "bridge.validation.report.v1",
+    "valid": true
+  }
+}

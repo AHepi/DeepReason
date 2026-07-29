@@ -126,3 +126,29 @@ Calibration findings for the allowance signal suite:
   lever is the reader-facing findings report (established / contested /
   unverified, rendered from the record), which remains the top
   presentation gap for end users.
+
+## Segment 3 (2026-07-29): the legend ships, and a new defect surfaces
+
+Segment 3 continued the narrow root past BOTH bridge epochs (the
+two-bridge tail validated cleanly), ran 6 more live cycles to a third
+typed budget_exhausted stop at cycle 18, and composed a third-epoch
+bridge at fence 1131. Honest scorecard:
+
+- **Citation conversion: not yet exercised.** Segment 3's candidates
+  carried no evidence_refs at all — the 11 typed UNKNOWN_BLOCK failures
+  from segment 2 remain the only citation attempts. The citable-block
+  legend entered packs this segment, but the model chose consolidation
+  over citation, and proposed no new research either (no allowance
+  decisions recorded). Converting the legend into verified groundings
+  still awaits a run whose candidates actually cite.
+- **A resolution-semantics defect at scale.** The third bridge reports
+  resolution=answered — yet the record holds 70 accepted artifacts, zero
+  refuted, an unresolved rivalry now ~60 positions wide. The bounded
+  evidence-pack window surfaced only 4 survivors and no rivalry
+  observation, so the composer truthfully mapped everything it was shown
+  and upgraded the resolution. The overclaim lives in the bounded
+  window, not the classifier: at rivalry scales beyond the pack budget,
+  the rivalry observation must survive windowing (or the resolution must
+  be capped at partially_answered when the window is known-truncated).
+  Filed as the next defect; FINDINGS.md still tells the full story (60
+  rival positions, preserved).

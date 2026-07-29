@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:15769cf44a85) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 15769cf44a85 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@56c7c2501892: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+The isolated artifact SHARES MECHANISM with SRC_001's three-archetype framework, specifically the deduplication-key mechanism that converts a non-idempotent byte-level append into a replay-safe semantic operation. Both artifacts identify the same causal pathway: deterministic identity attached to each event allows duplicate detection, which in turn makes at-least-once delivery survivable. The shared mechanism is the keying step: without it, neither safety nor effective idempotency is achievable for an append-only log. REFUTED IF the isolated artifact achieves replay safety through a fundamentally different mechanism—for example, by making the replay engine stateful (keeping a cursor of already-processed entries across replays) rather than through per-event deterministic keys, which would mean the mechanism is cursor-based deduplication rather than content-based deduplication.
+commitments: hv-floor@2a45b7988522, lineage-ref@56c7c2501892, relation-form@578e42df713e
+
+TARGET SRC_002
+The isolated artifact is COMPATIBLE WITH SRC_001's archetype framework but extends it by identifying a fourth archetype missing from the original taxonomy: the 'idempotency-key writer' that appends a deterministic key separate from the payload (e.g., a request ID). This archetype is safe and effectively idempotent but, unlike the deterministic-hash writer, does not collapse genuinely distinct logical events that happen to share identical content. SRC_001's countercondition already gestures at this case (two distinct payments of the same amount), but does not elevate it to an archetype. The isolated artifact argues this fourth archetype is the practically recommended one, subsuming both the UUID writer (too weak—duplicates are safe but not deduplicated) and the hash writer (too strong—collapses distinct events). REFUTED IF the idempotency-key writer is merely a parameterization of the deterministic-hash archetype (key = hash of a tuple including a nonce) rather than a structurally distinct writer strategy, in which case SRC_001's three-archetype taxonomy is complete and the fourth 'archetype' adds no independent design choice.
+commitments: hv-floor@2a45b7988522, lineage-ref@56c7c2501892, relation-form@578e42df713e
+
+TARGET SRC_003
+The isolated artifact CONTRADICTS SRC_004's claim that append-only logs require 'effectively idempotent' writers. SRC_004 argues that the composite operation 'ensure-this-event-is-in-the-log' is idempotent at the semantic level, collapsing safety and idempotency into a unified property. The isolated artifact insists this collapse is illegitimate: the composite operation is safe but not idempotent, because idempotency is a property of a function's mathematical behavior, not of the resulting state's cardinality. Calling it 'effectively idempotent' obscures the real engineering trade-off between writers that are safe-but-non-idempotent (random UUID) and safe-and-idempotent (deterministic hash). REFUTED IF the isolated artifact cannot produce a concrete case where 'effective idempotency' and 'safety' yield different engineering prescriptions—for if they always prescribe the same writer behavior, the distinction is purely terminological and SRC_004's unification is pragmatically correct even if not formally precise.
+commitments: hv-floor@2a45b7988522, lineage-ref@56c7c2501892, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

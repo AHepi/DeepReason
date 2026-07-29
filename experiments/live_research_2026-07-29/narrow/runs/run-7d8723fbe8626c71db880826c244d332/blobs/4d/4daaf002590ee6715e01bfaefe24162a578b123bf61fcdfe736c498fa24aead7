@@ -1,0 +1,31 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-27633c5a9c5c7a55f009bf27b0b8c744) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits only docs.python.org. Proposals to any other host will be recorded and denied by the harness. Fetched pages become citable evidence blocks.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@02c7219bb65d4adfcc12f9f7: program:reasoning_observation_pending
+- reason-counter@8dc2c696e9645bdb7190fffe: program:reasoning_observation_pending
+- reason-counter@7d61bb78db6eb5a50315e88e: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"An idempotent operation guarantees the resulting system state is identical after one or multiple executions (f(f(x)) = f(x)), whereas a safe operation merely guarantees no harmful side effects or corruption on retry, potentially leaving the system in an altered, though benign, state. To survive at-least-once delivery and ensure deterministic replay, an append-only event log fundamentally requires its writers to be idempotent, either inherently or by enforcing content-defined deduplication.","counterconditions":[{"case":"The log could survive at-least-once delivery without writer idempotency if the log infrastructure itself assigns sequence numbers and deduplicates network-level retries before the append event reaches the log's total order.","eval":"observation"},{"case":"If the definition of 'safe' is interpreted to inherently include state convergence (making safe a superset of idempotent), the distinction collapses.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"At-least-once delivery means a writer's request may be executed multiple times. If the operation is merely safe (e.g., appending a random UUID), the log accumulates multiple distinct entries, violating deterministic replay. Idempotency ensures that repeated appends of the exact same event yield a single logical entry, making the replayed state perfectly match the primary path.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@02c7219bb65d4adfcc12f9f7, reason-counter@8dc2c696e9645bdb7190fffe
+
+TARGET SRC_002
+{"analogy":null,"claim":"The append-only event log only requires writers to be safe, not idempotent. Idempotency is a stronger property that applies to the application of an event to state, not the act of appending the event itself. The log preserves the total order of appends, and as long as retried appends do not corrupt the log (i.e., they are safe), deterministic replay is achieved by the consumer applying idempotent logic or sequence-based deduplication to the stream.","counterconditions":[{"case":"If a safe operation appends events with distinct, randomly generated contents upon retry (e.g., different timestamps or UUIDs), the log will contain divergent events, breaking deterministic replay regardless of consumer logic.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"A writer appending an event to a log might safely append duplicates if the log assigns an append position and a producer ID, allowing downstream consumers to deterministically ignore duplicates during replay. The writer's job is just to persist the event safely.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@7d61bb78db6eb5a50315e88e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
