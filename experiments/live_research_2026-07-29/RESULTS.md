@@ -229,49 +229,64 @@ exercise returned nothing:
   is grounded. Citation conversion remains unexercised across all five
   segments.
 
-**The model never engaged the question.** This is the finding, and it is
-worth more than the capability tallies. All 70 standing positions are
-evidence-*neighbourhood* conjectures: relation claims about a single
-artifact (`0e26d6be54fd`) against the five attached sources — "depends on
-SRC_004", "reduces to SRC_003", "contradicts SRC_005", "shares mechanism
-with SRC_001", "abstracts", "integrates" — restated dozens of times with
-varying refutation conditions, plus meta-criticisms of those relation
-claims. The criticism is often good (it correctly convicts targets of
-naming a relation kind while supplying no causal mechanism, and of
-refutation conditions narrower than the claims they guard). But it is
-criticism of the wrong target. Not one accepted position addresses how
-schools generate rivals or how criticism retires them. The run spent
-191k tokens becoming an example of the pathology it was asked to
-diagnose.
+**The question was never dispatched — a scheduling defect, not model
+behavior.** The work-preparation chronology settles culpability
+precisely. Every provider call from the first (formal fence 32) to the
+last (fence 605) served one problem: `conn:0e26d6be54fd`, the
+auto-spawned neighbourhood-connection problem for the attached-source
+record of STATE_OF_THE_THEORY.md. The full 191,232-token spend decomposes
+as: 73,285 tokens / 8 calls on its conjecturer turns, 23,032 / 6 on its
+atomic candidates, 39,007 / 12 on repair turns of those outputs, and
+55,908 / 16 on batch criticism of them. The operator's question
+(`question-98a0e3…`) was first *prepared* at fence 722 — after the budget
+was already spent — and all 8 of its conjecturer turns terminated typed
+`budget_denied` without one provider call. The referee's two cadence
+firings (fences 720, 740) and a second connection problem
+(`conn:0f99efbab8a4`, fences 742–748) were denied the same way. So the
+70 standing relation conjectures ("depends on SRC_004", "reduces to
+SRC_003", …) are not the model failing to engage the question — glm-5.2
+answered exactly what it was dispatched, every time. The harness spent
+the entire budget asking how one attached document relates to the other
+four, and never once asked its operator's question.
 
-This sharpens the parked defect. The record already showed criticism
-retiring rivalry more slowly than conjecture grows it; segment 5 shows
-something worse at the scheduling layer — with five attached sources the
-neighbourhood machinery generates a combinatorial relation lattice
-(sources x relation kinds x restatements) that displaces the operator's
-question entirely. Conjecture did not merely outpace criticism; it
-crowded out the problem. Any fix that only speeds up retirement leaves
-this untouched: the question needs a budget floor the neighbourhood work
-cannot consume.
+This reframes the parked defect at a harsher altitude. It is not that
+conjecture outpaces criticism, or even that neighbourhood work
+outcompetes the question — there was no competition. Attach-spawned
+connection problems were scheduled strictly ahead of the operator's
+question with no budget reservation whatsoever, so at any attach scale
+where connection work can exhaust the budget, the question's allocation
+is exactly zero. The fix is a scheduling guarantee, not an economy tweak:
+the operator's question must hold a budget floor (or scheduling priority)
+that auto-spawned housekeeping problems cannot consume.
 
-**A new replay violation class, first fired here.** `verify_root` returns
-`valid: false` with 6 violations. Four are the known
-`foreign-criticism` coverage-debt class. Two are not: `conjecture-context`
-at seqs 390 and 547, "render handles differ from the selected blocks" —
-the check that the context actually rendered to the model matches the
-attention selection the record commits to. That check has fired in no
-previous run recorded here (segment 4's clean ladder returned zero
-violations; earlier ladders showed only the coverage-debt class). It bears
-directly on whether the record faithfully states what the model was shown,
-so it should be characterized before it is explained away — specifically,
-whether the mismatch is ordering-only or a genuine set difference. I could
-not reach the receipts through the event blobs to settle that here; the
-violations reproduce from the committed root via `verify_root`.
+**A new replay violation class: ordering-only, root-caused to
+re-render.** `verify_root` returns `valid: false` with 6 violations. Four
+are the known `foreign-criticism` coverage-debt class. Two are new:
+`conjecture-context` at event seqs 390 and 547 — "render handles differ
+from the selected blocks", the check that the context rendered to the
+model matches the attention selection the record commits to. Direct
+comparison of the render receipts (state_seqs 386 and 543) against the
+replayed attention receipts shows the mismatch is **ordering-only**: the
+handle sets are identical (10 and 13 blocks; nothing shown that was not
+selected, nothing selected that was not shown), but the render's
+`block_handles` order is a permutation of the selection's `final_order` —
+in the seq-386 case a single block sits at its *old* position 2 while
+`final_order` moved it to the end. Both violations sit inside
+repair-turn clusters (fences 385→393 and 542→550), and both failing
+windows follow earlier renders that shared blocks — consistent with the
+renderer maintaining `block_handles` as a persistent dict across
+re-renders, where updating an existing key preserves its original
+insertion position while `final_order` reorders freely. Content
+faithfulness held; the ordering commitment is what broke. Filed as a
+defect: either the renderer must rebuild `block_handles` in `final_order`
+on every render, or the invariant must compare as ordered sets only if
+ordering is genuinely not part of the containment claim.
 
 Honest status: the run is complete, terminal, and continuable. Nothing
-here refutes the referee or the contained runner — both were simply never
-reached. What the run does establish is that the attach path admits real
-documents end to end, and that on this question the harness's own
-neighbourhood stage is a budget sink severe enough to starve the
-question, the citations, the research, the simulation, and the referee
-all at once.
+here refutes the referee or the contained runner — both were starved
+before dispatch, along with the question itself. What the run
+establishes: the attach path admits real documents end to end; the typed
+budget-denial path holds under total exhaustion (16 denials, no crash);
+and the scheduler's treatment of auto-spawned connection problems is the
+binding defect — severe enough that a 200k-token run completed without
+its question ever reaching the model.
