@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-3
+stance: anchor in cases
+
+PROBLEM CONTEXT (question-7586c8cea7202c9505529ddf4efd0774) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits en.wikipedia.org and www.rfc-editor.org (RFC 9110 defines both terms). Fetched pages become citable evidence blocks.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@6f1441cc8a46713357437b98: program:reasoning_observation_pending
+- reason-counter@8737c2d6df57ec45739c3fb4: program:reasoning_observation_pending
+- reason-counter@50d0a1bd682e5b71df7c73a9: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"RFC 9110 distinguishes safe from idempotent by side-effect permission: a safe method is intended only for retrieval and has no intended action beyond retrieval (section 9.2.1), while an idempotent method may have side effects but multiple identical requests have the same intended effect as one (section 9.2.2). An append-only log writer cannot be safe because appending changes durable state; it must be idempotent so that at-least-once redelivery of the same event yields the same log state as a single append.","counterconditions":[{"case":"If duplicate appends are allowed to create distinct log entries and downstream replay is sensitive to multiplicity, this idempotent-writer claim fails.","eval":"observation"},{"case":"If the transport already guarantees exactly-once delivery, idempotence is not exercised though it may still be defensive.","eval":"observation"},{"case":"If the relevant protocol defines idempotence by identical responses rather than identical resulting server state, a retry returning 'already exists' instead of 'created' could violate the claim.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Key the event by a stable content/idempotency identifier and make the write a conditional append or upsert: if the identifier already exists, return without adding a new entry; if not, append exactly once. Thus the state transition for duplicate retries is S -> S union {e} after first and S -> S on later duplicates, equal to the single successful write.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@6f1441cc8a46713357437b98, reason-counter@8737c2d6df57ec45739c3fb4, reason-counter@50d0a1bd682e5b71df7c73a9
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

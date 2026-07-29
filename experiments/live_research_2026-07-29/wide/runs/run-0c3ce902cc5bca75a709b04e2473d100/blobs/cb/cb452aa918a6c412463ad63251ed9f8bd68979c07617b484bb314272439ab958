@@ -1,0 +1,3 @@
+```json
+{"repair_patch_v1": {"operation": "replace", "path": "/candidates/3/counterconditions", "value": ["If replay or downstream consumers treat log multiplicity as significant, a writer that always appends duplicates will not converge to the same replay state, so the claimed reader-safe/writer-idempotent split fails."], "baseline_sha256": "cfaefb9448080ba582a4d919682522a7893b680c9cb6063247fa6b5ca52ee0ea"}}
+```

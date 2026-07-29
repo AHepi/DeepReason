@@ -9,6 +9,13 @@ from pathlib import Path
 from typing import Any
 
 from deepreason.canonical import canonical_json
+from deepreason.capabilities.models import (
+    ResearchConsumptionV1,
+    ResearchExecutionReceiptV1,
+    ResearchFetchProposalV1,
+    ResearchResultPackageV1,
+    SimulationExecutionReceiptV1,
+)
 from deepreason.harness import Harness
 from deepreason.invariants import verify_root
 from deepreason.run_manifest import MANIFEST_NAME, load_run_manifest
@@ -61,6 +68,18 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     ]
     for request_ref, transitions in chains.items():
         proposal = state.proposals[request_ref]
+        if isinstance(proposal, ResearchFetchProposalV1):
+            semantic_lines = (
+                f"Purpose: {proposal.purpose}  ",
+                "Requested URLs: "
+                + ", ".join(f"`{url}`" for url in proposal.urls)
+                + "  ",
+            )
+        else:
+            semantic_lines = (
+                f"Hypothesis: {proposal.hypothesis}  ",
+                f"Discriminating purpose: {proposal.discriminating_purpose}  ",
+            )
         request_lines.extend(
             (
                 f"## {proposal.request_identifier}",
@@ -68,8 +87,7 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                 f"Proposal: `{proposal.id}`  ",
                 f"Origin work: `{proposal.originating_work_order_ref}`  ",
                 f"Source call sequence: `{proposal.source_call_seq}`  ",
-                f"Hypothesis: {proposal.hypothesis}  ",
-                f"Discriminating purpose: {proposal.discriminating_purpose}  ",
+                *semantic_lines,
                 "Lifecycle: "
                 + " → ".join(item.lifecycle.value for item in transitions)
                 + "  ",
@@ -86,6 +104,8 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
         "",
     ]
     for receipt in state.receipts.values():
+        if not isinstance(receipt, SimulationExecutionReceiptV1):
+            continue
         compiled = state.compiled[receipt.compiled_specification_ref]
         work_order = state.work_orders[receipt.simulation_work_order_ref]
         package = next(
@@ -142,6 +162,12 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
         consumptions = [item for item in state.consumptions.values() if item.proposal_ref == proposal.id]
         semantic_effects: list[str] = []
         for consumption in consumptions:
+            if isinstance(consumption, ResearchConsumptionV1):
+                semantic_effects.append(
+                    "consumed fetched material registered candidate evidence "
+                    + ", ".join(f"`{ref}`" for ref in consumption.evidence_refs)
+                )
+                continue
             work_ref = consumption.follow_up_work_order_ref
             call_events = [
                 event
@@ -229,11 +255,16 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                     semantic_effects.append(
                         f"provider call `{call_event.seq}` produced no separately typed semantic change"
                     )
+        proposal_label = (
+            "Research fetch proposal"
+            if isinstance(proposal, ResearchFetchProposalV1)
+            else "Theory proposal"
+        )
         lineage_lines.extend(
             (
                 f"## {proposal.request_identifier}",
                 "",
-                f"Theory proposal `{proposal.id}` from {origin_label} "
+                f"{proposal_label} `{proposal.id}` from {origin_label} "
                 f"`{proposal.originating_work_order_ref}`.",
                 "Origin provider result: "
                 f"`{proposal.originating_provider_attempt_ref or 'legacy-v5'}`.",
@@ -243,7 +274,11 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
                 f"Package refs: {', '.join(f'`{item.id}`' for item in packages) or 'none'}.",
                 "Fresh result work refs: "
                 + (
-                    ", ".join(f"`{item.follow_up_work_order_ref}`" for item in consumptions)
+                    ", ".join(
+                        f"`{item.follow_up_work_order_ref}`"
+                        for item in consumptions
+                        if not isinstance(item, ResearchConsumptionV1)
+                    )
                     or "none"
                 )
                 + ".",
@@ -260,16 +295,73 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
     from deepreason.evidence.state import load_evidence_dossier, load_run_input
 
     evidence = manifest.inquiry_capability_policy.attached_evidence
+    research_policy = manifest.inquiry_capability_policy.research
     run_input = load_run_input(root)
     dossier = load_evidence_dossier(root)
     source_lines = [
-        "Tranche A performs no open-web retrieval after manifest freeze.",
+        (
+            "In-run retrieval is limited to the contained research backend "
+            "under the frozen domain allowlist recorded below."
+            if research_policy.enabled
+            else "This run performs no open-web retrieval after manifest freeze."
+        ),
         "",
         f"Run-input digest: `{run_input.run_input_digest}`",
         f"Evidence dossier digest: `{dossier.dossier_digest}`",
         f"Evidence policy digest: `{evidence.digest}`",
         "",
     ]
+    if research_policy.enabled:
+        source_lines.extend(
+            (
+                "## Contained research authority",
+                "",
+                f"Backend: `{research_policy.backend_identity}`  ",
+                "Frozen domain allowlist: "
+                + ", ".join(
+                    f"`{domain}`" for domain in research_policy.domain_allowlist
+                )
+                + "  ",
+                f"Request budget: `{research_policy.maximum_requests}`  ",
+                f"Source budget: `{research_policy.maximum_sources}`",
+                "",
+            )
+        )
+        for receipt in state.receipts.values():
+            if not isinstance(receipt, ResearchExecutionReceiptV1):
+                continue
+            source_lines.extend(
+                (
+                    f"## Fetch receipt {receipt.id}",
+                    "",
+                    f"Outcome: `{receipt.outcome}`  ",
+                    "Requests used: "
+                    f"`{receipt.requests_used_total}/{receipt.requests_limit}`  ",
+                    "Attempts:",
+                    "",
+                )
+            )
+            source_lines.extend(
+                f"- `{attempt.outcome}` `{attempt.url}` "
+                f"(status `{attempt.http_status}`, bytes `{attempt.byte_count}`)"
+                for attempt in receipt.attempts
+            )
+            source_lines.append("")
+        for package in state.result_packages.values():
+            if not isinstance(package, ResearchResultPackageV1):
+                continue
+            source_lines.extend(
+                (
+                    f"## Result package {package.id}",
+                    "",
+                    *(
+                        f"- `{item.url}` content `{item.content_sha256}` "
+                        f"text `{item.text_sha256}`"
+                        for item in package.items
+                    ),
+                    "",
+                )
+            )
     for item in dossier.sources:
         attached = []
         for artifact in harness.state.artifacts.values():
@@ -350,7 +442,15 @@ def write_tranche_a_audits(root: Path | str) -> dict[str, str]:
             action == BridgeAction.REPAIR_ATTEMPTED for action in bridge_actions
         ),
         "workflow_bridge_retries": len(harness.bridge_state.workflow_retries),
-        "research_requests": 0,
+        "research_requests": sum(
+            isinstance(proposal, ResearchFetchProposalV1)
+            for proposal in state.proposals.values()
+        ),
+        "research_fetch_attempts": sum(
+            len(receipt.attempts)
+            for receipt in state.receipts.values()
+            if isinstance(receipt, ResearchExecutionReceiptV1)
+        ),
         "formal_tool_executions": 0,
     }
     target = root / "TOKEN_ACCOUNTING.json"

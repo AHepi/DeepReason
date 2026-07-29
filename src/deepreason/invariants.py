@@ -1184,14 +1184,84 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 "Capability events require one manifest-bound v5+ simulation policy",
             )
         else:
+            from urllib.parse import urlparse
+
+            from deepreason.capabilities.models import (
+                CompiledResearchFetchV1,
+                ResearchConsumptionV1,
+                ResearchExecutionReceiptV1,
+                ResearchFetchProposalV1,
+                ResearchGrantV1,
+                ResearchResultPackageV1,
+                ResearchWorkOrderV1,
+                SimulationExecutionReceiptV1,
+            )
+
+            research_policy = manifest.inquiry_capability_policy.research
+
+            def _research_host_allowed(url: str) -> bool:
+                host = (urlparse(url).hostname or "").lower()
+                return any(
+                    host == domain or host.endswith("." + domain)
+                    for domain in research_policy.domain_allowlist
+                )
+
             state = h.capability_state
-            grants = len(state.grants)
+            grants = sum(
+                1
+                for grant in state.grants.values()
+                if not isinstance(grant, ResearchGrantV1)
+            )
             if grants > policy.maximum_simulation_requests:
                 fail("capability-budget", "simulation grant count exceeds request policy")
-            if state.execution_count > policy.maximum_simulation_executions:
+            simulation_executions = sum(
+                1
+                for receipt in state.receipts.values()
+                if isinstance(receipt, SimulationExecutionReceiptV1)
+            )
+            if simulation_executions > policy.maximum_simulation_executions:
                 fail("capability-budget", "simulation execution count exceeds policy")
-            if state.consumption_count > policy.maximum_follow_up_reasoning_turns:
+            simulation_consumptions = sum(
+                1
+                for consumption in state.consumptions.values()
+                if not isinstance(consumption, ResearchConsumptionV1)
+            )
+            if simulation_consumptions > policy.maximum_follow_up_reasoning_turns:
                 fail("capability-budget", "simulation follow-up count exceeds policy")
+            research_records = [
+                record
+                for record in state.proposals.values()
+                if isinstance(record, ResearchFetchProposalV1)
+            ]
+            if research_records and not research_policy.enabled:
+                fail(
+                    "capability-budget",
+                    "research records require an enabled frozen research policy",
+                )
+            if research_policy.enabled:
+                research_used = max(
+                    (
+                        receipt.requests_used_total
+                        for receipt in state.receipts.values()
+                        if isinstance(receipt, ResearchExecutionReceiptV1)
+                    ),
+                    default=0,
+                )
+                if research_used > research_policy.maximum_requests:
+                    fail(
+                        "capability-budget",
+                        "research request spend exceeds the frozen budget",
+                    )
+                research_sources = sum(
+                    len(consumption.evidence_refs)
+                    for consumption in state.consumptions.values()
+                    if isinstance(consumption, ResearchConsumptionV1)
+                )
+                if research_sources > research_policy.maximum_sources:
+                    fail(
+                        "capability-budget",
+                        "research source consumption exceeds the frozen budget",
+                    )
             for event in capability_events:
                 transition = state.transitions.get(event.capability.transition_ref)
                 if transition is None:
@@ -1200,10 +1270,18 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"event seq={event.seq}: transition is absent after replay",
                     )
                     continue
+                expected_policy_digest = (
+                    research_policy.digest
+                    if isinstance(
+                        state.proposals.get(transition.request_ref),
+                        ResearchFetchProposalV1,
+                    )
+                    else policy.digest
+                )
                 if (
                     transition.manifest_digest != manifest.sha256
                     or transition.run_input_digest != manifest.run_input_digest
-                    or transition.capability_policy_digest != policy.digest
+                    or transition.capability_policy_digest != expected_policy_digest
                 ):
                     fail(
                         "capability-authority",
@@ -1216,6 +1294,28 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     )
             for proposal in state.proposals.values():
                 from deepreason.workflow.models import CapabilityOutcome
+
+                if isinstance(proposal, ResearchFetchProposalV1):
+                    if manifest.schema_version != 6:
+                        fail(
+                            "capability-origin",
+                            f"research proposal {proposal.id} requires a v6 manifest",
+                        )
+                        continue
+                    from deepreason.capabilities.research import (
+                        ResearchCapabilityController,
+                    )
+
+                    try:
+                        ResearchCapabilityController(
+                            h, manifest
+                        ).require_transactional_origin(proposal)
+                    except Exception as error:  # noqa: BLE001 - root diagnostic
+                        fail(
+                            "capability-origin",
+                            f"proposal {proposal.id} has no completed transaction origin: {error!r}",
+                        )
+                    continue
 
                 if manifest.schema_version == 6:
                     from deepreason.capabilities.simulation import (
@@ -1265,9 +1365,15 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"proposal {proposal.id} does not resolve to its provider work order",
                     )
             proposals_by_call: dict[int, int] = {}
+            research_by_call: dict[int, int] = {}
             for proposal in state.proposals.values():
-                proposals_by_call[proposal.source_call_seq] = (
-                    proposals_by_call.get(proposal.source_call_seq, 0) + 1
+                counter = (
+                    research_by_call
+                    if isinstance(proposal, ResearchFetchProposalV1)
+                    else proposals_by_call
+                )
+                counter[proposal.source_call_seq] = (
+                    counter.get(proposal.source_call_seq, 0) + 1
                 )
             if any(
                 count > policy.maximum_proposals_per_turn
@@ -1277,8 +1383,44 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "capability-origin",
                     "one provider call exceeds its frozen proposal-count authority",
                 )
+            if research_by_call:
+                from deepreason.capabilities.research import (
+                    MAXIMUM_PROPOSALS_PER_TURN as _RESEARCH_TURN_MAXIMUM,
+                )
+
+                if any(
+                    count > _RESEARCH_TURN_MAXIMUM
+                    for count in research_by_call.values()
+                ):
+                    fail(
+                        "capability-origin",
+                        "one provider call exceeds its frozen research-proposal authority",
+                    )
             for grant in state.grants.values():
                 proposal = state.proposals.get(grant.proposal_ref)
+                if isinstance(grant, ResearchGrantV1):
+                    if (
+                        not isinstance(proposal, ResearchFetchProposalV1)
+                        or grant.manifest_digest != manifest.sha256
+                        or grant.run_input_digest != manifest.run_input_digest
+                        or not research_policy.enabled
+                        or grant.policy_digest != research_policy.digest
+                        or grant.backend_identity
+                        != research_policy.backend_identity
+                        or set(grant.granted_urls) - set(proposal.urls)
+                        or grant.requests_limit != research_policy.maximum_requests
+                        or grant.maximum_response_bytes
+                        != research_policy.maximum_response_bytes
+                        or any(
+                            not _research_host_allowed(url)
+                            for url in grant.granted_urls
+                        )
+                    ):
+                        fail(
+                            "capability-grant",
+                            f"research grant {grant.id} differs from its proposal or frozen policy",
+                        )
+                    continue
                 expected_seeds = (
                     policy.fixed_seed_set
                     if policy.deterministic_seed_policy == "fixed_manifest"
@@ -1304,6 +1446,23 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             for compiled in state.compiled.values():
                 grant = state.grants.get(compiled.grant_ref)
                 proposal = state.proposals.get(compiled.proposal_ref)
+                if isinstance(compiled, CompiledResearchFetchV1):
+                    if (
+                        not isinstance(grant, ResearchGrantV1)
+                        or proposal is None
+                        or grant.proposal_ref != compiled.proposal_ref
+                        or tuple(compiled.urls) != tuple(grant.granted_urls)
+                        or compiled.domain_allowlist
+                        != research_policy.domain_allowlist
+                        or compiled.requests_limit != grant.requests_limit
+                        or compiled.maximum_response_bytes
+                        != grant.maximum_response_bytes
+                    ):
+                        fail(
+                            "capability-compiled-authority",
+                            f"compiled research fetch {compiled.id} differs from its grant",
+                        )
+                    continue
                 if (
                     grant is None
                     or proposal is None
@@ -1411,6 +1570,28 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             f"compiled simulation {compiled.id} has missing blob: {error!r}",
                         )
             for work_order in state.work_orders.values():
+                if isinstance(work_order, ResearchWorkOrderV1):
+                    grant = state.grants.get(work_order.grant_ref)
+                    compiled = state.compiled.get(work_order.compiled_research_ref)
+                    if (
+                        not isinstance(grant, ResearchGrantV1)
+                        or not isinstance(compiled, CompiledResearchFetchV1)
+                        or grant.id != compiled.grant_ref
+                        or work_order.proposal_ref != compiled.proposal_ref
+                        or work_order.manifest_digest != manifest.sha256
+                        or work_order.run_input_digest != manifest.run_input_digest
+                        or work_order.policy_digest != research_policy.digest
+                        or work_order.backend_identity
+                        != research_policy.backend_identity
+                        or work_order.requests_limit != grant.requests_limit
+                        or work_order.maximum_response_bytes
+                        != grant.maximum_response_bytes
+                    ):
+                        fail(
+                            "capability-work-order",
+                            f"research work order {work_order.id} differs from frozen authority",
+                        )
+                    continue
                 grant = state.grants.get(work_order.grant_ref)
                 compiled = state.compiled.get(work_order.compiled_simulation_ref)
                 if (
@@ -1440,6 +1621,29 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                         f"simulation work order {work_order.id} differs from frozen authority",
                     )
             for receipt in state.receipts.values():
+                if isinstance(receipt, ResearchExecutionReceiptV1):
+                    compiled = state.compiled.get(receipt.compiled_specification_ref)
+                    research_work = state.work_orders.get(
+                        receipt.research_work_order_ref
+                    )
+                    if (
+                        not isinstance(compiled, CompiledResearchFetchV1)
+                        or not isinstance(research_work, ResearchWorkOrderV1)
+                        or receipt.proposal_ref != compiled.proposal_ref
+                        or research_work.compiled_research_ref != compiled.id
+                        or receipt.run_input_digest != manifest.run_input_digest
+                        or receipt.requests_limit != research_work.requests_limit
+                        or any(
+                            attempt.outcome == "FETCHED"
+                            and not _research_host_allowed(attempt.url)
+                            for attempt in receipt.attempts
+                        )
+                    ):
+                        fail(
+                            "capability-receipt",
+                            f"research receipt {receipt.id} differs from contained fetch authority",
+                        )
+                    continue
                 compiled = state.compiled.get(receipt.compiled_specification_ref)
                 work_order = state.work_orders.get(
                     receipt.simulation_work_order_ref
@@ -1507,6 +1711,38 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     except KeyError:
                         pass
             for package in state.result_packages.values():
+                if isinstance(package, ResearchResultPackageV1):
+                    receipt = state.receipts.get(package.execution_receipt_ref)
+                    fetched_digests = (
+                        {
+                            attempt.content_sha256
+                            for attempt in receipt.attempts
+                            if attempt.outcome == "FETCHED"
+                        }
+                        if isinstance(receipt, ResearchExecutionReceiptV1)
+                        else set()
+                    )
+                    missing_text = False
+                    for item in package.items:
+                        try:
+                            h.blobs.get(item.text_sha256)
+                        except KeyError:
+                            missing_text = True
+                    if (
+                        not isinstance(receipt, ResearchExecutionReceiptV1)
+                        or package.proposal_ref != receipt.proposal_ref
+                        or package.run_input_digest != manifest.run_input_digest
+                        or any(
+                            item.content_sha256 not in fetched_digests
+                            for item in package.items
+                        )
+                        or missing_text
+                    ):
+                        fail(
+                            "capability-result-package",
+                            f"research package {package.id} differs from its fetch receipt",
+                        )
+                    continue
                 receipt = state.receipts.get(package.receipt_ref)
                 if receipt is None:
                     fail(
@@ -1531,6 +1767,25 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                             f"package {package.id} has missing bounded result: {error!r}",
                         )
             for consumption in state.consumptions.values():
+                if isinstance(consumption, ResearchConsumptionV1):
+                    package = state.result_packages.get(
+                        consumption.result_package_ref
+                    )
+                    if (
+                        not isinstance(package, ResearchResultPackageV1)
+                        or package.proposal_ref != consumption.proposal_ref
+                        or consumption.run_input_digest
+                        != manifest.run_input_digest
+                        or any(
+                            ref not in h.state.artifacts
+                            for ref in consumption.evidence_refs
+                        )
+                    ):
+                        fail(
+                            "capability-consumption",
+                            f"research consumption {consumption.id} differs from its package",
+                        )
+                    continue
                 if manifest.schema_version == 6:
                     item = h.workflow_state.transaction_work.get(
                         consumption.follow_up_work_order_ref

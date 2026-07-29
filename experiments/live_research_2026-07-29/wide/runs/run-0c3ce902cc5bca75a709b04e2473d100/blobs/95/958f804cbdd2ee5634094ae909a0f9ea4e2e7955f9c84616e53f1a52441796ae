@@ -1,0 +1,32 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 2, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-7586c8cea7202c9505529ddf4efd0774) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits en.wikipedia.org and www.rfc-editor.org (RFC 9110 defines both terms). Fetched pages become citable evidence blocks.
+
+TARGETS (2) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@e530c249b302b46a4b7308bd: program:reasoning_observation_pending
+- reason-counter@cdecd8b3b4f76ad6f6d881a5: program:reasoning_observation_pending
+- reason-counter@626655268162a3992aa170b8: program:reasoning_observation_pending
+- reason-counter@3e4edb56250d0ddba76cedb3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The precise distinction is scope of constraint: safe forbids intended side effects in a single call; idempotent permits side effects but requires repeated identical calls to converge to the same intended effect. For an append-only event log, readers/replayers must be safe (no mutation during replay) and writers must be idempotent; requiring writers to be safe would forbid the append itself.","counterconditions":[{"case":"If replay mutates durable state as a side effect of folding, the readers-as-safe assumption fails and the distinction collapses.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Separate read and write paths: replay reads the log and folds state with no side effects, while a writer accepts at-least-once redelivery and deduplicates by id.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@e530c249b302b46a4b7308bd
+
+TARGET SRC_002
+{"analogy":null,"claim":"In formal terms, safety is the special case f(x)=no-op on server state; idempotence is f^n(x)=f(x). Therefore safe implies idempotent over intended state, but idempotent does not imply safe. The append-only log requires the writer property idempotence, not safety, because the write is a non-no-op side effect that must be stable under repetition.","counterconditions":[{"case":"If the log's state domain counts duplicate entries as distinct, f_e is not idempotent.","eval":"observation"},{"case":"If ordering or timestamps are part of state and duplicates alter order or timestamps, the equality f_e^n(S) = f_e(S) may not hold.","eval":"observation"},{"case":"If safe is interpreted as 'safe to retry' rather than RFC 9110 safe, the implication safe => idempotent may not match the published definition.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Model the writer as f_e(S) = if e in S then S else S union {e}. One application mutates S; a second application leaves S unchanged; both lead to f_e(S), satisfying f_e(f_e(S)) = f_e(S). Safety would require f_e(S) = S for all S, which no genuine append can satisfy.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@cdecd8b3b4f76ad6f6d881a5, reason-counter@626655268162a3992aa170b8, reason-counter@3e4edb56250d0ddba76cedb3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

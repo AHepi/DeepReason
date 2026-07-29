@@ -1,0 +1,9 @@
+```json
+{
+  "operation": "replace",
+  "path": "/candidates/3/counterconditions",
+  "value": [
+    "If replay mutates durable state as a side effect of folding, the readers-as-safe assumption fails and the distinction collapses."
+  ]
+}
+```

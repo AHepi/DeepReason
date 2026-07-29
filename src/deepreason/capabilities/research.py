@@ -385,6 +385,76 @@ class ResearchCapabilityController:
             for index, draft in enumerate(drafts)
         )
 
+    def require_transactional_origin(self, proposal: ResearchFetchProposalV1):
+        """Return the completed v6 origin or fail closed on any broken link.
+
+        Mirrors the simulation origin validator: the proposal must resolve
+        to one completed, admitted conjecture transaction whose payload
+        carried a research_authority block matching the live frozen policy,
+        with the provider-result event as its recorded semantic source.
+        """
+
+        if self.manifest.schema_version != 6:
+            raise ValueError("transactional research origin requires v6")
+        item = self.harness.workflow_state.transaction_work.get(
+            proposal.originating_work_order_ref
+        )
+        if item is None or proposal.originating_work_order_ref in (
+            self.harness.workflow_state.work_orders
+        ):
+            raise ValueError("v6 research proposal names legacy or missing work")
+        provider_attempt = next(
+            (
+                attempt
+                for attempt in item.provider_attempts.values()
+                if attempt.id == proposal.originating_provider_attempt_ref
+            ),
+            None,
+        )
+        terminal = item.terminal
+        admission = (
+            item.admissions.get(terminal.attempt_index)
+            if terminal is not None
+            else None
+        )
+        payload = item.preparation.task_payload_value
+        source = next(
+            (
+                event
+                for event in self.harness._events_since(proposal.source_call_seq)
+                if event.seq == proposal.source_call_seq
+            ),
+            None,
+        )
+        research_authority = (
+            payload.get("research_authority") if isinstance(payload, Mapping) else None
+        )
+        if (
+            provider_attempt is None
+            or terminal is None
+            or terminal.status != "completed"
+            or admission is None
+            or admission.outcome != "admitted"
+            or proposal.id not in admission.admitted_refs
+            or terminal.semantic_admission_ref != admission.id
+            or item.preparation.contract_id != "conjecturer.turn.v6"
+            or not isinstance(payload, Mapping)
+            or payload.get("problem_ref") != proposal.problem_ref
+            or payload.get("run_input_digest") != proposal.run_input_digest
+            or not isinstance(research_authority, Mapping)
+            or research_authority.get("policy_digest") != self.policy.digest
+            or source is None
+            or source.llm is None
+            or source.llm.work_order_id != item.preparation.id
+            or source.llm.dispatch_authorization_ref
+            != provider_attempt.authorization_bundle_ref
+            or provider_attempt.id not in source.outputs
+        ):
+            raise ValueError(
+                "v6 research proposal does not resolve to completed transaction authority"
+            )
+        return item
+
     def execute(
         self,
         proposal: ResearchFetchProposalV1,

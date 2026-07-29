@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-7586c8cea7202c9505529ddf4efd0774) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits en.wikipedia.org and www.rfc-editor.org (RFC 9110 defines both terms). Fetched pages become citable evidence blocks.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@da33f96b12f5520a54d396c0: program:reasoning_observation_pending
+- reason-counter@4030ae0454fc15394f2764c3: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction is about intended vs observed semantics: RFC 9110 'safe' means the method is *intended* not to cause server-side effects (a design-time contract), while 'idempotent' means the *observable result* of n invocations equals one invocation (a runtime property). An append-only log requires the runtime property (idempotence) of its writers, not the design-time contract (safety), because the append method is explicitly intended to cause an effect\u2014the log's correctness depends on the effect being the same on replay, not on there being no effect at all.","counterconditions":[{"case":"If RFC 9110 defines both as behavioral rather than one as intentional, this framing is wrong.","eval":"observation"},{"case":"If the problem demands only the formal algebraic distinction, the intentional/behavioral framing may be seen as extraneous.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Safety is a design contract (method author declares intent: no side effects). Idempotence is a behavioral property (observable equivalence under repetition). These are different kinds of statements. The log needs the behavioral guarantee; it does not need\u2014and cannot have\u2014the design contract since append is meant to change state. This resolves the apparent tension: safe \u2282 idempotent because design-time no-effect trivially satisfies behavioral equivalence, but the log only needs the behavioral half.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@da33f96b12f5520a54d396c0, reason-counter@4030ae0454fc15394f2764c3
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

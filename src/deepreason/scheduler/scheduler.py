@@ -1459,6 +1459,7 @@ class Scheduler:
             return False
 
         from deepreason.capabilities.enums import CapabilityLifecycle
+        from deepreason.capabilities.models import SimulationResultPackageV1
         from deepreason.capabilities.simulation import SimulationCapabilityController
 
         controller = SimulationCapabilityController(self.harness, manifest)
@@ -1467,7 +1468,12 @@ class Scheduler:
         available_packages = [
             package
             for package in state.result_packages.values()
-            if package.id not in consumed_packages
+            # Research packages are consumed inside their own conjecture
+            # cycle; one left RESULT_PACKAGED (source budget exhausted,
+            # empty fetch) is terminal for the run and never schedules a
+            # simulation-style follow-up reasoning turn.
+            if isinstance(package, SimulationResultPackageV1)
+            and package.id not in consumed_packages
             and state.transitions[
                 state.current_transition_by_request[package.proposal_ref]
             ].lifecycle

@@ -1,0 +1,27 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-2
+stance: seek the covering principle
+
+PROBLEM CONTEXT (question-7586c8cea7202c9505529ddf4efd0774) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits en.wikipedia.org and www.rfc-editor.org (RFC 9110 defines both terms). Fetched pages become citable evidence blocks.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@1d88fc68d0d1377bd54aaf48: program:reasoning_observation_pending
+- reason-counter@9c8b647789617a12714494ca: program:reasoning_observation_pending
+- reason-counter@143c5562b36a8edfee64c991: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"An append-only log does not strictly require writers to be RFC-safe or RFC-idempotent; it requires deterministic replay invariants immune to duplicate delivery. If duplicate entries are persisted but the replay fold treats the log as a content-addressed set rather than a multiset, the writer can always append yet replay remains deterministic. The RFC terms are about HTTP method intended effects, not a generic durable log protocol.","counterconditions":[{"case":"If replay treats multiplicity, ordering, or non-content timestamps as significant, absorption fails and duplicate entries diverge.","eval":"observation"},{"case":"If the question insists on the writer boundary only rather than downstream replay, this shifts the required property to consumers not writers.","eval":"observation"},{"case":"If the log must be a clean append-only stream without downstream dedup, duplicate entries violate determinism.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Let the log be a multiset W and replay state R = fold(W, deterministic reducer) where the reducer absorbs duplicate event ids, for example via set union. The writer appends every delivered copy, but the fold's absorption layer makes final replay state equal under duplicates.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@1d88fc68d0d1377bd54aaf48, reason-counter@9c8b647789617a12714494ca, reason-counter@143c5562b36a8edfee64c991
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
