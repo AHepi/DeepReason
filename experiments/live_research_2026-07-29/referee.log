@@ -16,3 +16,19 @@ reason_rc=4 reason_seconds=822
 run_id=run-e542c3c1fc266943e0260c5aa8d7c107 state=failed
 critique_audit_rc=1
 === referee ladder end 2026-07-29T15:32:37Z ===
+=== referee ladder (glm-5.2, cadence=2) start 2026-07-29T15:36:40Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_research_2026-07-29/referee/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+{"cache_reused":true,"maximum_expected_provider_calls":0,"model_id":"glm-5.2","next_action":"deepreason reason \"YOUR QUESTION\"","profile_source":"setup","provider":"ollama","qualification_state":"ready","qualification_subject_digest":"212fbcb6a54030c307187bc3114a11a7556110ed288355c41570170c8a0a704c","schema":"deepreason-qualification-result.v1","tier":"full"}
+qualify_rc=0 qualify_seconds=1
+reason_rc=1 reason_seconds=4
+run_id= state=
+=== referee ladder end 2026-07-29T15:36:46Z ===
+=== referee ladder 2 start 2026-07-29T15:37:51Z ===
