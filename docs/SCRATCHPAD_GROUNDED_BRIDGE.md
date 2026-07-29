@@ -231,3 +231,41 @@ The script builds a wheel, installs it into a fresh virtual environment, checks
 both entry points and the exact default MCP tool list, imports the canonical
 scratch/bridge/locking and MiniReason advisory packages, and proves that the
 deterministic embedder works without `fastembed`. It makes no provider call.
+
+## Retrying a failed bridge terminal (owner decision 4b, 2026-07-29)
+
+A canonical bridge terminal is served idempotently forever once recorded.
+That is correct for every completed epistemic resolution — answered,
+refused, insufficient evidence, conflicted — which is permanent and never
+retried. It was previously also true of PROCESS failures (a crash, a stage
+failure, a harness defect fixed after the fact), leaving a perfectly good
+run permanently unable to produce its composed answer.
+
+An explicit operator intent now retries a process-failed canonical bridge:
+`deepreason bridge build --retry-failed-terminal`, or MCP `start_bridge`
+with `retry_failed_terminal: true`. Nothing retries by default. The retry
+is a typed continuation of the recorded chain, not an erasure:
+
+- the failed attempt's events and failure object stay in the append-only
+  log; a `WORKFLOW_RETRY_STARTED` receipt — derived entirely from replayed
+  bridge state (attempt number, prior retry link, cumulative tokens) —
+  bridges it to the fresh attempt;
+- the fresh attempt reuses the failed attempt's frozen execution: same
+  formal fence, evidence pack, and input catalog; only the provider calls
+  are new, with work ordinals continuing past the closed attempt's items;
+- a completed epistemic resolution fails closed under the flag
+  (`BRIDGE_RETRY_TERMINAL_NOT_FAILED`); an exhausted frozen policy chain
+  stays exhausted (`BRIDGE_RETRY_CHAIN_EXHAUSTED`); route-seat capability
+  exhaustion is never overridden — a retry into a terminally exhausted
+  seat resolves as a typed `V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY`
+  failure without a dispatch;
+- `bridge-result.json` holds the latest terminal; the full attempt history
+  remains replay-validated in the log (`failed → workflow_retry_started →
+  fresh attempt → completed`), and root verification and terminal
+  authority stay valid throughout.
+
+Replay validation accepts a retry receipt for a failure that recorded no
+model call: a pre-dispatch refusal has no route to compare, and the
+attempt fence itself pins the coming attempt's route. Derived destinations
+are not retried (`BRIDGE_RETRY_DERIVED_UNSUPPORTED`) — discard and rebuild
+instead.
