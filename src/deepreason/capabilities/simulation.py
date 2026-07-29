@@ -135,11 +135,21 @@ class SimulationCapabilityController:
             return False
         toolchain = matches[0]
         version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-        # Model-authored Python is never sent to the local subprocess backend.
-        # A future certified container adapter must provide a distinct trusted
-        # implementation before this branch may return True.
+        # Model-authored Python is never sent to the local subprocess backend:
+        # it requires the contained runner profile, a container toolchain, and
+        # a host that can actually deny network access. Any missing containment
+        # layer fails closed into a typed runner_unavailable denial.
         if proposal.simulation_mode == "sandboxed_python_v1":
-            return False
+            from deepreason.verification.contained import ContainedSimulationBackend
+
+            return (
+                self.policy.runner_profile == "simulation.container.v1"
+                and toolchain.runner == "container"
+                and toolchain.network is False
+                and Path(toolchain.executable).resolve() == Path(sys.executable).resolve()
+                and toolchain.version_output_sha256 == sha256_hex(version.encode("utf-8"))
+                and ContainedSimulationBackend.containment_available()
+            )
         return (
             proposal.simulation_mode == "declarative_numeric_v1"
             and self.policy.runner_profile == "simulation.declarative.v1"
@@ -569,6 +579,7 @@ class SimulationCapabilityController:
                     )
                 else:
                     validate_sandboxed_python_source(proposal.model_source)
+                    source_bytes = proposal.model_source.encode("utf-8")
             except (DeclarativeSimulationError, ValueError):
                 reason = "invalid_model_program"
         if source_bytes and len(source_bytes) > self.policy.maximum_generated_code_bytes:
@@ -695,11 +706,20 @@ class SimulationCapabilityController:
         )
         from deepreason.workloads.code import SimulationSpec
 
-        backend = SimulationBackend(
-            toolchain_id=self.policy.python_toolchain_identity,
-            maximum_wall_ms=self.policy.maximum_wall_ms,
-            maximum_memory_bytes=self.policy.maximum_memory_bytes,
-        )
+        if self.policy.runner_profile == "simulation.container.v1":
+            from deepreason.verification.contained import ContainedSimulationBackend
+
+            backend = ContainedSimulationBackend(
+                toolchain_id=self.policy.python_toolchain_identity,
+                maximum_wall_ms=self.policy.maximum_wall_ms,
+                maximum_memory_bytes=self.policy.maximum_memory_bytes,
+            )
+        else:
+            backend = SimulationBackend(
+                toolchain_id=self.policy.python_toolchain_identity,
+                maximum_wall_ms=self.policy.maximum_wall_ms,
+                maximum_memory_bytes=self.policy.maximum_memory_bytes,
+            )
         backend_request = SimulationRequest(
             source_ref=source_ref,
             spec=SimulationSpec.model_validate(

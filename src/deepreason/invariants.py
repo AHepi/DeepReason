@@ -1515,17 +1515,25 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
                     expected_checker = TRUSTED_CHECKER_SOURCE_V1.encode("utf-8")
                     from deepreason.simulation.compiler import (
+                        DeclarativeSimulationError,
                         compile_declarative_numeric,
+                        validate_sandboxed_python_source,
                     )
 
-                    expected_source = (
-                        compile_declarative_numeric(
-                            proposal.model_source,
-                            proposal.requested_observables,
-                        )
-                        if proposal.simulation_mode == "declarative_numeric_v1"
-                        else None
-                    )
+                    try:
+                        if proposal.simulation_mode == "declarative_numeric_v1":
+                            expected_source = compile_declarative_numeric(
+                                proposal.model_source,
+                                proposal.requested_observables,
+                            )
+                        else:
+                            # A sandboxed compiled record is trusted only when
+                            # its source is byte-identical to the validated
+                            # semantic proposal.
+                            validate_sandboxed_python_source(proposal.model_source)
+                            expected_source = proposal.model_source.encode("utf-8")
+                    except (DeclarativeSimulationError, ValueError):
+                        expected_source = None
                     try:
                         source_payload = h.blobs.get(compiled.source_ref)
                         input_payload = h.blobs.get(compiled.input_ref)

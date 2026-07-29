@@ -656,7 +656,10 @@ def test_request_exhaustion_denies_later_proposal_and_duplicate_dispatch_fails(t
 
 
 def test_sandboxed_python_has_no_host_fallback(tmp_path):
-    policy = _simulation_policy(runner_profile="simulation.container.v1")
+    policy = _simulation_policy(
+        runner_profile="simulation.container.v1",
+        backend_identity="simulation-python-contained",
+    )
     config, manifest, harness = _prepare_run(
         tmp_path / "python-denied",
         policy=policy,

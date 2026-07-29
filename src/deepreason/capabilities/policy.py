@@ -63,7 +63,9 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
         "simulation-capability-policy.v1", alias="schema"
     )
     enabled: bool = False
-    backend_identity: Literal["simulation-python"] = "simulation-python"
+    backend_identity: Literal[
+        "simulation-python", "simulation-python-contained"
+    ] = "simulation-python"
     runner_profile: Literal[
         "simulation.declarative.v1", "simulation.container.v1"
     ] = "simulation.declarative.v1"
@@ -124,6 +126,12 @@ class SimulationCapabilityPolicyV1(_PolicyModel):
 
     @model_validator(mode="after")
     def _enabled_shape(self):
+        if (self.runner_profile == "simulation.container.v1") != (
+            self.backend_identity == "simulation-python-contained"
+        ):
+            raise ValueError(
+                "container runner profile and contained backend identity must pair"
+            )
         positive = (
             self.maximum_simulation_requests,
             self.maximum_simulation_executions,

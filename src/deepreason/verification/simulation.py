@@ -63,7 +63,9 @@ class SimulationRequest(BaseModel):
 
 
 class SimulationVerificationResult(VerificationResult):
-    backend: Literal["simulation-python"] = "simulation-python"
+    backend: Literal[
+        "simulation-python", "simulation-python-contained"
+    ] = "simulation-python"
     source_sha256: str
     inputs_sha256: str
     checker_sha256: str

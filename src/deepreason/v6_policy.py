@@ -213,17 +213,66 @@ def engaged_criticism_policy(endpoint_id: str) -> CriticismPolicyV1:
 # manifest compile time by ``engaged_local_simulation_toolchain``.
 PUBLIC_SIMULATION_TOOLCHAIN_ID = "python@deepreason-public-local.v1"
 
+# The operator-opted contained runner freezes its own toolchain identity so a
+# contained manifest can never be mistaken for a local-declarative one.
+PUBLIC_CONTAINED_TOOLCHAIN_ID = "python@deepreason-public-contained.v1"
 
-def engaged_simulation_policy() -> SimulationCapabilityPolicyV1:
-    """Return the modest declarative-numeric-only public simulation authority.
 
-    Only the trusted declarative-numeric compiler path is reachable: the
-    runner profile is ``simulation.declarative.v1`` and the controller
-    refuses ``sandboxed_python_v1`` proposals outright, so no model-authored
-    Python ever reaches the local subprocess backend.  Every bound is small
-    enough that a worst-case run stays inside the fixed public envelope.
+def _contained_runner_opted(environ=None) -> bool:
+    env = os.environ if environ is None else environ
+    runner = str(env.get("DEEPREASON_SIMULATION_RUNNER", "")).strip().lower()
+    if runner in {"", "declarative"}:
+        return False
+    if runner != "contained":
+        raise ValueError(
+            "DEEPREASON_SIMULATION_RUNNER must be 'declarative' or 'contained'"
+        )
+    return True
+
+
+def engaged_simulation_policy(environ=None) -> SimulationCapabilityPolicyV1:
+    """Return the public simulation authority, declarative-numeric by default.
+
+    Default (``DEEPREASON_SIMULATION_RUNNER`` unset or ``declarative``): only
+    the trusted declarative-numeric compiler path is reachable — the runner
+    profile is ``simulation.declarative.v1`` and the controller refuses
+    ``sandboxed_python_v1`` proposals outright, so no model-authored Python
+    ever reaches the local subprocess backend.  The returned policy is
+    byte-identical to the historical preset, so existing qualification
+    subjects are untouched.
+
+    Operator-opted (``DEEPREASON_SIMULATION_RUNNER=contained``): the runner
+    profile becomes ``simulation.container.v1`` and model-authored
+    ``sandboxed_python_v1`` programs run inside the contained subprocess
+    runner (scratch workdir, scrubbed environment, hard rlimits, unshared
+    network namespace, fail-closed refusal when containment is unavailable).
+    The changed policy changes the manifest — a different qualification
+    subject, exactly like a changed research allowlist.
     """
 
+    if _contained_runner_opted(environ):
+        return SimulationCapabilityPolicyV1(
+            enabled=True,
+            backend_identity="simulation-python-contained",
+            runner_profile="simulation.container.v1",
+            python_toolchain_identity=PUBLIC_CONTAINED_TOOLCHAIN_ID,
+            maximum_simulation_requests=2,
+            maximum_simulation_executions=2,
+            maximum_proposals_per_turn=1,
+            # Model-authored Python earns a larger code bound than the
+            # declarative DSL but the same modest request/sample envelope.
+            maximum_generated_code_bytes=65_536,
+            maximum_input_bytes=16_384,
+            maximum_output_bytes=65_536,
+            maximum_wall_ms=20_000,
+            maximum_memory_bytes=512 * 1024 * 1024,
+            maximum_steps=2_000_000,
+            maximum_samples=64,
+            deterministic_seed_policy="fixed_manifest",
+            fixed_seed_set=(7,),
+            maximum_follow_up_reasoning_turns=2,
+            input_catalog=(),
+        )
     return SimulationCapabilityPolicyV1(
         enabled=True,
         runner_profile="simulation.declarative.v1",
@@ -282,13 +331,13 @@ def engaged_research_policy(environ=None) -> ResearchCapabilityPolicyV1:
     )
 
 
-def engaged_inquiry_capability_policy() -> InquiryCapabilityPolicyV1:
+def engaged_inquiry_capability_policy(environ=None) -> InquiryCapabilityPolicyV1:
     """Return the engaged topology: simulation ON, research operator-opted."""
 
     return InquiryCapabilityPolicyV1(
         capability_profile="inquiry-capabilities.v2",
-        simulation=engaged_simulation_policy(),
-        research=engaged_research_policy(),
+        simulation=engaged_simulation_policy(environ),
+        research=engaged_research_policy(environ),
     )
 
 
@@ -313,6 +362,36 @@ def engaged_local_simulation_toolchain() -> ToolchainEntry:
         version_output_sha256=sha256_hex(version.encode("utf-8")),
         network=False,
     )
+
+
+def engaged_contained_simulation_toolchain() -> ToolchainEntry:
+    """Freeze the current interpreter as the contained-runner toolchain.
+
+    The pinned executable is whichever interpreter runs DeepReason — when the
+    operator launches from a virtual environment, that venv's interpreter is
+    the frozen reproducibility identity.  The containment guarantees live in
+    the contained runner (scratch workdir, scrubbed environment, rlimits,
+    unshared network namespace), never in the venv itself.
+    """
+
+    version = (
+        f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    )
+    return ToolchainEntry(
+        id=PUBLIC_CONTAINED_TOOLCHAIN_ID,
+        runner="container",
+        executable=str(Path(sys.executable).resolve()),
+        version_output_sha256=sha256_hex(version.encode("utf-8")),
+        network=False,
+    )
+
+
+def engaged_simulation_toolchain(environ=None) -> ToolchainEntry:
+    """Return the one frozen toolchain matching the engaged simulation policy."""
+
+    if _contained_runner_opted(environ):
+        return engaged_contained_simulation_toolchain()
+    return engaged_local_simulation_toolchain()
 
 
 def engaged_policy_digest() -> str:
@@ -346,6 +425,7 @@ def engaged_policy_digest() -> str:
 
 __all__ = [
     "POLICY_PRESET_ID",
+    "PUBLIC_CONTAINED_TOOLCHAIN_ID",
     "PUBLIC_SCHOOL_COUNT",
     "PUBLIC_SIMULATION_TOOLCHAIN_ID",
     "conservative_control_plane_policy_v3",
@@ -354,8 +434,10 @@ __all__ = [
     "engaged_control_plane_policy_v3",
     "engaged_criticism_policy",
     "engaged_inquiry_capability_policy",
+    "engaged_contained_simulation_toolchain",
     "engaged_local_simulation_toolchain",
     "engaged_policy_digest",
     "engaged_scratchpad_source",
     "engaged_simulation_policy",
+    "engaged_simulation_toolchain",
 ]

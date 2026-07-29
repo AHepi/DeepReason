@@ -63,9 +63,9 @@ from deepreason.v6_policy import (
     engaged_control_plane_policy_v3,
     engaged_criticism_policy,
     engaged_inquiry_capability_policy,
-    engaged_local_simulation_toolchain,
     engaged_policy_digest,
     engaged_scratchpad_source,
+    engaged_simulation_toolchain,
 )
 from deepreason.workloads.text import ReasoningWorkloadSpec, WorkloadProblem
 
@@ -360,10 +360,12 @@ def build_preparation_manifest(
         criticism_policy=engaged_criticism_policy(profile.endpoint_id),
         inquiry_capability_policy=engaged_inquiry_capability_policy(),
         run_input_digest=run_input_digest,
-        # The one frozen local simulation toolchain is derived from the
-        # executing interpreter at preparation time so the wheel stays
-        # portable across end-user machines.
-        toolchains=(engaged_local_simulation_toolchain(),),
+        # The one frozen simulation toolchain is derived from the executing
+        # interpreter at preparation time so the wheel stays portable across
+        # end-user machines; the entry matches the engaged simulation policy
+        # (local declarative by default, container when the operator opts
+        # into the contained runner).
+        toolchains=(engaged_simulation_toolchain(),),
     )
 
 
