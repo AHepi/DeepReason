@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (conn:0e26d6be54fd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0e26d6be54fd to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f34648daa4ff: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+0e26d6be54fd shares mechanism with SRC_001 (Token Economy): both implement epistemic cost-control through conjecture-criticism budgeting — 0e26d6be54fd applies the same token-burn-vs-epistemology tradeoff logic described in SRC_001 to a specific operational context. REFUTED IF 0e26d6be54fd involves no token-budget, cost-control, or resource-allocation mechanism whatsoever.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_002
+CONTRADICTS: Artifact 0e26d6be54fd contradicts SRC_005 (When Conjecture Circles: Repertoire Exhaustion and Refuted-Attractor) because if 0e26d6be54fd represents a successful connection that escaped basin-trapping, it stands as a counter-instance to the repertoire-exhaustion dynamic described in SRC_005 — demonstrating that neighbourhood connection is achievable where SRC_005 predicts cycling. This is REFUTED IF 0e26d6be54fd is itself a record of a failed or still-cycling connection attempt (as the scratch context hypothesizes), in which case it would exemplify rather than contradict SRC_005.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_003
+SHARES MECHANISM: Artifact 0e26d6be54fd shares mechanism with SRC_001 (Reducing Token Burn Without Sacrificing the Epistemology) because both artifacts plausibly employ the same epistemic strategy — preserving conjecture quality while constraining resource expenditure. If 0e26d6be54fd is a method for neighbourhood connection under token-budget pressure, its underlying mechanism (e.g., compact candidate generation, adversarial pruning) would be structurally homologous to SRC_001's token-economy approach. This is REFUTED IF 0e26d6be54fd's connection method does not involve any resource-budget tradeoff, or if its mechanism operates at a different layer (e.g., semantic rather than economic) with no shared structural pattern.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_004
+DEPENDS ON: Artifact 0e26d6be54fd depends on SRC_004 (What the Machine Currently Holds) because any substantive claim about 0e26d6be54fd's role in the neighbourhood presupposes the current theory state recorded in SRC_004 — without that grounding, 0e26d6be54fd has no interpretive frame. This is REFUTED IF 0e26d6be54fd can be interpreted and adjudicated entirely without reference to the current theory state, or if SRC_004's recorded state is shown to be irrelevant to 0e26d6be54fd's content.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
