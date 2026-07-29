@@ -1547,6 +1547,12 @@ def conj(
         if dossier_receipt is not None and dossier_receipt.excerpts:
             alias_for_source = {target: alias for alias, target in aliases.aliases.items()}
             rendered_bytes = len(frozen_evidence_context.encode("utf-8"))
+            # Aliases exist only for source ids that survived pack
+            # allocation; an excerpt whose rendered section was compressed
+            # out of the pack is not visible to the model and must not be
+            # declared in the exposure plan (live selfstudy regression:
+            # a large dossier at cycle 2 dropped one source's section and
+            # the unconditional alias lookup crashed the run).
             dossier_items = tuple(
                 VisibleContextItemV1(
                     namespace=ContextNamespace.SOURCE,
@@ -1556,16 +1562,18 @@ def conj(
                     planned_bytes=rendered_bytes,
                 )
                 for excerpt in dossier_receipt.excerpts
+                if excerpt.source_id in alias_for_source
             )
-            transaction_plans.append(
-                transaction_service.context_plan(
-                    transaction_preparation,
-                    plan_kind="dossier",
-                    items=dossier_items,
-                    maximum_bytes=max(dossier_maximum_bytes, rendered_bytes),
-                    rendered_bytes=rendered_bytes,
+            if dossier_items:
+                transaction_plans.append(
+                    transaction_service.context_plan(
+                        transaction_preparation,
+                        plan_kind="dossier",
+                        items=dossier_items,
+                        maximum_bytes=max(dossier_maximum_bytes, rendered_bytes),
+                        rendered_bytes=rendered_bytes,
+                    )
                 )
-            )
         if simulation_policy.enabled and simulation_policy.input_catalog:
             rendered_bytes = len(v6_simulation_rendered_text.encode("utf-8"))
             simulation_items = tuple(
