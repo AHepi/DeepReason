@@ -288,6 +288,15 @@ PREFIXES: dict[str, str] = {
                            "every grant decision so each tightening or "
                            "widening of where tokens flow is attackable in "
                            "the log — the frozen cap itself never moves",
+    "config-critique:": "one config-referee review outcome over standard "
+                        "views (suffix = config_effective | config_mistuned "
+                        "| REJECTED_UNFOUNDED; grounded verdicts carry "
+                        "inputs: [signal, recommendation:menu-entry, "
+                        "cited:seq list, view ref, verdict ref]); advice "
+                        "and attention on the record only — no budget, "
+                        "status, or policy byte moves because the referee "
+                        "spoke, and an uncited verdict is recorded as its "
+                        "own rejection",
     "spec-transmission:": "measured fraction of diversity specs realized "
                           "(suffix = score)",
     "trial-blocked:": "a trial ruling was screened out by a guard (suffix = "
