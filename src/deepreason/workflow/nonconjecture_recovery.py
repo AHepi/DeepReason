@@ -535,6 +535,111 @@ def _artifact_digest(harness, target_id: str) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
+def _config_referee_contract(manifest, preparation, payload):
+    """Resolve the frozen config-referee contract for one durable work item."""
+
+    from deepreason.referee import (
+        CONFIG_REFEREE_CONTRACT_V1,
+        config_referee_wire_contract,
+    )
+    from deepreason.llm.wire import AliasTable
+
+    _trigger(preparation, payload, "config-referee:")
+    _authority(
+        preparation.contract_id == CONFIG_REFEREE_CONTRACT_V1,
+        "config referee contract differs",
+    )
+    capabilities = manifest.inquiry_capability_policy
+    policy = capabilities.config_referee if capabilities is not None else None
+    _authority(
+        policy is not None and policy.enabled,
+        "manifest does not authorize the config referee",
+    )
+    school_id = payload.get("critic_school_id")
+    if school_id is not None:
+        criticism = manifest.criticism_policy
+        binding = next(
+            (
+                value
+                for value in (criticism.bindings if criticism is not None else ())
+                if value.school_id == school_id
+            ),
+            None,
+        )
+        _authority(binding is not None, "referee school has no manifest binding")
+    view_ref = payload.get("view_ref")
+    _authority(
+        isinstance(view_ref, str) and preparation.target_refs == (view_ref,),
+        "config referee work does not target its durable review view",
+    )
+    return config_referee_wire_contract(AliasTable({"SRC_001": view_ref}))
+
+
+def _recover_config_referee_effect(
+    harness,
+    item,
+    preparation,
+    payload,
+    provider,
+    output,
+    service,
+) -> SemanticAdmissionV1:
+    """Close an interrupted config review; advice recorded at most once.
+
+    The referee is observe-only, so the only domain effect to recover is the
+    ``config-critique:`` measure. The stored view is the exact material the
+    provider was shown; citations validate against it just as they would
+    have live, and an unfounded verdict recovers as its recorded rejection.
+    """
+
+    from deepreason.referee import (
+        ConfigRefereeError,
+        ConfigReviewViewV1,
+        record_config_critique,
+        record_rejected_config_critique,
+    )
+
+    semantic_ref = harness.blobs.put(
+        canonical_json(output.model_dump(mode="json", by_alias=True))
+    )
+    admission = _existing_admission(item, provider)
+    if admission is not None and admission.outcome != "admitted":
+        return admission
+    if admission is None:
+        admission = _complete_admitted(
+            service,
+            provider,
+            admitted_refs=(semantic_ref,),
+            reason_code="config_referee_output_admitted",
+        )
+    else:
+        _authority(
+            admission.admitted_refs == (semantic_ref,),
+            "config referee admission differs from the durable validated output",
+        )
+    view_ref = str(payload["view_ref"])
+    try:
+        view = ConfigReviewViewV1.model_validate(
+            json.loads(harness.blobs.get(view_ref))
+        )
+    except (KeyError, OSError, ValueError) as error:
+        raise NonConjectureRecoveryAuthorityError(
+            "config referee review view is unavailable or corrupt"
+        ) from error
+    already_recorded = any(
+        event.inputs
+        and str(event.inputs[0]).startswith("config-critique:")
+        and any(str(value) == f"view:{view_ref}" for value in event.inputs[1:])
+        for event in harness.log.read()
+    )
+    if not already_recorded:
+        try:
+            record_config_critique(harness, output, view)
+        except ConfigRefereeError as error:
+            record_rejected_config_critique(harness, error, view)
+    return admission
+
+
 def _criticism_contract(harness, manifest, item, preparation, payload):
     _authority(payload.get("schema") == "criticism.semantic-task.v1", "unknown critic task")
     _trigger(preparation, payload, "criticism:")
@@ -901,6 +1006,22 @@ def recover_nonconjecture_admission(
         return _schema_exhausted(service, provider, task=task, error=error)
 
     try:
+        if (
+            preparation.task_kind == WorkflowTaskKind.CRITICISM
+            and hasattr(payload, "get")
+            and payload.get("schema") == "config-referee.semantic-task.v1"
+        ):
+            contract = _config_referee_contract(manifest, preparation, payload)
+            output = contract.compile(contract.validate_value(raw_value))
+            return _recover_config_referee_effect(
+                harness,
+                item,
+                preparation,
+                payload,
+                provider,
+                output,
+                service,
+            )
         if preparation.task_kind == WorkflowTaskKind.CRITICISM:
             contract = _criticism_contract(
                 harness, manifest, item, preparation, payload

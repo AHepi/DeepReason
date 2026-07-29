@@ -821,6 +821,39 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
                         expected_role = binding.role
                         expected_seat = binding.seat
                         expected_endpoint = binding.endpoint_id
+        elif task == "criticism" and (
+            payload is not None
+            and payload.get("schema") == "config-referee.semantic-task.v1"
+        ):
+            expected_contract = "config-referee.v1"
+            expected_role = "argumentative_critic"
+            capabilities = manifest.inquiry_capability_policy
+            referee_policy = (
+                capabilities.config_referee if capabilities is not None else None
+            )
+            if referee_policy is None or not referee_policy.enabled:
+                differences.append(
+                    "config referee work is not authorized by the manifest"
+                )
+            else:
+                school_id = payload.get("critic_school_id")
+                policy = manifest.criticism_policy
+                binding = next(
+                    (
+                        candidate
+                        for candidate in (policy.bindings if policy else ())
+                        if candidate.school_id == school_id
+                    ),
+                    None,
+                )
+                if school_id is not None and binding is None:
+                    differences.append(
+                        "config referee school has no frozen criticism binding"
+                    )
+                elif binding is not None:
+                    expected_role = binding.role
+                    expected_seat = binding.seat
+                    expected_endpoint = binding.endpoint_id
         elif task == "criticism":
             expected_contract = versions.batch_critic_contract
             policy = manifest.criticism_policy

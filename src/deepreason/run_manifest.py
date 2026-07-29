@@ -1840,12 +1840,24 @@ def _route_seat_behavioral_contract_assignments(
         )
 
     criticism = manifest.criticism_policy
+    referee = (
+        manifest.inquiry_capability_policy.config_referee
+        if manifest.inquiry_capability_policy is not None
+        else None
+    )
+    referee_enabled = referee is not None and referee.enabled
     if criticism is not None:
         for binding in criticism.bindings:
             if binding.role == "argumentative_critic":
                 assignments.add(
                     (contracts.batch_critic_contract, binding.role, binding.seat)
                 )
+                if referee_enabled:
+                    # The config referee is an ordinary critic call on the
+                    # same frozen seat, under its own narrow contract.
+                    assignments.add(
+                        ("config-referee.v1", binding.role, binding.seat)
+                    )
     else:
         # The ordinary scheduler retains its non-school batch-criticism path
         # when no foreign-school policy is configured. It still uses the real
@@ -1856,6 +1868,8 @@ def _route_seat_behavioral_contract_assignments(
             assignments.add(
                 (contracts.batch_critic_contract, "argumentative_critic", seat)
             )
+            if referee_enabled:
+                assignments.add(("config-referee.v1", "argumentative_critic", seat))
 
     bridge = manifest.bridge_policy
     if bridge is not None and bridge.mode == "grounded_two_stage":
@@ -2447,6 +2461,7 @@ def _compile_contract_schema_repair_policy(
     source_config: dict[str, Any],
     control_plane_policy: ControlPlanePolicyV3,
     bridge_policy: BridgePolicy,
+    inquiry_capability_policy: InquiryCapabilityPolicyV1 | None = None,
 ) -> ContractSchemaRepairPolicyV1:
     """Freeze current schema-repair authority per model-facing v6 contract."""
 
@@ -2496,6 +2511,14 @@ def _compile_contract_schema_repair_policy(
                     ).contract_id: bridge_ceiling,
                 }
             )
+    if (
+        inquiry_capability_policy is not None
+        and inquiry_capability_policy.config_referee is not None
+        and inquiry_capability_policy.config_referee.enabled
+    ):
+        # Conditional exactly like the scratch and bridge contracts above:
+        # manifests without an enabled referee keep their exact bytes.
+        ceilings["config-referee.v1"] = shared_ceiling
     return ContractSchemaRepairPolicyV1(
         grants=tuple(
             ContractSchemaRepairGrantV1(
@@ -2835,6 +2858,14 @@ def _validate_v6_capability_policy(manifest: RunManifest) -> None:
         # The contained directed-fetch runtime is the only implemented
         # research authority; any other backend identity stays refused.
         raise ValueError("V6_RESEARCH_UNAVAILABLE")
+    if (
+        capabilities.config_referee is not None
+        and capabilities.config_referee.enabled
+        and not manifest.roles.get("argumentative_critic")
+    ):
+        # The referee is an ordinary critic call; without a frozen critic
+        # seat there is no route that could ever carry its contract.
+        raise ValueError("V6_CONFIG_REFEREE_CRITIC_SEAT_REQUIRED")
     if (
         manifest.criticism_policy is not None
         and manifest.criticism_policy.authority == "defended_trial"
@@ -3199,6 +3230,7 @@ def compile_run_manifest(
                 source_config=data,
                 control_plane_policy=resolved_control_policy,
                 bridge_policy=bridge_policy,
+                inquiry_capability_policy=resolved_inquiry_policy,
             )
         )
         manifest_values["route_seat_presentation_plan"] = (

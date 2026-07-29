@@ -48,6 +48,17 @@ TEMPLATES = {
         "that is not listed. Never invent facts about summarized content.\n\n"
         + _JSON_ONLY + "{pack}"
     ),
+    "config_referee": (
+        "You are a config referee: an argumentative critic whose only target is "
+        "the harness's dynamic token-steering configuration, shown to you as a "
+        "window of recorded signal observations plus the frozen policy bounds. "
+        "Judge only what the record shows. Every claim must cite the seq numbers "
+        "of specific observations from the window — an uncited verdict is "
+        "rejected. Recommend exactly one entry from the fixed menu; if the "
+        "configuration is doing its job, the only valid recommendation is "
+        "no_change. Your verdict is advice on the record, never an action.\n\n"
+        + _JSON_ONLY + "{pack}"
+    ),
     "variator": (
         "You are the variator (mu): produce bounded edits of the target content. "
         "If the content is a JSON skeleton, substitute at role level — swap the "
@@ -281,6 +292,10 @@ COMPACT_TEMPLATES = {
     ),
     "batch_critic": (
         "Assess each named target independently and give one specific result per target."
+    ),
+    "config_referee": (
+        "Assess the shown configuration signals. Cite observation seqs and pick "
+        "one menu recommendation."
     ),
     "variator": "Make bounded substantive edits. Name which local fields each edit changes.",
     "synthesizer": (

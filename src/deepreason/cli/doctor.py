@@ -63,6 +63,7 @@ class ProductionContractPairV1(_DoctorRecord):
         "conjecturer.atomic-candidate.v1",
         "batch-critic.v2",
         "critic.atomic-target.v1",
+        "config-referee.v1",
         "bridge.ledger.v3",
         "bridge.ledger-batch.v1",
         "bridge.composition.v2",
@@ -836,6 +837,13 @@ def _production_probe_contract(
             expected_target="qualification-target",
         )
         template_role = "argumentative_critic"
+    elif contract_id == "config-referee.v1":
+        from deepreason.referee import config_referee_wire_contract
+
+        contract = config_referee_wire_contract(
+            AliasTable({"SRC_001": "qualification-review-view"})
+        )
+        template_role = "config_referee"
     elif contract_id == "bridge.ledger.v3":
         contract, task = _production_bridge_ledger_probe()
         template_role = "bridge_ledger"

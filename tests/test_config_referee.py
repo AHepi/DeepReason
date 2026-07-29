@@ -255,6 +255,203 @@ def test_parse_is_strict_and_typed():
         parse_config_referee_verdict(json.dumps({"verdict": "config_effective"}))
 
 
+def _referee_manifest():
+    from deepreason.capabilities.policy import (
+        ConfigRefereePolicyV1 as PolicyRecord,
+        InquiryCapabilityPolicyV1,
+    )
+    from deepreason.run_manifest import compile_run_manifest
+    from tests.test_v6_nonconjecture_recovery import (
+        STAMP,
+        _config,
+        _control,
+        _criticism_policy,
+    )
+
+    config = _config()
+    manifest = compile_run_manifest(
+        config,
+        schema_version=6,
+        workload_profile="text",
+        rubric_policy="forbid",
+        compiled_at=STAMP,
+        control_plane_policy=_control(),
+        criticism_policy=_criticism_policy(),
+        inquiry_capability_policy=InquiryCapabilityPolicyV1(
+            capability_profile="inquiry-capabilities.v2",
+            config_referee=PolicyRecord(
+                enabled=True,
+                cadence_cycles=4,
+                window_events=256,
+                maximum_view_bytes=65_536,
+            ),
+        ),
+        run_input_digest="f" * 64,
+    )
+    return config, manifest
+
+
+def _referee_provider_prefix(root, manifest, *, raw: bytes):
+    from deepreason.harness import Harness
+    from deepreason.referee import build_config_review_view
+    from deepreason.workflow.models import WorkflowTaskKind
+    from deepreason.workflow.transaction import ContextNamespace, VisibleContextItemV1
+    from tests.test_v6_nonconjecture_recovery import _provider_prefix
+
+    harness = Harness(root)
+    harness.record_measure(inputs=["cycle", "1", "-"])
+    harness.record_measure(
+        inputs=["evidence-citation:EVIDENCE_REF_UNKNOWN_BLOCK", "sha256:aa", "art-1"]
+    )
+    policy = manifest.inquiry_capability_policy.config_referee
+    view = build_config_review_view(
+        harness,
+        manifest,
+        window_events=policy.window_events,
+        maximum_view_bytes=policy.maximum_view_bytes,
+    )
+    view_ref = harness.blobs.put(
+        canonical_json(view.model_dump(mode="json", by_alias=True))
+    )
+    payload = {
+        "schema": "config-referee.semantic-task.v1",
+        "critic_school_id": "school-1",
+        "view_ref": view_ref,
+        "fence_seq": view.fence_seq,
+        "caller_trigger_ref": "config-referee-cycle:4",
+    }
+    item = VisibleContextItemV1(
+        namespace=ContextNamespace.SOURCE,
+        alias="SRC_001",
+        object_ref=view_ref,
+        content_sha256=view_ref,
+        planned_bytes=64,
+    )
+    preparation, provider = _provider_prefix(
+        harness,
+        manifest,
+        task_kind=WorkflowTaskKind.CRITICISM,
+        role="argumentative_critic",
+        seat=1,
+        contract_id="config-referee.v1",
+        payload=payload,
+        trigger_prefix="config-referee:",
+        raw=raw,
+        target_refs=(view_ref,),
+        input_refs=(view_ref,),
+        items=(item,),
+    )
+    return preparation, provider, view
+
+
+def _critique_events(harness):
+    return [
+        event
+        for event in harness.log.read()
+        if event.inputs and str(event.inputs[0]).startswith("config-critique:")
+    ]
+
+
+def test_recovered_referee_verdict_records_critique_exactly_once(tmp_path):
+    from deepreason.workflow.transaction_service import TokenMeter
+    from deepreason.workflow.nonconjecture_recovery import (
+        recover_nonconjecture_admission,
+    )
+    from tests.test_v6_nonconjecture_recovery import _recover
+
+    config, manifest = _referee_manifest()
+    root = tmp_path / "referee-grounded"
+    raw = json.dumps(
+        {
+            "verdict": "config_mistuned",
+            "assessment": "Citation failures at seq 1 show wasted evidence.",
+            "cited_seqs": [1],
+            "recommendation": "research_allowance_step_tighten",
+        }
+    ).encode("utf-8")
+    _preparation, provider, view = _referee_provider_prefix(root, manifest, raw=raw)
+    assert 1 in view.citable_seqs
+    reopened, item, admission = _recover(root, manifest, provider)
+    assert admission.outcome == "admitted"
+    assert item.terminal.status == "completed"
+    critiques = _critique_events(reopened)
+    assert len(critiques) == 1
+    assert critiques[0].inputs[0] == "config-critique:config_mistuned"
+    assert critiques[0].inputs[1] == "recommendation:research_allowance_step_tighten"
+    # Recovering again applies no second advice record.
+    again = recover_nonconjecture_admission(
+        reopened, manifest, TokenMeter(100_000), provider
+    )
+    assert again.id == admission.id
+    assert len(_critique_events(reopened)) == 1
+
+
+def test_recovered_unfounded_referee_verdict_is_a_typed_rejection(tmp_path):
+    from tests.test_v6_nonconjecture_recovery import _recover
+
+    config, manifest = _referee_manifest()
+    root = tmp_path / "referee-unfounded"
+    raw = json.dumps(
+        {
+            "verdict": "config_mistuned",
+            "assessment": "Cites an observation the referee was never shown.",
+            "cited_seqs": [999],
+            "recommendation": "criticism_weighted_cycle",
+        }
+    ).encode("utf-8")
+    _preparation, provider, _view = _referee_provider_prefix(root, manifest, raw=raw)
+    reopened, item, admission = _recover(root, manifest, provider)
+    assert admission.outcome == "admitted"  # semantic admission is not grounding
+    critiques = _critique_events(reopened)
+    assert len(critiques) == 1
+    assert critiques[0].inputs[0] == "config-critique:REJECTED_UNFOUNDED"
+
+
+def test_recovered_malformed_referee_output_terminalizes_without_advice(tmp_path):
+    from tests.test_v6_nonconjecture_recovery import _recover
+
+    config, manifest = _referee_manifest()
+    root = tmp_path / "referee-malformed"
+    _preparation, provider, _view = _referee_provider_prefix(
+        root, manifest, raw=b'{"verdict": "nope"}'
+    )
+    reopened, item, admission = _recover(root, manifest, provider)
+    assert admission.outcome != "admitted"
+    assert _critique_events(reopened) == []
+
+
+def test_scheduler_fires_referee_only_on_the_frozen_cadence(monkeypatch):
+    from types import SimpleNamespace
+
+    from deepreason.scheduler.scheduler import Scheduler
+
+    _config_unused, manifest = _referee_manifest()
+    calls = []
+    monkeypatch.setattr(
+        "deepreason.referee.run_config_referee",
+        lambda harness, adapter, mani, *, trigger_ref: calls.append(trigger_ref),
+    )
+    fake = SimpleNamespace(
+        run_manifest=manifest,
+        adapter=SimpleNamespace(has_role=lambda role: True),
+        harness=object(),
+        _cycles=8,
+        _drop=lambda error: None,
+    )
+    Scheduler._maybe_config_referee(fake)
+    assert calls == ["config-referee-cycle:8"]
+    fake._cycles = 7
+    Scheduler._maybe_config_referee(fake)
+    assert calls == ["config-referee-cycle:8"]  # off-cadence cycle stays silent
+    fake._cycles = 0
+    Scheduler._maybe_config_referee(fake)
+    assert calls == ["config-referee-cycle:8"]  # cycle zero never fires
+    fake.adapter = SimpleNamespace(has_role=lambda role: False)
+    fake._cycles = 12
+    Scheduler._maybe_config_referee(fake)
+    assert calls == ["config-referee-cycle:8"]  # no critic role, no dispatch
+
+
 @pytest.mark.skipif(not NARROW.is_dir(), reason="live narrow evidence root is not present")
 def test_view_builds_from_the_live_narrow_record():
     from deepreason.harness import Harness

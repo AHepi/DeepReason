@@ -377,6 +377,43 @@ class ResearchCapabilityPolicyV1(_PolicyModel):
         ).hexdigest()
 
 
+class ConfigRefereePolicyV1(_PolicyModel):
+    """Frozen config-review authority: cadence and window are manifest data.
+
+    The referee is an observe-only critic over standard views (see
+    ``deepreason.referee``). Freezing its cadence, window size, and view
+    byte bound here makes the review schedule part of the qualification
+    subject: a different review shape is a different behavior subject, and
+    nothing at runtime can widen what the referee is shown.
+    """
+
+    schema_: Literal["config-referee-policy.v1"] = Field(
+        "config-referee-policy.v1", alias="schema"
+    )
+    enabled: bool = False
+    cadence_cycles: int = Field(default=0, ge=0, le=1_000)
+    window_events: int = Field(default=0, ge=0, le=100_000)
+    maximum_view_bytes: int = Field(default=0, ge=0, le=1024 * 1024)
+
+    @model_validator(mode="after")
+    def _finite_shape(self):
+        bounds = (self.cadence_cycles, self.window_events, self.maximum_view_bytes)
+        if self.enabled:
+            if not all(bounds):
+                raise ValueError(
+                    "enabled config referee requires finite positive bounds"
+                )
+        elif any(bounds):
+            raise ValueError("disabled config referee cannot bind authority")
+        return self
+
+    @property
+    def digest(self) -> str:
+        return hashlib.sha256(
+            canonical_json(self.model_dump(mode="json", by_alias=True))
+        ).hexdigest()
+
+
 class InquiryCapabilityPolicyV1(_PolicyModel):
     """The complete, opt-in A-tranche capability topology."""
 
@@ -401,6 +438,11 @@ class InquiryCapabilityPolicyV1(_PolicyModel):
     research: ResearchCapabilityPolicyV1 = Field(
         default_factory=ResearchCapabilityPolicyV1
     )
+    # Serialized only when configured, so every existing policy keeps its
+    # exact bytes — and therefore its digest and cached qualifications.
+    config_referee: ConfigRefereePolicyV1 | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @property
     def digest(self) -> str:
@@ -411,6 +453,7 @@ class InquiryCapabilityPolicyV1(_PolicyModel):
 
 __all__ = [
     "AttachedEvidencePolicyV1",
+    "ConfigRefereePolicyV1",
     "FormalizationCapabilityPolicyV1",
     "FrozenEvidenceItemV1",
     "FrozenEvidencePolicyV1",

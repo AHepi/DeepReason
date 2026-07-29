@@ -537,6 +537,40 @@ class Scheduler:
             )
         return True
 
+    def _maybe_config_referee(self) -> None:
+        """Fire one config review on the frozen cadence; failures never stall.
+
+        The referee is advice on the record: an unreachable provider or a
+        rejected verdict drops into diagnostics exactly like any other
+        optional call, and the cycle proceeds. Cadence is manifest data
+        (cycle numbers are replay-stable), and duplicate firings after a
+        resume are absorbed by the durable-transaction match inside
+        ``run_config_referee``.
+        """
+
+        manifest = self.run_manifest
+        if manifest is None or manifest.schema_version != 6:
+            return
+        capabilities = manifest.inquiry_capability_policy
+        policy = capabilities.config_referee if capabilities is not None else None
+        if policy is None or not policy.enabled:
+            return
+        if self._cycles == 0 or self._cycles % policy.cadence_cycles != 0:
+            return
+        if not self.adapter.has_role("argumentative_critic"):
+            return
+        from deepreason.referee import run_config_referee
+
+        try:
+            run_config_referee(
+                self.harness,
+                self.adapter,
+                manifest,
+                trigger_ref=f"config-referee-cycle:{self._cycles}",
+            )
+        except (SchemaRepairError, EndpointError) as error:
+            self._drop(error)
+
     def _rehydrate_resumed_stop_controller(self) -> None:
         """Restore the exact deterministic stop window authorized by RESUMED."""
 
@@ -1655,6 +1689,7 @@ class Scheduler:
         # heartbeat belongs to this cycle — the log segments itself, live
         # progress is tail-able, and stalls become diagnosable post hoc.
         harness.record_measure(inputs=["cycle", str(self._cycles), problem.id if problem else "-"])
+        self._maybe_config_referee()
         if problem is None:
             self._cycles += 1
             return

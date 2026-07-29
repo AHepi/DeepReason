@@ -26,6 +26,7 @@ from pathlib import Path
 from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.policy import (
+    ConfigRefereePolicyV1,
     InquiryCapabilityPolicyV1,
     ResearchCapabilityPolicyV1,
     SimulationCapabilityPolicyV1,
@@ -331,6 +332,29 @@ def engaged_research_policy(environ=None) -> ResearchCapabilityPolicyV1:
     )
 
 
+def engaged_config_referee_policy(environ=None) -> ConfigRefereePolicyV1 | None:
+    """Return the operator-opted config-referee authority, default OFF.
+
+    ``DEEPREASON_CONFIG_REFEREE`` names the review cadence in scheduler
+    cycles (a positive integer). Unset keeps the policy absent — existing
+    manifests stay byte-identical. An enabled referee is part of the
+    compiled manifest, hence a distinct qualification subject, exactly like
+    a research allowlist or the contained simulation runner.
+    """
+
+    env = os.environ if environ is None else environ
+    raw = str(env.get("DEEPREASON_CONFIG_REFEREE", "")).strip()
+    if not raw:
+        return None
+    cadence = int(raw)
+    return ConfigRefereePolicyV1(
+        enabled=True,
+        cadence_cycles=cadence,
+        window_events=1_024,
+        maximum_view_bytes=128 * 1024,
+    )
+
+
 def engaged_inquiry_capability_policy(environ=None) -> InquiryCapabilityPolicyV1:
     """Return the engaged topology: simulation ON, research operator-opted."""
 
@@ -338,6 +362,7 @@ def engaged_inquiry_capability_policy(environ=None) -> InquiryCapabilityPolicyV1
         capability_profile="inquiry-capabilities.v2",
         simulation=engaged_simulation_policy(environ),
         research=engaged_research_policy(environ),
+        config_referee=engaged_config_referee_policy(environ),
     )
 
 
@@ -431,6 +456,7 @@ __all__ = [
     "conservative_control_plane_policy_v3",
     "conservative_policy_digest",
     "engaged_bridge_source",
+    "engaged_config_referee_policy",
     "engaged_control_plane_policy_v3",
     "engaged_criticism_policy",
     "engaged_inquiry_capability_policy",

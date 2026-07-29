@@ -34,6 +34,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json
+from deepreason.capabilities.policy import ConfigRefereePolicyV1
 from deepreason.ontology import Rule
 
 # The complete pre-declared intervention vocabulary. Order is meaningful only
@@ -72,36 +73,6 @@ class _FrozenModel(BaseModel):
     model_config = ConfigDict(
         extra="forbid", frozen=True, populate_by_name=True, serialize_by_alias=True
     )
-
-
-class ConfigRefereePolicyV1(_FrozenModel):
-    """Frozen review authority: cadence and window are manifest data, not code."""
-
-    schema_: Literal["config-referee-policy.v1"] = Field(
-        "config-referee-policy.v1", alias="schema"
-    )
-    enabled: bool = False
-    cadence_cycles: int = Field(default=0, ge=0, le=1_000)
-    window_events: int = Field(default=0, ge=0, le=100_000)
-    maximum_view_bytes: int = Field(default=0, ge=0, le=1024 * 1024)
-
-    @model_validator(mode="after")
-    def _finite_shape(self):
-        bounds = (self.cadence_cycles, self.window_events, self.maximum_view_bytes)
-        if self.enabled:
-            if not all(bounds):
-                raise ValueError(
-                    "enabled config referee requires finite positive bounds"
-                )
-        elif any(bounds):
-            raise ValueError("disabled config referee cannot bind authority")
-        return self
-
-    @property
-    def digest(self) -> str:
-        return hashlib.sha256(
-            canonical_json(self.model_dump(mode="json", by_alias=True))
-        ).hexdigest()
 
 
 class ConfigObservationV1(_FrozenModel):
@@ -358,6 +329,344 @@ def latest_config_critique(harness) -> dict | None:
     return latest
 
 
+CONFIG_REFEREE_CONTRACT_V1 = "config-referee.v1"
+
+
+def _wire_contract_class():
+    """Build the wire contract lazily so referee stays importable standalone."""
+
+    from pydantic import Field as WireField
+    from deepreason.llm.wire import StrictWireModel, WireContract
+
+    class ConfigRefereeWireV1(StrictWireModel):
+        verdict: Literal["config_effective", "config_mistuned"]
+        assessment: str = WireField(min_length=1, max_length=4_096)
+        cited_seqs: list[int] = WireField(min_length=1, max_length=32)
+        recommendation: Literal[
+            "no_change",
+            "criticism_weighted_cycle",
+            "research_allowance_step_tighten",
+            "research_allowance_step_widen",
+        ]
+
+    class ConfigRefereeWireContractV1(WireContract[ConfigRefereeVerdictV1]):
+        """One review, one verdict; targets and evidence are the shown view."""
+
+        def __init__(self, aliases=None) -> None:
+            super().__init__(
+                CONFIG_REFEREE_CONTRACT_V1,
+                ConfigRefereeWireV1,
+                ConfigRefereeVerdictV1,
+                aliases=aliases,
+            )
+
+        def compile(self, wire) -> ConfigRefereeVerdictV1:
+            return ConfigRefereeVerdictV1(
+                verdict=wire.verdict,
+                assessment=wire.assessment,
+                cited_seqs=tuple(wire.cited_seqs),
+                recommendation=wire.recommendation,
+            )
+
+    return ConfigRefereeWireContractV1
+
+
+def config_referee_wire_contract(aliases=None):
+    return _wire_contract_class()(aliases)
+
+
+def render_config_review_pack(view: ConfigReviewViewV1) -> str:
+    """Deterministic review pack: the complete view, nothing else."""
+
+    payload = canonical_json(view.model_dump(mode="json", by_alias=True)).decode(
+        "utf-8"
+    )
+    return (
+        "config-review SRC_001\n"
+        "Review whether the harness's dynamic token-steering configuration is "
+        "doing its job: does the working research allowance tighten when "
+        "consumed sources go uncited, widen when evidence converts, and does "
+        "criticism keep pace with rivalry growth? Judge only the recorded "
+        "observations below. Every claim in your assessment must cite the seq "
+        "numbers of specific observations shown here; a verdict citing "
+        "anything else is rejected. If the configuration is effective, say so "
+        "and recommend no_change. If it is mistuned, recommend exactly one "
+        "menu intervention.\n\n"
+        f"{payload}\n"
+    )
+
+
+def run_config_referee(
+    harness,
+    adapter,
+    manifest,
+    *,
+    trigger_ref: str,
+) -> ConfigRefereeVerdictV1 | None:
+    """Execute one transactional config review under frozen manifest authority.
+
+    Returns the grounded verdict, or ``None`` when the review was skipped
+    (disabled policy, an existing transaction for this trigger) or its
+    output was rejected as unfounded — in which case the rejection is
+    already on the record.
+    """
+
+    from deepreason.llm.firewall import (
+        resolve_school_role_lease,
+        route_fingerprint,
+        select_lease,
+    )
+    from deepreason.workflow.models import RouteLeaseRefV1, WorkflowTaskKind
+    from deepreason.workflow.transaction import (
+        ContextNamespace,
+        VisibleContextItemV1,
+    )
+    from deepreason.workflow.transaction_service import InquiryTransactionService
+
+    capabilities = getattr(manifest, "inquiry_capability_policy", None)
+    policy = getattr(capabilities, "config_referee", None)
+    if policy is None or not policy.enabled:
+        return None
+    if manifest.schema_version != 6:
+        raise ConfigRefereeError("CONFIG_REFEREE_V6_REQUIRED")
+    meter = getattr(adapter, "meter", None)
+    if meter is None:
+        raise ConfigRefereeError("CONFIG_REFEREE_METER_REQUIRED")
+
+    criticism = manifest.criticism_policy
+    if criticism is not None:
+        critic_school_id = min(
+            binding.school_id
+            for binding in criticism.bindings
+            if binding.role == "argumentative_critic"
+        )
+        endpoint_lease = resolve_school_role_lease(
+            manifest,
+            adapter.leases,
+            school_id=critic_school_id,
+            role="argumentative_critic",
+        )
+    else:
+        critic_school_id = None
+        endpoint_lease = select_lease(adapter.leases, "argumentative_critic", 0)
+    route_ref = RouteLeaseRefV1(
+        role="argumentative_critic",
+        seat=endpoint_lease.seat,
+        endpoint_id=endpoint_lease.route.endpoint_id,
+        route_sha256=route_fingerprint(endpoint_lease.route),
+    )
+
+    view = build_config_review_view(
+        harness,
+        manifest,
+        window_events=policy.window_events,
+        maximum_view_bytes=policy.maximum_view_bytes,
+    )
+    view_bytes = canonical_json(view.model_dump(mode="json", by_alias=True))
+    view_ref = harness.blobs.put(view_bytes)
+    payload = {
+        "schema": "config-referee.semantic-task.v1",
+        "critic_school_id": critic_school_id,
+        "view_ref": view_ref,
+        "fence_seq": view.fence_seq,
+        "caller_trigger_ref": trigger_ref,
+    }
+    matches = [
+        item
+        for item in harness.workflow_state.transaction_work.values()
+        if item.preparation.contract_id == CONFIG_REFEREE_CONTRACT_V1
+        and item.preparation.task_payload_value == payload
+        and item.preparation.route_lease == route_ref
+    ]
+    if matches:
+        # This exact review already has durable work; recovery owns any
+        # incomplete remainder and a completed one already spoke.
+        return None
+
+    service = InquiryTransactionService(harness, manifest, meter)
+    from deepreason.llm.wire import AliasTable
+
+    aliases = AliasTable({"SRC_001": view_ref})
+    contract = config_referee_wire_contract(aliases)
+    fence = max(0, harness._next_seq - 1)
+    preparation_trigger = (
+        "config-referee:" + hashlib.sha256(canonical_json(payload)).hexdigest()
+    )
+    preparation = service.prepare(
+        task_kind=WorkflowTaskKind.CRITICISM,
+        attempt_index=0,
+        route_lease=route_ref,
+        contract_id=CONFIG_REFEREE_CONTRACT_V1,
+        trigger_ref=preparation_trigger,
+        formal_fence_seq=fence,
+        scratch_fence_seq=fence,
+        target_refs=(view_ref,),
+        input_refs=(view_ref,),
+        task_payload_value=payload,
+    )
+    authorized = None
+
+    def abandon(*, issued: bool, reason_code: str) -> None:
+        if authorized is not None and authorized.reservation.is_open:
+            authorized.release()
+        service.terminate(
+            work_id=preparation.id,
+            attempt_index=preparation.attempt_index,
+            status="abandoned",
+            reason_code=reason_code,
+            usage_status=("unknown" if issued else "exact"),
+            prompt_tokens=(None if issued else 0),
+            completion_tokens=(None if issued else 0),
+        )
+
+    try:
+        pack = render_config_review_pack(view)
+        rendered_bytes = len(pack.encode("utf-8"))
+        plan = service.context_plan(
+            preparation,
+            plan_kind="dossier",
+            items=(
+                VisibleContextItemV1(
+                    namespace=ContextNamespace.SOURCE,
+                    alias="SRC_001",
+                    object_ref=view_ref,
+                    content_sha256=view_ref,
+                    planned_bytes=rendered_bytes,
+                ),
+            ),
+            maximum_bytes=rendered_bytes,
+            rendered_bytes=rendered_bytes,
+        )
+        prompt, preview_contract, preview_lease, maximum_tokens = (
+            adapter.preview_request(
+                "argumentative_critic",
+                pack,
+                ConfigRefereeVerdictV1,
+                endpoint_index=endpoint_lease.seat,
+                template_role="config_referee",
+                wire_contract=contract,
+                aliases=aliases,
+                endpoint_lease=endpoint_lease,
+            )
+        )
+        if preview_contract is not contract or preview_lease != endpoint_lease:
+            raise ValueError("config referee preview changed frozen call authority")
+        authorized = service.issue(
+            preparation,
+            plans=(plan,),
+            prompt=prompt,
+            max_tokens=maximum_tokens,
+        )
+    except Exception:
+        abandon(issued=False, reason_code="config_referee_preissue_failure")
+        raise
+
+    provider = None
+    try:
+        output, llm_call = adapter.call(
+            "argumentative_critic",
+            pack,
+            ConfigRefereeVerdictV1,
+            endpoint_index=endpoint_lease.seat,
+            template_role="config_referee",
+            wire_contract=contract,
+            aliases=aliases,
+            endpoint_lease=endpoint_lease,
+            school_id=critic_school_id,
+            dispatch_authorization=authorized,
+        )
+    except Exception as error:
+        from deepreason.llm.adapter import EndpointError, SchemaRepairError
+
+        if isinstance(error, EndpointError):
+            spend = getattr(error, "spend", None)
+            if spend is None:
+                abandon(issued=True, reason_code="config_referee_transport_unknown")
+            else:
+                diagnostic_ref = (
+                    spend.attempt_trace[-1].diagnostic_ref
+                    if spend.attempt_trace
+                    else harness.blobs.put(str(error).encode("utf-8"))
+                )
+                provider = service.record_provider_attempt(
+                    authorized,
+                    call=spend,
+                    outcome="transport_failure",
+                    usage_status="unknown",
+                    diagnostic_ref=diagnostic_ref,
+                )
+                service.terminate(
+                    work_id=preparation.id,
+                    attempt_index=preparation.attempt_index,
+                    status="transport_failed",
+                    reason_code="config_referee_transport_failure",
+                    usage_status="unknown",
+                    provider_attempt=provider,
+                )
+                error.spend = None
+            error.transaction_terminalized = True
+            raise
+        if isinstance(error, SchemaRepairError):
+            repaired = service.repair_schema_failure(
+                adapter=adapter,
+                authorized=authorized,
+                error=error,
+                role="argumentative_critic",
+                pack=pack,
+                output_model=ConfigRefereeVerdictV1,
+                wire_contract=contract,
+                endpoint_index=endpoint_lease.seat,
+                template_role="config_referee",
+                endpoint_lease=endpoint_lease,
+                school_id=critic_school_id,
+                reason_prefix="config_referee",
+            )
+            output = repaired.output
+            llm_call = repaired.llm_call
+            preparation = repaired.preparation
+            authorized = repaired.authorized
+            provider = repaired.provider_attempt
+        else:
+            abandon(issued=True, reason_code="config_referee_authority_failure")
+            raise
+
+    if provider is None:
+        provider = service.record_provider_attempt(
+            authorized,
+            call=llm_call,
+            outcome="provider_result",
+            usage_status="exact",
+        )
+    verdict = ConfigRefereeVerdictV1.model_validate(
+        output.model_dump(mode="python", by_alias=True)
+    )
+    admitted_ref = harness.blobs.put(
+        canonical_json(verdict.model_dump(mode="json", by_alias=True))
+    )
+    admission = service.record_semantic_admission(
+        provider,
+        outcome="admitted",
+        admitted_refs=(admitted_ref,),
+    )
+    service.terminate(
+        work_id=preparation.id,
+        attempt_index=preparation.attempt_index,
+        status="completed",
+        reason_code="config_referee_output_admitted",
+        usage_status="exact",
+        prompt_tokens=llm_call.prompt_tokens,
+        completion_tokens=llm_call.completion_tokens,
+        provider_attempt=provider,
+        admission=admission,
+    )
+    try:
+        record_config_critique(harness, verdict, view)
+    except ConfigRefereeError as error:
+        record_rejected_config_critique(harness, error, view)
+        return None
+    return verdict
+
+
 def parse_config_referee_verdict(payload: str | bytes) -> ConfigRefereeVerdictV1:
     """Strictly parse one referee response; anything nonconforming fails typed."""
 
@@ -376,6 +685,7 @@ def parse_config_referee_verdict(payload: str | bytes) -> ConfigRefereeVerdictV1
 
 
 __all__ = [
+    "CONFIG_REFEREE_CONTRACT_V1",
     "CONFIG_REFEREE_RESPONSE_MENU",
     "ConfigObservationV1",
     "ConfigRefereeError",
@@ -383,7 +693,10 @@ __all__ = [
     "ConfigRefereeVerdictV1",
     "ConfigReviewViewV1",
     "build_config_review_view",
+    "config_referee_wire_contract",
     "latest_config_critique",
+    "render_config_review_pack",
+    "run_config_referee",
     "parse_config_referee_verdict",
     "record_config_critique",
     "record_rejected_config_critique",

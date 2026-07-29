@@ -176,6 +176,7 @@ def test_simulation_runner_profile_must_match_exact_frozen_toolchain(tmp_path):
     simulation = SimulationCapabilityPolicyV1(
         enabled=True,
         runner_profile="simulation.container.v1",
+        backend_identity="simulation-python-contained",
         python_toolchain_identity=toolchain.id,
         maximum_simulation_requests=1,
         maximum_simulation_executions=1,
