@@ -33,7 +33,7 @@ mkdir -p "$DEEPREASON_HOME"
   timeout 14400 deepreason qualify --yes --json --concurrency 3
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
   r0=$SECONDS
-  timeout 14400 deepreason reason --token-budget 250000 \
+  timeout 14400 deepreason reason --token-budget 200000 \
     --attach "$REPO/docs/harness-spec-v1.3.md" \
     --attach "$REPO/docs/harness-spec-v1.5-amendment.md" \
     --attach "$REPO/docs/STATE_OF_THE_THEORY.md" \

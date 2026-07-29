@@ -149,7 +149,10 @@ class RunPreparationRequestV1(BaseModel):
             or self.budget.token_budget > PUBLIC_MAX_TOKEN_BUDGET
         ):
             raise ValueError(
-                "public budget must be finite and within the fixed V6 policy ceiling"
+                "public budget must be finite and within the fixed V6 policy "
+                f"ceiling: cycles <= {PUBLIC_MAX_CYCLES} and token budget "
+                f"1..{PUBLIC_MAX_TOKEN_BUDGET} (requested cycles="
+                f"{self.budget.cycles}, token_budget={self.budget.token_budget})"
             )
         return self
 
