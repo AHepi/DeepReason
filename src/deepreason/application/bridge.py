@@ -1659,19 +1659,30 @@ class GroundedBridgeApplicationService:
         preflight = Harness(root, read_only=True)
         _preflight_bridge_caller_policy(preflight, manifest)
         require_v6_launch_allowed(manifest, operation="grounded bridge")
-        preflight_canonical_bridge(root, manifest)
+        terminal_authority = preflight_canonical_bridge(root, manifest)
         resolve_problem(preflight, intent.problem)
         blocks = bounded_focus(intent.focus_blocks, "focus-block")
         clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
         preflight_focus(preflight, manifest, blocks, clusters)
 
         def _terminal_disposition(existing):
-            """Serve, retry, or refuse one already-terminal root.
+            """Serve, retry, supersede, or refuse one already-terminal root.
 
-            Returns the idempotent start result to serve, or None when the
-            explicit operator retry intent authorizes a fresh attempt on a
-            process-failure terminal (owner decision 4b)."""
+            Returns the idempotent start result to serve, or None when a
+            fresh compose is authorized: an explicit operator retry of a
+            same-fence process failure (owner decision 4b), or fence
+            supersession — the run's terminal commitment advanced past the
+            stored bridge's fence, so the stored terminal is history, not
+            the final answer (no answer is final)."""
 
+            superseded = (
+                existing is not None
+                and terminal_authority is not None
+                and existing.source_terminal_commitment_ref
+                != terminal_authority.terminal_commitment_ref
+            )
+            if superseded:
+                return None
             if existing is None:
                 if intent.retry_failed_terminal:
                     raise ValueError(
@@ -1682,8 +1693,8 @@ class GroundedBridgeApplicationService:
             if intent.retry_failed_terminal:
                 if existing.process_status != "failure":
                     raise ValueError(
-                        "BRIDGE_RETRY_TERMINAL_NOT_FAILED: a completed "
-                        "epistemic resolution is permanent"
+                        "BRIDGE_RETRY_TERMINAL_NOT_FAILED: a same-fence "
+                        "completed resolution is served, never recomposed"
                     )
                 return None
             state = "completed" if existing.process_status == "success" else "failed"

@@ -465,10 +465,15 @@ def _read_existing_bridge_terminal(
         or terminal.problem_id != problem_id
         or terminal.target != target
         or terminal.source_run_digest != source_run_digest
-        or terminal.source_terminal_commitment_ref
-        != source_terminal_commitment_ref
     ):
         raise ValueError("BRIDGE_RESULT_AUTHORITY_MISMATCH")
+    if terminal.source_terminal_commitment_ref != source_terminal_commitment_ref:
+        # Fence supersession: the run's terminal commitment advanced past
+        # this bridge's fence (a continuation opened a new terminal epoch).
+        # The stored terminal remains immutable history in the log, but it
+        # is a fence-stamped snapshot, not a final answer — a fresh view
+        # composes at the current fence.
+        return None
     return terminal
 
 class _HarnessBridgeSink:

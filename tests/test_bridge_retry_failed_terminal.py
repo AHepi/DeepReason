@@ -183,3 +183,52 @@ def test_retry_intent_rejects_derived_destinations():
             at_seq=5,
             retry_failed_terminal=True,
         )
+
+
+def test_completed_terminal_is_superseded_when_the_commitment_advances(tmp_path):
+    """No answer is final: a stored bridge terminal is served idempotently
+    only while the run's terminal commitment still matches its fence. Once a
+    continuation opens a new terminal epoch, the stored terminal is history
+    and a fresh view composes at the current fence."""
+
+    from deepreason.bridge.harness import _read_existing_bridge_terminal
+
+    root, manifest, problem_id, _failed = _failed_root(tmp_path)
+    harness = Harness(root)
+    adapter = _recovery_adapter(harness, manifest, _recovery_responses(), [])
+    terminal = _build(harness, manifest, problem_id, adapter, retry=True)
+    assert terminal.process_status == "success"
+    fence_commitment = terminal.source_terminal_commitment_ref
+    assert fence_commitment is not None
+
+    reader = Harness(root, read_only=True)
+    served = _read_existing_bridge_terminal(
+        reader,
+        manifest_digest=manifest.sha256,
+        problem_id=problem_id,
+        target="answer",
+        source_run_digest=None,
+        source_terminal_commitment_ref=fence_commitment,
+    )
+    assert served == terminal
+
+    advanced = "sha256:" + "e" * 64
+    superseded = _read_existing_bridge_terminal(
+        reader,
+        manifest_digest=manifest.sha256,
+        problem_id=problem_id,
+        target="answer",
+        source_run_digest=None,
+        source_terminal_commitment_ref=advanced,
+    )
+    assert superseded is None  # fresh compose authorized at the new fence
+
+    with pytest.raises(ValueError, match="BRIDGE_RESULT_AUTHORITY_MISMATCH"):
+        _read_existing_bridge_terminal(
+            reader,
+            manifest_digest=manifest.sha256,
+            problem_id="another-problem",
+            target="answer",
+            source_run_digest=None,
+            source_terminal_commitment_ref=fence_commitment,
+        )
