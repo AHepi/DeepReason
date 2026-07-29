@@ -1,0 +1,55 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "Artifact 0e26d6be54fd DEPENDS ON the refuted-attractor mechanism described in SRC_009 (BASIN_REPORT): repertoire exhaustion creates a basin where the conjecturer cycles through already-refuted candidates, and 0e26d6be54fd is a downstream node that only persists while this attractor holds. The causal mechanism is that the harness's lineage-depth and HV-floor constraints progressively prune the candidate space until the only surviving paths pass through previously-refuted territory; 0e26d6be54fd is one such path that inherits its survival from the attractor's closure of alternatives rather than from independent evidential support. REFUTED IF 0e26d6be54fd can be reached through a lineage path that never intersects a previously-refuted candidate — i.e., if the artifact's persistence is explained by novel evidence rather than by the exhaustion-induced narrowing of the conjecture basin.",
+      "typicality": 0.82,
+      "neighbours": ["SRC_009", "SRC_008", "SRC_007"],
+      "evidence_refs": [
+        {"block": "daf9e84b84596ff59505e6b038681c55a3d84b24", "quote": null}
+      ]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd SHARES MECHANISM with SRC_001's token-economy analysis: the budget-pressure causal loop where token cost creates selection pressure on candidate depth is the same mechanism that governs whether 0e26d6be54fd survives adjudication. Specifically, the token budget forces shallow lineage paths, and 0e26d6be54fd's epistemic content is shaped by this truncation — its form is a product of economic constraints on reasoning depth rather than of the problem's intrinsic structure. REFUTED IF 0e26d6be54fd's content can be fully reproduced under an unconstrained token budget with deeper lineage paths, demonstrating that its form is invariant to token pressure rather than caused by it.",
+      "typicality": 0.74,
+      "neighbours": ["SRC_001", "SRC_003", "SRC_008"],
+      "evidence_refs": [
+        {"block": "74ded11eccee525366948958d3b4fb57bccbdeb2", "quote": null}
+      ]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd ABSTRACTS from SRC_007's formal harness specification: it is a concrete instance whose properties (isolation, need for connection, lineage ref) are governed by the harness's formal adjudication loop, and its current isolation is predicted by the spec's treatment of artifacts that fail to establish neighbourhood dependencies. The causal mechanism is that the harness's adjudication cycle mechanically isolates any artifact whose evidence_refs and neighbours do not satisfy the lineage-ref and HV-floor programs; 0e26d6be54fd is isolated precisely because these programs returned false on prior turns. REFUTED IF 0e26d6be54fd was never subject to the harness's adjudication loop — i.e., if its isolation is an external state not caused by the harness's formal programs.",
+      "typicality": 0.68,
+      "neighbours": ["SRC_007", "SRC_004"],
+      "evidence_refs": [
+        {"block": "9116c8592387ce22d436cde600d77077d2b08176", "quote": null}
+      ]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd CONTRADICTS SRC_004's v1.5 normative amendment: the amendment requires that conjecturers carry forward dependence refs to admitted dossier blocks, yet 0e26d6be54fd's isolation demonstrates that this normative rule is insufficient to prevent artifacts from falling outside the neighbourhood — the rule specifies the form of connection but does not causally enforce it. The contradiction is that the amendment prescribes a procedure (include refs) whose execution still permits isolation, so the artifact's existence is evidence that the normative amendment's mechanism is incomplete. REFUTED IF no artifact that satisfies the v1.5 amendment's dependence-ref requirement can remain isolated — i.e., if the rule is both necessary and sufficient for neighbourhood membership and 0e26d6be54fd simply never satisfied it.",
+      "typicality": 0.55,
+      "neighbours": ["SRC_004", "SRC_006"],
+      "evidence_refs": [
+        {"block": "7a3d186479cefef7597b38dbd96a905207f51cba", "quote": null}
+      ]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd INTEGRATES SRC_008's state-of-the-theory with SRC_009's basin report: it represents a checkpoint where the machine's current holdings (SRC_008) intersect the refuted-attractor basin (SRC_009), and its causal significance is that it marks a transition point — the artifact is what the machine holds when repertoire exhaustion begins to dominate over novel conjecture. The mechanism is that as the theory's state accumulates refutations, the lineage graph's branching factor drops, and 0e26d6be54fd is a node born at this threshold where novel lineage paths become scarce. REFUTED IF 0e26d6be54fd appears at a point in the run history where the refuted-attractor basin is not active — i.e., if the machine's state at that checkpoint shows ample unused candidate space.",
+      "typicality": 0.61,
+      "neighbours": ["SRC_008", "SRC_009"],
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173fa9fb61c145772881", "quote": null},
+        {"block": "daf9e84b84596ff59505e6b038681c55a3d84b24", "quote": null}
+      ]
+    },
+    {
+      "content": "Artifact 0e26d6be54fd REDUCES TO a degenerate lineage ref under SRC_007's formal spec: its isolation is not a substantive epistemic state but a mechanical consequence of the lineage-ref program returning false, which causes the harness to mark it as unconnected. The causal mechanism is that the lineage-ref program performs a graph-reachability check between the artifact and the neighbourhood; when no path exists, the artifact is labeled isolated regardless of its content. Thus 0e26d6be54fd's 'isolation' is not a property of the artifact but a computational label. REFUTED IF the lineage-ref program returns true for 0e26d6be54fd — i.e., if a valid lineage path to the neighbourhood already exists and the isolation label is therefore spurious.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_007", "SRC_004"],
+      "evidence_refs": [
+        {"block": "9116c8592387ce22d436cde600d77077d2b08176", "quote": null}
+      ]
+    }
+  ]
+}
+```
