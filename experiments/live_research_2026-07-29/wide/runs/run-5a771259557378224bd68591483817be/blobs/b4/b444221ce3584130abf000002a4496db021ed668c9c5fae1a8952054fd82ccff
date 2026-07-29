@@ -1,0 +1,58 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "DEPENDENCE: artifact 03999d039dc1 depends on SRC_005's causal mechanism — the at-least-once delivery model generates retry pressure that makes idempotence (not safety) the binding requirement for append-only writers. The relation is causal: without at-least-once delivery, no retries occur, so neither safe nor idempotent is necessary; with at-least-once delivery, the mutation (append) must be repeatable, forcing idempotence while precluding safety. REFUTED IF: the delivery layer guarantees exactly-once semantics, or if the log's consumers are designed to tolerate duplicate events (making idempotence unnecessary and the delivery-model dependence spurious).",
+      "evidence_refs": [
+        {"block": "SRC_005", "quote": null},
+        {"block": "SRC_001", "quote": null}
+      ],
+      "neighbours": ["SRC_005", "SRC_001"],
+      "typicality": 0.9
+    },
+    {
+      "content": "REDUCTION: artifact 03999d039dc1 reduces to SRC_002's deterministic-replay idempotence. The isolated claim that writers need 'idempotence' is an underspecified approximation that, upon analysis, reduces to the stronger sequence-level property: replay of the entire append history (including interleaved retries) must reproduce the canonical log state. The per-method RFC 9110 idempotence framing is a coarse summary of this property. REFUTED IF: per-operation idempotence (suppressing duplicate individual writes without reasoning about the full sequence) is provably sufficient for log correctness — i.e., if sequence-level composition adds no constraint beyond what per-operation dedup already provides.",
+      "evidence_refs": [
+        {"block": "SRC_002", "quote": null}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"],
+      "typicality": 0.8
+    },
+    {
+      "content": "CONTRADICTION: artifact 03999d039dc1 contradicts SRC_003's claim that RFC 9110 idempotence is entirely inapplicable. The isolated artifact treats the RFC safe/idempotent distinction as conceptually essential scaffolding for identifying what the log needs, whereas SRC_003 dismisses it as a category error that obscures the design problem. The contradiction is genuine: one position holds the RFC framework is illuminating, the other holds it is misleading. REFUTED IF: operational deduplication can be fully specified and motivated without any reference to 'same result under repetition' — i.e., if the RFC conceptual frame adds zero explanatory power and the isolated artifact's use of it is purely decorative.",
+      "evidence_refs": [
+        {"block": "SRC_003", "quote": null},
+        {"block": "SRC_001", "quote": null}
+      ],
+      "neighbours": ["SRC_003", "SRC_001"],
+      "typicality": 0.6
+    },
+    {
+      "content": "SHARED MECHANISM: artifact 03999d039dc1 shares mechanism with SRC_004's write-ordered idempotence — both rely on content-addressing or operation-ID deduplication at the append boundary to suppress duplicate writes. The shared mechanism is the dedup key + monotonic sequence tracking. However, the isolated artifact under-specifies the ordering constraint that SRC_004 identifies as essential: retry of event A arriving after event B must yield [A, B], not [A, B, A]. REFUTED IF: the event log is defined as an unordered set of events rather than an ordered sequence, in which case the ordering mechanism is unnecessary and the shared mechanism collapses to simple per-operation dedup.",
+      "evidence_refs": [
+        {"block": "SRC_004", "quote": null},
+        {"block": "SRC_001", "quote": null}
+      ],
+      "neighbours": ["SRC_004", "SRC_001"],
+      "typicality": 0.75
+    },
+    {
+      "content": "ABSTRACTION: artifact 03999d039dc1 abstracts SRC_001's safe-implies-idempotent hierarchy into a design heuristic: append-only log writers occupy the 'idempotent but not safe' cell because they mutate state (ruling out safety) while bounding mutation under retry (requiring idempotence). The abstraction generalizes from the specific RFC 9110 classification to a placement principle for distributed-system operations. REFUTED IF: RFC 9110 does not formally establish that safe methods are a subset of idempotent methods (safe ⊂ idempotent), in which case the hierarchy underpinning the abstraction is unsupported and the design heuristic has no RFC grounding.",
+      "evidence_refs": [
+        {"block": "SRC_001", "quote": null}
+      ],
+      "neighbours": ["SRC_001", "SRC_005"],
+      "typicality": 0.55
+    },
+    {
+      "content": "INTEGRATION: artifact 03999d039dc1 integrates SRC_002's sequence-level deterministic-replay property with SRC_004's write-ordered constraint into a unified requirement: the log needs deterministic-replay idempotence that is also order-preserving. The integration claim is that these are not two separate properties but facets of a single compound invariant — replay-equivalence under at-least-once delivery with causal ordering. The isolated artifact's 'idempotent writers' shorthand is the surface expression of this integrated invariant. REFUTED IF: deterministic-replay idempotence and write-ordered deduplication are independently satisfiable without each other — i.e., if one can achieve sequence-level replay equivalence without ordering constraints, or order-preservation without sequence-level reasoning, making the integration artificial.",
+      "evidence_refs": [
+        {"block": "SRC_002", "quote": null},
+        {"block": "SRC_004", "quote": null}
+      ],
+      "neighbours": ["SRC_002", "SRC_004"],
+      "typicality": 0.4
+    }
+  ]
+}
+```

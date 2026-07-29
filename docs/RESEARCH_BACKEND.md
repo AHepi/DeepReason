@@ -171,3 +171,24 @@ Tranche 2 (A, B, C1, C2) is complete. Remaining research-backend work is
 operational rather than structural: a live web run against a real
 allowlisted domain, and any owner decision on result-follow-up reasoning
 turns for fetched material.
+
+## Status after the first live research runs (2026-07-29)
+
+The backend is live-proven. `DEEPREASON_RESEARCH_ALLOWLIST` opts prepared
+runs into the contained backend (unset stays byte-identical to the
+historical preset); each allowlist is a distinct qualification subject.
+glm-5.2 ran the same question under two allowlists
+(`experiments/live_research_2026-07-29/RESULTS.md`): it proposed on-topic
+directed fetches unprompted in every run and never targeted an off-list
+host; the narrow run consumed fetched Python documentation into 100
+citable blocks and bridged; the wide runs exercised the 4 MiB byte
+ceiling, exact request-budget exhaustion, and typed denial of
+post-exhaustion proposals live — with the refusals surfacing honestly in
+the bridged answer's epistemics. Three simulation-only assumptions the
+live runs exposed (audit writer, verify_root, scheduler follow-up) are
+fixed, and run-0c3ce902 is pinned as a replay regression fixture.
+
+Remaining operational items: a live run in which a candidate byte-checks a
+citation against fetched text (short runs ended before any candidate cited
+the new blocks), and owner decisions on result-follow-up reasoning turns
+for fetched material.

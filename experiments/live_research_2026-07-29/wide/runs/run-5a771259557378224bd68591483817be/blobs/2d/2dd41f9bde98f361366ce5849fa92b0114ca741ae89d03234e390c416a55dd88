@@ -1,0 +1,69 @@
+{
+  "sections": [
+    {
+      "span_id": "S1",
+      "text": "For an append-only event log with at-least-once delivery, safety is categorically impossible for its writers. Safe methods forbid all server state mutation, and writers must mutate the log by appending events. Because writers always expect and request a state change, the log cannot require safety regardless of deduplication strategy.",
+      "ledger_entry_handles": [
+        "E16",
+        "E18"
+      ]
+    },
+    {
+      "span_id": "S2",
+      "text": "The log instead requires idempotence of its writers. At-least-once delivery retries writes that may have already succeeded, and idempotence guarantees that repeated identical requests yield the same effect as a single request. The causal mechanism for preventing duplicate events is deduplication via a stable operation key, sequence number, or content hash that lets the append path detect and discard replays.",
+      "ledger_entry_handles": [
+        "E17",
+        "E19"
+      ]
+    },
+    {
+      "span_id": "S3",
+      "text": "There is an unresolved rivalry over whether the log requires RFC 9110 idempotence simpliciter or a stronger, log-specific property. One position holds that the log requires idempotence in the RFC sense; the opposing position holds that the log requires a property distinct from or strictly stronger than RFC idempotence, because RFC 9110 idempotence is order-insensitive and defined over individual HTTP method semantics rather than over ordered sequences of operations with causality.",
+      "ledger_entry_handles": [
+        "E20",
+        "E21"
+      ]
+    },
+    {
+      "span_id": "S4",
+      "text": "The record cannot determine two definitional matters from RFC 9110 because no verbatim source text is available: whether the RFC explicitly states that safe methods are a subset of idempotent methods or merely implies it; and whether idempotence is defined over the observable response, over server state, or over both. The latter distinction matters because if idempotence is defined over responses only, the event-log deduplication requirement is a separate, stronger property.",
+      "ledger_entry_handles": [
+        "E22",
+        "E23"
+      ]
+    }
+  ],
+  "resolution": "partially_answered",
+  "resolution_reason": "The ledger supports the conclusion that an append-only event log with at-least-once delivery cannot require safety of its writers and must require some form of idempotence. However, the precise idempotence property—RFC 9110 idempotence simpliciter or a stronger, log-specific property—remains contested among the formal artifacts, and definitional questions about RFC 9110 cannot be resolved without verbatim source text.",
+  "unresolved_items": [
+    {
+      "description": "At formal sequence 281, problem question-4dd976434b71f6e815508e52e995af6b retained an unresolved rivalry among 10 positions.",
+      "reason": "Process observation indicating unresolved rivalry; preserved as an unresolved item per ledger rules.",
+      "ledger_entry_handles": [
+        "E11"
+      ]
+    },
+    {
+      "description": "Whether the append-only event log requires RFC 9110 idempotence simpliciter or a stronger, log-specific property is contested among the formal artifacts, with no source evidence available to adjudicate.",
+      "reason": "Conflict entry E21.",
+      "ledger_entry_handles": [
+        "E21"
+      ]
+    },
+    {
+      "description": "Whether RFC 9110 explicitly states that safe methods are a subset of idempotent methods, or whether the subset relation is only implied by the definitions, cannot be determined from this record because no verbatim RFC source text is available.",
+      "reason": "Unknown outcome preserved.",
+      "ledger_entry_handles": [
+        "E22"
+      ]
+    },
+    {
+      "description": "Whether RFC 9110 defines idempotence over the observable response, over server state, or over both cannot be determined from this record because no verbatim RFC source text is available. This distinction matters: if idempotence is defined over responses only, the event-log deduplication requirement is a separate, stronger property.",
+      "reason": "Unknown outcome preserved.",
+      "ledger_entry_handles": [
+        "E23"
+      ]
+    }
+  ],
+  "ledger_amendment_request": null
+}
