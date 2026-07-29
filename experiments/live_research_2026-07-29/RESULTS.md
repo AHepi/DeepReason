@@ -86,3 +86,43 @@ assumptions outside the capability layer, each now fixed and committed:
   `resolution=partially_answered` (see bridge-status lines in the .txt).
 - run-0c3ce902's reasoning is incomplete (crashed pre-fix); its value is
   the intact, replay-valid research record.
+
+## The Popper loop, closed live (2026-07-29, second session)
+
+The narrow run now demonstrates the full fallibilist cycle in one
+append-only root: typed stop → bridge (fence 430) → continuation (6 more
+live cycles, 6 new artifacts, second typed budget_exhausted stop) →
+superseding bridge at fence 676. Both bridge terminals stand in the log
+(seqs 473 and 691); terminal authority, integrity, and security all
+verify. No answer was final: the first bridge became history the moment
+the record grew past its fence.
+
+Getting there surfaced six no-drift assumptions, each fixed and tested:
+the continuation fence, the resume-lifecycle builder, the resume-decision
+model, the checkpoint cross-check (a bridged run was silently
+un-continuable), the staged bridge's unwhitelisted decomposition-effect
+measure (a staged successful bridge invalidated its own root's terminal
+authority), stale prior-epoch status/result views served as the new
+launch's outcome, and epoch-blind crash recovery refusing every
+superseding compose.
+
+Calibration findings for the allowance signal suite:
+
+- **The citation loop engages under continuation — and fails
+  informatively.** The continued model attempted 11 evidence citations;
+  every one was typed `EVIDENCE_REF_UNKNOWN_BLOCK` because it cited its
+  own accepted-artifact hashes instead of the fetched-document block ids.
+  Zero verified citations of fetched material. The §4 checker held; the
+  gap is presentation — packs do not make citable research block ids
+  discoverable enough for the model to use them. The waste signal
+  therefore correctly still reads 3/3 uncited sources.
+- **No new research proposals in the continuation** (still 3, budget
+  4/6): the model spent its continuation consolidating, not fetching, so
+  the allowance controller recorded no live grant decisions. Its denial
+  and widening behavior is pinned offline in
+  tests/test_research_capability.py.
+- **The 18-way rivalry survived both segments**, so the superseding
+  bridge is again truthful observation-mode rather than prose. The next
+  lever is the reader-facing findings report (established / contested /
+  unverified, rendered from the record), which remains the top
+  presentation gap for end users.

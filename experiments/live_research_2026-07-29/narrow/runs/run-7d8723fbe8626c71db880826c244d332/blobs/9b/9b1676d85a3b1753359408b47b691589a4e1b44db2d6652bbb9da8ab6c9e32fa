@@ -1,0 +1,45 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-27633c5a9c5c7a55f009bf27b0b8c744) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+Deterministic replay in an append-only reasoning system depends on retried operations being safe to repeat. Drawing on published definitions, what precisely distinguishes an idempotent operation from a safe one, and which of the two properties does an append-only event log actually require of its writers to survive at-least-once delivery? You may propose directed research fetches of specific https pages; this run'\''s frozen domain allowlist permits only docs.python.org. Proposals to any other host will be recorded and denied by the harness. Fetched pages become citable evidence blocks.
+
+PROBLEM CONTEXT (conn:14e084ed5ca7) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 14e084ed5ca7 to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@935a15bba8f3580f55feaf69: program:reasoning_observation_pending
+- reason-counter@c0e3a37f84370324a200ceac: program:reasoning_observation_pending
+- reason-counter@b220efcff847ec0d2575baf0: program:reasoning_observation_pending
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@5c3a3e92c1d7: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"The distinction is that idempotency is a property of an operation applied to the same input state, while safety is a property of an operation applied after its own prior execution\u2014i.e., idempotency asks 'does doing it twice from the original state equal once?' while safety asks 'does doing it again after already having done it cause harm?' For an append-only log, the relevant property is safety: the writer must ensure that re-executing an append after a prior (possibly successful) append does not cause incorrect replay, which is satisfied by deduplication. The confusion arises because for pure functions these coincide, but for stateful appends they diverge.","counterconditions":[{"case":"If published definitions define idempotency as 'f applied to the state resulting from f(x)' rather than 'f applied to x,' then idempotency and safety collapse and the distinction is semantic only.","eval":"observation"},{"case":"If the log's replay semantics treat every physical entry as causally distinct (e.g., because timestamps differ), then [x, x] is not safe because it encodes two distinct causal events.","eval":"observation"},{"case":"If 'safety' in the referenced literature is defined differen
+commitments: reasoning-envelope-wf, reason-counter@935a15bba8f3580f55feaf69, reason-counter@c0e3a37f84370324a200ceac, reason-counter@b220efcff847ec0d2575baf0
+
+TARGET SRC_002
+14e084ed5ca7 abstracts from the layer-boundary framing in 2edd20cc5e66: the protocol-level invariant of distinguishability (delivery metadata enabling duplicate detection) subsumes both the writer's safety obligation and the replay layer's idempotency obligation. The distinction between safe and idempotent is not a layer-boundary distinction but a category distinction—operation-level properties versus protocol-level invariants. Under this abstraction, 2edd20cc5e66's claim that 'the log requires safety of its writers' collapses into the weaker requirement that writers attach distinguishing metadata, which 14e084ed5ca7 already grants. This is refuted if distinguishability cannot be enforced independently of writer-level safety—i.e., if attaching delivery metadata that enables downstream deduplication necessarily entails that the writer itself is safe in the operation-level sense, in which case 2edd20cc5e66's layer-boundary framing is irreducible and the category-error claim is itself the error.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c3a3e92c1d7, relation-form@578e42df713e
+
+TARGET SRC_003
+The category-error framing of 14e084ed5ca7 abstracts the layer-boundary distinction of 2edd20cc5e66: both share a mechanism—delivery metadata (delivery IDs, producer epochs, sequence numbers) as the invariant that enables duplicate detection—but the category-error framing collapses the writer-safety / reader-idempotency split into a single protocol-level property (distinguishability). This abstraction is refuted if the replay layer requires content-level semantics for correct deduplication (as anticipated by 14e084ed5ca7's own countercondition that distinguishability reduces to content idempotency when the replay layer ignores delivery metadata), which would force the two-layer model back into the description and show that distinguishability alone cannot replace the safety/idempotency distinction.
+commitments: hv-floor@2a45b7988522, lineage-ref@5c3a3e92c1d7, relation-form@578e42df713e
+
+TARGET SRC_004
+14e084ed5ca7 CONTRADICTS 2edd20cc5e66 on whether 'safety' is a coherent predicate of append-only log writers: 14e084ed5ca7 claims the idempotency/safety distinction is a category error (the real invariant is protocol-level distinguishability via delivery metadata, not an operation property of writers), while 2edd20cc5e66 claims safety is a genuine writer requirement (layer-boundary distinction: safe writers, idempotent readers). Both share mechanism—metadata-based distinguishability as the operative deduplication strategy—but the contradiction turns on whether calling a writer 'safe' is meaningful or a misnomer for 'attaches metadata.' This is REFUTED IF 14e084ed5ca7's own countercondition holds: defining 'safe' broadly as 'attaches metadata that enables downstream deduplication' makes 2edd20cc5e66's layer framing compatible with rather than contradictory to the category-error claim, collapsing the dispute to a terminological one. It is further REFUTED IF 8dc9accbe33c's three-writer counterexample analysis shows the category-error framing cannot distinguish a writer appending random UUIDs per attempt (genuinely unsafe, unidentifiable duplicates) from one attaching consistent delivery IDs (safe under 2edd20cc5e66'
+commitments: hv-floor@2a45b7988522, lineage-ref@5c3a3e92c1d7, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
