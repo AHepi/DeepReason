@@ -155,6 +155,13 @@ class StartBridgeInput(_Input):
         json_schema_extra={"uniqueItems": True},
     )
     budget: BridgeStartBudget | None = None
+    retry_failed_terminal: bool = Field(
+        default=False,
+        description=(
+            "Explicitly retry a bridge whose terminal is a process failure. "
+            "Completed epistemic resolutions are permanent and never retried."
+        ),
+    )
 
     @field_validator("problem")
     @classmethod
@@ -368,6 +375,7 @@ def _bridge_intent(value: StartBridgeInput) -> GroundedBridgeBuildIntentV1:
         token_budget=(
             value.budget.token_budget if value.budget is not None else None
         ),
+        retry_failed_terminal=value.retry_failed_terminal,
     )
 
 

@@ -808,6 +808,7 @@ def build_grounded_bridge(
     desired_length_chars: int = 16_384,
     maximum_sections: int = 32,
     formatting_profile: str = "plain",
+    retry_failed_terminal: bool = False,
 ) -> BridgeTerminalResultV1:
     """Build and persist one grounded final view without touching formal state."""
 
@@ -936,20 +937,58 @@ def build_grounded_bridge(
             source_run_digest=source_run_digest,
             source_terminal_commitment_ref=source_terminal_commitment_ref,
         )
+        operator_retry_failure = None
         if terminal is not None:
-            return terminal
+            if not retry_failed_terminal:
+                return terminal
+            # Operator retry (owner decision 4b): only a PROCESS failure is
+            # retryable. A completed epistemic resolution — answered, refused,
+            # or conflicted — is permanent; retrying it would be answer
+            # shopping, so the explicit flag fails closed on it.
+            if terminal.process_status != "failure":
+                raise ValueError("BRIDGE_RETRY_TERMINAL_NOT_FAILED")
+            operator_retry_failure = harness.bridge_state.failures.get(
+                terminal.failure_id
+            )
+            if operator_retry_failure is None:
+                raise ValueError("BRIDGE_RETRY_FAILURE_UNAVAILABLE")
+        elif retry_failed_terminal:
+            raise ValueError("BRIDGE_RETRY_TERMINAL_ABSENT")
         recovery_snapshot = _find_bridge_execution_snapshot(
             harness,
             manifest_digest,
             source_terminal_commitment_ref,
         )
     else:
+        if retry_failed_terminal:
+            raise ValueError("BRIDGE_RETRY_TRANSACTIONAL_REQUIRED")
+        operator_retry_failure = None
         recovery_snapshot = None
-    recovery = recovery_snapshot is not None
+    resumed = recovery_snapshot is not None
+    recovery = resumed and operator_retry_failure is None
+    if operator_retry_failure is not None:
+        # The fresh attempt reuses the failed attempt's frozen execution —
+        # same fence, evidence pack, and catalog — so only the provider
+        # calls differ. Its terminally closed work is never re-driven.
+        if recovery_snapshot is None:
+            raise ValueError("BRIDGE_RETRY_EXECUTION_UNAVAILABLE")
+        if (
+            recovery_snapshot.catalog.id != operator_retry_failure.catalog_id
+            or recovery_snapshot.formal_seq != operator_retry_failure.formal_seq
+        ):
+            raise ValueError("BRIDGE_RETRY_EXECUTION_MISMATCH")
+        if any(
+            item.terminal is None
+            for item in harness.workflow_state.transaction_work.values()
+            if isinstance(item.preparation.task_payload_value, Mapping)
+            and item.preparation.task_payload_value.get("execution_id")
+            == recovery_snapshot.execution_id
+        ):
+            raise ValueError("BRIDGE_RETRY_WORK_IN_FLIGHT")
 
     scratch_service = None
     context = None
-    if recovery:
+    if resumed:
         if len(transactional_adapters) != len({id(adapter) for adapter in active_adapters}):
             raise ValueError("BRIDGE_RECOVERY_ADAPTER_REQUIRED")
         assert recovery_snapshot is not None
@@ -1071,12 +1110,29 @@ def build_grounded_bridge(
     sink_commitments_before = dict(harness.commitments)
     sink_warrants_before = dict(harness.warrants)
     if recovery_snapshot is not None:
+        ordinal_base = 0
+        if operator_retry_failure is not None:
+            # Fresh work continues the recorded execution's ordinal sequence
+            # so retry-attempt preparations never collide with the closed
+            # attempt's content-addressed work items.
+            ordinal_base = 1 + max(
+                (
+                    payload.get("ordinal")
+                    for item in harness.workflow_state.transaction_work.values()
+                    for payload in (item.preparation.task_payload_value,)
+                    if isinstance(payload, Mapping)
+                    and payload.get("execution_id") == recovery_snapshot.execution_id
+                    and type(payload.get("ordinal")) is int
+                ),
+                default=-1,
+            )
         for adapter in transactional_adapters:
             adapter.bind_bridge_execution(
                 execution_id=recovery_snapshot.execution_id,
                 execution_snapshot_ref=recovery_snapshot.snapshot_ref,
                 formal_fence_seq=recovery_snapshot.formal_seq,
                 recovery=recovery,
+                ordinal_base=ordinal_base,
             )
     sinks: list[_HarnessBridgeSink] = []
 
@@ -1112,11 +1168,7 @@ def build_grounded_bridge(
             sink=sink,
         )
 
-    if retry_lease is None:
-        result = workflow_factory(1).run(
-            catalog, composition_request, materials=materials
-        )
-    else:
+    if retry_lease is not None:
         from deepreason.llm.firewall import route_fingerprint
 
         _assert_adapter_matches_retry_lease(stage_a_adapter, retry_lease)
@@ -1142,6 +1194,32 @@ def build_grounded_bridge(
             route_sha256=route_fingerprint(retry_route),
         )
 
+    if operator_retry_failure is not None:
+        if retry_lease is None:
+            raise ValueError("BRIDGE_RETRY_MANIFEST_REQUIRED")
+        from deepreason.bridge.retry import authorize_operator_workflow_retry
+
+        receipt = authorize_operator_workflow_retry(
+            harness.bridge_state,
+            operator_retry_failure,
+            attempt_fence=attempt_fence,
+        )
+        retry_inputs = [receipt.prior_failure_id]
+        if source_terminal_commitment_ref is not None:
+            retry_inputs.append(source_terminal_commitment_ref)
+        harness.record_bridge_event(
+            BridgeAction.WORKFLOW_RETRY_STARTED,
+            inputs=retry_inputs,
+            records=[("bridge-workflow-retry", receipt)],
+        )
+        result = workflow_factory(receipt.attempt_number).run(
+            catalog, composition_request, materials=materials
+        )
+    elif retry_lease is None:
+        result = workflow_factory(1).run(
+            catalog, composition_request, materials=materials
+        )
+    else:
         def failure_id_for_result(_result):
             failure = sinks[-1].failure
             if failure is None:

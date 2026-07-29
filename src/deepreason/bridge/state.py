@@ -400,21 +400,24 @@ class BridgeState:
                 ):
                     raise ValueError("workflow retry changed its frozen retry fence")
             calls = self.calls_by_failure.get(failure.id, [])
-            if not calls:
-                raise ValueError("workflow retry requires a replayed failed model call")
-            call = calls[-1]
-            fence = retry.attempt_fence
-            if call.role != fence.role or not call.attempt_trace:
-                raise ValueError("workflow retry role differs from the failed call")
-            for attempt in call.attempt_trace:
-                if attempt.contract_id != fence.contract_id:
-                    raise ValueError("workflow retry contract differs from the failed call")
-                if (
-                    attempt.seat != fence.seat
-                    or attempt.endpoint_id != fence.endpoint_id
-                    or attempt.route_sha256 != fence.route_sha256
-                ):
-                    raise ValueError("workflow retry route differs from the failed call")
+            # A failure with no recorded model call (a pre-dispatch refusal,
+            # e.g. a harness-side authority defect) has no route to compare;
+            # the fence itself still pins the coming attempt's route. When a
+            # failed call exists, the retry must match it exactly.
+            if calls:
+                call = calls[-1]
+                fence = retry.attempt_fence
+                if call.role != fence.role or not call.attempt_trace:
+                    raise ValueError("workflow retry role differs from the failed call")
+                for attempt in call.attempt_trace:
+                    if attempt.contract_id != fence.contract_id:
+                        raise ValueError("workflow retry contract differs from the failed call")
+                    if (
+                        attempt.seat != fence.seat
+                        or attempt.endpoint_id != fence.endpoint_id
+                        or attempt.route_sha256 != fence.route_sha256
+                    ):
+                        raise ValueError("workflow retry route differs from the failed call")
 
         if action in {BridgeAction.LEDGER_CREATED, BridgeAction.LEDGER_AMENDED}:
             _ledger_id, ledger = self._one(records, "bridge-claim-ledger")

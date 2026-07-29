@@ -169,6 +169,74 @@ def authorize_workflow_retry(
     )
 
 
+def authorize_operator_workflow_retry(
+    bridge_state,
+    failure,
+    *,
+    attempt_fence: BridgeWorkflowAttemptFenceV1,
+) -> BridgeWorkflowRetryV1:
+    """Authorize one fresh attempt after a terminally failed bridge.
+
+    This is the owner-decision escape hatch for PROCESS failures only: an
+    explicit operator intent — never a policy default — continues the
+    recorded retry chain past a failure the frozen retry policy did not
+    anticipate (typically a harness defect fixed after the fact). Every
+    chain field is derived from replayed bridge state, so the receipt is
+    exactly what replay validation re-derives; nothing epistemic is
+    retried, and an exhausted frozen chain stays exhausted.
+    """
+
+    if any(
+        prior.prior_failure_id == failure.id
+        for prior in bridge_state.workflow_retries.values()
+    ):
+        raise WorkflowRetryBoundaryError("BRIDGE_RETRY_ALREADY_ATTEMPTED")
+    attempt_number = bridge_state.attempt_number_by_failure.get(failure.id, 1) + 1
+    prior_retry_id = bridge_state.retry_id_by_failure.get(failure.id)
+    if prior_retry_id is not None:
+        prior = bridge_state.workflow_retries[prior_retry_id]
+        maximum_attempts = prior.maximum_attempts
+        if attempt_fence != prior.attempt_fence:
+            raise WorkflowRetryBoundaryError(
+                "BRIDGE_WORKFLOW_RETRY_PROMPT_POLICY_CHANGED"
+            )
+    else:
+        # The protocol ceiling, not a policy grant: each further attempt
+        # still requires its own explicit operator intent.
+        maximum_attempts = 3
+    if attempt_number > min(maximum_attempts, 3):
+        raise WorkflowRetryBoundaryError("BRIDGE_RETRY_CHAIN_EXHAUSTED")
+    if (
+        attempt_fence.formal_seq != failure.formal_seq
+        or attempt_fence.catalog_id != failure.catalog_id
+        or attempt_fence.manifest_digest != failure.run_manifest_digest
+    ):
+        raise WorkflowRetryBoundaryError(
+            "BRIDGE_WORKFLOW_RETRY_FORMAL_FENCE_CHANGED"
+        )
+    prior_token_count = bridge_state.cumulative_tokens_by_failure.get(
+        failure.id, 0
+    )
+    next_attempt_id = domain_hash(
+        "bridge.workflow-attempt.v1",
+        {
+            "prior_failure_id": failure.id,
+            "attempt_number": attempt_number,
+            "attempt_fence": attempt_fence.model_dump(mode="json", by_alias=True),
+        },
+    )
+    return BridgeWorkflowRetryV1.create(
+        prior_failure_id=failure.id,
+        attempt_number=attempt_number,
+        maximum_attempts=maximum_attempts,
+        reason_code=failure.error_code,
+        attempt_fence=attempt_fence,
+        prior_token_count=prior_token_count,
+        prior_retry_id=prior_retry_id,
+        next_attempt_id=next_attempt_id,
+    )
+
+
 def bridge_prompt_policy_digest(workflow_policy, composition_request) -> str:
     """Hash every deterministic prompt-shaping input retained across a retry."""
 
@@ -285,6 +353,7 @@ __all__ = [
     "BridgeWorkflowRetryV1",
     "WorkflowRetryBoundaryError",
     "WorkflowRetryPolicyV1",
+    "authorize_operator_workflow_retry",
     "authorize_workflow_retry",
     "bridge_prompt_policy_digest",
     "run_bridge_workflow_with_retries",

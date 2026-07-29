@@ -359,6 +359,7 @@ class TransactionalBridgeAdapter:
         execution_snapshot_ref: str,
         formal_fence_seq: int,
         recovery: bool,
+        ordinal_base: int = 0,
     ) -> None:
         """Bind one harness-frozen bridge execution to later v6 work.
 
@@ -373,13 +374,17 @@ class TransactionalBridgeAdapter:
             raise ValueError("bridge execution requires a snapshot reference")
         if type(formal_fence_seq) is not int or formal_fence_seq < 0:
             raise ValueError("bridge execution requires a non-negative formal fence")
+        if type(ordinal_base) is not int or ordinal_base < 0:
+            raise ValueError("bridge execution requires a non-negative ordinal base")
+        if recovery and ordinal_base:
+            raise ValueError("recovery replay always begins at the first ordinal")
         self._execution_id = execution_id
         self._execution_snapshot_ref = execution_snapshot_ref
         self._execution_formal_fence = formal_fence_seq
         self._recovery_mode = bool(recovery)
         self._recovery_items = self._execution_items() if self._recovery_mode else ()
         self._recovered_work_ids = set()
-        self._ordinal = 0
+        self._ordinal = ordinal_base
         self._staged_calls = []
         self._pending_staged_transition = None
 

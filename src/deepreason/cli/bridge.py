@@ -124,6 +124,14 @@ def register_bridge_commands(subparsers) -> None:
         help="build a labelled noncanonical derived view of a failed source run",
     )
     build.add_argument(
+        "--retry-failed-terminal",
+        action="store_true",
+        help=(
+            "explicitly retry a canonical bridge whose terminal is a process "
+            "failure (epistemic resolutions are permanent)"
+        ),
+    )
+    build.add_argument(
         "--focus-block", action="append", default=[], help="scratch block ID or prefix"
     )
     build.add_argument(
@@ -202,6 +210,9 @@ def _build_intent(args) -> GroundedBridgeBuildIntentV1:
             at_seq=args.at_seq,
             diagnostic_after_failure=getattr(
                 args, "diagnostic_after_failure", False
+            ),
+            retry_failed_terminal=getattr(
+                args, "retry_failed_terminal", False
             ),
         )
     except ValidationError as error:

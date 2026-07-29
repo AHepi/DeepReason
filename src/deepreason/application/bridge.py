@@ -81,6 +81,10 @@ class GroundedBridgeBuildIntentV1(_StrictModel):
     at_seq: StrictInt | None = Field(default=None, ge=0)
     diagnostic_after_failure: bool = False
     token_budget: StrictInt | None = Field(default=None, ge=1, le=10_000_000)
+    # Owner decision 4b: an explicit operator intent may retry a canonical
+    # bridge whose terminal is a PROCESS failure. Epistemic terminals stay
+    # permanent, and nothing ever retries by default.
+    retry_failed_terminal: bool = False
 
     @field_validator("root", "run_manifest_ref", "derived_output")
     @classmethod
@@ -133,6 +137,11 @@ class GroundedBridgeBuildIntentV1(_StrictModel):
             raise ValueError(
                 "BRIDGE_DIAGNOSTIC_DERIVED_REQUIRED: --diagnostic-after-failure "
                 "requires --derived-output"
+            )
+        if self.retry_failed_terminal and derived:
+            raise ValueError(
+                "BRIDGE_RETRY_DERIVED_UNSUPPORTED: a derived destination is "
+                "discarded and rebuilt instead of retried"
             )
         return self
 
@@ -307,6 +316,7 @@ class _PreparedBridge:
     attention_pack: Any
     locks: Any
     token_budget: int | None
+    retry_failed_terminal: bool = False
 
 
 class GroundedBridgeWorkerRegistry:
@@ -746,6 +756,7 @@ def _prepare_bridge(
         attention_pack=attention,
         locks=locks,
         token_budget=intent.token_budget,
+        retry_failed_terminal=intent.retry_failed_terminal,
     )
 
 
@@ -769,6 +780,7 @@ def _execute_bridge(prepared: _PreparedBridge) -> BridgeTerminalResultV1:
         attention_pack=prepared.attention_pack,
         maximum_sections=policy.output_section_limit,
         formatting_profile=policy.target_profile,
+        retry_failed_terminal=prepared.retry_failed_terminal,
     )
     load_snapshot(prepared.root, terminal=terminal)
     return terminal
@@ -826,6 +838,7 @@ def _build_canonical(
             attention_pack=pack,
             maximum_sections=policy.output_section_limit,
             formatting_profile=policy.target_profile,
+            retry_failed_terminal=intent.retry_failed_terminal,
         )
         snapshot = load_snapshot(root, terminal=terminal)
         return GroundedBridgeBuildResultV1(
@@ -1652,36 +1665,53 @@ class GroundedBridgeApplicationService:
         clusters = bounded_focus(intent.focus_clusters, "focus-cluster")
         preflight_focus(preflight, manifest, blocks, clusters)
 
+        def _terminal_disposition(existing):
+            """Serve, retry, or refuse one already-terminal root.
+
+            Returns the idempotent start result to serve, or None when the
+            explicit operator retry intent authorizes a fresh attempt on a
+            process-failure terminal (owner decision 4b)."""
+
+            if existing is None:
+                if intent.retry_failed_terminal:
+                    raise ValueError(
+                        "BRIDGE_RETRY_TERMINAL_ABSENT: there is no failed "
+                        "terminal to retry"
+                    )
+                return None
+            if intent.retry_failed_terminal:
+                if existing.process_status != "failure":
+                    raise ValueError(
+                        "BRIDGE_RETRY_TERMINAL_NOT_FAILED: a completed "
+                        "epistemic resolution is permanent"
+                    )
+                return None
+            state = "completed" if existing.process_status == "success" else "failed"
+            return _start_result(
+                state,
+                root,
+                manifest_sha256=manifest.sha256,
+                terminal=existing,
+            )
+
         with self.registry.lock:
             if self.registry.live(root) is not None:
                 return _start_result("busy", root, manifest_sha256=manifest.sha256)
-            existing = _existing_terminal(root)
-            if existing is not None:
-                state = "completed" if existing.process_status == "success" else "failed"
-                return _start_result(
-                    state,
-                    root,
-                    manifest_sha256=manifest.sha256,
-                    terminal=existing,
-                )
+            served = _terminal_disposition(_existing_terminal(root))
+            if served is not None:
+                return served
             try:
                 locks = operator_locks(root, owner="bridge", blocking=False)
             except ProcessLockBusy:
                 return _start_result("busy", root, manifest_sha256=manifest.sha256)
             try:
-                existing = _existing_terminal(root)
+                served = _terminal_disposition(_existing_terminal(root))
             except BaseException:
                 locks.release()
                 raise
-            if existing is not None:
+            if served is not None:
                 locks.release()
-                state = "completed" if existing.process_status == "success" else "failed"
-                return _start_result(
-                    state,
-                    root,
-                    manifest_sha256=manifest.sha256,
-                    terminal=existing,
-                )
+                return served
             try:
                 prepared = _prepare_bridge(
                     intent,
