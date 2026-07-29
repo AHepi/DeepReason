@@ -32,3 +32,8 @@ reason_rc=1 reason_seconds=4
 run_id= state=
 === referee ladder end 2026-07-29T15:36:46Z ===
 === referee ladder 2 start 2026-07-29T15:37:51Z ===
+reason_rc=0 reason_seconds=752
+run_id=run-d17935a4bf5ffa67c7f6e67b9a637a00 state=completed
+critique_audit_rc=0
+=== referee ladder 2 end 2026-07-29T15:50:40Z ===
+=== referee ladder 3 start 2026-07-29T15:55:26Z ===

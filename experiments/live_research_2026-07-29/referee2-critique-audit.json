@@ -1,0 +1,33 @@
+{
+  "critiques": [],
+  "referee_transactions": [
+    {
+      "work_id": "sha256:e562dc4c7668517a07d2b9bf7372d1a3eb96c9f2df28609d15f54b6d4d0823bd",
+      "status": "budget_denied",
+      "reason": "token_budget_denied"
+    },
+    {
+      "work_id": "sha256:15fe9ef446e4468a45b37d110ef8258874ecadb043816ab60aa40e59e220933a",
+      "status": "budget_denied",
+      "reason": "token_budget_denied"
+    }
+  ],
+  "replay_violations": [
+    {
+      "check": "foreign-criticism",
+      "detail": "target 2451a0b36fa9e28d32ee851516d51244310a188054692b69548e1da1e8d71912 has 0 foreign schools; policy requires 1"
+    },
+    {
+      "check": "foreign-criticism",
+      "detail": "target 9597e3503b78c2474269fb04253363206e2cb12fe6f6b6c32762bcc9f6169de9 has 0 foreign schools; policy requires 1"
+    },
+    {
+      "check": "foreign-criticism",
+      "detail": "target d5dc53d8ee8502c6d54ed85b4dd39dda035ffc6357669ec520cc3fb898101c92 has 0 foreign schools; policy requires 1"
+    },
+    {
+      "check": "foreign-criticism",
+      "detail": "target 51d07bacb22009abf9478a2bef3696437fd8f145127aaae62274391ce7eb1089 has 0 foreign schools; policy requires 1"
+    }
+  ]
+}
