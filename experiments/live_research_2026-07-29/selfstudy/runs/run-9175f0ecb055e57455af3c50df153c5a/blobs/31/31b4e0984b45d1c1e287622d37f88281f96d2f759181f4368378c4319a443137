@@ -1,0 +1,34 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:0e26d6be54fd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0e26d6be54fd to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f34648daa4ff: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+STATE_OF_THE_THEORY.md shares mechanism with BASIN REPORT.md: both implement self-referential auditing of the theory's conjecture-production pipeline — the state inventory in the former and the refuted-attractor / repertoire-exhaustion diagnosis in the latter arise from the same lineage-ref tracking primitive that lets the system inspect its own propositional history. The state report enumerates what the machine currently holds (claims, lineage, open questions), while the basin report diagnoses the failure mode where that inventory stops growing productively. This relation is refuted if the state inventory in STATE_OF_THE_THEORY.md can be faithfully produced without any lineage tracking, or if the refuted-attractor phenomenon in BASIN REPORT.md is shown to arise from a mechanism wholly independent of the theory's self-reported state (e.g., purely from external token constraints with no lineage dependency), since that would sever the shared-mechanism link.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_002
+The state of the theory recorded in 0e26d6be54fd integrates the token economy mechanisms described in the neighboring token reduction dossier, treating token efficiency as a structural component of the current epistemic state. This relation is refuted if the machine state document explicitly isolates epistemology from token cost tracking or fails to operationalize any token economy constraint.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_003
+The theory-state artifact depends on the basin-report's characterization of refuted-attractors to formulate its repertoire claims, and this is refuted if the token-economy's cost optimizations abstracts away the epistemic constraints that the basin-report imposes on the theory-state.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
