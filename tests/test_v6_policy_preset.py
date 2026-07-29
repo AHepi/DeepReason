@@ -230,3 +230,40 @@ def test_policy_factories_return_equal_independent_frozen_models():
     )
     assert engaged_control_plane_policy_v3() == engaged_control_plane_policy_v3()
     assert engaged_control_plane_policy_v3() is not engaged_control_plane_policy_v3()
+
+
+def test_engaged_research_policy_is_operator_opted_and_default_silent():
+    """Research stays byte-identical OFF without the operator env; a named
+    allowlist enables the contained backend with that frozen list."""
+
+    from deepreason.canonical import canonical_json
+    from deepreason.v6_policy import (
+        engaged_inquiry_capability_policy,
+        engaged_research_policy,
+    )
+
+    disabled = engaged_research_policy(environ={})
+    assert disabled.enabled is False
+    assert canonical_json(
+        disabled.model_dump(mode="json", by_alias=True)
+    ) == canonical_json(
+        type(disabled)().model_dump(mode="json", by_alias=True)
+    )
+
+    enabled = engaged_research_policy(
+        environ={
+            "DEEPREASON_RESEARCH_ALLOWLIST": (
+                " EN.wikipedia.org, www.rfc-editor.org ,en.wikipedia.org,"
+            )
+        }
+    )
+    assert enabled.enabled is True
+    assert enabled.backend_identity == "web.contained.v1"
+    assert enabled.domain_allowlist == (
+        "en.wikipedia.org",
+        "www.rfc-editor.org",
+    )
+    assert enabled.maximum_requests == 6 and enabled.maximum_sources == 3
+
+    # The preset factory embeds the same operator decision.
+    assert engaged_inquiry_capability_policy().research == engaged_research_policy()

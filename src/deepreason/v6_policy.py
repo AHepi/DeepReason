@@ -19,6 +19,7 @@ Two presets live here:
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -26,6 +27,7 @@ from deepreason.bridge.retry import WorkflowRetryPolicyV1
 from deepreason.canonical import canonical_json, sha256_hex
 from deepreason.capabilities.policy import (
     InquiryCapabilityPolicyV1,
+    ResearchCapabilityPolicyV1,
     SimulationCapabilityPolicyV1,
 )
 from deepreason.run_manifest import (
@@ -246,12 +248,47 @@ def engaged_simulation_policy() -> SimulationCapabilityPolicyV1:
     )
 
 
+def engaged_research_policy(environ=None) -> ResearchCapabilityPolicyV1:
+    """Return the operator-opted contained research authority, default OFF.
+
+    Research stays disabled — byte-identical to the historical preset, so
+    every existing qualification subject is untouched — unless the operator
+    names an explicit frozen domain allowlist via
+    ``DEEPREASON_RESEARCH_ALLOWLIST`` (comma-separated bare lowercase
+    hosts). The allowlist is part of the compiled manifest, hence part of
+    the qualification behavior subject: a different list is a different
+    subject and requalifies. Bounds stay modest: the budget is denominated
+    in dispatched requests, and a per-response byte ceiling is containment.
+    """
+
+    env = os.environ if environ is None else environ
+    raw = str(env.get("DEEPREASON_RESEARCH_ALLOWLIST", "")).strip()
+    if not raw:
+        return ResearchCapabilityPolicyV1()
+    domains = tuple(
+        dict.fromkeys(
+            domain.strip().lower()
+            for domain in raw.split(",")
+            if domain.strip()
+        )
+    )
+    return ResearchCapabilityPolicyV1(
+        enabled=True,
+        backend_identity="web.contained.v1",
+        maximum_requests=int(env.get("DEEPREASON_RESEARCH_MAX_REQUESTS", "6")),
+        maximum_sources=int(env.get("DEEPREASON_RESEARCH_MAX_SOURCES", "3")),
+        domain_allowlist=domains,
+        maximum_response_bytes=4 * 1024 * 1024,
+    )
+
+
 def engaged_inquiry_capability_policy() -> InquiryCapabilityPolicyV1:
-    """Return the engaged Tranche-A topology: simulation ON, all else OFF."""
+    """Return the engaged topology: simulation ON, research operator-opted."""
 
     return InquiryCapabilityPolicyV1(
         capability_profile="inquiry-capabilities.v2",
         simulation=engaged_simulation_policy(),
+        research=engaged_research_policy(),
     )
 
 
