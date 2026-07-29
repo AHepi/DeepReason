@@ -194,3 +194,84 @@ rejected as unfounded (offline-tested), recommendations came only from
 the frozen menu, and no budget, status, or policy byte moved because the
 referee spoke — the critiques are attention on the record, available to
 the operator and to any criticism-weighted continuation.
+
+## Segment 5 (2026-07-29): the self-study run completes, and answers nothing
+
+The self-study ladder — glm-5.2 asked to criticize DeepReason's own school
+and criticism mechanism, with five mechanism documents attached and all
+three opt-in capabilities on — finally ran to a typed terminal after five
+earlier attempts died to container resets, a rig typo, and four
+now-fixed defects. Attempt 6 (`run-9175f0ec`, launched after retiring the
+attempt-4 root as `failed-epoch2-`) reached a typed `budget_exhausted`
+stop at cycle 6: 42 provider calls, 191,232 of 200,000 tokens, 754
+events, 79 accepted artifacts.
+
+**The attached-evidence envelope is proven; everything it was meant to
+feed is empty.** Admission worked exactly as designed — 5 sources, 331
+blocks (255 paragraph, 68 section, 8 table), 112,749 dossier bytes, zero
+admission refusals, and the dossier KeyError that killed attempt 4 never
+recurred. Past that point every capability the run was configured to
+exercise returned nothing:
+
+- **Research: 0 requests, 0 fetch attempts.** The frozen
+  `en.wikipedia.org` allowlist was never consulted. The model proposed no
+  directed fetch despite the question naming three in-scope topics.
+- **Simulation: 0 formal tool executions.** No `sandboxed_python_v1`
+  proposal was ever made, so the contained runner — the segment's
+  headline capability — was not exercised at all by this run.
+- **Referee: 2 transactions, both typed `budget_denied`
+  (`token_budget_denied`), 0 critiques.** The same 200k budget that let
+  the referee complete twice in segment 4 could not seat a single review
+  here, because the budget was gone before the cadence fired.
+- **Citations: 33 attempts, 33 `EVIDENCE_REFS_UNBOUND`, 0 verified.** The
+  question explicitly instructed the model to cite block ids. Every
+  attempt failed its deterministic check, so no claim about the mechanism
+  is grounded. Citation conversion remains unexercised across all five
+  segments.
+
+**The model never engaged the question.** This is the finding, and it is
+worth more than the capability tallies. All 70 standing positions are
+evidence-*neighbourhood* conjectures: relation claims about a single
+artifact (`0e26d6be54fd`) against the five attached sources — "depends on
+SRC_004", "reduces to SRC_003", "contradicts SRC_005", "shares mechanism
+with SRC_001", "abstracts", "integrates" — restated dozens of times with
+varying refutation conditions, plus meta-criticisms of those relation
+claims. The criticism is often good (it correctly convicts targets of
+naming a relation kind while supplying no causal mechanism, and of
+refutation conditions narrower than the claims they guard). But it is
+criticism of the wrong target. Not one accepted position addresses how
+schools generate rivals or how criticism retires them. The run spent
+191k tokens becoming an example of the pathology it was asked to
+diagnose.
+
+This sharpens the parked defect. The record already showed criticism
+retiring rivalry more slowly than conjecture grows it; segment 5 shows
+something worse at the scheduling layer — with five attached sources the
+neighbourhood machinery generates a combinatorial relation lattice
+(sources x relation kinds x restatements) that displaces the operator's
+question entirely. Conjecture did not merely outpace criticism; it
+crowded out the problem. Any fix that only speeds up retirement leaves
+this untouched: the question needs a budget floor the neighbourhood work
+cannot consume.
+
+**A new replay violation class, first fired here.** `verify_root` returns
+`valid: false` with 6 violations. Four are the known
+`foreign-criticism` coverage-debt class. Two are not: `conjecture-context`
+at seqs 390 and 547, "render handles differ from the selected blocks" —
+the check that the context actually rendered to the model matches the
+attention selection the record commits to. That check has fired in no
+previous run recorded here (segment 4's clean ladder returned zero
+violations; earlier ladders showed only the coverage-debt class). It bears
+directly on whether the record faithfully states what the model was shown,
+so it should be characterized before it is explained away — specifically,
+whether the mismatch is ordering-only or a genuine set difference. I could
+not reach the receipts through the event blobs to settle that here; the
+violations reproduce from the committed root via `verify_root`.
+
+Honest status: the run is complete, terminal, and continuable. Nothing
+here refutes the referee or the contained runner — both were simply never
+reached. What the run does establish is that the attach path admits real
+documents end to end, and that on this question the harness's own
+neighbourhood stage is a budget sink severe enough to starve the
+question, the citations, the research, the simulation, and the referee
+all at once.
