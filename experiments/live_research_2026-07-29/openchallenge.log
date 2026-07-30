@@ -16,3 +16,15 @@ reason_rc=4 reason_seconds=668
 run_id=run-0d1f88e18779b7eb6d8c5d6af3473ba7 state=failed
 audit_rc=0
 === openchallenge ladder end 2026-07-30T04:57:32Z ===
+=== openchallenge ladder start 2026-07-30T04:59:45Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_research_2026-07-29/openchallenge/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+Qualification will test ollama/glm-5.2; maximum expected provider calls: 1160. If the full battery fails, a shallow-fitness battery of at most 18 further calls decides the shallow tier.
+qualification cases: 1/300qualification cases: 2/300qualification cases: 3/300qualification cases: 4/300qualification cases: 5/300qualification cases: 6/300qualification cases: 7/300qualification cases: 8/300qualification cases: 9/300qualification cases: 10/300qualification cases: 11/300qualification cases: 12/300qualification cases: 13/300
