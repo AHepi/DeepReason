@@ -1,0 +1,31 @@
+```json
+{
+  "candidate": {
+    "claim": "The stall at 23 multiplications is caused by a symmetry obstruction: any rank-22 decomposition of the `<3,3,3>` tensor must break the left-right symmetry of the tensor in a way that forces at least one of the 22 rank-1 terms to have a structural defect, making rank 22 unachievable over any field.",
+    "mechanism": "The 3x3 matrix multiplication tensor has a large symmetry group including the left and right action of GL(3). Existing lower bounds (19) rely on basic flattenings. Advanced algebraic geometry techniques, such as Koszul flattenings or Young flattenings applied to specific partitions, might reveal that the image of the tensor under these maps has a rank that strictly bounds the tensor rank to 23. Specifically, if a proposed rank-22 decomposition is restricted to an invariant subspace under the symmetry group, the projection of the rank-22 sum onto this subspace would require more than 22 effective degrees of freedom, leading to an inherent contradiction.",
+    "counterconditions": [
+      "A valid rank-22 decomposition is found that explicitly breaks the standard symmetry but still verifies identically against the 729 tensor entries.",
+      "The rank of the proposed Koszul flattening matrix is computed and found to be 21 or less, meaning it cannot provide a lower bound of 22.",
+      "A rank-22 decomposition is found that preserves the left-right symmetry, refuting the hypothesis that symmetry must be broken."
+    ],
+    "evidence_refs": [
+      {
+        "block": "695e3101e0b7bef8",
+        "quote": "1. **Symmetry obstruction.** The `<3,3,3>` tensor has a large symmetry group. If every rank-22 decomposition would have to break that symmetry in a way that for"
+      },
+      {
+        "block": "1db0851ec995fd3d",
+        "quote": "**R(3,3,3) is unknown.** The best construction anyone has found uses 23 multiplications. The best proved lower bound is 19. Whether 22, 21, or 20 is achievable"
+      },
+      {
+        "block": "70df46c005c36307"
+      }
+    ],
+    "typicality": 0.65,
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}
+```
