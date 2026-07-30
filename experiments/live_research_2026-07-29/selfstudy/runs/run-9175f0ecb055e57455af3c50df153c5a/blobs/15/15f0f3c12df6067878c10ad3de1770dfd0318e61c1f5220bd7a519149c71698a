@@ -1,0 +1,53 @@
+{
+  "candidate": {
+    "claim": "Batch criticism fails to retire rival positions because it permits warrants that lack criterion-level forced choice, causing coverage debt to grow monotonically with rivalry size.",
+    "mechanism": "Without criterion-level forced choice in warrants, critics can assert vague disanalogies or broad coverage claims that never trigger a decisive Dung grounded extension attack. Consequently, the number of accepted rival positions grows unbounded while attacks fail to form a unique skeptical extension, leaving coverage debt unpaid.",
+    "counterconditions": [
+      "If warrants are restricted to criterion-level forced choice, attacks become decisive and rival positions retire.",
+      "If the Dung grounded extension enforces strict closure rules, criticism automatically cascades and retires rivals."
+    ],
+    "typicality": 0.72,
+    "evidence_refs": [
+      {
+        "block": "0868cfc01f2d83d4",
+        "quote": "The judge-side measurement problem and its fix (criterion-level forced choice + degraded-control validity gate)"
+      },
+      {
+        "block": "09ffabcd92979168",
+        "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0974daebd1665965",
+        "quote": "any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge)."
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "SRC_001"
+      ],
+      "shared_structure": [
+        "Both systems rely on a unique skeptical extension to prune invalid elements.",
+        "Failure to enforce strict closure rules leads to unbounded accumulation of unpruned elements."
+      ],
+      "disanalogies": [
+        "Dung semantics operate on abstract argumentation graphs, whereas DeepReason's schools operate on semantic conditioning of generative models."
+      ],
+      "transfer_claims": [
+        "Enforcing strict closure in DeepReason's criticism mechanism will replicate the guaranteed polynomial-time pruning seen in Dung grounded extensions."
+      ],
+      "overturn_conditions": [
+        "DeepReason's semantic warrants cannot be formalized into strict attack relations.",
+        "Generative conditioning fundamentally tolerates ambiguity that invalidates Dung-style pruning."
+      ]
+    },
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}
