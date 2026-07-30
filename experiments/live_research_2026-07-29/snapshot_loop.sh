@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # Rollback insurance for long live runs: commit and push whatever the
-# self-study run has written under experiments/ every five minutes, then
-# exit once the run's driver script is gone.
+# watched run has written under experiments/ every five minutes, then
+# exit once the run's driver script is gone. Pass the driver script name
+# to watch as $1 (default selfstudy_run.sh).
 #
 # Commits are path-scoped to experiments/ so concurrent source-tree work in
 # the same checkout is never swept into a snapshot.
 set -u
+DRIVER="${1:-selfstudy_run.sh}"
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 BRANCH="claude/handover-package-committed-kw8imd"
 LIVE_REL="experiments/live_research_2026-07-29"
@@ -21,6 +23,6 @@ while true; do
       sleep $((2 ** attempt))
     done
   fi
-  pgrep -f "[s]elfstudy_run.sh" >/dev/null 2>&1 || break
+  pgrep -f "$DRIVER" >/dev/null 2>&1 || break
 done
-echo "snapshot loop finished: selfstudy_run.sh no longer running"
+echo "snapshot loop finished: $DRIVER no longer running"
