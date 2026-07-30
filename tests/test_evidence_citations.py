@@ -87,11 +87,98 @@ def test_exact_quote_verifies_and_mismatch_is_a_typed_finding(tmp_path):
     assert verified[0].block_id == block.id and verified[0].quoted
 
     reworded = check_candidate_citations(
-        (EvidenceRefClaimV1(block=block.id, quote=canonical.replace(" ", "  ", 1)),),
+        (EvidenceRefClaimV1(block=block.id, quote=canonical.replace("Widgets", "Gadgets")),),
         dossier,
         blobs,
     )
     assert [c.code for c in reworded] == [EVIDENCE_QUOTE_MISMATCH]
+
+
+WRAPPED = (
+    "# Open challenge\n"
+    "\n"
+    "23 has stood since 1976 despite: decades of hand construction;\n"
+    "numerical alternating-least-squares searches; SAT attacks; and a\n"
+    "large reinforcement-learning search that rediscovered 23.\n"
+    "\n"
+    "1. **Symmetry obstruction.** The tensor has a large symmetry\n"
+    "   group. If every rank-22 decomposition breaks it, 22 is out.\n"
+    "\n"
+    "    sum_k  U_k[i,j]  ==  T[(i,j),(l,m)]\n"
+).encode("utf-8")
+
+
+def _wrapped_case(tmp_path):
+    dossier, _report = admit_sources(
+        [AdmissionInput(locator="challenge.md", data=WRAPPED)],
+        problem_ref="question-" + "0" * 32,
+        provenance=PROVENANCE,
+    )
+    store = BlobStore(tmp_path / "blobs")
+    store.put(WRAPPED)
+
+    def block_containing(needle):
+        for block in dossier.blocks:
+            text = WRAPPED[block.span_start : block.span_end].decode("utf-8")
+            if needle in text:
+                return block, text
+        raise AssertionError(f"no admitted block contains {needle!r}")
+
+    def code(block, quote):
+        checks = check_candidate_citations(
+            (EvidenceRefClaimV1(block=block.id, quote=quote),), dossier, store
+        )
+        assert len(checks) == 1
+        return checks[0]
+
+    return block_containing, code
+
+
+def test_quote_is_checked_against_the_blocks_words_not_its_line_layout(tmp_path):
+    """Regression (tensorrank run-27b80f26bd398c718360e97e2a403593).
+
+    That run recorded 42 EVIDENCE_QUOTE_MISMATCH and 0 verified quoted
+    citations against a dossier hard-wrapped at ~72 columns. All 15
+    distinct quotes were present in the blocks they cited; each differed
+    from the admitted bytes only where the source carried a line break or
+    alignment padding. Line layout must not decide whether a grounding is
+    established, and folding must not blunt the check against a quote
+    whose words differ.
+    """
+
+    block_containing, code = _wrapped_case(tmp_path)
+
+    # A hard newline inside a paragraph, rendered by the model as a space.
+    wrapped, canonical = block_containing("alternating-least-squares")
+    assert "\n" in canonical
+    assert code(wrapped, canonical).code == EVIDENCE_CITATION_VERIFIED
+    assert code(wrapped, canonical).detail == "citation resolved and quote byte-verified"
+
+    folded = code(wrapped, canonical.replace("\n", " "))
+    assert folded.code == EVIDENCE_CITATION_VERIFIED
+    assert folded.quoted and "folding whitespace" in folded.detail
+
+    # A newline plus a list continuation indent collapses to one space.
+    listed, list_text = block_containing("Symmetry obstruction")
+    assert "\n   " in list_text
+    assert code(listed, list_text.replace("\n   ", " ")).code == EVIDENCE_CITATION_VERIFIED
+
+    # Alignment padding inside one line of a preformatted block.
+    aligned, aligned_text = block_containing("sum_k")
+    assert "  ==  " in aligned_text
+    assert (
+        code(aligned, aligned_text.strip().replace("  ", " ")).code
+        == EVIDENCE_CITATION_VERIFIED
+    )
+
+    # Folding tolerates a different rendering of whitespace, nothing else.
+    assert code(wrapped, canonical.replace("1976", "1979")).code == EVIDENCE_QUOTE_MISMATCH
+    assert (
+        code(wrapped, canonical.replace("\n", "")).code == EVIDENCE_QUOTE_MISMATCH
+    ), "deleting whitespace joins words the source separated"
+    assert code(wrapped, "   \n\t ").code == EVIDENCE_QUOTE_MISMATCH, (
+        "a quote that folds to nothing must not match every block"
+    )
 
 
 def test_block_prefix_resolves_and_unknown_block_is_typed(tmp_path):

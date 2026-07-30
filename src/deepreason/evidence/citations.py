@@ -2,14 +2,18 @@
 
 A conjecture citing admitted evidence names dossier block ids and may carry
 quotes. Nothing here is trusted on arrival: every citation resolves against
-the frozen dossier and every quote is byte-checked against the block's
-canonical text. The result is one durable, typed check per citation —
-verification and failure are both recorded outcomes, never silence.
+the frozen dossier and every quote is checked against the block's canonical
+text, with whitespace folded on both sides so that the source author's line
+wrapping cannot decide the verdict while every non-whitespace character must
+still appear, contiguously and in order. The result is one durable, typed
+check per citation — verification and failure are both recorded outcomes,
+never silence.
 """
 
 from __future__ import annotations
 
 import hashlib
+import re
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -81,6 +85,23 @@ def canonical_block_text(block: AdmissionBlockV1, source_bytes: bytes) -> str:
         ) from error
 
 
+_WHITESPACE = re.compile(r"\s+")
+
+
+def _whitespace_folded(text: str) -> str:
+    """Collapse every run of whitespace to one space, and strip.
+
+    Admitted text is the source author's bytes, carrying their hard line
+    wrapping and any alignment padding; a model reproduces the passage as
+    running text. Layout is not part of what a citation claims, so both
+    sides are folded before the fallback comparison. Folding never
+    inserts whitespace where the source had none, so a quote that joins
+    words the source separated still fails.
+    """
+
+    return _WHITESPACE.sub(" ", text).strip()
+
+
 def _resolve(
     reference: str, blocks: tuple[AdmissionBlockV1, ...]
 ) -> tuple[AdmissionBlockV1 | None, str | None]:
@@ -133,6 +154,7 @@ def check_candidate_citations(
     blocks = tuple(blocks)
     for ref in refs:
         quoted = ref.quote is not None
+        quote_detail = ""
         if not bound and not extra_blocks:
             checks.append(
                 EvidenceCitationCheckV1(
@@ -190,7 +212,18 @@ def check_candidate_citations(
                     )
                 )
                 continue
-            if ref.quote.encode("utf-8") not in canonical.encode("utf-8"):
+            folded_quote = _whitespace_folded(ref.quote)
+            if ref.quote.encode("utf-8") in canonical.encode("utf-8"):
+                quote_detail = "citation resolved and quote byte-verified"
+            # The emptiness guard is load-bearing: a quote of only whitespace
+            # folds to "", which is a sub-span of every block's folded text.
+            elif folded_quote and folded_quote in _whitespace_folded(canonical):
+                quote_detail = (
+                    "citation resolved and quote verified against the block's "
+                    "canonical text after folding whitespace; the admitted line "
+                    "breaks and alignment are not required to be reproduced"
+                )
+            else:
                 checks.append(
                     EvidenceCitationCheckV1(
                         code=EVIDENCE_QUOTE_MISMATCH,
@@ -198,8 +231,8 @@ def check_candidate_citations(
                         block_id=block.id,
                         quoted=True,
                         detail=(
-                            "quote is not an exact byte sub-span of the block's "
-                            "canonical text"
+                            "quote is not a sub-span of the block's canonical "
+                            "text under any rendering of its whitespace"
                         ),
                     )
                 )
@@ -211,7 +244,7 @@ def check_candidate_citations(
                 block_id=block.id,
                 quoted=quoted,
                 detail=(
-                    "citation resolved and quote byte-verified"
+                    quote_detail
                     if quoted
                     else "citation resolved to an admitted evidence block"
                 ),
