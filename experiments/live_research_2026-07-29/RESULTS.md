@@ -290,3 +290,80 @@ budget-denial path holds under total exhaustion (16 denials, no crash);
 and the scheduler's treatment of auto-spawned connection problems is the
 binding defect — severe enough that a 200k-token run completed without
 its question ever reaching the model.
+
+## Segment 6 (2026-07-30): the question answers, first verified citations, replay-valid
+
+Segment 5's diagnosis produced two harness fixes, and the second one
+took two rounds — the first round was refuted live, which is worth
+recording as much as the success.
+
+**The fixes.** (1) Render receipts persist as canonical JSON with sorted
+keys, so a reloaded handle map iterates B1, B10, B2, ... and every
+consumer comparing `.values()` against a selection's `final_order` broke
+at ten-plus blocks — the "render handles differ" replay violations were
+spurious convictions of faithful renders. `ordered_refs()` recovers
+handle-index order; the replay validator, the live canonical-order check,
+and both wire-contract sites now use it, and re-verifying the attempt-6
+root drops exactly the two conjecture-context violations. (2) Scheduling:
+making reflexive problems lose rank ties was not enough — attempt 7
+(cycle 0 `disc:question`, cycle 1 `conn:0e26d6be54fd` again, stopped at
+~0 tokens) showed that evidence admission auto-accepts import-role
+records ADDRESSING the question, so the question counted as "solved" and
+took the 0.3 aging discount before a single provider call; no tie was
+ever reached. The complete fix: import-role artifacts never count as
+survivors for scheduling, and seed problems win rank ties outright (the
+question must also beat its own spawned `disc:question-<digest>`, which
+wins the bare id tie). Both fixes regression-tested against the exact
+live conditions; full gate 3106/0 twice.
+
+**Attempt 8 (run-9175f0ec, epoch-5 of the identity): the run the ladder
+was designed for.** Clean `reason_rc=0`, typed `budget_exhausted` at
+cycle 6, 189,909/200,000 tokens over 35 provider calls, 486 events —
+and `verify_root` returns **valid: true, zero violations**, the first
+fully replay-valid attached-evidence run on record. The cycle heartbeats
+read: question, disc:question, conn, question, conn, disc:question —
+the operator's question took cycle 0 and ~63% of all tokens (119,768
+across 3 turns + 17 atomic candidates), with its own discrimination and
+the connection housekeeping rotating in on age exactly as designed.
+
+**First verified citations in the record: 28.** After five segments of
+typed citation failures (UNKNOWN_BLOCK, EVIDENCE_REFS_UNBOUND), 28
+citations byte-verified against the admitted dossier, with 9
+EVIDENCE_QUOTE_MISMATCH refusals showing the deterministic checker still
+rejecting bad quotes. Citation conversion — the capability the
+attach envelope exists for — is now exercised end to end.
+
+**The model's actual answer.** 34 positions stand accepted, and this
+time they are ABOUT the mechanism. The record preserves a genuine
+rivalry of diagnoses for why criticism retires almost nothing while
+rivalry grows: incomplete closure enforcement in the grounded-extension
+attack pass (defeated warrants never transitively invalidate their
+carriers); batch criticism diluting per-target warrants below the
+retirement threshold; absence of any enforced coverage-debt retirement
+threshold; per-target warrant requirements compounding combinatorially
+with batching. The proposed optimisations are specific and criticizable:
+enforce the closure rule; winner-takes-all tournaments per criticism
+batch; a coverage-debt amortization queue forcing attention proportional
+to accumulated debt; criterion-level forced choice to bound rivalry;
+ensemble-pruning that collapses semantically redundant rivals rather
+than criticizing each independently; throttling school generative
+capacity by unretired debt. And the record's own criticism is doing real
+work against them: it convicts the mutual-information pruning proposal
+of contradicting its own disanalogy ("warrants are strictly logical, not
+probabilistic"), catches an internal O(N^2)-vs-O(N) inconsistency in a
+proposed simulation's coverage-debt formula, and identifies that
+debt-coupled throttling freezes a high-debt plateau instead of retiring
+anything.
+
+**The honest residue.** Simulation and research remain unexercised — but
+the failure moved somewhere more interesting: candidates PROPOSED
+simulations and named Wikipedia targets in prose while leaving the typed
+`simulation_refs` channel empty, and the in-record critics repeatedly
+convicted them for exactly that. The mechanism is self-policing the gap;
+the model is not yet using the typed proposal channel. The config
+referee's two cadence firings were again typed budget_denied — the
+question's atomic-candidate appetite left the referee's reservation
+unfunded at both firings; the reservation sizing is the next tuning
+knob. Rivalry discipline improved without new machinery: 34 accepted
+positions against attempt 6's 70, on the same budget, with the
+disagreement preserved as unresolved rivals rather than merged.
