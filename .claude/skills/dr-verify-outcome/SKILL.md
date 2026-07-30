@@ -31,6 +31,12 @@ orchestrator.
      success AND failure signatures.
    - Judge only typed outcomes: run state, stop_reason, audit JSON,
      `verify_root`, FINDINGS.md. Model prose is not verification.
+   - A monitor alert is a prompt to CHECK the primary record, never a
+     conclusion: monitor scripts can emit stale or self-matched lines
+     (one live monitor re-reported an old failure line every poll
+     because its own dedup variable could not persist across a
+     subshell). Confirm against progress.jsonl / the driver log
+     before acting on any alert.
 4. **Know what a live run can and cannot prove.** Model behavior is
    stochastic across identically-configured runs (a capability channel
    used in one attempt may go unused in the next). A live attempt that

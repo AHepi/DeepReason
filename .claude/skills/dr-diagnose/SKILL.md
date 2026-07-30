@@ -53,6 +53,12 @@ implicated source file, and only that file plus at most two neighbors.
 
 - Attribute, don't infer: "cycle 0 selected conn:X (seq 32)" beats any
   reading of `_select_problem`.
+- Inherited conclusions are not evidence. A predecessor session's (or
+  your own earlier) written diagnosis must be RE-DERIVED from the
+  record before you build on it — one recorded run was summarized as
+  "the model never engaged the question" when the work-preparation
+  chronology showed the scheduler never dispatched it at all; the
+  narrative was plausible, committed, and wrong.
 - When a prior attempt failed differently, diff the two records, not
   the two vibes.
 - If you find a SECOND independent cause, put it in PARKED.md and
