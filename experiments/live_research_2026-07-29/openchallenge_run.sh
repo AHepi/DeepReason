@@ -20,10 +20,15 @@ export DEEPREASON_CONFIG_REFEREE="2"
 mkdir -p "$DEEPREASON_HOME"
 {
   echo "=== openchallenge ladder start $(date -u +%FT%TZ) ==="
+  # 24576 completion tokens, not the 8192 used elsewhere: attempt 1 failed
+  # typed (V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY) because glm-5.2 spent the
+  # entire 8192 cap on hidden reasoning about the combinatorial problem and
+  # emitted zero text; three attempts show completion=8192 with empty
+  # output. A harder question needs a deeper completion budget.
   timeout 300 deepreason setup \
     --provider ollama --endpoint https://ollama.com/v1 \
     --model glm-5.2 --model-revision glm-5.2 --family glm \
-    --context-window-tokens 131072 --maximum-completion-tokens 8192 \
+    --context-window-tokens 131072 --maximum-completion-tokens 24576 \
     --credential-env OLLAMA_API_KEY
   echo "setup_rc=$?"
   q0=$SECONDS
