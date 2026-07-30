@@ -1,0 +1,174 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "Greedy comparator removal from bubble-sort and insertion-sort networks for n=13 reaches exactly 45 comparators but not 44, because the overall merge structure of standard sorting networks has removable overhead that trims to the known best but the remaining comparators are structurally load-bearing. The gap between greedy-reduced size and S(n) grows monotonically with n, confirming greedy reduction reproduces known bounds but cannot improve them.",
+      "mechanism": "Generate bubble-sort and insertion-sort networks for n=13 (each 78 comparators), then iteratively remove the first comparator whose removal preserves sorting (verified by the 0-1 principle over all 8192 binary vectors). The greedy first-fit removal order and the starting network's topology jointly determine the final size. Calibration at n=2..12 (where S(n) is proven) establishes the gap trend, which is then extrapolated to n=13.",
+      "counterconditions": [
+        "If greedy reduction from either starting point reaches 44 or fewer, the claim is refuted and we have genuine progress (ambition level 1).",
+        "If greedy reduction does not reach 45 from either starting point, the claim that it matches the known best is refuted.",
+        "The first-fit greedy order may be suboptimal; a different removal order (e.g., last-fit, random-fit, or cost-weighted) could reach a smaller network, making this claim an artifact of the greedy heuristic."
+      ],
+      "typicality": 0.7,
+      "evidence_refs": [
+        {"block": "8a7a7d8f89f48b3e", "quote": "S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"},
+        {"block": "6050cf69f391fa33", "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"},
+        {"block": "d14bbc1788ad0249", "quote": "1. A 13-input sorting network with 44 or fewer comparators (would improve a bound that has stood since the 1990s)."}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "Encoding 'exists a 44-comparator sorting network for 13 inputs' as a Boolean satisfiability problem, with selection variables per comparator slot and 0-1-principle constraints, can be resolved by a CDCL SAT solver within hours — either yielding a 44-comparator network or proving UNSAT (establishing S(13) >= 45). This is the only approach that can give a definitive answer rather than a heuristic one.",
+      "mechanism": "For each of 44 comparator slots, encode the choice of (i,j) pair from C(13,2)=78 possibilities using log2(78)≈7 binary variables per slot (total ~308 selection variables). For each of 8192 binary input vectors, simulate the network symbolically: track each channel's output as a Boolean function of the selection variables, and constrain the final output to be sorted (non-decreasing). The solver searches for a consistent assignment. If SAT, extract the network and verify with the 0-1 principle. If UNSAT, S(13) >= 45.",
+      "counterconditions": [
+        "The SAT instance may have too many clauses (8192 vectors * 44 slots * channel constraints) and be intractable for current solvers.",
+        "The symbolic encoding of the comparator simulation may introduce auxiliary variables that blow up the formula size beyond feasibility.",
+        "Even if the solver runs, it may time out without a definitive answer, leaving the question open.",
+        "Encoding errors (e.g., incorrect comparator semantics in symbolic form) could produce false SAT or UNSAT."
+      ],
+      "typicality": 0.3,
+      "evidence_refs": [
+        {"block": "b01150a3ae43d8f6", "quote": "The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n."},
+        {"block": "8a7a7d8f89f48b3e", "quote": "The n = 9 and n = 10 cases were settled by exhaustive SAT-ba"},
+        {"block": "843819388191d0e9", "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "Reflection symmetry-reduced exhaustive DFS with prefix-based 0-1 pruning can either find a 44-comparator network for n=13 or certify that none exists within the symmetry-reduced search tree. The reflection i -> n-1-i halves the search space, and prefix pruning (abandoning a prefix when some binary vector cannot be sorted by any extension within the remaining budget) makes the tree tractable enough for n=13 at depth 44.",
+      "mechanism": "DFS over comparator sequences of length up to 44. At each node: (1) run the 0-1 principle on the current prefix — if all 8192 vectors are sorted, we have a valid network shorter than 44. (2) For each binary vector, compute whether it can still be sorted by the remaining comparators (if the vector has k inversions and fewer than k comparators remain, prune). (3) Apply reflection symmetry: canonicalize so that the first comparator (i,j) satisfies i+j < n-1 (i.e., i < n-1-j), halving the tree. The search is exhaustive over the reduced tree.",
+      "counterconditions": [
+        "The pruned search tree may still be astronomically large for n=13 at depth 44, making exhaustive search infeasible within any practical budget.",
+        "The prefix pruning rule may incorrectly prune valid 44-comparator networks if the reachability analysis (can this vector still be sorted?) is too conservative.",
+        "Reflection symmetry reduction only halves the tree; the remaining half is still exponential in 44."
+      ],
+      "typicality": 0.6,
+      "evidence_refs": [
+        {"block": "bfc42b3064ed02fe", "quote": "Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class."},
+        {"block": "6050cf69f391fa33", "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"},
+        {"block": "8a7a7d8f89f48b3e", "quote": "The n = 9 and n = 10 cases were settled by exhaustive SAT-ba"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "The stall at 45 comparators for n=13 is explained by a 'layer depth barrier': optimal networks require a minimum number of non-overlapping comparator layers (depth), and 45 corresponds to the minimum product of depth and average-width achievable for 13 channels. Specifically, the merge structure of 13 elements (split into 6+7, then 3+3, 3+4, etc.) requires at least 10-11 layers, and the average comparators per layer cannot drop below ~4 without breaking the merge, yielding ~44-45 as the structural floor.",
+      "mechanism": "Decompose all known 45-comparator networks (and optimal networks for n=7..12) into layers (maximal sets of non-overlapping comparators applied simultaneously). For each network, record: number of layers, comparators per layer, and the merge tree structure. Test whether S(n) correlates with minimum_depth * mean_width. If all 45-comparator networks share the same layer count and merge tree shape, this is evidence for a structural barrier. If varying layer counts all achieve 45, the barrier is not layer-based.",
+      "counterconditions": [
+        "If 45-comparator networks exist with fewer than 10 layers, the depth-barrier hypothesis is refuted.",
+        "If a 44-comparator network exists with the same layer count as 45-comparator networks, the barrier is at 44, not 45.",
+        "The correlation between depth * width and S(n) at small n may be spurious and not extrapolate to n=13."
+      ],
+      "typicality": 0.5,
+      "evidence_refs": [
+        {"block": "2c7a5cc0d7461dd5"},
+        {"block": "8a7a7d8f89f48b3e", "quote": "S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"},
+        {"block": "1194dff78a2795cf", "quote": "A sorting network is therefore a straight-line program — no branches, no loops — and its size is its comparator count. Minimizing size for a given n is a pure p"}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    },
+    {
+      "claim": "Optimal sorting networks for n=7..12 share a common 'split-merge' structural pattern: first sort small groups (3-4 elements), then merge pairs of groups incrementally. Extrapolating this pattern to n=13 (split into 3,3,3,4 groups, merge pairwise then merge the results) may yield a structurally novel 45-comparator or even 44-comparator network that systematic search misses because it does not conform to the search heuristics' bias.",
+      "mechanism": "1. Extract or construct optimal networks for n=7..12. 2. Identify the common merge-tree topology: how channels are grouped, in what order groups are merged, and what comparators each merge adds. 3. Construct a candidate for n=13 by extending the pattern: sort groups (0,1,2), (3,4,5), (6,7,8), (9,10,11,12) optimally, then merge (0-2) with (3-5), (6-8) with (9-12), then merge the two halves. 4. Verify via 0-1 principle (8192 vectors). 5. If it sorts and has <= 45 comparators, this is genuine progress; if <= 44, a breakthrough.",
+      "counterconditions": [
+        "The pattern at small n may be an artifact of the search method, not a structural necessity, and may not extend to n=13.",
+        "The extrapolated network may not sort all binary vectors, requiring additional comparators that push the count above 45.",
+        "Multiple distinct merge-tree topologies may be optimal at small n, making the 'common pattern' ill-defined."
+      ],
+      "typicality": 0.4,
+      "evidence_refs": [
+        {"block": "8a7a7d8f89f48b3e", "quote": "S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"},
+        {"block": "d14bbc1788ad0249", "quote": "2. A 13-input network with 45 comparators tha"},
+        {"block": "9086cd300f72e08a", "quote": "A comparator network on n channels is a fixed sequence of comparators (i, j) with i < j."}
+      ],
+      "sidecar": {"search_signal": "productive"}
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "verify_bounds_table",
+      "purpose": "Verify the S(n) bounds table in the dossier (blocks 8a7a7d8f89f48b3e, 680b4c459d28bf7a) against the published Wikipedia table. Specifically check: S(12)=39, S(13) unknown, best known 45-comparator network for n=13, and whether any published results have improved the bound since the 1990s.",
+      "urls": ["https://en.wikipedia.org/wiki/Sorting_network"]
+    },
+    {
+      "request_identifier": "verify_batcher_construction",
+      "purpose": "Verify that Batcher's odd-even mergesort gives 48 comparators for n=13 as claimed in the dossier, and check whether Wikipedia documents a more efficient variant of Batcher's construction or a known 45-comparator network for n=13.",
+      "urls": ["https://en.wikipedia.org/wiki/Batcher_odd-even_mergesort"]
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "greedy_reduction_comparison_v1",
+      "hypothesis": "Greedy first-fit comparator removal from bubble-sort and insertion-sort networks for n=13 both reach 45 comparators but not 44, and the gap between greedy-reduced size and proven S(n) grows monotonically with n from 0 at n=2..5 to positive at n=6..12, predicting a gap of 0 at n=13 (matching the best known 45). If the gap is already positive at n=8 or above, greedy reduction cannot reach 45 for n=13.",
+      "rival_predictions": [
+        "Hypothesis A: Both bubble-sort and insertion-sort greedy reduction reach exactly 45 for n=13 (starting structure does not matter; gap at n=13 is 0 relative to best known).",
+        "Hypothesis B: Bubble-sort reduction reaches 45 but insertion-sort reduction reaches 46 or higher (starting structure matters at n=13).",
+        "Hypothesis C: Both reach 44 or fewer (greedy reduction improves the known bound — breakthrough).",
+        "Hypothesis D: Both reach 46 or more (greedy reduction from standard sorting networks is insufficient for n=13; the 45-comparator networks require non-standard structure)."
+      ],
+      "discriminating_purpose": "Determine which of four rival predictions holds by actually running greedy reduction at n=2..13. The calibration curve (gap vs n for n=2..12 where S(n) is proven) discriminates between 'greedy matches known bounds' (A), 'starting structure matters' (B), 'greedy improves bounds' (C), and 'greedy is insufficient' (D). The simulation code runs the actual 0-1 principle verification for all 2^n binary vectors, so the results are not prose claims but machine-verified measurements.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "def sorts(net, n):\n    for v in range(1 << n):\n        bits = [(v >> k) & 1 for k in range(n)]\n        for i, j in net:\n            if bits[i] > bits[j]:\n                bits[i], bits[j] = bits[j], bits[i]\n        for k in range(n - 1):\n            if bits[k] > bits[k + 1]:\n                break\n        else:\n            continue\n        break\n    else:\n        return True\n    return False\n\ndef bubble_sort_net(n):\n    net = []\n    for p in range(n):\n        for q in range(n - 1 - p):\n            net.append((q, q + 1))\n    return net\n\ndef insertion_sort_net(n):\n    net = []\n    for i in range(1, n):\n        for j in range(i, 0, -1):\n            net.append((j - 1, j))\n    return net\n\ndef greedy_reduce(net, n):\n    net = list(net)\n    changed = True\n    while changed:\n        changed = False\n        idx = 0\n        while idx < len(net):\n            candidate = net[:idx] + net[idx+1:]\n            if sorts(candidate, n):\n                net = candidate\n                changed = True\n            else:\n                idx += 1\n    return net\n\nknown_S = {1:0, 2:1, 3:3, 4:5, 5:9, 6:12, 7:16, 8:19, 9:25, 10:29, 11:35, 12:39}\n\nprint('=== Greedy reduction from bubble-sort vs insertion-sort ===')\nprint(f'{\"n\":>3} {\"S(n)\":>5} {\"BS_start\":>8} {\"BS_red\":>6} {\"BS_gap\":>6} {\"IS_start\":>8} {\"IS_red\":>6} {\"IS_gap\":>6}')\nresults = {}\nfor n in range(2, 14):\n    bs = bubble_sort_net(n)\n    ins = insertion_sort_net(n)\n    bs_red = greedy_reduce(bs, n)\n    ins_red = greedy_reduce(ins, n)\n    S_n = known_S.get(n, None)\n    b_gap = bs_red.__len__() - S_n if S_n is not None else None\n    i_gap = ins_red.__len__() - S_n if S_n is not None else None\n    results[n] = (len(bs), len(bs_red), len(ins), len(ins_red), S_n, b_gap, i_gap)\n    print(f'{n:>3} {str(S_n):>5} {len(bs):>8} {len(bs_red):>6} {str(b_gap):>6} {len(ins):>8} {len(ins_red):>6} {str(i_gap):>6}')\n\nprint()\nprint('=== Gap trend (greedy_reduced - S(n)) ===')\nfor n in range(2, 13):\n    _, bs_r, _, ins_r, S_n, b_gap, i_gap = results[n]\n    print(f'n={n}: bubble_gap={b_gap}, insertion_gap={i_gap}')\n\nprint()\n_, b13r, _, i13r, _, _, _ = results[13]\nprint(f'=== n=13 results ===')\nprint(f'Bubble sort reduction: {b13r} comparators')\nprint(f'Insertion sort reduction: {i13r} comparators')\nprint(f'Best known: 45')\n\nif b13r <= 44 or i13r <= 44:\n    print('RESULT: Hypothesis C — BREAKTHROUGH, found network with <= 44 comparators!')\nelif b13r <= 45 and i13r <= 45:\n    print('RESULT: Hypothesis A — both reach 45, starting structure does not matter')\nelif b13r <= 45 and i13r > 45:\n    print(f'RESULT: Hypothesis B — structure matters (bubble={b13r}, insertion={i13r})')\nelse:\n    print(f'RESULT: Hypothesis D — greedy reduction insufficient (bubble={b13r}, insertion={i13r})')\n",
+      "requested_observables": [
+        "final comparator count for bubble-sort greedy reduction at each n=2..13",
+        "final comparator count for insertion-sort greedy reduction at each n=2..13",
+        "gap (greedy_reduced - S(n)) at each n=2..12",
+        "which hypothesis (A, B, C, or D) is confirmed for n=13"
+      ],
+      "interpretation_conditions": [
+        "The sorts() function implements the exact 0-1 principle over all 2^n binary vectors as specified in block 6050cf69f391fa33.",
+        "Greedy reduction uses first-fit removal (removes the first removable comparator in each pass), which is a heuristic and may not achieve the globally optimal reduction.",
+        "Starting networks (bubble-sort and insertion-sort) are deterministic constructions, so results are fully reproducible.",
+        "For n=13, S(n) is unknown; we compare against the best known bound of 45 from block d14bbc1788ad0249.",
+        "The gap trend at n=2..12 provides a calibration curve; if the gap is already positive at n>=8, greedy reduction is unlikely to reach 45 for n=13."
+      ],
+      "declared_assumptions": [
+        "The sorts() function correctly implements the 0-1 principle (verifiable against block b01150a3ae43d8f6).",
+        "First-fit greedy removal is a representative heuristic for reduction quality.",
+        "The gap trend at small n is informative about n=13 behavior.",
+        "Both bubble-sort and insertion-sort networks are valid sorting networks before reduction."
+      ],
+      "parameter_definitions": [],
+      "requested_seed_set": [42]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Speculative construction for n=13 with 44 comparators:\n\nAttempt: Split 13 channels into groups (0,1,2), (3,4,5), (6,7,8), (9,10,11,12).\n- Sort each group of 3 with 3 comparators each: 9 total for first three groups.\n- Sort group of 4 with 5 comparators: 5 total.\n- Subtotal: 14 comparators for initial sorting.\n- Merge (0-2) with (3-5) using odd-even merge: needs ~3 comparators.\n- Merge (6-8) with (9-12) using odd-even merge: needs ~4 comparators.\n- Merge the two 6-7 element halves: needs ~? comparators.\n- Budget remaining for final merge: 44 - 14 - 3 - 4 = 23 comparators.\n- Is 23 comparators enough to merge two sorted 6-7 element sequences? Batcher's merge of 6+7 needs about 16-19. So 23 should be plenty.\n- Total estimate: 14 + 3 + 4 + 19 = 40? That seems too optimistic. Need to actually build and verify.\n\nKey uncertainty: the merge steps may require more comparators than estimated. The odd-even merge of a 6-element and 7-element sequence is not well-characterized.",
+          "why_keep_this": "This is a concrete constructive attempt at a 44-comparator network. Even if it fails (likely), the failure mode is informative: which merge step blows the budget? That tells us where the structural difficulty lies.",
+          "possible_next_move": "Implement the construction in Python, verify with 0-1 principle, and count comparators. If it fails, analyze which merge step is the bottleneck.",
+          "unfinished": "The merge comparators for 6+7 elements need exact computation. Also, the group-of-4 optimal network (5 comparators) is known for n=4."
+        }
+      },
+      {
+        "local_key": "NEW_002",
+        "body": {
+          "content": "Counterfactual: What if the 0-1 principle verification is used not just as a final check but as a *search guide*? Specifically: during DFS, after each comparator is added, compute the set of binary vectors that are NOT yet sorted (the 'unsorted residue'). The next comparator should be chosen to minimize the size of this residue. This is a greedy information-theoretic heuristic: each comparator should sort as many currently-unsorted vectors as possible.\n\nPotential issue: minimizing the unsorted residue greedily may lead to a locally optimal but globally suboptimal path — classic greedy failure.\n\nHowever, at small n (7-10) where S(n) is known, we can test whether this heuristic finds optimal networks. If it does at n=7..10, that's evidence (not proof) it might work at n=13.",
+          "why_keep_this": "This transforms the 0-1 principle from a verification tool into a search heuristic, which is novel and testable.",
+          "possible_next_move": "Implement residue-minimizing search and test at n=7,8,9,10. Compare found size to known S(n)."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does the gap between greedy-reduced size and S(n) grow smoothly with n, or is there a phase transition? If smooth, the n=13 prediction is reliable; if there's a jump, extrapolation is unreliable.",
+        "related_refs": ["NEW_001"]
+      },
+      {
+        "question": "Are all known 45-comparator networks for n=13 derived from the same construction family, or do independent constructions exist? If all share a family, the structural barrier hypothesis is strengthened; if independent, it's weakened.",
+        "related_refs": ["NEW_002"]
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "NEW_001",
+        "to_ref": "NEW_002",
+        "relation_hint": "The constructive attempt (NEW_001) could be guided by the residue-minimizing heuristic (NEW_002) during the merge steps, where the comparator count is uncertain.",
+        "direction": "symmetric"
+      }
+    ]
+  }
+}
+```

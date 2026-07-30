@@ -1,0 +1,3 @@
+```json
+{"op": "replace", "path": "/requested_observables", "value": ["bubble_sort_reduced_count_n2_to_n13", "insertion_sort_reduced_count_n2_to_n13", "gap_reduced_minus_Sn_n2_to_n12", "confirmed_hypothesis_n13"]}
+```

@@ -1,0 +1,27 @@
+```json
+{
+  "candidate": {
+    "claim": "A backtracking search algorithm that uses partial 0-1 vector testing after every 11 comparators, combined with symmetry-breaking via reflection equivalence, will successfully find a 44-comparator 13-input sorting network.",
+    "mechanism": "By incrementally testing candidate networks against subsets of the 8192 binary vectors (e.g., vectors with weight 6 and 7) after every 11 comparators, we can prune invalid branches early. Combining this with reflection symmetry-breaking (i -> n-1-i) to avoid exploring symmetric duplicates reduces the search space enough to find a 44-comparator solution.",
+    "counterconditions": [
+      "S(13) is exactly 45, meaning no 44-comparator network exists and the search will exhaust all possibilities without finding a valid network.",
+      "The branch factor of 13-input networks is so large that even with partial 0-1 vector pruning and symmetry-breaking, the search space for 44 comparators remains intractable within any fixed time budget.",
+      "Testing partial monotonicity on an incomplete network may not be a valid pruning rule, as a non-sorting intermediate state might still be fixable by subsequent comparators, leading to pruning of valid branches."
+    ],
+    "typicality": 0.65,
+    "evidence_refs": [
+      {
+        "block": "6050cf69f391",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      },
+      {
+        "block": "bfc42b3064ed",
+        "quote": "Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class."
+      }
+    ],
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}
+```

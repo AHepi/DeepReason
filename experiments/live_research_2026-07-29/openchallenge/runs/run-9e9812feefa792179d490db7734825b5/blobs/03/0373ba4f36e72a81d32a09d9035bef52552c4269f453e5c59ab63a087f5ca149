@@ -1,0 +1,1 @@
+{"repair.patch.v1":[{"op":"replace","path":"/requested_observables","value":["bubble_sort_greedy_reduced_counts_n2_to_n13","insertion_sort_greedy_reduced_counts_n2_to_n13","greedy_gap_vs_Sn_n2_to_n12","confirmed_hypothesis_for_n13"]}]}
