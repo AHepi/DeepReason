@@ -699,3 +699,88 @@ anyway and can pay that cost once.
 **Still open from the 2026-07-30 diagnosis:** D2 (the sandboxed_python_v1
 program contract never reaches the model) and P4 (TOKEN_ACCOUNTING.json
 counting research records as simulation records).
+
+---
+
+## 2026-07-30 — D2b: the sandbox program contract now reaches the model
+
+**What was wrong.** The shape a `sandboxed_python_v1` program must have
+was written down in exactly one place, `validate_sandboxed_python_source`,
+which admits only a module whose body is a single
+`def simulate(inputs, rng)`. The model was shown that rule nowhere. What
+it was shown is the wire contract's JSON schema, serialised whole into the
+prompt, and there `model_source` read
+`{"maxLength": 262144, "minLength": 1, "type": "string"}` — an accurate
+description of what the wire accepts and a false one of what the harness
+admits. In `run-27b80f26bd398c718360e97e2a403593` the model answered that
+with an 11-statement script: a calibration against Strassen's rank-7
+decomposition, a corrupted-W negative control, then the discriminating
+check. Competent work under the contract it was given, inadmissible under
+the contract that was enforced, and denied `invalid_model_program`. A
+second denial sat behind it: `requested_observables` must be keys of the
+mapping `simulate` returns, so the proposal's `["stdout"]` would have
+failed one stage later with `declared observable missing`. All three of
+that run's ~23.5 KB packs contain zero occurrences of `simulate`,
+`inputs`, or `rng`.
+
+**What is fixed.** Both rules are now stated in the schema the conjecturer
+reads, as descriptions on the two fields. Nothing enforced changed: the
+validator and the contained runner are untouched, and the tranche's own
+reproduction was written so that three of its four parts must NOT move —
+the field run's committed packs still contain zero occurrences, its
+recorded program is still refused with the same `ValueError`, and a
+program declaring `stdout` still fails the real contained runner with
+`declared observable missing`. Only the rendered schema grew (v5 5232 →
+6414 bytes, v6 9814 → 10996).
+
+**What the record now shows.** Full gate 3169 passed, 0 failed.
+`verify_root` over all 23 committed run roots under `experiments/` is
+byte-identical before and after — 44 foreign-criticism, 1 run-input, 1
+terminal-authority, the same violations on the same roots, none masked and
+none introduced. The recorded denial stands: that root still carries its
+`invalid_model_program` transition, because the log is append-only and was
+not touched. This changes what future packs say, not what past ones said.
+
+**The frozen-surface cost, priced before it was paid.** This is the
+tranche the D1 retraction was parked for, and the lesson from that
+retraction was applied literally: rather than change the pack and find out
+what broke, the change was prototyped, measured against the full gate and
+a `verify_root` sweep, and then reverted before FIX.md was written — so
+FIX.md predicted the consequences from measurements instead of reasoning.
+The predictions held exactly. The incident-wave `generated_root_sha256`
+moved for A3 only (`d887b449… → 11b5aa70…`), A1 and A2 unmoved,
+`descriptor_sha256` unmoved. No third baseline moved.
+
+**The prediction worth recording is the one that says nothing moved.** The
+operator pre-authorised regenerating two baselines. Only one had to be
+spent. `tokens_per_admitted_useful_candidate` stays at 784.5, because that
+fixture's conjecturer prompts carry `EvidenceRefClaim` — which is why the
+D1 docstring moved it — and do not carry `SimulationProposalWireV1` at
+all. Measured by spying on `MockEndpoint` while replaying the fixture: its
+three prompts are 2685 / 445 / 2846 bytes and none contains the string
+`simulate`. "The pack's bytes sit inside committed provenance digests" is
+true; "therefore any pack change moves every pack-derived baseline" is
+not, and the difference is measurable in advance.
+
+**The residue.** No live model has been through this path, and nothing
+here shows one writing a valid program. What is proven is narrower: the
+two rules the harness enforces are inside the bytes the conjecturer is
+shown, they are the same rules the enforcing code applies — asserted by
+coupling the disclosure to the validator and to the runner's own wording
+in one regression test, not by reading them side by side — and nothing
+already recorded moved. Whether glm-5.2 then authors a conforming
+`simulate` is stochastic and undecidable offline. Fixed does not mean
+exercised.
+
+**Newly parked, both found by doing this work.** D2c: the
+`declarative_numeric_v1` document shape is still undisclosed — the same
+defect class, one simulation mode over. D2e: the disclosure is
+unconditional, because `SimulationProposalWireV1` stays in `$defs` even
+when the `simulation_proposals` property is omitted, so runs that cannot
+propose a simulation now carry ~1.2 KB of contract text they cannot use.
+
+**Still open:** D2a (a capability transition still cannot say why it
+denied a program — parked by operator instruction); D1a
+(`EvidenceRefClaimV1`'s quote docstring still describes the pre-fix,
+stricter rule); P4 (TOKEN_ACCOUNTING.json counting research records as
+simulation records).
