@@ -1,0 +1,58 @@
+```json
+{
+  "candidate": {
+    "claim": "No rank-22 decomposition of the <3,3,3> tensor exists with all coefficient-matrix entries drawn from {-1, 0, 1}. The minimum rank achievable in this ternary-restricted class is 23, matching Laderman's construction. Consequently, if R(3,3,3) < 23, any rank-22 decomposition must use at least one coefficient with absolute value ≥ 2 or require non-integer entries.",
+    "mechanism": "The <3,3,3> tensor has 729 entries, each of which must be expressed as a sum of exactly r rank-1 outer-product contributions. With ternary entries, each rank-1 term contributes to a tensor entry a product u*v*w where u,v,w ∈ {-1,0,1}, so each contribution is also in {-1,0,1}. For a tensor entry that equals 1, one needs an odd number of +1 contributions minus an odd number of -1 contributions from the r terms. With r=22 (even), the parity structure of the 729 target entries imposes combinatorial constraints: entries requiring an odd number of nonzero contributions face a parity mismatch if all 22 terms are active at that entry, forcing some terms to contribute zero at certain entries. This zero-forcing creates a graph-coloring-like constraint across the 729 entries whose satisfiability with 22 ternary terms is structurally blocked, analogous to how 2-coloring an odd cycle fails. The Laderman 23-term solution sidesteps this because 23 is odd, allowing natural parity coverage.",
+    "counterconditions": [
+      "An explicit rank-22 decomposition with all entries in {-1,0,1} is found and verified by the 729-entry integer check.",
+      "A constrained search over ternary rank-22 decompositions terminates without exhaustion (e.g., by pruning bounds that are too aggressive), so non-existence is not actually proved.",
+      "A rank-22 decomposition using coefficients in {-2,-1,0,1,2} is found, weakening the ternary-specific claim but not the broader structural parity argument.",
+      "The parity argument is shown to be flawed because tensor entries with value 0 can absorb parity mismatches, so the odd/even distinction does not propagate as claimed.",
+      "A rank-22 decomposition is found over a small finite field (e.g., GF(3)) where ternary entries are natural, contradicting the claim even in the restricted setting."
+    ],
+    "typicality": 0.55,
+    "evidence_refs": [
+      {
+        "block": "695e3101e0b7bef8",
+        "quote": "**Symmetry obstruction.** The `<3,3,3>` tensor has a large symmetry group. If every rank-22 decomposition would have to break that symmetry in a way that for"
+      },
+      {
+        "block": "1db0851ec995fd3d",
+        "quote": "**R(3,3,3) is unknown.** The best construction anyone has found uses 23 multiplications. The best proved lower bound is 19. Whether 22, 21, or 20 is achievable"
+      },
+      {
+        "block": "2ee4b98f645480d4",
+        "quote": "A rank-r decomposition is r triples `(U_k, V_k, W_k)`, k = 1..r, each a 3x3 matrix of coefficients. The claim is the tensor identity"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "analogy": {
+      "source_memory_refs": ["parity_coloring_obstruction"],
+      "shared_structure": [
+        "Both involve a discrete structure (odd cycle / tensor entry pattern) where a parity constraint on the number of available resources (colors / rank-1 terms) creates an impossibility.",
+        "Both have a natural 'one more resource' solution: 3 colors for any graph / 23 terms for the tensor.",
+        "Both are decidable by exhaustive combinatorial search within a bounded class."
+      ],
+      "disanalogies": [
+        "Graph coloring impossibility is a global topological property; the tensor parity argument operates entry-wise and the global coupling is through shared rank-1 terms.",
+        "Odd cycle non-2-colorability is a theorem; the ternary rank-22 non-existence is a conjecture that may fail due to richer combinatorial structure.",
+        "Graphs have well-understood parity; tensor entries interact through 18 input variables, making the parity coupling far more complex."
+      ],
+      "transfer_claims": [
+        "If the parity obstruction holds for ternary <3,3,3>, then analogous parity obstructions may govern ternary-restricted rank for other tensor formats <n,n,n> where the minimal rank and the tensor entry count have mismatched parity.",
+        "The 'one more term' pattern (like 'one more color') may generalize: minimal ternary rank for <n,n,n> is constrained by parity of r relative to entry structure."
+      ],
+      "overturn_conditions": [
+        "A ternary rank-22 decomposition is explicitly found, collapsing the analogy.",
+        "The parity argument is shown inapplicable because zero tensor entries absorb parity mismatches.",
+        "Exhaustive search over ternary rank-22 is shown computationally infeasible, so the obstruction is untestable at this scale."
+      ]
+    }
+  },
+  "abstention": null
+}
+```
