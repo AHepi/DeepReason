@@ -1,0 +1,26 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 1, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-1
+stance: counterexample first
+
+PROBLEM CONTEXT (question-b9510316be66b626d54bf59c1e3483cc) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+The attached dossier defines the open problem of the minimal 13-input sorting network: S(13) is unknown, the best known network has 45 comparators, Batcher's construction gives 48, and every candidate is exactly checkable in milliseconds by the 0-1 principle (8192 binary vectors). Work the problem. Conjecture concrete search or construction strategies as rival positions, and where rivals predict different measurable outcomes — a candidate network sorting or not, a pruning rule preserving optimality at small n, one strategy reaching smaller networks than another under a fixed budget — file a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) whose program actually runs the discriminating experiment; a simulation described in prose with an empty simulation_refs channel is an unverified claim and will be criticized as such. Where the dossier's bounds table or method claims need checking against published knowledge, file typed research proposals for specific https pages on the frozen en.wikipedia.org allowlist. Ground every claim about the problem state in the attached dossier blocks by citing their block ids. Genuine progress in order of ambition: a verified 13-input network of 44 or fewer comparators; a structurally novel verified 45; or a simulation-discriminated account of which structural hypothesis best explains why search stalls at 45.
+
+TARGETS (1) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@05ea3fdb79fb34cd755e3f4c: program:reasoning_observation_pending
+- reason-counter@da7844f67658abc947e50c58: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A BFS search of comparator networks bounded by depth 10 and size 44, with reflection symmetry breaking (i -> 12-i), can exhaustively eliminate the 44-comparator space if we prune states that have the same reachable set of 0-1 vectors.","counterconditions":[{"case":"The state space of distinct reachable sets might still explode combinatorially for n=13 within the sandbox's time and memory limits.","eval":"observation"},{"case":"Reflection symmetry might not be the only isomorphism causing redundancy, leading to an incomplete pruning strategy.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Reflection symmetry reduces the search space by a factor of ~2. Pruning networks that produce identical intermediate sets of reachable 0-1 vectors prevents exploring permutation-equivalent states, drastically cutting the branching factor.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@05ea3fdb79fb34cd755e3f4c, reason-counter@da7844f67658abc947e50c58
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
