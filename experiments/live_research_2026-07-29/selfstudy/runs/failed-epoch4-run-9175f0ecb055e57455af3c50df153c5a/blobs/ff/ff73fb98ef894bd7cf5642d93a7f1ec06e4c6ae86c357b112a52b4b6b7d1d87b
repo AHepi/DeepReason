@@ -1,0 +1,79 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "The isolated artifact 0e26d6be54fd DEPENDS ON SRC_005 (BASIN_REPORT): its isolation is causally produced by the refuted-attractor / repertoire-exhaustion dynamics documented in the basin report. Causal mechanism: repertoire exhaustion → viable-candidate depletion → attractor fixation → neighbourhood-edge pruning → artifact ejection into isolation. The artifact is not merely unconnected but was actively ejected as the conjecture basin collapsed and surviving connections were pruned. This is REFUTED IF 0e26d6be54fd was isolated before or independently of any basin-collapse event, if it was never part of the conjecture repertoire, or if the basin report's refuted-attractor model does not predict neighbourhood ejection as a consequence of repertoire exhaustion.",
+      "evidence_refs": [
+        {"block": "daf9e84b84596ff59505e6b038681c55a3d84b24b80df102f060fdd8aecff90e"}
+      ],
+      "neighbours": ["SRC_005"],
+      "typicality": 0.82
+    },
+    {
+      "content": "0e26d6be54fd SHARES MECHANISM with SRC_004 (STATE_OF_THE_THEORY): both the isolated artifact and the theory-state record participate in the same conjecture→criticism→adjudication pipeline, and its isolation is the terminal state of that cycle where all surviving edges were eliminated by criticism. Causal mechanism: conjecture generation → critical adjudication → edge refutation → connection depletion → isolation as residual unrefuted-but-unconnected artifact. The isolation is a downstream product of the adjudication machinery itself, not an external anomaly. This is REFUTED IF 0e26d6be54fd was never processed through the conjecture-criticism harness, if it was created by a different pipeline entirely, or if its isolation predates any adjudication cycle.",
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173fa9fb61c1457728816dff522eaf0d466714121247"}
+      ],
+      "neighbours": ["SRC_004"],
+      "typicality": 0.64
+    },
+    {
+      "content": "0e26d6be54fd CONTRADICTS SRC_003 (FORMAL BUILD SPEC): the harness spec mandates a connected dossier-graph where every artifact participates in a neighbourhood, yet 0e26d6be54fd exists in isolation—its existence is a live counterexample to the spec's connectivity invariant. Causal mechanism: spec requires connectedness → artifact exists without connections → spec's connectivity guarantee is falsified → the spec is incomplete or violated. The contradiction is causal, not merely descriptive: the spec's design should have prevented isolation, so the artifact's isolated state is evidence the spec's enforcement mechanism failed. This is REFUTED IF SRC_003 explicitly permits isolated/unconnected artifacts as a valid state, if 0e26d6be54fd falls outside the spec's scope, or if the spec includes a connectivity exemption clause.",
+      "evidence_refs": [
+        {"block": "9116c8592387ce22d436cde600d77077d2b08176225f49d1c01613eb8dfb5ca8"}
+      ],
+      "neighbours": ["SRC_003"],
+      "typicality": 0.52
+    },
+    {
+      "content": "The isolation of 0e26d6be54fd REDUCES TO a normative gap in SRC_002 (V1.5 AMENDMENT): the amendment's connection protocol lacks a reconnection or recovery procedure for artifacts ejected during basin collapse, so the artifact's persistent isolation is the downstream causal consequence of an incomplete normative specification. Causal mechanism: v1.5 amendment omits reconnection protocol → ejected artifacts have no mechanism to rejoin the neighbourhood → isolation persists as a normative lacuna rather than an intentional design choice. The phenomenon of isolation is fully explained by the absence of a recovery clause in the amendment. This is REFUTED IF SRC_002 already specifies a reconnection or recovery mechanism for isolated artifacts, if the isolation was intentional under the amendment, or if the amendment's scope does not cover neighbourhood maintenance.",
+      "evidence_refs": [
+        {"block": "7a3d186479cefef7597b38dbd96a905207f51cbac7a8d494cf324c85a4b022d0"}
+      ],
+      "neighbours": ["SRC_002"],
+      "typicality": 0.43
+    },
+    {
+      "content": "0e26d6be54fd is COMPATIBLE WITH SRC_001 (TOKEN_ECONOMY): token budget scarcity can causally produce artifact isolation when the token cost of maintaining neighbourhood edges exceeds the epistemic value of those connections, making isolation an economically rational state under the token-economy constraints the document describes. Causal mechanism: token budget scarcity → connection-maintenance cost exceeds marginal epistemic value → low-value edges pruned → artifact becomes isolated as a token-saving outcome. The isolation is not pathological but adaptive under resource constraints. This is REFUTED IF 0e26d6be54fd's isolation occurred despite sufficient available token budget, if the token economy model does not govern connection-maintenance decisions for this artifact class, or if isolation actually increased token consumption.",
+      "evidence_refs": [
+        {"block": "74ded11eccee525366948958d3b4fb57bccbdeb2ac8da1e4db35e075c61562a3"}
+      ],
+      "neighbours": ["SRC_001"],
+      "typicality": 0.31
+    },
+    {
+      "content": "0e26d6be54fd CONTRADICTS SRC_004 (STATE_OF_THE_THEORY): the theory state claims the machine's holdings are self-contained and traceable to internal runs, but if 0e26d6be54fd is an exogenous artifact—externally supplied, not generated by prior conjecture-criticism cycles—then its existence as an unconnected node violates the self-containment assumption. Causal mechanism: external injection → artifact lacks internal lineage → no neighbourhood edges form → theory-state's self-containment claim is falsified. The isolation is itself the signature of exogenous origin: internal artifacts carry lineage edges, external ones do not. This is REFUTED IF 0e26d6be54fd has a traceable internal provenance matching the machine's run history, if the theory state does not claim self-containment, or if the artifact was internally generated but lost its lineage metadata through corruption rather than external injection.",
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173fa9fb61c1457728816dff522eaf0d466714121247"}
+      ],
+      "neighbours": ["SRC_004"],
+      "typicality": 0.15
+    }
+  ],
+  "context_request": {
+    "desired_retrieval_channels": ["semantic", "focus", "link"],
+    "purpose": "Retrieve the content and provenance of artifact 0e26d6be54fd to determine whether it is an internal run artifact, a dossier block, or an externally supplied record. Without its content, proposed relations to the neighbourhood are underdetermined—multiple incompatible relation kinds (dependence, contradiction, reduction) could each be justified. Resolving this will discriminate between the basin-collapse ejection hypothesis and the exogenous-origin counterfactual.",
+    "query": "artifact 0e26d6be54fd content provenance lineage dossier block",
+    "requested_visible_aliases": ["SRC_004", "SRC_005", "SRC_001", "SRC_002", "SRC_003"]
+  },
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "What is the actual content of 0e26d6be54fd? All six candidates are grounded in neighbourhood artifacts, not in the isolated artifact itself. Without its content, the relation kind is underdetermined.",
+        "related_refs": ["SCR_002", "SCR_004"]
+      },
+      {
+        "question": "Is 0e26d6be54fd a dossier block within the existing digest eb6b4d30978838b51bb7bc39d96c3c423cc6c04527b1d1c35369dc017f91e6f6, or is it a separate artifact entirely? This determines whether 'depends on' or 'contradicts' is the correct polarity.",
+        "related_refs": ["SCR_004", "SCR_003"]
+      }
+    ],
+    "links": [
+      {
+        "from_ref": "SCR_001",
+        "to_ref": "SCR_003",
+        "relation_hint": "rival hypotheses: basin-collapse ejection (endogenous) vs exogenous-origin injection. Content retrieval of 0e26d6be54fd discriminates them."
+      }
+    ]
+  }
+}
+```
