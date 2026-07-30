@@ -861,12 +861,24 @@ class Scheduler:
         return last is not None and self._cycles - last < self.config.DISC_COOLDOWN
 
     def _select_problem(self):
+        from deepreason.ontology.artifact import ProvenanceRole
+
         state = self.harness.state
         if self.config.FOCUS_PROBLEM is not None:
             return state.problems.get(self.config.FOCUS_PROBLEM)
+        # "Solved" means a CANDIDATE survived — never admission bookkeeping.
+        # Evidence admission auto-accepts import-role records (attached-source
+        # records, source-reliability assertions) that ADDRESS the operator's
+        # question, and counting them as survivors marked the question solved
+        # before a single provider call, dropping it to the 0.3 aging weight
+        # while never-worked spawns outranked it (selfstudy run-9175f0ec:
+        # the question terminated budget_denied with zero calls).
         survivors_by_problem: dict[str, int] = {}
         for aid, pid in state.addr:
-            if state.status.get(aid) == Status.ACCEPTED:
+            if (
+                state.status.get(aid) == Status.ACCEPTED
+                and state.artifacts[aid].provenance.role != ProvenanceRole.IMPORT
+            ):
                 survivors_by_problem[pid] = survivors_by_problem.get(pid, 0) + 1
         integration_allowed = self.config.INTEGRATION_BUDGET_SHARE > 0 and (
             self._cycles == 0
@@ -898,29 +910,38 @@ class Scheduler:
             # breaks what remains. Selecting a problem resets its age — that
             # is what makes this a fair rotation rather than a fixed winner.
             #
-            # The reflexive tie-break is a live-run guarantee, not a
-            # nicety: at cycle 0 every problem is never-worked, so before
-            # it the winner fell to the id tie-break — and an attach-spawned
-            # "conn:<id>" sorts before "question-<digest>". One recorded run
-            # (selfstudy run-9175f0ec) spent its entire 200k budget inside
-            # that first connection cycle and the operator's question
-            # terminated budget_denied without a single provider call. The
-            # operator's question must always hold first claim on the
-            # budget; reflexive problems still rotate in afterwards on age.
+            # The tie-break order is a live-run guarantee, not a nicety: at
+            # cycle 0 every problem is never-worked, so before it the winner
+            # fell to the bare id tie-break — and an attach-spawned
+            # "conn:<id>" or "disc:<id>" sorts before "question-<digest>".
+            # One recorded run (selfstudy run-9175f0ec) spent its entire
+            # 200k budget inside that first connection cycle and the
+            # operator's question terminated budget_denied without a single
+            # provider call. Seed problems (the operator's own questions)
+            # win ties outright, independent spawns beat reflexive
+            # housekeeping next, and everything still rotates on age.
             def rank(p):
                 age = self._cycles - self._problem_worked.get(p.id, -1)
                 weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
-                return (-(age * weight), p.id in reflexive, p.id)
+                return (
+                    -(age * weight),
+                    p.provenance.trigger != SpawnTrigger.SEED,
+                    p.id in reflexive,
+                    p.id,
+                )
 
             best = min(candidates, key=rank)
             self._problem_worked[best.id] = self._cycles
             return best
         # Unsolved problems first, then round-robin rotation by cycle count.
-        # Stable sort keeps registration order within each class while
-        # independent problems precede reflexive housekeeping, so cycle 0
-        # lands on the operator's question here too.
+        # Stable sort keeps registration order within each class while seeds
+        # precede independent spawns and those precede reflexive
+        # housekeeping, so cycle 0 lands on the operator's question here too.
         unsolved = [p for p in candidates if not survivors_by_problem.get(p.id)]
-        pool = sorted(unsolved or candidates, key=lambda p: p.id in reflexive)
+        pool = sorted(
+            unsolved or candidates,
+            key=lambda p: (p.provenance.trigger != SpawnTrigger.SEED, p.id in reflexive),
+        )
         return pool[self._cycles % len(pool)]
 
     def _school_dict(self, school_id: str) -> dict:

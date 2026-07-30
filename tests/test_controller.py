@@ -175,20 +175,24 @@ def test_forbidden5_liveness_queue_starves_no_problem(tmp_path):
     assert picked == {"pi-0", "pi-1", "pi-2", "pi-3"}, f"a problem starved: {picked}"
 
 
-# --- #5b: reflexive problems lose ties to independent work -------------- #
-def test_operator_question_outranks_reflexive_spawn_at_cycle_zero(tmp_path):
-    """Regression (selfstudy run-9175f0ec): at cycle 0 every problem is
-    never-worked, so selection fell to the id tie-break — and an
-    attach-spawned "conn:<id>" sorts lexicographically before
-    "question-<digest>". That run spent its full 200k budget inside the
-    first connection cycle; the operator's question terminated
-    budget_denied with zero provider calls. Reflexive housekeeping must
-    lose ties to independent work in both selection modes."""
+# --- #5b: the operator's question holds first claim on the budget ------- #
+def test_operator_question_outranks_spawns_at_cycle_zero(tmp_path):
+    """Regression (selfstudy run-9175f0ec and its first refix attempt): at
+    cycle 0 every problem is never-worked, so selection fell to the bare id
+    tie-break — "conn:<id>" and "disc:<id>" both sort before
+    "question-<digest>" — and evidence admission had already auto-accepted
+    import-role records ADDRESSING the question, marking it "solved" and
+    dropping it to the 0.3 aging weight before a single provider call. The
+    run spent its full 200k budget on the connection problem; the question
+    terminated budget_denied with zero calls. Import-role artifacts must
+    not count as survivors, and seed problems must win rank ties, in both
+    selection modes."""
+    from deepreason.ontology import Provenance
+
     for liveness in (True, False):
         h = Harness(tmp_path / f"run-{liveness}")
         h.register_commitment(Commitment(id="k-q", eval="predicate:'x' in content"))
-        # Register the connection problem FIRST with an id sorting before
-        # the question's, mirroring the live run's spawn-before-select.
+        # Spawn-order and id-order both favor the spawns, as live.
         h.register_problem(Problem(
             id="conn:0e26d6be54fd", description="connect isolated artifact",
             criteria=["k-q"],
@@ -201,20 +205,37 @@ def test_operator_question_outranks_reflexive_spawn_at_cycle_zero(tmp_path):
             provenance=ProblemProvenance.model_validate(
                 {"trigger": "seed", "from": []}),
         ))
+        h.register_problem(Problem(
+            id="disc:question-98a0e3a77a0e", description="discriminate rivals",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "discrimination", "from": ["question-98a0e3a77a0e"]}),
+        ))
+        # Admission bookkeeping: accepted import-role records addressing
+        # the question (the attach path does exactly this before cycle 0).
+        for i in range(2):
+            h.create_artifact(
+                f"attached-source record {i}",
+                provenance=Provenance(role="import"),
+                problem_id="question-98a0e3a77a0e",
+            )
         config = Config(LIVENESS_QUEUE=liveness, N_SCHOOLS=0)
         adapter = LLMAdapter({}, h.blobs)
         sched = Scheduler(h, adapter, config)
         first = sched._select_problem()
         assert first is not None and first.id == "question-98a0e3a77a0e", (
             f"cycle 0 (liveness={liveness}) went to {first and first.id}: "
-            "reflexive spawn preempted the operator's question"
+            "a spawned problem preempted the operator's question"
         )
         if liveness:
             # The rotation stays fair: once the question has been worked,
-            # the aged connection problem wins the next cycle.
+            # aged never-worked spawns win, independent before reflexive.
             sched._cycles = 1
             second = sched._select_problem()
-            assert second is not None and second.id == "conn:0e26d6be54fd"
+            assert second is not None and second.id == "disc:question-98a0e3a77a0e"
+            sched._cycles = 2
+            third = sched._select_problem()
+            assert third is not None and third.id == "conn:0e26d6be54fd"
 
 
 # --- #6: fail-static — no policy while the last is under standing attack - #
