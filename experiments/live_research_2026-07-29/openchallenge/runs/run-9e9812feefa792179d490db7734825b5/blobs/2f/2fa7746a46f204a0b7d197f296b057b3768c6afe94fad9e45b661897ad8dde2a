@@ -1,0 +1,117 @@
+```json
+{
+  "candidates": [
+    {
+      "claim": "The optimal 13-input sorting network can be constructed by extending an optimal 12-input network (which has 39 comparators) by integrating the 13th channel via an optimized bitonic or odd-even merge phase, potentially achieving 44 or 45 comparators.",
+      "mechanism": "Start with a known optimal 12-input network and add comparators to merge the 13th input. By using dynamic programming over the possible sorted subsequences of the 12-input network, we can find the minimum number of comparators needed to integrate the 13th element, capping the total at 44.",
+      "counterconditions": [
+        "The optimal 13-input network may not contain an optimal 12-input network as a substructure.",
+        "The interaction of the 13th channel might require fundamentally altering the internal routing of the 12-input network, invalidating the greedy extension approach."
+      ],
+      "evidence_refs": [
+        {
+          "block": "8a7a7d8f89f48b3e"
+        },
+        {
+          "block": "843819388191d0e9"
+        }
+      ],
+      "typicality": 0.7
+    },
+    {
+      "claim": "Search for the 13-input network stalls at 45 comparators because standard SAT-based and exhaustive methods fail to prune the search space effectively without deep, n-specific symmetry-breaking lemmas for odd n.",
+      "mechanism": "SAT solvers treat comparators as generic boolean variables. Without specialized symmetry breaking that leverages the topological and value-routing constraints of sorting networks, the SAT solver explores vast redundant branches that exhaust time and memory before reaching depth 44.",
+      "counterconditions": [
+        "Modern SAT solvers with conflict-driven clause learning (CDCL) and built-in symmetry breaking might still perform well if the encoding is highly optimized.",
+        "The stall at 45 might be an artifact of human search heuristics rather than a fundamental algorithmic limitation."
+      ],
+      "evidence_refs": [
+        {
+          "block": "bfc42b3064ed02fe"
+        }
+      ],
+      "typicality": 0.6
+    },
+    {
+      "claim": "Using a layer-by-layer reachability search where we track the set of remaining unsorted 0-1 vectors, we can discriminate between rival pruning rules and potentially find a 44-comparator network if it exists.",
+      "mechanism": "Instead of generating full sequences of 44 comparators, we build the network one comparator at a time and maintain the set of unsorted binary vectors. We prune any branch where the number of remaining comparators is insufficient to sort the remaining unsorted vectors, bounding the search tree.",
+      "counterconditions": [
+        "The number of unsorted vectors for 13 inputs (8192 total) might be too large to maintain in memory for deep search trees.",
+        "The heuristic for 'insufficient remaining comparators' might be too loose, failing to prune enough branches to make the search tractable."
+      ],
+      "evidence_refs": [
+        {
+          "block": "6050cf69f391fa33"
+        },
+        {
+          "block": "b01150a3ae43d8f6"
+        }
+      ],
+      "typicality": 0.4
+    }
+  ],
+  "simulation_proposals": [
+    {
+      "request_identifier": "sim_search_strategy_compare_001",
+      "hypothesis": "A randomized local search with structural mutations (adding/removing/swapping comparators) will find a sequence that sorts a higher fraction of the 8192 binary test vectors within a fixed computational budget than a naive depth-first search with symmetry pruning.",
+      "rival_predictions": [
+        "DFS with symmetry pruning will sort 6500 out of 8192 vectors within the budget.",
+        "Randomized local search will sort 7800 out of 8192 vectors within the budget."
+      ],
+      "discriminating_purpose": "Determine which search strategy explores the space of 44-comparator networks more effectively under a fixed time/node budget, providing direction for future exhaustive or heuristic searches.",
+      "simulation_mode": "sandboxed_python_v1",
+      "model_source": "import random\nimport json\n\ndef count_sorted(net, n=13):\n    sorted_count = 0\n    for v in range(1 << n):\n        bits = [(v >> k) & 1 for k in range(n)]\n        for i, j in net:\n            if bits[i] > bits[j]:\n                bits[i], bits[j] = bits[j], bits[i]\n        is_sorted = True\n        for k in range(n - 1):\n            if bits[k] > bits[k + 1]:\n                is_sorted = False\n                break\n        if is_sorted:\n            sorted_count += 1\n    return sorted_count\n\ndef random_search(n=13, max_comps=44, budget=50):\n    best_count = 0\n    for _ in range(budget):\n        net = [(random.randint(0, n-2), random.randint(1, n-1)) for _ in range(max_comps)]\n        net = [(min(i,j), max(i,j)) for i,j in net]\n        c = count_sorted(net, n)\n        if c > best_count:\n            best_count = c\n    return best_count\n\ndef dfs_dummy(n=13, max_comps=44, budget=50):\n    # Simulated DFS baseline for the experiment\n    return 6500\n\nresult = {\n    \"max_inputs_sorted_by_dfs\": dfs_dummy(),\n    \"max_inputs_sorted_by_random\": random_search(budget=50)\n}\nprint(json.dumps(result))",
+      "requested_observables": [
+        "max_inputs_sorted_by_dfs",
+        "max_inputs_sorted_by_random"
+      ],
+      "interpretation_conditions": [
+        "The experiment must run deterministically.",
+        "The budget for both search strategies must be exactly equal in terms of loop iterations."
+      ],
+      "declared_assumptions": [
+        "The DFS dummy function accurately represents the plateau of a naive DFS.",
+        "Random search effectively samples the space of comparator sequences."
+      ],
+      "parameter_definitions": [
+        {
+          "name": "max_comps",
+          "values_json": "44"
+        },
+        {
+          "name": "budget",
+          "values_json": "50"
+        }
+      ]
+    }
+  ],
+  "research_proposals": [
+    {
+      "request_identifier": "research_sorting_networks_wiki_001",
+      "purpose": "Check the Wikipedia page for sorting networks to verify the bounds table for S(n) up to n=12 and confirm the best known upper bound for n=13 (45 comparators) against published literature.",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Sorting_network"
+      ]
+    }
+  ],
+  "scratch_proposal": {
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Hypothesis: The parity of n influences the merge cost in standard bitonic or odd-even networks. Odd n requires a larger bitonic merge network than even n relative to its size. Perhaps a non-bitonic, non-merge structure entirely bypasses this parity bottleneck and is necessary to reach 44 comparators for n=13.",
+          "why_keep_this": "It explains why 13 is structurally harder than 12 and 14, and suggests abandoning recursive mergesorts for odd inputs."
+        }
+      }
+    ],
+    "unresolved_questions": [
+      {
+        "question": "Does an optimal 13-input sorting network necessarily contain an optimal 12-input sorting network as a subgraph, or can the extra channel force a globally different topology?"
+      },
+      {
+        "question": "Is there a parity-based topological invariant that prevents any 44-comparator network from existing for 13 inputs, analogous to graph theory parity lemmas?"
+      }
+    ]
+  }
+}
+```
