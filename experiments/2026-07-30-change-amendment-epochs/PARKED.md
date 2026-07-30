@@ -52,3 +52,48 @@ what copying the manifest verbatim guarantees by construction.
 invalidating committed roots; it should carry its own goal, its own
 frozen-surface approval, and a before/after `verify_root` sweep over
 every committed root as its acceptance check.
+
+## P2 — DEFECT: re-attaching an already-admitted source makes the root invalid
+
+Found 2026-07-30 while answering an operator question about the
+admission path, after the tranche was delivered. Parked, not fixed: a
+defect found outside a change tranche routes through
+`deepreason-orchestrator`, not through this one.
+
+**Reproduction.** Take a converged root whose dossier already admits
+some file F. Run `deepreason amend --attach F` with F's exact bytes.
+`amend` accepts and commits the epoch. Then:
+
+    dossier-1 source ids: ['src-a7b17a1063413cfec12df194df73083127c3757a']
+    dossier-1 block ids : ['7275171c263c', '8fd103c96358']
+    amend accepted; new dossier: b7aab4b02d8c
+    dossier-2 source ids: ['src-a7b17a1063413cfec12df194df73083127c3757a']
+    dossier-2 block ids : ['7275171c263c', '8fd103c96358']
+    same source id across epochs: True
+    same block ids across epochs: True
+    verify_root violations: [{'check': 'attached-evidence',
+      'detail': 'event seq=10: attached source differs from its bound
+       dossier or arrived late'}]
+
+**Cause (unconfirmed, from reading).** `verify_root`'s attached-evidence
+sweep carries one `source_records` map across every epoch window and
+fails any source id it sees twice. That is correct within an epoch — it
+is what stops a source being introduced twice under one dossier — but
+across epochs it collides with a second dossier that legitimately
+contains the same content-addressed source. The dossier digests differ
+(different `problem_ref` and provenance), so the epoch is not skipped by
+the `admitted_digests` short-circuit, and `attach_bound_evidence`
+registers a second, differently-worded source record for the same id.
+
+**Severity.** Narrow but real: an operation the tool permits produces a
+record the tool then calls invalid. An operator who re-attaches a
+document they already attached gets a root that fails its own integrity
+check with no warning at `amend` time.
+
+**Suggested direction, not a decision.** Refuse the duplicate at `amend`
+time with a typed code (the source is already admitted; nothing would be
+added), rather than loosening the cross-epoch uniqueness rule — the rule
+is doing real work and the duplicate carries no new evidence. Whether a
+partial overlap (some files new, some already admitted) should be
+refused wholesale or admitted minus the duplicates is the open design
+question, and belongs to that tranche's spec.
