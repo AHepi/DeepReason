@@ -378,6 +378,15 @@ def build_parser() -> argparse.ArgumentParser:
              "else the hashing embedder)")
     sub.add_parser("capture", help="both-surface capture dashboard (spec 11)")
     sub.add_parser("report", help="P6 eval report (valid-JSON, attack validity, trial guard, ...)")
+    findings_parser = sub.add_parser(
+        "findings",
+        help="reader-facing findings summary: rivalries, refutations, "
+        "suspended positions, side branches, criticism and capability "
+        "ledgers — all replay-derived",
+    )
+    findings_parser.add_argument(
+        "--json", action="store_true", help="emit the structured summary as JSON"
+    )
     sub.add_parser("reseed", help="manual school reseed (logged)").add_argument("school_id")
     sub.add_parser("merge", help="merge another saved graph (G-Set union)").add_argument("path")
     trace_cmd = sub.add_parser("trace", help="print the events touching an id")
@@ -919,6 +928,16 @@ def _main(argv: list[str] | None = None) -> int:
         harness = Harness(Path(args.root))
         config = load_config(Path(args.config) if args.config else None)
         print(json.dumps(eval_report(harness, config), indent=2, sort_keys=True))
+        return 0
+
+    if args.command == "findings":
+        from deepreason.findings import findings_summary, render_findings
+
+        summary = findings_summary(Path(args.root))
+        if args.json:
+            print(json.dumps(summary, indent=2, sort_keys=True))
+        else:
+            print(render_findings(summary))
         return 0
 
     if args.command == "docket":

@@ -132,6 +132,27 @@ def _run_tools() -> list[dict]:
             },
         },
         {
+            "name": "run_findings",
+            "description": (
+                "Reader-facing findings summary for one managed run, "
+                "replay-derived: accepted positions grouped into rivalry "
+                "sets (competitors), refutations with recorded attackers, "
+                "suspended positions, every spawned side branch with its "
+                "worked/starved status, and the criticism and capability "
+                "ledgers. Markdown by default; structured JSON with "
+                "json=true."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_RUN_ID,
+                    "json": {"type": "boolean", "default": False},
+                },
+                "required": ["run_id"],
+                "additionalProperties": False,
+            },
+        },
+        {
             "name": "continue_run",
             "description": (
                 "Continue the same stopped run under its bound manifest and append "
@@ -529,7 +550,15 @@ def _safe_tool_error(error: Exception) -> str:
 
 
 _RUN_TOOL_NAMES = frozenset(
-    {"get_readiness", "start_run", "run_status", "run_result", "continue_run", "cancel_run"}
+    {
+        "get_readiness",
+        "start_run",
+        "run_status",
+        "run_result",
+        "run_findings",
+        "continue_run",
+        "cancel_run",
+    }
 )
 
 
@@ -631,6 +660,18 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
             indent=2,
             sort_keys=True,
         )
+
+    if name == "run_findings":
+        from deepreason.findings import findings_summary, render_findings
+
+        summary = findings_summary(root)
+        if arguments.get("json"):
+            return json.dumps(
+                _managed_response(arguments["run_id"], summary),
+                indent=2,
+                sort_keys=True,
+            )
+        return render_findings(summary)
 
     if name == "continue_run":
         return json.dumps(

@@ -37,6 +37,7 @@ SUPPORTED_TOOL_NAMES = {
     "start_run",
     "run_status",
     "run_result",
+    "run_findings",
     "continue_run",
     "cancel_run",
     "scratch_map",
