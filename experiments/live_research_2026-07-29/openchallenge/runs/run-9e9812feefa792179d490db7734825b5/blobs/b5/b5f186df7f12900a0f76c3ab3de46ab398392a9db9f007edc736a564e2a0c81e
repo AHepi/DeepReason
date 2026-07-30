@@ -1,0 +1,25 @@
+{
+  "candidate": {
+    "claim": "Greedy insertion of a 13th channel into optimal 12-input networks cannot yield a network of size < 45, because optimal 12-input networks are structurally rigid, requiring at least 7 additional comparators (yielding 46) when extended to 13 inputs, explaining why search stalls at 45 for de novo 13-input constructions.",
+    "mechanism": "Optimal 12-input networks are maximally packed. Adding a 13th channel requires integrating the new element into the sorted sequence. Due to the straight-line structure, adding a channel needs comparators that interact with the existing fixed structure. Greedy insertion takes at least 7 extra comparators (39+7=46). This structural rigidity prevents 45-comparator extensions from 12-input networks.",
+    "counterconditions": [
+      "A specific 12-input optimal network can be extended with exactly 6 comparators to sort 13 inputs.",
+      "A different insertion strategy bypasses the rigidity and yields a 45-comparator network."
+    ],
+    "typicality": 0.65,
+    "evidence_refs": [
+      {
+        "block": "8a7a7d8f89f48b3e"
+      },
+      {
+        "block": "1194dff78a2795cf"
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    }
+  }
+}

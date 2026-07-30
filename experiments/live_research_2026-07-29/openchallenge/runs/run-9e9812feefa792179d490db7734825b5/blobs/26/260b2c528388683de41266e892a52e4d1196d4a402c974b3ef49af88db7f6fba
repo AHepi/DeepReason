@@ -1,0 +1,28 @@
+```json
+{
+  "candidate": {
+    "claim": "Search for a 44-comparator 13-input sorting network stalls because the state space of 44-networks is disconnected from 45-networks under standard local search move sets (single comparator addition, removal, or swap).",
+    "mechanism": "By implementing a local search simulation starting from known 45-comparator networks, we can map the neighborhood graph. The simulation will apply randomized permutations of comparators and track whether a 44-comparator sorting network is reachable. If the 44-networks form a separate connected component in this state space graph, local search algorithms will inevitably stall at 45, explaining the lack of progress.",
+    "counterconditions": [
+      "If the simulation discovers a 44-comparator sorting network by applying local search moves from a 45-comparator network, the disconnected component hypothesis is false.",
+      "If the simulation exhaustively checks all 44-comparator networks within a specific neighborhood radius and finds none, the stall is better explained by the non-existence of a 44-network rather than landscape ruggedness."
+    ],
+    "typicality": 0.65,
+    "evidence_refs": [
+      {
+        "block": "843819388191d0e9",
+        "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."
+      },
+      {
+        "block": "4f053d098dcef347",
+        "quote": "A simulation that cannot discriminate between rival predictions is weight, not evidence."
+      }
+    ],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  },
+  "abstention": null
+}
+```

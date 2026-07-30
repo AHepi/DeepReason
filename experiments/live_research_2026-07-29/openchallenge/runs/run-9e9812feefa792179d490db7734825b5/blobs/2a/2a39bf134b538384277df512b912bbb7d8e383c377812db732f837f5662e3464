@@ -1,0 +1,27 @@
+{
+  "abstention": null,
+  "candidate": {
+    "claim": "Search for S(13) stalls at 45 comparators because standard branch-and-bound pruning rules prematurely prune 'weakly redundant' comparators that are structurally necessary to achieve the channel crossings needed in a 44-comparator network. Allowing temporary non-minimal networks via simulated annealing escapes this local minimum.",
+    "mechanism": "A local search algorithm that strictly prunes any comparator that does not immediately change the channel state bounds itself to a highly restricted subspace. By introducing a weakly redundant comparator, the network can temporarily increase to 46 comparators, but this structural shift allows subsequent comparators to be placed in a more efficient pattern, ultimately collapsing to a 44-comparator network. A simulation comparing strict pruning against an annealing approach that allows temporary size increases would discriminate this.",
+    "counterconditions": [
+      "If running a simulated annealing search that allows temporary size increases still fails to find a 44-comparator network after an exhaustive time budget, then the pruning rule is not the primary cause of stalling at 45."
+    ],
+    "evidence_refs": [
+      {
+        "block": "843819388191d0e9"
+      },
+      {
+        "block": "2c7a5cc0d7461dd5"
+      },
+      {
+        "block": "bfc42b3064ed02fe"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.6
+  }
+}
