@@ -143,3 +143,5 @@ setup_rc=0
 qualify_rc=0 qualify_seconds=1
 reason_rc=0 reason_seconds=1045
 run_id=run-9175f0ecb055e57455af3c50df153c5a state=completed
+audit_rc=0
+=== selfstudy ladder end 2026-07-30T01:46:34Z ===
