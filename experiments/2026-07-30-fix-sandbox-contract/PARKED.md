@@ -49,3 +49,37 @@ Checked in the previous tranche and found INTENDED at the contract level;
 the residue is that the ledger event carries only the code, not the
 `quoted` flag, so FINDINGS.md overstates what was compared. Full entry in
 `experiments/2026-07-30-fix-citation-quote-check/PARKED.md`.
+
+## D2c — the declarative_numeric_v1 document shape is still undisclosed
+
+Found while writing the disclosure, parked because the operator's
+approval enumerated the `simulate(inputs, rng)` contract and the
+`requested_observables` rule, and this is neither.
+
+`model_source` now tells the model that a `declarative_numeric_v1` source
+is a JSON document rather than Python. It does not say what the document
+must contain: exactly the keys `schema` and `observables`, with
+`schema == "declarative-numeric.v1"`, and each observable an expression
+over a fixed vocabulary (`compile_declarative_numeric`,
+`src/deepreason/simulation/compiler.py:138-170`). That is the same defect
+class as D2b — a rule enforced and never shown — one simulation mode
+over. Cheaper than D2b was: the same wire constant is the change site,
+and the incident-wave A3 digest would move again.
+
+## D2e — the simulation contract text is disclosed unconditionally
+
+`ConjecturerTurnWireContractV6.model_json_schema` omits the
+`simulation_proposals` property when simulation is disabled, but the
+`SimulationProposalWireV1` entry stays in `$defs` (measured: v6 with
+simulation disabled still carries the whole definition). So the ~1.2 KB
+of contract text this tranche added is present in packs for runs that
+cannot propose a simulation.
+
+The dangling definition predates this tranche; the tranche makes it
+bigger. Two fixes are possible and neither is in this goal: prune the
+`$defs` entry when the property is omitted (changes schema bytes for
+every non-simulation pack, so it would move baselines of its own), or
+inject the descriptions conditionally the way
+`V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION` is injected — which needs a
+`model_json_schema` override on `ConjecturerTurnWireContractV5`, since
+v5 has none. FIX.md records why the conditional route was not taken here.
