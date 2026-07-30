@@ -1,0 +1,3 @@
+```json
+{"op": "replace", "path": "/simulation_proposals/0/parameter_definitions/0/values_json", "value": [3, 4, 5]}
+```
