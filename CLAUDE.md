@@ -65,6 +65,10 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
   run id. A leftover root refuses relaunch with RUN_ALREADY_STARTED.
   Retire it — `git mv run-<id> <failed|completed>-epochN-run-<id>` —
   and COMMIT THE RENAME FIRST. Never edit a committed root's contents.
+  To change the QUESTION or add evidence without losing the epistemic
+  state, do not mint a new root: `deepreason amend` appends an amendment
+  epoch to the stopped one (docs/proposals/AMENDMENT_EPOCHS.md), then
+  `deepreason continue` resumes it.
 - **Qualification caches by subject digest.** Same home + same provider
   profile + same opt-ins → cache hit (~1 s). Changing the profile (e.g.
   completion tokens) or the home reruns the full battery (~14 min,
@@ -124,6 +128,8 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
     src/deepreason/
       scheduler/scheduler.py   problem selection, cycles, budgets
       rules/                   spawn (conn/disc/succ/debt), conjecture
+      amendment/               post-stop epochs: reshape the question,
+                               admit more evidence, chain, never edit
       capabilities/            simulation + research controllers, state
       scratch/                 attention, render receipts, authoring
       workflow/                v6 transactional work lifecycle

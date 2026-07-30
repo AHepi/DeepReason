@@ -153,6 +153,55 @@ def _run_tools() -> list[dict]:
             },
         },
         {
+            "name": "amend_run",
+            "description": (
+                "Append an amendment epoch to a stopped run: admit more "
+                "evidence, reshape the central question, or both. Nothing is "
+                "edited — the old question keeps its record, its rivalries, "
+                "and its accepted positions, earlier evidence stays "
+                "byte-checkable, and the reshaped question enters as a seed "
+                "problem with first claim on the next continuation's budget. "
+                "Call continue_run afterwards to resume the same run."
+            ),
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    **_RUN_ID,
+                    "attachments": {
+                        "type": "array",
+                        "description": (
+                            "local file or directory paths to admit as a "
+                            "supplemental dossier for this amendment"
+                        ),
+                        "minItems": 1,
+                        "maxItems": 16,
+                        "uniqueItems": True,
+                        "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 4096,
+                            "pattern": "^[^\\x00]+$",
+                        },
+                    },
+                    "reshape_question": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": _MAX_MCP_TEXT_CHARS,
+                        "pattern": "^[^\\x00]+$",
+                    },
+                    "allow_partial": {
+                        "type": "boolean",
+                        "description": (
+                            "admit bounded prefixes when an attachment "
+                            "exceeds a block budget instead of refusing it"
+                        ),
+                    },
+                },
+                "required": ["run_id"],
+                "additionalProperties": False,
+            },
+        },
+        {
             "name": "continue_run",
             "description": (
                 "Continue the same stopped run under its bound manifest and append "
@@ -556,6 +605,7 @@ _RUN_TOOL_NAMES = frozenset(
         "run_status",
         "run_result",
         "run_findings",
+        "amend_run",
         "continue_run",
         "cancel_run",
     }
@@ -672,6 +722,24 @@ def call_tool(name: str, arguments: dict, *, progress_callback=None) -> str:
                 sort_keys=True,
             )
         return render_findings(summary)
+
+    if name == "amend_run":
+        from deepreason.amendment import amend_run
+
+        return json.dumps(
+            _managed_response(
+                arguments["run_id"],
+                amend_run(
+                    root,
+                    attach=tuple(arguments.get("attachments") or ()),
+                    reshape_question=arguments.get("reshape_question"),
+                    supplied_by="deepreason.mcp",
+                    allow_partial=bool(arguments.get("allow_partial", False)),
+                ),
+            ),
+            indent=2,
+            sort_keys=True,
+        )
 
     if name == "continue_run":
         return json.dumps(

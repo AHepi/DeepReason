@@ -758,6 +758,123 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
     return findings, context
 
 
+_UNBOUNDED_FENCE = 1 << 62
+
+
+def _amendment_epochs(
+    root: Path, manifest, fail, problems=()
+) -> tuple[tuple[int, int, object], ...]:
+    """Validate the amendment chain and return each epoch's event window.
+
+    The result is ``(fence_seq, next_fence_seq, dossier)`` per epoch, oldest
+    first, which is what makes replay validation piecewise: events below a
+    fence answer to the parent epoch's documents, events at or above it to
+    the successor's.  An unamended root yields exactly one window covering
+    the whole log, so its validation is unchanged.
+    """
+
+    from deepreason.amendment.state import (
+        AMENDMENT_CHAIN_NAME,
+        AmendmentError,
+        load_amendments,
+        load_epoch_dossier,
+        load_epoch_manifest,
+        load_epoch_run_input,
+        staged_amendment,
+        verify_epoch_run_input,
+    )
+    from deepreason.evidence.state import load_evidence_dossier
+
+    root = Path(root)
+    epoch_zero = (0, _UNBOUNDED_FENCE, load_evidence_dossier(root))
+    try:
+        records = load_amendments(root)
+        pending = staged_amendment(root)
+    except (AmendmentError, ValueError, OSError) as error:
+        fail("amendment-chain", f"amendment chain is unreadable: {error!r}")
+        return (epoch_zero,)
+    if pending is not None:
+        fail(
+            "amendment-chain",
+            f"epoch {pending.seq} is staged but never committed to "
+            f"{AMENDMENT_CHAIN_NAME}",
+        )
+    if not records:
+        return (epoch_zero,)
+    if records[0].parent_manifest_digest != manifest.sha256:
+        fail("amendment-chain", "amendment chain is anchored to another manifest")
+
+    known_problems = set(problems)
+    parent_input = load_epoch_run_input(root, 0)
+    parent_dossier = load_epoch_dossier(root, 0)
+    epochs = [(0, parent_dossier)]
+    for record in records:
+        try:
+            epoch_manifest = load_epoch_manifest(root, record.seq)
+            epoch_input = load_epoch_run_input(root, record.seq)
+            epoch_dossier = load_epoch_dossier(root, record.seq)
+            # Every source this epoch admits must still resolve, byte for
+            # byte, in the shared content-addressed store.
+            verify_epoch_run_input(root, record.seq)
+        except Exception as error:  # noqa: BLE001 - a missing epoch is the finding
+            fail(
+                "amendment-epoch",
+                f"epoch {record.seq} documents are unavailable: {error!r}",
+            )
+            break
+        if (
+            epoch_manifest.sha256 != record.successor_manifest_digest
+            or epoch_input.run_input_digest != record.successor_run_input_digest
+            or epoch_dossier.dossier_digest != record.successor_dossier_digest
+            or parent_input.run_input_digest != record.parent_run_input_digest
+            or parent_dossier.dossier_digest != record.parent_dossier_digest
+            or epoch_input.problem.id != (
+                record.problem_id
+                if record.problem_id is not None
+                else parent_input.problem.id
+            )
+            # A dossier belongs forever to the question that admitted it. An
+            # epoch that mints one addresses it directly; an epoch that only
+            # reshapes the question inherits its parent's dossier unchanged.
+            or (
+                epoch_dossier.problem_ref != epoch_input.problem.id
+                if record.supplemental_dossier_digests
+                else epoch_dossier.dossier_digest != parent_dossier.dossier_digest
+            )
+        ):
+            fail(
+                "amendment-epoch",
+                f"epoch {record.seq} documents differ from the record that binds them",
+            )
+        if record.problem_id is not None and not {
+            record.problem_id,
+            record.superseded_problem_id,
+        } <= known_problems:
+            fail(
+                "amendment-epoch",
+                f"epoch {record.seq} names a question absent from the record",
+            )
+        epochs.append((record.fence_seq, epoch_dossier))
+        parent_input = epoch_input
+        parent_dossier = epoch_dossier
+    boundaries = [fence for fence, _dossier in epochs] + [_UNBOUNDED_FENCE]
+    return tuple(
+        (fence, boundaries[index + 1], epoch_dossier)
+        for index, (fence, epoch_dossier) in enumerate(epochs)
+    )
+
+
+def _epoch_input_for_dossier(root: Path, epochs, dossier):
+    """The run input of the epoch that first bound ``dossier``."""
+
+    from deepreason.amendment.state import load_epoch_run_input
+
+    for index, (_fence, _next_fence, candidate) in enumerate(epochs):
+        if candidate.dossier_digest == dossier.dossier_digest:
+            return load_epoch_run_input(root, index)
+    return load_epoch_run_input(root, 0)
+
+
 def verify_root(root: Path, meter_total: int | None = None) -> dict:
     """Run every invariant over the session at ``root``. Returns
     {"violations": [{"check", "detail"}, ...], "stats": {...}}."""
@@ -1891,19 +2008,21 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
 
     if manifest is not None and manifest.schema_version >= 5:
         try:
+            from deepreason.amendment.state import epoch_problem_ids
             from deepreason.evidence.state import (
-                load_evidence_dossier,
                 load_run_input,
                 verify_run_input,
             )
 
             input_verification = verify_run_input(root)
             run_input = load_run_input(root)
-            dossier = load_evidence_dossier(root)
+            epochs = _amendment_epochs(
+                root, manifest, fail, problems=h.state.problems
+            )
         except Exception as error:  # noqa: BLE001 - complete root diagnostic
             fail("run-input", f"bound run input is invalid: {error!r}")
             run_input = None
-            dossier = None
+            epochs = ()
         else:
             if (
                 input_verification["run_input_digest"] != manifest.run_input_digest
@@ -1911,52 +2030,80 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
             ):
                 fail("run-input", "manifest and bound run-input digests differ")
             evidence = manifest.inquiry_capability_policy.attached_evidence
+            # Amendment epochs make evidence cumulative, so the manifest's
+            # frozen attached-evidence authority binds the union, not the
+            # newest dossier alone.
+            union_sources = {}
+            for _fence, _next_fence, epoch_dossier in epochs:
+                for source in epoch_dossier.sources:
+                    union_sources.setdefault(source.id, source)
             if (
-                len(dossier.sources) > evidence.maximum_sources
-                or dossier.total_byte_count > evidence.maximum_total_bytes
+                len(union_sources) > evidence.maximum_sources
+                or sum(item.byte_count for item in union_sources.values())
+                > evidence.maximum_total_bytes
             ):
                 fail("run-input", "bound dossier exceeds frozen evidence authority")
 
-            first_llm_seq = min(
-                (event.seq for event in events if event.llm is not None),
-                default=len(events) + 1,
-            )
             source_records: dict[str, tuple[int, str]] = {}
-            for event in events:
-                for output in event.outputs:
-                    artifact = h.state.artifacts.get(output)
-                    if artifact is None or not artifact.content_ref.startswith("inline:"):
-                        continue
-                    try:
-                        attached = json.loads(
-                            artifact.content_ref.removeprefix("inline:")
+            admitted_digests: set[str] = set()
+            for fence, next_fence, epoch_dossier in epochs:
+                if epoch_dossier.dossier_digest in admitted_digests:
+                    # A question-only amendment cites the dossier it inherited;
+                    # its sources were admitted once, in the epoch that bound
+                    # them, and are never re-admitted.
+                    continue
+                admitted_digests.add(epoch_dossier.dossier_digest)
+                epoch_input = _epoch_input_for_dossier(root, epochs, epoch_dossier)
+                window = [
+                    event for event in events if fence <= event.seq < next_fence
+                ]
+                first_llm_seq = min(
+                    (event.seq for event in window if event.llm is not None),
+                    default=next_fence,
+                )
+                for event in window:
+                    for output in event.outputs:
+                        artifact = h.state.artifacts.get(output)
+                        if artifact is None or not artifact.content_ref.startswith(
+                            "inline:"
+                        ):
+                            continue
+                        try:
+                            attached = json.loads(
+                                artifact.content_ref.removeprefix("inline:")
+                            )
+                        except (TypeError, json.JSONDecodeError):
+                            continue
+                        if attached.get("schema") != "attached-source-record.v1":
+                            continue
+                        source = attached.get("source") or {}
+                        source_id = str(source.get("id") or "")
+                        expected = next(
+                            (
+                                item
+                                for item in epoch_dossier.sources
+                                if item.id == source_id
+                            ),
+                            None,
                         )
-                    except (TypeError, json.JSONDecodeError):
-                        continue
-                    if attached.get("schema") != "attached-source-record.v1":
-                        continue
-                    source = attached.get("source") or {}
-                    source_id = str(source.get("id") or "")
-                    expected = next(
-                        (item for item in dossier.sources if item.id == source_id),
-                        None,
-                    )
-                    if (
-                        expected is None
-                        or attached.get("run_input_digest") != run_input.run_input_digest
-                        or attached.get("dossier_digest") != dossier.dossier_digest
-                        or source != expected.model_dump(
-                            mode="json", by_alias=True, exclude_none=True
-                        )
-                        or event.seq >= first_llm_seq
-                        or source_id in source_records
-                    ):
-                        fail(
-                            "attached-evidence",
-                            f"event seq={event.seq}: attached source differs from its bound dossier or arrived late",
-                        )
-                    source_records[source_id] = (event.seq, artifact.id)
-            for source in dossier.sources:
+                        if (
+                            expected is None
+                            or attached.get("run_input_digest")
+                            != epoch_input.run_input_digest
+                            or attached.get("dossier_digest")
+                            != epoch_dossier.dossier_digest
+                            or source != expected.model_dump(
+                                mode="json", by_alias=True, exclude_none=True
+                            )
+                            or event.seq >= first_llm_seq
+                            or source_id in source_records
+                        ):
+                            fail(
+                                "attached-evidence",
+                                f"event seq={event.seq}: attached source differs from its bound dossier or arrived late",
+                            )
+                        source_records[source_id] = (event.seq, artifact.id)
+            for source in union_sources.values():
                 record = source_records.get(source.id)
                 if record is None:
                     fail(
@@ -1995,7 +2142,19 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                 except Exception as error:  # noqa: BLE001
                     fail("dossier-pack", f"event seq={event.seq}: {error!r}")
                     continue
-                source_ids = {source.id for source in dossier.sources}
+                # A pack drawn in epoch N sees every source bound at or before
+                # epoch N, and addresses whichever epoch's question the
+                # scheduler selected.
+                source_ids = {
+                    source.id
+                    for fence, _next_fence, epoch_dossier in epochs
+                    if fence <= event.seq
+                    for source in epoch_dossier.sources
+                }
+                problem_refs = epoch_problem_ids(root) | {
+                    epoch_dossier.problem_ref
+                    for _fence, _next_fence, epoch_dossier in epochs
+                }
                 pack_work = h.workflow_state.work_orders.get(
                     receipt.work_order_ref
                 )
@@ -2003,7 +2162,7 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     receipt.run_input_digest != run_input.run_input_digest
                     or pack_work is None
                     or pack_work.run_input_digest != run_input.run_input_digest
-                    or pack_work.problem_ref != dossier.problem_ref
+                    or pack_work.problem_ref not in problem_refs
                     or not receipt.state_fence.startswith(
                         f"formal:{pack_work.formal_fence_seq};scratch:{pack_work.scratch_fence_seq};"
                     )

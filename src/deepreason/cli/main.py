@@ -296,6 +296,32 @@ def build_parser() -> argparse.ArgumentParser:
         if command_name == "pin":
             brain_record.add_argument("--floor", type=float, default=1.0)
     brain_sub.add_parser("reindex").add_argument("path")
+    amend_cmd = sub.add_parser(
+        "amend",
+        help=(
+            "append an amendment epoch to a stopped run: attach more evidence "
+            "and/or reshape the question, without editing anything"
+        ),
+    )
+    amend_cmd.add_argument(
+        "--attach",
+        action="append",
+        default=[],
+        metavar="FILE",
+        help="file or directory to admit as a supplemental dossier (repeatable)",
+    )
+    amend_cmd.add_argument(
+        "--reshape-question",
+        default=None,
+        metavar="TEXT",
+        help="the superseding question; the old one keeps its record and status",
+    )
+    amend_cmd.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="admit bounded prefixes when a block budget is exceeded",
+    )
+    amend_cmd.add_argument("--json", action="store_true")
     continue_cmd = sub.add_parser(
         "continue", help="continue a stopped run under its bound immutable manifest"
     )
@@ -414,6 +440,7 @@ def _resolve(harness: Harness, prefix: str) -> str:
 
 _ROOT_ADMISSION_COMMANDS = frozenset(
     {
+        "amend",
         "blob",
         "calibrate",
         "cancel",
@@ -713,6 +740,9 @@ def _main(argv: list[str] | None = None) -> int:
 
     if args.command == "brain":
         return _cmd_brain(args)
+
+    if args.command == "amend":
+        return _cmd_amend(args)
 
     if args.command == "continue":
         return _cmd_continue(args)
@@ -1993,6 +2023,31 @@ def _cmd_brain(args) -> int:
     except (OSError, ValueError, KeyError) as error:
         print(str(error), file=sys.stderr)
         return 1
+
+
+def _cmd_amend(args) -> int:
+    """Append one amendment epoch; every refusal is typed and durable."""
+
+    from deepreason.amendment import AmendmentError, amend_run
+
+    try:
+        result = amend_run(
+            args.root,
+            attach=tuple(args.attach),
+            reshape_question=args.reshape_question,
+            supplied_by="deepreason amend",
+            allow_partial=bool(args.allow_partial),
+        )
+    except (AmendmentError, OSError, ValueError) as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    print(json.dumps(result, indent=None if args.json else 2, sort_keys=True))
+    print(
+        "amendment committed; continue the run with "
+        f"`deepreason --root {args.root} continue --budget cycles=<N>`",
+        file=sys.stderr,
+    )
+    return 0
 
 
 def _cmd_continue(args) -> int:

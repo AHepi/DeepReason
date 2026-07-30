@@ -302,11 +302,27 @@ def _read_request(root: Path) -> dict[str, Any]:
         or not str(data["problem"].get("description") or "").strip()
     ):
         raise ValueError("RUN_REQUEST_INVALID: fixed run request is not valid text input")
-    workload_path = root / "text-workload.json"
+    # An amendment epoch supersedes the question in place: the newest epoch's
+    # workload is what a continuation must run, while the root's original
+    # request stays exactly as it was written.
+    from deepreason.amendment.state import current_epoch, epoch_workload_path
+
+    epoch = current_epoch(root)
+    amended = epoch > 0 and epoch_workload_path(root, epoch).exists()
+    workload_path = (
+        epoch_workload_path(root, epoch) if amended else root / "text-workload.json"
+    )
     if workload_path.exists():
-        data["workload_spec"] = json.loads(
-            workload_path.read_text(encoding="utf-8")
-        )
+        spec = json.loads(workload_path.read_text(encoding="utf-8"))
+        data["workload_spec"] = spec
+        if amended:
+            # Only an amendment epoch may restate the question, and only from
+            # its own durable workload. Epoch 0 keeps the original strict
+            # request/workload agreement check in _spec_from_request.
+            data["problem"] = {
+                "id": spec["problem"]["id"],
+                "description": spec["problem"]["description"],
+            }
     return data
 
 
@@ -739,11 +755,7 @@ class TextRunApplicationService:
                 "RUN_MANIFEST_WORKLOAD_MISMATCH: start_run requires a v6 text manifest"
             )
         spec = spec_override or _spec_from_request(request)
-        from deepreason.evidence.state import (
-            load_evidence_dossier,
-            load_run_input,
-            verify_run_input,
-        )
+        from deepreason.evidence.state import load_run_input, verify_run_input
         from deepreason.run_manifest import RunManifestError
 
         verified_input = verify_run_input(root)
@@ -754,13 +766,25 @@ class TextRunApplicationService:
                 "/run-input.json/schema",
             )
         run_input = load_run_input(root)
-        dossier = load_evidence_dossier(root)
+        # The manifest names the run's one input identity for its whole life;
+        # an amendment epoch supersedes the question and the evidence behind a
+        # fence, so the spec is checked against the current epoch's records
+        # and the identity anchor against the root's.
+        from deepreason.amendment.state import (
+            current_epoch,
+            load_epoch_dossier,
+            load_epoch_run_input,
+        )
+
+        epoch = current_epoch(root)
+        epoch_input = load_epoch_run_input(root, epoch)
+        epoch_dossier = load_epoch_dossier(root, epoch)
         if (
             verified_input["run_input_digest"] != manifest.run_input_digest
             or run_input.run_input_digest != manifest.run_input_digest
-            or not _run_input_matches_spec(run_input, spec)
-            or dossier.dossier_digest != run_input.evidence_dossier_digest
-            or dossier.problem_ref != spec.problem.id
+            or not _run_input_matches_spec(epoch_input, spec)
+            or epoch_dossier.dossier_digest != epoch_input.evidence_dossier_digest
+            or epoch_dossier.problem_ref != spec.problem.id
         ):
             raise ValueError(
                 "RUN_INPUT_MISMATCH: text request differs from the frozen "

@@ -16,6 +16,7 @@ SUPPORTED_TOOLS = {
     "run_status",
     "run_result",
     "run_findings",
+    "amend_run",
     "continue_run",
     "cancel_run",
     "scratch_map",

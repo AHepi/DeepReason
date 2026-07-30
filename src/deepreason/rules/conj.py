@@ -66,6 +66,20 @@ def _resolve_ref(target: str, artifacts: dict) -> str | None:
     return matches[0] if len(matches) == 1 else None
 
 
+def _union_blocks(dossiers) -> tuple:
+    """Every admitted block across the run's bound dossiers, epoch order."""
+
+    blocks: list = []
+    known: set[str] = set()
+    for dossier in dossiers:
+        for block in getattr(dossier, "blocks", ()) or ():
+            if block.id in known:
+                continue
+            known.add(block.id)
+            blocks.append(block)
+    return tuple(blocks)
+
+
 def root_problem_family(state, problem_id: str) -> str:
     """Stable provenance-root family key for anti-relapse domains (RC3).
 
@@ -1235,7 +1249,9 @@ def conj(
     dossier_receipt = None
     dossier_maximum_bytes = 0
     bound_dossier = None
+    bound_dossiers: tuple = ()
     if active_v5 or active_v6:
+        from deepreason.amendment.state import dossier_union, epoch_problem_ids
         from deepreason.evidence import (
             commit_dossier_pack_receipt,
             dossier_exposure_counts,
@@ -1251,7 +1267,25 @@ def conj(
             dossier = load_evidence_dossier(harness.root)
             if bound_input.run_input_digest != run_manifest.run_input_digest:
                 raise ValueError("conjecture evidence belongs to another run input")
-            if dossier.problem_ref == problem.id:
+            # Amendment epochs make evidence cumulative: any epoch's question
+            # may be selected, and every one of them reasons against every
+            # dossier bound so far.
+            bound_dossiers = dossier_union(harness.root)
+            addressed = bool(bound_dossiers) and problem.id in epoch_problem_ids(
+                harness.root
+            )
+            seen_source_ids = {source.id for source in dossier.sources}
+            supplemental: list = []
+            for item in bound_dossiers:
+                if item.dossier_digest == dossier.dossier_digest:
+                    continue
+                for source in item.sources:
+                    if source.id in seen_source_ids:
+                        continue
+                    seen_source_ids.add(source.id)
+                    supplemental.append(source)
+            supplemental_sources = tuple(supplemental)
+            if addressed:
                 bound_dossier = dossier
                 dossier_maximum_bytes = min(
                     evidence_policy.maximum_total_bytes,
@@ -1282,6 +1316,7 @@ def conj(
                     ),
                     maximum_total_excerpt_bytes=dossier_maximum_bytes,
                     exposure_counts=dossier_exposure_counts(harness),
+                    additional_sources=supplemental_sources,
                 )
                 if active_v5:
                     commit_dossier_pack_receipt(harness, dossier_receipt)
@@ -1289,6 +1324,7 @@ def conj(
                     blobs=harness.blobs,
                     dossier=dossier,
                     receipt=dossier_receipt,
+                    dossiers=bound_dossiers,
                 )
     citable_evidence_context = None
     if active_v5 or active_v6:
@@ -1297,9 +1333,7 @@ def conj(
 
         citable_evidence_context = render_citable_blocks(
             (
-                tuple(getattr(bound_dossier, "blocks", ()) or ())
-                if bound_dossier is not None
-                else ()
+                _union_blocks(bound_dossiers) if bound_dossier is not None else ()
             )
             + consumed_research_blocks(harness),
             harness.blobs,
@@ -2273,6 +2307,7 @@ def conj(
                 bound_dossier,
                 harness.blobs,
                 extra_blocks=consumed_research_blocks(harness),
+                dossiers=bound_dossiers if bound_dossier is not None else (),
             ):
                 harness.record_measure(
                     inputs=[

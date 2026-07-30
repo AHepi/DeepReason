@@ -51,11 +51,17 @@ def pack_dossier(
     maximum_excerpt_bytes_per_source: int,
     maximum_total_excerpt_bytes: int,
     exposure_counts: Mapping[str, int] | None = None,
+    additional_sources: tuple = (),
 ) -> DossierPackReceiptV1:
     """Select and materialize one replayable advisory evidence pack.
 
     Ranking uses only frozen source cards, the explicit query, and supplied
     exposure counts. No source is admitted as true by this operation.
+
+    ``additional_sources`` carries the source cards of dossiers bound by later
+    amendment epochs.  Evidence is cumulative, so the candidate set is the
+    union; the receipt still binds the run's one input identity, because an
+    amendment supersedes the question and the evidence, never the run.
     """
 
     if not query.strip():
@@ -71,8 +77,13 @@ def pack_dossier(
     if run_input.evidence_dossier_digest != dossier.dossier_digest:
         raise ValueError("run input does not bind the supplied evidence dossier")
 
+    candidates = (*dossier.sources, *additional_sources)
+    candidate_ids = tuple(source.id for source in candidates)
+    if len(candidate_ids) != len(set(candidate_ids)):
+        raise ValueError("cumulative dossier sources must stay ID-unique")
+
     exposures = dict(exposure_counts or {})
-    known_ids = {source.id for source in dossier.sources}
+    known_ids = set(candidate_ids)
     if any(
         source_id not in known_ids
         or not isinstance(count, int)
@@ -84,7 +95,7 @@ def pack_dossier(
 
     query_tokens = _tokens(query)
     scored = []
-    for source in dossier.sources:
+    for source in candidates:
         literal_text = " ".join(
             (
                 source.title,
@@ -141,7 +152,6 @@ def pack_dossier(
         )
         remaining -= len(excerpt)
 
-    candidate_ids = tuple(source.id for source in dossier.sources)
     selected_ids = tuple(source.id for source in selected_sources)
     selected_set = set(selected_ids)
     excluded_ids = tuple(source_id for source_id in candidate_ids if source_id not in selected_set)

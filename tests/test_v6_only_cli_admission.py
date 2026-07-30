@@ -103,6 +103,7 @@ def _prepared_v6_root(
 
 
 ROOT_COMMANDS = {
+    "amend": ("amend", "--reshape-question", "A superseding question?"),
     "blob": ("blob", "sha256:deadbeef"),
     "calibrate": ("calibrate",),
     "cancel": ("cancel",),

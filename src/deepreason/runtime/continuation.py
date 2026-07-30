@@ -136,6 +136,26 @@ def _validate_typed_history(records: list[dict], workflow_state) -> None:
             raise ValueError("CONTINUE_HISTORY_AUTHORITY_MISMATCH")
 
 
+def _assert_amendment_committed(root: Path) -> None:
+    """Refuse to resume across a staged amendment that never committed.
+
+    Fail-closed is the whole point: the successor epoch's documents may be
+    durable while its ledger chain is not, and running that half-state would
+    reason under an epoch the record cannot vouch for.  A byte-identical
+    re-run of ``deepreason amend`` completes the chain and clears this.
+    """
+
+    from deepreason.amendment.state import (
+        AmendmentError,
+        require_no_partial_amendment,
+    )
+
+    try:
+        require_no_partial_amendment(root, code="CONTINUE_AMENDMENT_INCOMPLETE")
+    except AmendmentError as error:
+        raise ValueError(str(error)) from error
+
+
 def _assert_no_live_lock(root: Path) -> None:
     try:
         locks = operator_locks(root, owner="continue-check", blocking=False)
@@ -346,6 +366,7 @@ def prepare_continuation(
     check_operator_lock: bool = True,
 ) -> dict:
     root_path = Path(root)
+    _assert_amendment_committed(root_path)
     manifest = load_run_manifest(root_path / MANIFEST_NAME)
     control = _owned_v4_control(manifest)
     if expected_manifest_digest and manifest.sha256 != expected_manifest_digest:

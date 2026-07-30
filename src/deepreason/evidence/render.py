@@ -26,15 +26,21 @@ def render_dossier_pack(
     blobs,
     dossier: EvidenceDossierV1,
     receipt: DossierPackReceiptV1,
+    dossiers=(),
 ) -> str:
-    by_id = {source.id: source for source in dossier.sources}
+    """Render one pack.  ``dossiers`` supplies the cumulative bound set when
+    amendment epochs have added evidence; it defaults to ``dossier`` alone."""
+
+    bound = tuple(dossiers) or (dossier,)
+    by_id = {source.id: source for item in bound for source in item.sources}
     # Admission-era dossiers (v2) carry canonical blocks; listing their ids
     # is what makes citations possible — a candidate's evidence_refs can only
     # name blocks, never free-text quotes alone (admission §4).
     citable_by_source: dict[str, list] = {}
-    for block in getattr(dossier, "blocks", ()):
-        if block.tier == "evidence":
-            citable_by_source.setdefault(block.source_sha256, []).append(block)
+    for item in bound:
+        for block in getattr(item, "blocks", ()):
+            if block.tier == "evidence":
+                citable_by_source.setdefault(block.source_sha256, []).append(block)
     lines = [_NOTICE, f"pack_receipt={receipt.receipt_digest}"]
     if citable_by_source:
         lines.append(

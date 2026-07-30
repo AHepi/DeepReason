@@ -1,10 +1,12 @@
 # Proposal: amendment epochs — reshape the question and inject evidence
 # after a stop, without corrupting ledger, state, or evidence
 
-Status: proposed (design complete, unimplemented). Motivated by the
-operator requirement: after a run, inject more content and reshape the
-central question before continuing, with zero corruption of the
-append-only ledger, the epistemic state, or already-submitted evidence.
+Status: implemented (all four tranches). See "As implemented" at the end
+for the one place the realization departs from this sketch, and why.
+Motivated by the operator requirement: after a run, inject more content
+and reshape the central question before continuing, with zero corruption
+of the append-only ledger, the epistemic state, or already-submitted
+evidence.
 
 ## The insight
 
@@ -102,3 +104,63 @@ Regression fixtures: a completed root amended offline, then
 verified, (c) reshaped question wins cycle 0 of the continuation,
 (d) crash-mid-amend leaves a typed refusal and an intact parent
 epoch.
+
+## As implemented
+
+Code: `src/deepreason/amendment/` (`models.py`, `state.py`, `apply.py`).
+Durable shape: `run-amendments.jsonl` is the committed chain; each epoch's
+complete documents live in `run-epochs/NNN/` (`run-manifest.json`,
+`run-input.json`, `evidence-dossier.json`, `text-workload.json`, and the
+staged `run-amendment.json`). Epoch 0 is the root's own bound documents
+and is never touched. Source bytes are never copied: later dossiers
+reference the same content-addressed blob store.
+
+Order of durable writes is fail-closed: stage the epoch documents, then
+apply the ledger chain, then commit the chain line. A crash leaves a
+staged record with no committed line — `continue` refuses with
+`CONTINUE_AMENDMENT_INCOMPLETE`, `verify_root` reports
+`amendment-chain`, and a byte-identical re-run of `amend` completes the
+same epoch (problem registration and source admission are both
+content-addressed, so completion appends only what the first attempt did
+not). A *different* amendment over a staged one is refused
+`AMEND_PENDING_CONFLICT` rather than silently superseding it; that is
+stricter than the sketch's "supersedes it with a fresh chain", and it
+avoids leaving orphan events that no fence accounts for.
+
+**The one departure.** The sketch mints a distinct successor manifest
+whose `run_input_digest` names the new epoch's input. This codebase
+cannot carry that today, and the reason is structural rather than
+incidental: the controller's process state binds one manifest digest for
+the life of a root (`workflow/state.py`, `apply_decision`), capability
+transitions require `transition.run_input_digest == previous.
+run_input_digest` (`capabilities/state.py`, a frozen surface), and every
+work order, terminal commitment, and replay-validation binding is minted
+against that one pair. A second digest mid-root would not be additive —
+it would invalidate the authority chain of the epoch below the fence.
+
+So an amendment supersedes the QUESTION and the EVIDENCE, and copies the
+manifest verbatim: `successor_manifest_digest == parent_manifest_digest`,
+and `manifest.run_input_digest` keeps naming epoch 0 as the run's one
+input identity. The successor run-input is still a real, canonical,
+digest-bound document — it is named by the amendment record and validated
+by `verify_root` — it simply is not what work orders bind. The
+qualification subject is therefore unchanged by construction, which is
+what the sketch wanted anyway (no requalify). The per-epoch
+`run-manifest.json` slot is kept so a future manifest-superseding epoch
+has somewhere to go and `verify_root` already validates each side of the
+fence against "its own" manifest.
+
+Piecewise replay validation is by fence: `_amendment_epochs` in
+`invariants.py` returns one `(fence, next_fence, dossier)` window per
+epoch, and the attached-evidence checks (unique source record per source,
+admitted before that epoch's first provider call) run per window. The
+manifest's frozen attached-evidence budget binds the union of all bound
+dossiers, and a dossier-pack receipt drawn in epoch N may cite every
+source bound at or before N. An unamended root yields exactly one window
+covering the whole log, so its validation is byte-for-byte what it was.
+
+Operator surfaces: `deepreason amend --attach FILE --reshape-question
+TEXT`, and the MCP `amend_run` tool (listed in `get_capabilities` under
+the `amendment` area). Regression coverage is
+`tests/test_amendment_epochs.py`, which runs (a)-(d) plus a real
+`continue_run` across the fence.

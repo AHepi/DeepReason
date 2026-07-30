@@ -26,6 +26,7 @@ HELP_TOPICS = (
 REQUEST_OPERATIONS = (
     "reasoning_run",
     "continue_run",
+    "amend_run",
     "grounded_bridge",
 )
 
@@ -186,6 +187,29 @@ _REQUIREMENT_CONTENT: dict[str, dict[str, Any]] = {
         "optional_information": (),
         "next_operation": "continue_run",
     },
+    "amend_run": {
+        "required_information": (
+            ("run_id", "Identifies the managed V6 run without exposing a path."),
+        ),
+        "optional_information": (
+            (
+                "attachments",
+                "Local document paths admitted as a supplemental dossier "
+                "alongside the evidence already bound.",
+            ),
+            (
+                "reshape_question",
+                "Supersedes the central question; the old one keeps its "
+                "record, its rivals, and its accepted positions.",
+            ),
+            (
+                "allow_partial",
+                "Admits bounded prefixes when a document exceeds a block "
+                "budget instead of refusing it.",
+            ),
+        ),
+        "next_operation": "continue_run",
+    },
     "grounded_bridge": {
         "required_information": (
             ("run_id", "Identifies the managed V6 run without exposing a path."),
@@ -205,6 +229,12 @@ _CAPABILITY_AREAS = (
     ("readiness", "Check whether a managed V6 question may start.", ("get_readiness",)),
     ("reasoning_runs", "Start a normal question under host-owned V6 authority.", ("start_run",)),
     ("continuation", "Request continued work from an earlier reasoning request.", ("continue_run",)),
+    (
+        "amendment",
+        "Add evidence or reshape the question of a stopped request without "
+        "discarding what it already established.",
+        ("amend_run",),
+    ),
     ("run_information", "Read reasoning progress and final information.", ("run_status", "run_result")),
     ("cancellation", "Request a safe stop for a reasoning request.", ("cancel_run",)),
     (

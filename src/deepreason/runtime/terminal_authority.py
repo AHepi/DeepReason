@@ -508,12 +508,74 @@ def is_commitment_bound_bridge_work(
     )
 
 
+def _amendment_application_window(root: Path) -> tuple[int, frozenset[str]] | None:
+    """The sequence fence and declared problem ids of this root's amendments.
+
+    Both committed and staged records count: a crash mid-amendment must leave
+    a root whose post-horizon tail is still interpretable, so that
+    ``continue`` can refuse it for the right typed reason instead of
+    collapsing it into a generic authority failure.
+    """
+
+    from deepreason.amendment.state import (
+        AmendmentError,
+        load_amendments,
+        staged_amendment,
+    )
+
+    try:
+        records = list(load_amendments(root))
+        pending = staged_amendment(root)
+    except (AmendmentError, ValueError, OSError):
+        return None
+    if pending is not None:
+        records.append(pending)
+    if not records:
+        return None
+    return (
+        min(record.fence_seq for record in records),
+        frozenset(
+            record.problem_id
+            for record in records
+            if record.problem_id is not None
+        ),
+    )
+
+
+def _is_amendment_application_event(harness, event, problem_ids) -> bool:
+    """Whether one post-horizon event is an amendment's own typed application.
+
+    An amendment appends exactly two kinds of thing: the reshaped question it
+    declares, and import-role records for the sources its supplemental
+    dossier admits.  Nothing else — no conjecture, no criticism, no control,
+    no status flip — is authorized to cross a terminal horizon this way.
+    """
+
+    from deepreason.ontology.event import Rule
+
+    if event.rule == Rule.SPAWN:
+        return tuple(event.outputs) in {(value,) for value in problem_ids}
+    if event.rule != Rule.REGISTER or not event.outputs:
+        return False
+    for output in event.outputs:
+        artifact = harness.state.artifacts.get(output)
+        if artifact is None:
+            return False
+        provenance = artifact.provenance
+        if provenance is None or getattr(
+            provenance.role, "value", provenance.role
+        ) != "import":
+            return False
+    return True
+
+
 def _validate_post_terminal_descendants(harness, commitment) -> None:
     from deepreason.bridge.state import validate_terminal_bridge_history
     from deepreason.ontology.event import Rule
 
     events = tuple(harness.log.read())
     transaction_work = harness.workflow_state.transaction_work
+    amendment_window = _amendment_application_window(Path(harness.root))
 
     def commitment_bound_bridge_work(item) -> bool:
         return is_commitment_bound_bridge_work(
@@ -539,6 +601,14 @@ def _validate_post_terminal_descendants(harness, commitment) -> None:
         raise ValueError("TERMINAL_POST_HORIZON_BRIDGE_INVALID") from error
     for event in events:
         if event.seq <= commitment.reasoning_event_horizon_seq:
+            continue
+        if (
+            amendment_window is not None
+            and event.seq >= amendment_window[0]
+            and _is_amendment_application_event(
+                harness, event, amendment_window[1]
+            )
+        ):
             continue
         control = getattr(event, "control", None)
         if event.seq == commitment_seq:

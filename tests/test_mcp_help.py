@@ -30,6 +30,7 @@ HELP_TOPICS = (
 REQUEST_OPERATIONS = (
     "reasoning_run",
     "continue_run",
+    "amend_run",
     "grounded_bridge",
 )
 SUPPORTED_TOOL_NAMES = {
@@ -38,6 +39,7 @@ SUPPORTED_TOOL_NAMES = {
     "run_status",
     "run_result",
     "run_findings",
+    "amend_run",
     "continue_run",
     "cancel_run",
     "scratch_map",
@@ -152,6 +154,7 @@ def test_capabilities_are_deterministic_and_only_describe_registered_core_operat
         "readiness",
         "reasoning_runs",
         "continuation",
+        "amendment",
         "run_information",
         "cancellation",
         "scratchpad_browsing",
