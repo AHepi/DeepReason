@@ -28,3 +28,21 @@ subject digest, which CLAUDE.md declares frozen.
 
 Operator instruction: investigate further, do not fix. Full entry in
 `experiments/2026-07-30-change-amendment-epochs/PARKED.md`.
+
+## Q1 — an unquoted citation is recorded as "byte-verified"
+
+Checked during diagnosis and found to be INTENDED, so it is not part of
+this tranche's cause. `EvidenceRefClaimV1.quote` is
+`str | None = Field(default=None, ...)` and its docstring says a quote
+"when present, must reproduce a contiguous byte span" — optional by
+design (`src/deepreason/llm/contracts.py:32`). A bare block reference
+asserts only that the block exists, which the checker does establish, and
+`EvidenceCitationCheckV1.quoted` records which kind it was.
+
+What is NOT clean, and is left parked: the ledger event carries only the
+code, not the `quoted` flag (`src/deepreason/rules/conj.py:2314`), so
+`findings.py` counts both kinds together and `FINDINGS.md` for this run
+reports "Byte-verified citations of admitted evidence: 4" when all four
+carried no quote and no bytes were compared. That line overstates what
+the record holds. Narrow, cosmetic in effect, and a separate change to
+the signal shape — out of scope here.
