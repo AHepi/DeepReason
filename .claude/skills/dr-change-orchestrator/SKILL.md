@@ -34,6 +34,9 @@ operator's suggestion VERBATIM, split into numbered requirements
    smallest reasonable interpretation and RECORD the assumption in
    SPEC.md; where two readings differ materially in effort or
    behavior, stop and ask — one batched question, not a dribble.
+   Before ANY question, run dr-decide-or-ask: derive the answer from
+   the operator's recorded values first; only genuine forks earn
+   their attention, always led by a recommendation.
 2. Anything you notice that is broken but not requested: one line in
    `PARKED.md` (a defect goes to the `deepreason-orchestrator`
    workflow later). Never fix it now.
