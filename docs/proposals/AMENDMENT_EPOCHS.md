@@ -1,12 +1,12 @@
 # Proposal: amendment epochs — reshape the question and inject evidence
 # after a stop, without corrupting ledger, state, or evidence
 
-Status: implemented (all four tranches). See "As implemented" at the end
-for the one place the realization departs from this sketch, and why.
-Motivated by the operator requirement: after a run, inject more content
-and reshape the central question before continuing, with zero corruption
-of the append-only ledger, the epistemic state, or already-submitted
-evidence.
+Status: implemented (all four tranches), validated against this document
+as its specification; see "As implemented" at the end for the durable
+shapes and the ordering guarantees. Motivated by the operator
+requirement: after a run, inject more content and reshape the central
+question before continuing, with zero corruption of the append-only
+ledger, the epistemic state, or already-submitted evidence.
 
 ## The insight
 
@@ -27,9 +27,10 @@ is appended and chained.
 
 ## Design: `deepreason amend`, a typed in-root epoch
 
-    deepreason amend [--attach FILE ...] [--reshape-question "TEXT"] \
-        [--root ROOT]
-    deepreason continue --tokens N
+    deepreason --root ROOT amend [--attach FILE ...] \
+        [--reshape-question "TEXT"] [--allow-partial]
+    deepreason --root ROOT continue --budget cycles=N \
+        [--token-budget N|unlimited]
 
 `amend` refuses (typed) unless the run stands at a typed terminal
 stop. It appends ONE atomic chain of typed events to the SAME root:
@@ -52,11 +53,24 @@ stop. It appends ONE atomic chain of typed events to the SAME root:
 3. **Manifest epoch record** — `run-amendment.v1`, carrying
    `parent_manifest_digest`, `successor_manifest_digest`, the
    supplemental dossier digest(s), the new problem id, and the fence
-   seq. The successor manifest is the parent manifest with ONLY the
-   run-input reference and dossier list extended — capability
-   policies, allowlists, budgets, and provider profile are copied
-   verbatim, so the qualification subject is unchanged and the cached
-   qualification remains valid (no requalify).
+   seq. The manifest itself is copied VERBATIM across the epoch —
+   capability policies, allowlists, budgets, and provider profile
+   included — so the qualification subject is unchanged and the cached
+   qualification remains valid (no requalify). What supersedes is the
+   RUN INPUT and the DOSSIER, and the amendment record is what names
+   them: the successor run-input is its own canonical, digest-bound
+   document, chained to its parent by this record rather than by a
+   re-pointed manifest. The manifest keeps naming epoch 0's input as
+   the run's one input identity, which is what lets every work order,
+   terminal commitment, and capability transition in the root keep
+   binding a single stable pair.
+
+   Minting a distinct successor manifest digest instead would not be
+   additive: the controller's process state, the capability transition
+   chain, terminal authority, and continuation history each bind that
+   one pair for a root's whole life, so a second digest mid-root would
+   invalidate the authority chain of the epoch BELOW the fence. That
+   variant is parked, not required.
 
 `continue` then resumes the same root: the epistemic state loads from
 the unbroken ledger; new cycles work the reshaped question against
@@ -67,8 +81,11 @@ the union of old positions and new evidence.
 - **Ledger**: append-only is preserved — amendment is new events
   behind a fence, exactly like a bridge terminal. Crash mid-amendment
   leaves a typed partial chain that recovery refuses to continue past
-  (fail-closed), and a re-run of `amend` supersedes it with a fresh
-  chain; nothing is rewritten.
+  (fail-closed). A re-run of `amend` supersedes it with a fresh chain
+  when that staged epoch has applied no ledger events yet — nothing can
+  be orphaned, so nothing needs to be. Once it HAS applied events, they
+  belong to that epoch: the re-run completes it instead, and a different
+  amendment becomes the next epoch. Nothing is rewritten either way.
 - **Replay**: piecewise validation, mirroring the existing
   epoch-aware bridge machinery — events before the amendment fence
   validate against the parent manifest, events after against the
@@ -118,37 +135,35 @@ reference the same content-addressed blob store.
 Order of durable writes is fail-closed: stage the epoch documents, then
 apply the ledger chain, then commit the chain line. A crash leaves a
 staged record with no committed line — `continue` refuses with
-`CONTINUE_AMENDMENT_INCOMPLETE`, `verify_root` reports
-`amendment-chain`, and a byte-identical re-run of `amend` completes the
-same epoch (problem registration and source admission are both
-content-addressed, so completion appends only what the first attempt did
-not). A *different* amendment over a staged one is refused
-`AMEND_PENDING_CONFLICT` rather than silently superseding it; that is
-stricter than the sketch's "supersedes it with a fresh chain", and it
-avoids leaving orphan events that no fence accounts for.
+`CONTINUE_AMENDMENT_INCOMPLETE` and `verify_root` reports
+`amendment-chain`. Recovery from there has exactly two shapes, decided
+by whether the staged epoch had already reached the ledger:
 
-**The one departure.** The sketch mints a distinct successor manifest
-whose `run_input_digest` names the new epoch's input. This codebase
-cannot carry that today, and the reason is structural rather than
-incidental: the controller's process state binds one manifest digest for
-the life of a root (`workflow/state.py`, `apply_decision`), capability
-transitions require `transition.run_input_digest == previous.
-run_input_digest` (`capabilities/state.py`, a frozen surface), and every
-work order, terminal commitment, and replay-validation binding is minted
-against that one pair. A second digest mid-root would not be additive —
-it would invalidate the authority chain of the epoch below the fence.
+- **Nothing applied** (`fence_seq == harness._next_seq`): a different
+  amendment supersedes the staged one outright. The staged epoch
+  directory is discarded and restaged; no ledger event exists to orphan,
+  and the committed chain was never written.
+- **Events applied**: those events belong to that epoch, so it is
+  completed rather than replaced. A byte-identical re-run of `amend`
+  finishes it — problem registration and source admission are both
+  content-addressed, so completion appends only what the first attempt
+  did not — and a *different* amendment is refused
+  `AMEND_PENDING_CONFLICT`, whose message names the route: complete this
+  epoch, then amend again for the next one.
 
-So an amendment supersedes the QUESTION and the EVIDENCE, and copies the
-manifest verbatim: `successor_manifest_digest == parent_manifest_digest`,
-and `manifest.run_input_digest` keeps naming epoch 0 as the run's one
-input identity. The successor run-input is still a real, canonical,
-digest-bound document — it is named by the amendment record and validated
-by `verify_root` — it simply is not what work orders bind. The
-qualification subject is therefore unchanged by construction, which is
-what the sketch wanted anyway (no requalify). The per-epoch
-`run-manifest.json` slot is kept so a future manifest-superseding epoch
-has somewhere to go and `verify_root` already validates each side of the
-fence against "its own" manifest.
+**Manifest and run input.** `successor_manifest_digest ==
+parent_manifest_digest`: the manifest is copied verbatim, and
+`manifest.run_input_digest` keeps naming epoch 0 as the run's one input
+identity. The superseding run-input is a real, canonical, digest-bound
+document, named by the amendment record and validated by `verify_root`;
+it is deliberately not what work orders bind. That is what keeps the
+qualification subject unchanged by construction — no requalify — and
+what keeps every work order, terminal commitment, and capability
+transition below the fence binding the same stable pair they always did.
+The per-epoch `run-manifest.json` slot is kept, and validated, so
+`verify_root` already checks each side of the fence against "its own"
+manifest; materializing a distinct successor digest there is parked
+(see the tranche's `PARKED.md`), not required.
 
 Piecewise replay validation is by fence: `_amendment_epochs` in
 `invariants.py` returns one `(fence, next_fence, dossier)` window per

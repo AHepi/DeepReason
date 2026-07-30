@@ -119,3 +119,53 @@ Turn 2:
   valid across the fence, (b) old citations still verified, (c)
   reshaped question wins cycle 0 of the continuation, (d)
   crash-mid-amend leaves a typed refusal and an intact parent epoch."
+
+## Amendments (operator ruling on VALIDATION.md's FAIL, 2026-07-30)
+
+Asked: how should R12's mechanism clause resolve, and should R15/R1 be
+fixed in this tranche. Operator selected:
+
+> **Amend the spec to match** — "Rewrite R12 in AMENDMENT_EPOCHS.md so
+> the successor run-input is carried by the amendment record rather than
+> by a re-pointed manifest, keeping the outcome clause (no requalify) as
+> the requirement. The implementation then satisfies R12 as written, and
+> DELIVERY.md can show it done. Cheapest, and preserves every existing
+> replay-valid root."
+
+> **Fix both now** — "R15: allow a different amendment to supersede a
+> staged epoch exactly when it has applied no ledger events yet
+> (fence_seq == _next_seq), so nothing is orphaned; keep the fail-closed
+> refusal once events exist. R1: correct the spec's usage line to the
+> CLI's global --root rather than shadowing it with a subcommand
+> duplicate. Then re-validate and deliver."
+
+- **R12a** supersedes **R12**. The manifest is copied verbatim across an
+  amendment epoch; the successor run-input and dossier are named by the
+  `run-amendment.v1` record, not by a re-pointed manifest. The binding
+  requirement is the outcome: capability policies, allowlists, budgets,
+  and provider profile unchanged, so the qualification subject is
+  unchanged and the cached qualification stays valid (no requalify).
+  Carries with it: `docs/proposals/AMENDMENT_EPOCHS.md` must be edited so
+  the design section states this, and the "As implemented" section must
+  stop describing it as a departure.
+- **R15a** refines **R15** (does not supersede it). Supersession of a
+  staged-but-uncommitted epoch is required exactly when that epoch has
+  applied no ledger events (`fence_seq == harness._next_seq`), because
+  nothing can be orphaned. Once events exist, the fail-closed refusal
+  stands and the refusal must name the operator's actual route forward.
+- **R1a** supersedes **R1**'s `[--root ROOT]` placement. The root is
+  given by this CLI's global `--root` option
+  (`deepreason --root ROOT amend`); the spec's usage line is corrected
+  rather than the CLI gaining a subcommand-level duplicate that would
+  shadow it.
+
+### Operator message mid-tranche (verbatim)
+
+> Approved: amend R12's mechanism clause to match the implemented design
+> — manifest copied verbatim, successor run-input carried by the
+> amendment record. Park the successor-manifest digest materialization in
+> PARKED.md as a possible future tranche; do not implement it now.
+
+- **R12b** confirms **R12a** and adds: materializing a distinct successor
+  manifest digest is PARKED, not implemented in this tranche. It goes in
+  `PARKED.md` as a candidate future tranche.

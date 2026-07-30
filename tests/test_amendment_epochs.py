@@ -580,3 +580,89 @@ def test_mcp_amend_run_is_exposed_and_hides_host_paths(tmp_path, monkeypatch):
     assert "root" not in payload
     assert payload["epoch"] == 1
     assert load_amendments(root)[0].amendment_digest == payload["amendment_digest"]
+
+
+def test_staged_epoch_that_never_reached_the_ledger_is_superseded(
+    tmp_path, monkeypatch
+):
+    """R15a: nothing applied means nothing to orphan, so a different
+    amendment replaces the staged one outright."""
+
+    root, _manifest, _service, parent = _converged_root(tmp_path, monkeypatch)
+    supplement = str(_supplement_file(tmp_path))
+    log_before = (root / "log.jsonl").read_bytes()
+
+    def crash_before_apply(_root, _record, *, supplement):
+        raise RuntimeError("simulated crash before the ledger chain landed")
+
+    with monkeypatch.context() as crashed:
+        crashed.setattr(apply_module, "_apply_ledger_chain", crash_before_apply)
+        with pytest.raises(RuntimeError, match="simulated crash"):
+            amend_run(
+                root, attach=(supplement,), reshape_question=RESHAPED_QUESTION
+            )
+
+    abandoned = staged_amendment(root)
+    assert abandoned is not None
+    assert abandoned.problem_id == _problem_id(RESHAPED_QUESTION)
+    # Nothing reached the ledger: the staged fence is still the live head.
+    assert (root / "log.jsonl").read_bytes() == log_before
+    assert abandoned.fence_seq == Harness(root, read_only=True)._next_seq
+
+    other = "Which loop gain keeps the delayed-feedback loop stable?"
+    result = amend_run(root, attach=(supplement,), reshape_question=other)
+
+    (record,) = load_amendments(root)
+    assert record.amendment_digest == result["amendment_digest"]
+    assert record.amendment_digest != abandoned.amendment_digest
+    assert record.problem_id == _problem_id(other)
+    assert record.superseded_problem_id == parent
+    assert record.seq == 1
+    assert staged_amendment(root) is None
+    # The abandoned question never entered the record.
+    replayed = Harness(root, read_only=True)
+    assert _problem_id(RESHAPED_QUESTION) not in replayed.state.problems
+    assert _problem_id(other) in replayed.state.problems
+    assert verify_root(root)["violations"] == []
+    prepare_continuation(root, cycles=1, tokens=32, check_operator_lock=False)
+
+
+def test_staged_epoch_that_applied_events_refuses_and_names_the_route(
+    tmp_path, monkeypatch
+):
+    """R15a: applied events belong to their epoch, so it is completed,
+    never replaced — and the refusal says how to move forward."""
+
+    root, _manifest, _service, _parent = _converged_root(tmp_path, monkeypatch)
+    supplement = str(_supplement_file(tmp_path))
+
+    def crash_before_commit(_root, _record):
+        raise RuntimeError("simulated crash before the chain line landed")
+
+    with monkeypatch.context() as crashed:
+        crashed.setattr(apply_module, "_commit_chain_line", crash_before_commit)
+        with pytest.raises(RuntimeError, match="simulated crash"):
+            amend_run(
+                root, attach=(supplement,), reshape_question=RESHAPED_QUESTION
+            )
+
+    pending = staged_amendment(root)
+    assert pending is not None
+    assert pending.fence_seq < Harness(root, read_only=True)._next_seq
+
+    with pytest.raises(AmendmentError) as refusal:
+        amend_run(root, attach=(supplement,), reshape_question="A third question?")
+    assert refusal.value.code == "AMEND_PENDING_CONFLICT"
+    assert "complete it" in str(refusal.value)
+    assert "next epoch" in str(refusal.value)
+
+    # The named route works: complete this epoch, then open the next one.
+    amend_run(root, attach=(supplement,), reshape_question=RESHAPED_QUESTION)
+    third = tmp_path / "third.md"
+    third.write_text("# Margin\n\nPhase margin below 30 degrees.\n", encoding="utf-8")
+    second = amend_run(root, attach=(str(third),), reshape_question="A third question?")
+
+    assert second["epoch"] == 2
+    first, latest = load_amendments(root)
+    assert latest.parent_amendment_digest == first.amendment_digest
+    assert verify_root(root)["violations"] == []

@@ -5,10 +5,14 @@ Spec: `docs/proposals/AMENDMENT_EPOCHS.md` (operator-designated), sections
 fixtures". The doc's "As implemented" section is the implementer's own
 report and is treated as the object under audit, never as authority.
 
-Branch `claude/amendment-epochs-om0ztb` at `0a946726`. No `SPEC.md` /
-`CHECKLIST.md` exist (see REQUEST.md's provenance note); acceptance
-checks S1..S16 below were derived from the designated spec for this
-phase.
+Branch `claude/amendment-epochs-om0ztb`. **Second pass**, after the
+operator's ruling on the first pass's FAIL (REQUEST.md R12a/R12b, R15a,
+R1a) and the re-plan in `CHECKLIST.md` (C1..C6). Every acceptance check
+was re-run against the amended spec and the amended code; the first
+pass's verdict and its two failures are preserved below in
+"First-pass verdict (superseded)".
+
+Acceptance checks S1..S16 were derived from the designated spec.
 
 ## Acceptance checks
 
@@ -23,16 +27,22 @@ phase.
                             the superseding question; the old one keeps its record
                             and status
 
-    $ deepreason amend --root /tmp/nope
-    deepreason: error: unrecognized arguments: --root /tmp/nope
+R1a corrected the spec's usage line to this CLI's global `--root`
+rather than shadowing it with a subcommand duplicate:
 
-`--attach` (repeatable) and `--reshape-question`: PASS.
-`--root` after the subcommand: **FAIL (surface)** — this CLI carries
-`--root` as a global option (`deepreason --root ROOT amend`), which every
-other root-taking subcommand uses. Substantively amend takes a root; the
-spec's literal placement is rejected. Recorded, not silently reconciled.
+    $ sed -n '/^## Design/,/^`amend` refuses/p' docs/proposals/AMENDMENT_EPOCHS.md
+        deepreason --root ROOT amend [--attach FILE ...] \
+            [--reshape-question "TEXT"] [--allow-partial]
+        deepreason --root ROOT continue --budget cycles=N \
+            [--token-budget N|unlimited]
 
-: PASS (flags) / FAIL (literal `--root` placement)
+    $ deepreason --root <root> amend
+    AMEND_EMPTY: an amendment must attach evidence, reshape the question, or both
+
+The documented invocation reaches `amend` and refuses typed, which is
+the flag surface working end to end.
+
+: PASS (R1a)
 
 ### S2 — R2: `deepreason continue --tokens N` resumes afterwards
 
@@ -40,11 +50,12 @@ spec's literal placement is rejected. Recorded, not silently reconciled.
     usage: deepreason continue [-h] --budget BUDGET [--token-budget TOKEN_BUDGET]
                                [--expected-manifest-digest EXPECTED_MANIFEST_DIGEST]
 
-The token flag is spelled `--token-budget`, not `--tokens`. This is the
-pre-existing `continue` surface, untouched by this tranche; the spec line
-describes it loosely. Resumption itself is demonstrated by S11.
+R1a also corrected the spec's `continue` line to the real flags
+(`--budget cycles=N [--token-budget N|unlimited]`), which is the
+pre-existing surface this tranche did not touch. Resumption itself is
+demonstrated by S11.
 
-: PASS (behavior) / note (spec spells the pre-existing flag `--tokens`)
+: PASS (R1a, R2)
 
 ### S3 — R3, R22: typed refusals
 
@@ -166,7 +177,7 @@ All five spec-named fields present: `parent_manifest_digest`,
 
 : PASS
 
-### S10 — R12: the successor manifest
+### S10 — R12a: the successor manifest and run input
 
     === S10 qualification subject untouched (no requalify) ===
     {'report_bytes_unchanged': True,
@@ -174,7 +185,7 @@ All five spec-named fields present: `parent_manifest_digest`,
      'epoch1_manifest_equals_parent': True,
      'successor_manifest_digest_equals_parent': True}
 
-    === S10 DEPARTURE probe: does the successor manifest extend run-input? ===
+    === S10 probe: where the superseding run-input lives ===
     {'parent_manifest.run_input_digest':    'ffcc8f6e3f533ebd',
      'successor_manifest.run_input_digest': 'ffcc8f6e3f533ebd',
      'extended_in_manifest': False,
@@ -182,23 +193,34 @@ All five spec-named fields present: `parent_manifest_digest`,
      'successor_run_input_named_by_record': True,
      'epoch1_run_input_problem': 'question-4b4cac18dffda96a67ae5c61ac392d11'}
 
-R12 has two clauses and they split:
+R12a (operator ruling) replaced R12's mechanism clause. The spec now
+reads, at `docs/proposals/AMENDMENT_EPOCHS.md` "Manifest epoch record":
 
-- **Outcome clause** — "capability policies, allowlists, budgets, and
-  provider profile copied verbatim, qualification subject unchanged,
-  cached qualification remains valid (no requalify)": **PASS.** The
-  epoch-1 manifest is byte-identical to the parent and
-  `validate_production_contract_qualification` accepts the unchanged
-  cached report.
-- **Mechanism clause** — "the successor manifest is the parent manifest
-  with ... the run-input reference and dossier list extended":
-  **FAIL.** `extended_in_manifest: False`. The successor run-input is a
-  real canonical digest-bound document named by the amendment record,
-  but the manifest document does not point at it.
+> The manifest itself is copied VERBATIM across the epoch — capability
+> policies, allowlists, budgets, and provider profile included — so the
+> qualification subject is unchanged and the cached qualification remains
+> valid (no requalify). What supersedes is the RUN INPUT and the DOSSIER,
+> and the amendment record is what names them: the successor run-input is
+> its own canonical, digest-bound document, chained to its parent by this
+> record rather than by a re-pointed manifest.
 
-No operator words defer the mechanism clause.
+Measured against R12a, every clause holds:
 
-: FAIL (mechanism clause)
+- manifest copied verbatim — `epoch1_manifest_equals_parent: True`,
+  `successor_manifest_digest_equals_parent: True`;
+- qualification subject unchanged, no requalify —
+  `report_bytes_unchanged: True` and
+  `validate_production_contract_qualification` accepts the cached report;
+- the superseding run-input is its own digest-bound document named by the
+  record — `successor_run_input_document_digest: f49577f23ea87875`,
+  distinct from the parent's `ffcc8f6e3f533ebd`, carrying the reshaped
+  question `epoch1_run_input_problem: question-4b4cac18...`.
+
+`extended_in_manifest: False` is now the specified behavior, not a
+deviation. Materializing a distinct successor manifest digest is parked
+(R12b) in `PARKED.md` P1.
+
+: PASS (R12a)
 
 ### S11 — R13, R2: `continue` resumes the same root on the reshaped question
 
@@ -241,27 +263,39 @@ Crash simulation:
     S13 committed chain empty: True
     S13 continue refusal: CONTINUE_AMENDMENT_INCOMPLETE
 
-    --- R15 probe: can the operator amend to something DIFFERENT after the crash? ---
-      refused: AMEND_PENDING_CONFLICT
-      escape hatch in CLI/API to abandon the staged epoch: False
+R15a implemented the bounded supersession. Both recovery shapes are now
+covered by regression:
 
-    --- and the identical re-run still completes ---
-      completed epoch: 1 staged cleared: True
+    tests/test_amendment_epochs.py::test_staged_epoch_that_never_reached_the_ledger_is_superseded PASSED
+    tests/test_amendment_epochs.py::test_staged_epoch_that_applied_events_refuses_and_names_the_route PASSED
+    tests/test_amendment_epochs.py::test_partial_amendment_refuses_continuation_and_completes_on_rerun PASSED
 
-R15 splits the same way R12 does:
+**Nothing applied** (crash before `_apply_ledger_chain`): the first test
+asserts the log is byte-identical to before the attempt, the staged
+fence still equals the live head, and a *different* amendment supersedes
+it outright — the committed chain holds only the new record, the
+abandoned question never enters `state.problems`, `verify_root` returns
+`[]`, and `prepare_continuation` proceeds.
 
-- **Fail-closed clause** — "leaves a typed partial chain that recovery
-  refuses to continue past ... nothing is rewritten": **PASS.**
-- **Supersession clause** — "a re-run of `amend` supersedes it with a
-  fresh chain": **FAIL.** An identical re-run *completes* the staged
-  epoch; a *different* one is refused `AMEND_PENDING_CONFLICT` and there
-  is no typed way to abandon a staged epoch. The operator is left with
-  no route except hand-deleting `run-epochs/NNN/` inside a run root,
-  which this project's own rule ("Never edit a committed root's
-  contents") forbids. This is an operator dead-end, not a wording
-  difference.
+**Events applied** (crash before `_commit_chain_line`): the second test
+asserts `pending.fence_seq < harness._next_seq`, that a different
+amendment is refused `AMEND_PENDING_CONFLICT`, and that the refusal names
+the route:
 
-: PASS (fail-closed) / FAIL (supersession clause)
+    epoch 1 is staged, has already applied ledger events, and cannot be
+    replaced; re-run `deepreason amend` with its original inputs to
+    complete it, then amend again to open the next epoch
+
+and that the named route works end to end — completing epoch 1, then
+opening epoch 2 with the different amendment, chained
+(`latest.parent_amendment_digest == first.amendment_digest`) and
+`verify_root` clean. The operator dead-end the first pass found is gone.
+
+Nothing is rewritten in either shape: the discarded epoch directory is
+pre-commitment staging that no chain line names and no ledger event
+refers to.
+
+: PASS (R15, R15a)
 
 ### S14 — R16, R20, R24a: piecewise replay validation across the fence
 
@@ -328,25 +362,26 @@ implemented (S13).
 
 ## Full gate
 
-    3126 passed, 7 skipped in 485.76s (0:08:05)
+    3128 passed, 7 skipped in 488.53s (0:08:08)
 
-Baseline at `531a7154` was `3110 passed, 7 skipped`; the change adds 16.
+Baseline at `531a7154` was `3110 passed, 7 skipped`; this tranche adds 18
+(16 in the first pass, 2 for R15a).
 : PASS
 
 ## Record-behavior preservation
 
 `verify_root` over all 15 committed run roots under
 `experiments/live_research_2026-07-29/`, at `531a7154` (pre-change
-worktree) and at `0a946726`:
+worktree) and at the tranche head, re-run after the R15a code change:
 
-    $ diff pre.json post.json
-    IDENTICAL: verify_root verdicts unchanged on all 15 committed roots
+    $ diff pre.json post2.json
+    IDENTICAL to 531a7154 across all 15 committed roots
 
 Both known-good roots (0 violations) and defect-era roots keep their
-exact verdicts — `foreign-criticism` x5 roots (3, 7, 4, 4, 5 findings),
-`run-input` on `failed-epoch1-run-9175f0ec`, `terminal-authority` on
-`failed-epoch2-run-9175f0ec`. No existing replay-valid root was
-invalidated and no defect-era finding was masked.
+exact verdicts — `foreign-criticism` on 5 roots (3, 7, 4, 4, 5
+findings), `run-input` on `failed-epoch1-run-9175f0ec`,
+`terminal-authority` on `failed-epoch2-run-9175f0ec`. No existing
+replay-valid root was invalidated and no defect-era finding was masked.
 
 : unchanged
 
@@ -354,8 +389,9 @@ invalidated and no defect-era finding was masked.
 
 | R | Verdict | Evidence |
 |---|---|---|
-| R1 | PARTIAL | S1 — `--attach`/`--reshape-question` exact; `--root` accepted only as the CLI's global option, not after the subcommand |
-| R2 | PASS (note) | S2, S11 — resumption works; spec spells the pre-existing flag `--tokens`, actual is `--token-budget` |
+| R1 | superseded-by R1a | — |
+| R1a | PASS | S1 — spec usage line corrected to the CLI's global `--root`; documented invocation works |
+| R2 | PASS | S2, S11 |
 | R3 | PASS | S3 |
 | R4 | PASS | S13 — one chain, seq 9..12, all at/above the declared fence |
 | R5 | PASS | S4 |
@@ -365,74 +401,85 @@ invalidated and no defect-era finding was masked.
 | R9 | PASS | S7 |
 | R10 | PASS | S8 |
 | R11 | PASS | S9 |
-| **R12** | **FAIL** | S10 — outcome clause holds (no requalify); mechanism clause "successor manifest with the run-input reference extended" is not implemented, and no operator words defer it |
+| R12 | superseded-by R12a | — |
+| R12a | PASS | S10 — manifest verbatim, qualification unchanged, superseding run-input its own digest-bound document named by the record |
+| R12b | PASS | C1 — `PARKED.md` P1, successor-manifest digest materialization parked with its structural reason and unpark criteria |
 | R13 | PASS | S11 |
 | R14 | PASS | S12 |
-| **R15** | **FAIL** | S13 — fail-closed clause holds; "a re-run supersedes it with a fresh chain" is not implemented and there is no typed way to abandon a staged epoch |
+| R15 | PASS | S13 — fail-closed clause |
+| R15a | PASS | S13 — supersession when nothing applied; typed refusal naming the route when events exist; both under regression |
 | R16 | PASS | S14 |
 | R17 | PASS | S7 |
 | R18 | PASS | S5, S6 |
 | R19 | PASS | S12 |
-| R20 | PASS (see R12) | S9, S14 — record and piecewise validation land; the manifest-superseding half is the R12 failure |
+| R20 | PASS | S9, S14 |
 | R21 | PASS | S4, S6 |
 | R22 | PASS | S1, S3, S13 |
 | R23 | PASS | S15 |
 | R24 | PASS | S16 |
 
+Every requirement is either demonstrated by a pasted acceptance output or
+explicitly superseded by an operator-ruled amendment. None is deferred.
+
 ## Assumptions carried
 
-No `SPEC.md` existed, so these were assumptions taken during
-implementation rather than recorded and approved beforehand. They are
-surfaced here for the delivery:
+Taken during implementation rather than approved beforehand (no `SPEC.md`
+existed), surfaced for the delivery:
 
 - **A1** — "the run manifest freezes the question (run-input digest)"
   (spec, blocker 1) was read as removable per-epoch. It is not: the
   controller process state, the capability transition chain, work
   orders, terminal commitments, and replay-validation bindings all bind
-  one `(manifest digest, run_input_digest)` pair for a root's life. This
-  assumption is what R12 fails on.
+  one `(manifest digest, run_input_digest)` pair for a root's life.
+  **Resolved** by the operator's R12a ruling; the residue is parked as
+  `PARKED.md` P1.
 - **A2** — "supersedes it with a fresh chain" was read as unsound
-  whenever the staged epoch had already applied ledger events, because a
-  fresh fence would orphan them. The implementation chose fail-closed
-  refusal over supersession for every case, including the case where
-  nothing was applied yet and supersession would in fact be sound.
-- **A3** — the manifest's frozen attached-evidence budget was read as
-  binding the *union* of bound dossiers, not the newest alone. The spec
-  is silent.
-- **A4** — a dossier's `problem_ref` was read as belonging permanently to
-  the question that admitted it, so a question-only amendment inherits
-  its parent's dossier rather than minting one. The spec is silent.
-- **A5** — the reshaped problem's criteria were read as the parent's
-  criteria carried verbatim. The spec is silent.
+  whenever the staged epoch had already applied ledger events.
+  **Resolved** by R15a: unsound only in that case, and supersession is
+  now implemented for the case where nothing was applied.
+- **A3** — the manifest's frozen attached-evidence budget binds the
+  *union* of bound dossiers, not the newest alone. The spec is silent.
+  **Still carried.**
+- **A4** — a dossier's `problem_ref` belongs permanently to the question
+  that admitted it, so a question-only amendment inherits its parent's
+  dossier rather than minting one. The spec is silent. **Still carried.**
+- **A5** — the reshaped problem's criteria are the parent's criteria
+  carried verbatim. The spec is silent. **Still carried.**
 
-## Verdict: FAIL
+A3, A4 and A5 remain assumptions, not requirements. They are behavior the
+operator has not ruled on; if any is wrong, it is a change tranche, not a
+defect in this one.
 
-FAIL detail:
+## Verdict: PASS
 
-1. **R12 mechanism clause** (check S10). The successor manifest does not
-   extend the run-input reference; `extended_in_manifest: False`.
-   Implementing it as specified means making the manifest digest and the
-   run-input digest epoch-varying across `workflow/state.py`
-   (`apply_decision`), `capabilities/state.py` (transition chain — a
-   CLAUDE.md frozen surface), `runtime/terminal_authority.py`,
+All 16 acceptance checks pass with pasted output. Full gate 3128 passed /
+0 failed. `verify_root` verdicts on all 15 committed roots identical to
+the pre-change commit. Every requirement demonstrated or
+operator-superseded; none deferred.
+
+Routing: `dr-deliver-change`.
+
+## First-pass verdict (superseded)
+
+The first pass returned **FAIL** on two requirements. Kept here because a
+validation that quietly rewrites its own history is not a record.
+
+1. **R12 mechanism clause** — the successor manifest did not extend the
+   run-input reference (`extended_in_manifest: False`). Implementing it
+   as literally specified meant making the manifest and run-input digests
+   epoch-varying across `workflow/state.py`, `capabilities/state.py` (a
+   frozen surface), `runtime/terminal_authority.py`,
    `runtime/continuation.py`, and ~20 identity checks in
-   `invariants.py`. That is the change workflow's declared stop
-   condition ("the spec turns out to require touching frozen-record
-   semantics ... qualification subjects") and the spec's own tranche-1
-   note ("frozen-surface adjacent: operator approval required").
-   **This one needs an operator ruling; it is not a re-plannable step.**
+   `invariants.py` — the change workflow's declared stop condition.
+   Operator ruled: amend the spec to the record-carried design (R12a) and
+   park the digest materialization (R12b).
 
-2. **R15 supersession clause** (check S13). No typed route out of a
-   staged-but-uncommitted epoch when the operator wants a *different*
-   amendment. This one *is* re-plannable without touching any frozen
-   surface: allow supersession exactly when the staged epoch has applied
-   no ledger events yet (`fence_seq == harness._next_seq`), which is
-   sound because nothing would be orphaned, and keep the fail-closed
-   refusal when events exist.
+2. **R15 supersession clause** — no typed route out of a
+   staged-but-uncommitted epoch when the operator wanted a *different*
+   amendment; `AMEND_PENDING_CONFLICT` with no escape but hand-deleting
+   a directory inside a run root. Operator ruled: fix it (R15a). Fixed
+   in C4 and under regression.
 
-3. **R1 `--root` placement** (check S1). Re-plannable, but the smallest
-   correct fix may be to amend the spec's usage line rather than shadow
-   the CLI's global `--root` with a subcommand duplicate.
-
-Routing: `dr-plan-steps` for (2) and (3); operator decision required for
-(1). Not eligible for `dr-deliver-change`.
+3. **R1 `--root` placement** — the spec's usage line put `--root` after
+   the subcommand; this CLI carries it globally. Operator ruled: correct
+   the spec (R1a). Corrected in C3.

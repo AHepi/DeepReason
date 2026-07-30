@@ -3,9 +3,14 @@
 Order matters and is fail-closed.  The successor epoch's documents and its
 typed record are staged first; the ledger chain is applied second; the chain
 line is committed last.  A crash anywhere leaves a staged record with no
-committed line — a typed partial chain that ``continue`` refuses to run past
-and that a byte-identical re-run of ``amend`` completes.  Nothing is ever
-rewritten.
+committed line — a typed partial chain that ``continue`` refuses to run past.
+
+Recovery from there has two shapes, decided by whether the staged epoch ever
+reached the ledger.  Nothing applied: a different amendment supersedes it
+outright, because there is no event to orphan.  Events applied: they belong to
+that epoch, so a byte-identical re-run completes it and a different amendment
+becomes the NEXT epoch.  Nothing in the append-only record is rewritten either
+way.
 """
 
 from __future__ import annotations
@@ -13,6 +18,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 import os
 from pathlib import Path
+import shutil
 import tempfile
 
 from deepreason.amendment.models import RunAmendmentV1
@@ -81,6 +87,19 @@ def _write_once(target: Path, payload: bytes) -> None:
             )
         return
     _atomic_write(target, payload)
+
+
+def _discard_staged_epoch(directory: Path) -> None:
+    """Drop a staged epoch that never reached the ledger or the chain.
+
+    Safe exactly because of what it is not touching: no committed chain
+    line names this directory (its sequence is one past the chain's end),
+    and its caller has already established that no ledger event sits at or
+    above its declared fence. Nothing in the append-only record is rewritten
+    — this is pre-commitment staging being restaged.
+    """
+
+    shutil.rmtree(directory, ignore_errors=True)
 
 
 def _reshaped_problem_id(question: str) -> str:
@@ -376,38 +395,50 @@ def _amend_locked(
 
     from deepreason.harness import Harness
 
-    fence_seq = Harness(root, read_only=True)._next_seq
+    live_seq = Harness(root, read_only=True)._next_seq
     pending = staged_amendment(root)
-    if pending is not None:
-        fence_seq = pending.fence_seq
+    fence_seq = pending.fence_seq if pending is not None else live_seq
 
-    record = RunAmendmentV1.create(
-        seq=seq,
-        parent_amendment_digest=(
-            committed[-1].amendment_digest if committed else None
-        ),
-        parent_manifest_digest=parent_manifest.sha256,
-        successor_manifest_digest=parent_manifest.sha256,
-        parent_run_input_digest=parent_input.run_input_digest,
-        successor_run_input_digest=successor_input.run_input_digest,
-        parent_dossier_digest=parent_dossier.dossier_digest,
-        successor_dossier_digest=successor_dossier.dossier_digest,
-        supplemental_dossier_digests=(
-            (supplement.dossier_digest,) if supplement is not None else ()
-        ),
-        superseded_problem_id=(
-            parent_input.problem.id if problem_id is not None else None
-        ),
-        problem_id=problem_id,
-        fence_seq=fence_seq,
-        created_at=pending.created_at if pending is not None else _now(),
-    )
-    if pending is not None and pending.amendment_digest != record.amendment_digest:
-        raise AmendmentError(
-            "AMEND_PENDING_CONFLICT",
-            "this root carries a staged amendment with different content; "
-            "re-run `deepreason amend` with the same inputs to complete it",
+    def build(created_at: str) -> RunAmendmentV1:
+        return RunAmendmentV1.create(
+            seq=seq,
+            parent_amendment_digest=(
+                committed[-1].amendment_digest if committed else None
+            ),
+            parent_manifest_digest=parent_manifest.sha256,
+            successor_manifest_digest=parent_manifest.sha256,
+            parent_run_input_digest=parent_input.run_input_digest,
+            successor_run_input_digest=successor_input.run_input_digest,
+            parent_dossier_digest=parent_dossier.dossier_digest,
+            successor_dossier_digest=successor_dossier.dossier_digest,
+            supplemental_dossier_digests=(
+                (supplement.dossier_digest,) if supplement is not None else ()
+            ),
+            superseded_problem_id=(
+                parent_input.problem.id if problem_id is not None else None
+            ),
+            problem_id=problem_id,
+            fence_seq=fence_seq,
+            created_at=created_at,
         )
+
+    record = build(pending.created_at if pending is not None else _now())
+    if pending is not None and pending.amendment_digest != record.amendment_digest:
+        # A staged epoch that never reached the ledger has nothing to
+        # orphan, so a different amendment supersedes it outright. Once it
+        # HAS applied events, those events belong to that epoch: it is
+        # completed, never replaced, and the different amendment becomes the
+        # next one.
+        if pending.fence_seq != live_seq:
+            raise AmendmentError(
+                "AMEND_PENDING_CONFLICT",
+                f"epoch {pending.seq} is staged, has already applied ledger "
+                "events, and cannot be replaced; re-run `deepreason amend` "
+                "with its original inputs to complete it, then amend again "
+                "to open the next epoch",
+            )
+        _discard_staged_epoch(directory)
+        record = build(_now())
 
     directory.mkdir(parents=True, exist_ok=True)
     _stage_epoch_documents(
