@@ -145,3 +145,53 @@ Also unchanged: the unquoted-reference path (PARKED Q1), D2, and P4.
 GOAL.md classes this `defect`; diff estimate is 80 lines across 2 files;
 no frozen surface is touched (`verify_root` reads none of this, and the
 admitted bytes are untouched). Proceeds to `dr-implement-fix`.
+
+---
+
+## Amendment (during implementation): two documentation sites the plan missed
+
+Implementation surfaced two docstrings that describe the old rule and
+would be left asserting something the code no longer does. Recorded here
+before the change, per the tranche rule against silent scope growth.
+
+Added change sites:
+
+  - `src/deepreason/evidence/citations.py` module docstring — says
+    "every quote is byte-checked against the block's canonical text".
+    Becomes a statement of the actual rule: checked against the
+    canonical text with whitespace folded, every non-whitespace
+    character still required.
+  - `src/deepreason/llm/contracts.py:20-27`, `EvidenceRefClaimV1`
+    docstring — says a quote "must reproduce a contiguous byte span of
+    the block's canonical text exactly — the citation checker
+    byte-verifies it". Becomes the true contract, and states positively
+    that whitespace need not match while every other character must.
+
+### Why the second one needed checking before it could be written
+
+Pydantic promotes a model's class docstring to the JSON schema's
+`description`, and that schema is serialised into the conjecturer's
+context pack — so this docstring is prompt text the model reads, not
+merely developer documentation. CLAUDE.md freezes anything that alters
+qualification subject digests, which made this a potential stop.
+
+Checked, and it is not one. `qualification_subject_payload`
+(`src/deepreason/qualification.py:248-283`) closes over the provider
+profile identity, the policy preset, the manifest behaviour, and a pair
+inventory whose payload fields are
+`contract_id, role, seat, endpoint_id, route_sha256, model_id,
+model_revision, provider, family, output_mechanism`. No contract JSON
+schema and no docstring text enters it. Corroborated against the
+committed artifact: the tensor-rank run's
+`production-contract-qualification.json` contains no `description` key
+and none of the docstring's wording anywhere in its 65,975 bytes.
+
+So the digest does not move, the qualification cache is not invalidated,
+and no committed root is affected — their packs are already recorded in
+their own blob stores. What does change is the prompt bytes of FUTURE
+runs, which is intended: the contract the model is shown should be the
+contract the harness enforces.
+
+Revised estimated diff: ~40 lines in `citations.py`, ~8 in
+`contracts.py`, ~90 in `tests/test_evidence_citations.py`. 3 files,
+~138 lines. Still inside the 150-line budget.
