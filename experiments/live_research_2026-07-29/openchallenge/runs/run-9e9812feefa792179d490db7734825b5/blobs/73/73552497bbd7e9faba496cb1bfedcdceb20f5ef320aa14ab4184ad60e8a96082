@@ -1,0 +1,1 @@
+{"error_type": "WorkBudgetDenied", "message": "token budget denied transactional work sha256:c4638bd6e10109f7acd0c0ac4a6c07d78c2f7bcb6cd694bceb7276192d17fc3f", "outcome": "budget_denied"}
