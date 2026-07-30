@@ -453,3 +453,55 @@ for. The referee also stayed starved in all three completed attempts
 (six typed budget_denied transactions) under the question's
 atomic-candidate appetite; its reservation sizing is the other standing
 knob.
+
+## Segment 8 (2026-07-30): amendment epochs land, and are unexercised live
+
+Segment 7 closed with the campaign's ledger and a standing constraint
+that had nothing to do with the model: a run's question was frozen at
+mint time. Changing it, or admitting evidence discovered mid-campaign,
+meant a new root and a lost epistemic state — every accepted position,
+rivalry, and criticism debt from the old question thrown away in order
+to ask a better one. `deepreason amend` removes that constraint. After a
+typed terminal stop it appends one epoch to the SAME root: supplemental
+sources admitted as their own dossier with their own digest, the
+question superseded by a seed problem whose provenance names the
+question it replaces, and a `run-amendment.v1` line chaining the two
+behind a declared event fence. `continue` then resumes, and the reshaped
+question takes cycle 0 on the existing seed-priority guarantee.
+
+**What the record shows.** Offline, on a converged v6 root: epoch 0's
+manifest, run input, and dossier keep their exact canonical bytes; the
+log grows only by suffix; a citation verified against the first dossier
+returns a byte-identical `EvidenceCitationCheckV1` after the amendment;
+no pre-existing artifact changes status and no attack or dependence edge
+is removed; `verify_root` returns clean across the fence, and again
+after a real continuation. `verify_root` over all fifteen committed run
+roots in this experiment is byte-identical to the pre-change commit —
+the defect-era findings on `failed-epoch1`, `failed-epoch2`, and the
+five `foreign-criticism` roots all still report exactly what they
+reported before, none masked. Full gate 3128 passed, 0 failed.
+
+**The residue, stated plainly.** None of this has been exercised live.
+Every claim above rests on offline regression against a fixture root; no
+amendment has been applied to any root in this campaign, and no live
+model has yet reasoned across an amendment fence. What the record
+therefore does NOT show: whether a reshaped question actually produces
+better conjectures than a fresh root would, whether glm-5.2 uses the
+older dossier's blocks once new ones are visible alongside them, or
+whether the seed-priority win at cycle 0 survives a frontier with real
+discrimination and connection spawns on it rather than a fixture's two
+problems. Accepted does not mean true, and implemented does not mean
+useful: the capability is proven correct, not proven valuable.
+
+**One thing the tranche's own validation caught.** The first validation
+pass returned FAIL, not PASS, on two counts — and the more instructive
+one was not the design deviation but a plain usability dead-end: a run
+that crashed mid-amendment could be *completed*, but if the operator
+then wanted a different amendment there was no typed way out, only a
+hand-deletion inside a run root that this project's own rules forbid.
+Recovery now splits on whether the staged epoch ever reached the ledger:
+nothing applied, it is superseded outright; events applied, they belong
+to that epoch and it is completed, with the refusal naming that route.
+The gap was invisible to the implementation's own tests and visible
+immediately to a validation that asked what an operator would actually
+try next.
