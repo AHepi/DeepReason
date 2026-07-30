@@ -1,0 +1,25 @@
+{
+  "candidate": {
+    "claim": "Extending the proven optimal 12-input network (39 comparators) by inserting 5 additional comparators involving the 13th channel could yield a 44-comparator 13-input sorting network, beating the known 45-comparator best.",
+    "mechanism": "If the optimal 12-input network's partial order after 39 comparators leaves enough structural slack to absorb the 13th input with fewer than the 6 comparators required by a standard odd-even merge, a targeted insertion of 5 comparators might complete the sort for all 8192 binary vectors.",
+    "counterconditions": [
+      "The optimal 12-input network's topology is too rigid, requiring at least 6 comparators to fully integrate the 13th channel, thus bounding extensions at 45.",
+      "The 13th input must be compared against at least 6 distinct elements to find its correct sorted position in the worst case, requiring at least 6 additional comparators.",
+      "Inserting 5 comparators disrupts the 12-input network's sorting property, causing it to fail on some binary vectors."
+    ],
+    "evidence_refs": [
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "- S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      }
+    ],
+    "typicality": 0.6,
+    "sidecar": {
+      "search_signal": "productive"
+    }
+  }
+}

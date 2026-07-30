@@ -1,0 +1,47 @@
+```json
+{
+  "candidate": {
+    "claim": "Greedy single-comparator removal from Batcher's odd-even mergesort network for n=13 (48 comparators) will get stuck above 45 comparators, discriminating the 'structural barrier' hypothesis (predicts stall >45, meaning 45-nets require fundamentally different structure) from the 'redundant Batcher' hypothesis (predicts reaching ≤45, meaning the best-known 45-net is extractable as a subnetwork of Batcher's construction). The structural barrier hypothesis is expected to be supported.",
+    "mechanism": "The simulation generates Batcher's odd-even mergesort network for n=13 using the standard iterative formulation (p=1..n; k=p..1; inner loop over channels), yielding ~48 comparators. It verifies the network sorts all 2^13=8192 binary vectors via the 0-1 principle. Then it greedily prunes: iteratively try removing each comparator (right-to-left), and keep the removal if the reduced network still sorts all 8192 vectors. Repeat until no single removal preserves sorting. Final comparator count discriminates the two hypotheses. Full Python code:\n\n```python\ndef batcher_network(n):\n    comps = []\n    p = 1\n    while p < n:\n        k = p\n        while k > 0:\n            j = k % p\n            while j < n - k:\n                for i in range(k):\n                    if ((i + j) // p) % 2 == 0:\n                        if i + j + k < n:\n                            a, b = i + j, i + j + k\n                            comps.append((min(a, b), max(a, b)))\n                j += 2 * k\n            k //= 2\n        p *= 2\n    return comps\n\ndef verify_sorting(comps, n):\n    for mask in range(1 << n):\n        arr = [(mask >> ch) & 1 for ch in range(n)]\n        for (a, b) in comps:\n            if arr[a] > arr[b]:\n                arr[a], arr[b] = arr[b], arr[a]\n        for ch in range(n - 1):\n            if arr[ch] > arr[ch + 1]:\n                return False\n    return True\n\ndef greedy_prune(comps, n):\n    current = list(comps)\n    changed = True\n    while changed:\n        changed = False\n        for idx in range(len(current) - 1, -1, -1):\n            trial = current[:idx] + current[idx + 1:]\n            if verify_sorting(trial, n):\n                current = trial\n                changed = True\n    return current\n\nn = 13\nnetwork = batcher_network(n)\nassert verify_sorting(network, n), \"Batcher network does not sort!\"\npruned = greedy_prune(network, n)\nassert verify_sorting(pruned, n)\nremoved = len(network) - len(pruned)\nprint(f\"Batcher: {len(network)}, Pruned: {len(pruned)}, Removed: {removed}\")\nif len(pruned) <= 44:\n    print(\"OUTCOME: <=44 — REDUNDANCY hypothesis supported\")\nelif len(pruned) == 45:\n    print(\"OUTCOME: ==45 — matches known best via subnetwork extraction\")\nelse:\n    print(f\"OUTCOME: {len(pruned)}>45 — STRUCTURAL BARRIER hypothesis supported\")\n```",
+    "counterconditions": [
+      "If greedy pruning reaches ≤45 comparators, the 'redundant Batcher' hypothesis is supported instead and the structural barrier claim is falsified — the 45-net would be a subnetwork of Batcher's construction, implying no novel structure is needed.",
+      "If the Batcher implementation is incorrect (the generated network does not sort all 8192 binary vectors), the entire experiment is invalid and all pruning results are void.",
+      "If greedy pruning order matters (different removal orders yield different final sizes), the single-order result underestimates removable comparators; a systematic search over removal orders would be needed to fully discriminate.",
+      "If verify_sorting has an implementation bug causing false positives (network that does not actually sort passes), pruning results are unreliable and the discrimination is void.",
+      "If the final pruned size is exactly 46, the result is ambiguous: it neither confirms structural barrier nor redundancy decisively, since a different pruning heuristic might reach 45."
+    ],
+    "evidence_refs": [
+      {
+        "block": "680b4c459d28bf7a",
+        "quote": "S(n) denotes the minimum comparator count of any n-input sorting network."
+      },
+      {
+        "block": "b01150a3ae43d8f6",
+        "quote": "The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n."
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      },
+      {
+        "block": "843819388191d0e9",
+        "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."
+      },
+      {
+        "block": "4f053d098dcef347",
+        "quote": "A simulation that cannot discriminate between rival predictions is weight, not evidence."
+      },
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "S(n) is PROVEN for n up to 12"
+      }
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.55
+  }
+}
+```

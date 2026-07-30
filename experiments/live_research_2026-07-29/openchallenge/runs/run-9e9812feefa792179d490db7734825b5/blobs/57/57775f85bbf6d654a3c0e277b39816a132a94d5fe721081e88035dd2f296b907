@@ -1,0 +1,32 @@
+```json
+{
+  "candidate": {
+    "claim": "A constructive greedy search strategy that selects the next comparator to maximize the reduction in unsorted 0-1 vectors will discover a sorting network of size 48 for n=13 more reliably under a fixed budget than random topological modifications of Batcher's odd-even mergesort network, and has a nonzero probability of finding a network of size 46 or 45 if equipped with random restarts.",
+    "mechanism": "By explicitly optimizing for the 0-1 principle, the greedy heuristic evaluates all candidate comparators against the 8192 binary vectors, selecting the one that maximizes the transition of vectors from unsorted to sorted. This directly attacks the verification condition specified in the dossier. In contrast, modifying Batcher's fixed 48-comparator network via local swaps often breaks the network's sorting property, triggering costly backtracking and stalling the search at 48.",
+    "counterconditions": [
+      "The greedy heuristic falls into a local minimum where no single comparator reduces the number of unsorted vectors, but a specific sequence of two or more comparators would.",
+      "The fixed search budget (e.g., 10,000 iterations) is exhausted before the heuristic can escape a deep local minimum, making it practically equivalent to or worse than Batcher's base network.",
+      "The overhead of evaluating all possible comparators against 8192 vectors for each step makes the greedy approach too computationally expensive to complete enough iterations within the budget compared to cheaper random modifications."
+    ],
+    "evidence_refs": [
+      {
+        "block": "b01150a3ae43d8f6",
+        "quote": "The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n."
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it — a few milliseconds of pure Python, no network access, deter"
+      },
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "S(n): 0 1 3 5 9 12 16 19 25 29 35 39 The n = 9 and n = 10 cases were settled by exhaustive SAT-ba"
+      }
+    ],
+    "typicality": 0.6,
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    }
+  }
+}
+```
