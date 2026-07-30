@@ -1,0 +1,34 @@
+```json
+{
+  "candidate": {
+    "claim": "The stall at rank 23 for <3,3,3> is best explained by a rationality-and-symmetry obstruction: any rank-22 decomposition over a characteristic-0 field must place coefficient-matrix entries in a number-field extension of degree ≥ 2, and no such decomposition exists over Q. This predicts (a) exhaustive bounded-denominator rational search finds no rank-22 solution, (b) floating-point ALS searches approach but never certify rank 22, and (c) a rank-22 solution may exist modulo some small prime p without lifting to characteristic 0.",
+    "mechanism": "The symmetry group of <3,3,3> (factor permutations plus inner automorphisms from GL_3^3) acts on the set of rank-r decompositions. For rank 23, Laderman's construction has a residual symmetry (order-3 cyclic) that is compatible with rational coefficients. Reducing to 22 terms forces the orbit structure to break this cyclic symmetry: the 22 rank-1 terms cannot be partitioned into orbits whose sizes sum to 22 while preserving the trilinear identity over Q. The only escape is to allow coefficients in a quadratic or higher extension where the orbit-stabilizer constraints relax, but the polynomial identity conditions (729 integer comparisons) then require algebraic-integer cancellations that are provably impossible for degree-2 extensions because the Galois conjugate of any valid decomposition would give a second distinct valid decomposition, and the tensor's known degeneracy structure forbids two conjugate decompositions from both being rank-minimal.",
+    "counterconditions": [
+      "A rank-22 decomposition with all coefficient matrices having rational entries is found and sandbox-verified.",
+      "A rank-22 decomposition over a quadratic number field is found and sandbox-verified, contradicting the impossibility claim for degree-2 extensions.",
+      "An exhaustive search over rational coefficient matrices with bounded denominators (e.g., |entries| ≤ B for B up to 10^4) finds a rank-22 solution, showing the obstruction is not rationality but search-depth.",
+      "A structural lemma proving that the orbit-stabilizer argument is vacuous (e.g., because rank-1 terms need not lie in distinct symmetry orbits) is demonstrated."
+    ],
+    "evidence_refs": [
+      {
+        "block": "695e3101e0b7bef8",
+        "quote": "1. **Symmetry obstruction.** The `<3,3,3>` tensor has a large symmetry group. If every rank-22 decomposition would have to break that symmetry in a way that for"
+      },
+      {
+        "block": "1db0851ec995fd3d",
+        "quote": "**R(3,3,3) is unknown.** The best construction anyone has found uses 23 multiplications. The best proved lower bound is 19. Whether 22, 21, or 20 is achievable"
+      },
+      {
+        "block": "70df46c005c36307",
+        "quote": "23 has stood since 1976 despite: decades of hand construction; numerical alternating-least-squares searches; SAT and Groebner-basis attacks; and a"
+      }
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.45
+  }
+}
+```
