@@ -118,6 +118,53 @@ two-step form remains available for parse-once/reason-many workflows:
 `deepreason admit FILES --problem "question"` followed by
 `deepreason reason "question" --dossier DIGEST`.
 
+### Changing the question, or adding evidence, after a run has stopped
+
+Real inquiry rarely survives contact with its first question. You read the
+result, and what you actually wanted to ask is now slightly different — or a
+colleague sends you the paper you should have had on day one. Starting over
+would throw away everything the run established.
+
+`deepreason amend` adds to a stopped run instead of replacing it:
+
+```bash
+# add evidence, reshape the question, or both
+deepreason --root RUN_ROOT amend \
+  --attach new-paper.pdf \
+  --reshape-question "Under what conditions does the effect reverse?"
+
+# then carry on in the same run
+deepreason --root RUN_ROOT continue --budget cycles=4
+```
+
+The reshaped question enters as a new problem and gets first claim on the
+next continuation's budget. Everything the run already established stays:
+the old question keeps its record, its rival positions, its accepted
+answers, and their status. Nothing is deleted, edited, or re-scored — the
+record can still show you exactly what you used to be asking and what
+survived it.
+
+New documents are admitted the same way `--attach` admits them at the start:
+same parser, same typed refusals, their own evidence dossier with its own
+digest. Evidence is cumulative, so later cycles reason against the old and
+new material together, and a quotation that was byte-verified against the
+original evidence verifies identically afterwards. A file already admitted
+to the run is refused up front — an amendment adds evidence, it does not
+re-add it.
+
+`amend` refuses, with a typed reason, unless the run is standing at a real
+terminal stop, and refuses an amendment that would change nothing. Each
+amendment is one epoch, chained to the last behind a declared position in
+the run's history, so replay validates each side of that boundary against
+the evidence and question in force there. If the process dies mid-amendment
+the run says so and will not continue until the amendment is completed or
+replaced — it never half-applies.
+
+What an amendment cannot do is change the run's routing, budgets, policy, or
+provider profile. Those stay frozen for the life of a run, which is what
+lets an amended run keep its existing qualification instead of requalifying.
+If you need different machinery, you need a different run.
+
 ### The local web page
 
 ```bash
@@ -187,7 +234,7 @@ MCP client's configuration.
 
 ## MCP public facade
 
-The installed MCP server exposes exactly eighteen tools. All input schemas are
+The installed MCP server exposes exactly twenty tools. All input schemas are
 closed and bounded.
 
 | Tool | Public authority |
@@ -196,6 +243,8 @@ closed and bounded.
 | `start_run` | Prepare and start one normal question with an optional bounded budget and optional local document attachments admitted as frozen evidence. |
 | `run_status` | Read current lifecycle and append-only progress for an opaque managed run ID. |
 | `run_result` | Read the fixed terminal result for an opaque managed run ID. |
+| `run_findings` | Read a replay-derived findings summary: rivalry sets, refutations with their attackers, suspended positions, spawned side branches with worked/starved status, and the criticism and capability ledgers. |
+| `amend_run` | Admit further evidence and/or reshape the central question of a stopped managed run, as an appended epoch that supersedes neither its record nor its earlier evidence. |
 | `continue_run` | Request bounded continuation of the same managed run when durable lifecycle authority permits it. |
 | `cancel_run` | Request cancellation at the next safe completed-cycle boundary. |
 | `scratch_map` | Read a bounded cluster map from immutable advisory scratch history. |
@@ -233,6 +282,14 @@ including the required stop, checkpoint, event fence, manifest identity, and
 empty outstanding-work conditions. Cancellation is likewise operational: it
 is observed at a safe completed-cycle boundary and does not let a caller set
 epistemic status.
+
+Amendment is narrower still. `amend_run` may supersede only the question and
+the evidence, and only from a valid terminal stop: it registers the reshaped
+question as a new problem and admits new documents as their own dossier,
+leaving every earlier problem, position, status, and dossier byte-identical.
+It cannot change routing, budgets, policy, or provider profile, so the run's
+qualification remains valid and is not re-run. A caller cannot use it to set
+epistemic status, retract a refutation, or reach evidence already admitted.
 
 Terminal state alone is not sufficient evidence of valid success. The current
 V6 terminal commitment must have a fresh matching replay-validation binding,

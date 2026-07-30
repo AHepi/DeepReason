@@ -90,6 +90,28 @@ The caller does not choose a root, manifest, route, policy, or qualification
 record. DeepReason returns an opaque managed run identity in the terminal JSON
 result.
 
+`deepreason amend` appends one typed epoch to a run standing at a terminal
+stop, admitting further evidence and/or superseding the central question,
+after which `deepreason continue` resumes the same run:
+
+```bash
+deepreason --root RUN_ROOT amend --attach further-evidence.pdf \
+  --reshape-question "REVISED QUESTION"
+deepreason --root RUN_ROOT continue --budget cycles=4
+```
+
+The amendment is strictly additive: one new seed problem whose provenance
+names the question it supersedes, one new dossier for the admitted files,
+and no status change to anything already recorded. The manifest is copied
+verbatim across the epoch, so the qualification subject is unchanged and no
+requalification occurs. Typed refusals cover a run not at a terminal stop
+(`AMEND_NOT_AT_TERMINAL`), an amendment that changes nothing
+(`AMEND_EMPTY`, `AMEND_QUESTION_UNCHANGED`, `AMEND_NO_EFFECT`), evidence
+already admitted (`AMEND_SOURCE_ALREADY_ADMITTED`), evidence beyond the
+frozen attached-evidence budget (`AMEND_EVIDENCE_BUDGET_EXCEEDED`), and an
+epoch staged but never committed (`CONTINUE_AMENDMENT_INCOMPLETE` on the
+following continuation).
+
 `python -m deepreason` invokes the same installed parser and accepts the same
 arguments:
 
@@ -103,7 +125,7 @@ not edit any client's configuration.
 
 ## MCP contract
 
-The production MCP facade contains exactly eighteen unique tools:
+The production MCP facade contains exactly twenty unique tools:
 
 | Tool | Semantics |
 |---|---|
@@ -111,6 +133,8 @@ The production MCP facade contains exactly eighteen unique tools:
 | `start_run` | Prepare and start a question with an optional bounded budget. |
 | `run_status` | Read lifecycle and progress using an opaque managed run ID. |
 | `run_result` | Read a fixed terminal result using an opaque managed run ID. |
+| `run_findings` | Read a replay-derived findings summary for one managed run. |
+| `amend_run` | Append an evidence/question amendment epoch to a stopped run. |
 | `continue_run` | Continue the same run only under durable typed lifecycle authority. |
 | `cancel_run` | Request cancellation at a safe completed-cycle boundary. |
 | `scratch_map` | Read a bounded immutable scratch cluster map. |
@@ -236,5 +260,5 @@ pytest
 
 Developers may inspect internal manifests, roots, application intents, and
 historical migrations when maintaining the product. A public caller or agent
-must stay within the question-first CLI and the eighteen-tool closed MCP
+must stay within the question-first CLI and the twenty-tool closed MCP
 facade above.
