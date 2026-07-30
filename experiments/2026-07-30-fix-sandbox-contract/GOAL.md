@@ -124,3 +124,33 @@ program. Capability-channel use is stochastic (CLAUDE.md), so a live run
 is not the criterion here. What is decidable offline is whether the
 contract the harness enforces is present in the bytes the model is
 shown.
+
+---
+
+## Amendment (during dr-propose-fix): two criterion filenames were wrong
+
+The success criterion above named `tests/test_simulation_capability.py`
+and `tests/test_llm_packs.py`. Neither exists; both were written before
+the test tree was searched. The criterion's substance is unchanged and
+reads against the real files:
+
+    pytest tests/test_simulation_compiler.py tests/test_simulation_capability_v5.py -q
+        passes, including a new regression test naming
+        run-27b80f26bd398c718360e97e2a403593 in its docstring, asserting
+        that the conjecturer schema a simulation-enabled v5 or v6 run
+        renders contains (a) the simulate(inputs, rng) signature and
+        (b) the rule binding requested_observables to the mapping the
+        program returns.
+
+The other two criteria (full gate 0 failed; `verify_root` verdicts
+byte-identical) stand as written.
+
+## Amendment: one of the two pre-authorised baselines does not move
+
+Measured in `dr-propose-fix` and recorded here because it narrows what
+this tranche spends of the operator's authority.
+`tests/fixtures/semantic_freedom_baseline_v1.json` does NOT move —
+`tokens_per_admitted_useful_candidate` stays 784.5 — because that
+fixture's conjecturer prompts do not carry `SimulationProposalWireV1`.
+Only `generated_root_sha256.A3` in the incident-wave PROVENANCE.json
+moves. Evidence and mechanism in FIX.md.
