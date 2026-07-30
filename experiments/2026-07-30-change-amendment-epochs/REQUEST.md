@@ -169,3 +169,15 @@ fixed in this tranche. Operator selected:
 - **R12b** confirms **R12a** and adds: materializing a distinct successor
   manifest digest is PARKED, not implemented in this tranche. It goes in
   `PARKED.md` as a candidate future tranche.
+
+### Operator message on PARKED P2 (verbatim)
+
+> Yup. Amend needs to reject up front.  This is good news. Ok so after
+> you've made the change, push to branch please.
+
+- **R25** unparks **PARKED P2** and rules its open design question:
+  `amend` refuses, before any parsing or staging, when an attached file's
+  content is already admitted to this run. Refusal is whole-invocation,
+  matching `collect_attachment_inputs`' existing rule that admitting a
+  subset of what the operator pointed at would misrepresent the evidence
+  base. The cross-epoch uniqueness rule in `verify_root` is left alone.

@@ -156,3 +156,27 @@ glm-5.2 cites older dossier blocks once newer ones sit beside them, and
 whether the cycle-0 seed win survives a frontier carrying real
 discrimination and connection spawns. A live amendment run is the
 natural next tranche.
+
+## Addendum (post-delivery): PARKED P2 unparked and fixed
+
+Found while answering an operator question about the admission path,
+after the tranche was delivered: re-attaching a file already admitted to
+the run was accepted by `amend` and then reported as a violation by
+`verify_root`. Operator ruled (R25) that `amend` must reject it up front.
+
+`amend` now refuses before any parse, blob write, or staging, with
+`AMEND_SOURCE_ALREADY_ADMITTED`, naming the path and the source id it
+duplicates. The check spans every epoch's dossier, not just the original.
+Refusal is whole-invocation rather than admit-minus-duplicates, matching
+the rule `collect_attachment_inputs` already applies to an unreadable
+path — silently admitting a subset would misrepresent the evidence base.
+The cross-epoch uniqueness rule in `verify_root` was left alone; it was
+never wrong, it was correctly reporting a record `amend` should not have
+produced.
+
+| R | Operator's words (short) | Disposition | Proof |
+|---|---|---|---|
+| R25 | "Amend needs to reject up front" | done | PARKED.md P2 resolution; `test_amend_refuses_a_source_already_admitted_to_this_run`, `test_amend_refuses_content_admitted_by_an_earlier_amendment` |
+
+Full gate after the fix: see the commit message. Parked list is now P1
+only.

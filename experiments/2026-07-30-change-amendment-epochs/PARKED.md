@@ -53,12 +53,13 @@ invalidating committed roots; it should carry its own goal, its own
 frozen-surface approval, and a before/after `verify_root` sweep over
 every committed root as its acceptance check.
 
-## P2 — DEFECT: re-attaching an already-admitted source makes the root invalid
+## P2 — RESOLVED: re-attaching an already-admitted source made the root invalid
 
 Found 2026-07-30 while answering an operator question about the
-admission path, after the tranche was delivered. Parked, not fixed: a
-defect found outside a change tranche routes through
-`deepreason-orchestrator`, not through this one.
+admission path, after the tranche was delivered. Parked briefly, then
+UNPARKED by operator instruction (REQUEST.md R25: *"Amend needs to
+reject up front"*) and fixed in the same tranche. The original entry is
+kept below unchanged; the resolution is appended at the end.
 
 **Reproduction.** Take a converged root whose dossier already admits
 some file F. Run `deepreason amend --attach F` with F's exact bytes.
@@ -97,3 +98,34 @@ is doing real work and the duplicate carries no new evidence. Whether a
 partial overlap (some files new, some already admitted) should be
 refused wholesale or admitted minus the duplicates is the open design
 question, and belongs to that tranche's spec.
+
+### Resolution (R25)
+
+`amend` now refuses the duplicate before any parse, blob write, or
+staging. `_admit_supplement` receives the content digests of every source
+already bound to the run — across all epochs, not just the original
+dossier — and fails the whole invocation with
+`AMEND_SOURCE_ALREADY_ADMITTED`, naming the offending path and the source
+id it duplicates.
+
+The refusal is whole-invocation rather than admit-minus-duplicates: that
+is the rule `collect_attachment_inputs` already applies to an unreadable
+path, on the same reasoning — silently admitting a subset of what the
+operator pointed at would misrepresent the evidence base.
+
+The cross-epoch uniqueness rule in `verify_root` was left untouched, as
+the original entry suggested. It was never wrong; it was correctly
+reporting a record `amend` should not have produced.
+
+Reproduction, re-run against the fix:
+
+    amend refused up front: AMEND_SOURCE_ALREADY_ADMITTED
+    message: .../same-again.md is already admitted as
+      src-a7b17a1063413cfec12df194df73083127c3757a. An amendment admits
+      new evidence only; drop the already-admitted file(s) and re-run
+    run-epochs staged: False
+    verify_root violations: []
+
+Regression: `test_amend_refuses_a_source_already_admitted_to_this_run`
+(including the mixed-batch case and the drop-the-duplicate recovery) and
+`test_amend_refuses_content_admitted_by_an_earlier_amendment`.

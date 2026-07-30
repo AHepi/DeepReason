@@ -127,7 +127,10 @@ def _admit_supplement(
     problem_ref: str,
     supplied_by: str,
     allow_partial: bool,
+    already_admitted: dict[str, str],
 ):
+    import hashlib
+
     from deepreason.admission.attach import collect_attachment_inputs
     from deepreason.admission.parse import AdmissionError, admit_sources
 
@@ -138,6 +141,29 @@ def _admit_supplement(
     if not inputs:
         raise AmendmentError(
             "AMEND_NO_SOURCES", "supply at least one readable file to attach"
+        )
+    # Refused here, before any parse, blob write, or staging: a source is
+    # admitted to a run exactly once, and re-admitting one adds no evidence
+    # while producing a second introduction that replay validation rejects.
+    # The whole invocation fails rather than a subset being admitted —
+    # silently dropping some of what the operator pointed at would
+    # misrepresent the evidence base just as an unreadable path would.
+    duplicates = []
+    for item in inputs:
+        if not item.data:
+            continue
+        digest = hashlib.sha256(item.data).hexdigest()
+        if digest in already_admitted:
+            duplicates.append((item.locator, already_admitted[digest]))
+    if duplicates:
+        listed = "; ".join(
+            f"{locator} is already admitted as {source_id}"
+            for locator, source_id in duplicates
+        )
+        raise AmendmentError(
+            "AMEND_SOURCE_ALREADY_ADMITTED",
+            f"{listed}. An amendment admits new evidence only; drop the "
+            "already-admitted file(s) and re-run",
         )
     try:
         dossier, report = admit_sources(
@@ -362,16 +388,20 @@ def _amend_locked(
     supplement = None
     report = None
     if attach:
+        bound = dossier_union(root)
         supplement, report = _admit_supplement(
             root,
             paths=attach,
             problem_ref=successor_problem_id,
             supplied_by=supplied_by,
             allow_partial=allow_partial,
+            already_admitted={
+                source.content_sha256: source.id
+                for dossier in bound
+                for source in dossier.sources
+            },
         )
-        _check_evidence_budget(
-            parent_manifest, (*dossier_union(root), supplement)
-        )
+        _check_evidence_budget(parent_manifest, (*bound, supplement))
         successor_dossier = supplement
     else:
         # A question-only amendment cites exactly the dossier its parent did;

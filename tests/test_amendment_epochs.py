@@ -666,3 +666,66 @@ def test_staged_epoch_that_applied_events_refuses_and_names_the_route(
     first, latest = load_amendments(root)
     assert latest.parent_amendment_digest == first.amendment_digest
     assert verify_root(root)["violations"] == []
+
+
+def test_amend_refuses_a_source_already_admitted_to_this_run(
+    tmp_path, monkeypatch
+):
+    """Regression (PARKED P2): re-attaching admitted content used to be
+    accepted and then rejected by verify_root. It is refused up front now —
+    before any parse, blob write, or staging."""
+
+    root, _manifest, _service, _parent = _converged_root(tmp_path, monkeypatch)
+    duplicate = tmp_path / "same-again.md"
+    duplicate.write_text(SOURCE_TEXT, encoding="utf-8")
+    admitted = load_evidence_dossier(root)
+    (bound_source,) = admitted.sources
+
+    with pytest.raises(AmendmentError) as refusal:
+        amend_run(
+            root,
+            attach=(str(duplicate),),
+            reshape_question=RESHAPED_QUESTION,
+        )
+
+    assert refusal.value.code == "AMEND_SOURCE_ALREADY_ADMITTED"
+    assert bound_source.id in str(refusal.value)
+    assert "same-again.md" in str(refusal.value)
+    # Refused before anything was staged or applied: no epoch, no chain, no
+    # ledger growth, and the root stays valid.
+    assert not (root / "run-epochs").exists()
+    assert load_amendments(root) == ()
+    assert staged_amendment(root) is None
+    assert verify_root(root)["violations"] == []
+
+    # A mixed batch is refused whole, not admitted minus the duplicate.
+    fresh = tmp_path / "fresh.md"
+    fresh.write_text(SUPPLEMENT_TEXT, encoding="utf-8")
+    with pytest.raises(AmendmentError) as mixed:
+        amend_run(root, attach=(str(fresh), str(duplicate)))
+    assert mixed.value.code == "AMEND_SOURCE_ALREADY_ADMITTED"
+    assert load_amendments(root) == ()
+
+    # The same batch minus the duplicate is admitted normally.
+    result = amend_run(root, attach=(str(fresh),))
+    assert result["epoch"] == 1
+    assert verify_root(root)["violations"] == []
+
+
+def test_amend_refuses_content_admitted_by_an_earlier_amendment(
+    tmp_path, monkeypatch
+):
+    """The uniqueness rule spans epochs, not just the original dossier."""
+
+    root, _manifest, _service, _parent = _converged_root(tmp_path, monkeypatch)
+    supplement = _supplement_file(tmp_path)
+    amend_run(root, attach=(str(supplement),))
+
+    again = tmp_path / "sampled-copy.md"
+    again.write_text(SUPPLEMENT_TEXT, encoding="utf-8")
+    with pytest.raises(AmendmentError) as refusal:
+        amend_run(root, attach=(str(again),), reshape_question=RESHAPED_QUESTION)
+
+    assert refusal.value.code == "AMEND_SOURCE_ALREADY_ADMITTED"
+    assert len(load_amendments(root)) == 1
+    assert verify_root(root)["violations"] == []
