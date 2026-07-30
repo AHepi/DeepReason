@@ -367,3 +367,89 @@ unfunded at both firings; the reservation sizing is the next tuning
 knob. Rivalry discipline improved without new machinery: 34 accepted
 positions against attempt 6's 70, on the same budget, with the
 disagreement preserved as unresolved rivals rather than merged.
+
+## Segment 7 (2026-07-30): a genuinely open problem, and what four attempts proved
+
+A new all-capability ladder (`openchallenge_run.sh`, fresh home, fresh
+full qualification battery) put glm-5.2 on an unsolved programming
+problem: the minimal 13-input sorting network. S(13) is unknown — proven
+optimal only through n=12, best known 45 comparators, Batcher's
+construction 48 (verified during dossier compilation) — and every
+candidate is exactly decidable in the contained sandbox by the 0-1
+principle (8192 binary vectors, ~60 ms). Two dossier documents were
+attached: the problem statement and a capability contract that
+explicitly mandates the TYPED simulation and research channels, citing
+the previous segment's prose-only failure mode. Four attempts, all
+preserved as epochs of the run identity:
+
+- **Attempt 1 (failed-epoch1, typed failure).** glm-5.2 spent its entire
+  8192-token completion cap on hidden reasoning about the combinatorial
+  problem and emitted nothing — three attempts at completion=8192 with
+  empty output, repairs returning empty objects, and the route seat
+  failing closed with V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY at cycle 0.
+  A genuinely hard question needs a deep completion budget: the ladder
+  now sets 24576.
+- **Attempt 2 (completed-epoch2): every typed channel fired — and a new
+  defect.** Typed budget_exhausted, 178,642/200,000. The model filed TWO
+  typed sandboxed_python_v1 simulation proposals, each a genuinely
+  discriminating experiment (simulated annealing vs uninformed random
+  search at n=7; pruned-exhaustive vs evolutionary search at n=9), and
+  TWO typed research proposals; the research chain ran END TO END —
+  proposed, granted, compiled, dispatched, fetched
+  (en.wikipedia.org/wiki/Sorting_network, ~197 KB), packaged, consumed
+  as citable evidence. But both simulation proposals were denied
+  (request_budget_exhausted / execution_budget_exhausted) with ZERO
+  simulations run: the capability state pools every capability's
+  proposals and work orders, and the simulation budget gate counted the
+  pooled totals, so the two research fetches had silently exhausted the
+  simulation budgets. Fixed (gate and accounting now count only
+  simulation records) with a regression test that drives two full
+  research chains and then requires the first simulation proposal to
+  clear untouched budgets; full gate 3107/0.
+- **Attempts 3 and 4 (completed-epoch3, and the standing root): clean,
+  cited, and typed-channel-silent.** Both completed with typed
+  budget_exhausted (174,513 and 176,638 tokens), healthy
+  question-first rotation, zero replay violations, and verified
+  citations (21 and 8) — but neither filed a single typed capability
+  proposal, so the budget fix could not be exercised live. The filing
+  behavior is stochastic across identically-configured runs: the same
+  model, question, and contract that produced four typed proposals in
+  attempt 2 produced none in attempts 3 and 4.
+
+**What the model said about the problem.** The accepted positions form a
+real rivalry about where S(13) lives and why search stalls at 45:
+extension arguments (an optimal 12-input prefix plus a 5-comparator
+insertion tail would give 44 — rivaled by the claim that integrating a
+13th channel needs at least 6 comparators, and criticized correctly for
+assuming a 44-network must embed an optimal 12-prefix at all);
+landscape arguments (no single-comparator removal from a 45-network
+preserves sorting, so 45-to-44 needs simultaneous structural changes;
+44-networks may be disconnected from 45-networks under local search
+moves); and strategy claims (symmetry-pruned local search from Batcher
+beats naive synthesis; SAT symmetry-breaking may over-prune asymmetric
+optima). The record's criticism enforced the capability contract
+relentlessly — candidate after candidate convicted for describing a
+discriminating simulation while leaving the typed channel empty — and
+caught real mathematical errors, including an inversion-count pruning
+bound that is invalid because non-adjacent comparators resolve multiple
+inversions at once. No 44-comparator network was produced; no candidate
+network was sandbox-verified, because no simulation was ever granted.
+
+**The campaign's honest ledger.** Across the four attempts every
+DeepReason capability was exercised live except one: attach admission
+and byte-checked citation (three runs), contained research fetch to
+consumption (attempt 2), typed simulation proposal and typed denial
+(attempt 2), typed run failure fail-closed (attempt 1), typed
+budget_exhausted stops and clean replay (attempts 2-4). The one part
+never exercised live remains contained simulation EXECUTION — blocked
+first by the pooling defect, then by the model simply not filing. The
+lever is no longer harness correctness (the offline regression proves
+the full grant-execute-consume chain); it is turn-contract affordance:
+the typed proposal channel needs to be un-ignorable in the conjecturer
+contract — for example a required field forcing each candidate to
+either reference a filed simulation or state why none discriminates —
+before a live granted execution can be counted on rather than hoped
+for. The referee also stayed starved in all three completed attempts
+(six typed budget_denied transactions) under the question's
+atomic-candidate appetite; its reservation sizing is the other standing
+knob.
