@@ -893,20 +893,34 @@ class Scheduler:
             # Aging priority (docs/CONTROLLER_SPEC.md liveness): age = cycles
             # since a problem was last WORKED (never-worked => -1, so it has
             # waited longest). age grows without bound until the problem wins,
-            # so nothing starves; unsolved outweighs solved; lower id breaks
-            # ties. Selecting a problem resets its age — that is what makes
-            # this a fair rotation rather than a fixed winner.
+            # so nothing starves; unsolved outweighs solved; reflexive
+            # housekeeping loses ties to independent work, then lower id
+            # breaks what remains. Selecting a problem resets its age — that
+            # is what makes this a fair rotation rather than a fixed winner.
+            #
+            # The reflexive tie-break is a live-run guarantee, not a
+            # nicety: at cycle 0 every problem is never-worked, so before
+            # it the winner fell to the id tie-break — and an attach-spawned
+            # "conn:<id>" sorts before "question-<digest>". One recorded run
+            # (selfstudy run-9175f0ec) spent its entire 200k budget inside
+            # that first connection cycle and the operator's question
+            # terminated budget_denied without a single provider call. The
+            # operator's question must always hold first claim on the
+            # budget; reflexive problems still rotate in afterwards on age.
             def rank(p):
                 age = self._cycles - self._problem_worked.get(p.id, -1)
                 weight = 1.0 if not survivors_by_problem.get(p.id) else 0.3
-                return (-(age * weight), p.id)
+                return (-(age * weight), p.id in reflexive, p.id)
 
             best = min(candidates, key=rank)
             self._problem_worked[best.id] = self._cycles
             return best
         # Unsolved problems first, then round-robin rotation by cycle count.
+        # Stable sort keeps registration order within each class while
+        # independent problems precede reflexive housekeeping, so cycle 0
+        # lands on the operator's question here too.
         unsolved = [p for p in candidates if not survivors_by_problem.get(p.id)]
-        pool = unsolved or candidates
+        pool = sorted(unsolved or candidates, key=lambda p: p.id in reflexive)
         return pool[self._cycles % len(pool)]
 
     def _school_dict(self, school_id: str) -> dict:

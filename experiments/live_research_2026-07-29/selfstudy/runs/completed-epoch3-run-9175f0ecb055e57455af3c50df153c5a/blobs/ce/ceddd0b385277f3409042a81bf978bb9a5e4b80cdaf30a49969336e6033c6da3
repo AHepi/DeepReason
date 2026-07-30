@@ -1,0 +1,14 @@
+{
+  "candidate": {
+    "content": "The state-of-the-theory record integrates the basin report because it incorporates the machine's repertoire exhaustion and refuted attractors into its overall status; refuted if the state record does not include the basin report's repertoire exhaustion findings.",
+    "typicality": 0.7,
+    "neighbours": [
+      "SRC_002"
+    ],
+    "evidence_refs": [
+      {
+        "block": "0f99efbab8a4c4bd449d193dd01495355cd97d9a964a17f1934c94474ee9e222"
+      }
+    ]
+  }
+}

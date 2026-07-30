@@ -1,0 +1,40 @@
+{
+  "candidates": [
+    {
+      "content": "0e26d6be54fd depends on SRC_004: it operationalizes the programmatic commitments recorded in the state-of-the-theory dossier, treating those commitments as background assumptions without which its own claims are ill-formed. It is refuted if 0e26d6be54fd can be fully interpreted without invoking any commitment from SRC_004, or if it directly contradicts a commitment that SRC_004 marks as load-bearing.",
+      "typicality": 0.6,
+      "neighbours": ["SRC_004"]
+    },
+    {
+      "content": "0e26d6be54fd reduces to SRC_003: its claims are concrete instances of the formal harness mechanics specified in v1.3, so the artifact's behavior should be derivable from that specification. It is refuted if 0e26d6be54fd exhibits behavior that is not expressible under the v1.3 formal spec, or if it requires machinery outside that spec to be explained.",
+      "typicality": 0.5,
+      "neighbours": ["SRC_003"]
+    },
+    {
+      "content": "0e26d6be54fd shares mechanism with SRC_001: both rely on the same token-economy discipline, where repertoire exhaustion and token-budget pressure shape admissible conjectures. It is refuted if 0e26d6be54fd's dynamics do not depend on token-burn or repertoire constraints in any way analogous to SRC_001.",
+      "typicality": 0.45,
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "0e26d6be54fd integrates SRC_002: it combines the normative amendments of the v1.5 amendment with the earlier harness spec, producing a composite operational rule set. It is refuted if 0e26d6be54fd predates SRC_002 and therefore could not have integrated it, or if it is incompatible with the amendment's required changes.",
+      "typicality": 0.4,
+      "neighbours": ["SRC_002"]
+    },
+    {
+      "content": "0e26d6be54fd contradicts SRC_005: it presents an escape from the refuted-attractor basin that SRC_005 describes as terminal, denying that repertoire exhaustion is an absorbing state. It is refuted if 0e26d6be54fd's claimed escape is itself a basin artifact, or if it re-enters the same exhaustion pattern without breaking the attractor.",
+      "typicality": 0.3,
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "0e26d6be54fd abstracts both SRC_004 and SRC_005: it extracts a general principle of conjecture cycling from the case-specific state-of-theory and basin records, subsuming their particulars under a broader schema. It is refuted if the abstraction fails to cover either the load-bearing commitments of SRC_004 or the basin phenomenology of SRC_005.",
+      "typicality": 0.25,
+      "neighbours": ["SRC_004", "SRC_005"]
+    }
+  ],
+  "context_request": {
+    "query": "What is the actual content and type of artifact 0e26d6be54fd? I need its text, its role, and whether it is a theory document, experimental result, spec amendment, or meta-artifact about a prior connection attempt.",
+    "purpose": "Without the content of 0e26d6be54fd, every proposed relation to the SRC foundations is underdetermined and cannot be adjudicated beyond plausibility.",
+    "desired_retrieval_channels": ["semantic", "focus", "keyword"],
+    "requested_visible_aliases": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005", "SCR_001", "SCR_002", "SCR_003", "SCR_005", "SCR_010", "SCR_011"]
+  }
+}

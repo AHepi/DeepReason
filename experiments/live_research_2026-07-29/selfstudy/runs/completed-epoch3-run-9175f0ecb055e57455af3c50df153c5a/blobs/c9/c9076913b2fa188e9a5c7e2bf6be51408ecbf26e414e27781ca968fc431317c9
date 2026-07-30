@@ -1,0 +1,82 @@
+```json
+{
+  "candidates": [
+    {
+      "content": "DEPENDS ON: Artifact 0e26d6be54fd depends on SRC_004 (What the Machine Currently Holds) because any substantive claim about 0e26d6be54fd's role in the neighbourhood presupposes the current theory state recorded in SRC_004 — without that grounding, 0e26d6be54fd has no interpretive frame. This is REFUTED IF 0e26d6be54fd can be interpreted and adjudicated entirely without reference to the current theory state, or if SRC_004's recorded state is shown to be irrelevant to 0e26d6be54fd's content.",
+      "typicality": 0.72,
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173fa9fb61c145772881"}
+      ],
+      "neighbours": ["SRC_004"]
+    },
+    {
+      "content": "REDUCES TO: Artifact 0e26d6be54fd reduces to SRC_003 (Formal Build Spec v1.3) because if 0e26d6be54fd is a normative or structural artifact about the conjecture-criticism harness, its content should be expressible as a specialization or instance of the formal specification in SRC_003. This is REFUTED IF 0e26d6be54fd introduces constructs, obligations, or semantics that cannot be derived from or mapped onto the v1.3 specification, or if it operates in a domain outside the harness's formal scope.",
+      "typicality": 0.55,
+      "evidence_refs": [
+        {"block": "9116c8592387ce22d436cde600d77077d2b08176"}
+      ],
+      "neighbours": ["SRC_003"]
+    },
+    {
+      "content": "CONTRADICTS: Artifact 0e26d6be54fd contradicts SRC_005 (When Conjecture Circles: Repertoire Exhaustion and Refuted-Attractor) because if 0e26d6be54fd represents a successful connection that escaped basin-trapping, it stands as a counter-instance to the repertoire-exhaustion dynamic described in SRC_005 — demonstrating that neighbourhood connection is achievable where SRC_005 predicts cycling. This is REFUTED IF 0e26d6be54fd is itself a record of a failed or still-cycling connection attempt (as the scratch context hypothesizes), in which case it would exemplify rather than contradict SRC_005.",
+      "typicality": 0.35,
+      "evidence_refs": [
+        {"block": "daf9e84b84596ff59505e6b038681c55a3d84b24"}
+      ],
+      "neighbours": ["SRC_005"]
+    },
+    {
+      "content": "SHARES MECHANISM: Artifact 0e26d6be54fd shares mechanism with SRC_001 (Reducing Token Burn Without Sacrificing the Epistemology) because both artifacts plausibly employ the same epistemic strategy — preserving conjecture quality while constraining resource expenditure. If 0e26d6be54fd is a method for neighbourhood connection under token-budget pressure, its underlying mechanism (e.g., compact candidate generation, adversarial pruning) would be structurally homologous to SRC_001's token-economy approach. This is REFUTED IF 0e26d6be54fd's connection method does not involve any resource-budget tradeoff, or if its mechanism operates at a different layer (e.g., semantic rather than economic) with no shared structural pattern.",
+      "typicality": 0.48,
+      "evidence_refs": [
+        {"block": "74ded11eccee525366948958d3b4fb57bccbdeb2"}
+      ],
+      "neighbours": ["SRC_001"]
+    },
+    {
+      "content": "INTEGRATES: Artifact 0e26d6be54fd integrates with SRC_002 (Harness v1.5 Normative Amendment) because a new neighbourhood-connection artifact would need to comply with and extend the amendment's normative constraints — it cannot stand alone as a pure v1.3 artifact if v1.5 obligations are in force. The integration is bidirectional: 0e26d6be54fd inherits v1.5's adjudication rules while contributing a concrete connection case that tests the amendment's adequacy. This is REFUTED IF 0e26d6be54fd predates or explicitly operates outside the v1.5 amendment's scope, or if its connection logic is independent of any normative harness constraint.",
+      "typicality": 0.60,
+      "evidence_refs": [
+        {"block": "7a3d186479cefef7597b38dbd96a905207f51cba"}
+      ],
+      "neighbours": ["SRC_002"]
+    },
+    {
+      "content": "ABSTRACTS: Artifact 0e26d6be54fd abstracts from SRC_004 (What the Machine Currently Holds) and SRC_005 (Basin Report) jointly, because if 0e26d6be54fd is a meta-artifact about the connection process itself — recording a prior failed attempt that ended in repertoire exhaustion — it generalizes the specific basin dynamics of SRC_005 into a reusable structural lesson about neighbourhood connection failure, while drawing its factual grounding from SRC_004's theory-state snapshot. The abstraction elevates a concrete failure record into a transferable pattern. This is REFUTED IF 0e26d6be54fd is not a meta-artifact but a substantive domain claim, or if its content cannot be decomposed into elements traceable to both SRC_004 and SRC_005.",
+      "typicality": 0.25,
+      "evidence_refs": [
+        {"block": "95e7a2acb742b1d6187b173fa9fb61c145772881"},
+        {"block": "daf9e84b84596ff59505e6b038681c55a3d84b24"}
+      ],
+      "neighbours": ["SRC_004", "SRC_005"]
+    }
+  ],
+  "context_request": {
+    "query": "What is the actual content, type, and provenance of artifact 0e26d6be54fd? Is it a theory document, experimental result, spec amendment, meta-artifact about the connection process, or something else? Any accepted neighbourhood relations from prior turns?",
+    "purpose": "All proposed relations between 0e26d6be54fd and the SRC neighbourhood are speculative without knowing 0e26d6be54fd's content. Retrieving it would allow retracting incompatible candidates and sharpening survivors.",
+    "desired_retrieval_channels": ["focus", "semantic", "recent"],
+    "requested_visible_aliases": ["SRC_001", "SRC_002", "SRC_003", "SRC_004", "SRC_005"]
+  },
+  "scratch_proposal": {
+    "unresolved_questions": [
+      {
+        "question": "What is the actual content of artifact 0e26d6be54fd? Without this, all six candidates above are underdetermined and cannot be adjudicated. Is it a new theory document, an experimental result, a spec amendment, a meta-artifact about connection failure, or something else entirely?",
+        "related_refs": ["SRC_004", "SRC_005", "SCR_003", "SCR_005"]
+      },
+      {
+        "question": "If 0e26d6be54fd is itself a meta-artifact recording a prior failed connection attempt (as hypothesized in SCR_002 and SCR_006), does the 'contradicts SRC_005' candidate collapse into 'shares mechanism with SRC_005' or 'reduces to SRC_005'?",
+        "related_refs": ["SRC_005", "SCR_002", "SCR_006"]
+      }
+    ],
+    "new_blocks": [
+      {
+        "local_key": "NEW_001",
+        "body": {
+          "content": "Candidate diversity audit: the six proposed candidates cover dependence (SRC_004), reduction (SRC_003), contradiction (SRC_005), shared mechanism (SRC_001), integration (SRC_002), and joint abstraction (SRC_004+SRC_005). This spans all relation types requested by the problem. The contradiction and abstraction candidates are atypical (typicality 0.35 and 0.25) because they require specific content assumptions about 0e26d6be54fd that may not hold. The context_request is the most important output: without 0e26d6be54fd's content, no candidate can be properly adjudicated.",
+          "why_keep_this": "Documents the rationale for candidate diversity and flags the central epistemic gap for the next turn."
+        }
+      }
+    ]
+  }
+}
+```

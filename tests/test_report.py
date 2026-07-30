@@ -38,12 +38,38 @@ def test_eval_report_from_scheduler_run(tmp_path):
             provenance=ProblemProvenance.model_validate({"trigger": "seed", "from": []}),
         )
     )
+
+    # Both candidates satisfy k-moon: no refutations means no successor
+    # spawn treadmill, and with discrimination paused the never-worked
+    # pool is reflexive-only — so a connection problem gets worked and
+    # its structural criteria programs (lineage-ref, relation-form) feed
+    # the program-grounding section this test asserts on. Reflexive
+    # problems lose selection ties to independent work, so the seed
+    # keeps first claim on the run.
+    def _vs_all_pass(prompt: str) -> str:
+        return json.dumps(
+            {
+                "candidates": [
+                    {
+                        "content": f"the moon pulls the sea ({hash(prompt) % 97})",
+                        "typicality": 0.8,
+                    },
+                    {
+                        "content": f"the moon's orbit drags the tide ({hash(prompt) % 89})",
+                        "typicality": 0.2,
+                    },
+                ]
+            }
+        )
+
     adapter = LLMAdapter(
-        {"conjecturer": MockEndpoint(_vs), "variator": MockEndpoint(_edits)},
+        {"conjecturer": MockEndpoint(_vs_all_pass), "variator": MockEndpoint(_edits)},
         harness.blobs,
         retry_max=2,
     )
-    config = Config(VS_K=2, N_SCHOOLS=2, HV_K=3, HV_MIN=0.5, CAPTURE_W=10)
+    config = Config(
+        VS_K=2, N_SCHOOLS=2, HV_K=3, HV_MIN=0.5, CAPTURE_W=10, DISC_ATTEMPTS_MAX=0
+    )
     Scheduler(harness, adapter, config).run(4)
     # Stage a trial block and an intervention so those sections populate.
     harness.record_measure(inputs=["trial-blocked:order-swap", "case-1"])

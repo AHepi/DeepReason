@@ -2708,7 +2708,12 @@ def verify_root(root: Path, meter_total: int | None = None) -> dict:
                     "conjecture-context",
                     f"{prefix}: render receipt names another selection",
                 )
-            if selection is not None and list(render.block_handles.values()) != list(
+            # Compare by handle index, not mapping order: the persisted
+            # canonical JSON sorts keys, so .values() interleaves B10
+            # between B1 and B2 once a window reaches ten blocks (fired
+            # live at seqs 390/547 of the selfstudy run as a spurious
+            # violation on faithful renders).
+            if selection is not None and list(render.ordered_refs("block")) != list(
                 selection.final_order
             ):
                 fail(

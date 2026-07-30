@@ -175,6 +175,48 @@ def test_forbidden5_liveness_queue_starves_no_problem(tmp_path):
     assert picked == {"pi-0", "pi-1", "pi-2", "pi-3"}, f"a problem starved: {picked}"
 
 
+# --- #5b: reflexive problems lose ties to independent work -------------- #
+def test_operator_question_outranks_reflexive_spawn_at_cycle_zero(tmp_path):
+    """Regression (selfstudy run-9175f0ec): at cycle 0 every problem is
+    never-worked, so selection fell to the id tie-break — and an
+    attach-spawned "conn:<id>" sorts lexicographically before
+    "question-<digest>". That run spent its full 200k budget inside the
+    first connection cycle; the operator's question terminated
+    budget_denied with zero provider calls. Reflexive housekeeping must
+    lose ties to independent work in both selection modes."""
+    for liveness in (True, False):
+        h = Harness(tmp_path / f"run-{liveness}")
+        h.register_commitment(Commitment(id="k-q", eval="predicate:'x' in content"))
+        # Register the connection problem FIRST with an id sorting before
+        # the question's, mirroring the live run's spawn-before-select.
+        h.register_problem(Problem(
+            id="conn:0e26d6be54fd", description="connect isolated artifact",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "connection", "from": []}),
+        ))
+        h.register_problem(Problem(
+            id="question-98a0e3a77a0e", description="the operator's question",
+            criteria=["k-q"],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}),
+        ))
+        config = Config(LIVENESS_QUEUE=liveness, N_SCHOOLS=0)
+        adapter = LLMAdapter({}, h.blobs)
+        sched = Scheduler(h, adapter, config)
+        first = sched._select_problem()
+        assert first is not None and first.id == "question-98a0e3a77a0e", (
+            f"cycle 0 (liveness={liveness}) went to {first and first.id}: "
+            "reflexive spawn preempted the operator's question"
+        )
+        if liveness:
+            # The rotation stays fair: once the question has been worked,
+            # the aged connection problem wins the next cycle.
+            sched._cycles = 1
+            second = sched._select_problem()
+            assert second is not None and second.id == "conn:0e26d6be54fd"
+
+
 # --- #6: fail-static — no policy while the last is under standing attack - #
 def test_forbidden6_fail_static_holds_under_standing_attack(tmp_path):
     from deepreason.ontology import Provenance, Rule, Warrant, WarrantType

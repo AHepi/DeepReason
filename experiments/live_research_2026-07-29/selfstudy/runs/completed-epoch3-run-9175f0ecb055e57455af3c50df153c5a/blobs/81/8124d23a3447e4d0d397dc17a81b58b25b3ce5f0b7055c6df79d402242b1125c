@@ -1,0 +1,38 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003", "SRC_004"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 4, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (conn:0e26d6be54fd) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+connect isolated 0e26d6be54fd to its neighbourhood: propose a SUBSTANTIVE relation (dependence, reduction, shared mechanism, compatibility, inheritance, integration, contradiction, or abstraction), naming its kind and stating what it is REFUTED IF - a summary of the endpoints is not a relation
+
+TARGETS (4) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- hv-floor@2a45b7988522: program:hv_floor
+- lineage-ref@f34648daa4ff: program:lineage_ref
+- relation-form@578e42df713e: predicate:'refuted if' in content.lower() and any(k in content.lower() for k in ('depends on', 'reduces to', 'shares mechanism', 'shared mechanism', 'compatible with', 'inherits', 'integrates', 'contradicts', 'abstracts'))
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+Artifact 0e26d6be54fd reduces to SRC_003 (harness-spec-v1.3): the content of 0e26d6be54fd is a specialization or downstream consequence of the formal build specification, such that every operation or structure it describes is already entailed by the rules, interfaces, and adjudication procedures defined in the v1.3 spec. The relation is reduction because 0e26d6be54fd adds no new normative or mechanical primitive — it is an instance of the spec's generative grammar. REFUTED IF 0e26d6be54fd introduces a mechanism, constraint, or interface element that is not derivable from the v1.3 spec and would require a spec amendment (e.g., something only found in SRC_002's v1.5 amendment) to be valid.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_002
+0e26d6be54fd shares mechanism with SRC_001: both rely on the same token-economy discipline, where repertoire exhaustion and token-budget pressure shape admissible conjectures. It is refuted if 0e26d6be54fd's dynamics do not depend on token-burn or repertoire constraints in any way analogous to SRC_001.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_003
+Artifact 0e26d6be54fd abstracts from both SRC_004 and SRC_005: it generalizes the pattern of 'what the machine currently holds' (SRC_004) together with the pattern of 'when conjecture circles into basin exhaustion' (SRC_005) into a higher-level meta-claim about the lifecycle of held propositions — specifically, a framework that subsumes both the inventory of current holdings and the dynamics of how those holdings enter and exit attractor basins. The relation is abstraction because 0e26d6be54fd operates at a level of description above both artifacts, treating them as special cases. REFUTED IF 0e26d6be54fd is at the same or lower level of description as SRC_004 or SRC_005 (i.e., it is an instance or application rather than a generalization), or if it addresses only one of the two and not their common superstructure.
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+TARGET SRC_004
+Artifact 0e26d6be54fd contradicts SRC_005 (BASIN REPORT): if 0e26d6be54fd is itself a meta-artifact recording a prior failed connection attempt that escaped the repertoire-exhaustion / refuted-attractor basin, then its existence contradicts the basin report's characterization of such states as terminal or cycling. The contradiction is that 0e26d6be54fd demonstrates a successful exit from a state SRC_005 predicts should be absorbing. REFUTED IF 0e26d6be54fd does not describe an exit from a basin state, or if SRC_005's model already accounts for the kind of exit 0e26d6be54fd represents (i.e., the basin report predicts rather than excludes this outcome).
+commitments: hv-floor@2a45b7988522, lineage-ref@f34648daa4ff, relation-form@578e42df713e
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.

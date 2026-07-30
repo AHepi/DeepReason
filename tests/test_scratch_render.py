@@ -62,6 +62,36 @@ def test_receipt_resolves_strict_handles_and_rejects_forgery():
         ScratchRenderReceiptV1.model_validate(forged)
 
 
+def test_ordered_refs_survive_canonical_json_at_ten_plus_handles():
+    """Regression (selfstudy run-9175f0ec, replay seqs 390/547): receipts
+    persist as canonical JSON with lexicographically sorted keys, so a
+    reloaded mapping iterates B1, B10, B11, B2, ... — any consumer that
+    compared .values() against a selection's final_order reported a
+    spurious order violation on faithful renders once a window reached
+    ten blocks. ordered_refs must recover handle-index order regardless
+    of mapping key order."""
+    from deepreason.canonical import canonical_json
+
+    final_order = [f"sha256:{i:064x}" for i in range(1, 14)]
+    receipt = ScratchRenderReceiptV1.create(
+        state_seq=1,
+        attention_receipt="sha256:" + "a" * 64,
+        block_handles={f"B{i}": ref for i, ref in enumerate(final_order, 1)},
+        cluster_handles={},
+        link_handles={},
+        guide_handles={},
+    )
+    # Freshly built: insertion order matches; both paths agree.
+    assert list(receipt.ordered_refs("block")) == final_order
+    reloaded = ScratchRenderReceiptV1.model_validate_json(
+        canonical_json(receipt.model_dump(mode="json", by_alias=True))
+    )
+    # The reloaded mapping is key-sorted (the bug's trigger)...
+    assert list(reloaded.block_handles.values()) != final_order
+    # ...but handle-index order is recovered exactly.
+    assert list(reloaded.ordered_refs("block")) == final_order
+
+
 def test_render_is_pure_until_explicit_receipt_persistence(tmp_path):
     root = tmp_path / "run"
     service = ScratchService(root)

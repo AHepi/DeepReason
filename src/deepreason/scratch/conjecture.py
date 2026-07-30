@@ -579,7 +579,9 @@ def validate_conjecture_context_call(
         or render_receipt.state_seq != selection.state_seq
     ):
         raise ValueError("conjecture render receipt differs from canonical selection")
-    if tuple(render_receipt.block_handles.values()) != tuple(selection.final_order):
+    # Handle-index order, not mapping order: this receipt was reloaded from
+    # canonical JSON, whose sorted keys interleave B10 between B1 and B2.
+    if render_receipt.ordered_refs("block") != tuple(selection.final_order):
         raise ValueError("conjecture render blocks differ from canonical attention order")
     historical = ScratchService(
         service.harness.root,

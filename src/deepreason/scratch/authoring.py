@@ -426,7 +426,7 @@ class ScratchAuthoringService:
                 "SCRATCH_CONTEXT_NOT_RENDERED",
                 "commit the attention receipt before invoking a model",
             )
-        mapped = list(receipt.block_handles.values())
+        mapped = list(receipt.ordered_refs("block"))
         if mapped != list(attention.final_order):
             raise ScratchAuthoringError(
                 "SCRATCH_CONTEXT_FORGED",
@@ -913,7 +913,7 @@ class ScratchAuthoringService:
         elif operation == "link":
             model = ScratchLinkBodyV1
             contract = ScratchLinkMinimalWireContract(
-                indexed_block_ids=list(handles.values()),
+                indexed_block_ids=list(rendered.receipt.ordered_refs("block")),
                 handles=handles,
             )
         else:
@@ -1644,7 +1644,7 @@ class ScratchAuthoringService:
     def author_link(self, rendered: RenderedScratchPackV1, *, task: str) -> ScratchLinkV1:
         handles = rendered.receipt.alias_map("block")
         contract = ScratchLinkWireContract(
-            indexed_block_ids=list(handles.values()), handles=handles
+            indexed_block_ids=list(rendered.receipt.ordered_refs("block")), handles=handles
         )
         result = self._call(
             operation="link",

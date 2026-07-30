@@ -804,7 +804,10 @@ def _scratch_contract(harness, manifest, item, preparation, payload):
     if operation == "link":
         _authority(not preparation.target_refs, "scratch link unexpectedly names a target")
         return ScratchLinkWireContract(
-            indexed_block_ids=list(handles.values()),
+            # Handle-index order: this receipt was reloaded from canonical
+            # JSON (sorted keys), so .values() would interleave B10 between
+            # B1 and B2 and diverge from the live-built contract.
+            indexed_block_ids=list(receipt.ordered_refs("block")),
             handles=handles,
         )
     cluster_id = operation_payload.get("cluster_id")

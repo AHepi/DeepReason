@@ -120,6 +120,28 @@ class ScratchRenderReceiptV1(ScratchRecord):
             raise ValueError("kind must be block, cluster, link, or guide")
         return dict(table)
 
+    def ordered_refs(self, kind: str = "block") -> tuple[str, ...]:
+        """Targets in handle-index order (B1, B2, ..., B10, B11).
+
+        Handle maps are persisted as canonical JSON with lexicographically
+        sorted keys, so a reloaded mapping iterates B1, B10, B11, B2, ... —
+        the handle INDEX, not the mapping's key order, is what binds a
+        target to its position in the committed attention order. Any
+        comparison against a selection's final_order must go through this
+        accessor, never through .values().
+        """
+        table = {
+            "block": self.block_handles,
+            "cluster": self.cluster_handles,
+            "link": self.link_handles,
+            "guide": self.guide_handles,
+        }.get(kind)
+        if table is None:
+            raise ValueError("kind must be block, cluster, link, or guide")
+        return tuple(
+            ref for _, ref in sorted(table.items(), key=lambda item: int(item[0][1:]))
+        )
+
 
 class RenderedScratchPackV1(ScratchRecord):
     text: str = Field(min_length=1, max_length=1_048_576)

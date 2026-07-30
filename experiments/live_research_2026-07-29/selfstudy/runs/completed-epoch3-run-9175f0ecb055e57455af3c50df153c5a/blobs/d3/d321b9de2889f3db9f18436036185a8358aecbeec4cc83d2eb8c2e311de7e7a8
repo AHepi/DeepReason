@@ -1,0 +1,10 @@
+{
+  "candidate": {
+    "content": "Node 0e26d6be54fd integrates with its neighbourhood's Basin Report because the theory's machine-state tracking shares mechanism with the refuted-attractor basin analysis. This is refuted if the basin report's repertoire exhaustion phenomenon cannot be reconciled with, or does not map onto, the machine state tracking asserted in the theory document.",
+    "typicality": 0.75,
+    "neighbours": [
+      "SRC_002",
+      "SRC_003"
+    ]
+  }
+}
