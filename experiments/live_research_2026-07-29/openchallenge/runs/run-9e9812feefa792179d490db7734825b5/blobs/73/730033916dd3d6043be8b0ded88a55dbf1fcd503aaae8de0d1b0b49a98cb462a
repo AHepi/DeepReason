@@ -1,0 +1,31 @@
+{
+  "candidate": {
+    "claim": "An exhaustive search of structural extensions to the optimal 12-input sorting network (39 comparators) will yield a 45-comparator 13-input network, but will fail to find a 44-comparator network, supporting the hypothesis that S(13)=45 and that optimal networks exhibit incremental structural continuity.",
+    "mechanism": "Implement the known optimal 12-input network in Python. Systematically insert a 13th channel and test all possible additions of 5 comparators (yielding size 44) and 6 comparators (yielding size 45) connected to the new channel or modifying the existing network's end stages, verifying each candidate using the 0-1 principle over 8192 binary vectors. The search space for 5 added comparators is bounded and computationally feasible in sandboxed Python.",
+    "counterconditions": [
+      "A 44-comparator 13-input network is found within the search space of 5 added comparators, disproving the structural continuity hypothesis and establishing S(13) <= 44.",
+      "The search space for 5 added comparators is too large to complete in the fixed sandbox budget.",
+      "The optimal 12-input network structure is fundamentally incompatible with a 44-comparator 13-input network, meaning the search space is structurally insufficient even if S(13)=44."
+    ],
+    "evidence_refs": [
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      },
+      {
+        "block": "bfc42b3064ed02fe",
+        "quote": "Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class."
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.7
+  }
+}
