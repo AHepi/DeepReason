@@ -815,6 +815,30 @@ class ConjecturerTurnWireContractV4(WireContract[BaseModel]):
         )
 
 
+SIMULATION_MODEL_SOURCE_CONTRACT = (
+    "The program itself; its required shape follows simulation_mode. For "
+    "sandboxed_python_v1 the entire source must be exactly one function "
+    "definition and nothing else: def simulate(inputs, rng), with no "
+    "imports, no statements outside it, no decorators, no return "
+    "annotation, and no default, keyword-only, or variadic arguments. It "
+    "is called once per (input, seed) pair, where inputs is one mapping "
+    "carrying parameter_set, parameters, and sealed_inputs, and rng is a "
+    "seeded random.Random. It must return a JSON-safe mapping of "
+    "observable name to finite value; that mapping is the only output "
+    "recorded, so printing reports nothing. math is available and nothing "
+    "else may be imported. For declarative_numeric_v1 this field is a JSON "
+    "document instead of Python."
+)
+SIMULATION_REQUESTED_OBSERVABLES_CONTRACT = (
+    "The observable names this proposal is judged on. Every name must be a "
+    "key of what the program produces: for sandboxed_python_v1 a key of the "
+    "mapping simulate returns, for declarative_numeric_v1 a key of the "
+    "document's observables. The two sets must match exactly. A name that "
+    "is not such a key ends the run with declared observable missing, so "
+    "stream names like stdout are never observables."
+)
+
+
 class SimulationParameterSetWireV1(StrictWireModel):
     name: str = Field(min_length=1, max_length=128)
     # Canonical JSON text keeps arbitrary finite numerical arrays inside one
@@ -836,8 +860,21 @@ class SimulationProposalWireV1(StrictWireModel):
     simulation_mode: Literal[
         "declarative_numeric_v1", "sandboxed_python_v1"
     ]
-    model_source: str = Field(min_length=1, max_length=262_144)
-    requested_observables: list[str] = Field(min_length=1, max_length=128)
+    # These two descriptions are the only place the harness states the program
+    # contract to the author of the program: the sandbox validator and the
+    # contained runner enforce it, and the model sees nothing but this schema.
+    # They must track validate_sandboxed_python_source and the runner's
+    # declared-observable check.
+    model_source: str = Field(
+        min_length=1,
+        max_length=262_144,
+        description=SIMULATION_MODEL_SOURCE_CONTRACT,
+    )
+    requested_observables: list[str] = Field(
+        min_length=1,
+        max_length=128,
+        description=SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
+    )
     interpretation_conditions: list[str] = Field(min_length=1, max_length=64)
 
 
