@@ -505,3 +505,128 @@ to that epoch and it is completed, with the refusal naming that route.
 The gap was invisible to the implementation's own tests and visible
 immediately to a validation that asked what an operator would actually
 try next.
+
+## 2026-07-30 — tensor rank live run: the record blocked every quoted citation, and the sandbox never ran
+
+Run root `run-27b80f26bd398c718360e97e2a403593` (home `openchallenge`,
+glm-5.2, qualification cache hit). Typed outcome: state `completed`,
+`stop_reason` `budget_exhausted` at cycle 6, 176,730 of 200,000 tokens
+over 26 provider calls, `verify_root` clean, terminal commitment bound at
+event 498. What follows is what the record shows about the two channels
+that failed, both diagnosed from the record and neither re-run.
+
+### The 42 blocked citations are a line-wrapping artifact, not dishonesty
+
+`log.jsonl` carries 42 `EVIDENCE_QUOTE_MISMATCH` events and 4
+`EVIDENCE_CITATION_VERIFIED`. Every one of the 46 names a block of the
+attached dossier; none names an unknown or ambiguous block.
+
+The 42 mismatches reduce to 15 distinct (block, quote) pairs, recovered
+from the run's blob store and re-checked against each block's canonical
+text — the exact byte slice `span_start:span_end` of the admitted source,
+digest-verified against `text_sha256`:
+
+    exact              0
+    present after whitespace normalisation   15
+    absent from the block                     0
+    block unresolvable                        0
+
+Every quote the model offered is really in the block it cited. Nine
+differ from the admitted bytes only where the dossier has a hard line
+break and the model wrote a space:
+
+    model  '...despite: decades of hand construction; numerical alternating-least-squares s'
+    source '...despite: decades of hand construction; numerical\nalternating-least-squares s'
+
+The other six differ by a break plus list indentation (`\n   `) or by
+runs of spaces inside an indented code block collapsing to one.
+
+`check_candidate_citations` tests `ref.quote.encode() in canonical.encode()`
+(`src/deepreason/evidence/citations.py:192`) — raw byte containment against
+text that still carries the source's newlines. `TENSOR_RANK_CHALLENGE.md`
+is hard-wrapped at ~72 columns, so a quote long enough to be worth making
+almost always spans a wrap and almost always fails. The dossier's own
+authoring, not the model, is what made the channel unusable.
+
+The 4 that verified prove the same point from the other side. All four
+cite one block, `70df46c005c3`, and all four carry no quote at all: the
+checker records `EVIDENCE_CITATION_VERIFIED` for a bare block reference
+without ever comparing text. So the run's byte-checked citation score is
+0 of 50 quoted citations and 4 of 5 unquoted ones — and the 7 quoted
+citations of that same block `70df46c005c3` failed while its bare
+references passed. Nothing was verified by quotation in this run.
+
+Residue: this says nothing about whether the model would quote honestly
+against an unwrapped source. It says only that the check as written
+cannot distinguish an honest quote of wrapped text from a fabricated one,
+because both fail identically. Whether the right repair is a normalising
+comparison, an unwrapped admission form, or leaving the check strict and
+telling the model the constraint is a design question, not settled here.
+
+### The sandbox denial: the model was never told the program's shape
+
+One simulation proposal, `sim_2x2_diagonal_W_refutation`, lifecycle
+`proposed → validated → denied`, `reason_code` `invalid_model_program`,
+zero budget consumed. Replaying `validate_sandboxed_python_source` over
+the proposal's stored `model_source` reproduces the denial exactly:
+
+    ValueError: sandboxed Python must define exactly one simulate function
+
+The program is a script: a `verify_decomposition` helper, then ten
+top-level statements — assignments, asserts, prints. The validator's
+first structural rule (`src/deepreason/simulation/compiler.py:212`) requires
+the module body to be exactly one `FunctionDef` named `simulate` with
+signature `(inputs, rng)`. The submission fails on statement count before
+anything else is examined.
+
+The program is not otherwise bad. It contains no import, no forbidden
+name, no private attribute traversal; at 2,255 bytes it is far inside the
+size cap; the runner profile matched and the toolchain was available. Its
+mathematics is sound — the diagonal-W argument it encodes is correct.
+It was refused for its shape alone.
+
+The reason it had the wrong shape is in the prompt. The pack that carried
+this turn (blob `9705881e`, 23,570 bytes) describes `model_source` to the
+model as exactly `{"maxLength": 262144, "minLength": 1, "title": "Model
+Source", "type": "string"}`. The words `simulate`, `inputs`, and `rng`
+appear nowhere in the pack, nowhere in the ladder's question, and nowhere
+in `CAPABILITY_CONTRACT.md` — which I wrote, and which describes what the
+sandbox is FOR at length while never stating what a program must look
+like. The requirement exists only in the validator. A second, latent
+failure sits behind the first: the proposal declares `requested_observables:
+["stdout"]`, but observables are keys of the mapping `simulate` returns
+(`verification/contained.py:202`), and stdout is not one — a correctly
+shaped program with these observables would still have failed, one stage
+later, as `declared observable missing`.
+
+So `invalid_model_program` with an empty detail is accurate and useless.
+The typed record says the program was invalid; it does not say the module
+body had eleven statements where one was allowed, and the operator cannot
+learn that from the run root — only by replaying the validator by hand,
+which is what produced this paragraph.
+
+Residue: capability-channel use is stochastic across identical runs, and
+this is one attempt. What is NOT stochastic is the prompt: no run of this
+ladder can tell the model the contract, because the contract is not in the
+pack. That part is a defect, not a sampling outcome.
+
+### Found while diagnosing: TOKEN_ACCOUNTING.json miscounts research as simulation
+
+`TOKEN_ACCOUNTING.json` for this root reports `simulation_compilations: 1`,
+`simulation_executions: 1`, `simulation_backend_attempts: 1`. No
+simulation compiled, executed, or reached a backend in this run — the
+single proposal was denied at validation and `objects/` contains no
+simulation work order, compiled simulation, or execution receipt. All
+three counters are the Wikipedia research fetch, mislabelled.
+
+The cause is the documented invariant, violated in the reporter:
+`capabilities/audit.py:435-438` reads `len(state.compiled)`,
+`state.execution_count`, and `sum(len(receipt.attempts) for receipt in
+state.receipts.values())` without filtering by type, and
+`capabilities/state.py` puts `CompiledResearchFetchV1` into the same
+`compiled` map (line 307) and the research receipt into the same
+`receipts` map (line 340). The budget meter beside it
+(`capabilities/simulation.py:1134`) filters by `isinstance` and is correct
+— which is why `run-result.json`'s `capability_accounting` truthfully
+reports `simulation_executions: 0` while `TOKEN_ACCOUNTING.json` reports 1
+for the same run. Parked, not fixed: see PARKED.md P4.

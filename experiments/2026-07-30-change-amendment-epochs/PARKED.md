@@ -159,3 +159,51 @@ deadline.
 
 **Operator note.** The proximate cause was mine: I started a second full
 gate before the first finished. Don't.
+
+## P4 — `TOKEN_ACCOUNTING.json` counts research records as simulation records
+
+Found 2026-07-30 while diagnosing the tensor-rank live run
+(`run-27b80f26bd398c718360e97e2a403593`), which denied its only
+simulation proposal at validation and never compiled, executed, or
+dispatched a simulation. That root's `TOKEN_ACCOUNTING.json` nonetheless
+reports:
+
+    simulation_compilations: 1
+    simulation_executions: 1
+    simulation_backend_attempts: 1
+
+All three are its one Wikipedia research fetch.
+
+**Cause (confirmed by reading and by the record).** `capabilities/audit.py`
+lines 435-438 read the shared capability-state maps without filtering by
+record type:
+
+    "simulation_compilations": len(state.compiled),
+    "simulation_executions": state.execution_count,   # len(state.work_orders)
+    "simulation_backend_attempts": sum(
+        len(receipt.attempts) for receipt in state.receipts.values()
+    ),
+
+and `capabilities/state.py` deliberately pools both capabilities in those
+maps — `CompiledResearchFetchV1` into `compiled` (line 307), the research
+execution receipt into `receipts` (line 340), the research work order into
+`work_orders`. This is the CLAUDE.md invariant *"the shared capability-state
+maps pool ALL capabilities' proposals and work orders; always filter by
+type"*, violated in the reporter. The budget meter alongside it
+(`capabilities/simulation.py:1134`) filters by `isinstance` and is right,
+which is why `run-result.json`'s `capability_accounting` reports
+`simulation_executions: 0` for the same run.
+
+**Severity.** No effect on adjudication, budgets, or `verify_root` — the
+enforcing paths filter correctly. Real for evidence: `TOKEN_ACCOUNTING.json`
+is a typed artifact an operator reads to judge whether a capability was
+exercised, and on this root it asserts a simulation ran when none did. Two
+typed artifacts of one run root disagree.
+
+**Not fixed here.** Out of this tranche's scope; found during a live-run
+diagnosis, not during the change. The fix is small (filter each counter by
+`isinstance`, mirroring simulation.py:1134) but it changes the bytes of
+`TOKEN_ACCOUNTING.json` for existing roots, so it needs its own goal, a
+check that no committed root's `verify_root` verdict depends on those
+fields, and a decision about whether research gets its own counters rather
+than simply vanishing from the report.
