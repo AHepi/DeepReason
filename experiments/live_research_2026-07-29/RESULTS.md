@@ -630,3 +630,72 @@ state.receipts.values())` without filtering by type, and
 — which is why `run-result.json`'s `capability_accounting` truthfully
 reports `simulation_executions: 0` while `TOKEN_ACCOUNTING.json` reports 1
 for the same run. Parked, not fixed: see PARKED.md P4.
+
+## 2026-07-30 — fixed: a quoted citation is now checked against the block's words, not its line layout
+
+Tranche `experiments/2026-07-30-fix-citation-quote-check/`. Defect class,
+offline proof, no live run.
+
+**What the record showed.** `check_candidate_citations` decided a quoted
+citation by raw byte containment against the admitted source's own bytes,
+which carry the author's hard wrapping and alignment. A model writes
+running text. So the verdict tracked line layout, and an exact quote
+spanning a wrap returned the same `EVIDENCE_QUOTE_MISMATCH` as a
+fabricated one — the check could not discriminate between the two things
+it exists to separate.
+
+**What is fixed.** The strict byte test runs first; on failure both sides
+are whitespace-folded and the comparison is retried. Every non-whitespace
+character must still appear, contiguously and in order. Folding never
+inserts whitespace where the source had none, so `"foobar"` still fails
+against `"foo bar"`, and an all-whitespace quote is refused rather than
+matching every block. The admitted bytes were not touched: normalising at
+admission would move `text_sha256`, block ids and dossier digests, and
+invalidate every committed root.
+
+**What the record now shows.** Full gate 3168 passed, 0 failed.
+`verify_root` over all sixteen committed roots is byte-identical to the
+pre-change sweep — 23 foreign-criticism, 1 run-input, 1 terminal-authority
+violations, the same counts on the same roots, none masked and none
+introduced. The tensor-rank run's own 15 recorded quotes, replayed through
+the fixed checker against its own dossier, return 15
+`EVIDENCE_CITATION_VERIFIED`. That is a counterfactual, not a repair: the
+root still carries its 42 `EVIDENCE_QUOTE_MISMATCH` events, because the
+log is append-only and was not edited.
+
+**One decision worth recording.** A reflowed quote records
+`EVIDENCE_CITATION_VERIFIED` rather than a new typed code. The
+alternative was considered and rejected: the check exists to establish
+whether the model reproduced the source's words, and layout is not part
+of that question, so a reflowed quote is a verified citation and not a
+lesser kind. The distinction is not lost — both the quote and the
+admitted bytes stay in the record, which is exactly how this tranche
+re-derived all 15 field cases after the fact.
+
+**The residue.** No live model has been through this path. Whether
+glm-5.2 now produces verified groundings against a wrapped dossier is
+unproven; what is proven is that the 15 claims the run rejected would be
+accepted, and that the check now separates an honest reflow from a
+fabrication. Accepted does not mean true, and fixed does not mean
+exercised.
+
+**What the tranche got wrong, and how it was caught.** FIX.md was amended
+mid-implementation to also correct `EvidenceRefClaimV1`'s docstring,
+which tells the model a quote must reproduce a byte span "exactly" — now
+stricter than the harness enforces. Before making that change the
+qualification subject digest was checked and found not to carry contract
+schema text, which is true. Generalising from that one digest to "the
+prompt is free to change" was not. Pydantic promotes the docstring into
+the JSON schema `description`, the schema is serialised into the context
+pack, and the pack's bytes sit inside committed provenance digests: the
+gate came back `4 failed, 3164 passed`, on a token baseline (842.0 vs
+784.5) and a `generated_root_sha256`. Isolated by stashing — all four
+pass on a clean tree and again with only that file reverted — and the
+amendment was retracted rather than the digests regenerated, since
+rewriting committed provenance is frozen-record semantics. The contract
+text is parked as D1a for the D2 tranche, which is about pack text
+anyway and can pay that cost once.
+
+**Still open from the 2026-07-30 diagnosis:** D2 (the sandboxed_python_v1
+program contract never reaches the model) and P4 (TOKEN_ACCOUNTING.json
+counting research records as simulation records).
