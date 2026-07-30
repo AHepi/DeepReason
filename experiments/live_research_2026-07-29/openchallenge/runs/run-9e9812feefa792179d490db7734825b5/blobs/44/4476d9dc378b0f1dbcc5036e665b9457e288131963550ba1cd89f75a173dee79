@@ -1,0 +1,6 @@
+```json
+{
+  "op": "remove",
+  "path": "/values"
+}
+```
