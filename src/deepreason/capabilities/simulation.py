@@ -539,8 +539,19 @@ class SimulationCapabilityController:
         if not self.policy.enabled:
             reason = "capability_disabled"
         else:
+            # Simulation budgets meter SIMULATION work only. The capability
+            # state pools every capability's proposals and work orders in
+            # shared maps, and counting the pooled totals here let two
+            # research fetches exhaust the simulation budgets before the
+            # first simulation proposal arrived (openchallenge
+            # run-9e9812fe: both typed simulation proposals denied with
+            # zero simulations run).
             ordered_requests = sorted(
-                self.harness.capability_state.proposals.values(),
+                (
+                    item
+                    for item in self.harness.capability_state.proposals.values()
+                    if isinstance(item, SimulationProposalV1)
+                ),
                 key=lambda item: (
                     item.source_call_seq,
                     item.proposal_index,
@@ -550,10 +561,14 @@ class SimulationCapabilityController:
             request_ordinal = ordered_requests.index(proposal) + 1
             if request_ordinal > self.policy.maximum_simulation_requests:
                 reason = "request_budget_exhausted"
+        simulation_executions = sum(
+            1
+            for order in self.harness.capability_state.work_orders.values()
+            if isinstance(order, SimulationWorkOrderV1)
+        )
         if (
             reason is None
-            and self.harness.capability_state.execution_count
-            >= self.policy.maximum_simulation_executions
+            and simulation_executions >= self.policy.maximum_simulation_executions
         ):
             reason = "execution_budget_exhausted"
         if (
@@ -1111,8 +1126,16 @@ class SimulationCapabilityController:
         attempts = sum(len(receipt.attempts) for receipt in state.receipts.values())
         return {
             "schema": "capability-accounting.v1",
-            "simulation_requests": state.request_count,
-            "simulation_executions": state.execution_count,
+            "simulation_requests": sum(
+                1
+                for item in state.proposals.values()
+                if isinstance(item, SimulationProposalV1)
+            ),
+            "simulation_executions": sum(
+                1
+                for order in state.work_orders.values()
+                if isinstance(order, SimulationWorkOrderV1)
+            ),
             "simulation_backend_attempts": attempts,
             "result_follow_up_work_orders": state.consumption_count,
             "compilation_usage_known": True,

@@ -785,3 +785,149 @@ def test_dispatched_crash_recovers_as_unknown_without_silent_rerun(
     assert "did not silently rerun" in prompts[1]
     assert harness.capability_state.consumption_count == 1
     assert _verify_v5_component_root(harness.root, manifest)["violations"] == []
+
+
+def test_research_spend_does_not_exhaust_simulation_budgets(tmp_path):
+    """Regression (openchallenge run-9e9812fe): the capability state pools
+    every capability's proposals and work orders in shared maps, and the
+    simulation budget gate counted the pooled totals — two consumed
+    research fetches denied both typed simulation proposals
+    (request_budget_exhausted / execution_budget_exhausted) with zero
+    simulations run. Research spend must be invisible to the simulation
+    budgets."""
+    from types import SimpleNamespace
+
+    from deepreason.capabilities.policy import ResearchCapabilityPolicyV1
+    from deepreason.capabilities.research import ResearchCapabilityController
+    from deepreason.capabilities.models import ResearchFetchProposalDraftV1
+    from deepreason.workflow.models import CapabilityOutcome
+
+    config, manifest, harness = _prepare_run(
+        tmp_path / "shared-budget",
+        policy=_simulation_policy(
+            maximum_simulation_requests=1, maximum_simulation_executions=1
+        ),
+    )
+
+    # Two full research chains on the same harness: proposals, work
+    # orders, receipts, and consumptions all land in the shared state
+    # maps exactly as in the live run.
+    page = b"<html><body>sorting networks</body></html>"
+    research_policy = ResearchCapabilityPolicyV1(
+        enabled=True,
+        backend_identity="web.contained.v1",
+        maximum_requests=3,
+        maximum_sources=2,
+        domain_allowlist=("example.org",),
+        maximum_response_bytes=65_536,
+    )
+    research_manifest = SimpleNamespace(
+        schema_version=6,
+        sha256=manifest.sha256,
+        run_input_digest=manifest.run_input_digest,
+        inquiry_capability_policy=SimpleNamespace(research=research_policy),
+    )
+
+    def transport(url, timeout, maximum_bytes):
+        return (200, "text/html", None, page)
+
+    research = ResearchCapabilityController(
+        harness, research_manifest, transport=transport
+    )
+    research_problem = harness.register_problem(
+        Problem(
+            id="pi-research-side",
+            description="side research problem",
+            criteria=[],
+            provenance=ProblemProvenance.model_validate(
+                {"trigger": "seed", "from": []}
+            ),
+        )
+    )
+    for index, name in enumerate(("req-alpha", "req-beta")):
+        order = SimpleNamespace(
+            id="sha256:" + str(index) * 64,
+            problem_ref="pi-research-side",
+            capability_grant=SimpleNamespace(
+                allowed_outcomes=(CapabilityOutcome.RESEARCH_REQUEST,)
+            ),
+        )
+        fence = harness._next_seq - 1
+        proposal = research.propose(
+            ResearchFetchProposalDraftV1(
+                request_identifier=name,
+                purpose="check the published bounds",
+                urls=(f"https://example.org/{name}",),
+            ),
+            proposal_index=0,
+            work_order=order,
+            source_call_seq=1 + index,
+            formal_fence_seq=fence,
+            scratch_fence_seq=fence,
+        )
+        package = research.execute(
+            proposal, formal_fence_seq=fence, scratch_fence_seq=fence
+        )
+        assert package is not None
+        research.consume(
+            proposal,
+            package,
+            research_problem,
+            formal_fence_seq=fence,
+            scratch_fence_seq=fence,
+        )
+
+    assert harness.capability_state.request_count == 2  # pooled: research only
+    assert harness.capability_state.execution_count == 2  # pooled: research only
+
+    # The FIRST simulation proposal must clear the untouched simulation
+    # budgets (1 request, 1 execution) despite the pooled research spend.
+    prompts = []
+    adapter, pending = _adapter(
+        manifest,
+        harness,
+        [
+            _simulation_turn(),
+            {
+                "candidates": [
+                    {
+                        "content": (
+                            "Under the exact recorded schedule, x=6 favors the "
+                            "first rival; this remains a conditional negative bound."
+                        ),
+                        "typicality": 0.4,
+                        "neighbours": [],
+                    }
+                ]
+            },
+        ],
+        prompts,
+    )
+    assert _initial_conjecture(harness, manifest, config, adapter) == []
+    scheduler = Scheduler(
+        harness,
+        adapter,
+        config,
+        workload_profile="text",
+        run_manifest=manifest,
+    )
+    scheduler.step()
+    scheduler.step()
+
+    state = harness.capability_state
+    denied = [
+        item
+        for item in state.transitions.values()
+        if item.lifecycle == CapabilityLifecycle.DENIED
+    ]
+    assert denied == [], [item.reason_code for item in denied]
+    simulation_transitions = {
+        state.transitions[ref].lifecycle
+        for pid, ref in state.current_transition_by_request.items()
+        if pid in {
+            p.id
+            for p in state.proposals.values()
+            if type(p).__name__ == "SimulationProposalV1"
+        }
+    }
+    assert CapabilityLifecycle.CONSUMED in simulation_transitions
