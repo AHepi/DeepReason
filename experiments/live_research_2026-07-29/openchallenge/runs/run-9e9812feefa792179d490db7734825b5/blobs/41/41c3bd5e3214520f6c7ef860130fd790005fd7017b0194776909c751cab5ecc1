@@ -1,0 +1,124 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 6 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-b9510316be66b626d54bf59c1e3483cc
+The attached dossier defines the open problem of the minimal 13-input sorting network: S(13) is unknown, the best known network has 45 comparators, Batcher's construction gives 48, and every candidate is exactly checkable in milliseconds by the 0-1 principle (8192 binary vectors). Work the problem. Conjecture concrete search or construction strategies as rival positions, and where rivals predict different measurable outcomes — a candidate network sorting or not, a pruning rule preserving optimality at small n, one strategy reaching smaller networks than another under a fixed budget — file a typed sandboxed Python simulation (simulation_mode sandboxed_python_v1) whose program actually runs the discriminating experiment; a simulation described in prose with an empty simulation_refs channel is an unverified claim and will be criticized as such. Where the dossier's bounds table or method claims need checking against published knowledge, file typed research proposals for specific https pages on the frozen en.wikipedia.org allowlist. Ground every claim about the problem state in the attached dossier blocks by citing their block ids. Genuine progress in order of ambition: a verified 13-input network of 44 or fewer comparators; a structurally novel verified 45; or a simulation-discriminated account of which structural hypothesis best explains why search stalls at 45.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[0280ceb1aefafeff] Any of the following would be genuine progress, in decreasing order of ambition:
+[08bc358f98f84584] Claims about the problem state — bounds, prior methods, verification rules — must cite the block ids of this dossier's admitted blocks, or of fetched research o
+[0e36d4be63d988c1] ## Evidence citation
+[1194dff78a2795cf] A sorting network is therefore a straight-line program — no branches, no loops — and its size is its comparator count. Minimizing size for a given n is a pure p
+[27ba492cb40c323a] ## The object
+[2c7a5cc0d7461dd5] ## Known structure worth attacking
+[444e781a3a39d046] Research proposals must name specific https URLs on the frozen allowlist. On-topic targets include the encyclopedia's pages on sorting networks, Batcher's odd-e
+[4f053d098dcef347] A simulation that cannot discriminate between rival predictions is weight, not evidence.
+[52636d57d1b5f176] # Capability contract for this run
+[6050cf69f391fa33] Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it — a few milliseconds of pure Python, no network access, deter
+[62c5a6b149f9ffed] ## Directed research (frozen allowlist: en.wikipedia.org)
+[680b4c459d28bf7a] S(n) denotes the minimum comparator count of any n-input sorting network. As compiled in this dossier:
+[817aa2704ec43646] - verifying a candidate 13-input network via the 0-1 principle (8192 vectors, milliseconds); - bounded comparative experiments between rival search or pruning s
+[843819388191d0e9] A candidate network is a list of (i, j) pairs with 0 <= i < j < 13. Any claim of the form "this 45-comparator sequence sorts" or "this pruning rule preserves at
+[8a7a7d8f89f48b3e] - S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39 The n = 9 and n = 10 cases were settled by exhaustive SAT-ba
+[8d14051fa3cadd91] This run grants three operator-opted capabilities. Each has a typed proposal channel, and work that only DESCRIBES using a capability in prose — without filing 
+[9086cd300f72e08a] A comparator network on n channels is a fixed sequence of comparators (i, j) with i < j. A comparator reads the values on channels i and j and swaps them if the
+[b01150a3ae43d8f6] The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n. Proof sketch: for any monotone fu
+[b279686d1d1683db] ## The verification protocol (exact, sandbox-sized)
+[b42a7cbb72244180] ## The open problem
+[bfc42b3064ed02fe] - Symmetry: the reflection i -> n-1-i maps sorting networks to sorting networks of equal size, so search need only consider one member of each symmetry class. -
+[c062efaae47d569e] Contained Python: scratch working directory, scrubbed environment, hard resource limits, no network. Programs must be deterministic and self-contained — the pro
+[cb563fa000097d50] # The 13-input minimal sorting network challenge
+[d14bbc1788ad0249] 1. A 13-input sorting network with 44 or fewer comparators (would improve a bound that has stood since the 1990s). 2. A 13-input network with 45 comparators tha
+[d29bebef6fcde56a] This dossier states an open problem in exact combinatorial optimization of programs, the verification protocol that makes every candidate machine-checkable, and
+[eb8c30b2159ea031] ## Sandboxed simulation (simulation_mode sandboxed_python_v1)
+[eed97b59dd852dcd] def sorts(net, n=13): for v in range(1 << n): bits = [(v >> k) & 1 for k in range(n)] for i, j in net: if bits[i] > bits[j]: bits[i], bits[j] = bits[j], bits[i]
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=f7eb4b24d2ba9cbbe834bfe570b2c24b08af32766d83eba8f78bbb13f9e28348
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[src-c684127f981a8a8c1d5e0739c804e68436eebc3d] The 13-input minimal sorting network challenge
+class=other; locator=/home/user/DeepReason/experiments/live_research_2026-07-29/openchallenge-dossier/SORTING_NETWORK_CHALLENGE.md; source_sha256=c684127f981a8a8c1d5e0739c804e68436eebc3d59d92ce8c4a0c3a286786c02; excerpt_sha256=c684127f981a8a8c1d5e0739c804e68436eebc3d59d92ce8c4a0c3a286786c02
+citable_blocks:
+  block=0280ceb1aefafeff kind=paragraph title=The open problem
+  block=1194dff78a2795cf kind=paragraph title=The object
+  block=27ba492cb40c323a kind=section title=The object
+  block=2c7a5cc0d7461dd5 kind=section title=Known structure worth attacking
+  block=6050cf69f391fa33 kind=paragraph title=The verification protocol (exact, sandbox-sized)
+  block=680b4c459d28bf7a kind=paragraph title=The open problem
+  block=843819388191d0e9 kind=paragraph title=The verification protocol (exact, sandbox-sized)
+  block=8a7a7d8f89f48b3e kind=paragraph title=The open problem
+  block=9086cd300f72e08a kind=paragraph title=The object
+  block=b01150a3ae43d8f6 kind=paragraph title=The verification protocol (exact, sandbox-sized)
+  block=b279686d1d1683db kind=section title=The verification protocol (exact, sandbox-sized)
+  block=b42a7cbb72244180 kind=section title=The open problem
+  block=bfc42b3064ed02fe kind=paragraph title=Known structure worth attacking
+  block=cb563fa000097d50 kind=section title=The 13-input minimal sorting network challenge
+  block=d14bbc1788ad0249 kind=paragraph title=The open problem
+  block=d29bebef6fcde56a kind=paragraph title=The 13-input minimal sorting network challenge
+  (+1 more admitted blocks not listed)
+BEGIN UNTRUSTED SOURCE DATA
+# The 13-input minimal sorting network challenge
+
+This dossier states an open problem in exact combinatorial optimization of
+programs, the verification protocol that makes every candidate
+machine-checkable, and the current state of knowledge as compiled here.
+Every factual claim in this dossier is attackable evidence, not
+established truth; the known-bounds table in particular should be checked
+against published references where research access permits.
+
+## The object
+
+A comparator network on n channels is a fixed sequence of comparators
+(i, j) with i < j. A comparator reads the values on channels i and j and
+swaps them if they are out of order (minimum to channel i, maximum to
+channe
+…[section compressed]…
+-class counts at fixed depth, reachable-set
+  shrink schedules, sizes reached under a fixed node budget);
+- checking a claimed structural lemma exhaustively at small n where it
+  is decidable (a lemma true for n = 7..10 is evidence, not proof, for
+  n = 13 — say so).
+
+A simulation that cannot discriminate between rival predictions is
+weight, not evidence.
+
+## Directed research (frozen allowlist: en.wikipedia.org)
+
+Research proposals must name specific https URLs on the frozen
+allowlist. On-topic targets include the encyclopedia's pages on sorting
+networks, Batcher's odd-even mergesort, bitonic sorting, and
+SAT-solver-based optimality methods. The request budget is small; spend
+it on pages whose content can settle or sharpen a live disagreement
+(e.g. the exact published bounds table), not on background reading.
+
+## Evidence citation
+
+Claims about the problem state — bounds, prior methods, verification
+rules — must cite the block ids of this dossier's admitted blocks, or of
+fetched research once packaged. Citations are byte-checked against the
+admitted text; a citation that does not match refuses as typed evidence
+(quote mismatch), and uncited mechanism claims have been refused before.
+The bounds table in SORTING_NETWORK_CHALLENGE.md is itself attackable:
+if fetched research contradicts it, the contradiction is a finding and
+should be recorded as one.
+
+END UNTRUSTED SOURCE DATA
+
+## school-stance
+SCHOOL STANCE (weight 1.00): demand a causal mechanism
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.

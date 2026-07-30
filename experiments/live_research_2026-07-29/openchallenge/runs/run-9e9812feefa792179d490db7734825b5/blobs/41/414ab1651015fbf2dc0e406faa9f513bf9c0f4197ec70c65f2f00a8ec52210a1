@@ -1,0 +1,32 @@
+```json
+{
+  "candidate": {
+    "claim": "The search for a minimal 13-input sorting network stalls at 45 comparators because no optimal 39-comparator 12-input network can be extended with the 13th channel using 5 or fewer additional comparators, meaning a 44-comparator network cannot be formed by extending an optimal 12-input prefix.",
+    "mechanism": "If the first 39 comparators form an optimal 12-input sorting network (since S(12)=39), the remaining 5 comparators must merge the 13th channel into the sorted 12 channels. According to the 0-1 principle, the 13th channel must be inserted into the correct sorted position among 12 values. With 13 possible insertion positions, a theoretical lower bound is ceil(log2(13)) = 4 comparators. However, sorting networks are oblivious (branchless), and the constraints of merging 1 element into 12 fixed channels require more than 5 comparators. If a sandboxed simulation tests all optimal 12-input prefixes and confirms none allows a 5-comparator merge for the 13th channel, it proves that 44-comparator 13-input networks do not contain a 39-comparator 12-input prefix, strongly constraining the search space.",
+    "counterconditions": [
+      "There exists a 12-input sorting network of 39 comparators that has a structural 'opening' allowing the 13th channel to be merged in exactly 5 comparators.",
+      "A 44-comparator 13-input network exists but does not embed any optimal 39-comparator 12-input sorting network as a contiguous prefix."
+    ],
+    "evidence_refs": [
+      {
+        "block": "8a7a7d8f89f48b3e",
+        "quote": "- S(n) is PROVEN for n up to 12: n: 1 2 3 4 5 6 7 8 9 10 11 12 S(n): 0 1 3 5 9 12 16 19 25 29 35 39"
+      },
+      {
+        "block": "843819388191d0e9",
+        "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      }
+    ],
+    "optional_refs": [],
+    "sidecar": {
+      "requested_context_aliases": [],
+      "search_signal": "productive"
+    },
+    "typicality": 0.65
+  }
+}
+```
