@@ -180,3 +180,66 @@ produced.
 
 Full gate after the fix: see the commit message. Parked list is now P1
 only.
+
+## Addendum 2 (post-delivery): coverage gaps closed (R26), live run blocked (R27)
+
+A post-delivery review of my own work found three real gaps and some dead
+API. Operator ruled: close all three, and attempt a live run.
+
+**Gap 1 — the detectors had never fired.** Every existing test asserted a
+clean root; none asserted that a *corrupted* amendment chain is caught.
+`tests/test_amendment_chain_integrity.py` (36 cases) now corrupts exactly
+one thing at a time — unreadable chain, non-canonical bytes, forged
+digest, foreign manifest anchor, broken parent link, stalled fence,
+out-of-order sequence, missing or deleted epoch documents, swapped
+dossier, foreign epoch manifest, tampered source blob, a record naming a
+dossier the epoch lacks, a record naming an unregistered question — and
+requires `verify_root` to name each. All ten record-model rejection rules
+are covered too. Amendment-module coverage 86% -> 95%; the record model
+84% -> 100%.
+
+Two of those tests were written expecting one behavior and found another.
+Forging a staged record does not reach `AMEND_PENDING_CONFLICT`: it
+breaks the authority that let the staged epoch's events cross the
+terminal horizon, so `amend` fails closed at `AMEND_NOT_AT_TERMINAL`.
+Sound, but the message pointed at the stop rather than the staged epoch,
+so `_require_terminal_stop` now names the staged epoch and the terminal
+detail code.
+
+**Gap 2 — amendment beside a bridge episode.** One root now carries a
+successfully composed grounded bridge AND an amendment past the same
+terminal horizon; terminal authority, `verify_root_report` and
+`verify_root` all stay valid, and the bridge episode still stands. The
+negative case is the important half: planting an ordinary conjecturer
+artifact past the horizon on an amended root still collapses authority
+with `TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`, so widening the rule for
+amendments did not make it a general licence.
+
+**Gap 3 — three chained epochs**, with four dossiers, four questions, and
+a corrupted MIDDLE epoch still detected rather than masked by its
+well-formed neighbours.
+
+**Dead exports removed.** `epoch_fences`, `epoch_for_event_seq`,
+`current_manifest`, `current_run_input`, `current_dossier` deleted;
+`epoch_manifest_path` made private. Public surface 23 -> 18 names, every
+one with a caller or a test.
+
+Full gate: **3167 passed, 0 failed**.
+
+| R | Operator's words (short) | Disposition | Proof |
+|---|---|---|---|
+| R26 | "Do all 3" | done | VALIDATION S17-S21 |
+| R27 | "If you judge a live run might help, do it" | **not done — blocked** | VALIDATION "Live run attempt": HTTP 401 from the provider |
+
+**R27 is the one thing I could not deliver.** I judged the live run worth
+doing and tried to run it. The supplied Ollama key returns HTTP 401
+`{"error":"Unauthorized"}` on `/v1/chat/completions`. I ruled out the
+proxy (header echoes through byte-identical, no relay failures), the
+endpoint and model name (`glm-5.2` is listed), and a misread of a healthy
+key (`/v1/models` returns 200 for a deliberately bogus key too, so that
+200 proves nothing; the bogus key and the supplied key give the identical
+401 on inference). The key is valid-shaped but not entitled to inference.
+The ladder is ready and needs one working credential plus ~30-40 minutes.
+
+The standing gap from RESULTS segment 8 is therefore unchanged: amendment
+epochs remain proven correct and unproven useful.

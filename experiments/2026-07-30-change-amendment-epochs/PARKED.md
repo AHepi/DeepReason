@@ -129,3 +129,33 @@ Reproduction, re-run against the fix:
 Regression: `test_amend_refuses_a_source_already_admitted_to_this_run`
 (including the mixed-batch case and the drop-the-duplicate recovery) and
 `test_amend_refuses_content_admitted_by_an_earlier_amendment`.
+
+## P3 — OBSERVATION: two MCP run tests are wall-clock fragile under load
+
+Not caused by this tranche and not fixed here. Recorded because it cost
+a diagnosis and will cost the next person one too.
+
+`tests/test_mcp_run.py::test_start_poll_result_and_progress_notifications`
+and `::test_typed_v6_stop_can_continue_and_append` failed in two gate
+runs and passed in every other. Cause, established rather than guessed:
+
+    concurrent  2 failed, 3165 passed in 891.57s   (two -n 4 gates at once)
+    concurrent  2 failed, 3165 passed in 900.66s   (the other of the pair)
+    exclusive   3167 passed, 7 skipped in 476.57s
+
+Both failures occurred only while two full `pytest -n 4` gates ran
+simultaneously — eight workers on a box sized for four, roughly doubling
+wall time. The two tests drive a real run worker thread and wait on it
+with hard two-second bounds (`_RUN_THREADS[...].join(timeout=2)`,
+`cycle_started.wait(timeout=2)`), which a 2x-oversubscribed machine
+misses. They pass in isolation, and pass in an exclusive full gate.
+
+**Severity.** Low for correctness, real for signal: a loaded CI box can
+turn these into a red gate with no defect behind it, and "0 failed is the
+only acceptable result" then costs someone an investigation. The fix
+would be to derive those waits from a scaling factor rather than a fixed
+two seconds, or to make the test wait on a condition rather than a
+deadline.
+
+**Operator note.** The proximate cause was mine: I started a second full
+gate before the first finished. Don't.

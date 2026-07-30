@@ -112,12 +112,26 @@ def _require_terminal_stop(root: Path, manifest) -> None:
     from deepreason.runtime.terminal_authority import derive_terminal_authority
 
     authority = derive_terminal_authority(root, manifest=manifest)
-    if not authority.current_valid:
-        raise AmendmentError(
-            "AMEND_NOT_AT_TERMINAL",
-            "amendment requires a run standing at a valid typed terminal stop "
-            f"(terminal authority is {authority.status})",
-        )
+    if authority.current_valid:
+        return
+    # A staged epoch's own events are authorized past the terminal horizon by
+    # the record that declares them. If that record no longer describes them,
+    # authority collapses — and the honest diagnosis is the staged epoch, not
+    # the stop, which is exactly where an operator would otherwise not look.
+    pending = staged_amendment(root)
+    staged_note = (
+        f"; this root also carries a staged epoch {pending.seq} whose record "
+        "may no longer describe the events it applied"
+        if pending is not None
+        else ""
+    )
+    raise AmendmentError(
+        "AMEND_NOT_AT_TERMINAL",
+        "amendment requires a run standing at a valid typed terminal stop "
+        f"(terminal authority is {authority.status}"
+        f"{f', {authority.detail_code}' if authority.detail_code else ''})"
+        f"{staged_note}",
+    )
 
 
 def _admit_supplement(

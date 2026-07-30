@@ -483,3 +483,148 @@ validation that quietly rewrites its own history is not a record.
 3. **R1 `--root` placement** — the spec's usage line put `--root` after
    the subcommand; this CLI carries it globally. Operator ruled: correct
    the spec (R1a). Corrected in C3.
+
+## Third pass — post-delivery coverage gaps (R26) and the live attempt (R27)
+
+### S17 — gap 1: the chain and epoch detectors actually fire
+
+`tests/test_amendment_chain_integrity.py`, 36 cases. Every `verify_root`
+amendment failure branch now has a test that corrupts exactly one thing
+and asserts the specific finding, rather than asserting a clean root:
+
+    unreadable chain                -> amendment-chain, "unreadable"
+    non-canonical chain bytes       -> amendment-chain
+    forged amendment digest         -> AMENDMENT_RECORD_INVALID + amendment-chain
+    chain anchored to another manifest -> amendment-chain, "anchored to another manifest"
+    broken parent link              -> AMENDMENT_CHAIN_BROKEN
+    non-advancing fence             -> AMENDMENT_CHAIN_BROKEN
+    out-of-order sequence           -> AMENDMENT_CHAIN_INVALID
+    staged but uncommitted          -> amendment-chain, "staged but never committed"
+    missing epoch document          -> amendment-epoch, "documents are unavailable"
+    deleted epoch directory         -> amendment-epoch, "documents are unavailable"
+    record naming a dossier the epoch lacks -> amendment-epoch, "differ from the record"
+    record naming an unregistered question  -> amendment-epoch, "names a question absent"
+    swapped epoch dossier           -> amendment-epoch
+    foreign epoch manifest          -> amendment-epoch, "differ from the record"
+    tampered source blob            -> amendment-epoch / attached-evidence
+    tampered staged record          -> AMEND_NOT_AT_TERMINAL naming the staged epoch
+
+All ten `RunAmendmentV1` rejection rules are covered by parametrized
+cases. Coverage of `amendment/models.py` moved 84% -> **100%**; the
+module total 86% -> **95%**.
+
+Two of these were written expecting one behavior and found another,
+which is the point of writing them:
+
+- forging the staged record does not reach `AMEND_PENDING_CONFLICT`; it
+  breaks the very authority that let the staged epoch's events cross the
+  terminal horizon, so `amend` fails closed at `AMEND_NOT_AT_TERMINAL`
+  instead. Correct, but the message pointed at the stop rather than the
+  staged epoch, so `_require_terminal_stop` now names the staged epoch
+  and the terminal authority's detail code.
+- a root that binds evidence its manifest does not authorize is already
+  non-conforming before any amendment. The useful property, now pinned:
+  amending an already-flawed root reports exactly the flaws it had and
+  invents none.
+
+: PASS
+
+### S18 — gap 2: an amendment beside a commitment-bound bridge episode
+
+    test_amendment_and_a_bridge_episode_coexist_past_one_horizon PASSED
+    test_a_stray_post_horizon_event_is_still_refused_after_an_amendment PASSED
+
+Built on the bridge suite's own proven root: run a grounded bridge to
+`process_status == "success"` with real dispatches, confirm its events
+sit past the terminal horizon, then amend the same root. Both post-
+terminal authorizations hold together — `derive_terminal_authority` stays
+valid, `verify_root_report` stays integrity- and security-valid,
+`verify_root` returns `[]`, the `BridgeAction.COMPLETED` episode still
+stands, and both questions remain in state.
+
+The negative case matters as much: planting an ordinary conjecturer
+artifact past the horizon on an amended root collapses authority with
+`TERMINAL_POST_HORIZON_EVENT_UNAUTHORIZED`. Widening the rule to admit
+amendments did not turn it into a general licence.
+
+: PASS
+
+### S19 — gap 3: three chained epochs
+
+    test_three_chained_epochs_validate_and_window_correctly PASSED
+
+Three amendments, each attaching and reshaping: sequence `[1, 2, 3]`,
+each record's `parent_amendment_digest` naming its predecessor, fences
+strictly increasing, each epoch's parent run-input and dossier digests
+matching the previous epoch's successor. Four dossiers bound, four
+unique sources, four questions on the frontier, `verify_root` clean.
+Then the MIDDLE epoch's run-input is deleted and the finding still
+comes back — it is not masked by its well-formed neighbours.
+
+: PASS
+
+### S20 — the operator-facing refusal surface
+
+    AMEND_ROOT_UNAVAILABLE            (root is not a directory)
+    ADMISSION_PATH_UNAVAILABLE        (attachment path unreadable)
+    AMEND_EVIDENCE_NOT_AUTHORIZED     (manifest disables attached evidence)
+    AMEND_EVIDENCE_BUDGET_EXCEEDED    (union exceeds the frozen budget)
+    AMEND_RUN_ACTIVE                  (operator lock live; released -> lands)
+    AMENDMENT_EPOCH_OUT_OF_RANGE      (epoch 0 and epoch 1000)
+    AMENDMENT_CHAIN_INVALID           (chain exceeds its size bound)
+
+Each asserts the typed code and that nothing was staged or committed.
+
+: PASS
+
+### S21 — dead exports removed
+
+`epoch_fences`, `epoch_for_event_seq`, `current_manifest`,
+`current_run_input`, `current_dossier` deleted (no production caller, no
+test); `epoch_manifest_path` made private, since only
+`load_epoch_manifest` used it. Public surface 23 -> 18 names, every one
+with a caller or a test.
+
+: PASS
+
+### Live run attempt (R27): BLOCKED on the credential
+
+A live amendment run is the right next evidence and I judged it worth
+doing. It cannot run: the supplied key does not authenticate for
+inference.
+
+    $ curl .../v1/chat/completions -H "Authorization: Bearer $OLLAMA_API_KEY" ...
+    HTTP/2 401
+    {"error":"Unauthorized"}
+
+Ruled out, in order:
+
+- **Not the proxy.** `$HTTPS_PROXY/__agentproxy/status` reports
+  `enabled: true`, `recentRelayFailures: []`; an echo probe confirms the
+  `Authorization` header reaches the origin byte-identical
+  (`Bearer SENTINEL-VALUE-12345` echoed intact). The 401 comes from
+  Ollama's own server (`server: Google Frontend`,
+  `x-request-id: 997f81e2-42ad-4242-acda-0da9a53a861b`), not the relay.
+- **Not the endpoint or model name.** `glm-5.2` and `glm-5.1` are both
+  listed by `/v1/models`.
+- **Not a misread of a healthy key.** `/v1/models` returns HTTP 200 for a
+  deliberately bogus key too, so that 200 proves nothing; the bogus key
+  and the supplied key return the identical `{"error":"Unauthorized"}` on
+  `/v1/chat/completions`.
+
+So the key reads as valid-shaped but is not entitled to inference —
+expired, revoked, or without inference credit. Nothing in the harness or
+this container can work around that, and I will not fake a live result.
+
+The ladder is otherwise ready: setup -> qualify -> reason -> amend ->
+continue -> audit, modelled on `selfstudy_run.sh`. It needs one working
+credential and roughly 30-40 minutes (qualification against a fresh
+subject is ~14 min, ~1160 calls).
+
+: BLOCKED — no live evidence produced, and none claimed
+
+### Third-pass verdict: PASS (offline), live evidence still outstanding
+
+Gaps 1, 2 and 3 are closed with pasted evidence; the dead exports are
+gone. The standing live gap from RESULTS segment 8 is unchanged and
+remains honestly open.

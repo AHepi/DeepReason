@@ -181,3 +181,17 @@ fixed in this tranche. Operator selected:
   matching `collect_attachment_inputs`' existing rule that admitting a
   subset of what the operator pointed at would misrepresent the evidence
   base. The cross-epoch uniqueness rule in `verify_root` is left alone.
+
+### Operator message on the coverage gaps (verbatim)
+
+> Do all 3. Don't worry about cost.  Here is an Ollama API key. If you
+> judge a live run might help, do it. Don't worry about token spend. You
+> do whatever it takes to close all the gaps
+
+- **R26** closes all three coverage gaps named in the post-delivery
+  review: (1) `verify_root`'s amendment failure branches, which had never
+  fired in a test; (2) an amendment beside a commitment-bound bridge
+  episode past one terminal horizon; (3) three or more chained epochs.
+  Plus the dead-export cleanup noted with them.
+- **R27** authorizes a live run at the implementer's judgement, with the
+  supplied Ollama credential and without a token-spend constraint.

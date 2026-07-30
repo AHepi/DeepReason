@@ -126,9 +126,17 @@ def _admit(text: str, *, problem_ref: str, locator: str):
     return dossier
 
 
-def _converged_root(tmp_path, monkeypatch, *, name="amend-root"):
+def _converged_root(
+    tmp_path,
+    monkeypatch,
+    *,
+    name="amend-root",
+    manifest_factory=None,
+    prepare=None,
+):
     """One real v6 run that reaches a valid typed terminal stop offline."""
 
+    manifest_factory = manifest_factory or _evidence_manifest
     root = tmp_path / name
     commitment = _commitment()
     problem_id = _problem_id(ORIGINAL_QUESTION)
@@ -145,9 +153,15 @@ def _converged_root(tmp_path, monkeypatch, *, name="amend-root"):
         evidence_dossier_digest=dossier.dossier_digest,
     )
     bind_run_input(run_input, dossier, root)
-    manifest = _evidence_manifest(run_input.run_input_digest)
+    manifest = manifest_factory(run_input.run_input_digest)
     bind_run_manifest(manifest, root)
     _write_qualification(root, manifest)
+    if prepare is not None:
+        # Anything the root needs bound BEFORE it runs and commits its
+        # terminal — a richer qualification report, a durable model
+        # classification — has to land here. Binding it afterwards would be
+        # an unauthorized event past the terminal horizon.
+        prepare(root, manifest)
 
     def finish_without_provider(harness, _config, _cycles, token_budget, **_kwargs):
         # One surviving non-import candidate makes the original question

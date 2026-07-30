@@ -178,27 +178,11 @@ def current_epoch(root: Path | str) -> int:
     return len(load_amendments(root))
 
 
-def epoch_fences(root: Path | str) -> tuple[int, ...]:
-    """Fence sequence per epoch; epoch 0 always starts at the log's first seq."""
-
-    return (0, *(record.fence_seq for record in load_amendments(root)))
-
-
-def epoch_for_event_seq(root: Path | str, seq: int) -> int:
-    """The epoch that owns ledger sequence ``seq``."""
-
-    epoch = 0
-    for index, fence in enumerate(epoch_fences(root)):
-        if seq >= fence:
-            epoch = index
-    return epoch
-
-
 def _epoch_root(root: Path | str, epoch: int) -> Path:
     return Path(root) if epoch == 0 else epoch_directory(root, epoch)
 
 
-def epoch_manifest_path(root: Path | str, epoch: int) -> Path:
+def _epoch_manifest_path(root: Path | str, epoch: int) -> Path:
     from deepreason.run_manifest import MANIFEST_NAME
 
     return _epoch_root(root, epoch) / MANIFEST_NAME
@@ -207,7 +191,7 @@ def epoch_manifest_path(root: Path | str, epoch: int) -> Path:
 def load_epoch_manifest(root: Path | str, epoch: int):
     from deepreason.run_manifest import load_run_manifest
 
-    return load_run_manifest(epoch_manifest_path(root, epoch))
+    return load_run_manifest(_epoch_manifest_path(root, epoch))
 
 
 def load_epoch_run_input(root: Path | str, epoch: int) -> RunInputManifest:
@@ -246,20 +230,6 @@ def verify_epoch_run_input(root: Path | str, epoch: int) -> dict:
         "input_schema_version": int(getattr(run_input, "input_schema_version", 1)),
     }
     return report
-
-
-def current_manifest(root: Path | str):
-    """The manifest the next continuation runs under."""
-
-    return load_epoch_manifest(root, current_epoch(root))
-
-
-def current_run_input(root: Path | str) -> RunInputManifest:
-    return load_epoch_run_input(root, current_epoch(root))
-
-
-def current_dossier(root: Path | str) -> EvidenceDossier:
-    return load_epoch_dossier(root, current_epoch(root))
 
 
 def epoch_problem_ids(root: Path | str) -> frozenset[str]:
@@ -327,15 +297,9 @@ __all__ = [
     "AMENDMENT_RECORD_NAME",
     "AmendmentError",
     "amendment_lock",
-    "current_dossier",
     "current_epoch",
-    "current_manifest",
-    "current_run_input",
     "dossier_union",
     "epoch_directory",
-    "epoch_fences",
-    "epoch_for_event_seq",
-    "epoch_manifest_path",
     "epoch_problem_ids",
     "epoch_workload_path",
     "load_amendments",

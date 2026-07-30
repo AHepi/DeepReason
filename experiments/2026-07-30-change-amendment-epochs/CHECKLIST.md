@@ -80,3 +80,32 @@ reopened.
 - **C6** — `VALIDATION.md` rewritten as a second pass; all 16 acceptance
   checks re-run against the amended spec and amended code; verdict PASS.
   The first pass's FAIL is preserved in "First-pass verdict (superseded)".
+
+## Re-plan 2 — post-delivery coverage gaps (R26, R27)
+
+- [x] **C7 — Make the chain/epoch detectors fire (gap 1).**
+  Done-criterion: a test per `verify_root` amendment failure branch and
+  per record-model rejection rule, each asserting the specific finding.
+  Output: `tests/test_amendment_chain_integrity.py`, 28 cases; amendment
+  models coverage 84% -> 100%.
+
+- [x] **C8 — Amendment beside a bridge episode (gap 2).**
+  Done-criterion: one root carrying both a commitment-bound bridge
+  episode and an amendment past the same horizon, with terminal authority
+  and `verify_root` still valid; plus a negative case proving the
+  amendment authorization did not become a general licence.
+
+- [x] **C9 — Three or more chained epochs (gap 3).**
+  Done-criterion: three epochs chained, four dossiers bound, four
+  questions on the frontier, `verify_root` clean, and a corrupted MIDDLE
+  epoch still detected.
+
+- [x] **C10 — Delete the dead exports.**
+  Done-criterion: `epoch_fences`, `epoch_for_event_seq`,
+  `current_manifest`, `current_run_input`, `current_dossier` removed;
+  `epoch_manifest_path` made private. Public surface 23 -> 18 names, all
+  with a caller or a test.
+
+- [x] **C11 — Live run (R27): attempted, blocked on the credential.**
+  Done-criterion: a typed determination either way, with evidence.
+  Outcome: BLOCKED. See VALIDATION.md "Live run attempt".
