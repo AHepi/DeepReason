@@ -1,0 +1,28 @@
+{
+  "candidate": {
+    "claim": "The hypothesis that S(13) = 45 is optimal is best supported by a structural absence of 44-comparator networks, which can be demonstrated by observing that local search algorithms (e.g., simulated annealing) exhibit a sharp phase transition: they readily find valid 45-comparator networks but systematically fail to find any valid 44-comparator networks under a fixed computational budget.",
+    "mechanism": "Implement a simulated annealing search over comparator sequences of length L. The search mutates comparators (i, j) with 0 <= i < j < 13 and evaluates fitness using the 0-1 principle by testing all 2^13 = 8192 binary vectors. Running this for L=44 and L=45 will discriminate between the 'search inefficiency' hypothesis and the 'structural absence' hypothesis. If 44-comparator networks exist but are merely hard to find, we would expect occasional successes given enough restarts; if they are structurally absent, the success rate will remain strictly zero, while remaining high for L=45.",
+    "counterconditions": [
+      "The simulated annealing search finds a valid 44-comparator network within the fixed budget, falsifying the structural absence hypothesis and proving S(13) <= 44.",
+      "A formal proof is discovered showing S(13) <= 44, rendering the simulation-based discrimination obsolete."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0280ceb1aefafeff",
+        "quote": "Any of the following would be genuine progress, in decreasing order of ambition:"
+      },
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it — a few milliseconds of pure Python, no network access, deter"
+      },
+      {
+        "block": "843819388191d0e9",
+        "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13. Any claim of the form \"this 45-comparator sequence sorts\" or \"this pruning rule preserves at"
+      }
+    ],
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "typicality": 0.75
+  }
+}

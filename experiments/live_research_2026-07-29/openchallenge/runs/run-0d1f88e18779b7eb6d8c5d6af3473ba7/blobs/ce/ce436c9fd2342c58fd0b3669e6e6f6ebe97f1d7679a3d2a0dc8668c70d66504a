@@ -1,0 +1,26 @@
+{
+  "candidate": {
+    "claim": "A greedy, lexicographic 0-1 vector insertion strategy—starting from an empty network and iteratively appending the fewest comparators necessary to sort the smallest unsorted binary vector—can find a 45-comparator (or smaller) 13-input network more efficiently than unguided SAT-based exhaustive search because it directly prunes the massive space of invalid networks.",
+    "mechanism": "The algorithm initializes an empty network. It then iterates through the 8192 binary vectors of length 13. For each vector, it checks if the current network sorts it. If not, it searches for the minimal set of comparators to append that sorts this vector while preserving the sorting of all previously checked vectors. By satisfying the 0-1 principle incrementally, the network is built up only as needed, avoiding the combinatorial explosion of evaluating arbitrary 45-comparator sequences.",
+    "counterconditions": [
+      "If appending a comparator to fix vector v_k breaks the sorting of a previously fixed vector v_j (j < k), the greedy approach requires backtracking, which may scale exponentially and perform worse than a SAT solver with conflict-driven clause learning.",
+      "The greedy insertion strategy may reach a local minimum where a 44-comparator network exists, but early suboptimal comparator choices create unresolvable conflicts that block reaching it.",
+      "Lexicographic iteration over 0-1 vectors might prioritize fixing easy low-weight vectors first, while vectors in the middle of the lexicographic order require globally coordinated comparator placements that greedy insertion cannot easily discover."
+    ],
+    "typicality": 0.4,
+    "evidence_refs": [
+      {
+        "block": "6050cf69f391fa33",
+        "quote": "Consequently a 13-input candidate is verified by running all 2^13 = 8192 binary vectors through it"
+      },
+      {
+        "block": "843819388191d0e9",
+        "quote": "A candidate network is a list of (i, j) pairs with 0 <= i < j < 13."
+      },
+      {
+        "block": "b01150a3ae43d8f6",
+        "quote": "The 0-1 principle: a comparator network on n channels sorts ALL inputs if and only if it sorts every input drawn from {0,1}^n."
+      }
+    ]
+  }
+}
