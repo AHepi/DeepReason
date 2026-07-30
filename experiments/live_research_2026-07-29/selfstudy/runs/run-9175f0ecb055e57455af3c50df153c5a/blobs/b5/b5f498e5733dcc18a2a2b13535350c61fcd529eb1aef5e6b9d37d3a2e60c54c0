@@ -1,0 +1,59 @@
+{
+  "candidate": {
+    "claim": "DeepReason's criticism mechanism fails to retire rival positions due to incomplete closure enforcement in the Dung grounded extension (block 09ffabcd92979168), leaving standing residue (block 0909868ae3d22218). To fix this and validate coverage debt, we should enforce the closure rule (block 0974daebd1665965) and run a sandboxed Python simulation (simulation_mode sandboxed_python_v1) testing rivalry growth vs. retirement rates, supported by directed research fetches of https://en.wikipedia.org/wiki/Argumentation_framework and https://en.wikipedia.org/wiki/Peer_review.",
+    "mechanism": "Rivalry grows because the variator produces inequivalent survivors (block 0efee9d35ff76f87) that pass the base bar B(a) but lack full validity. Without the closure rule (block 0974daebd1665965) mapping attacks on `validity_node` to the warrant, the attack graph (block 09ffabcd92979168) leaves invalid warrants unretired, contributing to the standing residue (block 0909868ae3d22218). A sandboxed Python simulation should model attack graph generation with and without closure enforcement, measuring coverage debt as a function of batch size, to discriminate whether closure enforcement reduces the 60-rival backlog. Research fetches on Dung argumentation frameworks and peer review will establish whether the missing closure rule is the standard approach for conflict resolution in abstract argumentation.",
+    "counterconditions": [
+      "The standing residue is an intentional design feature to maintain ensemble diversity, not a failure of the closure rule.",
+      "The batch criticism mechanism lacks the attention bandwidth to process 60 rivals regardless of closure rules, meaning the issue is capacity, not semantic closure.",
+      "The Dung grounded extension is already correctly implemented with closure, and the failure to retire is due to overly strong defenders.",
+      "The simulation will show that coverage debt is strictly linear with rivalry size regardless of closure rules, falsifying the closure hypothesis."
+    ],
+    "typicality": 0.8,
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92979168",
+        "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0974daebd1665965",
+        "quote": "- **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension "
+      },
+      {
+        "block": "0909868ae3d22218",
+        "quote": "## IV. Standing residue"
+      },
+      {
+        "block": "0efee9d35ff76f87",
+        "quote": "s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only"
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "wikipedia_argumentation_framework",
+        "wikipedia_peer_review"
+      ],
+      "shared_structure": [
+        "Both DeepReason schools and human peer review systems evaluate novel claims using a pool of external critics.",
+        "Both systems accumulate a backlog of unretired submissions when attack edges or reviewer assignments are sparse or fail to propagate to the core claims."
+      ],
+      "disanalogies": [
+        "Human peer review uses a one-to-one mapping of reviewer to paper, whereas DeepReason uses batched criticism over a shared attention pool.",
+        "DeepReason's schools share frozen provider seats and formal Dung semantics, whereas human reviewers are independent agents without strict mathematical closure rules."
+      ],
+      "transfer_claims": [
+        "If peer review systems reduce backlog by ensuring reviewers attack the core methodology (not just surface validity), DeepReason should enforce closure rules mapping validity_node attacks to warrants.",
+        "If Dung argumentation frameworks require strict attack closure to resolve conflicts and reduce grounded extensions, DeepReason's failure to retire rivals stems from semantic gaps in attack edges."
+      ],
+      "overturn_conditions": [
+        "If empirical studies show human peer review backlogs are primarily driven by submission volume rather than lack of deep methodological critique, the peer review analogy fails.",
+        "If the proposed sandboxed Python simulation shows that enforcing closure rules in Dung frameworks does not reduce the standing residue, the mechanism is invalid."
+      ]
+    },
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": [
+        "SRC_001"
+      ]
+    }
+  }
+}
