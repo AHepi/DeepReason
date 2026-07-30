@@ -195,3 +195,63 @@ contract the harness enforces.
 Revised estimated diff: ~40 lines in `citations.py`, ~8 in
 `contracts.py`, ~90 in `tests/test_evidence_citations.py`. 3 files,
 ~138 lines. Still inside the 150-line budget.
+
+---
+
+## Amendment retracted: the contracts.py docstring is NOT free to change
+
+The amendment above was wrong, and the full gate caught it. Recorded in
+full because the reasoning that produced it looked sound and will look
+sound again.
+
+**What happened.** With the docstring change applied, the gate returned
+`4 failed, 3164 passed, 7 skipped in 500.13s`:
+
+    tests/test_chaos_invariants.py::test_budget_exhaustion_mid_retry_still_reconciles
+    tests/test_incident_wave_a_v2_fixtures.py::test_incident_descriptors_and_generated_roots_are_frozen_and_deterministic
+    tests/test_semantic_freedom_constitution.py::test_offline_semantic_freedom_baseline_is_measurable
+    tests/test_workflow_shadow_c0.py::test_mid_retry_budget_stop_is_not_reported_as_repair_exhaustion
+
+Isolated rather than guessed. All four pass on a clean tree; all four
+pass with the `citations.py` logic change and the new tests applied and
+ONLY `contracts.py` reverted. The docstring alone causes every one.
+
+**Why the earlier check missed it.** It asked the right question of the
+wrong digest. The qualification subject digest genuinely does not carry
+contract schema text — that finding stands. But it is not the only frozen
+digest downstream of the pack:
+
+    test_semantic_freedom_constitution — tokens_per_admitted_useful_candidate
+      842.0 measured vs 784.5 baseline. A longer docstring is a longer
+      prompt, and the offline baseline meters tokens.
+    test_incident_wave_a_v2_fixtures — generated_root_sha256 for a fixture
+      root: a8ea8a62891a... measured vs d887b4494a5d... committed. The
+      generated roots embed their packs, so the pack's bytes are inside a
+      committed provenance digest.
+
+Checking one digest and generalising to "the digest does not move" was
+the error. The pack's bytes are load-bearing in more places than the
+qualification subject.
+
+**Decision: reverted, not regenerated.** Updating those committed
+provenance digests is exactly the frozen-record semantics this workflow
+stops on rather than improvising through. It also is not this tranche's
+goal: GOAL.md is about whether a quoted citation can verify, and it can,
+without any change to what the model is told.
+
+The contract text now under-describes the check — it tells the model a
+quote must reproduce a byte span "exactly". That is stricter than the
+harness enforces, so it costs nothing in correctness: a model that obeys
+it verifies. It is a documentation debt, not a defect, and it belongs to
+D2, whose whole subject is what the pack tells the model and which must
+price the frozen-digest regeneration deliberately and with the operator
+informed. Moved to PARKED.md.
+
+Final change sites for this tranche, exhaustive:
+  - `src/deepreason/evidence/citations.py` — module docstring, `import re`,
+    `_WHITESPACE` + `_whitespace_folded`, the comparison, the verified
+    detail wording.
+  - `tests/test_evidence_citations.py` — new regression test, plus the
+    predicted `reworded` fixture repoint.
+
+`src/deepreason/llm/contracts.py` is NOT changed.

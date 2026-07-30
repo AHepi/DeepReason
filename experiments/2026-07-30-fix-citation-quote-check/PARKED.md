@@ -46,3 +46,28 @@ reports "Byte-verified citations of admitted evidence: 4" when all four
 carried no quote and no bytes were compared. That line overstates what
 the record holds. Narrow, cosmetic in effect, and a separate change to
 the signal shape — out of scope here.
+
+## D1a — the wire contract still describes the old, stricter quote rule
+
+Split out of this tranche after the gate refused it. `EvidenceRefClaimV1`'s
+docstring (`src/deepreason/llm/contracts.py:20-27`) tells the model a
+quote "must reproduce a contiguous byte span of the block's canonical
+text exactly — the citation checker byte-verifies it". After this
+tranche the checker folds whitespace, so the text is stricter than the
+rule.
+
+Harmless in effect: a model that obeys the stricter text verifies under
+the looser check. It is a documentation debt.
+
+Not free to fix. Pydantic promotes the class docstring into the JSON
+schema `description`, which is serialised into the conjecturer's context
+pack, and the pack's bytes sit inside committed provenance digests:
+`test_semantic_freedom_constitution`'s
+`tokens_per_admitted_useful_candidate` baseline and
+`test_incident_wave_a_v2_fixtures`'s `generated_root_sha256`. Changing
+the docstring turns the gate red on both (proven by isolation, see
+FIX.md's retraction). Regenerating those digests is frozen-record
+semantics and needs operator approval.
+
+Belongs to the D2 tranche, which is about what the pack tells the model
+and will have to pay this cost once for both changes rather than twice.
