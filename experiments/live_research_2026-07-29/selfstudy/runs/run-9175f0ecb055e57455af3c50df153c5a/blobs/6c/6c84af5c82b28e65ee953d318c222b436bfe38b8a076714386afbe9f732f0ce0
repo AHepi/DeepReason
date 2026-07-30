@@ -1,0 +1,55 @@
+{
+  "candidate": {
+    "claim": "The criticism mechanism suffers from a coverage debt bottleneck because batched criticism applies finite warrants per batch to a growing space of rival positions without prioritizing semantic redundancy. Optimizing this requires an ensemble-pruning heuristic that ranks rival positions by mutual information, focusing criticism on collapsing redundant rivalry rather than evaluating each independently.",
+    "mechanism": "By routing criticism proportional to the semantic overlap between rival positions, the system focuses finite attention on collapsing redundant clusters. This mirrors ensemble pruning in machine learning, where diversity metrics filter out highly correlated models to prevent the majority voting mechanism from being overwhelmed by correlated errors.",
+    "counterconditions": [
+      "The number of unique rival positions grows linearly, not combinatorially, making batch coverage sufficient.",
+      "Ensemble diversity metrics do not transfer to argumentative criticism because warrants are strictly logical, not probabilistic.",
+      "The system's grounding extension semantics (Dung) already implicitly handles redundancy by collapsing equivalent attacks."
+    ],
+    "evidence_refs": [
+      {
+        "block": "09ffabcd92979168",
+        "quote": "# Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "0efee9d35ff76f87",
+        "quote": "s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only"
+      },
+      {
+        "block": "104e65041f02d759"
+      }
+    ],
+    "analogy": {
+      "source_memory_refs": [
+        "en.wikipedia.org/wiki/Ensemble_learning"
+      ],
+      "shared_structure": [
+        "Both systems combine multiple models/positions to improve overall robustness.",
+        "Both suffer from redundancy that increases computational cost without proportionally improving outcomes."
+      ],
+      "disanalogies": [
+        "Argumentative criticism relies on logical refutation and warrants, whereas ensemble methods rely on variance reduction and statistical averaging.",
+        "Ensemble methods operate over continuous prediction spaces, while DeepReason schools operate over discrete logical claims."
+      ],
+      "transfer_claims": [
+        "Applying diversity metrics from ensemble methods to rank and prune rival positions will reduce coverage debt."
+      ],
+      "overturn_conditions": [
+        "Ensemble diversity metrics fail to predict argumentative redundancy in the schools.",
+        "Coverage debt is fundamentally a routing problem rather than a redundancy problem."
+      ],
+      "adopted_commitment_refs": []
+    },
+    "optional_refs": [
+      "SRC_001"
+    ],
+    "sidecar": {
+      "requested_context_aliases": [
+        "SRC_001"
+      ],
+      "search_signal": "productive"
+    },
+    "typicality": 0.6
+  }
+}

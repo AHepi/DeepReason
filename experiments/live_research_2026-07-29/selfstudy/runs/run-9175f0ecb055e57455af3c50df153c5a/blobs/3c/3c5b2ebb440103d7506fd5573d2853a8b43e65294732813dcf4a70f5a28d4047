@@ -1,0 +1,26 @@
+{
+  "candidate": {
+    "claim": "DeepReason's school system accumulates unretired rivalries (18 to 60) because the variator's 'inequivalent survivors' criterion (`a' ≉_B a`) is too permissive, while argumentative criticism lacks the coverage bandwidth to keep pace, suggesting a variator-side novelty or fitness threshold to control rivalry growth.",
+    "mechanism": "The variator currently emits k bounded edits where the only barrier is passing a base filter and being inequivalent. This combinatorial expansion of inequivalent survivors saturates the argumentative_critic's capacity. By adding a strict fitness or delta-coverage requirement to the variator emission contract, the rate of new rival positions slows to match the critic's retirement rate, reducing coverage debt.",
+    "counterconditions": [
+      "If the problem space is inherently rugged and requires high rivalry for exploration, throttling variator emission will prematurely converge on local optima.",
+      "If the argumentative_critic's batch criticism mechanism can be parallelized or scaled instead, constraining the variator is unnecessary and limits system diversity."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0efee9d35ff76f87",
+        "quote": "variator emits k bounded edits {a'} via µ(·|a) s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only HV_B(a) = 1 - s(a)"
+      },
+      {
+        "block": "0f670de69de9021d",
+        "quote": "conjecturer (Verbalized-Sampling contract, §11.6), argumentative_critic, defender, variator(µ, µ_struct), judge(rubric verdicts under trial protocol), summariz"
+      },
+      {
+        "block": "0974daebd1665965",
+        "quote": "- **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension"
+      }
+    ],
+    "optional_refs": [],
+    "typicality": 0.75
+  }
+}

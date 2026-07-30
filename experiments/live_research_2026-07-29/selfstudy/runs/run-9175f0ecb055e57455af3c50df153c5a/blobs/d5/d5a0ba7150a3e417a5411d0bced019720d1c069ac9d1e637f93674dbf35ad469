@@ -1,0 +1,37 @@
+```json
+{
+  "candidate": {
+    "claim": "The criticism mechanism fails to retire rivals because the Dung grounded extension attack pass does not enforce coverage debt as a degradation trigger, leading to unbounded rivalry from variators. Introducing a criterion-level forced choice would bound rivalry. A sandboxed_python_v1 simulation testing the growth of unretired positions under batched criticism with versus without forced-choice degradation—alongside Wikipedia research on Dung's argumentation frameworks and peer review—would discriminate these predictions.",
+    "mechanism": "Variators generate inequivalent survivors (s(a) > 0) independently of strict attack coverage, meaning many positions survive simply because they are unattacked. The grounded extension settles on a skeptical state but does not actively degrade or retire high-coverage-debt nodes. By enforcing a forced-choice degradation criterion tied to coverage debt, the survival probability of un-attacked or poorly-defended nodes is directly lowered, actively retiring positions rather than allowing them to coexist. This can be tested in a sandboxed Python simulation by comparing rivalry size over time under random batched criticism versus forced-choice degradation. Wikipedia fetches on Dung's frameworks and peer review processes would provide theoretical bounds for the simulation's parameters.",
+    "counterconditions": [
+      "The grounded extension might already be sufficient if the issue is merely insufficient attack density rather than the extension algorithm itself.",
+      "Variators could be tuned to reduce novelty instead of changing the criticism mechanism.",
+      "Coverage debt may not monotonically correlate with retirement if defenders can effectively resolve warrants."
+    ],
+    "evidence_refs": [
+      {
+        "block": "0868cfc01f2d83d4",
+        "quote": "criterion-level forced choice + degraded-control validity gate"
+      },
+      {
+        "block": "0efee9d35ff76f87",
+        "quote": "inequivalent survivors only"
+      },
+      {
+        "block": "09ffabcd92979168",
+        "quote": "Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)"
+      },
+      {
+        "block": "1401526e86196288",
+        "quote": "The judge's question per commitment: \"does the ca"
+      }
+    ],
+    "optional_refs": ["SRC_001"],
+    "sidecar": {
+      "requested_context_aliases": ["SRC_001"],
+      "search_signal": "productive"
+    },
+    "typicality": 0.75
+  }
+}
+```

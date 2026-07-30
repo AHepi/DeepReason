@@ -1,0 +1,101 @@
+ATOMIC SINGLE-CANDIDATE CALL: this is candidate slot 6 of 6. Return exactly one JSON object holding one candidate (or one abstention) per the response schema. Never return an array or any other slot's content.
+
+## problem
+PROBLEM question-98a0e3a77a0e29bd56195f9c531f6092
+The attached documentation specifies DeepReason's school system (conditioning-only schools sharing frozen provider seats) and its criticism mechanism (foreign-school argumentative criticism with per-target warrants, coverage debt, batch criticism, criticism-weighted attention). Treat this as a combined simulation, coding, and research challenge: identify concrete weaknesses in how schools generate rival positions and how criticism retires them — in live runs rivalry has grown from 18 to roughly 60 accepted rival positions while criticism retired almost none — and propose specific, criticizable optimisations. Where a claim about coverage or retirement dynamics can be tested numerically, propose a sandboxed Python simulation (simulation_mode sandboxed_python_v1) that discriminates between rival predictions, for example about how coverage debt grows with rivalry size under batched criticism. Where published work bears on the design, propose directed research fetches of specific https pages; this run's frozen allowlist permits only en.wikipedia.org (ensemble methods, peer review, Popperian critical rationalism are all in scope). Ground every claim about the current mechanism in the attached evidence blocks by citing their block ids.
+
+## criteria
+CRITERIA (commitments every candidate will carry and face):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+
+## citable-evidence-blocks
+CITABLE EVIDENCE BLOCKS — to ground a candidate in admitted
+evidence, name these block ids in its evidence_refs (optionally
+with an exact quote from the block; quotes are byte-checked
+against the recorded bytes). Only ids from this list resolve —
+artifact hashes and any other handles are rejected as unknown.
+
+[030b6533444807e7] Candidate content remains open. Claims, mechanisms, counterconditions, analogies, uncertainty, and optional semantic fields are not restricted to a closed mecha
+[0868cfc01f2d83d4] - The judge-side measurement problem and its fix (criterion-level forced choice + degraded-control validity gate): `experiments/informal_ab_prereg.yaml`, instru
+[0909868ae3d22218] ## IV. Standing residue
+[093553dbc247bd0c] All arms: conjecture-only (licensed by the survivorship result), fixed problem (`pi-bronze`), 2 schools, ~60k tokens each, fresh roots, invariants verified clea
+[0974daebd1665965] - **Closure rule:** any attacker of `validity_node` attacks the warrant (hence its carrier's attack edge). Enforce in `att` construction. - **Closure extension 
+[09ffabcd92979168] # Pass 1: attack (Dung grounded extension; unique, skeptical, polynomial)
+[0b0e7cfc88b8578f] This amendment separates four concepts that reports and operators must not collapse: school lineage, route topology, advisory attention, and workflow authority.
+[0c74fc8b6042157a] **The epistemologically principled procedure is "downgrade, then audit."** This is where the harness earns its keep: it already contains the instruments that ce
+[0cc96960b136c7ef] ## 2. Angle: role→model routing (pro → flash)
+[0d20320ff9938143] **Commitment** (Def 3.1)
+[0d252ced86fc7870] `Rule.CONTROL` and `ControlEventPayloadV1` persist authority transitions by canonical reference. Control events have an empty formal `StateDiff`; they do not du
+[0d315607fbe7bccd] ## I. Interfaces and compatibility
+[0efee9d35ff76f87] ``` variator emits k bounded edits {a'} via µ(·|a) s(a) = Pr[ a' passes B(a) ∧ a' ≉_B a ] # inequivalent survivors only HV_B(a) = 1 - s(a) ```
+[0f670de69de9021d] `conjecturer (Verbalized-Sampling contract, §11.6), argumentative_critic, defender, variator(µ, µ_struct), judge(rubric verdicts under trial protocol), summariz
+[0f7c567fc0adcc11] DeepSeek applies context caching automatically: input tokens matching a previously seen prefix are billed at **1/10 the input price** ([pricing docs](https://ap
+[104e65041f02d759] Three layers + guardrails. Correction from v1: Def 4.2 coupling and Prop 4.1 reach are **not** the same parameter — coupling is a property of γ, reach a measure
+[11946742f52c634d] ## 2. Instrument
+[12680856aa1384a9] So the current theory of the Gulf of Mexico's single daily tide is: *the semidiurnal constituent is suppressed wholesale near an amphidromic node, letting the d
+[12e3502ca378276c] ## 8. Views (not types)
+[1401526e86196288] - **Anchored rubric mode.** A standard artifact (10.3) may declare `mode: anchored` with anchor exemplar refs. The judge's question per commitment: "does the ca
+[144cc07f42bb61e7] Local schema repair and whole-workflow retry are different authorities.
+[146e021253b0932f] What makes this artifact interesting is what it *stands on*. It declares a dependence on a second accepted artifact — a correction the system's own critic produ
+[15134e0610653477] The sharpest question the spec asks about itself: if you take away every program check and let the loop run on LLM criticism alone (λ = 0), do outcomes actually
+[168ef361cd247c5c] ### P4 — complement directive: placebo, with a dissociation
+[174dcccf9f7813e6] Blocking occurs **only** for relapse onto refuted-equivalents. Near-duplicates of *accepted* artifacts are never blocked — they register normally; the scheduler
+[17c63684c9bcc60f] A real embedding model (and showing the conclusions are embedder-invariant), ≥3 model families, ≥5 problems, ≥5 seeds per condition with confidence intervals, a
+[181ab596196aa5ce] **10.4 Judge audits (program-checked attacks on rubric infrastructure).**
+[1854133175700580] **Storage:** schema-namespaced content-addressed JSON files (`objects/<schema>/<sha256(id)>.json`) + an append-only JSONL log, git-native. Legacy flat object re
+[185839867abb3fe8] - `WorkOrderEnvelopeV1`, containing state fences, problem/target references, school assignment, exact route lease, contract, bounded capability grant, budget re
+[1958b39701612057] A **school** is a persistent conditioning regime for γ-calls: `(endpoint/family, stance_seed, lineage exemplar slice, render weights)`, registered as a school-p
+[1b2d5ddadda17971] *Flags:* **lineage stagnation** = conjecture-stream contraction ∧ flat progress (no status changes, no problems retired, no oracle delta where present) sustaine
+[1bce366b78f61ebc] Opening a v1, v2, or v3 manifest does not synthesize v4 fields, control events, school bindings, context capabilities, criticism policy, or workflow retries. Hi
+(+299 further citable blocks not shown)
+
+## frozen-evidence-context
+FROZEN EVIDENCE DOSSIER (untrusted source data): retrieval and attachment do not establish truth, reliability, relevance, scope, support, or refutation.
+pack_receipt=58813b0fd8a498806b180ef03af0b95fd7b0b99bd2c53a88702c7db4bd7f150d
+Citable admitted blocks are listed per source. To ground a candidate in one, put its block id in that candidate's evidence_refs; an optional quote must reproduce the block's text exactly (byte-checked).
+[src-74ded11eccee525366948958d3b4fb57bccbdeb2] Reducing Token Burn Without Sacrificing the Epistemology
+class=other; locator=/home/user/DeepReason/docs/TOKEN_ECONOMY.md; source_sha256=74ded11eccee525366948958d3b4fb57bccbdeb2ac8da1e4db35e075c61562a3; excerpt_sha256=74ded11eccee525366948958d3b4fb57bccbdeb2ac8da1e4db35e075c61562a3
+citable_blocks:
+  block=0c74fc8b6042157a kind=paragraph title=2. Angle: role→model routing (pro → flash)
+  block=0cc96960b136c7ef kind=section title=2. Angle: role→model routing (pro → flash)
+  block=0f7c567fc0adcc11 kind=paragraph title=3. Angle: prefix caching (free 10x on repeated input)
+  block=1e8f3773c8b077ed kind=paragraph title=2. Angle: role→model routing (pro → flash)
+  block=1fcb6268bf2c318f kind=section title=5. Angle: prompt and output diet (real but small)
+  block=2218848dfc13fe02 kind=paragraph title=7. The floor: what must never be cut, and why it's cheap anyway
+  block=2dbabc04624e12b4 kind=section title=Sources
+  block=313110932f883bef kind=section title=Reducing Token Burn Without Sacrificing the Epistemology
+  block=349af53c3c86de0d kind=paragraph title=1. Angle: reasoning-token control (the dominant lever)
+  block=4827cb44c7ef35e6 kind=paragraph title=7. The floor: what must never be cut, and why it's cheap anyway
+  block=4dbacde34aab3318 kind=paragraph title=8. Ranked plan with estimates
+  block=55215f283364285d kind=paragraph title=1. Angle: reasoning-token control (the dominant lever)
+  block=5cd2be3356cff03b kind=paragraph title=Reducing Token Burn Without Sacrificing the Epistemology
+  block=5de90abd15014f0c kind=paragraph title=4. Angle: call elimination (architecture)
+  block=5f9d0809d4d7423c kind=paragraph title=2. Angle: role→model routing (pro → flash
+…[section compressed]…
+ intent that records visibility under the service-owned
+lock. This extraction does not imply one universal service or grant any client
+raw control authority.
+
+MiniReason continues to use the shared ontology, storage, route firewall,
+wire/repair kernel, scratch, attention, and bridge services while retaining its
+reduced scheduler. Its explicit v4 `shadow` path also reuses the parent
+conjecture application boundary and the exact canonical work-order, proposal,
+guard, and transition record types for the overlapping generate boundary. It
+does not implement the active v4 turn/context-expansion controller,
+full-engine trials, research, or website stages. The default Mini path and
+historical roots remain byte-compatible and open without migration.
+
+Opening a v1, v2, or v3 manifest does not synthesize v4 fields, control events,
+school bindings, context capabilities, criticism policy, or workflow retries.
+Historical reads remain physically read-only. Opting into v4 requires an
+explicitly compiled complete policy and a newly bound compatible run root.
+
+END UNTRUSTED SOURCE DATA
+
+## school-stance
+SCHOOL STANCE (weight 1.00): counterexample first
+
+## output-contract
+DIRECTIVE: return up to 6 diverse candidates with typicality estimates. You may instead or additionally request bounded context, or abstain when no responsible proposal is available. Return at least one meaningful outcome; never invent a candidate to fill a quota. Include atypical candidates when proposing candidates.
+
+IMAGINATIVE SCRATCH WORKSHOP (optional): speculative mechanisms, counterfactuals, contradictions, rough fragments, and unresolved questions are explicitly welcome. Explore boldly. Scratch remains advisory: storage alone never makes it a fact, evidence, a formal claim, or support for one.

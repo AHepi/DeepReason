@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "attack": true,
+      "case": "The target posits a specific, numerically testable claim (retiring older rivals 'from near-zero to at least 15% per batch') but leaves the `simulation_refs` array completely empty. This violates the problem directive to propose a sandboxed Python simulation that discriminates between rival predictions when retirement dynamics can be tested numerically. Without such a simulation, the 15% retirement target is purely speculative and ungrounded.",
+      "counterexample": null,
+      "target_alias": "SRC_001"
+    },
+    {
+      "attack": true,
+      "case": "The target's `mechanism` field is abruptly truncated ('Under fixed criticism budgets, the number '), leaving the core causal explanation for how ensemble-sampled criticism optimizes retirement fundamentally incomplete. Additionally, despite predicting a 'superlinear explosion in coverage debt' and referencing a Python simulation in its counterconditions, the target leaves `simulation_refs` empty, failing the problem directive to actually propose the sandboxed Python simulation for numerically testable claims about coverage debt growth.",
+      "counterexample": null,
+      "target_alias": "SRC_002"
+    }
+  ]
+}
