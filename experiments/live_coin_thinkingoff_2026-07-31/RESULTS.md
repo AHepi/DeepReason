@@ -86,3 +86,71 @@ surface qualified cleanly with thinking off in both batteries.
 
 That is a further change to the engaged preset and is not authorised
 here, so it is not done.
+
+---
+
+## The schema fix: prose constraint made mechanical
+
+Operator rule (R9-R12): a constraint that exists only in prose, while the
+schema permits its violation, is an ambiguity in the contract — not a
+model failure. Enforce it in the JSON Schema and re-run the battery with
+thinking off; accept only at the thinking-on level (20/20, zero repairs).
+
+### What was ambiguous
+
+`ScratchLinkWireV1` / `ScratchLinkMinimalWireV1` declared four optional,
+nullable reference fields and stated the rule in the docstring only:
+"Exactly one representation is legal for each endpoint." The schema
+permitted all four set, all four null, and every mixture.
+
+### What it now says, mechanically
+
+    "allOf": [
+      {"oneOf": [{"required": ["from_index"]}, {"required": ["from_handle"]}]},
+      {"oneOf": [{"required": ["to_index"]},   {"required": ["to_handle"]}]}
+    ]
+
+plus `null` dropped from those four fields, so `required` cannot be
+satisfied by an explicit null.
+
+Two things the obvious encoding gets wrong, both found before coding:
+
+  - **Per endpoint, not per pair.** `_require_one_reference_per_endpoint`
+    tests each endpoint independently, so `from_index=0, to_handle="SCR_002"`
+    is legal. The rule's worked example pairs them and would have rejected
+    valid links.
+  - **Branches must carry `required` only.** `_strict_schema` sets
+    `additionalProperties: false` on every subschema holding a
+    `properties` key, so a branch written with `properties` becomes a
+    closed object rejecting `relation_hint`.
+
+### Measured, third battery, thinking still off
+
+    contract                     before (B1 / B2)        after
+    scratch.link.compact.v1      11/20, 18r / 9/20, 22r  20/20, 0 repairs
+    scratch.link.minimal.v1      18/20,  4r / 17/20, 6r  20/20, 0 repairs
+
+    tier: shallow (twice)  ->  tier: full, qualification_state: ready
+
+Every other pair unchanged and passing. The three at 19/20 with one
+repair each (`bridge.ledger.v3`, `bridge.ledger-batch.v1`,
+`conjecturer.turn.v6`) were at 19-20/20 before the change too.
+
+The runtime was NOT narrowed: the Python models still accept an explicit
+null for the unused field, so the change tightens only what the model is
+TOLD. Nothing that previously validated now fails.
+
+### Residue
+
+Two samples before, one after. The after-battery is a single run; a
+repeat would strengthen it. The fix is nonetheless mechanical rather than
+statistical — the violation is now unrepresentable in valid JSON, which
+is checkable offline and is pinned by
+`test_the_endpoint_rule_is_enforced_by_the_schema_not_only_by_prose`.
+
+**The rule generalises and the sweep is not done.** Only the two contracts
+that measurably failed were audited. `bridge.ledger.v3` still describes
+its per-class grounding rules in prose ("source_fact needs a source or
+evidence handle", "scratch handles never ground") where `if/then` and
+`dependentRequired` could carry them. It passes at 19-20/20, so it is not
+urgent, but it is the same defect class and is parked.

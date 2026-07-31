@@ -286,3 +286,97 @@ def test_single_element_array_wrapper_is_tolerated_like_a_fence():
         contract.validate_value([payload, payload])
     with pytest.raises(ValueError):
         contract.validate_value([[payload]])
+
+
+def test_the_endpoint_rule_is_enforced_by_the_schema_not_only_by_prose():
+    """Regression (thinking-off battery, subject 97653fde...): with glm-5.2's
+    reasoning disabled, scratch.link.compact.v1 scored 11/20 then 9/20
+    first-pass valid with 18 then 22 repairs, and failed production
+    qualification twice; scratch.link.minimal.v1 fell with it. The rule it
+    kept breaking - exactly one of index/handle per endpoint - existed only
+    in the class docstring, while the schema left all four reference fields
+    independently optional and nullable.
+
+    A model that treats the schema as the source of structural truth must be
+    unable to express the violation at all. This pins that property of the
+    SCHEMA, so the constraint cannot regress back into prose.
+    """
+
+    from deepreason.scratch.contracts import (
+        ScratchLinkMinimalWireContract,
+        ScratchLinkWireContract,
+    )
+
+    # jsonschema is not a declared dependency of this project, so the
+    # behavioural half runs only where it is available; the structural
+    # assertions below are unconditional and are what actually pin the fix.
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    handles = {"SCR_001": "a", "SCR_002": "b"}
+    for contract in (
+        ScratchLinkWireContract(handles=handles),
+        ScratchLinkMinimalWireContract(handles=handles),
+    ):
+        schema = contract.model_json_schema()
+
+        # Structural pin, checked before any optional validator runs: the
+        # exclusion is present, per-endpoint, and null is gone from the four
+        # reference fields so `required` cannot be satisfied by a null.
+        assert schema["allOf"] == [
+            {"oneOf": [{"required": ["from_index"]}, {"required": ["from_handle"]}]},
+            {"oneOf": [{"required": ["to_index"]}, {"required": ["to_handle"]}]},
+        ]
+        for name, expected in (
+            ("from_index", "integer"), ("to_index", "integer"),
+            ("from_handle", "string"), ("to_handle", "string"),
+        ):
+            field = schema["properties"][name]
+            assert field.get("type") == expected, field
+            assert "anyOf" not in field and "default" not in field, field
+
+        def valid(document) -> bool:
+            try:
+                jsonschema.validate(document, schema)
+            except jsonschema.ValidationError:
+                return False
+            return True
+
+        # Legal forms stay legal — including the MIXED endpoint form, which a
+        # paired oneOf would wrongly forbid. _require_one_reference_per_endpoint
+        # tests each endpoint independently, so the schema must too.
+        assert valid({"from_handle": "SCR_001", "to_handle": "SCR_002", "relation_hint": "r"})
+        assert valid({"from_index": 0, "to_index": 1, "relation_hint": "r"})
+        assert valid({"from_index": 0, "to_handle": "SCR_002", "relation_hint": "r"})
+
+        # Every way of breaking the prose rule is now invalid JSON.
+        assert not valid(
+            {"from_index": 0, "from_handle": "SCR_001", "to_index": 1, "relation_hint": "r"}
+        )
+        assert not valid({"to_index": 1, "relation_hint": "r"})
+        assert not valid(
+            {"from_index": None, "from_handle": None, "to_index": None,
+             "to_handle": None, "relation_hint": "r"}
+        )
+        # An explicit null must not satisfy `required`: that was the escape
+        # hatch a nullable type would have left open.
+        assert not valid(
+            {"from_index": None, "from_handle": "SCR_001", "to_handle": "SCR_002",
+             "relation_hint": "r"}
+        )
+
+        # _strict_schema closes any subschema carrying `properties`, so the
+        # exclusion branches must carry `required` only or they would be
+        # rewritten into closed objects that reject relation_hint.
+        for clause in schema["allOf"]:
+            for branch in clause["oneOf"]:
+                assert set(branch) == {"required"}, branch
+
+    # The runtime is NOT narrowed: an explicit null for the unused field is
+    # still admitted, exactly as before. The schema tightens what the model
+    # is told, never what the harness accepts.
+    from deepreason.scratch.contracts import ScratchLinkWireV1
+
+    assert ScratchLinkWireV1(
+        from_index=None, from_handle="SCR_001", to_index=1, to_handle=None,
+        relation_hint="r",
+    ).from_handle == "SCR_001"
