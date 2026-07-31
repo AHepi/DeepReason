@@ -7,6 +7,7 @@ changes policy, or manufactures a substantive field.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import re
 from dataclasses import dataclass
@@ -1369,6 +1370,9 @@ class V6PatchRepairSession:
         self.last_error: Exception | None = None
         self.whole_object_retry_used = False
         self._pending_candidate: Any = _MISSING
+        # Digests of every rejected candidate, to catch a repair that cycles.
+        self._rejected_digests: dict[str, int] = {}
+        self.oscillation: str = ""
 
     @property
     def attempt_count(self) -> int:
@@ -1480,6 +1484,7 @@ class V6PatchRepairSession:
                 candidate_ready = True
 
         if self.invalid_value_parseable and candidate_ready:
+            self._note_repeated_state(turn)
             envelope = diagnostic_envelope_from_error(
                 contract=self.contract,
                 error=error,
@@ -1521,8 +1526,68 @@ class V6PatchRepairSession:
         self.syntax_diagnostic = diagnostic
         return diagnostic
 
+    def _note_repeated_state(self, turn: V6RepairTurn) -> None:
+        """Record a rejected candidate and detect a repair that has cycled.
+
+        Observed live (run-bc3e8797b3e0609eddb324299c8257bd): a scratch link's
+        `to_ref` had NO legal value — the response declared one new block, so
+        every target was either that block (a self-link) or an undeclared key.
+        The model alternated between the two invalid values across four
+        attempts, because each diagnostic names only the violation of the state
+        the document is currently in, so patching away the reported violation
+        lands it in the other one. The budget drained and the seat exhausted
+        its smallest authorized contract, discarding an answer it had already
+        written.
+
+        Detection RECORDS the loop; it deliberately does not cut the attempts
+        short. A repeated state is evidence of non-convergence, not proof of
+        it, and `test_doctor_two_ceiling_allows_second_required_repair` is the
+        standing counterexample: a no-op patch reproduces the rejected document
+        and the NEXT attempt removes the offending field and succeeds. Stopping
+        on the repeat would forfeit a granted repair that demonstrably works.
+
+        What the loop costs is legibility, and that is what this buys back. On
+        exhaustion the recorded reason now names the repeat and its pointer
+        instead of echoing whichever validation error happened to come last, so
+        `run-bc3e8797b3e0609eddb324299c8257bd` would have said the authorized
+        value was unsatisfiable rather than leaving that to be reconstructed
+        from blobs.
+
+        The detection guesses nothing: the equality is exact, over the
+        canonical form of the whole candidate, so a repair converging through
+        distinct states is never flagged.
+        """
+
+        digest = hashlib.sha256(
+            json.dumps(
+                self.invalid_value,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+            ).encode("utf-8")
+        ).hexdigest()
+        first_seen = self._rejected_digests.get(digest)
+        if first_seen is None:
+            self._rejected_digests[digest] = turn.attempt
+            return
+        pointer = turn.validation_path or (
+            turn.authorized_pointers[0] if turn.authorized_pointers else ""
+        )
+        self.oscillation = (
+            "repair_oscillation: attempt "
+            f"{turn.attempt} restored the candidate already rejected at attempt "
+            f"{first_seen}"
+            + (f" while repairing {pointer}" if pointer else "")
+            + "; the authorized value is likely unsatisfiable by patching"
+        )
+
     def exhaustion_error(self, *, spend=None) -> SchemaExhaustedError:
         message = str(self.last_error).strip() if self.last_error is not None else ""
+        # A detected loop is the more useful cause than whichever validation
+        # error happened to come last, so it leads; the last error is kept
+        # after it rather than replaced.
+        if self.oscillation:
+            message = f"{self.oscillation}; last error: {message}" if message else self.oscillation
         return SchemaExhaustedError(
             "schema_exhausted"
             + (f": {message[:500]}" if message else ""),

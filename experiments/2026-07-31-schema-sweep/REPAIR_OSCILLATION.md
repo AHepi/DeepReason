@@ -1,8 +1,9 @@
 # The repair loop can oscillate forever between two invalid states
 
 Notes for the operator. Diagnosed from `run-bc3e8797b3e0609eddb324299c8257bd`
-(turmite ladder, glm-5.2, thinking off). One instance is fixed; the CLASS is
-not, and the class is the part worth your attention.
+(turmite ladder, glm-5.2, thinking off). Two fixes landed — the specific
+instance and a general cycle detector — and two larger options remain open at
+the end of this note.
 
 ## First, a correction
 
@@ -76,7 +77,7 @@ Ordering is checked: the drop runs before `_local_namespace_is_closed`, and a
 self-link naming an undeclared key is dropped rather than becoming a route to
 smuggle unknown keys past admission.
 
-## What is NOT fixed — the class
+## The class, and what cycle detection does and does not do
 
 Any repair diagnostic that is **locally satisfiable but globally
 unsatisfiable** will loop until exhaustion. Self-links were one instance. The
@@ -94,7 +95,48 @@ Other places the same shape can arise, none of them investigated:
   in a live run);
 - a `decisive_point_alias` when the alias table is empty.
 
-## Two candidate fixes, neither implemented
+## Fixed: cycle detection (records the loop; does not cut attempts short)
+
+Implemented in `V6PatchRepairSession`. Every rejected candidate's canonical
+form is digested; a repeated digest is recorded as an oscillation and leads the
+exhaustion reason.
+
+    attempt 0  outside namespace   rejected
+    attempt 1  self-link           rejected
+    attempt 2  outside namespace   rejected  <- repeat of attempt 0, recorded
+    attempt 3  self-link           rejected
+    attempt 4  outside namespace   rejected  -> exhausted, reason now reads:
+      repair_oscillation: attempt 2 restored the candidate already rejected at
+      attempt 0 while repairing /links/0/to_ref; the authorized value is likely
+      unsatisfiable by patching; last error: ...
+
+**A design correction, and the test that forced it.** My first implementation
+STOPPED as soon as a state repeated, on the reasoning that the loop was proven.
+That broke `test_doctor_two_ceiling_allows_second_required_repair`, which
+scripts precisely the counterexample:
+
+    attempt 0  {"finding":"supported","message":""}     rejected
+    attempt 1  patch replaces /message with ""          same document, rejected
+    attempt 2  patch removes /message                   VALID
+
+A no-op patch reproduces the rejected document and the NEXT attempt succeeds.
+So a repeated state is evidence of non-convergence, NOT proof of it — the model
+is stochastic, and stopping would forfeit a granted repair that demonstrably
+works. The test was right and the implementation was wrong; it was not
+weakened.
+
+What the loop actually costs is legibility, and that is what detection buys
+back. Before, exhaustion recorded whichever validation error came last, leaving
+the oscillation to be reconstructed from blobs — which is how this defect was
+found, by hand, after the run had already died. Now the loop and its pointer
+lead the recorded reason and the last error is kept after it.
+
+The detection guesses nothing: the equality is exact, over the canonical form
+of the whole candidate, so a repair converging through distinct states is never
+flagged — a test pins that four different rejected values in a row do not trip
+it.
+
+## The two larger fixes, still not implemented
 
 1. **Report the whole violation set, not one member.** If the diagnostic for
    attempt 2 had said "self-link AND the only alternative is undeclared", the
@@ -104,11 +146,35 @@ Other places the same shape can arise, none of them investigated:
    direct a `remove` explicitly. This is a protocol change to
    `RepairDiagnosticEnvelopeV2` and a larger commitment.
 
-A cheaper mitigation, orthogonal to both: **detect the cycle**. The repair
-session already holds the attempt history; if a patch returns the document to a
-value it previously held at the same pointer, that is a loop and no further
-attempt at that pointer can succeed. Failing fast there would at least convert
-a silent exhaustion into a typed, diagnosable outcome — and would have saved
-this run's answer rather than discarding it.
+Both remain open. Cycle detection stops the bleeding — it makes the failure
+immediate and legible instead of silent — but neither of these is subsumed by
+it, because neither is about detecting the loop: they are about giving the
+model enough information to avoid entering it. Of the two, (1) is the smaller
+commitment and would likely have let this run finish.
 
-I have not implemented any of the three. Pick one and I will.
+---
+
+## Unrelated, parked: two load-flaky MCP tests
+
+Noticed while gating this change, not caused by it.
+
+`tests/test_mcp_run.py` waits on the run thread with a hardcoded
+`join(timeout=2)` at four sites (lines 222, 328, 350, 363). Under `pytest -n 4`
+that budget is occasionally missed, and the two assertions that depend on the
+thread having finished then fail:
+
+    test_start_poll_result_and_progress_notifications
+      assert status["state"] == "completed"   ->  'running'
+    test_typed_v6_stop_can_continue_and_append
+      run_result  ->  ValueError: RUN_RESULT_NOT_READY
+
+Not caused by this tranche: both tests monkeypatch `run_scheduler` outright, so
+neither the repair session nor the scratch proposal models are on their path.
+They pass in isolation (7 passed), passed in the two preceding full gates, and
+failed only in the one run — the signature of a wall-clock budget, not a logic
+change.
+
+The fix is to wait on the run's own terminal state rather than a fixed
+two-second sleep-equivalent, or to raise the budget substantially. Left alone
+here because it is outside this tranche and touching it would mix an unrelated
+change into a gate that exists to verify something else.

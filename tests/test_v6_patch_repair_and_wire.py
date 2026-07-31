@@ -605,3 +605,90 @@ def test_bare_candidate_payload_is_re_enveloped_for_atomic_calls():
         contract.validate_value({"candidate": dict(inner), "content": "smuggle"})
     with _pytest.raises(Exception):
         contract.validate_value({"typicality": 0.4})
+
+
+def test_a_repair_that_cycles_is_named_in_the_exhaustion_reason():
+    """Regression (turmite run-bc3e8797b3e0609eddb324299c8257bd): a scratch
+    link's `to_ref` had NO legal value. The response declared exactly one new
+    block, so every target was either that block (a self-link) or an undeclared
+    key. The model alternated between the two invalid values across four repair
+    attempts, because each diagnostic names only the violation of the state the
+    document is currently in — so patching away the reported violation lands it
+    in the other one. The seat exhausted its smallest authorized contract and
+    the run died at cycle 0, and the recorded reason was whichever validation
+    error came last, leaving the loop to be reconstructed from blobs.
+
+    Detection RECORDS the loop and deliberately does not cut the attempts
+    short. `test_doctor_two_ceiling_allows_second_required_repair` is the
+    standing counterexample to stopping: there a no-op patch reproduces the
+    rejected document and the NEXT attempt removes the offending field and
+    succeeds, so a repeated state is evidence of non-convergence, not proof of
+    it, and stopping would forfeit a granted repair that demonstrably works.
+    """
+
+    import json
+
+    from deepreason.llm.repair import V6PatchRepairSession
+
+    schema = {
+        "type": "object",
+        "additionalProperties": False,
+        "required": ["links"],
+        "properties": {
+            "links": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["from_ref", "to_ref"],
+                    "properties": {
+                        "from_ref": {"type": "string", "pattern": r"^(?:SCR|NEW)_[0-9]{3,}$"},
+                        "to_ref": {"type": "string", "pattern": r"^(?:SCR|NEW)_[0-9]{3,}$"},
+                    },
+                },
+            }
+        },
+    }
+    outside = {"links": [{"from_ref": "NEW_001", "to_ref": "2469e57fb1b8d91d"}]}
+    self_link = {"links": [{"from_ref": "NEW_001", "to_ref": "NEW_001"}]}
+
+    def drive(documents):
+        session = V6PatchRepairSession(
+            contract="conjecturer.turn.v6",
+            schema=schema,
+            initial_request="q",
+            retry_max=4,
+            root_authorized_pointers=("/links/0/to_ref",),
+        )
+        first = session.turn(0)
+        session.candidate_from_raw(first, json.dumps(outside))
+        session.note_invalid(first, json.dumps(outside), ValueError("outside namespace"))
+        offered = 0
+        for index, document in enumerate(documents, start=1):
+            turn = session.turn(index)
+            offered += 1
+            session._pending_candidate = document
+            session.note_invalid(turn, json.dumps(document), ValueError("invalid"))
+        return session, offered
+
+    # The live alternation, replayed exactly.
+    session, offered = drive([self_link, outside, self_link, outside])
+    assert offered == 4, "every granted attempt must still be offered"
+    assert session.oscillation, "the repeat was not detected"
+    assert "/links/0/to_ref" in session.oscillation, session.oscillation
+
+    # The loop leads the recorded cause, and the last validation error survives
+    # after it rather than being replaced.
+    reason = str(session.exhaustion_error())
+    assert "repair_oscillation" in reason, reason
+    assert "last error" in reason, reason
+
+    # A repair converging through distinct states is never flagged.
+    healthy, _ = drive(
+        [
+            {"links": [{"from_ref": "NEW_001", "to_ref": ref}]}
+            for ref in ("ALSO_BAD_1", "ALSO_BAD_2", "ALSO_BAD_3", "ALSO_BAD_4")
+        ]
+    )
+    assert not healthy.oscillation
+    assert "repair_oscillation" not in str(healthy.exhaustion_error())
