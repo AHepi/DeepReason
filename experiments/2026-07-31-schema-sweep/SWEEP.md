@@ -269,6 +269,36 @@ Two coverage guards (`tests/test_schema_carries_every_prose_rule.py`) pin the
 later array or refactor cannot quietly return a contract to the prose-only
 state that failed qualification.
 
+### One baseline moved, and the evidence that it was allowed to
+
+`tests/.../DR-2026-07-16-AUTONOMOUS-INQUIRY-WAVE-A/PROVENANCE.json`,
+`generated_root_sha256["A3"]`:
+`11b5aa701464` -> `c10ccf2be588`. A1 and A2 did not move.
+
+That root is BUILT by the test from a descriptor using current code, and its
+bytes include rendered contract schemas — so it moves whenever a schema does.
+It is not a committed run root. Three checks before regenerating it, because
+"a change that invalidates existing replay-valid roots is wrong by definition":
+
+1. **Determinism holds.** The test's own `first == second` assertion passed
+   throughout; only the recorded digest disagreed. The generator did not become
+   nondeterministic.
+2. **The move is caused by this sweep.** Checked out `4246137d` (pre-sweep) in
+   a worktree and ran the test with `PYTHONPATH` pointed at that tree's `src`:
+   it PASSES there and fails here. The first attempt at this check was
+   worthless — plain `pytest` in the worktree resolved `deepreason` through the
+   editable install back to the main checkout, so it re-tested the new code and
+   "confirmed" a pre-existing failure that was not one.
+3. **`verify_root` on real committed roots is unmoved.** Ran it on
+   `run-f4fa6663e5412d64df943a5a22342baf` and
+   `run-ac1836b6237b6e9d80b3b0cb492b39f5` before and after: the violation lists
+   are byte-identical (6 pre-existing `foreign-criticism` entries each, about
+   run content and nothing to do with schemas). No existing replay-valid root
+   was invalidated.
+
+`descriptor_sha256` was not touched: the descriptors are unchanged and their
+assertions passed. Only the derived digest was regenerated.
+
 ### Residue — what is NOT yet proven
 
 - **The full gate has not completed in this session.** Per-area runs before
