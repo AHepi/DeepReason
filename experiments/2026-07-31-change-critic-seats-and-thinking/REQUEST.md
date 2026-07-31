@@ -140,3 +140,83 @@ channels and so cannot exercise R2 at all.
 
 Recorded here; put to the operator before the live run, not resolved by
 assumption.
+
+### A2 — new operator rule (2026-07-31, verbatim)
+
+> Rule: Prose-only constraints must be enforced in the schema
+>
+> Principle
+> When reasoning/thinking is disabled, the model relies on the JSON Schema as the sole source of structural truth. If a constraint exists only in natural-language prose—and the schema permits a violation—the model will often violate it. This is not a model capability failure; it's an ambiguity in the contract specification.
+>
+> Detection
+> Look at any contract that fails with thinking off but passes with thinking on (especially the ones that show repair churn). Check for:
+>
+> · Constraints described in English but not expressed via JSON Schema keywords (oneOf, dependentRequired, not, if/then/else, pattern, additionalProperties, etc.).
+> · Optional/nullable fields that should be mutually exclusive.
+> · Enumerations or namespaces described in prose but not captured in regex patterns.
+> · Handle/reference forms that should forbid mixing index-based and handle-based endpoints, but don't.
+>
+> Required action
+> Mechanically enforce every known constraint in the contract's JSON Schema. Make the schema the definitive, machine-readable source of validity. The contract must be impossible to violate without producing invalid JSON.
+>
+> Common fixes
+>
+> · Mutual exclusion: Use oneOf with required lists. For example:
+>   "oneOf": [ { "required": ["from_index", "to_index"] }, { "required": ["from_handle", "to_handle"] } ]
+>   Remove nullable escapes and disable additionalProperties if not already done.
+> · Identifier namespaces: Replace "must match ^CLM_…" prose with a pattern property.
+> · Conditional dependencies: Replace "if field X is provided, field Y must be a source handle" with if/then blocks.
+> · Disallowed combinations: Use not with required to forbid co-occurrence of fields.
+>
+> Validation before acceptance
+> After amending the schema, run the qualification battery with thinking off. The contract must pass at a level indistinguishable from the thinking-on baseline (20/20 first-pass, zero repairs). If it doesn't, the schema still contains a loophole—fix it and retest.
+>
+> Why this works
+> It transforms the contract from "follow both my instructions and my schema" to "just generate valid JSON against this schema." The schema becomes self-policing, removing the need for hidden reasoning to hold an extra-textual rule in memory. It also makes the contract more robust against future model updates or temperature changes.
+
+R9 (behavior): "Mechanically enforce every known constraint in the
+contract's JSON Schema ... impossible to violate without producing
+invalid JSON."
+
+R10 (process): detection target — "any contract that fails with thinking
+off but passes with thinking on (especially the ones that show repair
+churn)". Measured this session: `scratch.link.compact.v1` (11/20 then
+9/20, 18 then 22 repairs) and `scratch.link.minimal.v1` (18/20 then
+17/20). No other contract is below 19/20.
+
+R11 (process): "run the qualification battery with thinking off. The
+contract must pass at a level indistinguishable from the thinking-on
+baseline (20/20 first-pass, zero repairs)."
+
+R12 (process): "If it doesn't, the schema still contains a loophole—fix
+it and retest."
+
+## Correction to the operator's worked example, recorded before acting
+
+The rule's example is
+
+    "oneOf": [ {"required": ["from_index","to_index"]},
+               {"required": ["from_handle","to_handle"]} ]
+
+That pairs the endpoints, and the enforced rule does not.
+`_require_one_reference_per_endpoint`
+(`src/deepreason/scratch/contracts.py:86-111`) tests each endpoint
+independently:
+
+    if (link.from_index is None) == (link.from_handle is None): problem
+    if (link.to_index   is None) == (link.to_handle   is None): problem
+
+So `from_index=0, to_handle="SCR_002"` is LEGAL today, and the paired
+`oneOf` would reject it — the schema would then be stricter than the
+validator in a way that forbids valid links. Encoded per endpoint
+instead, which is what the prose ("exactly one representation is legal
+for each endpoint") actually says.
+
+Second deviation, forced by the codebase: the example says to express
+branches with `required` lists, and that is exactly right here for a
+reason the example does not state. `_strict_schema`
+(`src/deepreason/llm/wire.py:179-195`) walks the whole schema and sets
+`additionalProperties: false` on EVERY subschema carrying a `properties`
+key. A `oneOf` branch written with `properties` would therefore be
+rewritten into a closed object that rejects `relation_hint` and every
+other field. Branches must use `required`/`not` only.
