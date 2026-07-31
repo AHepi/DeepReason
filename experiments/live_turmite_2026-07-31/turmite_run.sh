@@ -33,6 +33,8 @@ export DEEPREASON_CONFIG_REFEREE="2"
 mkdir -p "$DEEPREASON_HOME"
 {
   echo "=== turmite ladder start $(date -u +%FT%TZ) ==="
+  # token budget 200000 is the fixed V6 policy ceiling; 260000 is refused
+  # at preparation (RunPreparationRequestV1), before any provider call.
   # completion 24576: a hard question can otherwise spend the whole cap and
   # emit nothing (recorded typed failure, V6_ROUTE_SEAT_INSUFFICIENT_CAPABILITY).
   timeout 300 deepreason setup \
@@ -46,7 +48,7 @@ mkdir -p "$DEEPREASON_HOME"
     > "$LIVE/turmite-qual.json" 2> "$LIVE/turmite-qual.err"
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
   r0=$SECONDS
-  timeout 21600 deepreason reason --token-budget 260000 \
+  timeout 21600 deepreason reason --token-budget 200000 \
     --attach "$LIVE/dossier/TURMITE_CHALLENGE.md" \
     --attach "$LIVE/dossier/CAPABILITY_CONTRACT.md" \
     --allow-partial \
