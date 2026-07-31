@@ -224,20 +224,104 @@ def exclusive_fields_schema(*groups: tuple[str, ...]):
     return apply
 
 
+_COMBINATORS = frozenset({"oneOf", "anyOf", "allOf", "not", "if", "then", "else"})
+
+
+def _present_and_carrying_content(name: str, properties: dict) -> dict:
+    """One branch asserting a field is present AND actually says something.
+
+    "Present" is not enough on either shape the wire uses: an array field
+    defaults to ``[]`` and a nullable object field defaults to ``null``, and
+    the Python validators test truthiness, not presence. The branch has to
+    say so, which is why it carries ``properties`` — legal only because
+    ``_strict_schema`` leaves constraint branches open.
+    """
+
+    field = properties.get(name, {})
+    is_array = field.get("type") == "array" or "items" in field
+    inner = {"minItems": 1} if is_array else {"not": {"type": "null"}}
+    return {"required": [name], "properties": {name: inner}}
+
+
+def outcome_shape_schema(
+    *,
+    meaningful: tuple[str, ...],
+    abstention: str | None = None,
+    abstention_excludes: tuple[str, ...] = (),
+):
+    """Encode "at least one meaningful outcome" and abstention exclusivity.
+
+    Both rules lived only in ``_meaningful_*_outcome`` validators, so the
+    schema said every field was optional and a model reading it could emit
+    ``{}`` — structurally valid, semantically refused. In the coin
+    canonicity run ``conjecturer.turn.v6`` was rejected five times and
+    completed zero times, and every surviving candidate came from the
+    atomic fallback instead.
+
+    Constraints are appended under ``allOf`` deliberately:
+    ``_reject_unknown_fields`` inspects only a TOP-LEVEL ``anyOf``/``oneOf``
+    and then ``properties``, so nesting under ``allOf`` leaves that
+    firewall's behaviour exactly as it was.
+    """
+
+    def apply(schema: dict) -> None:
+        properties = schema.get("properties", {})
+        present = [name for name in meaningful if name in properties]
+        if not present:
+            return
+        clauses = schema.setdefault("allOf", [])
+        clauses.append(
+            {"anyOf": [_present_and_carrying_content(n, properties) for n in present]}
+        )
+        if abstention is None or abstention not in properties:
+            return
+        excluded = [name for name in abstention_excludes if name in properties]
+        if not excluded:
+            return
+        emptied = {}
+        for name in excluded:
+            field = properties[name]
+            is_array = field.get("type") == "array" or "items" in field
+            emptied[name] = {"maxItems": 0} if is_array else {"type": "null"}
+        clauses.append(
+            {
+                "if": _present_and_carrying_content(abstention, properties),
+                "then": {"properties": emptied},
+            }
+        )
+
+    return apply
+
+
 def _strict_schema(node: Any, root: dict | None = None) -> Any:
-    """Mark every model-visible object as closed, including $defs."""
+    """Mark every model-visible object as closed, including $defs.
+
+    A subschema sitting directly under a combinator is a CONSTRAINT on an
+    object declared elsewhere, not a declaration of one. Closing it would
+    make ``{"required": [...], "properties": {...}}`` reject every sibling
+    field of the object it is meant to constrain, which is what blocked
+    encoding cross-field rules (minItems on one array, say) into the schema.
+    Such a branch is left open unless it declares ``"type": "object"``
+    itself, in which case it really is an object and is closed as before.
+
+    Verified inert when introduced: across all 18 constructible wire
+    contracts, no combinator branch carried a ``properties`` key, so every
+    rendered schema was byte-identical before and after this distinction.
+    """
+
     result = copy.deepcopy(node)
     root = result if root is None else root
 
-    def visit(value: Any) -> None:
+    def visit(value: Any, constrains: bool = False) -> None:
         if isinstance(value, dict):
-            if value.get("type") == "object" or "properties" in value:
+            declares_object = value.get("type") == "object"
+            if declares_object or ("properties" in value and not constrains):
                 value["additionalProperties"] = False
-            for child in value.values():
-                visit(child)
+            for key, child in value.items():
+                visit(child, key in _COMBINATORS)
         elif isinstance(value, list):
             for child in value:
-                visit(child)
+                visit(child, constrains)
 
     visit(result)
     return result
@@ -1000,6 +1084,31 @@ class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
 
 
 class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
+    # The outcome rules below are carried by the schema too, not only by the
+    # validators, so a model reading the schema cannot emit a structurally
+    # valid turn that the harness then refuses.
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=outcome_shape_schema(
+            meaningful=(
+                "candidates",
+                "context_request",
+                "abstention",
+                "simulation_proposals",
+                "scratch_proposal",
+                "research_proposals",
+            ),
+            abstention="abstention",
+            abstention_excludes=(
+                "candidates",
+                "simulation_proposals",
+                "scratch_proposal",
+                "research_proposals",
+            ),
+        ),
+    )
+
     context_request: ContextRequestWireV2 | None = None
     scratch_proposal: ScratchProposalV1 | None = None
     research_proposals: list[ResearchFetchProposalWireV1] = Field(

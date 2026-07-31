@@ -19,7 +19,7 @@ LABEL="${1:-run}"
     --credential-env OLLAMA_API_KEY --reasoning none
   echo "setup_rc=$?"
   q0=$SECONDS
-  timeout 6000 deepreason qualify --yes --json --concurrency 12 --attached-evidence \
+  timeout 6000 deepreason qualify --yes --json --concurrency 4 --attached-evidence \
     > "$LIVE/qual-$LABEL.json" 2> "$LIVE/qual-$LABEL.err"
   echo "qualify_rc=$? qualify_seconds=$((SECONDS-q0))"
   echo "=== 20b battery $LABEL end $(date -u +%FT%TZ) ==="

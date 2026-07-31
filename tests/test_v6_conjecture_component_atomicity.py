@@ -515,3 +515,101 @@ def test_every_exactly_one_rule_is_carried_by_the_schema_universally():
     assert not valid({"candidate": candidate, "abstention": {"search_signal": "stuck"}})
     assert not valid({})
     assert not valid({"candidate": None, "abstention": {"search_signal": "stuck"}})
+
+
+def test_the_turn_outcome_rules_are_carried_by_the_schema_and_agree_with_the_validator():
+    """Regression (coin canonicity run-c5f901f38208e862f4ce2fe60a26e551):
+    `conjecturer.turn.v6` was rejected 5 times and completed 0 times, so every
+    surviving candidate came from the atomic fallback — which carries no
+    capability channel at all. Its two outcome rules ("at least one meaningful
+    outcome", "abstention cannot accompany semantic proposals") lived only in
+    model_validators, so a model reading the schema could emit a structurally
+    valid turn the harness then refused.
+
+    The dangerous direction for an encoding like this is a FALSE REJECT, so
+    this differential-tests the schema against the validator rather than
+    merely asserting the schema's shape.
+    """
+
+    import itertools
+
+    import pytest
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        ConjecturerTurnWireContractV6,
+        ConjecturerTurnWireV6,
+    )
+
+    contract = ConjecturerTurnWireContractV6(
+        reasoning=False,
+        aliases=AliasTable({"SRC_001": "x"}),
+        simulation_enabled=True,
+        maximum_simulation_proposals=1,
+    )
+    schema = contract.model_json_schema()
+
+    # Constraint branches must stay OPEN. _strict_schema closes objects; a
+    # closed branch here would reject every sibling field of the turn.
+    def closed_constraint_branches(node, constrains=False, hits=None):
+        hits = [] if hits is None else hits
+        if isinstance(node, dict):
+            if constrains and node.get("additionalProperties") is False and "type" not in node:
+                hits.append(node)
+            for key, child in node.items():
+                closed_constraint_branches(
+                    child,
+                    key in {"anyOf", "oneOf", "allOf", "not", "if", "then", "else"},
+                    hits,
+                )
+        elif isinstance(node, list):
+            for child in node:
+                closed_constraint_branches(child, constrains, hits)
+        return hits
+
+    assert closed_constraint_branches(schema) == []
+    # Constraints live under allOf so `_reject_unknown_fields`, which reads a
+    # TOP-LEVEL anyOf/oneOf then properties, keeps its previous behaviour.
+    assert "anyOf" not in schema and "oneOf" not in schema
+    assert schema["allOf"]
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    candidate = {"content": "c", "typicality": 0.5}
+    simulation = {
+        "request_identifier": "r", "hypothesis": "h", "rival_predictions": ["a"],
+        "discriminating_purpose": "p", "simulation_mode": "sandboxed_python_v1",
+        "model_source": "def simulate(inputs, rng):\n    return {'v': 1}\n",
+        "requested_observables": ["v"], "interpretation_conditions": ["c"],
+    }
+    options = {
+        "candidates": ([], [candidate]),
+        "context_request": (None, {"query": "q"}),
+        "abstention": (None, {"search_signal": "stuck"}),
+        "simulation_proposals": ([], [simulation]),
+    }
+    disagreements = []
+    for combination in itertools.product(
+        *[[(name, value) for value in values] for name, values in options.items()]
+    ):
+        full = dict(combination)
+        for omit_empty in (False, True):
+            document = {
+                name: value
+                for name, value in full.items()
+                if not (omit_empty and (value == [] or value is None))
+            }
+            try:
+                jsonschema.validate(document, schema)
+                by_schema = True
+            except jsonschema.ValidationError:
+                by_schema = False
+            try:
+                ConjecturerTurnWireV6.model_validate(document)
+                by_validator = True
+            except Exception:
+                by_validator = False
+            if by_schema != by_validator:
+                disagreements.append((document, by_schema, by_validator))
+
+    assert disagreements == [], disagreements[:4]
