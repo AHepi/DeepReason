@@ -305,9 +305,32 @@ assertions passed. Only the derived digest was regenerated.
   the tranche tip with the regenerated baseline. The preceding run reported
   1 failed / 3188 passed — that single failure was the stale A3 digest, and
   the run had started before the regeneration landed.
-- **No live battery has yet certified the sweep.** A `gemma4:31b` run is in
-  flight (`../live_gemma4_schema_2026-07-31/`); glm-5.2 thinking-off and the
-  20B re-run remain outstanding.
+- **First live battery: `gemma4:31b`, tier `full`, state `ready`,
+  `cache_reused: False`, 320 cases in 2421 s.** 15 of 16 pairs at 20/20
+  first-pass with ZERO repairs; `config-referee.v1` at 19/20 (case-017 needed
+  2 repairs, then admitted) so 16/16 eventual. **Zero alias failures and zero
+  scope violations across all 320 cases** — the exact failure classes the 20B
+  produced before the sweep, and the ones C8 encoded.
+
+  The model matters here: `gemma4:31b` returns no `reasoning` field at all, so
+  it is natively thinking-off. Rule A2 says the schema is the sole source of
+  structural truth when reasoning is disabled; this is a model for which that
+  is true unconditionally, and it reads the contracts cleanly.
+
+  **What this does NOT establish.** There is no pre-sweep `gemma4` baseline, so
+  this cannot attribute the result to the sweep — a controlled claim would need
+  the same battery at `4246137d`. It is one battery on one model. What it does
+  show is that the encoded contracts are answerable at full tier by a model
+  with no hidden reasoning available to compensate for them.
+
+  The one imperfect pair is one this sweep made STRICTER: C6 moved
+  `_menu_coherence` and `_unique_citations` onto the referee's wire model, so a
+  violation that previously slipped through to `compile()` now costs a repair
+  at admission instead. That is the intended direction — the refusal moved
+  earlier and became typed — but it should be read as a cost, not a win.
+
+  Outstanding: glm-5.2 thinking-off, and the 20B re-run against a cleared
+  cache.
 - **`if`/`then` has no completed battery behind it.** `allOf` has production
   precedent from the atomic and scratch-link encodings; `if`/`then` does not.
   Every clause emitted here is mechanically rewritable as `{"anyOf":
