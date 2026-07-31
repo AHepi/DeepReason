@@ -95,3 +95,48 @@ for this provider is an empirical question SPEC.md must settle.
 ## Amendments
 
 (append-only)
+
+## Amendments
+
+### A1 — operator answers to SPEC.md's three decision points (2026-07-31, verbatim)
+
+D-1 (R1 scope), answering "judge + grounding_reviewer only":
+
+> The first option. But don't push. Change here, do another GLM run with
+> thinking off and no qualification. Then return the results of interest.
+
+D-2 (R2 reading):
+
+> Show the critic the contract + filed proposals (Recommended)
+
+D-3 (R5 cost / R4 binding point):
+
+> Authorise re-qualification; bind at launch (P2) (Recommended)
+
+New requirements derived from A1, in the operator's own words:
+
+R6 (process): "don't push" — commit locally; do NOT push to the remote
+for this tranche. Supersedes the orchestrator's standing
+"commit and push at every phase boundary" for this tranche only.
+
+R7 (process): "do another GLM run with thinking off and no qualification"
+
+R8 (artifact): "Then return the results of interest."
+
+R1 is hereby narrowed to R1a (judge + grounding_reviewer). R1b
+(variator/property_designer/vision_critic/defender) is NOT approved and
+moves to PARKED.md.
+
+### Conflict recorded, not resolved silently
+
+R7 says "no qualification". SPEC F6 measured that thinking off moves the
+provider profile digest, and R1a moves the policy preset digest and the
+pair inventory; either alone changes the qualification subject, so the
+cached battery cannot apply. D-3 authorises the re-qualification, and R7
+asks for none. The two cannot both hold with the full engine, because the
+only no-battery tier is `shallow`, whose next action is
+`reason --shallow` — the reduced engine, which has no capability
+channels and so cannot exercise R2 at all.
+
+Recorded here; put to the operator before the live run, not resolved by
+assumption.
