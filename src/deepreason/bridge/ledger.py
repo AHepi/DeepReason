@@ -44,7 +44,13 @@ from deepreason.bridge.models import (
 from deepreason.bridge.validate import validate_claim_ledger
 from deepreason.frozen import FrozenList, FrozenRecord
 from deepreason.llm.repair import SchemaRepairError
-from deepreason.llm.wire import WireContract
+from deepreason.llm.wire import (
+    FieldIn,
+    ShapeClause,
+    WireContract,
+    discriminated_shape_schema,
+    narrow_unsatisfiable_discriminator_values,
+)
 from deepreason.llm.packs import AllocatedPack
 from deepreason.ontology.event import LLMCall
 from deepreason.scratch.models import HashRef, OpaqueRef, domain_hash
@@ -519,7 +525,54 @@ class LedgerWireModel(FrozenRecord):
     model_config = ConfigDict(frozen=True, extra="forbid", strict=True)
 
 
+EPISTEMIC_MINIMUMS_SHAPE = discriminated_shape_schema(
+    ShapeClause(
+        when=FieldIn("claim_class", (ClaimClass.SOURCE_FACT.value,)),
+        requires_any=(("source_handles", "evidence_handles"),),
+    ),
+    ShapeClause(
+        when=FieldIn("claim_class", (ClaimClass.RECORDED_OBSERVATION.value,)),
+        requires_any=(
+            (
+                "evidence_handles",
+                "event_handles",
+                "trace_handles",
+                "formal_observation_handles",
+            ),
+        ),
+    ),
+    ShapeClause(
+        when=FieldIn("claim_class", (ClaimClass.SUPPORTED_INFERENCE.value,)),
+        requires=("premise_keys",),
+    ),
+    ShapeClause(
+        when=FieldIn("claim_class", (ClaimClass.SURVIVING_CONJECTURE.value,)),
+        requires=("formal_artifact_handles",),
+    ),
+    ShapeClause(
+        when=FieldIn("claim_class", (ClaimClass.CONFLICT.value,)),
+        requires_any=((("conflict_handles", 2), "source_conflict_keys"),),
+    ),
+)
+"""`_epistemic_minimums`, carried by the schema rather than only in English.
+
+`assumption` and `unknown` take no clause: they are the classes that ground
+nothing, and the validator demands nothing of them.
+
+Inherited by ``ClaimLedgerEntryWireV2``, which redeclares the same field names
+with kind-safe handle types; the encoder reads rendered properties, so both
+versions get the rule over whatever each actually declares.
+"""
+
+
 class ClaimLedgerEntryWireV1(LedgerWireModel):
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+        strict=True,
+        json_schema_extra=EPISTEMIC_MINIMUMS_SHAPE,
+    )
+
     entry_key: LocalHandle
     claim_class: ClaimClassValue
     claim: WireText
@@ -1372,6 +1425,10 @@ class ClaimLedgerWireContractV2(ClaimLedgerWireContract):
         for field, kinds in self._entry_channel_kinds().items():
             if field in entry_properties:
                 _bind_schema_enum(entry_properties[field], self.handles_for(*kinds))
+        # Binding above can pin a channel this run has no items for to
+        # `maxItems: 0`, which leaves the grounding rule for some claim class
+        # unsatisfiable while `claim_class` still advertises it.
+        narrow_unsatisfiable_discriminator_values(entry, "claim_class")
 
         conflicts = definitions.get("SourceConflictWireV2", {}).get(
             "properties", {}

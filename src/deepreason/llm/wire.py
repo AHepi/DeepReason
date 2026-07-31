@@ -474,6 +474,237 @@ def outcome_shape_schema(
     return apply
 
 
+@dataclass(frozen=True)
+class FieldIn:
+    """The clause applies when ``name`` holds one of ``values``."""
+
+    name: str
+    values: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class FieldPresent:
+    """The clause applies when ``name`` is present and carries content."""
+
+    name: str
+
+
+@dataclass(frozen=True)
+class ShapeClause:
+    """One "this value of that field demands this shape" rule.
+
+    ``requires`` names fields that must each carry content; an entry may be
+    ``(name, n)`` to demand ``n`` items rather than one. ``requires_any`` holds
+    INDEPENDENT groups, one satisfied alternative per group. ``forbids`` names
+    fields that must be absent or empty. ``field_values`` narrows another
+    field's enum.
+    """
+
+    when: FieldIn | FieldPresent
+    requires: tuple[str | tuple[str, int], ...] = ()
+    requires_any: tuple[tuple[str | tuple[str, int], ...], ...] = ()
+    forbids: tuple[str, ...] = ()
+    field_values: Mapping[str, tuple[str, ...]] = field(
+        default_factory=lambda: MappingProxyType({})
+    )
+
+
+def _clause_branch(entry: str | tuple[str, int], properties: dict) -> dict:
+    name, minimum = entry if isinstance(entry, tuple) else (entry, 1)
+    return present_and_nonempty(name, properties, minimum=minimum)
+
+
+def discriminated_shape_schema(*clauses: ShapeClause):
+    """Encode "the value of one field decides the shape of the others".
+
+    The single most common prose-only rule in this repository: five
+    validators across the ledger, the grounding repair, the composition and
+    the pairwise judge say it in English while the schema declares every
+    field independently optional.
+
+    Three encoding constraints, each of which was a real trap:
+
+    * Clauses append to ``allOf``. ``_reject_unknown_fields`` inspects only a
+      TOP-LEVEL ``anyOf``/``oneOf`` before falling through to ``properties``,
+      so nesting here leaves that firewall's behaviour exactly as it was.
+    * Negation is spelled as the positive complement. ``FieldIn`` enumerates
+      the values a clause fires on rather than wrapping a ``not``, which keeps
+      the emitted schema inside the keyword subset that constrained-decoding
+      backends actually implement. Every discriminator here is a closed
+      ``Literal``, so the complement is always writable.
+    * The ``if`` carries ``required`` as well as the value test, so a clause
+      cannot apply vacuously to a document that simply omits the
+      discriminator.
+
+    Where a provider rejects ``if``/``then`` outright, every clause below is
+    mechanically rewritable as ``{"anyOf": [{"properties": {d: {"enum":
+    complement}}}, consequent]}`` using only ``anyOf`` and ``enum``.
+
+    A clause naming a field the contract does not render is narrowed to the
+    fields that survive, exactly as ``prune_property`` narrows one after the
+    fact, so the two paths cannot disagree.
+    """
+
+    def apply(schema: dict) -> None:
+        properties = schema.get("properties", {})
+        emitted = []
+        for clause in clauses:
+            condition = _clause_condition(clause, properties)
+            if condition is None:
+                continue
+            consequent = _clause_consequent(clause, properties)
+            if consequent is None:
+                continue
+            emitted.append({"if": condition, "then": consequent})
+        if emitted:
+            schema.setdefault("allOf", []).extend(emitted)
+
+    return apply
+
+
+def _declared_enum(field: Mapping[str, Any]) -> tuple[str, ...] | None:
+    for option in _concrete_options(field):
+        values = option.get("enum")
+        if isinstance(values, list):
+            return tuple(values)
+        if "const" in option:
+            return (option["const"],)
+    return None
+
+
+def _clause_condition(clause: ShapeClause, properties: dict) -> dict | None:
+    name = clause.when.name
+    if name not in properties:
+        return None
+    if isinstance(clause.when, FieldPresent):
+        return present_and_nonempty(name, properties)
+    declared = _declared_enum(properties[name])
+    if declared is not None:
+        unknown = [value for value in clause.when.values if value not in declared]
+        if unknown:
+            # A typo'd literal must be a hard error: as a silently vacuous
+            # clause it would look encoded and enforce nothing.
+            raise ValueError(
+                f"{name!r} clause names values outside the rendered enum: {unknown!r}"
+            )
+    live = [value for value in clause.when.values if declared is None or value in declared]
+    if not live:
+        return None
+    return {"required": [name], "properties": {name: {"enum": live}}}
+
+
+def _clause_consequent(clause: ShapeClause, properties: dict) -> dict | None:
+    constraints: list[dict] = []
+    for entry in clause.requires:
+        name = entry[0] if isinstance(entry, tuple) else entry
+        if name in properties:
+            constraints.append(_clause_branch(entry, properties))
+    for group in clause.requires_any:
+        branches = [
+            _clause_branch(entry, properties)
+            for entry in group
+            if (entry[0] if isinstance(entry, tuple) else entry) in properties
+        ]
+        if branches:
+            constraints.append({"anyOf": branches})
+    emptied = {}
+    for name in clause.forbids:
+        if name not in properties:
+            continue
+        try:
+            emptied[name] = absent_or_empty(name, properties)
+        except ValueError:
+            constraints.append(require_absent(name))
+    if emptied:
+        constraints.append({"properties": emptied})
+    narrowed = {
+        name: {"enum": list(values)}
+        for name, values in clause.field_values.items()
+        if name in properties
+    }
+    if narrowed:
+        constraints.append({"properties": narrowed})
+    if not constraints:
+        return None
+    return constraints[0] if len(constraints) == 1 else {"allOf": constraints}
+
+
+def _branch_is_unsatisfiable(branch: dict, properties: dict) -> bool:
+    """True when no instance can satisfy this ``present_and_nonempty`` branch."""
+
+    for name, demand in branch.get("properties", {}).items():
+        minimum = demand.get("minItems")
+        if minimum is None:
+            continue
+        for option in _concrete_options(properties.get(name, {})):
+            ceiling = option.get("maxItems")
+            if ceiling is not None and ceiling < minimum:
+                return True
+    return False
+
+
+def narrow_unsatisfiable_discriminator_values(node: dict, discriminator: str) -> None:
+    """Stop advertising a discriminator value nothing can satisfy.
+
+    Catalog binding pins a reference channel the run has no items for to
+    ``maxItems: 0``. A clause whose every alternative demands one of those
+    channels is then unsatisfiable, so the schema names a value in the
+    discriminator's enum while forbidding every way to use it — the inverse
+    of a prose-only rule, and just as misleading: the contract advertises
+    more than the harness can accept.
+
+    Dropping the value narrows only what the model is TOLD. The harness
+    already refuses such an entry, because the handles it would have to cite
+    do not exist in the catalog.
+    """
+
+    clauses = node.get("allOf")
+    properties = node.get("properties", {})
+    field = properties.get(discriminator)
+    if not isinstance(clauses, list) or not isinstance(field, dict):
+        return
+    dead: set[str] = set()
+    kept = []
+    for clause in clauses:
+        condition = clause.get("if", {}) if isinstance(clause, dict) else {}
+        values = condition.get("properties", {}).get(discriminator, {}).get("enum")
+        if not values:
+            kept.append(clause)
+            continue
+        groups = _consequent_groups(clause.get("then", {}))
+        if groups and any(
+            all(_branch_is_unsatisfiable(branch, properties) for branch in group)
+            for group in groups
+        ):
+            dead.update(values)
+            continue
+        kept.append(clause)
+    if not dead:
+        return
+    node["allOf"] = kept
+    if not kept:
+        node.pop("allOf")
+    for option in (*_concrete_options(field), field):
+        values = option.get("enum")
+        if isinstance(values, list):
+            option["enum"] = [value for value in values if value not in dead]
+
+
+def _consequent_groups(consequent: dict) -> list[list[dict]]:
+    """The alternative-sets a ``then`` demands, one list per independent group."""
+
+    constraints = consequent.get("allOf", [consequent])
+    groups = []
+    for constraint in constraints:
+        if not isinstance(constraint, dict):
+            continue
+        if "anyOf" in constraint:
+            groups.append(list(constraint["anyOf"]))
+        elif "required" in constraint:
+            groups.append([constraint])
+    return groups
+
+
 def _strict_schema(node: Any, root: dict | None = None) -> Any:
     """Mark every model-visible object as closed, including $defs.
 

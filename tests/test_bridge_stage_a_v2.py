@@ -404,3 +404,124 @@ def test_internal_reference_diagnostic_lists_only_available_keys():
     assert diagnostic.observed_handle_kind == "entry_key"
     assert diagnostic.required_handle_kinds == ("entry_key", "prior_entry_key")
     assert diagnostic.legal_handles == ("CLM_1",)
+
+
+def test_the_epistemic_minimums_are_carried_by_the_schema_and_agree_with_the_validator():
+    """`_epistemic_minimums` said in English which handles each claim class
+    needs, while the schema declared all ten reference arrays independently
+    optional and nullable. With reasoning off the schema is the model's only
+    source of structural truth, so the rule was unenforced where it mattered.
+
+    The fatal direction for an encoding like this is a FALSE REJECT, so this
+    differential-tests schema against validator over every claim class and
+    every reference channel rather than asserting the schema's shape.
+    """
+
+    import itertools
+
+    from deepreason.bridge.ledger import ClaimLedgerEntryWireV2
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    schema = ClaimLedgerEntryWireV2.model_json_schema()
+    sample = {
+        "source_handles": ["SRC_1"],
+        "evidence_handles": ["EVD_1"],
+        "event_handles": ["EVT_1"],
+        "trace_handles": ["TRC_1"],
+        "formal_observation_handles": ["OBS_1"],
+        "premise_keys": ["CLM_1"],
+        "formal_artifact_handles": ["ART_1"],
+        "conflict_handles": ["SRC_1", "EVD_1"],
+        "source_conflict_keys": ["SC_1"],
+        "scratch_handles": ["SCR_1"],
+    }
+    disagreements = []
+    for claim_class, (name, full) in itertools.product(ClaimClass, sample.items()):
+        for value in (None, [], full, full[:1]):
+            for omit_empty in (False, True):
+                document = {
+                    "entry_key": "CLM_1",
+                    "claim_class": claim_class.value,
+                    "claim": "a claim",
+                }
+                if not (omit_empty and (value is None or value == [])):
+                    document[name] = value
+                try:
+                    jsonschema.validate(document, schema)
+                    by_schema = True
+                except jsonschema.ValidationError:
+                    by_schema = False
+                try:
+                    ClaimLedgerEntryWireV2.model_validate(document)
+                    by_validator = True
+                except Exception:
+                    by_validator = False
+                if by_schema != by_validator:
+                    disagreements.append(
+                        (claim_class.value, name, value, omit_empty, by_schema)
+                    )
+
+    assert disagreements == [], disagreements[:4]
+
+    # `conflict` needs TWO conflict_handles or one source_conflict_key, and the
+    # schema has to carry the count, not merely non-emptiness.
+    conflict = [
+        clause
+        for clause in schema["allOf"]
+        if clause["if"]["properties"]["claim_class"]["enum"] == ["conflict"]
+    ]
+    (branches,) = [clause["then"]["anyOf"] for clause in conflict]
+    counts = {
+        tuple(branch["required"])[0]: tuple(branch["properties"].values())[0].get(
+            "minItems"
+        )
+        for branch in branches
+    }
+    assert counts == {"conflict_handles": 2, "source_conflict_keys": 1}
+
+
+def test_a_claim_class_no_catalog_can_ground_is_not_advertised():
+    """The inverse of a prose-only rule: catalog binding pins a channel with no
+    items to `maxItems: 0`, so the grounding clause for some claim class became
+    unsatisfiable while `claim_class` still offered it. The contract advertised
+    more than the harness could ever accept.
+
+    Narrowing removes only what was already unreachable — the handles such an
+    entry would have to cite do not exist — and must never touch the classes
+    that ground nothing, which are the run's escape hatch.
+    """
+
+    for label, items, expected in (
+        (
+            "source only",
+            (_item("s", "source", "source-real", "A bounded source."),),
+            ["source_fact", "supported_inference", "assumption", "unknown", "conflict"],
+        ),
+        (
+            "scratch only",
+            (_item("n", "scratch", "scratch-real", "A provisional note."),),
+            ["supported_inference", "assumption", "unknown", "conflict"],
+        ),
+    ):
+        schema = ClaimLedgerWireContractV2(_catalog(*items)).model_json_schema()
+        entry = schema["$defs"]["ClaimLedgerEntryWireV2"]
+        assert entry["properties"]["claim_class"]["enum"] == expected, label
+        # Every surviving clause must still be about an advertised class.
+        for clause in entry.get("allOf", []):
+            named = clause["if"]["properties"]["claim_class"]["enum"]
+            assert set(named) <= set(expected), (label, named)
+        # `assumption` and `unknown` ground nothing, so no catalog can retire
+        # them; they are how a run stays honest about what it cannot cover.
+        assert {"assumption", "unknown"} <= set(expected), label
+
+    # A catalog carrying every kind advertises every class.
+    full = ClaimLedgerWireContractV2(
+        _catalog(
+            _item("s", "source", "source-real", "A source."),
+            _item("e", "evidence", "evidence-real", "Evidence."),
+            _item("a", "formal_artifact", "artifact-real", "An artifact."),
+        )
+    ).model_json_schema()
+    advertised = full["$defs"]["ClaimLedgerEntryWireV2"]["properties"]["claim_class"]
+    assert set(advertised["enum"]) == {member.value for member in ClaimClass}
