@@ -36,6 +36,36 @@ _EXECUTION_EVALS = {f"program:{p}" for p in EXEC_PROGRAMS}
 class AllocatedPack(str):
     """Marker for a pack already budgeted section-by-section by PackIR."""
 
+def _simulation_contract_note() -> str:
+    """The critic-side statement of the simulation channel and its contract.
+
+    Built from the same two wire constants the conjecturer's schema carries,
+    so the rule the critic is told and the rule the harness enforces cannot
+    drift into two wordings. Imported lazily: llm.wire imports this module's
+    package siblings, and a module-level import would close the cycle.
+    """
+
+    from deepreason.llm.wire import (
+        SIMULATION_MODEL_SOURCE_CONTRACT,
+        SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
+    )
+
+    return (
+        "SIMULATION IS AVAILABLE TO THE TARGETS YOU ARE JUDGING. A candidate "
+        "whose claim turns on a discriminating experiment could have filed a "
+        "typed simulation proposal and had it executed under containment; one "
+        "that only describes an experiment in prose has not established it. "
+        "Judge whether the claim NEEDED one, and say so in your case.\n"
+        "The contract a filed program must satisfy, verbatim as the "
+        "conjecturer is shown it:\n"
+        f"- model_source: {SIMULATION_MODEL_SOURCE_CONTRACT}\n"
+        f"- requested_observables: {SIMULATION_REQUESTED_OBSERVABLES_CONTRACT}\n"
+        "You cannot file a simulation yourself on this contract; you can "
+        "convict a candidate for not having filed one, or attack the program "
+        "it did file."
+    )
+
+
 _COUNTEREXAMPLE_NOTE = (
     "EXECUTION-BACKED TARGETS: a target whose commitments include an "
     "execution oracle is judged by RUNNING it — if it currently passes, a "
@@ -531,6 +561,8 @@ def render_batch_crit_pack(
     commitments: dict[str, Commitment],
     blobs,
     token_budget: int,
+    simulation_proposals: tuple[tuple[str, str, str, str], ...] = (),
+    simulation_enabled: bool = False,
 ) -> str:
     """One critic pass over several targets (§14 batching): the commitment
     schemas — usually shared, since batch-mates come from one problem —
@@ -570,6 +602,21 @@ def render_batch_crit_pack(
                 lines.append(f"- {x} [{status.value if status else '?'}]: {_head(state, x, blobs)}")
     if any(_carries_execution_oracle(state.artifacts[tid], commitments) for tid in target_ids):
         lines += ["", _COUNTEREXAMPLE_NOTE]
+    # Gated: a run that cannot propose a simulation must render the pack it
+    # rendered before this section existed, byte for byte, so no committed
+    # pack-derived baseline moves for runs the channel does not reach.
+    if simulation_enabled:
+        lines += ["", _simulation_contract_note()]
+        if simulation_proposals:
+            lines.append("")
+            lines.append("SIMULATIONS ALREADY FILED ON THIS PROBLEM:")
+            for request_id, mode, lifecycle, reason in simulation_proposals:
+                lines.append(
+                    f"- {request_id} [{mode}] -> {lifecycle}"
+                    + (f" ({reason})" if reason else "")
+                )
+        else:
+            lines += ["", "SIMULATIONS ALREADY FILED ON THIS PROBLEM: none."]
     lines += [
         "",
         "DIRECTIVE: return exactly one entry per target id above — the "

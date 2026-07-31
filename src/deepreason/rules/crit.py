@@ -157,6 +157,44 @@ def _condition_pack(pack: str, prefix: str) -> str:
     return f"{prefix}\n\n{pack}" if prefix else pack
 
 
+def _simulation_enabled(harness) -> bool:
+    """Whether this run's manifest grants the simulation capability."""
+
+    manifest = getattr(harness, "workflow_manifest", None)
+    policy = getattr(manifest, "simulation_policy", None) if manifest else None
+    return bool(getattr(policy, "enabled", False))
+
+
+def _filed_simulations(harness) -> tuple[tuple[str, str, str, str], ...]:
+    """Simulation proposals already filed, with their current lifecycle.
+
+    The capability-state maps pool every capability's proposals, so this
+    filters by type rather than by count — a research proposal is not a
+    simulation and must not be reported as one.
+    """
+
+    state = getattr(harness, "capability_state", None)
+    if state is None:
+        return ()
+    rows: list[tuple[str, str, str, str]] = []
+    for proposal in state.proposals.values():
+        mode = getattr(proposal, "simulation_mode", None)
+        if mode is None:
+            continue
+        ref = state.current_transition_by_request.get(proposal.id)
+        transition = state.transitions.get(ref) if ref else None
+        lifecycle = getattr(getattr(transition, "lifecycle", None), "value", "proposed")
+        rows.append(
+            (
+                str(getattr(proposal, "request_identifier", "")),
+                str(mode),
+                str(lifecycle),
+                str(getattr(transition, "reason_code", "") or ""),
+            )
+        )
+    return tuple(sorted(rows))
+
+
 def _llm_event_seq(harness, llm_call) -> int | None:
     """Return the durable event carrying one exact in-memory call receipt."""
 
@@ -1365,6 +1403,8 @@ def crit_argumentative_batch(
             harness.commitments,
             harness.blobs,
             token_budget=_conditioned_budget(config.PACK_TOKEN_BUDGET, school_prefix),
+            simulation_proposals=_filed_simulations(harness),
+            simulation_enabled=_simulation_enabled(harness),
         )
         return _condition_pack(pack, school_prefix)
 

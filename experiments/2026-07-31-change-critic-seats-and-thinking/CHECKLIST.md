@@ -10,7 +10,7 @@ Traces to REQUEST.md. R6 applies throughout: commit locally, never push.
       `_route_seat_behavioral_contract_assignments` now contains an entry
       whose role is the bridge `reviewer_role`, where before it had none.
 
-- [ ] S2 (R2-show, R3) — expose the simulation option AND the form of the
+- [x] S2 (R2-show, R3) — expose the simulation option AND the form of the
       contract to the critic pack.
       Site: `src/deepreason/llm/packs.py` — a new note constant built from
       the two existing D2b constants (single source of truth, no second
@@ -83,3 +83,21 @@ The `judge` seat now carries behavioral authority; it is the
 absence produced D4. `grounding_reviewer` stays dark because
 `reviewer_role` defaults to `judge`; only one of the two is ever seated,
 and switching which one is a config choice, not a second seat.
+
+## S2 done-criterion output
+
+    simulation DISABLED           -> 845 bytes, no contract text
+    simulation ENABLED, none filed -> 2645 bytes
+      contains "def simulate(inputs, rng)"      True
+      contains "declared observable missing"    True
+      "SIMULATIONS ALREADY FILED ON THIS PROBLEM: none."  True
+    simulation ENABLED, one filed  -> 2713 bytes, names sim_bound_sweep/denied
+
+    diff pack_before.txt pack_after.txt  (simulation disabled, pre- vs
+    post-change code) -> BYTE-IDENTICAL
+
+The contract text is not re-worded for the critic: the note is built from
+`SIMULATION_MODEL_SOURCE_CONTRACT` and
+`SIMULATION_REQUESTED_OBSERVABLES_CONTRACT`, the same two constants the
+conjecturer's JSON schema carries, so the rule the critic is told and the
+rule the harness enforces cannot drift into two wordings (R3).
