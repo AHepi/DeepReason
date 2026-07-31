@@ -829,3 +829,106 @@ def test_every_turn_version_carries_its_own_outcome_rules_and_agrees_with_it():
                     disagreements.append((label, document, by_schema, by_validator))
 
     assert disagreements == [], disagreements[:4]
+
+
+def test_the_context_request_selector_rule_is_carried_by_the_schema():
+    """`_has_semantic_selector` lived only in a model_validator on both context
+    request versions, so the schema said every field was optional and a model
+    reading it could emit `{}` — structurally valid, semantically refused.
+
+    The alias and channel arrays are catalog-bound and vanish when their
+    catalog is empty, so this also exercises the interaction with
+    `prune_property`: the branch offering a removed field must go with it.
+    """
+
+    import itertools
+
+    import pytest
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        ConjecturerTurnWireContractV4,
+        ConjecturerTurnWireContractV6,
+        ContextRequestWireV1,
+        ContextRequestWireV2,
+    )
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    cases = {
+        "v1 with channels": (
+            ConjecturerTurnWireContractV4(
+                reasoning=False,
+                aliases=AliasTable({"A1": "x"}),
+                permitted_retrieval_channels=("corpus",),
+            ),
+            "ContextRequestWireV1",
+            ContextRequestWireV1,
+            "A1",
+            "corpus",
+        ),
+        "v2 with channels": (
+            ConjecturerTurnWireContractV6(
+                reasoning=False,
+                aliases=AliasTable({"SRC_001": "x"}),
+                permitted_retrieval_channels=("corpus",),
+            ),
+            "ContextRequestWireV2",
+            ContextRequestWireV2,
+            "SRC_001",
+            "corpus",
+        ),
+        "v2 no catalogs": (
+            ConjecturerTurnWireContractV6(
+                reasoning=False, aliases=AliasTable({"SRC_001": "x"})
+            ),
+            "ContextRequestWireV2",
+            ContextRequestWireV2,
+            None,
+            None,
+        ),
+    }
+
+    disagreements = []
+    for label, (contract, name, model, alias, channel) in cases.items():
+        root = contract.model_json_schema()
+        schema = dict(root["$defs"][name])
+        schema["$defs"] = root["$defs"]
+        declared = set(schema["properties"])
+        constrained = set()
+        for clause in schema.get("allOf", []):
+            for branch in clause.get("anyOf", []):
+                constrained.update(branch.get("required", []))
+        # A branch may only offer a field the contract actually renders.
+        assert constrained <= declared, (label, sorted(constrained - declared))
+        assert constrained, label
+
+        options = {"query": (None, "q"), "purpose": (None, "p")}
+        if alias is not None:
+            options["requested_visible_aliases"] = ([], [alias])
+        if channel is not None:
+            options["desired_retrieval_channels"] = ([], [channel])
+        for combination in itertools.product(
+            *[[(n, v) for v in values] for n, values in options.items()]
+        ):
+            full = dict(combination)
+            for omit_empty in (False, True):
+                document = {
+                    n: v
+                    for n, v in full.items()
+                    if not (omit_empty and (v == [] or v is None))
+                }
+                try:
+                    jsonschema.validate(document, schema)
+                    by_schema = True
+                except jsonschema.ValidationError:
+                    by_schema = False
+                try:
+                    model.model_validate(document)
+                    by_validator = True
+                except Exception:
+                    by_validator = False
+                if by_schema != by_validator:
+                    disagreements.append((label, document, by_schema, by_validator))
+
+    assert disagreements == [], disagreements[:4]

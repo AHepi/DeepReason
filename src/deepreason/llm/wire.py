@@ -915,8 +915,23 @@ class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput])
         return ReasoningConjecturerOutput(candidates=tuple(candidates))
 
 
+CONTEXT_REQUEST_SELECTOR_SHAPE = outcome_shape_schema(
+    meaningful=("query", "requested_visible_aliases", "desired_retrieval_channels")
+)
+"""`_has_semantic_selector`, for both context-request versions.
+
+They are siblings rather than a chain, so the encoder is attached to each;
+they carry the same rule over the same field names and differ only in alias
+syntax.
+"""
+
+
 class ContextRequestWireV1(StrictWireModel):
     """Only call-local aliases and bounded semantic search material."""
+
+    model_config = ConfigDict(
+        extra="forbid", strict=True, json_schema_extra=CONTEXT_REQUEST_SELECTOR_SHAPE
+    )
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
     requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
@@ -957,6 +972,10 @@ class ContextRequestWireV1(StrictWireModel):
 
 class ContextRequestWireV2(StrictWireModel):
     """V6 semantic retrieval using only SRC_### and SCR_### handles."""
+
+    model_config = ConfigDict(
+        extra="forbid", strict=True, json_schema_extra=CONTEXT_REQUEST_SELECTOR_SHAPE
+    )
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
     requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
