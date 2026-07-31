@@ -613,3 +613,112 @@ def test_the_turn_outcome_rules_are_carried_by_the_schema_and_agree_with_the_val
                 disagreements.append((document, by_schema, by_validator))
 
     assert disagreements == [], disagreements[:4]
+
+
+def test_omitting_a_capability_property_also_removes_the_constraints_naming_it():
+    """Regression (schema sweep, 2026-07-31): `ConjecturerTurnWireV6` carries
+    its outcome rules in the schema, but the capability-gated properties are
+    removed at render time. Omission that left the `allOf` alone advertised
+    `simulation_proposals`, `scratch_proposal` and `research_proposals` as ways
+    to satisfy the turn while `additionalProperties: false` forbade emitting
+    them — a dead branch on every run with a channel switched off, which is
+    the common case.
+
+    The invariant is that a rendered schema after omission must be
+    indistinguishable from one where the property was never declared, so the
+    encoder and the omission cannot disagree.
+    """
+
+    import itertools
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        ConjecturerTurnWireContractV6,
+        _names_mentioned,
+    )
+
+    for simulation, scratch, research in itertools.product((False, True), repeat=3):
+        contract = ConjecturerTurnWireContractV6(
+            reasoning=False,
+            aliases=AliasTable({"SRC_001": "x"}),
+            simulation_enabled=simulation,
+            maximum_simulation_proposals=1 if simulation else 0,
+            research_enabled=research,
+            maximum_research_proposals=1 if research else 0,
+        )
+        schema = contract.model_json_schema()
+        label = (simulation, scratch, research)
+        declared = set(schema["properties"])
+        constrained = _names_mentioned(schema.get("allOf", []))
+        assert constrained <= declared, (label, sorted(constrained - declared))
+
+        # An emptied branch must be DROPPED, never kept as `{}`: a vacuously
+        # true branch satisfies the whole anyOf and silently deletes the rule.
+        def branches(node):
+            if isinstance(node, dict):
+                for key, child in node.items():
+                    if key in {"anyOf", "oneOf"} and isinstance(child, list):
+                        assert child, (label, key)
+                        assert all(branch for branch in child), (label, key)
+                    yield from branches(child)
+            elif isinstance(node, list):
+                for child in node:
+                    yield from branches(child)
+
+        list(branches(schema))
+
+
+def test_the_branch_builders_read_the_rendered_shape_not_the_annotation():
+    """A nullable array renders as `{"anyOf": [{"type": "array"}, {"type":
+    "null"}]}` with no top-level `type` and no `items`, which a naive array
+    test misses — emitting `{"not": {"type": "null"}}`, a branch that admits
+    `[]` and so drops the rule it was carrying. Every reference array on the
+    claim ledger has exactly that shape.
+    """
+
+    import pytest
+
+    from deepreason.llm.wire import absent_or_empty, present_and_nonempty
+
+    properties = {
+        "plain_array": {"type": "array", "items": {"type": "string"}},
+        "nullable_array": {
+            "anyOf": [{"type": "array", "items": {"type": "string"}}, {"type": "null"}],
+            "default": None,
+        },
+        "alias": {"type": "string"},
+        "nullable_object": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+        "required_text": {"type": "string", "minLength": 1},
+    }
+
+    assert present_and_nonempty("plain_array", properties) == {
+        "required": ["plain_array"],
+        "properties": {"plain_array": {"minItems": 1}},
+    }
+    assert present_and_nonempty("nullable_array", properties) == {
+        "required": ["nullable_array"],
+        "properties": {"nullable_array": {"minItems": 1, "type": "array"}},
+    }
+    assert present_and_nonempty("nullable_array", properties, minimum=2) == {
+        "required": ["nullable_array"],
+        "properties": {"nullable_array": {"minItems": 2, "type": "array"}},
+    }
+    assert present_and_nonempty("alias", properties) == {
+        "required": ["alias"],
+        "properties": {"alias": {"minLength": 1}},
+    }
+    assert present_and_nonempty("nullable_object", properties) == {
+        "required": ["nullable_object"],
+        "properties": {"nullable_object": {"not": {"type": "null"}}},
+    }
+
+    assert absent_or_empty("plain_array", properties) == {"maxItems": 0}
+    assert absent_or_empty("nullable_array", properties) == {
+        "anyOf": [{"type": "null"}, {"maxItems": 0}]
+    }
+    assert absent_or_empty("nullable_object", properties) == {"type": "null"}
+    # A field with no empty representation must not be given an unsatisfiable
+    # one; `maxLength: 0` against a rendered `minLength: 1` would forbid the
+    # whole discriminator value rather than merely emptying the field.
+    with pytest.raises(ValueError, match="require_absent"):
+        absent_or_empty("required_text", properties)

@@ -227,20 +227,202 @@ def exclusive_fields_schema(*groups: tuple[str, ...]):
 _COMBINATORS = frozenset({"oneOf", "anyOf", "allOf", "not", "if", "then", "else"})
 
 
-def _present_and_carrying_content(name: str, properties: dict) -> dict:
+def _concrete_options(field: Mapping[str, Any]) -> list[dict]:
+    """The non-null alternatives of a rendered field, whatever its shape."""
+
+    options = field.get("anyOf")
+    if isinstance(options, list):
+        return [
+            option
+            for option in options
+            if isinstance(option, dict) and option.get("type") != "null"
+        ]
+    return [dict(field)] if field else []
+
+
+def _renders_as(field: Mapping[str, Any], kind: str) -> bool:
+    """True when every non-null alternative of ``field`` is ``kind``."""
+
+    options = _concrete_options(field)
+    if not options:
+        return False
+    if kind == "array":
+        return all(
+            option.get("type") == "array" or "items" in option for option in options
+        )
+    return all(option.get("type") == kind for option in options)
+
+
+def present_and_nonempty(name: str, properties: dict, *, minimum: int = 1) -> dict:
     """One branch asserting a field is present AND actually says something.
 
-    "Present" is not enough on either shape the wire uses: an array field
-    defaults to ``[]`` and a nullable object field defaults to ``null``, and
-    the Python validators test truthiness, not presence. The branch has to
-    say so, which is why it carries ``properties`` — legal only because
-    ``_strict_schema`` leaves constraint branches open.
+    "Present" is not enough on any shape the wire uses: an array field
+    defaults to ``[]``, a nullable field defaults to ``null``, an alias field
+    defaults to ``""``, and the Python validators test truthiness, not
+    presence. The branch has to say so, which is why it carries
+    ``properties`` — legal only because ``_strict_schema`` leaves constraint
+    branches open, and only for as long as the branch never declares
+    ``"type": "object"`` itself.
+
+    The shape switch reads the RENDERED property, not the annotation. A
+    nullable array renders as ``{"anyOf": [{"type": "array", ...},
+    {"type": "null"}]}`` with no top-level ``type`` and no ``items``, so a
+    naive array test misses it and emits ``{"not": {"type": "null"}}`` —
+    which admits ``[]`` and silently drops the rule. Every reference array on
+    the claim ledger has exactly that shape.
     """
 
     field = properties.get(name, {})
-    is_array = field.get("type") == "array" or "items" in field
-    inner = {"minItems": 1} if is_array else {"not": {"type": "null"}}
+    if _renders_as(field, "array"):
+        inner: dict = {"minItems": minimum}
+        if field.get("type") != "array":
+            inner["type"] = "array"
+    elif _renders_as(field, "string"):
+        inner = {"minLength": 1}
+    else:
+        inner = {"not": {"type": "null"}}
     return {"required": [name], "properties": {name: inner}}
+
+
+def absent_or_empty(name: str, properties: dict) -> dict:
+    """The dual of :func:`present_and_nonempty`, as a bare property constraint.
+
+    Carries no ``required``, so an absent field satisfies it — which is the
+    whole point: inside a ``then`` there is no in-band way to say "absent"
+    except :func:`require_absent`, and a field that has an empty
+    representation should be allowed to use it.
+
+    Raises when the field has no empty representation at all: emitting
+    ``maxLength: 0`` against a rendered ``minLength: 1`` would make the
+    consequent unsatisfiable and so forbid the discriminator value outright,
+    which is a much larger claim than the validator makes.
+    """
+
+    field = properties.get(name, {})
+    options = _concrete_options(field)
+    nullable = any(
+        option.get("type") == "null" for option in field.get("anyOf", []) if isinstance(option, dict)
+    )
+    if _renders_as(field, "array"):
+        empty: dict = {"maxItems": 0}
+        return {"anyOf": [{"type": "null"}, empty]} if nullable else empty
+    if nullable:
+        return {"type": "null"}
+    if _renders_as(field, "string") and not any(
+        option.get("minLength", 0) for option in options
+    ):
+        return {"maxLength": 0}
+    raise ValueError(
+        f"{name!r} has no empty representation; use require_absent instead"
+    )
+
+
+def require_absent(name: str) -> dict:
+    """Forbid a field outright, for the fields that cannot be empty."""
+
+    return {"not": {"required": [name]}}
+
+
+def _names_mentioned(node: Any) -> set[str]:
+    """Every property name a constraint subtree constrains or requires."""
+
+    found: set[str] = set()
+    if isinstance(node, dict):
+        required = node.get("required")
+        if isinstance(required, list):
+            found.update(name for name in required if isinstance(name, str))
+        properties = node.get("properties")
+        if isinstance(properties, dict):
+            found.update(properties)
+        for key, child in node.items():
+            if key in _COMBINATORS:
+                found |= _names_mentioned(child)
+    elif isinstance(node, list):
+        for child in node:
+            found |= _names_mentioned(child)
+    return found
+
+
+def _without_property(clause: Any, name: str) -> Any | None:
+    """Rewrite one constraint clause as if ``name`` had never been declared.
+
+    Returns ``None`` when the clause has nothing left to say. An emptied
+    branch must be DROPPED, never returned as ``{}``: a vacuously true branch
+    inside an ``anyOf`` satisfies the whole disjunction and silently deletes
+    the rule it was carrying — which is exactly the "``{}`` is a valid turn"
+    defect the outcome encoding exists to prevent.
+    """
+
+    if not isinstance(clause, dict):
+        return clause
+    if "if" in clause:
+        if name in _names_mentioned(clause["if"]):
+            return None
+        rewritten = dict(clause)
+        for branch in ("then", "else"):
+            if branch not in rewritten:
+                continue
+            pruned = _without_property(rewritten[branch], name)
+            if pruned is None:
+                rewritten.pop(branch)
+            else:
+                rewritten[branch] = pruned
+        return rewritten if rewritten.keys() - {"if"} else None
+    rewritten = dict(clause)
+    for key in ("anyOf", "oneOf", "allOf"):
+        branches = rewritten.get(key)
+        if not isinstance(branches, list):
+            continue
+        kept = [
+            pruned
+            for pruned in (_without_property(branch, name) for branch in branches)
+            if pruned is not None
+        ]
+        if not kept:
+            rewritten.pop(key)
+        else:
+            rewritten[key] = kept
+    required = rewritten.get("required")
+    if isinstance(required, list) and name in required:
+        remaining = [item for item in required if item != name]
+        if remaining:
+            rewritten["required"] = remaining
+        else:
+            rewritten.pop("required")
+    properties = rewritten.get("properties")
+    if isinstance(properties, dict) and name in properties:
+        properties.pop(name)
+        if not properties:
+            rewritten.pop("properties")
+    return rewritten or None
+
+
+def prune_property(node: dict[str, Any], name: str) -> None:
+    """Remove a property AND every constraint that still names it.
+
+    Capability-gated contracts drop properties at render time, and
+    ``additionalProperties: false`` then forbids the very field a surviving
+    ``allOf`` branch still advertises as a way to satisfy the schema. The
+    rendered result must be indistinguishable from one where the property was
+    never declared, so omission and encoding cannot disagree.
+    """
+
+    node.get("properties", {}).pop(name, None)
+    required = node.get("required")
+    if isinstance(required, list) and name in required:
+        required.remove(name)
+    clauses = node.get("allOf")
+    if not isinstance(clauses, list):
+        return
+    kept = [
+        pruned
+        for pruned in (_without_property(clause, name) for clause in clauses)
+        if pruned is not None
+    ]
+    if kept:
+        node["allOf"] = kept
+    else:
+        node.pop("allOf")
 
 
 def outcome_shape_schema(
@@ -271,21 +453,17 @@ def outcome_shape_schema(
             return
         clauses = schema.setdefault("allOf", [])
         clauses.append(
-            {"anyOf": [_present_and_carrying_content(n, properties) for n in present]}
+            {"anyOf": [present_and_nonempty(n, properties) for n in present]}
         )
         if abstention is None or abstention not in properties:
             return
         excluded = [name for name in abstention_excludes if name in properties]
         if not excluded:
             return
-        emptied = {}
-        for name in excluded:
-            field = properties[name]
-            is_array = field.get("type") == "array" or "items" in field
-            emptied[name] = {"maxItems": 0} if is_array else {"type": "null"}
+        emptied = {name: absent_or_empty(name, properties) for name in excluded}
         clauses.append(
             {
-                "if": _present_and_carrying_content(abstention, properties),
+                "if": present_and_nonempty(abstention, properties),
                 "then": {"properties": emptied},
             }
         )
@@ -1343,12 +1521,7 @@ class ConjecturerTurnWireContractV6(ConjecturerTurnWireContractV5):
                 f"v6 {prefix} aliases must use {prefix}_###: {malformed!r}"
             )
 
-    @staticmethod
-    def _omit_property(node: dict[str, Any], name: str) -> None:
-        node.get("properties", {}).pop(name, None)
-        required = node.get("required")
-        if isinstance(required, list) and name in required:
-            required.remove(name)
+    _omit_property = staticmethod(prune_property)
 
     @staticmethod
     def _bind_alias_array(
