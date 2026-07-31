@@ -380,3 +380,67 @@ def test_the_endpoint_rule_is_enforced_by_the_schema_not_only_by_prose():
         from_index=None, from_handle="SCR_001", to_index=1, to_handle=None,
         relation_hint="r",
     ).from_handle == "SCR_001"
+
+
+def test_legal_handles_are_named_in_the_schema_not_only_enforced_by_the_compiler():
+    """Regression (gpt-oss:20b battery, subject 382bfcef...): with thinking off,
+    `scratch.link.compact.v1` reached 20/20 eventual validity and STILL failed
+    the release gate on 2 alias failures, and `scratch.cluster-guide.compact.v1`
+    failed with 4 alias failures and 4 scope violations. The contract knows the
+    legal handles — it is built with the alias table and rejects anything
+    outside it — but the schema said only {"type": "string"}, so a model
+    reading the schema had nothing to choose from and invented handles.
+
+    Corroborating detail from the same battery: the MINIMAL cluster guide,
+    which has no handle field at all, scored 20/20.
+
+    The v6 conjecturer already binds its alias arrays this way; this pins the
+    same treatment for the scratch contracts.
+    """
+
+    from deepreason.scratch.contracts import (
+        ClusterGuideMinimalWireContract,
+        ClusterGuideWireContract,
+        ScratchLinkMinimalWireContract,
+        ScratchLinkWireContract,
+    )
+
+    handles = {"SCR_001": "a", "SCR_002": "b"}
+    legal = ["SCR_001", "SCR_002"]
+
+    for contract in (
+        ScratchLinkWireContract(handles=handles),
+        ScratchLinkMinimalWireContract(handles=handles),
+    ):
+        properties = contract.model_json_schema()["properties"]
+        for name in ("from_handle", "to_handle"):
+            assert properties[name]["enum"] == legal, name
+            # A free-length string is exactly what let the model invent one.
+            assert "maxLength" not in properties[name]
+
+    guide = ClusterGuideWireContract(handles=handles).model_json_schema()
+    array_branch = next(
+        option
+        for option in guide["properties"]["entry_points"]["anyOf"]
+        if option.get("type") == "array"
+    )
+    assert array_branch["items"]["enum"] == legal
+
+    # The minimal guide carries no handle field, so there is nothing to bind
+    # and nothing to invent — which is why it never failed.
+    assert "entry_points" not in ClusterGuideMinimalWireContract(
+        handles=handles
+    ).model_json_schema()["properties"]
+
+    # With no handles bound, an empty enum would be unsatisfiable, so the
+    # field is left alone and the endpoint exclusion admits only the index.
+    unbound = ScratchLinkWireContract(handles={}).model_json_schema()
+    assert "enum" not in unbound["properties"]["from_handle"]
+
+    # The schema now says exactly what the compiler enforces.
+    contract = ScratchLinkWireContract(handles=handles)
+    with pytest.raises(Exception):
+        contract.parse_compile(
+            '{"from_handle": "SCR_999", "to_handle": "SCR_001", '
+            '"relation_hint": "r"}'
+        )

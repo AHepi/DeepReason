@@ -330,6 +330,58 @@ class _ReferenceCompiler:
         else:
             self.handles = AliasTable(dict(handles or {}))
 
+    _HANDLE_FIELDS: tuple[str, ...] = ()
+
+    def _bind_legal_handles(self, schema: dict) -> dict:
+        """Name the legal call-local handles IN the schema, not only in prose.
+
+        The contract already knows which handles exist — it is constructed
+        with the alias table and rejects anything outside it — but the
+        rendered schema said only ``{"type": "string"}``. A model reading the
+        schema as its source of structural truth has no way to know which
+        strings are legal, and invents one. Measured on gpt-oss:20b with
+        thinking off: ``scratch.link.compact.v1`` reached 20/20 eventual
+        validity and still failed the release gate on 2 alias failures, and
+        ``scratch.cluster-guide.compact.v1`` failed with 4.
+
+        The v6 conjecturer already does this for its alias arrays
+        (``_bind_alias_array``); this applies the same rule to the scratch
+        contracts' handle fields, scalar and array alike.
+
+        With no handles bound there is nothing legal to name, so the field is
+        left alone rather than given an empty ``enum`` that nothing could
+        satisfy; the endpoint exclusion then admits only the index form.
+        """
+
+        legal = sorted(self.handles.aliases)
+        if not legal:
+            return schema
+        properties = schema.get("properties", {})
+        for name in self._HANDLE_FIELDS:
+            field = properties.get(name)
+            if not isinstance(field, dict):
+                continue
+            if field.get("type") == "array" or "items" in field:
+                field["items"] = {"enum": list(legal), "type": "string"}
+                continue
+            branches = [
+                option
+                for option in field.get("anyOf", ())
+                if isinstance(option, dict) and option.get("type") == "array"
+            ]
+            if branches:
+                for option in branches:
+                    option["items"] = {"enum": list(legal), "type": "string"}
+                continue
+            field.pop("anyOf", None)
+            field.pop("maxLength", None)
+            field.pop("minLength", None)
+            field.update({"enum": list(legal), "type": "string"})
+        return schema
+
+    def model_json_schema(self) -> dict:
+        return self._bind_legal_handles(super().model_json_schema())
+
     def _resolve(
         self,
         *,
@@ -369,6 +421,8 @@ class _ReferenceCompiler:
 
 
 class ScratchLinkWireContract(_ReferenceCompiler, WireContract[ScratchLinkBodyV1]):
+    _HANDLE_FIELDS = ("from_handle", "to_handle")
+
     def __init__(
         self,
         *,
@@ -412,6 +466,8 @@ class ScratchLinkWireContract(_ReferenceCompiler, WireContract[ScratchLinkBodyV1
 class ScratchLinkMinimalWireContract(
     _ReferenceCompiler, WireContract[ScratchLinkBodyV1]
 ):
+    _HANDLE_FIELDS = ("from_handle", "to_handle")
+
     def __init__(
         self,
         *,
@@ -449,6 +505,8 @@ class ScratchLinkMinimalWireContract(
 
 
 class ClusterGuideWireContract(_ReferenceCompiler, WireContract[ClusterGuideDraftV1]):
+    _HANDLE_FIELDS = ("entry_points",)
+
     def __init__(self, *, handles: Mapping[str, str] | AliasTable) -> None:
         _ReferenceCompiler.__init__(self, handles=handles)
         WireContract.__init__(
@@ -480,6 +538,8 @@ class ClusterGuideWireContract(_ReferenceCompiler, WireContract[ClusterGuideDraf
 class ClusterGuideMinimalWireContract(
     _ReferenceCompiler, WireContract[ClusterGuideDraftV1]
 ):
+    _HANDLE_FIELDS = ("entry_points",)
+
     def __init__(self, *, handles: Mapping[str, str] | AliasTable) -> None:
         _ReferenceCompiler.__init__(self, handles=handles)
         WireContract.__init__(
