@@ -38,7 +38,7 @@ Traces to REQUEST.md. R6 applies throughout: commit locally, never push.
       launch with `reasoning: "none"` proceeds; a `generic`-provider
       profile with `reasoning: null` is unaffected.
 
-- [ ] S4 (R5) — thinking off for the live GLM 5.2 profile.
+- [x] S4 (R5) — thinking off for the live GLM 5.2 profile.
       Site: the ladder's `deepreason setup` invocation gains
       `--reasoning none`. No code change; the field already accepts it.
       Done-criterion: the written `provider.yaml` shows `reasoning: none`
@@ -157,3 +157,18 @@ One predicted fixture update, minimal:
 pinned `grounding_review: False`. Renamed to `..._the_reviewed_grounded_bridge`
 and repointed, because the old NAME asserted the very property the change
 removes; leaving the name would have made the test lie.
+
+## S4 done-criterion output
+
+`experiments/live_coin_thinkingoff_2026-07-31/coin_run.sh` sets up with
+`--reasoning none`. Predicted profile digest `e800ce9c...` (SPEC F6),
+confirmed already by the S3 rewrite test which produced exactly
+`e800ce9c13e48f6e`. The ladder reuses the coin run's QUESTION.txt and
+dossier byte-for-byte, so the only differences from
+`run-c5f901f38208e862f4ce2fe60a26e551` are the three changes in this
+tranche.
+
+Checked while wiring it: `application/bridge.py:774/832/929` already pass
+`review_adapter` conditioned on `policy.grounding_review`, so turning
+review on is wired end to end on the production path and needs no
+further change.
