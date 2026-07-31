@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "claim": "A polynomial-time decision procedure exists that determines canonicity in O(n^3) time by evaluating a finite set of candidate amounts bounded by c_3 + c_2, but this candidate is unverified because it lacks the required sandboxed simulation.",
+    "mechanism": "Pearson's algorithm checks counterexamples of the form w = k * c_i + r. The finite search is justified by the Kozen-Zaks bound which states that if a counterexample exists, one exists less than c_3 + c_2. However, this candidate does not include the mandated sandboxed Python simulation to empirically verify this bound, rendering it an unverified claim under the capability contract.",
+    "counterconditions": [
+      "The Kozen-Zaks bound is refuted by an enumerated counterexample exceeding c_3 + c_2.",
+      "The algorithm's time complexity is actually pseudo-polynomial rather than polynomial in n alone.",
+      "Pearson's algorithm fails for some strictly decreasing coin system."
+    ],
+    "typicality": 0.6,
+    "evidence_refs": [
+      {
+        "block": "0c2bebf8bed87d67",
+        "quote": "Canonicity quantifies over infinitely many amounts. Any procedure that terminates must therefore justify a finite search: either a bound W such that a counterex"
+      }
+    ]
+  }
+}
