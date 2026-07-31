@@ -1,0 +1,15 @@
+{
+  "candidate": {
+    "claim": "A decision procedure for canonicity can be achieved in O(n^3) time, polynomial in n alone, by verifying that the greedy algorithm is optimal for a bounded finite set of amounts. However, lacking the ability to execute the requested sandboxed Python simulation, this remains an unverified theoretical claim.",
+    "mechanism": "Based on the work of Pearson (2005), a coin system is canonical if and only if the greedy algorithm yields the optimal number of coins for all amounts in the intervals [c_i, c_{i-1} + c_i] for i=2, ..., n. Testing these intervals requires testing O(n) amounts per interval, each taking O(n) time to compute greedy and optimal coin counts via dynamic programming, yielding an O(n^3) algorithm. The bound w < c_{i-1} + c_i is a universal claim over coin systems. Because I cannot file a sandboxed Python simulation to verify this bound against enumerated coin systems, the bound is unverified and subject to refutation by counterexample as the problem criteria warn.",
+    "counterconditions": [
+      "The bound c_{i-1} + c_i might be insufficient, meaning some non-canonical coin system has a smallest counterexample exceeding this bound, which would invalidate the finite search.",
+      "The O(n^3) complexity claim depends on the exact structure of the algorithm, which may be misremembered or require a different finite bound.",
+      "The absence of a sandboxed Python simulation verifying the bound means this is an unverified claim subject to immediate criticism under the problem's strict evidence requirements."
+    ],
+    "typicality": 0.6,
+    "sidecar": {
+      "search_signal": "capability_mismatch"
+    }
+  }
+}

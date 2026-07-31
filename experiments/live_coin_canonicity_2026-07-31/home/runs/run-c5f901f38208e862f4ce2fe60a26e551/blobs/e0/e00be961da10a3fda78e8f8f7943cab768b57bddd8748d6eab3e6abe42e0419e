@@ -1,0 +1,21 @@
+```json
+{
+  "candidate": {
+    "claim": "A pseudo-polynomial decision procedure using dynamic programming up to the bound W(C) = c_1 + c_2 correctly decides canonicity and finds the smallest counterexample for any coin system C. The worst-case time complexity is O(n * c_1), which depends on the magnitude of the largest coin and is thus pseudo-polynomial.",
+    "mechanism": "By a theorem of Kozen and Zaks (1994), if a coin system C is not canonical, its smallest counterexample amount w must be strictly less than c_1 + c_2. The algorithm computes the optimal number of coins (via standard DP) and the greedy number of coins for all amounts up to c_1 + c_2 - 1. The smallest amount where the greedy count exceeds the optimal count is returned as the smallest counterexample. If no such amount exists, the system is canonical. Since the search space is bounded by the coin values rather than the number of coins n, the complexity is pseudo-polynomial. Whether an algorithm strictly polynomial in n alone exists to find the smallest counterexample is uncertain.",
+    "counterconditions": [
+      "The bound c_1 + c_2 is too small, and a non-canonical coin system exists whose smallest counterexample is greater than or equal to c_1 + c_2.",
+      "An algorithm strictly polynomial in n alone exists to find the exact smallest counterexample for arbitrary coin systems, contradicting the claim that pseudo-polynomial complexity is the expected ceiling for this specific output requirement."
+    ],
+    "evidence_refs": [
+      {
+        "block": "06be33f59f4066be"
+      },
+      {
+        "block": "0c2bebf8bed87d67"
+      }
+    ],
+    "typicality": 0.85
+  }
+}
+```
