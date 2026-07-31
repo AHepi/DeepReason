@@ -321,3 +321,87 @@ def test_global_semantic_call_cap_quarantines_remaining_failed_spans(tmp_path):
     assert len(result.calls) == 1
     assert any(item.code == "BRIDGE_REPAIR_ATTEMPT_CAP" for item in result.diagnostics)
     assert validate_bridge_output(ledger, result.output).valid
+
+
+def test_the_repair_contract_states_the_action_shape_and_only_the_permitted_actions():
+    """Two prose-only rules on one contract, both the same defect class read in
+    opposite directions.
+
+    `_action_shape` said in English which fields each action may and must
+    carry, while the schema declared all three independently optional and
+    nullable. And the schema advertised the whole `CorrectionMode` enum plus
+    the `answered` resolution, when the pack's `permitted_actions` is narrower
+    for every finding status and `BRIDGE_REPAIR_RESOLUTION_TOO_STRONG` rejects
+    `answered` unconditionally — the contract promising more than the harness
+    honours.
+    """
+
+    import itertools
+
+    from deepreason.bridge.models import (
+        BridgeResolution,
+        CorrectionMode,
+        GroundingStatus,
+    )
+    from deepreason.bridge.repair import (
+        GroundingRepairWireContractV1,
+        GroundingRepairWireV1,
+        _ALLOWED_BY_STATUS,
+        _UNRESOLVED_RESOLUTIONS,
+    )
+    from deepreason.llm.wire import minimal_example
+
+    # The pair inventory, the ceiling map and the constructed-identity check
+    # all key off contract_id; this narrows a call, never the contract.
+    assert GroundingRepairWireContractV1().contract_id == "groundingrepairwirev1.direct.v1"
+
+    for status, allowed in _ALLOWED_BY_STATUS.items():
+        contract = GroundingRepairWireContractV1(allowed)
+        schema = contract.model_json_schema()
+        assert set(schema["$defs"]["CorrectionMode"]["enum"]) == {
+            action.value for action in allowed
+        }, status
+        assert set(schema["$defs"]["BridgeResolution"]["enum"]) == {
+            item.value for item in _UNRESOLVED_RESOLUTIONS
+        }, status
+        # No clause may survive for an action the call cannot choose.
+        for clause in schema.get("allOf", []):
+            named = set(clause["if"]["properties"]["action"]["enum"])
+            assert named <= {action.value for action in allowed}, (status, named)
+        # The prompt's example must be admissible. `minimal_skeleton` cannot
+        # read allOf, so it took the first enum value and omitted the field
+        # that action requires — invalid long before this encoding existed.
+        contract.validate_value(json.loads(minimal_example(contract)))
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    schema = GroundingRepairWireContractV1().model_json_schema()
+    options = {
+        "replacement_text": (None, "new text"),
+        "resolution": (None, BridgeResolution.UNDERDETERMINED.value),
+        "resolution_reason": (None, "because"),
+    }
+    disagreements = []
+    for action in CorrectionMode:
+        for combination in itertools.product(
+            *[[(name, value) for value in values] for name, values in options.items()]
+        ):
+            for omit_empty in (False, True):
+                document = {"action": action.value}
+                document.update(
+                    {n: v for n, v in combination if not (omit_empty and v is None)}
+                )
+                try:
+                    jsonschema.validate(document, schema)
+                    by_schema = True
+                except jsonschema.ValidationError:
+                    by_schema = False
+                try:
+                    GroundingRepairWireV1.model_validate(document)
+                    by_validator = True
+                except Exception:
+                    by_validator = False
+                if by_schema != by_validator:
+                    disagreements.append((action.value, document, by_schema, by_validator))
+
+    assert disagreements == [], disagreements[:4]

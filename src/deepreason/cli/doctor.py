@@ -692,7 +692,7 @@ def _production_grounding_probe(*, repair: bool):
 
     from deepreason.bridge.models import GroundingFindingV1, GroundingStatus
     from deepreason.bridge.repair import (
-        GroundingRepairWireV1,
+        GroundingRepairWireContractV1,
         _ALLOWED_BY_STATUS,
         _repair_pack,
     )
@@ -704,13 +704,11 @@ def _production_grounding_probe(*, repair: bool):
         ledger_entry_ids=[entry.id],
         checked_refs=["qualification-source"],
     )
-    contract = DirectWireContract(GroundingRepairWireV1)
-    return contract, _repair_pack(
-        section,
-        finding,
-        [entry],
-        _ALLOWED_BY_STATUS[finding.status],
-    )
+    # The probe must qualify the contract the run actually sends, which is
+    # narrowed to the finding status's permitted actions.
+    allowed = _ALLOWED_BY_STATUS[finding.status]
+    contract = GroundingRepairWireContractV1(allowed)
+    return contract, _repair_pack(section, finding, [entry], allowed)
 
 
 def _production_scratch_probe(contract_id: str):

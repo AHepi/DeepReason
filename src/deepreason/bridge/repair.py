@@ -9,8 +9,10 @@ explicit Stage-A ledger-amendment requests.
 
 from __future__ import annotations
 
+import copy
 import json
 from enum import Enum
+from typing import Iterable
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -24,7 +26,13 @@ from deepreason.bridge.models import (
     GroundingStatus,
 )
 from deepreason.bridge.validate import validate_bridge_output
-from deepreason.llm.wire import DirectWireContract
+from deepreason.llm.wire import (
+    DirectWireContract,
+    FieldIn,
+    ShapeClause,
+    discriminated_shape_schema,
+    restrict_discriminator_values,
+)
 from deepreason.ontology.event import LLMCall
 from deepreason.ontology.frozen import FrozenList, FrozenRecord
 
@@ -91,10 +99,39 @@ class RepairDisposition(str, Enum):
     BOUNDED_FAILURE = "bounded_failure"
 
 
+_SUBSTANTIVE_REPAIR_FIELDS = ("replacement_text", "resolution", "resolution_reason")
+_ACTION_SHAPE = discriminated_shape_schema(
+    ShapeClause(
+        when=FieldIn("action", (CorrectionMode.CORRECT_WORDING.value,)),
+        requires=("replacement_text",),
+        forbids=("resolution", "resolution_reason"),
+    ),
+    ShapeClause(
+        when=FieldIn("action", (CorrectionMode.CHANGE_RESOLUTION.value,)),
+        requires=("resolution", "resolution_reason"),
+        forbids=("replacement_text",),
+    ),
+    ShapeClause(
+        # Spelled as the positive complement rather than a `not`: the enum is
+        # closed, and `anyOf`/`enum` is the keyword subset constrained decoding
+        # backends actually implement.
+        when=FieldIn(
+            "action",
+            (
+                CorrectionMode.DOWNGRADE_CLAIM.value,
+                CorrectionMode.REMOVE_SPAN.value,
+                CorrectionMode.REQUEST_LEDGER_AMENDMENT.value,
+            ),
+        ),
+        forbids=_SUBSTANTIVE_REPAIR_FIELDS,
+    ),
+)
+
+
 class GroundingRepairWireV1(BaseModel):
     """One local action; canonical references are intentionally absent."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", json_schema_extra=_ACTION_SHAPE)
 
     action: CorrectionMode
     replacement_text: str | None = Field(default=None, max_length=262_144)
@@ -126,6 +163,58 @@ class GroundingRepairWireV1(BaseModel):
         ):
             raise ValueError(f"{self.action.value} does not accept substantive fields")
         return self
+
+
+class GroundingRepairWireContractV1(DirectWireContract[GroundingRepairWireV1]):
+    """The repair contract narrowed to what THIS call will actually accept.
+
+    Two things the unbound contract advertised and the harness never took: the
+    whole ``CorrectionMode`` enum, when the pack's ``permitted_actions`` is
+    narrower for every finding status; and ``answered``, which
+    ``BRIDGE_REPAIR_RESOLUTION_TOO_STRONG`` rejects unconditionally. Both are
+    the inverse of a prose-only rule — the schema promising more than the
+    contract honours — and both are fixed by telling the model the truth.
+
+    ``contract_id`` is deliberately unchanged: the production pair inventory,
+    the ceiling map and ``_require_constructed_contract_identity`` all key off
+    it, and this narrows a call, not the contract's identity.
+    """
+
+    def __init__(self, allowed: Iterable[CorrectionMode] = ()) -> None:
+        super().__init__(GroundingRepairWireV1)
+        self.allowed = frozenset(allowed) or frozenset(CorrectionMode)
+
+    def minimal_example_document(self) -> dict:
+        """An action that needs nothing else, so the example is admissible.
+
+        `minimal_skeleton` cannot read `allOf`, so left to itself it takes the
+        first enum value — `correct_wording` — and omits the `replacement_text`
+        that action requires. That example has always been invalid; encoding
+        the rule only made it visible.
+        """
+
+        for action in (
+            CorrectionMode.REMOVE_SPAN,
+            CorrectionMode.DOWNGRADE_CLAIM,
+            CorrectionMode.REQUEST_LEDGER_AMENDMENT,
+        ):
+            if action in self.allowed:
+                return {"action": action.value}
+        return {"action": sorted(self.allowed)[0].value}
+
+    def model_json_schema(self) -> dict:
+        schema = copy.deepcopy(super().model_json_schema())
+        restrict_discriminator_values(
+            schema, "action", sorted(action.value for action in self.allowed)
+        )
+        resolutions = schema.get("$defs", {}).get("BridgeResolution", {})
+        if "enum" in resolutions:
+            resolutions["enum"] = [
+                value
+                for value in resolutions["enum"]
+                if value in {item.value for item in _UNRESOLVED_RESOLUTIONS}
+            ]
+        return schema
 
 
 class BridgeRepairDiagnostic(FrozenRecord):
@@ -426,7 +515,7 @@ class GroundingRepairService:
                     _repair_pack(section, finding, entries, allowed),
                     GroundingRepairWireV1,
                     template_role="bridge_grounding_repair",
-                    wire_contract=DirectWireContract(GroundingRepairWireV1),
+                    wire_contract=GroundingRepairWireContractV1(allowed),
                 )
                 calls.append(call)
                 if patch.action not in allowed:

@@ -11,7 +11,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Any, Generic, Literal, Mapping, TypeVar
+from typing import Any, Generic, Literal, Mapping, Sequence, TypeVar
 
 from pydantic import (
     BaseModel,
@@ -549,7 +549,7 @@ def discriminated_shape_schema(*clauses: ShapeClause):
         properties = schema.get("properties", {})
         emitted = []
         for clause in clauses:
-            condition = _clause_condition(clause, properties)
+            condition = _clause_condition(clause, properties, schema)
             if condition is None:
                 continue
             consequent = _clause_consequent(clause, properties)
@@ -562,23 +562,34 @@ def discriminated_shape_schema(*clauses: ShapeClause):
     return apply
 
 
-def _declared_enum(field: Mapping[str, Any]) -> tuple[str, ...] | None:
+def _declared_enum(
+    field: Mapping[str, Any], root: dict | None = None
+) -> tuple[str, ...] | None:
+    """The values a field may hold, following one ``$ref`` into ``$defs``.
+
+    Enum-typed fields render as a bare ``$ref``, so reading the property alone
+    sees no values at all and every clause over them would look unverifiable.
+    """
+
     for option in _concrete_options(field):
-        values = option.get("enum")
+        resolved = _resolve_ref(option, root) if root is not None else option
+        values = resolved.get("enum")
         if isinstance(values, list):
             return tuple(values)
-        if "const" in option:
-            return (option["const"],)
+        if "const" in resolved:
+            return (resolved["const"],)
     return None
 
 
-def _clause_condition(clause: ShapeClause, properties: dict) -> dict | None:
+def _clause_condition(
+    clause: ShapeClause, properties: dict, root: dict | None = None
+) -> dict | None:
     name = clause.when.name
     if name not in properties:
         return None
     if isinstance(clause.when, FieldPresent):
         return present_and_nonempty(name, properties)
-    declared = _declared_enum(properties[name])
+    declared = _declared_enum(properties[name], root)
     if declared is not None:
         unknown = [value for value in clause.when.values if value not in declared]
         if unknown:
@@ -627,6 +638,69 @@ def _clause_consequent(clause: ShapeClause, properties: dict) -> dict | None:
     if not constraints:
         return None
     return constraints[0] if len(constraints) == 1 else {"allOf": constraints}
+
+
+def restrict_discriminator_values(
+    schema: dict, discriminator: str, allowed: Sequence[str]
+) -> None:
+    """Advertise only the discriminator values this CALL actually permits.
+
+    The pack tells the model which actions are permitted for the finding in
+    hand, but the schema kept offering the whole enum, so the two disagreed on
+    every call and only the prose carried the narrower truth. The harness
+    refuses a value outside ``allowed`` anyway, so this narrows what the model
+    is TOLD and nothing else.
+
+    Enum fields render as a bare ``$ref``, so the values are narrowed in
+    ``$defs`` — correct only while the definition has one user, which is
+    checked here rather than assumed.
+    """
+
+    keep = list(allowed)
+    field = schema.get("properties", {}).get(discriminator)
+    if not isinstance(field, dict):
+        return
+    for option in _concrete_options(field):
+        ref = option.get("$ref")
+        target = _resolve_ref(option, schema) if ref else option
+        values = target.get("enum")
+        if not isinstance(values, list):
+            continue
+        if ref and _ref_users(schema, ref) > 1:
+            raise ValueError(
+                f"{ref} is shared, so narrowing it for {discriminator!r} would "
+                "silently narrow another field"
+            )
+        target["enum"] = [value for value in values if value in keep]
+    clauses = schema.get("allOf")
+    if not isinstance(clauses, list):
+        return
+    kept = []
+    for clause in clauses:
+        condition = clause.get("if", {}) if isinstance(clause, dict) else {}
+        values = condition.get("properties", {}).get(discriminator, {}).get("enum")
+        if not values:
+            kept.append(clause)
+            continue
+        live = [value for value in values if value in keep]
+        if not live:
+            continue
+        condition["properties"][discriminator]["enum"] = live
+        kept.append(clause)
+    if kept:
+        schema["allOf"] = kept
+    else:
+        schema.pop("allOf")
+
+
+def _ref_users(node: Any, ref: str) -> int:
+    if isinstance(node, dict):
+        if node.get("$ref") == ref:
+            return 1
+        return sum(_ref_users(child, ref) for child in node.values())
+    if isinstance(node, list):
+        return sum(_ref_users(child, ref) for child in node)
+    return 0
 
 
 def _branch_is_unsatisfiable(branch: dict, properties: dict) -> bool:
@@ -2498,7 +2572,16 @@ def wire_contract_for(
 
 
 def minimal_example(contract: WireContract) -> str:
-    """Exactly one syntax-only example suitable for compact prompts."""
+    """Exactly one syntax-only example suitable for compact prompts.
+
+    ``minimal_skeleton`` reads ``properties``/``required`` and ignores
+    ``allOf``, so on any contract carrying a cross-field rule it will happily
+    build a document the contract rejects — it takes the first enum value and
+    stops. A contract whose rules it cannot see supplies its own example via
+    ``minimal_example_document``; the turn contracts are the older, hardcoded
+    form of the same exemption.
+    """
+
     from deepreason.llm.repair import minimal_skeleton
 
     if contract.contract_id in {
@@ -2507,4 +2590,8 @@ def minimal_example(contract: WireContract) -> str:
         CONJECTURER_TURN_CONTRACT_V6,
     }:
         return '{"abstention":{"search_signal":"stuck"}}'
-    return json.dumps(minimal_skeleton(contract.model_json_schema()), separators=(",", ":"))
+    supplied = getattr(contract, "minimal_example_document", None)
+    document = (
+        supplied() if callable(supplied) else minimal_skeleton(contract.model_json_schema())
+    )
+    return json.dumps(document, separators=(",", ":"))
