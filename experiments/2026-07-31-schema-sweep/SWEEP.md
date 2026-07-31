@@ -301,9 +301,10 @@ assertions passed. Only the derived digest was regenerated.
 
 ### Residue — what is NOT yet proven
 
-- **The full gate has not completed in this session.** Per-area runs before
-  each commit totalled roughly 2,400 passing with zero failures, which is not
-  the same thing. A full run is in flight.
+- **The full gate is green: 3189 passed, 0 failed, 7 skipped** (12m31s), on
+  the tranche tip with the regenerated baseline. The preceding run reported
+  1 failed / 3188 passed — that single failure was the stale A3 digest, and
+  the run had started before the regeneration landed.
 - **No live battery has yet certified the sweep.** A `gemma4:31b` run is in
   flight (`../live_gemma4_schema_2026-07-31/`); glm-5.2 thinking-off and the
   20B re-run remain outstanding.
