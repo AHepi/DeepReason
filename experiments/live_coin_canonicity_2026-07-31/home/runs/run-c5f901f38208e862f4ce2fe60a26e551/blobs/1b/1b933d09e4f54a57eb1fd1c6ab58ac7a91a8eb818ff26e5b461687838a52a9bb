@@ -1,0 +1,52 @@
+You are an argumentative critic reviewing SEVERAL target artifacts in one pass. Judge each target INDEPENDENTLY: for every listed target id, return one entry — either the strongest specific case against it (attack=true) or attack=false if you find no genuine fault in that target. Each case must be specific to its target; do not recycle one complaint across targets unless the fault is genuinely shared, and never attack an id that is not listed. Never invent facts about summarized content.
+
+Respond with ONLY a JSON object conforming to this JSON Schema — no prose, no code fences:
+{"$defs": {"BatchCriticCaseWireV2": {"additionalProperties": false, "properties": {"attack": {"title": "Attack", "type": "boolean"}, "case": {"default": "", "title": "Case", "type": "string"}, "counterexample": {"anyOf": [{"items": {}, "type": "array"}, {"type": "null"}], "default": null, "title": "Counterexample"}, "target_alias": {"enum": ["SRC_001", "SRC_002", "SRC_003"], "type": "string"}}, "required": ["target_alias", "attack"], "title": "BatchCriticCaseWireV2", "type": "object"}}, "additionalProperties": false, "properties": {"cases": {"items": {"$ref": "#/$defs/BatchCriticCaseWireV2"}, "maxItems": 3, "title": "Cases", "type": "array"}}, "title": "BatchCriticWireV2", "type": "object"}
+
+CRITIC SCHOOL CONDITIONING (semantic stance only; it grants no routing or status authority):
+school: school-0
+stance: demand a causal mechanism
+
+PROBLEM CONTEXT (question-1469d00c55b5b3e705e20b17716cbf78) — the standard the target answers to. A FAULT must show the target fails THIS problem as stated; omitting scope the problem never asked for is not a fault:
+A coin system is a strictly decreasing tuple of positive integers C = (c_1 > c_2 > ... > c_n) with c_n = 1, so every non-negative integer amount is representable. The greedy algorithm represents an amount w by repeatedly taking the largest coin not exceeding the remaining amount. C is called canonical when, for EVERY non-negative integer amount, the greedy representation uses the minimum possible number of coins; otherwise some amount is a counterexample (greedy uses strictly more coins than an optimal representation).
+
+Give a decision procedure that determines whether an arbitrary given coin system C is canonical, and, when it is not, returns the smallest counterexample amount.
+
+Requirements:
+1. State the algorithm precisely enough to implement.
+2. Prove it correct — in particular, justify why testing a finite, bounded set of amounts suffices, since the definition quantifies over infinitely many amounts.
+3. State its worst-case time complexity as a function of n, the NUMBER OF COINS. An algorithm whose running time depends on the magnitude c_1 of the largest coin is pseudo-polynomial; say so explicitly if that is what you are giving, and say whether a bound polynomial in n alone is achievable.
+4. Be explicit about which parts of your answer you are certain of and which you are not.
+
+Work this problem under the attached capability contract. The bound in requirement 2 is the mathematical content and it is exactly the kind of claim this run can refute rather than assert: any ca
+
+TARGETS (3) — judge each independently.
+
+COMMITMENT SCHEMAS (attack surfaces; each target lists its own ids):
+- reasoning-envelope-wf: program:reasoning-envelope-wf
+- reason-counter@2c263cbb4284de85bac87c67: program:reasoning_observation_pending
+- reason-counter@a6816ce1629e2e6c7176381b: program:reasoning_observation_pending
+- reason-counter@a0b7190bf8d4310d5c722fb3: program:reasoning_observation_pending
+- reason-counter@4d8c63829d0103c3d06f01d3: program:reasoning_observation_pending
+- reason-counter@448a1ec21b7d1aa015ff3911: program:reasoning_observation_pending
+- reason-counter@82e8469b87d88c7624c051dc: program:reasoning_observation_pending
+- reason-counter@f49d2de8a38897b59c28f406: program:reasoning_observation_pending
+- reason-counter@38aca1648c93bd1c9fc0dca4: program:reasoning_observation_pending
+- reason-counter@318ab25c1b58b50d4f0b7994: program:reasoning_observation_pending
+- reason-counter@cc36bf8a18f913e9dcc563e5: program:reasoning_observation_pending
+
+MACHINE-EVALUATED COMMITMENTS: schemas whose eval starts with 'predicate:' or 'program:' are checked by the harness DETERMINISTICALLY — every target shown here currently PASSES them (failures were refuted mechanically before this call). Do NOT base a case on claiming such a commitment is violated (e.g. re-counting a length bound): that claim is machine-decided and your case would assert a falsehood. Argue about the SUBSTANCE of the content instead.
+
+TARGET SRC_001
+{"analogy":null,"claim":"A coin system C = (c_1 > ... > c_n = 1) is canonical iff for every amount w with 1 <= w <= W(C) the greedy representation is coin-optimal, where the candidate search bound is W(C) = c_3 + c_{n-1} (Kozen-Zaks style bound, for n >= 3; for n = 2 every two-coin system is canonical). The decision procedure: (i) if n <= 2 return canonical; (ii) compute the DP table of optimal coin counts for all w in [0, W(C)]; (iii) for each w in increasing order compute the greedy coin count g(w); (iv) return the smallest w with g(w) > opt(w), else return canonical.","counterconditions":[{"case":"If the true smallest counterexample of some enumerated coin system exceeds c_3 + c_{n-1}, the stated bound is refuted and the procedure is unsound (false 'canonical' verdicts).","eval":"observation"},{"case":"If the correct bound is instead c_2 + c_n - 1, c_3 + c_{n-1} - 1, or some multiplicative form, the additive window is wrong and the procedure may miss counterexamples near the boundary.","eval":"observation"},{"case":"If a polynomial-in-n decision procedure exists (e.g. Pearson's), this pseudo-polynomial answer is dominated and fails requirement 3's ambition tier.","eval":"observation"},{"case":"If n >= 3 but c_3 is undefined because n == 2, the bound formula is inapplicable (handled by the n <= 2 shortcut, but the shortcut's correctness for ALL two-coin systems must itself hold: (a,1) is canonical iff a is... actually I am NOT certain all two-coin systems are canonical; (4,3,1) is a known non-canonical example with n=3, but I have not verified the n=2 case rigorously \u2014 it is plausible but unproven here).","e
+commitments: reasoning-envelope-wf, reason-counter@2c263cbb4284de85bac87c67, reason-counter@a6816ce1629e2e6c7176381b, reason-counter@a0b7190bf8d4310d5c722fb3, reason-counter@4d8c63829d0103c3d06f01d3
+
+TARGET SRC_002
+{"analogy":null,"claim":"A polynomial-time decision procedure exists that determines canonicity in O(n^3) time by evaluating a finite set of candidate amounts bounded by c_3 + c_2, but this candidate is unverified because it lacks the required sandboxed simulation.","counterconditions":[{"case":"The Kozen-Zaks bound is refuted by an enumerated counterexample exceeding c_3 + c_2.","eval":"observation"},{"case":"The algorithm's time complexity is actually pseudo-polynomial rather than polynomial in n alone.","eval":"observation"},{"case":"Pearson's algorithm fails for some strictly decreasing coin system.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"Pearson's algorithm checks counterexamples of the form w = k * c_i + r. The finite search is justified by the Kozen-Zaks bound which states that if a counterexample exists, one exists less than c_3 + c_2. However, this candidate does not include the mandated sandboxed Python simulation to empirically verify this bound, rendering it an unverified claim under the capability contract.","premises":[],"schema":"deepreason-reasoning-envelope-v1","scope":{"covers":[],"excludes":[]},"simulation_refs":[],"uncertainties":[]}
+commitments: reasoning-envelope-wf, reason-counter@448a1ec21b7d1aa015ff3911, reason-counter@82e8469b87d88c7624c051dc, reason-counter@f49d2de8a38897b59c28f406
+
+TARGET SRC_003
+{"analogy":null,"claim":"A coin system C is canonical if and only if the greedy algorithm is optimal for all amounts w in the bounded range [c_2 + 1, c_1 + c_2 - 1]. The smallest counterexample can be found by checking this finite range using dynamic programming versus the greedy approach, yielding a pseudo-polynomial algorithm O(n * (c_1 + c_2)). A truly polynomial-time algorithm in n alone is achievable (e.g., Pearson's O(n^3) algorithm), but this candidate does not implement it.","counterconditions":[{"case":"The bound c_1 + c_2 - 1 is asserted from memory without a sandboxed Python simulation as required by the problem contract; a single enumerated coin system whose smallest counterexample exceeds this bound would refute it outright.","eval":"observation"},{"case":"The range [c_2 + 1, c_1 + c_2 - 1] may be incorrect or have an off-by-one error, which would cause false positives or negatives.","eval":"observation"},{"case":"The claim that a polynomial-time algorithm in n alone exists is unproven here and relies on unverified external knowledge.","eval":"observation"}],"definitions":[],"derivation":[],"formalization_refs":[],"mechanism":"By the theorem attributed to Kozen and Zaks (1994), if a counterexample exists for a coin system, the smallest counterexample amount must be strictly less than c_1 + c_2. Thus, it suffices to test each amount w from c_2 + 1 up to c_1 + c_2 - 1. For each w, compute the greedy representation and compare its coin count to the optimal count found via dynamic programming. If any w yields a greedy count greater than the optimal count, return w as the smallest counterexample. If no such
+commitments: reasoning-envelope-wf, reason-counter@38aca1648c93bd1c9fc0dca4, reason-counter@318ab25c1b58b50d4f0b7994, reason-counter@cc36bf8a18f913e9dcc563e5
+
+DIRECTIVE: return exactly one entry per target id above — the strongest NEW specific case (attack=true) or attack=false. Never attack an id that is not listed.
