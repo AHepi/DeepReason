@@ -63,8 +63,9 @@ def test_external_provider_satisfies_every_production_qualification_contract():
     pairs = production_contract_pairs(manifest)
     # The engaged public preset qualifies the complete production surface:
     # conjecture, foreign-school criticism, the enabled scratch contracts,
-    # and the grounded two-stage bridge contracts.
-    assert len(pairs) == 14
+    # and the grounded two-stage bridge contracts including the grounding
+    # review stream — the reviewer seat is the fifteenth pair.
+    assert len(pairs) == 15
     assert {pair.contract_id for pair in pairs} == {
         "conjecturer.turn.v6",
         "conjecturer.atomic-candidate.v1",
@@ -80,6 +81,9 @@ def test_external_provider_satisfies_every_production_qualification_contract():
         "bridge.ledger-batch.v1",
         "bridge.composition.v2",
         "bridge.composition-batch.v1",
+        # The grounding review stream: a bridge-family contract whose id
+        # carries no "bridge." prefix.
+        "groundingverdictwirev1.direct.v1",
     }
     for pair in pairs:
         for case_index in range(20):

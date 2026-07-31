@@ -47,7 +47,7 @@ Traces to REQUEST.md. R6 applies throughout: commit locally, never push.
 - [x] S5 — regression tests for S1-S3.
       Done-criterion: the new tests pass and each names what it guards.
 
-- [ ] S6 (C2) — full gate.
+- [x] S6 (C2) — full gate.
       Done-criterion: `pytest tests/ -q -n 4` reports 0 failed. Any
       baseline that moves must have been predicted in this checklist
       before it moved; an unpredicted move is a stop.
@@ -172,3 +172,37 @@ Checked while wiring it: `application/bridge.py:774/832/929` already pass
 `review_adapter` conditioned on `policy.grounding_review`, so turning
 review on is wired end to end on the production path and needs no
 further change.
+
+## S6 done-criterion output
+
+    first run  : 18 failed, 3154 passed, 7 skipped in 755.10s
+    after fixes: 3172 passed, 7 skipped in 698.04s   <- 0 failed
+
+Every one of the 18 fell into a category CHECKLIST predicted, and none
+required weakening an assertion. Two families:
+
+**A — the binding rule refused test launches (12).** `test_public_v6_facade`
+(5), `test_qualification_tier` (6), `test_shallow_reason` (1) all resolve
+through one shared `_profile()` helper whose provider is `openai` with
+`reasoning=None`. Fixed in ONE place by giving the fixture
+`reasoning="none"`: a fixture that launches must satisfy the same
+invariant a real profile does. No assertion changed.
+
+**B — seating the reviewer moved the inventory and the behavior (6).**
+Each is a real consequence, recorded rather than papered over:
+
+    grounding_review pin False -> True            (1 test)
+    qualification pairs        14 -> 15           (the reviewer pair)
+    announced call ceiling   1100 -> 1140         (+40 = 20 cases x 2 calls)
+    base battery              840 -> 880
+    bridge provider calls        2 -> 3           (review is a call, not free)
+    a test-local roles config had to seat `judge`, because a grounded
+      bridge with review on refuses to compile without an explicit
+      reviewer route (BRIDGE_REVIEWER_ROUTE_REQUIRED)
+
+The production path was checked and is unaffected by that last one:
+`preparation._config_for_profile` seats every `V3_CANONICAL_ROLES`, so
+only hand-written configs that omit `judge` are affected.
+
+**The measured price of R1a, stated plainly:** +1 qualification pair, +40
+qualification calls, +1 provider call per bridge build.

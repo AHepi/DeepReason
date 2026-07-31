@@ -139,7 +139,7 @@ def test_public_manifest_compiles_the_grounded_two_stage_bridge():
     assert bridge is not None
     assert bridge.mode == "grounded_two_stage"
     # The audited review-free single-route shape from the engaged preset.
-    assert bridge.grounding_review is False
+    assert bridge.grounding_review is True
     assert bridge.max_schema_repair_attempts == 1
     assert bridge.max_grounding_repair_attempts == 0
     assert bridge.output_section_limit == 4
@@ -177,7 +177,7 @@ def test_public_manifest_grants_conjecture_family_multi_pointer_repairs():
     child) four repairs / five provider calls, keeps every other non-bridge
     contract at two repairs, and announces the recomputed qualification
     maximum: 2 conjecture pairs x 20 cases x 5 calls + 8 pairs x 20 x 3 +
-    4 bridge pairs x 20 x 2 = 840.
+    5 bridge pairs x 20 x 2 = 880 (the reviewer seat is the fifth).
     """
 
     from deepreason.preparation import qualification_subject_manifest
@@ -193,13 +193,18 @@ def test_public_manifest_grants_conjecture_family_multi_pointer_repairs():
         assert grants[contract_id].maximum_schema_repairs == 4
         assert grants[contract_id].maximum_provider_calls == 5
     for contract_id in sorted(grants):
-        if contract_id.startswith(("bridge.", "conjecturer.")):
+        # The grounding review/repair streams are bridge-family contracts
+        # whose ids carry no "bridge." prefix; they take the bridge
+        # ceiling, not the ordinary non-bridge one.
+        if contract_id.startswith(("bridge.", "conjecturer.", "grounding")):
             continue
         assert grants[contract_id].maximum_schema_repairs == 2
         assert grants[contract_id].maximum_provider_calls == 3
-    # 840 base battery calls plus the bounded flake re-exercise allowance
+    # 880 base battery calls plus the bounded flake re-exercise allowance
     # (the three most expensive pair blocks may each be redrawn once).
-    assert production_qualification_maximum_provider_calls(manifest) == 1100
+    # Seating the reviewer added one bridge pair: 20 cases x 2 calls = 40,
+    # so the announced ceiling is the direct price of that seat.
+    assert production_qualification_maximum_provider_calls(manifest) == 1140
 
 
 def test_public_manifest_enables_declarative_local_simulation():
@@ -261,6 +266,9 @@ def _public_preset_mock_manifest():
             "synthesizer": [_route("synthesizer-route")],
             "summarizer": [_route("summarizer-route")],
             "thesis": [_route("thesis-route")],
+            # The engaged bridge now reviews, and the reviewer role is
+            # judge; a grounded bridge refuses to compile without it.
+            "judge": [_route("judge-route")],
         },
     )
     manifest = compile_run_manifest(
@@ -618,10 +626,12 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
     _write_bridge_qualification(harness, manifest)
     _write_eligible_v6_run_result(root, manifest)
 
-    # The review-free public bridge makes exactly two provider calls: the
-    # frozen summarizer builds the claim ledger, then the frozen thesis
-    # route composes the grounded output.  Every canonical role rides one
-    # endpoint, so a single ordered script serves both dispatches.
+    # The public bridge makes three provider calls: the frozen summarizer
+    # builds the claim ledger, the frozen thesis route composes the
+    # grounded output, and the frozen judge route reviews its grounding.
+    # Every canonical role rides one endpoint, so a single ordered script
+    # serves all three dispatches. The third response is the direct cost
+    # of seating the reviewer: review is a provider call, not free.
     responses = [
         json.dumps(
             {
@@ -650,6 +660,7 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
                 "resolution_reason": "The record supports a conjecture, not a fact.",
             }
         ),
+        json.dumps({"finding": "supported"}),
     ]
     dispatched = []
     route = manifest.roles["summarizer"][0]
@@ -689,8 +700,13 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
     result = mcp.call_tool("bridge_result", {"run_id": run_id, "limit": 5})
     assert result["terminal"]["process_status"] == "success"
     assert result["output"]["resolution"] == "partially_answered"
-    # Review-free means exactly the two scripted stage calls, no more.
-    assert dispatched == [profile.endpoint_id, profile.endpoint_id]
+    # Exactly the three scripted calls, no more: ledger, composition,
+    # grounding review. The third is what seating the reviewer costs.
+    assert dispatched == [
+        profile.endpoint_id,
+        profile.endpoint_id,
+        profile.endpoint_id,
+    ]
     assert responses == []
     actions = [
         event.bridge.action

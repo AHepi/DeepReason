@@ -39,6 +39,10 @@ def _profile(**updates) -> ProviderProfileV1:
         context_window_tokens=131_072,
         maximum_completion_tokens=4_096,
         credential_env="DEEPREASON_PUBLIC_TEST_KEY",
+        # The launch rule refuses a provider that realizes the reasoning knob
+        # with thinking left on, and "openai" realizes it. A fixture that
+        # launches must satisfy the same invariant a real profile does.
+        reasoning="none",
     )
     values.update(updates)
     return ProviderProfileV1.create(**values)

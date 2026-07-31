@@ -260,8 +260,10 @@ def test_qualify_announces_both_battery_ceilings(tmp_path, monkeypatch, capsys):
     assert main(["qualify"]) == 1
     err = capsys.readouterr().err
     # 840 base calls plus the bounded flake re-exercise allowance: the three
-    # most expensive pair blocks may each be redrawn once.
-    assert "maximum expected provider calls: 1100." in err
+    # most expensive pair blocks may each be redrawn once. Seating the
+    # reviewer role adds its contract to the pair inventory, and the ceiling
+    # is the direct price of that seat: 1100 -> 1140.
+    assert "maximum expected provider calls: 1140." in err
     assert f"at most {SHALLOW_FITNESS_MAX_PROVIDER_CALLS} further calls" in err
     assert shallow_fitness_maximum_provider_calls() == 18
 
