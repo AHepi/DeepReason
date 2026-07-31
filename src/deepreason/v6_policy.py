@@ -163,17 +163,22 @@ def engaged_scratchpad_source() -> dict:
 def engaged_bridge_source() -> dict:
     """Typed-Config source enabling the grounded two-stage bridge.
 
-    This is the audited review-free shape: Stage A (claim ledger, frozen
-    ``summarizer`` route) and Stage B (composition, frozen ``thesis`` route)
-    with the minimum one-repair schema budget, no grounding-review stream,
-    and a small bounded four-section output.  Public preparation seats every
-    canonical role on the single provider endpoint, so both frozen bridge
-    roles ride the one public route.
+    Stage A (claim ledger, frozen ``summarizer`` route) and Stage B
+    (composition, frozen ``thesis`` route) with the minimum one-repair schema
+    budget and a small bounded four-section output.  Public preparation seats
+    every canonical role on the single provider endpoint, so every frozen
+    bridge role rides the one public route.
+
+    ``grounding_review`` is the only source of behavioral authority for the
+    ``reviewer_role`` seat: ``_route_seat_behavioral_contract_assignments``
+    grants that seat a contract in no other branch, so with review off the
+    seat qualifies ``inactive_no_authorized_contract`` and every phase that
+    needs it defers ``transaction-contract-unavailable``.
     """
 
     return {
         "mode": "grounded_two_stage",
-        "grounding_review": False,
+        "grounding_review": True,
         "max_schema_repair_attempts": 1,
         "max_grounding_repair_attempts": 0,
         "output_section_limit": 4,
