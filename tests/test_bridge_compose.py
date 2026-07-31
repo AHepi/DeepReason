@@ -395,3 +395,82 @@ def test_empty_valid_ledger_with_uncovered_requirement_can_abstain(tmp_path):
     assert result.status == CompositionStatus.COMPOSED
     assert result.output.resolution.value == "insufficient_evidence"
     assert result.output.unresolved_items[0].ledger_entry_ids is None
+
+
+def test_the_amendment_outcome_rule_is_carried_by_the_schema_on_both_versions():
+    """`_amendment_is_a_distinct_outcome` said in English that an amendment
+    request cannot smuggle sections, cannot be `answered`, and needs a reason,
+    while the schema declared each field independently. Both composition
+    versions carry the identical rule, so both are encoded and both are tested.
+    """
+
+    import itertools
+
+    import pytest
+
+    from deepreason.bridge.compose import (
+        BridgeCompositionWireV1,
+        BridgeCompositionWireV2,
+    )
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    resolutions = (
+        "answered",
+        "partially_answered",
+        "underdetermined",
+        "insufficient_evidence",
+        "conflicting_evidence",
+        "outside_scope",
+    )
+    amendment = {
+        "target_entry_key": "CLM_1",
+        "proposed_claim_class": "assumption",
+        "proposed_claim": "a claim",
+        "reason": "a reason",
+    }
+    disagreements = []
+    for model in (BridgeCompositionWireV1, BridgeCompositionWireV2):
+        schema = model.model_json_schema()
+        span = {
+            "span_id": "S1",
+            "text": "t",
+            "rendering_mode": "verbatim_quote",
+            "claim_use": {"entry_key": "CLM_1"},
+        }
+        if model is BridgeCompositionWireV2:
+            span.pop("rendering_mode")
+        # `answered` must be unreachable once an amendment is requested.
+        clause = schema["allOf"][0]["then"]["allOf"]
+        narrowed = next(
+            item["properties"]["resolution"]["enum"]
+            for item in clause
+            if "resolution" in item.get("properties", {})
+        )
+        assert "answered" not in narrowed, model.__name__
+
+        for sections, amend, reason, resolution in itertools.product(
+            ([], [span]), (None, amendment), (None, "because"), resolutions
+        ):
+            for omit_empty in (False, True):
+                document = {"sections": sections, "resolution": resolution}
+                if not (omit_empty and amend is None):
+                    document["ledger_amendment_request"] = amend
+                if not (omit_empty and reason is None):
+                    document["resolution_reason"] = reason
+                try:
+                    jsonschema.validate(document, schema)
+                    by_schema = True
+                except jsonschema.ValidationError:
+                    by_schema = False
+                try:
+                    model.model_validate(document)
+                    by_validator = True
+                except Exception:
+                    by_validator = False
+                if by_schema != by_validator:
+                    disagreements.append(
+                        (model.__name__, document, by_schema, by_validator)
+                    )
+
+    assert disagreements == [], disagreements[:4]

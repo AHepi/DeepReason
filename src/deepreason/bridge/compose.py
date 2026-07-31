@@ -15,7 +15,14 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 
-from pydantic import Field, StrictInt, create_model, field_validator, model_validator
+from pydantic import (
+    ConfigDict,
+    Field,
+    StrictInt,
+    create_model,
+    field_validator,
+    model_validator,
+)
 
 from deepreason.bridge.models import (
     BridgeOutputV1,
@@ -29,7 +36,14 @@ from deepreason.bridge.models import (
 )
 from deepreason.bridge.validate import validate_bridge_output, validate_claim_ledger
 from deepreason.llm.repair import SchemaRepairError
-from deepreason.llm.wire import AliasTable, StrictWireModel, WireContract
+from deepreason.llm.wire import (
+    AliasTable,
+    FieldPresent,
+    ShapeClause,
+    StrictWireModel,
+    WireContract,
+    discriminated_shape_schema,
+)
 from deepreason.ontology.event import LLMCall
 
 
@@ -249,8 +263,36 @@ class LedgerAmendmentWireV1(StrictWireModel):
         return value
 
 
+_UNANSWERED_RESOLUTIONS = (
+    "partially_answered",
+    "underdetermined",
+    "insufficient_evidence",
+    "conflicting_evidence",
+    "outside_scope",
+)
+AMENDMENT_IS_DISTINCT_SHAPE = discriminated_shape_schema(
+    ShapeClause(
+        when=FieldPresent("ledger_amendment_request"),
+        requires=("resolution_reason",),
+        forbids=("sections",),
+        field_values={"resolution": _UNANSWERED_RESOLUTIONS},
+    )
+)
+"""`_amendment_is_a_distinct_outcome`, for both composition versions.
+
+They are siblings carrying an identical rule over identical field names, so
+the encoder is declared once and attached to each.
+"""
+
+
 class BridgeCompositionWireV1(StrictWireModel):
     """Exactly one closed Stage B response; never a list of operations."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=AMENDMENT_IS_DISTINCT_SHAPE,
+    )
 
     sections: list[CompositionSpanWireV1] = Field(max_length=_MAX_COMPOSITION_ITEMS)
     unresolved_items: list[CompositionUnresolvedWireV1] | None = Field(
@@ -292,6 +334,12 @@ class BridgeCompositionWireV1(StrictWireModel):
 
 class BridgeCompositionWireV2(StrictWireModel):
     """v6 composition response with no rendering-mode authority."""
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=AMENDMENT_IS_DISTINCT_SHAPE,
+    )
 
     sections: list[CompositionSpanWireV2] = Field(max_length=_MAX_COMPOSITION_ITEMS)
     unresolved_items: list[CompositionUnresolvedWireV1] | None = Field(

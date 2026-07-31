@@ -546,3 +546,71 @@ def test_view_builds_from_the_live_narrow_record():
         view.window_first_seq <= item.seq <= view.fence_seq
         for item in view.observations
     )
+
+
+def test_the_referee_contract_carries_its_own_rules_instead_of_deferring_to_compile():
+    """`_menu_coherence` and `_unique_citations` lived only on the CANONICAL
+    verdict, so the wire contract carried neither: an incoherent verdict
+    validated on the wire and blew up inside `compile()`, after the response
+    had been accepted and paid for. The schema said nothing about the
+    biconditional at all.
+
+    `verdict` is a closed two-value Literal, so the biconditional is two
+    clauses and needs no dedicated encoder.
+    """
+
+    import itertools
+
+    import pytest
+
+    from deepreason.referee import config_referee_wire_contract
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    contract = config_referee_wire_contract()
+    schema = contract.model_json_schema()
+    model = contract.wire_model
+
+    interventions = {
+        "criticism_weighted_cycle",
+        "research_allowance_step_tighten",
+        "research_allowance_step_widen",
+    }
+    clauses = {
+        clause["if"]["properties"]["verdict"]["enum"][0]: set(
+            clause["then"]["properties"]["recommendation"]["enum"]
+        )
+        for clause in schema["allOf"]
+    }
+    assert clauses == {
+        "config_effective": {"no_change"},
+        "config_mistuned": interventions,
+    }
+    assert schema["properties"]["cited_seqs"]["uniqueItems"] is True
+
+    disagreements = []
+    for verdict, recommendation, seqs in itertools.product(
+        ("config_effective", "config_mistuned"),
+        ("no_change", *sorted(interventions)),
+        ([1], [1, 1], [1, 2], []),
+    ):
+        document = {
+            "verdict": verdict,
+            "assessment": "an assessment",
+            "cited_seqs": seqs,
+            "recommendation": recommendation,
+        }
+        try:
+            jsonschema.validate(document, schema)
+            by_schema = True
+        except jsonschema.ValidationError:
+            by_schema = False
+        try:
+            model.model_validate(document)
+            by_validator = True
+        except Exception:
+            by_validator = False
+        if by_schema != by_validator:
+            disagreements.append((document, by_schema, by_validator))
+
+    assert disagreements == [], disagreements[:4]

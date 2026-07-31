@@ -335,19 +335,75 @@ CONFIG_REFEREE_CONTRACT_V1 = "config-referee.v1"
 def _wire_contract_class():
     """Build the wire contract lazily so referee stays importable standalone."""
 
-    from pydantic import Field as WireField
-    from deepreason.llm.wire import StrictWireModel, WireContract
+    from pydantic import ConfigDict as WireConfigDict, Field as WireField
+    from deepreason.llm.wire import (
+        FieldIn,
+        ShapeClause,
+        StrictWireModel,
+        WireContract,
+        discriminated_shape_schema,
+    )
+
+    _INTERVENTIONS = (
+        "criticism_weighted_cycle",
+        "research_allowance_step_tighten",
+        "research_allowance_step_widen",
+    )
 
     class ConfigRefereeWireV1(StrictWireModel):
+        # `verdict` and `recommendation` are a biconditional, which two
+        # clauses state exactly because `verdict` is a closed two-value
+        # Literal — no dedicated encoder needed.
+        model_config = WireConfigDict(
+            extra="forbid",
+            strict=True,
+            json_schema_extra=discriminated_shape_schema(
+                ShapeClause(
+                    when=FieldIn("verdict", ("config_effective",)),
+                    field_values={"recommendation": ("no_change",)},
+                ),
+                ShapeClause(
+                    when=FieldIn("verdict", ("config_mistuned",)),
+                    field_values={"recommendation": _INTERVENTIONS},
+                ),
+            ),
+        )
+
         verdict: Literal["config_effective", "config_mistuned"]
         assessment: str = WireField(min_length=1, max_length=4_096)
-        cited_seqs: list[int] = WireField(min_length=1, max_length=32)
+        cited_seqs: list[int] = WireField(
+            min_length=1,
+            max_length=32,
+            json_schema_extra={"uniqueItems": True},
+        )
         recommendation: Literal[
             "no_change",
             "criticism_weighted_cycle",
             "research_allowance_step_tighten",
             "research_allowance_step_widen",
         ]
+
+        # Both rules previously lived only on the canonical verdict, so they
+        # fired inside compile() — after the response had been accepted — and
+        # the wire contract carried neither. Restating them here moves the
+        # refusal to admission and keeps schema and validator in step.
+        @field_validator("cited_seqs")
+        @classmethod
+        def _unique_citations(cls, value):
+            if len(value) != len(set(value)):
+                raise ValueError("cited seqs must be unique non-negative integers")
+            return value
+
+        @model_validator(mode="after")
+        def _menu_coherence(self):
+            if (self.verdict == "config_effective") != (
+                self.recommendation == "no_change"
+            ):
+                raise ValueError(
+                    "an effective config recommends no_change and a mistuned "
+                    "config recommends one menu intervention"
+                )
+            return self
 
     class ConfigRefereeWireContractV1(WireContract[ConfigRefereeVerdictV1]):
         """One review, one verdict; targets and evidence are the shown view."""
