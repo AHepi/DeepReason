@@ -1,0 +1,663 @@
+{
+ "jolts": {
+  "anti_anchor_fewshot": {
+   "animal": {
+    "distinct": 6,
+    "histogram": {
+     "cat": 2,
+     "elephant": 1,
+     "giraffe": 4,
+     "hippopotamus": 2,
+     "horse": 1,
+     "tiger": 2
+    },
+    "mode": "giraffe",
+    "samples": 12,
+    "top_mass": 0.3333
+   },
+   "card": {
+    "distinct": 1,
+    "histogram": {
+     "two of diamonds": 12
+    },
+    "mode": "two of diamonds",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "colour": {
+    "distinct": 7,
+    "histogram": {
+     "chartreuse": 1,
+     "cyan": 4,
+     "gray": 1,
+     "green": 1,
+     "orange": 1,
+     "violet": 1,
+     "yellow": 3
+    },
+    "mode": "cyan",
+    "samples": 12,
+    "top_mass": 0.3333
+   },
+   "fruit": {
+    "distinct": 5,
+    "histogram": {
+     "grapefruit": 1,
+     "mango": 5,
+     "pear": 1,
+     "pineapple": 3,
+     "plum": 2
+    },
+    "mode": "mango",
+    "samples": 12,
+    "top_mass": 0.4167
+   },
+   "random_number": {
+    "distinct": 5,
+    "histogram": {
+     "13": 1,
+     "14": 1,
+     "42": 7,
+     "47": 1,
+     "73": 2
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "vegetable": {
+    "distinct": 7,
+    "histogram": {
+     "cabbage": 1,
+     "cucumber": 3,
+     "eggplant": 1,
+     "okra": 2,
+     "radish": 2,
+     "spinach": 2,
+     "turnip": 1
+    },
+    "mode": "cucumber",
+    "samples": 12,
+    "top_mass": 0.25
+   }
+  },
+  "avoid_obvious": {
+   "animal": {
+    "distinct": 3,
+    "histogram": {
+     "narwhal": 6,
+     "okapi": 1,
+     "quokka": 5
+    },
+    "mode": "narwhal",
+    "samples": 12,
+    "top_mass": 0.5
+   },
+   "card": {
+    "distinct": 2,
+    "histogram": {
+     "four of clubs": 4,
+     "four of diamonds": 8
+    },
+    "mode": "four of diamonds",
+    "samples": 12,
+    "top_mass": 0.6667
+   },
+   "colour": {
+    "distinct": 7,
+    "histogram": {
+     "celadon": 1,
+     "cerulean": 2,
+     "chartreuse": 4,
+     "fuchsia": 1,
+     "mauve": 2,
+     "periwinkle": 1,
+     "verdigris": 1
+    },
+    "mode": "chartreuse",
+    "samples": 12,
+    "top_mass": 0.3333
+   },
+   "fruit": {
+    "distinct": 6,
+    "histogram": {
+     "guava": 2,
+     "kumquat": 4,
+     "lychee": 1,
+     "persimmon": 1,
+     "pomelo": 1,
+     "quince": 3
+    },
+    "mode": "kumquat",
+    "samples": 12,
+    "top_mass": 0.3333
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "37": 3,
+     "73": 9
+    },
+    "mode": "73",
+    "samples": 12,
+    "top_mass": 0.75
+   },
+   "vegetable": {
+    "distinct": 1,
+    "histogram": {
+     "kohlrabi": 12
+    },
+    "mode": "kohlrabi",
+    "samples": 12,
+    "top_mass": 1.0
+   }
+  },
+  "baseline": {
+   "animal": {
+    "distinct": 1,
+    "histogram": {
+     "elephant": 12
+    },
+    "mode": "elephant",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "card": {
+    "distinct": 7,
+    "histogram": {
+     "ace of spades": 5,
+     "four of diamonds": 1,
+     "king of hearts": 1,
+     "queen of hearts": 1,
+     "seven of clubs": 1,
+     "ten of hearts": 1,
+     "two of hearts": 2
+    },
+    "mode": "ace of spades",
+    "samples": 12,
+    "top_mass": 0.4167
+   },
+   "colour": {
+    "distinct": 2,
+    "histogram": {
+     "blue": 10,
+     "cerulean": 2
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.8333
+   },
+   "fruit": {
+    "distinct": 1,
+    "histogram": {
+     "apple": 12
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "42": 10,
+     "73": 2
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.8333
+   },
+   "vegetable": {
+    "distinct": 2,
+    "histogram": {
+     "broccoli": 8,
+     "carrot": 4
+    },
+    "mode": "broccoli",
+    "samples": 12,
+    "top_mass": 0.6667
+   }
+  },
+  "persona_random": {
+   "animal": {
+    "distinct": 8,
+    "histogram": {
+     "aardvark": 1,
+     "capybara": 1,
+     "eagle": 1,
+     "elephant": 3,
+     "hippopotamus": 1,
+     "narwhal": 1,
+     "platypus": 3,
+     "tiger": 1
+    },
+    "mode": "platypus",
+    "samples": 12,
+    "top_mass": 0.25
+   },
+   "card": {
+    "distinct": 9,
+    "histogram": {
+     "four of diamonds": 2,
+     "four of hearts": 1,
+     "four of spades": 1,
+     "jack of hearts": 1,
+     "king of diamonds": 2,
+     "king of hearts": 2,
+     "nine of diamonds": 1,
+     "queen of diamonds": 1
+    },
+    "mode": "king of hearts",
+    "samples": 12,
+    "top_mass": 0.1667
+   },
+   "colour": {
+    "distinct": 2,
+    "histogram": {
+     "blue": 11,
+     "red": 1
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.9167
+   },
+   "fruit": {
+    "distinct": 5,
+    "histogram": {
+     "apple": 4,
+     "banana": 4,
+     "kiwi": 1,
+     "kumquat": 1,
+     "mango": 2
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 0.3333
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "42": 9,
+     "73": 3
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.75
+   },
+   "vegetable": {
+    "distinct": 3,
+    "histogram": {
+     "broccoli": 1,
+     "cabbage": 1,
+     "carrot": 10
+    },
+    "mode": "carrot",
+    "samples": 12,
+    "top_mass": 0.8333
+   }
+  },
+  "school_stance": {
+   "animal": {
+    "distinct": 6,
+    "histogram": {
+     "badger": 2,
+     "beaver": 3,
+     "bee": 2,
+     "chimera": 1,
+     "falcon": 1,
+     "wolf": 3
+    },
+    "mode": "wolf",
+    "samples": 12,
+    "top_mass": 0.25
+   },
+   "card": {
+    "distinct": 4,
+    "histogram": {
+     "ace of spades": 1,
+     "jack of spades": 2,
+     "joker": 2,
+     "seven of clubs": 7
+    },
+    "mode": "seven of clubs",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "colour": {
+    "distinct": 6,
+    "histogram": {
+     "blue": 2,
+     "colourless": 1,
+     "critical": 1,
+     "ideology": 1,
+     "purple": 1,
+     "red": 6
+    },
+    "mode": "red",
+    "samples": 12,
+    "top_mass": 0.5
+   },
+   "fruit": {
+    "distinct": 5,
+    "histogram": {
+     "apple": 7,
+     "forbidden": 1,
+     "ideology": 2,
+     "persimmon": 1,
+     "pomegranate": 1
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "random_number": {
+    "distinct": 3,
+    "histogram": {
+     "42": 2,
+     "47": 1,
+     "73": 9
+    },
+    "mode": "73",
+    "samples": 12,
+    "top_mass": 0.75
+   },
+   "vegetable": {
+    "distinct": 8,
+    "histogram": {
+     "broccoli": 1,
+     "brussels-sprout": 1,
+     "brusselsprout": 1,
+     "cabbage": 2,
+     "ideology": 1,
+     "kale": 1,
+     "potato": 4,
+     "rhubarb": 1
+    },
+    "mode": "potato",
+    "samples": 12,
+    "top_mass": 0.3333
+   }
+  },
+  "seed_varied": {
+   "animal": {
+    "distinct": 1,
+    "histogram": {
+     "elephant": 12
+    },
+    "mode": "elephant",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "card": {
+    "distinct": 5,
+    "histogram": {
+     "ace of spades": 5,
+     "king of hearts": 4,
+     "seven of clubs": 1,
+     "ten of hearts": 1,
+     "two of hearts": 1
+    },
+    "mode": "ace of spades",
+    "samples": 12,
+    "top_mass": 0.4167
+   },
+   "colour": {
+    "distinct": 2,
+    "histogram": {
+     "azure": 1,
+     "blue": 11
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.9167
+   },
+   "fruit": {
+    "distinct": 1,
+    "histogram": {
+     "apple": 12
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "42": 10,
+     "73": 2
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.8333
+   },
+   "vegetable": {
+    "distinct": 2,
+    "histogram": {
+     "broccoli": 5,
+     "carrot": 7
+    },
+    "mode": "carrot",
+    "samples": 12,
+    "top_mass": 0.5833
+   }
+  },
+  "temperature_high": {
+   "animal": {
+    "distinct": 2,
+    "histogram": {
+     "dog": 1,
+     "elephant": 11
+    },
+    "mode": "elephant",
+    "samples": 12,
+    "top_mass": 0.9167
+   },
+   "card": {
+    "distinct": 6,
+    "histogram": {
+     "ace of spades": 3,
+     "jack of hearts": 1,
+     "king of hearts": 3,
+     "queen of hearts": 3,
+     "three of diamonds": 1,
+     "two of hearts": 1
+    },
+    "mode": "queen of hearts",
+    "samples": 12,
+    "top_mass": 0.25
+   },
+   "colour": {
+    "distinct": 2,
+    "histogram": {
+     "azure": 5,
+     "blue": 7
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "fruit": {
+    "distinct": 2,
+    "histogram": {
+     "apple": 11,
+     "mango": 1
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 0.9167
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "42": 7,
+     "73": 5
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "vegetable": {
+    "distinct": 2,
+    "histogram": {
+     "broccoli": 9,
+     "carrot": 3
+    },
+    "mode": "broccoli",
+    "samples": 12,
+    "top_mass": 0.75
+   }
+  },
+  "temperature_max": {
+   "animal": {
+    "distinct": 4,
+    "histogram": {
+     "dog": 1,
+     "elephant": 9,
+     "hippopotamus": 1,
+     "tiger": 1
+    },
+    "mode": "elephant",
+    "samples": 12,
+    "top_mass": 0.75
+   },
+   "card": {
+    "distinct": 10,
+    "histogram": {
+     "ace of spades": 2,
+     "four of spades": 1,
+     "jack of hearts": 2,
+     "jack of spades": 1,
+     "nine of spades": 1,
+     "queen of spades": 1,
+     "seven of clubs": 1,
+     "two of hearts": 1
+    },
+    "mode": "ace of spades",
+    "samples": 12,
+    "top_mass": 0.1667
+   },
+   "colour": {
+    "distinct": 5,
+    "histogram": {
+     "azure": 2,
+     "blue": 7,
+     "cerulean": 1,
+     "chartreuse": 1,
+     "teal": 1
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.5833
+   },
+   "fruit": {
+    "distinct": 2,
+    "histogram": {
+     "apple": 11,
+     "mango": 1
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 0.9167
+   },
+   "random_number": {
+    "distinct": 6,
+    "histogram": {
+     "37": 1,
+     "42": 5,
+     "43": 1,
+     "57": 3,
+     "71": 1,
+     "72": 1
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.4167
+   },
+   "vegetable": {
+    "distinct": 3,
+    "histogram": {
+     "broccoli": 4,
+     "carrot": 7,
+     "spinach": 1
+    },
+    "mode": "carrot",
+    "samples": 12,
+    "top_mass": 0.5833
+   }
+  },
+  "top_p_wide": {
+   "animal": {
+    "distinct": 1,
+    "histogram": {
+     "elephant": 12
+    },
+    "mode": "elephant",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "card": {
+    "distinct": 5,
+    "histogram": {
+     "ace of spades": 8,
+     "four of diamonds": 1,
+     "four of hearts": 1,
+     "king of hearts": 1,
+     "seven of clubs": 1
+    },
+    "mode": "ace of spades",
+    "samples": 12,
+    "top_mass": 0.6667
+   },
+   "colour": {
+    "distinct": 3,
+    "histogram": {
+     "azure": 1,
+     "blue": 10,
+     "cerulean": 1
+    },
+    "mode": "blue",
+    "samples": 12,
+    "top_mass": 0.8333
+   },
+   "fruit": {
+    "distinct": 1,
+    "histogram": {
+     "apple": 12
+    },
+    "mode": "apple",
+    "samples": 12,
+    "top_mass": 1.0
+   },
+   "random_number": {
+    "distinct": 2,
+    "histogram": {
+     "42": 8,
+     "73": 4
+    },
+    "mode": "42",
+    "samples": 12,
+    "top_mass": 0.6667
+   },
+   "vegetable": {
+    "distinct": 2,
+    "histogram": {
+     "broccoli": 3,
+     "carrot": 9
+    },
+    "mode": "carrot",
+    "samples": 12,
+    "top_mass": 0.75
+   }
+  }
+ },
+ "model": "glm-5.2",
+ "samples": 12,
+ "schema": "jolt-probe.v1",
+ "task_prompts": {
+  "animal": "Name an animal. Reply with the single word only.",
+  "card": "Name a playing card. Reply with the card only, e.g. 'seven of clubs'.",
+  "colour": "Name a colour. Reply with the single word only.",
+  "fruit": "Name a fruit. Reply with the single word only.",
+  "random_number": "Pick a random integer from 1 to 100. Reply with the number only.",
+  "vegetable": "Name a vegetable. Reply with the single word only."
+ }
+}
