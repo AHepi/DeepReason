@@ -1,0 +1,29 @@
+=== turmite ladder start 2026-07-31T10:26:28Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_turmite_2026-07-31/home/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+qualify_rc=0 qualify_seconds=376
+reason_rc=1 reason_seconds=1
+run_id= state=
+=== turmite ladder end 2026-07-31T10:32:46Z ===
+=== turmite ladder start 2026-07-31T10:33:32Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_turmite_2026-07-31/home/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+qualify_rc=0 qualify_seconds=1
+reason_rc=4 reason_seconds=368
+run_id=run-bc3e8797b3e0609eddb324299c8257bd state=failed
+audit_rc=0
+=== turmite ladder end 2026-07-31T10:39:54Z ===
