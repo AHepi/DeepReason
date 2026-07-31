@@ -1,0 +1,26 @@
+A rule string is a word over the alphabet {L, R, N, U}, parsed under the grammar given in the attached dossier. A rule string of length k defines a deterministic automaton on the integer lattice with k cell states, under the operational semantics given there. The automaton BUILDS A HIGHWAY when, from some step onward, its configuration repeats with a fixed non-zero displacement forever.
+
+Consider the following claim.
+
+    CLAIM H: every rule string that contains at least one L and at least
+    one R eventually builds a highway.
+
+Settle CLAIM H, and then characterise the behaviour it fails to describe.
+
+Requirements:
+
+1. Decide CLAIM H. If it is false, exhibit a specific rule string that refutes it and establish the refutation — not merely report that no highway was observed within some horizon. The dossier's rules of evidence state what the difference is and what would count.
+
+2. For every rule string of length at most 4 over {L, R}, state whether it builds a highway. Where one does, give its transient length, highway period and displacement, and verify the translation property on the CONFIGURATION rather than only on the position. Where one does not, say whether you have a proof or only a bounded search, and be explicit about which.
+
+3. Explain the mechanism. What property of a rule string decides whether a highway forms? A correct classifier for length ≤ 4 that predicts nothing beyond it is worth less than a mechanism that explains the cases you have and makes a checkable prediction about a length you have not tested. Make such a prediction and then test it.
+
+4. Give the worst-case cost of deciding, for a rule string of length k and a step horizon T, whether a highway has formed by step T. Say whether the problem of deciding highway formation in general is one you believe to be decidable, and on what grounds — distinguishing what you can prove from what you suspect.
+
+5. Be explicit throughout about which parts of your answer you are certain of and which you are not.
+
+Two warnings, both of which have cost previous attempts at this kind of problem.
+
+The semantics in the dossier are precise and are NOT the common convention, and this is the single most likely way to get every answer wrong. The move is a stride of (c+1) cells, where c is the state found on arrival, taken as one jump whose intermediate cells are not visited. The widely published automata of this family use a unit stride, and their results do not carry over: under a unit stride the rule string RL is the well known highway builder, and here it is not. If your answer for any rule string agrees with a recalled result for a unit-stride automaton, that agreement is evidence you have implemented the wrong machine, not evidence you are right. Establish that your implementation matches the specified order AND stride before any of its output is used as evidence, and prefer your own measurement over any recalled or fetched value whenever the two disagree.
+
+Absence of a highway within a horizon is the weakest possible evidence and is exactly what a long-transient automaton produces. If you claim a rule string never builds a highway, the argument that would settle it is structural — an invariant the trajectory preserves that a highway would have to break — not a longer run.
