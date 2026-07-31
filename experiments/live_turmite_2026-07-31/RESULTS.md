@@ -73,19 +73,67 @@ is advisory text in the prompt rather than a grammar — a rendered pattern
 cannot prevent a violation, only diagnose it. That distinction matters for how
 much any schema encoding can be expected to buy on this transport.
 
-## A second defect, separate from the above
+## The repair loop: not collapse, but oscillation
 
-The repair loop degrades rather than corrects. Completion tokens across the
-`conjecturer.turn.v6` attempts, in order:
+An earlier reading of this run recorded the completion-token sequence
+(2735, 7151, 7150, 78, 38, 25, 67, 19, 32, 38) as the model "collapsing toward
+empty" under accumulating repair prompts. **That was wrong**, and the raw
+blobs say so plainly. The small responses are JSON PATCHES, which is exactly
+what `RepairPatchWireContract` asks for; 19-78 tokens is the correct size for
+one. There is no degradation.
 
-    2735 -> 7151 -> 7150 -> 78 -> 38 -> 25 -> 67 -> 19 -> 32 -> 38
+What actually happened is worse and much more specific. Ordered by attempt,
+the model's `to_ref` values were:
 
-The model starts by answering at length and, as repair prompts accumulate,
-collapses to near-empty responses — ending at `{}` on the atomic fallback.
-Whatever the repair prompt is doing, it is not steering the model toward a
-valid document; it is suppressing output. This is worth its own tranche and is
-NOT explained by the completion cap: every attempt sits far below the 24576
-ceiling, and thinking is off, so it is not hidden-reasoning burn either.
+    attempt 1   "2469e57fb1b8d91d"   rejected: outside the SCR/NEW namespace
+    attempt 2   "NEW_001"            rejected: self-link (from_ref is NEW_001)
+    attempt 3   "2469e57fb1b8d91d"   rejected: namespace again
+    attempt 4   "NEW_001"            rejected: self-link again -> exhausted
+
+The model oscillated between exactly two invalid values. The reason it could
+not escape is structural: the proposal declared exactly ONE new block, so no
+legal `to_ref` existed at all. Every candidate target is either that same
+block — a self-link — or a key the response never declares. The field was
+**unsatisfiable**, and the only correct repair was to remove the link.
+
+The model never tried that, and it had no way to know it should: each
+diagnostic reports the violation of the state the document is currently in, so
+patching away one violation lands it in the other. Nothing in the repair
+channel can say "this field cannot be satisfied; delete the element". The
+model clearly knows the `remove` op — it used it on
+`/simulation_proposals/1` in the same run — so this is a diagnostic gap, not a
+capability gap.
+
+**Fixed** by dropping self-links deterministically at the scratch-proposal
+container rather than refusing the turn from inside a nested link model. A
+self-link is inert: it adds no edge between distinct blocks, so removing it
+cannot change what the graph says. Neither rule is weakened — the link model
+still refuses a directly constructed self-link, and the closed-namespace rule
+still refuses an undeclared target.
+
+**Still open, for the operator.** The general defect remains: a repair
+diagnostic that is locally satisfiable but globally unsatisfiable will loop
+until exhaustion, and the protocol has no way to express "no value works
+here". Dropping self-links removes the one instance that killed this run; it
+does not remove the class. A principled fix would either report the full
+violation set rather than one at a time, or let a diagnostic mark a field
+unsatisfiable so the repair prompt can direct a `remove`.
+
+## The substance: the model got the answer right
+
+The failure was bookkeeping, not mathematics. The candidate the run discarded
+reads:
+
+> CLAIM H is false. The rule string LR provides a structural refutation. Under
+> the (c+1) stride, the rules {L, R} are exact inverses.
+
+`oracle_table.txt` agrees: under these semantics `LR` builds no highway. The
+model also avoided the recall trap — the published unit-stride result for `LR`
+is a highway at period 104, and asserting that would have been the easy wrong
+answer. It reasoned from the specified stride instead.
+
+So the run had a correct refutation of CLAIM H in hand and threw it away over
+a self-referential scratch link.
 
 ## What went right, and should not be lost in the failure
 

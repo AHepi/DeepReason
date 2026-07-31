@@ -444,3 +444,104 @@ def test_legal_handles_are_named_in_the_schema_not_only_enforced_by_the_compiler
             '{"from_handle": "SCR_999", "to_handle": "SCR_001", '
             '"relation_hint": "r"}'
         )
+
+
+def test_a_self_link_is_dropped_rather_than_killing_the_whole_turn():
+    """Regression (turmite run-bc3e8797b3e0609eddb324299c8257bd): a proposal
+    declared exactly ONE new block, so no legal `to_ref` existed — every target
+    is either that same block (a self-link) or a key the response never
+    declares. `_not_a_self_link` raised from inside the nested link model, which
+    rejects the entire conjecture turn, candidates and all.
+
+    The model then oscillated between the two invalid values across four repair
+    attempts — `to_ref` "NEW_001" (self-link), then an out-of-namespace handle,
+    then back — because each diagnostic names only the violation of the state
+    it is in, and nothing ever said the field was unsatisfiable and the link
+    should simply be removed. The route seat exhausted its smallest authorized
+    contract and the run died at cycle 0, discarding a correct refutation it
+    had already written.
+
+    A self-link is inert: it adds no edge between distinct blocks, so dropping
+    it cannot change what the scratch graph says.
+    """
+
+    import pytest
+
+    from deepreason.scratch.proposals import ScratchProposalLinkV1, ScratchProposalV1
+
+    first = {"local_key": "NEW_001", "body": {"content": "a mechanism"}}
+    second = {"local_key": "NEW_002", "body": {"content": "another"}}
+
+    # The exact shape that killed the run: one block, one self-link.
+    proposal = ScratchProposalV1.model_validate(
+        {
+            "new_blocks": (first,),
+            "links": (
+                {
+                    "from_ref": "NEW_001",
+                    "to_ref": "NEW_001",
+                    "relation_hint": "self-consistency check for spiral prediction",
+                },
+            ),
+        }
+    )
+    assert proposal.links == ()
+    assert len(proposal.new_blocks) == 1, "the block must survive the dropped link"
+
+    # A link between distinct blocks is untouched.
+    kept = ScratchProposalV1.model_validate(
+        {
+            "new_blocks": (first, second),
+            "links": (
+                {"from_ref": "NEW_001", "to_ref": "NEW_002", "relation_hint": "revision"},
+            ),
+        }
+    )
+    assert [(l.from_ref, l.to_ref) for l in kept.links] == [("NEW_001", "NEW_002")]
+
+    # Mixed: the self-link goes, the real one stays, and order is preserved.
+    mixed = ScratchProposalV1.model_validate(
+        {
+            "new_blocks": (first, second),
+            "links": (
+                {"from_ref": "NEW_001", "to_ref": "NEW_001", "relation_hint": "x"},
+                {"from_ref": "NEW_001", "to_ref": "NEW_002", "relation_hint": "y"},
+            ),
+        }
+    )
+    assert [(l.from_ref, l.to_ref) for l in mixed.links] == [("NEW_001", "NEW_002")]
+
+    # The judgement still exists on the link; only the DISPOSAL moved. It
+    # cannot be a raise there: a nested raise aborts the whole model, which is
+    # exactly the behaviour being removed.
+    assert ScratchProposalLinkV1(
+        from_ref="NEW_001", to_ref="NEW_001", relation_hint="x"
+    ).is_self_link
+    assert not ScratchProposalLinkV1(
+        from_ref="NEW_001", to_ref="NEW_002", relation_hint="x"
+    ).is_self_link
+
+    # A self-link naming an UNDECLARED key is dropped before the namespace
+    # check, so ordering cannot turn the drop into a smuggling route: the link
+    # is gone, and it contributes no reference either way.
+    stray = ScratchProposalV1.model_validate(
+        {
+            "new_blocks": (first,),
+            "links": (
+                {"from_ref": "NEW_009", "to_ref": "NEW_009", "relation_hint": "x"},
+            ),
+        }
+    )
+    assert stray.links == ()
+
+    # And the closed-namespace rule still refuses an undeclared target: this
+    # change must not become a way to smuggle unknown keys past admission.
+    with pytest.raises(Exception):
+        ScratchProposalV1.model_validate(
+            {
+                "new_blocks": (first,),
+                "links": (
+                    {"from_ref": "NEW_001", "to_ref": "NEW_009", "relation_hint": "x"},
+                ),
+            }
+        )

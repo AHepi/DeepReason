@@ -67,11 +67,16 @@ class ScratchProposalLinkV1(ScratchProposalModel):
     weakens_when: str | None = Field(default=None, min_length=1, max_length=262_144)
     direction: Literal["directed", "symmetric"] | None = None
 
-    @model_validator(mode="after")
-    def _not_a_self_link(self):
-        if self.from_ref == self.to_ref:
-            raise ValueError("scratch proposal links must connect distinct blocks")
-        return self
+    @property
+    def is_self_link(self) -> bool:
+        """A link from a block to itself, which carries no edge.
+
+        Refusing this from here would abort the entire enclosing turn, so the
+        judgement lives here and the DISPOSAL lives on the container, which is
+        the only place an element can actually be removed.
+        """
+
+        return self.from_ref == self.to_ref
 
 
 class ScratchQuestionDraftV1(ScratchProposalModel):
@@ -122,6 +127,35 @@ class ScratchProposalV1(ScratchProposalModel):
     cluster_suggestions: tuple[ScratchClusterSuggestionV1, ...] = Field(
         default=(), max_length=32
     )
+
+    @model_validator(mode="after")
+    def _drop_self_links(self):
+        """Discard a link from a block to itself instead of refusing the turn.
+
+        A self-link carries nothing, but refusing it used to abort the WHOLE
+        conjecture turn, candidates and all, because the refusal was raised
+        from inside a nested item.
+
+        Not hypothetical. In run-bc3e8797b3e0609eddb324299c8257bd a proposal
+        declared exactly one new block, so no legal `to_ref` existed — every
+        target is either that same block (a self-link) or a key the response
+        never declares. The model oscillated between the two invalid values
+        across four repair attempts, because each diagnostic names only the
+        violation of the state the document is in, and nothing could say the
+        field was unsatisfiable and the link should go. The seat exhausted its
+        smallest authorized contract and the run died at cycle 0, discarding a
+        correct refutation it had already written.
+
+        Dropping is safe because a self-link is inert by construction: it adds
+        no edge between distinct blocks, so removing it cannot change what the
+        scratch graph says. This runs BEFORE `_local_namespace_is_closed` so a
+        dropped link stops contributing references to the namespace check.
+        """
+
+        kept = tuple(link for link in self.links if not link.is_self_link)
+        if len(kept) != len(self.links):
+            object.__setattr__(self, "links", kept)
+        return self
 
     @model_validator(mode="after")
     def _local_namespace_is_closed(self):
