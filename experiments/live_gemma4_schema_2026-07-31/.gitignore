@@ -1,0 +1,5 @@
+# Provider profile and qualification cache are machine-local run state, not
+# evidence: the profile carries a credential reference and the cache is keyed
+# by a subject digest that does not cover schema bytes, so committing it would
+# invite a future run to reuse a verdict that no longer describes the contracts.
+home/
