@@ -25,7 +25,7 @@ Traces to REQUEST.md. R6 applies throughout: commit locally, never push.
       request identifier; with simulation disabled it is byte-identical
       to the pre-change render.
 
-- [ ] S3 (R4, P2) — binding rule: refuse to launch when the provider
+- [x] S3 (R4, P2) — binding rule: refuse to launch when the provider
       realises a reasoning knob and thinking is not off.
       Sites: `src/deepreason/llm/providers.py` (availability predicate +
       the off token, beside `REASONING_ADAPTERS` which already knows which
@@ -101,3 +101,33 @@ The contract text is not re-worded for the critic: the note is built from
 `SIMULATION_REQUESTED_OBSERVABLES_CONTRACT`, the same two constants the
 conjecturer's JSON schema carries, so the rule the critic is told and the
 rule the harness enforces cannot drift into two wordings (R3).
+
+## S3 done-criterion output
+
+    availability (provider -> knob realized)
+      ollama True | openai True | deepseek True | generic False | vllm False
+    off-detection
+      None False | "none" True | "None" True | " NONE " True
+      "low" False | "high" False | 0 False | 2000 False
+
+    ollama profile, reasoning: null
+      $ deepreason reason --token-budget 1000 "test"
+      REASONING_MUST_BE_DISABLED: provider 'ollama' realizes the reasoning
+      knob and this profile has reasoning=None, which does not switch
+      thinking off (unset sends no reasoning field, so the model thinks by
+      default). Re-run setup with --reasoning none.
+      exit 1
+
+    same profile rewritten with reasoning: none  (digest e800ce9c13e48f6e,
+    exactly as SPEC F6 predicted)
+      $ deepreason reason --token-budget 1000 "test"
+      QUALIFICATION_NOT_CONFIGURED: no completed reusable qualification
+      exists for this exact subject
+
+The rule stops firing and the launch proceeds to the next check. That
+second message is also the empirical confirmation of the R7 conflict: with
+thinking off, this subject has no completed qualification.
+
+`generic` and any unlisted provider are unaffected, so the rule binds only
+where the knob is real. It binds on LAUNCH (`reason`, `qualify`) and never
+on profile load, so every committed run root still reopens.

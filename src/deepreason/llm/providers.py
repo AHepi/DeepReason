@@ -64,6 +64,35 @@ def _no_reasoning_knob(value) -> dict:
     return {}
 
 
+# The neutral vocabulary's off token. Every adapter above maps it to the
+# provider's own most-off setting (OpenAI has no "none", so it takes
+# "minimal"); a provider with no adapter cannot be asked at all.
+REASONING_OFF = "none"
+
+
+def reasoning_knob_available(provider: str) -> bool:
+    """Whether this provider realizes the neutral reasoning knob at all.
+
+    Availability is decidable here rather than by probing the endpoint: a
+    provider whose adapter is the no-op cannot carry the request, so asking
+    it to disable thinking is meaningless.
+    """
+
+    return REASONING_ADAPTERS.get(provider, _no_reasoning_knob) is not _no_reasoning_knob
+
+
+def reasoning_disabled(value) -> bool:
+    """Whether a neutral reasoning value actually switches thinking off.
+
+    Unset is NOT off. A profile carrying ``None`` sends no reasoning field,
+    and a reasoning model then thinks by default — measured on glm-5.2 via
+    Ollama Cloud, where an unset knob returned a populated reasoning payload
+    and "none" returned an empty one.
+    """
+
+    return value is not None and str(value).strip().casefold() == REASONING_OFF
+
+
 REASONING_ADAPTERS = {
     "deepseek": _deepseek_reasoning,
     "openai": _openai_reasoning,

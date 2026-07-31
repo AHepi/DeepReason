@@ -1531,6 +1531,12 @@ def _cmd_qualify(args) -> int:
             raise QualificationError(
                 "PROVIDER_CREDENTIAL_MISSING", "configured provider credential is absent"
             )
+        # The battery spends provider calls, so it is a launch too: qualifying
+        # a thinking-on profile would certify behavior the run may not use.
+        refusal = _reasoning_disabled_refusal(args.provider_profile)
+        if refusal is not None:
+            print(refusal, file=sys.stderr)
+            return 1
         manifest = qualification_subject_manifest(
             profile,
             attached_evidence=bool(getattr(args, "attached_evidence", False)),
@@ -1798,6 +1804,41 @@ def _cmd_admit(args) -> int:
     return 0
 
 
+def _reasoning_disabled_refusal(provider_profile) -> str | None:
+    """Refuse to spend provider calls while hidden reasoning is left on.
+
+    Binding rule: when the provider realizes the neutral reasoning knob, the
+    profile must switch it off. Unset is not off — a reasoning model with no
+    reasoning field sent thinks by default and can burn the entire completion
+    cap before emitting a token (recorded: a conjecture turn returning
+    completion_tokens exactly equal to the cap, with no candidate).
+
+    Enforced at LAUNCH, never on load: an already-committed profile stays
+    readable, so every existing run root still reopens and replays.
+    """
+
+    from deepreason.llm.providers import reasoning_disabled, reasoning_knob_available
+    from deepreason.provider_profile import resolve_provider_profile
+
+    try:
+        profile = resolve_provider_profile(provider_profile).profile
+    except Exception:
+        # Profile resolution problems are reported by the paths that own
+        # them; this rule speaks only about the reasoning knob.
+        return None
+    if not reasoning_knob_available(profile.provider):
+        return None
+    if reasoning_disabled(profile.reasoning):
+        return None
+    return (
+        "REASONING_MUST_BE_DISABLED: provider "
+        f"{profile.provider!r} realizes the reasoning knob and this profile "
+        f"has reasoning={profile.reasoning!r}, which does not switch thinking "
+        "off (unset sends no reasoning field, so the model thinks by "
+        "default). Re-run setup with --reasoning none."
+    )
+
+
 def _cmd_reason(args) -> int:
     """Prepare one question and execute it through the shared V6 application."""
 
@@ -1815,6 +1856,10 @@ def _cmd_reason(args) -> int:
 
     if args.root != ".deepreason":
         print("PUBLIC_REASON_ROOT_FORBIDDEN: managed run paths are host-owned", file=sys.stderr)
+        return 1
+    refusal = _reasoning_disabled_refusal(getattr(args, "provider_profile", None))
+    if refusal is not None:
+        print(refusal, file=sys.stderr)
         return 1
     cycles = args.cycles if args.cycles is not None else PUBLIC_DEFAULT_CYCLES
     tokens = (
