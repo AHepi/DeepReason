@@ -533,8 +533,12 @@ class ResearchFetchProposalDraftV1(_FrozenModel):
     request_identifier: str = Field(min_length=1, max_length=128)
     purpose: str = Field(min_length=1, max_length=2_000)
     urls: tuple[str, ...] = Field(
-        min_length=1, max_length=3,
-        json_schema_extra=_UNIQUE_ITEMS,
+        min_length=1,
+        max_length=3,
+        json_schema_extra={
+            **_UNIQUE_ITEMS,
+            "items": {"type": "string", "pattern": _HTTPS_URL},
+        },
     )
 
     @field_validator("urls")

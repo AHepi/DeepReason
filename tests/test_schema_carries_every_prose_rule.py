@@ -154,3 +154,142 @@ def test_every_cross_field_validator_has_a_schema_encoding():
                 unencoded.append(f"{relative}:{class_name} -> {encoder}")
 
     assert unencoded == [], unencoded
+
+
+def test_alias_bearing_fields_name_their_legal_values_in_the_schema():
+    """Regression (20B battery, 2026-07-31): the first failures a small model
+    produced were handle and namespace violations — aliases invented in the
+    right shape but outside the call-local table. `AliasTable.resolve` refuses
+    anything outside it, so the legal set is known at render time and there is
+    no reason to make the model infer it from the prompt.
+
+    Binding is skipped for an empty table: an empty enum is unsatisfiable, and
+    a contract with no aliases cannot be answered anyway.
+    """
+
+    import jsonschema
+    import pytest
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        CriticWireContract,
+        DefenderWireContract,
+        JudgeWireContract,
+        PairwiseJudgeWireContract,
+        SynthesizerWireContract,
+    )
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+    aliases = AliasTable(aliases={"A1": "art-1", "B1": "art-2"})
+
+    cases = (
+        (
+            "critic",
+            CriticWireContract(aliases=aliases, expected_target="art-1"),
+            {"attack": True, "target_alias": "A1", "cited_input_aliases": ["A1"]},
+            {"attack": True, "target_alias": "A1", "cited_input_aliases": ["Z9"]},
+        ),
+        (
+            "judge",
+            JudgeWireContract(aliases),
+            {"decision": "pass", "decisive_point_alias": "A1"},
+            {"decision": "pass", "decisive_point_alias": "Z9"},
+        ),
+        (
+            "pairwise",
+            PairwiseJudgeWireContract(aliases),
+            {"winner": "A", "decisive_point_alias": "B1"},
+            {"winner": "A", "decisive_point_alias": "Z9"},
+        ),
+        (
+            "synthesizer",
+            SynthesizerWireContract(aliases),
+            {"relation": "r", "depends_on": ["A1"]},
+            {"relation": "r", "depends_on": ["Z9"]},
+        ),
+    )
+    disagreements = []
+    for label, contract, legal, illegal in cases:
+        schema = contract.model_json_schema()
+        for document, expected in ((legal, True), (illegal, False)):
+            try:
+                jsonschema.validate(document, schema)
+                by_schema = True
+            except jsonschema.ValidationError:
+                by_schema = False
+            try:
+                contract.compile(contract.wire_model.model_validate(document))
+                by_compiler = True
+            except Exception:
+                by_compiler = False
+            if not (by_schema == by_compiler == expected):
+                disagreements.append((label, document, by_schema, by_compiler, expected))
+
+    assert disagreements == [], disagreements
+
+    # An alias field on a nested item model must be bound too; the defender's
+    # clauses are a $def, and binding only the response root missed them.
+    definitions = DefenderWireContract(aliases=aliases).model_json_schema()["$defs"]
+    bound = [
+        definition["properties"]["item_alias"]
+        for definition in definitions.values()
+        if isinstance(definition, dict) and "item_alias" in definition.get("properties", {})
+    ]
+    assert bound and all(field.get("enum") == ["A1", "B1"] for field in bound), bound
+
+    # `neither` needs no located point, so an empty-string default has to stay
+    # legal or the encoding would forbid the verdict it exists to allow.
+    pairwise = PairwiseJudgeWireContract(aliases).model_json_schema()
+    assert pairwise["properties"]["decisive_point_alias"]["enum"] == ["", "A1", "B1"]
+
+    # No aliases: leave the field open rather than emit an impossible schema.
+    open_schema = JudgeWireContract(AliasTable()).model_json_schema()
+    assert "enum" not in open_schema["properties"]["decisive_point_alias"]
+
+
+def test_identifier_namespaces_are_patterns_not_only_prose():
+    """`_visible_alias_syntax`, `_local_refs`, `_members_are_local` and
+    `_https_and_unique` each enforce a namespace in Python that the schema did
+    not state. `items` REPLACES the rendered subschema rather than merging, so
+    every one of these restates `type: string` — `pattern` constrains only
+    strings, and a bare number would otherwise slip past it.
+    """
+
+    from deepreason.capabilities.models import ResearchFetchProposalDraftV1
+    from deepreason.llm.wire import (
+        ContextRequestWireV1,
+        ContextRequestWireV2,
+        ResearchFetchProposalWireV1,
+    )
+    from deepreason.scratch.proposals import (
+        ScratchClusterSuggestionV1,
+        ScratchQuestionDraftV1,
+    )
+
+    expected = {
+        (ContextRequestWireV1, "requested_visible_aliases"): r"^[ABCLG][1-9][0-9]{0,4}$",
+        (ContextRequestWireV2, "requested_visible_aliases"): r"^(?:SRC|SCR)_[0-9]{3}$",
+        (ScratchQuestionDraftV1, "related_refs"): r"^(?:SCR|NEW)_[0-9]{3,}$",
+        (ScratchClusterSuggestionV1, "member_refs"): r"^(?:SCR|NEW)_[0-9]{3,}$",
+        (ResearchFetchProposalDraftV1, "urls"): r"^https://[^\s]{1,2048}$",
+        (ResearchFetchProposalWireV1, "urls"): r"^https://[^\s]{1,2048}$",
+    }
+    for (model, field), pattern in expected.items():
+        items = model.model_json_schema()["properties"][field]["items"]
+        assert items.get("pattern") == pattern, (model.__name__, field, items)
+        assert items.get("type") == "string", (model.__name__, field, items)
+
+    # The research wire model claimed to mirror its draft and did not: a
+    # non-https or duplicated URL passed the wire and died in compile().
+    for urls, admissible in (
+        (["https://a.example/x"], True),
+        (["http://a.example/x"], False),
+        (["https://a.example/x", "https://a.example/x"], False),
+    ):
+        payload = {"request_identifier": "r", "purpose": "p", "urls": urls}
+        try:
+            ResearchFetchProposalWireV1.model_validate(payload)
+            accepted = True
+        except Exception:
+            accepted = False
+        assert accepted is admissible, urls

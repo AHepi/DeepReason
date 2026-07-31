@@ -25,6 +25,14 @@ V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION = (
 )
 
 
+_LOCAL_SCRATCH_REF = r"^(?:SCR|NEW)_[0-9]{3,}$"
+_LOCAL_REF_ITEMS = {"type": "string", "pattern": _LOCAL_SCRATCH_REF}
+"""The namespace `_local_refs`/`_members_are_local` enforce, said in the schema.
+
+`items` REPLACES the rendered one, so the type is restated: `pattern`
+constrains only strings and a number would otherwise slip past it.
+"""
+
 _UNIQUE_ITEMS = {"uniqueItems": True}
 """Duplicates are refused by the ref validators below."""
 
@@ -69,7 +77,9 @@ class ScratchProposalLinkV1(ScratchProposalModel):
 class ScratchQuestionDraftV1(ScratchProposalModel):
     question: str = Field(min_length=1, max_length=262_144)
     related_refs: tuple[str, ...] = Field(
-        default=(), max_length=64, json_schema_extra=_UNIQUE_ITEMS
+        default=(),
+        max_length=64,
+        json_schema_extra={**_UNIQUE_ITEMS, "items": _LOCAL_REF_ITEMS},
     )
 
     @field_validator("related_refs")
@@ -85,7 +95,9 @@ class ScratchQuestionDraftV1(ScratchProposalModel):
 class ScratchClusterSuggestionV1(ScratchProposalModel):
     seed_focus: str = Field(min_length=1, max_length=262_144)
     member_refs: tuple[str, ...] = Field(
-        min_length=1, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+        min_length=1,
+        max_length=64,
+        json_schema_extra={**_UNIQUE_ITEMS, "items": _LOCAL_REF_ITEMS},
     )
 
     @field_validator("member_refs")

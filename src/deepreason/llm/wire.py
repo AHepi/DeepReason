@@ -866,8 +866,59 @@ class WireContract(Generic[CanonicalOutput]):
         self.aliases = aliases or AliasTable()
         self.variant = variant
 
+    #: Fields whose values must be call-local aliases. Named here so the
+    #: schema can state the legal set instead of leaving the model to guess
+    #: it from the prompt, which is where the 20B battery's handle and
+    #: namespace violations came from.
+    ALIAS_ARRAY_FIELDS: tuple[str, ...] = ()
+    ALIAS_SCALAR_FIELDS: tuple[str, ...] = ()
+
     def model_json_schema(self) -> dict:
-        return _strict_schema(self.wire_model.model_json_schema())
+        schema = _strict_schema(self.wire_model.model_json_schema())
+        self._bind_alias_fields(schema)
+        return schema
+
+    def _bind_alias_fields(self, schema: dict) -> None:
+        """Name the legal aliases in the schema, as an enum.
+
+        `AliasTable.resolve` refuses anything outside the table, so the legal
+        set is known at render time and there is no reason to make the model
+        infer it. Binding is skipped when the table is empty: an empty enum is
+        unsatisfiable, and a contract with no aliases cannot be answered
+        anyway — better to leave the field open than to emit a schema no
+        document can satisfy.
+        """
+
+        legal = sorted(self.aliases.aliases)
+        if not legal:
+            return
+        # An alias-bearing field is as often on a nested item model as on the
+        # response root — the defender's clauses are a $def — so every
+        # property map in the document is a candidate.
+        maps = [schema.get("properties", {})]
+        maps.extend(
+            definition.get("properties", {})
+            for definition in schema.get("$defs", {}).values()
+            if isinstance(definition, dict)
+        )
+        for name in self.ALIAS_ARRAY_FIELDS:
+            for properties in maps:
+                field = properties.get(name)
+                if isinstance(field, dict):
+                    field["items"] = {"type": "string", "enum": list(legal)}
+        for name in self.ALIAS_SCALAR_FIELDS:
+            for properties in maps:
+                field = properties.get(name)
+                if not isinstance(field, dict):
+                    continue
+                # A field defaulting to "" uses the empty string to mean "no
+                # alias", so the enum must keep it or the default becomes
+                # illegal — the pairwise judge's `neither` verdict needs it.
+                values = list(legal)
+                if field.get("default") == "":
+                    values = ["", *values]
+                field["enum"] = values
+                field["type"] = "string"
 
     def _preflight_value(self, value: Any) -> None:
         """Apply transport firewalls before contract-specific validation."""
@@ -1220,6 +1271,15 @@ class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput])
         return ReasoningConjecturerOutput(candidates=tuple(candidates))
 
 
+_HTTPS_URL = r"^https://[^\s]{1,2048}$"
+_V1_VISIBLE_ALIAS = r"^[ABCLG][1-9][0-9]{0,4}$"
+_V2_VISIBLE_ALIAS = r"^(?:SRC|SCR)_[0-9]{3}$"
+"""The alias namespaces `_visible_alias_syntax` enforces, said in the schema.
+
+A namespace stated only in prose is the failure the 20B battery produced
+first: handles invented in the right shape but the wrong namespace.
+"""
+
 _UNIQUE_ITEMS = {"uniqueItems": True}
 """Duplicates are refused by `_unique_values`; the schema must say so too."""
 
@@ -1244,7 +1304,14 @@ class ContextRequestWireV1(StrictWireModel):
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
     requested_visible_aliases: list[str] = Field(
-        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+        default_factory=list,
+        max_length=64,
+        json_schema_extra={
+            **_UNIQUE_ITEMS,
+            # `items` REPLACES the rendered one, so the type must be restated:
+            # `pattern` constrains only strings and a number would slip past it.
+            "items": {"type": "string", "pattern": _V1_VISIBLE_ALIAS},
+        },
     )
     desired_retrieval_channels: list[str] = Field(
         default_factory=list, max_length=16, json_schema_extra=_UNIQUE_ITEMS
@@ -1290,7 +1357,12 @@ class ContextRequestWireV2(StrictWireModel):
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
     requested_visible_aliases: list[str] = Field(
-        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+        default_factory=list,
+        max_length=64,
+        json_schema_extra={
+            **_UNIQUE_ITEMS,
+            "items": {"type": "string", "pattern": _V2_VISIBLE_ALIAS},
+        },
     )
     desired_retrieval_channels: list[str] = Field(
         default_factory=list, max_length=16, json_schema_extra=_UNIQUE_ITEMS
@@ -1594,14 +1666,31 @@ class ResearchFetchProposalWireV1(StrictWireModel):
 
     The model proposes sources; the harness alone validates them against
     the frozen domain allowlist and executes them under containment. The
-    wire shape mirrors ResearchFetchProposalDraftV1 exactly.
+    wire shape mirrors ResearchFetchProposalDraftV1 exactly — which it did
+    not: the draft rejects a non-https or duplicated URL and the wire took
+    both, so the refusal landed in compile() after the response had been
+    accepted, and the schema advertised neither rule.
     """
 
     request_identifier: str = Field(min_length=1, max_length=128)
     purpose: str = Field(min_length=1, max_length=2_000)
     urls: list[str] = Field(
-        min_length=1, max_length=3, json_schema_extra=_UNIQUE_ITEMS
+        min_length=1,
+        max_length=3,
+        json_schema_extra={
+            **_UNIQUE_ITEMS,
+            "items": {"type": "string", "pattern": _HTTPS_URL},
+        },
     )
+
+    @field_validator("urls")
+    @classmethod
+    def _https_and_unique(cls, value):
+        if len(value) != len(set(value)):
+            raise ValueError("research proposal urls must not contain duplicates")
+        if any(re.fullmatch(_HTTPS_URL, url) is None for url in value):
+            raise ValueError("research proposal urls must be bounded https URLs")
+        return value
 
 
 class ConjecturerTurnWireV5(ConjecturerTurnWireV4):
@@ -2351,6 +2440,8 @@ class CompactCritic(StrictWireModel):
 
 
 class CriticWireContract(WireContract[ArgumentativeCriticOutput]):
+    ALIAS_ARRAY_FIELDS = ("cited_input_aliases",)
+
     def __init__(self, aliases: AliasTable, expected_target: str) -> None:
         # Bind the target in the model-visible schema as well as checking it
         # during compilation.  A critic may cite any exposed input alias, but
@@ -2412,6 +2503,8 @@ class CompactDefender(StrictWireModel):
 
 
 class DefenderWireContract(WireContract[DefenderOutput]):
+    ALIAS_SCALAR_FIELDS = ("item_alias",)
+
     def __init__(self, aliases: AliasTable) -> None:
         super().__init__(
             "defender.compact.v1",
@@ -2436,6 +2529,8 @@ class CompactJudge(StrictWireModel):
 
 
 class JudgeWireContract(WireContract[JudgeRuling]):
+    ALIAS_SCALAR_FIELDS = ("decisive_point_alias",)
+
     def __init__(self, aliases: AliasTable) -> None:
         super().__init__(
             "judge.compact.v1",
@@ -2455,6 +2550,19 @@ class JudgeWireContract(WireContract[JudgeRuling]):
 
 
 class CompactPairwiseJudge(StrictWireModel):
+    # "neither" is the only verdict that needs no located point, so the rule
+    # is one clause over its complement — both named winners.
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=discriminated_shape_schema(
+            ShapeClause(
+                when=FieldIn("winner", ("A", "B")),
+                requires=("decisive_point_alias",),
+            )
+        ),
+    )
+
     winner: Literal["A", "B", "neither"]
     decisive_point_alias: str = ""
 
@@ -2466,6 +2574,8 @@ class CompactPairwiseJudge(StrictWireModel):
 
 
 class PairwiseJudgeWireContract(WireContract[PairwiseRuling]):
+    ALIAS_SCALAR_FIELDS = ("decisive_point_alias",)
+
     def __init__(self, aliases: AliasTable) -> None:
         super().__init__(
             "judge_pairwise.compact.v1",
@@ -2512,6 +2622,8 @@ class CompactSynthesizer(StrictWireModel):
 
 
 class SynthesizerWireContract(WireContract[SynthesizerOutput]):
+    ALIAS_ARRAY_FIELDS = ("depends_on",)
+
     def __init__(self, aliases: AliasTable) -> None:
         super().__init__(
             "synthesizer.compact.v1",
