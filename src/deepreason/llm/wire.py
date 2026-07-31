@@ -176,6 +176,54 @@ def _resolve_ref(node: dict, root: dict) -> dict:
     return current if isinstance(current, dict) else node
 
 
+def exclusive_fields_schema(*groups: tuple[str, ...]):
+    """Encode "exactly one field per group" INTO the JSON Schema.
+
+    A cross-field rule that lives only in a ``model_validator`` is invisible
+    to a model reading the schema as its source of structural truth: the
+    schema says every field is optional and nullable, the validator says
+    exactly one is legal, and with reasoning disabled the schema wins.
+    Measured on glm-5.2 with thinking off, one such rule cost 11/20 then
+    9/20 first-pass valid and failed production qualification twice.
+
+    Two encoding constraints, both learned the hard way:
+
+    * Groups are INDEPENDENT. A rule over two endpoints is two groups, not
+      one ``oneOf`` over paired required lists — pairing forbids the legal
+      mixed form.
+    * Branches carry ``required`` ONLY. ``_strict_schema`` below closes
+      every subschema holding a ``properties`` key, so a branch written
+      with ``properties`` becomes an object that rejects its siblings.
+
+    ``null`` is stripped from the named fields so ``required`` means
+    "present and usable"; otherwise an explicit null satisfies ``required``
+    and violates the rule anyway. Python models keep accepting ``None``, so
+    this narrows what the model is TOLD and never what the harness admits.
+    """
+
+    def apply(schema: dict) -> None:
+        properties = schema.get("properties", {})
+        for group in groups:
+            for name in group:
+                field = properties.get(name)
+                if not isinstance(field, dict):
+                    continue
+                concrete = [
+                    option
+                    for option in field.get("anyOf", ())
+                    if isinstance(option, dict) and option.get("type") != "null"
+                ]
+                if len(concrete) == 1:
+                    field.pop("anyOf", None)
+                    field.pop("default", None)
+                    field.update(concrete[0])
+        schema["allOf"] = [
+            {"oneOf": [{"required": [name]} for name in group]} for group in groups
+        ]
+
+    return apply
+
+
 def _strict_schema(node: Any, root: dict | None = None) -> Any:
     """Mark every model-visible object as closed, including $defs."""
     result = copy.deepcopy(node)
@@ -361,7 +409,16 @@ class ConjecturerWireContract(WireContract[ConjecturerOutput]):
 
 
 class AtomicConjectureCandidateWireV1(StrictWireModel):
-    """One bounded candidate slot or an honest no-candidate outcome."""
+    """One bounded candidate slot or an honest no-candidate outcome.
+
+    The exactly-one rule is in the schema, not only in the validator below.
+    """
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=exclusive_fields_schema(("candidate", "abstention")),
+    )
 
     candidate: CompactConjectureCandidate | None = None
     abstention: ConjectureAbstentionV1 | None = None
@@ -376,7 +433,16 @@ class AtomicConjectureCandidateWireV1(StrictWireModel):
 
 
 class AtomicReasoningConjectureCandidateWireV1(StrictWireModel):
-    """One bounded reasoning-envelope candidate or honest abstention."""
+    """One bounded reasoning-envelope candidate or honest abstention.
+
+    The exactly-one rule is in the schema, not only in the validator below.
+    """
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra=exclusive_fields_schema(("candidate", "abstention")),
+    )
 
     candidate: ReasoningCandidateProposal | None = None
     abstention: ConjectureAbstentionV1 | None = None

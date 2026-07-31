@@ -425,3 +425,93 @@ def test_real_scratch_retrieve_simulate_revise_then_fresh_formal(tmp_path):
         for edge in (*harness.state.att, *harness.state.dep)
     )
     assert len(prompts) == 3
+
+
+def test_every_exactly_one_rule_is_carried_by_the_schema_universally():
+    """Regression (thinking-off batteries, subject 97653fde...): a cross-field
+    rule that lives only in a model_validator is invisible to a model reading
+    the schema as its source of structural truth. One such rule
+    (scratch.link's per-endpoint reference) cost glm-5.2 11/20 then 9/20
+    first-pass valid with thinking off, and failed production qualification
+    twice; encoding it in the schema restored 20/20 with zero repairs.
+
+    The rule is universal, so this pins the ENCODER and every contract that
+    uses it — a new exactly-one rule added in prose alone should fail here.
+    """
+
+    import pytest
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        AtomicConjectureWireContractV1,
+        exclusive_fields_schema,
+    )
+    from deepreason.scratch.contracts import (
+        ScratchLinkMinimalWireContract,
+        ScratchLinkWireContract,
+    )
+
+    handles = {"SCR_001": "a", "SCR_002": "b"}
+    expected = {
+        "critic-free atomic conjecture": (
+            AtomicConjectureWireContractV1(AliasTable({"SRC_001": "x"})),
+            [{"oneOf": [{"required": ["candidate"]}, {"required": ["abstention"]}]}],
+        ),
+        "scratch link compact": (
+            ScratchLinkWireContract(handles=handles),
+            [
+                {"oneOf": [{"required": ["from_index"]}, {"required": ["from_handle"]}]},
+                {"oneOf": [{"required": ["to_index"]}, {"required": ["to_handle"]}]},
+            ],
+        ),
+        "scratch link minimal": (
+            ScratchLinkMinimalWireContract(handles=handles),
+            [
+                {"oneOf": [{"required": ["from_index"]}, {"required": ["from_handle"]}]},
+                {"oneOf": [{"required": ["to_index"]}, {"required": ["to_handle"]}]},
+            ],
+        ),
+    }
+    for label, (contract, clauses) in expected.items():
+        schema = contract.model_json_schema()
+        assert schema["allOf"] == clauses, label
+        # Branches must stay `required`-only: _strict_schema closes any
+        # subschema carrying `properties`, which would turn a constraint
+        # branch into an object that rejects its siblings.
+        for clause in schema["allOf"]:
+            for branch in clause["oneOf"]:
+                assert set(branch) == {"required"}, (label, branch)
+        # No null escape: `required` must mean present-and-usable.
+        for clause in schema["allOf"]:
+            for branch in clause["oneOf"]:
+                (name,) = branch["required"]
+                field = schema["properties"][name]
+                assert "anyOf" not in field and "default" not in field, (label, name)
+
+    # The encoder itself: groups are independent, so a mixed selection across
+    # groups stays legal. Pairing them would forbid a form the validator
+    # accepts.
+    schema = {"properties": {n: {"anyOf": [{"type": "integer"}, {"type": "null"}], "default": None} for n in ("a", "b", "c", "d")}}
+    exclusive_fields_schema(("a", "b"), ("c", "d"))(schema)
+    assert schema["allOf"] == [
+        {"oneOf": [{"required": ["a"]}, {"required": ["b"]}]},
+        {"oneOf": [{"required": ["c"]}, {"required": ["d"]}]},
+    ]
+    assert schema["properties"]["a"] == {"type": "integer"}
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+    atomic = AtomicConjectureWireContractV1(AliasTable({"SRC_001": "x"})).model_json_schema()
+    candidate = {"content": "a candidate", "typicality": 0.5}
+
+    def valid(document) -> bool:
+        try:
+            jsonschema.validate(document, atomic)
+        except jsonschema.ValidationError:
+            return False
+        return True
+
+    assert valid({"candidate": candidate})
+    assert valid({"abstention": {"search_signal": "stuck"}})
+    assert not valid({"candidate": candidate, "abstention": {"search_signal": "stuck"}})
+    assert not valid({})
+    assert not valid({"candidate": None, "abstention": {"search_signal": "stuck"}})

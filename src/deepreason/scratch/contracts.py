@@ -14,7 +14,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from deepreason.llm.wire import AliasTable, WireContract
+from deepreason.llm.wire import AliasTable, WireContract, exclusive_fields_schema
 from deepreason.ontology.frozen import FrozenList, FrozenRecord
 from deepreason.scratch.models import HashRef, ScratchBlockBodyV1, ScratchLinkBodyV1
 
@@ -83,54 +83,6 @@ class ScratchBlockWireV1(ScratchWireModel):
         return _nonblank(value)
 
 
-def _endpoint_exclusion_schema(schema: dict) -> None:
-    """Encode the per-endpoint reference rule INTO the JSON Schema.
-
-    The rule was prose only: the class docstring said exactly one
-    representation is legal per endpoint while the schema left all four
-    reference fields independently optional and nullable. A model reading
-    the schema as the source of structural truth could satisfy it and still
-    fail `_require_one_reference_per_endpoint`, which is a defect in the
-    contract specification rather than in the model. Measured on glm-5.2
-    with thinking off: 11/20 then 9/20 first-pass valid, 18 then 22 repairs.
-
-    Two encoding constraints the obvious version gets wrong:
-
-    * The rule is PER ENDPOINT, not per pair. ``from_index`` with
-      ``to_handle`` is legal, so a single ``oneOf`` over paired required
-      lists would reject valid links.
-    * Branches must carry ``required`` ONLY. ``_strict_schema``
-      (``llm/wire.py``) sets ``additionalProperties: false`` on every
-      subschema holding a ``properties`` key, so a branch written with
-      ``properties`` becomes a closed object that rejects ``relation_hint``.
-
-    Null is dropped from the four reference fields so that ``required``
-    means "present and usable": with a nullable type, a model could satisfy
-    ``required`` by emitting an explicit null and violate the rule anyway.
-    The Python models still accept ``None``, so this narrows only what the
-    model is TOLD, never what the harness admits.
-    """
-
-    properties = schema.get("properties", {})
-    for name in ("from_index", "to_index", "from_handle", "to_handle"):
-        field = properties.get(name)
-        if not isinstance(field, dict):
-            continue
-        concrete = [
-            option
-            for option in field.get("anyOf", ())
-            if isinstance(option, dict) and option.get("type") != "null"
-        ]
-        if len(concrete) == 1:
-            field.pop("anyOf", None)
-            field.pop("default", None)
-            field.update(concrete[0])
-    schema["allOf"] = [
-        {"oneOf": [{"required": ["from_index"]}, {"required": ["from_handle"]}]},
-        {"oneOf": [{"required": ["to_index"]}, {"required": ["to_handle"]}]},
-    ]
-
-
 def _require_one_reference_per_endpoint(link) -> None:
     """Report every violated endpoint in one message, not just the first.
 
@@ -182,7 +134,11 @@ class ScratchLinkWireV1(ScratchWireModel):
     model_config = ConfigDict(
         extra="forbid",
         strict=True,
-        json_schema_extra=_endpoint_exclusion_schema,
+        # One rule, one mechanism: the same encoder every other contract
+        # uses. Two groups because the endpoints are independent.
+        json_schema_extra=exclusive_fields_schema(
+            ("from_index", "from_handle"), ("to_index", "to_handle")
+        ),
     )
 
     from_index: LocalIndex | None = None
@@ -221,7 +177,11 @@ class ScratchLinkMinimalWireV1(ScratchWireModel):
     model_config = ConfigDict(
         extra="forbid",
         strict=True,
-        json_schema_extra=_endpoint_exclusion_schema,
+        # One rule, one mechanism: the same encoder every other contract
+        # uses. Two groups because the endpoints are independent.
+        json_schema_extra=exclusive_fields_schema(
+            ("from_index", "from_handle"), ("to_index", "to_handle")
+        ),
     )
 
     from_index: LocalIndex | None = None
