@@ -1,0 +1,18 @@
+```json
+{
+  "abstention": null,
+  "candidate": {
+    "claim": "A decision procedure polynomial in n alone exists (often attributed to Pearson) that decides canonicity in O(n^3) time and finds the smallest counterexample without depending on the magnitude of the largest coin c_1.",
+    "mechanism": "The algorithm examines the structural differences between greedy and optimal representations by tracking how combinations of up to three coins can cause the greedy algorithm to deviate from optimality. By searching over these structural deviations rather than over amounts up to c_1, it bounds the search space to a function of n alone and identifies the minimal counterexample in O(n^3) time.",
+    "counterconditions": [
+      "A brute-force dynamic programming oracle finds a coin system where this polynomial algorithm fails to identify a known counterexample.",
+      "A brute-force oracle or formal proof shows that any correct decision procedure must inherently depend on c_1 (pseudo-polynomial), refuting the claim of a bound polynomial in n alone."
+    ],
+    "typicality": 0.85,
+    "sidecar": {
+      "search_signal": "productive",
+      "requested_context_aliases": []
+    }
+  }
+}
+```
