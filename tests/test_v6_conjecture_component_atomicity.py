@@ -688,6 +688,10 @@ def test_the_branch_builders_read_the_rendered_shape_not_the_annotation():
         },
         "alias": {"type": "string"},
         "nullable_object": {"anyOf": [{"type": "object"}, {"type": "null"}]},
+        "nullable_text": {
+            "anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}],
+            "default": None,
+        },
         "required_text": {"type": "string", "minLength": 1},
     }
 
@@ -707,6 +711,13 @@ def test_the_branch_builders_read_the_rendered_shape_not_the_annotation():
         "required": ["alias"],
         "properties": {"alias": {"minLength": 1}},
     }
+    # A nullable string needs its type pinned: `minLength` constrains only
+    # strings, so an explicit null satisfies it and the branch admits exactly
+    # what it meant to forbid.
+    assert present_and_nonempty("nullable_text", properties) == {
+        "required": ["nullable_text"],
+        "properties": {"nullable_text": {"minLength": 1, "type": "string"}},
+    }
     assert present_and_nonempty("nullable_object", properties) == {
         "required": ["nullable_object"],
         "properties": {"nullable_object": {"not": {"type": "null"}}},
@@ -722,3 +733,99 @@ def test_the_branch_builders_read_the_rendered_shape_not_the_annotation():
     # whole discriminator value rather than merely emptying the field.
     with pytest.raises(ValueError, match="require_absent"):
         absent_or_empty("required_text", properties)
+
+
+def test_every_turn_version_carries_its_own_outcome_rules_and_agrees_with_it():
+    """Regression (schema sweep, 2026-07-31): the outcome encoding shipped on
+    `ConjecturerTurnWireV6` only, so `ReasoningConjecturerTurnWireV6` — the
+    LIVE reasoning v6 contract — still told a model that `{}` was a valid turn.
+    That is the same hole that left `conjecturer.turn.v6` with zero completions
+    in the coin canonicity run.
+
+    `json_schema_extra` is inherited, so the encoder is declared once per chain
+    on the v4 base with the SUPERSET of outcome names. The risk that creates is
+    the opposite one — a v4-shaped rule leaking down and rejecting a
+    simulation-only v5 turn the validator accepts — so this differential-tests
+    every version in both chains, not just v6.
+    """
+
+    import itertools
+
+    import pytest
+
+    from deepreason.llm.wire import (
+        AliasTable,
+        ConjecturerTurnWireContractV4,
+        ConjecturerTurnWireContractV5,
+        ConjecturerTurnWireContractV6,
+    )
+
+    jsonschema = pytest.importorskip("jsonschema", reason="optional checker")
+
+    aliases = AliasTable({"SRC_001": "x"})
+    candidate = {"content": "c", "typicality": 0.5}
+    simulation = {
+        "request_identifier": "r", "hypothesis": "h", "rival_predictions": ["a"],
+        "discriminating_purpose": "p", "simulation_mode": "sandboxed_python_v1",
+        "model_source": "def simulate(inputs, rng):\n    return {'v': 1}\n",
+        "requested_observables": ["v"], "interpretation_conditions": ["c"],
+    }
+    research = {"purpose": "p", "urls": ["https://example.invalid/a"]}
+
+    contracts = {}
+    for reasoning in (False, True):
+        tag = "reasoning" if reasoning else "direct"
+        contracts[f"v4.{tag}"] = ConjecturerTurnWireContractV4(
+            reasoning=reasoning, aliases=aliases
+        )
+        contracts[f"v5.{tag}"] = ConjecturerTurnWireContractV5(
+            reasoning=reasoning, aliases=aliases, maximum_simulation_proposals=1
+        )
+        contracts[f"v6.{tag}"] = ConjecturerTurnWireContractV6(
+            reasoning=reasoning,
+            aliases=aliases,
+            simulation_enabled=True,
+            maximum_simulation_proposals=1,
+            research_enabled=True,
+            maximum_research_proposals=1,
+        )
+
+    options = {
+        "candidates": ([], [candidate]),
+        "context_request": (None, {"query": "q"}),
+        "abstention": (None, {"search_signal": "stuck"}),
+        "simulation_proposals": ([], [simulation]),
+        "research_proposals": ([], [research]),
+    }
+    disagreements = []
+    for label, contract in contracts.items():
+        schema = contract.model_json_schema()
+        model = contract.wire_model
+        declared = set(schema["properties"])
+        # A version must be told about its own outcomes and no others.
+        assert set(schema["allOf"][0]["anyOf"][0]["required"]) <= declared, label
+        axes = {n: v for n, v in options.items() if n in declared}
+        for combination in itertools.product(
+            *[[(name, value) for value in values] for name, values in axes.items()]
+        ):
+            full = dict(combination)
+            for omit_empty in (False, True):
+                document = {
+                    name: value
+                    for name, value in full.items()
+                    if not (omit_empty and (value == [] or value is None))
+                }
+                try:
+                    jsonschema.validate(document, schema)
+                    by_schema = True
+                except jsonschema.ValidationError:
+                    by_schema = False
+                try:
+                    model.model_validate(document)
+                    by_validator = True
+                except Exception:
+                    by_validator = False
+                if by_schema != by_validator:
+                    disagreements.append((label, document, by_schema, by_validator))
+
+    assert disagreements == [], disagreements[:4]

@@ -275,12 +275,15 @@ def present_and_nonempty(name: str, properties: dict, *, minimum: int = 1) -> di
     field = properties.get(name, {})
     if _renders_as(field, "array"):
         inner: dict = {"minItems": minimum}
-        if field.get("type") != "array":
-            inner["type"] = "array"
     elif _renders_as(field, "string"):
         inner = {"minLength": 1}
     else:
-        inner = {"not": {"type": "null"}}
+        return {"required": [name], "properties": {name: {"not": {"type": "null"}}}}
+    # `minItems`/`minLength` constrain only their own instance type, so on a
+    # NULLABLE field they are vacuously satisfied by an explicit null and the
+    # branch admits exactly what it meant to forbid. Pinning the type closes it.
+    if field.get("type") is None:
+        inner["type"] = "array" if "minItems" in inner else "string"
     return {"required": [name], "properties": {name: inner}}
 
 
@@ -991,7 +994,40 @@ class ContextRequestWireV2(StrictWireModel):
                 )
         return value
 
+TURN_OUTCOME_SHAPE = outcome_shape_schema(
+    meaningful=(
+        "candidates",
+        "context_request",
+        "abstention",
+        "simulation_proposals",
+        "scratch_proposal",
+        "research_proposals",
+    ),
+    abstention="abstention",
+    abstention_excludes=(
+        "candidates",
+        "simulation_proposals",
+        "scratch_proposal",
+        "research_proposals",
+    ),
+)
+"""The two turn outcome rules, declared once for every version that has them.
+
+Named here as the SUPERSET across v4, v5 and v6 and attached to each chain's
+base class, because ``json_schema_extra`` is inherited: attaching a v4-shaped
+tuple would make a simulation-only v5 turn schema-invalid while the validator
+still accepts it, which is a false reject on a live path. ``outcome_shape_schema``
+filters by RENDERED properties, so v4 emits three branches, v5 four and v6 six —
+each exactly matching that version's own ``_meaningful_*_outcome`` validator.
+A future v7 outcome field is then one edit here, not six.
+"""
+
+
 class ConjecturerTurnWireV4(StrictWireModel):
+    model_config = ConfigDict(
+        extra="forbid", strict=True, json_schema_extra=TURN_OUTCOME_SHAPE
+    )
+
     candidates: list[CompactConjectureCandidate] = Field(
         default_factory=list, max_length=256
     )
@@ -1009,6 +1045,10 @@ class ConjecturerTurnWireV4(StrictWireModel):
 
 
 class ReasoningConjecturerTurnWireV4(StrictWireModel):
+    model_config = ConfigDict(
+        extra="forbid", strict=True, json_schema_extra=TURN_OUTCOME_SHAPE
+    )
+
     candidates: list[ReasoningCandidateProposal] = Field(
         default_factory=list, max_length=256
     )
@@ -1262,30 +1302,11 @@ class ReasoningConjecturerTurnWireV5(ReasoningConjecturerTurnWireV4):
 
 
 class ConjecturerTurnWireV6(ConjecturerTurnWireV5):
-    # The outcome rules below are carried by the schema too, not only by the
+    # The outcome rules are carried by the schema too, not only by the
     # validators, so a model reading the schema cannot emit a structurally
-    # valid turn that the harness then refuses.
-    model_config = ConfigDict(
-        extra="forbid",
-        strict=True,
-        json_schema_extra=outcome_shape_schema(
-            meaningful=(
-                "candidates",
-                "context_request",
-                "abstention",
-                "simulation_proposals",
-                "scratch_proposal",
-                "research_proposals",
-            ),
-            abstention="abstention",
-            abstention_excludes=(
-                "candidates",
-                "simulation_proposals",
-                "scratch_proposal",
-                "research_proposals",
-            ),
-        ),
-    )
+    # valid turn that the harness then refuses. Inherited from
+    # ConjecturerTurnWireV4 via TURN_OUTCOME_SHAPE; the encoder narrows itself
+    # to the properties this version actually renders.
 
     context_request: ContextRequestWireV2 | None = None
     scratch_proposal: ScratchProposalV1 | None = None
