@@ -44,7 +44,7 @@ Traces to REQUEST.md. R6 applies throughout: commit locally, never push.
       Done-criterion: the written `provider.yaml` shows `reasoning: none`
       and a profile digest of `e800ce9c...` (predicted in SPEC F6).
 
-- [ ] S5 — regression tests for S1-S3.
+- [x] S5 — regression tests for S1-S3.
       Done-criterion: the new tests pass and each names what it guards.
 
 - [ ] S6 (C2) — full gate.
@@ -131,3 +131,29 @@ thinking off, this subject has no completed qualification.
 `generic` and any unlisted provider are unaffected, so the rule binds only
 where the knob is real. It binds on LAUNCH (`reason`, `qualify`) and never
 on profile load, so every committed run root still reopens.
+
+## S5 done-criterion output
+
+    tests/test_providers.py                                   9 passed
+    tests/test_v6_engaged_public_defaults.py::test_the_reviewer_seat_carries_behavioral_authority
+      + tests/test_v6_policy_preset.py                       14 passed
+    tests/test_crit_batch.py                                 10 passed
+
+Three regression tests, each naming run-c5f901f38208e862f4ce2fe60a26e551:
+
+  - `test_the_reviewer_seat_carries_behavioral_authority` pins the SEAT,
+    not the flag: it asserts the role the bridge policy names holds at
+    least one contract, and that `argumentative_critic` stays authorized
+    (it was never the problem).
+  - `test_critic_pack_states_the_simulation_option_and_its_contract`
+    asserts the pack carries the same two constant OBJECTS the
+    conjecturer's schema carries, so the disclosed rule cannot drift from
+    the enforced one, and that a simulation-disabled pack says nothing.
+  - `test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means`
+    pins unset != off and the provider availability table.
+
+One predicted fixture update, minimal:
+`test_engaged_bridge_source_enables_the_review_free_grounded_bridge`
+pinned `grounding_review: False`. Renamed to `..._the_reviewed_grounded_bridge`
+and repointed, because the old NAME asserted the very property the change
+removes; leaving the name would have made the test lie.

@@ -64,15 +64,17 @@ def test_engaged_policy_enables_bounded_scratch_and_context():
     assert len(engaged_policy_digest()) == 64
 
 
-def test_engaged_bridge_source_enables_the_review_free_grounded_bridge():
+def test_engaged_bridge_source_enables_the_reviewed_grounded_bridge():
     source = engaged_bridge_source()
 
-    # The audited review-free single-route shape: Stage A on the frozen
-    # summarizer route, Stage B on the frozen thesis route, one schema
-    # repair, no grounding-review stream, four bounded output sections.
+    # The audited single-route shape: Stage A on the frozen summarizer
+    # route, Stage B on the frozen thesis route, one schema repair, four
+    # bounded output sections — and the grounding-review stream ON, which
+    # is the only thing that seats the reviewer role (see the seat test in
+    # tests/test_v6_engaged_public_defaults.py).
     assert source == {
         "mode": "grounded_two_stage",
-        "grounding_review": False,
+        "grounding_review": True,
         "max_schema_repair_attempts": 1,
         "max_grounding_repair_attempts": 0,
         "output_section_limit": 4,

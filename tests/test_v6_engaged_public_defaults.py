@@ -698,3 +698,45 @@ def test_public_preset_root_accepts_start_bridge_and_reaches_terminal(
         if event.bridge is not None
     ]
     assert actions[-1] == BridgeAction.COMPLETED
+
+
+def test_the_reviewer_seat_carries_behavioral_authority():
+    """Regression (coin canonicity run-c5f901f38208e862f4ce2fe60a26e551): the
+    run recorded 9 criticisms and 0 refutations, and closed reporting
+    accepted:29 refuted:0 over artifacts asserting mutually contradictory
+    bounds. The cause was typed — every adjudicating seat qualified
+    ``inactive_no_authorized_contract`` and seqs 261-274 deferred the
+    spot-check phase with ``transaction-contract-unavailable`` for all 14
+    survivors, because ``grounding_review`` was off and that flag is the ONLY
+    branch of ``_route_seat_behavioral_contract_assignments`` granting the
+    reviewer seat a contract.
+
+    This pins the seat, not the flag: criticism that cannot be adjudicated
+    is not criticism the record can act on.
+    """
+
+    from deepreason.run_manifest import (
+        _route_seat_behavioral_contract_assignments,
+    )
+
+    profile = _profile()
+    manifest = build_preparation_manifest(
+        profile,
+        question="Does the reviewer seat actually hold authority?",
+        compiled_at=STAMP,
+    )
+    assignments = _route_seat_behavioral_contract_assignments(manifest)
+    by_role: dict[str, set[str]] = {}
+    for contract_id, role, _seat in assignments:
+        by_role.setdefault(role, set()).add(contract_id)
+
+    reviewer_role = manifest.bridge_policy.reviewer_role
+    assert manifest.bridge_policy.grounding_review is True
+    # The seat the bridge policy names must hold at least one contract, or
+    # it classifies inactive and every phase needing it defers.
+    assert by_role.get(reviewer_role), (
+        f"reviewer seat {reviewer_role!r} holds no contract; it will qualify "
+        "inactive_no_authorized_contract and adjudication will defer"
+    )
+    # The criticising seat was never the problem and must stay authorized.
+    assert by_role.get("argumentative_critic")

@@ -295,3 +295,74 @@ def test_recrit_standing_off_preserves_legacy(tmp_path):
         if e.rule == Rule.MEASURE and e.llm and standing.id in e.inputs
     ]
     assert not shown  # legacy: only freshly admitted artifacts are criticized
+
+
+def test_critic_pack_states_the_simulation_option_and_its_contract():
+    """Regression (coin canonicity run-c5f901f38208e862f4ce2fe60a26e551): the
+    run's prompts demanded a typed simulation in 12 of 26 calls that carried
+    no channel, and the critic pack never mentioned simulation at all — so a
+    critic could convict a candidate for not simulating while never being
+    told the channel existed or what a program must look like.
+
+    The contract text is asserted to be the SAME objects the conjecturer's
+    schema carries, not a second wording that could drift from the enforced
+    rule.
+    """
+
+    from deepreason.llm.packs import render_batch_crit_pack
+    from deepreason.llm.wire import (
+        SIMULATION_MODEL_SOURCE_CONTRACT,
+        SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
+    )
+    from deepreason.ontology.artifact import Artifact, Interface, Provenance
+    from deepreason.ontology.state import EpistemicState
+
+    state = EpistemicState()
+    content_ref = "inline:the bound c_1+c_2 suffices"
+    target = Artifact(
+        id=Artifact.compute_id(content_ref, "utf8", Interface()),
+        content_ref=content_ref,
+        codec="utf8",
+        interface=Interface(),
+        warrants=[],
+        provenance=Provenance(role="conjecturer"),
+    )
+    state.artifacts[target.id] = target
+    common = {
+        "target_ids": [target.id],
+        "state": state,
+        "commitments": {},
+        "blobs": None,
+        "token_budget": 4000,
+    }
+
+    disabled = render_batch_crit_pack(**common)
+    enabled = render_batch_crit_pack(**common, simulation_enabled=True)
+    filed = render_batch_crit_pack(
+        **common,
+        simulation_enabled=True,
+        simulation_proposals=(
+            ("sim_bound_sweep", "sandboxed_python_v1", "denied", "invalid_model_program"),
+        ),
+    )
+
+    # A run that cannot propose a simulation is told nothing about it, so no
+    # pack-derived baseline moves for runs the channel does not reach.
+    assert "simulate" not in disabled
+    assert "SIMULATION" not in disabled
+
+    # The option, the form of the contract, and the enforced consequence.
+    assert "def simulate(inputs, rng)" in enabled
+    assert SIMULATION_MODEL_SOURCE_CONTRACT in enabled
+    assert SIMULATION_REQUESTED_OBSERVABLES_CONTRACT in enabled
+    assert "declared observable missing" in enabled
+    # The critic must not be invited to file one: this contract has no channel.
+    assert "cannot file a simulation yourself" in enabled
+
+    # What was actually filed is shown with its typed lifecycle, so a critic
+    # can attack the program rather than only its absence.
+    assert "SIMULATIONS ALREADY FILED ON THIS PROBLEM: none." in enabled
+    assert "sim_bound_sweep" in filed
+    assert "sandboxed_python_v1" in filed
+    assert "denied" in filed
+    assert "invalid_model_program" in filed

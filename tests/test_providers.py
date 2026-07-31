@@ -100,3 +100,39 @@ def test_endpoint_family_defaults_to_lease_inference():
     # explicit override still wins
     ep2 = _endpoint_from_spec({**spec, "family": "custom"})
     assert ep2.family == "custom"
+
+
+def test_thinking_off_rule_knows_where_the_knob_is_real_and_what_off_means():
+    """Regression (coin canonicity run-c5f901f3): the live profile carried
+    reasoning=None, which sends no reasoning field, and glm-5.2 thought by
+    default — the first conjecture turn returned completion_tokens exactly
+    equal to the 24576 cap and produced no candidate. Unset is not off, and
+    the binding rule has to encode that distinction.
+    """
+
+    from deepreason.llm.providers import (
+        reasoning_disabled,
+        reasoning_knob_available,
+    )
+
+    # Availability is decided by the adapter table, not by probing.
+    assert reasoning_knob_available("ollama")
+    assert reasoning_knob_available("openai")
+    assert reasoning_knob_available("deepseek")
+    assert not reasoning_knob_available("generic")
+    assert not reasoning_knob_available("some-unlisted-provider")
+
+    # Unset is NOT off; only the neutral off token is.
+    assert not reasoning_disabled(None)
+    assert reasoning_disabled("none")
+    assert reasoning_disabled(" NONE ")
+    assert not reasoning_disabled("low")
+    assert not reasoning_disabled("high")
+    # An int budget is a budget, never a disable.
+    assert not reasoning_disabled(0)
+    assert not reasoning_disabled(2000)
+
+    # The off token reaches the wire as each provider's most-off setting.
+    assert reasoning_body("ollama", "none") == {"reasoning_effort": "none"}
+    assert reasoning_body("openai", "none") == {"reasoning_effort": "minimal"}
+    assert reasoning_body("generic", "none") == {}
