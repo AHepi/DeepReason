@@ -42,6 +42,10 @@ Relationships are provisional.
 A guide is a temporary navigation aid."""
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by `_entry_handles_are_local_and_unique`."""
+
+
 class ScratchWireModel(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
@@ -214,7 +218,9 @@ class ClusterGuideWireV1(ScratchWireModel):
         default=None, max_length=MAX_GUIDE_OPEN_THREADS
     )
     entry_points: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_GUIDE_ENTRY_POINTS
+        default=None,
+        max_length=MAX_GUIDE_ENTRY_POINTS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     local_summary: WireText | None = None
 

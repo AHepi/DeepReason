@@ -1220,6 +1220,10 @@ class ReasoningConjecturerWireContract(WireContract[ReasoningConjecturerOutput])
         return ReasoningConjecturerOutput(candidates=tuple(candidates))
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by `_unique_values`; the schema must say so too."""
+
+
 CONTEXT_REQUEST_SELECTOR_SHAPE = outcome_shape_schema(
     meaningful=("query", "requested_visible_aliases", "desired_retrieval_channels")
 )
@@ -1239,9 +1243,11 @@ class ContextRequestWireV1(StrictWireModel):
     )
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
-    requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
+    requested_visible_aliases: list[str] = Field(
+        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
     desired_retrieval_channels: list[str] = Field(
-        default_factory=list, max_length=16
+        default_factory=list, max_length=16, json_schema_extra=_UNIQUE_ITEMS
     )
     purpose: str | None = Field(default=None, min_length=1, max_length=4_096)
 
@@ -1283,9 +1289,11 @@ class ContextRequestWireV2(StrictWireModel):
     )
 
     query: str | None = Field(default=None, min_length=1, max_length=8_192)
-    requested_visible_aliases: list[str] = Field(default_factory=list, max_length=64)
+    requested_visible_aliases: list[str] = Field(
+        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
     desired_retrieval_channels: list[str] = Field(
-        default_factory=list, max_length=16
+        default_factory=list, max_length=16, json_schema_extra=_UNIQUE_ITEMS
     )
     purpose: str | None = Field(default=None, min_length=1, max_length=4_096)
 
@@ -1541,14 +1549,22 @@ class SimulationParameterSetWireV1(StrictWireModel):
 class SimulationProposalWireV1(StrictWireModel):
     request_identifier: str = Field(min_length=1, max_length=128)
     hypothesis: str = Field(min_length=1, max_length=16_384)
-    rival_predictions: list[str] = Field(min_length=1, max_length=32)
+    rival_predictions: list[str] = Field(
+        min_length=1, max_length=32, json_schema_extra=_UNIQUE_ITEMS
+    )
     discriminating_purpose: str = Field(min_length=1, max_length=8_192)
-    declared_assumptions: list[str] = Field(default_factory=list, max_length=64)
-    input_aliases: list[str] = Field(default_factory=list, max_length=64)
+    declared_assumptions: list[str] = Field(
+        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
+    input_aliases: list[str] = Field(
+        default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
     parameter_definitions: list[SimulationParameterSetWireV1] = Field(
         default_factory=list, max_length=256
     )
-    requested_seed_set: list[int] = Field(default_factory=list, max_length=256)
+    requested_seed_set: list[int] = Field(
+        default_factory=list, max_length=256, json_schema_extra=_UNIQUE_ITEMS
+    )
     simulation_mode: Literal[
         "declarative_numeric_v1", "sandboxed_python_v1"
     ]
@@ -1566,8 +1582,11 @@ class SimulationProposalWireV1(StrictWireModel):
         min_length=1,
         max_length=128,
         description=SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
-    interpretation_conditions: list[str] = Field(min_length=1, max_length=64)
+    interpretation_conditions: list[str] = Field(
+        min_length=1, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
 
 
 class ResearchFetchProposalWireV1(StrictWireModel):
@@ -1580,7 +1599,9 @@ class ResearchFetchProposalWireV1(StrictWireModel):
 
     request_identifier: str = Field(min_length=1, max_length=128)
     purpose: str = Field(min_length=1, max_length=2_000)
-    urls: list[str] = Field(min_length=1, max_length=3)
+    urls: list[str] = Field(
+        min_length=1, max_length=3, json_schema_extra=_UNIQUE_ITEMS
+    )
 
 
 class ConjecturerTurnWireV5(ConjecturerTurnWireV4):

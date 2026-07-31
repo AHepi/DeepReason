@@ -25,6 +25,14 @@ _NAME = r"^[A-Za-z][A-Za-z0-9_]{0,63}$"
 _MAX_SEMANTIC_JSON_BYTES = 512 * 1024
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by the validators below; the schema must say so too.
+
+Without it every one of these arrays told the model repetition was legal and
+only the prose said otherwise.
+"""
+
+
 def _bounded_json(value: Any, *, depth: int = 0) -> Any:
     """Reject non-JSON, non-finite, or pathologically nested proposal data."""
 
@@ -114,20 +122,38 @@ class SimulationProposalDraftV1(_FrozenModel):
 
     request_identifier: str = Field(min_length=1, max_length=128)
     hypothesis: str = Field(min_length=1, max_length=16_384)
-    rival_predictions: tuple[str, ...] = Field(min_length=1, max_length=32)
+    rival_predictions: tuple[str, ...] = Field(
+        min_length=1, max_length=32,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
     discriminating_purpose: str = Field(min_length=1, max_length=8_192)
-    declared_assumptions: tuple[str, ...] = Field(default=(), max_length=64)
-    input_aliases: tuple[str, ...] = Field(default=(), max_length=64)
+    declared_assumptions: tuple[str, ...] = Field(
+        default=(), max_length=64,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
+    input_aliases: tuple[str, ...] = Field(
+        default=(), max_length=64,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
     parameter_definitions: tuple[SimulationParameterSetV1, ...] = Field(
         default=(), max_length=256
     )
-    requested_seed_set: tuple[int, ...] = Field(default=(), max_length=256)
+    requested_seed_set: tuple[int, ...] = Field(
+        default=(), max_length=256,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
     simulation_mode: Literal[
         "declarative_numeric_v1", "sandboxed_python_v1"
     ] = "declarative_numeric_v1"
     model_source: str = Field(min_length=1, max_length=262_144)
-    requested_observables: tuple[str, ...] = Field(min_length=1, max_length=128)
-    interpretation_conditions: tuple[str, ...] = Field(min_length=1, max_length=64)
+    requested_observables: tuple[str, ...] = Field(
+        min_length=1, max_length=128,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
+    interpretation_conditions: tuple[str, ...] = Field(
+        min_length=1, max_length=64,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
 
     @field_validator(
         "rival_predictions",
@@ -506,7 +532,10 @@ class ResearchFetchProposalDraftV1(_FrozenModel):
 
     request_identifier: str = Field(min_length=1, max_length=128)
     purpose: str = Field(min_length=1, max_length=2_000)
-    urls: tuple[str, ...] = Field(min_length=1, max_length=3)
+    urls: tuple[str, ...] = Field(
+        min_length=1, max_length=3,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
 
     @field_validator("urls")
     @classmethod

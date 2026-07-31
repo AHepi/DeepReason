@@ -53,6 +53,14 @@ _HANDLE_SENTINEL = "NO_LEDGER_ENTRIES"
 _COMPOSER_ROLES = frozenset({"summarizer", "thesis"})
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by the validators below; the schema must say so too.
+
+Without it every one of these arrays told the model repetition was legal and
+only the prose said otherwise.
+"""
+
+
 class CompositionContractError(ValueError):
     """A compiled composition violated one exact bridge-output constraint.
 
@@ -190,7 +198,10 @@ class CompositionSpanWireV1(StrictWireModel):
         "unknown",
         "conflict",
     ]
-    ledger_entry_handles: list[str] = Field(min_length=1, max_length=2_048)
+    ledger_entry_handles: list[str] = Field(
+        min_length=1, max_length=2_048,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
 
     @field_validator("text")
     @classmethod
@@ -212,7 +223,10 @@ class CompositionSpanWireV2(StrictWireModel):
 
     span_id: str = Field(pattern=r"^S[1-9][0-9]{0,5}$")
     text: str = Field(min_length=1, max_length=_MAX_COMPOSITION_TEXT)
-    ledger_entry_handles: list[str] = Field(min_length=1, max_length=2_048)
+    ledger_entry_handles: list[str] = Field(
+        min_length=1, max_length=2_048,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
 
     @field_validator("text")
     @classmethod
@@ -233,7 +247,10 @@ class CompositionSpanWireV2(StrictWireModel):
 class CompositionUnresolvedWireV1(StrictWireModel):
     description: str = Field(min_length=1, max_length=_MAX_COMPOSITION_TEXT)
     reason: str | None = Field(default=None, min_length=1, max_length=_MAX_COMPOSITION_TEXT)
-    ledger_entry_handles: list[str] | None = Field(default=None, max_length=2_048)
+    ledger_entry_handles: list[str] | None = Field(
+        default=None, max_length=2_048,
+        json_schema_extra=_UNIQUE_ITEMS,
+    )
 
     @field_validator("description", "reason")
     @classmethod

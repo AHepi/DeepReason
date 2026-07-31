@@ -25,6 +25,10 @@ V6_SCRATCH_WORKSHOP_SCHEMA_DESCRIPTION = (
 )
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by the ref validators below."""
+
+
 class ScratchProposalModel(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
@@ -64,7 +68,9 @@ class ScratchProposalLinkV1(ScratchProposalModel):
 
 class ScratchQuestionDraftV1(ScratchProposalModel):
     question: str = Field(min_length=1, max_length=262_144)
-    related_refs: tuple[str, ...] = Field(default=(), max_length=64)
+    related_refs: tuple[str, ...] = Field(
+        default=(), max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
 
     @field_validator("related_refs")
     @classmethod
@@ -78,7 +84,9 @@ class ScratchQuestionDraftV1(ScratchProposalModel):
 
 class ScratchClusterSuggestionV1(ScratchProposalModel):
     seed_focus: str = Field(min_length=1, max_length=262_144)
-    member_refs: tuple[str, ...] = Field(min_length=1, max_length=64)
+    member_refs: tuple[str, ...] = Field(
+        min_length=1, max_length=64, json_schema_extra=_UNIQUE_ITEMS
+    )
 
     @field_validator("member_refs")
     @classmethod

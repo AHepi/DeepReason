@@ -74,6 +74,14 @@ _LOCAL_HANDLE = re.compile(r"^[A-Za-z][A-Za-z0-9_.:-]{0,63}$")
 _CANONICAL_HASH = re.compile(r"^(?:sha256:)?[0-9a-fA-F]{64}$")
 
 
+_UNIQUE_ITEMS = {"uniqueItems": True}
+"""Duplicates are refused by the validators below; the schema must say so too.
+
+Without it every one of these arrays told the model repetition was legal and
+only the prose said otherwise.
+"""
+
+
 class LedgerCatalogKind(str, Enum):
     """Closed reference channels available to one Stage A call."""
 
@@ -577,38 +585,48 @@ class ClaimLedgerEntryWireV1(LedgerWireModel):
     claim_class: ClaimClassValue
     claim: WireText
     source_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     evidence_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     event_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     trace_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     formal_observation_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     premise_keys: list[LocalHandle] | None = Field(
         default=None,
         max_length=MAX_WIRE_REFS,
         description="Earlier entry_key values or supplied prior-entry keys only.",
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     formal_artifact_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     conflict_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     source_conflict_keys: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     scratch_handles: list[LocalHandle] | None = Field(
         default=None,
         max_length=MAX_WIRE_REFS,
         description="Intellectual provenance only; never grounding.",
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     qualification: WireText | None = None
 
@@ -678,11 +696,13 @@ class ClaimLedgerEntryWireV1(LedgerWireModel):
 class SourceConflictWireV1(LedgerWireModel):
     conflict_key: LocalHandle
     conflicting_handles: list[LocalHandle] = Field(
-        min_length=2, max_length=MAX_WIRE_REFS
+        min_length=2, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     description: WireText | None = None
     scratch_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
 
     @field_validator("description")
@@ -700,10 +720,12 @@ class UncoveredRequirementWireV1(LedgerWireModel):
     requirement: WireText
     reason: WireText | None = None
     related_entry_keys: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     scratch_handles: list[LocalHandle] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
 
     @field_validator("requirement", "reason")
@@ -753,57 +775,71 @@ class ClaimLedgerEntryWireV2(ClaimLedgerEntryWireV1):
 
     entry_key: EntryKeyV2
     source_handles: list[SourceHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     evidence_handles: list[EvidenceHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     event_handles: list[EventHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     trace_handles: list[TraceHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     formal_observation_handles: list[FormalObservationHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     premise_keys: list[PremiseKeyV2] | None = Field(
         default=None,
         max_length=MAX_WIRE_REFS,
         description="Earlier CLM_* values or supplied P<n> prior-entry keys only.",
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     formal_artifact_handles: list[FormalArtifactHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     conflict_handles: list[ExternalHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     source_conflict_keys: list[SourceConflictKeyV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     scratch_handles: list[ScratchHandleV2] | None = Field(
         default=None,
         max_length=MAX_WIRE_REFS,
         description="Intellectual provenance only; never grounding.",
+        json_schema_extra=_UNIQUE_ITEMS,
     )
 
 
 class SourceConflictWireV2(SourceConflictWireV1):
     conflict_key: ConflictKeyV2
     conflicting_handles: list[ExternalHandleV2] = Field(
-        min_length=2, max_length=MAX_WIRE_REFS
+        min_length=2, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     scratch_handles: list[ScratchHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
 
 
 class UncoveredRequirementWireV2(UncoveredRequirementWireV1):
     related_entry_keys: list[PremiseKeyV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
     scratch_handles: list[ScratchHandleV2] | None = Field(
-        default=None, max_length=MAX_WIRE_REFS
+        default=None, max_length=MAX_WIRE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
     )
 
 
