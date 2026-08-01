@@ -33,3 +33,8 @@ experiments/live_tri_2026-07-27/env
 experiments/live_compare_2026-07-28/env
 experiments/live_research_2026-07-29/env
 experiments/live_jolt_2026-07-31/probe.env
+
+# Subagent git worktrees. Created by Workflow isolation: 'worktree' and removed
+# when the agent finishes; committing one would commit a second checkout of the
+# repository into itself.
+.claude/worktrees/
