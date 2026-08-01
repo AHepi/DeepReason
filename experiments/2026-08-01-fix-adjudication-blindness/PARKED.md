@@ -40,3 +40,13 @@ Added this tranche:
   written as `getattr(state, "attacks", {})` silently reports zero for every
   root. Not a product defect, but it produced a false corpus-wide claim this
   session and would do so again.
+- `adjudication_ritual` cannot fire when blindness is TOTAL: two of its four
+  conditions are gated behind `MIN_ATTACKS_FOR_RITUAL=5` and a third
+  (`attack_target_entropy`) is `None` with no attacks, so the worse the run the
+  fewer conditions trip. Real, measured, and separate from the flag this
+  tranche adds.
+- `lineage_stagnation` is already `True` on a real fixture today and reaches
+  nothing. This tranche routes only `adjudication_blind` to the epistemic
+  channel; the other four flags stay discarded.
+- `invariants.py:4040-4048` still calls `raw_flags` purely as a totality check
+  and discards it. Left deliberately, so the finding is not emitted twice.
