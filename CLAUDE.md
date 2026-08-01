@@ -99,12 +99,15 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
 
 ## Hard-won invariants (violations of these were real, recorded defects)
 
-- Live runs now die on rules JSON Schema CANNOT express, not on ones it can.
-  Two runs, both qualified at full tier, both killed at cycle 0:
-  turmite (`_not_a_self_link`) and jolt (observable names must be KEYS of the
-  returned mapping). The 2026-07-31 schema sweep encoded everything
-  expressible; that moved the failure rather than removing it. When a run
-  fails, check SWEEP.md's not-expressible list FIRST.
+- When a run dies at cycle 0, READ THE DIAGNOSTIC BLOB before theorising.
+  Both cycle-0 deaths so far were misattributed on first reading. turmite
+  (`_not_a_self_link`) really was a rule JSON Schema cannot express; jolt was
+  first written up the same way and was not — the blob said
+  `simulation observables must be plain identifiers`, a plain `pattern` the
+  sweep had missed on `requested_observables`. The `attempt_trace` gives
+  `validation_path` and `diagnostic_ref`; the blob under `blobs/` gives the
+  verbatim error and the rejected value. Check SWEEP.md's not-expressible list
+  only AFTER the blob rules out a rule that could have been encoded.
 - The operator's seed question always wins scheduler rank ties;
   import-role admission records never count as "survivors".
 - Per-capability budgets meter only their own capability's records —

@@ -122,6 +122,26 @@ def json_safe(value):
     return False
 
 
+_ABSENT = object()
+
+
+def resolve_observable(output, name):
+    """Literal key first, then dotted traversal. Returns _ABSENT if neither.
+
+    Literal-first makes this strictly widening: every name that resolved before
+    dotted paths existed still resolves to exactly the same value, including a
+    program that legitimately returns flat keys containing dots.
+    """
+    if name in output:
+        return output[name]
+    cursor = output
+    for segment in name.split("."):
+        if not isinstance(cursor, dict) or segment not in cursor:
+            return _ABSENT
+        cursor = cursor[segment]
+    return cursor
+
+
 def run(job):
     seeds = job["seeds"]
     inputs = job["inputs"]
@@ -199,7 +219,14 @@ def run(job):
                         },
                         "output": records,
                     }
-                missing = [name for name in observables if name not in output]
+                resolved = {}
+                missing = []
+                for name in observables:
+                    value = resolve_observable(output, name)
+                    if value is _ABSENT:
+                        missing.append(name)
+                    else:
+                        resolved[name] = value
                 if missing:
                     return {
                         "verdict": "fail",
@@ -251,7 +278,7 @@ def run(job):
                 record = {
                     "seed": seed,
                     "input_index": input_index,
-                    "observables": {name: output[name] for name in observables},
+                    "observables": resolved,
                     "metrics": metrics,
                     "passed": passed,
                 }

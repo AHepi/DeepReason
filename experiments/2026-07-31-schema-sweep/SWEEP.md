@@ -64,6 +64,21 @@ rule ceased to exist. That is the only escape route this list has: a rule the
 schema cannot carry is a rule the model can violate, so if it is not worth a
 dead run it is not worth having. The remaining nine are all load-bearing.
 
+**A miss, recorded as one.** The jolt run
+(run-b4d6dfda0c20676a864a051fbc97bda4) was first written up as a second death
+on this list, at "observable-set agreement". It was not. The diagnostic blob
+says `simulation observables must be plain identifiers` — the `_observable_syntax`
+regex on `requested_observables`, a plain `pattern` that C8 should have caught
+and did not. The field carried no `pattern` and its description described a
+different rule entirely, so the constraint existed in neither place the model
+reads. Fixed 2026-08-01 by widening the pattern to accept dotted paths and
+attaching it to the item type on both the wire and the draft.
+
+The lesson is about the survey, not the method: C8 enumerated regexes by
+reading validators in the wire modules, and `capabilities/models.py` holds
+draft-side validators whose rules reach the model through a wire model that
+does not restate them. Any future sweep must walk the DRAFT models too.
+
 ---
 
 ## 2. Contracts changed, by commit

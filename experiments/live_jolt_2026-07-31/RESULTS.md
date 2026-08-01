@@ -35,49 +35,48 @@ The model filed a simulation declaring eighteen observables in dotted form:
     animal.baseline.distinct, animal.baseline.top_mass,
     animal.baseline.normalized_entropy, animal.schools.distinct, ...
 
-and a program whose last statement is `return results` — a NESTED mapping. The
-contract's rule is that every name in `requested_observables` must be a KEY of
-the returned mapping. A dotted path is a traversal, not a key, so none of the
-eighteen matched and the proposal was refused; repairs did not converge and the
-seat exhausted its smallest authorized contract.
+and a program whose last statement is `return results` — a NESTED mapping,
+which is the natural shape for a 3x2x3 measurement grid.
 
-## The finding, and it is now a pattern
+The diagnostic blob (`blobs/a9/a91ae25a…`) names the refusal exactly:
 
-Observable-set agreement — "every name must be a key of what the program
-returns" — is item 9 on the NOT EXPRESSIBLE list in
-`../2026-07-31-schema-sweep/SWEEP.md`. JSON Schema cannot state a relationship
-between one field's values and the runtime output of another field's program.
+    "path":  "/requested_observables"
+    "error": "Value error, simulation observables must be plain identifiers"
 
-That makes **two independent live runs killed by rules on that list**:
+That is `_observable_syntax` in `capabilities/models.py`, enforcing
+`^[A-Za-z][A-Za-z0-9_]{0,63}$`. The proposal never reached the runtime
+key-agreement check; it was refused at admission on NAME SYNTAX.
 
-    turmite run-bc3e8797b3e0609eddb324299c8257bd   _not_a_self_link
-    jolt    run-b4d6dfda0c20676a864a051fbc97bda4   observable-set agreement
+## Correction to an earlier reading of this run
 
-Both runs qualified at tier `full`. Both had every schema-expressible rule
-satisfied. Both died on prose. One is an anecdote; two, on different contracts
-with different models of failure, is the shape of the remaining risk — and it
-is only visible now because the sweep removed the failures that used to mask
-it.
+**This segment first attributed the death to observable-set agreement** — item
+9 on the NOT EXPRESSIBLE list — and drew from it a pattern: "two independent
+live runs killed by rules JSON Schema cannot express." The blob does not
+support that, and the corrected reading is worse for the sweep, not better:
 
-The honest reading of rule A2 after these two runs: encoding what CAN be
-encoded worked, and it relocated the failure rather than removing it. The
-residual is concentrated exactly where the sweep said it would be, which is
-some vindication of the analysis and no comfort at all about the outcome.
+- The killer was a `pattern`. **JSON Schema expresses it perfectly.** The sweep
+  simply missed this field; `requested_observables` carried no `pattern` and
+  the rule lived only in the Python validator.
+- The field's own description never mentioned it either. It talked exclusively
+  about key agreement. So the rule was in neither of the two places the model
+  can read, and the rejection was the first and only statement of it.
 
-## A cheap fix this suggests, not implemented here
+So the "two not-expressible deaths" pattern was wrong. One run (turmite) died
+on a rule the schema cannot carry. This one died on a rule the schema can carry
+and did not. That is a plain miss in the C8 pattern sweep, not a limit of the
+method — and it is a sharper indictment, because it was preventable by the
+tranche's own stated rule.
 
-The dotted-name failure is not a model error so much as an interface guess. The
-model reached for `animal.baseline.distinct` because a nested result is the
-natural shape for a 3x2 measurement grid, and flattening it is an arbitrary
-convention it had no way to infer. Two options, both small:
+## Fixed, 2026-08-01
 
-1. **Accept dotted paths** as traversals into the returned mapping. This makes
-   the natural shape legal and costs one resolver.
-2. **State the flattening rule in the schema description** where the
-   observables are declared, with an example of a legal name. The rule stays
-   prose but stops being invisible.
-
-(1) is better: it removes the failure rather than documenting it.
+`OBSERVABLE_NAME_PATTERN` now accepts an identifier or up to eight joined by
+dots, on both the wire model and the draft, as an item-type `pattern` so it
+validates AND renders. The runtime resolves a name literal-key-first and only
+then traverses, in both the contained worker and the in-process runner, so the
+change is strictly widening: every name that resolved before resolves to the
+same value. The description states the rule. The eighteen names that killed
+this run are pinned as a regression in
+`tests/test_simulation_dotted_observables.py`.
 
 ## What went right
 

@@ -21,8 +21,17 @@ from dataclasses import dataclass
 from typing import Any
 
 from deepreason.canonical import canonical_json
+from deepreason.capabilities.models import OBSERVABLE_NAME_PATTERN
 
 _NAME = re.compile(r"^[A-Za-z][A-Za-z0-9_]{0,63}$")
+_OBSERVABLE_NAME = re.compile(OBSERVABLE_NAME_PATTERN)
+"""Declarative observables accept the dotted form the wire accepts.
+
+A dotted name here is a literal flat key, not a traversal -- the generated
+program returns one flat mapping -- and that is consistent, because the runtime
+resolver tries the literal key before it walks. `_NAME` is unchanged: parameter
+and input references are still plain identifiers.
+"""
 _MAX_DEPTH = 24
 _MAX_NODES = 4_096
 _MAX_LITERAL_MAGNITUDE = 10**100
@@ -155,7 +164,10 @@ def compile_declarative_numeric(
     observables = document["observables"]
     if not isinstance(observables, dict) or not observables:
         raise DeclarativeSimulationError("numeric program requires observables")
-    if any(not isinstance(name, str) or _NAME.fullmatch(name) is None for name in observables):
+    if any(
+        not isinstance(name, str) or _OBSERVABLE_NAME.fullmatch(name) is None
+        for name in observables
+    ):
         raise DeclarativeSimulationError("numeric program has an invalid observable name")
     if tuple(sorted(observables)) != tuple(sorted(requested_observables)):
         raise DeclarativeSimulationError(

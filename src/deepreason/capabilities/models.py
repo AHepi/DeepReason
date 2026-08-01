@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 import re
-from typing import Any, ClassVar, Literal
+from typing import Annotated, Any, ClassVar, Literal
 
 from pydantic import (
     BaseModel,
@@ -22,6 +22,25 @@ _DIGEST = r"^[0-9a-f]{64}$"
 _WORKFLOW_ID = r"^sha256:[0-9a-f]{64}$"
 _ALIAS = r"^[A-Z][A-Z0-9_]{0,31}$"
 _NAME = r"^[A-Za-z][A-Za-z0-9_]{0,63}$"
+_SEGMENT = r"[A-Za-z][A-Za-z0-9_]{0,63}"
+OBSERVABLE_NAME_PATTERN = rf"^{_SEGMENT}(?:\.{_SEGMENT}){{0,7}}$"
+"""An observable name: an identifier, or a dotted path of up to eight of them.
+
+Dots were added after run-b4d6dfda0c20676a864a051fbc97bda4 died at cycle 0 on
+`simulation observables must be plain identifiers`. The model had designed a
+3x2x3 measurement grid and returned it nested, which is the natural shape for a
+grid, and named the cells `animal.baseline.distinct`. Nothing told it not to:
+the identifier rule was in neither the schema nor the field's description, so
+the refusal was the first and only statement of it.
+
+The repeat is bounded rather than `*` so the pattern stays finite for backends
+that compile the schema into a sampling grammar.
+"""
+ObservableName = Annotated[str, Field(pattern=OBSERVABLE_NAME_PATTERN)]
+SealedInputAlias = Annotated[str, Field(pattern=_ALIAS)]
+#: The draft refuses a seed outside the signed 64-bit range; `le` is exclusive
+#: of 2**63 in the validator, so the schema states the last legal value.
+SimulationSeed = Annotated[int, Field(ge=-(2**63), le=2**63 - 1)]
 _MAX_SEMANTIC_JSON_BYTES = 512 * 1024
 
 
@@ -131,14 +150,14 @@ class SimulationProposalDraftV1(_FrozenModel):
         default=(), max_length=64,
         json_schema_extra=_UNIQUE_ITEMS,
     )
-    input_aliases: tuple[str, ...] = Field(
+    input_aliases: tuple[SealedInputAlias, ...] = Field(
         default=(), max_length=64,
         json_schema_extra=_UNIQUE_ITEMS,
     )
     parameter_definitions: tuple[SimulationParameterSetV1, ...] = Field(
         default=(), max_length=256
     )
-    requested_seed_set: tuple[int, ...] = Field(
+    requested_seed_set: tuple[SimulationSeed, ...] = Field(
         default=(), max_length=256,
         json_schema_extra=_UNIQUE_ITEMS,
     )
@@ -146,7 +165,7 @@ class SimulationProposalDraftV1(_FrozenModel):
         "declarative_numeric_v1", "sandboxed_python_v1"
     ] = "declarative_numeric_v1"
     model_source: str = Field(min_length=1, max_length=262_144)
-    requested_observables: tuple[str, ...] = Field(
+    requested_observables: tuple[ObservableName, ...] = Field(
         min_length=1, max_length=128,
         json_schema_extra=_UNIQUE_ITEMS,
     )
@@ -179,8 +198,10 @@ class SimulationProposalDraftV1(_FrozenModel):
     @field_validator("requested_observables")
     @classmethod
     def _observable_syntax(cls, value):
-        if any(re.fullmatch(_NAME, name) is None for name in value):
-            raise ValueError("simulation observables must be plain identifiers")
+        if any(re.fullmatch(OBSERVABLE_NAME_PATTERN, name) is None for name in value):
+            raise ValueError(
+                "simulation observables must be identifiers, optionally dotted"
+            )
         return tuple(value)
 
     @field_validator("requested_seed_set")

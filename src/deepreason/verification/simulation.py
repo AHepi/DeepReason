@@ -151,6 +151,27 @@ def _json_safe(value: Any) -> bool:
     return False
 
 
+_ABSENT = object()
+
+
+def _resolve_observable(output: dict, name: str) -> Any:
+    """Literal key first, then dotted traversal; `_ABSENT` if neither resolves.
+
+    Kept byte-for-byte equivalent to `resolve_observable` in the contained
+    worker: the in-process runner and the sandboxed one must agree about what
+    a program produced, or a result would depend on which path ran it.
+    """
+
+    if name in output:
+        return output[name]
+    cursor: Any = output
+    for segment in name.split("."):
+        if not isinstance(cursor, dict) or segment not in cursor:
+            return _ABSENT
+        cursor = cursor[segment]
+    return cursor
+
+
 def _local_run(
     source: str,
     checker_source: str,
@@ -213,7 +234,14 @@ def _local_run(
                         },
                         "output": records,
                     }
-                missing = [name for name in observables if name not in output]
+                resolved: dict[str, Any] = {}
+                missing = []
+                for name in observables:
+                    value = _resolve_observable(output, name)
+                    if value is _ABSENT:
+                        missing.append(name)
+                    else:
+                        resolved[name] = value
                 if missing:
                     return {
                         "verdict": "fail",
@@ -260,7 +288,7 @@ def _local_run(
                 record = {
                     "seed": seed,
                     "input_index": input_index,
-                    "observables": {name: output[name] for name in observables},
+                    "observables": resolved,
                     "metrics": metrics,
                     "passed": passed,
                 }

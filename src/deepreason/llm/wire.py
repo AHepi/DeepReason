@@ -34,6 +34,9 @@ from deepreason.conjecture_turn import (
     ReasoningConjecturerTurnV6,
 )
 from deepreason.capabilities.models import (
+    ObservableName,
+    SealedInputAlias,
+    SimulationSeed,
     ResearchFetchProposalDraftV1,
     SimulationParameterSetV1,
     SimulationProposalDraftV1,
@@ -1602,12 +1605,15 @@ SIMULATION_MODEL_SOURCE_CONTRACT = (
     "document instead of Python."
 )
 SIMULATION_REQUESTED_OBSERVABLES_CONTRACT = (
-    "The observable names this proposal is judged on. Every name must be a "
-    "key of what the program produces: for sandboxed_python_v1 a key of the "
-    "mapping simulate returns, for declarative_numeric_v1 a key of the "
-    "document's observables. The two sets must match exactly. A name that "
-    "is not such a key ends the run with declared observable missing, so "
-    "stream names like stdout are never observables."
+    "The observable names this proposal is judged on. Each is an identifier, "
+    "or up to eight identifiers joined by dots to reach into a nested result "
+    "(a.b.c tries the literal key a.b.c first, then walks a, then b, then c). "
+    "Every name must resolve in what the program produces: for "
+    "sandboxed_python_v1 in the mapping simulate returns, for "
+    "declarative_numeric_v1 among the document's observables. The two sets "
+    "must match exactly. A name that does not resolve ends the run with "
+    "declared observable missing, so stream names like stdout are never "
+    "observables."
 )
 
 
@@ -1628,13 +1634,13 @@ class SimulationProposalWireV1(StrictWireModel):
     declared_assumptions: list[str] = Field(
         default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
     )
-    input_aliases: list[str] = Field(
+    input_aliases: list[SealedInputAlias] = Field(
         default_factory=list, max_length=64, json_schema_extra=_UNIQUE_ITEMS
     )
     parameter_definitions: list[SimulationParameterSetWireV1] = Field(
         default_factory=list, max_length=256
     )
-    requested_seed_set: list[int] = Field(
+    requested_seed_set: list[SimulationSeed] = Field(
         default_factory=list, max_length=256, json_schema_extra=_UNIQUE_ITEMS
     )
     simulation_mode: Literal[
@@ -1650,7 +1656,9 @@ class SimulationProposalWireV1(StrictWireModel):
         max_length=262_144,
         description=SIMULATION_MODEL_SOURCE_CONTRACT,
     )
-    requested_observables: list[str] = Field(
+    # The pattern lives on the item type, not in json_schema_extra: the wire
+    # model must REFUSE what the draft refuses, not merely advertise it.
+    requested_observables: list[ObservableName] = Field(
         min_length=1,
         max_length=128,
         description=SIMULATION_REQUESTED_OBSERVABLES_CONTRACT,
