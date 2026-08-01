@@ -4,3 +4,6 @@ probe.env
 # typed outcome and the audit are committed instead; the home is reproducible
 # and would otherwise put a 3.4M cache into the record.
 home/
+
+# Empty stderr from a clean audit; nothing to record.
+jolt-audit.err
