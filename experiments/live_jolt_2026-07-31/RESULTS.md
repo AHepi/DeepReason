@@ -219,3 +219,52 @@ It is the most serious open item in this file.
   runs, so a channel this run used says nothing about the next.
 - The integrity failure above means this root is not replay-valid. Nothing in
   this segment should be read as resting on a verified record until it is.
+
+---
+
+## 2026-08-01, the reader defect is fixed; the root stays invalid forever
+
+Tranche `experiments/2026-08-01-fix-decomposition-merge-pairing/`, fix at
+`17d9049d`.
+
+`_decomposition_merge_admits` resolved each slot of a decomposition completion
+by work id and demanded a `contract-decomposition-child.v1` payload. When an
+atomic child is rejected, the work that produces the admitted candidate is a
+DIFFERENT work item — `repair.semantic-task.v1`, authority at `parent_work_id`
+— and the completion must name that repair, because the repair holds the
+admission (`workflow/replay.py:565-598` refuses a completion whose per-slot
+inventory differs). The reader rejected the shape its own writer requires,
+while its docstring claimed to enforce "the same join the replay validator
+enforces".
+
+From this run's own objects, all three merges:
+
+    3340c059d828 (Conj 110)  [0..5] all contract-decomposition-child.v1
+    62b5e32458f8 (Conj 245)  [0] repair.semantic-task.v1  [1..5] child
+    f8335acf8f40 (Conj 386)  [0] repair.semantic-task.v1  [1..5] child
+
+Every other gate passed on the flagged two — 6/6 child admissions admitted,
+`source_seq == max(child provider seqs)`, outputs a subset of
+`admitted_effect_refs`. The latest-child marker was the natural rival and was
+ruled out by recomputation, not argument.
+
+Measured after the fix, 42 roots swept before and after with the same script:
+
+    19c19
+    < .../run-b4d6dfda0c20676a864a051fbc97bda4 integrity=False pairing=2
+    > .../run-b4d6dfda0c20676a864a051fbc97bda4 integrity=False pairing=0
+
+One line, one field. 41 roots byte-identical. Full gate 3238 passed, 0 failed.
+
+**The root is still `integrity_valid: False`, and always will be.** Its
+`run-result.json` carries a `verification.summary.v2` written at terminal time
+recording `integrity_valid: false` and `finding_counts.integrity: 2`, and the
+checker compares the live verdict against that durable self-report. A reader
+fix cannot make a written record claim it was valid. The tranche's own success
+criterion asked for `integrity_valid: True` and was unachievable the moment the
+run stopped; that is recorded as a FAIL in `VERIFY.md` rather than amended
+after the fact.
+
+So: the defect is gone for every future run, and this run's root remains a
+permanent record of having been written while it was live. Both statements are
+true and neither cancels the other.
