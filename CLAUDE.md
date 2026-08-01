@@ -99,6 +99,12 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
 
 ## Hard-won invariants (violations of these were real, recorded defects)
 
+- Live runs now die on rules JSON Schema CANNOT express, not on ones it can.
+  Two runs, both qualified at full tier, both killed at cycle 0:
+  turmite (`_not_a_self_link`) and jolt (observable names must be KEYS of the
+  returned mapping). The 2026-07-31 schema sweep encoded everything
+  expressible; that moved the failure rather than removing it. When a run
+  fails, check SWEEP.md's not-expressible list FIRST.
 - The operator's seed question always wins scheduler rank ties;
   import-role admission records never count as "survivors".
 - Per-capability budgets meter only their own capability's records —
@@ -111,6 +117,10 @@ setup → qualify → reason → audit against a `DEEPREASON_HOME`.
 
 ## Conventions
 
+- Reporting to the operator: lead with the result in one or two sentences.
+  Detail goes in the experiment's RESULTS.md, not the reply. Do not restate
+  the reasoning that produced a finding once the finding is stated. Say
+  corrections plainly and move on.
 - Commits: one defect or one change per commit; message states what,
   why, the live evidence (run ids), and "Full gate: N passed, 0
   failed" when code changed. Push with retry (2s/4s/8s/16s backoff).
