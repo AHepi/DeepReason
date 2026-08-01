@@ -268,3 +268,45 @@ after the fact.
 So: the defect is gone for every future run, and this run's root remains a
 permanent record of having been written while it was live. Both statements are
 true and neither cancels the other.
+
+---
+
+## 2026-08-01, the harness is now honest about not having adjudicated
+
+Tranche `experiments/2026-08-01-fix-adjudication-blindness/`, fix at
+`cdd07fec`.
+
+The run reported `epistemic_checks_passed: true` on 851 events containing zero
+attacks. `docs/harness-spec-v1.3.md` §11.3 names exactly that state: "if no
+test is ever attacked, D3 has died in practice while remaining true on paper".
+
+The cause was not the threshold the earlier investigation named. Verification
+called the detector only to prove it does not raise and discarded every flag;
+reproduced offline by forcing ALL FIVE flags True and still getting zero
+epistemic findings. No threshold change could have produced a finding.
+
+`report.py` now derives the check itself, whole-run: `state.att` empty AND at
+least one `Crit` event. Criticism having RUN is what makes zero attacks a
+finding rather than a fact about scope.
+
+Measured over all 42 roots:
+
+    roots whose valid MOVED : 0
+    roots newly flagged     : 26
+    live_engaged run-f4fa66 : NOT flagged (Crit=28, att=1)
+
+**26 of 42.** Every real recorded run in this project except the five that
+attacked has now been reported as having adjudicated nothing. That is the
+measurement, not a false-positive rate.
+
+Residue, and it is the important part: this makes the harness honest, it does
+not make it adjudicate. Nothing consumes the finding — no run stops, no
+scheduler behaviour changes, `valid` is deliberately unaffected. And the reason
+there are no attacks is untouched: `authority.py:97-101` hard-returns
+`OBSERVE_ONLY` for every text workload, so no text run can mint a warrant.
+Until that is decided, every future text run will carry this finding — which is
+the correct report, and also why a rerun of this question would still refute
+nothing.
+
+The five windowed detection flags remain discarded, including
+`lineage_stagnation`, which fires today. Parked, and stated as parked.
