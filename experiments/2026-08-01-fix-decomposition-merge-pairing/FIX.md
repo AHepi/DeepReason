@@ -52,6 +52,26 @@ is new behaviour and the reproduction does not cover them:
   - a repair whose parent disagrees on `contract_id`, `route_lease` or
     `target_refs` — must still fail closed.
 
+AMENDED during dr-implement-fix. None of the three is constructible as a
+TARGETED negative, and the reason is a property worth recording rather than a
+gap to apologise for. All three require a record naming a parent the writer
+would not have named, and `preparations` is loaded via `objects.get(object_id)`
+from a digest-verified store: editing any preparation record raises
+`corrupt object record` and the run fails closed on `workflow-decision` before
+the pairing check ever runs. Measured — tampering `contract_id` on the five
+repair preparations of a `repair_child=0` root yields
+
+    workflow-decision: event seq=34: transaction output is unavailable:
+      ValueError('corrupt object record: .../workflow-work-preparation-v1/9268...json')
+
+So the guards cannot be exercised by a forged record at all; they can only be
+reached by a genuinely authored one, which the writer does not produce. That is
+a stronger guarantee than the three negatives would have given, and it is what
+gets tested instead: one negative asserting that a tampered repair preparation
+fails closed. The parent-guard branches inside the helper are therefore
+defence-in-depth against a future writer change, not against an attacker, and
+this file says so rather than claiming coverage the tranche does not have.
+
 Existing tests at risk (from grep over `_decomposition_merge_admits` and
 `contract-decomposition-child`):
   - `test_merge_conj_bound_to_non_child_work_fails_closed` — MUST KEEP PASSING.
