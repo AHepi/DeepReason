@@ -115,7 +115,20 @@ run to a stop.
     qualify_rc=0  342 s   tier full, cache_reused False, state ready
     reason_rc=5   856 s   state completed, cycle 6
     audit_rc=0
-    72 standing, 0 accepted, 0 refuted, 63 positions formally accepted
+    72 ACCEPTED, 0 refuted, 0 attacks ever attempted
+
+CORRECTION, 2026-08-01 (full detail in INVESTIGATION.md). This segment first
+read the outcome as "72 standing, 0 accepted, 0 refuted", i.e. nothing
+adjudicated. That is wrong on the first two counts, and the truth is worse.
+`standing` is only the text-workload DISPLAY NAME for ACCEPTED
+(`status_display.py:27-28`); `display_status_counts(harness)` on this root
+returns `{'accepted': 72}`. The `accepted: 0  refuted: 0` in run-status.json are
+pydantic defaults the terminal emit never populates
+(`application/text_runs.py:1095-1108`). So the run ACCEPTED all 72 claims -- and
+it accepted them vacuously: `len(state.attacks) == 0` and `len(warrants) == 0`
+across all 851 events. Not one attack was ever attempted. `budget_exhausted` is
+likewise a fall-through label rather than a measurement
+(`text_runs.py:1022-1027`).
 
 Two capability channels were exercised and both are typed in the record:
 
