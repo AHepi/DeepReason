@@ -71,10 +71,45 @@ def _config() -> Config:
     )
 
 
-def _engaged_root(tmp_path: Path) -> Path:
-    """Drive one turn through rejected patches into a decomposition merge."""
+def _atomic_child_responses(index: int, *, repaired: bool) -> list[str]:
+    """One atomic child's provider responses, optionally via a repair step.
 
-    root = tmp_path / "engaged-repair"
+    A wire-invalid first response (``typicality`` out of range) is the same
+    class of rejection the live run took — a generic envelope failure — and the
+    patch that follows is the minimal one that makes the candidate admissible.
+    """
+
+    candidate = {
+        "content": f"atomic mechanism {index}",
+        "typicality": 0.5,
+        "neighbours": [],
+    }
+    if not repaired:
+        return [json.dumps({"candidate": candidate})]
+    return [
+        json.dumps({"candidate": {**candidate, "typicality": 2.0}}),
+        json.dumps(
+            {
+                "schema": "repair.patch.v1",
+                "op": "replace",
+                "path": "/candidate/typicality",
+                "value": 0.5,
+            }
+        ),
+    ]
+
+
+def _engaged_root(tmp_path: Path, *, repair_child: int | None = None) -> Path:
+    """Drive one turn through rejected patches into a decomposition merge.
+
+    ``repair_child`` makes that atomic child's first response wire-invalid so
+    the child is re-dispatched as ``repair.semantic-task.v1`` work and the
+    completion names the REPAIR in that slot rather than the child itself.
+    That shape occurs live (run-b4d6dfda0c20676a864a051fbc97bda4, slot 0 of two
+    of three merges) and no fixture exercised it before.
+    """
+
+    root = tmp_path / ("engaged-repair" if repair_child is None else f"engaged-repair-r{repair_child}")
     commitment = Commitment(
         id="k-engaged-repair", eval="predicate:len(content) > 0"
     )
@@ -147,16 +182,11 @@ def _engaged_root(tmp_path: Path) -> Path:
         unrelated_patch,
         # The decomposition transacts six atomic children, all admitted.
         *(
-            json.dumps(
-                {
-                    "candidate": {
-                        "content": f"atomic mechanism {index}",
-                        "typicality": 0.5,
-                        "neighbours": [],
-                    }
-                }
-            )
+            piece
             for index in range(6)
+            for piece in _atomic_child_responses(
+                index, repaired=(index == repair_child)
+            )
         ),
     ]
     _bind_classification(harness, manifest)
@@ -200,6 +230,21 @@ def _engaged_root(tmp_path: Path) -> Path:
 @pytest.fixture(scope="module")
 def engaged_root(tmp_path_factory) -> Path:
     return _engaged_root(tmp_path_factory.mktemp("engaged-repair-verification"))
+
+
+@pytest.fixture(scope="module", params=[0, 5], ids=["first-child", "latest-child"])
+def repaired_child_root(request, tmp_path_factory) -> Path:
+    """A merge whose completion names a repair work item in one slot.
+
+    Both positions are exercised because the LATEST child is also the one whose
+    provider call the merge marker names, so a repair there moves the marker as
+    well as the payload schema.
+    """
+
+    return _engaged_root(
+        tmp_path_factory.mktemp(f"engaged-repaired-child-{request.param}"),
+        repair_child=request.param,
+    )
 
 
 def _copy_root(source: Path, tmp_path: Path, name: str) -> Path:
@@ -316,3 +361,67 @@ def test_merge_conj_bound_to_non_child_work_fails_closed(engaged_root, tmp_path)
     _write_log(root, rows)
 
     assert "workflow-call-pairing" in _checks(root)
+
+
+def test_merge_whose_child_was_repaired_verifies_clean(repaired_child_root):
+    """Regression (jolt run-b4d6dfda0c20676a864a051fbc97bda4): a decomposition
+    merge containing a repaired child was reported non-replay-valid.
+
+    When an atomic child is rejected, the work that produces the admitted
+    candidate is a DIFFERENT work item — ``repair.semantic-task.v1``, whose
+    decomposition authority is its ``parent_work_id``. The completion must name
+    that repair, because the repair is what carries the admission:
+    ``workflow/replay.py`` refuses a completion whose per-slot inventory
+    differs. The merge exemption resolved each slot by work id and demanded a
+    ``contract-decomposition-child.v1`` payload, so it rejected the shape its
+    own writer requires.
+
+    Live evidence: slot 0 of two of that run's three merges, giving exactly two
+    findings at Conj seq 245 and 386, recorded by the run about itself in
+    REPLAY_VALIDATION.json. Nothing else about those merges differed — all 6/6
+    child admissions resolved as admitted, the latest-child marker matched, and
+    the outputs were a subset of admitted_effect_refs.
+    """
+
+    result = verify_root(repaired_child_root)
+
+    assert result["violations"] == []
+
+
+def test_the_repaired_child_slot_really_names_repair_work(repaired_child_root):
+    """Guards the regression above against passing for the wrong reason.
+
+    If the fixture stopped producing a repaired child — a wire-valid first
+    response, a changed repair budget — the test above would go green while
+    exercising nothing. This pins the shape it is meant to cover.
+    """
+
+    preparations = {}
+    for path in (
+        repaired_child_root / "objects" / "workflow-work-preparation-v1"
+    ).glob("*.json"):
+        record = json.loads(path.read_text())
+        record = record.get("data", record)
+        preparations[record.get("work_id") or record["id"]] = record
+
+    schemas: list[list[str | None]] = []
+    for path in (
+        repaired_child_root
+        / "objects"
+        / "workflow-contract-decomposition-completion-v1"
+    ).glob("*.json"):
+        record = json.loads(path.read_text())
+        record = record.get("data", record)
+        schemas.append(
+            [
+                (
+                    preparations.get(work_id, {}).get("task_payload_value") or {}
+                ).get("schema")
+                for work_id in record["child_work_ids"]
+            ]
+        )
+
+    assert schemas, "the fixture produced no decomposition completion"
+    assert any(
+        "repair.semantic-task.v1" in row for row in schemas
+    ), f"no completion names a repair work item: {schemas}"
