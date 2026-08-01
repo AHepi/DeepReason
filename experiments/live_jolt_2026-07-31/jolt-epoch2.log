@@ -1,0 +1,14 @@
+=== jolt ladder start 2026-08-01T04:04:19Z ===
+Let's set DeepReason up (one time, ~30 seconds).
+
+
+Done. Provider profile: /home/user/DeepReason/experiments/live_jolt_2026-07-31/home/provider.yaml
+Credential reference: OLLAMA_API_KEY (already available)
+
+Provider configuration saved. Qualification remains an explicit action.
+Next action: deepreason qualify
+setup_rc=0
+qualify_rc=0 qualify_seconds=370
+reason_rc=1 reason_seconds=1
+run_id= state=
+=== jolt ladder end 2026-08-01T04:10:31Z ===
