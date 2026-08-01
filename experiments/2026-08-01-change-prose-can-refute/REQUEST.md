@@ -97,3 +97,38 @@ part of R1-R4 expected to apply retroactively to their interpretation?
 ## Amendments
 
 (append-only)
+
+### 2026-08-01, message 2 — during dr-spec-change, before any code was written
+
+> Read claude.md again. The scratchpad authority chain needs to be completely
+> separate from conjecture/criticism adjudication. They shouldn't exist
+> together.
+
+R5 (behavior): "The scratchpad authority chain needs to be completely separate
+from conjecture/criticism adjudication."
+
+R6 (behavior): "They shouldn't exist together."
+
+**R5/R6 CLOSE Q3 in the negative.** Q3 asked what "access to the full argument"
+(R3) denotes, and I had established that `rules/crit.py` never receives scratch
+context — only `rules/conj.py` renders it (`conj.py:1368`) — and was heading
+toward exposing scratch to the critic as the reading of R3. R5/R6 rule that
+out. Whatever satisfies R3, it is NOT piping the scratchpad into criticism.
+
+Q3 is therefore re-opened in a narrower form and recorded as Q3a below.
+
+R5/R6 also RESTATE an existing boundary rather than inventing one:
+`scratch/proposals.py` sets `SCRATCH_EPISTEMIC_BOUNDARY = "advisory_non_grounding"`
+and the workshop prompt says "storage alone never makes it a fact, evidence, a
+formal claim, or support for one". The operator is affirming and strengthening
+that separation at the AUTHORITY-CHAIN level, not only at the grounding level.
+
+Q3a (supersedes Q3): if the scratchpad is excluded, what IS "the full argument"
+the refuting endpoint must be given? Candidates visible in the code: the target
+artifact's content alone (today's `render_crit_pack`), plus its support chain,
+plus the prior criticism thread on that target. None of these is the scratchpad.
+
+C6 (process): "Read claude.md again." — operator, message 2. CLAUDE.md re-read
+in full before this amendment was written. The governing line for this
+situation: "Cross-routing: a defect found mid-change is PARKED, not fixed; a
+change wished for mid-defect is PARKED, not implemented. One tranche, one goal."
