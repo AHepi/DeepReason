@@ -115,3 +115,51 @@ Approval gate: GOAL.md class is `defect`; estimate ≤150 lines; no frozen
 surface touched (no state digest, no event application order, no manifest
 schema, no qualification subject, no record format, and `valid` provably
 cannot move). Proceeds to `dr-implement-fix`.
+
+---
+
+## AMENDED during dr-implement-fix — the predicate was in the wrong scope
+
+The design above was implemented and its central prediction FAILED. Measured:
+
+    CAPTURE_W = 20
+    live_tri 6dab80d6    window_events=20  crit_in_window=0  crit_total=11
+                         n_attacks(windowed)=0   state.att=0
+    live_engaged f4fa66  window_events=20  crit_in_window=0  crit_total=28
+                         n_attacks(windowed)=0   state.att=1
+    both windows contain only Bridge/Measure/Scratch/Spawn events
+
+`adjudicator_metrics` is windowed by contract — it reads
+`harness.recent_semantic_events(window)` — because §11.3's flags are about
+*sustained recent dynamics* feeding the response ladder. "Did this run ever
+attack anything?" is not a recent-dynamics question; it is a whole-run one, and
+the verification report is a whole-run judgement. Putting it in `raw_flags` made
+`adjudication_blind` False on the positive root and, worse, made the negative
+root's windowed `n_attacks` 0 as well — the discriminator was destroyed.
+
+Corrected design:
+
+  - REVERT the `raw_flags` / `adjudicator_metrics` changes. `criticism_events`
+    and `adjudication_blind` do not belong in a windowed instrument.
+  - `_adjudication_blindness_findings` computes the predicate itself from the
+    whole run: `len(harness.state.att) == 0` AND the log contains at least one
+    `Crit` event. Both are whole-run facts, matching the report's scope.
+  - `report.py:131-137` unchanged from the design above (`_EPISTEMIC_CHECKS`
+    gains `adjudication-blindness`).
+
+Consequence for the diagnosis, stated plainly: this no longer routes the
+detector's flags anywhere. DIAGNOSIS.md named "verification discards the
+detector's flags" as the primary cause, and that remains TRUE and is now
+PARKED — the five windowed flags, including `lineage_stagnation` which is
+firing today, are still discarded. What this tranche actually adds is the
+whole-run adjudication check that never existed. The reproduction's
+load-bearing test (forcing every flag True and finding the channel still empty)
+therefore describes a defect this tranche does NOT fix; it is removed from the
+regression module and recorded in PARKED.md rather than left failing forever.
+
+Revised prediction, to be measured:
+  1. `run-6dab80d6…` (Crit=11, att=0) gains one epistemic finding.
+  2. `run-f4fa6663…` (Crit=28, att=1) gains none.
+  3. A fixture with no criticism at all gains none.
+  4. No root's `valid` changes.
+  5. Full gate 0 failed.

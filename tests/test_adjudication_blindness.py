@@ -30,11 +30,9 @@ repair fixture, which is a real v6 text root with artifacts and no attacks.
 
 from __future__ import annotations
 
-import deepreason.capture.detection as detection
-from deepreason.capture.detection import raw_flags
-from deepreason.config import Config
+from pathlib import Path
+
 from deepreason.harness import Harness
-from deepreason.llm.embedder import HashingEmbedder
 from deepreason.verification.report import verify_root_report
 from tests.test_v6_engaged_repair_verification import _engaged_root
 
@@ -50,34 +48,47 @@ def test_a_root_with_no_attacks_reproduces_the_live_shape(tmp_path):
     assert len(harness.warrants) == 0
 
 
-def test_the_ritual_flag_cannot_fire_when_nothing_was_ever_attacked(tmp_path):
-    root = _engaged_root(tmp_path / "flag")
-    harness = Harness(root, read_only=True)
-
-    flags = raw_flags(harness, HashingEmbedder(), Config())
-
-    assert flags["adjudication_ritual"] is True, (
-        "a run with zero attacks must raise the adjudication-ritual flag; "
-        f"flags were {flags}"
-    )
+#: Committed, git-tracked roots. The positive ran criticism 11 times and
+#: produced no attack; the negative ran it 28 times and produced one.
+_BLIND_ROOT = Path("experiments/live_tri_2026-07-27/run-6dab80d615a437a8b3fa489a279df847")
+_SIGHTED_ROOT = Path(
+    "experiments/live_engaged_2026-07-27/run-f4fa6663e5412d64df943a5a22342baf"
+)
 
 
-def test_detection_flags_reach_the_epistemic_channel(tmp_path, monkeypatch):
-    """The load-bearing half. If a FORCED flag still produces no finding, then
-    the thresholds are not the barrier and no threshold change can fix this.
+def test_a_run_whose_criticism_attacked_nothing_is_flagged():
+    harness = Harness(_BLIND_ROOT, read_only=True)
+    assert len(harness.state.att) == 0, "fixture root gained attacks"
+
+    report = verify_root_report(_BLIND_ROOT)
+
+    blind = [f for f in report.epistemic if f.check == "adjudication-blindness"]
+    assert len(blind) == 1, report.epistemic
+    assert report.epistemic_checks_passed is False
+
+
+def test_a_run_that_did_attack_is_not_flagged():
+    """The predicate is criticism-ran-and-attacked-nothing, not zero attacks.
+    Without this, a flag that fires on everything would look like a fix.
     """
 
-    root = _engaged_root(tmp_path / "channel")
-    real = detection.raw_flags
-    monkeypatch.setattr(
-        detection,
-        "raw_flags",
-        lambda *args, **kwargs: {key: True for key in real(*args, **kwargs)},
-    )
+    harness = Harness(_SIGHTED_ROOT, read_only=True)
+    assert len(harness.state.att) == 1, "control root lost its attack"
+
+    report = verify_root_report(_SIGHTED_ROOT)
+
+    assert not [f for f in report.epistemic if f.check == "adjudication-blindness"]
+
+
+def test_a_run_with_no_criticism_is_not_flagged(tmp_path):
+    """A fixture that never ran criticism never had the opportunity to attack.
+    Flagging it would be noise, and 22 test modules assert such roots verify
+    with an empty violation list.
+    """
+
+    root = _engaged_root(tmp_path / "nocrit")
+    assert not any(e.rule.value == "Crit" for e in Harness(root, read_only=True).log.read())
 
     report = verify_root_report(root)
 
-    assert report.epistemic, (
-        "every detection flag was forced True and the epistemic channel is "
-        "still empty: verification discards what the detector returns"
-    )
+    assert not [f for f in report.epistemic if f.check == "adjudication-blindness"]

@@ -130,6 +130,7 @@ _SECURITY_CHECKS = frozenset(
 _OPERATIONAL_CHECKS = frozenset({"detection-total", "time-travel"})
 _EPISTEMIC_CHECKS = frozenset(
     {
+        "adjudication-blindness",
         "bridge-epistemic",
         "bridge-grounding",
         "grounding-review",
@@ -1024,6 +1025,52 @@ def _transaction_findings(root: Path) -> tuple[VerificationFindingV2, ...]:
         )
     return tuple(findings)
 
+def _adjudication_blindness_findings(
+    root: Path,
+) -> tuple[VerificationFindingV2, ...]:
+    """Report a window in which criticism ran and attacked nothing.
+
+    `docs/harness-spec-v1.3.md` §11.3: "if no test is ever attacked, D3 has
+    died in practice while remaining true on paper".
+
+    Whole-run, not windowed: `capture.detection`'s adjudicator metrics read
+    only `recent_semantic_events(CAPTURE_W)` because §11.3's flags are about
+    sustained RECENT dynamics driving the response ladder.  "Did this run ever
+    attack anything?" is a whole-run question and this report is a whole-run
+    judgement; measured on two committed roots, a 20-event window contained no
+    criticism at all and no attack, which erases the distinction between a run
+    that attacked once and one that never did.
+
+    Criticism having RUN is what makes zero attacks a finding rather than a
+    fact about scope: a run that never criticised never had the opportunity.
+
+    Emitted here rather than from `invariants.py` because that module's
+    `fail()` feeds the legacy violation list, which many roots are asserted to
+    hold empty.  This is an epistemic finding: it does not gate `valid`.
+    """
+
+    from deepreason.harness import Harness
+
+    try:
+        harness = Harness(root, read_only=True)
+        if harness.state.att:
+            return ()
+        criticised = any(event.rule.value == "Crit" for event in harness.log.read())
+    except Exception:  # noqa: BLE001 - stays advisory over a messy log
+        return ()
+    if not criticised:
+        return ()
+    return (
+        _finding(
+            "epistemic",
+            "adjudication-blindness",
+            "criticism ran and produced no attack: nothing in this window "
+            "could have been refuted",
+            source="derived",
+        ),
+    )
+
+
 def _deferred_model_phase_findings(
     root: Path,
 ) -> tuple[VerificationFindingV2, ...]:
@@ -1161,6 +1208,8 @@ def verify_root_report(
         for finding in _transaction_findings(resolved):
             channels[finding.channel].append(finding)
         for finding in _deferred_model_phase_findings(resolved):
+            channels[finding.channel].append(finding)
+        for finding in _adjudication_blindness_findings(resolved):
             channels[finding.channel].append(finding)
 
     stats = dict(legacy.get("stats") or {})
