@@ -85,17 +85,47 @@ def test_naming_provenance_changes_the_block_because_it_is_part_of_the_note():
     )
 
 
-def test_the_refs_survive_the_wire_contract_into_the_stored_body():
-    wire = ScratchBlockWireV1(
-        content="entropy fell under the anti-anchor prompt, not under seeds",
-        experiment_refs=("sim.jolt.1", "sim.jolt.2"),
-        bears_on_refs=("SRC_004",),
+def test_the_standalone_block_seat_offers_no_provenance_at_all():
+    """Measured, not judged: offering it there took `scratch.block.compact.v1`
+    from 20/20 to 2/20 on glm-5.2 thinking-off.
+
+    Two independent faults, both from putting these fields on this seat. The
+    hard one: the contract validates through `model_validate` on a parsed dict,
+    which is strict, so a JSON array could not become a `tuple` field and
+    18 of 20 cases died `VALIDATION_ERROR` after two repairs each. The soft one:
+    this seat sees only `SCR_###` handles, so in 3 of 3 reproduction calls the
+    model filled `bears_on_refs` with `["SRC_001", "SRC_002"]` transliterated
+    from `SCR_001`/`SCR_002` — naming scratch blocks as artifacts.
+
+    Provenance lives on the conjecture-turn draft instead, where `SRC_###`
+    aliases actually exist.
+    """
+
+    assert "experiment_refs" not in ScratchBlockWireV1.model_fields
+    assert "bears_on_refs" not in ScratchBlockWireV1.model_fields
+    assert "bears_on_refs" in ScratchBlockDraftBodyV1.model_fields
+
+
+def test_a_json_document_survives_the_live_admission_path():
+    """The gap that let the 2/20 ship. Every earlier test built models in
+    Python with tuples; nothing pushed a JSON DOCUMENT through the contract,
+    which is the only path a provider response ever takes.
+    """
+
+    contract = ScratchBlockWireContract()
+    document = json.dumps(
+        {
+            "content": "entropy fell under the anti-anchor prompt, not seeds",
+            "why_keep_this": "it separates the two explanations",
+            "unfinished": "no account of why the prompt does it",
+            "possible_next_move": "vary the anchor and re-measure",
+        }
     )
 
-    body = ScratchBlockWireContract().compile(wire)
+    body = contract.compile(contract.validate_json(document))
 
-    assert body.experiment_refs == ("sim.jolt.1", "sim.jolt.2")
-    assert body.bears_on_refs == ("SRC_004",)
+    assert body.content.startswith("entropy fell")
+    assert body.experiment_refs is None and body.bears_on_refs is None
 
 
 def test_a_conjecture_turn_may_admit_a_draft_that_names_what_it_aims_at():
@@ -165,7 +195,7 @@ def test_the_refs_are_rendered_back_as_history_and_not_as_live_pointers(tmp_path
     ],
 )
 def test_a_ref_outside_its_namespace_is_refused(field, value):
-    for model in (ScratchBlockWireV1, ScratchBlockDraftBodyV1, ScratchBlockBodyV1):
+    for model in (ScratchBlockDraftBodyV1, ScratchBlockBodyV1):
         with pytest.raises(ValidationError):
             model(content="a note", **{field: value})
 
@@ -208,7 +238,7 @@ def test_the_channels_are_bounded_and_duplicate_free(field):
     prefix = "SRC_00" if field == "bears_on_refs" else "sim.e"
     legal = tuple(f"{prefix}{index}" for index in range(MAX_PROVENANCE_REFS))
 
-    for model in (ScratchBlockWireV1, ScratchBlockDraftBodyV1, ScratchBlockBodyV1):
+    for model in (ScratchBlockDraftBodyV1, ScratchBlockBodyV1):
         assert model(content="a note", **{field: legal})
 
         with pytest.raises(ValidationError):
@@ -223,7 +253,7 @@ def test_every_rule_the_validator_enforces_is_visible_in_the_schema(field):
     defect in the contract, not a failure of the model.
     """
 
-    for model in (ScratchBlockWireV1, ScratchBlockDraftBodyV1):
+    for model in (ScratchBlockDraftBodyV1,):
         rendered = model.model_json_schema()["properties"][field]
         # Nullable, so the array rules live in the array branch of the anyOf;
         # `uniqueItems` is inert against a null instance and stays at the top.
