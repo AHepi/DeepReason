@@ -1,4 +1,4 @@
-# Jolt run: the second death on a rule the schema cannot carry
+# Jolt run: three epochs, three different walls
 
 Dated 2026-07-31. Model glm-5.2, thinking OFF, fresh home.
 Run `run-b4d6dfda0c20676a864a051fbc97bda4`, state **failed**, 218 s, cycle 0.
@@ -102,3 +102,107 @@ convention.
   that per-call seeds are inert and that prompt jolts can CREATE collapse
   (`card` 0.42 -> 1.00 under `anti_anchor_fewshot`) does not depend on the
   harness run at all.
+
+---
+
+## 2026-08-01, epoch 3: the run completes, and the wall moves twice more
+
+Run `run-b4d6dfda0c20676a864a051fbc97bda4`, state **completed**, cycle 6,
+`stop_reason: budget_exhausted`, 174469 / 200000 tokens. Epoch 1 died at cycle
+0; epoch 2 never minted a root at all. This is the first time this question has
+run to a stop.
+
+    qualify_rc=0  342 s   tier full, cache_reused False, state ready
+    reason_rc=5   856 s   state completed, cycle 6
+    audit_rc=0
+    72 standing, 0 accepted, 0 refuted, 63 positions formally accepted
+
+Two capability channels were exercised and both are typed in the record:
+
+    ResearchFetchProposalV1  research_logits_api
+      proposed -> validated -> granted -> compiled -> dispatched -> succeeded
+      -> result_packaged -> consumed          (evidence_registered)
+    SimulationProposalV1     sim_entropy_overlap_sep
+      proposed -> validated -> DENIED         (invalid_model_program)
+
+### Epoch 2, and a regression that was mine
+
+Between epochs the qualification battery caught a defect the offline gate did
+not. `scratch.block.compact.v1` fell from 20/20 to 2/20 and the tier fell to
+`shallow`, so `reason` was refused at preparation with
+`QUALIFICATION_TIER_SHALLOW`. Cause: putting `experiment_refs` /
+`bears_on_refs` on that seat. `WireContract.validate_json` parses to a dict and
+calls `model_validate`, which is strict, so a JSON array could not become a
+`tuple` field. Separately, that seat sees only `SCR_###` handles, and in 3 of 3
+reproduction calls the model filled `bears_on_refs` with `["SRC_001",
+"SRC_002"]` transliterated from what it could see. Both fixed by taking
+provenance off that seat entirely; re-probed at 5/5. Full detail in the commit.
+
+The lesson is about the gate, not the field: every test built those models in
+Python with tuples, and nothing pushed a JSON DOCUMENT through the contract,
+which is the only path a provider response ever takes.
+
+### The third ambiguous-rule death, this time at execution
+
+The simulation was denied `invalid_model_program`. The program:
+
+    def simulate(inputs, rng):
+        baseline_animal = {'elephant': 12}
+        ...
+        def entropy(hist):
+            import math
+            ...
+
+The AST guard refuses any import in model-authored source
+(`simulation may not import or mutate scope`), verified directly against
+`CONTAINED_WORKER_SOURCE_V1`. The contract says "math is available and nothing
+else may be imported" — which the model read as permission to import math.
+
+Note what was lost. The program is otherwise exactly what the question asked
+for: per-task histograms transcribed into the program text, entropy AND
+set-overlap against baseline, no mean across tasks and no boolean. It is a
+direct attempt at requirement 3's separation of diversity from degradation, and
+it was thrown away over a word.
+
+That is now the third run-affecting failure of the same shape: a rule the model
+could not read correctly from where it was stated. `_not_a_self_link`
+(unstatable), `simulation observables must be plain identifiers` (statable and
+missed), and now "math is available" (stated, but ambiguous between "already
+bound" and "importable"). The cheap fix is a wording change — "`math` is
+ALREADY BOUND in the program namespace; do not import it, and no import
+statement of any kind is permitted" — and it is NOT made here.
+
+### An integrity violation, parked and undiagnosed
+
+`verify_root` on this root returns **integrity_valid: False**:
+
+    workflow-call-pairing  event seq=245: Conj outputs are not uniquely
+                           admitted by their provider attempt
+    workflow-call-pairing  event seq=386: (same)
+
+What is established:
+
+- It is not a long-run artifact. Every other root in `experiments/` with 400+
+  events was checked — 22 of them, up to 1591 events, five longer than this one
+  — and all report `pairing=0`.
+- The two flagged events are structurally indistinguishable from seq 110, which
+  is NOT flagged: same rule `Conj`, same contract
+  `conjecturer.atomic-candidate.v1`, six outputs, one attempt, valid first pass.
+- It is not output collision. No two `Conj` events in this run share an output.
+
+What is NOT established: the cause, and whether this tranche's changes produced
+it or merely produced the first trajectory that surfaces it. Per the tranche
+rule a defect found mid-change is PARKED, so it is recorded here and not fixed.
+It is the most serious open item in this file.
+
+### Residue
+
+- The question is still not answered. 72 claims stand, 0 accepted, 0 refuted;
+  the run stopped on budget, not on convergence. Standing is not accepted.
+- The dotted-observable fix was NOT exercised live. The model chose flat names
+  (`baseline_entropy`, `temp_max_overlap_with_baseline`). The fix removed a wall
+  this run did not walk into; the offline regression remains the only proof.
+- One run, one model. The capability channels are stochastic across identical
+  runs, so a channel this run used says nothing about the next.
+- The integrity failure above means this root is not replay-valid. Nothing in
+  this segment should be read as resting on a verified record until it is.

@@ -9,3 +9,7 @@ Provider configuration saved. Qualification remains an explicit action.
 Next action: deepreason qualify
 setup_rc=0
 qualify_rc=0 qualify_seconds=342
+reason_rc=5 reason_seconds=856
+run_id=run-b4d6dfda0c20676a864a051fbc97bda4 state=completed
+audit_rc=0
+=== jolt ladder end 2026-08-01T04:47:08Z ===

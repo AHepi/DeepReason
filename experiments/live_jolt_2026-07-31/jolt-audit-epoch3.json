@@ -1,0 +1,112 @@
+{
+  "critiques": [
+    {
+      "seq": 740,
+      "inputs": [
+        "config-critique:config_effective",
+        "recommendation:no_change",
+        "cited:25,82,83,84,85,86,87,452,453,454,455,456,457,458,459,460,461,462,463,488,599,734",
+        "view:83c8dc0ca7be48adf7e8d286ba240a59803731fd5c5108fac28caec556f39b8d",
+        "verdict:5a80ceec0650c8ec2ae1480b6fbffc0edec67cbe286a5e8450114d24417f8ce2"
+      ]
+    }
+  ],
+  "research": [
+    {
+      "seq": 488,
+      "inputs": [
+        "research-allowance:6/6",
+        "waste:0/0",
+        "refusal-streak:0",
+        "stagnation:0",
+        "question-28206d4076615280d8675950a1e2ca66"
+      ]
+    }
+  ],
+  "simulation": [
+    {
+      "mode": "sandboxed_python_v1",
+      "kind": "SimulationProposalV1",
+      "request": "sim_entropy_overlap_sep",
+      "observables": [
+        "baseline_entropy",
+        "temp_max_entropy",
+        "anti_anchor_entropy",
+        "temp_max_overlap_with_baseline",
+        "anti_anchor_overlap_with_baseline"
+      ],
+      "lifecycle": "denied",
+      "reason": "invalid_model_program"
+    },
+    {
+      "mode": null,
+      "kind": "ResearchFetchProposalV1",
+      "request": "research_logits_api",
+      "observables": [],
+      "lifecycle": "consumed",
+      "reason": "evidence_registered"
+    }
+  ],
+  "scratch": [],
+  "cycles": [
+    {
+      "seq": 25,
+      "inputs": [
+        "cycle",
+        "0",
+        "question-28206d4076615280d8675950a1e2ca66"
+      ]
+    },
+    {
+      "seq": 599,
+      "inputs": [
+        "cycle",
+        "1",
+        "simulation-request:sha256:03415739323ba8d3535d888c050897fc21816d4d264668d5636df358362cbf6d"
+      ]
+    },
+    {
+      "seq": 734,
+      "inputs": [
+        "cycle",
+        "2",
+        "disc:question-28206d4076615280d8675950a1e2ca66"
+      ]
+    },
+    {
+      "seq": 741,
+      "inputs": [
+        "cycle",
+        "3",
+        "conn:016ad3953cf0"
+      ]
+    },
+    {
+      "seq": 835,
+      "inputs": [
+        "cycle",
+        "4",
+        "conn:08cb9329793f"
+      ]
+    },
+    {
+      "seq": 840,
+      "inputs": [
+        "cycle",
+        "5",
+        "question-28206d4076615280d8675950a1e2ca66"
+      ]
+    }
+  ],
+  "replay_valid": null,
+  "replay_violations": [
+    {
+      "check": "workflow-call-pairing",
+      "detail": "event seq=245: Conj outputs are not uniquely admitted by their provider attempt"
+    },
+    {
+      "check": "workflow-call-pairing",
+      "detail": "event seq=386: Conj outputs are not uniquely admitted by their provider attempt"
+    }
+  ]
+}
