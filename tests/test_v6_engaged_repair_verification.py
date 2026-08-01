@@ -425,3 +425,36 @@ def test_the_repaired_child_slot_really_names_repair_work(repaired_child_root):
     assert any(
         "repair.semantic-task.v1" in row for row in schemas
     ), f"no completion names a repair work item: {schemas}"
+
+
+def test_a_tampered_repair_preparation_fails_closed(repaired_child_root, tmp_path):
+    """The merge exemption now walks ``parent_work_id``; a forged parent must
+    not survive that walk.
+
+    It cannot even reach it. Preparations load through ``objects.get``, which
+    verifies each record against its stored digest, so editing one to name a
+    different parent (or a different contract) raises ``corrupt object record``
+    and the root fails closed on ``workflow-decision`` before the pairing check
+    runs. The walk's own parent guards are therefore defence-in-depth against a
+    future writer change, not against a forged record — and this pins the outer
+    guarantee that actually holds.
+    """
+
+    root = _copy_root(repaired_child_root, tmp_path, "tampered-repair-preparation")
+    tampered = 0
+    for path in (root / "objects" / "workflow-work-preparation-v1").glob("*.json"):
+        record = json.loads(path.read_text())
+        body = record.get("data", record)
+        payload = body.get("task_payload_value") or {}
+        if payload.get("schema") == "repair.semantic-task.v1":
+            body["contract_id"] = "conjecturer.turn.v6"
+            path.write_text(json.dumps(record))
+            tampered += 1
+
+    assert tampered, "the fixture produced no repair preparation to tamper with"
+
+    result = verify_root(root)
+    assert result["violations"], "a tampered repair preparation verified clean"
+    assert any(
+        "corrupt object record" in item["detail"] for item in result["violations"]
+    ), result["violations"]

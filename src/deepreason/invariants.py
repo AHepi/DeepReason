@@ -500,6 +500,45 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
     # Associate each formal Conj event with the exact provider attempt and the
     # later admission that made its output durable.  The source event may be
     # separated by arbitrary intervening records.
+    def _decomposition_child_authority(child_work_id: str):
+        """Resolve the preparation carrying a merge slot's decomposition authority.
+
+        A rejected atomic child is re-dispatched as ``repair.semantic-task.v1``
+        work, and the merge completion names that repair rather than the child
+        it replaced, because the repair is what holds the admission.  Repair
+        work carries no decomposition payload of its own: it inherits its
+        parent's, so the parent named by ``parent_work_id`` is the durable
+        authority.  The parent guards are the writer's own for atomic repair
+        authority -- a repair inherits its parent's contract, route lease and
+        targets, so a payload naming an unrelated parent resolves to nothing
+        rather than borrowing authority from it.
+
+        Returning the resolved preparation rather than a verdict keeps the
+        caller's schema and transition tests intact: a chain terminating
+        anywhere other than a child of the merge's own transition still fails
+        them.
+        """
+
+        seen: set[str] = set()
+        preparation = preparations.get(child_work_id)
+        while preparation is not None and preparation.id not in seen:
+            seen.add(preparation.id)
+            payload = preparation.task_payload_value
+            if not hasattr(payload, "get"):
+                return None
+            if payload.get("schema") != "repair.semantic-task.v1":
+                return preparation
+            parent = preparations.get(payload.get("parent_work_id"))
+            if (
+                parent is None
+                or parent.contract_id != preparation.contract_id
+                or parent.route_lease != preparation.route_lease
+                or parent.target_refs != preparation.target_refs
+            ):
+                return None
+            preparation = parent
+        return None
+
     def _decomposition_merge_admits(event, source_seq: int, row: dict) -> bool:
         """Accept a Conj event only through an exact durable decomposition.
 
@@ -532,7 +571,9 @@ def _controller_v3_history(root: Path) -> tuple[list[dict], dict]:
             return False
         child_rows: list[tuple[int, dict]] = []
         for index, child_work_id in enumerate(completion.child_work_ids):
-            preparation = preparations.get(child_work_id)
+            # Authority may be inherited from an ancestor; the provider attempt
+            # and admission below stay keyed to the work that actually ran.
+            preparation = _decomposition_child_authority(child_work_id)
             child_payload = (
                 preparation.task_payload_value if preparation is not None else None
             )
