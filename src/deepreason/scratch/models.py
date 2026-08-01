@@ -22,6 +22,47 @@ from deepreason.frozen import FrozenDict, FrozenList, FrozenRecord
 
 HashRef = Annotated[str, Field(pattern=r"^sha256:[0-9a-f]{64}$")]
 OpaqueRef = Annotated[str, Field(min_length=1, max_length=512)]
+ExperimentRef = Annotated[str, Field(min_length=1, max_length=128)]
+"""A `SimulationProposalDraftV1.request_identifier`, named back.
+
+Bounded exactly as that field is (`capabilities/models.py`) and no tighter. A
+pattern here would be inventable, not enforced anywhere: request identifiers
+are model-chosen free text, so a namespace regex would refuse references to
+experiments the simulation contract itself accepted -- the contract-mismatch
+defect this tranche exists to remove, reintroduced from the other side.
+"""
+ArtifactRef = Annotated[str, Field(pattern=r"^SRC_[0-9]{3}$")]
+"""A source alias as it stood in the call that wrote the block.
+
+Deliberately NOT resolved to a durable artifact id. Source aliases are minted
+per call by enumeration (`rules/conj.py`), so this string names a different
+artifact in a later call, and the render layer therefore presents it as an
+aim-at-time-of-writing rather than a live pointer. Nothing in the harness
+follows it: it records what the work was FOR, and is admissible whether or not
+the aim turns out to be right.
+"""
+MAX_PROVENANCE_REFS = 4
+"""Bound on each of the two advisory ref channels.
+
+The pad cannot balloon: `maximum_total_bytes` is a hard cap (131072 in the v6
+preset). The cost of these fields is CROWDING, so the bound was chosen against
+measured block sizes rather than guessed. Median block across 16 real ones from
+run-bc3e8797b3e0609eddb324299c8257bd and run-b4d6dfda0c20676a864a051fbc97bda4
+is 948 bytes; against the cap, using the accounting in
+`ScratchAuthoringService.validate_proposal`:
+
+    no refs, before these fields existed     ~133 blocks
+    no refs, after                            128 blocks
+    four refs on each channel                 118 blocks
+
+Four is a deliberate stop. Eight each would put a fully-populated block past
+1200 accounted bytes and under 110, and the marginal ref is worth much less
+than the marginal block.
+
+The 133 -> 128 step is NOT the refs; it is two `null` placeholders entering the
+accounting, which dumps without `exclude_none` while block identity dumps with
+it. That divergence predates this field and is parked, not fixed here.
+"""
 ShortText = Annotated[str, Field(min_length=1, max_length=16_384)]
 LongText = Annotated[str, Field(min_length=1, max_length=262_144)]
 
@@ -151,11 +192,32 @@ class ScratchBlockBodyV1(ScratchRecord):
     why_keep_this: LongText | None = None
     unfinished: LongText | None = None
     possible_next_move: LongText | None = None
+    # Advisory provenance, defaulting to None rather than ().
+    # `_canonical_value` dumps with exclude_none, which drops None and KEEPS
+    # an empty tuple. Defaulting to () therefore added two keys to every
+    # block's canonical bytes and moved every stored block's id --
+    # measured: ff609dcc -> 248b3201 for the same content. None keeps every
+    # existing block byte-identical.
+    experiment_refs: tuple[ExperimentRef, ...] | None = Field(
+        default=None, max_length=MAX_PROVENANCE_REFS
+    )
+    bears_on_refs: tuple[ArtifactRef, ...] | None = Field(
+        default=None, max_length=MAX_PROVENANCE_REFS
+    )
 
     @field_validator("content", "why_keep_this", "unfinished", "possible_next_move")
     @classmethod
     def _nonblank_text(cls, value):
         return _require_nonblank(value)
+
+    @field_validator("experiment_refs", "bears_on_refs")
+    @classmethod
+    def _refs_are_unique(cls, value):
+        if value is None:
+            return None
+        if len(value) != len(set(value)):
+            raise ValueError("advisory refs must not contain duplicates")
+        return tuple(value)
 
 
 class ScratchBlockV1(ScratchRecord):

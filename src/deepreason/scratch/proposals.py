@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 import re
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from deepreason.canonical import canonical_json
+from deepreason.scratch.models import (
+    MAX_PROVENANCE_REFS as _MAX_PROVENANCE_REFS,
+    ArtifactRef,
+    ExperimentRef,
+)
 
 SCRATCH_AUTHORING_PURPOSE = "imaginative_workshop"
 SCRATCH_EPISTEMIC_BOUNDARY = "advisory_non_grounding"
@@ -41,11 +46,46 @@ class ScratchProposalModel(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
 
+
 class ScratchBlockDraftBodyV1(ScratchProposalModel):
     content: str = Field(min_length=1, max_length=262_144)
     why_keep_this: str | None = Field(default=None, min_length=1, max_length=262_144)
     unfinished: str | None = Field(default=None, min_length=1, max_length=262_144)
     possible_next_move: str | None = Field(default=None, min_length=1, max_length=262_144)
+    #: Bounds live on the ITEM type, not in json_schema_extra: the latter
+    #: renders a constraint the validator never applies, which is precisely
+    #: the prose-only defect this repository spent a tranche removing.
+    experiment_refs: tuple[ExperimentRef, ...] | None = Field(
+        default=None,
+        max_length=_MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Simulation request identifiers this note came out of. Provenance "
+            "only: naming an experiment here never makes this block evidence "
+            "for anything, and never makes the experiment's result a fact."
+        ),
+    )
+    bears_on_refs: tuple[ArtifactRef, ...] | None = Field(
+        default=None,
+        max_length=_MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Visible SRC_### artifacts this note was aimed at. A RELEVANCE "
+            "hypothesis, not a grounding claim: nothing follows it, and it is "
+            "admissible whether or not the aim turns out to be right. Read "
+            "back later it is labelled as the aim held when the note was "
+            "written, since source aliases are call-local."
+        ),
+    )
+
+    @field_validator("experiment_refs", "bears_on_refs")
+    @classmethod
+    def _refs_are_unique(cls, value):
+        if value is None:
+            return None
+        if len(value) != len(set(value)):
+            raise ValueError("advisory refs must not contain duplicates")
+        return tuple(value)
 
 
 class ScratchNewBlockDraftV1(ScratchProposalModel):

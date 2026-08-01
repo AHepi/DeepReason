@@ -107,9 +107,12 @@ capability gap.
 **Fixed** by dropping self-links deterministically at the scratch-proposal
 container rather than refusing the turn from inside a nested link model. A
 self-link is inert: it adds no edge between distinct blocks, so removing it
-cannot change what the graph says. Neither rule is weakened — the link model
-still refuses a directly constructed self-link, and the closed-namespace rule
-still refuses an undeclared target.
+cannot change what the graph says. The link model no longer refuses one — the
+judgement is a property (`is_self_link`) and the DISPOSAL is on the container,
+because a refusal raised from inside a nested item aborts container validation
+before it can run. So a directly constructed `ScratchProposalLinkV1` with equal
+endpoints now validates; no proposal can carry one past the container. The
+closed-namespace rule is unchanged and still refuses an undeclared target.
 
 **Still open, for the operator.** The general defect remains: a repair
 diagnostic that is locally satisfiable but globally unsatisfiable will loop
@@ -161,3 +164,90 @@ doing what it was meant to do.
   the whole turn. That is a design change, not a bug fix, and is not made here.
 
 Accepted does not mean true; failed does not mean incapable.
+
+---
+
+## 2026-08-01 — the channel the self-link was a substitute for
+
+The self-link in this run was not a random malformation. The model had exactly
+one new block and reached for a link from it to itself, which is what you do
+when the thing you want to point at is not in the link namespace. The operator's
+reading: a scratch note needs to say where it CAME FROM and what it was FOR,
+and neither of those is another scratch block.
+
+So the block body gained two optional channels, bounded at four entries each:
+
+    experiment_refs   the simulation request identifier this note came out of
+    bears_on_refs     the visible SRC_### artifact this note was aimed at
+
+Both are relevance hypotheses. Nothing in the harness follows either one. That
+is the point — a note is written before anyone, the model included, can know
+whether the work behind it will ever be strong enough to enter the epistemic
+loop, so the channel has to be admissible when the aim turns out to be wrong.
+
+### Size, measured before building
+
+The worry was that provenance would balloon the pad. It cannot: the store cap
+is fixed at 131072 bytes. The real cost is CROWDING. Median block across 16 real
+ones from this run and `run-b4d6dfda0c20676a864a051fbc97bda4` is 948 bytes.
+Against the cap, by the accounting the authoring service actually uses:
+
+    no refs, before these fields existed     ~133 blocks
+    no refs, after                            128 blocks
+    four refs on each channel                 118 blocks
+
+Four is a deliberate stop: eight each puts a populated block past 1200 accounted
+bytes and under 110, and the marginal ref is worth much less than the marginal
+block.
+
+The 133 -> 128 step is not the refs — it is two `null` placeholders entering the
+accounting, because `validate_proposal` sums `model_dump(mode="json")` while
+block identity uses `exclude_none=True`. So the byte ceiling has always charged
+for absent fields it never stores. That divergence predates this change and is
+PARKED, not fixed here; fixing it would loosen a live budget and belongs in its
+own tranche.
+
+### Two things this got wrong first, both caught by the record
+
+**Empty tuples are not absent.** The fields defaulted to `()`. `_canonical_value`
+dumps with `exclude_none=True`, which drops `None` and KEEPS an empty tuple, so
+two keys entered the canonical bytes of every block and every stored block's id
+moved — measured `sha256:ff609dcc…` to `sha256:248b3201…` for identical content.
+That would have invalidated replay validation for every root already recorded,
+which is wrong by definition. I had asserted hash stability before comparing
+against pre-change code; `test_content_only_block_is_valid_and_optionals_remain_absent`
+caught what the assertion did not. The defaults are `None`, and the pre-change
+digest is now pinned as a literal in `tests/test_scratch_provenance_refs.py`.
+
+**A namespace regex on `experiment_refs` was a contract mismatch.** It named
+`SimulationProposalDraftV1.request_identifier`, which is model-chosen free text
+bounded only at 1..128 characters. A pattern on the reading end would have
+refused references to experiments the simulation contract itself accepted — the
+same defect as a prose-only rule, introduced from the other side. The bound now
+matches the named field exactly and a test holds the two together.
+
+### The alias problem, and what was NOT done about it
+
+`SRC_###` aliases are minted per call by enumeration (`rules/conj.py`), so the
+string stored in a block names a different artifact in a later call. Resolving
+to durable ids at admission would need the source alias table threaded to three
+admission sites, one of which — the standalone `scratch.block.compact.v1` seat —
+has none, so the field would be admissible on one seat and refused on another.
+
+Instead the render layer presents both channels past-tense (`was_aimed_at`,
+`came_from_experiments`) so a stale alias reads as a record of intent rather
+than a pointer to resolve. Blocks with no refs render exactly as before.
+
+### Residue
+
+- Untested live. The sizing is measured on stored blocks; whether a model
+  actually uses these channels, and whether the past-tense keys stop it from
+  resolving a stale alias against the aliases in front of it, needs a run that
+  survives past cycle 0. Neither run in this tranche did.
+- The alias staleness is mitigated in presentation, not removed. A block whose
+  aim genuinely matters cannot be resolved back to an artifact mechanically.
+- The general repair defect this run exposed is still open: a diagnostic that
+  is locally satisfiable and globally unsatisfiable still loops to exhaustion.
+  Cycle detection now NAMES it in the record; it does not fix it.
+- Parked: the scratch byte ceiling charges for `null` placeholders it never
+  stores, so the effective pad is ~4% smaller than the manifest number implies.

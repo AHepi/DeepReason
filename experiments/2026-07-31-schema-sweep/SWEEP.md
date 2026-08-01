@@ -51,11 +51,18 @@ standard. Encoding half of one would be worse than nothing.
 | `_keys_are_unique` | `bridge/ledger.py:688` | same shape, over `entry_key` |
 | premise forward-reference / key shadowing | `bridge/ledger.py` | "must name an EARLIER entry in this document" |
 | `_local_namespace_is_closed` | `scratch/proposals.py:107` | "`NEW_*` must be declared elsewhere in this same response" |
-| `_not_a_self_link` | `scratch/proposals.py:59` | equality between two sibling fields |
+| ~~`_not_a_self_link`~~ | `scratch/proposals.py` | equality between two sibling fields — **retired 2026-08-01**, see below |
 | `desired_length_chars` budget | workloads | arithmetic over a supplied budget |
 | process-observation byte identity | `bridge/ledger.py` | compares against harness-held bytes |
 | simulation program structure | `SIMULATION_MODEL_SOURCE_CONTRACT` | Python AST shape, not JSON shape |
 | observable-set agreement | `SIMULATION_REQUESTED_OBSERVABLES_CONTRACT` | keys of what the program *returns* |
+
+**One rule left this list by being deleted rather than encoded.** A self-link
+is inert — it adds no edge between distinct blocks — so on 2026-08-01 the
+container stopped refusing it and started DROPPING it, and the sibling-equality
+rule ceased to exist. That is the only escape route this list has: a rule the
+schema cannot carry is a rule the model can violate, so if it is not worth a
+dead run it is not worth having. The remaining nine are all load-bearing.
 
 ---
 

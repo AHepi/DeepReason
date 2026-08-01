@@ -253,6 +253,21 @@ class ScratchRenderer:
                         if body.possible_next_move is not None
                         else {}
                     ),
+                    # Both keys are past-tense on purpose. A source alias is
+                    # minted per call by enumeration, so SRC_004 here names
+                    # whatever it named in the call that WROTE this block, not
+                    # whatever it names now. Rendering it under a live-sounding
+                    # key would invite the model to resolve a stale pointer.
+                    **(
+                        {"came_from_experiments": list(body.experiment_refs)}
+                        if body.experiment_refs
+                        else {}
+                    ),
+                    **(
+                        {"was_aimed_at": list(body.bears_on_refs)}
+                        if body.bears_on_refs
+                        else {}
+                    ),
                 }
             )
         links = []

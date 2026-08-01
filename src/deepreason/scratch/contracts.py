@@ -16,7 +16,14 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from deepreason.llm.wire import AliasTable, WireContract, exclusive_fields_schema
 from deepreason.ontology.frozen import FrozenList, FrozenRecord
-from deepreason.scratch.models import HashRef, ScratchBlockBodyV1, ScratchLinkBodyV1
+from deepreason.scratch.models import (
+    MAX_PROVENANCE_REFS,
+    ArtifactRef,
+    ExperimentRef,
+    HashRef,
+    ScratchBlockBodyV1,
+    ScratchLinkBodyV1,
+)
 
 
 MAX_LOCAL_INDEX = 4_095
@@ -80,11 +87,47 @@ class ScratchBlockWireV1(ScratchWireModel):
     why_keep_this: WireText | None = None
     unfinished: WireText | None = None
     possible_next_move: WireText | None = None
+    # Advisory provenance, mirroring ScratchBlockDraftBodyV1. A scratch block
+    # is where work sits before anyone knows whether it will ever be strong
+    # enough to enter the epistemic loop, so it needs a pointer back to the
+    # experiment it came from and forward to the claim it was aimed at.
+    # Neither is grounding: the block stays advisory whatever it names.
+    experiment_refs: tuple[ExperimentRef, ...] | None = Field(
+        default=None,
+        max_length=MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Simulation request identifiers this note came out of. Provenance "
+            "only: naming an experiment here never makes this block evidence "
+            "for anything, and never makes the experiment's result a fact."
+        ),
+    )
+    bears_on_refs: tuple[ArtifactRef, ...] | None = Field(
+        default=None,
+        max_length=MAX_PROVENANCE_REFS,
+        json_schema_extra=_UNIQUE_ITEMS,
+        description=(
+            "Visible SRC_### artifacts this note was aimed at. A RELEVANCE "
+            "hypothesis, not a grounding claim: nothing follows it, and it is "
+            "admissible whether or not the aim turns out to be right. Read "
+            "back later it is labelled as the aim held when the note was "
+            "written, since source aliases are call-local."
+        ),
+    )
 
     @field_validator("content", "why_keep_this", "unfinished", "possible_next_move")
     @classmethod
     def _nonblank_text(cls, value):
         return _nonblank(value)
+
+    @field_validator("experiment_refs", "bears_on_refs")
+    @classmethod
+    def _refs_are_unique(cls, value):
+        if value is None:
+            return None
+        if len(value) != len(set(value)):
+            raise ValueError("advisory refs must not contain duplicates")
+        return tuple(value)
 
 
 def _require_one_reference_per_endpoint(link) -> None:
